@@ -4,9 +4,10 @@
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc-parent</artifactId>
   <packaging>pom</packaging>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
   <modules>
     <module>server</module>
+    <module>client</module>
   </modules>
   <dependencyManagement>
     <dependencies>
@@ -52,7 +53,6 @@
     <typesafe.config.version>0.4.0</typesafe.config.version>
     <guice.version>3.0</guice.version>
     <guava.version>11.0</guava.version>
-    <jersey-version>2.0-m04</jersey-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>
