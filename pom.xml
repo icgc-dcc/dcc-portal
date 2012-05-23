@@ -52,7 +52,7 @@
   <properties>
     <typesafe.config.version>0.4.0</typesafe.config.version>
     <guice.version>3.0</guice.version>
-    <guava.version>11.0</guava.version>
+    <guava.version>12.0</guava.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>
