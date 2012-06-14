@@ -15,7 +15,7 @@ Start the server
 
 Start the client (in another console)
 
-	cd data-submission/client
-	mvn jetty:run
+	cd data-submission/client/src/main/webapp
+	cake start
 
-Point your browser to [http://localhost:8080/](http://localhost:8080/)
+Point your browser to [http://localhost:3001/](http://localhost:3001/)
