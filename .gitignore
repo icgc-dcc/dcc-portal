@@ -4,4 +4,4 @@ target/
 
 server/test-output/
 client/.settings/
-client/src/main/webapp/node_modules/
+node_modules/
