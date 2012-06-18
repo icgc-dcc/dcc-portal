@@ -5,3 +5,5 @@ target/
 server/test-output/
 client/.settings/
 node_modules/
+/dcc-server
+server/src/test/resources/
