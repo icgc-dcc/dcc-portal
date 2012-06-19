@@ -9,6 +9,11 @@
     <module>server</module>
     <module>client</module>
   </modules>
+  <scm>
+    <connection>scm:git:git@github.com:icgc-dcc/data-submission.git</connection>
+    <developerConnection>scm:git:git@github.com:icgc-dcc/data-submission.git</developerConnection>
+    <url>scm:git:git@github.com:icgc-dcc/data-submission.git</url>
+  </scm>
   <dependencyManagement>
     <dependencies>
       <dependency>
