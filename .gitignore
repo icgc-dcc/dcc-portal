@@ -6,4 +6,5 @@ server/test-output/
 client/.settings/
 node_modules/
 /dcc-server
-server/src/test/resources/
+server/src/test/resources/codeList.json
+server/src/test/resources/dictionary.json
