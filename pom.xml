@@ -1,14 +1,30 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc-parent</artifactId>
   <packaging>pom</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <modules>
     <module>server</module>
     <module>client</module>
   </modules>
+  <scm>
+    <connection>${github.url}</connection>
+    <developerConnection>${github.url}</developerConnection>
+    <url>${github.url}</url>
+  </scm>
+  <distributionManagement>
+    <repository>
+        <id>wrench***REMOVED***</id>
+        <name>wrench***REMOVED***-releases</name>
+        <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-release</url>
+    </repository>
+    <snapshotRepository>
+        <id>wrench***REMOVED***</id>
+        <name>wrench***REMOVED***-snapshots</name>
+        <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-snapshot</url>
+    </snapshotRepository>
+  </distributionManagement>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -54,5 +70,6 @@
     <guice.version>3.0</guice.version>
     <guava.version>12.0</guava.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <github.url>scm:git:git@github.com:icgc-dcc/data-submission.git</github.url><!-- TODO: need to corresponding children poms when more than one project -->
   </properties>
 </project>
