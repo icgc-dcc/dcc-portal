@@ -2,10 +2,7 @@ target/
 .project
 .classpath
 
-server/test-output/
 client/.settings/
 client/npm-debug.log
 node_modules/
 /dcc-server
-server/src/test/resources/codeList.json
-server/src/test/resources/dictionary.json
