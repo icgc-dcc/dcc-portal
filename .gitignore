@@ -4,5 +4,9 @@ target/
 
 client/.settings/
 client/npm-debug.log
+
+server/src/test/resources/codeList.json
+server/src/test/resources/dictionary.json
+
 node_modules/
 /dcc-server
