@@ -16,6 +16,6 @@ Start the server
 Start the client (in another console)
 
 	cd data-submission/client
-	cake start
+	cake develop
 
 Point your browser to [http://localhost:3001/](http://localhost:3001/)
