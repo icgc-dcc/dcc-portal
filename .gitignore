@@ -1,12 +1,16 @@
 target/
 .project
 .classpath
+pom.xml.releaseBackup
+release.properties
 
 client/.settings/
 client/npm-debug.log
+client/pom.xml.releaseBackup
 
 server/src/test/resources/codeList.json
 server/src/test/resources/dictionary.json
+server/pom.xml.releaseBackup
 
 node_modules/
 /dcc-server
