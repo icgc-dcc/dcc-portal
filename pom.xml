@@ -3,7 +3,7 @@
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc-parent</artifactId>
   <packaging>pom</packaging>
-  <version>1.4</version>
+  <version>1.5</version>
   <modules>
     <module>server</module>
     <module>client</module>
