@@ -8,7 +8,6 @@ client/.settings/
 client/npm-debug.log
 client/pom.xml.releaseBackup
 
-server/src/test/resources/
 server/reports/
 server/pom.xml.releaseBackup
 
