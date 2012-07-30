@@ -12,3 +12,7 @@ server/reports/
 server/pom.xml.releaseBackup
 
 node_modules/
+
+.pmd
+
+server/src/test/resources/tupleState.test
