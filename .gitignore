@@ -7,6 +7,7 @@ release.properties
 client/.settings/
 client/npm-debug.log
 client/pom.xml.releaseBackup
+client/.cake_task_cache
 
 server/reports/
 server/pom.xml.releaseBackup
