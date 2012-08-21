@@ -17,3 +17,5 @@ node_modules/
 .pmd
 
 server/src/test/resources/tupleState.test
+
+client/src/main/webapp/assets/css/.DS_Store
