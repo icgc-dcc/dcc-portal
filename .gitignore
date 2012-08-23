@@ -18,4 +18,4 @@ node_modules/
 
 server/src/test/resources/tupleState.test
 
-client/src/main/webapp/assets/css/.DS_Store
+.DS_Store
