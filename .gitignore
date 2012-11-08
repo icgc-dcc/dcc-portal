@@ -22,3 +22,4 @@ server/src/test/resources/tupleState.test
 
 server/dependency-reduced-pom.xml
 *~
+dist_*/
