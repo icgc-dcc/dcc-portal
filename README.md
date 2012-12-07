@@ -1,7 +1,7 @@
 ICGC DCC Data Submission Application
 ===
 
-Instructions
+Development Instructions
 ---
 
 Clone the repository
@@ -13,9 +13,23 @@ Start the server
 	cd data-submission/server
 	mvn exec:java
 
-Start the client (in another console)
+Server Development
+---
+
+Point your browser to [http://localhost:5380/](http://localhost:5380/)
+to see the client interface.
+
+Client Development
+---
+
+Start brunch (in another console)
 
 	cd data-submission/client
-	cake develop
+	brunch w -s
+
+Start the proxy (in yet another console)
+
+	cd data-submission/client
+	cake proxy
 
 Point your browser to [http://localhost:3001/](http://localhost:3001/)
