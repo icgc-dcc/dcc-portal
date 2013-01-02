@@ -7,7 +7,7 @@
     <groupId>org.icgc.dcc</groupId>
     <artifactId>data-portal-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>ICGC DCC Data Portal API</name>
     <description>
         RESTful API for the ICGC DCC Data Portal
