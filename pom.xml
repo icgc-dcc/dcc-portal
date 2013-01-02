@@ -7,9 +7,18 @@
     <groupId>org.icgc.dcc</groupId>
     <artifactId>data-portal-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>ICGC DCC Data Portal API</name>
+    <description>
+        RESTful API for the ICGC DCC Data Portal
+    </description>
 
     <dependencies>
-        <!-- none yet -->
+        <dependency>
+            <groupId>com.yammer.dropwizard</groupId>
+            <artifactId>dropwizard-core</artifactId>
+            <version>0.6.1</version>
+        </dependency>
     </dependencies>
 
     <properties>
