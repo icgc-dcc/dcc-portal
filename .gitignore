@@ -11,6 +11,7 @@ client/.cake_task_cache
 public/
 server/reports/
 server/pom.xml.releaseBackup
+server/build/
 
 node_modules/
 
