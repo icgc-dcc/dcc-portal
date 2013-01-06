@@ -96,6 +96,18 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12</version>
+				<configuration>
+					<argLine>-Xms256m -Xmx256m</argLine>
+					<redirectTestOutputToFile>true</redirectTestOutputToFile>
+					<excludes>
+						<exclude>**/DataPortalServiceTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>1.6</version>
 				<configuration>
