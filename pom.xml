@@ -6,6 +6,7 @@
 	<groupId>org.icgc.dcc</groupId>
 	<artifactId>data-portal</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<packaging>jar</packaging>
 	<name>ICGC DCC Data Portal API</name>
 	<description>
