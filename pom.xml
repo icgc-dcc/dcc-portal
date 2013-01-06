@@ -25,6 +25,11 @@
 			<version>0.6.1.1</version>
 		</dependency>
 		<dependency>
+			<groupId>com.bazaarvoice.dropwizard</groupId>
+			<artifactId>dropwizard-redirect-bundle</artifactId>
+			<version>0.1.1</version>
+		</dependency>
+		<dependency>
 			<groupId>com.wordnik</groupId>
 			<artifactId>swagger-core_${swagger.release}</artifactId>
 			<version>${swagger.version}</version>
@@ -39,12 +44,6 @@
 			<groupId>com.wordnik</groupId>
 			<artifactId>swagger-jaxrs_${swagger.release}</artifactId>
 			<version>${swagger.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- Database -->
