@@ -32,7 +32,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.wordnik</groupId>
-			<artifactId>swagger-core_${swagger.release}</artifactId>
+			<artifactId>swagger-core_${swagger.scala.version}</artifactId>
 			<version>${swagger.version}</version>
 			<exclusions>
 				<exclusion>
@@ -43,7 +43,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.wordnik</groupId>
-			<artifactId>swagger-jaxrs_${swagger.release}</artifactId>
+			<artifactId>swagger-jaxrs_${swagger.scala.version}</artifactId>
 			<version>${swagger.version}</version>
 		</dependency>
 
@@ -160,7 +160,7 @@
 	<properties>
 		<dropwizard.version>0.6.1</dropwizard.version>
 		<swagger.version>1.2.0</swagger.version>
-		<swagger.release>2.10.0</swagger.release>
+		<swagger.scala.version>2.10.0</swagger.scala.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
