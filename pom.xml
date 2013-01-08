@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>com.hubspot.dropwizard</groupId>
 			<artifactId>dropwizard-guice</artifactId>
-			<version>0.6.1.1</version>
+			<version>0.6.1.5</version> 
 		</dependency>
 		<dependency>
 			<groupId>com.bazaarvoice.dropwizard</groupId>
