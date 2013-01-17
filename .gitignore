@@ -1,6 +1,12 @@
 target/
+
+.idea
+*.iml
+
+.settings
 .project
 .classpath
+
 pom.xml.releaseBackup
 release.properties
 
@@ -8,9 +14,10 @@ client/.settings/
 client/npm-debug.log
 client/pom.xml.releaseBackup
 client/.cake_task_cache
-
+public/
 server/reports/
 server/pom.xml.releaseBackup
+server/build/
 
 node_modules/
 
@@ -19,3 +26,7 @@ node_modules/
 server/src/test/resources/tupleState.test
 
 .DS_Store
+
+server/dependency-reduced-pom.xml
+*~
+dist_*/
