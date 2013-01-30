@@ -6,8 +6,9 @@
   <packaging>pom</packaging>
   <version>1.1-SNAPSHOT</version>
   <modules>
-    <module>server</module>
     <module>client</module>
+    <module>server</module>
+    <module>loader</module>
     <module>indexer</module>
     <module>genes</module>
   </modules>
