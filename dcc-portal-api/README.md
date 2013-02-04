@@ -1,4 +1,4 @@
-icgc-data-portal-api
+dcc-portal-api
 ===
 
 RESTful API for the ICGC DCC Data Portal. 

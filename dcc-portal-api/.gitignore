@@ -1,9 +1,0 @@
-.DS_Store
-
-.idea
-*.iml
-
-.project
-.classpath
-
-/target
