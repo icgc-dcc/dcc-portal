@@ -8,6 +8,7 @@
   <modules>
     <module>server</module>
     <module>loader</module>
+    <module>aggregator</module>
     <module>indexer</module>
     <module>genes</module>
   </modules>
