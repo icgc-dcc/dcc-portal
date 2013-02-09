@@ -5,6 +5,11 @@
   <artifactId>dcc-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.1-SNAPSHOT</version>
+  <organization>
+    <name>ICGC DCC</name>
+    <url>http://dcc.icgc.org</url>
+  </organization>
+  <inceptionYear>2012</inceptionYear>
   <modules>
     <module>aggregator</module>
     <module>genes</module>
@@ -315,6 +320,14 @@
           </exclusion>
         </exclusions>
       </dependency>
+
+      <!-- Testing - Utilities -->
+      <dependency>
+        <groupId>com.google.code</groupId>
+        <artifactId>externalsortinginjava</artifactId>
+        <version>0.1.1</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -370,6 +383,28 @@
           <version>1.2.1</version>
         </plugin>
 
+        <!-- Generate sources -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.7</version>
+          <executions>
+            <execution>
+              <id>add-source</id>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>add-source</goal>
+              </goals>
+              <configuration>
+                <sources>
+                  <source>${project.build.directory}/generated-sources/java/</source>
+                </sources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!-- Compile -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -490,6 +525,13 @@
     </plugins>
   </build>
   <properties>
+    <!-- SCM -->
+    <github.url>scm:git:git@github.com:icgc-dcc/data-submission.git</github.url><!-- TODO: need to corresponding children poms when more than one project -->
+
+    <!-- Encoding -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
     <!-- Versions - Mongo -->
     <jongo.version>0.3</jongo.version>
     <mongo.version>2.10.1</mongo.version>
@@ -527,12 +569,5 @@
     <mockito.version>1.9.0</mockito.version>
     <fest.version>2.0M8</fest.version>
     <fest-guava.version>1.0</fest-guava.version>
-
-    <!-- SCM -->
-    <github.url>scm:git:git@github.com:icgc-dcc/data-submission.git</github.url><!-- TODO: need to corresponding children poms when more than one project -->
-
-    <!-- Encoding -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 </project>
