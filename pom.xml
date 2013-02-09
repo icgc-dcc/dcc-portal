@@ -17,16 +17,22 @@
     <developerConnection>${github.url}</developerConnection>
     <url>${github.url}</url>
   </scm>
+  <repositories>
+    <repository>
+      <id>internal</id>
+      <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-dependencies</url>
+    </repository>
+  </repositories>
   <distributionManagement>
     <repository>
-        <id>internal-release</id>
-        <name>wrench***REMOVED***-releases</name>
-        <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-release</url>
+      <id>internal-release</id>
+      <name>wrench***REMOVED***-releases</name>
+      <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-release</url>
     </repository>
     <snapshotRepository>
-        <id>internal-snapshot</id>
-        <name>wrench***REMOVED***-snapshots</name>
-        <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-snapshot</url>
+      <id>internal-snapshot</id>
+      <name>wrench***REMOVED***-snapshots</name>
+      <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-snapshot</url>
     </snapshotRepository>
   </distributionManagement>
   <dependencyManagement>
@@ -74,10 +80,10 @@
     <typesafe.config.version>0.4.0</typesafe.config.version>
     <guice.version>3.0</guice.version>
     <guava.version>12.0</guava.version>
-    
+
     <!-- SCM -->
     <github.url>scm:git:git@github.com:icgc-dcc/data-submission.git</github.url><!-- TODO: need to corresponding children poms when more than one project -->
-    
+
     <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
