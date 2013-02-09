@@ -22,6 +22,47 @@
       <id>internal</id>
       <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-dependencies</url>
     </repository>
+    <repository>
+      <id>morphia</id>
+      <url> http://morphia.googlecode.com/svn/mavenrepo/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <!-- For CDH -->
+      <id>cloudera</id>
+      <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <!-- For Cascading -->
+      <id>conjars.org</id>
+      <url>http://conjars.org/repo</url>
+    </repository>
+    <repository>
+      <id>oss.sonatype</id>
+      <url>http://oss.sonatype.org/content/repositories/releases/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <!-- For com.hadoop.gplcompression -->
+      <id>twttr.com</id>
+      <url>http://maven.twttr.com/</url>
+    </repository>
   </repositories>
   <distributionManagement>
     <repository>
@@ -115,6 +156,45 @@
             <source>1.6</source>
             <target>1.6</target>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>1.7.1</version>
+          <configuration>
+            <createDependencyReducedPom>false</createDependencyReducedPom>
+            <filters>
+              <filter>
+                <artifact>*:*</artifact>
+                <excludes>
+                  <exclude>META-INF/*.SF</exclude>
+                  <exclude>META-INF/*.RSA</exclude>
+                  <exclude>META-INF/*.INF</exclude>
+                </excludes>
+              </filter>
+            </filters>
+            <transformers>
+              <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+              <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <manifestEntries>
+                  <Main-Class>${main.class}</Main-Class>
+                  <Build-Number>${maven.build.timestamp}</Build-Number>
+                  <Implementation-Title>${project.name}</Implementation-Title>
+                  <Implementation-Version>${project.version}</Implementation-Version>
+                  <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+                  <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+                </manifestEntries>
+              </transformer>
+            </transformers>
+          </configuration>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
