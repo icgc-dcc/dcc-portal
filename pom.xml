@@ -6,11 +6,11 @@
   <packaging>pom</packaging>
   <version>1.1-SNAPSHOT</version>
   <modules>
-    <module>server</module>
-    <module>loader</module>
     <module>aggregator</module>
-    <module>indexer</module>
     <module>genes</module>
+    <module>indexer</module>
+    <module>loader</module>
+    <module>server</module>
   </modules>
   <scm>
     <connection>${github.url}</connection>
@@ -57,34 +57,52 @@
         <artifactId>config</artifactId>
         <version>${typesafe.config.version}</version>
       </dependency>
-
-      <!-- Testing - Unit, mocking, assertions -->
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.easytesting</groupId>
-        <artifactId>fest-assert-core</artifactId>
-        <version>${fest.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.easytesting</groupId>
-        <artifactId>fest-guava-assert</artifactId>
-        <version>${fest-guava.version}</version>
-        <scope>test</scope>
-      </dependency>
     </dependencies>
   </dependencyManagement>
+  <dependencies>
+    <!-- Logging -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+
+    <!-- Testing - Unit, mocking, assertions -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-assert-core</artifactId>
+      <version>${fest.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-guava-assert</artifactId>
+      <version>${fest-guava.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
   <build>
     <pluginManagement>
       <plugins>
@@ -106,6 +124,12 @@
     <typesafe.config.version>0.4.0</typesafe.config.version>
     <guice.version>3.0</guice.version>
     <guava.version>12.0</guava.version>
+
+    <!-- Versions - Logging -->
+    <slf4j.version>1.6.1</slf4j.version>
+    <logback.version>1.0.3</logback.version>
+
+    <!-- Versions - Testing -->
     <junit.version>4.10</junit.version>
     <mockito.version>1.9.0</mockito.version>
     <fest.version>2.0M8</fest.version>
