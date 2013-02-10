@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc-parent</artifactId>
@@ -385,6 +386,11 @@
 
         <!-- Generate sources -->
         <plugin>
+          <groupId>com.mysema.maven</groupId>
+          <artifactId>maven-apt-plugin</artifactId>
+          <version>1.0.3</version>
+        </plugin>
+        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>1.7</version>
@@ -489,7 +495,6 @@
           <version>2.5.2</version>
           <configuration>
             <xmlOutput>true</xmlOutput>
-            <excludeFilterFile>${project.basedir}/src/main/tools/findbugs-exclude.xml</excludeFilterFile>
           </configuration>
         </plugin>
         <plugin>
@@ -526,7 +531,8 @@
   </build>
   <properties>
     <!-- SCM -->
-    <github.url>scm:git:git@github.com:icgc-dcc/data-submission.git</github.url><!-- TODO: need to corresponding children poms when more than one project -->
+    <github.url>scm:git:git@github.com:icgc-dcc/data-submission.git</github.url><!-- TODO: need to corresponding 
+      children poms when more than one project -->
 
     <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
