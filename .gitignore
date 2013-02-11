@@ -8,12 +8,13 @@ target/
 
 pom.xml.releaseBackup
 release.properties
+dependency-reduced-pom.xml
 
 client/.settings/
 client/npm-debug.log
-client/pom.xml.releaseBackup
 client/.cake_task_cache
 public/
+
 server/reports/
 server/pom.xml.releaseBackup
 server/build/
@@ -26,6 +27,5 @@ server/src/test/resources/tupleState.test
 
 .DS_Store
 
-server/dependency-reduced-pom.xml
 *~
 dist_*/
