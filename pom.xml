@@ -10,6 +10,7 @@
     <name>ICGC DCC Data Portal</name>
 
     <modules>
+        <module>dcc-portal-das</module>
         <module>dcc-portal-api</module>
         <module>dcc-portal-ui</module>
     </modules>
