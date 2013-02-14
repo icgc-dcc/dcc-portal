@@ -2,6 +2,7 @@
 
 .idea
 *.iml
+atlassian-ide-plugin.xml
 
 .classpath
 .project
