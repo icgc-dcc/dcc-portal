@@ -7,3 +7,8 @@
 .project
 
 node_modules/
+
+unit.xml
+e2e.xml
+
+target/
