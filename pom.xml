@@ -519,6 +519,7 @@
           <version>2.5.2</version>
           <configuration>
             <xmlOutput>true</xmlOutput>
+            <failOnError>false</failOnError>
           </configuration>
           <executions>
             <execution>
@@ -601,6 +602,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <pushChanges>false</pushChanges>
+          <localCheckout>true</localCheckout>
+        </configuration>
       </plugin>
     </plugins>
   </build>
