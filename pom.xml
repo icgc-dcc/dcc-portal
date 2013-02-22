@@ -17,6 +17,7 @@
     <module>aggregator</module>
     <module>genes</module>
     <module>generator</module>
+    <module>identifier</module>
     <module>indexer</module>
     <module>loader</module>
     <module>server</module>
