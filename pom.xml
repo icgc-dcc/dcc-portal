@@ -2,9 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.icgc.dcc</groupId>
-  <artifactId>dcc-parent</artifactId>
+  <artifactId>dcc-submission</artifactId>
   <packaging>pom</packaging>
-  <version>1.2.1-SNAPSHOT</version>
+  <version>1.3-SNAPSHOT</version>
+  <name>${project.artifactId}</name>
+  <description>${project.name}</description>
+  <url>https://github.com/icgc-dcc/data-submission</url>
   <organization>
     <name>ICGC DCC</name>
     <url>http://dcc.icgc.org</url>
@@ -12,8 +15,10 @@
   <inceptionYear>2012</inceptionYear>
   <modules>
     <module>aggregator</module>
+    <module>core</module>
     <module>genes</module>
     <module>generator</module>
+    <module>identifier</module>
     <module>indexer</module>
     <module>loader</module>
     <module>server</module>
@@ -22,7 +27,29 @@
     <connection>${github.url}</connection>
     <developerConnection>${github.url}</developerConnection>
     <url>${github.url}</url>
+    <tag>HEAD</tag>
   </scm>
+  <issueManagement>
+    <system>jira</system>
+    <url>https://jira.oicr.on.ca/browse/DCC</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>http://dcc-jenkins1.oicr.on.ca:8080/</url>
+  </ciManagement>
+  <licenses>
+    <license>
+      <name>GNU Public License v3.0</name>
+      <url>http://www.gnu.org/licenses</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>OICR</name>
+      <organization>OICR</organization>
+    </developer>
+  </developers>
   <repositories>
     <repository>
       <id>internal</id>
@@ -376,6 +403,7 @@
     </dependency>
   </dependencies>
   <build>
+    <defaultGoal>install</defaultGoal>
     <pluginManagement>
       <plugins>
         <!-- M2E lifecycle -->
@@ -519,6 +547,7 @@
           <version>2.5.2</version>
           <configuration>
             <xmlOutput>true</xmlOutput>
+            <failOnError>false</failOnError>
           </configuration>
           <executions>
             <execution>
@@ -601,6 +630,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <pushChanges>false</pushChanges>
+          <localCheckout>true</localCheckout>
+        </configuration>
       </plugin>
     </plugins>
   </build>
