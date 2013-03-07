@@ -8,6 +8,7 @@ atlassian-ide-plugin.xml
 .project
 
 node_modules/
+.cake_task_cache
 
 unit.xml
 e2e.xml
