@@ -20,6 +20,7 @@
     <module>genes</module>
     <module>generator</module>
     <module>identifier</module>
+    <module>importer</module>
     <module>indexer</module>
     <module>loader</module>
     <module>server</module>
