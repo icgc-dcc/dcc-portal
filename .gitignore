@@ -29,3 +29,5 @@ server/src/test/resources/tupleState.test
 
 *~
 dist_*/
+
+generator/target/
