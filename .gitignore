@@ -1,31 +1,34 @@
-target/
-
-.idea
-*.iml
-
+# Eclipse IDE
 .project
 .classpath
 
+# Intellij IDE
+.idea
+*.iml
+
+# Maven
+target/
 pom.xml.releaseBackup
 release.properties
 dependency-reduced-pom.xml
 
+# Submission UI
 client/.settings/
 client/npm-debug.log
 client/.cake_task_cache
 public/
-
-server/reports/
-server/pom.xml.releaseBackup
-server/build/
-
 node_modules/
 
-.pmd
-
+# Project Temporary files
+server/reports/
+server/build/
 server/src/test/resources/tupleState.test
-
-.DS_Store
-
-*~
+indexer/build/
+.pmd
 dist_*/
+
+# *nix temporary files
+*~
+
+# Mac metadata
+.DS_Store
