@@ -651,7 +651,7 @@
 
     <!-- Versions - Mongo -->
     <jongo.version>0.3</jongo.version>
-    <mongo.version>2.11.0</mongo.version>
+    <mongo.version>2.10.1</mongo.version>
     <mongo-hadoop.version>1.1.0-93d3667</mongo-hadoop.version> <!-- See https://groups.google.com/d/topic/cascading-user/YaZUWr3V-sM/discussion -->
 
     <!-- Versions - JSON -->
