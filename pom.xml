@@ -16,11 +16,11 @@
   <modules>
     <module>dcc-core</module>
     <module>dcc-etl</module>
-    <module>dcc-etl-aggregator</module>
     <module>dcc-etl-identifier</module>
     <module>dcc-etl-importer</module>
     <module>dcc-etl-indexer</module>
     <module>dcc-etl-loader</module>
+    <module>dcc-etl-summarizer</module>
     <module>dcc-genes</module>
     <module>dcc-generator</module>
     <module>dcc-submission-server</module>
