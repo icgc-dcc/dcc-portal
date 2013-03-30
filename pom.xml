@@ -2,29 +2,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.icgc.dcc</groupId>
-  <artifactId>dcc-submission</artifactId>
+  <artifactId>dcc</artifactId>
   <packaging>pom</packaging>
   <version>1.4-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <description>${project.name}</description>
-  <url>https://github.com/icgc-dcc/data-submission</url>
+  <url>https://github.com/icgc-dcc/dcc</url>
   <organization>
     <name>ICGC DCC</name>
     <url>http://dcc.icgc.org</url>
   </organization>
   <inceptionYear>2012</inceptionYear>
   <modules>
-    <module>aggregator</module>
-    <module>core</module>
-    <module>etl</module>
-    <module>genes</module>
-    <module>generator</module>
-    <module>identifier</module>
-    <module>importer</module>
-    <module>indexer</module>
-    <module>loader</module>
-    <module>server</module>
-    <module>test</module>
+    <module>dcc-core</module>
+    <module>dcc-etl</module>
+    <module>dcc-etl-aggregator</module>
+    <module>dcc-etl-identifier</module>
+    <module>dcc-etl-importer</module>
+    <module>dcc-etl-indexer</module>
+    <module>dcc-etl-loader</module>
+    <module>dcc-genes</module>
+    <module>dcc-generator</module>
+    <module>dcc-submission-server</module>
+    <module>dcc-test</module>
   </modules>
   <scm>
     <connection>${github.url}</connection>
