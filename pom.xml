@@ -525,10 +525,13 @@
                 <manifestEntries>
                   <Main-Class>${main.class}</Main-Class>
                   <Build-Number>${maven.build.timestamp}</Build-Number>
+                  <Compile-Timestamp>${maven.build.timestamp}</Compile-Timestamp>
+                  <Compile-User>${user.name}</Compile-User>
                   <Implementation-Title>${project.name}</Implementation-Title>
                   <Implementation-Version>${project.version}</Implementation-Version>
                   <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
                   <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+                  <Specification-Version>${maven.build.timestamp}</Specification-Version>
                 </manifestEntries>
               </transformer>
             </transformers>
