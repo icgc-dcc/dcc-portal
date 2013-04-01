@@ -1,35 +1,23 @@
-ICGC DCC Data Submission Application
+
+ICGC DCC - System
 ===
 
-Development Instructions
+Setup
 ---
 
 Clone the repository
 
-	git clone https://github.com/icgc-dcc/data-submission.git
+	git clone https://github.com/icgc-dcc/dcc.git
 
-Start the server
-
-	cd data-submission/server
-	mvn exec:java
-
-Server Development
+Build
 ---
 
-Point your browser to [http://localhost:5380/](http://localhost:5380/)
-to see the client interface.
+To build all modules in the system:
 
-Client Development
----
+	mvn
 
-Start brunch (in another console)
+To build _only_ the ETL sub-system:
 
-	cd data-submission/client
-	brunch w -s
+	mvn -amd -pl dcc-etl
+	
 
-Start the proxy (in yet another console)
-
-	cd data-submission/client
-	cake proxy
-
-Point your browser to [http://localhost:3001/](http://localhost:3001/)
