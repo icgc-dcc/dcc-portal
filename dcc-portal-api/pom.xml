@@ -32,7 +32,7 @@
     <dependency>
       <groupId>com.hubspot.dropwizard</groupId>
       <artifactId>dropwizard-guice</artifactId>
-      <version>0.6.1.5</version>
+      <version>0.6.1.6</version>
     </dependency>
     <dependency>
       <groupId>com.bazaarvoice.dropwizard</groupId>
@@ -87,7 +87,7 @@
     <dependency>
       <groupId>com.yammer.dropwizard</groupId>
       <artifactId>dropwizard-testing</artifactId>
-      <version>0.6.1</version>
+      <version>${dropwizard.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -167,7 +167,7 @@
   </build>
 
   <properties>
-    <dropwizard.version>0.6.1</dropwizard.version>
+    <dropwizard.version>0.6.2</dropwizard.version>
     <swagger.version>1.2.0</swagger.version>
     <swagger.scala.version>2.10.0</swagger.scala.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
