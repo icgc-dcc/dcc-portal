@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.icgc.dcc</groupId>
-        <artifactId>dcc-portal</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
-
+  <parent>
     <groupId>org.icgc.dcc</groupId>
-    <artifactId>dcc-portal-ui</artifactId>
+    <artifactId>dcc-portal</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
-    <packaging>jar</packaging>
-    <name>ICGC DCC Data Portal UI</name>
-    <description>
-        Website for the ICGC DCC Data Portal
-    </description>
+  <artifactId>dcc-portal-ui</artifactId>
 
+  <name>${project.artifactId}</name>
+  <description>${project.name}</description>
+
+  <repositories>
+    <!-- Parent pom bootstrap -->
+    <repository>
+      <id>internal</id>
+      <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-dependencies</url>
+    </repository>
+  </repositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <!-- compile for Java 1.6 -->
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
