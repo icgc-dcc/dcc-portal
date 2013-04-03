@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  
   <groupId>org.icgc.dcc</groupId>
-  <artifactId>dcc-submission</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>dcc</artifactId>
   <version>1.4-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
   <name>${project.artifactId}</name>
   <description>${project.name}</description>
-  <url>https://github.com/icgc-dcc/data-submission</url>
+  
+  <url>https://github.com/icgc-dcc/dcc</url>
   <organization>
     <name>ICGC DCC</name>
     <url>http://dcc.icgc.org</url>
   </organization>
   <inceptionYear>2012</inceptionYear>
+  
   <modules>
-    <module>aggregator</module>
-    <module>core</module>
-    <module>etl</module>
-    <module>genes</module>
-    <module>generator</module>
-    <module>identifier</module>
-    <module>importer</module>
-    <module>indexer</module>
-    <module>loader</module>
-    <module>server</module>
-    <module>test</module>
+    <module>dcc-core</module>
+    <module>dcc-etl</module>
+    <module>dcc-genes</module>
+    <module>dcc-generator</module>
+    <module>dcc-submission-server</module>
+    <module>dcc-test</module>
   </modules>
+  
   <scm>
     <connection>${github.url}</connection>
     <developerConnection>${github.url}</developerConnection>
     <url>${github.url}</url>
     <tag>HEAD</tag>
   </scm>
+  
   <issueManagement>
     <system>jira</system>
     <url>https://jira.oicr.on.ca/browse/DCC</url>
   </issueManagement>
+  
   <ciManagement>
     <system>Jenkins</system>
     <url>http://dcc-jenkins1.oicr.on.ca:8080/</url>
   </ciManagement>
+  
   <licenses>
     <license>
       <name>GNU Public License v3.0</name>
@@ -47,12 +50,14 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  
   <developers>
     <developer>
       <name>OICR</name>
       <organization>OICR</organization>
     </developer>
   </developers>
+  
   <repositories>
     <repository>
       <id>internal</id>
@@ -100,6 +105,7 @@
       <url>http://maven.twttr.com/</url>
     </repository>
   </repositories>
+  
   <distributionManagement>
     <repository>
       <id>internal-release</id>
@@ -112,6 +118,7 @@
       <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-snapshot</url>
     </snapshotRepository>
   </distributionManagement>
+  
   <dependencyManagement>
     <dependencies>
       <!-- Command line -->
@@ -360,6 +367,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  
   <dependencies>
     <!-- Logging -->
     <dependency>
@@ -403,8 +411,8 @@
       <version>${fest-guava.version}</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
+  
   <build>
     <defaultGoal>install</defaultGoal>
     <pluginManagement>
@@ -525,10 +533,13 @@
                 <manifestEntries>
                   <Main-Class>${main.class}</Main-Class>
                   <Build-Number>${maven.build.timestamp}</Build-Number>
+                  <Compile-Timestamp>${maven.build.timestamp}</Compile-Timestamp>
+                  <Compile-User>${user.name}</Compile-User>
                   <Implementation-Title>${project.name}</Implementation-Title>
                   <Implementation-Version>${project.version}</Implementation-Version>
                   <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
                   <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+                  <Specification-Version>${maven.build.timestamp}</Specification-Version>
                 </manifestEntries>
               </transformer>
             </transformers>
@@ -641,6 +652,7 @@
       </plugin>
     </plugins>
   </build>
+  
   <properties>
     <!-- SCM -->
     <github.url>scm:git:git@github.com:icgc-dcc/data-submission.git</github.url><!-- TODO: need to corresponding children poms when more than one project -->
@@ -649,9 +661,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+    <!-- Format -->
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+
     <!-- Versions - Mongo -->
     <jongo.version>0.3</jongo.version>
-    <mongo.version>2.10.1</mongo.version>
+    <mongo.version>2.11.0</mongo.version>
     <mongo-hadoop.version>1.1.0-93d3667</mongo-hadoop.version> <!-- See https://groups.google.com/d/topic/cascading-user/YaZUWr3V-sM/discussion -->
 
     <!-- Versions - JSON -->
@@ -688,4 +703,5 @@
     <fest-guava.version>1.0</fest-guava.version>
     <embed-mongo.version>1.28</embed-mongo.version>
   </properties>
+  
 </project>
