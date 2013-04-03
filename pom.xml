@@ -23,6 +23,7 @@
     <module>dcc-genes</module>
     <module>dcc-generator</module>
     <module>dcc-submission-server</module>
+    <module>dcc-portal</module>
     <module>dcc-test</module>
   </modules>
   
