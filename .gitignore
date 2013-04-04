@@ -5,6 +5,9 @@
 # Intellij IDE
 .idea
 *.iml
+atlassian-ide-plugin.xml
+unit.xml
+e2e.xml
 
 # Maven
 target/
