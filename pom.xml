@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
   <version>1.4-SNAPSHOT</version>
   <packaging>pom</packaging>
-  
+
   <name>${project.artifactId}</name>
   <description>${project.name}</description>
-  
+
   <url>https://github.com/icgc-dcc/dcc</url>
   <organization>
     <name>ICGC DCC</name>
     <url>http://dcc.icgc.org</url>
   </organization>
   <inceptionYear>2012</inceptionYear>
-  
+
   <modules>
     <module>dcc-core</module>
     <module>dcc-etl</module>
     <module>dcc-genes</module>
     <module>dcc-generator</module>
-    <module>dcc-submission-server</module>
+    <module>dcc-submission</module>
     <module>dcc-portal</module>
     <module>dcc-test</module>
   </modules>
-  
+
   <scm>
     <connection>${github.url}</connection>
     <developerConnection>${github.url}</developerConnection>
     <url>${github.url}</url>
     <tag>HEAD</tag>
   </scm>
-  
+
   <issueManagement>
     <system>jira</system>
     <url>https://jira.oicr.on.ca/browse/DCC</url>
   </issueManagement>
-  
+
   <ciManagement>
     <system>Jenkins</system>
     <url>http://dcc-jenkins1.oicr.on.ca:8080/</url>
   </ciManagement>
-  
+
   <licenses>
     <license>
       <name>GNU Public License v3.0</name>
@@ -51,14 +52,14 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <developers>
     <developer>
       <name>OICR</name>
       <organization>OICR</organization>
     </developer>
   </developers>
-  
+
   <repositories>
     <repository>
       <id>internal</id>
@@ -106,7 +107,7 @@
       <url>http://maven.twttr.com/</url>
     </repository>
   </repositories>
-  
+
   <distributionManagement>
     <repository>
       <id>internal-release</id>
@@ -119,7 +120,7 @@
       <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-snapshot</url>
     </snapshotRepository>
   </distributionManagement>
-  
+
   <dependencyManagement>
     <dependencies>
       <!-- Command line -->
@@ -368,7 +369,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <dependencies>
     <!-- Logging -->
     <dependency>
@@ -413,7 +414,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
   <build>
     <defaultGoal>install</defaultGoal>
     <pluginManagement>
@@ -523,6 +524,7 @@
                 <artifact>*:*</artifact>
                 <excludes>
                   <exclude>META-INF/*.SF</exclude>
+                  <exclude>META-INF/*.DSA</exclude>
                   <exclude>META-INF/*.RSA</exclude>
                   <exclude>META-INF/*.INF</exclude>
                 </excludes>
@@ -653,10 +655,11 @@
       </plugin>
     </plugins>
   </build>
-  
+
   <properties>
     <!-- SCM -->
-    <github.url>scm:git:git@github.com:icgc-dcc/data-submission.git</github.url><!-- TODO: need to corresponding children poms when more than one project -->
+    <github.url>scm:git:git@github.com:icgc-dcc/data-submission.git</github.url><!-- TODO: need to corresponding 
+      children poms when more than one project -->
 
     <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -694,8 +697,8 @@
     <elasticsearch.version>0.20.2</elasticsearch.version>
 
     <!-- Versions - Logging -->
-    <slf4j.version>1.6.1</slf4j.version>
-    <logback.version>1.0.3</logback.version>
+    <slf4j.version>1.7.4</slf4j.version>
+    <logback.version>1.0.10</logback.version>
 
     <!-- Versions - Testing -->
     <junit.version>4.10</junit.version>
@@ -704,5 +707,5 @@
     <fest-guava.version>1.0</fest-guava.version>
     <embed-mongo.version>1.28</embed-mongo.version>
   </properties>
-  
+
 </project>
