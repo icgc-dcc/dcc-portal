@@ -5,6 +5,9 @@
 # Intellij IDE
 .idea
 *.iml
+atlassian-ide-plugin.xml
+unit.xml
+e2e.xml
 
 # Maven
 target/
@@ -13,17 +16,14 @@ release.properties
 dependency-reduced-pom.xml
 
 # Submission UI
-client/.settings/
-client/npm-debug.log
-client/.cake_task_cache
+npm-debug.log
+.cake_task_cache
 public/
 node_modules/
 
 # Project Temporary files
-server/reports/
-server/build/
-server/src/test/resources/tupleState.test
-indexer/build/
+reports/
+build/
 .pmd
 dist_*/
 
