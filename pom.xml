@@ -717,7 +717,7 @@
 
     <!-- Versions - Logging -->
     <slf4j.version>1.7.4</slf4j.version>
-    <logback.version>1.0.10</logback.version>
+    <logback.version>1.0.11</logback.version>
 
     <!-- Versions - Testing -->
     <junit.version>4.10</junit.version>
