@@ -563,6 +563,8 @@
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>2.5.2</version>
           <configuration>
+            <!-- Disabling as this is really slowing down our build times. We should be getting Jenkins to do this! -->
+            <skip>true</skip>
             <xmlOutput>true</xmlOutput>
             <failOnError>false</failOnError>
           </configuration>
@@ -627,6 +629,24 @@
                 </requireJavaVersion>
               </rules>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Package -->
+      <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
+        <version>2.1.4</version>
+        <configuration>
+          <generateGitPropertiesFile>true</generateGitPropertiesFile>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>revision</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
