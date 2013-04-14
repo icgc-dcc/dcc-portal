@@ -693,7 +693,7 @@
     <mongo-hadoop.version>1.1.0-93d3667</mongo-hadoop.version> <!-- See https://groups.google.com/d/topic/cascading-user/YaZUWr3V-sM/discussion -->
 
     <!-- Versions - JSON -->
-    <jackson.version>2.1.2</jackson.version>
+    <jackson.version>2.1.4</jackson.version>
     <jackson-yaml.version>2.1.4</jackson-yaml.version>
 
     <!-- Versions - Utilities -->
