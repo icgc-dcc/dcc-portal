@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.icgc.dcc</groupId>
@@ -160,11 +159,21 @@
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-smile</artifactId>
+        <version>${jackson-smile.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
         <artifactId>jackson-dataformat-yaml</artifactId>
         <version>${jackson-yaml.version}</version>
       </dependency>
 
       <!-- Utilities -->
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+      </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
@@ -186,9 +195,9 @@
         <version>${typesafe-config.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>${lombok.version}</version>
+        <groupId>joda-time</groupId>
+        <artifactId>joda-time</artifactId>
+        <version>${joda-time.version}</version>
       </dependency>
 
       <!-- Cascading -->
@@ -694,14 +703,16 @@
 
     <!-- Versions - JSON -->
     <jackson.version>2.1.4</jackson.version>
+    <jackson-smile.version>2.1.4</jackson-smile.version>
     <jackson-yaml.version>2.1.4</jackson-yaml.version>
 
     <!-- Versions - Utilities -->
+    <lombok.version>0.11.6</lombok.version>
     <jcommander.version>1.30</jcommander.version>
     <typesafe-config.version>0.4.0</typesafe-config.version>
     <guice.version>3.0</guice.version>
     <guava.version>12.0</guava.version>
-    <lombok.version>0.11.6</lombok.version>
+    <joda-time.version>2.2</joda-time.version>
 
     <!-- Versions - Cascading -->
     <cascading.version>2.1.5</cascading.version>
