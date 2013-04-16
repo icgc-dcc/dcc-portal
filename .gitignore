@@ -12,6 +12,7 @@ e2e.xml
 # Maven
 target/
 pom.xml.releaseBackup
+git.properties
 release.properties
 dependency-reduced-pom.xml
 
