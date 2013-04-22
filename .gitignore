@@ -16,13 +16,17 @@ git.properties
 release.properties
 dependency-reduced-pom.xml
 
-# Submission UI
+# Javascript Temporary Files
 npm-debug.log
 .cake_task_cache
 public/
 node_modules/
+dist/
+components/
+.sass-cache/
+.tmp/
 
-# Project Temporary files
+# Java Temporary files
 reports/
 build/
 .pmd
