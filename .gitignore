@@ -6,8 +6,6 @@
 .idea
 *.iml
 atlassian-ide-plugin.xml
-unit.xml
-e2e.xml
 
 # Maven
 target/
@@ -25,6 +23,8 @@ dist/
 components/
 .sass-cache/
 .tmp/
+unit.xml
+e2e.xml
 
 # Java Temporary files
 reports/
