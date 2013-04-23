@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>1.4</version>
+  <version>1.6-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -31,7 +31,7 @@
     <connection>${github.url}</connection>
     <developerConnection>${github.url}</developerConnection>
     <url>${github.url}</url>
-    <tag>v1.4</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
