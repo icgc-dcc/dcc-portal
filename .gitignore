@@ -1,6 +1,7 @@
 # Eclipse IDE
 .project
 .classpath
+org.eclipse.core.resources.prefs
 
 # Intellij IDE
 .idea
