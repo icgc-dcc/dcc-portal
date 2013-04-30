@@ -519,7 +519,8 @@
           <version>2.12</version>
           <configuration>
             <argLine>-Xms256m -Xmx256m</argLine>
-            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+            <redirectTestOutputToFile>${test.redirectTestOutputToFile}</redirectTestOutputToFile>
+            <useFile>${test.useFile}</useFile>
           </configuration>
         </plugin>
 
@@ -573,7 +574,7 @@
           <version>2.5.2</version>
           <configuration>
             <!-- Disabling as this is really slowing down our build times. We should be getting Jenkins to do this! -->
-            <skip>true</skip>
+            <skip>${install.skipFindbugs}</skip>
             <xmlOutput>true</xmlOutput>
             <failOnError>false</failOnError>
           </configuration>
@@ -684,6 +685,17 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>jenkins</id>
+      <properties>
+        <test.redirectTestOutputToFile>false</test.redirectTestOutputToFile>
+        <test.useFile>false</test.useFile>
+        <install.skipFindbugs>false</install.skipFindbugs>
+      </properties>
+    </profile>
+  </profiles>
+
   <properties>
     <!-- SCM -->
     <github.url>scm:git:git@github.com:icgc-dcc/dcc.git</github.url>
@@ -694,6 +706,11 @@
 
     <!-- Format -->
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+
+    <!-- Plugins -->
+    <test.redirectTestOutputToFile>true</test.redirectTestOutputToFile>
+    <test.useFile>true</test.useFile>
+    <install.skipFindbugs>true</install.skipFindbugs>
 
     <!-- Versions - Mongo -->
     <jongo.version>0.3</jongo.version>
