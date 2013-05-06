@@ -1,4 +1,3 @@
-
 ICGC DCC - System
 ===
 
@@ -19,5 +18,9 @@ To build all modules in the system:
 To build _only_ the ETL sub-system:
 
 	mvn -amd -pl dcc-etl
+	
+To build _only_ the Portal sub-system:
+
+	mvn -amd -pl dcc-portal
 	
 
