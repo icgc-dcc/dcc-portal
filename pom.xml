@@ -723,7 +723,7 @@
     <jackson-yaml.version>2.1.4</jackson-yaml.version>
 
     <!-- Versions - Utilities -->
-    <lombok.version>0.11.8</lombok.version>
+    <lombok.version>0.11.6</lombok.version>
     <jcommander.version>1.30</jcommander.version>
     <typesafe-config.version>0.4.0</typesafe-config.version>
     <guice.version>3.0</guice.version>
