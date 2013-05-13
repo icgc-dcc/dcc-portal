@@ -105,6 +105,13 @@
       <id>twttr.com</id>
       <url>http://maven.twttr.com/</url>
     </repository>
+
+    <!-- Utilities -->
+    <repository>
+      <id>externalsortinginjava.googlecode.com</id>
+      <url>http://externalsortinginjava.googlecode.com/svn/m2/releases</url>
+    </repository>
+
   </repositories>
 
   <distributionManagement>
