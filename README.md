@@ -4,45 +4,54 @@ ICGC DCC - System
 Setup
 ---
 
-Clone the repository
+Clone the repository:
 
-	git clone https://github.com/icgc-dcc/dcc.git
+`git clone https://github.com/icgc-dcc/dcc.git`
 	
-Install MongoDB 2.4.1
+Install MongoDB 2.4.1:
 
-	http://www.mongodb.org/downloads
+[http://www.mongodb.org/downloads](http://www.mongodb.org/downloads)
 
-Install ElasticSearch 0.20.2
+Install ElasticSearch 0.20.2:
 	
-	http://www.elasticsearch.org/downloads
+[http://www.elasticsearch.org/downloads](http://www.elasticsearch.org/downloads)
 
-Install UI development environment
+Install UI development environment:
 	
-	https://github.com/icgc-dcc/dcc/tree/develop/dcc-submission/dcc-submission-ui/README.md
-	https://github.com/icgc-dcc/dcc/tree/develop/dcc-portal/dcc-portal-ui/README.md
+- [dcc-submission-ui](dcc-submission/dcc-submission-ui/README.md)
+- [dcc-portal-ui](dcc-portal/dcc-portal-ui/README.md)
+
 
 Build
 ---
 
 To build, test and install _all_ modules in the system:
 
-	mvn
+`mvn`
 	
 To build, test and install _only_ the Submission sub-system modules:
 
-	mvn -amd -pl dcc-submission	
+`mvn -amd -pl dcc-submission`
 
 To build, test and install _only_ the ETL sub-system modules:
 
-	mvn -amd -pl dcc-etl
+`mvn -amd -pl dcc-etl`
 	
 To build, test and install _only_ the Portal sub-system modules:
 
-	mvn -amd -pl dcc-portal	
+`mvn -amd -pl dcc-portal`
 	
 Run
 ---
 
-See submodules documentation
+See module documentation
+
+Modules
+---
+Top level system modules:
+
+- [Submission](dcc-submission/README.md)
+- [ETL](dcc-etl/README.md)
+- [Portal](dcc-portal/README.md)
 	
 
