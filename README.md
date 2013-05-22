@@ -1,6 +1,8 @@
 ICGC DCC - System
 ===
 
+Parent project of the ICGC DCC system.
+
 Setup
 ---
 
