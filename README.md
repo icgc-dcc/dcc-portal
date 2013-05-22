@@ -7,20 +7,42 @@ Setup
 Clone the repository
 
 	git clone https://github.com/icgc-dcc/dcc.git
+	
+Install MongoDB 2.4.1
+
+	http://www.mongodb.org/downloads
+
+Install ElasticSearch 0.20.2
+	
+	http://www.elasticsearch.org/downloads
+
+Install UI development environment
+	
+	https://github.com/icgc-dcc/dcc/tree/develop/dcc-submission/dcc-submission-ui/README.md
+	https://github.com/icgc-dcc/dcc/tree/develop/dcc-portal/dcc-portal-ui/README.md
 
 Build
 ---
 
-To build all modules in the system:
+To build, test and install _all_ modules in the system:
 
 	mvn
+	
+To build, test and install _only_ the Submission sub-system modules:
 
-To build _only_ the ETL sub-system:
+	mvn -amd -pl dcc-submission	
+
+To build, test and install _only_ the ETL sub-system modules:
 
 	mvn -amd -pl dcc-etl
 	
-To build _only_ the Portal sub-system:
+To build, test and install _only_ the Portal sub-system modules:
 
-	mvn -amd -pl dcc-portal
+	mvn -amd -pl dcc-portal	
+	
+Run
+---
+
+See submodules documentation
 	
 
