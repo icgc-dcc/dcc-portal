@@ -25,6 +25,7 @@
     <module>dcc-submission</module>
     <module>dcc-portal</module>
     <module>dcc-test</module>
+    <module>dcc-downloader</module>
   </modules>
 
   <scm>
