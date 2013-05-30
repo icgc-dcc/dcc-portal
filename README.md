@@ -9,6 +9,10 @@ Setup
 Clone the repository:
 
 `git clone https://github.com/icgc-dcc/dcc.git`
+
+Install Maven 3.0.3
+
+[http://maven.apache.org/download.cgi](http://maven.apache.org/download.cgi)
 	
 Install MongoDB 2.4.1:
 
