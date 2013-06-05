@@ -520,6 +520,13 @@
           </configuration>
         </plugin>
 
+        <!-- Package -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+
         <!-- Test -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
