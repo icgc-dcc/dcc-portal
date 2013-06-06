@@ -755,7 +755,7 @@
     <hadoop-mr1-cdh.version>${hadoop.version}-mr1-${cdh.version}</hadoop-mr1-cdh.version>
 
     <!-- Versions - Search -->
-    <elasticsearch.version>0.20.2</elasticsearch.version>
+    <elasticsearch.version>0.90.1</elasticsearch.version>
 
     <!-- Versions - Logging -->
     <slf4j.version>1.7.4</slf4j.version>
