@@ -26,6 +26,7 @@
     <module>dcc-portal</module>
     <module>dcc-test</module>
     <module>dcc-downloader</module>
+    <module>dcc-identifier</module>
   </modules>
 
   <scm>
@@ -130,6 +131,19 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Dropwizard -->
+      <dependency>
+        <groupId>com.yammer.dropwizard</groupId>
+        <artifactId>dropwizard-core</artifactId>
+        <version>${dropwizard.version}</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>slf4j-api</artifactId>
+            <groupId>org.slf4j</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
       <!-- Command line -->
       <dependency>
         <groupId>com.beust</groupId>
@@ -726,6 +740,9 @@
     <test.redirectTestOutputToFile>true</test.redirectTestOutputToFile>
     <test.useFile>true</test.useFile>
     <install.skipFindbugs>true</install.skipFindbugs>
+
+    <!-- Versions - Dropwizard -->
+    <dropwizard.version>0.6.2</dropwizard.version>
 
     <!-- Versions - Mongo -->
     <jongo.version>0.3</jongo.version>
