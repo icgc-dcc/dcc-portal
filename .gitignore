@@ -32,6 +32,7 @@ reports/
 build/
 .pmd
 dist_*/
+mem.h2.db
 
 # *nix temporary files
 *~
