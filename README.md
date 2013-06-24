@@ -18,7 +18,7 @@ Install MongoDB 2.4.1:
 
 [http://www.mongodb.org/downloads](http://www.mongodb.org/downloads)
 
-Install ElasticSearch 0.20.2:
+Install ElasticSearch 0.90.1:
 	
 [http://www.elasticsearch.org/downloads](http://www.elasticsearch.org/downloads)
 
