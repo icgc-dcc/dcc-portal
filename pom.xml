@@ -19,6 +19,7 @@
 
   <modules>
     <module>dcc-core</module>
+    <module>dcc-hadoop</module>
     <module>dcc-etl</module>
     <module>dcc-genes</module>
     <module>dcc-generator</module>
