@@ -26,7 +26,6 @@
     <module>dcc-portal</module>
     <module>dcc-test</module>
     <module>dcc-downloader</module>
-    <module>dcc-identifier</module>
   </modules>
 
   <scm>
