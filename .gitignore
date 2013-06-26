@@ -39,3 +39,6 @@ mem.h2.db
 
 # Mac metadata
 .DS_Store
+
+# Kaleidoscope
+*.orig
