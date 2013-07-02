@@ -18,6 +18,10 @@ Install MongoDB 2.4.1:
 
 [http://www.mongodb.org/downloads](http://www.mongodb.org/downloads)
 
+Install PostgreSQL 9.2.4:
+
+[http://www.postgresql.org/download/](http://www.postgresql.org/download/)
+
 Install ElasticSearch 0.90.1:
 	
 [http://www.elasticsearch.org/downloads](http://www.elasticsearch.org/downloads)
