@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>1.9-SNAPSHOT</version>
+  <version>1.10-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -221,6 +221,11 @@
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
         <version>${joda-time.version}</version>
+      </dependency>
+      <dependency>
+	    <groupId>net.sf.supercsv</groupId>
+	    <artifactId>super-csv</artifactId>
+	    <version>${super.csv.version}</version>
       </dependency>
 
       <!-- Cascading -->
@@ -898,6 +903,7 @@
     <guice.version>3.0</guice.version>
     <guava.version>12.0</guava.version>
     <joda-time.version>2.2</joda-time.version>
+    <super.csv.version>2.0.1</super.csv.version>
 
     <!-- Versions - Cascading -->
     <cascading.version>2.1.5</cascading.version>
