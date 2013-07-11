@@ -33,6 +33,7 @@ build/
 .pmd
 dist_*/
 mem.h2.db
+mem.trace.db
 
 # *nix temporary files
 *~
