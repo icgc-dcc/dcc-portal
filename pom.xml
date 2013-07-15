@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>1.6-SNAPSHOT</version>
+  <version>1.10-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -19,12 +19,15 @@
 
   <modules>
     <module>dcc-core</module>
+    <module>dcc-hadoop</module>
     <module>dcc-etl</module>
     <module>dcc-genes</module>
     <module>dcc-generator</module>
     <module>dcc-submission</module>
     <module>dcc-portal</module>
     <module>dcc-test</module>
+    <module>dcc-downloader</module>
+    <module>dcc-identifier</module>
   </modules>
 
   <scm>
@@ -129,6 +132,19 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Dropwizard -->
+      <dependency>
+        <groupId>com.yammer.dropwizard</groupId>
+        <artifactId>dropwizard-core</artifactId>
+        <version>${dropwizard.version}</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>slf4j-api</artifactId>
+            <groupId>org.slf4j</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
       <!-- Command line -->
       <dependency>
         <groupId>com.beust</groupId>
@@ -206,6 +222,11 @@
         <artifactId>joda-time</artifactId>
         <version>${joda-time.version}</version>
       </dependency>
+      <dependency>
+	    <groupId>net.sf.supercsv</groupId>
+	    <artifactId>super-csv</artifactId>
+	    <version>${super.csv.version}</version>
+      </dependency>
 
       <!-- Cascading -->
       <dependency>
@@ -276,6 +297,44 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
           </exclusion>
+
+          <!-- DCC-1264 -->
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jsp-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jsp-api-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>servlet-api-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>tomcat</groupId>
+            <artifactId>jasper-compiler</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>tomcat</groupId>
+            <artifactId>jasper-runtime</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
@@ -292,6 +351,52 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+          </exclusion>
+
+          <!-- DCC-1264 -->
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jsp-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jsp-api-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>servlet-api-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>tomcat</groupId>
+            <artifactId>jasper-compiler</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>tomcat</groupId>
+            <artifactId>jasper-runtime</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
@@ -299,6 +404,58 @@
         <artifactId>hadoop-hdfs</artifactId>
         <version>${hadoop-cdh.version}</version>
         <scope>runtime</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+          </exclusion>
+
+          <!-- DCC-1264 -->
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jsp-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jsp-api-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>servlet-api-2.1</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>tomcat</groupId>
+            <artifactId>jasper-compiler</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>tomcat</groupId>
+            <artifactId>jasper-runtime</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>com.hadoop.gplcompression</groupId>
@@ -519,11 +676,18 @@
           </configuration>
         </plugin>
 
+        <!-- Package -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+
         <!-- Test -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.12</version>
+          <version>2.14.1</version>
           <configuration>
             <argLine>-Xms256m -Xmx256m</argLine>
             <redirectTestOutputToFile>${test.redirectTestOutputToFile}</redirectTestOutputToFile>
@@ -534,7 +698,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>1.7.1</version>
+          <version>2.0</version>
           <configuration>
             <filters>
               <filter>
@@ -719,6 +883,9 @@
     <test.useFile>true</test.useFile>
     <install.skipFindbugs>true</install.skipFindbugs>
 
+    <!-- Versions - Dropwizard -->
+    <dropwizard.version>0.6.2</dropwizard.version>
+
     <!-- Versions - Mongo -->
     <jongo.version>0.3</jongo.version>
     <mongo.version>2.11.0</mongo.version>
@@ -736,6 +903,7 @@
     <guice.version>3.0</guice.version>
     <guava.version>12.0</guava.version>
     <joda-time.version>2.2</joda-time.version>
+    <super.csv.version>2.0.1</super.csv.version>
 
     <!-- Versions - Cascading -->
     <cascading.version>2.1.5</cascading.version>
@@ -747,7 +915,7 @@
     <hadoop-mr1-cdh.version>${hadoop.version}-mr1-${cdh.version}</hadoop-mr1-cdh.version>
 
     <!-- Versions - Search -->
-    <elasticsearch.version>0.20.2</elasticsearch.version>
+    <elasticsearch.version>0.90.1</elasticsearch.version>
 
     <!-- Versions - Logging -->
     <slf4j.version>1.7.4</slf4j.version>
@@ -759,6 +927,8 @@
     <fest.version>2.0M8</fest.version>
     <fest-guava.version>1.0</fest-guava.version>
     <embed-mongo.version>1.28</embed-mongo.version>
+
+    <dcc-resources.version>0.6d.130606</dcc-resources.version>
   </properties>
 
 </project>

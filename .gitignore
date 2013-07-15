@@ -32,9 +32,15 @@ reports/
 build/
 .pmd
 dist_*/
+mem.h2.db
+mem.lock.db
+mem.trace.db
 
 # *nix temporary files
 *~
 
 # Mac metadata
 .DS_Store
+
+# Kaleidoscope
+*.orig
