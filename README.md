@@ -62,7 +62,7 @@ To build, test and install _only_ the Portal sub-system modules:
 Run
 ---
 
-See module documentation
+See module documentation below.
 
 Modules
 ---
