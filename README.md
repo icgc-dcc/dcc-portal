@@ -43,6 +43,10 @@ To build, test and install _only_ the Submission sub-system modules:
 
 `mvn -amd -pl dcc-submission`
 
+To build, test and install _only_ the ID sub-system module:
+
+`mvn -amd -pl dcc-identifier`
+
 To build, test and install _only_ the ETL sub-system modules:
 
 `mvn -amd -pl dcc-etl`
@@ -58,13 +62,14 @@ To build, test and install _only_ the Portal sub-system modules:
 Run
 ---
 
-See module documentation
+See module documentation below.
 
 Modules
 ---
 Top level system modules:
 
 - [Submission](dcc-submission/README.md)
+- [ID](dcc-identifier/README.md)
 - [ETL](dcc-etl/README.md)
 - [Download](dcc-downloader/README.md)
 - [Portal](dcc-portal/README.md)
