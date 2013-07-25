@@ -223,9 +223,9 @@
         <version>${joda-time.version}</version>
       </dependency>
       <dependency>
-	    <groupId>net.sf.supercsv</groupId>
-	    <artifactId>super-csv</artifactId>
-	    <version>${super.csv.version}</version>
+        <groupId>net.sf.supercsv</groupId>
+        <artifactId>super-csv</artifactId>
+        <version>${super.csv.version}</version>
       </dependency>
 
       <!-- Cascading -->
@@ -676,13 +676,6 @@
           </configuration>
         </plugin>
 
-        <!-- Package -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>2.4</version>
-        </plugin>
-
         <!-- Test -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -695,10 +688,21 @@
           </configuration>
         </plugin>
 
+        <!-- Package -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>2.0</version>
+          <version>2.1</version>
           <configuration>
             <filters>
               <filter>
