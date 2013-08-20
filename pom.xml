@@ -132,6 +132,23 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- DCC -->
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-resources</artifactId>
+        <version>${dcc-resources.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-cghub</artifactId>
+        <version>${dcc-cghub.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-heliotrope</artifactId>
+        <version>${dcc-heliotrope.version}</version>
+      </dependency>
+
       <!-- Dropwizard -->
       <dependency>
         <groupId>com.yammer.dropwizard</groupId>
@@ -933,7 +950,9 @@
     <embed-mongo.version>1.28</embed-mongo.version>
 
     <!-- Versions - Resources -->
-    <dcc-resources.version>0.6d.130606</dcc-resources.version>
+    <dcc-resources.version>0.6e</dcc-resources.version>
+    <dcc-cghub.version>2</dcc-cghub.version>
+    <dcc-heliotrope.version>6</dcc-heliotrope.version>
   </properties>
 
 </project>
