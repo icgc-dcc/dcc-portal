@@ -132,6 +132,23 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- DCC -->
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-resources</artifactId>
+        <version>${dcc-resources.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-cghub</artifactId>
+        <version>${dcc-cghub.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-heliotrope</artifactId>
+        <version>${dcc-heliotrope.version}</version>
+      </dependency>
+
       <!-- Dropwizard -->
       <dependency>
         <groupId>com.yammer.dropwizard</groupId>
@@ -891,14 +908,14 @@
     <dropwizard.version>0.6.2</dropwizard.version>
 
     <!-- Versions - Mongo -->
-    <jongo.version>0.3</jongo.version>
+    <jongo.version>0.4</jongo.version>
     <mongo.version>2.11.0</mongo.version>
     <mongo-hadoop.version>1.1.0-93d3667</mongo-hadoop.version> <!-- See https://groups.google.com/d/topic/cascading-user/YaZUWr3V-sM/discussion -->
 
     <!-- Versions - JSON -->
-    <jackson.version>2.1.4</jackson.version>
-    <jackson-smile.version>2.1.4</jackson-smile.version>
-    <jackson-yaml.version>2.1.4</jackson-yaml.version>
+    <jackson.version>2.1.5</jackson.version>
+    <jackson-smile.version>2.1.5</jackson-smile.version>
+    <jackson-yaml.version>2.1.5</jackson-yaml.version>
 
     <!-- Versions - Utilities -->
     <lombok.version>0.12.0</lombok.version>
@@ -910,7 +927,7 @@
     <super.csv.version>2.0.1</super.csv.version>
 
     <!-- Versions - Cascading -->
-    <cascading.version>2.1.5</cascading.version>
+    <cascading.version>2.1.6</cascading.version>
 
     <!-- Versions - Hadoop -->
     <cdh.version>cdh4.1.2</cdh.version>
@@ -922,17 +939,20 @@
     <elasticsearch.version>0.90.1</elasticsearch.version>
 
     <!-- Versions - Logging -->
-    <slf4j.version>1.7.4</slf4j.version>
+    <slf4j.version>1.7.5</slf4j.version>
     <logback.version>1.0.10</logback.version>
 
     <!-- Versions - Testing -->
     <junit.version>4.10</junit.version>
-    <mockito.version>1.9.0</mockito.version>
-    <fest.version>2.0M8</fest.version>
+    <mockito.version>1.9.5</mockito.version>
+    <fest.version>2.0M10</fest.version>
     <fest-guava.version>1.0</fest-guava.version>
     <embed-mongo.version>1.28</embed-mongo.version>
 
-    <dcc-resources.version>0.6d.130606</dcc-resources.version>
+    <!-- Versions - Resources -->
+    <dcc-resources.version>0.6e</dcc-resources.version>
+    <dcc-cghub.version>2</dcc-cghub.version>
+    <dcc-heliotrope.version>6</dcc-heliotrope.version>
   </properties>
 
 </project>
