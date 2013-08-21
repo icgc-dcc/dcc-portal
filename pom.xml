@@ -916,7 +916,7 @@
     <dropwizard.version>0.6.2</dropwizard.version>
 
     <!-- Versions - Mongo -->
-    <jongo.version>0.4</jongo.version>
+    <jongo.version>0.3</jongo.version>
     <mongo.version>2.11.0</mongo.version>
     <mongo-hadoop.version>1.1.0-93d3667</mongo-hadoop.version> <!-- See https://groups.google.com/d/topic/cascading-user/YaZUWr3V-sM/discussion -->
 
