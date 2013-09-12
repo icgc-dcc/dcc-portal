@@ -971,7 +971,7 @@
 
     <!-- Versions - Resources -->
     <dcc-resources.version>0.6e</dcc-resources.version>
-    <dcc-cghub.version>2</dcc-cghub.version>
+    <dcc-cghub.version>3</dcc-cghub.version>
     <dcc-heliotrope.version>6</dcc-heliotrope.version>
   </properties>
 
