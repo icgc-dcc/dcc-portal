@@ -761,7 +761,8 @@
               <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                 <manifestEntries>
                   <Main-Class>${main.class}</Main-Class>
-                  <Build-Number>${maven.build.timestamp}</Build-Number>
+                  <Build-Number>${env.BUILD_NUMBER}</Build-Number>
+                  <Build-Id>${env.BUILD_ID}</Build-Id>
                   <Compile-Timestamp>${maven.build.timestamp}</Compile-Timestamp>
                   <Compile-User>${user.name}</Compile-User>
                   <Implementation-Title>${project.name}</Implementation-Title>
