@@ -761,8 +761,11 @@
               <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                 <manifestEntries>
                   <Main-Class>${main.class}</Main-Class>
-                  <Build-Number>${env.BUILD_NUMBER}</Build-Number>
                   <Build-Id>${env.BUILD_ID}</Build-Id>
+                  <Build-Number>${env.BUILD_NUMBER}</Build-Number>
+                  <Build-Branch>${env.GIT_BRANCH}</Build-Branch>
+                  <Build-Commit>${env.GIT_COMMIT}</Build-Commit>
+                  <Build-Url>${env.BUILD_URL}</Build-Url>
                   <Compile-Timestamp>${maven.build.timestamp}</Compile-Timestamp>
                   <Compile-User>${user.name}</Compile-User>
                   <Implementation-Title>${project.name}</Implementation-Title>
@@ -911,6 +914,12 @@
         <install.skipFindbugs>false</install.skipFindbugs>
       </properties>
     </profile>
+    <profile>
+      <id>release</id>
+      <properties>
+        <package.attach>true</package.attach>
+      </properties>
+    </profile>
   </profiles>
 
   <properties>
@@ -928,6 +937,7 @@
     <test.redirectTestOutputToFile>true</test.redirectTestOutputToFile>
     <test.useFile>true</test.useFile>
     <install.skipFindbugs>true</install.skipFindbugs>
+    <package.attach>false</package.attach>
 
     <!-- Versions - Dropwizard -->
     <dropwizard.version>0.6.2</dropwizard.version>
