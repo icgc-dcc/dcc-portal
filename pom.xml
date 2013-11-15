@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>1.11-SNAPSHOT</version>
+  <version>2.1.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -325,6 +325,10 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+          </exclusion>
 
           <!-- DCC-1264 -->
           <exclusion>
@@ -558,6 +562,10 @@
             <artifactId>slf4j-log4j12</artifactId>
             <groupId>org.slf4j</groupId>
           </exclusion>
+          <exclusion>
+            <artifactId>mockito-all</artifactId>
+            <groupId>org.mockito</groupId>
+          </exclusion>
         </exclusions>
       </dependency>
 
@@ -600,6 +608,18 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito</artifactId>
+      <version>${powermock.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -761,7 +781,11 @@
               <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                 <manifestEntries>
                   <Main-Class>${main.class}</Main-Class>
-                  <Build-Number>${maven.build.timestamp}</Build-Number>
+                  <Build-Id>${env.BUILD_ID}</Build-Id>
+                  <Build-Number>${env.BUILD_NUMBER}</Build-Number>
+                  <Build-Branch>${env.GIT_BRANCH}</Build-Branch>
+                  <Build-Commit>${env.GIT_COMMIT}</Build-Commit>
+                  <Build-Url>${env.BUILD_URL}</Build-Url>
                   <Compile-Timestamp>${maven.build.timestamp}</Compile-Timestamp>
                   <Compile-User>${user.name}</Compile-User>
                   <Implementation-Title>${project.name}</Implementation-Title>
@@ -910,6 +934,12 @@
         <install.skipFindbugs>false</install.skipFindbugs>
       </properties>
     </profile>
+    <profile>
+      <id>release</id>
+      <properties>
+        <package.attach>true</package.attach>
+      </properties>
+    </profile>
   </profiles>
 
   <properties>
@@ -927,6 +957,7 @@
     <test.redirectTestOutputToFile>true</test.redirectTestOutputToFile>
     <test.useFile>true</test.useFile>
     <install.skipFindbugs>true</install.skipFindbugs>
+    <package.attach>false</package.attach>
 
     <!-- Versions - Dropwizard -->
     <dropwizard.version>0.6.2</dropwizard.version>
@@ -946,7 +977,7 @@
     <jcommander.version>1.30</jcommander.version>
     <typesafe-config.version>0.4.0</typesafe-config.version>
     <guice.version>3.0</guice.version>
-    <guava.version>14.0.1</guava.version>
+    <guava.version>15.0</guava.version>
     <jsr305.version>1.3.9</jsr305.version>
     <joda-time.version>2.2</joda-time.version>
     <super.csv.version>2.0.1</super.csv.version>
@@ -971,6 +1002,7 @@
     <!-- Versions - Testing -->
     <junit.version>4.10</junit.version>
     <mockito.version>1.9.5</mockito.version>
+    <powermock.version>1.5.1</powermock.version>
     <fest.version>2.0M10</fest.version>
     <fest-guava.version>1.0</fest-guava.version>
     <embed-mongo.version>1.28</embed-mongo.version>
