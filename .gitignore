@@ -45,3 +45,7 @@ mem.trace.db
 
 # Kaleidoscope
 *.orig
+
+# Reference genome databases
+*.fasta
+*.fasta.fai
