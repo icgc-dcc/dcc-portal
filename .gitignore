@@ -46,3 +46,7 @@ logs/
 
 # Kaleidoscope
 *.orig
+
+# Reference genome databases
+*.fasta
+*.fasta.fai
