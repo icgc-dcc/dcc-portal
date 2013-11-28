@@ -45,3 +45,6 @@ mem.trace.db
 
 # Kaleidoscope
 *.orig
+
+# Python
+*.pyc
