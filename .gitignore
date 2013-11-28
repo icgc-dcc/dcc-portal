@@ -29,6 +29,7 @@ unit.xml
 e2e.xml
 
 # Java Temporary files
+logs/
 reports/
 build/
 .pmd
