@@ -46,5 +46,11 @@ mem.trace.db
 # Kaleidoscope
 *.orig
 
+
 # Python
 *.pyc
+
+# Reference genome databases
+*.fasta
+*.fasta.fai
+
