@@ -54,3 +54,5 @@ mem.trace.db
 *.fasta
 *.fasta.fai
 
+# Keys
+*.pem
