@@ -46,7 +46,6 @@ mem.trace.db
 # Kaleidoscope
 *.orig
 
-
 # Python
 *.pyc
 
@@ -56,3 +55,6 @@ mem.trace.db
 
 # Keys
 *.pem
+
+# Vagrant
+.vagrant/
