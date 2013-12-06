@@ -39,13 +39,13 @@ mem.trace.db
 
 # *nix temporary files
 *~
+*.swp
 
 # Mac metadata
 .DS_Store
 
 # Kaleidoscope
 *.orig
-
 
 # Python
 *.pyc
@@ -56,3 +56,6 @@ mem.trace.db
 
 # Keys
 *.pem
+
+# Vagrant
+.vagrant/
