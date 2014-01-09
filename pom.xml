@@ -753,6 +753,9 @@
             <argLine>-Xms256m -Xmx256m</argLine>
             <redirectTestOutputToFile>${test.redirectTestOutputToFile}</redirectTestOutputToFile>
             <useFile>${test.useFile}</useFile>
+            <systemProperties>
+              <java.awt.headless>true</java.awt.headless>
+            </systemProperties>
           </configuration>
         </plugin>
 
@@ -1015,7 +1018,7 @@
     <embed-mongo.version>1.40</embed-mongo.version>
 
     <!-- Versions - Resources -->
-    <dcc-resources.version>0.7a</dcc-resources.version>
+    <dcc-resources.version>0.7c</dcc-resources.version>
     <dcc-cghub.version>3</dcc-cghub.version>
     <dcc-heliotrope.version>6</dcc-heliotrope.version>
   </properties>
