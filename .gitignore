@@ -36,6 +36,7 @@ dist_*/
 mem.h2.db
 mem.lock.db
 mem.trace.db
+logs/
 
 # *nix temporary files
 *~
