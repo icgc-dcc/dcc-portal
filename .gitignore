@@ -36,9 +36,11 @@ dist_*/
 mem.h2.db
 mem.lock.db
 mem.trace.db
+logs/
 
 # *nix temporary files
 *~
+*.swp
 
 # Mac metadata
 .DS_Store
@@ -46,6 +48,15 @@ mem.trace.db
 # Kaleidoscope
 *.orig
 
+# Python
+*.pyc
+
 # Reference genome databases
 *.fasta
 *.fasta.fai
+
+# Keys
+*.pem
+
+# Vagrant
+.vagrant/
