@@ -1014,7 +1014,7 @@
 
     <!-- Versions - Resources -->
     <dcc-resources.version>0.7e</dcc-resources.version>
-    <dcc-cghub.version>3</dcc-cghub.version>
+    <dcc-cghub.version>4</dcc-cghub.version>
     <dcc-heliotrope.version>7</dcc-heliotrope.version>
   </properties>
 
