@@ -932,6 +932,7 @@
         <version>2.1.9</version>
         <configuration>
           <generateGitPropertiesFile>true</generateGitPropertiesFile>
+          <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
         </configuration>
         <executions>
           <execution>
