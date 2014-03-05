@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>2.6.1-SNAPSHOT</version>
+  <version>2.6.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -1006,17 +1006,17 @@
     <dropwizard.version>0.6.2</dropwizard.version>
 
     <!-- Versions - Mongo -->
-    <jongo.version>0.3</jongo.version>
-    <mongo.version>2.11.0</mongo.version>
+    <mongo.version>2.11.4</mongo.version>
     <mongo-hadoop.version>1.1.0-93d3667</mongo-hadoop.version> <!-- See https://groups.google.com/d/topic/cascading-user/YaZUWr3V-sM/discussion -->
+    <jongo.version>1.0</jongo.version>
 
     <!-- Versions - JSON -->
-    <jackson.version>2.1.5</jackson.version>
-    <jackson-smile.version>2.1.5</jackson-smile.version>
-    <jackson-yaml.version>2.1.5</jackson-yaml.version>
+    <jackson.version>2.2.3</jackson.version>
+    <jackson-smile.version>2.2.3</jackson-smile.version>
+    <jackson-yaml.version>2.2.3</jackson-yaml.version>
 
     <!-- Versions - Utilities -->
-    <lombok.version>1.12.2</lombok.version>
+    <lombok.version>1.12.4</lombok.version>
     <jcommander.version>1.30</jcommander.version>
     <typesafe-config.version>1.2.0</typesafe-config.version>
     <guice.version>3.0</guice.version>
