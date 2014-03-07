@@ -1067,7 +1067,7 @@
     <embed-mongo.version>1.40</embed-mongo.version>
 
     <!-- Versions - Resources -->
-    <dcc-resources.version>0.7e</dcc-resources.version>
+    <dcc-resources.version>0.8a</dcc-resources.version>
     <dcc-cghub.version>4</dcc-cghub.version>
     <dcc-heliotrope.version>7</dcc-heliotrope.version>
   </properties>
