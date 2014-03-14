@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>2.6.3-SNAPSHOT</version>
+  <version>2.6.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -107,6 +107,17 @@
       <!-- For com.hadoop.gplcompression -->
       <id>twttr.com</id>
       <url>http://maven.twttr.com/</url>
+    </repository>
+    <repository>
+      <!-- For Jongo -->
+      <id>cloudbees-jongo-early-release</id>
+      <url>http://repository-jongo.forge.cloudbees.com/release</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
 
     <!-- Utilities -->
@@ -568,6 +579,20 @@
           </exclusion>
         </exclusions>
       </dependency>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-common</artifactId>
+        <version>${hadoop-cdh.version}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-hdfs</artifactId>
+        <version>${hadoop-cdh.version}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
 
       <!-- Testing - Utilities -->
       <dependency>
@@ -1024,12 +1049,12 @@
     <!-- Versions - Mongo -->
     <mongo.version>2.11.4</mongo.version>
     <mongo-hadoop.version>1.1.0-93d3667</mongo-hadoop.version> <!-- See https://groups.google.com/d/topic/cascading-user/YaZUWr3V-sM/discussion -->
-    <jongo.version>1.0</jongo.version>
+    <jongo.version>1.1-early-20140221-1732</jongo.version>
 
     <!-- Versions - JSON -->
-    <jackson.version>2.2.3</jackson.version>
-    <jackson-smile.version>2.2.3</jackson-smile.version>
-    <jackson-yaml.version>2.2.3</jackson-yaml.version>
+    <jackson.version>2.3.0</jackson.version>
+    <jackson-smile.version>2.3.0</jackson-smile.version>
+    <jackson-yaml.version>2.3.0</jackson-yaml.version>
 
     <!-- Versions - Utilities -->
     <lombok.version>1.12.4</lombok.version>
@@ -1067,7 +1092,7 @@
     <embed-mongo.version>1.40</embed-mongo.version>
 
     <!-- Versions - Resources -->
-    <dcc-resources.version>0.7e</dcc-resources.version>
+    <dcc-resources.version>0.8a</dcc-resources.version>
     <dcc-cghub.version>4</dcc-cghub.version>
     <dcc-heliotrope.version>7</dcc-heliotrope.version>
   </properties>
