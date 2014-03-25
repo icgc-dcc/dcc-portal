@@ -1079,7 +1079,10 @@
     <!-- Versions - Search -->
     <elasticsearch.version>0.90.1</elasticsearch.version>
 
-    <!--  Versions -IMDG -->
+    <!--  Versions - Genomics -->
+    <picard.version>1.102.0</picard.version>
+
+    <!--  Versions - IMDG -->
     <hazelcast.version>3.2-RC1</hazelcast.version>
     
     <!-- Versions - Logging -->
