@@ -27,6 +27,7 @@ components/
 .tmp/
 unit.xml
 e2e.xml
+Gemfile.lock
 
 # Java Temporary files
 logs/
