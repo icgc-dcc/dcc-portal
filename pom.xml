@@ -945,9 +945,9 @@
             </goals>
             <configuration>
               <rules>
-                <!--<requireMavenVersion>
-                  <version>[3.0.3, 3.0.4]</version>
-                </requireMavenVersion>-->
+                <requireMavenVersion>
+                  <version>[3.0.3, 3.2.1]</version>
+                </requireMavenVersion>
                 <requireJavaVersion>
                   <version>[1.6.0-26, 1.7)</version>
                 </requireJavaVersion>
