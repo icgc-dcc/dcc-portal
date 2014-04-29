@@ -945,9 +945,9 @@
             </goals>
             <configuration>
               <rules>
-                <!--<requireMavenVersion>
-                  <version>[3.0.3, 3.0.4]</version>
-                </requireMavenVersion>-->
+                <requireMavenVersion>
+                  <version>[3.0.3, 3.2.1]</version>
+                </requireMavenVersion>
                 <requireJavaVersion>
                   <version>[1.6.0-26, 1.7)</version>
                 </requireJavaVersion>
@@ -1096,7 +1096,7 @@
     <powermock.version>1.5.1</powermock.version>
     <fest.version>2.0M10</fest.version>
     <fest-guava.version>1.0</fest-guava.version>
-    <embed-mongo.version>1.42</embed-mongo.version>
+    <embed-mongo.version>1.43</embed-mongo.version>
 
     <!-- Versions - Resources -->
     <dcc-resources.version>0.8a</dcc-resources.version>
