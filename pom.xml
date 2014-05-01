@@ -1101,7 +1101,7 @@
     <!-- Versions - Resources -->
     <dcc-resources.version>0.8a</dcc-resources.version>
     <dcc-cghub.version>4</dcc-cghub.version>
-    <dcc-heliotrope.version>8</dcc-heliotrope.version>
+    <dcc-heliotrope.version>9</dcc-heliotrope.version>
   </properties>
 
 </project>
