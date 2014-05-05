@@ -1096,7 +1096,7 @@
     <powermock.version>1.5.1</powermock.version>
     <fest.version>2.0M10</fest.version>
     <fest-guava.version>1.0</fest-guava.version>
-    <embed-mongo.version>1.43</embed-mongo.version>
+    <embed-mongo.version>1.45</embed-mongo.version>
 
     <!-- Versions - Resources -->
     <dcc-resources.version>0.8a</dcc-resources.version>
