@@ -28,6 +28,7 @@
     <module>dcc-test</module>
     <module>dcc-downloader</module>
     <module>dcc-identifier</module>
+    <module>dcc-reporter</module>
   </modules>
 
   <scm>
