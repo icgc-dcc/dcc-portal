@@ -77,4 +77,6 @@ Top level system modules:
 - [Download](dcc-downloader/README.md)
 - [Portal](dcc-portal/README.md)
 	
-
+Changes
+---
+Change log for the user-facing system modules may be found [here](CHANGES.md).
