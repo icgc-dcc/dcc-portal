@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>2.6.4-SNAPSHOT</version>
+  <version>3.2.0</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
