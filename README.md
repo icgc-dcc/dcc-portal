@@ -31,6 +31,9 @@ Install UI development environment:
 - [dcc-submission-ui](dcc-submission/dcc-submission-ui/README.md)
 - [dcc-portal-ui](dcc-portal/dcc-portal-ui/README.md)
 
+Extract reference genome to `/tmp`
+
+- http://seqwaremaven.oicr.on.ca/artifactory/simple/dcc-dependencies/org/icgc/dcc/dcc-reference-genome
 
 Build
 ---
@@ -74,4 +77,6 @@ Top level system modules:
 - [Download](dcc-downloader/README.md)
 - [Portal](dcc-portal/README.md)
 	
-
+Changes
+---
+Change log for the user-facing system modules may be found [here](CHANGES.md).
