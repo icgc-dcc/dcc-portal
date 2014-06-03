@@ -814,7 +814,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.2-SNAPSHOT</version>
+          <version>3.1</version>
           <inherited>true</inherited>
           <configuration>
             <source>1.6</source>
@@ -972,12 +972,9 @@
                   <regex>Java\(TM\) SE Runtime Environment</regex>
                   <regexMessage>Java Vendor must be Sun/Oracle.</regexMessage>
                 </requireProperty>
-                <!-- TODO: Enable when maven-compiler-plugin 3.2-SNAPSHOT becomes 3.2 -->
-                <!--
                 <requirePluginVersions>
                   <message>Best Practice is to always define plugin versions!</message>
                 </requirePluginVersions>
-                -->
               </rules>
             </configuration>
           </execution>
