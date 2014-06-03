@@ -128,6 +128,20 @@
 
   </repositories>
 
+  <pluginRepositories>
+    <pluginRepository>
+      <id>apache-snapshots</id>
+      <name>Apache Snapshot Repository</name>
+      <url>https://repository.apache.org/content/groups/snapshots-group/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
   <distributionManagement>
     <repository>
       <id>internal-release</id>
@@ -800,7 +814,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.5.1</version>
+          <version>3.2-SNAPSHOT</version>
           <inherited>true</inherited>
           <configuration>
             <source>1.6</source>
@@ -958,9 +972,12 @@
                   <regex>Java\(TM\) SE Runtime Environment</regex>
                   <regexMessage>Java Vendor must be Sun/Oracle.</regexMessage>
                 </requireProperty>
+                <!-- TODO: Enable when maven-compiler-plugin 3.2-SNAPSHOT becomes 3.2 -->
+                <!--
                 <requirePluginVersions>
                   <message>Best Practice is to always define plugin versions!</message>
                 </requirePluginVersions>
+                -->
               </rules>
             </configuration>
           </execution>
@@ -1081,12 +1098,12 @@
     <!-- Versions - Search -->
     <elasticsearch.version>0.90.1</elasticsearch.version>
 
-    <!--  Versions - Genomics -->
+    <!-- Versions - Genomics -->
     <picard.version>1.102.0</picard.version>
 
-    <!--  Versions - IMDG -->
+    <!-- Versions - IMDG -->
     <hazelcast.version>3.2-RC1</hazelcast.version>
-    
+
     <!-- Versions - Logging -->
     <slf4j.version>1.7.5</slf4j.version>
     <logback.version>1.0.10</logback.version>
