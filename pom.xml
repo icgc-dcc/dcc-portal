@@ -239,6 +239,7 @@
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${lombok.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -1114,7 +1115,7 @@
     <jackson-yaml.version>2.3.0</jackson-yaml.version>
 
     <!-- Versions - Utilities -->
-    <lombok.version>1.12.6</lombok.version>
+    <lombok.version>1.12.4</lombok.version>
     <jcommander.version>1.30</jcommander.version>
     <typesafe-config.version>1.2.0</typesafe-config.version>
     <guice.version>3.0</guice.version>
