@@ -1012,6 +1012,7 @@
           <addOutputDirectory>false</addOutputDirectory>
           <sourceDirectory>src/main/java</sourceDirectory>
           <skip>${generateSources.skipDelombok}</skip>
+          <verbose>true</verbose>
         </configuration>
       </plugin>
 
