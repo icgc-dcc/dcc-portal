@@ -749,6 +749,19 @@
                     <ignore />
                   </action>
                 </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok-maven-plugin</artifactId>
+                    <versionRange>[0.11.2.0,)</versionRange>
+                    <goals>
+                      <goal>delombok</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
               </pluginExecutions>
             </lifecycleMappingMetadata>
           </configuration>
@@ -982,6 +995,26 @@
         </executions>
       </plugin>
 
+      <!-- Generate sources -->
+      <plugin>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok-maven-plugin</artifactId>
+        <version>0.11.2.0</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>delombok</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <addOutputDirectory>false</addOutputDirectory>
+          <sourceDirectory>src/main/java</sourceDirectory>
+          <skip>${generateSources.skipDelombok}</skip>
+        </configuration>
+      </plugin>
+
       <!-- Package -->
       <plugin>
         <groupId>pl.project13.maven</groupId>
@@ -1027,6 +1060,12 @@
 
   <profiles>
     <profile>
+      <id>delombok</id>
+      <properties>
+        <generateSources.skipDelombok>false</generateSources.skipDelombok>
+      </properties>
+    </profile>
+    <profile>
       <id>jenkins</id>
       <properties>
         <test.redirectTestOutputToFile>false</test.redirectTestOutputToFile>
@@ -1054,6 +1093,7 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 
     <!-- Plugins -->
+    <generateSources.skipDelombok>true</generateSources.skipDelombok>
     <test.redirectTestOutputToFile>true</test.redirectTestOutputToFile>
     <test.useFile>true</test.useFile>
     <install.skipFindbugs>true</install.skipFindbugs>
