@@ -10,7 +10,7 @@ Clone the repository:
 
 `git clone https://github.com/icgc-dcc/dcc.git`
 
-Install Maven 3.0.3:
+Install Maven 3.2.1:
 
 [http://maven.apache.org/download.cgi](http://maven.apache.org/download.cgi)
 	
@@ -77,4 +77,6 @@ Top level system modules:
 - [Download](dcc-downloader/README.md)
 - [Portal](dcc-portal/README.md)
 	
-
+Changes
+---
+Change log for the user-facing system modules may be found [here](CHANGES.md).

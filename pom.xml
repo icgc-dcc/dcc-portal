@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>2.6.4-SNAPSHOT</version>
+  <version>3.3.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -27,6 +27,7 @@
     <module>dcc-portal</module>
     <module>dcc-test</module>
     <module>dcc-downloader</module>
+    <module>dcc-annotator</module>
     <module>dcc-identifier</module>
     <module>dcc-reporter</module>
   </modules>
@@ -128,6 +129,20 @@
     </repository>
 
   </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>apache-snapshots</id>
+      <name>Apache Snapshot Repository</name>
+      <url>https://repository.apache.org/content/groups/snapshots-group/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
   <distributionManagement>
     <repository>
@@ -735,6 +750,19 @@
                     <ignore />
                   </action>
                 </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok-maven-plugin</artifactId>
+                    <versionRange>[0.11.2.0,)</versionRange>
+                    <goals>
+                      <goal>delombok</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
               </pluginExecutions>
             </lifecycleMappingMetadata>
           </configuration>
@@ -806,6 +834,7 @@
           <configuration>
             <source>1.6</source>
             <target>1.6</target>
+            <showWarnings>true</showWarnings>
           </configuration>
         </plugin>
 
@@ -903,6 +932,24 @@
           </executions>
         </plugin>
 
+      <!-- Package -->
+      <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
+        <version>2.1.9</version>
+        <configuration>
+          <generateGitPropertiesFile>true</generateGitPropertiesFile>
+          <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>revision</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
         <!-- Install - Code quality -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -950,7 +997,7 @@
                   <version>[3.0.3, 3.2.1]</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>[1.6.0-26, 1.7)</version>
+                  <version>[1.6.0-26, 1.8)</version>
                 </requireJavaVersion>
                 <requireProperty>
                   <property>java.runtime.name</property>
@@ -967,22 +1014,25 @@
         </executions>
       </plugin>
 
-      <!-- Package -->
+      <!-- Generate sources -->
       <plugin>
-        <groupId>pl.project13.maven</groupId>
-        <artifactId>git-commit-id-plugin</artifactId>
-        <version>2.1.9</version>
-        <configuration>
-          <generateGitPropertiesFile>true</generateGitPropertiesFile>
-          <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
-        </configuration>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok-maven-plugin</artifactId>
+        <version>${lombok.version}.0</version>
         <executions>
           <execution>
+            <phase>generate-sources</phase>
             <goals>
-              <goal>revision</goal>
+              <goal>delombok</goal>
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <addOutputDirectory>false</addOutputDirectory>
+          <sourceDirectory>src/main/java</sourceDirectory>
+          <skip>${generateSources.skipDelombok}</skip>
+          <verbose>true</verbose>
+        </configuration>
       </plugin>
 
       <!-- Install - Code quality -->
@@ -1012,6 +1062,12 @@
 
   <profiles>
     <profile>
+      <id>delombok</id>
+      <properties>
+        <generateSources.skipDelombok>false</generateSources.skipDelombok>
+      </properties>
+    </profile>
+    <profile>
       <id>jenkins</id>
       <properties>
         <test.redirectTestOutputToFile>false</test.redirectTestOutputToFile>
@@ -1039,6 +1095,7 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 
     <!-- Plugins -->
+    <generateSources.skipDelombok>true</generateSources.skipDelombok>
     <test.redirectTestOutputToFile>true</test.redirectTestOutputToFile>
     <test.useFile>true</test.useFile>
     <install.skipFindbugs>true</install.skipFindbugs>
@@ -1081,12 +1138,12 @@
     <!-- Versions - Search -->
     <elasticsearch.version>0.90.1</elasticsearch.version>
 
-    <!--  Versions - Genomics -->
+    <!-- Versions - Genomics -->
     <picard.version>1.102.0</picard.version>
 
-    <!--  Versions - IMDG -->
+    <!-- Versions - IMDG -->
     <hazelcast.version>3.2-RC1</hazelcast.version>
-    
+
     <!-- Versions - Logging -->
     <slf4j.version>1.7.5</slf4j.version>
     <logback.version>1.0.10</logback.version>
