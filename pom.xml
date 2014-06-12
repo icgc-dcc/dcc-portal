@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>3.3.1-SNAPSHOT</version>
+  <version>3.3.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -978,7 +978,7 @@
                   <version>[3.0.3, 3.2.1]</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>[1.6.0-26, 1.7)</version>
+                  <version>[1.6.0-26, 1.8)</version>
                 </requireJavaVersion>
                 <requireProperty>
                   <property>java.runtime.name</property>
@@ -999,7 +999,7 @@
       <plugin>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok-maven-plugin</artifactId>
-        <version>0.11.2.0</version>
+        <version>${lombok.version}.0</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
