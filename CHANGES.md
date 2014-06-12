@@ -3,7 +3,12 @@ ICGC DCC - System - Change Log
 
 Change log for the DCC 2.0 System
 
-3.3
+3.2.3
+---
+
+- Added "Data Repository HREF" feature
+
+3.2
 ---
 
 ### Portal
@@ -19,7 +24,7 @@ Change log for the DCC 2.0 System
 - Added "Asynchronous Download" feature
 - Added "Public RESTful API" feature
 
-3.2
+3.1
 ---
 
 ### Submission System
