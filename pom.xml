@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>3.3.2-SNAPSHOT</version>
+  <version>3.3.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -30,6 +30,7 @@
     <module>dcc-annotator</module>
     <module>dcc-identifier</module>
     <module>dcc-reporter</module>
+    <module>dcc-icgc-client</module>
   </modules>
 
   <scm>
