@@ -933,24 +933,6 @@
           </executions>
         </plugin>
 
-      <!-- Package -->
-      <plugin>
-        <groupId>pl.project13.maven</groupId>
-        <artifactId>git-commit-id-plugin</artifactId>
-        <version>2.1.9</version>
-        <configuration>
-          <generateGitPropertiesFile>true</generateGitPropertiesFile>
-          <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>revision</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
         <!-- Install - Code quality -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -1036,6 +1018,24 @@
         </configuration>
       </plugin>
 
+      <!-- Package -->
+      <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
+        <version>${git-commit-id-plugin.version}</version>
+        <configuration>
+          <generateGitPropertiesFile>true</generateGitPropertiesFile>
+          <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>revision</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
       <!-- Install - Code quality -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -1087,6 +1087,7 @@
   <properties>
     <!-- SCM -->
     <github.url>scm:git:git@github.com:icgc-dcc/dcc.git</github.url>
+	<git-commit-id-plugin.version>2.1.9</git-commit-id-plugin.version>
 
     <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
