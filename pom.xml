@@ -29,6 +29,7 @@
     <module>dcc-downloader</module>
     <module>dcc-annotator</module>
     <module>dcc-identifier</module>
+    <module>dcc-reporter</module>
     <module>dcc-icgc-client</module>
   </modules>
 
@@ -1021,7 +1022,7 @@
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
-        <version>2.1.9</version>
+        <version>${git-commit-id-plugin.version}</version>
         <configuration>
           <generateGitPropertiesFile>true</generateGitPropertiesFile>
           <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
@@ -1034,7 +1035,7 @@
           </execution>
         </executions>
       </plugin>
-
+      
       <!-- Install - Code quality -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -1086,6 +1087,7 @@
   <properties>
     <!-- SCM -->
     <github.url>scm:git:git@github.com:icgc-dcc/dcc.git</github.url>
+	<git-commit-id-plugin.version>2.1.9</git-commit-id-plugin.version>
 
     <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -1125,6 +1127,7 @@
     <joda-time.version>2.2</joda-time.version>
     <super.csv.version>2.0.1</super.csv.version>
     <mail.version>1.4.5</mail.version>
+    <tika-core.version>1.4</tika-core.version>
 
     <!-- Versions - Cascading -->
     <cascading.version>2.1.6</cascading.version>
