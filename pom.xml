@@ -937,15 +937,17 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
           <version>3.1</version>
+          <inherited>false</inherited>
           <configuration>
             <skipPmdError>false</skipPmdError>
             <aggregate>true</aggregate>
-            <targetDirectory>${basedir}/src/main/pmd</targetDirectory>
+            <targetDirectory>${pmd.sourcedir}</targetDirectory>
+            <outputDirectory>${pmd.targetdir}</outputDirectory>
             <linkXRef>false</linkXRef>
             <sourceEncoding>utf-8</sourceEncoding>
             <targetJdk>1.6</targetJdk>
             <rulesets>
-              <ruleset>${basedir}/src/main/pmd/config/custom.xml</ruleset>
+              <ruleset>${pmd.sourcedir}/config/custom.xml</ruleset>
             </rulesets>
             <excludeRoots>
               <excludeRoot>${project.build.directory}/generated-sources/java/</excludeRoot>
@@ -1049,10 +1051,6 @@
 
       <!-- Install - Code quality -->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
       </plugin>
@@ -1086,6 +1084,34 @@
         <test.useFile>false</test.useFile>
         <install.skipFindbugs>false</install.skipFindbugs>
       </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <inherited>false</inherited>
+            <executions>
+              <execution>
+                <phase>compile</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${pmd.targetdir}</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${pmd.sourcedir}/config/style</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>release</id>
@@ -1172,6 +1198,10 @@
     <dcc-resources.version>0.8a</dcc-resources.version>
     <dcc-cghub.version>4</dcc-cghub.version>
     <dcc-heliotrope.version>9</dcc-heliotrope.version>
+    
+    <!-- PMD -->
+    <pmd.sourcedir>${basedir}/src/main/pmd</pmd.sourcedir>
+    <pmd.targetdir>${project.build.directory}/pmd</pmd.targetdir>
   </properties>
 
 </project>
