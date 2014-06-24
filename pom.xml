@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>3.3.1-SNAPSHOT</version>
+  <version>3.4.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -29,6 +29,8 @@
     <module>dcc-downloader</module>
     <module>dcc-annotator</module>
     <module>dcc-identifier</module>
+    <module>dcc-reporter</module>
+    <module>dcc-icgc-client</module>
   </modules>
 
   <scm>
@@ -749,6 +751,19 @@
                     <ignore />
                   </action>
                 </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok-maven-plugin</artifactId>
+                    <versionRange>[0.11.2.0,)</versionRange>
+                    <goals>
+                      <goal>delombok</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
               </pluginExecutions>
             </lifecycleMappingMetadata>
           </configuration>
@@ -965,7 +980,7 @@
                   <version>[3.0.3, 3.2.1]</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>[1.6.0-26, 1.7)</version>
+                  <version>[1.6.0-26, 1.8)</version>
                 </requireJavaVersion>
                 <requireProperty>
                   <property>java.runtime.name</property>
@@ -982,11 +997,32 @@
         </executions>
       </plugin>
 
+      <!-- Generate sources -->
+      <plugin>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok-maven-plugin</artifactId>
+        <version>${lombok.version}.0</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>delombok</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <addOutputDirectory>false</addOutputDirectory>
+          <sourceDirectory>src/main/java</sourceDirectory>
+          <skip>${generateSources.skipDelombok}</skip>
+          <verbose>true</verbose>
+        </configuration>
+      </plugin>
+
       <!-- Package -->
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
-        <version>2.1.9</version>
+        <version>${git-commit-id-plugin.version}</version>
         <configuration>
           <generateGitPropertiesFile>true</generateGitPropertiesFile>
           <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
@@ -999,7 +1035,7 @@
           </execution>
         </executions>
       </plugin>
-
+      
       <!-- Install - Code quality -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -1027,6 +1063,12 @@
 
   <profiles>
     <profile>
+      <id>delombok</id>
+      <properties>
+        <generateSources.skipDelombok>false</generateSources.skipDelombok>
+      </properties>
+    </profile>
+    <profile>
       <id>jenkins</id>
       <properties>
         <test.redirectTestOutputToFile>false</test.redirectTestOutputToFile>
@@ -1045,6 +1087,7 @@
   <properties>
     <!-- SCM -->
     <github.url>scm:git:git@github.com:icgc-dcc/dcc.git</github.url>
+	<git-commit-id-plugin.version>2.1.9</git-commit-id-plugin.version>
 
     <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -1054,6 +1097,7 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 
     <!-- Plugins -->
+    <generateSources.skipDelombok>true</generateSources.skipDelombok>
     <test.redirectTestOutputToFile>true</test.redirectTestOutputToFile>
     <test.useFile>true</test.useFile>
     <install.skipFindbugs>true</install.skipFindbugs>
@@ -1083,6 +1127,7 @@
     <joda-time.version>2.2</joda-time.version>
     <super.csv.version>2.0.1</super.csv.version>
     <mail.version>1.4.5</mail.version>
+    <tika-core.version>1.4</tika-core.version>
 
     <!-- Versions - Cascading -->
     <cascading.version>2.1.6</cascading.version>
