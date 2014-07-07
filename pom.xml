@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>3.3.3-SNAPSHOT</version>
+  <version>3.4.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -29,6 +29,7 @@
     <module>dcc-downloader</module>
     <module>dcc-annotator</module>
     <module>dcc-identifier</module>
+    <module>dcc-reporter</module>
     <module>dcc-icgc-client</module>
   </modules>
 
@@ -936,18 +937,32 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.1</version>
+          <inherited>false</inherited>
           <configuration>
+            <skipPmdError>false</skipPmdError>
+            <aggregate>true</aggregate>
+            <targetDirectory>${pmd.sourcedir}</targetDirectory>
+            <outputDirectory>${pmd.targetdir}</outputDirectory>
+            <linkXRef>false</linkXRef>
+            <sourceEncoding>utf-8</sourceEncoding>
             <targetJdk>1.6</targetJdk>
             <rulesets>
-              <ruleset>/rulesets/basic.xml</ruleset>
-              <ruleset>/rulesets/unusedcode.xml</ruleset>
-              <ruleset>/rulesets/codesize.xml</ruleset>
+              <ruleset>${pmd.sourcedir}/config/custom.xml</ruleset>
             </rulesets>
             <excludeRoots>
               <excludeRoot>${project.build.directory}/generated-sources/java/</excludeRoot>
             </excludeRoots>
           </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>pmd</goal>
+                <goal>cpd</goal>
+              </goals>
+              <phase>compile</phase>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -1021,7 +1036,7 @@
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
-        <version>2.1.9</version>
+        <version>${git-commit-id-plugin.version}</version>
         <configuration>
           <generateGitPropertiesFile>true</generateGitPropertiesFile>
           <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
@@ -1034,12 +1049,8 @@
           </execution>
         </executions>
       </plugin>
-
+      
       <!-- Install - Code quality -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
@@ -1074,6 +1085,34 @@
         <test.useFile>false</test.useFile>
         <install.skipFindbugs>false</install.skipFindbugs>
       </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <inherited>false</inherited>
+            <executions>
+              <execution>
+                <phase>compile</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${pmd.targetdir}</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${pmd.sourcedir}/config/style</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>release</id>
@@ -1086,6 +1125,7 @@
   <properties>
     <!-- SCM -->
     <github.url>scm:git:git@github.com:icgc-dcc/dcc.git</github.url>
+	<git-commit-id-plugin.version>2.1.9</git-commit-id-plugin.version>
 
     <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -1125,6 +1165,7 @@
     <joda-time.version>2.2</joda-time.version>
     <super.csv.version>2.0.1</super.csv.version>
     <mail.version>1.4.5</mail.version>
+    <tika-core.version>1.4</tika-core.version>
 
     <!-- Versions - Cascading -->
     <cascading.version>2.1.6</cascading.version>
@@ -1160,7 +1201,10 @@
     <dcc-resources.version>0.8a</dcc-resources.version>
     <dcc-cghub.version>4</dcc-cghub.version>
     <dcc-heliotrope.version>9</dcc-heliotrope.version>
+    
+    <!-- PMD -->
+    <pmd.sourcedir>${basedir}/src/main/pmd</pmd.sourcedir>
+    <pmd.targetdir>${project.build.directory}/pmd</pmd.targetdir>
   </properties>
 
 </project>
-
