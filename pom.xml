@@ -21,7 +21,6 @@
     <module>dcc-core</module>
     <module>dcc-hadoop</module>
     <module>dcc-etl</module>
-    <module>dcc-genes</module>
     <module>dcc-generator</module>
     <module>dcc-submission</module>
     <module>dcc-portal</module>
