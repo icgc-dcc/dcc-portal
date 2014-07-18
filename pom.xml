@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>3.4.1-SNAPSHOT</version>
+  <version>3.4.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -21,7 +21,6 @@
     <module>dcc-core</module>
     <module>dcc-hadoop</module>
     <module>dcc-etl</module>
-    <module>dcc-genes</module>
     <module>dcc-generator</module>
     <module>dcc-submission</module>
     <module>dcc-portal</module>
