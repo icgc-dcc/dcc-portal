@@ -60,7 +60,7 @@ To build, test and install _only_ the Download sub-system modules:
 	
 To build, test and install _only_ the Portal sub-system modules:
 
-`mvn -amd -pl dcc-portal`
+`mvn -am -pl dcc-portal/dcc-portal-api`
 	
 Run
 ---
