@@ -28,7 +28,6 @@
     <module>dcc-downloader</module>
     <module>dcc-annotator</module>
     <module>dcc-identifier</module>
-    <module>dcc-reporter</module>
     <module>dcc-icgc-client</module>
   </modules>
 
