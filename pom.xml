@@ -1181,7 +1181,7 @@
     <picard.version>1.102.0</picard.version>
 
     <!-- Versions - IMDG -->
-    <hazelcast.version>3.2-RC1</hazelcast.version>
+    <hazelcast.version>3.2.3</hazelcast.version>
 
     <!-- Versions - Logging -->
     <slf4j.version>1.7.5</slf4j.version>
