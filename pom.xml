@@ -19,16 +19,16 @@
 
   <modules>
     <module>dcc-core</module>
-    <module>dcc-hadoop</module>
-    <module>dcc-etl</module>
-    <module>dcc-generator</module>
-    <module>dcc-submission</module>
-    <module>dcc-portal</module>
     <module>dcc-test</module>
+    <module>dcc-hadoop</module>
+    <module>dcc-submission</module>
+    <module>dcc-etl</module>
+    <module>dcc-portal</module>
     <module>dcc-downloader</module>
     <module>dcc-annotator</module>
     <module>dcc-identifier</module>
     <module>dcc-icgc-client</module>
+    <module>dcc-generator</module>
   </modules>
 
   <scm>
