@@ -1204,4 +1204,5 @@
     <pmd.sourcedir>${basedir}/src/main/pmd</pmd.sourcedir>
     <pmd.targetdir>${project.build.directory}/pmd</pmd.targetdir>
   </properties>
+
 </project>
