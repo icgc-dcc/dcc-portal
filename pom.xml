@@ -4,7 +4,7 @@
 
   <groupId>org.icgc.dcc</groupId>
   <artifactId>dcc</artifactId>
-  <version>3.4.2-SNAPSHOT</version>
+  <version>3.5.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -19,16 +19,16 @@
 
   <modules>
     <module>dcc-core</module>
-    <module>dcc-hadoop</module>
-    <module>dcc-etl</module>
-    <module>dcc-generator</module>
-    <module>dcc-submission</module>
-    <module>dcc-portal</module>
     <module>dcc-test</module>
+    <module>dcc-hadoop</module>
+    <module>dcc-submission</module>
+    <module>dcc-etl</module>
+    <module>dcc-portal</module>
     <module>dcc-downloader</module>
     <module>dcc-annotator</module>
     <module>dcc-identifier</module>
     <module>dcc-icgc-client</module>
+    <module>dcc-generator</module>
   </modules>
 
   <scm>
@@ -697,8 +697,8 @@
                 <pluginExecution>
                   <pluginExecutionFilter>
                     <groupId>com.mysema.maven</groupId>
-                    <artifactId>maven-apt-plugin</artifactId>
-                    <versionRange>[1.0.3,)</versionRange>
+                    <artifactId>apt-maven-plugin</artifactId>
+                    <versionRange>[1.0.6,)</versionRange>
                     <goals>
                       <goal>process</goal>
                     </goals>
@@ -1047,7 +1047,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <!-- Install - Code quality -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -1123,7 +1123,7 @@
   <properties>
     <!-- SCM -->
     <github.url>scm:git:git@github.com:icgc-dcc/dcc.git</github.url>
-	<git-commit-id-plugin.version>2.1.9</git-commit-id-plugin.version>
+    <git-commit-id-plugin.version>2.1.9</git-commit-id-plugin.version>
 
     <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -1196,10 +1196,10 @@
     <embed-mongo.version>1.45</embed-mongo.version>
 
     <!-- Versions - Resources -->
-    <dcc-resources.version>0.8a</dcc-resources.version>
+    <dcc-resources.version>0.9a</dcc-resources.version>
     <dcc-cghub.version>4</dcc-cghub.version>
     <dcc-heliotrope.version>9</dcc-heliotrope.version>
-    
+
     <!-- PMD -->
     <pmd.sourcedir>${basedir}/src/main/pmd</pmd.sourcedir>
     <pmd.targetdir>${project.build.directory}/pmd</pmd.targetdir>
