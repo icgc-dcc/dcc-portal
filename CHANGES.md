@@ -3,6 +3,12 @@ ICGC DCC - System - Change Log
 
 Change log for the DCC 2.0 System
 
+3.5.2
+---
+
+- Added a url shortening service for search queries
+- Updated to latest Genome Maps
+
 3.2.3
 ---
 
