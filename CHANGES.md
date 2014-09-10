@@ -3,6 +3,14 @@ ICGC DCC - System - Change Log
 
 Change log for the DCC 2.0 System
 
+
+3.5.8
+---
+
+- Support multiple observations
+- Genome Maps update
+
+
 3.5.2
 ---
 
