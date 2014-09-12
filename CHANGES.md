@@ -1,8 +1,7 @@
-ICGC DCC - System - Change Log
+ICGC DCC - Portal - Change Log
 ===
 
-Change log for the DCC 2.0 System
-
+Change log for the DCC 2.0 Portal
 
 3.5.8
 ---
@@ -10,19 +9,11 @@ Change log for the DCC 2.0 System
 - Support multiple observations
 - Genome Maps update
 
-
 3.5.2
 ---
 
 - Added a url shortening service for search queries
 - Updated to latest Genome Maps
-
-
-3.5.1
----
-
-- Added Executive Reports (Dataype and Sequencing Strategy)
-
 
 3.2.3
 ---
@@ -31,8 +22,6 @@ Change log for the DCC 2.0 System
 
 3.2
 ---
-
-### Portal
 
 - Added "Aggregated SSM VCF" feature
 - Added "Pathway Entity Page" feature
@@ -44,12 +33,3 @@ Change log for the DCC 2.0 System
 - Added "Controlled Access Download" feature
 - Added "Asynchronous Download" feature
 - Added "Public RESTful API" feature
-
-3.1
----
-
-### Submission System
-
-- Added "Incremental Submission" feature
-- Added "Selective Validation" feature
-- Added "Dictionary Diff Tool" feature
