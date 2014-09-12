@@ -14,14 +14,6 @@
   <name>${project.artifactId}</name>
   <description>${project.name}</description>
 
-  <repositories>
-    <!-- Parent pom bootstrap -->
-    <repository>
-      <id>internal</id>
-      <url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-dependencies</url>
-    </repository>
-  </repositories>
-
   <build>
     <resources>
       <resource>
