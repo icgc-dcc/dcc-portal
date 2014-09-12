@@ -38,7 +38,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-downloader</artifactId>
-      <version>${project.version}</version>
+      <version>3.5.10</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
@@ -81,7 +81,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-icgc-client</artifactId>
-      <version>${project.version}</version>
+      <version>3.5.10</version>
     </dependency>
 
     <!-- Framework -->
