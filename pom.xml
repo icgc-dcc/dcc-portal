@@ -27,4 +27,32 @@
     </repository>
   </repositories>
 
+  <dependencyManagement>
+    <dependencies>
+      <!-- DCC -->
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-core</artifactId>
+        <version>${dcc-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-downloader</artifactId>
+        <version>${dcc-downloader.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-icgc-client</artifactId>
+        <version>${dcc-icgc-client.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <properties>
+    <!-- Versions -->
+    <dcc-core.version>3.5.10</dcc-core.version>
+    <dcc-downloader.version>3.5.10</dcc-downloader.version>
+    <dcc-icgc-client.version>3.5.10</dcc-icgc-client.version>
+  </properties>
+
 </project>

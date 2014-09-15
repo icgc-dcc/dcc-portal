@@ -30,7 +30,6 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-downloader</artifactId>
-      <version>3.5.10</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
@@ -73,7 +72,6 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-icgc-client</artifactId>
-      <version>3.5.10</version>
     </dependency>
 
     <!-- Framework -->
@@ -281,4 +279,5 @@
     <jetty.version>8.1.10.v20130312</jetty.version>
     <elasticsearch-test.version>0.0.9</elasticsearch-test.version>
   </properties>
+  
 </project>
