@@ -71,7 +71,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-icgc-client</artifactId>
+      <artifactId>dcc-common-client</artifactId>
     </dependency>
 
     <!-- Framework -->
