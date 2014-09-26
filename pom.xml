@@ -42,8 +42,8 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-icgc-client</artifactId>
-        <version>${dcc-icgc-client.version}</version>
+        <artifactId>dcc-common-client</artifactId>
+        <version>${dcc-common-client.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -52,7 +52,7 @@
     <!-- Versions -->
     <dcc-core.version>3.5.10</dcc-core.version>
     <dcc-downloader.version>3.5.10</dcc-downloader.version>
-    <dcc-icgc-client.version>3.5.10</dcc-icgc-client.version>
+    <dcc-common-client.version>3.5.11</dcc-common-client.version>
   </properties>
 
 </project>
