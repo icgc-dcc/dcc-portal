@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>2</version>
+    <version>3</version>
   </parent>
 
   <artifactId>dcc-portal</artifactId>
@@ -32,27 +32,26 @@
       <!-- DCC -->
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-core</artifactId>
-        <version>${dcc-core.version}</version>
+        <artifactId>dcc-common-core</artifactId>
+        <version>${dcc-common.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-common-client</artifactId>
+        <version>${dcc-common.version}</version>
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>dcc-downloader</artifactId>
         <version>${dcc-downloader.version}</version>
       </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-common-client</artifactId>
-        <version>${dcc-common-client.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <properties>
-    <!-- Versions -->
-    <dcc-core.version>3.5.10</dcc-core.version>
+    <!-- Versions - DCC -->
+    <dcc-common.version>3.6.1.3</dcc-common.version>
     <dcc-downloader.version>3.5.10</dcc-downloader.version>
-    <dcc-common-client.version>3.5.11</dcc-common-client.version>
   </properties>
 
 </project>
