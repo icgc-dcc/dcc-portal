@@ -167,6 +167,12 @@
       <artifactId>guice</artifactId>
     </dependency>
 
+    <!-- JDBC -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+
     <!-- Hazelcast -->
     <dependency>
       <groupId>com.hazelcast</groupId>
