@@ -50,7 +50,7 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.6.1.3</dcc-common.version>
+    <dcc-common.version>3.6.1.9</dcc-common.version>
     <dcc-downloader.version>3.5.10</dcc-downloader.version>
   </properties>
 
