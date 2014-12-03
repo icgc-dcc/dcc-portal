@@ -228,6 +228,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.github.tlrx</groupId>
       <artifactId>elasticsearch-test</artifactId>
       <version>${elasticsearch-test.version}</version>
@@ -317,7 +323,7 @@
     <!-- Versions - Swagger -->
     <swagger.version>1.3.2</swagger.version>
     <swagger.scala.version>2.10</swagger.scala.version>
-    
+
     <!-- Versions - Math -->
     <commons-math.version>3.3</commons-math.version>
 
