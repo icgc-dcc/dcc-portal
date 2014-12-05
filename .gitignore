@@ -36,9 +36,6 @@ reports/
 build/
 .pmd
 dist_*/
-mem.h2.db
-mem.lock.db
-mem.trace.db
 logs/
 
 # *nix temporary files
@@ -60,6 +57,8 @@ logs/
 
 # H2 database
 *.h2.db
+*.lock.db
+*.trace.db
 
 # Keys
 *.pem
