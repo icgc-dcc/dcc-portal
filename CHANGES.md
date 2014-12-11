@@ -3,6 +3,14 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.7.4.1
+---
+
+- Plot showing exome mutations across projects
+- Upload custom gene list
+- Markdown support for data repository
+
+
 3.5.8
 ---
 
