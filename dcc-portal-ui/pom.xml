@@ -53,6 +53,21 @@
             </configuration>
           </execution>
 
+          <execution>
+            <id>bower-install</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>bower</executable>
+              <arguments>
+                <argument>install</argument>
+              </arguments>
+              <workingDirectory>src/main/js</workingDirectory>
+            </configuration>
+          </execution>
+
           <!-- Prepare package -->
           <execution>
             <id>grunt-build</id>
