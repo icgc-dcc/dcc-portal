@@ -18,6 +18,7 @@
   <modules>
     <module>dcc-portal-api</module>
     <module>dcc-portal-ui</module>
+    <module>dcc-portal-pql</module>
   </modules>
 
   <repositories>
