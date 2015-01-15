@@ -10,7 +10,6 @@
 	</parent>
 
 	<artifactId>dcc-portal-pql</artifactId>
-	<packaging>jar</packaging>
 
 	<dependencies>
 		<!-- DCC -->
@@ -82,11 +81,4 @@
 		</plugins>
 	</build>
 	<name>dcc-portal-pql</name>
-	<url>http://maven.apache.org</url>
-	<repositories>
-		<repository>
-			<id>dcc-releases</id>
-			<url>http://seqwaremaven.oicr.on.ca/artifactory/dcc-release</url>
-		</repository>
-	</repositories>
 </project>
