@@ -20,6 +20,14 @@ Setup
 	cd src/main/js
 	npm install
 	```
+	
+- Install client-side dependencies	
+	```
+	cd src/main/js
+	npm install -g bower
+	bower install
+	```
+	
 - Install ruby gems
 
 	```
