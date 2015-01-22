@@ -65,3 +65,4 @@ logs/
 
 # Vagrant
 .vagrant/
+/dcc-portal-ui/src/main/js/app/.brackets.json
