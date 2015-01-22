@@ -3,6 +3,16 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.7.6.1
+---
+
+- Gene Ontology integration
+- Update Reactome pathway 
+- Update Cancer Gene Census
+- Route change: Pathway ==> GeneSet
+- Various small fixes
+
+
 3.7.4.1
 ---
 
