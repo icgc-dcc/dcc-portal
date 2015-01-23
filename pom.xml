@@ -46,6 +46,14 @@
         <artifactId>dcc-downloader</artifactId>
         <version>${dcc-downloader.version}</version>
       </dependency>
+
+      <!-- Test -->
+      <dependency>
+        <groupId>com.github.tlrx</groupId>
+        <artifactId>elasticsearch-test</artifactId>
+        <version>${elasticsearch-test.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -53,6 +61,7 @@
     <!-- Versions - DCC -->
     <dcc-common.version>3.6.5.3</dcc-common.version>
     <dcc-downloader.version>3.6.1.1</dcc-downloader.version>
+    <elasticsearch-test.version>0.0.9</elasticsearch-test.version>
   </properties>
 
 </project>
