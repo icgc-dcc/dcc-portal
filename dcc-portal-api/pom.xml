@@ -334,7 +334,7 @@
     <swagger.scala.version>2.10</swagger.scala.version>
 
     <!-- Versions - Math -->
-    <commons-math.version>3.3</commons-math.version>
+    <commons-math.version>3.4.1</commons-math.version>
 
     <!-- Versions - Testing -->
     <elasticsearch-test.version>0.0.9</elasticsearch-test.version>
