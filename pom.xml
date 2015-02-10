@@ -5,11 +5,10 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>8</version>
+    <version>10-cdh-java8</version>
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>3.7.6.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -42,16 +41,16 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-downloader</artifactId>
-        <version>${dcc-downloader.version}</version>
+        <artifactId>dcc-downloader-client</artifactId>
+        <version>${dcc-downloader-client.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.6.5.3</dcc-common.version>
-    <dcc-downloader.version>3.6.1.1</dcc-downloader.version>
+    <dcc-common.version>10-cdh-java8</dcc-common.version>
+    <dcc-downloader-client.version>10-cdh-java8</dcc-downloader-client.version>
   </properties>
 
 </project>
