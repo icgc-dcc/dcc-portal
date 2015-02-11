@@ -29,6 +29,7 @@ components/
 .tmp/
 unit.xml
 e2e.xml
+bower_components/
 
 # Java Temporary files
 logs/
