@@ -42,7 +42,7 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-downloader</artifactId>
+        <artifactId>dcc-downloader-client</artifactId>
         <version>${dcc-downloader.version}</version>
       </dependency>
     </dependencies>
@@ -51,7 +51,7 @@
   <properties>
     <!-- Versions - DCC -->
     <dcc-common.version>3.6.5.3</dcc-common.version>
-    <dcc-downloader.version>3.6.1.1</dcc-downloader.version>
+    <dcc-downloader.version>3.6.1.2</dcc-downloader.version>
   </properties>
 
 </project>
