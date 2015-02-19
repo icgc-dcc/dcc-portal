@@ -29,6 +29,7 @@ components/
 .tmp/
 unit.xml
 e2e.xml
+bower_components/
 
 # Java Temporary files
 logs/
@@ -65,3 +66,4 @@ logs/
 
 # Vagrant
 .vagrant/
+/dcc-portal-ui/src/main/js/app/.brackets.json
