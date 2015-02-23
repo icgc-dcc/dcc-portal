@@ -3,7 +3,7 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
-3.8.0.3
+3.8.1.3
 ---
 
 - Added ability to disable downloader in the API and UI
