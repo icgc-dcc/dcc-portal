@@ -50,8 +50,8 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>10-cdh-java8</dcc-common.version>
-    <dcc-downloader-client.version>10-cdh-java8</dcc-downloader-client.version>
+    <dcc-common.version>3.8.1.0-SNAPSHOT</dcc-common.version>
+    <dcc-downloader-client.version>3.8.1.0-SNAPSHOT</dcc-downloader-client.version>
   </properties>
 
 </project>
