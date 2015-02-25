@@ -3,6 +3,40 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.1.3
+---
+
+- Added ability to disable downloader in the API and UI
+- Harmonized tooltips across application
+
+3.7.6.4
+---
+
+- New functions to save donor, gene and muation sets
+- Gene set enrichment analysis
+- Set operations analysis
+- Projects page layout optimization
+- Charts optimization
+- Global alliance beacon
+- Bug fixes
+
+3.7.6.3
+---
+
+- Health checks for CUD and Hazelcast
+- Dynamically configurable logging
+- Connection pooling with healh check
+
+3.7.6.2
+---
+
+- Gene Ontology integration
+- Update Reactome pathway 
+- Update Cancer Gene Census
+- Route change: Pathway to GeneSet
+- Various small fixes
+
+
 3.7.4.1
 ---
 

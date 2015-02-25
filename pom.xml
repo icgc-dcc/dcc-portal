@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>5</version>
+    <version>10</version>
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>3.7.4.3-SNAPSHOT</version>
+  <version>3.8.1.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -42,7 +42,7 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-downloader</artifactId>
+        <artifactId>dcc-downloader-client</artifactId>
         <version>${dcc-downloader.version}</version>
       </dependency>
     </dependencies>
@@ -63,8 +63,8 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.6.1.9</dcc-common.version>
-    <dcc-downloader.version>3.6.1.1</dcc-downloader.version>
+    <dcc-common.version>3.6.5.3</dcc-common.version>
+    <dcc-downloader.version>3.6.1.2</dcc-downloader.version>
   </properties>
 
 </project>

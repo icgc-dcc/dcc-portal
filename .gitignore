@@ -29,6 +29,7 @@ components/
 .tmp/
 unit.xml
 e2e.xml
+bower_components/
 
 # Java Temporary files
 logs/
@@ -36,9 +37,6 @@ reports/
 build/
 .pmd
 dist_*/
-mem.h2.db
-mem.lock.db
-mem.trace.db
 logs/
 
 # *nix temporary files
@@ -60,9 +58,12 @@ logs/
 
 # H2 database
 *.h2.db
+*.lock.db
+*.trace.db
 
 # Keys
 *.pem
 
 # Vagrant
 .vagrant/
+/dcc-portal-ui/src/main/js/app/.brackets.json
