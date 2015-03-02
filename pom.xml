@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>11</version>
+    <version>12</version>
   </parent>
 
   <artifactId>dcc-portal</artifactId>
@@ -63,8 +63,8 @@
       <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
-            <source>1.7</source>
-            <target>1.7</target>
+            <source>1.8</source>
+            <target>1.8</target>
           </configuration>
         </plugin>
     </plugins>
@@ -75,7 +75,7 @@
     <dcc-common.version>3.8.2.0</dcc-common.version>
     <dcc-downloader.version>3.8.2.0</dcc-downloader.version>
 	<dcc-downloader-client.version>3.8.2.0</dcc-downloader-client.version>
-    <elasticsearch-test.version>0.0.9</elasticsearch-test.version>
+    <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
   </properties>
 
 </project>
