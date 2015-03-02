@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>10</version>
+    <version>11</version>
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>3.8.1.2-pql-SNAPSHOT</version>
+  <version>3.8.2.1-pql-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -44,7 +44,7 @@
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>dcc-downloader-client</artifactId>
-        <version>${dcc-downloader.version}</version>
+        <version>${dcc-downloader-client.version}</version>
       </dependency>
 
       <!-- Test -->
@@ -72,8 +72,9 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.6.5.3</dcc-common.version>
-    <dcc-downloader.version>3.6.1.2</dcc-downloader.version>
+    <dcc-common.version>3.8.2.0</dcc-common.version>
+    <dcc-downloader.version>3.8.2.0</dcc-downloader.version>
+	<dcc-downloader-client.version>3.8.2.0</dcc-downloader-client.version>
     <elasticsearch-test.version>0.0.9</elasticsearch-test.version>
   </properties>
 
