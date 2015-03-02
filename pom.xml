@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>10-cdh-java8</version>
+    <version>11</version>
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>3.8.1.0-SNAPSHOT</version>
+  <version>3.8.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -50,8 +50,8 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.1.0-SNAPSHOT</dcc-common.version>
-    <dcc-downloader-client.version>3.8.1.0-SNAPSHOT</dcc-downloader-client.version>
+    <dcc-common.version>3.8.2.0</dcc-common.version>
+    <dcc-downloader-client.version>3.8.2.0</dcc-downloader-client.version>
   </properties>
 
 </project>
