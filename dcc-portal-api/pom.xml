@@ -1,324 +1,323 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.icgc.dcc</groupId>
-		<artifactId>dcc-portal</artifactId>
-		<version>3.8.2.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+  <parent>
+    <groupId>org.icgc.dcc</groupId>
+    <artifactId>dcc-portal</artifactId>
+    <version>3.8.2.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
-	<artifactId>dcc-portal-api</artifactId>
+  <artifactId>dcc-portal-api</artifactId>
 
-	<name>${project.artifactId}</name>
-	<description>${project.name}</description>
+  <name>${project.artifactId}</name>
+  <description>${project.name}</description>
 
-	<dependencies>
-		<!-- DCC -->
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>dcc-portal-ui</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>dcc-downloader-client</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.jruby</groupId>
-					<artifactId>jruby-complete</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.mortbay.jetty</groupId>
-					<artifactId>servlet-api-2.5</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>dcc-common-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>dcc-common-client</artifactId>
-		</dependency>
+  <dependencies>
+    <!-- DCC -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-portal-ui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-downloader-client</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jruby</groupId>
+          <artifactId>jruby-complete</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.mortbay.jetty</groupId>
+          <artifactId>servlet-api-2.5</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-client</artifactId>
+    </dependency>
 
-		<!-- Framework -->
-		<dependency>
-			<groupId>com.yammer.dropwizard</groupId>
-			<artifactId>dropwizard-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.yammer.dropwizard</groupId>
-			<artifactId>dropwizard-auth</artifactId>
-			<version>${dropwizard.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.nhuray</groupId>
-			<artifactId>dropwizard-spring</artifactId>
-			<version>${dropwizard-spring.version}</version>
-		</dependency>
-		<!-- Framework - Overrides -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
+    <!-- Framework -->
+    <dependency>
+      <groupId>com.yammer.dropwizard</groupId>
+      <artifactId>dropwizard-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.yammer.dropwizard</groupId>
+      <artifactId>dropwizard-auth</artifactId>
+      <version>${dropwizard.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.nhuray</groupId>
+      <artifactId>dropwizard-spring</artifactId>
+      <version>${dropwizard-spring.version}</version>
+    </dependency>
+    <!-- Framework - Overrides -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.jaxrs</groupId>
+      <artifactId>jackson-jaxrs-json-provider</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
 
-		<!-- Servlet -->
-		<dependency>
-			<groupId>org.tuckey</groupId>
-			<artifactId>urlrewritefilter</artifactId>
-			<version>4.0.4</version>
-		</dependency>
+    <!-- Servlet -->
+    <dependency>
+      <groupId>org.tuckey</groupId>
+      <artifactId>urlrewritefilter</artifactId>
+      <version>4.0.4</version>
+    </dependency>
 
-		<!-- API documentation -->
-		<dependency>
-			<groupId>com.wordnik</groupId>
-			<artifactId>swagger-core_${swagger.scala.version}</artifactId>
-			<version>${swagger.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.wordnik</groupId>
-			<artifactId>swagger-jaxrs_${swagger.scala.version}</artifactId>
-			<version>${swagger.version}</version>
-		</dependency>
+    <!-- API documentation -->
+    <dependency>
+      <groupId>com.wordnik</groupId>
+      <artifactId>swagger-core_${swagger.scala.version}</artifactId>
+      <version>${swagger.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.wordnik</groupId>
+      <artifactId>swagger-jaxrs_${swagger.scala.version}</artifactId>
+      <version>${swagger.version}</version>
+    </dependency>
 
-		<!-- Search -->
-		<dependency>
-			<groupId>org.elasticsearch</groupId>
-			<artifactId>elasticsearch</artifactId>
-		</dependency>
+    <!-- Search -->
+    <dependency>
+      <groupId>org.elasticsearch</groupId>
+      <artifactId>elasticsearch</artifactId>
+    </dependency>
 
-		<!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>commons-logging</artifactId>
+          <groupId>commons-logging</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
-		<!-- OpenID -->
-		<dependency>
-			<groupId>org.openid4java</groupId>
-			<artifactId>openid4java-consumer</artifactId>
-			<version>0.9.6</version>
-			<type>pom</type>
-			<!-- Guice 2.0 has been superseded -->
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.code.guice</groupId>
-					<artifactId>guice</artifactId>
-				</exclusion>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
-		</dependency>
+    <!-- OpenID -->
+    <dependency>
+      <groupId>org.openid4java</groupId>
+      <artifactId>openid4java-consumer</artifactId>
+      <version>0.9.6</version>
+      <type>pom</type>
+      <!-- Guice 2.0 has been superseded -->
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.guice</groupId>
+          <artifactId>guice</artifactId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-logging</artifactId>
+          <groupId>commons-logging</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+    </dependency>
 
-		<!-- JDBC -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-		</dependency>
+    <!-- JDBC -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
 
-		<!-- Hazelcast -->
-		<dependency>
-			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast</artifactId>
-			<version>${hazelcast.version}</version>
-		</dependency>
+    <!-- Hazelcast -->
+    <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast</artifactId>
+      <version>${hazelcast.version}</version>
+    </dependency>
 
-		<!-- Math -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-			<version>${commons-math.version}</version>
-		</dependency>
+    <!-- Math -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>${commons-math.version}</version>
+    </dependency>
 
-		<!-- Utilities -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.supercsv</groupId>
-			<artifactId>super-csv</artifactId>
-		</dependency>
+    <!-- Utilities -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.supercsv</groupId>
+      <artifactId>super-csv</artifactId>
+    </dependency>
 
-		<!-- Validation -->
-		<dependency>
-			<groupId>commons-validator</groupId>
-			<artifactId>commons-validator</artifactId>
-			<version>1.4.0</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+    <!-- Validation -->
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.4.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>commons-logging</artifactId>
+          <groupId>commons-logging</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
-		<!-- Compression -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-compress</artifactId>
-			<version>1.5</version>
-		</dependency>
+    <!-- Compression -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.5</version>
+    </dependency>
 
-		<!-- Test -->
-		<dependency>
-			<groupId>com.yammer.dropwizard</groupId>
-			<artifactId>dropwizard-testing</artifactId>
-			<version>${dropwizard.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.tlrx</groupId>
-			<artifactId>elasticsearch-test</artifactId>
-			<version>${elasticsearch-test.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-chrome-driver</artifactId>
-			<version>2.35.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.catch-exception</groupId>
-			<artifactId>catch-exception</artifactId>
-			<version>1.2.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-multipart</artifactId>
-			<version>1.17.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.yammer.dropwizard</groupId>
-			<artifactId>dropwizard-jdbi</artifactId>
-			<version>${dropwizard.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>${h2.version}</version>
-		</dependency>
-		<!-- For sending emails -->
-		<dependency>
-			<groupId>dumbster</groupId>
-			<artifactId>dumbster</artifactId>
-			<version>1.6</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <!-- Test -->
+    <dependency>
+      <groupId>com.yammer.dropwizard</groupId>
+      <artifactId>dropwizard-testing</artifactId>
+      <version>${dropwizard.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.tlrx</groupId>
+      <artifactId>elasticsearch-test</artifactId>
+      <version>${elasticsearch-test.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-chrome-driver</artifactId>
+      <version>2.35.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.catch-exception</groupId>
+      <artifactId>catch-exception</artifactId>
+      <version>1.2.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey.contribs</groupId>
+      <artifactId>jersey-multipart</artifactId>
+      <version>1.17.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.yammer.dropwizard</groupId>
+      <artifactId>dropwizard-jdbi</artifactId>
+      <version>${dropwizard.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2.version}</version>
+    </dependency>
+    <!-- For sending emails -->
+    <dependency>
+      <groupId>dumbster</groupId>
+      <artifactId>dumbster</artifactId>
+      <version>1.6</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-	<build>
-		<plugins>
-			<!-- Test -->
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>**/*IT.java</exclude>
-						<exclude>**/*IntegrationTest.java</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
+  <build>
+    <plugins>
+      <!-- Test -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/*IT.java</exclude>
+            <exclude>**/*IntegrationTest.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
 
-			<!-- Package -->
-			<plugin>
-				<artifactId>maven-shade-plugin</artifactId>
-				<configuration>
-					<createDependencyReducedPom>false</createDependencyReducedPom>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>create-dist</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<attach>${package.attach}</attach>
-							<descriptors>
-								<descriptor>src/main/assembly/bin.xml</descriptor>
-							</descriptors>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+      <!-- Package -->
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <configuration>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>create-dist</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <attach>${package.attach}</attach>
+              <descriptors>
+                <descriptor>src/main/assembly/bin.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
-	<properties>
-		<!-- Entry point -->
-		<main.class>org.icgc.dcc.portal.DataPortalService</main.class>
+  <properties>
+    <!-- Entry point -->
+    <main.class>org.icgc.dcc.portal.DataPortalService</main.class>
 
-		<!-- Versions - Dropwizard -->
-		<dropwizard.version>0.6.2</dropwizard.version>
-		<dropwizard-spring.version>0.2</dropwizard-spring.version>
+    <!-- Versions - Dropwizard -->
+    <dropwizard.version>0.6.2</dropwizard.version>
+    <dropwizard-spring.version>0.2</dropwizard-spring.version>
 
-		<!-- Versions - Spring -->
-		<spring.version>4.1.1.RELEASE</spring.version>
+    <!-- Versions - Spring -->
+    <spring.version>4.1.1.RELEASE</spring.version>
 
-		<!-- Versions - Swagger -->
-		<swagger.version>1.3.2</swagger.version>
-		<swagger.scala.version>2.10</swagger.scala.version>
+    <!-- Versions - Swagger -->
+    <swagger.version>1.3.2</swagger.version>
+    <swagger.scala.version>2.10</swagger.scala.version>
 
-		<!-- Versions - Math -->
-		<commons-math.version>3.4.1</commons-math.version>
+    <!-- Versions - Math -->
+    <commons-math.version>3.4.1</commons-math.version>
 
-		<!-- Versions - Testing -->
-		<elasticsearch-test.version>0.0.9</elasticsearch-test.version>
-		<h2.version>1.3.173</h2.version>
-	</properties>
+    <!-- Versions - Testing -->
+    <elasticsearch-test.version>0.0.9</elasticsearch-test.version>
+    <h2.version>1.3.173</h2.version>
+  </properties>
 
 </project>
