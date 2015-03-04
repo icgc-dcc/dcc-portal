@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -54,30 +55,37 @@
         <version>${elasticsearch-test.version}</version>
         <scope>test</scope>
       </dependency>
+
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-all</artifactId>
+        <version>${groovy.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
-  
-  
+
+
   <build>
     <plugins>
-    <!-- Required for Elasticsearch -->
+      <!-- Required for Elasticsearch -->
       <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>1.8</source>
-            <target>1.8</target>
-          </configuration>
-        </plugin>
-        
-        <!-- Fixes bug https://jira.codehaus.org/browse/MSHADE-183 -->
-        <plugin>
-          <artifactId>maven-shade-plugin</artifactId>
-          <executions>
-            <execution>
-              <phase>site</phase>
-            </execution>
-          </executions>
-        </plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <!-- Fixes bug https://jira.codehaus.org/browse/MSHADE-183 -->
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>site</phase>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -85,8 +93,9 @@
     <!-- Versions - DCC -->
     <dcc-common.version>3.8.2.0</dcc-common.version>
     <dcc-downloader.version>3.8.2.0</dcc-downloader.version>
-	<dcc-downloader-client.version>3.8.2.0</dcc-downloader-client.version>
+    <dcc-downloader-client.version>3.8.2.0</dcc-downloader-client.version>
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
+    <groovy.version>2.3.5</groovy.version>
   </properties>
 
 </project>
