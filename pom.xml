@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>12</version>
+    <version>13</version>
   </parent>
 
   <artifactId>dcc-portal</artifactId>
@@ -85,13 +85,6 @@
             <phase>site</phase>
           </execution>
         </executions>
-      </plugin>
-
-      <!-- Test if Findbugs 3.0.0 works with Java8 -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.0</version>
       </plugin>
     </plugins>
   </build>
