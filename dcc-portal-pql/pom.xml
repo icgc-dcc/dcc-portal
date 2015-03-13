@@ -18,9 +18,9 @@
     <!-- DCC -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-portal-api</artifactId>
-      <version>${project.version}</version>
+      <artifactId>dcc-common-core</artifactId>
     </dependency>
+
 
     <!-- Search -->
     <dependency>
