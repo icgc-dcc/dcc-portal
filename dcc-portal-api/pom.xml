@@ -23,6 +23,11 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-portal-pql</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>dcc-downloader-client</artifactId>
       <exclusions>
         <exclusion>
