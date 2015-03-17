@@ -3,6 +3,12 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.2.2
+---
+
+- Added "Donor Count History" chart to the Projects Page
+- Added versioning in relational models for compatibility detection in data releases.
+
 3.8.1.3
 ---
 
