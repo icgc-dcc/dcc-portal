@@ -40,11 +40,8 @@ Run
 ---
 
 - Start node development server: `grunt server`
-
-- Open another console and start the proxy: `cake proxy`
-
 - Start the [Portal API](../dcc-portal-api/README.md)
-- View the site: [localhost:9001](http://localhost:9001/)
+- View the site: [localhost:9001](http://localhost:9000/)
 
 Style Guide
 ---
