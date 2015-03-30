@@ -41,7 +41,7 @@ Run
 
 - Start node development server: `grunt server`
 - Start the [Portal API](../dcc-portal-api/README.md)
-- View the site: [localhost:9001](http://localhost:9000/)
+- View the site: [localhost:9000](http://localhost:9000/)
 
 Style Guide
 ---
