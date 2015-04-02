@@ -64,20 +64,6 @@
     </dependencies>
   </dependencyManagement>
 
-
-  <build>
-    <plugins>
-      <!-- Required for Elasticsearch -->
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
   <properties>
     <!-- Versions - DCC -->
     <dcc-common.version>3.8.2.0</dcc-common.version>
