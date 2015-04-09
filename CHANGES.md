@@ -3,6 +3,17 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.2.3
+---
+
+- Added phenotype comparison to data analysis
+- Redesigned data analysis to better model user activities
+- Added functionality to save custom uploaded gene list
+- Added version control and version deprecation for data analyses
+- Added demo analyses
+- Upgrade libraries
+- Fix bugs and usability issues.
+
 3.8.2.2
 ---
 
