@@ -79,7 +79,6 @@
               <executable>grunt</executable>
               <arguments>
                 <argument>build</argument>
-                <argument>--force</argument>
               </arguments>
               <workingDirectory>src/main/js</workingDirectory>
             </configuration>
