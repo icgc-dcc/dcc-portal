@@ -9,8 +9,10 @@ Requiments
 - Install rubygems
 - Install global modules:
 
-	`npm install -g grunt-cli@0.1.13`
-	`npm install -g bower@1.3.12`
+	```
+	npm install -g grunt-cli@0.1.13
+	npm install -g bower@1.3.12`
+	```
 
 Setup
 ---
@@ -60,6 +62,7 @@ Before Pull Request
 ---
 
 Pass JSHint: `grunt jshint`
+
 Pass Unit tests: `grunt test`
 
 Tips
