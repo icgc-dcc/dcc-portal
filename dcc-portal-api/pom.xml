@@ -46,7 +46,6 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-common-client</artifactId>
-      <version>3.8.3.3-SNAPSHOT</version>
     </dependency>
 
     <!-- Framework -->
