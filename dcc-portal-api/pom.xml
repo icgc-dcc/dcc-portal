@@ -53,6 +53,10 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-common-client</artifactId>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-resources</artifactId>
+    </dependency>
 
     <!-- Framework -->
     <dependency>
