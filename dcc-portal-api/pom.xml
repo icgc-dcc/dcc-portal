@@ -53,10 +53,6 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-common-client</artifactId>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-common-resources</artifactId>
-    </dependency>
 
     <!-- Framework -->
     <dependency>
@@ -216,6 +212,12 @@
     </dependency>
 
     <!-- Test -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-resources</artifactId>
+      <version>${dcc-common.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>com.yammer.dropwizard</groupId>
       <artifactId>dropwizard-testing</artifactId>

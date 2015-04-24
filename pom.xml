@@ -43,16 +43,17 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-common-resources</artifactId>
-        <version>${dcc-common.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
         <artifactId>dcc-downloader-client</artifactId>
         <version>${dcc-downloader-client.version}</version>
       </dependency>
 
       <!-- Test -->
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-common-resources</artifactId>
+        <version>${dcc-common.version}</version>
+        <scope>test</scope>
+      </dependency>
       <dependency>
         <groupId>com.github.tlrx</groupId>
         <artifactId>elasticsearch-test</artifactId>
