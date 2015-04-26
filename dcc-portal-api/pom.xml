@@ -210,6 +210,11 @@
 
     <!-- Test -->
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-resources</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.yammer.dropwizard</groupId>
       <artifactId>dropwizard-testing</artifactId>
       <version>${dropwizard.version}</version>

@@ -45,12 +45,20 @@
         <artifactId>dcc-downloader-client</artifactId>
         <version>${dcc-downloader-client.version}</version>
       </dependency>
+
+      <!-- Test -->
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>dcc-common-resources</artifactId>
+        <version>${dcc-common.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.3.3</dcc-common.version>
+    <dcc-common.version>3.8.5.1</dcc-common.version>
     <dcc-downloader-client.version>3.8.2.0</dcc-downloader-client.version>
   </properties>
 
