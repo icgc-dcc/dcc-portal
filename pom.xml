@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>3.8.2.3-pql-SNAPSHOT</version>
+  <version>3.8.5.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -72,9 +72,8 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.3.3</dcc-common.version>
-    <dcc-downloader.version>3.8.2.0</dcc-downloader.version>
     <dcc-common.version>3.8.5.2</dcc-common.version>
+    <dcc-downloader.version>3.8.2.0</dcc-downloader.version>
     <dcc-downloader-client.version>3.8.2.0</dcc-downloader-client.version>
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
     <groovy.version>2.3.5</groovy.version>
