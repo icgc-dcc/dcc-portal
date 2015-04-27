@@ -21,7 +21,6 @@
       <artifactId>dcc-common-core</artifactId>
     </dependency>
 
-
     <!-- Search -->
     <dependency>
       <groupId>org.elasticsearch</groupId>
@@ -51,7 +50,14 @@
       <groupId>com.github.tlrx</groupId>
       <artifactId>elasticsearch-test</artifactId>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-common-resources</artifactId>
+      <version>${dcc-common.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+  
 
   <build>
     <plugins>
