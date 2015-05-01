@@ -108,6 +108,7 @@
             <exclude>src/main/js/app/scripts/modules/genomemaps</exclude>
             <exclude>src/main/js/app/scripts/modules/proteinstructureviewer</exclude>
             <exclude>src/main/js/app/scripts/ui/table2CSV.js</exclude>
+            <exclude>src/main/js/app/scripts/common/pql/pqlparser.js</exclude>
           </excludes>
           <configFile>${basedir}/src/main/js/.jshintrc</configFile>
           <failOnError>true</failOnError>
