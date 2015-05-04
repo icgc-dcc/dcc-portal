@@ -3,6 +3,10 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.2.4
+---
+ - Added support for HTTP range headers for static downloads
+
 3.8.2.3
 ---
 
