@@ -59,7 +59,7 @@
   <properties>
     <!-- Versions - DCC -->
     <dcc-common.version>3.8.6.3</dcc-common.version>
-    <dcc-downloader-client.version>3.8.2.0</dcc-downloader-client.version>
+    <dcc-downloader-client.version>3.8.2.1-SNAPSHOT</dcc-downloader-client.version>
   </properties>
 
 </project>
