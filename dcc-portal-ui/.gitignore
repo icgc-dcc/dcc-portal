@@ -1,2 +1,4 @@
 /.apt_generated
 /src/main/js/report/
+/src/main/js/app/scripts/common/pql/pqlparser.js
+
