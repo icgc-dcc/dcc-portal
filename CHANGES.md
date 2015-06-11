@@ -3,6 +3,14 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.x??
+--
+ - Incorporated PANCANCER donors
+ - Added support to supplementary files (family, exposure, therapy)
+ - Added External Repositories to Data Repository page
+ - Javascript library upgrades
+ - Bug fixes.
+
 3.8.2.4
 ---
  - Added support for HTTP range headers for static downloads
