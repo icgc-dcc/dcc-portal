@@ -3,6 +3,18 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.8.0
+--
+ - Upgraded core javascript libraries
+ - Reduced project colour space to primary sites
+ - Added facet / filter / badge support for PanCancer (PCAWG) donors
+ - Added support for clinical supplementary files (family, exposure, therapy)
+ - Added external repositories to Data Repository page
+ - Added Data Repository search and manifest export
+ - Added support for non-Molecular / non-Clinical project / donor entity pages
+ - Added preliminary UI / API support for "donor states"
+ - Added miscelaneous bug fixes.
+
 3.8.2.4
 ---
  - Added support for HTTP range headers for static downloads
