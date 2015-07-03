@@ -3,6 +3,12 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.9.0
+--
+ - Added Pancancer pages
+ - Fix minor issues with protein viewer and enrichment analysis
+
+
 3.8.8.0
 --
  - Upgraded core javascript libraries
