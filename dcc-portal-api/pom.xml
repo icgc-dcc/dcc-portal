@@ -23,6 +23,11 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-portal-pql</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>dcc-downloader-client</artifactId>
       <exclusions>
         <exclusion>
@@ -108,8 +113,6 @@
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
-      <version>2.3.5</version>
-      <scope>test</scope>
     </dependency>
 
     <!-- Spring -->
@@ -218,6 +221,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-common-resources</artifactId>
+      <version>${dcc-common.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -235,8 +239,6 @@
     <dependency>
       <groupId>com.github.tlrx</groupId>
       <artifactId>elasticsearch-test</artifactId>
-      <version>${elasticsearch-test.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
