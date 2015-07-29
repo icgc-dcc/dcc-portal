@@ -210,6 +210,13 @@
       <version>1.5</version>
     </dependency>
 
+    <!-- HTTP Client -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${jersey.version}</version>
+    </dependency>
+
     <!-- Test -->
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -333,6 +340,9 @@
 
     <!-- Versions - Math -->
     <commons-math.version>3.4.1</commons-math.version>
+
+    <!-- Versions - Jersey -->
+    <jersey.version>1.17.1</jersey.version>
 
     <!-- Versions - Testing -->
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
