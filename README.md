@@ -17,6 +17,7 @@ Sub-system modules:
 
 - [Portal API](dcc-portal-api/README.md)
 - [Portal UI](dcc-portal-ui/README.md)
+- [Portal PQL](dcc-portal-pql/README.md)
 
 Changes
 ---
