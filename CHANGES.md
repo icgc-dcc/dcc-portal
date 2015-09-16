@@ -8,12 +8,12 @@ Change log for the DCC 2.0 Portal
  - Added full screen support for Pathway Viewer
  - Disease pathways should no longer throw errors
  - QOL improvements and various bug fixes for Pathway Viewer
+ - Added Tumor Types facet in Projects page
 
 3.8.9.0
 --
  - Added Pancancer pages
  - Fix minor issues with protein viewer and enrichment analysis
-
 
 3.8.8.0
 --
