@@ -5,8 +5,9 @@ Change log for the DCC 2.0 Portal
 
 3.8.14.x
 --
- - Added full screen support for Genome Viewer
- - Added full screen support for Pathway Viewer
+ - Added functionality to view files in external repo based on filter from advanced search
+ - Added functionality to download and view donor sets in external repository from analysis
+ - Added full screen support for Genome Viewer and Pathway Viewer
  - Disease pathways should no longer throw errors
  - QOL improvements and various bug fixes for Pathway Viewer
  - Added Tumor Types facet in Projects page
