@@ -5,6 +5,7 @@ Change log for the DCC 2.0 Portal
 
 3.8.14.x
 --
+ - Bug fix for gene query in the case of no donor analysis
  - Added full screen support for Genome Viewer
  - Added full screen support for Pathway Viewer
  - Disease pathways should no longer throw errors
