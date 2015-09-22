@@ -3,7 +3,7 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
-3.8.14.x
+3.8.14.4
 --
  - Added functionality to view files in external repo based on filter from advanced search
  - Added functionality to download and view donor sets in external repository from analysis
