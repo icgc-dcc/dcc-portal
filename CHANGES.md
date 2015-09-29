@@ -5,7 +5,7 @@ Change log for the DCC 2.0 Portal
 
 3.8.15.x
 --
-	- Updated d3 to fix minor with Pathway Viewer
+	- Updated d3 to fix minor error with Pathway Viewer
 
 3.8.14.4
 --
