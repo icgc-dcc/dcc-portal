@@ -12,6 +12,7 @@ Change log for the DCC 2.0 Portal
  - Corrected the filter used in querying mutations for the Reactome Pathway Viewer
  - Fixed bug that caused the Project Sample Sheet to return empty
  - Refactored Browser API to fix various problems that could result in error 500s being returned
+ - Significantly reduced the load time of stacked bar chart in Project Summary page.
 
 3.8.14.4
 --
