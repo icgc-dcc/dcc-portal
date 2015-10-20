@@ -6,6 +6,13 @@ Change log for the DCC 2.0 Portal
 3.8.15.x
 --
  - Updated d3 to fix minor error with Pathway Viewer
+ - Fixed issue that caused Pie Chart colouring from not being correctly assigned to new Projects on Cancer Projects page.
+ - In Phenotype Analysis, results of 0 should no longer link to advanced search
+ - When navigating to Genome Viewer from Donor Entity page, the mutation sorting and filter will be carried over
+ - Corrected the filter used in querying mutations for the Reactome Pathway Viewer
+ - Fixed bug that caused the Project Sample Sheet to return empty
+ - Refactored Browser API to fix various problems that could result in error 500s being returned
+ - Significantly reduced the load time of stacked bar chart in Project Summary page.
 
 3.8.14.4
 --
