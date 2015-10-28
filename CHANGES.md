@@ -3,7 +3,7 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
-3.8.15.x
+3.8.16.1
 --
  - Updated d3 to fix minor error with Pathway Viewer
  - Fixed issue that caused Pie Chart colouring from not being correctly assigned to new Projects on Cancer Projects page.
