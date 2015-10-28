@@ -3,11 +3,6 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
-3.8.?.?
---
- - Enhanced data repositories.
-
-
 3.8.16.1
 --
  - Updated d3 to fix minor error with Pathway Viewer
@@ -18,6 +13,7 @@ Change log for the DCC 2.0 Portal
  - Fixed bug that caused the Project Sample Sheet to return empty
  - Refactored Browser API to fix various problems that could result in error 500s being returned
  - Significantly reduced the load time of stacked bar chart in Project Summary page.
+ - Enhanced data repositories.
 
 3.8.14.4
 --
