@@ -3,6 +3,11 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.?.?
+--
+ - Enhanced data repositories.
+
+
 3.8.16.1
 --
  - Updated d3 to fix minor error with Pathway Viewer
