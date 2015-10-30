@@ -3,7 +3,7 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
-3.8.15.x
+3.8.16.1
 --
  - Updated d3 to fix minor error with Pathway Viewer
  - Fixed issue that caused Pie Chart colouring from not being correctly assigned to new Projects on Cancer Projects page.
@@ -13,6 +13,18 @@ Change log for the DCC 2.0 Portal
  - Fixed bug that caused the Project Sample Sheet to return empty
  - Refactored Browser API to fix various problems that could result in error 500s being returned
  - Significantly reduced the load time of stacked bar chart in Project Summary page.
+ - Enhanced data repositories.
+ - Introduced in Pathway Viewer page relating to Enrichment Analysis
+ - Added filtering on Reactome ID’s in new Pathway Viewer page.
+ - Promoted featurePortal service to a Provider so it can be used in config angular modules (useful for altering angular routes or angular ui-router state templates).
+  - Added ICGC in the Cloud pages including (currently disabled as changes are being done to the documents):
+  - Logo addition on ICGC Portal Home Page
+  - ICGC In the Cloud Landing Page 
+  - Preliminary User Guide for AWS-Virginia
+ - Added a generalized page to be able to model the info regarding associated ICGC Repositories (similar to the PCAWG Page).
+ - Fixed Grunt Bower service from running multiple times during build
+ - Added injectable Grunt Front-end Developer Profile so there is no more need to modify the application’s app.js when doing front-end development via ‘grunt server’.
+ - Updated ICGC Data Portal Team Page to reflect the current Project Team as well as to publicly acknowledge some important contributing parties to the ICGC Portal.
 
 3.8.14.4
 --
