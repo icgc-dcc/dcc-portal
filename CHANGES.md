@@ -3,6 +3,13 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.18.x
+--
+  - Added tooltip information for Data Type in External Repository
+  - Added Analysis Software facet in External Repository
+  - Updated Genome Viewer to handle new API format
+  - Bug fixes to mutation counts and text rendering in Pathway Viewer
+
 3.8.16.1
 --
  - Updated d3 to fix minor error with Pathway Viewer
