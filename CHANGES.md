@@ -3,11 +3,37 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
-3.8.14.x
+3.8.16.1
 --
- - Added full screen support for Pathway Viewer
+ - Updated d3 to fix minor error with Pathway Viewer
+ - Fixed issue that caused Pie Chart colouring from not being correctly assigned to new Projects on Cancer Projects page.
+ - In Phenotype Analysis, results of 0 should no longer link to advanced search
+ - When navigating to Genome Viewer from Donor Entity page, the mutation sorting and filter will be carried over
+ - Corrected the filter used in querying mutations for the Reactome Pathway Viewer
+ - Fixed bug that caused the Project Sample Sheet to return empty
+ - Refactored Browser API to fix various problems that could result in error 500s being returned
+ - Significantly reduced the load time of stacked bar chart in Project Summary page.
+ - Enhanced data repositories.
+ - Introduced in Pathway Viewer page relating to Enrichment Analysis
+ - Added filtering on Reactome ID’s in new Pathway Viewer page.
+ - Promoted featurePortal service to a Provider so it can be used in config angular modules (useful for altering angular routes or angular ui-router state templates).
+  - Added ICGC in the Cloud pages including (currently disabled as changes are being done to the documents):
+  - Logo addition on ICGC Portal Home Page
+  - ICGC In the Cloud Landing Page 
+  - Preliminary User Guide for AWS-Virginia
+ - Added a generalized page to be able to model the info regarding associated ICGC Repositories (similar to the PCAWG Page).
+ - Fixed Grunt Bower service from running multiple times during build
+ - Added injectable Grunt Front-end Developer Profile so there is no more need to modify the application’s app.js when doing front-end development via ‘grunt server’.
+ - Updated ICGC Data Portal Team Page to reflect the current Project Team as well as to publicly acknowledge some important contributing parties to the ICGC Portal.
+
+3.8.14.4
+--
+ - Added functionality to view files in external repo based on filter from advanced search
+ - Added functionality to download and view donor sets in external repository from analysis
+ - Added full screen support for Genome Viewer and Pathway Viewer
+ - Bug fix for gene query in the case of no donor analysis
  - Disease pathways should no longer throw errors
- - QOL improvements and various bug fixes for Pathway Viewer
+ - QOL improvements and various bug fixes for Pathway Viewer and Genome Viewer
  - Added Tumor Types facet in Projects page
 
 3.8.9.0
