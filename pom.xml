@@ -50,8 +50,8 @@
       <!-- Test -->
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-common-resources</artifactId>
-        <version>${dcc-common.version}</version>
+        <artifactId>dcc-etl-resources</artifactId>
+        <version>${dcc-etl.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -73,6 +73,7 @@
   <properties>
     <!-- Versions - DCC -->
     <dcc-common.version>3.8.17.1</dcc-common.version>
+    <dcc-etl.version>3.8.17.8</dcc-etl.version>
     <dcc-downloader-client.version>3.8.6.0</dcc-downloader-client.version>
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
     <groovy.version>2.3.5</groovy.version>
