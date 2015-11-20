@@ -82,9 +82,9 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.17.1</dcc-common.version>
+    <dcc-common.version>3.8.18.0</dcc-common.version>
     <dcc-downloader.version>3.8.6.0</dcc-downloader.version>
-    <dcc-etl.version>3.8.17.8</dcc-etl.version>
+    <dcc-etl.version>3.8.19</dcc-etl.version>
     <dcc-repository.version>1.0.0</dcc-repository.version>
 
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
