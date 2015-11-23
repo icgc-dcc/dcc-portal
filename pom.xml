@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>3.8.18.4-SNAPSHOT</version>
+  <version>3.8.18.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -44,16 +44,10 @@
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>dcc-downloader-client</artifactId>
-        <version>${dcc-downloader-client.version}</version>
+        <version>${dcc-downloader.version}</version>
       </dependency>
 
       <!-- Test -->
-      <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-common-resources</artifactId>
-        <version>${dcc-common.version}</version>
-        <scope>test</scope>
-      </dependency>
       <dependency>
         <groupId>com.github.tlrx</groupId>
         <artifactId>elasticsearch-test</artifactId>
@@ -70,10 +64,29 @@
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <!-- Test - DCC -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-etl-resources</artifactId>
+      <version>${dcc-etl.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>dcc-repository-resources</artifactId>
+      <version>${dcc-repository.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.17.1</dcc-common.version>
-    <dcc-downloader-client.version>3.8.6.0</dcc-downloader-client.version>
+    <dcc-common.version>3.8.18.0</dcc-common.version>
+    <dcc-downloader.version>3.8.6.0</dcc-downloader.version>
+    <dcc-etl.version>3.8.19</dcc-etl.version>
+    <dcc-repository.version>1.0.0</dcc-repository.version>
+
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
     <groovy.version>2.3.5</groovy.version>
   </properties>
