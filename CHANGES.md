@@ -3,6 +3,16 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.20
+--
+ - New drug/compound entity page which correlates targetted genes and provides context into clinical trials.
+ - Drug/Compound integration in gene info pages.
+ - Quick search support added for Compounds/Drugs.
+ - Bug fixes for genome map viewer including support for tooltip descriptions in fullscreen.
+ - Reactome Pathway viewer from enrichment analysis now supports the ability to indentify overlapping genes (ICGC vs input gene sets).
+ - Refactored Pathway Viewer into more angular-ized components.
+ - iobio integration added to AWS/Collaboratory repository pages.
+ 
 3.8.18.x
 --
   - Added tooltip information for Data Type in External Repository
