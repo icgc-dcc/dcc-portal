@@ -318,6 +318,15 @@
             <goals>
               <goal>repackage</goal>
             </goals>
+            <configuration>
+            	<requiresUnpack>
+            	    <dependency>
+				      <groupId>${project.groupId}</groupId>
+				      <artifactId>dcc-portal-ui</artifactId>
+				      <version>${project.version}</version>
+				    </dependency>
+				</requiresUnpack>
+            </configuration>
           </execution>
         </executions>
       </plugin>
