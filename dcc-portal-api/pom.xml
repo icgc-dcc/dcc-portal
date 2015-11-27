@@ -291,12 +291,6 @@
 
       <!-- Package -->
       <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <configuration>
-          <createDependencyReducedPom>false</createDependencyReducedPom>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
@@ -314,12 +308,26 @@
           </execution>
         </executions>
       </plugin>
+      
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
     </plugins>
   </build>
 
   <properties>
     <!-- Entry point -->
-    <main.class>org.icgc.dcc.portal.DataPortalService</main.class>
+    <main.class>org.springframework.boot.loader.JarLauncher</main.class>
 
     <!-- Versions - Dropwizard -->
     <dropwizard.version>0.6.2</dropwizard.version>
@@ -341,6 +349,10 @@
     <!-- Versions - Testing -->
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
     <h2.version>1.3.173</h2.version>
+    
+    <!--  Versions - Sring Maven Boot -->
+    <spring-maven-plugin.version>1.3.0.RELEASE</spring-maven-plugin.version>
+    
   </properties>
 
 </project>
