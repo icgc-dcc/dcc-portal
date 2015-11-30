@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>3.8.17.8-SNAPSHOT</version>
+    <version>3.8.20-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -49,12 +49,6 @@
     <dependency>
       <groupId>com.github.tlrx</groupId>
       <artifactId>elasticsearch-test</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-common-resources</artifactId>
-      <version>${dcc-common.version}</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   
