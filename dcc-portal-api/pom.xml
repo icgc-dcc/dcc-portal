@@ -321,8 +321,8 @@
             <configuration>
             	<requiresUnpack>
             	    <dependency>
-				      <groupId>${project.groupId}</groupId>
-				      <artifactId>dcc-portal-ui</artifactId>
+            	      <groupId>${project.groupId}</groupId>
+				       <artifactId>dcc-portal-ui</artifactId>
 				      <version>${project.version}</version>
 				    </dependency>
 				</requiresUnpack>
