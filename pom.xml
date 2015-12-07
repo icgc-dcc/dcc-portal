@@ -65,6 +65,14 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- Utilities -->
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>annotations</artifactId>
+      <version>${findbugs-annotations.version}</version>
+      <scope>provided</scope>
+    </dependency>  
+  
     <!-- Test - DCC -->
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -86,6 +94,7 @@
     <dcc-downloader.version>3.8.6.0</dcc-downloader.version>
     <dcc-etl.version>3.8.19</dcc-etl.version>
     <dcc-repository.version>1.0.0</dcc-repository.version>
+    <findbugs-annotations.version>3.0.1u2</findbugs-annotations.version>
 
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
     <groovy.version>2.3.5</groovy.version>
