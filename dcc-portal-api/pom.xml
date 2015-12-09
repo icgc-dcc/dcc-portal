@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>3.8.17.7-SNAPSHOT</version>
+    <version>3.8.20-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -219,12 +219,6 @@
 
     <!-- Test -->
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-common-resources</artifactId>
-      <version>${dcc-common.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.yammer.dropwizard</groupId>
       <artifactId>dropwizard-testing</artifactId>
       <version>${dropwizard.version}</version>
@@ -325,7 +319,7 @@
 
   <properties>
     <!-- Entry point -->
-    <main.class>org.icgc.dcc.portal.DataPortalService</main.class>
+    <main.class>org.icgc.dcc.portal.PortalMain</main.class>
 
     <!-- Versions - Dropwizard -->
     <dropwizard.version>0.6.2</dropwizard.version>

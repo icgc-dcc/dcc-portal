@@ -3,6 +3,32 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.8.20
+--
+ - New drug/compound entity page which correlates targetted genes and provides context into clinical trials.
+ - Drug/Compound integration in gene info pages.
+ - Quick search support added for Compounds/Drugs.
+ - Bug fixes for genome map viewer including support for tooltip descriptions in fullscreen.
+ - Reactome Pathway viewer from enrichment analysis now supports the ability to indentify overlapping genes (ICGC vs input gene sets).
+ - Refactored Pathway Viewer into more angular-ized components.
+ - iobio integration added to AWS/Collaboratory repository pages.
+ 
+3.8.18.x
+--
+  - Added tooltip information for Data Type in External Repository
+  - Added Analysis Software facet in External Repository
+  - Updated Genome Viewer to handle new API format
+  - Bug fixes to mutation counts and text rendering in Pathway Viewer
+  - Custom Copy to Clipboard Component added througout application.
+  - Improved performance of the Advanced Search page.
+  - Released ICGC in the Cloud Universal Guide for AWS and Collaboratory. 
+  - Released ICGC in the Cloud Repository showcase pages for AWS and Collaboratory.
+  - Separated DCC data releases from the external file repository page.
+  - Various portal UI bug fixes.
+  - Fixed mailer for error reporting on the data portal.
+  - Enrichment Analysis enhancements utilizing the Pathway Viewer for Reactome Pathways.
+  - Some additional improvements and optimizations introduced to front-end build process.
+
 3.8.16.1
 --
  - Updated d3 to fix minor error with Pathway Viewer
