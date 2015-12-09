@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>3.8.20-SNAPSHOT</version>
+    <version>3.9.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -82,8 +82,8 @@
   </build>
 
   <properties>
-    <antlr4.version>4.5</antlr4.version>
-    <antlr4-maven.version>4.5</antlr4-maven.version>
+    <antlr4.version>4.5.1</antlr4.version>
+    <antlr4-maven.version>4.5.1</antlr4-maven.version>
   </properties>
 
 </project>
