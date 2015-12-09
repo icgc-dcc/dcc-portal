@@ -90,7 +90,7 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>3.8.18.0</dcc-common.version>
+    <dcc-common.version>3.9.0</dcc-common.version>
     <dcc-downloader.version>3.8.6.0</dcc-downloader.version>
     <dcc-etl.version>3.8.19</dcc-etl.version>
     <dcc-repository.version>1.0.0</dcc-repository.version>
