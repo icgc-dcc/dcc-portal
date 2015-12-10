@@ -3,9 +3,54 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
-3.8.15.x
+3.8.20
+--
+ - New drug/compound entity page which correlates targetted genes and provides context into clinical trials.
+ - Drug/Compound integration in gene info pages.
+ - Quick search support added for Compounds/Drugs.
+ - Bug fixes for genome map viewer including support for tooltip descriptions in fullscreen.
+ - Reactome Pathway viewer from enrichment analysis now supports the ability to indentify overlapping genes (ICGC vs input gene sets).
+ - Refactored Pathway Viewer into more angular-ized components.
+ - iobio integration added to AWS/Collaboratory repository pages.
+ 
+3.8.18.x
+--
+  - Added tooltip information for Data Type in External Repository
+  - Added Analysis Software facet in External Repository
+  - Updated Genome Viewer to handle new API format
+  - Bug fixes to mutation counts and text rendering in Pathway Viewer
+  - Custom Copy to Clipboard Component added througout application.
+  - Improved performance of the Advanced Search page.
+  - Released ICGC in the Cloud Universal Guide for AWS and Collaboratory. 
+  - Released ICGC in the Cloud Repository showcase pages for AWS and Collaboratory.
+  - Separated DCC data releases from the external file repository page.
+  - Various portal UI bug fixes.
+  - Fixed mailer for error reporting on the data portal.
+  - Enrichment Analysis enhancements utilizing the Pathway Viewer for Reactome Pathways.
+  - Some additional improvements and optimizations introduced to front-end build process.
+
+3.8.16.1
 --
  - Updated d3 to fix minor error with Pathway Viewer
+ - Fixed issue that caused Pie Chart colouring from not being correctly assigned to new Projects on Cancer Projects page.
+ - In Phenotype Analysis, results of 0 should no longer link to advanced search
+ - When navigating to Genome Viewer from Donor Entity page, the mutation sorting and filter will be carried over
+ - Corrected the filter used in querying mutations for the Reactome Pathway Viewer
+ - Fixed bug that caused the Project Sample Sheet to return empty
+ - Refactored Browser API to fix various problems that could result in error 500s being returned
+ - Significantly reduced the load time of stacked bar chart in Project Summary page.
+ - Enhanced data repositories.
+ - Introduced in Pathway Viewer page relating to Enrichment Analysis
+ - Added filtering on Reactome ID’s in new Pathway Viewer page.
+ - Promoted featurePortal service to a Provider so it can be used in config angular modules (useful for altering angular routes or angular ui-router state templates).
+  - Added ICGC in the Cloud pages including (currently disabled as changes are being done to the documents):
+  - Logo addition on ICGC Portal Home Page
+  - ICGC In the Cloud Landing Page 
+  - Preliminary User Guide for AWS-Virginia
+ - Added a generalized page to be able to model the info regarding associated ICGC Repositories (similar to the PCAWG Page).
+ - Fixed Grunt Bower service from running multiple times during build
+ - Added injectable Grunt Front-end Developer Profile so there is no more need to modify the application’s app.js when doing front-end development via ‘grunt server’.
+ - Updated ICGC Data Portal Team Page to reflect the current Project Team as well as to publicly acknowledge some important contributing parties to the ICGC Portal.
 
 3.8.14.4
 --
