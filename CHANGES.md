@@ -3,6 +3,14 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+3.9.3
+--
+ - Refactored Advanced Search Front end to render tabs and facets only when required - performance boost is the result.
+ - Decorated Restangular to provide support for cancelling ajax requests.
+ - Draft of front end developer conventions in progress - README.md
+ - Updated build tools on front end.
+ - Added JS Source Maps Support for extra debugging convenience.
+ 
 3.8.20
 --
  - New drug/compound entity page which correlates targetted genes and provides context into clinical trials.
