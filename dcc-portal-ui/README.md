@@ -250,11 +250,14 @@ var _this = this;
 function. Why? To reduce verbose duplication of code and to map our conventions to the same one angularJS does with their getter/setters
 See https://docs.angularjs.org/api/ng/directive/ngModel#binding-to-a-getter-setter
 
+* **Note**: In the case where we only wish to create a getter function only it is completely admissible to use the traditional ```get<propertyName>()``` functional naming scheme.
 
 ### Angular Controller Conventions
+
 * Use **controllerAs** or ```controller: 'a as b' (in the $stateProvider)``` syntax in your controller (we do this in our route definition on the parent module). This allows you to bind your controller's ```this```
 (we will store this in a variable called **_controller** in our controllers --> see above) value to
 functionality your view can use.
+
 * Using this convention allows you to use **$scope** as well however **please try not to!!!** The reality is
 Angular makes the controller available via the **$scope** variable irregardless so it's really your call if you have some compelling reason to use both.
 
@@ -266,7 +269,7 @@ Angular makes the controller available via the **$scope** variable irregardless 
 
       // Projects modules definition including dependencies
       angular.module('session', ['session.controllers', 'ui.router'])
-          .constant('SOME_CONSTANT', {
+          .constant('sessionConstants', {
             FOO_1: 'foo1', FOO_2:'foo2' // CAPITALIZE AND UNDERSCORE CONSTANTS!
           })
           .config(function ($stateProvider) {
