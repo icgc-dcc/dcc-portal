@@ -271,7 +271,7 @@ Angular makes the controller available via the **$scope** variable irregardless 
           })
           .config(function ($stateProvider) {
             $stateProvider.state('sessions', {
-              url: '/projects?filters',
+              url: '/sessions?filters',
               templateUrl: 'scripts/session/views/session.html',
               controller: 'SessionCtrl as SessionCtrl', // <--- controller declaration!
               data: {
