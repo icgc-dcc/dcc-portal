@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-parent</artifactId>
-    <version>26</version>
+    <version>27</version>
   </parent>
 
   <artifactId>dcc-portal</artifactId>
@@ -69,7 +69,6 @@
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>annotations</artifactId>
-      <version>${findbugs-annotations.version}</version>
       <scope>provided</scope>
     </dependency>  
   
@@ -94,7 +93,6 @@
     <dcc-downloader.version>3.8.6.0</dcc-downloader.version>
     <dcc-etl.version>3.8.19</dcc-etl.version>
     <dcc-repository.version>1.0.0</dcc-repository.version>
-    <findbugs-annotations.version>3.0.1u2</findbugs-annotations.version>
 
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
     <groovy.version>2.3.5</groovy.version>
