@@ -120,6 +120,49 @@ Folder | Purpose   | Example
 /vendor/scripts/bamiobio| Customized iobio Module | N/A
 /vendor/scripts/genome-viewer | Customized genome viewer with ICGC Tracks and Data Adapters | N/A
 
+## Getting Started - The DCC Portal UI Hello World ##
+
+### Start Up the Development Server
+1. From within the DCC Portal route go to  ```dcc-portal-ui/```
+2. Ensure you have previously installed NodeJS and ran an ```npm install```
+3. Start up the DCC Portal API - this will ensure that your DCC API webservices will not fail. Refer to
+ the DCC-Portal-API [README.md](../dcc-portal-api/README.md) for more details.
+4. Type in the command ```grunt server```
+5. Open your favourite development browser at ```http://localost:9000```
+6. From this point on any changes made to the application in the ```app/scripts```. Refer to the [README.md](./README.md) for more details
+on starting your development server.
+
+### Create your Angular Module Root ###
+
+1. From within the DCC Portal route go to  ```dcc-portal-ui/app/scripts```.
+2. Create a folder with your module name i.e. ```mkdir helloworld```
+3. Create folders inside of ```helloworld``` called ```js```, ```views```, ```styles```, ```images```. Your folder structure should now look like the below:
+   ```
+    helloworld/
+      |__ js/
+      |__ views/
+      |__ styles/
+      |__ images/
+   ```
+
+### Register your Application Route ###
+
+:dart: Your application route is the entry point into your application. Here you will be using angular-ui-router. For more information
+about this library please [refer to its documentation](https://github.com/angular-ui/ui-router/wiki).
+
+1. In your ```js``` folder create a javascript file called ```helloworld.js```. Note that it's conventional to give it the same name as your module.
+2. In your ```helloworld.js``` file you will declare your AngularJS module, include your module dependencies (if applicable).
+3. After defining your module you will then tell angular-ui-router a little about your application architecture including the url, controllers and views you would
+like to use. Again please [refer to its documentation](https://github.com/angular-ui/ui-router/wiki) if you are not familiar with this library. We will provide only
+the basics here. Your ```helloworld.js``` file might look something like this:
+
+
+### Create your Controllers, Views and Directives Skeletons. ###
+
+### Update DCC Portals Module ###
+
+### Update index.html ###
+
 ## Got Questions/Feeback? ##
 
  * We are always happy to help - should you have any questions or feedback
