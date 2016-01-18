@@ -168,7 +168,7 @@ the basics here. Your :paperclip: ```helloworld.js``` file might look something 
       // Projects modules definition including dependencies
       angular.module('helloworld', ['helloworld.controllers', 'ui.router'])
           .constant('helloworldConstants', {
-            HELLO_MSG: 'Hello DCC Portal World!', GOODBYE_MESSAGE:'Goodbye sweet world!' // CAPITALIZE AND UNDERSCORE CONSTANTS!
+            HELLO_MSG: 'Hello DCC Portal World!', GOODBYE_MSG:'Goodbye Sweet World! :S' // CAPITALIZE AND UNDERSCORE CONSTANTS!
           })
           .config(function ($stateProvider) {
             $stateProvider.state('helloworld', {
@@ -210,7 +210,7 @@ Now that we defined our ```helloworld``` module let's create our corresponding A
       };
 
       _controller.pressTheRedButton = function() {
-        _greetingMsg = helloworldConstants.GOODBYE_MESSAGE;
+        _greetingMsg = helloworldConstants.GOODBYE_MSG;
       };
   });
 })();
