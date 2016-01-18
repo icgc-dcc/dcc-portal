@@ -173,7 +173,7 @@ the basics here. Your ```helloworld.js``` file might look something like this:
               controller: 'HelloworldCtrl as HelloworldCtrl', // <--- controller declaration!
             });
           })
-          .run(function(someDependency1, someDependency1, ..., someDependencyN) {
+          .run(function(someDependency1, someDependency2, someDependencyN) {
             /* ... Run block implementation ... */
           });
 
@@ -189,35 +189,38 @@ the basics here. Your ```helloworld.js``` file might look something like this:
 Now that we defined our ```helloworld``` module let's create our corresponding AngularJS controller and view.
 
 ```controllers/controllers.js```
+
 ```javascript
-  function () {
-      'use strict';
+(function() {
+  'use strict';
 
-      // Projects modules definition including dependencies
-      angular.module('helloworld')
-        .controller('HelloworldCtrl', function(helloworldConstants) {
-          var _controller = this,
-              _greetingMsg = helloworldConstants.HELLO_MSG;
+  // Projects modules definition including dependencies
+  angular.module('helloworld')
+    .controller('HelloworldCtrl', function(helloworldConstants) {
+      var _controller = this,
+          _greetingMsg = helloworldConstants.HELLO_MSG;
 
 
-          _controller.getHelloMsg = function() {
-            return _greetingMsg;
-          };
+      _controller.getHelloMsg = function() {
+        return _greetingMsg;
+      };
 
-          _controller.pressTheRedButton = function() {
-            _greetingMsg = helloworldConstants.GOODBYE_MESSAGE;
-          };
-      });
-  })();
+      _controller.pressTheRedButton = function() {
+        _greetingMsg = helloworldConstants.GOODBYE_MESSAGE;
+      };
+  });
+})();
 ```
 
 ```views/helloworld.html```
+
 ```html
 <h1 data-ng-bind="HelloworldCtrl.getHelloMsg()"></h1>
 <button data-ng-click="pressTheRedButton()" class="red-button">Do not press the red button...</button>
 ```
 
 ```styles/helloworld.scss```
+
 ```scss
 $topRedButtonColour: #fa8cad;
 $bottomRedButtonColour: #b82b2b;
