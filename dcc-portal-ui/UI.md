@@ -145,6 +145,8 @@ on starting your development server.
   |__ images/
 ```
 
+:thumbsup: If you have any questions about coding conventions please refer to the Portal UI [CONTRIBUTING.md](./CONTRIBUTING.md) file for more information.
+
 ### Register your Application Route ###
 
 :dart: Your application route is the entry point into your application. Here you will be using angular-ui-router. For more information
@@ -162,7 +164,7 @@ the basics here. Your ```helloworld.js``` file might look something like this:
       // Projects modules definition including dependencies
       angular.module('helloworld', ['helloworld.controllers', 'ui.router'])
           .constant('helloworldConstants', {
-            FOO_1: 'foo1', FOO_2:'foo2' // CAPITALIZE AND UNDERSCORE CONSTANTS!
+            HELLO_MSG: 'Hello DCC Portal World!', GOODBYE_MESSAGE:'Goodbye sweet world!' // CAPITALIZE AND UNDERSCORE CONSTANTS!
           })
           .config(function ($stateProvider) {
             $stateProvider.state('helloworld', {
@@ -183,6 +185,54 @@ the basics here. Your ```helloworld.js``` file might look something like this:
 
 
 ### Create your Controllers, Views and Directives Skeletons. ###
+
+Now that we defined our ```helloworld``` module let's create our corresponding AngularJS controller and view.
+
+```controllers/controllers.js```
+```javascript
+  function () {
+      'use strict';
+
+      // Projects modules definition including dependencies
+      angular.module('helloworld')
+        .controller('HelloworldCtrl', function(helloworldConstants) {
+          var _controller = this,
+              _greetingMsg = helloworldConstants.HELLO_MSG;
+
+
+          _controller.getHelloMsg = function() {
+            return _greetingMsg;
+          };
+
+          _controller.pressTheRedButton = function() {
+            _greetingMsg = helloworldConstants.GOODBYE_MESSAGE;
+          };
+      });
+  })();
+```
+
+```views/helloworld.html```
+```html
+<h1 data-ng-bind="HelloworldCtrl.getHelloMsg()"></h1>
+<button data-ng-click="pressTheRedButton()" class="red-button">Do not press the red button...</button>
+```
+
+```styles/helloworld.scss```
+```scss
+$topRedButtonColour: #fa8cad;
+$bottomRedButtonColour: #b82b2b;
+
+.red-button {
+  background: $redButtonColour;
+  background-image: linear-gradient(to bottom, $topRedButtonColour, $bottomRedButtonColour);
+  border-radius: 28px;
+  font-family: Arial;
+  color: #fff;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+```
 
 ### Update DCC Portals Module ###
 
