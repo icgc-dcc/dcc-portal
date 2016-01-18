@@ -137,13 +137,13 @@ on starting your development server.
 1. From within the DCC Portal route go to  ```dcc-portal-ui/app/scripts```.
 2. Create a folder with your module name i.e. ```mkdir helloworld```
 3. Create folders inside of ```helloworld``` called ```js```, ```views```, ```styles```, ```images```. Your folder structure should now look like the below:
-   ```
-    helloworld/
-      |__ js/
-      |__ views/
-      |__ styles/
-      |__ images/
-   ```
+```
+  helloworld/
+  |__ js/
+  |__ views/
+  |__ styles/
+  |__ images/
+```
 
 ### Register your Application Route ###
 
@@ -151,10 +151,35 @@ on starting your development server.
 about this library please [refer to its documentation](https://github.com/angular-ui/ui-router/wiki).
 
 1. In your ```js``` folder create a javascript file called ```helloworld.js```. Note that it's conventional to give it the same name as your module.
-2. In your ```helloworld.js``` file you will declare your AngularJS module, include your module dependencies (if applicable).
+2. In your ```helloworld.js``` file you will declare your AngularJS module, include your module dependencies (if applicable), and do some general module initialization.
 3. After defining your module you will then tell angular-ui-router a little about your application architecture including the url, controllers and views you would
 like to use. Again please [refer to its documentation](https://github.com/angular-ui/ui-router/wiki) if you are not familiar with this library. We will provide only
 the basics here. Your ```helloworld.js``` file might look something like this:
+```javascript
+(function () {
+      'use strict';
+
+      // Projects modules definition including dependencies
+      angular.module('helloworld', ['helloworld.controllers', 'ui.router'])
+          .constant('helloworldConstants', {
+            FOO_1: 'foo1', FOO_2:'foo2' // CAPITALIZE AND UNDERSCORE CONSTANTS!
+          })
+          .config(function ($stateProvider) {
+            $stateProvider.state('helloworld', {
+              url: '/helloworld',
+              templateUrl: 'scripts/helloworld/views/helloworld.html',
+              controller: 'HelloworldCtrl as HelloworldCtrl', // <--- controller declaration!
+            });
+          })
+          .run(function(someDependency1, someDependency1, ..., someDependencyN) {
+            /* ... Run block implementation ... */
+          });
+
+    })();
+```
+
+:question: If you are unfamiliar with the above AngularJS Framework code we suggest you refer to the
+[AngularJS Documentation](https://docs.angularjs.org/guide).
 
 
 ### Create your Controllers, Views and Directives Skeletons. ###
