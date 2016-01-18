@@ -4,7 +4,6 @@
 
 
 ## Who this Document is for? ##
----
 
 * A developer, or team of developers who wish to understand the general frontend
 components in order to extend, modify or provide fixes towards the UI.
@@ -13,7 +12,7 @@ components in order to extend, modify or provide fixes towards the UI.
 
 
 ## Learning Objectives ##
----
+
 * Understand the general frameworks used within the frontend.
 * Be able to identify the responsibilities of various portions of the UI codebase.
 * Learn to customize the DCC Banner, Logo and Footer.
@@ -22,7 +21,6 @@ components in order to extend, modify or provide fixes towards the UI.
 
 
 ## The Frontend Stack ##
----
 
 ### Build ###
 *Please note:* The below dependendencies are managed using the [NodeJS's](https://nodejs.org) [NPM](https://www.npmjs.com/) tool. Please
