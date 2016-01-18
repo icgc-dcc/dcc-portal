@@ -253,9 +253,9 @@ Open the ```dcc-portal-ui/scripts/app/index.html``` file and add all our script 
 Inside the ```ICGC Core Application``` build:js usemin block/
 
 ```html
-<!-- --------------------------------------------------------- -->
-<!-- ICGC Core Application -->
-<!-- --------------------------------------------------------- -->
+<!--                        -->
+<!-- ICGC Core Application  -->
+<!--                        -->
 
 <!-- build:js scripts/scripts.js -->
 <script src="scripts/app/js/app.js"></script>
