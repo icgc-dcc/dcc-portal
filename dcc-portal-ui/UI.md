@@ -188,7 +188,7 @@ the basics here. Your ```helloworld.js``` file might look something like this:
 
 Now that we defined our ```helloworld``` module let's create our corresponding AngularJS controller and view.
 
-* :paperclip: controllers/controllers.js
+ :paperclip: controllers/controllers.js
 
 ```javascript
 (function() {
@@ -212,14 +212,14 @@ Now that we defined our ```helloworld``` module let's create our corresponding A
 })();
 ```
 
-* :paperclip: views/helloworld.html
+ :paperclip: views/helloworld.html
 
 ```html
     <h1 data-ng-bind="HelloworldCtrl.getHelloMsg()"></h1>
     <button data-ng-click="pressTheRedButton()" class="red-button">Do not press the red button...</button>
 ```
 
-* :paperclip: styles/helloworld.scss
+ :paperclip: styles/helloworld.scss
 
 ```scss
 $topRedButtonColour: #fa8cad;
