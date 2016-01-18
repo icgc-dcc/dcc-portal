@@ -58,11 +58,24 @@ refer to the *bower.json* file in the current directory to lookup which versions
 * *[Angular-ui-router](https://github.com/angular-ui/ui-router)*  - Route Management in AngularJS.
 * *[Restangular](https://github.com/mgonto/restangular)* - REST Resource Management in AngularJS.
 * *[Angular-bootstrap](https://angular-ui.github.io/bootstrap/)* Bootstrap integration in AngularJS.
-* *[D3.js](https://d3js.org/)* - Visualization (Preferred) Library
+* *[D3.js](https://d3js.org/)* - Visualization (*Preferred*) Library
 * *[Highcharts](http://www.highcharts.com/)*  - Visualization Library
 * *Other Various Third Party Libs*
 
 ## Frontend Breakdown ##
+
+### UI Architecture ###
+
+The frontend UI is based fully on an AngularJS Single Page Application ([SPA](https://en.wikipedia.org/wiki/Single-page_application)) Architecture
+meaning that the core domain logic is encapsulated on the server-side while the UI logic is soley handled in the user's browser and managed via JavaScript 
+(specifically [ECMAScript](https://en.wikipedia.org/wiki/ECMAScript) Version 5). Communication between the two layers is achieved using [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfer) webservices.
+
+![Image of Frontend Architecture](docs-resources/images/architecture-diagram.png)
+
+DCC Portal UI uses the angular-ui-router to extend and replace the functionality provided by Angular's default Router implementation. UI Router makes
+use of the ```ui-view``` directive to handle state transitions between views. Below is a diagram illustrating the basic template for the ui-view in the DCC Portal UI:
+
+![Image of Frontend UI-VIEW Page Layout](docs-resources/images/page-layout.png)
 
 ### File Organization ###
 This section provides a high-level outline of the modules/file structure in the Portal UI project.
@@ -104,6 +117,8 @@ This is also the build area for the PQL grammar file.
 * ```/scripts/ui``` - Mostly smaller UI components tied to the ICGC portal
 * ```/scripts/venn23``` - Venn diagram UI component used in analysis module.
 * ```/scripts/visualization``` - Visualization module definition for the project mutation viewer, project stacked bar and area bar.
+* ```/vendor/scripts/bamiobio``` - Customized iobio Module
+* ```/vendor/scripts/genome-viewer``` - Customized genome viewer with ICGC Tracks and Data Adapters
 
 ## Got Questions/Feeback? ##
 
