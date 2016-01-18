@@ -171,7 +171,7 @@ the basics here. Your :paperclip: ```helloworld.js``` file might look something 
             HELLO_MSG: 'Hello DCC Portal World!', GOODBYE_MSG:'Goodbye Sweet World! :S' // CAPITALIZE AND UNDERSCORE CONSTANTS!
           })
           .config(function ($stateProvider) {
-            $stateProvider.state('helloworld', {
+            $stateProvider.state('helloworld', { // Must be a globally unique state name
               url: '/helloworld',
               templateUrl: 'scripts/helloworld/views/helloworld.html',
               controller: 'HelloworldCtrl as HelloworldCtrl', // <--- controller declaration!
@@ -183,6 +183,10 @@ the basics here. Your :paperclip: ```helloworld.js``` file might look something 
 
     })();
 ```
+
+:bomb: Make note that the state name ```helloworld``` (the first parameter in $stateProvider's ```state``` method in the example above) must be globally unique in the application. It is for this reason
+that your module name correctly reflect the module name folder used. This will reduce the probability that
+developers step on each others toes.
 
 :question: If you are unfamiliar with the above AngularJS Framework code we suggest you refer to the
 [AngularJS Documentation](https://docs.angularjs.org/guide).
