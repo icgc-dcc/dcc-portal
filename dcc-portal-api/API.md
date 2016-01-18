@@ -1,5 +1,26 @@
 # Data Portal API
 
+1. [Indended Audience](#indended-audience)
+2. [Learning Objectives](#learning-objectives)
+3. [Terms](#terms)
+4. [Portal Architecture and the API](#portal-architecture-and-the-api)
+5. [Data Store](#data-store)
+ 1. [Elasticsearch](#elasticsearch)
+ 2. [Postgres](#postgres)
+6. [Query Languages](#query-languages)
+7. [Frameworks and Libraries](#frameworks-and-libraries)
+ 1. [Dropwizard](#dropwizard)
+ 2. [Spring](#spring)
+ 3. [Lombok](#lombok)
+ 4. [JUnit](#junit)
+ 5. [Swagger](#swagger)
+ 6. [Elasticsearch](#elasticsearch)
+8. [Project Organization](#project-organization)
+ 1. [Preface](#preface)
+ 2. [Basics](#basics)
+ 3. [Life Cycle of a Request](#life-cycle-of-a-request)
+ 4. [Important Packages](#important-packages)
+
 ## Intended Audience
 This document is intended for developers working on or planning on contributing to the dcc-portal
 project which powers the [ICGC Data Portal](https://dcc.icgc.org).
@@ -21,7 +42,7 @@ into the overall design
 * REST - Representational State Transfer
 
 ## Portal Architecture and the API
-The API module of the dcc-portal project sits between the UI and PQL. 
+The API module of the dcc-portal project sits between the UI and PQL infrastructure. 
 State is manuplated by users using the UI and the UI sends REST requests to the API.
 The API consumes these requests, performs any needed business logic, and hands off a query to the PQL
 module if needed. When the PQL module returns with data, additional business logic may be performed by
@@ -32,10 +53,55 @@ the API before returning a response to the UI.
 Requests between the UI and API are communicated over HTTP.
 
 Since the API is RESTful, all requests are one of the following verbs: GET, PUT, POST, DELETE.
-All responses from the API are returned in the form of JSON. 
+All responses from the API are returned in the form of JSON content. 
 
 * For more information about REST: [Wikipedia](https://en.wikipedia.org/wiki/Representational_state_transfer)
 * For more information about JSON: http://json.org/
+
+## Data Store
+There are two places from which the portal can query data.
+
+### Elasticsearch
+The main place where the data lives is in Elasticsearch. Without going into too much detail,
+the data in elasticsearch lives in three indices.
+* The release index, where the majority of the information lives. Stores donors, genes,
+mutations, genesets, diagrams, drugs and more.
+* The repository index, where the information about external files gets stored.
+* The terms lookup index, where entity sets are created and stored. 
+
+The majority of the time, data from Elasticsearch is queried through the PQL infrastructure,
+except for special cases such as querying files from the repository index.
+
+### Postgres
+Metadata and state of analysis results and sets that are in flight (still being computed)
+are stored here. 
+
+## Query Languages
+
+This section will describe the various query languages used by the API.
+
+### JQL
+JSON Query Language. JSON representation of a filter to be applied to our data model.
+Primarily used by the UI to communicate the desired query to the API.
+
+Example of JQL query where we are filtering for donors where the primary cancer site is blood,
+gene type is protein coding, and functional impact is high.
+```json
+{"donor":{"primarySite":{"is":["Blood"]}},"gene":{"type":{"is":["protein_coding"]}},"mutation":{"functionalImpact":{"is":["High"]}}}
+```
+
+### PQL
+Portal Query Language. A query language designed for our data model, meant to abstract away
+the raw elasticsearch queries to a more human format. 
+
+An example query where we want the id and age of a donor with id of 1:
+```
+select(id,age),facets(*),eq(donor.id,1)
+```
+
+### SQL
+Structured Query Language. Used for querying Postgres. 
+
 
 ## Frameworks and Libraries
 The dcc-portal project is build on top of a lot very useful frameworks and libraries.
@@ -43,8 +109,8 @@ They provide important functionality from lightweight HTTP servers to useful fun
 when manipulating data. 
 
 ### Dropwizard
-At the heart of the project sits Dropwizard. In addition to bootstrapping the application itself,
-Dropwizard brings many useful libraries:
+At the heart of the project sits Dropwizard. In addition for being responsible for bootstrapping
+the application itself, Dropwizard brings many useful libraries:
 
 #### Jetty
 The library responsible for providing the Web server for the dcc-portal web application.
@@ -63,6 +129,8 @@ Provides useful classes and methods for handling and manipulating collections am
 Simple Logging Facade for Java. Handy library for providing logging functionality within the application.
 
 ### Spring
+The Spring Framework is an application framework that provides us with inversion of control,
+dependancy injection, and configuration utilities. 
 
 ### Lombok
 Very nifty library for Java projects which aims to reduce boilerplate code by replacing
@@ -72,9 +140,10 @@ said code with annotations.
 The standard unit testing suite used in Java projects. 
 
 ### Swagger
+A library that generates a user facing representation of the RESTful API.
 
 ### Elasticsearch
-Library for querying Elasticsearch indeces. This is sometimes used instead of the PQL layer for special cases
+Library for querying Elasticsearch indices. This is sometimes used instead of the PQL layer for special cases
 where we need to be making custom queries not easily represented in our data model or query language. 
 
 ## Project Organization
@@ -86,7 +155,7 @@ More info: [Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design)
 
 ### Basics
 Before we get started, it might be a good idea to keep the following diagram fresh in your mind.
-It shows a very simplified representation of the API's core functions:
+It shows a very simplified representation of the API's core functions and flow of data:
 ![Simplified Organization](docs-resources/rsr-diagram.png)
 
 The diagram shows the three most important packages / units of organization within the project.
@@ -148,7 +217,7 @@ Working back up, `DonorRepository.findAllCetric` returns a `SearchResponse` with
 to `DonorResource.findAll` which thanks to the frameworks in play serializes this collection as JSON
 and returns the response to the requesting agent. 
 
-Requests are not only so simple, and there are cases where a resource may talk different services
+Requests are not always so simple, and there are cases where a resource may talk different services
 based on certain conditions, and some services that can talk to different repositories. 
 
 ### Important Packages
@@ -170,4 +239,3 @@ other important packages to be aware of:
  * Classes that power the analysis functionality of the portal. 
  * Performing enrichment analysis.
  * Performing set operations on EntitySets. 
-
