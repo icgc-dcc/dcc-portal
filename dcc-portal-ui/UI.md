@@ -63,7 +63,6 @@ refer to the *bower.json* file in the current directory to lookup which versions
 * *Other Various Third Party Libs*
 
 ## Frontend Breakdown ##
----
 
 ### File Organization ###
 This section provides a high-level outline of the modules/file structure in the Portal UI project.
@@ -107,6 +106,6 @@ This is also the build area for the PQL grammar file.
 * ```/scripts/visualization``` - Visualization module definition for the project mutation viewer, project stacked bar and area bar.
 
 ## Got Questions/Feeback? ##
----
+
  * We are always happy to help - should you have any questions or feedback
 please feel free to contact us at [dcc-support@icgc.org](mailto:dcc-support@icgc.org) 
