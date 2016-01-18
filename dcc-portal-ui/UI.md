@@ -156,7 +156,7 @@ about this library please [refer to its documentation](https://github.com/angula
 2. In your ```helloworld.js``` file you will declare your AngularJS module, include your module dependencies (if applicable), and do some general module initialization.
 3. After defining your module you will then tell angular-ui-router a little about your application architecture including the url, controllers and views you would
 like to use. Again please [refer to its documentation](https://github.com/angular-ui/ui-router/wiki) if you are not familiar with this library. We will provide only
-the basics here. Your ```helloworld.js``` file might look something like this:
+the basics here. Your :paperclip: ```helloworld.js``` file might look something like this:
 ```javascript
 (function () {
       'use strict';
@@ -188,7 +188,7 @@ the basics here. Your ```helloworld.js``` file might look something like this:
 
 Now that we defined our ```helloworld``` module let's create our corresponding AngularJS controller and view.
 
- :paperclip: controllers/controllers.js
+ :paperclip: js/controllers.js
 
 ```javascript
 (function() {
@@ -216,7 +216,9 @@ Now that we defined our ```helloworld``` module let's create our corresponding A
 
 ```html
     <h1 data-ng-bind="HelloworldCtrl.getHelloMsg()"></h1>
-    <button data-ng-click="pressTheRedButton()" class="red-button">Do not press the red button...</button>
+    <button data-ng-click="pressTheRedButton()" class="red-button">
+        Do not press the red button...
+    </button>
 ```
 
  :paperclip: styles/helloworld.scss
@@ -226,9 +228,10 @@ $topRedButtonColour: #fa8cad;
 $bottomRedButtonColour: #b82b2b;
 
 .red-button {
-  background: $redButtonColour;
+  background: $bottomRedButtonColour;
   background-image: linear-gradient(to bottom, $topRedButtonColour, $bottomRedButtonColour);
   border-radius: 28px;
+  border-color: $topRedButtonColour;
   font-family: Arial;
   color: #fff;
   font-size: 20px;
@@ -236,10 +239,53 @@ $bottomRedButtonColour: #b82b2b;
   text-decoration: none;
 }
 ```
+### Registering your Module with the Portal ###
+
+#### Update index.html ####
+So far so good but we can't see our handy work yet. The next steps are to register the module with
+them main application.
+
+1. Open the ```dcc-portal-ui/scripts/app/index.html``` file and add all our script references.
+Inside the ```ICGC Core Application``` build:js usemin block/
+
+```html
+<!-- --------------------------------------------------------- -->
+<!-- ICGC Core Application -->
+<!-- --------------------------------------------------------- -->
+
+<!-- build:js scripts/scripts.js -->
+<script src="scripts/app/js/app.js"></script>
+<!-- extra js files included here... -->
+<script src="scripts/helloworld/js/helloworld.js"></script>
+<script src="scripts/helloworld/js/controllers.js"></script>
+<!-- endbuild -->
+```
+
+2. Update the ```app/styles/styles.scss``` file and include an import to your sass file.
+
+:paperclip: app/styles/styles.scss
+
+```scss
+@import "../../scripts/helloworld/styles/helloworld";
+```
+3. Add your ```helloworld``` module dependency to the ```scripts/app/js/app.js``` file.
+
+```javascript
+ var module = angular.module('icgc', [
+    'ngSanitize',
+    'ngAnimate',
+    'ngCookies',
+
+    // angular plugins
+    'restangular',
+    'ui.scrollfix',
+
+    // More modules included here ...
+    'helloworld' // <--- Define your Module Here!
+    ]);
+```
 
 ### Update DCC Portals Module ###
-
-### Update index.html ###
 
 ## Got Questions/Feeback? ##
 
