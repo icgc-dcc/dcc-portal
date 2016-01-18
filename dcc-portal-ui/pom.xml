@@ -17,14 +17,14 @@
   <build>
     <resources>
       <resource>
-        <directory>src/main/js</directory>
+        <directory>.</directory>
         <filtering>true</filtering>
         <includes>
           <include>**/index.html</include>
         </includes>
       </resource>
       <resource>
-        <directory>src/main/js</directory>
+        <directory>.</directory>
         <filtering>false</filtering>
         <excludes>
           <exclude>**/index.html</exclude>
