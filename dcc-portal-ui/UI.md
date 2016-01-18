@@ -120,6 +120,10 @@ Folder | Purpose   | Example
 /vendor/scripts/bamiobio| Customized iobio Module | N/A
 /vendor/scripts/genome-viewer | Customized genome viewer with ICGC Tracks and Data Adapters | N/A
 
+
+## Getting Started - Customizing the Portal Header and Footer ##
+
+
 ## Getting Started - The DCC Portal UI Hello World ##
 
 ### Start Up the Development Server
@@ -245,7 +249,7 @@ $bottomRedButtonColour: #b82b2b;
 So far so good but we can't see our handy work yet. The next steps are to register the module with
 them main application.
 
-1. Open the ```dcc-portal-ui/scripts/app/index.html``` file and add all our script references.
+Open the ```dcc-portal-ui/scripts/app/index.html``` file and add all our script references.
 Inside the ```ICGC Core Application``` build:js usemin block/
 
 ```html
@@ -261,14 +265,20 @@ Inside the ```ICGC Core Application``` build:js usemin block/
 <!-- endbuild -->
 ```
 
-2. Update the ```app/styles/styles.scss``` file and include an import to your sass file.
+#### Add a Link to your SASS File ####
+Update the ```app/styles/styles.scss``` file and include an import to your sass file.
 
 :paperclip: app/styles/styles.scss
 
 ```scss
 @import "../../scripts/helloworld/styles/helloworld";
 ```
-3. Add your ```helloworld``` module dependency to the ```scripts/app/js/app.js``` file.
+
+:thumbsup: If you are using multiple SCSS files in your implementation then let your `<module_name>.scss` file do the appropriate
+imports on your behalf. Do not include more then one import per module in the ```app/styles/styles.scss```
+
+#### Update the DCC Portal UI Module Dependencies
+Add your ```helloworld``` module dependency to the ```scripts/app/js/app.js``` file.
 
 ```javascript
  var module = angular.module('icgc', [
@@ -281,11 +291,13 @@ Inside the ```ICGC Core Application``` build:js usemin block/
     'ui.scrollfix',
 
     // More modules included here ...
-    'helloworld' // <--- Define your Module Here!
+    'helloworld' // <--- Define your module here!
     ]);
 ```
 
-### Update DCC Portals Module ###
+### The Grand Finale: Check out your work! ###
+:tada: Now that you have done all of the following go to ```http://localhost:9000/helloworld```.
+You should see your module working quite nicely inside the portal.
 
 ## Got Questions/Feeback? ##
 
