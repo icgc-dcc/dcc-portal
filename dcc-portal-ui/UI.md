@@ -79,6 +79,7 @@ use of the ```ui-view``` directive to handle state transitions between views. Be
 
 ### File Organization ###
 This section provides a high-level outline of the modules/file structure in the Portal UI project.
+These folders lie under the ```dcc-portal-ui/app``` directory.
 
 Folder | Purpose   | Example
 ------ | --------- | -------
@@ -122,7 +123,10 @@ Folder | Purpose   | Example
 
 
 ## Getting Started - Customizing the Portal Header and Footer ##
-
+1. The header and footer can be easily customized by modifying the ```header.html``` and ```footer.html``` in ```dcc-portal-ui/app/scripts/common/views/```.
+2. Common CSS styles (SASS files) can be found in the ```dcc-portal-ui/app/styles/``` directory. Please note that styles in this directory are meant to be shared
+across the application. UI components are great examples what we be expected to be found here. If you are just creating module specific styles please include them in your
+```app/scripts/<module_name>/styles``` directory.
 
 ## Getting Started - The DCC Portal UI Hello World ##
 
