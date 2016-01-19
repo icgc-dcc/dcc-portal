@@ -23,6 +23,8 @@
  2. [Basics](#basics)
  3. [Life Cycle of a Request](#life-cycle-of-a-request)
  4. [Important Packages](#important-packages)
+9. [Swagger API Documentation](#swagger-api-documentation)
+10. [Additional Reading](#additional-reading)
 
 ## Intended Audience
 This document is intended for developers working on or planning on contributing to the dcc-portal
@@ -242,3 +244,23 @@ other important packages to be aware of:
  * Classes that power the analysis functionality of the portal. 
  * Performing enrichment analysis.
  * Performing set operations on EntitySets. 
+
+## Swagger API Documentation
+The swagger library provides us with a user facing representation of our API endpoints. It
+allows those who are curious in working directly against the API to see the data model our
+API uses to communicate, what endpoints are available, and what parameters are to be used.
+
+For the production swagger documentation: https://dcc.icgc.org/docs/
+
+## Additional Reading
+ 
+* [Data Model]()
+* [UI]()
+* [PQL]()
+
+## Useful Links
+
+* [Dropwizard](http://www.dropwizard.io/0.9.1/docs/)
+* [Spring Framework](https://projects.spring.io/spring-framework/)
+* [Elasticsearch](https://www.elastic.co/products/elasticsearch)
+* [DCC Documentation](http://docs.dcc.icgc.org/)
