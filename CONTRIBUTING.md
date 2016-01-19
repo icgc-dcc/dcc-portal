@@ -37,7 +37,7 @@ git hf hotfix start 3d-gene-renderer
 ## Coding Conventions ##
 Normalizing your code by following established conventions can help developers understand one another by
 reducing the complexity introduced by different coding styles. We have established some code conventions
-for the [Front End (UI)](dcc-portal-ui/README.md) and [Back End (Server)](dcc-portal-api/README.md). Please
+for the [Front End (UI)](dcc-portal-ui/README.md#coding-conventions) and [Back End (Server)](dcc-portal-api/README.md). Please
 review them to ensure you are doing your part in keeping this project maintainable.
 
 
