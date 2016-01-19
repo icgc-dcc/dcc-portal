@@ -122,6 +122,19 @@ Folder | Purpose   | Example
 /vendor/scripts/genome-viewer | Customized genome viewer with ICGC Tracks and Data Adapters | N/A
 
 
+### Other Notable Areas in the UI ###
+
+There are some other notable areas under the ```dcc-portal-ui``` root folder in the Front End UI that should be briefly mentioned.
+
+Path  | Purpose
+----- | -------
+/app/develop | Contains the development config and interim index.html. Used when running ```grunt server```.
+/dcc-grunt-tasks | Custom NodeJS Grunt Tasks go here.
+/styles | Contains the SASS (SCSS files) and images shared across the application.
+/test/regression | NodeJS (and PhantomJS) regression testing tool to validate Facet counts in the portal (ensures that your indexes are in good working order).
+/test/unit | Used to provide Unit front end (AngularJS via Jasmine) testing
+
+
 ## Getting Started - Customizing the Portal Header and Footer ##
 1. The header and footer can be easily customized by modifying the ```header.html``` and ```footer.html``` in ```dcc-portal-ui/app/scripts/common/views/```.
 2. Common CSS styles (SASS files) can be found in the ```dcc-portal-ui/app/styles/``` directory. Please note that styles in this directory are meant to be shared
