@@ -23,12 +23,12 @@ contributions will be managed using [git branching](http://nvie.com/posts/a-succ
 ![HubFlow Workflow Diagram](https://datasift.github.io/gitflow/GitFlowWorkflowNoFork.png)
 
 Example 1: To create a feature branch (*Step 3*) using Hubflow:
-```
+```bash
 git hf feature start 3d-gene-renderer
 ```
 
 Example 2: To create a bugfix branch (*Step 3*) using Hubflow:
-```
+```bash
 git hf hotfix start 3d-gene-renderer
 ```
 
