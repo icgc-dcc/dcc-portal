@@ -14,10 +14,24 @@ contributions will be managed using [git branching](http://nvie.com/posts/a-succ
 
 * To clone from the ```develop``` you can use the [HubFlow tool](https://datasift.github.io/gitflow/TheHubFlowTools.html) (Gitflow for Github) which will do the fancy footwork for you.
 * In general PR come as two predominate types:
-  * Bug Fixes
-  * Features
+  * Bug Fixes - or ```hotfix``` for the git branch prefix
+  * Features - or ```feature``` for the git branch prefix
+  * Note that we do not use ```release``` branches at this time as implied in the diagram below.
+  * In the diagram below ```##repo##``` is ```develop``` in our context.
 
-![HubFlow Workflow Diagram](https://datasift.github.io/gitflow/GitFlowWorkflowNoFork.svg)
+*Hubflow Workflow Diagram*
+![HubFlow Workflow Diagram](https://datasift.github.io/gitflow/GitFlowWorkflowNoFork.png)
+
+Example 1: To create a feature branch (*Step 3*) using Hubflow:
+```
+git hf feature start 3d-gene-renderer
+```
+
+Example 2: To create a bugfix branch (*Step 3*) using Hubflow:
+```
+git hf hotfix start 3d-gene-renderer
+```
+
 
 ## Before Opening a Pull Request ##
 
