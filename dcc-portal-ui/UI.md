@@ -266,7 +266,7 @@ $bottomRedButtonColour: #b82b2b;
 }
 ```
 
-:question: Why do we prefix the scss file with an ```_``` (underscore) ? This is a partial SASS which is meant to be imported into a larger primary SASS file. For more information [refer to the SASS documentation on partials](http://sass-lang.com/guide#topic-4).
+:question: Why do we prefix the scss file with an ```_``` (underscore) ? This is a partial SASS file which is meant to be imported into a larger primary SASS file. For more information [refer to the SASS documentation on partials](http://sass-lang.com/guide#topic-4).
 
 ### Registering your Module with the Portal ###
 
