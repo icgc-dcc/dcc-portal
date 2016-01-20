@@ -326,7 +326,7 @@ You should see your module working quite nicely inside the portal.
 The base install of the DCC Portal comes with some static pages whose purpose is simply to provide informational content. These pages
 can be found in ```scripts/static``` which includes an FAQ, Team and Info Page. In our definition static pages can also include dynamic
 content that do not provide more then dynamic informational (i.e. statistical) content. These pages include the PCAWG page found
-in ```scripts/pancancer``` and ICGC Cloud pages which can be found in ```scripts/repositories```. Finally, as [was mentioned earlier](./#file-organization),
+in ```scripts/pancancer``` and ICGC Cloud pages which can be found in ```scripts/repositories```. Finally, as [was mentioned earlier](#file-organization),
 ```/scripts/releases``` contains the home page content should you wish to customize the DCC Portal landing page.
 
 
