@@ -85,7 +85,7 @@ Folder | Purpose   | Example
 ------ | --------- | -------
 /scripts/advanced| Advanced Page | [https://dcc.icgc.org/search](https://dcc.icgc.org/search)
 /scripts/analysis | Set Analysis Page | [https://dcc.icgc.org/analysis](https://dcc.icgc.org/analysis) 
-```/scripts/app``` | ```The main entry point in the application. This is the file that provides the definition of the main application module and it's dependencies.It also contains bootstrap code and some configuration for some of the dependencies (i.e. Restangular) used within the application.``` | ```N/A```
+**/scripts/app** | The main entry point in the application. This is the file that provides the definition of the main application module and it's dependencies.It also contains bootstrap code and some configuration for some of the dependencies (i.e. Restangular) used within the application. | N/A
 /scripts/auth | Login module | N/A
 /scripts/beacon | Global alliance beacon page | [https://dcc.icgc.org/ga4gh/beacon](https://dcc.icgc.org/ga4gh/beacon)
 /scripts/browser | Genome Viewer Page  | [https://dcc.icgc.org/browser](https://dcc.icgc.org/browser)
@@ -106,7 +106,7 @@ Folder | Purpose   | Example
 /scripts/projectmutationviewer | Project mutation viewer component. | N/A
 /scripts/projects | Projects Page and Project Page | [https://dcc.icgc.org/projects](https://dcc.icgc.org/projects), [https://dcc.icgc.org/projects/BRCA-US](https://dcc.icgc.org/projects/BRCA-US)
 /scripts/proteinstructureviewer | Protein structure viewer component. | N/A
-/scripts/releases | Release module. Carries portal release summary. | [https://dcc.icgc.org/releases](https://dcc.icgc.org/releases)
+**/scripts/releases** | Release module. Carries portal release summary - **this folder contains HTML markup that serves the role of the landing page for the DCC Portal**. | [https://dcc.icgc.org/releases](https://dcc.icgc.org/releases)
 /scripts/repositories  | Pages for cloud documentation and repository stats (AWS/Collaboratory) | N/A
 /scripts/repository  | Static download Page | [https://dcc.icgc.org/repository](https://dcc.icgc.org/repository)
 /scripts/sets | Set upload, set operations, set CRUD | N/A
@@ -114,6 +114,7 @@ Folder | Purpose   | Example
 /scripts/software | DCC software page which publishes various tools for working with ICGC Data | [https://dcc.icgc.org/software](https://dcc.icgc.org/software)
 /scripts/stackedareachart | Stacked bar chart UI component. | N/A
 /scripts/stackedbarchart | Stacked area chart UI component. | N/A
+/scripts/static | Contains non-dynamic (static) pages
 /scripts/tokens | Token management for Collaboratory project via the portal login, not to be confused with the auth module with deals with ICGC authentication and tokens. | N/A
 /scripts/ui | Mostly smaller UI components tied to the ICGC portal | N/A
 /scripts/venn23 | Venn diagram UI component used in analysis module. | N/A
@@ -319,6 +320,16 @@ Add your ```helloworld``` module dependency to the ```scripts/app/js/app.js``` f
 ### The Grand Finale: Check out your work! ###
 :tada: Now that you have done all of the following go to ```http://localhost:9000/helloworld```.
 You should see your module working quite nicely inside the portal.
+
+
+## Getting Started - Adding/Editing and Removing Static Pages ##
+The base install of the DCC Portal comes with some static pages whose purpose is simply to provide informational content. These pages
+can be found in ```scripts/static``` which includes an FAQ, Team and Info Page. In our definition static pages can also include dynamic
+content that do not provide more then dynamic informational (i.e. statistical) content. These pages include the PCAWG page found
+in ```scripts/pancancer``` and ICGC Cloud pages which can be found in ```scripts/repositories```. Finally, as [was mentioned earlier](#file-organization),
+```/scripts/releases``` contains the home page content should you wish to customize the DCC Portal landing page.
+
+
 
 ## Got Questions/Feeback? ##
 
