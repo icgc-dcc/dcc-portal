@@ -247,7 +247,7 @@ Now that we defined our ```helloworld``` module let's create our corresponding A
     </button>
 ```
 
- :paperclip: styles/helloworld.scss
+ :paperclip: styles/_helloworld.scss
 
 ```scss
 $topRedButtonColour: #fa8cad;
@@ -265,6 +265,9 @@ $bottomRedButtonColour: #b82b2b;
   text-decoration: none;
 }
 ```
+
+:question: Why do we prefix the scss file with an ```_``` (underscore) ? This is a partial SASS which is meant to be imported into a larger primary SASS file. For more information [refer to the SASS documentation on partials](http://sass-lang.com/guide#topic-4).
+
 ### Registering your Module with the Portal ###
 
 #### Update index.html ####
