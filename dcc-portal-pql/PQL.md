@@ -1,5 +1,21 @@
 # Portal Query Language
 
+1. [Indended Audience](#indended-audience)
+2. [Learning Objectives](#learning-objectives)
+3. [Terms](#terms)
+4. [Querying In The Portal](#querying-in-the-portal)
+ 1. [The Query Languages](#the-query-languages) 
+ 2. [Converter to Query Engine](#converter-to-query-engine)
+5. [Design of PQL](#design-of-pql)
+ 1. [Inspiration](#inspiration)
+ 2. [ANTLR](#antlr)
+ 3. [Visitors](#visitors)
+ 4. [Type Model](#type-model)
+ 5. [Limitations](#limitations)
+ 6. [Adding a new Type](#adding-a-new-type)
+6. [Additional Reading](#additional-reading)
+7. [Useful Links](#useful-links)
+
 ## Intended Audience
 This document is intended for developers working on or planning on contributing to the dcc-portal
 project which powers the [ICGC Data Portal](https://dcc.icgc.org).
@@ -68,7 +84,98 @@ used for elasticsearch. It encapsulates this object inside a `QueryRequest` obje
 ## Design of PQL
 
 ### Inspiration
+The grammar and syntax of PQL is largely inspired by RQL. 
+Looking at the operators like `eq`, `ne`, `gt`, `lt`, and functions such as `in`, `sort`, `select` the similarities 
+are quite clear. 
+
+Also, very importantly, the readability of PQL is much greater than that of Elasticsearch. 
+
+There was the intention to one day allow the UI to utilize PQL for its quries in a sort of 'advanced' mode. Similar to how JIRA allows a user
+to type in a manual query rather then relying on the UI controls, it may be possible one day for advanced users
+of the portal to enter direct PQL queries.
 
 ### ANTLR
+ANTRL is the tool used for generating the lexer and parser classes which are based off of the grammar file we defined. 
 
-### Limitation
+The grammar file [Pql.g4](src/main/antl4/org/icgc/dcc/portal/pql/antrl4/Pql.g4) contains the definition the language. 
+It is probably worthwhile to give the file a quick scan to gain a basic understanding of how statements are constructed in PQL. 
+
+### Visitors
+The visitors are at the heart of how the PQL module functions. 
+Their function is to visit the nodes of an AST and to convert them into an AST for the next language. 
+
+* `CreatePqlAstVisitor` - Responsible for taking the generated parse tree from a PQL String and to convert it into an Object
+representing our PQL AST. The parse tree is created from functionality provided by ANTLR.
+* `CreateEsAstVisitor` -  Responsible for traversing the PQL AST and returning an Elasticsearch AST representation of our query.
+
+Once the Query Engine has the Elasticsearch AST, extra steps are performed on it to ensure it fits the requirements imposed by our data
+model. Nesting of certain queries is ensured, facets are resolved, and some optimization is performed. Only then is the Elasticsearch AST
+resolved into a SearchRequestBuilder used by the Elasticsearch API.
+
+### Type Model
+`org.dcc.portal.pql.meta`
+
+The classes in this package represents a document type that the PQL infrastructure can query. These classes extend the abstract class
+`TypeModel`. All of these classes have provide some important information about their document type. It can be summarized as:
+* The `Type` of the document
+* The available fields
+* The aliases for the fields
+* The available facets
+
+### Limitations
+Since PQL is purpose designed for our data model it is inherently resistant to large changes to that data model. Changes to field names, nesting, 
+and certain special case fields can all require code changes. Introducing new types also requires a new class to be written. 
+
+Furthermore, not all Elasticsearch queries can be represented in PQL. Most notably multisearch and multi-index queries will need to be
+written directly with the Elasticsearch API rather than using PQL. 
+
+### Adding a new Type
+This section will provide a high level explenation of how to add a new type to the Type Model.
+
+1. Add your new type to the enum `org.dcc.portal.pql.meta.Type`
+```java
+public enum Type {
+  ...
+  FOO("foo","foo")
+}
+```
+
+2. Create a new class in `org.dcc.portal.pql.meta` 
+```java
+/**
+ * Type model of Foo index type
+ */
+public class FooTypeModel extends TypeModel {...
+```
+
+3. Implement the constructure and abstract methods.
+```java
+public FooTypeModel() {
+  super(fields,internalAliases,allowedAliases,includeFields);
+}
+public Type getType()
+public String prefix()
+public List<String> getFacets()
+```
+
+4. Make your new type available by adding it to the `org.dcc.portal.pql.meta.IndexModel` class.
+```java
+...
+private static final FooTypeModel FOO_TYPE_MODEL = new FooTypeModel();
+...
+case FOO:
+      return FOO_TYPE_MODEL;
+```
+
+## Additional Reading
+ 
+* [Data Model]()
+* [UI]()
+* [API]()
+
+## Useful Links
+
+* [Elasticsearch](https://www.elastic.co/products/elasticsearch)
+* [ANTRL](http://www.antlr.org/)
+* [Wikipedia: Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
+* [DCC Documentation](http://docs.dcc.icgc.org/)
