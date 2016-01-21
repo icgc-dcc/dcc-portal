@@ -101,7 +101,7 @@ the raw elasticsearch queries to a more human format.
 
 An example query where we want the id and age of a donor with id of 1:
 ```
-select(id,age),facets(*),eq(donor.id,1)
+select(id,age),eq(donor.id,1)
 ```
 
 ### SQL
