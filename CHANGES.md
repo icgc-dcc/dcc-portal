@@ -6,6 +6,8 @@ Change log for the DCC 2.0 Portal
 4.0.0
 --
  - Refactored the repositories API to support changes in document structure in Elasticsearch.
+ - Added `IS NOT` support for Facets, this functionality is hidden behind a feature flag. 
+ - EntitySetIds are now part of entity id list in JQL. Olds style JQL for entitySetIds is still supported. 
 
 3.9.3
 --
