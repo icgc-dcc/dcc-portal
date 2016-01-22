@@ -63,11 +63,15 @@ select(id,age),eq(donor.id,1)
 
 ### Converter to Query Engine
 
+![High Level](docs-resources/high-level.png)
+This diagram provides a high level view of the steps a query takes before being executed 
+against elastic search. The visitors will be described in a later section. 
+
 #### Converter
 `org.icgc.dcc.portal.pql.convert.Jql2PqlConverter`
 
 As queries come into the portal in the form of JQL they are converted to PQL in order to be
-used by the query engine. This class will converting the incoming Query object into a PQL String.
+used by the query engine. This class will convert the incoming Query object into a PQL String.
 
 #### Parser
  `org.dcc.portal.pql.query.PqlParser`
@@ -90,7 +94,7 @@ are quite clear.
 
 Also, very importantly, the readability of PQL is much greater than that of Elasticsearch. 
 
-There was the intention to one day allow the UI to utilize PQL for its quries in a sort of 'advanced' mode. Similar to how JIRA allows a user
+There was the intention to one day allow the UI to utilize PQL for its queries in a sort of 'advanced' mode. Similar to how JIRA allows a user
 to type in a manual query rather then relying on the UI controls, it may be possible one day for advanced users
 of the portal to enter direct PQL queries.
 
@@ -98,25 +102,32 @@ of the portal to enter direct PQL queries.
 ANTRL is the tool used for generating the lexer and parser classes which are based off of the grammar file we defined. 
 
 The grammar file [Pql.g4](src/main/antl4/org/icgc/dcc/portal/pql/antrl4/Pql.g4) contains the definition the language. 
-It is probably worthwhile to give the file a quick scan to gain a basic understanding of how statements are constructed in PQL. 
+It is worthwhile to give the file a quick read to gain a basic understanding of how statements are constructed in PQL. 
 
 ### Visitors
 The visitors are at the heart of how the PQL module functions. 
 Their function is to visit the nodes of an AST and to convert them into an AST for the next language. 
 
-* `CreatePqlAstVisitor` - Responsible for taking the generated parse tree from a PQL String and to convert it into an Object
+* `CreatePqlAstVisitor` - Responsible for taking the generated parse tree from a PQL String and to convert it into an object
 representing our PQL AST. The parse tree is created from functionality provided by ANTLR.
 * `CreateEsAstVisitor` -  Responsible for traversing the PQL AST and returning an Elasticsearch AST representation of our query.
 
 Once the Query Engine has the Elasticsearch AST, extra steps are performed on it to ensure it fits the requirements imposed by our data
-model. Nesting of certain queries is ensured, facets are resolved, and some optimization is performed. Only then is the Elasticsearch AST
+model:
+* Resolving special cases
+* Resolving nested filters
+* Resolving facets
+* Adding score scripts
+* Optimizing
+
+Only then is the Elasticsearch AST
 resolved into a SearchRequestBuilder used by the Elasticsearch API.
 
 ### Type Model
 `org.dcc.portal.pql.meta`
 
 The classes in this package represents a document type that the PQL infrastructure can query. These classes extend the abstract class
-`TypeModel`. All of these classes have provide some important information about their document type. It can be summarized as:
+`TypeModel`. All of these classes have to provide some important information about their document type. It can be summarized as:
 * The `Type` of the document
 * The available fields
 * The aliases for the fields
@@ -170,8 +181,8 @@ case FOO:
 ## Additional Reading
  
 * [Data Model]()
-* [UI]()
-* [API]()
+* [UI](../dcc-portal-ui/UI.md)
+* [API](../dcc-portal-api/API.md)
 
 ## Useful Links
 
