@@ -3,6 +3,16 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+4.0.0
+--
+ - Refactored the repositories API to support changes in document structure in Elasticsearch.
+ - Added `IS NOT` support for Facets, this functionality is hidden behind a feature flag. 
+ - EntitySetIds are now part of entity id list in JQL. Olds style JQL for entitySetIds is still supported. 
+ - Various UI Bug Fixes.
+ - Added UI.md (UI Getting Started Developer Guide), CONTRIBUTING.md (Making Contributions to the Source Guide) and GPL3 Licenses to UI code. Changed links to point to newly created ICGC Document site developed in parallel to this release.
+ - Filters are now managed by a seperate Angular Service to simplify interaction with UI logic.
+ - Changed directory structure of UI (flattened out unneccessary nesting) to simplify it for future extension.
+
 3.9.3
 --
  - Refactored Advanced Search Front end to render tabs and facets only when required - performance boost is the result.
@@ -13,11 +23,11 @@ Change log for the DCC 2.0 Portal
  
 3.8.20
 --
- - New drug/compound entity page which correlates targetted genes and provides context into clinical trials.
+ - New drug/compound entity page which correlates targeted genes and provides context into clinical trials.
  - Drug/Compound integration in gene info pages.
  - Quick search support added for Compounds/Drugs.
  - Bug fixes for genome map viewer including support for tooltip descriptions in fullscreen.
- - Reactome Pathway viewer from enrichment analysis now supports the ability to indentify overlapping genes (ICGC vs input gene sets).
+ - Reactome Pathway viewer from enrichment analysis now supports the ability to identify overlapping genes (ICGC vs input gene sets).
  - Refactored Pathway Viewer into more angular-ized components.
  - iobio integration added to AWS/Collaboratory repository pages.
  
@@ -27,7 +37,7 @@ Change log for the DCC 2.0 Portal
   - Added Analysis Software facet in External Repository
   - Updated Genome Viewer to handle new API format
   - Bug fixes to mutation counts and text rendering in Pathway Viewer
-  - Custom Copy to Clipboard Component added througout application.
+  - Custom Copy to Clipboard Component added throuhgout application.
   - Improved performance of the Advanced Search page.
   - Released ICGC in the Cloud Universal Guide for AWS and Collaboratory. 
   - Released ICGC in the Cloud Repository showcase pages for AWS and Collaboratory.
@@ -85,7 +95,7 @@ Change log for the DCC 2.0 Portal
  - Added Data Repository search and manifest export
  - Added support for non-Molecular / non-Clinical project / donor entity pages
  - Added preliminary UI / API support for "donor states"
- - Added miscelaneous bug fixes.
+ - Added miscellaneous bug fixes.
 
 3.8.2.4
 ---
@@ -117,7 +127,7 @@ Change log for the DCC 2.0 Portal
 3.7.6.4
 ---
 
-- New functions to save donor, gene and muation sets
+- New functions to save donor, gene and mutation sets
 - Gene set enrichment analysis
 - Set operations analysis
 - Projects page layout optimization
@@ -130,7 +140,7 @@ Change log for the DCC 2.0 Portal
 
 - Health checks for CUD and Hazelcast
 - Dynamically configurable logging
-- Connection pooling with healh check
+- Connection pooling with health check
 
 3.7.6.2
 ---
