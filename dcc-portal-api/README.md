@@ -20,10 +20,6 @@ Administration is available at:
 Development
 ---
 
-For development data, port forward to the dev cluster:
-
-	ssh -NL 9200:***REMOVED***:9200 -NL 9300:***REMOVED***:9300 hproxy-dev***REMOVED***
-
 To run the application:
 	
 	cd dcc-portal/dcc-portal-api
