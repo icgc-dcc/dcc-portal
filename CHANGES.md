@@ -8,6 +8,10 @@ Change log for the DCC 2.0 Portal
  - Refactored the repositories API to support changes in document structure in Elasticsearch.
  - Added `IS NOT` support for Facets, this functionality is hidden behind a feature flag. 
  - EntitySetIds are now part of entity id list in JQL. Olds style JQL for entitySetIds is still supported. 
+ - Various UI Bug Fixes.
+ - Added UI.md (UI Getting Started Developer Guide), CONTRIBUTING.md (Making Contributions to the Source Guide) and GPL3 Licenses to UI code. Changed links to point to newly created ICGC Document site developed in parallel to this release.
+ - Filters are now managed by a seperate Angular Service to simplify interaction with UI logic.
+ - Changed directory structure of UI (flattened out unneccessary nesting) to simplify it for future extension.
 
 3.9.3
 --
