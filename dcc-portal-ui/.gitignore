@@ -1,4 +1,6 @@
-/.apt_generated
-/src/main/js/report/
-/src/main/js/app/scripts/common/pql/pqlparser.js
+app/styles/styles.css
+.apt_generated
+report/
+app/scripts/common/js/pql/pqlparser.js
+target/
 
