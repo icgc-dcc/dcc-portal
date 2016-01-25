@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>3.9.7-SNAPSHOT</version>
+    <version>4.0.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -17,14 +17,14 @@
   <build>
     <resources>
       <resource>
-        <directory>src/main/js</directory>
+        <directory>.</directory>
         <filtering>true</filtering>
         <includes>
           <include>**/index.html</include>
         </includes>
       </resource>
       <resource>
-        <directory>src/main/js</directory>
+        <directory>.</directory>
         <filtering>false</filtering>
         <excludes>
           <exclude>**/index.html</exclude>
@@ -49,7 +49,7 @@
               <arguments>
                 <argument>install</argument>
               </arguments>
-              <workingDirectory>src/main/js</workingDirectory>
+              <workingDirectory>.</workingDirectory>
             </configuration>
           </execution>
 
@@ -65,7 +65,7 @@
               <arguments>
                 <argument>build</argument>
               </arguments>
-              <workingDirectory>src/main/js</workingDirectory>
+              <workingDirectory>.</workingDirectory>
             </configuration>
           </execution>
         </executions>

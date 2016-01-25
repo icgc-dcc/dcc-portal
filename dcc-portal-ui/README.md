@@ -426,6 +426,6 @@ Pass Unit tests: `grunt test`
 Tips
 ---
 
-If a production build fails to produce the expected output when deployed, try `rm -rf src/main/js/node_modules` and rebuilding.
+If a production build fails to produce the expected output when deployed, try `rm -rf node_modules` from the ```dcc-portal-ui``` root folder and rebuilding.
 
 
