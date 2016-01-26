@@ -6,6 +6,8 @@ RESTful API for the ICGC DCC Data Portal.
 Documentation
 ---
 
+Technical Documentation: [API.md](./API.md)
+
 Executable API documentation is available at:
 
 	http://localhost:8080/docs
