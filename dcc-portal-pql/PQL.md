@@ -180,7 +180,7 @@ case FOO:
 
 ## Additional Reading
  
-* [Data Model]()
+* [Data Model](../MODEL.md)
 * [UI](../dcc-portal-ui/UI.md)
 * [API](../dcc-portal-api/API.md)
 

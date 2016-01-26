@@ -254,7 +254,7 @@ For the production swagger documentation: https://dcc.icgc.org/docs/
 
 ## Additional Reading
  
-* [Data Model]()
+* [Data Model](../MODEL.md)
 * [UI](../dcc-portal-ui/UI.md)
 * [PQL](../dcc-portal-pql/PQL.md)
 
