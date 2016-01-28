@@ -429,3 +429,14 @@ Tips
 If a production build fails to produce the expected output when deployed, try `rm -rf node_modules` from the ```dcc-portal-ui``` root folder and rebuilding.
 
 
+Additional Info
+---
+* [Portal README Documentation](../README.md)
+* [Contributing to the Portal Open Source Project Documentation](../CONTRIBUTING.md)
+* [Frontend (UI) Architecture/Getting Started Documentation](UI.md)
+
+
+Copyright and License
+---
+
+* [License](../LICENSE.md)
