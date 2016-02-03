@@ -1,0 +1,116 @@
+
+<div id="pathways">
+  <h1 data-ui-scrollfix="79"><i class="t_badge t_badge_icon"><i class="icon-spread"></i></i>Pathway Viewer</h1>
+  <div class="content-body">
+    <aside>
+      <div>
+        <div class="search-control">
+            <div class="search-icon"><i class="icon-search"></i></div>
+            <input class="pathway-filter" type="text" placeholder="Filter pathways" data-ng-model="pathwayFilter">
+        </div>
+        <div class="pathway-filter-container">
+            <ul class="t_suggest_flyout__hits">
+              <li class="t_suggest_flyout__hits__hit" 
+              data-ng-repeat="pw in pathways|filter:pathwayFilter"
+              data-ng-click="setSelectedPathway(pw)"
+              data-ng-class="{'selected': getSelectedPathway().geneSetId ==  pw.geneSetId}"
+              >
+                <div class="pathway-item-header">
+                  <div class="item-title">
+                    <span style="font-size: 1.2rem" data-ng-bind="pw.geneSetId"></span>
+                  </div>
+                  <div class="item-pval">
+                    <abbrev data-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}" data-ng-bind="pw.adjustedPValue.toExponential(2)"></abbrev>
+                  </div>
+                </div>
+                  <ul>
+                      <li class="item-body">
+                        <small data-ng-bind="pw.geneSetName"></small>
+                      </li>
+                  </ul>
+                 
+              </li>
+            </ul>
+        </div>
+       </div>
+    </aside>
+    <article class="pathways-content">
+      
+      <section id="pathway" data-ng-if="geneSet.showPathway && geneSet.source === 'Reactome'"
+         data-ng-class="{'loading': !geneSet.projects, 'empty': geneSet.projects.length == 0}">
+         
+         <div class="pathway-analysis-header">
+               <span data-ng-if="analysis.getData().results.length > 0">
+                Enriched gene set with FDR &le; <strong data-ng-bind="analysis.getData().params.fdr"></strong>
+               </span>
+               <div class="action-item summary-back-link">
+                    <i class="icon-beaker"></i>Go back to <a href="/analysis/view/enrichment/{{analysis.getData().id}}">Enrichment Analysis Results</a>
+               </div>        
+        </div>
+         <table class="table table-bordered table-pathway-info">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES}}"><abbr># Genes</abbr></th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES_OVERLAP}}"><abbr># Genes in overlap</abbr></th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_DONORS}}"><abbr># Donors affected</abbr></th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_MUTATIONS}}"><abbr># Mutations</abbr></th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_EXPECTED}}"><abbr>Expected</abbr></th>
+                        <th>
+                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_PVALUE}}">P-Value</abbr>
+                        </th>
+                        <th>
+                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}">Adjusted P-Value</abbr>
+       
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="white-space:nowrap"><a data-ng-href="/genesets/{{getSelectedPathway().geneSetId}}"  data-ng-bind="getSelectedPathway().geneSetId"></a></td>
+                        <td  data-ng-bind="getSelectedPathway().geneSetName">
+                        </td>
+                        <td class="text-right">
+                            <a href="/search/g?filters={{getSelectedPathway().geneSetFilters}}" data-ng-bind="getSelectedPathway().geneCount | number"></a>
+                        </td>
+                        <td class="text-right">
+                            <span data-ng-if="!getSelectedPathway().geneSetOverlapFilters" data-ng-bind="getSelectedPathway().overlapGeneSetGeneCount | number"></span>
+                            <span data-ng-if="getSelectedPathway().geneSetOverlapFilters" class="gene-overlap-result">
+                                <a href="/search/g?filters={{getSelectedPathway().geneSetOverlapFilters}}"  data-ng-bind="getSelectedPathway().overlapGeneSetGeneCount | number"></a>
+                            </span>
+                        </td>
+    
+                        <td class="text-right">
+                            <span data-ng-if="!getSelectedPathway().geneSetOverlapFilters" data-ng-bind="getSelectedPathway().overlapGeneSetDonorCount | number"></span>
+                            <span data-ng-if="getSelectedPathway().geneSetOverlapFilters && ! analysis.isLoading">
+                                <a href="/search?filters={{getSelectedPathway().geneSetOverlapFilters}}"  data-ng-bind="getSelectedPathway().overlapGeneSetDonorCount | number"></a>
+                            </span>
+                            <span data-ng-if="analysis.isLoading"><i class="icon-spinner icon-spin"></i></span>
+                        </td>
+                        <td class="text-right">
+                            <span data-ng-if="!getSelectedPathway().geneSetOverlapFilters" data-ng-bind="getSelectedPathway().overlapGeneSetMutationCount | number"></span>
+                            <span data-ng-if="getSelectedPathway().geneSetOverlapFilters && ! analysis.isLoading">
+                                <a href="/search/m?filters={{getSelectedPathway().geneSetOverlapFilters}}"  data-ng-bind="getSelectedPathway().overlapGeneSetMutationCount | number"></a>
+                            </span>
+                            <span data-ng-if="analysis.isLoading"><i class="icon-spinner icon-spin"></i></span>
+                        </td>
+                        <td class="text-right" data-ng-bind="getSelectedPathway().expectedValue.toExponential(2)"></td>
+                        <td class="text-right"  data-ng-bind="getSelectedPathway().pvalue.toExponential(2)"></td>
+                        <td class="text-right" data-ng-bind="getSelectedPathway().adjustedPValue.toExponential(2)"></td>
+                    </tr>
+                </tbody>
+            </table>
+        <div data-ng-if="pathway">
+            <h4 data-ng-if="pathway.xml!==''">Drag and scroll to explore the pathway. Double click to reset the view.</h4>
+            <pathway-viewer data-items="pathway.xml" data-zooms="pathway.zooms" data-highlights="pathway.highlights" data-overlaps="pathway.overlaps">
+            </pathway-viewer>
+        </div>
+        <h3 data-ng-if="!pathway">
+            No Pathway Diagram Found.
+        </h3>
+        <small>Data Source: <a href="http://www.reactome.org/">Reactome</a></small>
+      </section>
+    </article>
+  </div>
+</div>

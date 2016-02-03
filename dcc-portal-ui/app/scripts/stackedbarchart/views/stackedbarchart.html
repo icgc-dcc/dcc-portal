@@ -1,0 +1,19 @@
+<div>
+  <div class="text-center graph_title">{{ title }}</div>
+
+  <div ng-show="showPlot" class="stackedsubtitle text-center">{{ subtitle }}</div>
+  <div ng-show="! showPlot && ! isLoadingData" class="text-center" style="line-height: {{ lineHeight }}px;">
+    <strong>No data found for the selected
+      <ng-pluralize count="selectedProjectCount" when="{'0': 'project', 'one': 'project', 'other': 'projects'}"></ng-pluralize>.
+    </strong>
+  </div>
+
+  <div>
+    <div ng-show="isLoadingData"
+      style="line-height: {{ lineHeight }}px; z-index: 1; position: absolute; margin-left: {{ 20 + (defaultGraphWidth + margin.left + margin.right)/2 }}px;">
+      <i class="icon-spinner icon-spin"></i>
+    </div>
+
+    <div ng-show="showPlot && ! isLoadingData" class="canvas"></div>
+  </div>
+</div>

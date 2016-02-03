@@ -1,0 +1,117 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+.t_tab_pane {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+.t_tabs {
+  font-weight: 300;
+  border-bottom: 1px solid $greyLighter;
+  margin-top: -1px;
+}
+
+.t_tabs__tab {
+  display: inline-block;
+  background: $greyLightest;
+  color: $greyDark;
+  padding: .7rem;
+  width: 12rem;
+  cursor: pointer;
+  margin-right: -.25rem;
+  margin-bottom: -1px; //- will need to use this
+
+  border-top: 1px solid $greyLighter;
+  border-right: 1px solid $greyLighter;
+  border-bottom: 1px solid $greyLighter;
+
+  //transition: color .5s, border-top-color .5s, background .5s;
+
+  &:hover {
+    color: $greyDarker;
+    background: $greyLightestEver;
+    border-top-color: $greyDarker;
+  }
+
+  &.active {
+    background: $white;
+    color: $greyDarker;
+    cursor: default;
+    border-top-color: $greyDarker;
+    border-bottom-color: $white;
+  }
+}
+
+.t_tabs__tab__donor {
+  &.active, &:hover {
+    border-top-color: $donor;
+  }
+}
+.t_tabs__tab__gene {
+  &.active, &:hover {
+    border-top-color: $gene;
+  }
+}
+.t_tabs__tab__mutation {
+  &.active, &:hover {
+    border-top-color: $mutation;
+  }
+}
+
+.t_tabs__tab__file {
+  &.active, &:hover {
+    border-top-color: $file;
+  } 
+}
+
+.t_tabs__tab__charts {
+  &.active, &:hover {
+    border-top-color: $charts;
+  }
+}
+
+.t_tabs__tab__table {
+  &.active, &:hover {
+    border-top-color: $table;
+  }
+}
+
+.t_tabs__tab__history {
+  &.active, &:hover {
+    border-top-color: $history;
+  }
+}
+
+aside {
+  .t_tabs {
+    margin-top: 0;
+    margin-right: -2rem;
+  }
+  .t_tabs__tab {
+    padding: .5rem 0;
+    text-align: center;
+    width: 5rem;
+    margin-right: -3px;
+  }
+  .t_tab_pane {
+    //margin-right: -2rem;
+  }
+}

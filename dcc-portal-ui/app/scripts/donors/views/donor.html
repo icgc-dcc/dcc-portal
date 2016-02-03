@@ -1,0 +1,403 @@
+<div class="h1-wrap">
+    <h1 data-ui-scrollfix=79><span class="t_badge t_badge__donor"></span>
+        {{ DonorCtrl.donor.id }}
+        <pcawg-badge data-ng-if="DonorCtrl.isPCAWG(DonorCtrl.donor)"></pcawg-badge>
+    </h1>
+</div>
+
+<span data-ng-if="DonorCtrl.isPendingDonor">
+  <section>
+    <i class="icon-attention or icon-attention-1"></i>
+    No data for this donor has been submitted directly to ICGC DCC yet. However, go to the
+    <a href="{{:: DonorCtrl.urlToExternalRepository() }}">
+      {{:: DonorCtrl.dataRepoTitle }} browser
+    </a>
+     to see the list of data files hosted in {{:: DonorCtrl.dataRepoTitle }} for this donor.
+  </section>
+</span>
+
+<span data-ng-if="!DonorCtrl.isPendingDonor">
+<div data-scroll-spy="">
+<aside data-ui-scrollfix=79 class="t_sidenav">
+    <section>
+        <ul class="t_subnav__items">
+            <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary">Summary</a></li>
+            <li data-spy="clinical" class="t_subnav__items__item"><a data-scrollto href="#clinical">Clinical Data</a></li>
+            <li data-spy="mutations" class="t_subnav__items__item" data-ng-if="DonorCtrl.donor.state==='live'"><a data-scrollto href="#mutations">Mutations</a></li>
+            <li data-spy="specimen" class="t_subnav__items__item"><a data-scrollto href="#specimen">Specimen</a></li>
+            <li><br></li>
+            <li class="t_subnav__items__item" data-ng-if="DonorCtrl.mutationFacets.functionalImpact.total > 0">
+                <span>Page Filters</span>
+            </li>
+            <li class="t_subnav__items__box" data-ng-if="DonorCtrl.mutationFacets.functionalImpact.total > 0">
+                <ul class="t_facets">
+                    <terms data-type="mutation"
+                           data-facet-name="functionalImpact"
+                           data-hide-count="true"
+                           data-label="Mutation Impact"
+                           data-facet="DonorCtrl.mutationFacets.functionalImpact"></terms>
+                </ul>
+            </li>
+        </ul>
+    </section>
+</aside>
+<article>
+<section id="summary">
+    <div class="half">
+        <h3>Summary</h3>
+        <table class="table table-info">
+            <tr>
+                <th>ID</th>
+                <td>{{ DonorCtrl.donor.id }}</td>
+            </tr>
+            <tr>
+                <th>Submitter ID</th>
+                <td>{{ DonorCtrl.donor.submittedDonorId }}</td>
+            </tr>
+            <tr>
+                <th>Project Name</th>
+                <td>
+                   <a href="/projects/{{DonorCtrl.donor.projectId}}">{{ DonorCtrl.donor.projectName }}</a>
+                </td>
+            </tr>
+            <tr>
+                <th>Project Code</th>
+                <td>{{ DonorCtrl.donor.projectId }}</td>
+            </tr>
+            <tr>
+                <th>Primary Site</th>
+                <td>{{ DonorCtrl.donor.primarySite }}</td>
+            </tr>
+            <tr>
+                <th>Tumour Type</th>
+                <td>{{ DonorCtrl.donor.tumourType }}</td>
+            </tr>
+            <tr>
+                <th>Tumour Subtype</th>
+                <td>{{ DonorCtrl.donor.tumourSubtype }}</td>
+            </tr>
+            <tr>
+                <th>Total number of mutations</th>
+                <td><a data-ng-if="DonorCtrl.donor.ssmCount > 0"
+                       href='/search/m?filters={"donor":{"id":{"is":["{{DonorCtrl.donor.id}}"]}}}'>
+                    {{ DonorCtrl.donor.ssmCount | numberPT }}</a>
+                    <span data-ng-if="!DonorCtrl.donor.ssmCount">--</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="half omega">
+        <h3>Available Data Types</h3>
+        <div data-ng-if="DonorCtrl.donor.state === 'pending'" class="well">
+            Only clinical data has been submitted to ICGC DCC.
+        </div>
+        <table class="table table-info" data-ng-if="DonorCtrl.donor.state === 'live'">
+            <tr>
+                <th>Clinical Data</th>
+                <td class="text-center"><i class="icon-ok"></i></td>
+            </tr>
+            <tr>
+                <th>Simple Somatic Mutations (SSM)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.ssmCount"></span></td>
+            </tr>
+            <tr>
+                <th>Copy Number Somatic Mutations (CNSM)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.cnsmExists"></span></td>
+            </tr>
+            <tr>
+                <th>Structural Somatic Mutations (StSM)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.stsmExists"></span></td>
+            </tr>
+            <tr>
+                <th>Simple Germline Variants (SGV)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.sgvExists"></span></td>
+            </tr>
+            <tr>
+                <th>Array-based DNA Methylation (METH-A)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.methArrayExists"></span></td>
+            </tr>
+            <tr>
+                <th>Sequence-based DNA Methylation (METH-S)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.methSeqExists"></span></td>
+            </tr>
+            <tr>
+                <th>Array-based Gene Expression (EXP-A)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.expArrayExists"></span></td>
+            </tr>
+            <tr>
+                <th>Sequence-based Gene Expression (EXP-S)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.expSeqExists"></span></td>
+            </tr>
+            <tr>
+                <th>Protein Expression (PEXP)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.pexpExists"></span></td>
+            </tr>
+            <tr>
+                <th>Sequence-based miRNA Expression (miRNA)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.mirnaSeqExists"></span></td>
+            </tr>
+            <tr>
+                <th>Exon Junctions (JCN)</th>
+                <td class="text-center"><span data-exists="DonorCtrl.donor.jcnExists"></span></td>
+            </tr>
+        </table>
+
+        <div>
+            <button class="t_button" type="button" data-ng-click="DonorCtrl.downloadDonorData()" data-ng-disabled="!DonorCtrl.downloadEnabled">
+                <i class="icon-download"></i>
+                <span> Download Donor Data</span>
+            </button>
+            <br>
+            <span data-ng-if="!DonorCtrl.downloadEnabled" class="alert-warning">Data download is currently unavailable.</span>
+        </div>
+
+    </div>
+</section>
+
+<section id="clinical">
+    <h3>Clinical Data
+        <small class="pull-right" style="font-size: 1.0rem" data-ng-if="DonorCtrl.donor.clinicalXML">
+            <a href="{{DonorCtrl.donor.clinicalXML}}" target="_blank"><i class="icon-external-link"></i>TCGA Clinical XML</a>
+        </small>
+    </h3>
+    <div class="half">
+        <table class="table table-info">
+            <tr>
+                <th>Age at diagnosis</th>
+                <td>{{ DonorCtrl.donor.ageAtDiagnosis | numberPT }}</td>
+            </tr>
+            <tr>
+                <th>Age at enrollment</th>
+                <td>{{ DonorCtrl.donor.ageAtEnrollment | numberPT }}</td>
+            </tr>
+            <tr>
+                <th>Age at last followup</th>
+                <td>{{ DonorCtrl.donor.ageAtLastFollowup | numberPT }}</td>
+            </tr>
+            <tr>
+                <th>Diagnosis ICD-10 code</th>
+                <td>{{ DonorCtrl.donor.diagnosisIcd10 }}</td>
+            </tr>
+            <tr>
+                <th>Disease status at last followup</th>
+                <td>{{ DonorCtrl.donor.diseaseStatusLastFollowup }}</td>
+            </tr>
+            <tr>
+                <th>Interval of last followup (days)</th>
+                <td>{{ DonorCtrl.donor.intervalOfLastFollowup | numberPT }}</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>{{ DonorCtrl.donor.gender }}</td>
+            </tr>
+            <tr>
+                <th>Vital status</th>
+                <td>{{ DonorCtrl.donor.vitalStatus }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="half omega">
+        <table class="table table-info">
+            <tr>
+                <th>Tumour stage at diagnosis</th>
+                <td>{{ DonorCtrl.donor.tumourStageAtDiagnosis }}</td>
+            </tr>
+            <tr>
+                <th>Tumour staging system at diagnosis</th>
+                <td>{{ DonorCtrl.donor.tumourStagingSystemAtDiagnosis }}</td>
+            </tr>
+            <tr>
+                <th>Tumour stage at diagnosis supplemental</th>
+                <td>{{ DonorCtrl.donor.tumourStageAtDiagnosisSupplemental }}</td>
+            </tr>
+            <tr>
+                <th>Relapse type</th>
+                <td>{{ DonorCtrl.donor.relapseType }}</td>
+            </tr>
+            <tr>
+                <th>Relapse interval (days)</th>
+                <td>{{ DonorCtrl.donor.relapseInterval | numberPT }}</td>
+            </tr>
+            <tr>
+                <th>Survival time (days)</th>
+                <td>{{ DonorCtrl.donor.survivalTime | numberPT }}</td>
+            </tr>
+            <tr>
+                <th>Prior Malignancy</th>
+                <td>{{ DonorCtrl.donor.priorMalignancy }}</td>
+            </tr>
+            <tr>
+                <th>Cancer Type Prior Malignancy</th>
+                <td>{{ DonorCtrl.donor.cancerTypePriorMalignancy }}</td>
+            </tr>
+            <tr>
+                <th>Cancer history first degree relative</th>
+                <td>{{ DonorCtrl.donor.cancerHistoryFirstDegreeRelative }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="clearfix"></div>
+
+    <div data-ng-init="supplementalCollapsed=true">
+       <span data-ng-show="DonorCtrl.hasSupplementalFiles(DonorCtrl.donor)">
+           <a href="" data-ng-click="supplementalCollapsed=!supplementalCollapsed">
+               Supplemental files:
+               {{ DonorCtrl.donor.family? " " + DonorCtrl.donor.family.length + " Family, " : "" }}
+               {{ DonorCtrl.donor.exposure? " " + DonorCtrl.donor.exposure.length + " Exposure, " : "" }}
+               {{ DonorCtrl.donor.therapy? " " + DonorCtrl.donor.therapy.length + " Therapy" : "" }}
+               <i class="icon-caret-left" data-ng-if="supplementalCollapsed===true"></i>
+               <i class="icon-caret-down" data-ng-if="supplementalCollapsed===false"></i>
+           </a>
+       </span>
+       <div data-ng-include="'scripts/donors/views/donor.supplemental.html'"
+            data-ng-show="supplementalCollapsed === false"></div>
+    </div>
+
+</section>
+
+<section id="mutations"
+         data-ng-if="DonorCtrl.donor.state === 'live'"
+         data-ng-controller="DonorMutationsCtrl as DonorMutationsCtrl"
+         data-ng-class="{'loading': !DonorMutationsCtrl.mutations.hits, 'empty': DonorMutationsCtrl.mutations.hits.length == 0}">
+    <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits"><i class="icon-spinner icon-spin"></i> Fetching Mutations...
+    </h3>
+
+    <h3 data-ng-if="DonorMutationsCtrl.mutations.hits.length == 0">No Mutations Reported.</h3>
+
+    <div data-ng-if="DonorMutationsCtrl.mutations.hits.length > 0">
+        <h3>Most Frequent Mutations
+            <span
+            data-open-in-list='/m?filters={{DonorMutationsCtrl.mutations.advQuery}}'
+            context="donor"
+            context-url='/m?filters={{DonorMutationsCtrl.mutations.viewerQuery}}'></span>
+        </h3>
+
+        <div class="t_table_top">
+            Showing <strong>{{ DonorMutationsCtrl.mutations.hits.length }}</strong> of
+            <strong>{{ DonorMutationsCtrl.mutations.pagination.total | numberPT }}</strong> mutations
+            <span data-toolbar data-dl="{{DonorCtrl.donor.id}}_mutations"></span>
+        </div>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+            <tr>
+                <th rowspan="2">ID</th>
+                <th rowspan="2"><abbr data-tooltip="Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}">DNA
+                    change</abbr></th>
+                <th rowspan="2">Type</th>
+                <th rowspan="2"><abbr data-tooltip="Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.">Consequences</abbr>
+                </th>
+                <th colspan="2" class="text-center"># Donors affected</th>
+            </tr>
+            <tr>
+                <th class="text-center">
+                    <abbr data-tooltip="Breakdown of Affected Donors in {{ DonorCtrl.donor.projectId }}<br># Donors affected / # SSM tested donors">
+                        {{ DonorCtrl.donor.projectId }}
+                    </abbr> <i class="icon-caret-down"></i></th>
+                <th class="text-center">
+                    <abbr data-tooltip="# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project."
+                          data-tooltip-placement="left">Across all Projects</abbr></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="mutation in DonorMutationsCtrl.mutations.hits">
+                <td>
+                    <a href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a>
+                </td>
+                <td class="t_cell_line_break">chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
+                <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr>
+                </td>
+                <td>
+                    <mutation-consequences items="mutation.consequences"></mutation-consequences>
+                </td>
+                <td class="text-right" style="position: relative; display: block;white-space: nowrap">
+                        <span data-ng-style="{width:mutation.affectedDonorCountFiltered/DonorCtrl.donor.ssmTestedDonorCount * 100+'%'}"
+                          class="t_facets__facet__terms__active__term__bar"></span>
+                    <span style="position: relative">
+                        <a href='/search?filters={{mutation.advQuery}}'>
+                            {{ mutation.affectedDonorCountFiltered | number }}
+                        </a>
+                        /
+                        <a href='/search?filters={"donor":{"projectId":{"is":["{{DonorCtrl.donor.projectId}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
+                            {{ DonorCtrl.donor.ssmTestedDonorCount | number }}
+                        </a>
+                        <em>({{mutation.affectedDonorCountFiltered / DonorCtrl.donor.ssmTestedDonorCount * 100 |
+                            number:2}}%)</em>
+                    </span>
+
+
+                </td>
+                <td class="text-right" style="white-space: nowrap">
+                    <ul data-hide-sum-list="{{mutation.uiDonors}}"
+                        data-link='/search?filters={{mutation.advQueryAll}}'>
+                        <li data-ng-repeat="p in list | orderBy:'percentage':true"
+                            style="position: relative">
+                            <span data-ng-style="{width:p.percentage * 100+'%'}"
+                                  class="t_facets__facet__terms__active__term__bar"></span>
+                            <span style="position: relative">
+                                <a data-tooltip-placement="left"
+                                   data-tooltip="{{ p.projectName }}"
+                                   href="/projects/{{p.term}}">{{p.term}}</a>:
+                            <a href='/search?filters={{p.advQuery}}'>
+                                {{p.count | number}}
+                            </a>/
+                            <a href='/search?filters={"donor":{"projectId":{"is":["{{p.term}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
+                                {{p.countTotal | number}}
+                            </a>
+                            <em>({{p.percentage * 100 | number:2}}%)</em>
+                            </span>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="hidden" id="{{DonorCtrl.donor.id}}_mutations">
+            <thead>
+            <tr>
+                <th>Mutation ID</th>
+                <th>Genomic DNA Change</th>
+                <th>Mutation Type</th>
+                <th>Consequences</th>
+                <th>Number of affected donors from the same project as this donor</th>
+                <th>Number of SSM-tested donors from the same project as this donor</th>
+                <th>Percentage of affected donors</th>
+                <th>Projects</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="mutation in DonorMutationsCtrl.mutations.hits">
+                <td>{{mutation.id}}</td>
+                <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
+                <td>{{mutation.type}}</td>
+                <td>
+                    <mutation-consequences data-ng-if="mutation.consequences"
+                                           items="mutation.consequences"></mutation-consequences>
+                </td>
+                <td>{{mutation.affectedDonorCountFiltered}}</td>
+                <td>{{DonorCtrl.donor.ssmTestedDonorCount}}</td>
+                <td>{{mutation.affectedDonorCountFiltered / DonorCtrl.donor.ssmTestedDonorCount}}</td>
+                <td>
+                    <div data-ng-repeat="p in mutation.uiDonors | orderBy:'percentage':true">
+                        <div>{{p.term}}:{{p.count}}/{{p.countTotal}}</div>
+                        <div data-ng-if="!$last">|</div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<section id="specimen" data-ng-controller="DonorSpecimenCtrl as DonorSpecimenCtrl"
+         data-ng-class="{'empty': DonorCtrl.donor.specimen.length == 0}">
+    <h3 data-ng-if="DonorCtrl.donor.specimen.length == 0">No Specimen Found.</h3>
+
+    <div data-ng-if="DonorCtrl.donor.specimen.length > 0">
+        <h3>Specimen</h3>
+
+        <div data-ng-include="'scripts/donors/views/donor.specimen.html'"></div>
+    </div>
+</section>
+</article>
+</div>
+</span>

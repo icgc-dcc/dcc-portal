@@ -1,0 +1,459 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+//-----------------------------------------------------------------------------
+// Base
+@import "_base/base";
+//-----------------------------------------------------------------------------
+// Layout
+@import "layout";
+//-----------------------------------------------------------------------------
+// General
+@import "_general/root";
+@import "_general/type";
+//-----------------------------------------------------------------------------
+// Sections
+@import "../scripts/common/styles/preheader";
+@import "../scripts/common/styles/header";
+@import "../scripts/releases/styles/home";
+@import "../scripts/donors/styles/donor";
+@import "../scripts/advanced/styles/advanced";
+@import "../scripts/keyword/styles/results";
+@import "../scripts/common/styles/footer";
+@import "../scripts/downloader/styles/download";
+@import "../scripts/analysis/styles/analysis";
+@import "../scripts/static/styles/team";
+//-----------------------------------------------------------------------------
+
+
+// --
+
+@import "../../scripts/facets/styles/current";
+@import "../../scripts/facets/styles/facets";
+
+@import "../../scripts/ui/styles/suggest";
+@import "../../scripts/ui/styles/tooltip";
+@import "../../scripts/ui/styles/copyclip";
+@import "../../scripts/ui/styles/trees";
+
+@import "../../scripts/auth/styles/auth";
+
+@import "../../scripts/visualization/styles/vis";
+@import "../../scripts/highcharts/styles/highcharts";
+@import "../../scripts/proteinstructureviewer/styles/protein";
+@import "../../scripts/genomemaps/styles/genomemaps";
+
+// --
+// Pages
+@import "../../scripts/pathwayviewer/styles/pathwayviewer";
+
+@import "../../scripts/repositories/styles/repositories";
+@import "../../scripts/repositories/styles/guide";
+
+@import "../../scripts/compounds/styles/compounds";
+
+@import "../../scripts/tokens/styles/tokens";
+
+@import "../../scripts/beacon/styles/beacon";
+
+@import "../vendor/styles/bamiobio/bamiobio";
+// --
+
+// Modules
+@import "_modules/modules";
+
+html {
+  font-family: $sans-stack;
+  font-size: .7rem;
+  line-height: 1.618rem;
+  overflow-y: scroll;
+
+  @include breakpoint($break-laptop) {
+    font-size: .8rem;
+  }
+  @include breakpoint($break-widescreen) {
+    font-size: 0.9rem;
+  }
+}
+
+b, i {
+  font-weight: normal;
+  font-style: normal;
+}
+
+.amp {
+  font-family: $amp-stack;
+}
+
+.caps {
+  @include caps;
+}
+
+/*a {
+  #{$link} {
+    text-decoration: none;
+  }
+  #{$focus} {
+    text-decoration: underline;
+  }
+}*/
+
+//-----------------------------------------------------------------------------
+// Code Blocks
+
+.highlight {
+
+  background: transparent;
+  border: 0;
+}
+
+abbr {
+  border-bottom: 1px dashed $orangeLight;
+}
+
+code, pre {
+  font-family: $mono-stack;
+}
+
+code {
+
+}
+
+pre {
+
+  overflow: auto;
+}
+
+// ---
+html, body {
+  background: $greyLightest;
+}
+
+article {
+  border: {
+    top: 1px solid $greyLight;
+    left: 1px solid $greyLight;
+  }
+  //  padding-bottom: 9999px;
+  //  margin-bottom: -9999px;
+}
+
+section {
+  padding: 2rem;
+  margin: 0;
+  box-shadow: none;
+  background: $white;
+  border-radius: 0;
+  border-bottom: 1px solid $greyLight;
+  
+  a {
+    text-indent: initial;
+    
+    &.link {
+      white-space: nowrap;
+    }
+  }
+
+  .indent {
+    text-align: justify; 
+    text-indent: 1rem;
+  }
+  
+  &.no-border {
+    border-bottom: none;
+  }
+  
+  &.no-vert-padding {
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+  }
+}
+
+section:last-child {
+  border: none;
+}
+
+aside {
+  font-size: .9rem;
+  section {
+    padding: 1rem;
+  }
+}
+
+article.full {
+  @include grid-span(12);
+  border: 0;
+}
+
+ul, ul li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ol {
+  vertical-align: middle;
+  p {
+    margin: .2rem 0;
+    font: {
+      family: $sans-stack;
+      size: 1rem;
+    }
+  }
+}
+
+.match {
+  font-weight: 700;
+}
+
+.empty, .loading {
+  color: $greyDark;
+  h3 {
+    color: $greyDark;
+    margin-bottom: 0;
+  }
+}
+
+.loading-text {
+  margin: 2rem;
+}
+
+.loading-icon {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.data-available {
+  color: $green;
+}
+
+.data-missing {
+  color: $red;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.ui-scrollfix {
+  position: fixed;
+  z-index: 99;
+}
+
+.h1-wrap {
+  height: 5rem;
+}
+
+h1.ui-scrollfix, .sug-wrap.ui-scrollfix {
+  // Sets a max width. Site will be fluid until it reaches 1200, then stick there.
+  width: $break-desktop;
+
+  @include breakpoint($break-widescreen) {
+    width: 1440px;
+  }
+  top: 0;
+  padding: .5rem 0;
+  background: hsla(0, 0%, 100%, .9);
+  border-bottom: 1px solid $greyLightest;
+}
+
+h1.sticky-scrollfix {
+  border-bottom: 1px solid $greyLightest;
+  padding-bottom: 0.5rem;
+}
+
+aside.ui-scrollfix {
+  top: 5rem;
+  section {
+    background: transparent;
+  }
+}
+
+
+.open-in {
+  font-size: 1rem;
+  color: $grey;
+  text-transform: uppercase;
+}
+
+h3:hover {
+  .pilcrow {
+    opacity: 1;
+  }
+}
+
+.pilcrow {
+  opacity: .1;
+}
+
+.t_sidebar {
+  position: relative;
+}
+
+.t_notify_popup, #buorg {
+  position: fixed;
+  z-index: 1000000;
+  width: 100%;
+  font-size: 1.25rem;
+  background: $orange;
+  color: $white;
+  padding: 1rem 2rem;
+  left: 0;
+  border: none;
+  font-family: inherit;
+}
+
+.t_notify_link {
+  cursor: pointer;
+  color: #FFF;
+}
+
+.t_notify_link:hover {
+  text-decoration: underline;
+}
+
+
+.t_notify_body {
+  font-size: 1rem;
+}
+
+.t_notify_warning {
+  background: $orangeLight;
+}
+
+.t_notify_success {
+  background: $green;
+}
+
+a.no-style {
+  background: none;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    background: none;
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+
+#buorg {
+  div {
+    padding: 0
+  }
+
+  #buorgclose {
+    position: relative;
+    float: right;
+    right: 0;
+    top: 0;
+    height: 0;
+    width: 0;
+    font-weight: normal;
+    font-size: 1rem;
+    padding: 0;
+    padding-right: 1rem;
+  }
+}
+
+.blur {
+   @include filter(blur(2px));
+}
+
+#loading-screen {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  /* Fallback for web browsers that doesn't support RGBa */
+  background: hsl(0, 0, 0) transparent;
+  /* RGBa with 0.6 opacity */
+  background: hsla(100, 100, 100, 0.6);
+  text-align: center;
+
+  font-size: 6rem;
+  color: $greyDark;
+
+  i, img {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+  }
+  i {
+    margin-left: -2rem;
+    margin-top: -8rem;
+  }
+  img {
+    height: 3rem;
+    margin-left: .7rem;
+    margin-top: -6.5rem;
+  }
+}
+
+.iobio-popup {
+  color:#e9931c;
+  transition: color .5s, border .5s;
+  width:18px;
+  vertical-align:middle;
+  cursor: pointer;
+  &:hover {
+    color:#ce6503;
+  }
+}
+
+/******/
+
+////.quick-fade.ng-leave,
+//.quick-fade.ng-enter {
+//  -webkit-transition:0.2s linear all;
+//  -moz-transition:0.2s linear all;
+//  -o-transition:0.2s linear all;
+//  transition:0.2s linear all;
+//}
+////.transition-fade.ng-leave,
+//.transition-fade.ng-enter {
+//  -webkit-transition:0.5s linear all;
+//  -moz-transition:0.5s linear all;
+//  -o-transition:0.5s linear all;
+//  transition:0.5s linear all;
+//}
+//.transition-fade.ng-enter,
+//.transition-fade.ng-leave.ng-leave-active,
+//.quick-fade.ng-enter,
+//.quick-fade.ng-leave.ng-leave-active {
+//  -ms-opacity: 0;
+//  opacity: 0;
+//}
+//.transition-fade.ng-leave,
+//.transition-fade.ng-enter.ng-enter-active,
+//.quick-fade.ng-leave,
+//.quick-fade.ng-enter.ng-leave-active {
+//  -ms-opacity: 1;
+//  opacity: 1;
+//}

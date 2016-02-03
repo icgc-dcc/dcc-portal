@@ -1,0 +1,384 @@
+<div data-ng-init="compound = CompoundCtrl.getCompound()">
+    <div class="h1-wrap">
+        <h1 data-ui-scrollfix="79">
+            <span class="t_badge t_badge__compound"></span>
+            <span data-ng-bind=":: compound.name"></span>
+        </h1>
+    </div>
+    <div data-scroll-spy="">
+        <aside data-ui-scrollfix="79" class="t_sidenav">
+            <section>
+                <ul class="t_subnav__items">
+                    <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary">Summary</a></li>
+                    <li data-spy="genes" class="t_subnav__items__item"><a data-scrollto href="#genes">Targeted Genes</a></li>
+                    <li data-spy="trials" class="t_subnav__items__item"><a data-scrollto href="#trials">Clinical Trials</a></li>
+                    <li><br></li>
+                    <li class="t_subnav__items__item" data-ng-if="CompoundCtrl.getMutationImpactFacets() && CompoundCtrl.getMutationImpactFacets().functionalImpact.total > 0">
+                        <span>Page Filters</span>
+                    </li>
+                    <li class="t_subnav__items__box" data-ng-if="CompoundCtrl.getMutationImpactFacets() && CompoundCtrl.getMutationImpactFacets().functionalImpact.total > 0">
+                        <ul class="t_facets">
+                            <terms data-type="mutation"
+                                   data-facet-name="functionalImpact"
+                                   data-hide-count="true"
+                                   data-label="Mutation Impact"
+                                   data-facet=" CompoundCtrl.getMutationImpactFacets().functionalImpact"></terms>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+        <article>
+            <section id="summary">
+                <div class="wide">
+
+                    <h3>Summary</h3>
+                    <table class="table table-info">
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td data-ng-bind=":: compound.name"></td>
+                            </tr>
+                            <tr>
+                                <th>Synonyms</th>
+                                <td>
+                                    <hide-text data-text="{{compound.synonyms.join(', ')}}">
+                                    </hide-text>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>InChIKey</th>
+                                <td data-ng-bind=":: compound.inchiKey"></td>
+                            </tr>
+                            <tr>
+                                <th>Compound Class</th>
+                                <td data-ng-bind=":: compound.drugClass | formatCompoundClass"></td>
+                            </tr>
+                            <tr>
+                                <th>Clinical Trials</th>
+                                <td>
+                                    <a data-scrollto href="#trials" data-ng-bind=":: compound.cancerTrialCount"></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <div class="narrow omega">
+                        <h3>External References</h3>
+                        <table class="table table-info">
+                            <tbody>
+                                <tr>
+                                    <th>Zinc ID</th>
+                                    <td>
+                                        <a href="http://zinc15.docking.org/substances/{{compound.id}}" target="_blank">
+                                            <span class="icon-external-link"></span> <span data-ng-bind="compound.id"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <tr data-ng-repeat="(refName, refIds) in :: compound.externalReferences" data-ng-if="refIds.length">
+                                <th data-ng-bind="CompoundCtrl.getPrettyExternalRefName(refName)"></th>
+                                <td>
+                                    <ul>
+                                        <li data-ng-repeat="refId in :: refIds">
+                                            <a  data-ng-if="refName === 'chembl'" href="https://www.ebi.ac.uk/chembl/compound/inspect/{{refId}}"
+                                                target="_blank">
+                                                <span class="icon-external-link"></span> <span data-ng-bind="refId"></span>
+                                            </a>
+
+                                            <a  data-ng-if="refName === 'drugbank'" href="http://www.drugbank.ca/drugs/{{refId}}"
+                                                target="_blank">
+                                                <span class="icon-external-link"></span> <span data-ng-bind="refId"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="wide">
+                        <h3>ATC Codes</h3>
+                        <div data-ng-if="compound.atcCodes.length == 0">No ATC Codes Found.</div>
+                        <table class="table table-info" data-ng-if="compound.atcCodes.length">
+                            <tbody>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>ATC Level 4 Code</th>
+                                    <th>ATC Level 4 Description</th>
+
+                                </tr>
+                                <tr data-ng-repeat="atcCodes in :: compound.atcCodes">
+                                    <td>
+                                        <a href="http://www.whocc.no/atc_ddd_index/?code={{atcCodes.atcLevel5Codes}}" target="_blank">
+                                            <i class="icon-external-link"></i>
+                                            <span data-ng-bind="atcCodes.atcLevel5Codes"></span>
+                                        </a>
+                                    </td>
+                                    <td data-ng-bind="atcCodes.code"></td>
+                                    <td data-ng-bind="atcCodes.description"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <div class="narrow omega" data-ng-if="compound.imageURL">
+                    <h3>Molecule</h3>
+                    <div style="border: solid 1px #ccc; text-align: center; ">
+                       <a href="{{compound.imageURL}}" class="no-style" target="_blank">
+                           <img src="{{compound.imageURL}}" data-ng-if="compound.imageURL" style="max-width: 100%" />
+                       </a>
+                    </div>
+                </div>
+
+                </section>
+            <section id="genes">
+                <div class="full">
+                    <h3>
+                        Targeted Genes
+
+                        <span class="open-in pull-right" data-ng-if="CompoundCtrl.getTargetedCompoundGenes() && CompoundCtrl.getTargetedCompoundGenes().length > 0">
+                            Open in
+
+                              <a href="/search/g?filters={{CompoundCtrl.getFilter()}}">
+                                  Advanced Search
+                              </a>
+                                |
+                              <a href="/browser/g?filters={{CompoundCtrl.getFilter()}}">
+                                  Genome Viewer
+                              </a>
+
+                        </span>
+                    </h3>
+
+
+
+                    <div class="t_table_top">
+
+                        <span data-ng-if="CompoundCtrl.getTargetedCompoundGenes() && CompoundCtrl.getTargetedCompoundGenes().length > 0">
+                            Showing <strong data-ng-bind="CompoundCtrl.getTargetedCompoundGenesResultPerPage()"></strong> of <strong data-ng-bind="CompoundCtrl.getTargetedGeneCount()"></strong> genes
+                            <span class="t_tools" data-toolbar="" data-dl="compound_mutated_genes">
+                            <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="Export Table as TSV" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
+                            </span>
+                        </span>
+                        <span data-ng-if="CompoundCtrl.getTargetedCompoundGenes() &&  CompoundCtrl.getTargetedCompoundGenes().length === 0">
+                            No targeted genes found.
+                        </span>
+                    </div>
+                    <h3 data-ng-if="! CompoundCtrl.getTargetedCompoundGenes()">
+                        <i class="icon-spinner icon-spin"></i> Fetching targeted genes...
+                    </h3>
+                    <table class="table table-info" data-ng-if="CompoundCtrl.getTargetedCompoundGenes().length > 0">
+                        <tbody>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Name</th>
+                                <th>
+                                    <abbr data-tooltip="Gene location on the genome, chr:start-end">
+                                        Location
+                                    </abbr>
+                                </th>
+                                <th>Type</th>
+                                <th>
+                                    <abbr data-tooltip="Number of Donors where a Gene involved in the Gene Set can be targeted by the compound">#
+                                        Donors affected</abbr><i class="icon-sort-down"></i>
+                                </th>
+                                <th>
+                                    <abbr data-tooltip="Number of Mutations of gene observed" data-tooltip-placement="left"># Mutations</abbr>
+                                </th>
+                            </tr>
+                            <tr data-ng-repeat="gene in CompoundCtrl.getTargetedCompoundGenes() | limitTo: CompoundCtrl.getTargetedCompoundGenesResultPerPage()">
+                                <td><a href="/genes/{{gene.id}}" data-ng-bind="gene.symbol"></a></td>
+                                <td data-ng-bind="gene.name"></td>
+                                <td data-ng-bind-template="chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}"></td>
+                                <td data-ng-bind="gene.type | trans"></td>
+                                <td class="text-right" style="display:block; position: relative; white-space: nowrap">
+                                     <span data-ng-style="{width: gene.affectedDonorCountFiltered/CompoundCtrl.getAffectedDonorCountTotal() * 100+'%'}"
+                                           class="t_facets__facet__terms__active__term__bar">
+                                     </span>
+                                    <span data-ng-if="gene.affectedDonorCountFiltered==null"><i class="icon-spinner icon-spin"></i></span>
+                                    <span style="position: relative" data-ng-if="gene.affectedDonorCountFiltered >= 0">
+                                    <a data-ng-href='/search?filters={{gene.affectedDonorCountFilter}}'>
+                                        {{ gene.affectedDonorCountFiltered | number }}
+                                    </a>
+                                    /
+                                    <a href="/search?filters={{CompoundCtrl.getAffectedDonorCountTotalFilter()}}">
+                                        {{ CompoundCtrl.getAffectedDonorCountTotal() | number }}
+                                    </a>
+                                    <em data-ng-bind-template="({{gene.affectedDonorCountFiltered/CompoundCtrl.getAffectedDonorCountTotal() * 100 | number:2}}%)"></em>
+                                    </span>
+
+                                </td>
+                                <td class="text-right">
+                                    <span data-ng-if="gene.mutationCountTotal == null"><i class="icon-spinner icon-spin"></i></span>
+                                    <span data-ng-if="gene.mutationCountTotal === 0">--</span>
+                                    <a data-ng-if="gene.mutationCountTotal > 0"
+                                       data-ng-href='/search/m?filters={{gene.mutationCountFilter}}'>
+                                        {{ gene.mutationCountTotal | number }}
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section id="trials" data-ng-init="sortField = 'code'; sortDescending = false;">
+                <div class="full">
+                    <h3>
+                        Clinical Trials
+
+                        <span class="pull-right open-in" data-ng-if="compound.trials.length > 0">
+                            Open in
+                              <a href="http://zinc15.docking.org/substances/{{compound.id}}/trials/subsets/cancer/" target="_blank">
+                                  <i class="icon-external-link"></i>
+                                  Zinc
+                              </a>
+
+                        </span>
+                    </h3>
+                    <div class="t_table_top">
+                        <span data-ng-if="compound.trials.length > 0">
+                            Showing <strong data-ng-bind="compound.trials.length"></strong> Clinical Trials
+                            <span class="t_tools" data-toolbar="" data-dl="compound_trials">
+                            <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="Export Table as TSV" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
+                            </span>
+                        </span>
+                        <span data-ng-if="compound.trials.length === 0">
+                            No trials found.
+                        </span>
+                    </div>
+                    <table class="table table-info" data-ng-if="compound.trials.length > 0">
+                        <thead>
+                            <tr>
+                                <th data-ng-click="sortField = 'code'; sortDescending = ! sortDescending" class="sortable">
+                                    Code
+                                    <i data-ng-if="sortField !== 'code'" class="icon-sort"></i>
+                                    <i data-ng-if="sortField === 'code'"
+                                       data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                                    </i>
+                                </th>
+                                <th data-ng-click="sortField = 'description'; sortDescending = ! sortDescending" class="sortable">
+                                    Description
+                                    <i data-ng-if="sortField !== 'description'" class="icon-sort"></i>
+                                    <i data-ng-if="sortField === 'description'"
+                                       data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                                    </i>
+                                </th>
+                                <th>
+                                    Conditions
+                                </th>
+                                <th data-ng-click="sortField = 'startDate'; sortDescending = ! sortDescending" class="sortable">
+                                    Start Date
+                                    <i data-ng-if="sortField !== 'startDate'" class="icon-sort" ></i>
+                                    <i data-ng-if="sortField === 'startDate'"
+                                       data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                                    </i>
+                                </th>
+                                <th data-ng-click="sortField = 'phaseName'; sortDescending = ! sortDescending" class="sortable">
+                                    Phase
+                                    <i data-ng-if="sortField !== 'phaseName'" class="icon-sort"></i>
+                                    <i data-ng-if="sortField === 'phaseName'"
+                                       data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                                    </i>
+                                </th>
+                                <th data-ng-click="sortField = 'statusName'; sortDescending = ! sortDescending" class="sortable">
+                                    Status
+                                    <i data-ng-if="sortField !== 'statusName'" class="icon-sort"></i>
+                                    <i data-ng-if="sortField === 'statusName'"
+                                       data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                                    </i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="trial in compound.trials | orderBy:sortField:sortDescending">
+                                <td>
+                                    <a style="white-space: nowrap" target="_blank" href="https://www.clinicaltrials.gov/ct2/show/{{trial.code}}">
+                                        <i class="icon-external-link"></i> <span data-ng-bind="trial.code"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <hide-text text="{{ trial.description }}"></hide-text>
+                                </td>
+                                <td>
+                                    <ul>
+                                        <hide-list data-items="trial.conditions"
+                                                   data-display-limit="2"
+                                                   data-template-name="template/compoundList.html"
+                                        >
+                                        </hide-list>
+                                    </ul>
+                                </td>
+                                <td data-ng-bind="trial.startDate" style="width:6rem; white-space: nowrap;"></td>
+                                <td data-ng-bind="trial.phaseName"></td>
+                                <td data-ng-bind="trial.statusName"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <table class="hidden" id="compound_mutated_genes">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Number of donors affected</th>
+                            <th>Percentage of affected donors</th>
+                            <th>Number of Mutations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="gene in CompoundCtrl.getTargetedCompoundGenes() | limitTo: CompoundCtrl.getTargetedCompoundGenesResultPerPage()">
+                            <td><a href="/genes/{{gene.id}}" data-ng-bind="gene.symbol"></a></td>
+                            <td data-ng-bind="gene.name"></td>
+                            <td data-ng-bind-template="chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}"></td>
+                            <td data-ng-bind="gene.type | trans"></td>
+                            <td>
+                                {{ gene.affectedDonorCountFiltered | number }}
+                            </td>
+                            <td>
+                                {{gene.affectedDonorCountFiltered/CompoundCtrl.getAffectedDonorCountTotal() * 100 | number:2}}%
+                            </td>
+                            <td>
+                                {{ gene.mutationCountTotal | number }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="hidden" data-ng-if="compound.trials.length > 0" id="compound_trials">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Description</th>
+                            <th>Conditions</th>
+                            <th>Start Date</th>
+                            <th>Phase</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="trial in compound.trials | orderBy:sortField:sortDescending">
+                            <td>
+                                <a>
+                                    <span data-ng-bind="trial.code"></span>
+                                </a>
+                            </td>
+                            <td>
+                               {{ trial.description }}
+                            </td>
+                            <td>
+                                <span data-ng-repeat="condition in trial.conditions">
+                                    {{condition.name}}
+                                </span>
+                            </td>
+                            <td data-ng-bind="trial.startDate"></td>
+                            <td data-ng-bind="trial.phaseName"></td>
+                            <td data-ng-bind="trial.statusName"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+    </div>
+</div>

@@ -1,0 +1,280 @@
+<h1><span class="t_badge t_badge_icon t_badge__q"><span class="icon-search"></span></span>Keyword Search</h1>
+<article class="full" data-infinite-scroll="next()" data-infinite-scroll-disabled='isBusy || limit'
+         data-infinite-scroll-distance='1'>
+    <div style="height: 12rem;">
+        <div class="clearfix sug-wrap" data-ui-scrollfix=400>
+            <form class="t_suggest">
+                <input
+                        class="t_suggest__input"
+                        placeholder="e.g. BRAF, KRAS G12D, DO35100, MU7870, FI998, apoptosis, Cancer Gene Census, GO:0016049"
+                        autocomplete="off"
+                        autofocus="true"
+                        data-ng-model="query"
+                        data-ng-change="quick()"
+                        data-ui-keydown="{'enter':enter}">
+                <i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search"></i>
+                <i class="t_suggest__embedded t_suggest__embedded__right icon-spin icon-spinner"
+                   data-ng-show='isBusy'></i>
+                <i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel"
+                   data-ng-click="clear()" data-ng-show='query && !isBusy'></i>
+
+                <div data-ng-if="results.hits.length">
+                    <strong>{{ results.pagination.total | number }}</strong> results found for <span class="match">{{query}}</span>
+                </div>
+                <div data-ng-if="query.length < 2 && !results.hits.length">Search term must be at least
+                    <strong>2</strong> characters
+                </div>
+                <div data-ng-if="query.length > 1 && results.hits.length == 0">No results found for <span class="match">{{query}}</span>
+                </div>
+                <div class="t_labels">
+                    <span data-toggle-param data-default-select="true" data-key='type' data-value="all"
+                          class="t_labels__label t_labels__label__all"></span>
+                    <span data-toggle-param data-key='type' data-value=gene
+                          class="t_labels__label t_labels__label__genes"></span>
+                    <span data-toggle-param data-key='type' data-value=donor
+                          class="t_labels__label t_labels__label__donors"></span>
+                    <span data-toggle-param data-key='type' data-value=mutation
+                          class="t_labels__label t_labels__label__mutations"></span>
+                    <span data-toggle-param data-key='type' data-value=project
+                          class="t_labels__label t_labels__label__projects"></span>
+                    <span data-toggle-param data-key='type' data-value="geneSet"
+                          class="t_labels__label t_labels__label__pathways"></span>
+                    <span data-toggle-param data-key='type' data-value="file"
+                          class="t_labels__label t_labels__label__files"></span>
+                    <span data-toggle-param data-key='type' data-value="compound"
+                          class="t_labels__label t_labels__label__compounds" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <section>
+        <table class="t_quick">
+            <tr data-ng-repeat="r in results.hits" data-ng-switch="r.type" class="t_quick__hit">
+                <td class="t_quick__hit__type">
+                    <span class="{{ badgeStyleClass (r.type) }}" />
+                </td>
+
+                <td class="t_quick__hit__text" data-ng-switch-when="compound">
+                    <a href="{{ compoundEntityUrl }}{{ r.id }}" data-ng-bind-html="r.name | highlight: activeQuery"></a>
+
+                    <ul class="t_quick__hit__text__details">
+                        <li>
+                            <span class="t_quick__hit__text__details__label">ZINC ID</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="r.id | highlight: activeQuery" />
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Compound Class</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="r.drugClass | highlight: activeQuery" />
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">InChIKey</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="r.inchikey | highlight: activeQuery" />
+                        </li>
+                        <li ng-init="compooundSynonyms = concatMatches (r.synonyms)"
+                            ng-if="concatMatches (r.synonyms).length > 0">
+                            <span class="t_quick__hit__text__details__label">Synonyms</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="compooundSynonyms | highlight: activeQuery" />
+                        </li>
+                        <li ng-init="atcCodes = concatMatches (r.atcCodes)"
+                            ng-if="concatMatches (r.atcCodes).length > 0">
+                            <span class="t_quick__hit__text__details__label">ATC Codes</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="atcCodes | highlight: activeQuery" />
+                        </li>
+                        <li ng-init="atcLevel5Codes = concatMatches (r.atcLevel5Codes)"
+                            ng-if="concatMatches (r.atcLevel5Codes).length > 0">
+                            <span class="t_quick__hit__text__details__label">ATC Level5 Codes</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="atcLevel5Codes | highlight: activeQuery" />
+                        </li>
+                        <li ng-init="trialConditionNames = concatMatches (r.trialConditionNames)"
+                            ng-if="concatMatches (r.trialConditionNames).length > 0">
+                            <span class="t_quick__hit__text__details__label">Trial Condition Names</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="trialConditionNames | highlight: activeQuery" />
+                        </li>
+                        <li ng-init="externalReferencesDrugbank = concatMatches (r.externalReferencesDrugbank)"
+                            ng-if="concatMatches (r.externalReferencesDrugbank).length > 0">
+                            <span class="t_quick__hit__text__details__label">Ext. References Drugbank</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="externalReferencesDrugbank | highlight: activeQuery" />
+                        </li>
+                        <li ng-init="externalReferencesChembl = concatMatches (r.externalReferencesChembl)"
+                            ng-if="concatMatches (r.externalReferencesChembl).length > 0">
+                            <span class="t_quick__hit__text__details__label">Ext. References Chembl</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="externalReferencesChembl | highlight: activeQuery" />
+                        </li>
+
+                        <li ng-init="atcCodeDescriptions = abridge (r.atcCodeDescriptions)"
+                            ng-if="abridge (r.atcCodeDescriptions).length > 0">
+                            <span class="t_quick__hit__text__details__label">ATC Code Descriptions</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="atcCodeDescriptions | highlight: activeQuery" />
+                        </li>
+                        <li ng-init="trialDescriptions = abridge (r.trialDescriptions)"
+                            ng-if="abridge (r.trialDescriptions).length > 0">
+                            <span class="t_quick__hit__text__details__label">Trial Descriptions</span>
+                            <span class="t_quick__hit__text__details__value" ng-bind-html="trialDescriptions | highlight: activeQuery" />
+                        </li>
+                    </ul>
+                </td>
+
+                <td class="t_quick__hit__text" data-ng-switch-when="file">
+                    <a href="{{ dataRepoFileUrl }}{{ r.id }}" data-ng-bind-html="r.id | highlight:activeQuery"></a>
+
+                    <ul class="t_quick__hit__text__details">
+                        <li>
+                            <span class="t_quick__hit__text__details__label">File Name</span>
+                            <span class="t_quick__hit__text__details__value" data-ng-bind-html="r.fileName[0] | highlight:activeQuery"></span>
+                            <span data-ng-if="r.fileName.length > 1" style="cursor:pointer;"
+                              data-tooltip="{{r.fileName | withoutFirst | highlight:activeQuery}}" class="t_quick__hit__text__details__value">...</span>
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Object ID</span>
+                            <span class="t_quick__hit__text__details__value">{{r.fileObjectId}}</span>
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Data Type</span>
+                            <span class="t_quick__hit__text__details__value">{{r.dataType}}</span>
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Project ID</span>
+                            <span class="t_quick__hit__text__details__value">{{ r.projectCode | projectCode }}</span>
+                        </li>
+                    </ul>
+                </td>
+                <td class="t_quick__hit__text" data-ng-switch-when="gene">
+                    <a href="/genes/{{r.id}}" data-ng-bind-html="r.symbol | highlight:activeQuery "></a>
+                    <ul class="t_quick__hit__text__details">
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Name</span>
+                        <span class="t_quick__hit__text__details__value"
+                              data-ng-bind-html="r.name | highlight:activeQuery "></span>
+                        </li>
+                        <li data-ng-if="r.synonyms">
+                            <span class="t_quick__hit__text__details__label">Synonyms</span>
+                            <span class="t_quick__hit__text__details__value"
+                                data-ng-bind-html="r.synonyms | highlight:activeQuery "></span>
+                        </li>
+                        <li data-ng-if="r.uniprotkbSwissprot">
+                            <span class="t_quick__hit__text__details__label">UniProtKB/Swiss-Prot</span>
+                            <span class="t_quick__hit__text__details__value"
+                                data-ng-bind-html="r.uniprotkbSwissprot.join(', ')| highlight:activeQuery "></span>
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Ensembl ID</span>
+                            <span class="t_quick__hit__text__details__value"
+                                  data-ng-bind-html="r.id | highlight:activeQuery "></span>
+                        </li>
+                    </ul>
+                </td>
+                <td class="t_quick__hit__text" data-ng-switch-when="donor">
+                    <a href="/donors/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <ul class="t_quick__hit__text__details">
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Project</span>
+                            <a href="/projects/{{r.projectId}}" class="t_quick__hit__text__details__value"
+                               data-ng-bind-html="r.projectId | highlight:activeQuery ">
+                            </a>
+                        </li>
+                        <li data-ng-if="r.submittedId">
+                            <span class="t_quick__hit__text__details__label">Submitted Id</span><span
+                                class="t_quick__hit__text__details__value"
+                                data-ng-bind-html="r.submittedId | highlight:activeQuery "></span>
+                        </li>
+                        <li data-ng-if="r.specimenIds">
+                            <span class="t_quick__hit__text__details__label">Specimen</span><span
+                                class="t_quick__hit__text__details__value"
+                                data-ng-bind-html="r.specimenIds | highlight:activeQuery "></span>
+                        </li>
+                        <li data-ng-if="r.sampleIds">
+                            <span class="t_quick__hit__text__details__label">Samples</span><span
+                                class="t_quick__hit__text__details__value"
+                                data-ng-bind-html="r.sampleIds | highlight:activeQuery "></span>
+                        </li>
+                    </ul>
+                </td>
+                <td class="t_quick__hit__text" data-ng-switch-when="mutation">
+                    <a href="/mutations/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <ul class="t_quick__hit__text__details">
+                        <li>
+                            <span class="t_quick__hit__text__details__label">DNA Changes</span>
+                        <span class="t_quick__hit__text__details__value"
+                              data-ng-bind-html="r.mutation | highlight:activeQuery"></span>
+                        </li>
+                        <li data-ng-if="r.geneMutations">
+                            <span class="t_quick__hit__text__details__label">AA Changes</span>
+                        <span class="t_quick__hit__text__details__value"
+                              data-ng-bind-html=" r.geneMutations | highlight:activeQuery "></span>
+                        </li>
+                    </ul>
+                </td>
+                <td class="t_quick__hit__text" data-ng-switch-when="project">
+                    <a href="/projects/{{r.id}}" data-ng-bind-html="r.name | highlight:activeQuery "></a>
+                    <ul class="t_quick__hit__text__details">
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Primary Site</span>
+                        <span class="t_quick__hit__text__details__value"
+                              data-ng-bind-html="r.primarySite | highlight:activeQuery"></span>
+                        </li>
+                        <li data-ng-if="r.tumourType">
+                            <span class="t_quick__hit__text__details__label">Tumour Type</span>
+                        <span class="t_quick__hit__text__details__value"
+                              data-ng-bind-html=" r.tumourType | highlight:activeQuery "></span>
+                        </li>
+                        <li data-ng-if="r.tumourSubtype">
+                            <span class="t_quick__hit__text__details__label">Subtype</span>
+                        <span class="t_quick__hit__text__details__value"
+                              data-ng-bind-html=" r.tumourSubtype | highlight:activeQuery "></span>
+                        </li>
+                    </ul>
+                </td>
+                <td class="t_quick__hit__text" data-ng-switch-when="pathway">
+                    <a href="/genesets/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <ul class="t_quick__hit__text__details">
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Gene Set Type</span>
+                            <span class="t_quick__hit__text__details__value">Reactome Pathway</span>
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Gene Set Name</span>
+                            <span class="t_quick__hit__text__details__value" data-ng-bind-html=" r.name | highlight:activeQuery "></span>
+                        </li>
+                    </ul>
+                </td>
+                <td class="t_quick__hit__text" data-ng-switch-when="go_term">
+                    <a href="/genesets/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <ul class="t_quick__hit__text__details">
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Gene Set Type</span>
+                            <span class="t_quick__hit__text__details__value">GO</span>
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Gene Set Name</span>
+                            <span class="t_quick__hit__text__details__value" data-ng-bind-html=" r.name | highlight:activeQuery "></span>
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Alt. ID</span>
+                            <span class="t_quick__hit__text__details__value" data-ng-bind-html=" r.altIds.join(', ') | highlight:activeQuery "></span>
+                        </li>
+                    </ul>
+                </td>
+                <td class="t_quick__hit__text" data-ng-switch-when="curated_set">
+                    <a href="/genesets/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <ul class="t_quick__hit__text__details">
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Gene Set Type</span>
+                            <span class="t_quick__hit__text__details__value">Curated Gene Set</span>
+                        </li>
+                        <li>
+                            <span class="t_quick__hit__text__details__label">Gene Set Name</span>
+                            <span class="t_quick__hit__text__details__value" data-ng-bind-html=" r.name | highlight:activeQuery "></span>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <div data-ng-if='isBusy' style="text-align: center; padding-top: 1rem">
+            <i class="icon-spin icon-spinner"></i>
+        </div>
+        <div data-ng-if="limit && !isBusy && !isFinished" class="results_show_more_bar" data-type="button"
+             data-ng-click="next()">
+            <i class="icon-double-angle-down"></i> Show more results
+        </div>
+    </section>
+</article>

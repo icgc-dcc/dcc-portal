@@ -1,0 +1,314 @@
+<h3 style="margin-bottom:0">Phenotype Comparison
+    <span style="font-size:1rem" class="pull-right" data-ng-if="!isDeprecated">
+        <share-button></share-button>
+    </span>
+</h3>
+<div><small>More phenotypes coming soon...</small></div><br>
+
+<div data-ng-if="isDeprecated" class="alert-error">
+    <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
+</div>
+<div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
+    <div>Your selected donor sets</div>
+    <div class="wide">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Set name</th>
+                    <th class="text-right"># Donors</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="donorSet in setIds">
+                    <td style="color:{{seriesColours[$index]}}">{{setMap[donorSet].name}}</th>
+                    <td class="text-right"><a href="/search?filters={{setFilters[$index]}}">{{setMap[donorSet].count | number}}</a></th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="clearfix"></div>
+    <br>
+
+
+    <br>
+    <div data-ng-class="{wide : setIds.length === 2}"> 
+        <strong>Gender comparison</strong>
+        <span data-toolbar data-dl="phenotype-gender"></span>
+    </div>
+
+    <div data-ng-class="{wide : setIds.length === 2}"> 
+        <table class="table"> 
+            <thead>
+                <tr>
+                    <th colspan="1"></th>
+                    <th class="multi-line-heading" colspan="2">
+                        <span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span><br>
+                        <small>Donor count: {{setMap[setIds[0]].count | number}}</small>
+                    </th>
+                    <th class="multi-line-heading" colspan="2">
+                        <span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span><br>
+                        <small>Donor count: {{setMap[setIds[1]].count | number}}</small>
+                    </th>
+                    <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]">
+                        <span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span><br>
+                        <small>Donor count: {{setMap[setIds[2]].count | number}}</small>
+                    </th>
+                </tr>
+                <tr class="subhead">
+                    <th>Gender</th>
+                    <th class="text-right"># Donors</th>
+                    <th class="text-right">%</th>
+                    <th class="text-right"># Donors</th>
+                    <th class="text-right">%</th>
+                    <th class="text-right" data-ng-if="setIds[2]"># Donors</th>
+                    <th class="text-right" data-ng-if="setIds[2]">%</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="row in gender.uiTable">
+                    <td>{{row.term | readable}}</td>
+                    <td class="text-right">
+                      <a data-ng-if="row[setIds[0]].count > 0" href="/search?filters={{row[setIds[0]].advQuery}}">{{row[setIds[0]].count | number}}</a>
+                      <span data-ng-if="row[setIds[0]].count === 0" >0</span>
+                    </td>
+                    <td class="text-right">{{row[setIds[0]].percentage*100 | number:2}}</td>
+                    <td class="text-right">
+                      <a data-ng-if="row[setIds[1]].count > 0" href="/search?filters={{row[setIds[1]].advQuery}}">{{row[setIds[1]].count | number}}</a>
+                      <span data-ng-if="row[setIds[1]].count === 0" >0</span>
+                    </td>
+                    <td class="text-right">{{row[setIds[1]].percentage*100 | number:2}}</td>
+                    <td class="text-right" data-ng-if="setIds[2]">
+                      <a data-ng-if="row[setIds[2]].count > 0" href="/search?filters={{row[setIds[2]].advQuery}}">{{row[setIds[2]].count | number}}</a>
+                      <span data-ng-if="row[setIds[2]].count === 0" >0</span>
+                    </td>
+                    <td class="text-right" data-ng-if="setIds[2]">{{row[setIds[2]].percentage*100 | number:2}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="clearfix"></div>
+    <div class="half">
+        <grouped-bar data-items="gender.uiGraph" ylabel="% Donors" height="200" format="percentage" data-colours="seriesColours"></grouped-bar>
+    </div>
+    <div class="clearfix"></div>
+
+
+    <br>
+    <div data-ng-class="{wide: setIds.length === 2}">
+        <strong>Vital status comparison</strong>
+        <span data-toolbar data-dl="phenotype-vital-status"></span>
+    </div>
+    <div data-ng-class="{wide: setIds.length === 2}"> 
+        <table class="table"> 
+            <thead>
+                <tr>
+                    <th colspan="1"></th>
+                    <th class="multi-line-heading" colspan="2">
+                        <span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span><br>
+                        <small>Donor count: {{setMap[setIds[0]].count | number}}</small>
+                    </th>
+                    <th class="multi-line-heading" colspan="2">
+                        <span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span><br>
+                        <small>Donor count: {{setMap[setIds[1]].count | number}}</small>
+                    </th>
+                    <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]">
+                        <span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span><br>
+                        <small>Donor count: {{setMap[setIds[2]].count | number}}</small>
+                    </th>
+                </tr>
+                <tr class="subhead">
+                    <th>Status</th>
+                    <th class="text-right"># Donors</th>
+                    <th class="text-right">%</th>
+                    <th class="text-right"># Donors</th>
+                    <th class="text-right">%</th>
+                    <th class="text-right" data-ng-if="setIds[2]"># Donors</th>
+                    <th class="text-right" data-ng-if="setIds[2]">%</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="row in vital.uiTable">
+                    <td>{{row.term | readable}}</td>
+                    <td class="text-right">
+                      <a data-ng-if="row[setIds[0]].count > 0" href="/search?filters={{row[setIds[0]].advQuery}}">{{row[setIds[0]].count | number}}</a>
+                      <span data-ng-if="row[setIds[0]].count === 0">0</span>
+                    </td>
+                    <td class="text-right">{{row[setIds[0]].percentage*100 | number:2}}</td>
+                    <td class="text-right">
+                      <a data-ng-if="row[setIds[1]].count > 0" href="/search?filters={{row[setIds[1]].advQuery}}">{{row[setIds[1]].count | number}}</a>
+                      <span data-ng-if="row[setIds[1]].count === 0">0</span>
+                    </td>
+                    <td class="text-right">{{row[setIds[1]].percentage*100 | number:2}}</td>
+                    <td class="text-right" data-ng-if="setIds[2]">
+                      <a data-ng-if="row[setIds[2]].count > 0" href="/search?filters={{row[setIds[2]].advQuery}}">{{row[setIds[2]].count | number}}</a>
+                      <span data-ng-if="row[setIds[2]].count === 0">0</span>
+                    </td>
+                    <td class="text-right" data-ng-if="setIds[2]">{{row[setIds[2]].percentage*100 | number:2}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="clearfix"></div>
+    <div class="half">
+        <grouped-bar data-items="vital.uiGraph" ylabel="% Donors" format="percentage" height="200" data-colours="seriesColours"></grouped-bar>
+    </div>
+    <div class="clearfix"></div>
+
+
+    <br>
+    <div data-ng-class="{wide: setIds.length === 2}">
+        <strong>Age at diagnosis comparison</strong>
+        <span data-toolbar data-dl="phenotype-age"></span>
+    </div>
+    <div data-ng-class="{wide: setIds.length === 2}"> 
+        <table class="table"> 
+            <thead>
+                <tr>
+                    <th colspan="1"></th>
+                    <th class="multi-line-heading" colspan="2"><span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span>
+                        <br><small>Donor count: {{setMap[setIds[0]].count | number}}</small>
+                        <br><small>Average age: {{meanAge[0] | number:2}}</small>
+                    </th>
+                    <th class="multi-line-heading" colspan="2"><span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span>
+                        <br><small>Donor count: {{setMap[setIds[1]].count | number}}</small>
+                        <br><small>Average age: {{meanAge[1] | number:2}}</small>
+                    </th>
+                    <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]"><span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span>
+                        <br><small>Donor count: {{setMap[setIds[2]].count | number}}</small>
+                        <br><small>Average age: {{meanAge[2] | number:2}}</small>
+                    </th>
+                </tr>
+                <tr class="subhead">
+                    <th>Age group</th>
+                    <th class="text-right"># Donors</th>
+                    <th class="text-right">%</th>
+                    <th class="text-right"># Donors</th>
+                    <th class="text-right">%</th>
+                    <th class="text-right" data-ng-if="setIds[2]"># Donors</th>
+                    <th class="text-right" data-ng-if="setIds[2]">%</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="row in age.uiTable">
+                    <td>{{row.term | readable}}</td>
+                    <td class="text-right">
+                      <a data-ng-if="row[setIds[0]].count > 0" href="/search?filters={{row[setIds[0]].advQuery}}">{{row[setIds[0]].count | number}}</a>
+                      <span data-ng-if="row[setIds[0]].count === 0">0</span>
+                    </td>
+                    <td class="text-right">{{row[setIds[0]].percentage*100 | number:2}}</td>
+                    <td class="text-right">
+                      <a data-ng-if="row[setIds[1]].count > 0" href="/search?filters={{row[setIds[1]].advQuery}}">{{row[setIds[1]].count | number}}</a>
+                      <span data-ng-if="row[setIds[1]].count === 0">0</span>
+                    </td>
+                    <td class="text-right">{{row[setIds[1]].percentage*100 | number:2}}</td>
+                    <td class="text-right" data-ng-if="setIds[2]">
+                      <a data-ng-if="row[setIds[2]].count > 0" href="/search?filters={{row[setIds[2]].advQuery}}">{{row[setIds[2]].count | number}}</a>
+                      <span data-ng-if="row[setIds[2]].count === 0">0</span>
+                    </td>
+                    <td class="text-right" data-ng-if="setIds[2]">{{row[setIds[2]].percentage*100 | number:2}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="clearfix"></div>
+    <div data-ng-class="{wide: setIds.length === 2}"> 
+        <grouped-bar data-items="age.uiGraph" ylabel="% Donors" height="250" format="percentage" data-colours="seriesColours"></grouped-bar>
+    </div>
+    <div class="clearfix"></div>
+
+
+    <table class="hidden" id="phenotype-gender">
+        <tr>
+            <td></td>
+            <td>{{setMap[setIds[0]].name}} ({{setMap[setIds[0]].count}} donors)</td>
+            <td>{{setMap[setIds[0]].name}} ({{setMap[setIds[0]].count}} donors)</td>
+            <td>{{setMap[setIds[1]].name}} ({{setMap[setIds[1]].count}} donors)</td>
+            <td>{{setMap[setIds[1]].name}} ({{setMap[setIds[1]].count}} donors)</td>
+            <td data-ng-if="setIds[2]">{{setMap[setIds[2]].name}} ({{setMap[setIds[2]].count}} donors)</td>
+            <td data-ng-if="setIds[2]">{{setMap[setIds[2]].name}} ({{setMap[setIds[2]].count}} donors)</td>
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td># Donors</td>
+            <td>%</td>
+            <td># Donors</td>
+            <td>%</td>
+            <td data-ng-if="setIds[2]"># Donors</td>
+            <td data-ng-if="setIds[2]">%</td>
+        </tr>
+        <tr data-ng-repeat="row in gender.uiTable">
+            <td>{{row.term | readable}}</td>
+            <td>{{row[setIds[0]].count}}</td>
+            <td>{{row[setIds[0]].percentage*100 | number:2}}</td>
+            <td>{{row[setIds[1]].count}}</td>
+            <td>{{row[setIds[1]].percentage*100 | number:2}}</td>
+            <td data-ng-if="setIds[2]">{{row[setIds[2]].count}}</td>
+            <td data-ng-if="setIds[2]">{{row[setIds[2]].percentage*100 | number:2}}</td>
+        </tr>
+    </table>
+
+    <table class="hidden" id="phenotype-vital-status">
+        <tr>
+            <td></td>
+            <td>{{setMap[setIds[0]].name}} ({{setMap[setIds[0]].count}} donors)</td>
+            <td>{{setMap[setIds[0]].name}} ({{setMap[setIds[0]].count}} donors)</td>
+            <td>{{setMap[setIds[1]].name}} ({{setMap[setIds[1]].count}} donors)</td>
+            <td>{{setMap[setIds[1]].name}} ({{setMap[setIds[1]].count}} donors)</td>
+            <td data-ng-if="setIds[2]">{{setMap[setIds[2]].name}} ({{setMap[setIds[2]].count}} donors)</td>
+            <td data-ng-if="setIds[2]">{{setMap[setIds[2]].name}} ({{setMap[setIds[2]].count}} donors)</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td># Donors</td>
+            <td>%</td>
+            <td># Donors</td>
+            <td>%</td>
+            <td data-ng-if="setIds[2]"># Donors</td>
+            <td data-ng-if="setIds[2]">%</td>
+        </tr>
+        <tr data-ng-repeat="row in vital.uiTable">
+            <td>{{row.term | readable}}</td>
+            <td>{{row[setIds[0]].count}}</td>
+            <td>{{row[setIds[0]].percentage*100 | number:2}}</td>
+            <td>{{row[setIds[1]].count}}</td>
+            <td>{{row[setIds[1]].percentage*100 | number:2}}</td>
+            <td data-ng-if="setIds[2]">{{row[setIds[2]].count}}</td>
+            <td data-ng-if="setIds[2]">{{row[setIds[2]].percentage*100 | number:2}}</td>
+        </tr>
+    </table>
+
+    <table class="hidden" id="phenotype-age">
+        <tr>
+            <td></td>
+            <td>{{setMap[setIds[0]].name}} ({{setMap[setIds[0]].count}} donors, {{meanAge[0]|number:2}} average age)</td>
+            <td>{{setMap[setIds[0]].name}} ({{setMap[setIds[0]].count}} donors, {{meanAge[0]|number:2}} average age)</td>
+            <td>{{setMap[setIds[1]].name}} ({{setMap[setIds[1]].count}} donors, {{meanAge[1]|number:2}} average age)</td>
+            <td>{{setMap[setIds[1]].name}} ({{setMap[setIds[1]].count}} donors, {{meanAge[1]|number:2}} average age)</td>
+            <td data-ng-if="setIds[2]">{{setMap[setIds[2]].name}} ({{setMap[setIds[2]].count}} donors, {{meanAge[2]|number:2}} average age)</td>
+            <td data-ng-if="setIds[2]">{{setMap[setIds[2]].name}} ({{setMap[setIds[2]].count}} donors, {{meanAge[2]|number:2}} average age)</td>
+        </tr>
+        <tr>
+            <td>Age group</td>
+            <td># Donors</td>
+            <td>%</td>
+            <td># Donors</td>
+            <td>%</td>
+            <td data-ng-if="setIds[2]"># Donors</td>
+            <td data-ng-if="setIds[2]">%</td>
+        </tr>
+        <tr data-ng-repeat="row in age.uiTable">
+            <td>{{row.term | readable}}</td>
+            <td>{{row[setIds[0]].count}}</td>
+            <td>{{row[setIds[0]].percentage*100 | number:2}}</td>
+            <td>{{row[setIds[1]].count}}</td>
+            <td>{{row[setIds[1]].percentage*100 | number:2}}</td>
+            <td data-ng-if="setIds[2]">{{row[setIds[2]].count}}</td>
+            <td data-ng-if="setIds[2]">{{row[setIds[2]].percentage*100 | number:2}}</td>
+        </tr>
+    </table>
+</div>
+
+

@@ -1,0 +1,11 @@
+.sortable {
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .icon-sort {
+    color: hsl(0,0%,80%);
+  }
+
+}

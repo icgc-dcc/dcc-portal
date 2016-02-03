@@ -1,0 +1,60 @@
+$navbarBGColour: #eaeaea;
+$navbarTextColor: #333;
+$navbarLinkColor: #166aa2;
+$navbarButtonSeparatorColour: #ccc;
+
+.login-nav-bar {
+   background: $navbarBGColour;
+   color: $navbarTextColor;
+   text-align: right;
+   padding: 0rem 0rem 0rem 1rem;
+   border-bottom: solid 1px #ddd;
+   transition-property: colour, background;
+   transition: 1s ease-in-out;
+
+   &.default-login {
+      padding: 0.2rem 1rem;
+   }
+
+   .data-available {
+
+      &[class^="icon-"]:hover {
+         color: lighten($green, 10);
+      }
+   }
+
+   .data-missing {
+      &[class^="icon-"]:hover {
+         color: lighten($red, 10);
+      }
+   }
+
+   .toolbar {
+      display: inline-block;
+      margin-left: 0.3rem;
+
+      .tool-item {
+         display: inline-block;
+         border-left: solid 1px $navbarButtonSeparatorColour;
+
+         &.tool-item-single {
+            border: none;
+         }
+
+         padding: 0rem 1rem 0rem 0.5rem;
+
+         &:hover {
+            background-color: rgb(255,255,255); // Old browsers
+         }
+
+         a {
+            padding: 0.3rem;
+
+            &:hover {
+               background: transparent;
+               color: lighten($navbarLinkColor, 10);
+            }
+         }
+      }
+   }
+}

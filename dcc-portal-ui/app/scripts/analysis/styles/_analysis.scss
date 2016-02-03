@@ -1,0 +1,95 @@
+.analysis {
+   display: table;
+   width: 100%;
+   padding-left: 1rem;
+   padding-right: 1rem;
+   
+   h3 {
+      margin-top: 0;
+   }
+
+   .analysis-tiles {
+      display: block;
+      padding-left: 1rem;
+      display: table;
+   }
+
+   .analysis-tile-container {
+      float: left;
+      width: 15rem;
+      height: 14rem;
+      margin: 0.5rem;
+
+      .analysis-tile-extra {
+         font-size: 0.8rem;
+         line-height: 1rem;
+         padding: 0.25rem 0.75rem;
+         color: $grey;
+      }
+
+      .analysis-tile {
+         //float: left;
+         // width: 15rem;
+         height: 12rem;
+         border: 1px solid $grey;
+         background: $greyLighter;
+         border-radius: 0.5rem;
+         padding: 0.5rem;
+         transition: color .5s, background .5s;
+
+         &:hover {
+           cursor: pointer;
+           color: $white;
+           background: $blue;
+           text-decoration: none;
+         }
+
+         &.in-progress {
+           border-style: dashed;
+           transition: none;
+           background: none;
+           color: $grey;
+           display: block;
+
+           &:hover {
+             color: $grey;
+             background: none;
+           }
+         }
+
+         .analysis-tile-detail {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            line-height: 1.25rem;
+         }
+      }
+   }
+
+   .sidepanel {
+      //float: left;
+      //width: 20%;
+      //margin-right: 1rem;
+      //isplay: table-cell;
+      vertical-align: top;
+      margin-right: 1rem;
+      min-width: 17rem;
+      max-width: 19rem;
+      height: 100%;
+      padding: 0rem 0rem 2rem 0rem;
+   }
+
+   .content {
+      //float: left;
+      //clear: right;
+      display: table-cell;
+      //width: 76%;
+      
+      min-height: 20rem; // Prevent complete collapse when switching content
+   }
+
+
+   // Smaller sub heading lines
+   .multi-line-heading {
+      line-height: 1.5rem;
+   }
+}

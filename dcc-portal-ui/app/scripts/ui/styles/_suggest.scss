@@ -1,0 +1,156 @@
+/* Suggest Input */
+.t_suggest {
+  position: relative;
+  width: 80%;
+  margin: auto auto;
+}
+
+.t_suggest__input {
+  font-size: 1.3rem;
+  border: .2rem solid $greyLight;
+  border-radius: 0;
+  margin: 1rem 0rem 0.3rem 0rem;
+  line-height: 2rem;
+  outline: $cyan;
+  padding: {
+    top: 1rem;
+    right: 2rem;
+    bottom: 1rem;
+    left: 0;
+  }
+  text-indent: 3rem;
+  width: 100%;
+
+  @include breakpoint($break-tablet) {
+    border-radius: 3rem;
+  }
+}
+
+.t_suggest__embedded {
+  position: absolute;
+}
+
+.t_suggest__embedded__left {
+  left: 1rem;
+  top: 2.2rem;
+}
+
+.t_suggest__embedded__right {
+  right: 1.5rem;
+  top: 2.2rem;
+}
+
+.t_suggest__embedded__search {
+  color: $greyLight;
+  font-size: 1.5rem;
+}
+
+.t_suggest__embedded__clear {
+  cursor: pointer;
+}
+
+.t_suggest__embedded__clear:hover {
+  color: $orange;
+}
+
+/* Suggest Flyout */
+.t_suggest_flyout {
+  position: absolute;
+  width: 100%;
+  z-index: 1001;
+  box-shadow: 0 1px 2px hsl(0, 0%, 67%);
+  border-radius: 3px;
+  overflow: hidden;
+  left: 0;
+}
+
+.t_suggest_flyout__hits {
+  @include breakpoint($break-laptop) {
+    font-size: 1rem;
+  }
+
+  font-size: .8rem;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.t_suggest_flyout__hits__hit {
+  @include clearfix();
+
+  cursor: pointer;
+  padding: .25rem;
+
+  &:nth-child(even) {
+    background: $greyLightest;
+  }
+
+  &:nth-child(odd) {
+    background: $greyLightestEver;
+  }
+
+  &.active, &:hover {
+    a {
+      color: lighten($cyan, 40);
+    }
+    a:hover {
+      background: none;
+    }
+    background: $cyan;
+    color: $white;
+  }
+
+  // Detail line item
+  .t_suggest_detail {
+    color: #BBB
+  }
+
+  .t_suggest_cancel {
+    background: none;
+    border-radius: 0.25rem;
+    &:hover {
+      background: $red;
+    }
+  }
+
+  &.selected {
+    background: $blue;
+    color: $white;
+    cursor: default;
+
+    .t_suggest_detail {
+      color: $white
+    }
+  }
+}
+
+.t_suggest_flyout__hits__hit__type {
+  vertical-align: middle;
+  text-align: center;
+  width: 4rem;
+}
+
+.t_suggest_flyout__hits__hit__text {
+  padding: .7rem 1rem;
+}
+
+.t_suggest_flyout__hits__hit__text__details {
+  font: {
+    style: italic;
+    weight: 300;
+    size: .8rem;
+  }
+}
+
+/************************************************
+ * @-moz-document
+ ***********************************************/
+@-moz-document url-prefix() {
+  .t_suggest__embedded__left {
+    top: 2.4rem;
+  }
+
+  .t_suggest__embedded__right {
+    top: 2.4rem;
+  }
+}

@@ -1,0 +1,111 @@
+footer {
+  border-top: 1px solid $greyLighter;
+
+  background: $greyLightestEver;
+  /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(hsl(0, 0%, 98%)), to(hsl(0, 0%, 100%)));
+  background-image: -moz-linear-gradient(center top, #fafafa 0%, #fff 100%);
+  background-image: -o-linear-gradient(#fafafa, #fff);*/
+
+  padding: 0.5rem 3rem;
+  position: relative;
+  z-index: 100;
+  
+  .clear-fix {
+    @include clearfix();
+  }
+  
+  .footer-caption {
+    margin-top: 1rem;
+  }
+
+  a {
+    text-decoration: none;
+    color: $blue;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+ 
+ .footer-grid-adjust {
+    width: 14.89%;
+    margin-right: 1.5rem;
+ }
+ 
+  ul, .logo {
+    @include float-span(6);
+    @include breakpoint($break-tablet) {
+      @include float-span(1.80);
+      //@include float-span(2); 
+    }
+  }
+
+  .logo {
+    img {
+      margin-top: 1rem;
+      width: 116px;
+      height: 84px;
+
+      -webkit-animation-name: decolourize;
+      animation-name: decolourize;
+      -webkit-animation-duration: 2.5s;
+      animation-duration: 2.5s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+
+      &:hover {
+        -webkit-animation-name: colourize;
+        animation-name: colourize;
+        -webkit-animation-duration: 1.5s;
+        animation-duration: 1.5s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+      }
+
+      @include breakpoint($break-tablet) {
+        width: 155px;
+        height: 112px;
+      }
+    }
+  }
+
+  ul {
+    font-size: .8rem;
+    line-height: 1.7;
+    list-style: none;
+    margin-left: 0;
+    margin-right: 0.4rem;
+    padding-left: 0;
+
+    .heading {
+      color: $greyDarker;
+      text-transform: uppercase;
+      font: {
+        size: 1rem;
+      }
+      line-height: 3;
+    }
+  }
+
+  .dcc-col {
+    margin-right: 0;
+    @include breakpoint($break-tablet) {
+      margin-right: gutter-span();
+    }
+  }
+
+  @include grid-span(12, 1);
+}
+@media screen and (max-width: 721px) {
+  footer {
+     .logo {
+      display: block;
+      width: 100%;
+      text-align: right;
+
+       img {
+         -webkit-filter: grayscale(100%);
+         filter: grayscale(100%);
+       }
+    }
+  }
+}

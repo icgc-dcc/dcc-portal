@@ -1,0 +1,131 @@
+<div data-ng-if="! AdvancedCtrl.Gene.genes || ! AdvancedCtrl.Gene.hitsLoaded || AdvancedCtrl.Gene.isLoading" class="loading loading-text"><h3><i class="icon-spinner icon-spin"></i>
+    Loading Genes...
+</h3></div>
+<div data-ng-if="AdvancedCtrl.Gene.genes.hits.length == 0 && AdvancedCtrl.Gene.hitsLoaded && ! AdvancedCtrl.Gene.isLoading" class="empty loading-text"><h3>No Genes Found.</h3></div>
+<section data-ng-show="AdvancedCtrl.Gene.genes.hits.length && AdvancedCtrl.Gene.hitsLoaded && ! AdvancedCtrl.Gene.isLoading">
+
+    <h3>Genes
+        <span class="action-toolbar pull-right">
+            <span class="action-item">
+                <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('gene', AdvancedCtrl.Gene.genes.pagination.total)">Save Gene Set</a>
+            </span>
+            <span class="action-item">
+               <i class="icon-beaker"></i><a href="" data-ng-click="AdvancedCtrl.enrichmentAnalysis(AdvancedCtrl.Gene.genes.pagination.total)">Enrichment Analysis</a>
+            </span>
+            <span class="action-item">
+               <i class="icon-chart"></i><a href="/browser/g?filters={{AdvancedCtrl.Location.filters()}}">Genome Viewer</a>
+            </span>
+        </span>
+    </h3>
+
+    <div class="t_table_top">
+        <span data-table-counts data-label="genes" data-page="AdvancedCtrl.Gene.genes.pagination"></span>
+        <span data-toolbar data-dl="genes"></span>
+    </div>
+
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+        <tr>
+            <th rowspan="2" data-sortable data-type="genes" data-field="symbol">Symbol
+            </th>
+            <th rowspan="2" data-sortable data-type="genes" data-field="name">Name</th>
+            <th rowspan="2" data-sortable data-type="genes" data-field="start"><abbr
+                    data-tooltip="Gene location on the genome, chr:start-end">Location</abbr></th>
+            <th rowspan="2" data-sortable data-type="genes" data-field="type">Type</th>
+            <th colspan="2" class="text-center"># Donors affected</th>
+            <th rowspan="2" class="text-center">
+                <abbr data-tooltip="Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria"
+                      data-tooltip-placement="left"># Mutations</abbr>
+            </th>
+        </tr>
+        <tr>
+            <th data-sortable data-type="genes" data-field="affectedDonorCountFiltered" data-active="true"
+                data-reversed="true" class="text-center">
+                <abbr data-tooltip="Number of Donors where Gene contains SSM<br>Filtered by Current Search Criteria / unfiltered # donors the gene is mutated.">
+                Total</abbr>
+            </th>
+            <th class="text-center">
+                <abbr data-tooltip="# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.">
+                    Across all Projects</abbr>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="gene in AdvancedCtrl.Gene.genes.hits track by gene.id">
+            <td><a href="/genes/{{ gene.id }}">{{ gene.symbol }}</a></td>
+            <td>{{ gene.name }}</td>
+            <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
+            <td>{{ gene.type | trans }}</td>
+            <td class="text-right" style="display:block; position: relative; white-space: nowrap">
+                        <span style="position: relative" data-ng-if="gene.affectedDonorCountFiltered > 0">
+                        <a href='/search?filters={{gene.embedQuery}}'>
+                            {{gene.affectedDonorCountFiltered | number}}
+                        </a>
+                        /
+                        <a href='/search?filters={"gene":{"id":{"is":["{{gene.id}}"]}},"donor":{"availableDataTypes":{"is":["ssm"]}}}'>
+                            {{gene.affectedDonorCountTotal | number}}
+                        </a>
+                        <em>({{gene.affectedDonorCountFiltered/gene.affectedDonorCountTotal *
+                            100 | number:2}}%)</em>
+                        </span>
+                        <span style="position: relative" data-ng-if="gene.affectedDonorCountFiltered === 0">0</span>
+
+            </td>
+            <td class="text-right" style="white-space: nowrap">
+                <ul data-hide-sum-list="{{gene.uiDonors}}"
+                    data-link='/search?filters={{gene.uiDonorsLink}}'>
+                    <li data-ng-repeat="p in list | orderBy:'percentage':true"
+                        style="position: relative">
+                            <span style="position: relative">
+                                <a data-tooltip-placement="left"
+                                   data-tooltip="{{ p.projectName }}"
+                                   href="/projects/{{p.term}}">{{p.term}}</a>:
+                            <a href='/search?filters={{AdvancedCtrl.Gene.projectGeneQuery(p.term, gene.id)}}'>
+                                {{p.count | number}}
+                            </a>/
+                            <a href='/search?filters={"donor":{"projectId":{"is":["{{p.term}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
+                                {{p.countTotal | number}}
+                            </a>
+                            <em>({{p.percentage * 100 | number:2}}%)</em>
+                            </span>
+                    </li>
+                </ul>
+            </td>
+            <td class="text-right">
+                <span data-ng-if="!AdvancedCtrl.Gene.mutationCounts"><i class="icon-spinner icon-spin"></i></span>
+                <span data-ng-if="AdvancedCtrl.Gene.mutationCounts[gene.id] === 0">--</span>
+                <a data-ng-if="AdvancedCtrl.Gene.mutationCounts[gene.id] > 0"
+                   href='/search/m?filters={{gene.embedQuery}}'>
+                    {{AdvancedCtrl.Gene.mutationCounts[gene.id] | number}}
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <pagination-controls type="genes" data="AdvancedCtrl.Gene.genes"></pagination-controls>
+
+    <table class="hidden" id="genes" data-ng-hide="AdvancedCtrl.Page.isExporting()">
+        <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Type</th>
+            <th>Affected Donors</th>
+            <th>Projects</th>
+            <th>Mutations</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="gene in AdvancedCtrl.Gene.genes.hits track by gene.id">
+            <td>{{gene.symbol}}</td>
+            <td>{{gene.name}}</td>
+            <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
+            <td>{{gene.type | trans}}</td>
+            <td>{{gene.affectedDonorCountFiltered }}/{{gene.affectedDonorCountTotal}}</td>
+            <td>{{gene.uiDonorsExportString}}</td>
+            <td>{{AdvancedCtrl.Gene.mutationCounts[gene.id]}}</td>
+        </tr>
+        </tbody>
+    </table>
+</section>

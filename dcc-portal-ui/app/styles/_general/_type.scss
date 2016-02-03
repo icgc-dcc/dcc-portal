@@ -1,0 +1,77 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// ---------------------------------------------------------------------------
+// Basic Typography
+//
+
+// -------------------------------------------------------------------------
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-family: $sans-stack;
+  font-weight: 300;
+  //text-transform: uppercase;
+  margin-top: 0;
+}
+
+h1 {
+
+  @extend .caps;
+  ~ h1 {
+
+  }
+  font-size: 2.5rem;
+  line-height: 3rem;
+}
+
+h2 {
+  font-size: 2.4em;
+  line-height: 1.25em;
+  margin-top: .5em;
+  margin-bottom: .5em;
+
+  @include breakpoint($break-tablet) {
+
+    ~ h2 {
+
+    }
+  }
+}
+
+h3 {
+  font-size: 2.0em;
+  line-height: 1.25em;
+  margin-top: .5em;
+  margin-bottom: .5em;
+  + h4 {
+
+  }
+  @include breakpoint($break-tablet) {
+
+  }
+}
+
+h4 {
+  @extend .caps;
+
+}
+
+h5 {
+  font-style: italic;
+}
+
+

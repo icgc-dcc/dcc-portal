@@ -1,0 +1,25 @@
+.open-id-providers {
+  margin: 1rem 0;
+}
+
+.open-id-provider {
+  display: inline;
+  margin-right: 1rem;
+
+  border-bottom: .25rem dashed $greyLightestEver;
+  transition: border .5s;
+
+  .logo img {
+     max-width: 8rem;
+     max-height: 4rem;
+     cursor: pointer;
+   }
+
+  &:hover {
+      border-bottom-color: $orangeLight;
+  }
+  &.active {
+    border-bottom-style: solid;
+    border-bottom-color: $orangeLight;
+  }
+}

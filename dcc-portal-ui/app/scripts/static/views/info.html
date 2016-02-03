@@ -1,0 +1,86 @@
+<div class="h1-wrap">
+    <h1 data-ui-scrollfix=79><span class="t_badge t_badge_icon"><span class="icon-info"></span></span>Information</h1>
+</div>
+<div data-scroll-spy="">
+<aside class="t_sidenav" data-ui-scrollfix=79>
+    <section>
+        <ul class="t_subnav__items">
+            <li data-spy="raw" class="t_subnav__items__item current"><a data-scrollto href="#raw">Access Raw Data</a></li>
+            <li data-spy="methods" class="t_subnav__items__item"><a data-scrollto href="#methods">Methods</a></li>
+            <li data-spy="tools" class="t_subnav__items__item"><a data-scrollto href="#tools">Submitter Tools</a></li>
+        </ul>
+    </section>
+</aside>
+<article>
+    <section id="raw">
+        <h3>Access Raw Data<a class="pilcrow" href="/info/raw"><i class="icon-pilcrow"></i></a></h3>
+        <h4><strong>Public Repositories Hosting ICGC Data</strong></h4>
+        <p>ICGC member projects are required by ICGC policies to submit their raw sequencing reads,
+        and other primary data, to controlled access public repositories. The official ICGC DCC-supported
+        repository for <a href="http://www.ebi.ac.uk/ega/dacs/EGAC00001000010">ICGC sequencing reads</a>
+        is the European Bioinformatics Institute's (EBI) <a href="http://www.ebi.ac.uk/ega">European Genome-phenome Archive (EGA)</a>.
+        </p>
+
+        <p>For the ICGC member projects which are part of the U.S <a href="http://cancergenome.nih.gov/">TCGA</a> project
+        raw data will be hosted either at the <a href="http://tcga-data.nci.nih.gov/">TCGA DCC</a> or the <a href="https://cghub.ucsc.edu/ ">Cancer Genomics Hub (CGHub)</a>.
+        </p>
+
+        <h4><strong>Applying for Access to Controlled-Access Datasets</strong></h4>
+        <p>Access to the ICGC sequencing datasets held at the EGA is granted by applying through
+        <a href="http://icgc.org/daco ">ICGC's Data Access and Compliance Office (DACO)</a>.</p>
+
+        <h4><strong>Overview of Available Raw Data</strong></h4>
+        <p>All controlled-access ICGC datasets held at EGA are associated with the <a href="http://icgc.org/daco">ICGC DACO</a>'s
+        EGA DAC accession #: <a href="https://www.ebi.ac.uk/ega/dacs/EGAC00001000010">EGAC00001000010</a>.</p>
+    </section>
+    <section id="methods">
+        <h3>Methods<a class="pilcrow" href="/info/methods"><i class="icon-pilcrow"></i></a></h3>
+
+        <h4><strong>Gene model</strong></h4>
+        <p>The ICGC Data Portal uses gene models produced by Ensembl (<a href="http://www.ensembl.org">http://www.ensembl.org</a>).</p>
+        <p>The canonical gene data (release 69) is available from Ensembl FTP site at
+            <a href="ftp://ftp.ensembl.org/pub/release-69/mysql/homo_sapiens_core_69_37">
+                ftp://ftp.ensembl.org/pub/release-69/mysql/homo_sapiens_core_69_37</a>.
+            We use a further-processed gene model file provided by <a href="http://snpeff.sourceforge.net/">snpEff</a>
+            which is available for download from <a href="http://sourceforge.net/projects/snpeff/files/databases/v3_3/snpEff_v3_3_GRCh37.69.zip/download">
+                http://sourceforge.net/projects/snpeff/files/databases/v3_3/snpEff_v3_3_GRCh37.69.zip/download</a>.
+            This file is then transformed
+            into a document-oriented data store for integration with other data types, such as, somatic mutations.</p>
+
+        <h4><strong>Gene consequence annotation</strong></h4>
+        <p>As part of the effort to enable cross cancer projects functional analysis, we perform standardized gene consequences
+        annotation, using Sequence Ontology's controlled vocabulary regarding mutation-induced changes (<a href="www.sequenceontology.org">www.sequenceontology.org</a>).
+        This type of annotation provides a list of predicted gene effects, such as a non-conservative amino acid substitution, but does not
+        attempt to prioritize the changes by their functional impact. Simple somatic mutation data submitted by member projects are
+        reannotated using the variant annotation tool SnpEff (v3.3c, <a href="http://snpeff.sourceforge.net/">http://snpeff.sourceforge.net/</a>) recommended by the ICGC Mutation
+        Consequences and Pathways (MUCOPA) Working Subgroup (Nature Methods, 2013, PMID:<a href="http://www.ncbi.nlm.nih.gov/pubmed/?term=23900255 ">23900255</a>). </p>
+
+        <h4><strong>Simple somatic mutation frequencies</strong></h4>
+        <p>In order to assess how often a particular simple somatic mutation (SSM) occurs in cancer patients, we establishes specific criteria to determine whether SSMs reported from different donors are considered to be the same. When all of these fields from two reported SSMs: chromosome, chromosome start, chromosome end, mutation type, DNA change, genome assembly version are identical, they are merged into one mutation entity. With this, we build a non-redundant collection of all simple somatic mutations. Each mutation entry in the collection is assigned a stable identifier for persisted referencing portal wide and across releases. Information for linking these non-redundant SSMs to the reported ones is also kept, enabling mutation counts across donors.
+        </p>
+    </section>
+    <section id="tools">
+        <h3>Submitter Tools<a class="pilcrow" href="/info/tools"><i class="icon-pilcrow"></i></a></h3>
+        <p>This section provides instructions for ICGC projects on releasing data through the ICGC DCC and public repositories</p>
+
+        <h4><strong>Using the ICGC DCC Data Submission System (Beta)</strong></h4>
+        <p>The ICGC DCC now supports data submissions through a web-based submission portal: <a href="https://submissions.dcc.icgc.org" target="_blank"><i class="icon-external-link"></i>https://submissions.dcc.icgc.org</a>.</p>
+
+        <p>The submission system is currently accepting files using ICGC DCC data specification, which is available <a href="http://legacy-portal.dcc.icgc.org/pages/docs/dictionaries/latest" target="_blank"><i class="icon-external-link"></i>here</a> as an HTML document.</p>
+
+        <p>During the beta period, please refer to the <a href="http://legacy-portal.dcc.icgc.org/pages/docs/icgc_dcc_data_submission_bulletin.pdf" target="_blank"><i class="icon-file"></i>ICGC Data Submission Bulletin</a>, and
+        <a href="http://legacy-portal.dcc.icgc.org/pages/docs/dcc_submission_system_sop-beta.pdf" target="_blank"><i class="icon-file"></i>submission system software documentation</a> for instructions
+        and important notes to assist you in using this system to release your project's data through the DCC data portal.</p>
+
+        <p>Please contact <a href="mailto:dcc-support@icgc.org"><i class="icon-mail"></i>ICGC Data Coordination Centre</a> if you have any questions or comments about the data submission process.</p>
+
+        <h4><strong>Virtual machine for local data validation</strong></h4>
+        <p>The ICGC DCC offers a standalone virtual machine that allows you to locally validate ICGC submissions before uploading complete datasets
+        to the online web-based data submission system. Please note that, as opposed to the DCC online submission system which is running on a computer
+        cluster, this VM can be deployed only on a single server. It is not therefore suitable for validating entire datasets but rather meant for
+        testing small subsets of data before submission to DCC. To use this virtual machine, please download the VirtualBox package from
+        <a href="https://daw9opvs2y3v5.cloudfront.net/public/icgc-dcc-validator-1.10.ova" target="_blank"><i class="icon-download"></i>here</a>. Instructions on how to use the VM can
+        be found <a href="http://legacy-portal.dcc.icgc.org/pages/docs/VirtualBoxforDCCv1.10.pdf" target="_blank"><i class="icon-file"></i>here</a>.</p>
+    </section>
+</article>
+</div>

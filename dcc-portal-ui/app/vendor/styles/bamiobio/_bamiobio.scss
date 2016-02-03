@@ -1,0 +1,16 @@
+@import "site.scss";
+@import "flat-ui.scss";
+#bam-statistics {
+  line-height: normal;
+  #bam-section {
+    border-bottom: none;
+  }
+  .axis .tick text {
+    font-weight: lighter;
+    font-size: 0.6rem;
+  }
+  #read-coverage {
+    font-size: 1.3rem;
+    font-weight: lighter;
+  }
+}

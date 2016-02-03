@@ -1,0 +1,111 @@
+<h3 data-ng-if="AdvancedCtrl.Mutation.occurrences.hits.length == 0" class="empty loading-text"> No Mutation Occurrences
+    Found.</h3>
+<div data-ng-if="AdvancedCtrl.Mutation.occurrences.hits.length > 0">
+    <h3>Mutation Occurrences
+        <span class="action-toolbar pull-right">
+            <i class="icon-chart"></i><a href="/browser/m?filters={{AdvancedCtrl.Location.filters()}}">Genome Viewer</a>
+        </span>
+    </h3>
+
+    <div class="t_table_top">
+        <span data-table-counts data-label="mutation occurrences"
+              data-page="AdvancedCtrl.Mutation.occurrences.pagination"></span>
+        <span data-toolbar data-dl="occurrences"></span>
+    </div>
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+        <tr>
+            <th rowspan="2" data-sortable data-type="occurrences" data-field="mutationId">
+                ID
+            </th>
+            <th rowspan="2" data-sortable data-type="occurrences" data-field="donorId" data-active="true" data-reversed="true">Donor
+                ID
+            </th>
+            <th rowspan="2" data-sortable data-type="occurrences" data-field="projectId">Project</th>
+            <th rowspan="2">DNA Change</th>
+            <th colspan="5" class="text-center">Experimental Observations</th>
+        </tr>
+        <tr>
+            <th>Sample ID</th>
+            <th>Matched Sample ID</th>
+            <th>Platform</th>
+            <th>Verification Status</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="occurrence in AdvancedCtrl.Mutation.occurrences.hits">
+            <td>
+                <a href="/mutations/{{ occurrence.mutationId }}">{{ occurrence.mutationId }}</a>
+            </td>
+            <td>
+                <a href="/donors/{{ occurrence.donorId }}">{{ occurrence.donorId }}</a>
+            </td>
+            <td>
+                <a data-tooltip="{{ occurrence.projectName }}"
+                   href="/projects/{{ occurrence.projectId }}">{{ occurrence.projectId }}</a>
+            </td>
+            <td class="t_cell_line_break">
+                chr{{occurrence.chromosome}}:g.{{occurrence.start}}{{occurrence.mutation}}
+            </td>
+            <td>
+                <ul>
+                    <li data-ng-repeat="observation in occurrence.observations">{{observation.icgcSampleId}}</li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li data-ng-repeat="observation in occurrence.observations">{{observation.matchedICGCSampleId || "--"}}</li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li data-ng-repeat="observation in occurrence.observations">{{observation.platform || "--"}}</li>
+                </ul>
+            </td>
+            <td>
+               <ul>
+                   <li data-ng-repeat="observation in occurrence.observations">{{observation.verificationStatus | readable }}</li>
+               </ul>
+            </td>
+            <td>
+               <ul>
+                   <li data-ng-repeat="observation in occurrence.observations">
+                       <a data-ng-click="AdvancedCtrl.viewObservationDetail(observation)" href="">Details</a>
+                   </li>
+               </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <pagination-controls data-type="occurrences" data="AdvancedCtrl.Mutation.occurrences"></pagination-controls>
+
+    <table id="occurrences" class="hidden" data-ng-if="AdvancedCtrl.Page.isExporting()">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Donor ID</th>
+            <th>Project</th>
+            <th>DNA CHange</th>
+            <th>Sample ID</th>
+            <th>Matched Sample ID</th>
+            <th>Platform</th>
+            <th>Verification Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="occurrence in AdvancedCtrl.Mutation.occurrences.hits">
+            <td>{{occurrence.mutationId}}</td>
+            <td>{{occurrence.donorId}}</td>
+            <td>{{occurrence.projectId}}</td>
+            <td>chr{{occurrence.chromosome}}:g.{{occurrence.start}}{{occurrence.mutation}}</td>
+            <td>{{ (occurrence.observations | pluck:'icgcSampleId').join(',') }}</td>
+            <td>{{ (occurrence.observations | pluck:'matchedICGCSampleId').join(',') }}</td>
+            <td>{{ (occurrence.observations | pluck:'platform').join(',') }}</td>
+            <td>{{ (occurrence.observations | pluck:'verificationStatus').join(',') }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

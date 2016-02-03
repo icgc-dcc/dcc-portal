@@ -1,0 +1,93 @@
+<div class="h1-wrap">
+    <h1 data-ui-scrollfix=79>
+        <span class="t_badge t_badge_icon t_badge__download">
+          <span class="icon-database" />
+        </span>
+        {{:: ICGCRepoController.dataReleasesTitle }}
+    </h1>
+</div>
+
+<div>
+<section style="padding-top:0">
+    <div data-ng-repeat="file in ICGCRepoController.textFiles | filter:{name:'notice.txt'}" class="alert alert-error">
+       <div btf-markdown="file.textContent" class="release_notice"></div>
+    </div>
+
+    <section class="alert alert-warning" data-ng-if="ICGCRepoController.downloadEnabled === false">
+    {{:: ICGCRepoController.dataReleasesTitle }} section is currently disabled due to maintenance.<br>
+    Please contact <a href="mailto:dcc-support@icgc.org">support</a> if you require assistance.
+    </section>
+
+    <div class="wide" data-ng-if="ICGCRepoController.downloadEnabled === true">
+        <span data-ng-init="predicate='name'"></span>
+        <span data-ng-init="reverse=false"></span>
+
+        <section class="loading" data-ng-if="! ICGCRepoController.files">
+            <h3><i class="icon-spin icon-spinner"></i>Loading...</h3>
+        </section>
+
+        <div data-ng-if="ICGCRepoController.files" ng-init="releaseUrl = ICGCRepoController.dataReleasesUrl;">
+            <ul class="breadcrumb" style="background:#fff;font-size:1.25rem; margin-bottom:0">
+                <li><a href="{{:: releaseUrl }}"><i class="icon-database"></i>DCC</a></li>
+                <li data-ng-repeat="p in ICGCRepoController.slugs">
+                    <a data-ng-if="!$last"
+                       data-ng-style="deprecatedReleases.indexOf(p.name) >= 0?{'text-decoration':'line-through'}:{}"
+                       href="{{:: releaseUrl }}/{{ p.url }}">{{ p.name }}</a>
+                    <span data-ng-if="$last"
+                          data-ng-style="deprecatedReleases.indexOf(p.name) >= 0?{'text-decoration':'line-through'}:{}">{{ p.name }}</span>
+                </li>
+            </ul>
+
+            <table class="table" style="font-size: 1.1rem">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-right">File Size</th>
+                    <th class="text-right">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="file in ICGCRepoController.files">
+                    <td data-ng-if="file.type=='f'">
+                        <i class="icon-file"></i>
+                        <a target="_self" href="{{ICGCRepoController.API.BASE_URL}}/download?fn={{file.name}}">{{ file.baseName }}</a>
+                    </td>
+                    <td data-ng-if="file.type=='d'"
+                        data-ng-style="deprecatedReleases.indexOf(file.baseName) >= 0?{'text-decoration':'line-through'}:{}">
+                        <i class="icon-folder-open"></i>
+                        <a data-ng-if="file.translation" href="{{:: releaseUrl }}{{ file.name }}">[{{ file.baseName }}] {{ file.translation }}</a>
+                        <a data-ng-if="!file.translation" href="{{:: releaseUrl }}{{ file.name }}">{{ file.baseName }}</a>
+                    </td>
+                    <td data-ng-if="file.type=='f'" class="text-right">{{ file.size | bytes }}</td>
+                    <td data-ng-if="file.type=='d'" class="text-right">--</td>
+                    <td class="text-right">{{ file.date | date }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+           <br>
+           <div data-ng-repeat="file in ICGCRepoController.textFiles | filter:{name : '!notice.txt'}">
+               <div class="well well-small">
+                   <div><a target="_self" href="{{ICGCRepoController.API.BASE_URL}}/download?fn={{file.name}}"><i class="icon-file"></i>{{file.baseName}}</a></div>
+                   <hr>
+                   <div class="markdown_container">
+                       <div btf-markdown="file.textContent"></div>
+                   </div>
+               </div>
+           </div>
+        </div>
+    </div>
+    <div class="narrow omega" data-ng-if="ICGCRepoController.downloadEnabled">
+        <br>
+        <p>
+            <span>
+                <a href="http://docs.icgc.org/portal/repositories/#having-trouble-downloading-a-file-from-dcc-repository" target="_blank">
+                    <i class="icon-external-link"></i> Having trouble downloading?
+                </a>
+            </span>
+        <p/>
+    </div>
+</section>
+</div>

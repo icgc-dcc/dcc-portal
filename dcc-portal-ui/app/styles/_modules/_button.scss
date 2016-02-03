@@ -1,0 +1,88 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+.t_button, a.t_button {
+  //color: $greyDarker;
+  //background: $greyLighter;
+  color: $greyLightestEver;
+  background: $orangeLight;
+  padding: .25rem .5rem;
+
+  outline: 0;
+  outline: thin dotted  \9; /* IE6-9 */
+
+  border-radius: .25rem;
+  border: 1px solid $orange;
+
+  transition: color .5s, background .5s;
+
+  &:hover, &.t_button__active {
+    cursor: pointer;
+    color: $white;
+    background: $orange;
+    text-decoration: none;
+  }
+
+  &:focus {
+  }
+
+  &.no-animate {
+    transition: none;
+  }
+
+  // For destructive actions
+  &.t_button__destructive {
+    background: $red;
+
+    &:hover {
+      background: $redDarker;
+    }
+  }
+
+}
+
+.t_button_large {
+  font-size: 1.1rem;
+  padding: .5rem 1rem;
+}
+
+.t_button[disabled] {
+  color: $grey;
+  background: $greyLightest;
+  border: 1px solid $grey;
+
+  &:hover {
+    cursor: not-allowed;
+    color: $grey;
+    background: $greyLightest;
+
+  }
+ 
+}
+ 
+.t_button_info {
+  background: lighten($brand-light, 10%);
+  border-color: lighten($brand-light, 10%);
+  
+    &:hover {
+    background: $brand;
+  }
+} 
+
+  
+  
+

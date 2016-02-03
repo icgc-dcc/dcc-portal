@@ -1,0 +1,81 @@
+<h1 data-ui-scrollfix=79><span class="t_badge t_badge_icon t_badge__advanced"><i class="icon-search"></i></span>Advanced Search</h1>
+<aside class="t_sidebar">
+    <div class="t_tabs">
+        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="AdvancedCtrl.state.setFacetTab('donor')"
+             data-ng-class="{active: AdvancedCtrl.state.isFacetTab('donor')}">
+            <span data-ng-if="donors.state == 'syncing'"><i class="icon-spinner icon-spin"></i></span>
+            <span data-ng-if="donors.state != 'syncing'">Donors</span>
+        </div>
+        <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="AdvancedCtrl.state.setFacetTab('gene')"
+             data-ng-class="{active: AdvancedCtrl.state.isFacetTab('gene')}">
+            <span data-ng-if="genes.state == 'syncing'"><i class="icon-spinner icon-spin"></i></span>
+            <span data-ng-if="genes.state != 'syncing'">Genes</span>
+        </div>
+        <div class="t_tabs__tab t_tabs__tab__mutation" data-ng-click="AdvancedCtrl.state.setFacetTab('mutation')"
+             data-ng-class="{active: AdvancedCtrl.state.isFacetTab('mutation')}">
+            <span data-ng-if="mutations.state == 'syncing'"><i class="icon-spinner icon-spin"></i></span>
+            <span data-ng-if="mutations.state != 'syncing'">Mutations</span>
+        </div>
+    </div>
+    <div style="position: relative; margin-right: -2rem">
+        <div data-ng-if="AdvancedCtrl.loadingFacet" style="text-align:center; vertical-align: middle; position: absolute; height:100%; width:100%; z-index: 1; top: 0px; left: 0px; opacity: 0.8; background: #fff;">
+            <div style="margin-top: 1rem;"><i class="icon-spinner icon-spin"></i></div>
+        </div>
+        <div data-ng-if="loading" class="loadingOverlay"></div>
+        <div class='t_tab_pane' data-ng-class="{active: AdvancedCtrl.state.isFacetTab('donor')}">
+            <div data-ng-if="AdvancedCtrl.state.hasVisitedFacet('donor')"
+                 data-ng-include="'scripts/advanced/views/advanced.facets.donors.html'"></div>
+        </div>
+        <div class='t_tab_pane' data-ng-class="{active: AdvancedCtrl.state.isFacetTab('gene')}">
+            <div data-ng-if="AdvancedCtrl.state.hasVisitedFacet('gene')"
+                 data-ng-include="'scripts/advanced/views/advanced.facets.genes.html'"></div>
+        </div>
+        <div class='t_tab_pane' data-ng-class="{active: AdvancedCtrl.state.isFacetTab('mutation')}">
+            <div data-ng-if="AdvancedCtrl.state.hasVisitedFacet('mutation')"
+                 data-ng-include="'scripts/advanced/views/advanced.facets.mutations.html'"></div>
+        </div>
+    </div>
+</aside>
+
+<article style="position: relative;">
+    <div data-ng-if="loading" class="loadingOverlay"></div>
+    <current></current>
+    <div class="t_tabs t_tabs__isolated">
+        <div class="t_tabs__tab t_tabs__tab__donor"
+             data-ng-class="{active: AdvancedCtrl.state.isTab('donor')}" data-nested data-href="search">
+            Donors<br>
+            <small data-ng-hide="AdvancedCtrl.Donor.isLoading" id="adv-donor-count">{{AdvancedCtrl.Donor.donors.pagination.total | number}}
+            </small>
+            <small data-ng-show="AdvancedCtrl.Donor.isLoading"><i class="icon-spinner icon-spin"></i></small>
+        </div>
+        <div class="t_tabs__tab t_tabs__tab__gene"
+             data-ng-class="{active: AdvancedCtrl.state.isTab('gene')}" data-nested data-href="search/g">
+            Genes<br>
+            <small data-ng-hide="AdvancedCtrl.Gene.isLoading" id="adv-gene-count">{{AdvancedCtrl.Gene.genes.pagination.total | number}}
+            </small>
+            <small data-ng-show="AdvancedCtrl.Gene.isLoading"><i class="icon-spinner icon-spin"></i></small>
+        </div>
+        <div class="t_tabs__tab t_tabs__tab__mutation"
+             data-ng-class="{active: AdvancedCtrl.state.isTab('mutation')}" data-nested data-href="search/m">
+            Mutations<br>
+            <small data-ng-hide="AdvancedCtrl.Mutation.isLoading" id="adv-mutation-count">{{AdvancedCtrl.Mutation.mutations.pagination.total | number}}
+            </small>
+            <small data-ng-show="AdvancedCtrl.Mutation.isLoading"><i class="icon-spinner icon-spin"></i></small>
+        </div>
+    </div>
+    <div class='t_tab_pane'
+         data-ng-if="AdvancedCtrl.state.hasVisitedTab('donor')"
+         data-ng-class="{active: AdvancedCtrl.state.isTab('donor')}"
+         data-ng-include="'scripts/advanced/views/advanced.donors.html'"></div>
+    <div class='t_tab_pane'
+         data-ng-if="AdvancedCtrl.state.hasVisitedTab('gene')"
+         data-ng-class="{active: AdvancedCtrl.state.isTab('gene')}">
+        <div data-ng-include="'scripts/advanced/views/advanced.genes.html'"></div>
+    </div>
+    <div class='t_tab_pane'
+         data-ng-if="AdvancedCtrl.state.hasVisitedTab('mutation')"
+         data-ng-class="{active: AdvancedCtrl.state.isTab('mutation')}">
+        <div data-ng-include="'scripts/advanced/views/advanced.mutations.html'"></div>
+    </div>
+
+</article>

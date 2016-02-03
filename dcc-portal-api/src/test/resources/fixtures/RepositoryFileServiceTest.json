@@ -1,0 +1,146 @@
+{  
+  "index":{  
+    "_index":"test-icgc-repository",
+    "_type":"file-centric",
+    "_id":"FI49283"
+  }
+}
+{
+  "id": "FI49283",
+  "object_id": "9154037d-ba72-5977-9f50-b575eaee5979",
+  "study": [
+    "PCAWG"
+  ],
+  "access": "controlled",
+  "data_bundle": {
+    "data_bundle_id": "c08b8fec-78a3-4f95-b472-953a5d0b46ef"
+  },
+  "analysis_method": {
+    "analysis_type": "Reference alignment",
+    "software": "BWA MEM"
+  },
+  "data_categorization": {
+    "data_type": "Aligned Reads",
+    "experimental_strategy": "WGS"
+  },
+  "reference_genome": {
+    "genome_build": "GRCh37",
+    "reference_name": "hs37d5",
+    "download_url": "ftp://ftp.sanger.ac.uk/pub/project/PanCancer/genome.fa.gz"
+  },
+  "file_copies": [
+    {
+      "file_name": "ffe2ed5dedcf27e52280c16db5eb2d04.bam",
+      "file_format": "BAM",
+      "file_size": 94359085765,
+      "file_md5sum": "ffe2ed5dedcf27e52280c16db5eb2d04",
+      "last_modified": 1420480562,
+      "index_file": {
+        "id": "FI210995",
+        "object_id": "62de8725-94ee-5f4f-9778-d8ce288a2f1e",
+        "file_name": "ffe2ed5dedcf27e52280c16db5eb2d04.bam.bai",
+        "file_format": "BAI",
+        "file_size": 11381552,
+        "file_md5sum": "d505af2caee36aa99b8e6974692b64cb"
+      },
+      "repo_type": "GNOS",
+      "repo_org": "PCAWG",
+      "repo_name": "PCAWG - Heidelberg",
+      "repo_code": "pcawg-heidelberg",
+      "repo_country": "DE",
+      "repo_base_url": "https://gtrepo-dkfz.annailabs.com/",
+      "repo_data_path": "/cghub/data/analysis/download/",
+      "repo_metadata_path": "/cghub/metadata/analysisFull/"
+    }
+  ],
+  "donors": [
+    {
+      "project_code": "PBCA-DE",
+      "program": null,
+      "study": "PCAWG",
+      "primary_site": "Brain",
+      "donor_id": "DO35741",
+      "specimen_id": "SP107417",
+      "specimen_type": "Normal - blood derived",
+      "sample_id": "SA517428",
+      "matched_control_sample_id": null,
+      "submitted_donor_id": "ICGC_MB111",
+      "submitted_specimen_id": "ICGC_BL111",
+      "submitted_sample_id": "ICGC_BL111",
+      "other_identifiers": {
+        "tcga_participant_barcode": null,
+        "tcga_sample_barcode": null,
+        "tcga_aliquot_barcode": null
+      }
+    }
+  ]
+}
+
+{  
+  "index":{  
+    "_index":"test-icgc-repository",
+    "_type":"file-centric",
+    "_id":"FI226785"
+  }
+}
+{
+  "id": "FI226785",
+  "object_id": "2489e862-9fa7-5e06-9429-c80fdd4b3118",
+  "study": "PCAWG",
+  "access": "open",
+  "data_bundle": {
+    "data_bundle_id": "cesc/bcr/nationwidechildrens.org/bio/clin/nationwidechildrens.org_CESC.bio.Level_1.114.68.0/nationwidechildrens.org_clinical.TCGA-ZX-AA5X.xml"
+  },
+  "analysis_method": {
+    "analysis_type": null,
+    "software": null
+  },
+  "data_categorization": {
+    "data_type": "Clinical",
+    "experimental_strategy": null
+  },
+  "reference_genome": {
+    "genome_build": null,
+    "reference_name": null,
+    "download_url": null
+  },
+  "file_copies": [
+    {
+      "file_name": "nationwidechildrens.org_clinical.TCGA-ZX-AA5X.xml",
+      "file_format": "XML",
+      "file_size": 62464,
+      "file_md5sum": "c2be918abd8d63c21cee69987a61fc23",
+      "last_modified": 1443223440,
+      "index_file": null,
+      "repo_type": "Web Archive",
+      "repo_org": "TCGA",
+      "repo_name": "TCGA DCC - Bethesda",
+      "repo_code": "tcga",
+      "repo_country": "US",
+      "repo_base_url": "https://tcga-data.nci.nih.gov/",
+      "repo_data_path": "/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/",
+      "repo_metadata_path": null
+    }
+  ],
+  "donors": [
+    {
+      "project_code": "CESC-US",
+      "program": "TCGA",
+      "study": null,
+      "primary_site": "Cervix",
+      "donor_id": "DO219762",
+      "specimen_id": null,
+      "specimen_type": null,
+      "sample_id": null,
+      "matched_control_sample_id": null,
+      "submitted_donor_id": "4756acc0-4e96-44d4-b359-04d64dc7eb84",
+      "submitted_specimen_id": null,
+      "submitted_sample_id": null,
+      "other_identifiers": {
+        "tcga_participant_barcode": "TCGA-ZX-AA5X",
+        "tcga_sample_barcode": null,
+        "tcga_aliquot_barcode": null
+      }
+    }
+  ]
+}

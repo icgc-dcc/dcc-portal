@@ -1,0 +1,233 @@
+<div data-ng-if="!AdvancedCtrl.Donor.donors || ! AdvancedCtrl.Donor.hitsLoaded || AdvancedCtrl.Donor.isLoading" class="loading loading-text"><h3><i class="icon-spinner icon-spin"></i>
+    Loading Donors...
+</h3></div>
+<div data-ng-if="AdvancedCtrl.Donor.donors.hits.length == 0 && AdvancedCtrl.Donor.hitsLoaded && ! AdvancedCtrl.Donor.isLoading" class="empty loading-text"><h3>No Donors Found.</h3></div>
+<div data-ng-show="AdvancedCtrl.Donor.donors.hits.length && AdvancedCtrl.Donor.hitsLoaded && ! AdvancedCtrl.Donor.isLoading">
+    <section style="position: relative">
+        <div data-ng-class="{'graphs-collapsed': !donorExpand}" class="graphs">
+            <pie items='AdvancedCtrl.Donor.pieProjectId' heading="Project" label="Donors" type="pie" width="195" group-percent="3"
+                 height="150"></pie>
+            <pie items='AdvancedCtrl.Donor.piePrimarySite' heading="Primary Site" label="Donors" type="pie" width="195"
+                 height="150"></pie>
+            <pie items='AdvancedCtrl.Donor.pieGender' heading="Gender" label="Donors" type="pie" width="195"
+                 height="150"></pie>
+            <pie items='AdvancedCtrl.Donor.pieTumourStage' heading="Tumour Stage" label="Donors" type="pie" width="195"
+                 height="150"></pie>
+            <pie items='AdvancedCtrl.Donor.pieVitalStatus' heading="Vital Status" label="Donors" type="pie" width="195"
+                 height="150"></pie>
+            <pie items='AdvancedCtrl.Donor.pieStatusFollowup' heading="Disease Status" label="Donors" type="pie"
+                 width="195" height="150"></pie>
+            <pie items='AdvancedCtrl.Donor.pieRelapseType' heading="Relapse Type" label="Donors" type="pie" width="195"
+                 height="150"></pie>
+            <pie items='AdvancedCtrl.Donor.pieAge' heading="Age" label="Donors" type="pie"
+                 width="195" height="150"></pie>
+            <pie items='AdvancedCtrl.Donor.pieDataTypes' heading="Data Types" label="Donors" type="pie"
+                 width="195" height="150"></pie>
+            <pie items='AdvancedCtrl.Donor.pieAnalysisTypes' heading="Analysis Types" label="Donors" type="pie"
+                 width="195" height="150"></pie>
+        </div>
+        <div class="more-graphs-wrap">
+            <span data-ng-click="donorExpand=!donorExpand" class="more-graphs t_tools__tool">
+                <span data-ng-if="!donorExpand"><i class="icon-angle-down"></i> Show More</span>
+                <span data-ng-if="donorExpand"><i class="icon-angle-up"></i> Show Less</span>
+            </span>
+        </div>
+    </section>
+    <section>
+        <h3>
+            Donors
+
+            <span class="action-toolbar pull-right">
+               <span class="action-item">
+                   <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('donor', AdvancedCtrl.Donor.donors.pagination.total)">Save Donor Set</a>
+               </span>
+               <span class="action-item" data-ng-if="!AdvancedCtrl.downloadEnabled">
+                   <i class="icon-download"></i><span>Data download is<br> currently unavailable</span>
+               </span>
+               <span class="action-item" data-ng-if="AdvancedCtrl.downloadEnabled">
+                   <span>
+                      <i class="icon-download"></i><a href="" data-ng-click="AdvancedCtrl.downloadDonorData()">Download Donor Data</a>
+                   </span>
+               </span>
+               <span class="action-item">
+                   <span>
+                      <i class="icon-download-cloud"></i><span>
+                      <a href="" data-ng-click="AdvancedCtrl.viewExternal('donor', AdvancedCtrl.Donor.donors.pagination.total)">
+                      View in {{:: AdvancedCtrl.dataRepoTitle }}</a></span>
+                   </span>
+               </span>
+            </span>
+        </h3>
+
+        <div class="t_table_top">
+            <span data-table-counts data-label="donors" data-page="AdvancedCtrl.Donor.donors.pagination"></span>
+            <span data-toolbar data-dl="donors"></span>
+        </div>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+            <tr>
+                <th rowspan="2" data-sortable data-type="donors" data-field="id">ID
+                </th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="projectId">Project</th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="primarySite">Site</th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="gender">Gender</th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="ageAtDiagnosis" class="text-center">
+                    <abbr data-tooltip="Age at Diagnosis">Age</abbr>
+                </th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="tumourStageAtDiagnosis">
+                    <abbr data-tooltip="Tumour Stage at Diagnosis">Stage</abbr></th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="survivalTime" class="text-center">
+                    <abbr data-tooltip="Survival Time in days">Survival<br>(days)</abbr>
+                </th>
+                <th colspan="11" class="text-center">Available Data Types</th>
+                <th rowspan="2">
+                    <abbr data-tooltip="Number of SSM<br>Filtered by Current Search Criteria">#
+                        Mutations</abbr></th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="ssmAffectedGenes" data-active="true"
+                    data-reversed="true">
+                    <abbr data-tooltip="Number of Genes with SSM<br>Filtered by Current Search Criteria"
+                          data-tooltip-placement="left"># Genes</abbr>
+                </th>
+            </tr>
+            <tr>
+                <th class="text-center" data-type="donors" data-field="ssmCount"><abbr
+                        data-tooltip="{{ 'ssm' | datatype }}" class="tiny-header">SSM</abbr></th>
+                <th class="text-center" data-type="donors" data-field="cnsmExists"><abbr
+                        data-tooltip="{{ 'cnsm' | datatype }}" class="tiny-header">CNSM</abbr></th>
+                <th class="text-center" data-type="donors" data-field="stsmExists"><abbr
+                        data-tooltip="{{ 'stsm' | datatype}}" class="tiny-header">StSM</abbr></th>
+                <th class="text-center" data-type="donors" data-field="sgvExists"><abbr
+                        data-tooltip="{{ 'sgv' | datatype}}" class="tiny-header">SGV</abbr></th>
+                <th class="text-center" data-type="donors" data-field="methArrayExists"><abbr
+                        data-tooltip="{{ 'meth_array' | datatype}}" class="tiny-header">METH-A</abbr></th>
+                <th class="text-center" data-type="donors" data-field="methSeqExists"><abbr
+                        data-tooltip="{{ 'meth_seq' | datatype}}" class="tiny-header">METH-S</abbr></th>
+                <th class="text-center" data-type="donors" data-field="expArrayExists"><abbr
+                        data-tooltip="{{ 'exp_array' | datatype}}" class="tiny-header">EXP-A</abbr></th>
+                <th class="text-center" data-type="donors" data-field="expSeqExists"><abbr
+                        data-tooltip="{{ 'exp_seq' | datatype}}" class="tiny-header">EXP-S</abbr></th>
+                <th class="text-center" data-type="donors" data-field="pexpExists"><abbr
+                        data-tooltip="{{ 'pexp' | datatype}}" class="tiny-header">PEXP</abbr></th>
+                <th class="text-center" data-type="donors" data-field="mirnaSeqExists"><abbr
+                        tooltip="{{ 'mirna_seq' | datatype}}" class="tiny-header">miRNA-S</abbr></th>
+                <th class="text-center" data-type="donors" data-field="jcnExists"><abbr
+                        data-tooltip="{{ 'jcn' | datatype}}" class="tiny-header">JCN</abbr></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="donor in AdvancedCtrl.Donor.donors.hits track by donor.id">
+                <td><a href="/donors/{{ donor.id }}">{{ donor.id }}</a></td>
+                <td>
+                    <a data-tooltip="{{ donor.projectName }}" data-tooltip-placement="top" href="/projects/{{ donor.projectId }}">
+                        {{ donor.projectId }}
+                    </a>
+                </td>
+                <td>{{ donor.primarySite }}</td>
+                <td>{{ donor.gender | readable }}</td>
+                <td class="text-right">{{ donor.ageAtDiagnosis }}</td>
+                <td class="text-right">{{ donor.tumourStageAtDiagnosis }}</td>
+                <td class="text-right">{{ donor.survivalTime | numberPT }}</td>
+                <td style="text-align:center">
+                    <span data-exists="donor.ssmCount"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.cnsmExists"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.stsmExists"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.sgvExists"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.methArrayExists"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.methSeqExists"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.expArrayExists"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.expSeqExists"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.pexpExists"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.mirnaSeqExists"></span>
+                </td>
+                <td style="text-align: center">
+                    <span data-exists="donor.jcnExists"></span>
+                </td>
+                <td class="text-right">
+                    <span data-ng-if="!AdvancedCtrl.Donor.mutationCounts"><i class="icon-spinner icon-spin"></i></span>
+                    <span data-ng-if="AdvancedCtrl.Donor.mutationCounts[donor.id] === 0">--</span>
+                    <a data-ng-if="AdvancedCtrl.Donor.mutationCounts[donor.id] > 0"
+                       href="search/m?filters={{ donor.embedQuery }}">
+                        {{ AdvancedCtrl.Donor.mutationCounts[donor.id] | numberPT }}</a>
+                </td>
+                <td class="text-right" style="position: relative">
+                    <span data-ng-if="donor.ssmAffectedGenes === 0">--</span>
+                    <a data-ng-if="donor.ssmAffectedGenes > 0"
+                       href="search/g?filters={{ donor.embedQuery }}">
+                        {{ donor.ssmAffectedGenes | numberPT }}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <pagination-controls data-type="donors" data-data="AdvancedCtrl.Donor.donors"></pagination-controls>
+
+
+        <table class="hidden" id="donors" data-ng-if="AdvancedCtrl.Page.isExporting()">
+            <thead>
+            <tr>
+                <td>Donor ID</td>
+                <td>Project Code</td>
+                <td>Primary Site</td>
+                <td>Gender</td>
+                <td>Age at Diagnosis</td>
+                <td>Tumor Stage at Diagnosis</td>
+                <td>Survival Time (days)</td>
+                <td>SSM</td>
+                <td>CNSM</td>
+                <td>STSM</td>
+                <td>SGV</td>
+                <td>METH-A</td>
+                <td>METH-S</td>
+                <td>EXP-A</td>
+                <td>EXP-S</td>
+                <td>PEXP</td>
+                <td>miRNA-S</td>
+                <td>JCN</td>
+                <td>Mutations</td>
+                <td>Mutated Genes</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="donor in AdvancedCtrl.Donor.donors.hits track by donor.id">
+                <td>{{ donor.id }}</td>
+                <td>{{ donor.projectId }}</td>
+                <td>{{ donor.primarySite }}</td>
+                <td>{{ donor.gender | readable }}</td>
+                <td>{{ donor.ageAtDiagnosis }}</td>
+                <td>{{ donor.tumourStageAtDiagnosis }}</td>
+                <td>{{ donor.survivalTime }}</td>
+                <td>{{ donor.ssmCount? 'True': 'False' }} </td>
+                <td>{{ donor.cnsmExists? 'True': 'False'}}</td>
+                <td>{{ donor.stsmExists? 'True': 'False'}}</td>
+                <td>{{ donor.sgvExists? 'True': 'False'}}</td>
+                <td>{{ donor.methArrayExists? 'True': 'False'}}</td>
+                <td>{{ donor.methSeqExists? 'True': 'False'}}</td>
+                <td>{{ donor.expArrayExists? 'True': 'False'}}</td>
+                <td>{{ donor.expSeqExists? 'True': 'False'}}</td>
+                <td>{{ donor.pexpExists? 'True': 'False'}}</td>
+                <td>{{ donor.mirnaSeqExists? 'True': 'False'}}</td>
+                <td>{{ donor.jcnExists? 'True': 'False'}}</td>
+                <td>{{ AdvancedCtrl.Donor.mutationCounts[donor.id] }}</td>
+                <td>{{ donor.ssmAffectedGenes | numberPT }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>

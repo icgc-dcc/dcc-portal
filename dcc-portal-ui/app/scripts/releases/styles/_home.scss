@@ -1,0 +1,73 @@
+#home-page {
+  .home-landing {
+    //display: table;
+    section {
+      border: none;
+      padding: 1rem;
+      position: relative;
+  
+      @include breakpoint($break-landscape) {
+        @include float-span(4);
+      }
+      
+      &.sidebar {
+        .list {
+          height: 11.5rem;
+        }
+      }
+    }
+    
+    
+    .summary-table-container {
+      margin-top: -2rem;
+      z-index: 100;
+      position: relative;
+    }
+  
+    .subhead {
+      margin-top: -1rem;
+      color: $grey;
+      font-size: 1.9rem;
+    }
+    
+    #pcawg-logo {
+      margin-left: 1rem; 
+      margin-bottom: 1rem;
+    }
+    
+  
+        
+      .icgc-cloud-home {
+        margin: 0 0;
+        padding-top: 0;
+        
+        .dividers {
+          margin-top: 1.5rem;
+        }
+  
+        .icgc-container {
+          margin: 0 0;
+          position:relative;
+          transition: opacity 0.2s ease-in;      
+          width: 330px;
+          
+          img { 
+              width: 100%;
+              display: block;
+              margin-left: -2rem;
+          } 
+          
+          p {
+            margin-top: 0;
+          }
+        }  
+      }
+  
+    
+    .divider {
+      border-top: 1px solid #eee; 
+      margin-top: 2rem; 
+      margin-bottom: 2.5rem
+    }
+  }
+}

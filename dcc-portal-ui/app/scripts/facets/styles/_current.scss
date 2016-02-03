@@ -1,0 +1,42 @@
+.t_current {
+  @include clearfix();
+
+  border-bottom: 1px solid $greyLighter;
+  background: $greyLightestEver;
+  /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(hsl(0, 0%, 100%)), to(hsl(0, 0%, 98%)));
+  background-image: -moz-linear-gradient(center top, #fff 0%, #fafafa 100%);
+  background-image: -o-linear-gradient(#fff, #fafafa);*/
+
+  padding: 1rem;
+
+  ul, li {
+    display: inline;
+    line-height: 2.3rem;
+  }
+
+  .t_facets__facet__label, .t_facets__facet__terms__active__term__label {
+    display: inline-block;
+    border-radius: .5rem;
+  }
+}
+
+.t_current__and, .t_current__or {
+  // font-weight: bold;
+  font-size: 1.05rem;
+}
+
+.t_current__and {
+  color: $green;
+}
+
+.t_current__or {
+  color: $orangeLight;
+}
+
+.t_current__remove_all {
+  margin-right: .75rem;
+}
+
+.t_current__buttons {
+  margin-top: 1rem;
+}

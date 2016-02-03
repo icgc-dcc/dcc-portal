@@ -1,0 +1,52 @@
+{
+  "name": "dcc-portal-ui",
+  "description": "ICGC DCC Data Portal UI",
+  "version": "3.8.21.x",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com:icgc-dcc/dcc-portal.git"
+  },
+  "devDependencies": {
+    "connect-livereload": "0.5.0",
+    "connect-modrewrite": "0.5.6",
+    "grunt": "~0.4.*",
+    "grunt-bower-install-simple": "~1.1.*",
+    "grunt-jsdoc-to-markdown": "~1.2.*",
+    "grunt-concurrent": "0.3.0",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-coffee": "0.7.0",
+    "grunt-contrib-compass": "0.3.0",
+    "grunt-contrib-concat": "~0.5.*",
+    "grunt-contrib-connect": "~0.8.*",
+    "grunt-contrib-copy": "~0.7.*",
+    "grunt-contrib-cssmin": "~0.11.*",
+    "grunt-contrib-htmlmin": "~0.3.*",
+    "grunt-contrib-imagemin": "~0.9.*",
+    "grunt-contrib-jshint": "~0.11.*",
+    "grunt-contrib-uglify": "~0.11.*",
+    "grunt-contrib-watch": "0.6.1",
+    "grunt-google-cdn": "0.2.0",
+    "grunt-jsdoc-to-markdown": "~1.2.*",
+    "grunt-karma": "0.10.1",
+    "grunt-ng-annotate": "~0.9.*",
+    "grunt-open": "0.2.0",
+    "grunt-peg": "~1.5.0",
+    "grunt-filerev": "~2.3.*",
+    "grunt-usemin": "3.0.0",
+    "http-proxy": "0.10.0",
+    "jshint-stylish": "^2.1.0",
+    "karma": "~0.12.31",
+    "karma-chrome-launcher": "~0.1.7",
+    "karma-jasmine": "~0.3.5",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "karma-spec-reporter": "0.0.16",
+    "matchdep": "~1.0.*",
+    "phantomjs": "~1.9.16",
+    "grunt-injector": "~0.6.x",
+    "time-grunt": "~1.2.2"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}

@@ -1,0 +1,27 @@
+<div>
+  <div class="text-center graph_title">Number of Somatic Mutations in Donor's Exomes Across Cancer Projects
+
+    <span ng-show="showPlot" class="pull-right">
+      <a href="">
+        <small><i class="icon-help" data-tooltip="{{ helpText }}" data-tooltip-placement="left"></i></small>
+      </a>
+    </span>
+  </div>
+
+  <div ng-show="! showPlot" class="text-center" style="line-height: {{ defaultGraphHeight }}px;">
+    <strong>No data found for the selected
+      <ng-pluralize count="selectedProjectCount" when="{'0': 'project', 'one': 'project', 'other': 'projects'}"></ng-pluralize>.
+    </strong>
+  </div>
+
+  <div ng-show="showPlot">
+    <div class="canvas"></div>
+
+    <div class="text-right">
+      <small>Design inspired from Nature:
+        <a href="http://www.nature.com/nature/journal/v499/n7457/full/nature12213.html" target="_blank">doi:10.1038/nature12213</a>
+      </small>
+    </div>
+  </div>
+
+</div>

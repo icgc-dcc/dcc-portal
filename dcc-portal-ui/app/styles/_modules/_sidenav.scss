@@ -1,0 +1,83 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+.t_sidenav {
+
+  .t_subnav__items__box {
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+  .t_facets {
+    .t_facets__facet__title {
+      background: none;
+      border-top: none;
+    }
+    .t_facets__facet__terms__inactive__term {
+      border: none;
+    }
+    .t_facets__facet__terms__active__term__label {
+      background: none;
+    }
+  }
+}
+.t_sidenav.ui-scrollfix {
+  width: inherit;
+  .t_facets {
+    width: 115%;
+  }
+}
+
+.t_subnav__items {
+  margin-right: -2rem;
+
+  .t_subnav__items__item {
+    padding: .5rem 0;
+
+    a, span {
+      font: {
+        size: 1.3rem;
+        weight: 300;
+      }
+      color: $greyDarker;
+    }
+
+    a {
+      transition: color .1s;
+      text-decoration: none;
+
+      &:hover {
+        color: $orangeLight;
+        background: $white;
+        text-decoration: none;
+      }
+    }
+    &.current {
+      a {
+        color: $orange;
+      }
+      a:hover {
+        cursor: default;
+        color: $orange;
+      }
+    }
+  }
+
+  .t_tabs {
+    border: 0;
+  }
+}
+

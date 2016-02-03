@@ -1,0 +1,80 @@
+/*** Protein Viewer ***/
+.axis-label {
+    font-size: 1.5ex;
+}
+
+.axis {
+    shape-rendering: crispEdges;
+}
+
+.axis line {
+    stroke: #666;
+    stroke-width: 1px;
+}
+
+.axis .tick line {
+    stroke: #666;
+    stroke-width: 1px;
+}
+
+.axis .tick text {
+    font-size: 1.2ex;
+}
+
+g.domain text {
+    font-size: 1.5ex;
+    font-weight: bold;
+    fill: white;
+}
+
+g.marker circle {
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+g.marker path {
+   opacity: 0.75;
+}
+
+g.marker circle.high {
+   fill: #d44;
+   stroke: none;
+}
+
+g.marker circle.low {
+   fill: #4d4;
+   stroke: none;
+}
+
+g.marker circle.unknown {
+   fill: #bbb;
+   stroke: none;
+}
+
+g.marker rect {
+   visibility: hidden;
+}
+
+g.marker rect.selected {
+   stroke-width: 2.0;
+   stroke: #33A; 
+   fill: none;
+   opacity: 1.0;
+   visibility: visible;
+}
+
+
+.axis .minor {
+    stroke-opacity: .5;
+}
+
+.axis path {
+    fill: none;
+    stroke: #666;
+    stroke-width: 1px;
+}
+
+.proteinstructure .marker {
+    stroke: #666;
+    stroke-width: 1px;
+}
