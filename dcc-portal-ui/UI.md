@@ -70,12 +70,12 @@ The frontend UI is based fully on an AngularJS Single Page Application ([SPA](ht
 meaning that the core domain logic is encapsulated on the server-side while the UI logic is soley handled in the user's browser and managed via JavaScript 
 (specifically [ECMAScript](https://en.wikipedia.org/wiki/ECMAScript) Version 5). Communication between the two layers is achieved using [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfer) webservices.
 
-![Image of Frontend Architecture](docs-resources/images/architecture-diagram.png)
+![Image of Frontend Architecture](docs/images/architecture-diagram.png)
 
 DCC Portal UI uses the angular-ui-router to extend and replace the functionality provided by Angular's default Router implementation. UI Router makes
 use of the ```ui-view``` directive to handle state transitions between views. Below is a diagram illustrating the basic template for the ui-view in the DCC Portal UI:
 
-![Image of Frontend UI-VIEW Page Layout](docs-resources/images/page-layout.png)
+![Image of Frontend UI-VIEW Page Layout](docs/images/page-layout.png)
 
 ### File Organization ###
 This section provides a high-level outline of the modules/file structure in the Portal UI project.
