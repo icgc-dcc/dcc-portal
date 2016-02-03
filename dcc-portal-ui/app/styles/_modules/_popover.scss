@@ -1,0 +1,182 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+$popoverBorderRadius: 3px;//5px;
+$popoverOutsetBorder: 0.4rem;
+$popoverBubbleMaxWidth: 28rem;
+$popoverBubbleMaxHeight: 30rem;
+
+
+$borderColor: $tooltipBorder;
+$tooltipFill: $tooltipFill;
+$shadowColor: $tooltipShadowColor;
+
+
+.popover {
+  transition: all ease-in-out 0.25s;
+  position: relative;
+  text-align: left;
+  float: none;
+  white-space: normal;
+  display: inline-block;
+  margin-right: 1rem;
+  padding-left: 0.5rem;
+ /*
+  &:hover  .popover-outer-container {
+    opacity: 0;
+    z-index: 100;
+  } */
+
+  .popover-outer-container {
+    position: absolute; 
+    background: transparent;
+    //z-index: -1;
+    top: -11px;
+    left: -$popoverBubbleMaxWidth + 0.2rem;
+    //opacity: 0;
+    display: none;
+    z-index: 1000000;
+    transition: opacity ease-in-out 0.25s;
+   
+    
+    
+    
+    .popover-inner-container-border {
+      position: absolute;
+      //background: #000;
+      background: $fill;
+      //opacity: 0.7;
+      display: none;
+      height: 100%;
+      width: 100%;
+      z-index: 0;
+      top: -$popoverOutsetBorder; 
+      left: -$popoverOutsetBorder;
+      border: 1px solid $borderColor;
+      border-radius: $popoverBorderRadius;
+      box-sizing: content-box;
+      padding: $popoverOutsetBorder $popoverOutsetBorder;
+      /*-webkit-box-shadow: -2px 4px 14px -1px rgba(0,0,0,0.75);
+      -moz-box-shadow: -2px 4px 14px -1px rgba(0,0,0,0.75);
+      box-shadow: -2px 4px 14px -1px rgba(0,0,0,0.75);*/
+      -webkit-filter: drop-shadow(0 1px 3px $shadowColor);
+      -moz-box-shadow: 0 1px 3px $shadowColor;
+      filter: drop-shadow(0 1px 3px $shadowColor);
+      
+      .arrow {
+        position: absolute;
+        opacity: 1;
+        right: -10px;
+        top: 17px;
+        width: 0; 
+        height: 0; 
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        
+        border-left: 10px solid $borderColor;
+      }
+
+      .arrow:after {
+        content: ' ';
+        position: absolute;
+        opacity: 1;
+        right: 1px;
+        top: -10px;
+
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+
+        border-left: 10px solid $tooltipFill;
+      }
+      
+    }
+    
+    .popover-inner-container {
+      position:relative;
+      display: none;
+      //background: #fff;
+      background: $fill;
+      padding: 0.5rem 0.5rem;
+      border-radius: $popoverBorderRadius;
+      z-index: 100;
+      width:100%;
+      height: 100%;
+      word-wrap: break-word;
+      max-width: $popoverBubbleMaxWidth - 1rem;
+      max-height: $popoverBubbleMaxHeight;
+      line-height: 1.8rem;
+      font-size: 1.1rem;
+      overflow-x: hidden;
+      overflow-y: auto;
+      
+    
+    
+      .popover-title {
+        font-size: 1.4rem;
+        margin: 0 auto 0.5rem auto;
+        font-weight: bold;
+      }
+      
+      
+      
+      .popover-body {
+        width: 100%;
+        height: 100%;
+        //font-size: 1.2rem;
+        font-size: 0.9rem;
+        line-height: 1.6rem;
+
+        & [class^="icon-"]:before {
+          width: auto;
+        }
+      }
+      
+    }
+  }
+  
+  .popover-anchor-container {
+    text-decoration: none;
+    color: #000;
+     
+     
+     &:hover  {
+      cursor: pointer;
+      color: #0E5E94
+    }
+  }
+  
+  .popover-icon-before {
+    margin-right: 1rem;
+  }
+  
+  .popover-icon-after {
+     margin-left: 0.1rem; 
+  }
+  
+  .popover-label {
+    display: inline-block;
+    //border-bottom: 1px dashed;
+    line-height: 1.1rem;
+  }
+  
+  [class^="icon-"] {
+    border: none;
+  }
+  
+ 
+
+}

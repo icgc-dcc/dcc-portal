@@ -1,0 +1,45 @@
+{
+  "id": "OV-AU",
+  "icgcId": "809",
+  "primarySite": "Ovary",
+  "name": "Ovarian Cancer - AU",
+  "tumourType": "Ovarian cancer",
+  "tumourSubtype": "Serous cystadenocarcinoma",
+  "pubmedIds": [
+    "222222",
+    "333333"
+  ],
+  "primaryCountries": [
+    "Canada",
+    "Australia"
+  ],
+  "partnerCountries": [
+    "Canada",
+    "Australia"
+  ],
+  "availableDataTypes": [
+    "ssm",
+    "cnsm"
+  ],
+  "ssmTestedDonorCount": 3,
+  "cnsmTestedDonorCount": 0,
+  "stsmTestedDonorCount": 0,
+  "sgvTestedDonorCount": 0,
+  "methSeqTestedDonorCount": 0,
+  "methArrayTestedDonorCount": 0,
+  "expSeqTestedDonorCount": 0,
+  "expArrayTestedDonorCount": 0,
+  "pexpTestedDonorCount": 0,
+  "mirnaSeqTestedDonorCount": 0,
+  "jcnTestedDonorCount": 0,
+  "totalDonorCount": 3,
+  "experimentalAnalysisPerformedDonorCounts": {
+    "WXS": 333,
+    "WGS": 222
+  },
+  "experimentalAnalysisPerformedSampleCounts": {
+    "WXS": 333,
+    "WGS": 222
+  },
+  "repository": []
+}

@@ -1,0 +1,44 @@
+<ul class="t_facets__facet">
+    <li class="t_facets__facet__title" data-ng-class="{t_facets__facet__title_active:actives.length}">
+        <span data-ng-click="collapsed=!collapsed" class="t_facets__facet__title__label">
+            <i data-ng-class="{'icon-caret-down':!collapsed, 'icon-caret-right':collapsed}"></i>
+            {{label}}
+        </span>
+        <span data-ng-if="actives.length" class="t_facets__facet__terms__inactive__reset t_tools">
+            <span class="pull-right t_facets__facet__is__not" 
+                data-ng-if="enabled && type !== 'file' && !isNot"
+                data-ng-click="notFacet(facet, $event)"
+                data-tooltip="Toggle this facet to IS NOT">
+                <i style="color:black;" class="icon-toggle-on"></i>
+            </span>
+            <span class="pull-right t_facets__facet__is__not" 
+                data-ng-if="enabled && type !== 'file' && isNot"
+                data-ng-click="isFacet(facet)"
+                data-tooltip="Toggle this facet to IS">
+                <i style="color:darkred;" class="icon-toggle-off"></i>
+            </span>
+            <a data-ng-click="removeFacet()" class="t_tools__tool " href=""><i class="icon-undo"></i></a>
+        </span>
+    </li>
+    <li>
+        <ul class="t_facets__facet__terms__active">
+            <li class="t_facets__facet__terms__active__term__label {{activeClass}}"
+                data-ng-repeat="item in actives"
+                data-ng-click="removeTerm(item)">
+                <i class="icon-ok"></i> {{item}}
+            </li>
+        </ul>
+    </li>
+    <li class="t_facets__facet__input" data-ng-hide="collapsed">
+        <input class="t_input__block" name="location" autocomplete="off" data-ng-keydown="keydown($event)" type="text"
+               data-ng-model="location"
+               data-ng-class="{'invalid': state=='invalid', 'valid':state=='valid'}"
+               placeholder="{{ placeholder }}"/>
+        <i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel"
+           data-ng-click="location=''" data-ng-show='location'></i>
+        {{ example }}
+        <button data-ng-disabled="state=='invalid'" type="button" class="t_button pull-right" data-ng-click="submit()">
+            <i class="icon-search"></i> Search
+        </button>
+    </li>
+</ul>

@@ -1,0 +1,141 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+$table-th-fixed-width: 200px;
+
+.table {
+  width: 100%;
+  border: 1px solid $greyLighter;
+  font-size: .9rem;
+
+  thead {
+    [class^="icon-"]:before, [class*=" icon-"]:before {
+      width: 0;
+    }
+    tr:nth-child(even){
+      border-top: 1px solid $greyLightest;
+    }
+
+    .tiny-header {
+      font-size: .7rem;
+    }
+  }
+
+  tbody {
+    tr {
+      vertical-align: top;
+
+      &:nth-child(odd) {
+        background: $greyLightest;
+      }
+    }
+
+    &.cell-vertically-centered tr td {
+      vertical-align: middle;
+    }
+  }
+
+  td, th {
+    line-height: inherit;
+    text-align: left;
+    padding: .2rem .4rem;
+    border-left: 1px solid $greyLighter;
+    white-space: normal;
+  }
+  th {
+    white-space: nowrap;
+  }
+
+  &.fixed-width {
+    th {
+      max-width: $table-th-fixed-width;
+      min-width: $table-th-fixed-width;
+      width: $table-th-fixed-width;
+    }
+  }
+
+  td {
+ //   overflow: hidden;
+ //   text-overflow: ellipsis;
+  }
+
+  th {
+    font-size: 1rem;
+    font-weight: 300;
+    color: $black;
+    text-overflow: normal;
+    //border: 1px solid $greyLighter;
+  }
+
+  // Table with icon check-boxes
+  &.table-selectable {
+     thead {
+         [class^="icon-"]:before, [class*=" icon-"]:before {
+           width: auto;
+         }
+     }
+  }
+
+  &.table-info {
+    margin-bottom: 1rem;
+
+    td {
+      white-space: normal;
+    }
+  }
+
+  &.table-download {
+    border:0;
+    tbody {
+       tr {
+          background: None;
+       }
+    }
+  }
+
+  &.table-setop {
+    tbody {
+       tr {
+          background-color: rgba(0, 0, 0, 0);
+          border-top: 1px solid $greyLighter;
+       }
+    }
+  }
+}
+
+.t_table_top {
+  margin-top: 1rem;
+  padding: .5rem 0;
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+
+
+.t_cell_line_break {
+  word-wrap:break-word;
+  max-width:15em
+}
+
+/* IE has crummy support for table-cell overflow, so we need to apply this to the element in the cell instead */
+.t_cell_overflow {
+  margin: 0;
+  padding: 0;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,83 @@
+<ul class="t_facets__facet" data-ng-show="facet.terms.length || actives.length">
+    <li class="t_facets__facet__title" data-ng-class="{t_facets__facet__title_active:actives.length}">
+        <span data-ng-click="collapsed=!collapsed" class="t_facets__facet__title__label">
+            <i data-ng-class="{'icon-caret-down':!collapsed, 'icon-caret-right':collapsed}"></i>
+            {{ label  }}
+        </span>
+        <span data-ng-if="actives.length" class="t_facets__facet__terms__inactive__reset t_tools">
+            <span class="pull-right t_facets__facet__is__not" 
+                data-ng-if="enabled && type !== 'file' && !isNot"
+                data-ng-click="notFacet(facet)"
+                data-tooltip="Toggle this facet to IS NOT">
+                <i style="color:black;" class="icon-toggle-on"></i>
+            </span>
+            <span class="pull-right t_facets__facet__is__not" 
+                data-ng-if="enabled && type !== 'file' && isNot"
+                data-ng-click="isFacet(facet)"
+                data-tooltip="Toggle this facet to IS">
+                <i style="color:darkred;" class="icon-toggle-off"></i>
+            </span>
+            <span data-ng-click="removeFacet()" class="t_tools__tool"><i class="icon-undo"></i></span>
+        </span>
+    </li>
+    <li class="t_facets__facet__terms">
+        <ul class="t_facets__facet__terms__active">
+            <li class="t_facets__facet__terms__active__term__label {{activeClass}}"
+                data-active-term data-item="item"
+                data-ng-mouseenter="mouseOver($event)"
+                data-ng-mouseleave="mouseLeave($event)"
+                data-ng-repeat="item in actives | orderBy:'-count'"
+                data-ng-click="removeTerm(item.term)">
+                <span data-ng-hide="hideCount" data-ng-style="bar(item.count)"
+                      class="t_facets__facet__terms__active__term__bar {{activeClass + '__bar'}}" ></span>
+                <span class="t_facets__facet__terms__active__term__label__text">
+                    <span data-ng-if="!defined">
+                        <i style='color:{{sites[item.term]}}' class="icon-ok t_impact_{{ item.term | lowercase }}"></i>
+                        <span ng-if='iconClass (item.term)' class='{{ iconClass (item.term) }}' />
+                        <span data-tooltip={{item.term}} data-tooltip-placement="overflow">
+                        {{ item.label }}
+                        </span>
+                    </span>
+                    <span data-ng-if="defined">
+                        <i class="icon-ok"></i>
+                        <span ng-if='iconClass (item.term)' class='{{ iconClass (item.term) }}' />
+                        <span data-tooltip="{{ item.tooltip }}">
+                        {{ item.label }}
+                        </span>
+                    </span>
+                </span>
+                <span data-ng-hide="hideCount" class="t_facets__facet__terms__active__term__count">{{item.count | number}}</span>
+                <span data-ng-if="hideCount"
+                      class="t_facets__facet__terms__active__term__count t_facets__facet__term__na">{{hideText}}</span>
+            </li>
+        </ul>
+
+        <ul data-ng-hide="collapsed || inactives.length == 0" class="t_facets__facet__terms__inactive">
+            <li data-ng-repeat="item in inactives | limitTo: (collapsed? 0 : displayLimit)"
+                class="t_facets__facet__terms__inactive__term">
+
+                <span data-ng-hide="hideCount" data-ng-style="bar(item.count)" class="t_facets__facet__terms__inactive__term__bar"></span>
+                <span class="t_facets__facet__terms__inactive__term__label"
+                      data-tooltip="{{ item.tooltip }}"
+                      data-tooltip-placement="{{ defined? 'right':'overflow'}}"
+                      data-ng-click="addTerm(item.term)">
+                    <i style='color:{{ sites[item.term] }}' class="icon-check-empty t_impact_{{item.term | lowercase}}"></i>
+                    <span ng-if='iconClass (item.term)' class='{{ iconClass (item.term) }}' />
+                    {{item.label}}
+                </span>
+
+                <span data-ng-hide="hideCount" class="t_facets__facet__terms__inactive__term__count">{{item.count | number}}</span>
+                <span data-ng-if="hideCount" class="t_facets__facet__terms__inactive__term__count t_facets__facet__term__na">{{hideText}}</span>
+
+            </li>
+            <li data-ng-show="inactives.length > displayLimit || expanded" class="t_sh__toggle">
+                <a data-ng-click="toggle()" href="" class="t_tools__tool">
+                  <span>
+                     <i class="{{ expanded? 'icon-caret-up': 'icon-caret-down' }}"></i>
+                     {{ expanded? "less" : (inactives.length - displayLimit) + " more" }}
+                  </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>

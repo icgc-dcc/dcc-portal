@@ -1,0 +1,157 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+//-----------------------------------------------------------------------------
+// Grid Settings
+*, input[type="search"] {
+  @include box-sizing(border-box);
+}
+
+$break-zero: 0;
+$break-tablet: 721px;
+$break-landscape: 769px;
+$break-laptop: 1025px;
+$break-desktop: 1280px;
+$break-widescreen: 1535px;
+$break-verywidescreen: 1730px;
+
+$grids: 12;
+
+$gutters: 1/3;
+$gutters: add-gutter(1/4 at $break-desktop);
+$gutters: add-gutter(1/5 at $break-verywidescreen);
+
+$footer-height: 16rem;
+
+//-----------------------------------------------------------------------------
+// Layout
+
+html, body {
+  height: 100%;
+}
+
+body {
+  @include clearfix();
+
+  // Sets a max width. Site will be fluid until it reaches 1200, then stick there.
+  max-width: 1280px;
+  margin: 0;
+
+
+  @include breakpoint($break-tablet) {
+    margin: 0 auto;
+  }
+  @include breakpoint($break-widescreen) {
+    max-width: 1440px;
+  }
+}
+
+/*
+.wrap {
+  @include clearfix();
+
+  position: relative;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin-bottom: -2 * $footer-height;
+  overflow: hidden;
+
+  box-shadow: 0 0 4px hsla(0, 0%, 0%, 0.3);
+
+  @include breakpoint($break-tablet) {
+    margin-bottom: -$footer-height;
+  }
+}*/
+
+.content {
+  @include clearfix();
+}
+
+/*
+footer, .push {
+  height: 2 * $footer-height;
+
+  @include breakpoint($break-tablet) {
+    height: $footer-height;
+
+  }
+}*/
+
+
+aside {
+  @include clearfix();
+  @include grid-span(2, 1);
+}
+
+article {
+  @include clearfix();
+  @include grid-span(10, 3);
+  margin-right: 0;
+}
+
+section {
+  @include clearfix();
+  //position: relative;
+}
+
+.wide {
+  @include breakpoint($break-landscape) {
+    @include float-span(8);
+  }
+}
+
+.quarter {
+  @include breakpoint($break-landscape) {
+    @include float-span(3);
+  }
+}
+
+.narrow {
+  @include breakpoint($break-landscape) {
+    @include float-span(4);
+  }
+}
+
+.half {
+  @include breakpoint($break-landscape) {
+    @include float-span(6);
+  }
+}
+
+.third {
+  @include breakpoint($break-landscape) {
+    @include float-span(4);
+  }
+}
+
+.relative {
+  position: relative;
+}
+
+.clearfix {
+  @include clearfix();
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.omega {
+  margin-right: 0 !important;
+}

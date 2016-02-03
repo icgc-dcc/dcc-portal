@@ -1,0 +1,79 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+.t_labels {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.t_labels__label {
+  padding: .5rem 1rem;
+  background: $greyDarker;
+  color: $white;
+  border-radius: 1rem;
+  margin-right: 1rem;
+  cursor: pointer;
+
+  transition: opacity .5s;
+}
+
+.t_labels__label.t_labels__label_inactive {
+  color: $greyLighter;
+  opacity: .5;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.t_labels__label__genes {
+  background-color: $gene;
+}
+
+.t_labels__label__donors {
+  background-color: $donor;
+}
+
+.t_labels__label__mutations {
+  background-color: $mutation;
+}
+
+.t_labels__label__projects {
+  background-color: $project;
+}
+
+.t_labels__label__pathways {
+  background-color: $pathway;
+}
+
+.t_labels__label__files {
+  background-color: $file;
+}
+
+.t_labels__label__compounds {
+  background-color: $compound;
+}
+
+.manifest-cell {
+  width: 28%;
+  min-height: 31px;
+  .manifest {
+    display: inline-block;
+    vertical-align: middle;
+
+  }
+}

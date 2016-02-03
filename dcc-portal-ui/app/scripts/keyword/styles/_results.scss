@@ -1,0 +1,57 @@
+.t_quick {
+
+}
+
+.t_quick__hit {
+}
+
+.t_quick__hit__type {
+  padding: 0 1rem;
+}
+
+.t_quick__hit__text {
+  padding: .7rem 1rem;
+}
+
+.t_quick__hit__text__details {
+  font-size: .9rem;
+}
+
+.t_quick__hit__text__details__label {
+  display: inline-block;
+  font: {
+    style: normal;
+    weight: 700;
+  }
+  ;
+  padding-right: .5rem;
+  margin-right: .5rem;
+
+  @include breakpoint($break-tablet) {
+    text-align: right;
+    width: 12rem;
+    border-right: 1px solid $greyLightest;
+  }
+}
+
+.t_quick__hit__text__details__value {
+  font-style: italic;
+}
+
+.results_show_more_bar {
+  @include grid-span(8,3);
+  margin-top: 1rem;
+  line-height: 2rem;
+  text-align: center;
+
+  color: $greyDarker;
+  border-radius: .25rem;
+  border: .1rem solid $greyLight;
+  background: $greyLightest;
+
+  &:hover {
+    color: $orangeLight;
+    cursor: pointer;
+    background: $greyLightestEver;
+  }
+}

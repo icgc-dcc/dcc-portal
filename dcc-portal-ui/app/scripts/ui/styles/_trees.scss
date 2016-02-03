@@ -1,0 +1,96 @@
+/* Adapated from http://jsfiddle.net/jhfrench/GpdgF/ */
+
+.tree {
+   font-size: 0.85rem;
+   line-height: 155%;
+}
+
+.tree ul {
+   padding: 0 0 0 15px; 
+}
+
+.tree>ul {
+   padding: 0;
+}
+
+
+.tree li {
+    list-style-type:none;
+    margin: 0;
+    padding: 4px 5px 0 5px !important;
+    position: relative
+}
+
+.tree li::before, .tree li::after {
+    content: '';
+    left: -7px;
+    position: absolute;
+    right: auto;
+}
+
+.tree li::before {
+    border-left: 1px solid $blue;
+    bottom: 50px;
+    height: 100%;
+    top: 0;
+    width: 1px;
+}
+
+.tree li::after {
+    border-top: 1px solid $blue;
+    height: 17px;
+    top: 17px;
+    width: 12px;
+}
+
+.tree li span {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+
+    border: 1px solid $blue;
+    border-radius: 6px 6px;
+
+    background-color: $greyLightestEver;
+
+    // border-left:1px solid #bbb;
+    // border-right:1px solid #bbb;
+    // border-bottom:1px solid #bbb;
+
+    display: inline-block;
+    padding: 1px 4px;
+    text-decoration: none;
+}
+
+.tree>ul>li::before, .tree>ul>li::after {
+    border:0;
+}
+
+.tree li:last-child::before {
+    height: 17px;
+}
+
+
+.tree .goterm_part_of {
+   color: rgb(0, 0, 254)
+}
+
+.tree .goterm_is_a {
+}
+
+.tree .goterm_regulates {
+   color: rgb(254, 180, 11)
+}
+
+.tree .goterm_positively_regulates {
+   color: rgb(31, 255, 9)
+}
+
+.tree .goterm_negatively_regulates {
+   color: rgb(252, 0, 8)
+}
+
+.tree .goterm_unknown {
+   color: #888888;
+}
+

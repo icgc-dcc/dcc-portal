@@ -1,0 +1,44 @@
+{
+    "id": "2ad7f03a-50cb-50d5-a0e4-7578709e1048",
+    "study": null,
+    "access": "controlled",
+    "data_type": {
+      "data_type": "DNA-Seq",
+      "data_format": "BAM",
+      "experimental_strategy": "WXS"
+    },
+    "repository": {
+      "repo_type": "GNOS",
+      "repo_org": "CGHub",
+      "repo_entity_id": "92e56667-0543-4835-b55b-375b4b9dd2f0",
+      "repo_server": [
+        {
+          "repo_name": "CGHub - Santa Cruz",
+          "repo_code": "cghub",
+          "repo_country": "US",
+          "repo_base_url": "https://cghub.ucsc.edu/"
+        }
+      ],
+      "repo_metadata_path": "/cghub/metadata/analysisFull/",
+      "repo_data_path": "/cghub/data/analysis/download/",
+      "file_name": "C239.TCGA-24-1431-10A-01D.1.bam",
+      "file_size": 22678042125,
+      "file_md5sum": "e721d77574c5692de1900e5f0d92f31c",
+      "last_modified": "2015-04-22T01:46:58Z"
+    },
+    "donor": {
+      "project_code": "OV-US",
+      "program": "TCGA",
+      "study": null,
+      "primary_site": "Ovary",
+      "donor_id": "DO32307",
+      "specimen_id": "SP68487",
+      "sample_id": "SA393570",
+      "submitted_donor_id": "384170fc-e8be-426a-a54e-bf1ca61f2986",
+      "submitted_specimen_id": "4a78aa71-6f25-4394-ad9e-1da9d4732768",
+      "submitted_sample_id": "7545d7dc-285a-409f-a82a-b02b6645a67d",
+      "tcga_participant_barcode": "TCGA-24-1431",
+      "tcga_sample_barcode": "TCGA-24-1431-10A",
+      "tcga_aliquot_barcode": "TCGA-24-1431-10A-01D-0472-01"
+    }
+}

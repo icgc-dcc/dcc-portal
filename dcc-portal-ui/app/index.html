@@ -1,0 +1,423 @@
+<!doctype html>
+<!--
+~ Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+~
+~ This program and the accompanying materials are made available under the terms of the GNU Public
+~ License v3.0. You should have received a copy of the GNU General Public License along with this
+~ program. If not, see <http://www.gnu.org/licenses/>.
+~
+~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+~ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+~ FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+~ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+~ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+~ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+~ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+~ WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html data-ng-app="icgc" data-ng-controller="AppCtrl as AppCtrl" data-ng-click="AppCtrl.handleApplicationClick()"
+      class="no-js">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <!--[if lte IE 10]>
+    <script>
+        document.write('<base href="' + document.location.protocol + '//' + document.location.host + '/">');
+    </script>
+    <![endif]-->
+    <base href="/"/>
+
+    <meta name="fragment" content="!"/>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title data-ng-bind-template="{{ AppCtrl.Page.title() }} | ICGC Data Portal"></title>
+    <meta name="description" content="ICGC Data Portal"/>
+    <meta name="viewport" content="width=device-width"/>
+
+    <link href="favicon.ico" rel="icon" type="image/x-icon"/>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700,700italic' rel='stylesheet'
+          type='text/css'>
+    <!-- build:css styles/vendor.css -->
+    <link rel="stylesheet" href="styles/bootstrap.css"/>
+    <link rel="stylesheet" href="styles/icgc-icons.css"/>
+    <link rel="stylesheet" href="vendor/styles/slider.css"/>
+    <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css"/>
+    <link rel="stylesheet" href="bower_components/angularjs-toaster/toaster.css"/>
+    <!-- endbuild -->
+
+    <!-- Genome Browser -->
+    <!-- build:css styles/vendor/genome-viewer-deps.css -->
+    <link rel="stylesheet" href="vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.css"/>
+    <link rel="stylesheet" href="vendor/scripts/genome-viewer/vendor/fontawesome/css/font-awesome.min.css"/>
+    <!-- endbuild -->
+    <link rel="stylesheet" href="vendor/styles/genomeviewer/css/style.css"/>
+    <!-- Genome Browser -->
+
+    <!-- build:css styles/styles.css -->
+    <link rel="stylesheet" href="styles/styles.css"/>
+    <link rel="stylesheet" href="styles/override.css"/>
+    <link rel="stylesheet" href="styles/flags.css"/>
+    <!-- endbuild -->
+
+</head>
+<body id="{{ AppCtrl.Page.page() }}-page">
+
+
+<noscript>
+    <style>#loading-screen {
+        display: none;
+    }</style>
+    <div class="wrap light">
+        <header>
+            <h1 style="font-size: 4rem">
+                <img style="height: 5rem; margin-bottom: -1rem" src="styles/images/icgc-logo.png">
+                <span id="icgc">ICGC</span> Data Portal</h1>
+        </header>
+        <div class="content">
+            <h1><span class="t_badge t_badge_icon" style="background: #dc322f"><i class="icon-attention"></i></span>
+                Javascript is required to view the ICG Data Portal.</h1>
+            <section><h2>Please enable Javascript and reload the page.</h2></section>
+        </div>
+        <div class="push"></div>
+    </div>
+    <footer>
+        <ul>
+            <li class="heading">DCC</li>
+            <li><a href="/team">The Team</a></li>
+            <li><a href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">Contact Us</a></li>
+            <li><a href="https://twitter.com/icgc_dcc">Twitter</a></li>
+        </ul>
+        <ul>
+            <li class="heading">ICGC</li>
+            <li><a href="https://icgc.org" target="_blank">ICGC Home</a></li>
+            <li><a href="https://www.icgc.org/daco" target="_blank">Data Access</a></li>
+            <li><a href="https://www.icgc.org/icgc/goals-structure-policies-guidelines/e3-publication-policy"
+                   target="_blank">Publication Policy</a></li>
+            <li><a href="https://www.icgc.org/privacy-policy" target="_blank">Privacy Policy</a></li>
+            <li><a href="https://www.icgc.org/terms-and-conditions" target="_blank">Terms and Conditions</a></li>
+        </ul>
+        <div class="logo omega"><a href="http://oicr.on.ca/" target="_blank"><img
+                src="styles/images/OICR2logo.png"></a></div>
+        <div style="clear:both"></div>
+        <div>
+            <small> &copy; 2015 <a href="https://icgc.org">International Cancer Genome Consortium.</a> All Rights
+                reserved.
+            </small>
+        </div>
+    </footer>
+</noscript>
+
+
+<notify></notify>
+<toaster-container></toaster-container>
+<div data-ng-if="!AppCtrl.appLoaded || AppCtrl.Page.working() || AppCtrl.Page.getError()" id="loading-screen">
+    <div data-ng-if="(!AppCtrl.appLoaded || AppCtrl.Page.working()) && ! AppCtrl.Page.getError()">
+        <i class="icon-spin icon-spinner"></i>
+        <img style="height: 3rem;" src="styles/images/icgc-logo.png">
+    </div>
+</div>
+<div class="wrap light ng-cloak">
+    <login></login>
+    <header data-ng-controller="MainHeaderController as controller"
+      data-ng-include="'/scripts/common/views/header.html'">
+    </header>
+    <div class="content transition-fade" data-ui-view></div>
+    <div class="push"></div>
+</div>
+<footer class="ng-cloak" data-ng-controller="FooterCtrl as FooterCtrl">
+    <div data-ng-include="'/scripts/common/views/footer.html'"></div>
+</footer>
+<tooltip-control></tooltip-control>
+
+<!-- inject develop enviroment configuration (if applicable) -->
+<!-- injector:js -->
+<!-- endinjector -->
+<!-- ********************************************************* -->
+
+
+
+<!-- --------------------------------------------------------- -->
+<!-- AngularJS Dependencies -->
+<!-- --------------------------------------------------------- -->
+
+<!-- build:js scripts/angular-libs.js -->
+
+<!-- Helper Libs for Angular App -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/lodash/lodash.js"></script>
+
+<!-- Angular Libs -->
+<script src="bower_components/angularjs/angular.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+<script src="bower_components/restangular/dist/restangular.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+<script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+<script src="bower_components/angularytics/dist/angularytics.js"></script>
+<script src="bower_components/angular-ui-utils/scrollfix.js"></script>
+<script src="bower_components/angular-markdown-directive/markdown.js"></script>
+<script src="bower_components/angular-lodash/angular-lodash.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="bower_components/angularjs-toaster/toaster.js"></script>
+<script src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+<!-- endbuild -->
+
+<!-- ********************************************************* -->
+
+<!-- --------------------------------------------------------- -->
+<!--  Other App Dependencies -->
+<!-- --------------------------------------------------------- -->
+
+<!-- build:js scripts/vendor-deps.min.js -->
+<script src="bower_components/highcharts/highcharts.js"></script>
+<script src="bower_components/highcharts/modules/no-data-to-display.src.js"></script>
+<script src="bower_components/d3/d3.min.js"></script>
+<script src="bower_components/Blob/Blob.js"></script>
+<script src="bower_components/FileSaver/FileSaver.min.js"></script>
+<script src="bower_components/showdown/src/showdown.js"></script>
+<script src="bower_components/showdown/src/extensions/table.js"></script>
+<script src="bower_components/x2js/xml2json.js"></script>
+<script src="scripts/ui/js/table2CSV.js"></script>
+<!-- endbuild -->
+
+<!-- ********************************************************* -->
+
+<!-- --------------------------------------------------------- -->
+<!--  BAM iobio -->
+<!-- --------------------------------------------------------- -->
+
+<!-- build:js scripts/bamiobio.min.js -->
+<script src="vendor/scripts/bamiobio/class.js"></script>
+<script src="vendor/scripts/bamiobio/rdp.js"></script>
+<script src="vendor/scripts/bamiobio/queue.min.js"></script>
+<script src="vendor/scripts/bamiobio/donut.d3.js"></script>
+<script src="vendor/scripts/bamiobio/histogram.d3.js"></script>
+<script src="vendor/scripts/bamiobio/histogramViewFinder.d3.js"></script>
+<script src="vendor/scripts/bamiobio/movingLine.d3.js"></script>
+<script src="vendor/scripts/bamiobio/bam.iobio.js/bam.iobio.js"></script>
+<script src="vendor/scripts/bamiobio/bam.iobio.js/bam.js"></script>
+<script src="vendor/scripts/bamiobio/bam.iobio.js/bin.js"></script>
+<script src="vendor/scripts/bamiobio/binary.js"></script>
+<script src="vendor/scripts/bamiobio/flatui-checkbox.js"></script>
+<!-- endbuild -->
+
+<!-- ********************************************************* -->
+
+<!-- --------------------------------------------------------- -->
+<!-- Genome Viewer -->
+<!-- --------------------------------------------------------- -->
+
+<!-- build:js scripts/genome-viewer.min.js -->
+<script src="vendor/scripts/backbone.min-1.0.js"></script>
+<script src="vendor/scripts/bootstrap.min.js"></script>
+<script src="vendor/scripts/bootstrap-slider-2.0.0.js"></script>
+<script src="vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.js"></script>
+<script src="vendor/scripts/genome-viewer/vendor/uri.js/src/URI.min.js"></script>
+
+<!-- Genome Viewer Config and Initialization -->
+<script src="vendor/scripts/genome-viewer/gv-config.js"></script>
+<script src="vendor/scripts/genome-viewer/genome-viewer.js"></script>
+
+<!-- Custom ICGC Genome Viewer Components -->
+<script type="text/javascript" src="vendor/scripts/genome-viewer/icgc-gene-adapter.js"></script>
+<script type="text/javascript" src="vendor/scripts/genome-viewer/icgc-gene-track.js"></script>
+<script type="text/javascript" src="vendor/scripts/genome-viewer/icgc-mutation-adapter.js"></script>
+<script type="text/javascript" src="vendor/scripts/genome-viewer/icgc-mutation-track.js"></script>
+<script type="text/javascript" src="vendor/scripts/genome-viewer/icgc-navigation-bar.js"></script>
+<!-- endbuild -->
+
+<!-- --------------------------------------------------------- -->
+
+
+<!-- --------------------------------------------------------- -->
+<!-- ICGC Core Application -->
+<!-- --------------------------------------------------------- -->
+
+<!-- build:js scripts/scripts.js -->
+<script src="scripts/app/js/app.js"></script>
+<script src="scripts/common/js/common.js"></script>
+<script src="scripts/common/js/services.js"></script>
+<script src="scripts/common/js/header.js"></script>
+<script src="scripts/common/js/footer.js"></script>
+<script src="scripts/common/js/version.js"></script>
+<script src="scripts/common/js/notify.js"></script>
+<script src="scripts/common/js/location.js"></script>
+<script src="scripts/common/js/filters.js"></script>
+<script src="scripts/common/js/display.js"></script>
+<script src="scripts/common/js/external.js"></script>
+<script src="scripts/common/js/chromosome.js"></script>
+<script src="scripts/common/js/consequence.js"></script>
+<script src="scripts/common/js/datatype.js"></script>
+<script src="scripts/common/js/codetable.js"></script>
+<script src="scripts/common/js/portalfeature.js"></script>
+<script src="scripts/common/js/historymanager.js"></script>
+<script src="scripts/common/js/pcawg.js"></script>
+<script src="scripts/common/js/translator.js"></script>
+<script src="scripts/common/js/abridger.js"></script>
+<script src="scripts/common/js/pql/pqlparser.js"></script>
+<script src="scripts/common/js/pql/PqlQueryObjectService.js"></script>
+<script src="scripts/common/js/pql/PqlUtilService.js"></script>
+<script src="scripts/common/js/pql/PqlTranslationService.js"></script>
+<script src="scripts/share/js/share.js"></script>
+<script src="scripts/ui/js/directives.js"></script>
+<script src="scripts/ui/js/tpls.js"></script>
+<script src="scripts/ui/js/suggest.js"></script>
+<script src="scripts/ui/js/table.js"></script>
+<script src="scripts/ui/js/toolbar.js"></script>
+<script src="scripts/ui/js/open_in.js"></script>
+<script src="scripts/ui/js/validators.js"></script>
+<script src="scripts/ui/js/trees.js"></script>
+<script src="scripts/ui/js/lists.js"></script>
+<script src="scripts/ui/js/query.js"></script>
+<script src="scripts/ui/js/tooltip.js"></script>
+<script src="scripts/ui/js/events.js"></script>
+<script src="scripts/ui/js/scroll.js"></script>
+<script src="scripts/visualization/js/common.js"></script>
+<script src="scripts/highcharts/js/service.js"></script>
+<script src="scripts/highcharts/js/directives.js"></script>
+<script src="scripts/proteinstructureviewer/js/chartmaker.js"></script>
+<script src="scripts/proteinstructureviewer/js/directives.js"></script>
+<script src="scripts/projectmutationviewer/js/viewer.js"></script>
+<script src="scripts/projectmutationviewer/js/directive.js"></script>
+<script src="scripts/stackedbarchart/js/stackedbar.js"></script>
+<script src="scripts/stackedbarchart/js/directives.js"></script>
+<script src="scripts/stackedareachart/js/stackedarea.js"></script>
+<script src="scripts/stackedareachart/js/directive.js"></script>
+<script src="scripts/projectmutationviewer/js/directive.js"></script>
+<script src="scripts/venn23/js/venn23.js"></script>
+<script src="scripts/pathwayviewer/js/pathways.js"></script>
+<script src="scripts/pathwayviewer/js/services.js"></script>
+<script src="scripts/pathwayviewer/js/controller.js"></script>
+<script src="scripts/pathwayviewer/js/directive.js"></script>
+<script src="scripts/keyword/js/keyword.js"></script>
+<script src="scripts/releases/js/releases.js"></script>
+<script src="scripts/projects/js/projects.js"></script>
+<script src="scripts/donors/js/donors.js"></script>
+<script src="scripts/genes/js/genes.js"></script>
+<script src="scripts/compounds/js/compounds.js"></script>
+<script src="scripts/mutations/js/mutations.js"></script>
+<script src="scripts/genesets/js/services.js"></script>
+<script src="scripts/genesets/js/genesets.js"></script>
+<script src="scripts/advanced/js/advanced.js"></script>
+<script src="scripts/genomemaps/js/gmservice.js"></script>
+<script src="scripts/genomemaps/js/viewer.js"></script>
+<script src="scripts/genomemaps/js/header.js"></script>
+<script src="scripts/downloader/js/routes.js"></script>
+<script src="scripts/downloader/js/services.js"></script>
+<script src="scripts/downloader/js/models.js"></script>
+<script src="scripts/downloader/js/controllers.js"></script>
+<script src="scripts/downloader/js/request.js"></script>
+<script src="scripts/repositories/js/repositories.js"></script>
+<script src="scripts/software/js/software.js"></script>
+<script src="scripts/repository/js/repository.js"></script>
+<script src="scripts/repository/js/routes.js"></script>
+<script src="scripts/repository/js/services.js"></script>
+<script src="scripts/repository/js/directives.js"></script>
+<script src="scripts/facets/js/facets.js"></script>
+<script src="scripts/facets/js/terms.js"></script>
+<script src="scripts/facets/js/current.js"></script>
+<script src="scripts/facets/js/location.js"></script>
+<script src="scripts/facets/js/tags.js"></script>
+<script src="scripts/facets/js/helpers.js"></script>
+<script src="scripts/browser/js/routes.js"></script>
+<script src="scripts/browser/js/controller.js"></script>
+<script src="scripts/auth/js/auth.js"></script>
+<script src="scripts/genelist/js/genelist.js"></script>
+<script src="scripts/donorlist/js/donorlist.js"></script>
+<script src="scripts/enrichment/js/enrichment.js"></script>
+<script src="scripts/phenotype/js/phenotype.js"></script>
+<script src="scripts/analysis/js/analysis.js"></script>
+<script src="scripts/analysis/js/analysisList.js"></script>
+<script src="scripts/analysis/js/analysisLauncher.js"></script>
+<script src="scripts/analysis/js/analysisSet.js"></script>
+<script src="scripts/sets/js/services.js"></script>
+<script src="scripts/sets/js/sets.js"></script>
+<script src="scripts/beacon/js/beacon.js"></script>
+<script src="scripts/tokens/js/tokens.js"></script>
+<script src="scripts/pancancer/js/pancancer.js"></script>
+<!-- endbuild -->
+
+<!-- --------------------------------------------------------- -->
+
+<script>
+    var _gaq = _gaq || [];
+    var pluginUrl =
+            '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+    _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+    _gaq.push(['_setAccount', 'UA-43425408-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src =
+        ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','iobioGoogleAnalytics');
+
+  iobioGoogleAnalytics('create', 'UA-47481907-2', 'iobio.io');
+   
+</script>
+  
+<!-- Piwik -->
+<script type="text/javascript">
+    var pkBaseURL = (("https:" == document.location.protocol) ? "https://webstats.oicr.on.ca/piwik/" :
+            "http://webstats.oicr.on.ca/piwik/");
+    document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 32);
+        piwikTracker.trackPageView();
+        piwikTracker.enableLinkTracking();
+    } catch (err) {
+    }
+</script>
+<noscript><p><img src="https://webstats.oicr.on.ca/piwik/piwik.php?idsite=32" style="border:0" alt=""/></p></noscript>
+<!-- End Piwik Tracking Code -->
+
+<script type="text/javascript">
+    var $buoop = {
+        vs: {i: 8, f: 15, o: 10.6, s: 4, n: 9},
+        reminder: 0,
+        test: false,
+        text: '<i class="icon-attention"></i>Your Browser is not supported, some features may be broken or missing.' +
+              '<strong><a target="_blank" style="color: #fff;text-decoration: underline;" ' +
+              'href="http://browser-update.org/en/update.html"> Learn how to update your browser</a></strong>'
+    };
+    $buoop.ol = window.onload;
+    window.onload = function () {
+        try {
+            if ($buoop.ol) {
+                $buoop.ol();
+            }
+        } catch (e) {
+        }
+        var e = document.createElement("script");
+        e.setAttribute("type", "text/javascript");
+        var prot = ('https:' == document.location.protocol ? 'https://' : 'http://');
+        e.setAttribute("src", prot + "browser-update.org/update.js");
+        document.body.appendChild(e);
+    }
+</script>
+</body>
+</html>

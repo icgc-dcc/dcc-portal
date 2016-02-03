@@ -1,0 +1,49 @@
+<div class="h1-wrap">
+   <h1 data-ui-scrollfix=79>
+       <i class="t_badge t_badge_icon t_badge__analysis"><i class="icon-beaker"></i></i>Data Analysis
+   </h1>
+</div>
+
+<article class="full">
+    <div class="t_tabs t_tabs__isolated">
+        <div class="t_tabs__tab t_tabs__tab__donor" 
+            data-ng-click="currentTab = 'sets'" 
+            data-ng-class="{active: currentTab === 'sets'}" 
+            data-nested data-href="analysis/sets">Saved Sets</div>
+
+        <div class="t_tabs__tab t_tabs__tab__donor" 
+            data-ng-click="currentTab = 'analysis'" 
+            data-ng-class="{active: currentTab === 'analysis'}" 
+            data-nested data-href="analysis">Launch Analysis</div>
+
+        <div class="t_tabs__tab t_tabs__tab__donor" 
+            data-ng-show="AnalysisService.getAll().length > 0"
+            data-ng-click="currentTab = 'view'" 
+            data-ng-class="{active: currentTab === 'view'}" 
+            data-nested data-href="analysis/view/{{AnalysisService.getAll()[0].type}}/{{AnalysisService.getAll()[0].id}}">
+                Result</div>
+
+    </div>
+
+    <div class="t_tab_pane" data-ng-class="{active: currentTab === 'sets'}" data-ng-if="currentTab === 'sets'">
+        <div data-ng-include="'/scripts/analysis/views/analysis.sets.html'"></div>
+    </div>
+
+    <div class="t_tab_pane" data-ng-class="{active: currentTab === 'analysis'}" data-ng-if="currentTab === 'analysis'">
+        <div data-ng-include="'/scripts/analysis/views/analysis.analysis.launcher.html'"></div>
+    </div>
+
+    <div class="t_tab_pane" data-ng-class="{active: currentTab === 'view'}">
+        <div data-ng-include="'/scripts/analysis/views/analysis.analysis.html'"></div>
+    </div>
+
+    <section data-ng-if="['sets', 'analysis'].indexOf(currentTab) >=0">
+        <small>
+            Please see the <a href="http://docs.icgc.org/portal/analysis/" target="_blank"><i class="icon-external-link"></i>Data Analysis</a>
+            documentation resource for a general overview of this feature.
+        </small>
+    </section>
+
+
+
+</article>

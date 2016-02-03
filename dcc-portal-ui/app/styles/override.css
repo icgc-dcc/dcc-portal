@@ -1,0 +1,158 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/* Bootstrap fixed table text alignment in their 3.0 versions, in the meantime ... */
+.table .text-left {
+    text-align: left;
+}
+
+.table .text-right {
+    text-align: right;
+}
+
+.table .text-center {
+    text-align: center;
+}
+
+.table .text-vert-middle {
+    vertical-align: middle;
+}
+
+.modal-header {
+   padding: 10px;
+}
+
+.modal-footer {
+   padding: 10px;
+}
+
+.modal-header h3 {
+   margin: 0
+}
+
+
+/* For file dialogs */
+.btn-file {
+    position: relative;
+    overflow: hidden;
+    font-size: 1.0rem;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    //font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+
+textarea {
+   display: block;
+   width: 100%;
+   margin: 0.2rem;
+}
+
+.alert-warning {
+   color: #c09853;
+   background-color: #fcf8e3
+}
+
+.alert-warning h4 {
+   color: #c09853;
+}
+
+
+
+/* Style showdown markup */
+.alert-error .release_notice * {
+   color: rgb(220, 50, 47) !important;
+}
+
+.markdown_container td,
+.markdown_container th {
+   border: 1px solid rgb(230, 230, 230);
+   text-align: left;
+   padding: .2rem .4rem;
+   line-height: 1rem;
+}
+
+.markdown_container p,
+.release_notice p{
+   margin-top: 0.5rem;
+   margin-bottom: 1.0rem;
+}
+
+.markdown_container h1,
+.release_notice h1 {
+   margin-top: 0.5rem;
+   margin-bottom: 0.5rem;
+   font-size: 2rem;
+}
+
+.markdown_container h2,
+.release_notice h2 {
+   margin-top: 0.5rem;
+   margin-bottom: 0.5rem;
+   font-size: 1.75rem;
+}
+
+.markdown_container h3,
+.release_notice h3 {
+   margin-top: 0.5rem;
+   margin-bottom: 0.5rem;
+   font-size: 1.5rem;
+}
+
+
+
+/* A slimmer pagination control */
+.pagination {
+    margin-top: 0px;
+    margin-bottom: 5px;
+    line-height: 20px;
+}
+
+.pagination >li>a {
+    padding: 0px 12px;
+}
+
+.pagination >li>a {
+    cursor: pointer;
+}
+
+/*** SUGGEST MATCH ***/
+.match {
+    font-weight: bold;
+}
+
+
+/**
+ * Fix modal jumps when opening dialog
+ * See: http://stackoverflow.com/questions/21604674/bootstrap-modal-background-jumps-to-top-on-toggle
+ */
+body.modal-open {
+   overflow: visible;
+}

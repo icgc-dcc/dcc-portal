@@ -1,0 +1,44 @@
+<div id="pathway-viewer-mini" class="pathwayviewercontainer text-center">
+  <div data-ng-if="items===''" class="empty loading-text">
+    <h3>No Diagram Available</h3>
+  </div>
+    <i class="fa fa-expand pathway-fullscreen-controller"></i>
+    
+  <div class="pathway-legend">
+    <i data-ng-if="items!==''" data-ng-click="legendClick()" class="fa fa-question-circle pathway-legend-controller"></i>
+    <h4>LEGEND</h4>
+    <div class="pathway-legend-container">
+      <div class="pathway-legend-content"></div>
+    </div>
+  </div>
+  
+  <div class="pathway-info">
+    <i style="visibility:hidden" class="fa fa-chevron-circle-right pathway-info-controller"></i>
+    <h4>DETAILS</h4>
+    <div>{{entityType}}</div>
+    <div class="pathway-info-svg"></div>
+    <div class="pathway-info-content">
+      <div class="subpath-link" data-ng-if="entityType=='ProcessNode'">
+        <a href="/genesets/R-HSA-{{ subPathwayId }}">VIEW THIS SUB-PATHWAY: R-HSA-{{ subPathwayId }}</a>
+      </div>
+      <table class="table pathway-gene-table" data-ng-if="geneList.length>0">
+        <tr>
+          <th class="pathway-gene-header-label pathway-gene-header">Gene</th>
+          <th class="pathway-gene-header-label pathway-gene-header"># ICGC Mutations</th>
+        </tr>
+        <tr data-ng-repeat="gene in geneList" data-ng-class="{'gene-overlap-result': overlappingGenesMap[gene.id]}">
+          <th class="pathway-gene-label"><a href="/genes/{{ gene.id }}">{{ gene.symbol }}</a></th>
+          <th class="pathway-gene-label"><a href="/search/m?filters={{ gene.advQuery }}">{{ gene.value }}</a></th>
+        </tr>
+      </table>
+      <table class="table pathway-gene-table" data-ng-if="geneList.length == 0 && overlappingGenesList.length > 0">
+        <tr>
+          <th class="pathway-gene-header-label pathway-gene-header">Gene</th>
+        </tr>
+        <tr data-ng-repeat="gene in overlappingGenesList" class="gene-overlap-result">
+          <th class="pathway-gene-label"><a href="/genes/{{ gene.geneId }}">{{ gene.geneSymbol }}</a></th>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

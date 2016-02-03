@@ -1,0 +1,18 @@
+<div class="popover">
+  <div class="popover-outer-container">  
+    <div class="popover-inner-container"> 
+      <h3 class="popover-title" data-ng-bind-html="title" data-ng-if="title"></h3>
+      <div class="popover-body" data-ng-transclude></div> 
+    </div> 
+    <div class="popover-inner-container-border"> 
+      <div class="arrow"></div> 
+    </div> 
+  </div> 
+  <div class="popover-anchor-container"> 
+    <i data-ng-if="assistIconClass && isAssistIconBeforeLabel"  
+      class="popover-icon-before {{assistIconClass}}"> 
+    </i> 
+    <div class="popover-label" data-ng-bind-html="anchorText"></div> 
+      <i data-ng-if="assistIconClass && ! isAssistIconBeforeLabel" class="{{assistIconClass}} popover-icon-after"></i>   
+  </div> 
+</div>

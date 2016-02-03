@@ -1,0 +1,112 @@
+.set-symbol {
+   font-family: Serif;
+}
+
+/* Bar charts styles */
+.axis_label {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: hsl(0, 0%, 20%)
+}
+
+.axis {
+    shape-rendering: crispEdges;
+}
+
+.axis line {
+    stroke: #666;
+    stroke-width: 1px;
+}
+
+.axis .domain {
+   opacity: 0.5;
+}
+
+.axis .tick line {
+    stroke: #666;
+    stroke-width: 1px;
+}
+
+.axis .tick text {
+    font-size: 0.75rem;
+}
+
+.graph_interactive {
+   cursor: pointer;
+}
+
+
+.graph_title {
+   font-size: 1.25rem;
+   font-weight: 300;
+   stroke: none;
+   fill: hsl(0, 0%, 20%);
+   text-anchor: middle;
+}
+
+.graph_subtitle {
+  font-size: 0.8rem; 
+  font-weight: 300; 
+  stroke: none;
+  fill: #666666;
+}
+
+.debug {
+   font-size: 0.8rem;
+   stroke: none;
+   fill: #444444;
+}
+
+/* stacke area chart style */
+
+
+/* Stacked bar chart style */
+.stacked.y.axis path,
+.stacked.y.axis line {
+  fill: none;
+  stroke: gray;
+  sharp-rengering: crispEdges;
+}
+
+.stacked.y.axis.major line {
+  fill: none;
+  stroke: hotpink;
+  sharp-rengering: crispEdges;
+}
+
+.stacked.bar {
+  fill: gray;
+}
+
+.stacked.x.axis path, .stackedarea.x.axis.labels path  {
+  display: none;
+}
+
+.stackedsubtitle {
+    font-weight:normal;
+    color: #999999;
+    font-size: 13px;
+}
+
+.stackedareahint, .stackedareahinthighlight, .stackedarea.x.axis, .stackedarea.y.axis{
+  pointer-events: none;
+}
+
+/* modify the container of the stacked bar chart */
+.wide.omega {
+    text-align: right;
+    margin-right: 30px;
+    min-width: 500px;
+}
+
+#svgcontainer {
+    min-width: 500px;
+}
+
+.venn-count {
+   fill: #111;
+}
+
+.tick line{
+    opacity: 0.1;
+  }

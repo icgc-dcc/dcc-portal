@@ -1,0 +1,37 @@
+<div class="h1-wrap">
+    <h1 data-ui-scrollfix=79><span class="t_badge t_badge_icon t_badge__download"><span class="icon-database"></span></span>Data Repository</h1>
+</div>
+<div class="t_tabs">
+    <div class="t_tabs__tab t_tabs__tab__charts"
+         data-nested
+         data-ng-click="RepositoryController.currentTab = 'icgc'"
+         data-ng-class="{active: RepositoryController.currentTab === 'icgc'}"
+         data-href="repository">
+        DCC Repository
+    </div>
+
+    <div class="t_tabs__tab t_tabs__tab__table"
+         data-nested
+         data-ng-click="RepositoryController.currentTab = 'external'"
+         data-ng-class="{active: RepositoryController.currentTab === 'external'}"
+         data-href="repository/external">
+        External Repositories
+    </div>
+</div>
+
+<div>
+    <div class='t_tab_pane'
+         data-ng-if="RepositoryController.currentTab === 'icgc'"
+         data-ng-class="{active: RepositoryController.currentTab === 'icgc'}">
+
+         <div data-ng-controller="ICGCRepoController as ICGCRepoController" data-ng-include="'scripts/repository/views/repository.icgc.html'"></div>
+    </div>
+
+    <div class='t_tab_pane'
+         data-ng-if="RepositoryController.currentTab === 'external'"
+         data-ng-class="{active: RepositoryController.currentTab === 'external'}">
+
+         <div data-ng-controller="ExternalRepoController as ExternalRepoController" data-ng-include="'scripts/repository/views/repository.external.html'"></div>
+    </div>
+</div>
+

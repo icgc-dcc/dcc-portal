@@ -1,0 +1,122 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// ---------------------------------------------------------------------------
+// Color Palette (Solarized: http://ethanschoonover.com/solarized)
+/*
+$base03:    #002b36;
+$base02:    #073642;
+$base01:    #586e75;
+$base00:    #657b83;
+$base0:     #839496;
+$base1:     #93a1a1;
+$base2:     #eee8d5;
+$base3:     #fdf6e3;
+$yellow:    #b58900;
+$orange:    #cb4b16;
+$red:       #dc322f;
+$magenta:   #d33682;
+$violet:    #6c71c4;
+$blue:      #268bd2;
+$cyan:      #2aa198;
+$green:     #859900;
+
+*/
+
+$blueDark:  #283e5d;
+
+$brand-dark: hsl(210, 29%, 30%);
+$brand: hsl(210, 29%, 35%);
+$brand-light: hsl(210, 29%, 40%);
+
+$black: hsl(0, 0%, 0%);
+$greyDarker: hsl(0, 0%, 20%);
+$greyDark: hsl(0, 0%, 40%);
+$grey: hsl(0, 0%, 60%);
+$greySlightlyLighter: hsl(0, 0%, 70%);
+$greyLight: hsl(0, 0%, 80%);
+$greyLighter: hsl(0, 0%, 90%);
+$greyLightest: hsl(0, 0%, 95%);
+$greyLightestEver: hsl(0, 0%, 98%);
+$white: hsl(0, 0%, 100%);
+
+$orangeLight: hsl(35, 82%, 51%);
+$orange: hsl(29, 97%, 41%);
+
+/*$mauve: hsl(300, 46%, 83%);*/
+$mauve: hsl(336, 52%, 40%);
+
+/* $red: #dc322f; */
+/* $redDarker: #BB3200; */
+
+/* $red: hsl(1, 71%, 52%); */
+$red: hsl(12, 71%, 52%);
+$redDarker: hsl(16, 100%, 37%);
+
+$magenta: hsl(331, 64%, 52%);
+$violet: hsl(237, 43%, 60%);
+
+$blue: hsl(204, 76%, 36%);
+$cyan: hsl(196, 79%, 42%);
+$green: hsl(110, 100%, 30%);
+
+$donor: $violet;
+$gene: $magenta;
+$mutation: $cyan;
+$project: $orangeLight;
+$pathway: $blue; //$green;
+$charts: $violet;
+$table: $magenta;
+$history: $green;
+$repositories: hsl(106, 25%, 45%);
+$compound: hsl(342, 86%, 19%);
+$file: $repositories;
+
+$tooltipBorder: $greySlightlyLighter;
+$tooltipFill: white;
+$tooltipShadowColor: rgba(180,180,180,0.43);
+
+// ---------------------------------------------------------------------------
+// Color System
+@mixin theme($background, $text, $headers, $links, $hover) {
+  background-color: $background;
+  color: $text;
+  //* { color:$text; }
+  h1, h2, h3, h4, h5, h6 {
+    color: $headers;
+  }
+  a, a:active, a:visited, code.url {
+    text-decoration: none;
+    color: $links;
+  }
+  a:hover {
+    background: rgba($hover, .7);
+  }
+}
+
+.light {
+  @include theme($white, $greyDarker, $black, $blue, $greyLighter);
+}
+
+.dark {
+  @include theme($brand, $white, $white, $orange, $brand-light);
+}
+
+html * {
+  color-profile: sRGB;
+  rendering-intent: auto;
+}

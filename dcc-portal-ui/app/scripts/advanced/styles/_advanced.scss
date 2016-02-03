@@ -1,0 +1,63 @@
+.graphs {
+  span {
+    float: left;
+  }
+}
+
+.graphs-collapsed {
+  max-height: 140px;
+  overflow-y: hidden;
+}
+
+.more-graphs-wrap {
+  position: absolute;
+  left: 0;
+  bottom: -1.5rem;
+  text-align: center;
+  width: 100%;
+}
+
+.more-graphs {
+  border: 1px solid $greyLight;
+  background: $white;
+  font: {
+    size: 1.2rem;
+    weight: 300;
+  }
+;
+  padding: .5rem 1rem;
+  display: inline-block;
+
+  &:hover {
+    border: 1px solid $orangeLight;
+    background: $white !important;
+  }
+}
+
+.gene-list-ids {
+   padding-left: 1rem;
+   max-height: 3rem;
+   overflow-x: hidden;
+   overflow-y: scroll;
+}
+
+
+/* Advanced search tab toolbar */
+.action-toolbar {
+   line-height: 1.25rem;
+   font-size: 1rem;
+   color: #999999;
+   text-transform: uppercase;
+
+   .action-item {
+      display: inline-block;
+      padding-right: 0.5rem;
+      padding-left: 0.25rem;
+      border-right-width: 1px;
+      border-right-style: solid;
+   }
+}
+.action-toolbar > .action-item:last-child {
+   border: 0;
+}
+

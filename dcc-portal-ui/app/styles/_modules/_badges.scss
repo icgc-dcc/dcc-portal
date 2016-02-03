@@ -1,0 +1,153 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+.t_badge {
+  font-family: $mono-stack;
+  color: $white;
+  background: $grey;
+  border-radius: 50%;
+  display: inline-block;
+  padding: .2rem 1rem 0rem;
+  text-align: center;
+  vertical-align: middle;
+
+  i {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  @include breakpoint($break-laptop) {
+    padding: .4rem 1rem .3rem;
+  }
+
+  @include breakpoint($break-widescreen) {
+    padding: .4rem 1rem .4rem;
+  }
+}
+
+h1 {
+  margin-bottom: 1rem;
+
+  .t_badge {
+    padding: .5rem 1.1rem .2rem 1.2rem;
+    margin: 0 2rem;
+  }
+  .t_badge_icon {
+    width: 4rem;
+    height: 4rem;
+    padding: .6rem .8rem .5rem .8rem;
+    font-size: 1.6rem;
+  }
+}
+
+.t_badge__gene {
+  background: $gene;
+}
+
+.t_badge__gene:after {
+  content: "G";
+}
+
+.t_badge__donor {
+  background: $donor;
+}
+
+.t_badge__donor:after {
+  content: "D";
+}
+
+.t_badge__mutation {
+  background: $mutation;
+}
+
+.t_badge__mutation:after {
+  content: "M";
+}
+
+.t_badge__pathway {
+  background: $pathway;
+}
+
+.t_badge__pathway:after {
+  content: "P";
+}
+
+
+.t_badge__geneset {
+  background: $pathway;
+}
+
+.t_badge__geneset:after {
+  content: "S";
+}
+
+.t_badge__compound {
+  background: $compound;
+}
+
+.t_badge__compound:after {
+  content: "C";
+}
+
+.t_badge__file {
+  background: $file;
+}
+
+.t_badge__file:after {
+  content: "F";
+}
+
+
+/*
+.t_badge__geneset::first-letter {
+  vertical-align: super;
+} */
+
+
+
+.t_badge__project, .t_badge__projects {
+  background: $project;
+}
+
+.t_badge__project:after {
+  content: "P";
+}
+
+.t_badge__advanced {
+  background: $blue;
+}
+
+.t_badge__analysis {
+  background: $mauve;
+}
+
+.t_badge__download {
+  background: $cyan;
+}
+
+.t_badge__data_repositories {
+  background: $repositories;
+}
+
+.t_badge__q {
+  background: $magenta;
+}
+
+
+.pcawg-badge {
+  font-size: 0.5rem;
+}

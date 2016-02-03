@@ -1,0 +1,215 @@
+.t_facets {
+  a:hover {
+    background: none;
+  }
+}
+
+.t_facets__facet__title {
+  border-left: .4rem solid $greyLight;
+  border-top: .1rem solid $greyLight;
+  background: $greyLightestEver;
+  padding: .5rem .25rem .5rem 0;
+
+  font: {
+    size: 1.1rem;
+    weight: 300;
+  }
+}
+
+.t_facets__facet__title_active {
+  border-left-color: $orangeLight;
+}
+
+.t_facets__facet__title__label {
+  &:hover {
+    cursor: pointer;
+    color: $orangeLight;
+  }
+}
+
+.t_facets__facet__is__not {
+  font-size: 0.75rem;
+  font-weight: 200;
+  cursor: pointer;
+  float: right;
+}
+
+/************************************************
+ *   Terms
+ ***********************************************/
+.t_facets__facet__terms__inactive ul li:last-child {
+  border-bottom: none;
+}
+
+.t_facets__facet__terms__inactive {
+  padding: 0;
+}
+
+.t_facets__facet__terms__inactive__term,
+.t_facets__facet__terms__active__term__label {
+  position: relative;
+}
+
+.t_facets__facet__terms__inactive__term {
+  border-bottom: 1px dashed $greyLighter;
+}
+
+.t_facets__facet__terms__inactive__term__label,
+.t_facets__facet__terms__active__term__label__text {
+  position: relative;
+  max-width: 67%;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  line-height: 1rem;
+}
+
+.t_facets__facet__terms__inactive__term__label {
+  padding-left: .5rem;
+  color: $blue;
+  cursor: pointer;
+  transition: .5s color;
+
+  &:hover {
+    color: $orange;
+  }
+}
+
+.t_facets__facet__terms__inactive__term__bar,
+.t_facets__facet__terms__active__term__bar {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  right: 0;
+
+  transition: width 1s;
+}
+
+.t_facets__facet__terms__inactive__term__bar {
+  background: $greyLightest;
+}
+
+.t_facets__facet__terms__active__term__bar {
+  background: lighten($cyan, 43);
+}
+
+.table .t_facets__facet__terms__active__term__bar {
+  max-height: 2.2rem;
+  background: lighten($cyan, 48);
+}
+
+.t_facets__facet__terms__inactive__term__count,
+.t_facets__facet__terms__active__term__count {
+  position: relative;
+  float: right;
+}
+
+.t_facets__facet__terms__inactive__term__count {
+  margin-right: 1rem;
+}
+
+.t_facets__facet__terms__active__term__count {
+  margin-right: .5rem;
+}
+
+.t_facets__facet__terms__inactive__reset {
+  font-size: 1.2rem;
+}
+.t_facets__facet__term__na {
+  color: $greyLight;
+}
+
+/************************************************
+ *   Labels
+ ***********************************************/
+.t_facets__facet__terms__active__term__label,
+.t_facets__facet__label {
+  padding: 0 .5rem;
+  line-height: 2.1rem;
+}
+
+.t_facets__facet__label, .t_facets__facet__terms__active__term__label {
+  &:hover {
+    cursor: pointer;
+    text-decoration: line-through;
+  }
+}
+
+.t_facets__facet__label {
+  background: lighten($greyDark, 50);
+  color: $blue;
+  &:hover {
+    background: lighten($greyDark, 47);
+  }
+}
+
+.t_facets__facet__terms__active__term__label {
+  background: lighten($cyan, 50);
+  color: $cyan;
+  &:hover {
+    background: lighten($cyan, 47);
+  }
+}
+
+.t_facets__facet__not {
+  background: lighten($red, 35%);
+  color: $black;
+  &:hover {
+    background: lighten($red, 30%);
+  }
+}
+
+.t_facets__facet__not__bar {
+  background: lighten($red, 25%);
+  color: $black;
+}
+
+.t_impact_high {
+  color: $red;
+}
+.t_impact_medium {
+  color: $orange;
+}
+.t_impact_low {
+  color: $green;
+}
+.t_impact_unknown {
+  color: $greyDark;
+}
+
+/************************************************
+ *   Input
+ ***********************************************/
+.t_facets__facet__input {
+  padding: .5rem;
+  position: relative;
+  input {
+    padding-right: 1.5rem;
+  }
+
+  .t_suggest_flyout {
+    margin-top: .25rem;
+  }
+
+  .t_suggest__embedded__right {
+    top: .9rem;
+    right: 1rem;
+  }
+}
+
+.t_facets__facet__button {
+	padding-right: .5rem;
+	position: relative;
+}
+
+/************************************************
+ * @-moz-document
+ ***********************************************/
+ @-moz-document url-prefix() {
+  .t_facets__facet__terms__inactive__term__label,
+  .t_facets__facet__terms__active__term__label__text {
+    line-height: 2.2rem;
+  }
+}

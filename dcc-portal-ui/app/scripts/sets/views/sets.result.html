@@ -1,0 +1,110 @@
+<h3>Set Operations
+    <span style="font-size:1rem" class="pull-right" data-ng-if="!isDeprecated">
+        <share-button></share-button>
+    </span>
+</h3>
+
+<div data-ng-if="!item || item.state === 'IN_PROGRESS'">
+    <h1 class="text-center"><i class="icon-spinner icon-spin" style="font-size:5rem"></i></h1>
+</div>
+<div data-ng-if="isDeprecated" class="alert-error">
+    <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
+</div>
+<div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
+
+    <div>Click on the areas of the Venn diagram to include them in your result set.</div>
+
+    <set-upload data-set-modal="dialog.setModal" data-set-union="dialog.setUnion" data-set-type="dialog.setType"></set-upload>
+
+    <div class="canvas half"></div>
+    <div class="half omega">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Alias</th>
+                    <th>Set Name</th>
+                    <th class="text-right"># Items</th>
+                    <th>Item Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="item in setList">
+                    <td>{{getSetShortHand(item, setList)}}</td>
+                    <td>{{setMap[item].name}}</td>
+                    <td class="text-right">
+                        <a href="{{setMap[item].advLink}}">{{setMap[item].count | number}}</a>
+                    </td>
+                    <td>{{setMap[item].type.toLowerCase() | readable}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+
+        <table class="table table-selectable">
+            <thead>
+                <tr>
+                    <th data-ng-click="checked=!checked; checked? selectAll() : selectNone()" class="text-center">
+                        <i class="{{checked? 'icon-check':'icon-check-empty'}}"></i>
+                    </th>
+                    <th>Set Operations</th>
+                    <th class="text-right"># Items</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="item in data"
+                    data-ng-mouseenter="tableMouseEnter(item.intersection)"
+                    data-ng-mouseleave="tableMouseOut(item.intersection)">
+
+                    <td style="cursor:pointer"
+                        data-ng-click="toggleSelection(item.intersection, item.count)" class="text-center">
+                        <i class="{{ isSelected(item.intersection)? 'icon-check' : 'icon-check-empty'}}"
+                           style="color: {{ isHighlighted(item.intersection)? '#B8D6E2' : isSelected(item.intersection)? '#7ABDDA' : ''}}"></i>
+                    </td>
+                    <td>
+                        <set-notation data-item="item" data-set-list="setList"></set-notation>
+                    </td>
+                    <td class="text-right">
+                        <a data-ng-if="item.count > 0" data-ng-click="redirect(item)" href="">{{item.count | number}}</a>
+                        <span data-ng-if="item.count === 0">{{item.count | number}}</span>
+                    </td>
+                    <td>
+                        <span style="float:left; font-size:1.25rem">
+                            <span class="t_tools__tool" data-ng-if="item.count > 0">
+                                <i class="icon-floppy" data-tooltip="Save as new set" data-ng-click="calculateUnion(item); saveDerivedSet()"></i>
+                                <i class="icon-file" data-tooltip="Export as TSV" data-ng-click="export(item)"></i>
+                            </span>
+                            <span class="t_tools__tool" data-ng-if="item.count > 0 && setType === 'donor'">
+                              <i data-ng-if="downloadsEnabled" class="icon-download" data-tooltip="Download Donor Data" data-ng-click="downloadDerivedSet(item)"></i>
+                              <i class="icon-download-cloud" data-tooltip="View in {{:: dataRepoTitle}}" data-ng-click="viewInExternal(item)"></i>
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+                <tr style="border-top: 1px solid #888; border-bottom: 1px solid #888">
+                    <td colspan="2"><strong>Union of selected sets</strong></td>
+                    <td class="text-right">
+                        <a data-ng-if="selectedTotalCount > 0 && selectedTotalCount <= unionMaxLimit" data-ng-click="redirect()" href=""><strong>{{selectedTotalCount | number}}</strong></a>
+                        <span data-ng-if="selectedTotalCount===0">0</span>
+                        <span data-ng-if="selectedTotalCount > unionMaxLimit"><strong>{{selectedTotalCount}}</strong></span>
+                    </td>
+                    <td>
+                        <span style="float:left; font-size:1.25rem" data-ng-show="selectedTotalCount > 0 && selectedTotalCount <= unionMaxLimit">
+                            <span class="t_tools__tool">
+                                <i class="icon-floppy" data-tooltip="Save as new set" data-ng-click="calculateUnion(); saveDerivedSet()"></i>
+                                <i class="icon-file" data-tooltip="Export" data-ng-click="export()"></i>
+                            </span>
+                            <span class="t_tools__tool" data-ng-if="setType === 'donor'">
+                              <i data-ng-if="downloadsEnabled" class="icon-download" data-tooltip="Download Donor Data" data-ng-click="downloadDerivedSet()"></i>
+                              <i class="icon-database" data-tooltip="View in {{:: dataRepoTitle}}" data-ng-click="viewInExternal()"></i>
+                            </span>
+                        </span>
+                        <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <small>Set operations has an upper limit of managing {{unionMaxLimit | number }} items.</small>
+    </div>
+</div>

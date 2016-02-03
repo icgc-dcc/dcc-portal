@@ -1,0 +1,72 @@
+<h1 data-ui-scrollfix=79><span class="t_badge t_badge_icon t_badge__projects"><i class="icon-list"></i></span>Cancer Projects</h1>
+<aside class="t_sidebar">
+    <div style="margin-right: -2rem; position: relative">
+        <div data-ng-if="ProjectsCtrl.loading" class="loadingOverlay"></div>
+        <div data-ng-if="!ProjectsCtrl.projects.facets" class="loading loading-icon">
+            <i class="icon-spinner icon-spin"></i>
+        </div>
+        <ul data-ng-show="ProjectsCtrl.projects.facets" class="t_facets">
+            <li data-tags-facet data-label="Project" data-facet-name="id" data-placeholder="e.g. PACA-CA, Brain, TCGA"
+                data-type="project"></li>
+            <terms data-type="project" data-facet-name="primarySite" data-label="Primary Site"
+                   data-facet="ProjectsCtrl.projects.facets.primarySite"></terms>
+            <terms data-type="project"
+                data-facet-name="primaryCountries"
+                data-label="Country"
+                data-facet="ProjectsCtrl.projects.facets.primaryCountries" />
+            <div data-disable-events="ProjectsCtrl.state.isTab('history')" >
+              <terms data-type="project" data-facet-name="availableDataTypes" data-defined="true" data-label="Available Data Type"
+                     data-facet="ProjectsCtrl.projects.facets.availableDataTypes"></terms>
+            </div>
+            <terms data-type="project" data-facet-name="tumourType" data-defined="true" data-label="Tumour Type"
+                     data-facet="ProjectsCtrl.projects.facets.tumourType"></terms>
+        </ul>
+    </div>
+</aside>
+<article>
+<div data-ng-if="ProjectsCtrl.loading" class="loadingOverlay"></div>
+<div data-ng-show="ProjectsCtrl.projects">
+<current></current>
+    <div class="t_tabs">
+        <div class="t_tabs__tab t_tabs__tab__charts"
+             data-nested
+             data-ng-click="ProjectsCtrl.state.setTab('summary')"
+             data-ng-class="{active: ProjectsCtrl.state.isTab('summary')}"
+              data-href="projects/summary">
+            Summary
+        </div>
+        <div class="t_tabs__tab t_tabs__tab__table"
+             data-nested
+             data-ng-click="ProjectsCtrl.state.setTab('details')"
+             data-ng-class="{active: ProjectsCtrl.state.isTab('details')}"
+             data-href="projects/details" >
+            Details
+        </div>
+      <div class="t_tabs__tab t_tabs__tab__history"
+             data-nested
+             data-ng-click="ProjectsCtrl.state.setTab('history')"
+             data-ng-class="{active: ProjectsCtrl.state.isTab('history')}"
+             data-href="projects/history" >
+            History
+        </div>
+    </div>
+
+    <section>
+        <div class='t_tab_pane'
+             data-ng-if="ProjectsCtrl.state.hasVisitedTab('summary')"
+             data-ng-class="{active: ProjectsCtrl.state.isTab('summary')}"
+             data-ng-include="'scripts/projects/views/projects.summary.html'">
+             </div>
+       <div class='t_tab_pane'
+             data-ng-if="ProjectsCtrl.state.hasVisitedTab('details')"
+             data-ng-class="{active: ProjectsCtrl.state.isTab('details')}"
+             data-ng-include="'scripts/projects/views/projects.details.html'">
+      </div>
+      <div class='t_tab_pane'
+             data-ng-if="ProjectsCtrl.state.hasVisitedTab('history')"
+             data-ng-class="{active: ProjectsCtrl.state.isTab('history')}"
+             data-ng-include="'scripts/projects/views/projects.history.html'">
+      </div>
+    </section>
+</div>
+</article>

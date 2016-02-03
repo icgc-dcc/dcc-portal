@@ -1,0 +1,91 @@
+<section data-ng-controller="SavedSetController as SavedSetController">
+    <div class="alert-error" data-ng-if="SavedSetController.syncError"><i class="icon-attention"></i>
+        Failed retrieving some saved sets. Please refresh this page to retry. If problem persists, <a href="" data-ng-click="SavedSetController.removeInvalidSets()"><i class="icon icon-trash"></i>DELETE THE SETS</a> that are in "processing" state.
+    </div>
+    <div>
+        You can create and save new <strong>donor</strong>, <strong>gene</strong>, or <strong>mutation</strong> sets of interest from
+        <span class="action-toolbar"><span class="action-item"><i class="icon-search"></i><a href="/search">Advanced Search.</a></span></span>
+        <br>
+
+        You can also
+        <span class="action-toolbar">
+            <span class="action-item">
+                <i class="icon-floppy"></i>
+                <a href="" data-ng-click="SavedSetController.addCustomGeneSet()">Upload your own gene set.</a>
+            </span>
+        </span>
+        <br>
+
+        You can use saved sets to
+        <span class="action-toolbar">
+            <span class="action-item">
+                <i class="icon-beaker"></i>
+                <a href="/analysis">Launch Analysis.</a>
+            </span>
+        </span>
+
+    </div>
+    <br>
+
+
+    <div style="padding:.5rem 0" data-ng-if="SavedSetController.entitySets.length > 0">
+        <button class="t_button t_button__destructive" data-ng-click="SavedSetController.removeSets()"
+            data-ng-disabled="SavedSetController.selectedSets.length === 0"
+            data-tooltip="Delete selected sets">
+            <i class="icon-trash"></i>Delete selected
+        </button>
+    </div>
+    <div class="wide">
+        <table class="table table-selectable">
+            <thead>
+                <th class="text-center"  data-ng-click="SavedSetController.toggleSelectAll(); SavedSetController.update()">
+                    <i class="{{ SavedSetController.checkAll === true? 'icon-check' : 'icon-check-empty' }}"></i>
+                </th>
+                <th>Item Type</th>
+                <th>Name</th>
+                <th>Note</th>
+                <th class="text-right"># Items</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr data-ng-if="SavedSetController.entitySets.length === 0">
+                    <td colspan="6" class="text-center"><strong>No saved set</strong></td>
+                </tr>
+                <tr data-ng-repeat="item in SavedSetController.entitySets" data-ng-init="item.checked=false">
+                    <td class="text-center">
+                        <span data-ng-if="(item.state === 'FINISHED' || SavedSetController.syncError === true)" style="cursor:pointer"
+                              data-ng-click="item.checked = !item.checked; SavedSetController.update();">
+                            <i class="{{item.checked === true? 'icon-check': 'icon-check-empty'}}"></i>
+                        </span>
+                    </td>
+                    <td>{{item.type | readable}}</td>
+                    <td>{{item.name}}</td>
+                    <td style="max-width: 30rem">{{item.description}}</td>
+                    <td class="text-right" data-ng-if="item.state === 'FINISHED'">
+                        <a href="{{item.advLink}}">{{item.count | number}}</a>
+                    </td>
+                    <td data-ng-if="item.state === 'FINISHED'">
+                        <span style="float:left; font-size:1.25rem">
+                            <span class="t_tools__tool">
+                                <i class="icon-file" data-tooltip="Export as TSV" data-ng-click="SavedSetController.exportSet(item.id)"></i>
+                            </span>
+                            <span class="t_tools__tool" data-ng-if="SavedSetController.downloadEnabled && item.type==='donor'">
+                                <i data-tooltip="Download Donor Data" class="icon-download" data-ng-click="SavedSetController.downloadDonorData(item.id)"></i>
+                            </span>
+                            <a data-ng-if="item.type==='donor'" class="t_tools__tool"
+                              data-tooltip="View in {{:: SavedSetController.dataRepoTitle }}" href="{{item.repoLink}}">
+                              <i class="icon-download-cloud"></i>
+                            </a>
+                            <span data-tooltip="Share Saved Set">
+                                <share-icon data-custom-popup-disclaimer="" data-share-params="SavedSetController.getEntitySetShareParams(item)" class="t_tools__tool"></share-icon>
+                            </span>
+                        </span>
+                    </td>
+                    <td colspan="2" data-ng-if="item.state !== 'FINISHED'">
+                        Processing ... <i class="icon-spinner icon-spin"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

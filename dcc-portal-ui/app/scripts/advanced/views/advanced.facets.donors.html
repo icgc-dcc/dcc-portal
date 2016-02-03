@@ -1,0 +1,45 @@
+<h3 data-ng-if="!AdvancedCtrl.Donor.donors" class="loading loading-icon">
+    <i class="icon-spinner icon-spin"></i>
+</h3>
+<ul data-ng-show="AdvancedCtrl.Donor.donors" class="t_facets">
+    <li data-tags-facet data-label="Donor" data-facet-name="id" data-placeholder="e.g. DO45299, SA501608" data-type="donor"></li>
+
+    <terms data-type="donor" data-facet-name="primarySite" data-label="Primary Site"
+           data-facet="AdvancedCtrl.Donor.donors.facets.primarySite"></terms>
+
+    <terms data-type="donor"
+      data-facet-name="projectId"
+      data-defined="true"
+      data-label="Project"
+      data-facet="AdvancedCtrl.Donor.donors.facets.projectId" />
+    <terms data-type="donor" data-facet-name="studies" data-label="Study"
+           data-missing-text="None"
+           data-facet="AdvancedCtrl.Donor.donors.facets.studies"></terms>
+
+    <terms data-type="donor" data-facet-name="gender" data-capitalize="true" data-label="Gender"
+           data-facet="AdvancedCtrl.Donor.donors.facets.gender"></terms>
+
+    <terms data-type="donor" data-facet-name="tumourStageAtDiagnosis" data-label="Tumour Stage"
+           data-facet="AdvancedCtrl.Donor.donors.facets.tumourStageAtDiagnosis" data-collapsed="true"></terms>
+
+    <terms data-type="donor" data-facet-name="vitalStatus" data-capitalize="true" data-label="Vital Status"
+           data-facet="AdvancedCtrl.Donor.donors.facets.vitalStatus" data-collapsed="true"></terms>
+
+    <terms data-type="donor" data-facet-name="diseaseStatusLastFollowup" data-capitalize="true" data-label="Disease Status"
+           data-facet="AdvancedCtrl.Donor.donors.facets.diseaseStatusLastFollowup" data-collapsed="true"></terms>
+
+    <terms data-type="donor" data-facet-name="relapseType" data-capitalize="true" data-label="Relapse Type"
+           data-facet="AdvancedCtrl.Donor.donors.facets.relapseType" data-collapsed="true"></terms>
+
+    <terms data-type="donor" data-facet-name="ageAtDiagnosisGroup" data-label="Age at Diagnosis"
+           data-facet="AdvancedCtrl.Donor.donors.facets.ageAtDiagnosisGroup" data-collapsed="true"></terms>
+
+    <terms data-type="donor" data-facet-name="availableDataTypes" data-defined="true" data-label="Available Data Type"
+           data-facet="AdvancedCtrl.Donor.donors.facets.availableDataTypes" data-collapsed="true"></terms>
+
+    <terms data-type="donor" data-facet-name="analysisTypes" data-defined="true" data-label="Donor Analysis Type"
+           data-facet="AdvancedCtrl.Donor.donors.facets.analysisTypes" data-collapsed="true"></terms>
+
+    <terms data-type="donor" data-facet-name="state" data-capitalize="true" data-collapsed="true" data-label="Donor Molecular Data"
+           data-facet="AdvancedCtrl.Donor.donors.facets.state"></terms>
+</ul>

@@ -1,0 +1,75 @@
+<div class="modal-content">
+    <div class="modal-header clearfix">
+      <h3 class="pull-left">Download manifests</h3>
+      <button class="pull-right t_button" data-ng-click="cancel()"><i
+              class="icon-cancel"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+       A manifest is a text file passed to download clients in order to download files.
+       You will get a single manifest file per repository. Please note that some files may be stored in multiple repositories.
+       The list below is restricted by your repository filter.
+       <br>
+       <table class="table table-info">
+         <thead>
+           <th style="width: 40%;">Repository</th>
+           <th class="text-right"># Donors</th>
+           <th class="text-right"># Files</th>
+           <th class="text-right">Total file size</th>
+           <th class="text-right">
+             <popover class="light"
+                      popover-anchor-label="Manifest ID"
+                      popover-assist-icon-class="icon-help"
+                      popover-assist-icon-position-before="false">
+
+                 In addition to the manifest file, the ICGC Storage Client accepts manifest ID to download files selected in your query.
+                 Please see the <a href="http://docs.icgc.org/cloud/guide/#manifest-from-the-data-portal" target="_blank"><i class="icon-external-link"></i>User Guide</a> to learn more.
+                 </a> 
+             </popover>
+             </th>
+         </thead>
+
+         <tbody>
+           <tr data-ng-repeat="(repoName, repoData) in repos">
+             <td>
+               {{ repoName }}
+             </td>
+             <td class="text-right">{{ repoData.donorCount | number }}</td>
+             <td class="text-right">{{ repoData.fileCount | number }}</td>
+             <td class="text-right">{{ repoData.fileSize | bytes }}</td>
+             <td class="text-right manifest-cell">
+                 <span data-tooltip="Manifest ID creation is not applicable to {{repoName}}." data-tooltip-placement="left" data-ng-if="repoName !== 'AWS - Virginia' && repoName !== 'Collaboratory'" style="color: #888; font-size: 0.8rem;">
+                     Not Applicable
+                 </span>
+               <div class="manifest" data-ng-if="repoName === 'AWS - Virginia' || repoName === 'Collaboratory'">
+                 <button data-ng-if="! repoData.isGeneratingManifestID  && ! repoData.manifestID" class="t_button no-animate"
+                   data-ng-click="createManifestId(repoName, repoData)">
+                   Manifest ID
+                 </button>
+                 <div data-ng-if="repoData.isGeneratingManifestID">
+                   <i class="icon-spinner icon-spin"></i>
+                  </div>
+                 <div data-ng-if="repoData.manifestID">
+                  <div data-copy-to-clip data-copy-data="repoData.manifestID"
+                       data-show-copy-tips="true" data-prompt-on-copy="true"
+                       data-on-copy-success-message="Manifest ID copied!"
+                       data-on-copy-focus-on="input[type='text']">
+                    <input size="38" type="text" class="input_manifest" value="{{repoData.manifestID}}"/>
+                    <!-- button style="border: 0; background: transparent;" title="Copy Manifest ID" class="icon-clippy">
+                    </button -->
+                  </div>
+                 </div>
+               </div>
+               <span data-ng-if="repoName != 'AWS - Virginia' && repoName != 'Collaboratory'">&nbsp;</span>
+             </td>
+           </tr>
+         </tbody>
+       </table>
+    </div>
+
+    <div class="modal-footer">
+      <button class="t_button" data-ng-click="cancel();">Cancel</button>
+      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i>Download</button>
+    </div>
+</div>

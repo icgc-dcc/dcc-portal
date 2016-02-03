@@ -1,0 +1,126 @@
+body, html {
+  font-size: 0.8rem;
+  line-height: 1.6rem;
+  background: #f2f2f2;
+  width: 100%;
+  height: 100%;
+  font-weight: 300;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.light {
+  background-color: #fff;
+  color: #333;
+  max-width: 1280px;
+  margin: auto auto;
+}
+
+.content {
+  margin-top: 64px;
+}
+
+.h1-wrap {
+  height: 63px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+header {
+  margin-bottom: 1rem;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  max-width: 1280px;
+  background: #f2f2f2;
+}
+
+header #brand {
+  white-space: nowrap;
+  vertical-align: middle;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: .8rem;
+  padding-left: 1rem;
+}
+
+header #brand #icgc {
+  color: #283e5d;
+  font-weight: bold;
+}
+
+header #brand a {
+  color: #333333;
+  font-size: 2.6rem;
+  vertical-align: middle;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: none;
+  text-decoration: none;
+}
+
+header #brand a:hover {
+  text-decoration: none;
+  background: none;
+}
+
+header #brand img {
+  height: 3.4rem;
+  width: 3.4rem;
+  vertical-align: top;
+}
+
+header .header-container {
+  display: table;
+  width: 100%;
+  background: #fafafa;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+section {
+  padding-left: 2rem;
+  padding-top: 1rem;
+  margin: 0;
+}
+
+h1 {
+  font-size: 2.7rem;
+  line-height: 3rem;
+}
+
+h2 {
+  font-size: 2.3rem;
+  font-weight: 300;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h2, h3, h4 {
+  line-height: 1.25em;
+  margin-top: 0.5em;
+  margin-bottom: 0.6em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  margin-top: 0;
+}
+
+summary {
+  padding: 1rem 1rem 2rem 0rem;
+  font-size: 1.3rem;
+  line-height: 2.2rem;
+  font-weight: normal;
+}
+
+#resources_container {
+  font-size: 1rem;
+}
+
+ #swagger-ui-container.swagger-ui-wrap {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#message-bar {
+  display: none;
+}

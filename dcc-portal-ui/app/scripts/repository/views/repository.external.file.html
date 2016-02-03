@@ -1,0 +1,300 @@
+<div class="h1-wrap" ng-init="info = fileCtrlr.fileInfo; fileId = fileCtrlr.stringOrDefault (info.id)">
+  <h1 data-ui-scrollfix=79 style="text-transform: none">
+    <span class="t_badge t_badge__file"></span>
+    <span ng-bind="fileId" />
+  </h1>
+</div>
+<div data-scroll-spy="">
+
+<aside data-ui-scrollfix=79 class="t_sidenav">
+  <section>
+    <ul class="t_subnav__items">
+      <li data-spy="summary" class="t_subnav__items__item current">
+        <a data-scrollto href="#summary">Summary</a>
+      </li>
+      <li data-spy="fileCopies" class="t_subnav__items__item">
+        <a data-scrollto href="#fileCopies">File Copies</a>
+      </li>
+      <li data-spy="donor" class="t_subnav__items__item">
+        <a data-scrollto href="#donor">Donor</a>
+      </li>
+      <li data-spy="bam-statistics" class="t_subnav__items__item" data-ng-if="fileCopies[0].fileFormat == 'BAM' && fileCtrlr.awsOrCollab(fileCopies)">
+        <a data-scrollto href="#bam-statistics">BAM Stats</a>
+      </li>
+    </ul>
+  </section>
+</aside>
+
+<article>
+<section id="summary">
+
+  <div class="half">
+    <h3>Summary</h3>
+
+    <table class="table table-info fixed-width">
+      <tr>
+        <th>File ID</th>
+        <td ng-bind="fileId" />
+      </tr>
+      <tr>
+        <th>Object ID</th>
+        <td>
+          <div ng-init="objectId = fileCtrlr.stringOrDefault (info.objectId);">
+            <div ng-if="objectId !== fileCtrlr.defaultString"
+                 data-copy-to-clip data-copy-data="objectId" data-show-copy-tips="true"
+                 data-on-copy-success-message="File Object ID copied!"
+                 data-on-copy-focus-on="#fileObjectID"
+                 data-on-hover-message="Click here to copy the Object ID to your clipboard."
+                 data-prompt-on-copy="false">
+                <span class="icon-clippy"></span>
+                <span id="fileObjectID" data-ng-bind="objectId">
+                </span>
+            </div>
+            <span ng-if="objectId === fileCtrlr.defaultString" data-ng-bind="objectId" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>Bundle ID</th>
+        <td>
+          <div ng-init="dataBundleId = fileCtrlr.stringOrDefault (info.dataBundle.dataBundleId);">
+            <div ng-if="dataBundleId !== fileCtrlr.defaultString"
+                 data-copy-to-clip data-copy-data="dataBundleId" data-show-copy-tips="true"
+                 data-on-copy-success-message="Bundle ID copied!"
+                 data-on-copy-focus-on="#dataBundleID"
+                 data-on-hover-message="Click here to copy the Bundle ID to your clipboard."
+                 data-prompt-on-copy="false">
+                <span class="icon-clippy" />
+                <span id="dataBundleID" data-ng-bind="dataBundleId" />
+            </div>
+            <span ng-if="dataBundleId === fileCtrlr.defaultString" data-ng-bind="dataBundleId" />
+          </div>
+        </td>
+      </tr>
+      <tr ng-init="accessType = info.access">
+        <th>Access</th>
+        <td>
+          <i class="{{ fileCtrlr.equalsIgnoringCase (accessType, 'open') ? 'icon-lock-open' : 'icon-lock' }}" />
+          <span ng-bind="fileCtrlr.stringOrDefault (accessType)" />
+        </td>
+      </tr>
+      <tr>
+        <th>File in Study</th>
+        <td>
+          <study-badge study="{{:: info.study [0] }}" text="None">
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="half omega">
+    <h3>Data Type</h3>
+
+    <table class="table table-info fixed-width" ng-init="categorization = info.dataCategorization">
+      <tr>
+        <th>Data Type</th>
+        <td ng-bind="fileCtrlr.translateDataType (categorization.dataType)" />
+      </tr>
+      <tr>
+        <th>Experimental Strategy</th>
+        <td ng-init="expStrategy = categorization.experimentalStrategy; isEmpty = fileCtrlr.isEmptyString (expStrategy);">
+          <span ng-if="isEmpty" ng-bind="fileCtrlr.defaultString" />
+          <abbr ng-if="! isEmpty" tooltip="{{ expStrategy | define }}" ng-bind="expStrategy" />
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="half">
+    <h3>Analysis Method</h3>
+
+    <table class="table table-info fixed-width" ng-init="analysisMethod = info.analysisMethod">
+      <tr>
+        <th>Analysis Type</th>
+        <td ng-bind="fileCtrlr.stringOrDefault (analysisMethod.analysisType)" />
+      </tr>
+      <tr>
+        <th>Software</th>
+        <td ng-bind="fileCtrlr.stringOrDefault (analysisMethod.software)" />
+      </tr>
+    </table>
+  </div>
+
+  <div class="narrow omega">
+    <h3>Reference Genome</h3>
+
+    <table class="table table-info fixed-width" ng-init="referenceGenome = info.referenceGenome">
+      <tr>
+        <th>Genome Build</th>
+        <td ng-bind="fileCtrlr.stringOrDefault (referenceGenome.genomeBuild)" />
+      </tr>
+      <tr>
+        <th>Reference Name</th>
+        <td ng-init="downloadUrl = referenceGenome.downloadUrl">
+          <span ng-bind="fileCtrlr.stringOrDefault (referenceGenome.referenceName)" />
+          <a ng-if="downloadUrl" tooltip="Download"
+            title="{{ downloadUrl }}" href="{{ downloadUrl }}">
+            <i class="icon-download" />
+            <!-- {{:: downloadUrl }} -->
+          </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</section>
+
+<section id="fileCopies">
+  <div>
+    <h3>File Copies</h3>
+
+    <table class="table table-info" ng-init="fileCopies = info.fileCopies">
+      <thead>
+        <tr>
+          <th rowspan="2">File Name</th>
+          <!-- <th rowspan="2">Checksum</th> -->
+          <th rowspan="2">Format</th>
+          <th rowspan="2">Size</th>
+          <th rowspan="2">Last Update</th>
+          <th colspan="3" class="text-center">Repository</th>
+          <th rowspan="2"> <popover class="light"
+                                    popover-anchor-label="Actions"
+                                    popover-assist-icon-class="icon-help"
+                                    popover-assist-icon-position-before="false">
+
+            Click on <strong><i class="icon-download"></i>Manifest</strong> and use the manifest to download the data file.
+            Please see the <a style="white-space: nowrap;" href="http://docs.icgc.org/portal/repositories" target="_blank"><i class="icon-external-link"></i>documentation</a> to learn more.
+            </a>
+          </popover></th>
+        </tr>
+
+        <tr>
+          <th rowspan="2">Name</th>
+          <th rowspan="2">Country</th>
+          <th rowspan="2">Type</th>
+        </tr>
+      </thead>
+
+      <tbody class="cell-vertically-centered">
+        <tr ng-repeat="fileCopy in info.fileCopies">
+          <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.fileName)" />
+          <!-- <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.fileMd5sum)" /> -->
+          <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.fileFormat)" />
+          <td tooltip="{{:: fileCopy.fileSize | number }} bytes"
+            ng-bind="fileCopy.fileSize | bytes" />
+          <td tooltip="{{:: fileCopy.lastModified * 1000 | date: 'medium' }}"
+            ng-bind="fileCopy.lastModified * 1000 | date: 'mediumDate'" />
+
+          <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.repoName)" />
+
+          <td style="text-align: center;"
+            ng-init="countryCode = fileCtrlr.translateCountryCode (fileCopy.repoCountry.toLowerCase())">
+            <span class="flag flag-{{ countryCode }}"
+              tooltip="{{ fileCtrlr.countryName (countryCode) }}" />
+          </td>
+          <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.repoType)" />
+
+          <td style="min-width: 90px"
+            ng-init="showMetaData = fileCtrlr.shouldShowMetaData (fileCopy.repoType)">
+            <a href="#" tooltip="Download Manifest"
+              ng-click="fileCtrlr.downloadManifest (info.id, fileCopy.repoName)">
+              <i class="icon-download" />Manifest
+            </a>
+
+            <span ng-if="showMetaData"
+              ng-init="metaDataUrl = fileCtrlr.buildMetaDataUrl (fileCopy, info); isS3 = fileCtrlr.isS3 (fileCopy.repoType);">
+              <br>
+              <a ng-if="isS3"
+                href="{{ metaDataUrl }}" tooltip="Download Metadata" title="{{ metaDataUrl }}" target="_blank">
+                <i class="icon-download" data-ng-if="fileCopy.repoName != 'Collaboratory'"  /><!--
+                --><i class="icon-external-link" data-ng-if="fileCopy.repoName === 'Collaboratory'"  /><!--
+                -->Metadata
+              </a>
+              <a ng-if="! isS3"
+                target="_blank" href="{{ metaDataUrl }}" tooltip="Show Metadata" title="{{ metaDataUrl }}">
+                <i class="icon-external-link" />Metadata
+              </a>
+            </span>
+
+            <span ng-if="! showMetaData"
+              ng-init="dataUrl = fileCtrlr.buildUrl (fileCopy.repoBaseUrl, fileCopy.repoDataPath, fileCopy.fileName)">
+              <br>
+              <a target="_blank" href="{{ dataUrl }}" tooltip="Show Data" title="{{ dataUrl }}">
+                <i class="icon-external-link" />Data
+              </a>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+</section>
+
+<section id="donor">
+
+  <div class="wide">
+    <h3>Donor</h3>
+
+    <table class="table table-info fixed-width" ng-repeat="donorInfo in info.donors">
+      <tr>
+        <th>Project ID</th>
+        <td ng-init="projCode = donorInfo.projectCode">
+            <a href="/projects/{{ projCode }}" tooltip="{{:: fileCtrlr.projectName (projCode) }}"
+              ng-bind="fileCtrlr.stringOrDefault (projCode)" />
+        </td>
+      </tr>
+      <tr>
+        <th>Primary site</th>
+        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.primarySite)" />
+      </tr>
+      <tr>
+        <th>Donor in Study</th>
+        <td>
+          <study-badge study="{{ donorInfo.study }}" text="None">
+        </td>
+      </tr>
+      <tr>
+        <th>Donor ID</th>
+        <td ng-init="donorId = donorInfo.donorId">
+            <a href="/donors/{{ donorId }}" ng-bind="fileCtrlr.stringOrDefault (donorId)" />
+        </td>
+      </tr>
+      <tr>
+        <th>Donor Submitter IDs</th>
+        <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaParticipantBarcode, donorInfo.submittedDonorId])" />
+      </tr>
+      <tr>
+        <th>Specimen ID</th>
+        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.specimenId)" />
+      </tr>
+      <tr>
+        <th>Specimen Submitter IDs</th>
+        <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaSampleBarcode, donorInfo.submittedSpecimenId])" />
+      </tr>
+      <tr>
+        <th>Specimen Type</th>
+        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.specimenType)" />
+      </tr>
+      <tr>
+        <th>Sample ID</th>
+        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.sampleId)" />
+      </tr>
+      <tr>
+        <th>Sample Submitter IDs</th>
+        <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaAliquotBarcode, donorInfo.submittedSampleId])" />
+      </tr>
+      <tr>
+        <th>Matched Control Sample ID</th>
+        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.matchedControlSampleId)" />
+      </tr>
+    </table>
+  </div>
+</section>
+<section id="bam-statistics" data-ng-if="fileCopies[0].fileFormat == 'BAM' && fileCtrlr.awsOrCollab(fileCopies)">
+    <h3>BAM Stats</h3>
+    <bamstats bam-id="info.objectId" on-modal="false" data-ng-if="fileCopies[0].fileFormat == 'BAM' && fileCtrlr.awsOrCollab(fileCopies)"></bamstats>
+</section>
+</article>
+</div>

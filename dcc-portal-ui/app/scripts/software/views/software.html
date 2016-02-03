@@ -1,0 +1,93 @@
+<div class="h1-wrap">
+   <h1 data-ui-scrollfix="80">
+      <span class="t_badge t_badge_icon">
+         <span class="icon-box"></span>
+      </span>
+      Software
+   </h1>
+</div>
+<div data-scroll-spy style="margin-left:2rem; margin-right:2rem;" class="container">
+   <aside class="t_side_nav" data-ui-scrollfix="80">
+      <nav>
+         <ul class="t_subnav__items">
+            <li data-spy="overview" class="t_subnav__items__item current"><a data-scrollto href="#overview">Overview</a></li>
+            <li data-spy="storage-client" class="t_subnav__items__item"><a data-scrollto href="#storage-client">Storage Client</a></li>
+            <li data-spy="verifying-downloads" class="t_subnav__items__item"><a data-scrollto href="#verifying-downloads">Public Key</a></li>
+         </ul>
+      </nav>
+   </aside>
+   <article>
+      <section id="overview" class="tab-content" style="padding-top:0px;">
+         <h2>Overview</h2>
+         <p>This is the official DCC software page which publishes various tools for working with ICGC data. Software is provided in both tarball and Docker image format.</p>
+         <p>For feature requests and reporting bugs, please contact <a href="mailto:dcc-support@icgc.org"><i class="icon-mail"></i>dcc-support@icgc.org</a>. To verify the contents of the download, please see <a data-scrollto href="#verifying-downloads">Verifying Downloads</a>.</p>
+      </section>
+   </article>
+   <article>
+      <section id="storage-client" class="tab-content" style="padding-top:0px;">
+         <h2>Storage Client</h2>
+         <div>
+            <p>To interact with cloud repositories such as <a href="/icgc-in-the-cloud/aws/">AWS</a> and <a href="/icgc-in-the-cloud/collaboratory/">Collaboratory</a>, you will require the Storage Client sofware. For system requirements and usage information, please see the <a href="http://docs.icgc.org/cloud/guide/"><i class="icon-external-link"></i>User Guide</a>.</p>
+
+            <h3>Latest Release Tarball</h3>
+            <p>Users are encouraged to use the latest version of our software to keep current with bug fixes, enhancements and new features. Click on the following to download the latest client package:</p>
+            <p>
+               <a id="latest-version" class="t_button" target="_blank" href="api/v1/ui/software/icgc-storage-client/latest">Download</a>
+            </p>
+            <h3>Previous Release Tarballs</h3>
+            <p>It is strongly recommended to use the latest release to take advantage of newest features and bug fixes.</p>
+
+            <p>However, if you wish to use an old version you may choose from the following:</p>
+            <table class="table table-striped">
+               <thead>
+                  <tr>
+                     <th>Version</th>
+                     <th>Dist</th>
+                     <th>MD5</th>
+                     <th>Signature</th>
+                  </tr>
+               </thead>
+               <tbody id="versions">
+                  <tr data-ng-repeat="v in versions">
+                     <td>{{ v.version }}</td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ artifactId }}/{{ v.version }}">{{ artifactId }}-{{ v.version }}-dist.tar.gz</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ artifactId }}/{{ v.version }}/md5">{{ artifactId }}-{{ v.version }}-dist.tar.gz.md5</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ artifactId }}/{{ v.version }}/asc">{{ artifactId }}-{{ v.version }}-dist.tar.gz.asc</a></td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3>Docker Images</h3>
+            <p>For Docker images, please visit our <a href="https://hub.docker.com/r/icgc/icgc-storage-client/" target="_blank"><i class="icon-external-link"></i>Docker Hub repository</a>.</p>
+         </div>
+      </section>
+   </article>
+   <article>
+      <section id="verifying-downloads" class="tab-content" style="padding-top:0px;">
+         <h2>Verifying Downloads</h2>
+         <p>In order to ensure safe downloads and binary integrity, all software releases are signed using GPG. The following sections detail how to verify our published software.</p>
+         <h3>Public Key</h3>
+         <div>
+            <p>To verify the signatures you will need our public key used for software releases:</p>
+            <p>
+               <a class="t_button" style="color:white" target="_blank" href="api/v1/ui/software/key">Public Key</a>
+            </p>
+         </div>
+         <h3>GPG Verification</h3>
+         <div>
+            <p>To verify the signed software you will need to ensure you have downloaded our public key and imported it:</p>
+            <p>From a key server:<pre>$ gpg --keyserver pgp.mit.edu --recv-key 0xAFE5D0B6</pre></p>
+            <p>From a file:<pre>$ gpg --import icgc-software.pub</pre></p>
+            <p>Once the public key has been imported you can verify the signature:</p>
+            <p><pre>$ gpg icgc-storage-client-0.0.27-dist.tar.gz.asc</pre></p>
+            <p>If successful, the ouput should contain the following:</p>
+            <p>
+<pre>
+gpg: assuming signed data in 'icgc-storage-client-0.0.27-dist.tar.gz'
+gpg: Signature made Mon  5 Oct 12:38:09 2015 EDT using RSA key ID AFE5D0B6
+gpg: Good signature from "ICGC DCC (Sign public software releases) &lt;dcc-support@icgc.org&gt;"
+</pre>
+            </p>
+         </div>
+      </section>
+   </article>
+</div>

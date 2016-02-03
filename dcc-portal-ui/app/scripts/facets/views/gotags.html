@@ -1,0 +1,74 @@
+<ul class="t_facets__facet">
+    <li class="t_facets__facet__title" data-ng-class="{t_facets__facet__title_active:actives.length}">
+        <span data-ng-click="collapsed=!collapsed" class="t_facets__facet__title__label">
+            <i data-ng-class="{'icon-caret-down':!collapsed, 'icon-caret-right':collapsed}"></i>
+            {{label}}
+        </span>
+        <span data-ng-if="actives.length" class="t_facets__facet__terms__inactive__reset t_tools">
+            <a data-ng-click="removeFacet()" class="t_tools__tool " href=""><i class="icon-undo"></i></a>
+        </span>
+    </li>
+    <li>
+        <ul class="t_facets__facet__terms__active">
+            <li class="t_facets__facet__terms__active__term__label {{activeClass}}"
+                data-active-term
+                data-item="item"
+                data-ng-show="predefinedGOIds.indexOf(item) === -1"
+                data-ng-repeat="item in actives"
+                data-ng-click="removeTerm(item)"
+                data-ng-mouseenter="mouseOver($event)"
+                data-ng-mouseleave="mouseLeave($event)">
+
+                <span class="t_facets__facet__terms__active__term__label__text">
+                    <i class="icon-ok"></i>
+                    <span data-tooltip="{{ item | geneSetNameLookup }}"
+                          data-tooltip-placement="top">{{item}}
+                    </span>
+                </span>
+                <span class="t_facets__facet__terms__active__term__count">
+                    {{GOIdCounts[item] | number}}
+                </span>
+            </li>
+        </ul>
+    </li>
+    <li class="t_facets__facet__input" data-ng-hide="collapsed">
+        <input class="t_input__block"
+               placeholder="{{ placeholder }}"
+               data-types="{{ types }}"
+               data-suggest="tags"/>
+        <i class="t_suggest__embedded t_suggest__embedded__right  icon-spin icon-spinner" data-ng-show='isBusy'></i>
+        <i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel"
+           data-ng-click="query='';quick()" data-ng-show='query && !isBusy'></i>
+    </li>
+
+    <li>
+        <ul>
+            <li data-ng-repeat="item in predefinedGO"
+                data-ng-if="actives.indexOf(item.id) >= 0"
+                data-ng-click="removeTerm({'type':type, 'facetName': facetName, 'id':item.id})"
+                class="t_facets__facet__terms__active__term__label {{activeClass}}"
+                data-ng-mouseover="toggleRemove=true"
+                data-ng-mouseleave="toggleRemove=false">
+                <span class="t_facets__facet__terms__active__term__label__text" data-tooltip="{{item.name}}" data-tooltip-placement="overflow">
+                    <i class="{{ toggleRemove === true? 'icon-cancel':'icon-ok'}}"></i> {{ item.name }}
+                </span>
+                <span class="t_facets__facet__terms__active__term__count">
+                    {{GOIdCounts[item.id] | number}}
+                </span>
+            </li>
+       </ul>
+       <ul class="t_facets__facet__terms__active" data-ng-hide="collapsed">
+            <li data-ng-repeat="item in predefinedGO"
+                data-ng-if="actives.indexOf(item.id) < 0"
+                data-ng-click="addTerm({'type':type, 'facetName': facetName, 'id':item.id})"
+                class="t_facets__facet__terms__inactive__term">
+                <span class="t_facets__facet__terms__inactive__term__label" data-tooltip="{{item.name}}" data-tooltip-placement="overflow">
+                    <i class="icon-check-empty"></i> {{item.name}}
+                </span>
+                <span class="t_facets__facet__terms__inactive__term__count">
+                    {{GOIdCounts[item.id] | number}}
+                </span>
+            </li>
+        </ul>
+    </li>
+</ul>

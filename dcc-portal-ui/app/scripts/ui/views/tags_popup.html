@@ -1,0 +1,95 @@
+<div class="t_suggest_flyout" data-ng-show="showResults()"
+    style="width:{{ ['file', 'donor'].indexOf (results.hits[0].type) > -1 ? '180%' : '100%' }}">
+    <table class="t_suggest_flyout__hits">
+        <tbody>
+        <tr data-ng-repeat="r in results.hits"
+            data-ng-mouseover="mouseover($index)"
+            data-ng-mouseout="mouseout($index)"
+            data-ng-class="{'active':r.active}"
+            data-ng-switch="r.type"
+            data-ng-click="click(r)"
+            class="t_suggest_flyout__hits__hit">
+            <td class="t_suggest_flyout__hits__hit__type">
+                <span class="{{ badgeStyleClass (r.type) }}"></span>
+            </td>
+            <td class="t_suggest_flyout__hits__hit__text">
+                <span>
+                     <span data-ng-bind-html="r.symbol | highlight:activeQuery"
+                           data-ng-switch-when="gene"></span>
+                     <span data-ng-bind-html="r.id | highlight:activeQuery"
+                           data-ng-switch-when="mutation"></span>
+                     <span data-ng-bind-html="r.id | highlight:activeQuery"
+                           data-ng-switch-when="donor"></span>
+                     <span data-ng-bind-html="r.id | highlight:activeQuery"
+                           data-ng-switch-when="project"></span>
+                     <span data-ng-bind-html="r.id | highlight:activeQuery"
+                           data-ng-switch-when="pathway"></span>
+                     <span data-ng-bind-html="r.id | highlight:activeQuery"
+                           data-ng-switch-when="go_term"></span>
+                     <span data-ng-bind-html="r.id | highlight:activeQuery"
+                           data-ng-switch-when="curated_set"></span>
+                     <span data-ng-bind-html="r.id | highlight:activeQuery"
+                           data-ng-switch-when="file"></span>
+                     <span data-ng-bind-html="r.name | highlight:activeQuery"
+                           data-ng-switch-when="compound" />
+                </span>
+                <ul class="t_suggest_flyout__hits__hit__text__details" data-ng-switch-when="file">
+                    <li data-ng-bind-html="r.fileName | highlight:activeQuery:true"></li>
+                </ul>
+                <ul class="t_suggest_flyout__hits__hit__text__details" data-ng-switch-when="compound">
+                    <li ng-bind-html="findFirstMatch (r) | highlight:activeQuery:true" />
+                </ul>
+                <ul class="t_suggest_flyout__hits__hit__text__details" data-ng-switch-when="gene">
+                    <li data-ng-bind-html="r.name | highlight:activeQuery:true"></li>
+                    <li data-ng-bind-html="r.synonyms | highlight:activeQuery:true"></li>
+                    <li data-ng-bind-html="r.id | highlight:activeQuery:true"></li>
+                </ul>
+                <ul class="t_suggest_flyout__hits__hit__text__details" data-ng-switch-when="donor">
+                    <li><span data-ng-bind-html="r.projectId | highlight:activeQuery:true"></span></li>
+                    <li><span data-ng-bind-html="r.submittedId | highlight:activeQuery:true"></span></li>
+                    <li><span data-ng-bind-html="r.specimenIds | highlight:activeQuery:true"></span></li>
+                    <li><span data-ng-bind-html="r.submittedSpecimenIds | highlight:activeQuery:true"></span></li>
+                    <li><span data-ng-bind-html="r.sampleIds | highlight:activeQuery:true"></span></li>
+                    <li><span data-ng-bind-html="r.submittedSampleIds | highlight:activeQuery:true"></span></li>
+                    <li><span data-ng-bind-html="r.tcgaParticipantBarcode | highlight:activeQuery:true"></span></li>
+                    <li><span data-ng-bind-html="r.tcgaAliquotBarcode | highlight:activeQuery:true"></span></li>
+                    <li><span data-ng-bind-html="r.tcgaSampleBarcode | highlight:activeQuery:true"></span></li>
+                </ul>
+                <ul class="t_suggest_flyout__hits__hit__text__details" data-ng-switch-when="mutation">
+                    <li>
+                        <span class="field-value" data-ng-bind-html="r.mutation | highlight:activeQuery:true"></span>
+                    </li>
+                    <li><span data-ng-bind-html="r.geneMutations | highlight:activeQuery:true"></span>
+                    </li>
+                </ul>
+                <ul class="t_suggest_flyout__hits__hit__text__details" data-ng-switch-when="project">
+                    <li data-ng-bind-html="r.name | highlight:activeQuery:true"></li>
+                    <li data-ng-bind-html="r.primarySite | highlight:activeQuery:true"></li>
+                    <li data-ng-bind-html="r.tumourType | highlight:activeQuery:true"></li>
+                    <li data-ng-bind-html="r.tumourSubtype | highlight:activeQuery:true"></li>
+                </ul>
+                <ul class="t_suggest_flyout__hits__hit__text__details" data-ng-switch-when="pathway">
+                    <li data-ng-bind-html="r.name | highlight:activeQuery:true"></li>
+                </ul>
+                <ul class="t_suggest_flyout__hits__hit__text__details" data-ng-switch-when="go_term">
+                    <li data-ng-bind-html="r.name | highlight:activeQuery:true"></li>
+                    <li data-ng-bind-html="r.altIds.join(', ') | highlight:activeQuery:true"></li>
+                </ul>
+            </td>
+        </tr>
+        <!--
+        <tr data-ng-if="results.pagination.total > 5"
+            data-ng-click="click()"
+            class="t_suggest_flyout__hits__hit">
+            <td class="t_suggest_flyout__hits__hit__type">
+                <i class="icon-search icon-2x"></i>
+            </td>
+            <td class="t_suggest_flyout__hits__hit__text">
+                <span>Press <strong>Enter</strong> for more search results</span>
+            </td>
+            </a>
+        </tr>
+        -->
+        </tbody>
+    </table>
+</div>

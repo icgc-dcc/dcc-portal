@@ -1,0 +1,70 @@
+<div data-ng-init="repoContextID = repositoryCtrl.getRepoContextID()">
+    <h1 class="repo-header" data-ng-if="repoContextID == 'aws-virginia'">
+        <img src="/scripts/repositories/images/home/aws_logo.svg" width="260" class="logo" alt="ICGC AWS Logo" />
+        <span>
+            ICGC on the Amazon Cloud
+        </span>
+    </h1>
+    <h1 class="repo-header" data-ng-if="repoContextID == 'collaboratory'">
+        <img src="/scripts/repositories/images/home/collab_logo.png" class="logo" alt="Collaboratory Logo" />
+        <span>
+        The Cancer Genome Collaboratory
+        </span>
+    </h1>
+    <section class="cloud-repository-content">
+        <div class="half pull-right" data-ui-view2="dataContent">
+             <!-- Bar Chart Status Region -->
+            <div data-ng-show="repositoryCtrl.hasSummaryData()" class="bar-chart-container">
+
+                <stacked height="250"
+                    data-title="Donor Distribution by Primary Site"
+                    data-subtitle="{{repositoryCtrl.getRepoSummaryData().projectCount}} projects and {{repositoryCtrl.getRepoSummaryData().primarySiteCount}} primary sites"
+                    data-y-label="Donors"
+                    data-alternate-brightness="true"
+                    data-items="repositoryCtrl.getPrimarySites()"
+                    data-is-loading="false">
+                </stacked>
+            
+               <section class="well icons-container">
+                    <div class="third text-center">
+                        <i class="icon-team"></i><strong data-ng-bind="repositoryCtrl.getRepoSummaryData().donorCount | number"></strong> Donors
+                    </div>
+                    <div class="third text-center">
+                        <i class="icon-file"></i><strong data-ng-bind="repositoryCtrl.getRepoSummaryData().fileCount | number"></strong> Files
+                    </div>
+                    <div class="third omega text-center">
+                        <i class="icon-database"></i><strong data-ng-bind="repositoryCtrl.getRepoSummaryData().totalFileSize | bytes"></strong>
+                    </div>
+                </section>
+            
+                <table class="table table-info">
+                    <thead>
+                        <th>Data Type</th>
+                        <th># Donors</th>
+                        <th># Files</th>
+                        <th>Format</th>
+                        <th>Size</th>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="type in repositoryCtrl.getRepoDataTypes()">
+                            <td data-ng-bind="type.uiName"></td>
+                            <td class="text-right" data-ng-bind="type.donorCount | number"></td>
+                            <td class="text-right">
+                                <a href="/repositories?filters={{type.filters}}" data-ng-bind="type.fileCount | number"></a>
+                            </td>
+                            <td data-ng-bind="type.fileFormat.join(', ')"></td>
+                            <td class="text-right" data-ng-bind="type.fileSize | bytes"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            
+                <span>
+                    Available data as of <a href="/repositories?filters={{repositoryCtrl.getFilterQueryStr()}}" data-ng-bind="repositoryCtrl.getRepoCreationDate() | date"></a>
+                </span>
+            </div>
+            <!-- -->     
+        </div>
+        <div data-ui-view="bodyContent">
+        </div>
+    </section>
+</div>

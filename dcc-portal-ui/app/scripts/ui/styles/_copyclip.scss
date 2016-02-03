@@ -1,0 +1,65 @@
+$copyClipBubbleBG: $tooltipFill;//#000;
+$borderColour: $tooltipBorder;
+$shadowColor: $tooltipShadowColor;
+
+.copy-to-clip {
+  position: relative;
+  display: inline-block;
+  
+  //.copy-to-clip-content {
+   
+  //}
+
+
+ .copy-to-clip-message-container {
+   background: $copyClipBubbleBG;
+   position: absolute;
+   opacity: 0.95;
+   //color: #fff;
+   color: #000;
+   left: 10%;
+   width: 14rem;
+   top: -3px;
+   text-align: center;
+   padding: 5px;
+   font-weight: 300;
+   line-height: 1.6rem;
+   font-size: .9rem;
+   //font-size: 1.1rem;
+   z-index: 0;
+   display: none;
+   border: 1px solid $borderColour;
+   border-radius: 3px;
+   -webkit-filter: drop-shadow(0 1px 3px $shadowColor);
+   -moz-box-shadow: 0 1px 3px $shadowColor;
+   filter: drop-shadow(0 1px 3px $shadowColor);
+
+   &:after {
+     border-width: 6px;
+   }
+
+   &:before {
+     border-width: 7px;
+   }
+   
+   .arrow {
+     position: absolute;
+     left: 45%;
+     top: 100%;
+     content: ' ';
+     border-left: 8px solid transparent;
+     border-right: 8px solid transparent;
+     border-top: 8px solid $borderColour;
+
+     &:before {
+       content: ' ';
+       position: absolute;
+       left: -8px;
+       top: -9px;
+       border-left: 8px solid transparent;
+       border-right: 8px solid transparent;
+       border-top: 8px solid $copyClipBubbleBG;
+     }
+   }
+ } 
+}

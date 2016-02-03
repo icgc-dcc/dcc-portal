@@ -1,0 +1,210 @@
+/** MAIN RESULT COLOR VARIABLES */
+$true-color:#2D832D;
+$false-color:#D31313;
+$null-color:#444;
+
+td{
+   padding:6px;
+}
+
+.beacon-button:focus{
+  outline: 0;
+  border-color:#66afe9;
+  -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+
+.beaconquery{
+ padding-top: 0;
+  padding-bottom: 0;
+}
+
+.beaconquestion{
+  font-style: italic;
+}
+
+.beacon-notes{
+  margin-left: 5%;
+}
+
+.beacon-icon{
+  font-size: xx-large;
+  color: white;
+}
+
+.beacon-icon-container{
+  float:left;
+  width: 30%;
+  padding-top: 1.8rem;
+  height: inherit;
+  border-bottom-left-radius: .5rem;
+  border-top-left-radius: .5rem;
+  text-align: center;
+}
+
+.beacon-icon-text{
+  font-size: x-large;
+  padding-top: 1.7rem;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  text-align: center;
+  float:left;
+  width:70%;
+  height:inherit;
+  border-bottom-right-radius: .5rem;
+  border-top-right-radius: .5rem;
+  background: white;
+}
+
+/** Different colors for each response */
+.beacon-true-container{
+   background: $true-color;
+}
+.beacon-true-text{
+  color: $true-color;
+  border: 3px solid $true-color;
+}
+.beacon-true-code{
+  border-bottom: 2px solid $true-color;
+}
+
+.beacon-false-container{
+   background: $false-color;
+}
+.beacon-false-text{
+  color: $false-color;
+  border: 3px solid $false-color;
+}
+.beacon-false-code{
+  border-bottom: 2px solid $false-color;
+}
+
+
+.beacon-null-container{
+   background: $null-color;
+}
+.beacon-null-text{
+  color: $null-color;
+  border: 3px solid $null-color;
+}
+.beacon-null-code{
+  border-bottom: 2px solid $null-color;
+}
+
+/** end of different color options */
+
+.beacon-result{
+  padding-right: 8rem;
+  width: 100%;
+  height: 80px;
+}
+
+.beacon-api-link{
+  padding-top: 0;
+  margin-bottom: 2px;
+  padding-bottom: 0;
+  padding-left: 1px;
+  padding-right: 3px;
+  width: 90%;
+}
+.beacon-api-link:focus{
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e3e3e3;
+}
+
+.beacon-alert{
+  margin-bottom: 2rem;
+}
+
+/** Result callouts */
+
+.beacon-callout-container{
+  height:auto;
+  overflow: hidden;
+}
+
+.beacon-callout {
+    padding: 15px;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+    float: left;
+    width:30%;
+    height:100%;
+    margin-right: 2.5%;
+}
+
+.beacon-callout-true {
+    border-left-color: $true-color;
+}
+.beacon-callout-true h4 {
+    color: $true-color;
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+}
+
+.beacon-callout-false {
+    border-left-color: $false-color;
+}
+.beacon-callout-false h4 {
+    color: $false-color;
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+}
+
+.beacon-callout-null {
+    border-left-color:$null-color;
+}
+.beacon-callout-null h4 {
+    color: $null-color;
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+}
+
+.invalid-icon{
+  color:#e37559;
+}
+
+/** SELECT FORM CONTROL FROM BOOTSTRAP 3.2 */
+
+.beacon-form-control {
+  display:block;
+  height:34px;
+  font-size:14px;
+  line-height:1.42857143;
+  color:#555;
+  background-color:#fff;
+  background-image:none;
+  border:1px solid #ccc;
+  border-radius:4px;
+  -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  padding:6px 12px;
+}
+
+.beacon-form-control:focus {
+  outline:0;
+  -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+  border-color:#66afe9;
+}
+
+.beacon-form-control::-moz-placeholder {
+  color:#777;
+  opacity:1;
+}
+
+.beacon-form-control[disabled],.beacon-form-control[readonly],fieldset[disabled] .beacon-form-control {
+  cursor:not-allowed;
+  background-color:#eee;
+  opacity:1;
+}
+
+.beacon-form-control:-ms-input-placeholder,.beacon-form-control::-webkit-input-placeholder {
+  color:#777;
+}
