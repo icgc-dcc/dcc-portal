@@ -51,6 +51,7 @@ public class BrowserResource {
     private static final String RESOURCE = "resource";
     private static final String BIOTYPE = "biotype";
     private static final String CONSEQUENCE_TYPE = "consequence_type";
+    private static final String FUNCTIONAL_IMPACT = "functional_impact";
   }
 
   /**
@@ -67,8 +68,9 @@ public class BrowserResource {
       @QueryParam(ParameterNames.INTERVAL) String interval,
       @QueryParam(ParameterNames.RESOURCE) String resource,
       @QueryParam(ParameterNames.BIOTYPE) String bioType,
-      @QueryParam(ParameterNames.CONSEQUENCE_TYPE) String consequenceType) {
-    return getData(segment, histogram, dataType, interval, resource, bioType, consequenceType);
+      @QueryParam(ParameterNames.CONSEQUENCE_TYPE) String consequenceType,
+      @QueryParam(ParameterNames.FUNCTIONAL_IMPACT) String functionalImpact) {
+    return getData(segment, histogram, dataType, interval, resource, bioType, consequenceType, functionalImpact);
   }
 
   /**
@@ -85,8 +87,9 @@ public class BrowserResource {
       @QueryParam(ParameterNames.INTERVAL) String interval,
       @QueryParam(ParameterNames.RESOURCE) String resource,
       @QueryParam(ParameterNames.BIOTYPE) String bioType,
-      @QueryParam(ParameterNames.CONSEQUENCE_TYPE) String consequenceType) {
-    return getData(segment, histogram, dataType, interval, resource, bioType, consequenceType);
+      @QueryParam(ParameterNames.CONSEQUENCE_TYPE) String consequenceType,
+      @QueryParam(ParameterNames.FUNCTIONAL_IMPACT) String functionalImpact) {
+    return getData(segment, histogram, dataType, interval, resource, bioType, consequenceType, functionalImpact);
   }
 
   /**
@@ -94,7 +97,7 @@ public class BrowserResource {
    */
   @SneakyThrows
   String getData(String segment, String histogram, String dataType,
-      String interval, String resource, String bioType, String consequenceType) {
+      String interval, String resource, String bioType, String consequenceType, String functionalImpact) {
 
     checkRequest(isBlank(resource), "'resource' parameter is required but missing.");
 
@@ -114,6 +117,7 @@ public class BrowserResource {
     queryMap.put(ParameterNames.RESOURCE, resource);
     queryMap.put(ParameterNames.BIOTYPE, bioType);
     queryMap.put(ParameterNames.CONSEQUENCE_TYPE, consequenceType);
+    queryMap.put(ParameterNames.FUNCTIONAL_IMPACT, functionalImpact);
 
     return MAPPER
         .writeValueAsString(isHistogram ? browserService.getHistogram(queryMap) : browserService.getRecords(queryMap));

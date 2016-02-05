@@ -107,8 +107,12 @@ public class BrowserService {
 
     val projectFilterValue = queryMap.get("consequence_type");
     val projectFilters = parseList(projectFilterValue);
+    
+    val impactFilterValue = queryMap.get("functional_impact");
+    val impactFilters = parseList(impactFilterValue);
 
-    val searchResponse = browserRepository.getMutation(segmentId, start, stop, consequenceTypes, projectFilters);
+    val searchResponse = browserRepository.getMutation(segmentId, start, stop, consequenceTypes, projectFilters, impactFilters);
+    
     return BrowserParsers.parseMutations(segmentId, start, stop, consequenceTypes, projectFilters, searchResponse);
   }
 
@@ -120,11 +124,15 @@ public class BrowserService {
     val projectFilterValue = queryMap.get("consequence_type");
     val projectFilters = parseList(projectFilterValue);
 
+    val impactFilterValue = queryMap.get("functional_impact");
+    val impactFilters = parseList(impactFilterValue);
+
     val intervalValue = queryMap.get("interval");
     val interval = intervalValue != null ? Math.round(Double.parseDouble(intervalValue)) : 0;
 
     val searchResponse =
-        browserRepository.getMutationHistogram(interval, segmentId, start, stop, consequenceTypes, projectFilters);
+        browserRepository.getMutationHistogram(interval, segmentId, start, stop, consequenceTypes, projectFilters,
+            impactFilters);
     return BrowserParsers.parseHistogramMutation(segmentId, start, stop, interval, consequenceTypes, projectFilters,
         searchResponse);
   }
