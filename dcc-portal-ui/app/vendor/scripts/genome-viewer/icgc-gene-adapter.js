@@ -151,8 +151,6 @@ IcgcGeneAdapter.prototype.getData = function (args) {
     }
   }
 
-//    var segmentObj = {chromosome: params.chromosome, start: start, end: end};
-
   var webServiceCallBack = function (data, segment) {
     var jsonResponse = data[0];
 

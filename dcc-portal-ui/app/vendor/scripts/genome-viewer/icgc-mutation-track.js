@@ -169,7 +169,6 @@ IcgcMutationTrack.prototype.draw = function () {
 
 IcgcMutationTrack.prototype.move = function (disp) {
   var _this = this;
-//    trackSvg.position = _this.region.center();
   _this.region.center();
   var pixelDisplacement = disp * _this.pixelBase;
   this.pixelPosition -= pixelDisplacement;
@@ -240,7 +239,6 @@ IcgcMutationTrack.prototype._getFeaturesByChunks = function (response) {
         featureLastChunk = this.dataAdapter.featureCache._getChunk(feature.end);
         for (var f = featureFirstChunk; f <= featureLastChunk; f++) {
           var fkey = chromosome + ':' + f;
-          //console.log(fkey + dataType)
           if (this.chunksDisplayed[fkey + dataType] === true) {
             displayed = true;
             break;
