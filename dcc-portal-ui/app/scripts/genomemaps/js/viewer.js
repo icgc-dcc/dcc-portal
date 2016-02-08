@@ -126,7 +126,6 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
     document.addEventListener('mozfullscreenchange', _fullscreenHandler);
     document.addEventListener('fullscreenchange', _fullscreenHandler);
 
-
     $scope.$on('$destroy', function() {
       document.removeEventListener('webkitfullscreenchange');
       document.removeEventListener('mozfullscreenchange');
@@ -134,10 +133,6 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
     });
 
   };
-
-
-
-
 
 });
 
@@ -178,15 +173,8 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
                 regionHistoryButton:false,
                 speciesButton:false,
                 chromosomesButton:false,
-//                  karyotypeButton:false,
-//                  chromosomeButton:false,
-//                  regionButton:false,
-//                  zoomControl:false,
                 windowSizeControl:false,
                 positionControl:false,
-//                  moveControl:false,
-//                  autoheightButton:false,
-//                  compactButton:false,
                 searchControl:false
               }
             },
@@ -322,7 +310,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
 
         genomeViewer.addTrack(tracks.icgcGeneTrack);
 
-
         tracks.icgcMutationsTrack = new IcgcMutationTrack({
           title: 'ICGC Mutations',
           minHistogramRegionSize: 10000,
@@ -366,8 +353,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
           height: 8,
           histogramColor: 'orange',
           handlers: {
-            //'feature:mouseover': function (e) {
-            //},
             'feature:click': function (e) {
               scope.$apply(function () {
                 $location.path('/mutations/' + e.feature.id).search({});
@@ -386,8 +371,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
           })
         });
 
-
-
         genomeViewer.addTrack(tracks.icgcMutationsTrack);
         /** End add tracks **/
 
@@ -398,7 +381,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
         genomeViewer.chromosomePanel.hide();
         GenomeViewerController.initFullScreenHandler(genomeViewer);
       }
-
 
       scope.$watch('[genes, mutations, tab]', function (params) {
         var genes, mutations, tab;
@@ -448,13 +430,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
 
         }
       }, true);
-      
-
-
-
-
-      
-
 
       scope.$on('gv:set:region', function (e, params) {
         if (genomeViewer) {
@@ -484,7 +459,8 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
   };
 });
 
-angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMService, $location, gvConstants) {
+angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMService, $location,
+  LocationService, gvConstants) {
   return {
     restrict: 'E',
     replace: true,
@@ -495,9 +471,6 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
     link: function (scope, element, attrs, GenomeViewerController) {
       var genomeViewer, navigationBar, tracks = {};
       var availableSpecies;
-
-
-
 
       function setup(regionObj) {
         regionObj.start = parseInt(regionObj.start);
@@ -520,15 +493,8 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
               regionHistoryButton:false,
               speciesButton:false,
               chromosomesButton:false,
-//                karyotypeButton:false,
-//                chromosomeButton:false,
-//                regionButton:false,
-//                zoomControl:false,
               windowSizeControl:false,
               positionControl:false,
-//                moveControl:false,
-//                autoheightButton:false,
-//                compactButton:false,
               searchControl:false
             }
           },
@@ -691,13 +657,12 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
         });
         genomeViewer.addTrack(tracks.icgcGeneTrack);
 
-
         tracks.icgcMutationsTrack = new IcgcMutationTrack({
           title: 'ICGC Mutations',
           minHistogramRegionSize: 10000,
           maxLabelRegionSize: 3000,
           height: 100,
-
+          functional_impact: _.get(LocationService.filters(), 'mutation.functionalImpact.is', ''),
           renderer: new FeatureRenderer({
             tooltipContainerID: '#genomic',
             label: function (f) {
@@ -767,10 +732,14 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
 
         GenomeViewerController.initFullScreenHandler(genomeViewer);
 
-        //genomeViewer.toggleAutoHeight(true);
-
-
-
+        scope.$on('$locationChangeSuccess', function () {
+          tracks.icgcMutationsTrack.functional_impact = _.get(LocationService.filters(),
+            'mutation.functionalImpact.is', '');
+          tracks.icgcMutationsTrack.functional_impact = _.get(LocationService.filters(),
+            'mutation.functionalImpact.not', tracks.icgcMutationsTrack.functional_impact);
+          tracks.icgcMutationsTrack.dataAdapter.clearData();
+          tracks.icgcMutationsTrack.draw();
+        });
         scope.$on('gv:set:region', function (e, params) {
           genomeViewer.setRegion(params);
         });
@@ -788,7 +757,6 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
             genomeViewer.destroy();
           }
         });
-
       }
 
       attrs.$observe('region', function (region) {

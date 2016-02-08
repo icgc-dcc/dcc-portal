@@ -27,9 +27,7 @@ function IcgcMutationAdapter(args) {
 
   this.host = window.$icgcApp.getQualifiedHost() + '/api/browser';
   this.gzip = true;
-
   this.params = {};
-
 
   this.setSpecies = function(species) {
     this.species = species;
@@ -122,7 +120,8 @@ IcgcMutationAdapter.prototype.getData = function (args) {
     interval: args.interval,
     chromosome: args.chromosome,
     resource: args.resource,
-    transcript: args.transcript
+    transcript: args.transcript,
+    functional_impact: args.functional_impact
   }
 
   var start = (args.start < 1) ? 1 : args.start;
@@ -150,8 +149,6 @@ IcgcMutationAdapter.prototype.getData = function (args) {
     }
   }
 
-//    var segmentObj = {chromosome: params.chromosome, start: start, end: end};
-
   var webServiceCallBack = function (data, segment) {
     var jsonResponse = data[0];
     if (params.histogram == true) {
@@ -167,22 +164,9 @@ IcgcMutationAdapter.prototype.getData = function (args) {
         }
       }
     }
-//        for (var i = 0; i < jsonResponse.length; i++) {
-//            var feature = jsonResponse[i];
-//        if(_this.filters) {
-//             if(_.contains(activeMutationTypes, feature.mutationType)) {
-//                    _this.featureCache.putFeaturesByRegion(feature, segmentObj, 'snp', dataType);
-//                }
-//        }else {
-//            _this.featureCache.putFeaturesByRegion(feature, segmentObj, 'snp', dataType);
-//        }
-//        }
-    /**/
-//        if (params.histogram == true) {
-//            _this.featureCache.putFeaturesByRegion(jsonResponse, segment, 'snp', dataType);
-//        } else {
+
     var fc = _this.featureCache._getChunk(segment.start);
-    //var k = segment.chromosome + ':' + fc;
+
     if (_this.featureCache.cache[key] == null || _this.featureCache.cache[key][dataType] == null) {
       // Define a feature type where genome viewer does not have a default for - the reason
       // is that genome viewer will by default clobber your own custom settings if you do.
@@ -205,7 +189,6 @@ IcgcMutationAdapter.prototype.getData = function (args) {
   var updateStart = true;
   var updateEnd = true;
   if (chunks.length > 0) {
-    //		console.log(chunks);
 
     for (var i = 0; i < chunks.length; i++) {
 
@@ -234,7 +217,6 @@ IcgcMutationAdapter.prototype.getData = function (args) {
         updateEnd = true;
       }
     }
-    //		console.log(querys);
     console.time(_this.resource + ' get and save ' + rnd);
     for (query in queries) {
       this._callWebService(queries[query], webServiceCallBack, params);
@@ -247,17 +229,18 @@ IcgcMutationAdapter.prototype.getData = function (args) {
 };
 
 IcgcMutationAdapter.prototype._callWebService = function (segmentString, callback, params) {
-//    ?segment=' + segmentString + '&chromosome=13&resource=mutation&dataType=data
-//     http://localhost:9001/api/browser/mutation?segment=17:7480000-7669999&resource=mutation&histogram=true&interval=2000
-//        url : 'http://imedina:8080/api/genes?segment='+segmentString+'&chromosome=13&resource=gene&dataType=data',
-//        url : 'http://imedina:8080/api/genes?filters={"gene":{"gene_location":["chr'+segmentString+'"]}}',
   var callParams = {
     segment: segmentString,
     resource: this.resource,
     histogram: params.histogram,
     interval: params.interval,
-    exclude: params.exclude
+    exclude: params.exclude,
   };
+
+  console.log(params.functional_impact);
+  if (params.functional_impact) {
+    callParams.functional_impact = params.functional_impact;
+  }
 
   var url = this.host + '/' + this.resource + this._getQuery(callParams);
     console.log(url);

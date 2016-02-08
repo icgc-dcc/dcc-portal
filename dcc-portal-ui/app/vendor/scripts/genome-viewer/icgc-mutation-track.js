@@ -160,11 +160,10 @@ IcgcMutationTrack.prototype.draw = function () {
       start: this.region.start - this.svgCanvasOffset * 2,
       end: this.region.end + this.svgCanvasOffset * 2,
       histogram: this.histogram,
-      interval: this.interval
+      interval: this.interval,
+      functional_impact: this.functional_impact
     });
-    //this.invalidZoomText.setAttribute('visibility', 'hidden');
   } else {
-    //this.invalidZoomText.setAttribute('visibility', 'visible');
   }
 };
 
@@ -248,17 +247,6 @@ IcgcMutationTrack.prototype._getFeaturesByChunks = function (response) {
           }
         }
         if (!displayed) {
-          //apply filter
-          // if(filters != null) {
-          //		var pass = true;
-          // 		for(filter in filters) {
-          // 			pass = pass && filters[filter](feature);
-          //			if(pass == false) {
-          //				break;
-          //			}
-          // 		}
-          //		if(pass) features.push(feature);
-          // } else {
           features.push(feature);
         }
       }
