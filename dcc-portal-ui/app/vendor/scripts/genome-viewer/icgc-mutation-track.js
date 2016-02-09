@@ -188,7 +188,8 @@ IcgcMutationTrack.prototype.move = function (disp) {
         start: parseInt(this.svgCanvasLeftLimit - this.svgCanvasOffset),
         end: this.svgCanvasLeftLimit,
         histogram: this.histogram,
-        interval: this.interval
+        interval: this.interval,
+        functional_impact: this.functional_impact
       });
       this.svgCanvasLeftLimit = parseInt(this.svgCanvasLeftLimit - this.svgCanvasOffset);
     }
@@ -199,7 +200,8 @@ IcgcMutationTrack.prototype.move = function (disp) {
         start: this.svgCanvasRightLimit,
         end: parseInt(this.svgCanvasRightLimit + this.svgCanvasOffset, 10),
         histogram: this.histogram,
-        interval: this.interval
+        interval: this.interval,
+        functional_impact: this.functional_impact
       });
       this.svgCanvasRightLimit = parseInt(this.svgCanvasRightLimit + this.svgCanvasOffset, 10);
     }

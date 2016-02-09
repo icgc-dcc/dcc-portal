@@ -162,7 +162,8 @@ IcgcGeneTrack.prototype.draw = function () {
       histogramLogarithm: this.histogramLogarithm,
       histogramMax: this.histogramMax,
       interval: this.interval,
-      transcript: this.transcript
+      transcript: this.transcript,
+      functional_impact: this.functional_impact
     });
 
     //this.invalidZoomText.setAttribute('visibility', 'hidden');
@@ -195,7 +196,8 @@ IcgcGeneTrack.prototype.move = function (disp) {
         end: this.svgCanvasLeftLimit,
         histogram: this.histogram,
         interval: this.interval,
-        transcript: this.transcript
+        transcript: this.transcript,
+        functional_impact: this.functional_impact
       });
       this.svgCanvasLeftLimit = parseInt(this.svgCanvasLeftLimit - this.svgCanvasOffset, 10);
     }
@@ -207,7 +209,8 @@ IcgcGeneTrack.prototype.move = function (disp) {
         end: parseInt(this.svgCanvasRightLimit + this.svgCanvasOffset, 10),
         histogram: this.histogram,
         interval: this.interval,
-        transcript: this.transcript
+        transcript: this.transcript,
+        functional_impact: this.functional_impact
       });
       this.svgCanvasRightLimit = parseInt(this.svgCanvasRightLimit + this.svgCanvasOffset, 10);
     }

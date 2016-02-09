@@ -121,7 +121,8 @@ IcgcGeneAdapter.prototype.getData = function (args) {
     interval: args.interval,
     chromosome: args.chromosome,
     resource: args.resource,
-    transcript: args.transcript
+    transcript: args.transcript,
+    functional_impact: args.functional_impact
   }
 
   var start = (args.start < 1) ? 1 : args.start;
@@ -273,6 +274,11 @@ IcgcGeneAdapter.prototype._callWebService = function (segmentString, callback, p
     interval: params.interval,
     dataType: params.dataType
   };
+  
+  if (params.functional_impact) {
+    callParams.functional_impact = params.functional_impact;
+  }
+  
   var url = this.host + '/' + this.resource + this._getQuery(callParams);
   $.ajax({
     type: 'GET',

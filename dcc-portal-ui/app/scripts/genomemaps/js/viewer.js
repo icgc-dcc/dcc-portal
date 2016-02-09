@@ -615,6 +615,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
           maxLabelRegionSize: 10000000,
           height: 100,
           autoHeight: true,
+          functional_impact: _.get(LocationService.filters(), 'mutation.functionalImpact.is', ''),
           renderer: icgcGeneOverviewRenderer,
           dataAdapter: new IcgcGeneAdapter({
             resource: 'gene',
@@ -633,6 +634,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
           maxLabelRegionSize: 10000000,
           minTranscriptRegionSize: 300000,
           height: 100,
+          functional_impact: _.get(LocationService.filters(), 'mutation.functionalImpact.is', ''),
           renderer: new GeneRenderer({
           tooltipContainerID: '#genomic',
             handlers: {
@@ -739,6 +741,13 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
             'mutation.functionalImpact.not', tracks.icgcMutationsTrack.functional_impact);
           tracks.icgcMutationsTrack.dataAdapter.clearData();
           tracks.icgcMutationsTrack.draw();
+          
+          tracks.icgcGeneTrack.functional_impact = _.get(LocationService.filters(),
+            'mutation.functionalImpact.is', '');
+          tracks.icgcGeneTrack.functional_impact = _.get(LocationService.filters(),
+            'mutation.functionalImpact.not', tracks.icgcMutationsTrack.functional_impact);
+          tracks.icgcGeneTrack.dataAdapter.clearData();
+          tracks.icgcGeneTrack.draw();
         });
         scope.$on('gv:set:region', function (e, params) {
           genomeViewer.setRegion(params);

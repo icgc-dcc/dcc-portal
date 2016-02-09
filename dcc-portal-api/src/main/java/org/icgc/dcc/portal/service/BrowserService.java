@@ -140,21 +140,27 @@ public class BrowserService {
   private List<Object> getSegmentGene(String segmentId, Long start, Long stop, Map<String, String> queryMap) {
     val biotypeValue = queryMap.get("biotype");
     val biotypes = parseList(biotypeValue);
+    
+    val impactFilterValue = queryMap.get("functional_impact");
+    val impactFilters = parseList(impactFilterValue);
 
     val withTranscripts = nullToEmpty(queryMap.get("dataType")).equals("withTranscripts");
 
-    val searchResponse = browserRepository.getGene(segmentId, start, stop, biotypes, withTranscripts);
+    val searchResponse = browserRepository.getGene(segmentId, start, stop, biotypes, withTranscripts, impactFilters);
     return BrowserParsers.parseGenes(segmentId, start, stop, biotypes, withTranscripts, searchResponse);
   }
 
   private List<Object> getHistogramSegmentGene(String segmentId, Long start, Long stop, Map<String, String> queryMap) {
     val biotypeValue = queryMap.get("biotype");
     val biotypes = parseList(biotypeValue);
+    
+    val impactFilterValue = queryMap.get("functional_impact");
+    val impactFilters = parseList(impactFilterValue);
 
     val intervalValue = queryMap.get("interval");
     val interval = intervalValue != null ? Math.round(Double.parseDouble(intervalValue)) : 0;
 
-    val searchResponse = browserRepository.getGeneHistogram(interval, segmentId, start, stop, biotypes);
+    val searchResponse = browserRepository.getGeneHistogram(interval, segmentId, start, stop, biotypes, impactFilters);
     return BrowserParsers.parseHistogramGene(segmentId, start, stop, interval, biotypes, searchResponse);
   }
 

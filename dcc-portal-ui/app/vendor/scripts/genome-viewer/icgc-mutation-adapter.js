@@ -234,7 +234,7 @@ IcgcMutationAdapter.prototype._callWebService = function (segmentString, callbac
     resource: this.resource,
     histogram: params.histogram,
     interval: params.interval,
-    exclude: params.exclude,
+    exclude: params.exclude
   };
   
   if (params.functional_impact) {
