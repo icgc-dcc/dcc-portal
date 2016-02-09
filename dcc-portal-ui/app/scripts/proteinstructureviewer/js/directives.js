@@ -240,7 +240,7 @@
                 $location.path('/mutations/' + d.ref);
               };
 
-             options.displayWidth = $('.protein-structure-viewer-diagram').width() - 100;
+             options.displayWidth = jQuery('.protein-structure-viewer-diagram').width() - 100;
 
               var chart = chartmaker.chart(options, chartData);
               if (chartData.mutations.length > 0) {
@@ -266,7 +266,7 @@
         
         jQuery(window).resize(function() {
           refresh(scope.transcript);
-        })
+        });
         
         scope.$on('$destroy', function () {
           jQuery(window).unbind('resize');
