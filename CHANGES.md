@@ -6,7 +6,11 @@ Change log for the DCC 2.0 Portal
 4.0.5
 --
  - Functional Impact filter now applies to gene and mutation tracks in the Genome Viewer.
+ - Functional Imapct filter now also applies to the compound page.
  - Increased size of protein viewer and made it resize based on page width.
+ - Various Front End Bug Fixes.
+ - Removed SwaggerUI static assets used in the Portal API documetation (this is now centralized at http://docs.icgc.org/)
+ - Updates to some Portal UI docs.
 
 4.0.0
 --
