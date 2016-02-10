@@ -3,6 +3,11 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+4.0.5
+--
+ - Functional Impact filter now applies to gene and mutation tracks in the Genome Viewer.
+ - Increased size of protein viewer and made it resize based on page width.
+
 4.0.0
 --
  - Refactored the repositories API to support changes in document structure in Elasticsearch.
