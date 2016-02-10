@@ -1,17 +1,23 @@
 <p style="margin-top: 1rem;">
-  The Cancer Genome Collaboratory (or simply the Collaboratory) is an academic research cloud being built by the Ontario Institute for Cancer Research (OICR). The Collaboratory hosts ICGC BAM files, compute capabilities, and Docker-based analysis tools for use by its research community. Although its access is currently restricted to a small number of beta-testers, OICR plans to scale up the hardware infrastructure,increase the number of ICGC datasets available, and open the cloud to a broader community of researchers by the end of 2016. For more information, please contact <a href="mailto:help@cancercollaboratory.org" class="link">
+  The <a href="http://www.cancercollaboratory.org" target="_blank"><i class="icon-external-link"></i>Cancer Genome Collaboratory</a> (or simply the Collaboratory) is an academic research cloud being built by the Ontario Institute for Cancer Research (OICR). The Collaboratory hosts ICGC BAM files, compute capabilities, and Docker-based analysis tools for use by its research community. Although its access is currently restricted to a small number of beta-testers, OICR plans to scale up the hardware infrastructure,increase the number of ICGC datasets available, and open the cloud to a broader community of researchers by the end of 2016.
+    For more information, please contact <a href="mailto:help@cancercollaboratory.org" class="link">
  <i class="icon-mail"></i>help@cancercollaboratory.org</a>.
 </p>
 <p>
-  The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the ICGG PanCancer Analysis of Whole Genomes project (PCAWG). The content is maintained in collaboration with the ICGC Data Coordination Center (DCC). Our <a href="/icgc-in-the-cloud/guide">user guide</a> provides step-by-step instructions on how to access and analyse ICGC data on the Collaboratory.
+  The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the ICGG PanCancer Analysis of
+    Whole Genomes project (PCAWG). The content is maintained in collaboration with the ICGC Data Coordination Center (DCC).
+    Our <a href="http://docs.icgc.org/cloud/guide/" target="_blank"><i class="icon-external-link"></i>user guide</a> provides step-by-step instructions on how to access and analyse ICGC data on the Collaboratory.
 </p>
 <p style="text-indent: initial;">
- <strong>The data produced by the PCAWG project, including somatic mutations, is subject to a publication embargo.</strong> Please see <a href="/pcawg#embargo">PCAWG publication and embargo policy</a> for the embargo terms. 
+ <strong>The data produced by the PCAWG project, including somatic mutations, is subject to a publication embargo.</strong>
+    Please see <a href="/pcawg#embargo">PCAWG publication and embargo policy</a> for the embargo terms.
 </p>
 
 <h3>Data Repository</h3>
 <p>
-  The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the <a href="/pcawg">ICGG PanCancer Analysis of Whole Genomes</a> project (PCAWG).  Content is maintained in collaboration with the ICGC Data Coordination Center (DCC).  Our user guide provides step-by-step instructions on how to access and analyse ICGC data on the Collaboratory.
+  The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the <a href="/pcawg">ICGG PanCancer Analysis of
+    Whole Genomes</a> project (PCAWG).  Content is maintained in collaboration with the ICGC Data Coordination Center (DCC).  Our user guide provides
+    step-by-step instructions on how to access and analyse ICGC data on the Collaboratory.
 </p> 
 
 <div class="repo-controls-container">
@@ -21,18 +27,27 @@
 
 <h3>Cloud Infrastructure</h3>
 <div class="indent">
-  The Collaboratory hosts an OpenStack cloud with nearly 1150 cores and over 3.2 PB of raw storage available for use by researchers.  Users can launch and access Linux virtual machines running common distributions such as <a href="http://www.ubuntu.com/" target="_blank"><i class="icon-external-link"></i>Ubuntu</a> or 
-  <a href="https://www.centos.org/" target="_blank"><i class="icon-external-link"></i>CentOS</a> through the OpenStack console.
-  <!-- a href="https://www.cancercollaboratory.org/" target="_blank"><i class="icon-external-link"></i>OpenStack console</a>.
-  <div class="repo-controls-container">
-      <a class="t_button btn"  href="https://www.cancercollaboratory.org/" target="_blank"><i class="icon-box"></i> OpenStack Console</a>
-  </div -->
+    The Collaboratory hosts an OpenStack cloud with nearly 1150 cores and over 3.2 PB of raw storage available for use by researchers.
+    Users can launch and access Linux virtual machines running common distributions such as
+    <a href="http://www.ubuntu.com/" target="_blank"><i class="icon-external-link"></i>Ubuntu</a> or
+    <a href="https://www.centos.org/" target="_blank"><i class="icon-external-link"></i>CentOS</a> through the OpenStack console.
+    <a href="https://console.cancercollaboratory.org/" target="_blank"><i class="icon-external-link"></i>OpenStack console</a>.
+    <div class="repo-controls-container">
+      <a class="t_button btn"  href="https://console.cancercollaboratory.org/" target="_blank"><i class="icon-box"></i> OpenStack Console</a>
+    </div>
 </div>
 
 
 <h3>Container Sharing</h3>
 <p>
-  The Collaboratory offers multiple ways for researchers to share their tools including VM sharing through the <!--a href="https://www.cancercollaboratory.org/" target="_blank"><i class="icon-external-link"></i>OpenStack Console</a-->OpenStack Console and the <a href="http://www.dockstore.org/" target="_blank"><i class="icon-external-link"></i>Dockstore</a>. The latter is a developing service that offers <a href="https://www.docker.com/" target="_blank"><i class="icon-external-link"></i>Docker</a> container sharing based on the  <a href="https://github.com/ga4gh/compliance" target="_blank"><i class="icon-external-link"></i>GA4GH-compliant</a> tool descriptor.  This is complimented by <a href="https://github.com/Consonance/consonance/wiki" target="_blank"><i class="icon-external-link"></i>Consonance</a>, a cloud orchestration tool, that allows users to launch Docker-based tools on many cloud nodes simultaneously. Both tools are open source and in active development.
+  The Collaboratory offers multiple ways for researchers to share their tools including VM sharing through the
+    <a href="https://console.cancercollaboratory.org/" target="_blank"><i class="icon-external-link"></i>OpenStack Console</a>
+    OpenStack Console and the <a href="http://www.dockstore.org/" target="_blank"><i class="icon-external-link"></i>Dockstore</a>.
+    The latter is a developing service that offers <a href="https://www.docker.com/" target="_blank"><i class="icon-external-link"></i>Docker</a>
+    container sharing based on the  <a href="https://github.com/ga4gh/compliance" target="_blank"><i class="icon-external-link"></i>GA4GH-compliant</a>
+    tool descriptor.  This is complimented by <a href="https://github.com/Consonance/consonance/wiki" target="_blank"><i class="icon-external-link"></i>Consonance</a>,
+    a cloud orchestration tool, that allows users to launch Docker-based tools on many cloud nodes simultaneously. Both tools are open source
+    and in active development.
  </p> 
   
 <div class="repo-controls-container">
