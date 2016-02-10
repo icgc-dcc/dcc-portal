@@ -20,13 +20,11 @@ Setup
 - Install local modules
 
 	```
-	cd src/main/js
 	npm install
 	```
 	
 - Install client-side dependencies	
 	```
-	cd src/main/js
 	npm install -g bower
 	bower install
 	```
@@ -34,7 +32,6 @@ Setup
 - Install ruby gems
 
 	```
-	cd src/main/js	
 	sudo gem install bundler -v 1.5.3
 	bundle install
 	```
