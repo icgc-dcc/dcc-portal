@@ -29,7 +29,8 @@
       scope: {
         items: '=',
         selected: '=',
-        selectedProjectCount: '='
+        selectedProjectCount: '=',
+        projectList: '='
       },
       link: function($scope, $element) {
         var chart, config;
@@ -53,9 +54,13 @@
           },
           tooltipShowFunc: function(elem, data) {
             function getLabel() {
-              return '<strong>' + data.name + '</strong><br>' +
-                'Median: ' + $filter('number')(data.medium) + '<br>' +
-                '# Donors: ' + data.donorCount;
+
+              var numberFilterFn = $filter('number');
+
+              return '<strong>' + data.name + ' [' + data.id + ']</strong><br />' +
+                'Median: ' + numberFilterFn(data.medium) + '<br />' +
+                '# Donors: ' + data.donorCount + '<br />' +
+                '# Mutations: ' + numberFilterFn(data.mutationCount);
             }
 
             var position = {
@@ -83,11 +88,13 @@
             var projectData = rawData[projectKey];
             var points = [];
             var medium = 0, mean = 0, count = 0;
+            var totalMutations = 0;
 
             Object.keys(projectData).forEach(function(donorKey) {
               var mutationCount = projectData[donorKey];
 
               mutationCount = mutationCount / 30; // As per equation in DCC-2612
+              totalMutations += projectData[donorKey]; //mutationCount; //projectData[donorKey];
 
               mean += mutationCount;
               points.push( mutationCount );
@@ -111,9 +118,10 @@
 
             chartData.push({
               id: projectKey,
-              name: projectKey,
+              name: $scope.projectList[projectKey].name,
               mean: mean,
               medium: medium,
+              mutationCount: totalMutations.toFixed(3),
               points: points
             });
           });

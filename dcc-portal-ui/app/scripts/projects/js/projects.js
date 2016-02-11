@@ -86,7 +86,8 @@
     $scope.$watch(function () {
        var currentStateData = angular.isDefined($state.current.data) ? $state.current.data : null;
 
-      if (! angular.isDefined(currentStateData.isProject) ||
+      if (! currentStateData ||
+          ! angular.isDefined(currentStateData.isProject) ||
           ! angular.isDefined(currentStateData.tab)) {
         return null;
       }
@@ -274,6 +275,9 @@
 
         _ctrl.totalDonors = totalDonors;
         _ctrl.ssmTotalDonors = ssmTotalDonors;
+        _ctrl.projectIDLookupMap = _.mapKeys(data.hits, function(project) {
+          return project.id;
+        });
 
         _ctrl.projects = data;
         _ctrl.donut = HighchartsService.donut({

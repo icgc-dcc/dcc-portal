@@ -127,6 +127,7 @@
           id: projData.id,
           name: projData.name,
           medium: projData.medium,
+          mutationCount: projData.mutationCount,
           donorCount: projData.points.length
         })
         .attr('class', 'project_control graph_interactive')
