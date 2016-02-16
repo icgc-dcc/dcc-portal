@@ -85,7 +85,13 @@
       //width: 76%;
       
       min-height: 20rem; // Prevent complete collapse when switching content
+
+      &.analysis-content {
+         width: 75%;
+      }
    }
+
+
 
 
    // Smaller sub heading lines
