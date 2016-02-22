@@ -129,6 +129,9 @@
       //   pathway has predefined type, searchableIds, Id counts and type counts
       //   curated_set has predefined Ids and Id counts
       if ($scope.type === 'go_term') {
+        if (LocationService.path().indexOf("/search") < 0) {
+          return;
+        } 
         $scope.predefinedGO = _.filter(Extensions.GENE_SET_ROOTS, function(set) {
           return set.type === 'go_term';
         });
@@ -140,6 +143,9 @@
           $scope.GOIdCounts = result;
         });
       } else if ($scope.type === 'pathway') {
+        if (LocationService.path().indexOf("/search") < 0) {
+          return;
+        } 
         var pathwayTypeFilters = {};
 
         if (filters.hasOwnProperty('gene') && filters.gene.hasOwnProperty('hasPathway')) {
@@ -164,6 +170,9 @@
           });
         }
       } else if ($scope.type === 'curated_set') {
+        if (LocationService.path().indexOf("/search") < 0) {
+          return;
+        } 
         $scope.predefinedCurated = _.filter(Extensions.GENE_SET_ROOTS, function(set) {
           return set.type === 'curated_set';
         });
