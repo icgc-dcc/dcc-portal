@@ -128,10 +128,7 @@
       //   go has predefined Ids, searchable Ids, and Id counts
       //   pathway has predefined type, searchableIds, Id counts and type counts
       //   curated_set has predefined Ids and Id counts
-      if ($scope.type === 'go_term') {
-        if (LocationService.path().indexOf("/search") < 0) {
-          return;
-        } 
+      if ($scope.type === 'go_term' && LocationService.path().indexOf('/search') >= 0) {
         $scope.predefinedGO = _.filter(Extensions.GENE_SET_ROOTS, function(set) {
           return set.type === 'go_term';
         });
@@ -142,10 +139,7 @@
         GeneSets.several(activeIds.join(',')).get('genes/counts', {filters: filters}).then(function(result) {
           $scope.GOIdCounts = result;
         });
-      } else if ($scope.type === 'pathway') {
-        if (LocationService.path().indexOf("/search") < 0) {
-          return;
-        } 
+      } else if ($scope.type === 'pathway' && LocationService.path().indexOf('/search') >= 0) {
         var pathwayTypeFilters = {};
 
         if (filters.hasOwnProperty('gene') && filters.gene.hasOwnProperty('hasPathway')) {
@@ -169,10 +163,7 @@
             $scope.pathwayIdCounts = result;
           });
         }
-      } else if ($scope.type === 'curated_set') {
-        if (LocationService.path().indexOf("/search") < 0) {
-          return;
-        } 
+      } else if ($scope.type === 'curated_set' && LocationService.path().indexOf('/search') >= 0) {
         $scope.predefinedCurated = _.filter(Extensions.GENE_SET_ROOTS, function(set) {
           return set.type === 'curated_set';
         });
