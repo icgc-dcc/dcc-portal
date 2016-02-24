@@ -735,6 +735,16 @@
     }
 
     refresh();
+    
+    // Pagination watcher, gets destroyed with scope.
+    $scope.$watch(function() {
+        return JSON.stringify(LocationService.search('files'));
+      },
+      function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          refresh();
+      }
+    });
 
     $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
       var filters = filterObj.currentFilters,
