@@ -31,7 +31,7 @@ The pagination information is stored in a `Pagination` object that holds informa
 * pages
 
 Using donors as an example:
-![donor-model](dcc-portal-api/docs/donor-model.png)
+![donor-model](dcc-portal-api/docs/images/donor-model.png)
 
 
 ## Elasticsearch Documents to Models
@@ -83,7 +83,7 @@ For more information about the structure of the Elasticsearch documents,
 please refer to [SCHEMAS](https://github.com/icgc-dcc/dcc-etl/blob/develop/SCHEMAS.md)
 from the ETL documentation.
 
-![Model Diagram](./dcc-portal-api/docs/models.png)
+![Model Diagram](./dcc-portal-api/docs/images/models.png)
 
 ## Additional Reading
  

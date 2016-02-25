@@ -63,7 +63,7 @@ select(id,age),eq(donor.id,1)
 
 ### Converter to Query Engine
 
-![High Level](docs/high-level.png)
+![High Level](docs/images/high-level.png)
 This diagram provides a high level view of the steps a query takes before being executed 
 against elastic search. The visitors will be described in a later section. 
 

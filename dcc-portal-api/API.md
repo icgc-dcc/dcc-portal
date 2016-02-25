@@ -53,7 +53,7 @@ The API consumes these requests, performs any needed business logic, and hands o
 module if needed. When the PQL module returns with data, additional business logic may be performed by
 the API before returning a response to the UI.
 
-![High Level Architecture](docs/high-level.png)
+![High Level Architecture](docs/images/high-level.png)
 
 Requests between the UI and API are communicated over HTTP.
 
@@ -161,7 +161,7 @@ More info: [Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design)
 ### Basics
 Before we get started, it might be a good idea to keep the following diagram fresh in your mind.
 It shows a very simplified representation of the API's core functions and flow of data:
-![Simplified Organization](docs/rsr-diagram.png)
+![Simplified Organization](docs/images/rsr-diagram.png)
 
 The diagram shows the three most important packages / units of organization within the project.
 
