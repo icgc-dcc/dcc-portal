@@ -249,7 +249,7 @@ public class TermsLookupRepository {
     return getHitIdsSet(response).size();
   }
 
-  public String getRepoName(String setId) {
+  public String getRepoName(@NonNull String setId) {
     val response = client.prepareGet(TERMS_LOOKUP_INDEX_NAME, TermLookupType.FILE_IDS.getName(), setId)
         .setFields("repo")
         .execute()

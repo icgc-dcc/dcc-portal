@@ -449,7 +449,7 @@ public class RepositoryFileService {
     } else if ("Collaboratory".equals(repoName)) {
       repoCode = "collaboratory";
     } else {
-      throw new BadRequestException("Only Collaboratory and AWS - Virginia are supported for this operation.");
+      throw new IllegalArgumentException("Only Collaboratory and AWS - Virginia are supported for this operation.");
     }
 
     val searchResult = repositoryFileRepository.findDownloadInfoFromSet(setId);
