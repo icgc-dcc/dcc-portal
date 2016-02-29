@@ -90,6 +90,7 @@ import org.icgc.dcc.portal.model.RepositoryFile.FileCopy;
 import org.icgc.dcc.portal.model.RepositoryFiles;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.repository.RepositoryFileRepository;
+import org.icgc.dcc.portal.repository.TermsLookupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvListWriter;
@@ -209,6 +210,7 @@ public class RepositoryFileService {
       (fileInfo, fieldName) -> COMMA_JOINER.join(transform(fileInfo, map -> map.get(fieldName)));
 
   private final RepositoryFileRepository repositoryFileRepository;
+  private final TermsLookupRepository termsLookupRepository;
 
   public Map<String, String> getIndexMetadata() {
     return repositoryFileRepository.getIndexMetaData();
@@ -438,12 +440,21 @@ public class RepositoryFileService {
   }
 
   @NonNull
+  @SneakyThrows
   public void generateManifestFileFromSet(OutputStream output, Date timestamp, String setId) {
-    // FIXME: Infer repoCode from the set.
-    val awsRepoCode = "aws-virginia";
+    String repoCode;
+    val repoName = termsLookupRepository.getRepoName(setId);
+    if ("AWS - Virginia".equals(repoName)) {
+      repoCode = "aws-virginia";
+    } else if ("Collaboratory".equals(repoName)) {
+      repoCode = "collaboratory";
+    } else {
+      throw new BadRequestException("Only Collaboratory and AWS - Virginia are supported for this operation.");
+    }
+
     val searchResult = repositoryFileRepository.findDownloadInfoFromSet(setId);
 
-    generateRepoManifestFile(output, awsRepoCode, searchResult, timestamp);
+    generateRepoManifestFile(output, repoCode, searchResult, timestamp);
   }
 
   private Iterable<Map<String, String>> getData(@NonNull final Query query) {

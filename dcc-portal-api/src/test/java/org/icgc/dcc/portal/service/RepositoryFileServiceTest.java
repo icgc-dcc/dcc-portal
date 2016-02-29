@@ -42,11 +42,13 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.staxmate.SMInputFactory;
+import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.IndexModel.Type;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.repository.BaseElasticSearchTest;
 import org.icgc.dcc.portal.repository.RepositoryFileRepository;
+import org.icgc.dcc.portal.repository.TermsLookupRepository;
 import org.icgc.dcc.portal.test.TestIndex;
 import org.junit.Before;
 import org.junit.Rule;
@@ -76,6 +78,8 @@ public class RepositoryFileServiceTest extends BaseElasticSearchTest {
   private static final String XML_FILE_EXTENSION = "xml";
   private static final String TXT_FILE_EXTENSION = "txt";
   private static final String GNOS_REPO = "GNOS";
+
+  private static final String TERMS_LOOKUP = "terms-lookup";
 
   /*
    * We only have two documents in the test index. See this file for details:
@@ -118,7 +122,8 @@ public class RepositoryFileServiceTest extends BaseElasticSearchTest {
     es.execute(createIndexMapping(Type.REPOSITORY_FILE_CENTRIC)
         .withData(bulkFile(getClass())));
     service =
-        new RepositoryFileService(new RepositoryFileRepository(es.client(), testIndex.getName(), new IndexService()));
+        new RepositoryFileService(new RepositoryFileRepository(es.client(), testIndex.getName(), new IndexService()),
+            new TermsLookupRepository(es.client(), TERMS_LOOKUP, testIndex.getName(), new PortalProperties()));
   }
 
   @Test

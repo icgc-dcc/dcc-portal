@@ -249,6 +249,16 @@ public class TermsLookupRepository {
     return getHitIdsSet(response).size();
   }
 
+  public String getRepoName(String setId) {
+    val response = client.prepareGet(TERMS_LOOKUP_INDEX_NAME, TermLookupType.FILE_IDS.getName(), setId)
+        .setFields("repo")
+        .execute()
+        .actionGet();
+
+    val field = response.getField("repo");
+    return field.getValue().toString();
+  }
+
   private long getCountFrom(@NonNull final SearchResponse response, final long max) {
     val result = getTotalHitCount(response);
     return min(max, result);
