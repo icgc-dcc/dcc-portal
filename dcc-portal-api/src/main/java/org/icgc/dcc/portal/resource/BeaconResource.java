@@ -61,22 +61,18 @@ public class BeaconResource extends BaseResource {
   @Path("/query")
   @Timed
   public Beacon query(
-
-  @ApiParam(value = "Chromosome ID: 1-22, X, Y, MT", required = true) @QueryParam("chromosome") String chromosome,
-
-  @ApiParam(value = "Position (1-based)", required = true) @QueryParam("position") String position,
-
-  @ApiParam(value = "Genome ID: GRCh\\d+", required = true) @QueryParam("reference") String reference,
-
-  @ApiParam(value = "Alleles: [ACTG]+", required = true) @QueryParam("allele") AlleleParam allele,
-
-  @ApiParam(value = "Dataset to be queried (Project ID)") @QueryParam("dataset") String dataset
+      @ApiParam(value = "Chromosome ID: 1-22, X, Y, MT", required = true) @QueryParam("chromosome") String chromosome,
+      @ApiParam(value = "Position (1-based)", required = true) @QueryParam("position") String position,
+      @ApiParam(value = "Genome ID: GRCh\\d+", required = true) @QueryParam("reference") String reference,
+      @ApiParam(value = "Alleles: [ACTG]+", required = true) @QueryParam("allele") AlleleParam allele,
+      @ApiParam(value = "Dataset to be queried (Project ID)") @QueryParam("dataset") String dataset
 
   ) {
     // Validate
     val parsedChromosome = Chromosome.byExpression(chromosome);
     val parsedPosition = parsedChromosome.parsePosition(position);
 
+    checkRequest(allele == null, "Allele param cannot be empty or null.");
     checkRequest(!isValidReference(reference), "Reference param ('%s') is empty or invalid (must be GRCh\\d+)",
         reference);
 
