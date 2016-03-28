@@ -25,10 +25,6 @@ import static org.dcc.portal.pql.meta.TypeModel.MUTATION_LOCATION;
 
 import java.util.Optional;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.NestedNode;
 import org.dcc.portal.pql.es.ast.RootNode;
@@ -54,6 +50,10 @@ import org.dcc.portal.pql.query.QueryContext;
 import org.icgc.dcc.common.core.model.ChromosomeLocation;
 
 import com.google.common.collect.ImmutableList;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Resolves filtering by {@code gene.location} and {@code mutation.location}
@@ -127,7 +127,8 @@ public class LocationFilterVisitor extends NodeVisitor<Optional<ExpressionNode>,
   }
 
   @Override
-  public Optional<ExpressionNode> visitShouldBool(@NonNull ShouldBoolNode node, @NonNull Optional<QueryContext> context) {
+  public Optional<ExpressionNode> visitShouldBool(@NonNull ShouldBoolNode node,
+      @NonNull Optional<QueryContext> context) {
     return visitChildren(this, node, context);
   }
 
@@ -176,12 +177,12 @@ public class LocationFilterVisitor extends NodeVisitor<Optional<ExpressionNode>,
     val mustBoolNodes = ImmutableList.<ExpressionNode> builder()
         .add(createChromosomeNameTermNode(field, typeModel, location.getChromosome().getName()));
 
-    if (location.hasStart()) {
+    if (location.hasStart() && location.hasEnd()) {
       mustBoolNodes.add(createGreaterEqualNode(resolveStartField(field, typeModel), location.getStart()));
-    }
-
-    if (location.hasEnd()) {
       mustBoolNodes.add(createLessEqualNode(resolveEndField(field, typeModel), location.getEnd()));
+    } else if (location.hasStart()) {
+      mustBoolNodes.add(createGreaterEqualNode(resolveEndField(field, typeModel), location.getStart()));
+      mustBoolNodes.add(createLessEqualNode(resolveEndField(field, typeModel), location.getStart()));
     }
 
     val result = new BoolNode(new MustBoolNode(mustBoolNodes.build()));
