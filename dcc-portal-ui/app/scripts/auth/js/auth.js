@@ -188,7 +188,10 @@
                 transitionParams.location = false;
               }
 
-              $state.transitionTo($state.current, $stateParams, transitionParams);
+              // If we are on the homepage (i.e. $state.current.name is falsey) don't bother transitioning...
+              if ($state.current.name) {
+                $state.transitionTo($state.current, $stateParams, transitionParams);
+              }
 
               $scope.closeLoginPopup();
               console.log('logged in as: ', $scope.params.user);

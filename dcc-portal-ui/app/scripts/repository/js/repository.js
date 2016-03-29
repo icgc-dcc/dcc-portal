@@ -403,7 +403,7 @@
    * External repository controller
    */
   module.controller ('ExternalRepoController', function ($scope, $window, $modal, LocationService, Page,
-    ExternalRepoService, SetService, ProjectCache, CodeTable, RouteInfoService, $rootScope) {
+    ExternalRepoService, SetService, ProjectCache, CodeTable, RouteInfoService, $rootScope, FacetConstants) {
 
     var dataRepoTitle = RouteInfoService.get ('dataRepositories').title,
         FilterService = LocationService.getFilterService();
@@ -755,6 +755,13 @@
       }
       else {
         refresh();
+      }
+    });
+
+    // Remove any pagination on facet change
+    $scope.$on(FacetConstants.EVENTS.FACET_STATUS_CHANGE, function() {
+      if (LocationService.getJsonParam('files')) {
+        LocationService.removeParam('files');
       }
     });
 
