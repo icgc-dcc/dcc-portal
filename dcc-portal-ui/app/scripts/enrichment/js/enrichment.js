@@ -278,8 +278,8 @@
     function mergeInputGeneList(filters, geneListId) {
       delete filters.gene[Extensions.ENTITY];
       delete filters.gene.id;
-      filters.gene[Extensions.ENTITY] = {
-        is: [geneListId]
+      filters.gene.id = {
+        is: [Extensions.ENTITY_PREFIX + geneListId]
       };
       return filters;
     }

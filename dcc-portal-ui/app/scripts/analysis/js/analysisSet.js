@@ -21,7 +21,7 @@
   var module = angular.module('icgc.analysis.controllers');
 
   module.controller('SavedSetController', function($scope, $window, $location, $timeout, $modal,
-    SetService, Settings, LocationService, RouteInfoService) {
+    SetService, Settings, LocationService, RouteInfoService, Extensions) {
 
     var _this = this;
     var syncSetTimeout;
@@ -87,7 +87,7 @@
         templateUrl: '/scripts/downloader/views/request.html',
         controller: 'DownloadRequestController',
         resolve: {
-          filters: function() { return {donor:{entitySetId:{is:[id]}}}; }
+          filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + id]}}}; }
         }
       });
     };

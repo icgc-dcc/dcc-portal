@@ -186,8 +186,8 @@
           var count = getTermCount(analysis, term, donorSetId);
           var summary = getSummary(analysis, donorSetId);
           var advQuery = {};
-          advQuery[Extensions.ENTITY] = {
-            is: [donorSetId]
+          advQuery.id = {
+            is: [Extensions.ENTITY_PREFIX+donorSetId]
           };
           advQuery[analysis.name] = {
             is: [term]

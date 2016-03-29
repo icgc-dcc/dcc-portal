@@ -322,7 +322,7 @@
       var filters = {
         gene: {}
       };
-      filters.gene[Extensions.ENTITY] = { is: [set.id] };
+      filters.gene.id = { is: [Extensions.ENTITY_PREFIX + set.id] };
 
       $modal.open({
         templateUrl: '/scripts/enrichment/views/enrichment.upload.html',
