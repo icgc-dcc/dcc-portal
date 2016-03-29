@@ -46,9 +46,14 @@
             _disable(featureName);
           }
         }
-      }
 
-      // Allow features to be turned on via query param on application load
+        // Allow features to be turned on via query param on application load
+        var enable = LocationService.getParam('enable');
+        enable.split(',').forEach(function(feature) {
+          _enable(feature.trim());
+        });
+        
+      }
 
       Settings.get().then(init);
 
