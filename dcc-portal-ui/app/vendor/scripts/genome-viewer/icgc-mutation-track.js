@@ -56,9 +56,9 @@ IcgcMutationTrack.prototype.updateHeight = function () {
   this.main.setAttribute('height', renderedHeight);
 
   if (this.resizable) {
-    if (this.autoHeight == false) {
+    if (this.autoHeight === false) {
       this.contentDiv.style.height = this.height + 10 + 'px';
-    } else if (this.autoHeight == true) {
+    } else if (this.autoHeight === true) {
       var x = this.pixelPosition;
       var width = this.width;
       var lastContains = 0;

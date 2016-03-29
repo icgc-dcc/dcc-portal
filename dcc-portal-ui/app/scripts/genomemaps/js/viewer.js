@@ -261,7 +261,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
           minHistogramRegionSize: 20000000,
           maxLabelRegionSize: 10000000,
           height: 100,
-          autoHeight: true,
+          autoHeight: false,
           renderer: icgcGeneOverviewRenderer,
           dataAdapter: new IcgcGeneAdapter({
             resource: 'gene',
@@ -614,7 +614,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
           minHistogramRegionSize: 20000000,
           maxLabelRegionSize: 10000000,
           height: 100,
-          autoHeight: true,
+          autoHeight: false,
           functional_impact: _.get(LocationService.filters(), 'mutation.functionalImpact.is', ''),
           renderer: icgcGeneOverviewRenderer,
           dataAdapter: new IcgcGeneAdapter({
