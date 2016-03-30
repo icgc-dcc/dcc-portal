@@ -27,7 +27,7 @@
      * Check set/list equality
      */
     this.isEqual = function(s1, s2) {
-      return _.isEqual(s1, s2);
+      return (_.difference(s1, s2).length === 0 && _.difference(s2, s1).length === 0);
     };
 
 
