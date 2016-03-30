@@ -580,7 +580,9 @@ angular.module('icgc.advanced.controllers', [
 
         Donors.getList(params).then(function(hitsDonorList) {
           _ASDonorService.donors.hits = hitsDonorList.hits;
+          _ASDonorService.donors.pagination = hitsDonorList.pagination;
           _ASDonorService.hitsLoaded = true;
+
 
           _ASDonorService.donors.hits.forEach(function (donor) {
             donor.embedQuery = LocationService.merge(filters, {donor: {id: {is: [donor.id]}}}, 'facet');
@@ -784,6 +786,7 @@ angular.module('icgc.advanced.controllers', [
       Genes.getList(params).then(function(hitsGenesList) {
 
         _ASGeneService.genes.hits = hitsGenesList.hits;
+        _ASGeneService.genes.pagination = hitsGenesList.pagination;
         _ASGeneService.hitsLoaded = true;
 
         _ASGeneService.genes.hits.forEach(function (gene) {
@@ -971,6 +974,7 @@ angular.module('icgc.advanced.controllers', [
       Mutations.getList(params)
         .then(function(hitsMutationsList) {
           _ASMutationService.mutations.hits = hitsMutationsList.hits;
+          _ASMutationService.mutations.pagination = hitsMutationsList.pagination;
           _ASMutationService.hitsLoaded = true;
 
           _ASMutationService.mutations.hits.forEach(function (mutation) {
