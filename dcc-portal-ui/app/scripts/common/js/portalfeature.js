@@ -49,9 +49,11 @@
 
         // Allow features to be turned on via query param on application load
         var enable = LocationService.getParam('enable');
-        enable.split(',').forEach(function(feature) {
-          _enable(feature.trim());
-        });
+        if (typeof enable !== 'undefined') {
+          enable.split(',').forEach(function(feature) {
+            _enable(feature.trim());
+          });
+        }
         
       }
 
