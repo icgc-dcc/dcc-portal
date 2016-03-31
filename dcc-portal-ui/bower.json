@@ -57,7 +57,7 @@
     "angular-scenario": "~1.4.*"
   },
   "resolutions": {
-    "angular": "~1.4.*",
-    "lodash": "~3.10.*"
+    "angular": "1.4.*",
+    "lodash": "3.10.*"
   }
 }
