@@ -57,8 +57,10 @@
   
   
   module.controller('PathwaysController', function ($scope, $q, Page, EnrichmentData, Restangular,
-                                                    GeneSetService, GeneSetHierarchy, GeneSets, GeneSetVerificationService, TooltipText, LocationService,
-                                                    EnrichmentService, SetService, PathwaysConstants, RestangularNoCache) {
+                                                    GeneSetService, GeneSetHierarchy, GeneSets,
+                                                    GeneSetVerificationService, TooltipText,
+                                                    LocationService, EnrichmentService, SetService,
+                                                    PathwaysConstants, RestangularNoCache) {
     
     
     var _selectedPathway = null;
