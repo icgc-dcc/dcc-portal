@@ -25,7 +25,9 @@ import static org.elasticsearch.action.search.SearchType.SCAN;
 import static org.elasticsearch.index.query.FilterBuilders.termFilter;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
-import static org.elasticsearch.search.facet.FacetBuilders.termsFacet;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.filter;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.nested;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 import static org.icgc.dcc.portal.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.model.IndexModel.MAX_FACET_TERM_COUNT;
 import static org.icgc.dcc.portal.model.IndexModel.getFields;
@@ -49,7 +51,9 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.NestedQueryBuilder;
-import org.elasticsearch.search.facet.terms.strings.InternalStringTermsFacet;
+import org.elasticsearch.search.aggregations.bucket.filter.Filter;
+import org.elasticsearch.search.aggregations.bucket.nested.Nested;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.icgc.dcc.portal.model.IndexModel;
 import org.icgc.dcc.portal.model.IndexModel.Kind;
 import org.icgc.dcc.portal.model.IndexModel.Type;
@@ -162,7 +166,6 @@ public class GeneRepository implements Repository {
     return findGeneSymbolsByFilters(filters);
   }
 
-  @SuppressWarnings("deprecation")
   public SearchResponse findGeneSetCounts(Query query) {
     log.info(" My Query {} ", query.getFilters());
 
@@ -170,13 +173,12 @@ public class GeneRepository implements Repository {
     val search = queryEngine.execute(pql, GENE_CENTRIC);
 
     for (val universe : Universe.values()) {
-      val universeFacetName = universe.getGeneSetFacetName();
+      val universeAggName = universe.getGeneSetFacetName();
 
-      // FIXME: migrate to aggregation
       search.getRequestBuilder()
-          .addFacet(termsFacet(universeFacetName).field(universeFacetName).size(50000));
-
+          .addAggregation(terms(universeAggName).field(universeAggName).size(50000));
     }
+
     search.getRequestBuilder().setSearchType(COUNT);
     return search.getRequestBuilder().execute().actionGet();
   }
@@ -304,25 +306,31 @@ public class GeneRepository implements Repository {
     val ssmConsequence = "donor.ssm.consequence";
     val transcriptField = ssmConsequence + ".transcript_affected";
     val geneIdField = ssmConsequence + "._gene_id";
-    val facetName = "affectedTranscript";
+    val rootAgg = "aggs";
+    val filteredAgg = "filtered";
+    val aggName = "affectedTranscript";
 
-    @SuppressWarnings("deprecation")
     val response = searchGenes(CENTRIC_TYPE.getId(), "getAffectedTranscripts", request -> {
       request
           .setTypes(CENTRIC_TYPE.getId())
           .setSearchType(QUERY_THEN_FETCH)
           .setSize(0)
-          .addFacet(termsFacet(facetName)
-              .nested(ssmConsequence)
-              .size(MAX_FACET_TERM_COUNT)
-              .field(transcriptField)
-              .facetFilter(termFilter(geneIdField, geneId)));
+          .addAggregation(nested(rootAgg)
+              .path(ssmConsequence)
+              .subAggregation(filter(filteredAgg)
+                  .filter(termFilter(geneIdField, geneId))
+                  .subAggregation(terms(aggName)
+                      .size(MAX_FACET_TERM_COUNT)
+                      .field(transcriptField))));
     });
 
-    val facet = (InternalStringTermsFacet) response.getFacets().facet(facetName);
+    val nestedAggs = (Nested) response.getAggregations().get(rootAgg);
+    val filteredAggs = (Filter) nestedAggs.getAggregations().get(filteredAgg);
+    val aggs = (Terms) filteredAggs.getAggregations().get(aggName);
 
-    return transform(facet.getEntries(),
-        entry -> entry.getTerm().toString());
+    val aggsTransform = transform(aggs.getBuckets(), bucket -> bucket.getKeyAsText().toString());
+
+    return aggsTransform;
   }
 
   public Multimap<String, String> getGeneSymbolEnsemblIdMap() {
