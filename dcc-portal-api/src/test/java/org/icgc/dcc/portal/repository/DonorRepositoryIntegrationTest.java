@@ -38,7 +38,7 @@ public class DonorRepositoryIntegrationTest extends BaseRepositoryIntegrationTes
 
   @Test
   public void test_facets() {
-    facets(repository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
+    aggregations(repository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
   }
 
   @Test

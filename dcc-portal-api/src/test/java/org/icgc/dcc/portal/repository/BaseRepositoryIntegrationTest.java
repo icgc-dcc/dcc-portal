@@ -23,17 +23,15 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import lombok.val;
-
 import org.elasticsearch.action.search.MultiSearchRequestBuilder;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.facet.Facet;
-import org.elasticsearch.search.facet.terms.TermsFacet;
-import org.elasticsearch.search.facet.terms.TermsFacet.Entry;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.IndexModel;
 import org.icgc.dcc.portal.model.IndexModel.Kind;
@@ -47,6 +45,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import lombok.val;
 
 public class BaseRepositoryIntegrationTest {
 
@@ -83,8 +83,7 @@ public class BaseRepositoryIntegrationTest {
       MUTATION_FILTER,
       OCCURRENCE_FILTER,
       CONSEQUENCE_FILTER,
-      TRANSCRIPT_FILTER
-      );
+      TRANSCRIPT_FILTER);
 
   protected static List<String> projectIds = Lists.newArrayList("BRCA-US", "GBM-US");
 
@@ -155,8 +154,8 @@ public class BaseRepositoryIntegrationTest {
     assertThat(exp).as(id).isEqualTo(actual);
   }
 
-  void assertFacet(String facetName, TermsFacet.Entry entry, long count) {
-    assertThat(count).as(facetName + ":" + entry.getTerm()).isEqualTo(entry.getCount());
+  void assertAggregation(String facetName, Terms.Bucket entry, long count) {
+    assertThat(count).as(facetName + ":" + entry.getKey()).isEqualTo(entry.getDocCount());
   }
 
   MultiSearchResponse setup(Repository repo, QueryBuilder qb, Type type) {
@@ -218,7 +217,7 @@ public class BaseRepositoryIntegrationTest {
     return queries;
   }
 
-  void facets(Repository repo, String sort, Type type, Kind kind) {
+  void aggregations(Repository repo, String sort, Type type, Kind kind) {
     val fIter = FILTERS.iterator();
     val query = query(sort).includes(Lists.newArrayList("facets"));
     val sr = setup(repo, query, type);
@@ -229,67 +228,66 @@ public class BaseRepositoryIntegrationTest {
       val filter = fIter.next();
       checkEmpty(response);
 
-      val queries = generateFacetQueries(filter, response, sort, kind);
+      val queries = generateAggsQueries(filter, response, sort, kind);
 
       // Execute MultiSearch Request for all Entry values for Facet
       val csr = repo.nestedCounts(queries);
 
-      verifyFacetCounts(response, csr);
+      verifyAggregationCounts(response, csr);
     }
   }
 
-  void verifyFacetCounts(SearchResponse r, MultiSearchResponse csr) {
+  void verifyAggregationCounts(SearchResponse r, MultiSearchResponse csr) {
     // Compare entry count to count response;
-    Iterator<Facet> facetIter = r.getFacets().iterator();
-    TermsFacet facet = (TermsFacet) facetIter.next();
-    Iterator<? extends Entry> entryIter = facet.getEntries().iterator();
+    Iterator<Aggregation> aggsIter = r.getAggregations().iterator();
+    Terms aggs = (Terms) aggsIter.next();
+    Iterator<Bucket> entryIter = aggs.getBuckets().iterator();
 
     for (val countResponse : csr.getResponses()) {
       val cr = countResponse.getResponse();
 
       while (!entryIter.hasNext()) {
-        facet = (TermsFacet) facetIter.next();
-        entryIter = facet.getEntries().iterator();
+        aggs = (Terms) aggsIter.next();
+        entryIter = aggs.getBuckets().iterator();
       }
 
       val entry = entryIter.next();
 
       // Needed for Mutation Repo test - these facet are known to fail
-      if (!facet.getName().endsWith("Nested") &&
+      if (!aggs.getName().endsWith("Nested") &&
           !Lists.newArrayList(
               "consequenceType",
               "functionalImpact",
               "platform",
-              "verificationStatus"
-              ).contains(facet.getName())) {
-        assertFacet(facet.getName(), entry, cr.getHits().getTotalHits());
+              "verificationStatus").contains(aggs.getName())) {
+        assertAggregation(aggs.getName(), entry, cr.getHits().getTotalHits());
       }
     }
   }
 
-  LinkedHashMap<String, LinkedHashMap<String, Query>> generateFacetQueries(String f, SearchResponse r, String sort,
+  LinkedHashMap<String, LinkedHashMap<String, Query>> generateAggsQueries(String f, SearchResponse r, String sort,
       Kind kind) {
     val queries = Maps.<String, LinkedHashMap<String, Query>> newLinkedHashMap();
 
-    for (val facet : r.getFacets()) { // EnrichmentSearchResponses
-      val termsFacet = (TermsFacet) facet;
+    for (val agg : r.getAggregations()) { // EnrichmentSearchResponses
+      val termsAggs = (Terms) agg;
 
       // Build map of Entry -> Query
-      val subQueries = generateEntryQueries(f, termsFacet, sort, kind);
-      queries.put(termsFacet.getName(), subQueries);
+      val subQueries = generateEntryQueries(f, termsAggs, sort, kind);
+      queries.put(termsAggs.getName(), subQueries);
     }
     return queries;
   }
 
-  LinkedHashMap<String, Query> generateEntryQueries(String f, TermsFacet termsFacet, String sort, Kind kind) {
+  LinkedHashMap<String, Query> generateEntryQueries(String f, Terms termsAggs, String sort, Kind kind) {
     val queries = Maps.<String, Query> newLinkedHashMap();
 
-    for (val entry : termsFacet.getEntries()) { // Facet Values
-      val updateNode = buildFilterNode(termsFacet.getName(), entry.getTerm().toString(), kind.getId());
+    for (val entry : termsAggs.getBuckets()) { // Facet Values
+      val updateNode = buildFilterNode(termsAggs.getName(), entry.getKey(), kind.getId());
       val filter = JsonUtils.merge(new FiltersParam(f).get(), updateNode);
       val query = query(sort).filters(filter).build();
 
-      queries.put(entry.getTerm().string(), query);
+      queries.put(entry.getKey(), query);
     }
 
     return queries;

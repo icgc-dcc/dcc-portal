@@ -18,14 +18,15 @@
 package org.icgc.dcc.portal.analysis;
 
 import static lombok.AccessLevel.PRIVATE;
+
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.facet.Facet;
+import org.icgc.dcc.portal.model.Universe;
+
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
-
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.search.facet.Facet;
-import org.elasticsearch.search.facet.terms.TermsFacet;
-import org.icgc.dcc.portal.model.Universe;
 
 /**
  * Enrichment analysis {@link Facet} utilities.
@@ -33,11 +34,11 @@ import org.icgc.dcc.portal.model.Universe;
 @NoArgsConstructor(access = PRIVATE)
 public class EnrichmentSearchResponses {
 
-  public static TermsFacet getUniverseTermsFacet(@NonNull SearchResponse response, @NonNull Universe universe) {
-    val facets = response.getFacets().getFacets();
-    val facet = facets.get(universe.getGeneSetFacetName());
+  public static Terms getUniverseTermsAggregation(@NonNull SearchResponse response, @NonNull Universe universe) {
+    val aggs = response.getAggregations();
+    val agg = aggs.get(universe.getGeneSetFacetName());
 
-    return (TermsFacet) facet;
+    return (Terms) agg;
   }
 
 }

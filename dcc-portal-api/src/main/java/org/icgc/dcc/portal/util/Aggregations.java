@@ -21,30 +21,30 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.util.Map;
 
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+
+import com.google.common.collect.ImmutableMap;
+
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
-
-import org.elasticsearch.search.facet.terms.TermsFacet;
-
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Elasticsearch facet utilities, not to be confused with API facets.
  */
 @NoArgsConstructor(access = PRIVATE)
-public final class Facets {
+public final class Aggregations {
 
-  public static Map<String, Integer> getFacetCounts(@NonNull TermsFacet termsFacet) {
-    val facetCounts = ImmutableMap.<String, Integer> builder();
-    for (val entry : termsFacet.getEntries()) {
-      val value = entry.getTerm().string();
-      val count = entry.getCount();
+  public static Map<String, Integer> getTermsCounts(@NonNull Terms agg) {
+    val termCounts = ImmutableMap.<String, Integer> builder();
+    for (val entry : agg.getBuckets()) {
+      val value = entry.getKey();
+      val count = entry.getDocCount();
 
-      facetCounts.put(value, count);
+      termCounts.put(value, (int) count);
     }
 
-    return facetCounts.build();
+    return termCounts.build();
   }
 
 }

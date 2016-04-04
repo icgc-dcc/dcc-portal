@@ -24,14 +24,14 @@ import static org.icgc.dcc.portal.analysis.EnrichmentAnalyses.calculateExpectedG
 import static org.icgc.dcc.portal.analysis.EnrichmentAnalyses.calculateGeneCountPValue;
 import static org.icgc.dcc.portal.analysis.EnrichmentQueries.geneSetOverlapQuery;
 import static org.icgc.dcc.portal.analysis.EnrichmentQueries.overlapQuery;
-import static org.icgc.dcc.portal.analysis.EnrichmentSearchResponses.getUniverseTermsFacet;
+import static org.icgc.dcc.portal.analysis.EnrichmentSearchResponses.getUniverseTermsAggregation;
 import static org.icgc.dcc.portal.model.EnrichmentAnalysis.State.ANALYZING;
 import static org.icgc.dcc.portal.model.EnrichmentAnalysis.State.ERROR;
 import static org.icgc.dcc.portal.model.EnrichmentAnalysis.State.FINISHED;
 import static org.icgc.dcc.portal.model.EnrichmentAnalysis.State.POST_PROCESSING;
 import static org.icgc.dcc.portal.model.Query.idField;
 import static org.icgc.dcc.portal.repository.TermsLookupRepository.TermLookupType.GENE_IDS;
-import static org.icgc.dcc.portal.util.Facets.getFacetCounts;
+import static org.icgc.dcc.portal.util.Aggregations.getTermsCounts;
 import static org.icgc.dcc.portal.util.SearchResponses.getHitIds;
 
 import java.util.List;
@@ -68,7 +68,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired) )
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EnrichmentAnalyzer {
 
   /**
@@ -344,9 +344,9 @@ public class EnrichmentAnalyzer {
   private Map<String, Integer> findOverlapGeneSetCounts(Query query, Universe universe, UUID inputGeneListId) {
     val overlapQuery = overlapQuery(query, universe, inputGeneListId);
     val response = geneRepository.findGeneSetCounts(overlapQuery);
-    val geneSetFacet = getUniverseTermsFacet(response, universe);
+    val geneSetAggs = getUniverseTermsAggregation(response, universe);
 
-    return getFacetCounts(geneSetFacet);
+    return getTermsCounts(geneSetAggs);
   }
 
   private Map<String, String> findGeneSetNames(Iterable<String> geneSetIds) {

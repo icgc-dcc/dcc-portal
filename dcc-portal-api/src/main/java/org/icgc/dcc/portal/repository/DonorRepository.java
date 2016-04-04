@@ -41,6 +41,9 @@ import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.missing;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.stats;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 import static org.icgc.dcc.portal.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.model.IndexModel.MAX_FACET_TERM_COUNT;
 import static org.icgc.dcc.portal.model.IndexModel.getFields;
@@ -74,11 +77,11 @@ import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.facet.Facet;
-import org.elasticsearch.search.facet.FacetBuilders;
-import org.elasticsearch.search.facet.terms.TermsFacet;
-import org.elasticsearch.search.facet.termsstats.TermsStatsFacet;
-import org.elasticsearch.search.facet.termsstats.TermsStatsFacetBuilder;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
+import org.elasticsearch.search.aggregations.metrics.stats.Stats;
 import org.icgc.dcc.portal.model.EntitySetTermFacet;
 import org.icgc.dcc.portal.model.IndexModel;
 import org.icgc.dcc.portal.model.IndexModel.Kind;
@@ -89,7 +92,6 @@ import org.icgc.dcc.portal.model.Statistics;
 import org.icgc.dcc.portal.model.TermFacet.Term;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.repository.TermsLookupRepository.TermLookupType;
-import org.icgc.dcc.portal.util.ForwardingTermsFacet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -105,7 +107,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@SuppressWarnings("deprecation")
 public class DonorRepository implements Repository {
 
   private static final Type TYPE = Type.DONOR;
@@ -158,7 +159,7 @@ public class DonorRepository implements Repository {
           PhenotypeFacetNames.VITAL_STATUS, "donor_vital_status");
 
   @Getter(lazy = true, value = PRIVATE)
-  private final Map<String, Map<String, Integer>> baselineTermsFacetsOfPhenotype = loadBaselineTermsFacetsOfPhenotype();
+  private final Map<String, Map<String, Integer>> baselineTermsAggsOfPhenotype = loadBaselineTermsAggsOfPhenotype();
 
   private static final int SCAN_BATCH_SIZE = 1000;
 
@@ -242,11 +243,11 @@ public class DonorRepository implements Repository {
 
     // Here we enumerate the response collection by entity-set UUIDs (the same grouping as in the multi-search).
     for (int i = 0; i < responseItemCount; i++) {
-      val facets = responseItems[i].getResponse().getFacets();
+      val aggregations = responseItems[i].getResponse().getAggregations();
 
-      if (null == facets) continue;
+      if (null == aggregations) continue;
 
-      val facetMap = facets.facetsAsMap();
+      val aggsMap = aggregations.asMap();
       val entitySetId = setIds.get(i);
 
       val entitySetCount = entityListRepository.find(entitySetId).getCount();
@@ -255,20 +256,25 @@ public class DonorRepository implements Repository {
       // EntitySetTermFacet.
       for (val facetKv : facetKeyValuePairs) {
         val facetName = facetKv.getKey();
-        Facet facet = facetMap.get(facetName);
+        Aggregation aggs = aggsMap.get(facetName);
 
+        Long total = 0L;
+        Long missing = 0L;
         // We want to include the number of missing donor documents in our final missing count
-        if (facet instanceof TermsFacet) {
-          val termsFacet = (TermsFacet) facet;
-          val realMissing =
-              termsFacet.getMissingCount() + entitySetCount
-                  - (termsFacet.getTotalCount() + termsFacet.getMissingCount()) - termsFacet.getOtherCount();
-          facet = new CustomMissingTermsFacet(termsFacet, realMissing);
+        if (aggs instanceof Terms) {
+          val termsAggs = (Terms) aggs;
+
+          total = termsAggs.getBuckets()
+              .stream()
+              .mapToLong(Bucket::getDocCount)
+              .sum();
+
+          missing = entitySetCount - total;
         }
 
-        if (!(facet instanceof TermsFacet)) continue;
+        // if (!(aggs instanceof Terms)) continue;
         results.get(facetName).add(
-            buildEntitySetTermFacet(entitySetId, (TermsFacet) facet, facetMap, facetKv.getValue()));
+            buildEntitySetTermFacet(entitySetId, (Terms) aggs, aggsMap, total, missing, facetKv.getValue()));
       }
 
     }
@@ -279,35 +285,40 @@ public class DonorRepository implements Repository {
     return ImmutableList.copyOf(finalResult);
   }
 
-  private EntitySetTermFacet buildEntitySetTermFacet(final UUID entitySetId, final TermsFacet termsFacet,
-      final Map<String, Facet> facetMap, final Optional<SimpleImmutableEntry<String, String>> statsFacetConfigMap) {
-    val termFacetList = buildTermFacetList(termsFacet, getBaselineTermsFacetsOfPhenotype());
+  private EntitySetTermFacet buildEntitySetTermFacet(final UUID entitySetId, final Terms termsFacet,
+      final Map<String, Aggregation> aggsMap,
+      final Long total,
+      final Long missing,
+      final Optional<SimpleImmutableEntry<String, String>> statsFacetConfigMap) {
+    val termFacetList = buildTermFacetList(termsFacet, getBaselineTermsAggsOfPhenotype());
 
     val mean = wantsStatistics(statsFacetConfigMap) ? getMeanFromTermsStatsFacet(
-        facetMap.get(statsFacetConfigMap.get().getKey())) : null;
-    val summary = new Statistics(termsFacet.getTotalCount(), termsFacet.getMissingCount(), mean);
+        aggsMap.get(statsFacetConfigMap.get().getKey())) : null;
+    val summary = new Statistics(total, missing, mean);
 
     return new EntitySetTermFacet(entitySetId, termFacetList, summary);
   }
 
-  private Map<String, Map<String, Integer>> loadBaselineTermsFacetsOfPhenotype() {
+  private Map<String, Map<String, Integer>> loadBaselineTermsAggsOfPhenotype() {
     val search = getPhenotypeAnalysisSearchBuilder();
     val response = search.execute().actionGet();
 
     log.debug("ES query is: '{}'", search);
     log.debug("ES response is: '{}'", response);
 
-    val facets = response.getFacets();
-    checkNotNull(facets, "Query response does not contain any facets.");
+    val aggs = response.getAggregations();
+    checkNotNull(aggs, "Query response does not contain any Aggregations.");
 
     val results = ImmutableMap.<String, Map<String, Integer>> builder();
 
-    for (val facet : facets.facets()) {
-      val entries = ((TermsFacet) facet).getEntries();
-      val terms = transform(entries, entry -> entry.getTerm().string());
+    for (val agg : aggs.asList()) {
+      if (agg instanceof Terms) {
+        val entries = ((Terms) agg).getBuckets();
+        val terms = transform(entries, entry -> entry.getKey());
 
-      // Map all term values to zero
-      results.put(facet.getName(), toMap(terms, constant(0)));
+        // Map all term values to zero
+        results.put(agg.getName(), toMap(terms, constant(0)));
+      }
     }
 
     return results.build();
@@ -320,13 +331,13 @@ public class DonorRepository implements Repository {
     return Optional.of(new SimpleImmutableEntry<String, String>(first, second));
   }
 
-  private static List<Term> buildTermFacetList(@NonNull final TermsFacet termsFacet,
+  private static List<Term> buildTermFacetList(@NonNull final Terms termsFacet,
       @NonNull Map<String, Map<String, Integer>> baseline) {
     val results = ImmutableMap.<String, Integer> builder();
 
     // First we populate with the terms facets from the search response
-    termsFacet.getEntries().stream().forEach(entry -> {
-      results.put(entry.getTerm().toString(), entry.getCount());
+    termsFacet.getBuckets().stream().forEach(entry -> {
+      results.put(entry.getKey(), (int) entry.getDocCount());
     });
 
     val facetName = termsFacet.getName();
@@ -343,14 +354,15 @@ public class DonorRepository implements Repository {
     return ImmutableList.copyOf(termFacetList);
   }
 
-  private static Double getMeanFromTermsStatsFacet(final Facet facet) {
-    if (!(facet instanceof TermsStatsFacet)) {
+  private static Double getMeanFromTermsStatsFacet(final Aggregation facet) {
+    if (!(facet instanceof Terms)) {
       return null;
     }
 
-    val stats = ((TermsStatsFacet) facet).getEntries();
+    val terms = (Terms) facet;
+    val statsAggs = (Stats) terms.getBuckets().get(0).getAggregations().asList().get(0);
 
-    return (stats.size() > 0) ? stats.get(0).getMean() : 0;
+    return statsAggs.getAvg();
   }
 
   private MultiSearchResponse performPhenotypeAnalysisMultiSearch(@NonNull final List<UUID> setIds) {
@@ -367,8 +379,7 @@ public class DonorRepository implements Repository {
           .map(Optional::get)
           .forEach(statsFacetNameFieldPair -> {
             final String actualFieldName = DONORS_FIELDS_MAPPING_FOR_PHENOTYPE.get(statsFacetNameFieldPair.getValue());
-
-            search.addFacet(buildTermsStatsFacetBuilder(statsFacetNameFieldPair.getKey(), actualFieldName));
+            search.addAggregation(buildTermsStatsAggsBuilder(statsFacetNameFieldPair.getKey(), actualFieldName));
           });
 
       log.info("Sub-search for DonorSet ID [{}] is: '{}'", setId, search);
@@ -381,11 +392,9 @@ public class DonorRepository implements Repository {
     return multiResponse;
   }
 
-  private static TermsStatsFacetBuilder buildTermsStatsFacetBuilder(final String facetName, final String facetField) {
-    return FacetBuilders.termsStatsFacet(facetName)
-        .keyField("_type")
-        .valueField(facetField)
-        .size(MAX_FACET_TERM_COUNT);
+  private static TermsBuilder buildTermsStatsAggsBuilder(final String aggName, final String aggField) {
+    return terms(aggName).field("_type").size(MAX_FACET_TERM_COUNT)
+        .subAggregation(stats("stats").field(aggField));
   }
 
   private SearchRequestBuilder getPhenotypeAnalysisSearchBuilder() {
@@ -400,11 +409,15 @@ public class DonorRepository implements Repository {
         .addFields(fieldMap.values().stream().toArray(String[]::new));
 
     for (val name : FACETS_FOR_PHENOTYPE.keySet()) {
-      val facetbuilder = FacetBuilders.termsFacet(name)
+      val aggsBuilder = terms(name)
           .field(fieldMap.get(name))
           .size(MAX_FACET_TERM_COUNT);
 
-      searchBuilder.addFacet(facetbuilder);
+      val missingAggsBuilder = missing(name + "_missing")
+          .field(fieldMap.get(name));
+
+      searchBuilder.addAggregation(missingAggsBuilder);
+      searchBuilder.addAggregation(aggsBuilder);
     }
 
     return searchBuilder;
@@ -600,18 +613,6 @@ public class DonorRepository implements Repository {
         .lowercaseMatchFields(newHashSet(fields))
         .build()
         .toMap();
-  }
-
-  public final class CustomMissingTermsFacet extends ForwardingTermsFacet {
-
-    @Getter
-    long missingCount;
-
-    public CustomMissingTermsFacet(TermsFacet delegate, long missingCount) {
-      super(delegate);
-      this.missingCount = missingCount;
-    }
-
   }
 
 }
