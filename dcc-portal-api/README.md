@@ -18,16 +18,36 @@ Administration
 Administration is available at:
 
 	http://localhost:8081
-
+  
 Development
 ---
+The Portal API is built with maven:
 
-To run the application:
-	
-	cd dcc-portal/dcc-portal-api
-	mvn -am
-	java -jar target/dcc-portal-api-[version].jar server src/test/conf/settings.yml
-  
+```
+cd dcc-portal/dcc-portal-api
+mvn -am
+```
+
+Configuration
+---
+
+To configure the portal for running, the `elastic` and `icgc` portions of the `settings.yml` file
+to be used must be set.
+
+The elastic portion of the configuration must point to an existing and running elasticsearch index. 
+
+For the `icgc` portion, the API endpoints and credentials must be configured. You must provide substitutes to any
+ICGC systems and APIs you do not have access to should that case arise, such as your own Centralized User Directory. 
+
+Deployment
+---
+
+To run the application once built:
+
+```
+cd dcc-portal/dcc-portal-api
+java -jar target/dcc-portal-api-[version].jar server src/test/conf/settings.yml
+``` 
   
 Keystore Management
 ---
