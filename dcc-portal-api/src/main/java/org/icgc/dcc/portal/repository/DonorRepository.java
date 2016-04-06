@@ -272,9 +272,8 @@ public class DonorRepository implements Repository {
           missing = entitySetCount - total;
         }
 
-        // if (!(aggs instanceof Terms)) continue;
         results.get(facetName).add(
-            buildEntitySetTermFacet(entitySetId, (Terms) aggs, aggsMap, total, missing, facetKv.getValue()));
+            buildEntitySetTermAggs(entitySetId, (Terms) aggs, aggsMap, total, missing, facetKv.getValue()));
       }
 
     }
@@ -285,14 +284,14 @@ public class DonorRepository implements Repository {
     return ImmutableList.copyOf(finalResult);
   }
 
-  private EntitySetTermFacet buildEntitySetTermFacet(final UUID entitySetId, final Terms termsFacet,
+  private EntitySetTermFacet buildEntitySetTermAggs(final UUID entitySetId, final Terms termsFacet,
       final Map<String, Aggregation> aggsMap,
       final Long total,
       final Long missing,
       final Optional<SimpleImmutableEntry<String, String>> statsFacetConfigMap) {
-    val termFacetList = buildTermFacetList(termsFacet, getBaselineTermsAggsOfPhenotype());
+    val termFacetList = buildTermAggList(termsFacet, getBaselineTermsAggsOfPhenotype());
 
-    val mean = wantsStatistics(statsFacetConfigMap) ? getMeanFromTermsStatsFacet(
+    val mean = wantsStatistics(statsFacetConfigMap) ? getMeanFromTermsStatsAggs(
         aggsMap.get(statsFacetConfigMap.get().getKey())) : null;
     val summary = new Statistics(total, missing, mean);
 
@@ -331,7 +330,7 @@ public class DonorRepository implements Repository {
     return Optional.of(new SimpleImmutableEntry<String, String>(first, second));
   }
 
-  private static List<Term> buildTermFacetList(@NonNull final Terms termsFacet,
+  private static List<Term> buildTermAggList(@NonNull final Terms termsFacet,
       @NonNull Map<String, Map<String, Integer>> baseline) {
     val results = ImmutableMap.<String, Integer> builder();
 
@@ -354,7 +353,7 @@ public class DonorRepository implements Repository {
     return ImmutableList.copyOf(termFacetList);
   }
 
-  private static Double getMeanFromTermsStatsFacet(final Aggregation facet) {
+  private static Double getMeanFromTermsStatsAggs(final Aggregation facet) {
     if (!(facet instanceof Terms)) {
       return null;
     }

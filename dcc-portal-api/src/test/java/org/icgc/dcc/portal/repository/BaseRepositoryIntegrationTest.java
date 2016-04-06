@@ -29,7 +29,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.icgc.dcc.portal.model.FiltersParam;
@@ -154,8 +153,8 @@ public class BaseRepositoryIntegrationTest {
     assertThat(exp).as(id).isEqualTo(actual);
   }
 
-  void assertAggregation(String facetName, Terms.Bucket entry, long count) {
-    assertThat(count).as(facetName + ":" + entry.getKey()).isEqualTo(entry.getDocCount());
+  void assertAggregation(String aggName, Terms.Bucket entry, long count) {
+    assertThat(count).as(aggName + ":" + entry.getKey()).isEqualTo(entry.getDocCount());
   }
 
   MultiSearchResponse setup(Repository repo, QueryBuilder qb, Type type) {
@@ -239,7 +238,7 @@ public class BaseRepositoryIntegrationTest {
 
   void verifyAggregationCounts(SearchResponse r, MultiSearchResponse csr) {
     // Compare entry count to count response;
-    Iterator<Aggregation> aggsIter = r.getAggregations().iterator();
+    val aggsIter = r.getAggregations().iterator();
     Terms aggs = (Terms) aggsIter.next();
     Iterator<Bucket> entryIter = aggs.getBuckets().iterator();
 

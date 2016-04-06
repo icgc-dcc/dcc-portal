@@ -222,14 +222,14 @@ public class EnrichmentAnalyzer {
   }
 
   private List<Result> analyzeGeneSetResults(Query query, Universe universe, UUID inputGeneListId,
-      Map<String, Integer> geneSetGeneCounts, Map<String, Integer> overlapGeneSetGeneCounts, int overlapGeneCount,
+      Map<String, Integer> geneSetGeneCounts, Map<String, Long> overlapGeneSetGeneCounts, int overlapGeneCount,
       int universeGeneCount) {
     val results = Lists.<Result> newArrayList();
     int i = 0;
     for (val entry : overlapGeneSetGeneCounts.entrySet()) {
       val geneSetId = entry.getKey();
       val geneSetGeneCount = geneSetGeneCounts.get(geneSetId);
-      int geneSetOverlapGeneCount = entry.getValue();
+      Long geneSetOverlapGeneCount = entry.getValue();
 
       log.info("[{}/{}] Processing {}", new Object[] { i++, overlapGeneSetGeneCounts.size(), geneSetId });
       if (geneSetId.equals(universe.getGeneSetId())) {
@@ -265,13 +265,13 @@ public class EnrichmentAnalyzer {
   }
 
   private Result analyzeGeneSetResult(Query query, Universe universe, UUID inputGeneListId, String geneSetId,
-      int geneSetGeneCount, int geneSetOverlapGeneCount, int overlapGeneCount, int universeGeneCount) {
+      int geneSetGeneCount, Long geneSetOverlapGeneCount, int overlapGeneCount, int universeGeneCount) {
     // Statistics
     val expectedGeneCount = calculateExpectedGeneCount(
         overlapGeneCount,
         geneSetGeneCount, universeGeneCount);
     val pValue = calculateGeneCountPValue(
-        geneSetOverlapGeneCount, overlapGeneCount, // The "four numbers"
+        geneSetOverlapGeneCount.intValue(), overlapGeneCount, // The "four numbers"
         geneSetGeneCount, universeGeneCount);
 
     log.debug("q = {}, k = {}, m = {}, n = {}, pValue = {}",
@@ -282,7 +282,7 @@ public class EnrichmentAnalyzer {
         .setGeneSetId(geneSetId)
 
         .setGeneCount(geneSetGeneCount)
-        .setOverlapGeneSetGeneCount(geneSetOverlapGeneCount)
+        .setOverlapGeneSetGeneCount(geneSetOverlapGeneCount.intValue())
 
         .setExpectedValue(expectedGeneCount)
         .setPValue(pValue);
@@ -341,7 +341,7 @@ public class EnrichmentAnalyzer {
     return geneSetRepository.countGenes(geneSetIds);
   }
 
-  private Map<String, Integer> findOverlapGeneSetCounts(Query query, Universe universe, UUID inputGeneListId) {
+  private Map<String, Long> findOverlapGeneSetCounts(Query query, Universe universe, UUID inputGeneListId) {
     val overlapQuery = overlapQuery(query, universe, inputGeneListId);
     val response = geneRepository.findGeneSetCounts(overlapQuery);
     val geneSetAggs = getUniverseTermsAggregation(response, universe);
