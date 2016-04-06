@@ -60,6 +60,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -359,9 +360,13 @@ public class DonorRepository implements Repository {
     }
 
     val terms = (Terms) facet;
-    val statsAggs = (Stats) terms.getBuckets().get(0).getAggregations().asList().get(0);
+    try (val buckets = terms.getBuckets().stream()) {
+      val stats = (Stats) buckets.findFirst().get().getAggregations().asList().get(0);
+      return stats.getAvg();
+    } catch (NoSuchElementException e) {
+      return 0.0;
+    }
 
-    return statsAggs.getAvg();
   }
 
   private MultiSearchResponse performPhenotypeAnalysisMultiSearch(@NonNull final List<UUID> setIds) {
