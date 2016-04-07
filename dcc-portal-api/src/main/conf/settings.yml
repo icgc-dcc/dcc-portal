@@ -87,6 +87,7 @@ oauth:
 
 hazelcast:
   # NB: Below hazelcast settings do not have default values. The portal won't start if they're unset
+  enabled: false
 
   # Credentials to enter a group. E.g. dev, uat, prod groups
   groupName: ""
@@ -102,6 +103,12 @@ hazelcast:
 
   # Expire openId authentication attempt in 2 minutes
   openidAuthTTL: 120
+  
+  # Enable multicast? If false then hosts must be provided. hosts not used otherwise
+  # Multicast must be disabled in an OpenStack / AWS environment
+  multicast: false
+  hosts:
+    - localhost
 
 # ElasticSearch index and hosts
 elastic:
@@ -138,6 +145,51 @@ download:
 web:
   # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs
   baseUrl: ""
+
+# ICGC Client configuration
+icgc:
+
+  # CGP/DACO API endpoint
+  cgpUrl: ""
+  # ShortUrl API endpoint
+  shortUrl: ""
+
+  # CUD API endpoint
+  cudUrl: ""
+  
+  # CMS API endpoint
+  cmsUrl: ""
+
+  # CUD credentials. Obtained from webdev@oicr.on.ca
+  cudAppId: ""
+  cudUser: ""
+  cudPassword: ""
+
+  # OAuth credentials
+  # To generate the credentials go to icgc.org, log in, go to the "OAuth Settings" tab and request "Regenerate all tokens"
+  consumerKey: ""
+  consumerSecret: ""
+  accessToken: ""
+  accessSecret: ""
+
+  # Log HTTP requests to the API
+  enableHttpLogging: false
+
+  # Disallow self-signed SSL certificates
+  enableStrictSSL: true
+
+# Set analysis configuration
+setOperation:
+
+  # Limit for number of items to return from ElasticSearch
+  maxPreviewNumberOfHits: 1000
+  maxNumberOfHits: 20000
+  maxMultiplier: 3
+
+# Release metadata configuration
+release:
+  releaseDate: "placeholder"
+  dataVersion: 2
 
 # Logging settings
 logging:
@@ -189,47 +241,3 @@ logging:
 
     # ERRORs should be converted to WARNs in Swagger 1.2.2
     "com.wordnik.swagger.jaxrs.HelpApi": OFF
-
-# ICGC Client configuration
-icgc:
-
-  # CGP/DACO API endpoint
-  cgpUrl: ""
-  # ShortUrl API endpoint
-  shortUrl: ""
-
-  # CUD API endpoint
-  cudUrl: ""
-  
-  # CMS API endpoint
-  cmsUrl: ""
-
-  # CUD credentials. Obtained from webdev@oicr.on.ca
-  cudAppId: ""
-  cudUser: ""
-  cudPassword: ""
-
-  # OAuth credentials
-  # To generate the credentials go to icgc.org, log in, go to the "OAuth Settings" tab and request "Regenerate all tokens"
-  consumerKey: ""
-  consumerSecret: ""
-  accessToken: ""
-  accessSecret: ""
-
-  # Log HTTP requests to the API
-  enableHttpLogging: false
-
-  # Disallow self-signed SSL certificates
-  enableStrictSSL: true
-
-# Set analysis configuration
-setOperation:
-
-  # Limit for number of items to return from ElasticSearch
-  maxPreviewNumberOfHits: 1000
-  maxNumberOfHits: 20000
-  maxMultiplier: 3
-
-release:
-  releaseDate: "placeholder"
-  dataVersion: 2

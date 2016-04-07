@@ -106,6 +106,12 @@ public class SessionConfig {
     val config = new Config();
     config.setProperty("hazelcast.logging.type", "slf4j");
     config.setGroupConfig(new GroupConfig(hazelcastConfig.getGroupName(), hazelcastConfig.getGroupPassword()));
+    if (!hazelcastConfig.isMulticast()) {
+      val multicastConfig = config.getNetworkConfig().getJoin().getMulticastConfig();
+      multicastConfig.setEnabled(false);
+      multicastConfig.setTrustedInterfaces(hazelcastConfig.getHosts());
+    }
+
     configureMapConfigs(hazelcastConfig, config.getMapConfigs());
 
     return config;
