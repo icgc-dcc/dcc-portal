@@ -40,12 +40,16 @@ import org.springframework.context.annotation.Lazy;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.GroupConfig;
 import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.MulticastConfig;
+import com.hazelcast.config.TcpIpConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Lazy
+@Slf4j
 @Configuration
 public class SessionConfig {
 
@@ -107,9 +111,19 @@ public class SessionConfig {
     config.setProperty("hazelcast.logging.type", "slf4j");
     config.setGroupConfig(new GroupConfig(hazelcastConfig.getGroupName(), hazelcastConfig.getGroupPassword()));
     if (!hazelcastConfig.isMulticast()) {
-      val multicastConfig = config.getNetworkConfig().getJoin().getMulticastConfig();
-      multicastConfig.setEnabled(false);
-      multicastConfig.setTrustedInterfaces(hazelcastConfig.getHosts());
+      log.info("Disabling multicast and using TCP/IP for Hazecast");
+      val joinConfig = config.getNetworkConfig().getJoin();
+
+      // Disable multicast
+      val multicastConfig = new MulticastConfig()
+          .setEnabled(false);
+      joinConfig.setMulticastConfig(multicastConfig);
+
+      // Enable TCP/IP
+      val tcpIpConfig = new TcpIpConfig()
+          .setEnabled(true)
+          .setMembers(hazelcastConfig.getHosts());
+      joinConfig.setTcpIpConfig(tcpIpConfig);
     }
 
     configureMapConfigs(hazelcastConfig, config.getMapConfigs());

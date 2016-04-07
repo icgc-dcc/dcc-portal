@@ -19,13 +19,11 @@ package org.icgc.dcc.portal.config;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
-import static com.google.common.collect.Sets.newLinkedHashSet;
 import static com.google.inject.Stage.DEVELOPMENT;
 import static org.icgc.dcc.downloader.core.ArchiverConstant.ARCHIVE_CURRENT_RELEASE;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -243,7 +241,7 @@ public class PortalProperties extends Configuration {
     boolean multicast = false;
 
     @JsonProperty
-    Set<String> hosts = newLinkedHashSet();
+    List<String> hosts = newArrayList();
 
   }
 
