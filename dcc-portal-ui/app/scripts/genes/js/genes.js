@@ -52,12 +52,15 @@
 
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 
-
     _ctrl.gene = gene;
     _ctrl.gene.uiProteinTranscript = [];
     _ctrl.gene.fprojects = [];
     _ctrl.totalDonors = 0;
     _ctrl.gene.hasGVChromosome = GMService.isValidChromosome(_ctrl.gene.chromosome);
+
+    _ctrl.hasNoExternal = function(dbId) {
+      return _.get(_ctrl.gene, ['externalDbIds', dbId], []).length === 0;
+    }
 
     function extractAndSort(list, type) {
       var filtered =  _.filter(list, function(set) {
