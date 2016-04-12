@@ -60,7 +60,7 @@
 
     _ctrl.hasNoExternal = function(dbId) {
       return _.get(_ctrl.gene, ['externalDbIds', dbId], []).length === 0;
-    }
+    };
 
     function extractAndSort(list, type) {
       var filtered =  _.filter(list, function(set) {
