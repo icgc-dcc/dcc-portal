@@ -46,7 +46,7 @@ public class StorageClientService {
   /**
    * Configuration.
    */
-  private String mavenRepositoryUrl = "http://seqwaremaven.oicr.on.ca/artifactory";
+  private String mavenRepositoryUrl = "https://seqwaremaven.oicr.on.ca/artifactory";
 
   @SneakyThrows
   public List<MavenArtifactVersion> getVersions() {
