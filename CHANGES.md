@@ -3,6 +3,17 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+4.0.13
+--
+ - Retrieving software download versions from artifactory is now done over HTTPS.
+ - Updates to the Collaboratory page. 
+ - Elasticsearch Facet API has been completely replaced with the newer Aggregations API.
+ - Fix to allow the enabling of experimental features through query parameters. 
+ - Improvements to resizing behaviour of Genome Viewer.
+ - Bug fix for Collaboratory manifest IDs mistakenly being resolved as AWS-Virginia manifest IDs.
+ - Bug fixes to Advanced Search links in Phenotype and Enrichment Analysis.
+ - Misc bug fixes to API, UI, and build process. 
+
 4.0.5
 --
  - Functional Impact filter now applies to gene and mutation tracks in the Genome Viewer.
