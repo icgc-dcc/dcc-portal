@@ -34,7 +34,7 @@ slack_url = 'https://hooks.slack.com/services/<!fill in>'
 
 # Maven artifact location
 name = 'dcc-portal-api'
-server = 'http://seqwaremaven.oicr.on.ca/artifactory'
+server = 'https://seqwaremaven.oicr.on.ca/artifactory'
 artifact = 'org/icgc/dcc/' + name
 api_path = 'http://seqwaremaven.oicr.on.ca/artifactory/api/storage'
 
@@ -181,7 +181,7 @@ def download_and_install(url):
     os.symlink(lib_dir+file_name, lib_dir+name+'.jar')
 
 
-parser = argparse.ArgumentParser(description='This script installs the dcc-portal-api from Artifactory, relinks the jar and restarts the daemon.')
+parser = argparse.ArgumentParser(description='This script installs the ' + name + ' from Artifactory, relinks the jar and restarts the daemon.')
 group = parser.add_mutually_exclusive_group()
 group.add_argument('-r', '--release', help='Install release with version (e.g. 4.0.3 , use "latest" for latest)')
 group.add_argument('-s', '--snapshot', help='Install snapshot with build number from current snapshot version (use "latest" for latest build)')
