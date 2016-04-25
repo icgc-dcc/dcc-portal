@@ -339,6 +339,10 @@
     function isCollab (repoCode) {
       return equalsIgnoringCase (repoCode, 'collaboratory');
     }
+    
+    function isEGA (repoType) {
+      return equalsIgnoringCase (repoType, 'EGA');
+    }
 
     // Public functions
     this.projectName = function (projectCode) {
@@ -382,6 +386,7 @@
     };
 
     this.isS3 = isS3;
+    this.isEGA = isEGA;
 
     this.translateDataType = function (dataType) {
       var longName = PCAWG.translate (dataType);

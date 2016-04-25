@@ -104,6 +104,7 @@
           'PCAWG - Santa Cruz',
           'PCAWG - Seoul',
           'PCAWG - Tokyo',
+          'EGA - United Kingdom',
           'CGHub - Santa Cruz',
           'TCGA DCC - Bethesda'
       ];
