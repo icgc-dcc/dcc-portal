@@ -1,17 +1,30 @@
-ICGC DCC - Portal
-===
+# ICGC DCC - Portal
+
 
 Parent project of the portal modules
 
-Build
----
+## Build
+
 
 From the command line:
+```
+$ mvn
+```
 
-    mvn
+## Running
+
+From Eclipse or IntelliJ:
+```
+Main Class: org.icgc.dcc.portal.PortalMain
+VM Options: -Xmx6G
+Arguments: server <path-to-conf>
+```
+
+*Note: If Eclipse or IntelliJ are taking a long time to build before running, try excluding
+the dcc-portal-ui as a module.*
     
-Modules
----
+## Modules
+
 
 Sub-system modules:
 
@@ -19,12 +32,12 @@ Sub-system modules:
 - [Portal UI](dcc-portal-ui/README.md)
 - [Portal PQL](dcc-portal-pql/README.md)
 
-Changes
----
+## Changes
+
 Change log for the user-facing system modules may be found [here](CHANGES.md).
 
 
-Copyright and License
----
+## Copyright and License
+
 
 * [License](LICENSE.md)
