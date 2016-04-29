@@ -130,7 +130,7 @@ There are some other notable areas under the ```dcc-portal-ui``` root folder in 
 Path  | Purpose
 ----- | -------
 /app/develop | Contains the development config and interim index.html. Used when running ```grunt server```.
-/dcc-grunt-tasks | Custom NodeJS Grunt Tasks go here.
+/grunt | Custom NodeJS Grunt Tasks go here.
 /styles | Contains the SASS (SCSS files) and images shared across the application.
 /test/regression | NodeJS (and PhantomJS) regression testing tool to validate Facet counts in the portal (ensures that your indexes are in good working order).
 /test/unit | Used to provide Unit front end (AngularJS via Jasmine) testing

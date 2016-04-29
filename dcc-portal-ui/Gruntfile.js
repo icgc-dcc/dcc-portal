@@ -34,7 +34,7 @@ module.exports = function (grunt) {
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
   require('time-grunt')(grunt);
 
-  var configProvider = require('./dcc-grunt-tasks/ICGC-grunt-config-provider')(grunt);
+  var configProvider = require('./grunt/grunt-config-provider')(grunt);
 
   // configurable paths
   var yeomanConfig = {
@@ -46,32 +46,32 @@ module.exports = function (grunt) {
 
   try {
     yeomanConfig.app = require('./bower.json').appPath || yeomanConfig.app;
-  } 
+  }
   catch (e) {
   }
 
   grunt.initConfig({
     'bower-install-simple': configProvider.setConfigForTask('bower-install-simple', function() {
-      
+
         /**
         * Bower configuration
         * See: https://www.npmjs.com/package/grunt-bower-install-simple
         */
-        
+
         var config =  {options: { color: true } };
-        
+
         if (configProvider.isProductionBuild()) {
           config.prod = { options: { production: true, interactive: false, forceLatest: false } };
         }
         else {
           config.dev = { options: { production: false,  interactive: true, forceLatest: false } };
         }
-            
-        return config;  
+
+        return config;
     })
     // Gets the default dev config object in this context because
     // we have yet to set a default
-    .getConfigForTask('bower-install-simple'), 
+    .getConfigForTask('bower-install-simple'),
     peg: {
       pql: {
         src: './app/scripts/common/js/pql/conf/pql.pegjs',
@@ -120,7 +120,7 @@ module.exports = function (grunt) {
           middleware: function (connect) {
             return [
               modRewrite([
-                '!\\.html|\\images|\\.js|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.svg ' + 
+                '!\\.html|\\images|\\.js|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.svg ' +
                 '/' + yeomanConfig.developIndexFile + ' [L]'
               ]),
               lrSnippet,
@@ -275,7 +275,7 @@ module.exports = function (grunt) {
             cwd: '<%= yeoman.app %>',
             // TODO: looks like imagemin is not processing module image deps
             // copy is doing this instead -
-            // will research proper way to fix this 
+            // will research proper way to fix this
             src:  [
                     '/images/{,*/}*.{png,jpg,jpeg}',
                     '/scripts/*/images/**/*.{png,jpg,jpeg}'
@@ -448,7 +448,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('bower-install', ['bower-install-simple']);
-  
+
   grunt.registerTask('server', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build',
