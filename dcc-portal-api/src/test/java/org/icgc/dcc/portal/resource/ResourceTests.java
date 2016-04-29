@@ -25,10 +25,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sun.jersey.api.client.ClientResponse;
 
-public class ResourceTestUtils {
+public class ResourceTests {
 
-  static final LinkedHashMap<String, Long> COUNT_MAP_REQUEST = Maps.newLinkedHashMap();
-  static final LinkedHashMap<String, LinkedHashMap<String, Long>> NESTED_MAP_REQUEST = Maps.newLinkedHashMap();
+  public static final LinkedHashMap<String, Long> COUNT_MAP_REQUEST = Maps.newLinkedHashMap();
+  public static final LinkedHashMap<String, LinkedHashMap<String, Long>> NESTED_MAP_REQUEST = Maps.newLinkedHashMap();
   static {
     COUNT_MAP_REQUEST.put("A", 1L);
     COUNT_MAP_REQUEST.put("B", 1L);
@@ -40,8 +40,8 @@ public class ResourceTestUtils {
     NESTED_MAP_REQUEST.get("B").put("BB", 1L);
   }
 
-  static final LinkedHashMap<String, Long> COUNT_MAP_RESULT = Maps.newLinkedHashMap();
-  static final LinkedHashMap<String, LinkedHashMap<String, Long>> NESTED_MAP_RESULT = Maps.newLinkedHashMap();
+  public static final LinkedHashMap<String, Long> COUNT_MAP_RESULT = Maps.newLinkedHashMap();
+  public static final LinkedHashMap<String, LinkedHashMap<String, Long>> NESTED_MAP_RESULT = Maps.newLinkedHashMap();
   static {
     COUNT_MAP_RESULT.put("A", 1L);
     COUNT_MAP_RESULT.put("B", 1L);
@@ -57,44 +57,44 @@ public class ResourceTestUtils {
   }
 
   @SuppressWarnings("unchecked")
-  static LinkedHashMap<String, LinkedHashMap<String, Query>> anyNestedCountQuery() {
+  public static LinkedHashMap<String, LinkedHashMap<String, Query>> anyNestedCountQuery() {
     return Matchers.any(LinkedHashMap.class);
   }
 
   @SuppressWarnings("unchecked")
-  static LinkedHashMap<String, Query> anyCountQuery() {
+  public static LinkedHashMap<String, Query> anyCountQuery() {
     return Matchers.any(LinkedHashMap.class);
   }
 
-  static final Project PROJECT = new Project(Maps.<String, Object> newHashMap());
+  public static final Project PROJECT = new Project(Maps.<String, Object> newHashMap());
 
-  static final Projects PROJECTS = new Projects(Lists.<Project> newArrayList(PROJECT));
+  public static final Projects PROJECTS = new Projects(Lists.<Project> newArrayList(PROJECT));
 
-  static final Donor DONOR = new Donor(Maps.<String, Object> newHashMap());
+  public static final Donor DONOR = new Donor(Maps.<String, Object> newHashMap());
 
-  static final Donors DONORS = new Donors(Lists.<Donor> newArrayList(DONOR));
+  public static final Donors DONORS = new Donors(Lists.<Donor> newArrayList(DONOR));
 
-  static final Gene GENE = new Gene(Maps.<String, Object> newHashMap());
+  public static final Gene GENE = new Gene(Maps.<String, Object> newHashMap());
 
-  static final Genes GENES = new Genes(Lists.<Gene> newArrayList(GENE));
+  public static final Genes GENES = new Genes(Lists.<Gene> newArrayList(GENE));
 
-  static final Mutation MUTATION = new Mutation(Maps.<String, Object> newHashMap());
+  public static final Mutation MUTATION = new Mutation(Maps.<String, Object> newHashMap());
 
-  static final Mutations MUTATIONS = new Mutations(Lists.<Mutation> newArrayList(MUTATION));
+  public static final Mutations MUTATIONS = new Mutations(Lists.<Mutation> newArrayList(MUTATION));
 
-  static final Occurrence OCCURRENCE = new Occurrence(Maps.<String, Object> newHashMap());
+  public static final Occurrence OCCURRENCE = new Occurrence(Maps.<String, Object> newHashMap());
 
-  static final Occurrences OCCURRENCES = new Occurrences(Lists.<Occurrence> newArrayList(OCCURRENCE));
+  public static final Occurrences OCCURRENCES = new Occurrences(Lists.<Occurrence> newArrayList(OCCURRENCE));
 
-  static final void assertOK(ClientResponse response) {
+  public static final void assertOK(ClientResponse response) {
     assertThat(response.getStatus()).isEqualTo(Status.OK.getStatusCode());
   }
 
-  static final <T> void assertEntityInstanceOf(ClientResponse response, Class<T> expected) throws IOException {
+  public static final <T> void assertEntityInstanceOf(ClientResponse response, Class<T> expected) throws IOException {
     assertThat(MAPPER.readValue(response.getEntity(String.class), expected)).isInstanceOf(expected);
   }
 
-  static final <T> void assertEntityEquals(ClientResponse response, T expected) throws IOException {
+  public static final <T> void assertEntityEquals(ClientResponse response, T expected) throws IOException {
     assertThat(MAPPER.readTree(response.getEntity(String.class))).isEqualTo(MAPPER.valueToTree(expected));
   }
 

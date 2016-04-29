@@ -1,9 +1,9 @@
 package org.icgc.dcc.portal.resource.entity;
 
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.OCCURRENCE;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.OCCURRENCES;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.assertEntityInstanceOf;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.assertOK;
+import static org.icgc.dcc.portal.resource.ResourceTests.OCCURRENCE;
+import static org.icgc.dcc.portal.resource.ResourceTests.OCCURRENCES;
+import static org.icgc.dcc.portal.resource.ResourceTests.assertEntityInstanceOf;
+import static org.icgc.dcc.portal.resource.ResourceTests.assertOK;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 

@@ -17,19 +17,19 @@
 
 package org.icgc.dcc.portal.resource.entity;
 
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.COUNT_MAP_REQUEST;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.COUNT_MAP_RESULT;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.DONORS;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.GENE;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.GENES;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.MUTATIONS;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.NESTED_MAP_REQUEST;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.NESTED_MAP_RESULT;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.anyCountQuery;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.anyNestedCountQuery;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.assertEntityEquals;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.assertEntityInstanceOf;
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.assertOK;
+import static org.icgc.dcc.portal.resource.ResourceTests.COUNT_MAP_REQUEST;
+import static org.icgc.dcc.portal.resource.ResourceTests.COUNT_MAP_RESULT;
+import static org.icgc.dcc.portal.resource.ResourceTests.DONORS;
+import static org.icgc.dcc.portal.resource.ResourceTests.GENE;
+import static org.icgc.dcc.portal.resource.ResourceTests.GENES;
+import static org.icgc.dcc.portal.resource.ResourceTests.MUTATIONS;
+import static org.icgc.dcc.portal.resource.ResourceTests.NESTED_MAP_REQUEST;
+import static org.icgc.dcc.portal.resource.ResourceTests.NESTED_MAP_RESULT;
+import static org.icgc.dcc.portal.resource.ResourceTests.anyCountQuery;
+import static org.icgc.dcc.portal.resource.ResourceTests.anyNestedCountQuery;
+import static org.icgc.dcc.portal.resource.ResourceTests.assertEntityEquals;
+import static org.icgc.dcc.portal.resource.ResourceTests.assertEntityInstanceOf;
+import static org.icgc.dcc.portal.resource.ResourceTests.assertOK;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 

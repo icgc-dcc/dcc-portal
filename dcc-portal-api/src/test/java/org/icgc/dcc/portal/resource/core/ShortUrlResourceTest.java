@@ -17,17 +17,15 @@
  */
 package org.icgc.dcc.portal.resource.core;
 
-import static org.icgc.dcc.portal.resource.ResourceTestUtils.assertOK;
+import static org.icgc.dcc.portal.resource.ResourceTests.assertOK;
 import static org.icgc.dcc.portal.resource.core.ShortUrlResource.SHORT_URL_PARAM;
 import static org.mockito.Mockito.when;
-import lombok.val;
 
 import org.icgc.dcc.common.client.api.ICGCUnknownException;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLClient;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLResponse;
 import org.icgc.dcc.portal.config.PortalProperties.WebProperties;
-import org.icgc.dcc.portal.mapper.NotFoundExceptionMa
-import org.icgc.dcc.portal.resource.core.ShortUrlResource;
+import org.icgc.dcc.portal.mapper.NotFoundExceptionMapper;
 import org.icgc.dcc.portal.service.BadRequestException;
 import org.icgc.dcc.portal.service.ServiceUnavailableException;
 import org.junit.Test;
@@ -37,6 +35,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.yammer.dropwizard.testing.ResourceTest;
+
+import lombok.val;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ShortUrlResourceTest extends ResourceTest {
