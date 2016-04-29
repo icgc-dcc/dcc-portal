@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -33,27 +33,28 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 import org.hibernate.validator.constraints.NotEmpty;
 import org.icgc.dcc.portal.model.AccessTokenScopes;
 import org.icgc.dcc.portal.model.Tokens;
 import org.icgc.dcc.portal.model.User;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.yammer.dropwizard.auth.Auth;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 /**
- * This endpoint is used to manage access tokens handled by the <a
- * href="https://github.com/icgc-dcc/dcc-auth">Authentication Server</a>
+ * This endpoint is used to manage access tokens handled by the
+ * <a href="https://github.com/icgc-dcc/dcc-auth">Authentication Server</a>
  */
 @Component
 @Path("/v1/settings/tokens")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class AccessTokenResource {
+public class AccessTokenResource extends Resource {
 
   @NonNull
   private final TokenService tokenService;

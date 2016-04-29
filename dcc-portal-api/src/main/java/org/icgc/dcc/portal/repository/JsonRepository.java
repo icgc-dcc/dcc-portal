@@ -28,8 +28,6 @@ import java.sql.SQLException;
 
 import javax.annotation.PreDestroy;
 
-import lombok.SneakyThrows;
-
 import org.icgc.dcc.portal.model.EnrichmentAnalysis;
 import org.icgc.dcc.portal.model.Identifiable;
 import org.icgc.dcc.portal.repository.JsonRepository.JsonMapperFactory;
@@ -43,6 +41,8 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.SneakyThrows;
 
 /**
  * Data access for abstraction for working with user defined {@link EnrichmentAnalysis}.

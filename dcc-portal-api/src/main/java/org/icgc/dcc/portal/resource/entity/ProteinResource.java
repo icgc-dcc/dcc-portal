@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -24,12 +24,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import lombok.RequiredArgsConstructor;
-
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.IdsParam;
 import org.icgc.dcc.portal.model.Mutations;
 import org.icgc.dcc.portal.model.Query;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.MutationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,11 +38,13 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.yammer.metrics.annotation.Timed;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
 @Path("/v1/protein")
 @Produces(APPLICATION_JSON)
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
-public class ProteinResource {
+public class ProteinResource extends Resource {
 
   private final MutationService mutationService;
 
@@ -52,8 +53,7 @@ public class ProteinResource {
   @Timed
   @ApiOperation(value = "Returns a list of mutations affected by the transcript(s)", response = Mutations.class)
   public Mutations findMutations(
-      @ApiParam(value = "Transcript ID. Multiple IDs can be entered as TRXXX,TRYYY", required = true) @PathParam("transcriptId") IdsParam transcriptId
-      ) {
+      @ApiParam(value = "Transcript ID. Multiple IDs can be entered as TRXXX,TRYYY", required = true) @PathParam("transcriptId") IdsParam transcriptId) {
     FiltersParam filters =
         new FiltersParam(String.format("{mutation:{transcriptId:{is:[\"%s\"]}}}",
             Joiner.on("\",\"").join(transcriptId.get())));

@@ -9,13 +9,10 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import lombok.val;
-
 import org.icgc.dcc.portal.mapper.NotFoundExceptionMapper;
 import org.icgc.dcc.portal.model.Donors;
 import org.icgc.dcc.portal.model.Gene;
 import org.icgc.dcc.portal.model.Query;
-import org.icgc.dcc.portal.resource.entity.OccurrenceResource;
 import org.icgc.dcc.portal.service.OccurrenceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +22,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.yammer.dropwizard.testing.ResourceTest;
+
+import lombok.val;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OccurrenceResourceTest extends ResourceTest {

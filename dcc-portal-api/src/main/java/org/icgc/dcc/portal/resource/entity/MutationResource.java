@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
+ *                                                                                                               
+ * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+ * You should have received a copy of the GNU General Public License along with                                  
+ * this program. If not, see <http://www.gnu.org/licenses/>.                                                     
+ *                                                                                                               
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY                           
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES                          
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT                           
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,                                
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED                          
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;                               
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER                              
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package org.icgc.dcc.portal.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -27,36 +44,20 @@ import static org.icgc.dcc.portal.resource.Resources.API_SIZE_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_SIZE_VALUE;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_FIELD;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_VALUE;
-import static org.icgc.dcc.portal.resource.Resources.COUNT_TEMPLATE;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_DONOR_SORT;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_FILTERS;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_FROM;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_GENE_MUTATION_SORT;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_ORDER;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_SIZE;
 import static org.icgc.dcc.portal.resource.Resources.DONOR;
-import static org.icgc.dcc.portal.resource.Resources.FIND_ALL_TEMPLATE;
 import static org.icgc.dcc.portal.resource.Resources.FIND_BY_ID;
 import static org.icgc.dcc.portal.resource.Resources.FIND_BY_ID_ERROR;
-import static org.icgc.dcc.portal.resource.Resources.FIND_ONE_TEMPLATE;
 import static org.icgc.dcc.portal.resource.Resources.FOR_THE;
 import static org.icgc.dcc.portal.resource.Resources.GENE;
 import static org.icgc.dcc.portal.resource.Resources.GROUPED_BY;
 import static org.icgc.dcc.portal.resource.Resources.MULTIPLE_IDS;
 import static org.icgc.dcc.portal.resource.Resources.MUTATION;
-import static org.icgc.dcc.portal.resource.Resources.NESTED_COUNT_TEMPLATE;
-import static org.icgc.dcc.portal.resource.Resources.NESTED_FIND_TEMPLATE;
-import static org.icgc.dcc.portal.resource.Resources.NESTED_NESTED_COUNT_TEMPLATE;
 import static org.icgc.dcc.portal.resource.Resources.NOT_FOUND;
 import static org.icgc.dcc.portal.resource.Resources.PROJECT;
 import static org.icgc.dcc.portal.resource.Resources.RETURNS_COUNT;
 import static org.icgc.dcc.portal.resource.Resources.RETURNS_LIST;
 import static org.icgc.dcc.portal.resource.Resources.S;
 import static org.icgc.dcc.portal.resource.Resources.TOTAL;
-import static org.icgc.dcc.portal.resource.Resources.generateQueries;
-import static org.icgc.dcc.portal.resource.Resources.mergeFilters;
-import static org.icgc.dcc.portal.resource.Resources.query;
-import static org.icgc.dcc.portal.resource.Resources.regularFindAllJqlQuery;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -69,10 +70,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.portal.model.Donors;
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Genes;
@@ -80,6 +77,7 @@ import org.icgc.dcc.portal.model.IdsParam;
 import org.icgc.dcc.portal.model.IndexModel;
 import org.icgc.dcc.portal.model.Mutation;
 import org.icgc.dcc.portal.model.Mutations;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.GeneService;
 import org.icgc.dcc.portal.service.MutationService;
@@ -96,13 +94,17 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import com.yammer.dropwizard.jersey.params.IntParam;
 import com.yammer.metrics.annotation.Timed;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Component
 @Slf4j
 @Path("/v1/mutations")
 @Produces(APPLICATION_JSON)
 @Api(value = "/mutations", description = "Resources relating to " + MUTATION)
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
-public class MutationResource {
+public class MutationResource extends Resource {
 
   private static final String MUTATION_FILTER_TEMPLATE = "{mutation:{id:{is:['%s']}}}";
   private static final String GENE_MUTATION_FILTER_TEMPLATE = "{gene:{id:{is:['%s']}},mutation:{id:{is:['%s']}}}";
@@ -131,8 +133,7 @@ public class MutationResource {
       @ApiParam(value = API_SIZE_VALUE, allowableValues = API_SIZE_ALLOW) @QueryParam(API_SIZE_PARAM) @DefaultValue(DEFAULT_SIZE) IntParam size,
       @ApiParam(value = API_SORT_VALUE) @QueryParam(API_SORT_FIELD) @DefaultValue(DEFAULT_GENE_MUTATION_SORT) String sort,
       @ApiParam(value = API_ORDER_VALUE, allowableValues = API_ORDER_ALLOW) @QueryParam(API_ORDER_PARAM) @DefaultValue(DEFAULT_ORDER) String order,
-      @ApiParam(value = API_FACETS_ONLY_DESCRIPTION) @QueryParam(API_FACETS_ONLY_PARAM) @DefaultValue("false") boolean facetsOnly
-      ) {
+      @ApiParam(value = API_FACETS_ONLY_DESCRIPTION) @QueryParam(API_FACETS_ONLY_PARAM) @DefaultValue("false") boolean facetsOnly) {
     val filters = filtersParam.get();
 
     log.info(FIND_ALL_TEMPLATE, new Object[] { size, MUTATION, from, sort, order, filters });
@@ -147,8 +148,7 @@ public class MutationResource {
   @Timed
   @ApiOperation(value = RETURNS_COUNT + MUTATION + S)
   public Long count(
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam
-      ) {
+      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
     log.info(COUNT_TEMPLATE, GENE, filters);
@@ -164,8 +164,7 @@ public class MutationResource {
   public Mutation find(
       @ApiParam(value = API_MUTATION_VALUE, required = true) @PathParam(API_MUTATION_PARAM) String mutationId,
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,
-      @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include
-      ) {
+      @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include) {
     log.info(FIND_ONE_TEMPLATE, mutationId);
 
     return mutationService.findOne(mutationId, query().fields(fields).includes(include).build());
@@ -176,15 +175,15 @@ public class MutationResource {
   @Timed
   @ApiOperation(value = RETURNS_LIST + DONOR + S + FOR_THE + MUTATION + S, response = Donors.class)
   public Donors findDonors(
-      @ApiParam(value = API_MUTATION_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
+      @ApiParam(value = API_MUTATION_VALUE
+          + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,
       @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include,
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
       @ApiParam(value = API_FROM_VALUE) @QueryParam(API_FROM_PARAM) @DefaultValue(DEFAULT_FROM) IntParam from,
       @ApiParam(value = API_SIZE_VALUE, allowableValues = API_SIZE_ALLOW) @QueryParam(API_SIZE_PARAM) @DefaultValue(DEFAULT_SIZE) IntParam size,
       @ApiParam(value = API_SORT_VALUE) @QueryParam(API_SORT_FIELD) @DefaultValue(DEFAULT_DONOR_SORT) String sort,
-      @ApiParam(value = API_ORDER_VALUE, allowableValues = API_ORDER_ALLOW) @QueryParam(API_ORDER_PARAM) @DefaultValue(DEFAULT_ORDER) String order
-      ) {
+      @ApiParam(value = API_ORDER_VALUE, allowableValues = API_ORDER_ALLOW) @QueryParam(API_ORDER_PARAM) @DefaultValue(DEFAULT_ORDER) String order) {
     ObjectNode filters = filtersParam.get();
 
     removeMutationEntitySet(filters);
@@ -203,8 +202,7 @@ public class MutationResource {
   @ApiOperation(value = RETURNS_COUNT + DONOR + S + FOR_THE + MUTATION)
   public Long countDonors(
       @ApiParam(value = API_MUTATION_VALUE, required = true) @PathParam(API_MUTATION_PARAM) String mutationId,
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam
-      ) {
+      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
     removeMutationEntitySet(filters);
@@ -221,9 +219,9 @@ public class MutationResource {
   @Timed
   @ApiOperation(value = RETURNS_COUNT + DONOR + S + FOR_THE + MUTATION + S)
   public Map<String, Long> countDonors(
-      @ApiParam(value = API_MUTATION_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
-      @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam
-      ) {
+      @ApiParam(value = API_MUTATION_VALUE
+          + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
+      @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
     List<String> mutations = mutationIds.get();
 
@@ -247,15 +245,15 @@ public class MutationResource {
   @Timed
   @ApiOperation(value = RETURNS_LIST + GENE + S + FOR_THE + MUTATION + S, response = Genes.class)
   public Genes findGenes(
-      @ApiParam(value = API_MUTATION_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
+      @ApiParam(value = API_MUTATION_VALUE
+          + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,
       @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include,
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
       @ApiParam(value = API_FROM_VALUE) @QueryParam(API_FROM_PARAM) @DefaultValue(DEFAULT_FROM) IntParam from,
       @ApiParam(value = API_SIZE_VALUE, allowableValues = API_SIZE_ALLOW) @QueryParam(API_SIZE_PARAM) @DefaultValue(DEFAULT_SIZE) IntParam size,
       @ApiParam(value = API_SORT_VALUE) @QueryParam(API_SORT_FIELD) @DefaultValue(DEFAULT_GENE_MUTATION_SORT) String sort,
-      @ApiParam(value = API_ORDER_VALUE, allowableValues = API_ORDER_ALLOW) @QueryParam(API_ORDER_PARAM) @DefaultValue(DEFAULT_ORDER) String order
-      ) {
+      @ApiParam(value = API_ORDER_VALUE, allowableValues = API_ORDER_ALLOW) @QueryParam(API_ORDER_PARAM) @DefaultValue(DEFAULT_ORDER) String order) {
     ObjectNode filters = filtersParam.get();
     List<String> mutations = mutationIds.get();
 
@@ -275,8 +273,7 @@ public class MutationResource {
   @ApiOperation(value = RETURNS_COUNT + GENE + S + FOR_THE + MUTATION)
   public Long countGenes(
       @ApiParam(value = API_MUTATION_VALUE, required = true) @PathParam(API_MUTATION_PARAM) String mutationId,
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam
-      ) {
+      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
     removeMutationEntitySet(filters);
@@ -293,9 +290,9 @@ public class MutationResource {
   @Timed
   @ApiOperation(value = RETURNS_COUNT + GENE + S + FOR_THE + MUTATION + S)
   public Map<String, Long> countGenes(
-      @ApiParam(value = API_MUTATION_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
-      @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam
-      ) {
+      @ApiParam(value = API_MUTATION_VALUE
+          + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
+      @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
     List<String> mutations = mutationIds.get();
 
@@ -321,8 +318,7 @@ public class MutationResource {
   public Long countGeneDonors(
       @ApiParam(value = API_MUTATION_VALUE, required = true) @PathParam(API_MUTATION_PARAM) String mutationId,
       @ApiParam(value = API_GENE_VALUE, required = true) @PathParam(API_GENE_PARAM) String geneId,
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam
-      ) {
+      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
     removeMutationEntitySet(filters);
@@ -339,10 +335,10 @@ public class MutationResource {
   @Timed
   @ApiOperation(value = RETURNS_COUNT + DONOR + S + GROUPED_BY + GENE + S + GROUPED_BY + MUTATION + S)
   public LinkedHashMap<String, LinkedHashMap<String, Long>> countsGeneDonors(
-      @ApiParam(value = API_MUTATION_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
+      @ApiParam(value = API_MUTATION_VALUE
+          + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
       @ApiParam(value = API_GENE_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_GENE_PARAM) IdsParam geneIds,
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam
-      ) {
+      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
     List<String> mutations = mutationIds.get();
     List<String> genes = geneIds.get();
@@ -371,8 +367,7 @@ public class MutationResource {
   public Long countProjectDonors(
       @ApiParam(value = API_MUTATION_VALUE, required = true) @PathParam(API_MUTATION_PARAM) String mutationId,
       @ApiParam(value = API_PROJECT_VALUE, required = true) @PathParam(API_PROJECT_PARAM) String projectId,
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam
-      ) {
+      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
     removeMutationEntitySet(filters);
@@ -390,10 +385,11 @@ public class MutationResource {
   @Timed
   @ApiOperation(value = RETURNS_COUNT + DONOR + S + GROUPED_BY + PROJECT + S + GROUPED_BY + MUTATION + S)
   public LinkedHashMap<String, LinkedHashMap<String, Long>> countsProjectDonors(
-      @ApiParam(value = API_MUTATION_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
-      @ApiParam(value = API_PROJECT_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_PROJECT_PARAM) IdsParam projectIds,
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam
-      ) {
+      @ApiParam(value = API_MUTATION_VALUE
+          + MULTIPLE_IDS, required = true) @PathParam(API_MUTATION_PARAM) IdsParam mutationIds,
+      @ApiParam(value = API_PROJECT_VALUE
+          + MULTIPLE_IDS, required = true) @PathParam(API_PROJECT_PARAM) IdsParam projectIds,
+      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
     List<String> projects = projectIds.get();
     List<String> mutations = mutationIds.get();

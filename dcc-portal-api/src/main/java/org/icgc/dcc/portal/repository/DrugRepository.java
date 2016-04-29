@@ -22,10 +22,6 @@ import static org.icgc.dcc.portal.util.ElasticsearchResponseUtils.sanityCheck;
 
 import java.util.function.Consumer;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.get.GetResponse;
@@ -35,6 +31,10 @@ import org.elasticsearch.client.Client;
 import org.icgc.dcc.portal.model.IndexModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data access layer to the drug index type

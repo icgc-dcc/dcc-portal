@@ -21,7 +21,6 @@ import static com.sun.jersey.api.client.ClientResponse.Status.BAD_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.icgc.dcc.portal.mapper.BadRequestExceptionMapper;
-import org.icgc.dcc.portal.resource.tool.BrowserResource;
 import org.icgc.dcc.portal.service.BrowserService;
 import org.junit.Ignore;
 import org.junit.Test;

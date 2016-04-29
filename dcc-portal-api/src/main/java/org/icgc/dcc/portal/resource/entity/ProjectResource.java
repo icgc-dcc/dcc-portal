@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
+ *                                                                                                               
+ * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+ * You should have received a copy of the GNU General Public License along with                                  
+ * this program. If not, see <http://www.gnu.org/licenses/>.                                                     
+ *                                                                                                               
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY                           
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES                          
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT                           
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,                                
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED                          
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;                               
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER                              
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package org.icgc.dcc.portal.resource.entity;
 
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
@@ -29,36 +46,20 @@ import static org.icgc.dcc.portal.resource.Resources.API_SIZE_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_SIZE_VALUE;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_FIELD;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_VALUE;
-import static org.icgc.dcc.portal.resource.Resources.COUNT_TEMPLATE;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_DONOR_SORT;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_FILTERS;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_FROM;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_GENE_MUTATION_SORT;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_ORDER;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_PROJECT_SORT;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_SIZE;
 import static org.icgc.dcc.portal.resource.Resources.DONOR;
-import static org.icgc.dcc.portal.resource.Resources.FIND_ALL_TEMPLATE;
 import static org.icgc.dcc.portal.resource.Resources.FIND_BY_ID;
 import static org.icgc.dcc.portal.resource.Resources.FIND_BY_ID_ERROR;
-import static org.icgc.dcc.portal.resource.Resources.FIND_ONE_TEMPLATE;
 import static org.icgc.dcc.portal.resource.Resources.FOR_THE;
 import static org.icgc.dcc.portal.resource.Resources.GENE;
 import static org.icgc.dcc.portal.resource.Resources.GROUPED_BY;
 import static org.icgc.dcc.portal.resource.Resources.MULTIPLE_IDS;
 import static org.icgc.dcc.portal.resource.Resources.MUTATION;
-import static org.icgc.dcc.portal.resource.Resources.NESTED_COUNT_TEMPLATE;
-import static org.icgc.dcc.portal.resource.Resources.NESTED_FIND_TEMPLATE;
-import static org.icgc.dcc.portal.resource.Resources.NESTED_NESTED_COUNT_TEMPLATE;
 import static org.icgc.dcc.portal.resource.Resources.NOT_FOUND;
 import static org.icgc.dcc.portal.resource.Resources.PROJECT;
 import static org.icgc.dcc.portal.resource.Resources.RETURNS_COUNT;
 import static org.icgc.dcc.portal.resource.Resources.RETURNS_LIST;
 import static org.icgc.dcc.portal.resource.Resources.S;
 import static org.icgc.dcc.portal.resource.Resources.TOTAL;
-import static org.icgc.dcc.portal.resource.Resources.generateQueries;
-import static org.icgc.dcc.portal.resource.Resources.mergeFilters;
-import static org.icgc.dcc.portal.resource.Resources.query;
 import static org.icgc.dcc.portal.util.JsonUtils.MAPPER;
 import static org.icgc.dcc.portal.util.MediaTypes.TEXT_TSV;
 
@@ -83,6 +84,7 @@ import org.icgc.dcc.portal.model.IdsParam;
 import org.icgc.dcc.portal.model.Mutations;
 import org.icgc.dcc.portal.model.Project;
 import org.icgc.dcc.portal.model.Projects;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.GeneService;
 import org.icgc.dcc.portal.service.MutationService;
@@ -111,9 +113,12 @@ import lombok.extern.slf4j.Slf4j;
 @Path("/v1/projects")
 @Produces(APPLICATION_JSON)
 @Api(value = "/projects", description = "Resources relating to " + PROJECT)
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired }) )
-public class ProjectResource {
+@RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
+public class ProjectResource extends Resource {
 
+  /**
+   * Constants.
+   */
   private static final String PROJECT_FILTER_TEMPLATE = "{donor:{projectId:{is:['%s']}}}";
   private static final String DONOR_PROJECT_FILTER_TEMPLATE = "{donor:{id:{is:['%s']},projectId:{is:['%s']}}}";
   private static final String MUTATION_PROJECT_FILTER_TEMPLATE =
@@ -122,6 +127,9 @@ public class ProjectResource {
       "{gene:{id:{is:['%s']}},donor:{projectId:{is:['%s']}}}";
   private static final String RELEASE_HISTORY_FILE_PATH = "data/project-history.json";
 
+  /**
+   * Dependencies.
+   */
   private final ProjectService projectService;
   private final GeneService geneService;
   private final DonorService donorService;

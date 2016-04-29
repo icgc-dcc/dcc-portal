@@ -1,20 +1,20 @@
 /*
- * Copyright 2013(c) The Ontario Institute for Cancer Research. All rights reserved.
- *
- * This program and the accompanying materials are made available under the terms of the GNU Public
- * License v3.0. You should have received a copy of the GNU General Public License along with this
- * program. If not, see <http://www.gnu.org/licenses/>.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
+ *                                                                                                               
+ * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+ * You should have received a copy of the GNU General Public License along with                                  
+ * this program. If not, see <http://www.gnu.org/licenses/>.                                                     
+ *                                                                                                               
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY                           
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES                          
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT                           
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,                                
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED                          
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;                               
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER                              
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.icgc.dcc.portal.resource.core;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -79,11 +79,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.StreamingOutput;
 
-import lombok.Cleanup;
-import lombok.Data;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -99,6 +94,7 @@ import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.IdsParam;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.User;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.BadRequestException;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.ForbiddenAccessException;
@@ -122,12 +118,17 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.yammer.dropwizard.auth.Auth;
 import com.yammer.metrics.annotation.Timed;
 
+import lombok.Cleanup;
+import lombok.Data;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Component
 @Slf4j
 @Api(value = "/v1/download", description = "Resources relating to archive downloading")
 @Path("/v1/download")
 @Consumes(APPLICATION_JSON)
-public class DownloadResource {
+public class DownloadResource extends Resource {
 
   /**
    * Constants.
@@ -226,7 +227,8 @@ public class DownloadResource {
   }
 
   @Autowired
-  public DownloadResource(DonorService donorService, DownloaderClient downloader, ExportedDataFileSystem fs, Stage env) {
+  public DownloadResource(DonorService donorService, DownloaderClient downloader, ExportedDataFileSystem fs,
+      Stage env) {
     this.donorService = donorService;
     this.downloader = downloader;
     this.fs = fs;
@@ -252,7 +254,7 @@ public class DownloadResource {
 
       @ApiParam(value = "UI representation of the filter string", required = false, access = "internal") @QueryParam("uiQueryStr") @DefaultValue("{}") String uiQueryStr
 
-      ) {
+  ) {
 
     boolean isLogin = isLogin(user);
 
@@ -379,7 +381,7 @@ public class DownloadResource {
 
       @ApiParam(value = "Filter the search donors") @QueryParam("filters") @DefaultValue("{}") FiltersParam filters
 
-      ) {
+  ) {
     // Work out the query for that returns only donor ids that matches the filter conditions
     Set<String> donorIds = donorService.findIds(Query.builder().filters(filters.get()).build());
 
@@ -387,7 +389,8 @@ public class DownloadResource {
 
     Builder<String, Long> filterSizesBuilder = ImmutableMap.builder();
 
-    for (DataType dataType : isLogin(user) ? AccessControl.PrivateAccessibleDataTypes : AccessControl.PublicAccessibleDataTypes) {
+    for (DataType dataType : isLogin(
+        user) ? AccessControl.PrivateAccessibleDataTypes : AccessControl.PublicAccessibleDataTypes) {
       try {
         long total = 0;
         for (DataType type : DataTypeGroupMap.get(dataType)) {
@@ -429,7 +432,7 @@ public class DownloadResource {
       // TODO: after merge with shane's branch, use pathparam to handle this
       @ApiParam(value = "id", required = false) @PathParam("downloadIds") @DefaultValue("") IdsParam downloadIds
 
-      ) throws IOException {
+  ) throws IOException {
     try {
 
       if (downloadIds.get() != null && downloadIds.get().size() != 0) {
@@ -473,7 +476,7 @@ public class DownloadResource {
       // TODO: queryparam like fn
       @ApiParam(value = "listing of the specified directory under the download relative directory", required = false) @PathParam("dir") String dir
 
-      ) throws IOException {
+  ) throws IOException {
     try {
       if (dir.trim().isEmpty()) dir = "/";
       return listInfo(new File(dir), isLogin(user));
@@ -494,7 +497,7 @@ public class DownloadResource {
       // TODO: queryparam like fn
       @ApiParam(value = "directory that contains the readme", required = false) @PathParam("dir") String dir
 
-      ) throws IOException {
+  ) throws IOException {
     try {
       if (dir.trim().isEmpty()) dir = "/";
       return "Directory for readme: " + dir + "\n===\n\n" + "PLACEHOLDER FOR README" + "\n\n" + "HEADER 1 \n---\n\n"
@@ -511,13 +514,13 @@ public class DownloadResource {
 
       @Auth(required = false) User user,
 
-      @ApiParam(value = "filename to download", required = true)//
-      @QueryParam("fn")//
+      @ApiParam(value = "filename to download", required = true) //
+      @QueryParam("fn") //
       @DefaultValue("") String filePath,
 
       @HeaderParam(RANGE) String range
 
-      ) throws IOException {
+  ) throws IOException {
 
     if (filePath.trim().equals("")) throw new BadRequestException("Missing argument fn");
 
@@ -576,7 +579,7 @@ public class DownloadResource {
 
       @PathParam("downloadId") String downloadId
 
-      ) throws IOException {
+  ) throws IOException {
     boolean isLogin = isLogin(user);
     ResponseBuilder rb = ok();
     StreamingOutput archiveStream = null;
@@ -632,7 +635,7 @@ public class DownloadResource {
       @PathParam("downloadId") String downloadId,
       @PathParam("dataType") final String dataType
 
-      ) throws IOException {
+  ) throws IOException {
     boolean isLogin = isLogin(user);
     ResponseBuilder rb = ok();
     StreamingOutput archiveStream = null;

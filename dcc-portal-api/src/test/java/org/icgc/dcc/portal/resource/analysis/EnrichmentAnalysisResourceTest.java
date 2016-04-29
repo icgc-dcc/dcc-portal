@@ -31,12 +31,9 @@ import java.util.UUID;
 
 import javax.ws.rs.core.MediaType;
 
-import lombok.val;
-
 import org.icgc.dcc.portal.mapper.BadRequestExceptionMapper;
 import org.icgc.dcc.portal.model.EnrichmentAnalysis;
 import org.icgc.dcc.portal.model.EnrichmentParams;
-import org.icgc.dcc.portal.resource.analysis.EnrichmentAnalysisResource;
 import org.icgc.dcc.portal.service.EnrichmentAnalysisService;
 import org.icgc.dcc.portal.test.ContextInjectableProvider;
 import org.junit.Test;
@@ -50,6 +47,8 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.core.HttpContext;
 import com.sun.jersey.api.representation.Form;
 import com.yammer.dropwizard.testing.ResourceTest;
+
+import lombok.val;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EnrichmentAnalysisResourceTest extends ResourceTest {

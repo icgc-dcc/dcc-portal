@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -28,6 +28,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.StorageClientService;
 import org.icgc.dcc.portal.service.StorageClientService.MavenArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,8 @@ import lombok.val;
 @Component
 @Path("/v1/ui/software")
 @Produces(APPLICATION_JSON)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired) )
-public class UISoftwareResource {
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class UISoftwareResource extends Resource {
 
   /**
    * Constants.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -21,7 +21,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.primitives.Doubles.tryParse;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
-import static org.icgc.dcc.portal.resource.Resources.checkRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,7 @@ import javax.ws.rs.core.Response;
 
 import org.icgc.dcc.portal.model.DiagramProtein;
 import org.icgc.dcc.portal.model.FieldsParam;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DiagramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -45,8 +45,8 @@ import lombok.RequiredArgsConstructor;
 @Component
 @Path("/v1/ui/reactome")
 @Produces(APPLICATION_JSON)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired) )
-public class UIReactomeResource {
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class UIReactomeResource extends Resource {
 
   /**
    * Constants.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -39,18 +39,12 @@ import static org.icgc.dcc.portal.resource.Resources.API_SIZE_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_SIZE_VALUE;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_FIELD;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_VALUE;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_FILTERS;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_FROM;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_ORDER;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_SIZE;
 import static org.icgc.dcc.portal.resource.Resources.DONOR;
-import static org.icgc.dcc.portal.resource.Resources.FIND_ALL_TEMPLATE;
 import static org.icgc.dcc.portal.resource.Resources.FOR_THE;
 import static org.icgc.dcc.portal.resource.Resources.GENE;
 import static org.icgc.dcc.portal.resource.Resources.MULTIPLE_IDS;
 import static org.icgc.dcc.portal.resource.Resources.RETURNS_LIST;
 import static org.icgc.dcc.portal.resource.Resources.S;
-import static org.icgc.dcc.portal.resource.Resources.regularFindAllJqlQuery;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.LinkedHashMap;
@@ -67,13 +61,12 @@ import org.icgc.dcc.portal.model.Drug;
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.IdsParam;
 import org.icgc.dcc.portal.model.Query;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DrugService;
 import org.icgc.dcc.portal.service.MutationService;
-import org.icgc.dcc.portal.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -92,8 +85,8 @@ import lombok.extern.slf4j.Slf4j;
 @Path("/v1/drugs")
 @Produces(APPLICATION_JSON)
 @Api(value = "/drugs", description = "Resources relating to drugs")
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired }) )
-public class DrugResource {
+@RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
+public class DrugResource extends Resource {
 
   /**
    * Constants.
@@ -170,10 +163,6 @@ public class DrugResource {
     val query = regularFindAllJqlQuery(fields, include, filters, from, size, sort, order);
 
     return drugService.findAll(query);
-  }
-
-  private static ObjectNode mergeFilters(ObjectNode filters, String template, Object... objects) {
-    return JsonUtils.merge(filters, (new FiltersParam(String.format(template, objects)).get()));
   }
 
 }

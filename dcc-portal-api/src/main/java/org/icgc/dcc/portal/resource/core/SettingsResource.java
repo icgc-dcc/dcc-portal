@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -24,6 +24,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import org.icgc.dcc.portal.model.Settings;
+import org.icgc.dcc.portal.resource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +37,7 @@ import com.yammer.metrics.annotation.Timed;
 @Component
 @Path("/v1/settings")
 @Produces(APPLICATION_JSON)
-public class SettingsResource {
+public class SettingsResource extends Resource {
 
   private final Settings settings;
 

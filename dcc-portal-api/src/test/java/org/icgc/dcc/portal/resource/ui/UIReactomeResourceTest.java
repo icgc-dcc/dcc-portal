@@ -23,7 +23,6 @@ import static org.mockito.Mockito.when;
 
 import org.icgc.dcc.portal.mapper.BadRequestExceptionMapper;
 import org.icgc.dcc.portal.mapper.IllegalArgumentExceptionMapper;
-import org.icgc.dcc.portal.resource.ui.UIReactomeResource;
 import org.icgc.dcc.portal.service.DiagramService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

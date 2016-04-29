@@ -24,15 +24,12 @@ import static org.mockito.Mockito.when;
 
 import javax.ws.rs.core.MediaType;
 
-import lombok.val;
-
 import org.icgc.dcc.portal.mapper.BadRequestExceptionMapper;
 import org.icgc.dcc.portal.mapper.IllegalArgumentExceptionMapper;
 import org.icgc.dcc.portal.model.AlleleMutation;
 import org.icgc.dcc.portal.model.Beacon;
 import org.icgc.dcc.portal.model.BeaconQuery;
 import org.icgc.dcc.portal.model.BeaconResponse;
-import org.icgc.dcc.portal.resource.tool.BeaconResource;
 import org.icgc.dcc.portal.service.BeaconService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +39,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.yammer.dropwizard.testing.ResourceTest;
+
+import lombok.val;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BeaconResourceTest extends ResourceTest {

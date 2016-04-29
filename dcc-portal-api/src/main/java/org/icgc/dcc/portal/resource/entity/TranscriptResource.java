@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
+ *                                                                                                               
+ * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+ * You should have received a copy of the GNU General Public License along with                                  
+ * this program. If not, see <http://www.gnu.org/licenses/>.                                                     
+ *                                                                                                               
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY                           
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES                          
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT                           
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,                                
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED                          
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;                               
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER                              
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package org.icgc.dcc.portal.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -14,15 +31,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Genes;
 import org.icgc.dcc.portal.model.IdsParam;
 import org.icgc.dcc.portal.model.Mutations;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Transcript;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.GeneService;
 import org.icgc.dcc.portal.service.MutationService;
 import org.icgc.dcc.portal.util.JsonUtils;
@@ -39,13 +54,16 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import com.yammer.dropwizard.jersey.params.IntParam;
 import com.yammer.metrics.annotation.Timed;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Component
 @Slf4j
 @Path("/v1/transcripts")
 @Produces(APPLICATION_JSON)
 @Api(value = "/transcripts", description = "Resources relating to transcripts")
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
-public class TranscriptResource {
+public class TranscriptResource extends Resource {
 
   private static final String DEFAULT_FILTERS = "{}";
   private static final String DEFAULT_SIZE = "10";
@@ -63,8 +81,7 @@ public class TranscriptResource {
   @ApiResponses(value = { @ApiResponse(code = NOT_FOUND_404, message = "Transcript not found") })
   public Transcript find(
       @ApiParam(value = "Transcript ID", required = true) @PathParam("transcriptId") String transcriptId,
-      @ApiParam(value = "Select fields returned", allowMultiple = true) @QueryParam("field") List<String> fields
-      ) {
+      @ApiParam(value = "Select fields returned", allowMultiple = true) @QueryParam("field") List<String> fields) {
     log.info("Request for Transcript {}", transcriptId);
 
     FiltersParam filters = new FiltersParam(String.format("{gene:{affectedTranscriptIds:{is:\"%s\"}}}", transcriptId));
@@ -103,8 +120,7 @@ public class TranscriptResource {
       @ApiParam(value = "Start index of results") @QueryParam("from") @DefaultValue(DEFAULT_FROM) IntParam from,
       @ApiParam(value = "Number of results returned", allowableValues = "range[1,100]") @QueryParam("size") @DefaultValue(DEFAULT_SIZE) IntParam size,
       @ApiParam(value = "Column to sort results on") @QueryParam("sort") @DefaultValue(DEFAULT_SORT) String sort,
-      @ApiParam(value = "Order to sort the column", allowableValues = "asc,desc") @QueryParam("order") @DefaultValue(DEFAULT_ORDER) String order
-      ) {
+      @ApiParam(value = "Order to sort the column", allowableValues = "asc,desc") @QueryParam("order") @DefaultValue(DEFAULT_ORDER) String order) {
     log.info("Request for Mutations affected by Transcript {}", transcriptId);
     log.info("Link out to Mutations Resource using transcriptId as filter");
 

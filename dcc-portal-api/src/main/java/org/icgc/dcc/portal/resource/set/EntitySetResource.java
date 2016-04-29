@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,7 +15,6 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.icgc.dcc.portal.resource.set;
 
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
@@ -23,9 +22,9 @@ import static com.sun.jersey.core.header.ContentDisposition.type;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static org.icgc.dcc.portal.resource.Resources.API_ASYNC;
-import static org.icgc.dcc.portal.resource.Resources.API_ENTITY_LIST_DEFINITION_VALUE;
-import static org.icgc.dcc.portal.resource.Resources.API_ENTITY_LIST_ID_PARAM;
-import static org.icgc.dcc.portal.resource.Resources.API_ENTITY_LIST_ID_VALUE;
+import static org.icgc.dcc.portal.resource.Resources.API_ENTITY_SET_DEFINITION_VALUE;
+import static org.icgc.dcc.portal.resource.Resources.API_ENTITY_SET_ID_PARAM;
+import static org.icgc.dcc.portal.resource.Resources.API_ENTITY_SET_ID_VALUE;
 import static org.icgc.dcc.portal.util.MediaTypes.TEXT_TSV;
 
 import java.io.IOException;
@@ -51,7 +50,8 @@ import javax.ws.rs.core.StreamingOutput;
 import org.icgc.dcc.portal.model.DerivedEntitySetDefinition;
 import org.icgc.dcc.portal.model.EntitySet;
 import org.icgc.dcc.portal.model.EntitySetDefinition;
-import org.icgc.dcc.portal.model.UuidListParam;
+import org.icgc.dcc.portal.model.UUIDSetParam;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.BadRequestException;
 import org.icgc.dcc.portal.service.EntitySetService;
 import org.icgc.dcc.portal.service.NotFoundException;
@@ -75,8 +75,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @Path("/v1/entityset")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired) )
-public class EntitySetResource {
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class EntitySetResource extends Resource {
 
   private final static String TYPE_ATTACHMENT = "attachment";
   private static final String EXPORT_FILE_EXTENSION = ".tsv";
@@ -84,52 +84,40 @@ public class EntitySetResource {
   @NonNull
   private final EntitySetService service;
 
-  private List<EntitySet> getEntityListsByIds(@NonNull final Set<UUID> ids) {
-    val result = new ArrayList<EntitySet>(ids.size());
-    for (val id : ids) {
-      // Should implement @BindIn in the EntityListRepository to allow the IN clause instead of doing a loop here.
-      val list = service.getEntityList(id);
-      if (null != list) {
-        result.add(list);
-      }
+  @GET
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
+  public EntitySet getSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entityListId) {
+    val result = getSetsByIds(Sets.newHashSet(entityListId));
+    if (result.isEmpty()) {
+      log.error("Error: getEntityListsByIds returns empty. The entityListId '{}' is most likely invalid.",
+          entityListId);
+      throw new NotFoundException(entityListId.toString(), API_ENTITY_SET_ID_VALUE);
+    } else {
+      return result.get(0);
     }
-    return result;
   }
 
   @GET
-  @Path("/sets/{" + API_ENTITY_LIST_ID_PARAM + "}")
+  @Path("/sets/{" + API_ENTITY_SET_ID_PARAM + "}")
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Retrieves a list of entity sets by their IDs.", response = EntitySet.class, responseContainer = "List")
-  public List<EntitySet> getEntityLists(
-      @ApiParam(value = API_ENTITY_LIST_ID_VALUE, required = true) @PathParam(API_ENTITY_LIST_ID_PARAM) final UuidListParam entityListIds) {
+  public List<EntitySet> getSets(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUIDSetParam entitySetIds) {
     Set<UUID> listIds = null;
     try {
-      listIds = entityListIds.get();
+      listIds = entitySetIds.get();
 
     } catch (Exception e) {
-      log.error("Exception occurred while parsing the UUID list from web request: '{}'", entityListIds);
+      log.error("Exception occurred while parsing the UUID list from web request: '{}'", entitySetIds);
       log.error("The exception while parsing the UUID list is: ", e);
       throw new BadRequestException("Unable to parse the entitySetId parameter.");
     }
     log.debug("Received a getEntityLists request for these lists: '{}'", listIds);
 
-    return getEntityListsByIds(listIds);
-  }
-
-  @GET
-  @Path("/{" + API_ENTITY_LIST_ID_PARAM + "}")
-  @Produces(APPLICATION_JSON)
-  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
-  public EntitySet getEntityList(
-      @ApiParam(value = API_ENTITY_LIST_ID_VALUE, required = true) @PathParam(API_ENTITY_LIST_ID_PARAM) final UUID entityListId) {
-    val result = getEntityListsByIds(Sets.newHashSet(entityListId));
-    if (result.isEmpty()) {
-      log.error("Error: getEntityListsByIds returns empty. The entityListId '{}' is most likely invalid.",
-          entityListId);
-      throw new NotFoundException(entityListId.toString(), API_ENTITY_LIST_ID_VALUE);
-    } else {
-      return result.get(0);
-    }
+    return getSetsByIds(listIds);
   }
 
   /**
@@ -143,12 +131,12 @@ public class EntitySetResource {
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Creates an entity set from an Advanced Search query.", response = EntitySet.class)
-  public Response createList(
-      @ApiParam(value = API_ENTITY_LIST_DEFINITION_VALUE) final EntitySetDefinition listDefinition,
+  public Response createSet(
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition listDefinition,
       @ApiParam(value = API_ASYNC) @QueryParam("async") @DefaultValue("true") final boolean async) {
     val newList = service.createEntityList(listDefinition, async);
 
-    return newListResponse(newList);
+    return newSetResponse(newList);
   }
 
   /**
@@ -162,11 +150,11 @@ public class EntitySetResource {
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Creates an entity set from an Advanced Search query.", response = EntitySet.class)
-  public Response createExternalList(
-      @ApiParam(value = API_ENTITY_LIST_DEFINITION_VALUE) final EntitySetDefinition listDefinition) {
+  public Response createExternalSet(
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition listDefinition) {
     val newList = service.createExternalEntityList(listDefinition);
 
-    return newListResponse(newList);
+    return newSetResponse(newList);
   }
 
   /**
@@ -181,12 +169,12 @@ public class EntitySetResource {
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Creates an entity set from an Repository Query.", response = EntitySet.class)
   public Response createFileSet(
-      @ApiParam(value = API_ENTITY_LIST_DEFINITION_VALUE) final EntitySetDefinition listDefinition) {
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition listDefinition) {
     val filters = listDefinition.getFilters();
     val repoList = (ArrayNode) filters.path("file").path("repoName").path("is");
     if (!repoList.isMissingNode() && repoList.size() == 1) {
       val newList = service.createFileEntitySet(listDefinition);
-      return newListResponse(newList);
+      return newSetResponse(newList);
     } else {
       throw new BadRequestException("Need to filter by exactly one Repository.");
     }
@@ -197,31 +185,21 @@ public class EntitySetResource {
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Creates an entity set by combining two or more existing sets.", response = EntitySet.class)
-  public Response deriveList(
-      @ApiParam(value = API_ENTITY_LIST_DEFINITION_VALUE) final DerivedEntitySetDefinition listDefinition,
+  public Response unionSets(
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final DerivedEntitySetDefinition listDefinition,
       @ApiParam(value = API_ASYNC) @QueryParam("async") @DefaultValue("true") final boolean async) {
     val newList = service.computeEntityList(listDefinition, async);
 
-    return newListResponse(newList);
-  }
-
-  private static Response newListResponse(final EntitySet newList) {
-    return Response.status(CREATED)
-        .entity(newList)
-        .build();
-  }
-
-  private static String getFileName(final EntitySet list) {
-    return list.getType().getName() + "-ids-for-set-" + list.getName() + EXPORT_FILE_EXTENSION;
+    return newSetResponse(newList);
   }
 
   @GET
-  @Path("/{" + API_ENTITY_LIST_ID_PARAM + "}/export")
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}/export")
   @Produces(TEXT_TSV)
   @ApiOperation(value = "Exports the data of a set as a download in TSV (tab-delimited) format.", response = EntitySet.class)
-  public Response exportListItems(
-      @ApiParam(value = API_ENTITY_LIST_ID_VALUE, required = true) @PathParam(API_ENTITY_LIST_ID_PARAM) final UUID entityListId) {
-    val list = getEntityList(entityListId);
+  public Response exportSetItems(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entityListId) {
+    val list = getSet(entityListId);
 
     if (EntitySet.State.FINISHED != list.getState()) {
       // We return a 204 if the list is not ready.
@@ -245,4 +223,28 @@ public class EntitySetResource {
         .header(CONTENT_DISPOSITION, attechmentType)
         .build();
   }
+
+  private List<EntitySet> getSetsByIds(@NonNull final Set<UUID> ids) {
+    val result = new ArrayList<EntitySet>(ids.size());
+    for (val id : ids) {
+      // Should implement @BindIn in the EntityListRepository to allow the IN clause instead of doing a loop here.
+      val list = service.getEntityList(id);
+      if (null != list) {
+        result.add(list);
+      }
+    }
+
+    return result;
+  }
+
+  private static String getFileName(final EntitySet list) {
+    return list.getType().getName() + "-ids-for-set-" + list.getName() + EXPORT_FILE_EXTENSION;
+  }
+
+  private static Response newSetResponse(final EntitySet newList) {
+    return Response.status(CREATED)
+        .entity(newList)
+        .build();
+  }
+
 }

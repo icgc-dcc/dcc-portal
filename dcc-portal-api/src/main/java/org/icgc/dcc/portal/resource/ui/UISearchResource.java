@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -24,7 +24,6 @@ import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.resource.Resources.API_GENE_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_GENE_VALUE;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_ORDER;
 import static org.icgc.dcc.portal.resource.Resources.MULTIPLE_IDS;
 import static org.icgc.dcc.portal.util.JsonUtils.merge;
 
@@ -41,15 +40,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.IdsParam;
 import org.icgc.dcc.portal.model.Mutations;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.TermFacet;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.GeneService;
 import org.icgc.dcc.portal.service.MutationService;
@@ -66,12 +62,16 @@ import com.sun.jersey.multipart.FormDataParam;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.yammer.dropwizard.jersey.params.IntParam;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Component
 @Path("/v1/ui/search")
 @Produces(APPLICATION_JSON)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class UISearchResource {
+public class UISearchResource extends Resource {
 
   /**
    * Constants.
@@ -155,8 +155,8 @@ public class UISearchResource {
   @Path("/gene-symbols/{" + API_GENE_PARAM + "}")
   @GET
   public Map<String, String> ensemblIdGeneSymbolMappings(
-      @ApiParam(value = API_GENE_VALUE + MULTIPLE_IDS + " (e.g. ENSG00000155657,ENSG00000141510).", required = true) @PathParam(API_GENE_PARAM) IdsParam geneIds
-      ) {
+      @ApiParam(value = API_GENE_VALUE + MULTIPLE_IDS
+          + " (e.g. ENSG00000155657,ENSG00000141510).", required = true) @PathParam(API_GENE_PARAM) IdsParam geneIds) {
     return geneService.getEnsemblIdGeneSymbolMap(geneIds.get());
   }
 

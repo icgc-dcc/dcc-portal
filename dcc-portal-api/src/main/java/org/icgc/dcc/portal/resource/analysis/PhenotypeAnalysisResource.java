@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -21,7 +21,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.icgc.dcc.portal.resource.Resources.API_ANALYSIS_ID_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_ANALYSIS_ID_VALUE;
-import static org.icgc.dcc.portal.resource.Resources.checkRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,11 +32,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.portal.model.PhenotypeAnalysis;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.PhenotypeAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -45,14 +41,18 @@ import org.springframework.stereotype.Component;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 /**
- * REST API end-points that provide various functionalities for phenotype analysis.
+ * End-points that provide various functionalities for phenotype analysis.
  */
 @Slf4j
 @Component
 @Path("/v1/analysis/phenotype")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class PhenotypeAnalysisResource {
+public class PhenotypeAnalysisResource extends Resource {
 
   @NonNull
   private final PhenotypeAnalysisService service;
@@ -72,8 +72,7 @@ public class PhenotypeAnalysisResource {
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Retrieves the result of a phenotype analysis by its ID.", response = PhenotypeAnalysis.class)
   public PhenotypeAnalysis getAnalysis(
-      @ApiParam(value = API_ANALYSIS_ID_VALUE, required = true) @PathParam(API_ANALYSIS_ID_PARAM) final UUID analysisId
-      ) {
+      @ApiParam(value = API_ANALYSIS_ID_VALUE, required = true) @PathParam(API_ANALYSIS_ID_PARAM) final UUID analysisId) {
     checkRequest(analysisId == null, API_ANALYSIS_ID_PARAM + " is null.");
 
     log.info("Received request with {} of '{}'", API_ANALYSIS_ID_PARAM, analysisId);

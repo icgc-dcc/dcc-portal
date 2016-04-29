@@ -17,46 +17,40 @@
  */
 package org.icgc.dcc.portal.model;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import com.google.common.collect.Sets;
 import com.yammer.dropwizard.jersey.params.AbstractParam;
 
-/**
- * TODO
- */
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
-public class UuidListParam extends AbstractParam<Set<UUID>> {
+public class UUIDSetParam extends AbstractParam<Set<UUID>> {
 
-  /**
-   * @param input
-   */
-  public UuidListParam(String input) {
-
+  public UUIDSetParam(String input) {
     super(input);
   }
 
   @Override
-  protected Set<UUID> parse(String input) {
-
-    val set = Sets.newHashSet(input.replaceAll("\"", "").split(","));
-    val result = new HashSet<UUID>(set.size());
-    for (val s : set) {
-
+  protected Set<UUID> parse(String text) {
+    val set = Sets.newHashSet(parseValues(text));
+    val result = Sets.<UUID> newHashSetWithExpectedSize(set.size());
+    for (val value : parseValues(text)) {
       try {
-
-        result.add(UUID.fromString(s));
-
+        result.add(UUID.fromString(value));
       } catch (Exception e) {
-        // we ignore any error here and continue the conversion
-        log.debug("Failed to convert {} to UUID", s, e.getMessage());
+        // We ignore any error here and continue the conversion
+        log.debug("Failed to convert {} to UUID", value, e.getMessage());
       }
     }
+
     return result;
   }
+
+  private static String[] parseValues(String input) {
+    return input.replaceAll("\"", "").split(",");
+  }
+
 }

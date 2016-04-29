@@ -17,7 +17,6 @@ import org.icgc.dcc.portal.model.Mutation;
 import org.icgc.dcc.portal.model.Mutations;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Transcript;
-import org.icgc.dcc.portal.resource.entity.TranscriptResource;
 import org.icgc.dcc.portal.service.GeneService;
 import org.icgc.dcc.portal.service.MutationService;
 import org.junit.Test;

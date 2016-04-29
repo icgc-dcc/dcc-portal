@@ -30,6 +30,7 @@ components/
 unit.xml
 e2e.xml
 bower_components/
+.bundle
 
 # Java Temporary files
 logs/

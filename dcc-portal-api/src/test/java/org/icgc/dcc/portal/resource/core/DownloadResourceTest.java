@@ -52,7 +52,6 @@ import org.icgc.dcc.portal.auth.oauth.OAuthClient;
 import org.icgc.dcc.portal.config.PortalProperties.CrowdProperties;
 import org.icgc.dcc.portal.mapper.BadRequestExceptionMapper;
 import org.icgc.dcc.portal.model.User;
-import org.icgc.dcc.portal.resource.core.DownloadResource;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.NotFoundException;
 import org.icgc.dcc.portal.service.ServiceUnavailableException;

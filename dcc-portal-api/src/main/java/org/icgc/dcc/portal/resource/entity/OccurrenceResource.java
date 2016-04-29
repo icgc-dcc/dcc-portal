@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
+ *                                                                                                               
+ * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+ * You should have received a copy of the GNU General Public License along with                                  
+ * this program. If not, see <http://www.gnu.org/licenses/>.                                                     
+ *                                                                                                               
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY                           
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES                          
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT                           
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,                                
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED                          
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;                               
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER                              
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package org.icgc.dcc.portal.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -20,22 +37,13 @@ import static org.icgc.dcc.portal.resource.Resources.API_SIZE_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_SIZE_VALUE;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_FIELD;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_VALUE;
-import static org.icgc.dcc.portal.resource.Resources.COUNT_TEMPLATE;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_FILTERS;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_FROM;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_OCCURRENCE_SORT;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_ORDER;
-import static org.icgc.dcc.portal.resource.Resources.DEFAULT_SIZE;
-import static org.icgc.dcc.portal.resource.Resources.FIND_ALL_TEMPLATE;
 import static org.icgc.dcc.portal.resource.Resources.FIND_BY_ID;
 import static org.icgc.dcc.portal.resource.Resources.FIND_BY_ID_ERROR;
-import static org.icgc.dcc.portal.resource.Resources.FIND_ONE_TEMPLATE;
 import static org.icgc.dcc.portal.resource.Resources.NOT_FOUND;
 import static org.icgc.dcc.portal.resource.Resources.OCCURRENCE;
 import static org.icgc.dcc.portal.resource.Resources.RETURNS_COUNT;
 import static org.icgc.dcc.portal.resource.Resources.RETURNS_LIST;
 import static org.icgc.dcc.portal.resource.Resources.S;
-import static org.icgc.dcc.portal.resource.Resources.query;
 
 import java.util.List;
 
@@ -46,13 +54,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Occurrence;
 import org.icgc.dcc.portal.model.Occurrences;
 import org.icgc.dcc.portal.model.Projects;
+import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.OccurrenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -65,12 +71,15 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import com.yammer.dropwizard.jersey.params.IntParam;
 import com.yammer.metrics.annotation.Timed;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Component
 @Path("/v1/occurrences")
 @Produces(APPLICATION_JSON)
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
-public class OccurrenceResource {
+public class OccurrenceResource extends Resource {
 
   private final OccurrenceService occurrenceService;
 
@@ -84,8 +93,7 @@ public class OccurrenceResource {
       @ApiParam(value = API_FROM_VALUE) @QueryParam(API_FROM_PARAM) @DefaultValue(DEFAULT_FROM) IntParam from,
       @ApiParam(value = API_SIZE_VALUE, allowableValues = API_SIZE_ALLOW) @QueryParam(API_SIZE_PARAM) @DefaultValue(DEFAULT_SIZE) IntParam size,
       @ApiParam(value = API_SORT_VALUE) @QueryParam(API_SORT_FIELD) @DefaultValue(DEFAULT_OCCURRENCE_SORT) String sort,
-      @ApiParam(value = API_ORDER_VALUE, allowableValues = API_ORDER_ALLOW) @QueryParam(API_ORDER_PARAM) @DefaultValue(DEFAULT_ORDER) String order
-      ) {
+      @ApiParam(value = API_ORDER_VALUE, allowableValues = API_ORDER_ALLOW) @QueryParam(API_ORDER_PARAM) @DefaultValue(DEFAULT_ORDER) String order) {
     ObjectNode filters = filtersParam.get();
 
     log.info(FIND_ALL_TEMPLATE, new Object[] { size, OCCURRENCE, from, sort, order, filters });
@@ -100,8 +108,7 @@ public class OccurrenceResource {
   @Timed
   @ApiOperation(value = RETURNS_COUNT + OCCURRENCE + S)
   public Long count(
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filters
-      ) {
+      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filters) {
     log.info(COUNT_TEMPLATE, OCCURRENCE, filters.get());
 
     return occurrenceService.count(query().filters(filters.get()).build());
@@ -115,8 +122,7 @@ public class OccurrenceResource {
   public Occurrence find(
       @ApiParam(value = API_OCCURRENCE_VALUE, required = true) @PathParam(API_OCCURRENCE_PARAM) String occurrenceId,
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,
-      @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include
-      ) {
+      @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include) {
     log.info(FIND_ONE_TEMPLATE, occurrenceId);
 
     return occurrenceService.findOne(occurrenceId, query().fields(fields).includes(include).build());

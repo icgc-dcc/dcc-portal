@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -27,6 +27,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import org.icgc.dcc.portal.resource.Resource;
 import org.springframework.stereotype.Component;
 
 import lombok.SneakyThrows;
@@ -35,7 +36,7 @@ import lombok.val;
 @Component
 @Path("/v1/ui/collaboratory")
 @Produces(APPLICATION_JSON)
-public class UICollaboratoryResource {
+public class UICollaboratoryResource extends Resource {
 
   /**
    * Constants.

@@ -35,15 +35,12 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import lombok.val;
-
 import org.icgc.dcc.portal.mapper.NotFoundExceptionMapper;
 import org.icgc.dcc.portal.model.Donor;
 import org.icgc.dcc.portal.model.Donors;
 import org.icgc.dcc.portal.model.Genes;
 import org.icgc.dcc.portal.model.Mutations;
 import org.icgc.dcc.portal.model.Query;
-import org.icgc.dcc.portal.resource.entity.DonorResource;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.GeneService;
 import org.icgc.dcc.portal.service.MutationService;
@@ -55,6 +52,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.yammer.dropwizard.testing.ResourceTest;
+
+import lombok.val;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonorResourceTest extends ResourceTest {
