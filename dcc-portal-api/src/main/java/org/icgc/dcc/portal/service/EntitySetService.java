@@ -49,7 +49,7 @@ import org.icgc.dcc.portal.model.EntitySet.SubType;
 import org.icgc.dcc.portal.model.EntitySetDefinition;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
-import org.icgc.dcc.portal.repository.EntityListRepository;
+import org.icgc.dcc.portal.repository.EntitySetRepository;
 import org.icgc.dcc.portal.repository.RepositoryFileRepository;
 import org.icgc.dcc.portal.repository.TermsLookupRepository;
 import org.icgc.dcc.portal.util.SearchResponses;
@@ -76,19 +76,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired) )
-public class EntityListService {
+public class EntitySetService {
 
   /**
    * Dependencies
    */
   @NonNull
-  private final EntityListRepository entityListRepository;
+  private final EntitySetRepository entitySetRepository;
   @NonNull
   private final TermsLookupRepository termsLookupRepository;
   @NonNull
   private final RepositoryFileRepository repositoryFileRepository;
   @NonNull
-  private final EntityListRepository repository;
+  private final EntitySetRepository repository;
   @NonNull
   private final UnionAnalyzer analyzer;
   @NonNull
@@ -184,9 +184,9 @@ public class EntityListService {
     EntitySet newEntity = null;
 
     try {
-      newEntity = entityListRepository.find(newEntityId);
+      newEntity = entitySetRepository.find(newEntityId);
       val dataVersion = newEntity.getVersion();
-      entityListRepository.update(newEntity.updateStateToInProgress(), dataVersion);
+      entitySetRepository.update(newEntity.updateStateToInProgress(), dataVersion);
 
       val max = entitySetDefinition.getLimit(maxNumberOfHits);
       val response = executeFilterQuery(entitySetDefinition, max);
@@ -198,12 +198,12 @@ public class EntityListService {
       termsLookupRepository.createTermsLookup(lookupType, newEntityId, entityIds, entitySetDefinition.isTransient());
 
       val count = getCountFrom(response, max);
-      entityListRepository.update(newEntity.updateStateToFinished(count), dataVersion);
+      entitySetRepository.update(newEntity.updateStateToFinished(count), dataVersion);
     } catch (Exception e) {
       log.error("Error while materializing list for {}: {}", newEntityId, e);
 
       if (null != newEntity) {
-        entityListRepository.update(newEntity.updateStateToError(), newEntity.getVersion());
+        entitySetRepository.update(newEntity.updateStateToError(), newEntity.getVersion());
       }
     }
   }
@@ -211,7 +211,7 @@ public class EntityListService {
   @SneakyThrows
   private void materializeRepositoryList(@NonNull final UUID newEntityId,
       @NonNull final EntitySetDefinition entitySet) {
-    val newEntity = entityListRepository.find(newEntityId);
+    val newEntity = entitySetRepository.find(newEntityId);
     val dataVersion = newEntity.getVersion();
 
     val query = Query.builder()
@@ -230,12 +230,12 @@ public class EntityListService {
 
     val count = entityIds.size();
     // Done - update status to finished
-    entityListRepository.update(newEntity.updateStateToFinished(count), dataVersion);
+    entitySetRepository.update(newEntity.updateStateToFinished(count), dataVersion);
   }
 
   private void materializeFileSet(@NonNull final UUID newEntityId,
       @NonNull final EntitySetDefinition entitySet) {
-    val newEntity = entityListRepository.find(newEntityId);
+    val newEntity = entitySetRepository.find(newEntityId);
     val dataVersion = newEntity.getVersion();
 
     val query = Query.builder()
@@ -253,7 +253,7 @@ public class EntityListService {
     termsLookupRepository.createTermsLookup(lookupType, newEntityId, entityIds, repoList.get(0).asText());
 
     val count = entityIds.size();
-    entityListRepository.update(newEntity.updateStateToFinished(count), dataVersion);
+    entitySetRepository.update(newEntity.updateStateToFinished(count), dataVersion);
   }
 
   private int resolveDataVersion() {

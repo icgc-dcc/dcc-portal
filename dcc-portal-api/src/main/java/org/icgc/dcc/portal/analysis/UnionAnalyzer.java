@@ -37,7 +37,7 @@ import org.icgc.dcc.portal.model.UnionAnalysisRequest;
 import org.icgc.dcc.portal.model.UnionAnalysisResult;
 import org.icgc.dcc.portal.model.UnionUnit;
 import org.icgc.dcc.portal.model.UnionUnitWithCount;
-import org.icgc.dcc.portal.repository.EntityListRepository;
+import org.icgc.dcc.portal.repository.EntitySetRepository;
 import org.icgc.dcc.portal.repository.GeneRepository;
 import org.icgc.dcc.portal.repository.RepositoryFileRepository;
 import org.icgc.dcc.portal.repository.TermsLookupRepository;
@@ -84,7 +84,7 @@ public class UnionAnalyzer {
   @NonNull
   private final UnionAnalysisRepository unionAnalysisRepository;
   @NonNull
-  private final EntityListRepository entityListRepository;
+  private final EntitySetRepository entitySetRepository;
   @NonNull
   private final TermsLookupRepository termsLookupRepository;
   @NonNull
@@ -148,9 +148,9 @@ public class UnionAnalyzer {
     EntitySet newEntity = null;
 
     try {
-      newEntity = entityListRepository.find(newEntityId);
+      newEntity = entitySetRepository.find(newEntityId);
       val dataVersion = newEntity.getVersion();
-      entityListRepository.update(newEntity.updateStateToInProgress(), dataVersion);
+      entitySetRepository.update(newEntity.updateStateToInProgress(), dataVersion);
 
       val definitions = entitySetDefinition.getUnion();
       val entityType = entitySetDefinition.getType();
@@ -175,19 +175,19 @@ public class UnionAnalyzer {
             "Because the total hit count ({}) exceeds the allowed maximum ({}), this set operation is aborted.",
             totalHits, maxUnionCount);
 
-        entityListRepository.update(newEntity.updateStateToError(), dataVersion);
+        entitySetRepository.update(newEntity.updateStateToError(), dataVersion);
         return;
       }
 
       val lookupType = entityType.toLookupType();
       termsLookupRepository.createTermsLookup(lookupType, newEntityId, entityIds, entitySetDefinition.isTransient());
-      entityListRepository.update(newEntity.updateStateToFinished(totalHits), dataVersion);
+      entitySetRepository.update(newEntity.updateStateToFinished(totalHits), dataVersion);
     } catch (Exception e) {
       log.error("Error while combining lists for {}. See exception below.", newEntityId);
       log.error("Error while combining lists: '{}'", e);
 
       if (null != newEntity) {
-        entityListRepository.update(newEntity.updateStateToError(), newEntity.getVersion());
+        entitySetRepository.update(newEntity.updateStateToError(), newEntity.getVersion());
       }
     }
   }

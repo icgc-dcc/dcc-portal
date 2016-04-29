@@ -53,7 +53,7 @@ import org.icgc.dcc.portal.model.EntitySet;
 import org.icgc.dcc.portal.model.EntitySetDefinition;
 import org.icgc.dcc.portal.model.UuidListParam;
 import org.icgc.dcc.portal.service.BadRequestException;
-import org.icgc.dcc.portal.service.EntityListService;
+import org.icgc.dcc.portal.service.EntitySetService;
 import org.icgc.dcc.portal.service.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -76,13 +76,13 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Path("/v1/entityset")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired) )
-public class EntityListResource {
+public class EntitySetResource {
 
   private final static String TYPE_ATTACHMENT = "attachment";
   private static final String EXPORT_FILE_EXTENSION = ".tsv";
 
   @NonNull
-  private final EntityListService service;
+  private final EntitySetService service;
 
   private List<EntitySet> getEntityListsByIds(@NonNull final Set<UUID> ids) {
     val result = new ArrayList<EntitySet>(ids.size());

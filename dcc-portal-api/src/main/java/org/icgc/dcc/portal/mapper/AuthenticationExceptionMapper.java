@@ -38,8 +38,8 @@ import lombok.val;
 
 import org.icgc.dcc.portal.config.PortalProperties.CrowdProperties;
 import org.icgc.dcc.portal.model.Error;
-import org.icgc.dcc.portal.resource.core.AuthResource;
-import org.icgc.dcc.portal.resource.core.OpenIDResource;
+import org.icgc.dcc.portal.resource.security.AuthResource;
+import org.icgc.dcc.portal.resource.security.OpenIDResource;
 import org.icgc.dcc.portal.service.AuthenticationException;
 import org.springframework.stereotype.Component;
 

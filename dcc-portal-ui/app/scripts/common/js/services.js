@@ -321,7 +321,7 @@
       } else {
         // Fallback (IE and other browsers that lack support), create a form and
         // submit a post request to bounce the download content against the server
-        jQuery('<form method="POST" id="htmlDownload" action="/api/echo" style="display:none">' +
+        jQuery('<form method="POST" id="htmlDownload" action="/api/v1/ui/echo" style="display:none">' +
                '<input type="hidden" name="fileName" value="' + filename + '"/>' +
                '<input type="hidden" name="text" value="' + data + '"/>' +
                '<input type="submit" value="Submit"/>' +

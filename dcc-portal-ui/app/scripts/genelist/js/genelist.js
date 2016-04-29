@@ -38,7 +38,7 @@
     /* Verify text input */
     this.verify = function(text) {
       var data = 'geneIds=' + encodeURI(text);
-      return Restangular.one('genelists').withHttpConfig({transformRequest: angular.identity})
+      return Restangular.one('genesets').withHttpConfig({transformRequest: angular.identity})
         .customPOST(data, undefined, {'validationOnly':true});
     };
 
@@ -47,7 +47,7 @@
     this.create = function(text) {
       var data = 'geneIds=' + encodeURI(text);
 
-      return Restangular.one('genelists').withHttpConfig({transformRequest: angular.identity})
+      return Restangular.one('genesets').withHttpConfig({transformRequest: angular.identity})
         .customPOST(data);
     };
 

@@ -37,7 +37,7 @@ import org.icgc.dcc.portal.model.EnrichmentAnalysis;
 import org.icgc.dcc.portal.model.EntitySet;
 import org.icgc.dcc.portal.model.EntitySet.SubType;
 import org.icgc.dcc.portal.repository.EnrichmentAnalysisRepository;
-import org.icgc.dcc.portal.repository.EntityListRepository;
+import org.icgc.dcc.portal.repository.EntitySetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +56,7 @@ public class EnrichmentAnalysisService {
   @NonNull
   private final EnrichmentAnalysisRepository repository;
   @NonNull
-  private final EntityListRepository entityListRepository;
+  private final EntitySetRepository entitySetRepository;
   @NonNull
   private final PortalProperties properties;
 
@@ -85,7 +85,7 @@ public class EnrichmentAnalysisService {
     // Save this as an entity list too in order to capture the subtype information.
     val newEntitySet = EntitySet.createForStatusFinished(id, "Input gene set", "", Type.GENE, 0, dataVersion);
     newEntitySet.setSubtype(SubType.ENRICHMENT);
-    entityListRepository.save(newEntitySet, dataVersion);
+    entitySetRepository.save(newEntitySet, dataVersion);
 
     val insertCount = repository.save(analysis, dataVersion);
     checkState(insertCount == 1, "Could not save analysis. Insert count: %s", insertCount);

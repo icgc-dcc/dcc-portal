@@ -114,7 +114,7 @@ public class DonorRepository implements Repository {
   private static final Kind KIND = Kind.DONOR;
 
   @NonNull
-  private final EntityListRepository entityListRepository;
+  private final EntitySetRepository entitySetRepository;
 
   // These are the raw field names from the 'donor-text' type in the main index.
   public static final Map<String, String> DONOR_ID_SEARCH_FIELDS = transformToTextSearchFieldMap(
@@ -174,12 +174,12 @@ public class DonorRepository implements Repository {
 
   @Autowired
   DonorRepository(Client client, IndexModel indexModel, QueryEngine queryEngine,
-      EntityListRepository entityListRepository) {
+      EntitySetRepository entitySetRepository) {
     this.index = indexModel.getIndex();
     this.repoIndexName = indexModel.getRepoIndex();
     this.client = client;
     this.queryEngine = queryEngine;
-    this.entityListRepository = entityListRepository;
+    this.entitySetRepository = entitySetRepository;
   }
 
   @Override
@@ -251,7 +251,7 @@ public class DonorRepository implements Repository {
       val aggsMap = aggregations.asMap();
       val entitySetId = setIds.get(i);
 
-      val entitySetCount = entityListRepository.find(entitySetId).getCount();
+      val entitySetCount = entitySetRepository.find(entitySetId).getCount();
 
       // We go through the main Results map for each facet and build the inner list by populating it with instances of
       // EntitySetTermFacet.

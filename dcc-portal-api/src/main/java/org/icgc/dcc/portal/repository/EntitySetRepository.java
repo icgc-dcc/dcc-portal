@@ -27,10 +27,10 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
 
 /**
- * DAO for entity_set table in Postgres
+ * DAO for {@code entity_set} table in Postgres.
  */
 @RegisterMapperFactory(JsonMapperFactory.class)
-public interface EntityListRepository extends JsonRepository {
+public interface EntitySetRepository extends JsonRepository {
 
   public final static String TABLE_NAME = "entity_set";
   public final static String VERSION_FIELD_NAME = "version";
@@ -45,4 +45,5 @@ public interface EntityListRepository extends JsonRepository {
   @SqlUpdate("UPDATE " + TABLE_NAME + " SET " + DATA_FIELD_NAME + " = :data, " + VERSION_FIELD_NAME
       + " = :version WHERE " + ID_FIELD_NAME + " = :id")
   int update(@BindValue EntitySet list, @Bind(VERSION_FIELD_NAME) int dataVersion);
+
 }

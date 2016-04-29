@@ -26,6 +26,7 @@ import org.icgc.dcc.common.client.api.shorturl.ShortURLClient;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLResponse;
 import org.icgc.dcc.portal.config.PortalProperties.WebProperties;
 import org.icgc.dcc.portal.mapper.NotFoundExceptionMapper;
+import org.icgc.dcc.portal.resource.core.ShortUrlResource;
 import org.icgc.dcc.portal.service.BadRequestException;
 import org.icgc.dcc.portal.service.ServiceUnavailableException;
 import org.junit.Test;

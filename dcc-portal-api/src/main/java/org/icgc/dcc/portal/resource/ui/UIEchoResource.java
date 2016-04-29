@@ -15,7 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.icgc.dcc.portal.resource.core;
+package org.icgc.dcc.portal.resource.ui;
 
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
 import static com.sun.jersey.core.header.ContentDisposition.type;
@@ -35,15 +35,13 @@ import javax.ws.rs.core.Response;
 import org.icgc.dcc.portal.resource.BaseResource;
 import org.springframework.stereotype.Component;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.yammer.metrics.annotation.Timed;
 
 @Component
-@Api(value = "/echo", description = "Resources relating to echoing data")
-@Path("/echo")
-public class EchoResource extends BaseResource {
+@Path("/v1/ui/echo")
+public class UIEchoResource extends BaseResource {
 
   @ApiOperation("Echo file contents")
   @Consumes(APPLICATION_FORM_URLENCODED)
@@ -56,7 +54,7 @@ public class EchoResource extends BaseResource {
 
       @ApiParam(value = "The contents of the file to echo") @FormParam("text") String text
 
-      ) {
+  ) {
 
     return ok().entity(text)
         .header(CONTENT_DISPOSITION, type("attachment").fileName(fileName).creationDate(new Date()).build()).build();

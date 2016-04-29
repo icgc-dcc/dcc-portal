@@ -18,7 +18,7 @@
 package org.icgc.dcc.portal.config;
 
 import org.icgc.dcc.portal.repository.EnrichmentAnalysisRepository;
-import org.icgc.dcc.portal.repository.EntityListRepository;
+import org.icgc.dcc.portal.repository.EntitySetRepository;
 import org.icgc.dcc.portal.repository.PhenotypeAnalysisRepository;
 import org.icgc.dcc.portal.repository.UnionAnalysisRepository;
 import org.icgc.dcc.portal.repository.UserGeneSetRepository;
@@ -49,8 +49,8 @@ public class RepositoryConfig {
   }
 
   @Bean
-  public EntityListRepository entityListRepository(DBI dbi) {
-    return dbi.open(EntityListRepository.class);
+  public EntitySetRepository entitySetRepository(DBI dbi) {
+    return dbi.open(EntitySetRepository.class);
   }
 
   @Bean

@@ -27,7 +27,7 @@ import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.model.BaseEntitySet.Type;
 import org.icgc.dcc.portal.model.EntitySet;
 import org.icgc.dcc.portal.model.EntitySet.SubType;
-import org.icgc.dcc.portal.repository.EntityListRepository;
+import org.icgc.dcc.portal.repository.EntitySetRepository;
 import org.icgc.dcc.portal.repository.TermsLookupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class UserDonorListService {
    * Dependencies.
    */
   @NonNull
-  private final EntityListRepository repository;
+  private final EntitySetRepository repository;
   @NonNull
   private final TermsLookupRepository termsLookupRepository;
   @NonNull

@@ -1,4 +1,4 @@
-package org.icgc.dcc.portal.resource.core;
+package org.icgc.dcc.portal.resource.security;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.String.format;
