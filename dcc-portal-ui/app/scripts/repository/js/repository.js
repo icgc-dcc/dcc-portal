@@ -180,6 +180,23 @@
     $scope.$on('bamready.event', function() {
       $scope.bamId = params.fileObjectId;
       $scope.bamName = params.fileObjectName;
+      $scope.bamFileName = params.fileName;
+      $scope.$apply();
+    });
+    
+  });
+
+  module.controller('ExternalVcfIobioController', 
+    function($scope, $document, $modalInstance, params) {
+    
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
+    };
+    
+    $scope.$on('bamready.event', function() {
+      $scope.vcfId = params.fileObjectId;
+      $scope.vcfName = params.fileObjectName;
+      $scope.vcfFileName = params.fileName;
       $scope.$apply();
     });
     
@@ -285,7 +302,7 @@
    * Controller for File Entity page
    */
   module.controller('ExternalFileInfoController',
-    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo) {
+    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature) {
 
     Page.setTitle('Repository File');
     Page.setPage('externalFileEntity');
@@ -299,6 +316,8 @@
       });
     }
     refresh();
+    
+    this.vcfIobio = PortalFeature.get('VCF_IOBIO');
 
     this.fileInfo = fileInfo;
     this.stringOrDefault = stringOrDefault;
@@ -401,14 +420,15 @@
        return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
          _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
     };
-    
+
   });
 
   /**
    * External repository controller
    */
   module.controller ('ExternalRepoController', function ($scope, $window, $modal, LocationService, Page,
-    ExternalRepoService, SetService, ProjectCache, CodeTable, RouteInfoService, $rootScope, FacetConstants) {
+    ExternalRepoService, SetService, ProjectCache, CodeTable, RouteInfoService, $rootScope, PortalFeature,
+    FacetConstants) {
 
     var dataRepoTitle = RouteInfoService.get ('dataRepositories').title,
         FilterService = LocationService.getFilterService();
@@ -429,6 +449,8 @@
     _ctrl.dataRepoTitle = dataRepoTitle;
     _ctrl.dataRepoFileUrl = RouteInfoService.get ('dataRepositoryFile').href;
     _ctrl.advancedSearchInfo = RouteInfoService.get ('advancedSearch');
+
+    _ctrl.vcfIobio = PortalFeature.get('VCF_IOBIO');
 
     function toSummarizedString (values, name) {
       var size = _.size (values);
@@ -532,6 +554,19 @@
        return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
          _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
     };
+    
+    _ctrl.getAwsOrCollabFileName = function(fileCopies) {
+      try {
+        var fCopies = _.filter(fileCopies, function(fCopy) {
+          return fCopy.repoCode === 'aws-virginia' || fCopy.repoCode === 'collaboratory';
+        });
+
+        return _.pluck(fCopies, 'fileName')[0];
+      } catch (err) {
+        console.log(err);
+        return 'Could Not Retrieve File Name';
+      }
+    };
 
     _ctrl.fileAverageSize = function (fileCopies) {
       var count = _.size (fileCopies);
@@ -625,25 +660,52 @@
       });
     };
     
-    _ctrl.showIobioModal = function(objectId, objectName) {
+    _ctrl.showIobioModal = function(objectId, objectName, name) {
       var fileObjectId = objectId;
       var fileObjectName = objectName;
+      var fileName = name;
       $modal.open ({
         controller: 'ExternalIobioController',
         template: '<section id="bam-statistics" class="bam-statistics-modal">'+
-          '<bamstats bam-id="bamId" on-modal=true bam-name="bamName" data-ng-if="bamId"></bamstats></section>',
+          '<bamstats bam-id="bamId" on-modal=true bam-name="bamName" bam-file-name="bamFileName" data-ng-if="bamId">'+
+          '</bamstats></section>',
         windowClass: 'iobio-modal',
         resolve: {
           params: function() {
             return {
               fileObjectId: fileObjectId,
-              fileObjectName: fileObjectName
+              fileObjectName: fileObjectName,
+              fileName: fileName
             };
           }
         }
       }).opened.then(function() {
         setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
         
+      });
+    };
+    
+    _ctrl.showVcfIobioModal = function(objectId, objectName, name) {
+      var fileObjectId = objectId;
+      var fileObjectName = objectName;
+      var fileName = name;
+      $modal.open ({
+        controller: 'ExternalVcfIobioController',
+        template: '<section id="vcf-statistics" class="vcf-statistics-modal">'+
+          '<vcfstats vcf-id="vcfId" on-modal=true vcf-name="vcfName" vcf-file-name="vcfFileName" data-ng-if="vcfId">'+
+          '</vcfstats></section>',
+        windowClass: 'iobio-modal',
+        resolve: {
+          params: function() {
+            return {
+              fileObjectId: fileObjectId,
+              fileObjectName: fileObjectName,
+              fileName: fileName
+            };
+          }
+        }
+      }).opened.then(function() {
+        setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);      
       });
     };
 

@@ -251,7 +251,9 @@ More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
                     </td>
                     
                     <td class="text-center" valign="middle" style="min-width: 1.6rem;">
-                      <i class="icon-chart-bar iobio-popup" tooltip="BAM statistics" data-ng-if="ExternalRepoController.fileFormats (row.fileCopies) == 'BAM' && ExternalRepoController.awsOrCollab(row.fileCopies)" data-ng-click="ExternalRepoController.showIobioModal(row.objectId, row.id)">
+                      <i class="icon-chart-bar iobio-popup" tooltip="BAM statistics" data-ng-if="ExternalRepoController.fileFormats (row.fileCopies) == 'BAM' && ExternalRepoController.awsOrCollab(row.fileCopies)" data-ng-click="ExternalRepoController.showIobioModal(row.objectId, row.id, ExternalRepoController.getAwsOrCollabFileName(row.fileCopies))">
+                      </i>
+                      <i class="icon-chart-bar iobio-popup" tooltip="VCF statistics" data-ng-if="ExternalRepoController.vcfIobio && ExternalRepoController.fileFormats (row.fileCopies) == 'VCF' && ExternalRepoController.awsOrCollab(row.fileCopies)" data-ng-click="ExternalRepoController.showVcfIobioModal(row.objectId, row.id, ExternalRepoController.getAwsOrCollabFileName(row.fileCopies))">
                       </i>
                     </td>
                     

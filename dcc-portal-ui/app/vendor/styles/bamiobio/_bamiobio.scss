@@ -1,5 +1,12 @@
 @import "site.scss";
 @import "flat-ui.scss";
+.bam-file-name {
+  float: left;
+  clear: left;
+  margin-left: 0.3rem;
+  margin-top: 0.5rem;
+  color: #166aa2
+}
 #bam-statistics {
   line-height: normal;
   #bam-section {

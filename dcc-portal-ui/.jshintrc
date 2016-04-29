@@ -60,6 +60,12 @@
     "histogramD3": false,
     "donutD3": false,
     "Bam": false,
-    "iobioGoogleAnalytics": false
+    "iobioGoogleAnalytics": false,
+    "Vcfiobio": false,
+    "donutChooserD3": false,
+    "lineD3":false,
+    "barChartAltD3":false,
+    "groupedBarD3":false,
+    "histogramD3VCF":false
   }
 }

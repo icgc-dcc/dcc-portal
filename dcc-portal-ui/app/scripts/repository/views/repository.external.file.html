@@ -296,5 +296,9 @@
     <h3>BAM Stats</h3>
     <bamstats bam-id="info.objectId" on-modal="false" data-ng-if="fileCopies[0].fileFormat == 'BAM' && fileCtrlr.awsOrCollab(fileCopies)"></bamstats>
 </section>
+<section id="vcf-statistics" data-ng-if="fileCtrlr.vcfIobio && fileCopies[0].fileFormat == 'VCF' && fileCtrlr.awsOrCollab(fileCopies)">
+    <h3>VCF Stats</h3>
+    <vcfstats vcf-id="info.objectId" on-modal="false"></vcfstats>
+</section>
 </article>
 </div>

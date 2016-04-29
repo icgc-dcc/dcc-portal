@@ -1,0 +1,52 @@
+@import "vcf.iobio.scss";
+@import "flat-ui.scss";
+#vcf-statistics {
+    line-height: normal;
+    
+    .samplingLoader {
+      font-size:14px;
+      color:#2687BE;
+      position:relative;
+      margin-top: 70px;
+      margin-left:-6px;
+      display:none;
+      
+      img {
+        height:9px;
+      }
+      
+      &.big {
+        font-size:24px;
+        color:#2687BE;
+        position:relative;
+        margin-top: 70px;
+        margin-left:-6px;
+        display:none;
+        
+        img {
+          height:16px;
+          margin-left: 10px;
+        }
+      }
+  
+    }
+    
+    .resize path {
+    fill: #eee;
+    stroke: #666;
+    } 
+
+    .chart-chooser {
+    /*                font-size: 16px;*/
+        color: rgb(180,180,180);                
+        font-weight: 400;
+    /*                text-align: right;*/
+    }
+    
+    .brush .extent {
+      stroke: #000;
+      fill-opacity: .125;
+      shape-rendering: crispEdges;
+    }
+    
+}

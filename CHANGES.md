@@ -3,6 +3,10 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
+4.0.x
+--
+  - Added iobio visualization for Collaboratory and AWS-Virginia hosted VCF files in File Repository. 
+
 4.0.13
 --
  - Retrieving software download versions from artifactory is now done over HTTPS.

@@ -91,7 +91,8 @@
           AUTH_TOKEN: true,
           ICGC_CLOUD: true,
           SOFTWARE_PAGE: true,
-          NOT_FACET: false
+          NOT_FACET: false,
+          VCF_IOBIO: false
        };
 
       this.hasFeature = function(featureID) {
