@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,65 +15,44 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.filter;
+package org.icgc.dcc.portal.resource.ui;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import lombok.Setter;
+import java.net.URL;
 
-import org.icgc.dcc.portal.config.PortalProperties.DownloadProperties;
-import org.icgc.dcc.portal.resource.core.DownloadResource;
-import org.icgc.dcc.portal.service.NotAvailableException;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+
 import org.springframework.stereotype.Component;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerRequestFilter;
+import lombok.SneakyThrows;
+import lombok.val;
 
-/**
- * Filter for globally disabling access to {@link DownloadResource} resources if {@link DownloadProperties#isEnabled()}
- * is {@code false}.
- */
-@Setter
 @Component
-public class DownloadFilter implements ContainerRequestFilter {
+@Path("/v1/ui/collaboratory")
+@Produces(APPLICATION_JSON)
+public class UICollaboratoryResource {
 
   /**
-   * Configuration.
+   * Constants.
    */
-  @Autowired
-  private DownloadProperties download;
+  private static final String COLLAB_META_URL = "https://object.cancercollaboratory.org:9080/oicr.icgc.meta/metadata/";
 
   /**
-   * State.
+   * Resources - Collaboratory.
    */
-  @Context
-  private UriInfo uriInfo;
 
-  @Override
-  public ContainerRequest filter(ContainerRequest request) {
-    if (isDownloadDisabled() && isDownloadURL()) {
-      throw new NotAvailableException("Download service unavailable. Please try again later");
-    }
+  @Path("/metadata/{objectId}")
+  @GET
+  @SneakyThrows
+  public Response collabMeta(@PathParam("objectId") String objectId) {
+    val input = new URL(COLLAB_META_URL + objectId).openStream();
 
-    return request;
-  }
-
-  private String getRequestPath() {
-    return uriInfo.getAbsolutePath().getPath();
-  }
-
-  private String getDownloadPath() {
-    return uriInfo.getBaseUriBuilder().path(DownloadResource.class).build().getPath();
-  }
-
-  private boolean isDownloadDisabled() {
-    return !download.isEnabled();
-  }
-
-  private boolean isDownloadURL() {
-    return getRequestPath().contains(getDownloadPath());
+    return Response.ok(input).type("text/xml").build();
   }
 
 }

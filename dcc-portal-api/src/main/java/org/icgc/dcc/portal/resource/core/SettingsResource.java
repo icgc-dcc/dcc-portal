@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,65 +15,41 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.filter;
+package org.icgc.dcc.portal.resource.core;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import lombok.Setter;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
-import org.icgc.dcc.portal.config.PortalProperties.DownloadProperties;
-import org.icgc.dcc.portal.resource.core.DownloadResource;
-import org.icgc.dcc.portal.service.NotAvailableException;
+import org.icgc.dcc.portal.model.Settings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerRequestFilter;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.yammer.metrics.annotation.Timed;
 
 /**
- * Filter for globally disabling access to {@link DownloadResource} resources if {@link DownloadProperties#isEnabled()}
- * is {@code false}.
+ * Fetch application settings
  */
-@Setter
 @Component
-public class DownloadFilter implements ContainerRequestFilter {
+@Path("/v1/settings")
+@Produces(APPLICATION_JSON)
+public class SettingsResource {
 
-  /**
-   * Configuration.
-   */
+  private final Settings settings;
+
   @Autowired
-  private DownloadProperties download;
-
-  /**
-   * State.
-   */
-  @Context
-  private UriInfo uriInfo;
-
-  @Override
-  public ContainerRequest filter(ContainerRequest request) {
-    if (isDownloadDisabled() && isDownloadURL()) {
-      throw new NotAvailableException("Download service unavailable. Please try again later");
-    }
-
-    return request;
+  public SettingsResource(Settings settings) {
+    this.settings = settings;
   }
 
-  private String getRequestPath() {
-    return uriInfo.getAbsolutePath().getPath();
-  }
-
-  private String getDownloadPath() {
-    return uriInfo.getBaseUriBuilder().path(DownloadResource.class).build().getPath();
-  }
-
-  private boolean isDownloadDisabled() {
-    return !download.isEnabled();
-  }
-
-  private boolean isDownloadURL() {
-    return getRequestPath().contains(getDownloadPath());
+  @GET
+  @Timed
+  @ApiOperation(value = "Returns application settings")
+  public Settings getSettings() {
+    return settings;
   }
 
 }

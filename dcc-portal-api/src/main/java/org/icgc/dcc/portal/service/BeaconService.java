@@ -36,7 +36,7 @@ import org.icgc.dcc.portal.model.BeaconInfo;
 import org.icgc.dcc.portal.model.BeaconQuery;
 import org.icgc.dcc.portal.model.BeaconResponse;
 import org.icgc.dcc.portal.model.IndexModel;
-import org.icgc.dcc.portal.resource.BeaconResource;
+import org.icgc.dcc.portal.resource.tool.BeaconResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

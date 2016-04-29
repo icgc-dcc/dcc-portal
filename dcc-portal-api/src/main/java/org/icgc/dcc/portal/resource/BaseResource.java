@@ -28,6 +28,7 @@ import javax.ws.rs.core.UriInfo;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
+import org.icgc.dcc.portal.resource.entity.MutationResource;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
