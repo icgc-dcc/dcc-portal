@@ -115,8 +115,8 @@ public class DonorResource extends Resource {
 
   // When the query is keyed by donor id, it makes little sense to use entity set.
   private void removeDonorEntitySet(ObjectNode filters) {
-    if (filters.path("donor").path(IndexModel.API_ENTITY_LIST_ID_FIELD_NAME).isMissingNode() == false) {
-      ((ObjectNode) filters.get("donor")).remove(IndexModel.API_ENTITY_LIST_ID_FIELD_NAME);
+    if (filters.path("donor").path(IndexModel.API_ENTITY_SET_ID_FIELD_NAME).isMissingNode() == false) {
+      ((ObjectNode) filters.get("donor")).remove(IndexModel.API_ENTITY_SET_ID_FIELD_NAME);
     }
   }
 

@@ -65,6 +65,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class DonorSetResource extends Resource {
 
+  /**
+   * Constants.
+   */
   // Spaces, tabs, commas, or new lines
   private final static Pattern DONOR_DELIMITERS = Pattern.compile("[, \t\r\n]");
   private final static int MAX_DONOR_LIST_SIZE = 1000;
@@ -76,9 +79,11 @@ public class DonorSetResource extends Resource {
   private final static String ICGC_COL = "icgc";
   private final static String SUBMITTER_COL = "submitter";
 
+  /**
+   * Dependencies.
+   */
   @NonNull
   private final UserDonorListService userDonorListService;
-
   @NonNull
   private final DonorService donorService;
 

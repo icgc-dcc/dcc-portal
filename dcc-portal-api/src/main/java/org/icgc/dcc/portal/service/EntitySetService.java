@@ -75,7 +75,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired) )
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EntitySetService {
 
   /**
@@ -112,7 +112,7 @@ public class EntitySetService {
   @Getter(lazy = true, value = PRIVATE)
   private final int currentDataVersion = resolveDataVersion();
 
-  public EntitySet getEntityList(@NonNull final UUID entitySetId) {
+  public EntitySet getEntitySet(@NonNull final UUID entitySetId) {
     val list = repository.find(entitySetId);
 
     if (null == list) {
@@ -124,7 +124,7 @@ public class EntitySetService {
     return list;
   }
 
-  public EntitySet createEntityList(@NonNull final EntitySetDefinition entitySetDefinition, boolean async) {
+  public EntitySet createEntitySet(@NonNull final EntitySetDefinition entitySetDefinition, boolean async) {
     val newEntitySet = createAndSaveNewListFrom(entitySetDefinition);
     if (async) {
       materializeListAsync(newEntitySet.getId(), entitySetDefinition);
@@ -134,7 +134,7 @@ public class EntitySetService {
     return newEntitySet;
   }
 
-  public EntitySet createExternalEntityList(@NonNull final EntitySetDefinition entitySetDefinition) {
+  public EntitySet createExternalEntitySet(@NonNull final EntitySetDefinition entitySetDefinition) {
     val newEntitySet = createAndSaveNewListFrom(entitySetDefinition);
     materializeRepositoryList(newEntitySet.getId(), entitySetDefinition);
     return newEntitySet;
@@ -146,7 +146,7 @@ public class EntitySetService {
     return newEntitySet;
   }
 
-  public EntitySet computeEntityList(@NonNull final DerivedEntitySetDefinition entitySetDefinition, boolean async) {
+  public EntitySet computeEntitySet(@NonNull final DerivedEntitySetDefinition entitySetDefinition, boolean async) {
     val newEntitySet = createAndSaveNewListFrom(entitySetDefinition);
     if (async) {
       analyzer.combineListsAsync(newEntitySet.getId(), entitySetDefinition);
@@ -310,7 +310,7 @@ public class EntitySetService {
       return Type.MUTATION_CENTRIC;
     }
 
-    log.error("No mapping for enum value '{}' of BaseEntityList.Type.", entityType);
+    log.error("No mapping for enum value '{}' of BaseEntitySet.Type.", entityType);
     throw new IllegalStateException("No mapping for enum value: " + entityType);
   }
 

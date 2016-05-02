@@ -61,7 +61,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired) )
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UnionAnalyzer {
 
   /**
@@ -192,10 +192,10 @@ public class UnionAnalyzer {
     }
   }
 
-  public List<String> retriveListItems(@NonNull final EntitySet entityList) {
-    val lookupTypeName = entityList.getType().toLookupType().getName();
+  public List<String> retriveListItems(@NonNull final EntitySet entitySet) {
+    val lookupTypeName = entitySet.getType().toLookupType().getName();
     val query = client.prepareGet(TermsLookupRepository.TERMS_LOOKUP_INDEX_NAME,
-        lookupTypeName, entityList.getId().toString());
+        lookupTypeName, entitySet.getId().toString());
 
     val response = query.execute().actionGet();
     val rawValues = response.getSource().get(TERMS_LOOKUP_PATH);
@@ -204,8 +204,8 @@ public class UnionAnalyzer {
     return MAPPER.convertValue(rawValues, LIST_TYPE_REFERENCE);
   }
 
-  public Map<String, String> retrieveGeneIdsAndSymbolsByListId(final UUID listId) {
-    return geneRepository.findGeneSymbolsByGeneListId(listId);
+  public Map<String, String> retrieveGeneIdsAndSymbolsByListId(final UUID setId) {
+    return geneRepository.findGeneSymbolsByGeneListId(setId);
   }
 
   private SearchResponse unionAll(final Iterable<UnionUnit> definitions, final BaseEntitySet.Type entityType,

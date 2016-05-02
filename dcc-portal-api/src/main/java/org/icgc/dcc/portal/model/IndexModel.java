@@ -47,7 +47,7 @@ public class IndexModel {
   /**
    * Special cases for term lookups
    */
-  public static final String API_ENTITY_LIST_ID_FIELD_NAME = ENTITY_SET_ID;
+  public static final String API_ENTITY_SET_ID_FIELD_NAME = ENTITY_SET_ID;
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Getter
@@ -143,7 +143,7 @@ public class IndexModel {
   private static final ImmutableMap<String, String> REPOSITORY_FILE_FIELDS_MAPPING = ImmutableMap
       .<String, String> builder()
       .putAll(Maps.toMap(REPOSITORY_FILE_CLIENT_FIELD_ALIAS_MAPPING, alias -> REPO_FILE_TYPE_MODEL.getField(alias)))
-      .put(API_ENTITY_LIST_ID_FIELD_NAME, API_ENTITY_LIST_ID_FIELD_NAME)
+      .put(API_ENTITY_SET_ID_FIELD_NAME, API_ENTITY_SET_ID_FIELD_NAME)
       .build();
 
   private static final ImmutableMap<String, String> FAMILY_FIELDS_MAPPING =
@@ -361,7 +361,7 @@ public class IndexModel {
           .put("totalReadCount", "total_read_count")
           .put("variationCallingAlgorithm", "variation_calling_algorithm")
           .put("verificationStatus", "verification_status")
-          .put(API_ENTITY_LIST_ID_FIELD_NAME, API_ENTITY_LIST_ID_FIELD_NAME)
+          .put(API_ENTITY_SET_ID_FIELD_NAME, API_ENTITY_SET_ID_FIELD_NAME)
 
           .build();
 

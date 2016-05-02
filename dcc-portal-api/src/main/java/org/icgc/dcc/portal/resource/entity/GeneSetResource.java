@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.resource.set;
+package org.icgc.dcc.portal.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -44,7 +44,7 @@ import javax.ws.rs.QueryParam;
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.GeneSet;
 import org.icgc.dcc.portal.model.IdsParam;
-import org.icgc.dcc.portal.model.UploadedGeneList;
+import org.icgc.dcc.portal.model.UploadedGeneSet;
 import org.icgc.dcc.portal.repository.GeneRepository;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.GeneService;
@@ -100,7 +100,7 @@ public class GeneSetResource extends Resource {
   @Produces(APPLICATION_JSON)
   @Timed
   @ApiOperation(value = "Save a gene set")
-  public UploadedGeneList processGeneList(
+  public UploadedGeneSet processGeneList(
       @ApiParam(value = "The Ids to be saved as a Gene Set") @FormParam("geneIds") String geneIds,
       @ApiParam(value = "Validation") @QueryParam("validationOnly") @DefaultValue("false") boolean validationOnly) {
 
@@ -175,8 +175,8 @@ public class GeneSetResource extends Resource {
     return geneSet;
   }
 
-  private UploadedGeneList findGenesByIdentifiers(String data) {
-    val geneList = new UploadedGeneList();
+  private UploadedGeneSet findGenesByIdentifiers(String data) {
+    val geneSet = new UploadedGeneSet();
 
     val splitter = Splitter.on(GENE_DELIMITERS).omitEmptyStrings();
     val originalIds = ImmutableList.<String> copyOf(splitter.split(data));
@@ -184,9 +184,9 @@ public class GeneSetResource extends Resource {
 
     if (originalIds.size() > MAX_GENE_LIST_SIZE) {
       log.info("Exceeds maximum size {}", MAX_GENE_LIST_SIZE);
-      geneList.getWarnings().add(
+      geneSet.getWarnings().add(
           String.format("Input data exceeds maximum threshold of %s gene identifiers.", MAX_GENE_LIST_SIZE));
-      return geneList;
+      return geneSet;
     }
 
     for (val id : originalIds) {
@@ -206,18 +206,18 @@ public class GeneSetResource extends Resource {
           allMatchedIdentifiers.add(k.toLowerCase());
         }
 
-        geneList.getValidGenes().put(searchField, validResults.get(searchField));
+        geneSet.getValidGenes().put(searchField, validResults.get(searchField));
       }
     }
 
     // Construct valid and invalid gene matches
     for (val id : originalIds) {
       if (!allMatchedIdentifiers.contains(id.toLowerCase())) {
-        geneList.getInvalidGenes().add(id);
+        geneSet.getInvalidGenes().add(id);
       }
     }
 
-    return geneList;
+    return geneSet;
   }
 
 }

@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.analysis;
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.portal.model.Query.idField;
 import static org.icgc.dcc.portal.util.Filters.geneSetFilter;
-import static org.icgc.dcc.portal.util.Filters.inputGeneListFilter;
+import static org.icgc.dcc.portal.util.Filters.inputGeneSetFilter;
 
 import java.util.UUID;
 
@@ -45,7 +45,7 @@ public class EnrichmentQueries {
     // Components
     val queryFilter = query.getFilters();
     val universeFilter = universe.getFilter();
-    val analysisFilter = inputGeneListFilter(inputGeneListId);
+    val analysisFilter = inputGeneSetFilter(inputGeneListId);
 
     // Overlap
     // val filters = ImmutableList.of(queryFilter, universeFilter, analysisFilter);
@@ -73,7 +73,7 @@ public class EnrichmentQueries {
     // Components
     ObjectNode filters = query.getFilters().deepCopy();
     val universeFilter = universe.getFilter();
-    val analysisFilter = inputGeneListFilter(inputGeneListId);
+    val analysisFilter = inputGeneSetFilter(inputGeneListId);
     val geneSetFilter = geneSetFilter(geneSetId);
 
     // Merge everything into filters

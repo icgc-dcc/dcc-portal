@@ -53,10 +53,7 @@ public abstract class BaseEntitySet {
   @Getter
   public enum Type {
 
-    DONOR("donor"),
-    GENE("gene"),
-    MUTATION("mutation"),
-    FILE("file");
+    DONOR("donor"), GENE("gene"), MUTATION("mutation"), FILE("file");
 
     @NonNull
     private final String name;
@@ -76,7 +73,7 @@ public abstract class BaseEntitySet {
         return TermLookupType.FILE_IDS;
       }
 
-      log.error("No mapping for enum value '{}' of BaseEntityList.Type.", this);
+      log.error("No mapping for enum value '{}' of BaseEntitySet.Type.", this);
       throw new IllegalStateException("No mapping for enum value: " + this);
     }
 

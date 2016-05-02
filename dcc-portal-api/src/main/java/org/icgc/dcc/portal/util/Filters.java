@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.util;
 import static com.google.common.base.Preconditions.checkState;
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.portal.model.IndexModel.ALL;
-import static org.icgc.dcc.portal.model.IndexModel.API_ENTITY_LIST_ID_FIELD_NAME;
+import static org.icgc.dcc.portal.model.IndexModel.API_ENTITY_SET_ID_FIELD_NAME;
 import static org.icgc.dcc.portal.model.IndexModel.IS;
 import static org.icgc.dcc.portal.model.IndexModel.Kind.GENE;
 import static org.icgc.dcc.portal.util.JsonUtils.MAPPER;
@@ -103,18 +103,18 @@ public final class Filters {
     return geneFilter;
   }
 
-  public static ObjectNode inputGeneListIdFilter(@NonNull String inputGeneListId) {
+  public static ObjectNode inputGeneSetIdFilter(@NonNull String inputGeneSetId) {
     val geneFilter = geneFilter();
-    geneFilter.with("gene").put(API_ENTITY_LIST_ID_FIELD_NAME, is(inputGeneListId));
+    geneFilter.with("gene").put(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId));
 
     return geneFilter;
   }
 
-  public static ObjectNode inputGeneListFilter(@NonNull UUID inputGeneListId) {
-    val inputGeneListFilter = geneFilter();
-    inputGeneListFilter.with(GENE.getId()).put(API_ENTITY_LIST_ID_FIELD_NAME, is(inputGeneListId.toString()));
+  public static ObjectNode inputGeneSetFilter(@NonNull UUID inputGeneSetId) {
+    val inputGeneSetFilter = geneFilter();
+    inputGeneSetFilter.with(GENE.getId()).put(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId.toString()));
 
-    return inputGeneListFilter;
+    return inputGeneSetFilter;
   }
 
   public static ObjectNode is(@NonNull String value) {
@@ -152,9 +152,9 @@ public final class Filters {
 
   public static ObjectNode mergeAnalysisInputGeneList(@NonNull ObjectNode current, @NonNull ObjectNode genelist) {
     val result = current.deepCopy();
-    if (genelist.path("gene").path(API_ENTITY_LIST_ID_FIELD_NAME).isMissingNode() == false) {
-      val geneListId = genelist.path("gene").path(API_ENTITY_LIST_ID_FIELD_NAME).withArray(IS).get(0).asText();
-      result.with("gene").put(API_ENTITY_LIST_ID_FIELD_NAME, is(geneListId));
+    if (genelist.path("gene").path(API_ENTITY_SET_ID_FIELD_NAME).isMissingNode() == false) {
+      val geneListId = genelist.path("gene").path(API_ENTITY_SET_ID_FIELD_NAME).withArray(IS).get(0).asText();
+      result.with("gene").put(API_ENTITY_SET_ID_FIELD_NAME, is(geneListId));
     }
     return result;
   }

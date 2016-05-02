@@ -31,7 +31,7 @@ import lombok.Data;
 
 @Data
 @JsonInclude(Include.NON_NULL)
-public class UploadedGeneList {
+public class UploadedGeneSet {
 
   @JsonProperty
   Map<String, Multimap<String, Gene>> validGenes = Maps.<String, Multimap<String, Gene>> newHashMap();

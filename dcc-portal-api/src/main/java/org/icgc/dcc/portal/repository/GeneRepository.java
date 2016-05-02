@@ -34,7 +34,7 @@ import static org.icgc.dcc.portal.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.util.Filters.andFilter;
 import static org.icgc.dcc.portal.util.Filters.geneSetFilter;
-import static org.icgc.dcc.portal.util.Filters.inputGeneListFilter;
+import static org.icgc.dcc.portal.util.Filters.inputGeneSetFilter;
 import static org.icgc.dcc.portal.util.SearchResponses.hasHits;
 
 import java.util.LinkedHashMap;
@@ -157,12 +157,12 @@ public class GeneRepository implements Repository {
 
   public Map<String, String> findGeneSymbolsByGeneListIdAndGeneSetId(@NonNull UUID inputGeneListId,
       @NonNull String geneSetId) {
-    val filters = andFilter(geneSetFilter(geneSetId), inputGeneListFilter(inputGeneListId));
+    val filters = andFilter(geneSetFilter(geneSetId), inputGeneSetFilter(inputGeneListId));
     return findGeneSymbolsByFilters(filters);
   }
 
-  public Map<String, String> findGeneSymbolsByGeneListId(@NonNull UUID inputGeneListId) {
-    val filters = inputGeneListFilter(inputGeneListId);
+  public Map<String, String> findGeneSymbolsByGeneListId(@NonNull UUID inputGeneSetId) {
+    val filters = inputGeneSetFilter(inputGeneSetId);
     return findGeneSymbolsByFilters(filters);
   }
 

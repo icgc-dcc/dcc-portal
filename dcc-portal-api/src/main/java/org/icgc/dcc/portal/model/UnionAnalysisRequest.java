@@ -22,17 +22,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * Represents a request for set union analysis.
@@ -60,14 +60,14 @@ public class UnionAnalysisRequest {
 
   @JsonCreator
   public UnionAnalysisRequest(
-      @NonNull @JsonProperty(JsonPropertyName.lists) final Iterable<UUID> lists,
+      @NonNull @JsonProperty(JsonPropertyName.lists) final Iterable<UUID> sets,
       @NonNull @JsonProperty(JsonPropertyName.type) final BaseEntitySet.Type type) {
-    val uniqueItems = ImmutableSet.copyOf(lists);
+    val uniqueItems = ImmutableSet.copyOf(sets);
     val inputCount = uniqueItems.size();
 
     if (inputCount < REQUIRED_ELEMENT_COUNT) {
       throw new IllegalArgumentException(
-          "The entityLists argument must contain at least " +
+          "The '" + JsonPropertyName.lists + "' argument must contain at least " +
               REQUIRED_ELEMENT_COUNT +
               " unique elements.");
     }
