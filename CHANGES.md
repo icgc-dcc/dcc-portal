@@ -3,7 +3,7 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC 2.0 Portal
 
-4.0.x
+4.0.14
 --
   - Added iobio visualization for Collaboratory and AWS-Virginia hosted VCF files in File Repository. 
 
