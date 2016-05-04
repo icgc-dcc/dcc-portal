@@ -44,6 +44,9 @@
       if ($scope.type === 'mutation' && $scope.facetName === 'id') {
         return true;
       }
+      if ($scope.type === 'file' && $scope.facetName === 'id') {
+        return true;
+      }
       return $scope.type !== 'file' && $scope.facetName !== 'id';
     };
 
@@ -99,14 +102,16 @@
 
     function setup() {
       var type = $scope.proxyType || $scope.type,
+          facet = $scope.proxyFacetName || $scope.facetName,
           filters = FilterService.filters(),
           activeIds = [];
 
       _fetchNameForSelections ( filters.gene );
 
+
       $scope.actives = Facets.getActiveFromTags({
         type: type,
-        facet: $scope.proxyFacetName || $scope.facetName
+        facet: facet
       }, false);
       
       setActiveClass();

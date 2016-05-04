@@ -62,7 +62,7 @@
                     <td>{{item.name}}</td>
                     <td style="max-width: 30rem">{{item.description}}</td>
                     <td class="text-right" data-ng-if="item.state === 'FINISHED'">
-                        <a href="{{item.advLink}}">{{item.count | number}}</a>
+                        <a href="{{item.type ==='file' ? item.repoLink : item.advLink}}">{{item.count | number}}</a>
                     </td>
                     <td data-ng-if="item.state === 'FINISHED'">
                         <span style="float:left; font-size:1.25rem">
@@ -76,7 +76,7 @@
                               data-tooltip="View in {{:: SavedSetController.dataRepoTitle }}" href="{{item.repoLink}}">
                               <i class="icon-download-cloud"></i>
                             </a>
-                            <span data-tooltip="Share Saved Set">
+                            <span data-ng-if="item.type !== 'file'" data-tooltip="Share Saved Set">
                                 <share-icon data-custom-popup-disclaimer="" data-share-params="SavedSetController.getEntitySetShareParams(item)" class="t_tools__tool"></share-icon>
                             </span>
                         </span>

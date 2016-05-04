@@ -30,8 +30,8 @@ import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.IndexModel.Kind;
 import org.icgc.dcc.portal.model.IndexModel.Type;
-import org.icgc.dcc.portal.test.TestIndex;
 import org.icgc.dcc.portal.model.Query;
+import org.icgc.dcc.portal.test.TestIndex;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,7 +56,7 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
     es.execute(createIndexMapping(Type.PROJECT)
         .withData(bulkFile(getClass()))
         // This is needed because the ProjectRepository now does a 'secondary' search on icgc-repository index.
-        .withData(bulkFile("RepositoryFileServiceTest.json")));
+        .withData(MANIFEST_TEST_DATA));
 
     projectRepository =
         new ProjectRepository(es.client(), testIndex.getModel(), new QueryEngine(es.client(), testIndex.getName()));

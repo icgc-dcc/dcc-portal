@@ -21,9 +21,9 @@ import static lombok.AccessLevel.PRIVATE;
 import java.util.List;
 import java.util.Map;
 
-import lombok.NoArgsConstructor;
-
 import com.google.common.collect.ImmutableList;
+
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class ListUtils {

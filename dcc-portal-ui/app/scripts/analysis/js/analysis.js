@@ -90,7 +90,7 @@
     $scope.AnalysisService = AnalysisService;
 
     $scope.$watch(function () {
-      return $state.current.data.tab;
+      return $state.current.data && $state.current.data.tab;
     }, function () {
       $scope.currentTab = $state.current.data.tab || DEFAULT_SELECTED_TAB_CONSTANT;
     });

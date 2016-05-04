@@ -21,11 +21,11 @@ import static org.icgc.dcc.portal.util.JsonUtils.MAPPER;
 
 import java.net.URLDecoder;
 
-import lombok.SneakyThrows;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.yammer.dropwizard.jersey.params.AbstractParam;
+
+import lombok.SneakyThrows;
 
 @ApiModel(value = FiltersParam.EXTRA_DETAIL_FOR_DONOR_COUNT_FILTER_PARAM)
 public class FiltersParam extends AbstractParam<ObjectNode> {

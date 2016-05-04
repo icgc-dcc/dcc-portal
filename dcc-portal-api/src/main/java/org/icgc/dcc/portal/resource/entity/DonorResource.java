@@ -136,7 +136,7 @@ public class DonorResource extends Resource {
 
     log.info(FIND_ALL_TEMPLATE, new Object[] { size, DONOR, from, sort, order, filters });
 
-    val query = regularFindAllJqlQuery(fields, include, filters, from, size, sort, order);
+    val query = query(fields, include, filters, from, size, sort, order);
 
     return donorService.findAllCentric(query, facetsOnly);
   }
@@ -226,7 +226,7 @@ public class DonorResource extends Resource {
 
     log.info(NESTED_COUNT_TEMPLATE, GENE, donors);
 
-    val queries = generateQueries(filters, DONOR_FILTER_TEMPLATE, donors);
+    val queries = queries(filters, DONOR_FILTER_TEMPLATE, donors);
     val counts = geneService.counts(queries);
 
     // Get total Gene count using all Donors
@@ -272,7 +272,7 @@ public class DonorResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { MUTATION, donors, genes });
 
-    val queries = generateQueries(filters, GENE_DONOR_FILTER_TEMPLATE, genes, donors);
+    val queries = queries(filters, GENE_DONOR_FILTER_TEMPLATE, genes, donors);
     val counts = mutationService.nestedCounts(queries);
 
     // Get total Mutation count for each Donor using all Genes
@@ -343,7 +343,7 @@ public class DonorResource extends Resource {
 
     log.info(NESTED_COUNT_TEMPLATE, MUTATION, donors);
 
-    val queries = generateQueries(filters, DONOR_FILTER_TEMPLATE, donors);
+    val queries = queries(filters, DONOR_FILTER_TEMPLATE, donors);
     val counts = mutationService.counts(queries);
 
     // Get total Mutation count using all Donors
@@ -391,7 +391,7 @@ public class DonorResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { GENE, donors, mutations });
 
-    val queries = generateQueries(filters, MUTATION_DONOR_FILTER_TEMPLATE, mutations, donors);
+    val queries = queries(filters, MUTATION_DONOR_FILTER_TEMPLATE, mutations, donors);
     val counts = geneService.nestedCounts(queries);
 
     // Get total Gene count for each Donor using all Mutations

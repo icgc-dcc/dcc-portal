@@ -170,36 +170,36 @@
 
   });
 
-  module.controller('ExternalIobioController', 
+  module.controller('ExternalIobioController',
     function($scope, $document, $modalInstance, params) {
-    
+
     $scope.cancel = function() {
       $modalInstance.dismiss('cancel');
     };
-    
+
     $scope.$on('bamready.event', function() {
       $scope.bamId = params.fileObjectId;
       $scope.bamName = params.fileObjectName;
       $scope.bamFileName = params.fileName;
       $scope.$apply();
     });
-    
+
   });
 
-  module.controller('ExternalVcfIobioController', 
+  module.controller('ExternalVcfIobioController',
     function($scope, $document, $modalInstance, params) {
-    
+
     $scope.cancel = function() {
       $modalInstance.dismiss('cancel');
     };
-    
+
     $scope.$on('bamready.event', function() {
       $scope.vcfId = params.fileObjectId;
       $scope.vcfName = params.fileObjectName;
       $scope.vcfFileName = params.fileName;
       $scope.$apply();
     });
-    
+
   });
 
   module.controller('ExternalFileDownloadController',
@@ -264,12 +264,12 @@
       }
       $scope.cancel();
     };
-    
+
     $scope.createManifestId = function (repoName, repoData) {
-      
+
       repoData.isGeneratingManifestID = true;
       repoData.manifestID = false;
-      
+
       var selectedFiles = $scope.selectedFiles;
       var filters = FilterService.filters();
 
@@ -292,12 +292,12 @@
         }
         repoData.isGeneratingManifestID = false;
         repoData.manifestID = data.id;
-       
+
      });
     };
 
   });
-  
+
   /**
    * Controller for File Entity page
    */
@@ -316,7 +316,7 @@
       });
     }
     refresh();
-    
+
     this.vcfIobio = PortalFeature.get('VCF_IOBIO');
 
     this.fileInfo = fileInfo;
@@ -354,11 +354,11 @@
     function isGnos (repoType) {
       return equalsIgnoringCase (repoType, 'GNOS');
     }
-    
+
     function isCollab (repoCode) {
       return equalsIgnoringCase (repoCode, 'collaboratory');
     }
-    
+
     function isEGA (repoType) {
       return equalsIgnoringCase (repoType, 'EGA');
     }
@@ -415,7 +415,7 @@
 
     this.translateCountryCode = CodeTable.translateCountryCode;
     this.countryName = CodeTable.countryName;
-    
+
     this.awsOrCollab = function(fileCopies) {
        return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
          _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
@@ -449,7 +449,7 @@
     _ctrl.dataRepoTitle = dataRepoTitle;
     _ctrl.dataRepoFileUrl = RouteInfoService.get ('dataRepositoryFile').href;
     _ctrl.advancedSearchInfo = RouteInfoService.get ('advancedSearch');
-
+    _ctrl.fileSets = PortalFeature.get('FILE_SETS');
     _ctrl.vcfIobio = PortalFeature.get('VCF_IOBIO');
 
     function toSummarizedString (values, name) {
@@ -549,12 +549,12 @@
     _ctrl.repoNamesInTooltip = function (fileCopies) {
       return tooltipList (fileCopies, 'repoName', '');
     };
-    
+
     _ctrl.awsOrCollab = function(fileCopies) {
        return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
          _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
     };
-    
+
     _ctrl.getAwsOrCollabFileName = function(fileCopies) {
       try {
         var fCopies = _.filter(fileCopies, function(fCopy) {
@@ -637,6 +637,36 @@
           },
           setUnion: function() {
             return undefined;
+          },
+          selectedIds: function() {
+            return undefined;
+          }
+        }
+      });
+    };
+
+    /**
+     * Save a file set from files
+     */
+    _ctrl.saveFileSet = function (type, limit) {
+      _ctrl.setLimit = limit;
+      _ctrl.setType = type;
+
+      $modal.open ({
+        templateUrl: '/scripts/sets/views/sets.upload.external.html',
+        controller: 'SetUploadController',
+        resolve: {
+          setType: function() {
+            return _ctrl.setType;
+          },
+          setLimit: function() {
+            return _ctrl.setLimit;
+          },
+          setUnion: function() {
+            return undefined;
+          },
+          selectedIds: function() {
+            return _ctrl.selectedFiles;
           }
         }
       });
@@ -659,7 +689,7 @@
         }
       });
     };
-    
+
     _ctrl.showIobioModal = function(objectId, objectName, name) {
       var fileObjectId = objectId;
       var fileObjectName = objectName;
@@ -681,10 +711,10 @@
         }
       }).opened.then(function() {
         setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
-        
+
       });
     };
-    
+
     _ctrl.showVcfIobioModal = function(objectId, objectName, name) {
       var fileObjectId = objectId;
       var fileObjectName = objectName;
@@ -705,7 +735,7 @@
           }
         }
       }).opened.then(function() {
-        setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);      
+        setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
       });
     };
 
@@ -802,7 +832,7 @@
     }
 
     refresh();
-    
+
     // Pagination watcher, gets destroyed with scope.
     $scope.$watch(function() {
         return JSON.stringify(LocationService.search('files'));

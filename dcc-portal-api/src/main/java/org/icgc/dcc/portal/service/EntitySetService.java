@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
-import javax.validation.constraints.Min;
 
 import org.dcc.portal.pql.meta.Type;
 import org.dcc.portal.pql.query.QueryEngine;
@@ -58,7 +57,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvListWriter;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.google.common.collect.ImmutableList;
 
@@ -93,20 +91,19 @@ public class EntitySetService {
   private final UnionAnalyzer analyzer;
   @NonNull
   private final PortalProperties properties;
-
+  @NonNull
   private final QueryEngine queryEngine;
+
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
 
   /**
    * Configuration.
    */
-  @Min(1)
   private int maxNumberOfHits;
-  @Min(1)
   private int maxMultiplier;
-  @Min(1)
   private int maxUnionCount;
-  @Min(1)
+  // TODO: Either use this or loose this!
+  @SuppressWarnings("unused")
   private int maxPreviewNumberOfHits;
 
   @Getter(lazy = true, value = PRIVATE)
@@ -156,20 +153,25 @@ public class EntitySetService {
     return newEntitySet;
   }
 
-  public void exportListItems(@NonNull EntitySet entitySet, @NonNull OutputStream outputStream) throws IOException {
+  public List<String> getSetItems(@NonNull EntitySet entitySet) {
+    // TODO: This method should be moved to this class
+    return analyzer.retriveListItems(entitySet);
+  }
+
+  public void exportSetItems(@NonNull EntitySet entitySet, @NonNull OutputStream outputStream) throws IOException {
+    // TODO: Explain why this distinction is needed
     val isGeneType = BaseEntitySet.Type.GENE == entitySet.getType();
-    val content =
+    val records =
         isGeneType ? convertToListOfListForGene(
             analyzer.retrieveGeneIdsAndSymbolsByListId(entitySet.getId())) : convertToListOfList(
                 analyzer.retriveListItems(entitySet));
 
     @Cleanup
     val writer = new CsvListWriter(new OutputStreamWriter(outputStream), TAB_PREFERENCE);
-
-    for (val v : content) {
-      writer.write(v);
+    for (val record : records) {
+      writer.write(record);
     }
-
+    // This should already be done by @Cleanup. Not sure why it is here...
     writer.flush();
   }
 
@@ -249,8 +251,12 @@ public class EntitySetService {
     val entityIds = repositoryFileRepository.findAllFileIds(query);
     val lookupType = entitySet.getType().toLookupType();
 
-    val repoList = (ArrayNode) entitySet.getFilters().path("file").path("repoName").path("is");
-    termsLookupRepository.createTermsLookup(lookupType, newEntityId, entityIds, repoList.get(0).asText());
+    val repoList = entitySet.getFilters().path("file").path("repoName").path("is");
+    if (repoList.isArray()) {
+      termsLookupRepository.createTermsLookup(lookupType, newEntityId, entityIds, repoList.get(0).asText());
+    } else {
+      termsLookupRepository.createTermsLookup(lookupType, newEntityId, entityIds);
+    }
 
     val count = entityIds.size();
     entitySetRepository.update(newEntity.updateStateToFinished(count), dataVersion);

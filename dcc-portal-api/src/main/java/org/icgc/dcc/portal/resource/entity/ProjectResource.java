@@ -236,7 +236,7 @@ public class ProjectResource extends Resource {
 
     log.info(NESTED_COUNT_TEMPLATE, DONOR, projects);
 
-    val queries = generateQueries(filters, PROJECT_FILTER_TEMPLATE, projects);
+    val queries = queries(filters, PROJECT_FILTER_TEMPLATE, projects);
     val counts = donorService.counts(queries);
 
     // Get total Donor count using all Projects
@@ -279,7 +279,7 @@ public class ProjectResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { GENE, projects, donors });
 
-    val queries = generateQueries(filters, DONOR_PROJECT_FILTER_TEMPLATE, donors, projects);
+    val queries = queries(filters, DONOR_PROJECT_FILTER_TEMPLATE, donors, projects);
     val counts = geneService.nestedCounts(queries);
 
     // Get total Gene count for each Project using all Donors
@@ -324,7 +324,7 @@ public class ProjectResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { MUTATION, projects, donors });
 
-    val queries = generateQueries(filters, DONOR_PROJECT_FILTER_TEMPLATE, donors, projects);
+    val queries = queries(filters, DONOR_PROJECT_FILTER_TEMPLATE, donors, projects);
     val counts = mutationService.nestedCounts(queries);
 
     // Get total Mutation count for each Project using all Donors
@@ -411,7 +411,7 @@ public class ProjectResource extends Resource {
 
     log.info(NESTED_COUNT_TEMPLATE, GENE, projects);
 
-    val queries = generateQueries(filters, PROJECT_FILTER_TEMPLATE, projects);
+    val queries = queries(filters, PROJECT_FILTER_TEMPLATE, projects);
     val counts = geneService.counts(queries);
 
     // Get total Gene count using all Projects
@@ -455,7 +455,7 @@ public class ProjectResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { MUTATION, projects, genes });
 
-    val queries = generateQueries(filters, GENE_PROJECT_FILTER_TEMPLATE, genes, projects);
+    val queries = queries(filters, GENE_PROJECT_FILTER_TEMPLATE, genes, projects);
     val counts = mutationService.nestedCounts(queries);
 
     // Get total Mutation count for each Project using all Genes
@@ -500,7 +500,7 @@ public class ProjectResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { DONOR, projects, genes });
 
-    val queries = generateQueries(filters, GENE_PROJECT_FILTER_TEMPLATE, genes, projects);
+    val queries = queries(filters, GENE_PROJECT_FILTER_TEMPLATE, genes, projects);
     val counts = donorService.nestedCounts(queries);
 
     // Get total Donor count for each Project using all Genes
@@ -567,7 +567,7 @@ public class ProjectResource extends Resource {
 
     log.info(NESTED_COUNT_TEMPLATE, MUTATION, projects);
 
-    val queries = generateQueries(filters, PROJECT_FILTER_TEMPLATE, projects);
+    val queries = queries(filters, PROJECT_FILTER_TEMPLATE, projects);
     val counts = mutationService.counts(queries);
 
     // Get total Mutation count using all Projects
@@ -612,7 +612,7 @@ public class ProjectResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { DONOR, projects, mutations });
 
-    val queries = generateQueries(filters, MUTATION_PROJECT_FILTER_TEMPLATE, mutations, projects);
+    val queries = queries(filters, MUTATION_PROJECT_FILTER_TEMPLATE, mutations, projects);
     val counts = donorService.nestedCounts(queries);
 
     // Get total Donor count for each Project using all Mutations
@@ -658,7 +658,7 @@ public class ProjectResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { GENE, projects, mutations });
 
-    val queries = generateQueries(filters, MUTATION_PROJECT_FILTER_TEMPLATE, mutations, projects);
+    val queries = queries(filters, MUTATION_PROJECT_FILTER_TEMPLATE, mutations, projects);
     val counts = geneService.nestedCounts(queries);
 
     // Get total Gene count for each Project using all Mutations

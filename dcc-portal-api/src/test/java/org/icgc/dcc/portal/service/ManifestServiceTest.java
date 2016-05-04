@@ -67,9 +67,9 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 /**
- * Test suite for RepositoryFileService
+ * Test suite for {@link ManifestService}.
  */
-public class RepositoryFileServiceTest extends BaseElasticSearchTest {
+public class ManifestServiceTest extends BaseElasticSearchTest {
 
   private static final SMInputFactory XML_READER_FACTORY = new SMInputFactory(XMLInputFactory.newInstance());
   private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
@@ -81,10 +81,10 @@ public class RepositoryFileServiceTest extends BaseElasticSearchTest {
 
   private static final String TERMS_LOOKUP = "terms-lookup";
 
-  /*
+  /**
    * We only have two documents in the test index. See this file for details:
-   * /dcc-portal/dcc-portal-api/src/test/resources/fixtures/RepositoryFileServiceTest.json The following expected values
-   * come from the file. Update the values here if the fixture file is changed.
+   * {@link BaseElasticSearchTest.MANIFEST_TEST_DATA}. The following expected values come from the file. Update the
+   * values here if the fixture file is changed.
    */
   private final static class ExpectedValues {
 
@@ -109,7 +109,7 @@ public class RepositoryFileServiceTest extends BaseElasticSearchTest {
 
   }
 
-  private RepositoryFileService service;
+  private ManifestService service;
 
   @Rule
   public TemporaryFolder temp = new TemporaryFolder();
@@ -122,7 +122,7 @@ public class RepositoryFileServiceTest extends BaseElasticSearchTest {
     es.execute(createIndexMapping(Type.REPOSITORY_FILE_CENTRIC)
         .withData(bulkFile(getClass())));
     service =
-        new RepositoryFileService(new RepositoryFileRepository(es.client(), testIndex.getName(), new IndexService()),
+        new ManifestService(new RepositoryFileRepository(es.client(), testIndex.getName(), new IndexService()),
             new TermsLookupRepository(es.client(), TERMS_LOOKUP, testIndex.getName(), new PortalProperties()));
   }
 

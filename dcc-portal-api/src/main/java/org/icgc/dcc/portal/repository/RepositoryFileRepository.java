@@ -59,6 +59,7 @@ import static org.icgc.dcc.portal.model.IndexModel.MAX_FACET_TERM_COUNT;
 import static org.icgc.dcc.portal.model.IndexModel.MISSING;
 import static org.icgc.dcc.portal.model.SearchFieldMapper.searchFieldMapper;
 import static org.icgc.dcc.portal.model.TermFacet.repoTermFacet;
+import static org.icgc.dcc.portal.pql.convert.FiltersConverter.ENTITY_SET_PREFIX;
 import static org.icgc.dcc.portal.repository.TermsLookupRepository.createTermsLookupFilter;
 import static org.icgc.dcc.portal.repository.TermsLookupRepository.TermLookupType.DONOR_IDS;
 import static org.icgc.dcc.portal.repository.TermsLookupRepository.TermLookupType.FILE_IDS;
@@ -118,6 +119,7 @@ import org.icgc.dcc.portal.model.SearchFieldMapper;
 import org.icgc.dcc.portal.model.TermFacet;
 import org.icgc.dcc.portal.model.TermFacet.Term;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
+import org.icgc.dcc.portal.repository.TermsLookupRepository.TermLookupType;
 import org.icgc.dcc.portal.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -125,6 +127,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
@@ -233,6 +236,45 @@ public class RepositoryFileRepository {
       if (fieldAlias.equals(ENTITY_SET_ID)) {
         // The assumption here is there should be only one "entitySetId" filter in JQL.
         entitySetIdFilter = buildEntitySetIdFilter(filterValues);
+      } else if (fieldAlias.equals(Fields.ID)) {
+        // Prepare for processing two types of file ids
+        val uuids = Lists.<String> newArrayList();
+        val ids = Lists.<String> newArrayList();
+
+        // Partition and parse
+        for (val id : filterValues) {
+          if (id.startsWith(ENTITY_SET_PREFIX)) {
+            val uuid = id.substring(ENTITY_SET_PREFIX.length());
+            uuids.add(uuid);
+          } else {
+            ids.add(id);
+          }
+        }
+
+        // Normal ids
+        BoolFilterBuilder idFilter = null;
+        if (!ids.isEmpty()) {
+          idFilter = missingInclusiveTermsFilter(fieldAlias, ids);
+        }
+
+        // Entity set ids
+        BoolFilterBuilder uuidFilter = null;
+        if (!uuids.isEmpty()) {
+          uuidFilter = boolFilter();
+          for (val uuid : uuids) {
+            uuidFilter.should(
+                createTermsLookupFilter(toRawFieldName(fieldAlias), TermLookupType.FILE_IDS, UUID.fromString(uuid)));
+          }
+        }
+
+        // Combine
+        if (idFilter != null && uuidFilter != null) {
+          result.should(idFilter).should(uuidFilter);
+        } else if (idFilter != null) {
+          result.must(idFilter);
+        } else if (uuidFilter != null) {
+          result.must(uuidFilter);
+        }
       } else {
         val filter = missingInclusiveTermsFilter(fieldAlias, filterValues);
 

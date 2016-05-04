@@ -19,16 +19,10 @@ package org.icgc.dcc.portal.resource.entity;
 
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
 import static com.sun.jersey.core.header.ContentDisposition.type;
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.ok;
-import static org.icgc.dcc.common.core.util.Splitters.COMMA;
 import static org.icgc.dcc.portal.resource.Resources.API_FIELD_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_FIELD_VALUE;
-import static org.icgc.dcc.portal.resource.Resources.API_FILE_IDS_PARAM;
-import static org.icgc.dcc.portal.resource.Resources.API_FILE_IDS_VALUE;
-import static org.icgc.dcc.portal.resource.Resources.API_FILE_REPOS_PARAM;
-import static org.icgc.dcc.portal.resource.Resources.API_FILE_REPOS_VALUE;
 import static org.icgc.dcc.portal.resource.Resources.API_FILTER_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_FILTER_VALUE;
 import static org.icgc.dcc.portal.resource.Resources.API_FROM_PARAM;
@@ -43,7 +37,6 @@ import static org.icgc.dcc.portal.resource.Resources.API_SIZE_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_SIZE_VALUE;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_FIELD;
 import static org.icgc.dcc.portal.resource.Resources.API_SORT_VALUE;
-import static org.icgc.dcc.portal.util.MediaTypes.GZIP;
 import static org.icgc.dcc.portal.util.MediaTypes.TEXT_TSV;
 
 import java.text.SimpleDateFormat;
@@ -51,28 +44,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
+import javax.ws.rs.core.UriBuilder;
 
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.RepositoryFile;
 import org.icgc.dcc.portal.model.RepositoryFiles;
 import org.icgc.dcc.portal.resource.Resource;
+import org.icgc.dcc.portal.resource.core.ManifestResource;
 import org.icgc.dcc.portal.service.RepositoryFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -92,10 +83,24 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class RepositoryFileResource extends Resource {
 
-  private static final String API_PATH_MANIFEST = "/manifest";
+  /**
+   * Constants.
+   */
   private static final String TYPE_ATTACHMENT = "attachment";
 
+  /**
+   * Dependencies.
+   */
+  @NonNull
   private final RepositoryFileService repositoryFileService;
+
+  @Path("/manifest/{setId}")
+  @GET
+  public Response legacyManifest(@ApiParam(value = "Set Id", required = true) @PathParam("setId") String setId) {
+    // For backwards compatibility for use with ICGC Storage Client
+    val uri = UriBuilder.fromResource(ManifestResource.class).path(setId).build();
+    return Response.seeOther(uri).build();
+  }
 
   @Path("/{fileId}")
   @GET
@@ -194,70 +199,6 @@ public class RepositoryFileResource extends Resource {
   }
 
   @GET
-  @Path("/manifests/{setId}")
-  @Produces(TEXT_TSV)
-  public Response getManifestFromSet(@ApiParam(value = "Set Id", required = true) @PathParam("setId") String setId) {
-    val timestamp = new Date();
-
-    final StreamingOutput outputGenerator =
-        (outputStream) -> repositoryFileService.generateManifestFileFromSet(outputStream, timestamp, setId);
-    val attachmentType = type(TYPE_ATTACHMENT)
-        .fileName(manifestFileName(setId, timestamp))
-        .creationDate(timestamp)
-        .modificationDate(timestamp)
-        .build();
-
-    return ok(outputGenerator)
-        .header(CONTENT_DISPOSITION, attachmentType)
-        .build();
-  }
-
-  @GET
-  @Path(API_PATH_MANIFEST)
-  @Produces(GZIP)
-  @Timed
-  @ApiOperation(value = "Generate a tar.gz archive containing the manifests of matching repository files.")
-  public Response generateManifestArchiveByFilters(
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
-      @ApiParam(value = API_FILE_REPOS_VALUE) @QueryParam(API_FILE_REPOS_PARAM) @DefaultValue("") String repoList) {
-    log.info("filtersParam is: '{}' AND repoList is: '{}'.", filtersParam, repoList);
-
-    val timestamp = new Date();
-    final StreamingOutput outputGenerator = outputStream -> repositoryFileService.generateManifestArchive(
-        outputStream,
-        timestamp,
-        toQuery(filtersParam),
-        COMMA.splitToList(repoList));
-    val attechmentType = type(TYPE_ATTACHMENT)
-        .fileName(manifestArchiveFileName(timestamp))
-        .creationDate(timestamp)
-        .modificationDate(timestamp)
-        .build();
-
-    return ok(outputGenerator)
-        .header(CONTENT_DISPOSITION, attechmentType)
-        .build();
-  }
-
-  @POST
-  @Path(API_PATH_MANIFEST)
-  @Consumes(APPLICATION_FORM_URLENCODED)
-  @Timed
-  @ApiOperation(value = "Generate a tar.gz archive containing the manifests of selected repository files.")
-  public Response generateManifestArchiveByIdList(
-      @ApiParam(value = API_FILE_IDS_VALUE) @FormParam(API_FILE_IDS_PARAM) List<String> fileIds,
-      @ApiParam(value = API_FILE_REPOS_VALUE) @FormParam(API_FILE_REPOS_PARAM) String repoList) {
-    checkRequest(null == fileIds,
-        "Form field, '%s', is missing in the POST payload.", API_FILE_IDS_PARAM);
-    checkRequest(fileIds.isEmpty(),
-        "Form field, '%s', must contain a list of repository file IDs.", API_FILE_IDS_PARAM);
-
-    val filter = buildFileIdListFilterParam(fileIds);
-    return generateManifestArchiveByFilters(new FiltersParam(filter),
-        null == repoList ? "" : repoList);
-  }
-
-  @GET
   @Path("/pcawg/stats")
   @Timed
   @ApiOperation(value = "Get pancancer repositories statistics")
@@ -283,39 +224,10 @@ public class RepositoryFileResource extends Resource {
     return repositoryFileService.getRepoStats(repoCode);
   }
 
-  @NonNull
   private static Query toQuery(FiltersParam filters) {
     return query()
         .filters(filters.get())
         .build();
-  }
-
-  @NonNull
-  private static String manifestArchiveFileName(Date timestamp) {
-    return "manifest." + timestamp.getTime() + ".tar.gz";
-  }
-
-  @NonNull
-  private static String manifestFileName(String repoCode, Date timestamp) {
-    return "manifest." + repoCode + "." + timestamp.getTime() + ".txt";
-  }
-
-  private static String buildFileIdListFilterParam(@NonNull List<String> fileIds) {
-    val nodeFactory = new JsonNodeFactory(false);
-    val root = nodeFactory.objectNode();
-
-    // Build an ObjectNode to represent this filter: {"file": "id": {"is": ["id1", "id2", ...]}
-    val file = nodeFactory.objectNode();
-    root.put("file", file);
-
-    val id = nodeFactory.objectNode();
-    file.put("id", id);
-
-    val idArray = nodeFactory.arrayNode();
-    fileIds.stream().forEach(fileId -> idArray.add(fileId));
-    id.put("is", idArray);
-
-    return root.toString();
   }
 
 }

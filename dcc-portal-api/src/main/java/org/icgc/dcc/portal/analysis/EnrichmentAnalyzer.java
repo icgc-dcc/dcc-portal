@@ -18,7 +18,7 @@
 package org.icgc.dcc.portal.analysis;
 
 import static com.google.common.base.Stopwatch.createStarted;
-import static org.icgc.dcc.common.core.util.FormatUtils.formatCount;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 import static org.icgc.dcc.portal.analysis.EnrichmentAnalyses.adjustRawGeneSetResults;
 import static org.icgc.dcc.portal.analysis.EnrichmentAnalyses.calculateExpectedGeneCount;
 import static org.icgc.dcc.portal.analysis.EnrichmentAnalyses.calculateGeneCountPValue;

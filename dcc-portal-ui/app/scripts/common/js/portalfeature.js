@@ -17,9 +17,9 @@
 
 (function() {
     'use strict';
-    
+
     function PortalFeatureConstructor(features, $state, LocationService, Settings) {
-      
+
 
       function _enable(feature) {
         if (features.hasOwnProperty(feature) === false) { return; }
@@ -37,7 +37,7 @@
         }
       }
 
-  
+
       function init(settingsJson) {
         for (var featureName in settingsJson.featureFlags) {
           if (settingsJson.featureFlags[featureName] === true) {
@@ -54,7 +54,7 @@
             _enable(feature.trim());
           });
         }
-        
+
       }
 
       Settings.get().then(init);
@@ -92,13 +92,14 @@
           ICGC_CLOUD: true,
           SOFTWARE_PAGE: true,
           NOT_FACET: false,
-          VCF_IOBIO: false
+          VCF_IOBIO: false,
+          FILE_SETS: false
        };
 
       this.hasFeature = function(featureID) {
         return _.get(_enabledFeatures, featureID, false);
       };
-      
+
       this.$get = ['$state', 'LocationService', 'Settings', function($state, LocationService, Settings) {
           return new PortalFeatureConstructor(_enabledFeatures, $state, LocationService, Settings);
       }];

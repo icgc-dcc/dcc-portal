@@ -383,8 +383,9 @@
           // Grab the type (base advanced search router and corresponding filters)
           set.advType = set.type.charAt(0); // route is '/search' plus either '/g' or '/m'
           set.advLink = '/search/' +  set.advType + '?filters=' + JSON.stringify(filters);
-        }
-        else {
+        } else if (['file'].indexOf(set.type) !== -1) {
+          set.repoLink = dataRepoUrl + '?filters=' + JSON.stringify(filters);
+        } else {
           set.advLink = '/search?filters=' + JSON.stringify(filters);
           var fileFilters = {};
           fileFilters.file = {};

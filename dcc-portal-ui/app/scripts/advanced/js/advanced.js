@@ -399,6 +399,9 @@ angular.module('icgc.advanced.controllers', [
             },
             setUnion: function() {
               return undefined;
+            },
+            selectedIds: function() {
+              return undefined;
             }
           }
         });

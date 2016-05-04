@@ -138,7 +138,7 @@ public class MutationResource extends Resource {
 
     log.info(FIND_ALL_TEMPLATE, new Object[] { size, MUTATION, from, sort, order, filters });
 
-    val query = regularFindAllJqlQuery(fields, include, filters, from, size, sort, order);
+    val query = query(fields, include, filters, from, size, sort, order);
 
     return mutationService.findAllCentric(query, facetsOnly);
   }
@@ -229,7 +229,7 @@ public class MutationResource extends Resource {
 
     log.info(NESTED_COUNT_TEMPLATE, DONOR, mutations);
 
-    val queries = generateQueries(filters, MUTATION_FILTER_TEMPLATE, mutations);
+    val queries = queries(filters, MUTATION_FILTER_TEMPLATE, mutations);
     val counts = donorService.counts(queries);
 
     // Get total Donor count using all Mutations
@@ -300,7 +300,7 @@ public class MutationResource extends Resource {
 
     log.info(NESTED_COUNT_TEMPLATE, GENE, mutations);
 
-    val queries = generateQueries(filters, MUTATION_FILTER_TEMPLATE, mutations);
+    val queries = queries(filters, MUTATION_FILTER_TEMPLATE, mutations);
     val counts = geneService.counts(queries);
 
     // Get total Gene count using all Mutations
@@ -347,7 +347,7 @@ public class MutationResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { DONOR, mutations, genes });
 
-    val queries = generateQueries(filters, GENE_MUTATION_FILTER_TEMPLATE, genes, mutations);
+    val queries = queries(filters, GENE_MUTATION_FILTER_TEMPLATE, genes, mutations);
     val counts = donorService.nestedCounts(queries);
 
     // Get total Donor count for each Mutation using all Genes
@@ -398,7 +398,7 @@ public class MutationResource extends Resource {
 
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { DONOR, mutations, projects });
 
-    val queries = generateQueries(filters, PROJECT_MUTATION_FILTER_TEMPLATE, projects, mutations);
+    val queries = queries(filters, PROJECT_MUTATION_FILTER_TEMPLATE, projects, mutations);
     val counts = donorService.nestedCounts(queries);
 
     // Get total Donor count for each Mutation using all Genes

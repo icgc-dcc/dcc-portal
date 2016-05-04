@@ -33,7 +33,8 @@
   var module = angular.module('icgc.sets.controllers', []);
 
   module.controller('SetUploadController',
-    function($scope, $modalInstance, LocationService, SetService, Settings, setType, setLimit, setUnion) {
+    function($scope, $modalInstance, LocationService, SetService, Settings, 
+               setType, setLimit, setUnion, selectedIds) {
 
     $scope.setLimit = setLimit;
     $scope.isValid = true;
@@ -47,6 +48,7 @@
     $scope.params.setLimit  = setLimit;
     $scope.params.setSize = 0;
     $scope.params.setUnion = setUnion;
+    $scope.params.selectedIds = selectedIds;
 
 
     /**
@@ -99,6 +101,12 @@
 
       if (angular.isDefined($scope.params.setLimit)) {
         params.filters = LocationService.filters();
+
+        if (! _.isEmpty ( $scope.params.selectedIds)) {
+          // Only used for files
+          _.set (params.filters, 'file.id.is',  $scope.params.selectedIds);
+        }
+        
         sortParam = LocationService.getJsonParam($scope.setType + 's');
       }
 

@@ -20,23 +20,20 @@ package org.icgc.dcc.portal.resource;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
-import static org.icgc.dcc.common.core.util.Joiners.COMMA;
-import static org.icgc.dcc.portal.util.ListUtils.mapList;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.validation.Validation;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHitField;
+import org.icgc.dcc.common.core.json.JsonNodeBuilders.ObjectNodeBuilder;
+import org.icgc.dcc.common.core.util.Joiners;
+import org.icgc.dcc.common.core.util.Splitters;
 import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Query.QueryBuilder;
@@ -46,6 +43,7 @@ import org.icgc.dcc.portal.util.JsonUtils;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
@@ -92,11 +90,11 @@ public abstract class Resource {
   /**
    * Other constants.
    */
-  private static final Joiner COMMA_JOINER = COMMA.skipNulls();
-  private static final List<String> EMPTY_VALUES = newArrayList("", null);
+  protected static final Joiner COMMA_JOINER = Joiners.COMMA.skipNulls();
+  protected static final Splitter COMMA_SPLITTER = Splitters.COMMA.omitEmptyStrings().trimResults();
 
   /**
-   * JAX-RS uri information for building mutation links.
+   * JAX-RS URI information for building mutation links.
    */
   @Context
   protected UriInfo uriInfo;
@@ -113,45 +111,6 @@ public abstract class Resource {
         .path(MutationResource.class)
         .path(mutationId)
         .build();
-  }
-
-  /**
-   * Returns the total matching count independent of paging.
-   * 
-   * @param response - the search results
-   * @return the total matching count
-   */
-  protected static long count(SearchResponse response) {
-    return response.getHits().totalHits();
-  }
-
-  /**
-   * Utility method.
-   * 
-   * @param hit
-   * @param fieldName
-   * @return
-   */
-  protected static Object field(SearchHit hit, String fieldName) {
-    return hit.field(fieldName).value();
-  }
-
-  /**
-   * Utility method to access a search hit partial field in a type safe manner.
-   * 
-   * @param hit - the search hit
-   * @param fieldName - the partial field name
-   * @return
-   */
-  protected static List<Map<String, Object>> partialField(SearchHit hit, String fieldName) {
-    SearchHitField field = hit.field(fieldName);
-    if (field == null) {
-      return null;
-    }
-
-    Map<String, Object> value = field.value();
-
-    return mapList(value.get(fieldName));
   }
 
   /**
@@ -183,7 +142,42 @@ public abstract class Resource {
     return ImmutableMap.<String, Object> builder();
   }
 
-  protected static LinkedHashMap<String, Query> generateQueries(ObjectNode filters, String filterTemplate,
+  protected static FiltersParam filtersParam(ObjectNode objectNode) {
+    return new FiltersParam(objectNode.toString());
+  }
+
+  protected static FiltersParam filtersParam(ObjectNodeBuilder builder) {
+    return filtersParam(builder.end());
+  }
+
+  protected static ObjectNode mergeFilters(ObjectNode filters, String template, Object... objects) {
+    return JsonUtils.merge(filters, (new FiltersParam(String.format(template, objects)).get()));
+  }
+
+  protected static QueryBuilder query() {
+    return Query.builder();
+  }
+
+  protected static Query query(FiltersParam filters) {
+    return query().filters(filters.get()).build();
+  }
+
+  protected static Query query(List<String> fields, List<String> include, ObjectNode filters,
+      IntParam from, IntParam size, String sort, String order) {
+    val query = query()
+        .fields(fields).filters(filters)
+        .from(from.get()).size(size.get())
+        .sort(sort).order(order);
+
+    clean(include);
+    if (!include.isEmpty()) {
+      query.includes(include);
+    }
+
+    return query.build();
+  }
+
+  protected static LinkedHashMap<String, Query> queries(ObjectNode filters, String filterTemplate,
       List<String> ids) {
     val queries = Maps.<String, Query> newLinkedHashMap();
 
@@ -194,7 +188,7 @@ public abstract class Resource {
     return queries;
   }
 
-  protected static LinkedHashMap<String, Query> generateQueries(ObjectNode filters, String filterTemplate,
+  protected static LinkedHashMap<String, Query> queries(ObjectNode filters, String filterTemplate,
       List<String> ids,
       String anchorId) {
     val queries = Maps.<String, Query> newLinkedHashMap();
@@ -206,24 +200,17 @@ public abstract class Resource {
     return queries;
   }
 
-  protected static LinkedHashMap<String, LinkedHashMap<String, Query>> generateQueries(ObjectNode filters,
+  protected static LinkedHashMap<String, LinkedHashMap<String, Query>> queries(ObjectNode filters,
       String filterTemplate,
       List<String> ids,
       List<String> anchorIds) {
     val queries = Maps.<String, LinkedHashMap<String, Query>> newLinkedHashMap();
 
     for (String anchorId : anchorIds) {
-      queries.put(anchorId, generateQueries(filters, filterTemplate, ids, anchorId));
+      queries.put(anchorId, queries(filters, filterTemplate, ids, anchorId));
     }
+
     return queries;
-  }
-
-  protected static ObjectNode mergeFilters(ObjectNode filters, String template, Object... objects) {
-    return JsonUtils.merge(filters, (new FiltersParam(String.format(template, objects)).get()));
-  }
-
-  protected static QueryBuilder query() {
-    return Query.builder();
   }
 
   /**
@@ -263,29 +250,14 @@ public abstract class Resource {
     }
   }
 
-  protected static List<String> removeNullAndEmptyString(List<String> source) {
+  protected static List<String> clean(List<String> source) {
     if (isEmpty(source)) {
       return source;
     }
 
-    source.removeAll(EMPTY_VALUES);
+    source.removeAll(newArrayList("", null));
 
     return source;
-  }
-
-  protected static Query regularFindAllJqlQuery(List<String> fields, List<String> include, ObjectNode filters,
-      IntParam from, IntParam size, String sort, String order) {
-    val query = query()
-        .fields(fields).filters(filters)
-        .from(from.get()).size(size.get())
-        .sort(sort).order(order);
-
-    removeNullAndEmptyString(include);
-    if (!include.isEmpty()) {
-      query.includes(include);
-    }
-
-    return query.build();
   }
 
 }

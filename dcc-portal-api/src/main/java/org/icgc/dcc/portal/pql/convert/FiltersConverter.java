@@ -80,7 +80,7 @@ public class FiltersConverter {
   private static final String EXISTS_TEMPLATE = "exists(%s)";
   private static final String MISSING_TEMPLATE = "missing(%s)";
   private static final String NESTED_TEMPLATE = "nested(%s,%s)";
-  private static final String ENTITY_SET_PREFIX = "ES:";
+  public static final String ENTITY_SET_PREFIX = "ES:";
 
   private static final Ordering<String> NATURAL_ORDER = Ordering.<String> natural();
   private static final Joiner COMMA_JOINER = Joiners.COMMA.skipNulls();

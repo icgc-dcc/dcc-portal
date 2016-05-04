@@ -128,7 +128,7 @@ public class DrugResource extends Resource {
     for (val gene : geneIds) {
       val mergedFilter = mergeFilters(filtersParam.get(), GENE_FILTER_TEMPLATE, gene);
       val query =
-          regularFindAllJqlQuery(emptyList(), emptyList(), mergedFilter, new IntParam(DEFAULT_FROM), size, "", order);
+          query(emptyList(), emptyList(), mergedFilter, new IntParam(DEFAULT_FROM), size, "", order);
       queryMap.put(gene, query);
     }
 
@@ -160,7 +160,7 @@ public class DrugResource extends Resource {
 
     log.debug(FIND_ALL_TEMPLATE, new Object[] { size, DONOR, from, sort, order, filters });
 
-    val query = regularFindAllJqlQuery(fields, include, filters, from, size, sort, order);
+    val query = query(fields, include, filters, from, size, sort, order);
 
     return drugService.findAll(query);
   }

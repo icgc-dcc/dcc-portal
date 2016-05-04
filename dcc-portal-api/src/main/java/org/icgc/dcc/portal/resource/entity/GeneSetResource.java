@@ -147,7 +147,7 @@ public class GeneSetResource extends Resource {
 
     List<String> geneSets = geneSetIds.get();
 
-    val queries = generateQueries(filters, geneSetIdFilter, geneSets);
+    val queries = queries(filters, geneSetIdFilter, geneSets);
     val counts = geneService.counts(queries);
 
     filters = mergeFilters(filters, geneSetIdFilter, JsonUtils.join(geneSets));

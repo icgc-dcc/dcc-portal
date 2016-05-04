@@ -172,6 +172,9 @@ More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
             <div class="clearfix"></div>
 
             <span class="action-toolbar pull-right">
+              <span data-ng-if="ExternalRepoController.fileSets" class="action-item">
+                  <i class="icon-floppy"></i><a href="" data-ng-click="ExternalRepoController.saveFileSet('file', ExternalRepoController.summary.fileCount)">Save File Set</a>
+              </span>
               <span class="action-item">
                   <i class="icon-floppy"></i><a href="" data-ng-click="ExternalRepoController.saveDonorSet('donor', ExternalRepoController.summary.donorCount)">Save Donor Set</a>
               </span>
@@ -249,14 +252,14 @@ More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
                     <td class="text-right" style="white-space:nowrap">
                       {{ ExternalRepoController.fileAverageSize (row.fileCopies) | bytes }}
                     </td>
-                    
+
                     <td class="text-center" valign="middle" style="min-width: 1.6rem;">
                       <i class="icon-chart-bar iobio-popup" tooltip="BAM statistics" data-ng-if="ExternalRepoController.fileFormats (row.fileCopies) == 'BAM' && ExternalRepoController.awsOrCollab(row.fileCopies)" data-ng-click="ExternalRepoController.showIobioModal(row.objectId, row.id, ExternalRepoController.getAwsOrCollabFileName(row.fileCopies))">
                       </i>
                       <i class="icon-chart-bar iobio-popup" tooltip="VCF statistics" data-ng-if="ExternalRepoController.vcfIobio && ExternalRepoController.fileFormats (row.fileCopies) == 'VCF' && ExternalRepoController.awsOrCollab(row.fileCopies)" data-ng-click="ExternalRepoController.showVcfIobioModal(row.objectId, row.id, ExternalRepoController.getAwsOrCollabFileName(row.fileCopies))">
                       </i>
                     </td>
-                    
+
                   </tr>
                 </tbody>
             </table>

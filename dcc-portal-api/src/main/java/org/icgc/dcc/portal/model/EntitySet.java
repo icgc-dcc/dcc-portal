@@ -20,19 +20,20 @@ package org.icgc.dcc.portal.model;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.google.common.base.Preconditions.checkArgument;
 
+import java.util.List;
 import java.util.UUID;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Represents an entity set.
@@ -53,6 +54,9 @@ public class EntitySet extends BaseEntitySet implements Identifiable<UUID> {
 
   @ApiModelProperty(value = "Number of elements in this entity set.")
   private Long count;
+
+  @ApiModelProperty(value = "The entity ids of this set.")
+  private List<String> items;
 
   /*
    * This is the default value and is used for migration when this version field is introduced.
@@ -144,10 +148,7 @@ public class EntitySet extends BaseEntitySet implements Identifiable<UUID> {
   @Getter
   @ApiModel(value = "State")
   public enum State {
-    PENDING("pending"),
-    IN_PROGRESS("in progess"),
-    FINISHED("finished"),
-    ERROR("error");
+    PENDING("pending"), IN_PROGRESS("in progess"), FINISHED("finished"), ERROR("error");
 
     @NonNull
     private final String name;
@@ -157,10 +158,7 @@ public class EntitySet extends BaseEntitySet implements Identifiable<UUID> {
   @Getter
   @ApiModel(value = "Subtype")
   public enum SubType {
-    NORMAL("normal"),
-    UPLOAD("upload"),
-    ENRICHMENT("enrichment"),
-    TRANSIENT("transient");
+    NORMAL("normal"), UPLOAD("upload"), ENRICHMENT("enrichment"), TRANSIENT("transient");
 
     @NonNull
     private final String name;

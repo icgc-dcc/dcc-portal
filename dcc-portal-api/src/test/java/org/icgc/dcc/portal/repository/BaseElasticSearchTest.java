@@ -58,6 +58,7 @@ public abstract class BaseElasticSearchTest {
    * Test data.
    */
   protected static final String MISSING_ID = "@@@@@@@@@@@";
+  protected static final BulkJSONProvider MANIFEST_TEST_DATA = bulkFile("ManifestServiceTest.json");
 
   /**
    * The index to test.
