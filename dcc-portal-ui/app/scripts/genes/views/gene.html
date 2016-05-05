@@ -219,7 +219,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="project in GeneCtrl.gene.projects | orderBy:'uiAffectedDonorPercentage':true">
+            <tr data-ng-repeat="project in GeneCtrl.gene.projects | orderBy:'uiAffectedDonorPercentage':true" data-ng-if="project.filteredDonorCount > 0">
                 <td><a data-tooltip="{{ project.name }}" data-ng-href="/projects/{{ project.id }}">
                     {{ project.id }}
                 </a></td>
