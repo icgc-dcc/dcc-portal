@@ -21,6 +21,9 @@
       <li data-spy="bam-statistics" class="t_subnav__items__item" data-ng-if="fileCopies[0].fileFormat == 'BAM' && fileCtrlr.awsOrCollab(fileCopies)">
         <a data-scrollto href="#bam-statistics">BAM Stats</a>
       </li>
+      <li data-spy="vcf-statistics" class="t_subnav__items__item" data-ng-if="fileCopies[0].fileFormat == 'VCF' && fileCtrlr.awsOrCollab(fileCopies)">
+        <a data-scrollto href="#vcf-statistics">VCF Stats</a>
+      </li>
     </ul>
   </section>
 </aside>
