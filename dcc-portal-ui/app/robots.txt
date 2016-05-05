@@ -1,1 +1,8 @@
+User-agent: Yandex
+Disallow: /search*
+Disallow: /donors*
+Disallow: /genes*
+Disallow: /mutations*
+Crawl-delay: 30
+
 User-agent: *

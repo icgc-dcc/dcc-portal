@@ -29,7 +29,7 @@
   <!-- For AngularJS HTML5 mode -->
   <rule>
     <condition type="method">GET</condition>
-    <from>^(?!/api|/docs|/swagger-ui|/views|/scripts|/bower_components|/images|/vendor|/styles|/favicon.ico|.*\.html).*</from>
+    <from>^(?!/api|/robots\.txt|/sitemap\.xml|/docs|/swagger-ui|/views|/scripts|/bower_components|/images|/vendor|/styles|/favicon.ico|.*\.html).*</from>
     <to last="true">/index.html</to>
   </rule>
   
