@@ -85,88 +85,98 @@
     "value": 220
   },
   {
+    "group": "ALL-US",
+    "index": 21,
+    "value": 220
+  },
+  {
     "group": "AML-US",
     "index": 4,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 5,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 6,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 7,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 8,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 9,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 10,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 11,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 12,
     "value": 0
-  },                    
+  },
   {
     "group": "AML-US",
     "index": 13,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 14,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 15,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 16,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 17,
     "value": 0
-  },            
+  },
   {
     "group": "AML-US",
     "index": 18,
     "value": 0
-  },    
+  },
   {
     "group": "AML-US",
     "index": 19,
     "value": 0
-  },  
+  },
   {
     "group": "AML-US",
     "index": 20,
+    "value": 161
+  },
+  {
+    "group": "AML-US",
+    "index": 21,
     "value": 161
   },
   {
@@ -252,6 +262,11 @@
   {
     "group": "BLCA-CN",
     "index": 20,
+    "value": 103
+  },
+  {
+    "group": "BLCA-CN",
+    "index": 21,
     "value": 103
   },
   {
@@ -340,6 +355,11 @@
     "value": 299
   },
   {
+    "group": "BLCA-US",
+    "index": 21,
+    "value": 299
+  },
+  {
     "group": "BOCA-FR",
     "index": 4,
     "value": 0
@@ -425,6 +445,11 @@
     "value": 98
   },
   {
+    "group": "BOCA-FR",
+    "index": 21,
+    "value": 98
+  },
+  {
     "group": "BOCA-UK",
     "index": 4,
     "value": 0
@@ -508,6 +533,101 @@
     "group": "BOCA-UK",
     "index": 20,
     "value": 69
+  },
+  {
+    "group": "BOCA-UK",
+    "index": 21,
+    "value": 69
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 4,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 5,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 6,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 7,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 8,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 9,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 10,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 11,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 12,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 13,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 14,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 15,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 16,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 17,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 18,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 19,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 20,
+    "value": 0
+  },
+  {
+    "group": "BRCA-EU",
+    "index": 21,
+    "value": 560
   },
   {
     "group": "BRCA-UK",
@@ -592,6 +712,11 @@
   {
     "group": "BRCA-UK",
     "index": 20,
+    "value": 141
+  },
+  {
+    "group": "BRCA-UK",
+    "index": 21,
     "value": 141
   },
   {
@@ -680,173 +805,188 @@
     "value": 1045
   },
   {
+    "group": "BRCA-US",
+    "index": 21,
+    "value": 1045
+  },
+  {
     "group": "BTCA-JP",
     "index": 4,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 5,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 6,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 7,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 8,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 9,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 10,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 11,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 12,
     "value": 0
-  },                    
+  },
   {
     "group": "BTCA-JP",
     "index": 13,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 14,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 15,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 16,
     "value": 0
-  },  
+  },
   {
     "group": "BTCA-JP",
     "index": 17,
     "value": 0
-  },            
+  },
   {
     "group": "BTCA-JP",
     "index": 18,
     "value": 0
-  },    
+  },
   {
     "group": "BTCA-JP",
     "index": 19,
     "value": 0
-  },    
+  },
   {
     "group": "BTCA-JP",
     "index": 20,
     "value": 239
   },
   {
+    "group": "BTCA-JP",
+    "index": 21,
+    "value": 239
+  },
+  {
     "group": "CCSK-US",
     "index": 4,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 5,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 6,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 7,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 8,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 9,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 10,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 11,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 12,
     "value": 0
-  },                    
+  },
   {
     "group": "CCSK-US",
     "index": 13,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 14,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 15,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 16,
     "value": 0
-  },  
+  },
   {
     "group": "CCSK-US",
     "index": 17,
     "value": 0
-  },            
+  },
   {
     "group": "CCSK-US",
     "index": 18,
     "value": 0
-  },    
+  },
   {
     "group": "CCSK-US",
     "index": 19,
     "value": 0
-  },    
+  },
   {
     "group": "CCSK-US",
     "index": 20,
+    "value": 13
+  },
+  {
+    "group": "CCSK-US",
+    "index": 21,
     "value": 13
   },
   {
@@ -935,6 +1075,11 @@
     "value": 261
   },
   {
+    "group": "CESC-US",
+    "index": 21,
+    "value": 261
+  },
+  {
     "group": "CLLE-ES",
     "index": 4,
     "value": 0
@@ -1017,6 +1162,11 @@
   {
     "group": "CLLE-ES",
     "index": 20,
+    "value": 549
+  },
+  {
+    "group": "CLLE-ES",
+    "index": 21,
     "value": 549
   },
   {
@@ -1105,6 +1255,11 @@
     "value": 129
   },
   {
+    "group": "CMDI-UK",
+    "index": 21,
+    "value": 129
+  },
+  {
     "group": "COAD-US",
     "index": 4,
     "value": 0
@@ -1187,6 +1342,11 @@
   {
     "group": "COAD-US",
     "index": 20,
+    "value": 451
+  },
+  {
+    "group": "COAD-US",
+    "index": 21,
     "value": 451
   },
   {
@@ -1275,6 +1435,11 @@
     "value": 147
   },
   {
+    "group": "COCA-CN",
+    "index": 21,
+    "value": 187
+  },
+  {
     "group": "EOPC-DE",
     "index": 4,
     "value": 0
@@ -1357,6 +1522,11 @@
   {
     "group": "EOPC-DE",
     "index": 20,
+    "value": 11
+  },
+  {
+    "group": "EOPC-DE",
+    "index": 21,
     "value": 11
   },
   {
@@ -1445,6 +1615,11 @@
     "value": 119
   },
   {
+    "group": "ESAD-UK",
+    "index": 21,
+    "value": 119
+  },
+  {
     "group": "ESCA-CN",
     "index": 4,
     "value": 0
@@ -1527,6 +1702,11 @@
   {
     "group": "ESCA-CN",
     "index": 20,
+    "value": 228
+  },
+  {
+    "group": "ESCA-CN",
+    "index": 21,
     "value": 228
   },
   {
@@ -1615,6 +1795,11 @@
     "value": 9
   },
   {
+    "group": "GACA-CN",
+    "index": 21,
+    "value": 9
+  },
+  {
     "group": "GBM-US",
     "index": 4,
     "value": 0
@@ -1697,6 +1882,11 @@
   {
     "group": "GBM-US",
     "index": 20,
+    "value": 589
+  },
+  {
+    "group": "GBM-US",
+    "index": 21,
     "value": 589
   },
   {
@@ -1785,6 +1975,11 @@
     "value": 494
   },
   {
+    "group": "HNSC-US",
+    "index": 21,
+    "value": 494
+  },
+  {
     "group": "KIRC-US",
     "index": 4,
     "value": 0
@@ -1867,6 +2062,11 @@
   {
     "group": "KIRC-US",
     "index": 20,
+    "value": 525
+  },
+  {
+    "group": "KIRC-US",
+    "index": 21,
     "value": 525
   },
   {
@@ -1955,6 +2155,101 @@
     "value": 223
   },
   {
+    "group": "KIRP-US",
+    "index": 21,
+    "value": 223
+  },
+  {
+    "group": "LAML-CN",
+    "index": 4,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 5,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 6,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 7,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 8,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 9,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 10,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 11,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 12,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 13,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 14,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 15,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 16,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 17,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 18,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 19,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 20,
+    "value": 0
+  },
+  {
+    "group": "LAML-CN",
+    "index": 21,
+    "value": 63
+  },
+  {
     "group": "LAML-KR",
     "index": 4,
     "value": 0
@@ -2040,6 +2335,11 @@
     "value": 147
   },
   {
+    "group": "LAML-KR",
+    "index": 21,
+    "value": 107
+  },
+  {
     "group": "LAML-US",
     "index": 4,
     "value": 0
@@ -2122,6 +2422,11 @@
   {
     "group": "LAML-US",
     "index": 20,
+    "value": 200
+  },
+  {
+    "group": "LAML-US",
+    "index": 21,
     "value": 200
   },
   {
@@ -2210,6 +2515,11 @@
     "value": 441
   },
   {
+    "group": "LGG-US",
+    "index": 21,
+    "value": 441
+  },
+  {
     "group": "LIAD-FR",
     "index": 4,
     "value": 0
@@ -2293,6 +2603,101 @@
     "group": "LIAD-FR",
     "index": 20,
     "value": 30
+  },
+  {
+    "group": "LIAD-FR",
+    "index": 21,
+    "value": 30
+  },
+  {
+    "group": "LICA-CN",
+    "index": 4,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 5,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 6,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 7,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 8,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 9,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 10,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 11,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 12,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 13,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 14,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 15,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 16,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 17,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 18,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 19,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 20,
+    "value": 0
+  },
+  {
+    "group": "LICA-CN",
+    "index": 21,
+    "value": 163
   },
   {
     "group": "LICA-FR",
@@ -2377,6 +2782,11 @@
   {
     "group": "LICA-FR",
     "index": 20,
+    "value": 277
+  },
+  {
+    "group": "LICA-FR",
+    "index": 21,
     "value": 277
   },
   {
@@ -2465,6 +2875,11 @@
     "value": 317
   },
   {
+    "group": "LIHC-US",
+    "index": 21,
+    "value": 317
+  },
+  {
     "group": "LIHM-FR",
     "index": 4,
     "value": 0
@@ -2547,6 +2962,11 @@
   {
     "group": "LIHM-FR",
     "index": 20,
+    "value": 4
+  },
+  {
+    "group": "LIHM-FR",
+    "index": 21,
     "value": 4
   },
   {
@@ -2635,6 +3055,11 @@
     "value": 244
   },
   {
+    "group": "LINC-JP",
+    "index": 21,
+    "value": 244
+  },
+  {
     "group": "LIRI-JP",
     "index": 4,
     "value": 1
@@ -2717,6 +3142,11 @@
   {
     "group": "LIRI-JP",
     "index": 20,
+    "value": 260
+  },
+  {
+    "group": "LIRI-JP",
+    "index": 21,
     "value": 260
   },
   {
@@ -2805,6 +3235,11 @@
     "value": 485
   },
   {
+    "group": "LUAD-US",
+    "index": 21,
+    "value": 485
+  },
+  {
     "group": "LUSC-CN",
     "index": 4,
     "value": 0
@@ -2887,6 +3322,11 @@
   {
     "group": "LUSC-CN",
     "index": 20,
+    "value": 10
+  },
+  {
+    "group": "LUSC-CN",
+    "index": 21,
     "value": 10
   },
   {
@@ -2973,6 +3413,11 @@
     "group": "LUSC-KR",
     "index": 20,
     "value": 36
+  },
+  {
+    "group": "LUSC-KR",
+    "index": 21,
+    "value": 66
   },
   {
     "group": "LUSC-US",
@@ -3057,6 +3502,11 @@
   {
     "group": "LUSC-US",
     "index": 20,
+    "value": 431
+  },
+  {
+    "group": "LUSC-US",
+    "index": 21,
     "value": 431
   },
   {
@@ -3145,88 +3595,98 @@
     "value": 102
   },
   {
+    "group": "MALY-DE",
+    "index": 21,
+    "value": 102
+  },
+  {
     "group": "MELA-AU",
     "index": 4,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 5,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 6,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 7,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 8,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 9,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 10,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 11,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 12,
     "value": 0
-  },                    
+  },
   {
     "group": "MELA-AU",
     "index": 13,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 14,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 15,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 16,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 17,
     "value": 0
-  },            
+  },
   {
     "group": "MELA-AU",
     "index": 18,
     "value": 0
-  },    
+  },
   {
     "group": "MELA-AU",
     "index": 19,
     "value": 0
-  },  
+  },
   {
     "group": "MELA-AU",
     "index": 20,
+    "value": 183
+  },
+  {
+    "group": "MELA-AU",
+    "index": 21,
     "value": 183
   },
   {
@@ -3315,6 +3775,11 @@
     "value": 448
   },
   {
+    "group": "NBL-US",
+    "index": 21,
+    "value": 448
+  },
+  {
     "group": "ORCA-IN",
     "index": 4,
     "value": 0
@@ -3400,6 +3865,11 @@
     "value": 106
   },
   {
+    "group": "ORCA-IN",
+    "index": 21,
+    "value": 106
+  },
+  {
     "group": "OV-AU",
     "index": 4,
     "value": 0
@@ -3482,6 +3952,11 @@
   {
     "group": "OV-AU",
     "index": 20,
+    "value": 93
+  },
+  {
+    "group": "OV-AU",
+    "index": 21,
     "value": 93
   },
   {
@@ -3567,6 +4042,11 @@
   {
     "group": "OV-US",
     "index": 20,
+    "value": 582
+  },
+  {
+    "group": "OV-US",
+    "index": 21,
     "value": 582
   },
   {
@@ -3655,6 +4135,11 @@
     "value": 148
   },
   {
+    "group": "PAAD-US",
+    "index": 21,
+    "value": 148
+  },
+  {
     "group": "PACA-AU",
     "index": 4,
     "value": 5
@@ -3738,6 +4223,11 @@
     "group": "PACA-AU",
     "index": 20,
     "value": 431
+  },
+  {
+    "group": "PACA-AU",
+    "index": 21,
+    "value": 430
   },
   {
     "group": "PACA-CA",
@@ -3825,6 +4315,11 @@
     "value": 252
   },
   {
+    "group": "PACA-CA",
+    "index": 21,
+    "value": 282
+  },
+  {
     "group": "PACA-IT",
     "index": 4,
     "value": 0
@@ -3908,6 +4403,11 @@
     "group": "PACA-IT",
     "index": 20,
     "value": 37
+  },
+  {
+    "group": "PACA-IT",
+    "index": 21,
+    "value": 0
   },
   {
     "group": "PAEN-AU",
@@ -3995,6 +4495,101 @@
     "value": 66
   },
   {
+    "group": "PAEN-AU",
+    "index": 21,
+    "value": 66
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 4,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 5,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 6,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 7,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 8,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 9,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 10,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 11,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 12,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 13,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 14,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 15,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 16,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 17,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 18,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 19,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 20,
+    "value": 0
+  },
+  {
+    "group": "PAEN-IT",
+    "index": 21,
+    "value": 37
+  },
+  {
     "group": "PBCA-DE",
     "index": 4,
     "value": 0
@@ -4077,6 +4672,11 @@
   {
     "group": "PBCA-DE",
     "index": 20,
+    "value": 299
+  },
+  {
+    "group": "PBCA-DE",
+    "index": 21,
     "value": 299
   },
   {
@@ -4163,7 +4763,12 @@
     "group": "PEME-CA",
     "index": 20,
     "value": 0
-  },  
+  },
+  {
+    "group": "PEME-CA",
+    "index": 21,
+    "value": 0
+  },
   {
     "group": "PRAD-CA",
     "index": 4,
@@ -4248,6 +4853,11 @@
     "group": "PRAD-CA",
     "index": 20,
     "value": 124
+  },
+  {
+    "group": "PRAD-CA",
+    "index": 21,
+    "value": 125
   },
   {
     "group": "PRAD-UK",
@@ -4332,6 +4942,11 @@
   {
     "group": "PRAD-UK",
     "index": 20,
+    "value": 108
+  },
+  {
+    "group": "PRAD-UK",
+    "index": 21,
     "value": 108
   },
   {
@@ -4420,6 +5035,11 @@
     "value": 384
   },
   {
+    "group": "PRAD-US",
+    "index": 21,
+    "value": 384
+  },
+  {
     "group": "READ-US",
     "index": 4,
     "value": 0
@@ -4505,6 +5125,11 @@
     "value": 169
   },
   {
+    "group": "READ-US",
+    "index": 21,
+    "value": 169
+  },
+  {
     "group": "RECA-CN",
     "index": 4,
     "value": 0
@@ -4590,6 +5215,11 @@
     "value": 10
   },
   {
+    "group": "RECA-CN",
+    "index": 21,
+    "value": 10
+  },
+  {
     "group": "RECA-EU",
     "index": 4,
     "value": 0
@@ -4672,6 +5302,11 @@
   {
     "group": "RECA-EU",
     "index": 20,
+    "value": 122
+  },
+  {
+    "group": "RECA-EU",
+    "index": 21,
     "value": 122
   },
   {
@@ -4757,6 +5392,11 @@
   {
     "group": "SKCA-BR",
     "index": 20,
+    "value": 66
+  },
+  {
+    "group": "SKCA-BR",
+    "index": 21,
     "value": 66
   },
   {
@@ -4845,6 +5485,11 @@
     "value": 433
   },
   {
+    "group": "SKCM-US",
+    "index": 21,
+    "value": 433
+  },
+  {
     "group": "STAD-US",
     "index": 4,
     "value": 0
@@ -4927,6 +5572,11 @@
   {
     "group": "STAD-US",
     "index": 20,
+    "value": 443
+  },
+  {
+    "group": "STAD-US",
+    "index": 21,
     "value": 443
   },
   {
@@ -5015,6 +5665,11 @@
     "value": 15
   },
   {
+    "group": "THCA-SA",
+    "index": 21,
+    "value": 15
+  },
+  {
     "group": "THCA-US",
     "index": 4,
     "value": 0
@@ -5097,6 +5752,11 @@
   {
     "group": "THCA-US",
     "index": 20,
+    "value": 502
+  },
+  {
+    "group": "THCA-US",
+    "index": 21,
     "value": 502
   },
   {
@@ -5185,88 +5845,98 @@
     "value": 513
   },
   {
+    "group": "UCEC-US",
+    "index": 21,
+    "value": 513
+  },
+  {
     "group": "WT-US",
     "index": 4,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 5,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 6,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 7,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 8,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 9,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 10,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 11,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 12,
     "value": 0
-  },                    
+  },
   {
     "group": "WT-US",
     "index": 13,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 14,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 15,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 16,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 17,
     "value": 0
-  },            
+  },
   {
     "group": "WT-US",
     "index": 18,
     "value": 0
-  },    
+  },
   {
     "group": "WT-US",
     "index": 19,
     "value": 0
-  },  
+  },
   {
     "group": "WT-US",
     "index": 20,
+    "value": 126
+  },
+  {
+    "group": "WT-US",
+    "index": 21,
     "value": 126
   }
 ]
