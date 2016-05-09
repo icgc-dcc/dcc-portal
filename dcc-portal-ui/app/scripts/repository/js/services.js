@@ -142,7 +142,7 @@
 
     _srv.download = function (filters, repos) {
       $window.location.href = API.BASE_URL + '/manifests?filters=' +
-        uriString (filters) + '&repositories=' + _concatRepoCodes (repos);
+        uriString (filters) + '&repos=' + _concatRepoCodes (repos) + '&format=tarball';
     };
 
     _srv.downloadSelected = function (ids, repos) {

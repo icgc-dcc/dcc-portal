@@ -54,10 +54,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Occurrence;
 import org.icgc.dcc.portal.model.Occurrences;
 import org.icgc.dcc.portal.model.Projects;
+import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.OccurrenceService;
 import org.springframework.beans.factory.annotation.Autowired;

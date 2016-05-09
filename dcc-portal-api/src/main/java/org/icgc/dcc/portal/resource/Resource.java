@@ -34,9 +34,9 @@ import javax.ws.rs.core.UriInfo;
 import org.icgc.dcc.common.core.json.JsonNodeBuilders.ObjectNodeBuilder;
 import org.icgc.dcc.common.core.util.Joiners;
 import org.icgc.dcc.common.core.util.Splitters;
-import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Query.QueryBuilder;
+import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.resource.entity.MutationResource;
 import org.icgc.dcc.portal.service.BadRequestException;
 import org.icgc.dcc.portal.util.JsonUtils;
@@ -113,6 +113,10 @@ public abstract class Resource {
         .build();
   }
 
+  protected boolean hasParam(String name) {
+    return uriInfo.getQueryParameters().containsKey(name);
+  }
+
   /**
    * Readability methods for map building.
    * 
@@ -154,12 +158,20 @@ public abstract class Resource {
     return JsonUtils.merge(filters, (new FiltersParam(String.format(template, objects)).get()));
   }
 
+  protected static List<String> commaValues(String text) {
+    return COMMA_SPLITTER.splitToList(text);
+  }
+
   protected static QueryBuilder query() {
     return Query.builder();
   }
 
   protected static Query query(FiltersParam filters) {
-    return query().filters(filters.get()).build();
+    return query(filters.get());
+  }
+
+  protected static Query query(ObjectNode filters) {
+    return query().filters(filters).build();
   }
 
   protected static Query query(List<String> fields, List<String> include, ObjectNode filters,
@@ -228,7 +240,18 @@ public abstract class Resource {
 
       throw new BadRequestException(COMMA_JOINER.join(errorMessages));
     }
+  }
 
+  protected static <E extends Enum<E>> boolean isValidEnum(Class<E> enumClass, String enumName) {
+    if (enumName == null) {
+      return false;
+    }
+    try {
+      Enum.valueOf(enumClass, enumName);
+      return true;
+    } catch (final IllegalArgumentException ex) {
+      return false;
+    }
   }
 
   protected static void checkRequest(boolean errorCondition, String formatTemplate, Object... args) {

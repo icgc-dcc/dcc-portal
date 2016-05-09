@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,31 +15,55 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.model;
+package org.icgc.dcc.portal.manifest;
 
-import com.wordnik.swagger.annotations.ApiModel;
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import static org.apache.commons.compress.archivers.tar.TarArchiveOutputStream.LONGFILE_GNU;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.GZIPOutputStream;
 
-/**
- * Base class for EntitySetDefinition and DerivedEntitySetDefinition
- */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "BaseEntitySetDefinition")
-public abstract class BaseEntitySetDefinition extends BaseEntitySet {
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+
+public class ManifestArchive implements AutoCloseable {
 
   /**
-   * This flag indicates whether the resulting set is meant to be temporary.
+   * State.
    */
-  @ApiModelProperty(value = "This flag indicates whether the resulting set should be temporary.")
-  private boolean isTransient;
+  private final TarArchiveOutputStream tar;
 
-  public BaseEntitySetDefinition(String name, String description, Type type, boolean isTransient) {
-    super(name, description, type);
-    this.isTransient = isTransient;
+  public ManifestArchive(@NonNull OutputStream output) throws IOException {
+    this.tar = createTar(output);
+  }
+
+  public void addManifest(@NonNull String fileName, @NonNull ByteArrayOutputStream fileContents) throws IOException {
+    val tarEntry = new TarArchiveEntry(fileName);
+
+    tarEntry.setSize(fileContents.size());
+    tar.putArchiveEntry(tarEntry);
+
+    fileContents.writeTo(tar);
+    tar.closeArchiveEntry();
+  }
+
+  @Override
+  @SneakyThrows
+  public void close() {
+    tar.close();
+  }
+
+  private static TarArchiveOutputStream createTar(OutputStream output) throws IOException {
+    val tar = new TarArchiveOutputStream(new GZIPOutputStream(new BufferedOutputStream(output)));
+    tar.setLongFileMode(LONGFILE_GNU);
+
+    return tar;
   }
 
 }

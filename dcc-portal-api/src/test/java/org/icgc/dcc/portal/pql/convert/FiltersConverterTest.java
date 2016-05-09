@@ -34,7 +34,7 @@ import static org.icgc.dcc.portal.pql.convert.model.Operation.IS;
 
 import org.dcc.portal.pql.meta.IndexModel;
 import org.dcc.portal.pql.meta.Type;
-import org.icgc.dcc.portal.model.FiltersParam;
+import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.pql.convert.model.JqlField;
 import org.icgc.dcc.portal.pql.convert.model.JqlFilters;
 import org.icgc.dcc.portal.pql.convert.model.JqlSingleValue;

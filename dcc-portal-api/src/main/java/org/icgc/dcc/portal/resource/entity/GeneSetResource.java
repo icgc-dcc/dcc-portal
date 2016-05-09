@@ -41,10 +41,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.GeneSet;
-import org.icgc.dcc.portal.model.IdsParam;
 import org.icgc.dcc.portal.model.UploadedGeneSet;
+import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.model.param.IdsParam;
 import org.icgc.dcc.portal.repository.GeneRepository;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.GeneService;

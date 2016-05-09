@@ -22,8 +22,8 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.dcc.portal.pql.meta.Type;
-import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Query;
+import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;

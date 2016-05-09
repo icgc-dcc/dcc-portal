@@ -26,9 +26,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import org.icgc.dcc.common.core.model.Chromosome;
-import org.icgc.dcc.portal.model.AlleleParam;
 import org.icgc.dcc.portal.model.Beacon;
 import org.icgc.dcc.portal.model.BeaconInfo;
+import org.icgc.dcc.portal.model.param.AlleleParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.BeaconService;
 import org.springframework.beans.factory.annotation.Autowired;

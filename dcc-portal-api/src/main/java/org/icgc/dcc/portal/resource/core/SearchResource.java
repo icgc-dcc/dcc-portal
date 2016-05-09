@@ -28,9 +28,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Keywords;
 import org.icgc.dcc.portal.model.Query;
+import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.RepositoryFileService;
 import org.icgc.dcc.portal.service.SearchService;

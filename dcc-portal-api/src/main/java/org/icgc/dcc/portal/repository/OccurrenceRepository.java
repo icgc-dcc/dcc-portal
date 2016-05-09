@@ -211,7 +211,7 @@ public class OccurrenceRepository {
         .setSearchType(SCAN)
         .setSize(searchSize)
         .setScroll(KEEP_ALIVE);
-    log.info("ES search is: '{}'.", search);
+    log.debug("ES search is: '{}'.", search);
 
     SearchResponse response = search.execute().actionGet();
     val result = Maps.<String, Map<String, Integer>> newHashMap();

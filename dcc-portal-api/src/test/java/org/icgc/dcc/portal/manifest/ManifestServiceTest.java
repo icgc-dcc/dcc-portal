@@ -15,13 +15,14 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.service;
+package org.icgc.dcc.portal.manifest;
 
 import static com.google.common.io.Files.getFileExtension;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.common.core.util.Splitters.WHITESPACE;
+import static org.mockito.Mockito.mock;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
 import java.io.BufferedInputStream;
@@ -32,7 +33,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -43,12 +43,15 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.staxmate.SMInputFactory;
 import org.icgc.dcc.portal.config.PortalProperties;
-import org.icgc.dcc.portal.model.FiltersParam;
+import org.icgc.dcc.portal.manifest.model.Manifest;
+import org.icgc.dcc.portal.manifest.model.ManifestFormat;
 import org.icgc.dcc.portal.model.IndexModel.Type;
-import org.icgc.dcc.portal.model.Query;
+import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.repository.BaseElasticSearchTest;
+import org.icgc.dcc.portal.repository.ManifestRepository;
 import org.icgc.dcc.portal.repository.RepositoryFileRepository;
 import org.icgc.dcc.portal.repository.TermsLookupRepository;
+import org.icgc.dcc.portal.service.IndexService;
 import org.icgc.dcc.portal.test.TestIndex;
 import org.junit.Before;
 import org.junit.Rule;
@@ -122,22 +125,30 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
     es.execute(createIndexMapping(Type.REPOSITORY_FILE_CENTRIC)
         .withData(bulkFile(getClass())));
     service =
-        new ManifestService(new RepositoryFileRepository(es.client(), testIndex.getName(), new IndexService()),
+        new ManifestService(
+            new PortalProperties(),
+            mock(ManifestRepository.class),
+            new RepositoryFileRepository(es.client(), testIndex.getName(), new IndexService()),
             new TermsLookupRepository(es.client(), TERMS_LOOKUP, testIndex.getName(), new PortalProperties()));
   }
 
   @Test
   public void test() throws IOException {
     val testArchive = temp.newFile();
-    val timestamp = new Date();
+    val timestamp = System.currentTimeMillis();
     val repoInclusionList = EMPTY_STRING_LIST;
-    val query = Query.builder()
-        .filters(EMPTY_FILTER)
-        .build();
 
     // Creates the test tar.gz archive.
     try (val output = new FileOutputStream(testArchive)) {
-      service.generateManifestArchive(output, timestamp, query, repoInclusionList);
+      val context = new ManifestContext(
+          new Manifest()
+              .setTimestamp(timestamp)
+              .setFilters(EMPTY_FILTER)
+              .setRepos(repoInclusionList)
+              .setFormat(ManifestFormat.TARBALL),
+          output);
+
+      service.generateManifests(context);
     }
 
     @Cleanup
@@ -185,15 +196,15 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
   }
 
   @NonNull
-  private static String buildFileName(String repoCode, String repoType, Date timestamp) {
+  private static String buildFileName(String repoCode, String repoType, long timestamp) {
     return DOT.join(Arrays.asList(
         "manifest",
         repoCode,
-        timestamp.getTime(),
+        timestamp,
         getFileExtensionOf(repoType)));
   }
 
-  private static void validateFileName(String testFileName, boolean isXml, Date timestamp) {
+  private static void validateFileName(String testFileName, boolean isXml, long timestamp) {
     val expectedRepoCode = isXml ? ExpectedValues.REPO_CODE_FOR_XML : ExpectedValues.REPO_CODE_FOR_TSV;
     val expectedRepoType = isXml ? ExpectedValues.REPO_TYPE_FOR_XML : ExpectedValues.REPO_TYPE_FOR_TSV;
     val expectedFileName = buildFileName(expectedRepoCode, expectedRepoType, timestamp);

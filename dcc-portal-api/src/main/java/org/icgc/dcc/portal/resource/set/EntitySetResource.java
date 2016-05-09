@@ -45,10 +45,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.icgc.dcc.portal.model.BaseEntitySet.Type;
+import org.icgc.dcc.portal.model.param.UUIDSetParam;
 import org.icgc.dcc.portal.model.DerivedEntitySetDefinition;
 import org.icgc.dcc.portal.model.EntitySet;
 import org.icgc.dcc.portal.model.EntitySetDefinition;
-import org.icgc.dcc.portal.model.UUIDSetParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.BadRequestException;
 import org.icgc.dcc.portal.service.EntitySetService;

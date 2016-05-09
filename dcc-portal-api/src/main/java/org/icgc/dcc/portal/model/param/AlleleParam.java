@@ -14,7 +14,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.model;
+package org.icgc.dcc.portal.model.param;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import lombok.NonNull;
 
+import org.icgc.dcc.portal.model.AlleleMutation;
 import org.icgc.dcc.portal.util.AlleleParser;
 
 import com.yammer.dropwizard.jersey.params.AbstractParam;

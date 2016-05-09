@@ -17,9 +17,9 @@
  */
 package org.icgc.dcc.portal.service;
 
-import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Math.min;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static lombok.AccessLevel.PRIVATE;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
@@ -167,7 +167,7 @@ public class EntitySetService {
                 analyzer.retriveListItems(entitySet));
 
     @Cleanup
-    val writer = new CsvListWriter(new OutputStreamWriter(outputStream), TAB_PREFERENCE);
+    val writer = new CsvListWriter(new OutputStreamWriter(outputStream, UTF_8), TAB_PREFERENCE);
     for (val record : records) {
       writer.write(record);
     }

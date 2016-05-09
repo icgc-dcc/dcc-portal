@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,31 +15,38 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.model;
+package org.icgc.dcc.portal.repository;
 
-import com.wordnik.swagger.annotations.ApiModel;
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import java.util.UUID;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.icgc.dcc.portal.manifest.model.Manifest;
+import org.icgc.dcc.portal.repository.JsonRepository.JsonMapperFactory;
+import org.skife.jdbi.v2.sqlobject.Bind;
+import org.skife.jdbi.v2.sqlobject.SqlQuery;
+import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
 
 /**
- * Base class for EntitySetDefinition and DerivedEntitySetDefinition
+ * Data access for abstraction for working with user defined {@link Manifest}s.
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "BaseEntitySetDefinition")
-public abstract class BaseEntitySetDefinition extends BaseEntitySet {
+@RegisterMapperFactory(JsonMapperFactory.class)
+public interface ManifestRepository extends JsonRepository {
 
   /**
-   * This flag indicates whether the resulting set is meant to be temporary.
+   * Schema constants.
    */
-  @ApiModelProperty(value = "This flag indicates whether the resulting set should be temporary.")
-  private boolean isTransient;
+  static final String TABLE_NAME = "manifest";
+  static final String VERSION_FIELD_NAME = "version";
 
-  public BaseEntitySetDefinition(String name, String description, Type type, boolean isTransient) {
-    super(name, description, type);
-    this.isTransient = isTransient;
-  }
+  @SqlQuery("SELECT  " + DATA_FIELD_NAME + " FROM " + TABLE_NAME + " WHERE " + ID_FIELD_NAME + " = :id")
+  Manifest find(@Bind(ID_FIELD_NAME) UUID id);
+
+  @SqlUpdate("INSERT INTO " + TABLE_NAME + " (" + ID_FIELD_NAME + " , " + DATA_FIELD_NAME + ", " + VERSION_FIELD_NAME
+      + ") VALUES (:id, :data, :version)")
+  int save(@BindValue Manifest manifest, @Bind(VERSION_FIELD_NAME) int dataVersion);
+
+  @SqlUpdate("UPDATE " + TABLE_NAME + " SET  " + DATA_FIELD_NAME + " = :data, " + VERSION_FIELD_NAME
+      + " = :version WHERE " + ID_FIELD_NAME + " = :id")
+  int update(@BindValue Manifest manifest, @Bind(VERSION_FIELD_NAME) int dataVersion);
 
 }

@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.manifest;
+package org.icgc.dcc.portal.manifest.writer;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
@@ -24,13 +24,12 @@ import static org.apache.commons.lang.time.DateFormatUtils.formatUTC;
 
 import java.io.OutputStream;
 import java.util.Date;
-import java.util.Map;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.dcc.portal.pql.meta.RepositoryFileTypeModel.Fields;
+import org.icgc.dcc.portal.manifest.model.ManifestFile;
 
 import com.google.common.collect.ListMultimap;
 import com.sun.xml.txw2.output.IndentingXMLStreamWriter;
@@ -40,7 +39,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class GNOSManifest {
+public class GNOSManifestWriter {
 
   /**
    * Constants.
@@ -59,8 +58,8 @@ public class GNOSManifest {
   private static final String FILE_ENCODING = UTF_8.name();
 
   @SneakyThrows
-  public static void write(OutputStream buffer, ListMultimap<String, Map<String, String>> downloadUrlGroups,
-      Date timestamp) {
+  public static void write(OutputStream buffer, ListMultimap<String, ManifestFile> bundles,
+      long timestamp) {
     int rowCount = 0;
     // If this is thread-safe, perhaps we can make this static???
     val factory = XMLOutputFactory.newInstance();
@@ -69,26 +68,32 @@ public class GNOSManifest {
 
     startXmlDocument(writer, timestamp);
 
-    for (val url : downloadUrlGroups.keySet()) {
-      val rowInfo = downloadUrlGroups.get(url);
+    for (val url : bundles.keySet()) {
+      val bundle = bundles.get(url);
 
-      if (isEmpty(rowInfo)) {
+      if (isEmpty(bundle)) {
         continue;
       }
 
-      // TODO: is this still true that same url has the same data_bundle_id??
-      val repoId = rowInfo.get(0).get(Fields.DATA_BUNDLE_ID);
+      val bundleId = bundle.get(0).getDataBundleId();
 
-      writeXmlEntry(writer, repoId, url, rowInfo, ++rowCount);
+      writeXmlEntry(writer, bundleId, url, bundle, ++rowCount);
     }
 
     endXmlDocument(writer);
   }
 
-  private static void startXmlDocument(XMLStreamWriter writer, Date timestamp) throws XMLStreamException {
+  private static void writeXmlEntry(XMLStreamWriter writer, String id, String downloadUrl,
+      Iterable<ManifestFile> bundle, final int rowCount) throws XMLStreamException {
+    addDownloadUrlEntryToXml(writer, id, downloadUrl, rowCount);
+    addFileInfoEntriesToXml(writer, bundle);
+    closeDownloadUrlElement(writer);
+  }
+
+  private static void startXmlDocument(XMLStreamWriter writer, long timestamp) throws XMLStreamException {
     writer.writeStartDocument(FILE_ENCODING, "1.0");
     writer.writeStartElement(GNOS_ROOT);
-    writer.writeAttribute("date", formatToUtc(timestamp));
+    writer.writeAttribute("date", formatToUtc(new Date(timestamp)));
   }
 
   private static void endXmlDocument(XMLStreamWriter writer) throws XMLStreamException {
@@ -108,6 +113,23 @@ public class GNOSManifest {
     writer.writeStartElement(GNOS_FILES);
   }
 
+  private static void addFileInfoEntriesToXml(XMLStreamWriter writer, Iterable<ManifestFile> info)
+      throws XMLStreamException {
+    for (val file : info) {
+      writer.writeStartElement(GNOS_FILE);
+  
+      addXmlElement(writer, GNOS_FILE_NAME, file.getName());
+      addXmlElement(writer, GNOS_FILE_SIZE, file.getSize() + "");
+  
+      writer.writeStartElement(GNOS_CHECK_SUM);
+      writer.writeAttribute("type", "md5");
+      writer.writeCharacters(file.getMd5sum());
+      writer.writeEndElement();
+  
+      writer.writeEndElement();
+    }
+  }
+
   private static void closeDownloadUrlElement(@NonNull XMLStreamWriter writer) throws XMLStreamException {
     // Close off GNOS_FILES ("files") element.
     writer.writeEndElement();
@@ -115,35 +137,11 @@ public class GNOSManifest {
     writer.writeEndElement();
   }
 
-  private static void addFileInfoEntriesToXml(XMLStreamWriter writer, Iterable<Map<String, String>> info)
-      throws XMLStreamException {
-    for (val fileInfo : info) {
-      writer.writeStartElement(GNOS_FILE);
-
-      addXmlElement(writer, GNOS_FILE_NAME, fileInfo.get(Fields.FILE_NAME));
-      addXmlElement(writer, GNOS_FILE_SIZE, fileInfo.get(Fields.FILE_SIZE));
-
-      writer.writeStartElement(GNOS_CHECK_SUM);
-      writer.writeAttribute("type", "md5");
-      writer.writeCharacters(fileInfo.get(Fields.FILE_MD5SUM));
-      writer.writeEndElement();
-
-      writer.writeEndElement();
-    }
-  }
-
   private static void addXmlElement(XMLStreamWriter writer, String elementName, String elementValue)
       throws XMLStreamException {
     writer.writeStartElement(elementName);
     writer.writeCharacters(elementValue);
     writer.writeEndElement();
-  }
-
-  private static void writeXmlEntry(XMLStreamWriter writer, String id, String downloadUrl,
-      Iterable<Map<String, String>> fileInfo, final int rowCount) throws XMLStreamException {
-    addDownloadUrlEntryToXml(writer, id, downloadUrl, rowCount);
-    addFileInfoEntriesToXml(writer, fileInfo);
-    closeDownloadUrlElement(writer);
   }
 
   private static String formatToUtc(@NonNull Date timestamp) {

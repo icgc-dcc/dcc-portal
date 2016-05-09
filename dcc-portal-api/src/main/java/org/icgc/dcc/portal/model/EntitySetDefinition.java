@@ -19,6 +19,9 @@ package org.icgc.dcc.portal.model;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Strings.isNullOrEmpty;
+
+import org.icgc.dcc.portal.model.param.FiltersParam;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;

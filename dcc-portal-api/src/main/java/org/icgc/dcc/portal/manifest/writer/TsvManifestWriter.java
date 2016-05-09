@@ -15,84 +15,35 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.manifest;
+package org.icgc.dcc.portal.manifest.writer;
 
-import static com.google.common.collect.Iterables.transform;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.icgc.dcc.common.core.util.Joiners.COMMA;
+import static java.util.stream.Collectors.joining;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
-import org.dcc.portal.pql.meta.RepositoryFileTypeModel.Fields;
+import org.icgc.dcc.portal.manifest.model.ManifestFile;
 import org.supercsv.io.CsvListWriter;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-
-import lombok.Cleanup;
 import lombok.SneakyThrows;
-import lombok.val;
 
-public class ICGCStorageManifest {
+public class TsvManifestWriter {
 
   /**
    * Constants
    */
   private static final String FILE_ENCODING = UTF_8.name();
-  private static final Joiner COMMA_JOINER = COMMA.skipNulls();
 
-  // This is cray cray...
-  private static final BiFunction<Collection<Map<String, String>>, String, String> CONCAT_WITH_COMMA =
-      (fileInfo, fieldName) -> COMMA_JOINER.join(transform(fileInfo, map -> map.get(fieldName)));
-
-  /**
-   * Constants - Fields
-   */
-  private static final String[] TSV_HEADERS =
-      { "repo_code", "file_id", "object_id", "file_format", "file_name", "file_size", "md5_sum", "index_object_id", "donor_id/donor_count", "project_id/project_count", "study" };
-  private static final List<String> TSV_COLUMN_FIELD_NAMES = ImmutableList.of(
-      Fields.REPO_CODE,
-      Fields.FILE_ID,
-      Fields.FILE_UUID,
-      Fields.FILE_FORMAT,
-      Fields.FILE_NAME,
-      Fields.FILE_SIZE,
-      Fields.FILE_MD5SUM,
-      Fields.INDEX_OBJECT_UUID,
-      Fields.DONOR_ID,
-      Fields.PROJECT_CODE,
-      Fields.STUDY);
-
-  @SneakyThrows
-  public static void write(OutputStream buffer, Multimap<String, Map<String, String>> downloadUrlGroups) {
-    @Cleanup
-    val tsv = createTsv(buffer);
-    tsv.writeHeader(TSV_HEADERS);
-
-    for (val url : downloadUrlGroups.keySet()) {
-      val fileInfo = downloadUrlGroups.get(url);
-      val row = createRow(fileInfo);
-
-      tsv.write(row);
-    }
-
-    tsv.flush();
-  }
-
-  private static List<String> createRow(Collection<Map<String, String>> fileInfo) {
-    return Lists.transform(TSV_COLUMN_FIELD_NAMES, fieldName -> CONCAT_WITH_COMMA.apply(fileInfo, fieldName));
+  protected static String join(Collection<ManifestFile> files, Function<? super ManifestFile, ?> field) {
+    return files.stream().map(field).map(value -> value == null ? "" : value.toString()).collect(joining(","));
   }
 
   @SneakyThrows
-  private static CsvListWriter createTsv(OutputStream stream) {
+  protected static CsvListWriter createTsv(OutputStream stream) {
     return new CsvListWriter(new OutputStreamWriter(stream, FILE_ENCODING), TAB_PREFERENCE);
   }
 

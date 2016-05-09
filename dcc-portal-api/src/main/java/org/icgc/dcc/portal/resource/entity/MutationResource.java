@@ -71,12 +71,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import org.icgc.dcc.portal.model.Donors;
-import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Genes;
-import org.icgc.dcc.portal.model.IdsParam;
 import org.icgc.dcc.portal.model.IndexModel;
 import org.icgc.dcc.portal.model.Mutation;
 import org.icgc.dcc.portal.model.Mutations;
+import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.model.param.IdsParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.GeneService;

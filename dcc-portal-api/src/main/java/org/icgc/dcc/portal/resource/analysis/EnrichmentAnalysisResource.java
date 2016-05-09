@@ -56,9 +56,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.icgc.dcc.portal.model.EnrichmentAnalysis;
-import org.icgc.dcc.portal.model.EnrichmentParamsParam;
-import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Query;
+import org.icgc.dcc.portal.model.param.EnrichmentParamsParam;
+import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.EnrichmentAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;

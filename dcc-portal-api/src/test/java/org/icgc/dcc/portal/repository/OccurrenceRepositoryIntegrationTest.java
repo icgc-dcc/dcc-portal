@@ -21,9 +21,9 @@ import lombok.val;
 
 import org.elasticsearch.action.search.MultiSearchRequestBuilder;
 import org.elasticsearch.action.search.MultiSearchResponse;
-import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.IndexModel.Type;
 import org.icgc.dcc.portal.model.Query.QueryBuilder;
+import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

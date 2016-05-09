@@ -1,10 +1,10 @@
 /**
  * Copyright 2012(c) The Ontario Institute for Cancer Research. All rights reserved.
- *
+ * 
  * This program and the accompanying materials are made available under the terms of the GNU Public
  * License v3.0. You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -14,24 +14,28 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.model;
+package org.icgc.dcc.portal.model.param;
 
+import static com.google.common.collect.Iterables.toArray;
 
-
-import java.util.List;
-
-import com.google.common.collect.Lists;
+import com.google.common.base.Splitter;
 import com.yammer.dropwizard.jersey.params.AbstractParam;
 
-public class IdsParam extends AbstractParam<List<String>> {
+public class FieldsParam extends AbstractParam<String[]> {
 
-  public IdsParam(String input) {
+  private static final Splitter SPLITTER = Splitter.on(',').omitEmptyStrings().trimResults();
+
+  public FieldsParam(String input) {
     super(input);
   }
 
   @Override
-  protected List<String> parse(String input) throws Exception {
-    // Just make sure we don't double up on quotes
-    return Lists.newArrayList(input.replaceAll("\"", "").split(","));
+  protected String[] parse(String input) throws Exception {
+    return parseFields(input);
   }
+
+  private String[] parseFields(String text) {
+    return toArray(SPLITTER.split(text), String.class);
+  }
+
 }

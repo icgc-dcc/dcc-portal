@@ -14,24 +14,28 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.model;
+package org.icgc.dcc.portal.model.param;
 
 import static org.icgc.dcc.portal.util.JsonUtils.MAPPER;
 
-import com.fasterxml.jackson.databind.ObjectReader;
+import java.lang.reflect.ParameterizedType;
+
 import com.yammer.dropwizard.jersey.params.AbstractParam;
 
-public class EnrichmentParamsParam extends AbstractParam<EnrichmentParams> {
+public abstract class JacksonParam<T> extends AbstractParam<T> {
 
-  private static final ObjectReader READER = MAPPER.reader(EnrichmentParams.class);
-
-  public EnrichmentParamsParam(String input) {
+  public JacksonParam(String input) {
     super(input);
   }
 
   @Override
-  protected EnrichmentParams parse(String input) throws Exception {
-    return READER.readValue(input);
+  protected T parse(String input) throws Exception {
+    return MAPPER.reader(resolveModelClass()).readValue(input);
+  }
+
+  @SuppressWarnings("unchecked")
+  private Class<T> resolveModelClass() {
+    return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
   }
 
 }

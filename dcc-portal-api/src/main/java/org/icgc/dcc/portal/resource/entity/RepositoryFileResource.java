@@ -54,10 +54,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriBuilder;
 
-import org.icgc.dcc.portal.model.FiltersParam;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.RepositoryFile;
 import org.icgc.dcc.portal.model.RepositoryFiles;
+import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.resource.core.ManifestResource;
 import org.icgc.dcc.portal.service.RepositoryFileService;

@@ -32,7 +32,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.icgc.dcc.portal.model.DiagramProtein;
-import org.icgc.dcc.portal.model.FieldsParam;
+import org.icgc.dcc.portal.model.param.FieldsParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DiagramService;
 import org.springframework.beans.factory.annotation.Autowired;

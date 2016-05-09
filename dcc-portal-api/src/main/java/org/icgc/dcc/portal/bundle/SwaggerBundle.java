@@ -19,13 +19,24 @@ package org.icgc.dcc.portal.bundle;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.icgc.dcc.portal.manifest.model.ManifestFormat;
+import org.icgc.dcc.portal.model.param.AlleleParam;
+import org.icgc.dcc.portal.model.param.EnrichmentParamsParam;
+import org.icgc.dcc.portal.model.param.FieldsParam;
+import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.model.param.IdsParam;
+import org.icgc.dcc.portal.model.param.ListParam;
+import org.icgc.dcc.portal.model.param.UUIDSetParam;
 import org.icgc.dcc.portal.util.VersionUtils;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wordnik.swagger.config.ConfigFactory;
 import com.wordnik.swagger.config.FilterFactory;
 import com.wordnik.swagger.config.ScannerFactory;
-import com.wordnik.swagger.config.SwaggerConfig;
+import com.wordnik.swagger.converter.ModelConverters;
+import com.wordnik.swagger.converter.TypeConverter;
 import com.wordnik.swagger.core.filter.SwaggerSpecFilter;
 import com.wordnik.swagger.jaxrs.config.DefaultJaxrsScanner;
 import com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider;
@@ -38,11 +49,16 @@ import com.wordnik.swagger.model.Parameter;
 import com.wordnik.swagger.reader.ClassReaders;
 import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Environment;
+import com.yammer.dropwizard.jersey.params.IntParam;
+
+import lombok.val;
 
 public class SwaggerBundle extends AssetsBundle {
 
+  /**
+   * Constants.
+   */
   private static final String RESOURCE_PATH = "/swagger-ui";
-
   private static final String URI_PATH = "/docs";
 
   public SwaggerBundle() {
@@ -64,16 +80,42 @@ public class SwaggerBundle extends AssetsBundle {
     // getClasses()
     ScannerFactory.setScanner(new DefaultJaxrsScanner());
 
-    // Add a custom filter
-    FilterFactory.setFilter(new InternalFilter());
-
     // Add a reader, the DefaultJaxrsApiReader will scan @Api annotations and create the swagger spec from them
     ClassReaders.setReader(new DefaultJaxrsApiReader());
 
+    // Add a custom filter
+    FilterFactory.setFilter(new InternalFilter());
+
+    // Add custom description of type fields in models
+    ModelConverters.addConverter(createTypeConverter(), true);
+
     // ConfigFactory.setConfig(new SwaggerConfig());
-    SwaggerConfig config = ConfigFactory.config();
+    val config = ConfigFactory.config();
     config.setApiVersion(VersionUtils.getApiVersion());
     config.setBasePath("/");
+  }
+
+  /**
+   * This is only a partial solution. See linked resources for more information.
+   * 
+   * @see https://groups.google.com/d/topic/swagger-swaggersocket/YdQOP_rdKZU/discussion
+   * @see https://github.com/swagger-api/swagger-core/issues/913
+   */
+  private TypeConverter createTypeConverter() {
+    val typeConverter = new TypeConverter();
+    typeConverter.add(AlleleParam.class.getSimpleName(), "string");
+    typeConverter.add(UUID.class.getSimpleName(), "number");
+    typeConverter.add(EnrichmentParamsParam.class.getSimpleName(), "string");
+    typeConverter.add(FieldsParam.class.getSimpleName(), "number");
+    typeConverter.add(FiltersParam.class.getSimpleName(), "string");
+    typeConverter.add(ListParam.class.getSimpleName(), "string");
+    typeConverter.add(IdsParam.class.getSimpleName(), "string");
+    typeConverter.add(UUIDSetParam.class.getSimpleName(), "string");
+    typeConverter.add(IntParam.class.getSimpleName(), "integer");
+    typeConverter.add(ObjectNode.class.getSimpleName(), "string");
+    typeConverter.add(ManifestFormat.class.getSimpleName(), "string");
+
+    return typeConverter;
   }
 
   private static class InternalFilter implements SwaggerSpecFilter {

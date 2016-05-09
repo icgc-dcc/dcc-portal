@@ -15,55 +15,37 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.manifest;
+package org.icgc.dcc.portal.manifest.model;
 
-import static org.apache.commons.compress.archivers.tar.TarArchiveOutputStream.LONGFILE_GNU;
+import static lombok.AccessLevel.PRIVATE;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.zip.GZIPOutputStream;
-
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 
-public class ManfiestArchive implements AutoCloseable {
+@RequiredArgsConstructor(access = PRIVATE)
+public enum ManifestField {
 
-  /**
-   * State.
-   */
-  private final TarArchiveOutputStream tar;
+  CONTENT("content"), ID("id"), MD5SUM("md5sum"), SIZE("size");
 
-  public ManfiestArchive(@NonNull OutputStream output) throws IOException {
-    this.tar = createTar(output);
+  @NonNull
+  private final String key;
+
+  @JsonCreator
+  public static ManifestField fromString(String key) {
+    return key == null ? null : ManifestField.valueOf(key.toUpperCase());
   }
 
-  public void addManifest(@NonNull String fileName, @NonNull ByteArrayOutputStream fileContents) throws IOException {
-    val tarEntry = new TarArchiveEntry(fileName);
-
-    tarEntry.setSize(fileContents.size());
-    tar.putArchiveEntry(tarEntry);
-
-    fileContents.writeTo(tar);
-    tar.closeArchiveEntry();
+  @JsonValue
+  public String getKey() {
+    return key;
   }
 
   @Override
-  @SneakyThrows
-  public void close() {
-    tar.close();
-  }
-
-  private static TarArchiveOutputStream createTar(OutputStream output) throws IOException {
-    val tar = new TarArchiveOutputStream(new GZIPOutputStream(new BufferedOutputStream(output)));
-    tar.setLongFileMode(LONGFILE_GNU);
-
-    return tar;
+  public String toString() {
+    return key;
   }
 
 }

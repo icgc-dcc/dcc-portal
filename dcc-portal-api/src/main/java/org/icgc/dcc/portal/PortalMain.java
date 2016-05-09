@@ -33,9 +33,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-
 import org.eclipse.jetty.util.resource.Resource;
 import org.icgc.dcc.portal.bundle.SwaggerBundle;
 import org.icgc.dcc.portal.config.PortalProperties;
@@ -48,11 +45,16 @@ import org.icgc.dcc.portal.util.VersionUtils;
 import org.icgc.dcc.portal.writer.ErrorMessageBodyWriter;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.sun.jersey.api.container.filter.LoggingFilter;
 import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
+import com.yammer.dropwizard.jersey.JsonProcessingExceptionMapper;
 import com.yammer.dropwizard.jersey.LoggingExceptionMapper;
+
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PortalMain extends SpringService<PortalProperties> {
@@ -85,6 +87,9 @@ public class PortalMain extends SpringService<PortalProperties> {
 
     environment.addProvider(new ErrorMessageBodyWriter());
 
+    // Be stricter by default
+    environment.getObjectMapperFactory().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
     environment.enableJerseyFeature(FEATURE_LOGGING_DISABLE_ENTITY);
 
     environment.setJerseyProperty(PROPERTY_CONTAINER_REQUEST_FILTERS,
@@ -97,7 +102,9 @@ public class PortalMain extends SpringService<PortalProperties> {
             CrossOriginFilter.class.getName(),
             CachingFilter.class.getName()));
 
+    // Remove so we can replace with JSON
     removeDwExceptionMapper(environment, LoggingExceptionMapper.class);
+    removeDwExceptionMapper(environment, JsonProcessingExceptionMapper.class);
 
     logInfo(config);
   }

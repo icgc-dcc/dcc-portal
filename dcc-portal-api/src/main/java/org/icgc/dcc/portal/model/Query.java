@@ -18,12 +18,6 @@ package org.icgc.dcc.portal.model;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-
 import org.elasticsearch.search.sort.SortOrder;
 import org.icgc.dcc.portal.util.JsonUtils;
 import org.icgc.dcc.portal.util.ObjectNodeDeserializer;
@@ -32,6 +26,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Builder
 @NoArgsConstructor
@@ -53,6 +54,7 @@ public class Query {
   private Integer defaultLimit;
 
   @JsonDeserialize(using = ObjectNodeDeserializer.class)
+  @ApiModelProperty(value = "The filters to apply to the search", dataType = "json")
   ObjectNode filters;
 
   List<String> fields;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,31 +15,52 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.model;
+package org.icgc.dcc.portal.manifest.writer;
 
-import com.wordnik.swagger.annotations.ApiModel;
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import java.io.OutputStream;
+import java.util.Collection;
+import java.util.List;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.icgc.dcc.portal.manifest.model.ManifestFile;
 
-/**
- * Base class for EntitySetDefinition and DerivedEntitySetDefinition
- */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "BaseEntitySetDefinition")
-public abstract class BaseEntitySetDefinition extends BaseEntitySet {
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+
+import lombok.SneakyThrows;
+import lombok.val;
+
+public class GenericManifestWriter extends TsvManifestWriter {
 
   /**
-   * This flag indicates whether the resulting set is meant to be temporary.
+   * Constants - Fields
    */
-  @ApiModelProperty(value = "This flag indicates whether the resulting set should be temporary.")
-  private boolean isTransient;
+  private static final String[] TSV_HEADERS =
+      { "url", "file_name", "file_size", "md5_sum", "study" };
 
-  public BaseEntitySetDefinition(String name, String description, Type type, boolean isTransient) {
-    super(name, description, type);
-    this.isTransient = isTransient;
+  @SneakyThrows
+  public static void write(OutputStream buffer, Multimap<String, ManifestFile> bundles) {
+    val tsv = createTsv(buffer);
+    tsv.writeHeader(TSV_HEADERS);
+
+    for (val url : bundles.keySet()) {
+      val bundle = bundles.get(url);
+      val row = createRow(url, bundle);
+
+      tsv.write(row);
+    }
+
+    tsv.flush();
+  }
+
+  private static List<String> createRow(String url, Collection<ManifestFile> bundle) {
+    val row = Lists.<String> newArrayList();
+    row.add(url);
+    row.add(join(bundle, ManifestFile::getName));
+    row.add(join(bundle, ManifestFile::getSize));
+    row.add(join(bundle, ManifestFile::getMd5sum));
+    row.add(join(bundle, ManifestFile::getStudy));
+
+    return row;
   }
 
 }

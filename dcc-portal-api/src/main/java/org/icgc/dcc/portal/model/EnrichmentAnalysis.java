@@ -24,14 +24,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.ImmutableList;
+import com.wordnik.swagger.annotations.ApiModel;
+
 import lombok.Data;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.Accessors;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.common.collect.ImmutableList;
-import com.wordnik.swagger.annotations.ApiModel;
 
 /**
  * The total state of an enrichment analysis including its inputs, state and outputs.
@@ -52,7 +52,9 @@ public class EnrichmentAnalysis implements Identifiable<UUID> {
    */
   private long timestamp = new Date().getTime();
 
-  /*
+  /**
+   * Used for schema evolution.
+   * <p>
    * This is the default value and is used for migration when this version field is introduced.
    */
   private int version = 1;
@@ -175,11 +177,7 @@ public class EnrichmentAnalysis implements Identifiable<UUID> {
    */
   public enum State {
 
-    PENDING,
-    ANALYZING,
-    POST_PROCESSING,
-    FINISHED,
-    ERROR;
+    PENDING, ANALYZING, POST_PROCESSING, FINISHED, ERROR;
 
   }
 
