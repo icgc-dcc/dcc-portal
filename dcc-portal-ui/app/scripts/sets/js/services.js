@@ -106,13 +106,17 @@
     var _service = this;
 
     // For application/json format
-    function params2JSON(type, params) {
+    function params2JSON(type, params, derived) {
       var data = {};
-      data.filters = encodeURI(JSON.stringify(params.filters));
+      
+      if (typeof derived === 'undefined' || !derived) {
+        data.filters = encodeURI(JSON.stringify(params.filters));
+        data.size = params.size || 0;
+      }
+      
       data.type = type.toUpperCase();
       data.name = params.name;
       data.description = params.description || '';
-      data.size = params.size || 0;
 
       if (params.isTransient) {
         data.isTransient = params.isTransient;
@@ -164,7 +168,7 @@
     };
 
     _service.materialize = function(type, params) {
-      var data = params2JSON(type, params);
+      var data = params2JSON(type, params, true);
       return Restangular.one('entityset').post('union', data, {}, {'Content-Type': 'application/json'});
     };
 
@@ -309,7 +313,7 @@
      */
     _service.addDerivedSet = function(type, params) {
       var promise = null;
-      var data = params2JSON(type, params);
+      var data = params2JSON(type, params, true);
 
       promise = Restangular.one('entityset').post('union', data, {}, {'Content-Type': 'application/json'});
       promise.then(function(data) {

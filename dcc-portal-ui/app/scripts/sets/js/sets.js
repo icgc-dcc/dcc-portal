@@ -299,6 +299,9 @@
               },
               setUnion: function() {
                 return $scope.dialog.setUnion;
+              },
+              selectedIds: function() {
+                return $scope.selected;
               }
             }
           });
