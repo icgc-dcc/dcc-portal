@@ -93,7 +93,7 @@ public class TokenServiceTest {
   @Test
   public void userScopesTest() {
     when(client.getUserScopes(USER_ID)).thenReturn(createUserScopesInternal(USER_SCOPES));
-    val result = tokenService.userScopes(createUser(USER_ID, TRUE));
+    val result = tokenService.getUserScopes(createUser(USER_ID, TRUE));
     val resultScopes = convertScopes(result.getScopes());
     log.info("{}", resultScopes);
     assertThat(resultScopes).containsOnlyElementsOf(USER_SCOPES);
@@ -108,7 +108,7 @@ public class TokenServiceTest {
   @Test(expected = IllegalArgumentException.class)
   public void userScopesTest_unrecognizedScope() {
     when(client.getUserScopes(USER_ID)).thenReturn(createUserScopesInternal(singleton("fake")));
-    tokenService.userScopes(createUser(USER_ID, TRUE));
+    tokenService.getUserScopes(createUser(USER_ID, TRUE));
   }
 
   private static UserScopesResponse createUserScopesInternal(Set<String> scopes) {

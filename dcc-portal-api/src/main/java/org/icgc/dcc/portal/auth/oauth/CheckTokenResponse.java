@@ -29,10 +29,17 @@ import lombok.Value;
 @JsonIgnoreProperties(ignoreUnknown = true)
 class CheckTokenResponse {
 
+  int exp;
+  String desc;
   List<String> scope;
 
   @JsonCreator
-  public CheckTokenResponse(@JsonProperty("scope") List<String> scope) {
+  public CheckTokenResponse(
+      @JsonProperty("exp") int exp,
+      @JsonProperty("desc") String desc,
+      @JsonProperty("scope") List<String> scope) {
+    this.exp = exp;
+    this.desc = desc;
     this.scope = scope;
   }
 

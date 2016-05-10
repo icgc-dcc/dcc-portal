@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.resource.security;
+package org.icgc.dcc.portal.resource.core;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -34,6 +34,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.icgc.dcc.portal.model.AccessToken;
 import org.icgc.dcc.portal.model.AccessTokenScopes;
 import org.icgc.dcc.portal.model.Tokens;
 import org.icgc.dcc.portal.model.User;
@@ -54,8 +55,11 @@ import lombok.RequiredArgsConstructor;
 @Component
 @Path("/v1/settings/tokens")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class AccessTokenResource extends Resource {
+public class TokenResource extends Resource {
 
+  /**
+   * Dependencies.
+   */
   @NonNull
   private final TokenService tokenService;
 
@@ -76,6 +80,13 @@ public class AccessTokenResource extends Resource {
     return tokenService.list(user);
   }
 
+  @GET
+  @Path("/{tokenId}")
+  @Produces(APPLICATION_JSON)
+  public AccessToken get(@PathParam("tokenId") String tokenId) {
+    return tokenService.getToken(tokenId);
+  }
+
   @DELETE
   @Path("/{tokenId}")
   public Response delete(@Auth(required = true) User user, @PathParam("tokenId") String tokenId) {
@@ -89,7 +100,7 @@ public class AccessTokenResource extends Resource {
   @Path("/scopes")
   @Produces(APPLICATION_JSON)
   public AccessTokenScopes scopes(@Auth(required = true) User user) {
-    return tokenService.userScopes(user);
+    return tokenService.getUserScopes(user);
   }
 
 }

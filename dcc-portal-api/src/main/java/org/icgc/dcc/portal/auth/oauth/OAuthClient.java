@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.ImmutableSet.copyOf;
+import static com.google.common.collect.Sets.newTreeSet;
 import static com.sun.jersey.api.client.Client.create;
 import static com.sun.jersey.api.client.ClientResponse.Status.OK;
 import static com.sun.jersey.api.json.JSONConfiguration.FEATURE_POJO_MAPPING;
@@ -134,7 +135,16 @@ public class OAuthClient {
     validateResponse(response);
   }
 
-  public boolean checkToken(@NonNull String token, String scope) {
+  public boolean checkToken(@NonNull String tokenId, String scope) {
+    val token = getToken(tokenId);
+    if (token == null) {
+      return false;
+    }
+
+    return token.getScope().contains(scope);
+  }
+
+  public AccessToken getToken(@NonNull String token) {
     checkArguments(token);
 
     val params = new MultivaluedMapImpl();
@@ -147,12 +157,11 @@ public class OAuthClient {
 
     checkState(response.getClientResponseStatus().getFamily() != SERVER_ERROR, "Error checking token: %s", response);
     if (response.getClientResponseStatus() != OK) {
-      return false;
+      return null;
     }
 
-    val accessToken = response.getEntity(CheckTokenResponse.class);
-    val scopes = accessToken.getScope();
-    return scopes.contains(scope);
+    val checkResponse = response.getEntity(CheckTokenResponse.class);
+    return new AccessToken(token, checkResponse.getDesc(), checkResponse.getExp(), newTreeSet(checkResponse.getScope()));
   }
 
   public UserScopesResponse getUserScopes(@NonNull String userId) {

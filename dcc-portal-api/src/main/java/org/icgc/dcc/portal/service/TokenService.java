@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.icgc.dcc.common.core.util.Splitters;
 import org.icgc.dcc.portal.auth.oauth.OAuthClient;
+import org.icgc.dcc.portal.model.AccessToken;
 import org.icgc.dcc.portal.model.AccessTokenScopes;
 import org.icgc.dcc.portal.model.AccessTokenScopes.AccessTokenScope;
 import org.icgc.dcc.portal.model.Tokens;
@@ -51,7 +52,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired) )
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TokenService {
 
   private static final Map<String, String> SCOPE_DESCRIPTIONS = ImmutableMap.<String, String> builder()
@@ -89,7 +90,16 @@ public class TokenService {
     client.revokeToken(tokenId);
   }
 
-  public AccessTokenScopes userScopes(User user) {
+  public AccessToken getToken(@NonNull String tokenId) {
+    val token = client.getToken(tokenId);
+    if (token == null) {
+      throw new BadRequestException("Invalid token");
+    }
+
+    return token;
+  }
+
+  public AccessTokenScopes getUserScopes(User user) {
     val userScopes = client.getUserScopes(user.getEmailAddress());
     val scopesResult = ImmutableSet.<AccessTokenScope> builder();
 
@@ -104,7 +114,7 @@ public class TokenService {
 
   private void validateScope(User user, String scope) {
     val requestScopes = parseScopes(scope);
-    val userScopes = extractScopeNames(userScopes(user));
+    val userScopes = extractScopeNames(getUserScopes(user));
 
     val scopeDiff = difference(requestScopes, userScopes);
     if (!scopeDiff.isEmpty()) {
