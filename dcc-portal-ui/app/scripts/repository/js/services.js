@@ -146,22 +146,17 @@
     };
 
     _srv.downloadSelected = function (ids, repos) {
-      jQuery('<form method="POST" id="fileDownload" action="' +
-              API.BASE_URL + '/manifests" style="display:none">' +
-             _.map (ids, function (id) {
-                return '<input type="hidden" name="fileIds" value="' + id + '"/>';
-              }) +
-             '<input type="hidden" name="repositories" value="' + _concatRepoCodes (repos) + '"/>' +
-             '<input type="submit" value="Submit"/>' +
-             '</form>').appendTo('body');
-
-      jQuery('#fileDownload').submit();
-      jQuery('#fileDownload').remove();
+      $window.location.href = _srv.getManifestUrl(ids, repos);
     };
 
     _srv.export = function (filters) {
       $window.location.href = API.BASE_URL + '/' + REPO_API_PATH +
         '/export?filters=' + uriString (filters);
+    };
+
+    _srv.getManifestUrl = function (ids, repos) {
+      return API.BASE_URL + '/manifests?filters=' +
+        uriString ({file:{id:{is:ids}}}) + '&repos=' + _concatRepoCodes (repos) + '&format=files';
     };
 
     _srv.getMetaData = function() {

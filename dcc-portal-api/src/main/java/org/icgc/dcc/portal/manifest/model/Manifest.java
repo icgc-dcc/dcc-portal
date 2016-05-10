@@ -35,6 +35,7 @@ import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 import lombok.Data;
+import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -85,10 +86,16 @@ public class Manifest implements Identifiable<UUID> {
 
   @JsonIgnore
   public String getFileName() {
+    val prefix = "manifest.";
     if (format == ManifestFormat.TARBALL) {
-      return "manifest." + timestamp + ".tar.gz";
+      return prefix + timestamp + ".tar.gz";
     } else {
-      return "manifest." + timestamp + ".txt";
+      // TODO: Fix extensions to match repos
+      if (repos.size() == 1) {
+        return prefix + repos.get(0) + "." + timestamp + ".txt";
+      } else {
+        return prefix + timestamp + ".txt";
+      }
     }
   }
 

@@ -389,6 +389,10 @@
         .join (slash);
     };
 
+    this.buildManifestUrl = function (fileId, repos) {
+       return ExternalRepoService.getManifestUrl(fileId, repos);
+    };
+
     this.equalsIgnoringCase = equalsIgnoringCase;
 
     this.downloadManifest = function (fileId, repo) {

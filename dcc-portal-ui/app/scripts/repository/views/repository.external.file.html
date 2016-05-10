@@ -198,9 +198,9 @@
           <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.repoType)" />
 
           <td style="min-width: 90px"
-            ng-init="showMetaData = fileCtrlr.shouldShowMetaData (fileCopy.repoType)">
-            <a href="#" tooltip="Download Manifest"
-              ng-click="fileCtrlr.downloadManifest (info.id, fileCopy.repoName)">
+            ng-init="showMetaData = fileCtrlr.shouldShowMetaData (fileCopy.repoType); manifestUrl = fileCtrlr.buildManifestUrl (info.id, [fileCopy.repoName])">
+
+            <a href="{{ manifestUrl }}" tooltip="Download Manifest" >
               <i class="icon-download" />Manifest
             </a>
 
