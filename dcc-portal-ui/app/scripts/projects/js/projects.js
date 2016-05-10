@@ -275,9 +275,6 @@
 
         _ctrl.totalDonors = totalDonors;
         _ctrl.ssmTotalDonors = ssmTotalDonors;
-        _ctrl.projectIDLookupMap = _.mapKeys(data.hits, function(project) {
-          return project.id;
-        });
 
         _ctrl.projects = data;
         _ctrl.donut = HighchartsService.donut({
@@ -373,7 +370,15 @@
 
     function refresh() {
       Page.startWork();
-      Projects.getList({include: 'facets'}).then(success);
+      
+      // Needs to first grab every single project for projectIdLookupMap. Otherwise could be missing from map.
+      Projects.getList({from: 1, size:100, filters:{}}).then(function(data) {
+        _ctrl.projectIDLookupMap = _.mapKeys(data.hits, function(project) {
+          return project.id;
+        });
+        
+        Projects.getList({include: 'facets'}).then(success);
+      });
     }
 
     _ctrl.countryIconClass = function (countryName) {
