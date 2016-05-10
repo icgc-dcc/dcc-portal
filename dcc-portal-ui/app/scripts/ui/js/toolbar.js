@@ -52,11 +52,11 @@ angular.module('icgc.ui.toolbar', []).directive('toolbar', function ($filter, $t
           delimiter = ',';
         }
 
-        tableData = jQuery('#' + id).table2CSV({
+        var sanitizedId = id.replace(':', '\\:');
+        tableData = jQuery('#' + sanitizedId).table2CSV({
           delivery: 'value',
           separator: delimiter
         });
-
 
         if (window.Blob && window.File) {
           saveAs(new Blob([tableData], {type: 'text/plain;charset=ascii'}), filename);
