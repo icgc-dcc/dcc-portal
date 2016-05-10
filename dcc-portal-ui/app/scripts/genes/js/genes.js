@@ -79,11 +79,13 @@
 
 
     function refresh() {
+      _ctrl.gene.advQuery = LocationService.mergeIntoFilters({gene: {id: {is: [_ctrl.gene.id] }}});
+      
       var geneProjectPromise = Donors.getList({
         size: 0,
         from: 1,
         include: ['facets'],
-        filters: {'gene':{'id':{'is':[_ctrl.gene.id]}}}
+        filters: _ctrl.gene.advQuery
       }).then(function(data) {
         var ids = _.pluck(data.facets.projectId.terms, 'term');
 
@@ -95,8 +97,6 @@
           filters: {'project': {'id': { 'is': ids}}}
         });
       });
-
-      _ctrl.gene.advQuery = LocationService.mergeIntoFilters({gene: {id: {is: [_ctrl.gene.id] }}});
 
       // Fetch dynaimc mutations and donors
       geneProjectPromise.then(function(projects) {
