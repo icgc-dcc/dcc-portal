@@ -19,16 +19,17 @@ package org.icgc.dcc.portal.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.google.common.collect.Lists;
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import lombok.Data;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.wordnik.swagger.annotations.ApiModel;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
  * Models a file from external repositories such as CGHub
@@ -94,6 +95,15 @@ public class RepositoryFile {
   @Data
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static final class FileCopy {
+
+    @ApiModelProperty(value = "Repository specific bundle id of a file copy")
+    String repoDataBundleId;
+
+    @ApiModelProperty(value = "Repository specific file id of a file copy")
+    String repoFileId;
+
+    @ApiModelProperty(value = "Repository specific data set ids of a file copy")
+    List<String> repoDataSetIds = Lists.newArrayList();
 
     @ApiModelProperty(value = "Repository code of a file copy")
     String repoCode;

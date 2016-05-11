@@ -29,22 +29,15 @@ import com.google.common.collect.Multimap;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class ICGCManifestWriter extends TSVManifestWriter {
-
-  /**
-   * Constants - Fields
-   */
-  private static final String[] TSV_HEADERS =
-      { "repo_code", "file_id", "object_id", "file_format", "file_name", "file_size", "md5_sum", "index_object_id", "donor_id/donor_count", "project_id/project_count", "study" };
+public class EGAManifestWriter extends TSVManifestWriter {
 
   @SneakyThrows
   public static void write(OutputStream buffer, Multimap<String, ManifestFile> bundles) {
     val tsv = createTsv(buffer);
-    tsv.writeHeader(TSV_HEADERS);
 
     for (val url : bundles.keySet()) {
       val bundle = bundles.get(url);
-      val row = createRow(bundle);
+      val row = createRow(url, bundle);
 
       tsv.write(row);
     }
@@ -52,19 +45,9 @@ public class ICGCManifestWriter extends TSVManifestWriter {
     tsv.flush();
   }
 
-  private static List<String> createRow(Collection<ManifestFile> bundle) {
+  private static List<String> createRow(String url, Collection<ManifestFile> bundle) {
     val row = Lists.<String> newArrayList();
-    row.add(join(bundle, ManifestFile::getRepoCode));
-    row.add(join(bundle, ManifestFile::getId));
-    row.add(join(bundle, ManifestFile::getObjectId));
-    row.add(join(bundle, ManifestFile::getFormat));
-    row.add(join(bundle, ManifestFile::getName));
-    row.add(join(bundle, ManifestFile::getSize));
-    row.add(join(bundle, ManifestFile::getMd5sum));
-    row.add(join(bundle, ManifestFile::getIndexObjectId));
-    row.add(join(bundle, ManifestFile::getDonorId));
-    row.add(join(bundle, ManifestFile::getProjectCode));
-    row.add(join(bundle, ManifestFile::getStudy));
+    row.add(join(bundle, ManifestFile::getRepoFileId));
 
     return row;
   }

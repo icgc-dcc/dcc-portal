@@ -43,6 +43,7 @@ import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.manifest.model.Manifest;
 import org.icgc.dcc.portal.manifest.model.ManifestField;
 import org.icgc.dcc.portal.manifest.model.ManifestFile;
+import org.icgc.dcc.portal.manifest.writer.EGAManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GNOSManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GenericManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.ICGCManifestWriter;
@@ -288,8 +289,10 @@ public class ManifestService {
       GNOSManifestWriter.write(out, downloadUrlGroups, timestamp);
     } else if (repo.isS3()) {
       ICGCManifestWriter.write(out, downloadUrlGroups);
+    } else if (repo.isEGA()) {
+      EGAManifestWriter.write(out, downloadUrlGroups);
     } else {
-      // TCGA, EGA
+      // e.g TCGA
       GenericManifestWriter.write(out, downloadUrlGroups);
     }
   }

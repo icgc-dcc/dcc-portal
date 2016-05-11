@@ -29,7 +29,7 @@ import com.google.common.collect.Multimap;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class GenericManifestWriter extends TsvManifestWriter {
+public class GenericManifestWriter extends TSVManifestWriter {
 
   /**
    * Constants - Fields

@@ -66,6 +66,10 @@ public enum Repository {
         || this == PCAWG_CHICAGO_TCGA;
   }
 
+  public boolean isEGA() {
+    return this == EGA;
+  }
+
   @JsonCreator
   public static Repository get(String repoCode) {
     return repoCode == null ? null : Repository.valueOf(repoCode.toUpperCase().replaceAll("-", "_"));

@@ -83,6 +83,7 @@ public class ManifestMapper {
         .setMd5sum(defaultString(fileCopy.getFileMd5sum()))
         .setSize(fileCopy.getFileSize())
         .setIndexObjectId(indexObjectId)
+        .setRepoFileId(defaultString(fileCopy.getRepoFileId()))
         .setRepoCode(defaultString(fileCopy.getRepoCode()))
         .setRepoType(defaultString(fileCopy.getRepoType()))
         .setRepoBaseUrl(defaultString(fileCopy.getRepoBaseUrl()))

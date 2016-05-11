@@ -31,7 +31,7 @@ import org.supercsv.io.CsvListWriter;
 
 import lombok.SneakyThrows;
 
-public class TsvManifestWriter {
+public class TSVManifestWriter {
 
   /**
    * Constants

@@ -45,6 +45,7 @@ public class ManifestFile {
   Long size;
   String indexObjectId;
 
+  String repoFileId;
   String repoCode;
   String repoType;
   String repoBaseUrl;
