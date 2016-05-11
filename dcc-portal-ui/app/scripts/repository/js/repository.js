@@ -279,20 +279,20 @@
 
       filters = _.set (filters, 'file.repoName.is', [repoName]);
 
+      // TODO: Externalize the mapping from repo codes to names
       var params = {
-        size: repoData.fileCount,
-        isTransient: true,
+        format: 'files',
+        repos: [repoName === 'AWS - Virginia' ? 'aws-virginia' : 'collaboratory'],
         filters: filters
       };
 
-      SetService.createFileSet (params).then (function (data) {
+      ExternalRepoService.createManifest(params).then(function (data) {
         if (! data.id) {
           console.log('No Manifest UUID is returned from API call.');
           return;
         }
         repoData.isGeneratingManifestID = false;
         repoData.manifestID = data.id;
-
      });
     };
 

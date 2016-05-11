@@ -154,6 +154,10 @@
         '/export?filters=' + uriString (filters);
     };
 
+    _srv.createManifest = function (params) {
+      return Restangular.service('manifests').post(params, {}, {'Content-Type': 'application/json'});
+    };
+
     _srv.getManifestUrl = function (ids, repos) {
       return API.BASE_URL + '/manifests?filters=' +
         uriString ({file:{id:{is:ids}}}) + '&repos=' + _concatRepoCodes (repos) + '&format=files';

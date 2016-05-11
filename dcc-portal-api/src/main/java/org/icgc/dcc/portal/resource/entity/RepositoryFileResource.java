@@ -94,11 +94,12 @@ public class RepositoryFileResource extends Resource {
   @NonNull
   private final RepositoryFileService repositoryFileService;
 
-  @Path("/manifest/{setId}")
+  @Path("/manifest/{manifestId}")
   @GET
-  public Response legacyManifest(@ApiParam(value = "Set Id", required = true) @PathParam("setId") String setId) {
+  public Response legacyManifest(
+      @ApiParam(value = "Manifest ID", required = true) @PathParam("manifestId") String manifestId) {
     // For backwards compatibility for use with ICGC Storage Client
-    val uri = UriBuilder.fromResource(ManifestResource.class).path(setId).build();
+    val uri = UriBuilder.fromResource(ManifestResource.class).path(manifestId).build();
     return Response.seeOther(uri).build();
   }
 
