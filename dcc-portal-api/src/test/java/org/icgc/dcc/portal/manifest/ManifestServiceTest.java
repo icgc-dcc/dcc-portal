@@ -79,7 +79,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
   private static final ObjectNode EMPTY_FILTER = new FiltersParam("{}").get();
 
   private static final String XML_FILE_EXTENSION = "xml";
-  private static final String TXT_FILE_EXTENSION = "txt";
+  private static final String TSV_FILE_EXTENSION = "tsv";
   private static final String GNOS_REPO = "GNOS";
 
   private static final String TERMS_LOOKUP = "terms-lookup";
@@ -192,7 +192,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
   }
 
   private static String getFileExtensionOf(String repoType) {
-    return isGnosRepo(repoType) ? XML_FILE_EXTENSION : TXT_FILE_EXTENSION;
+    return isGnosRepo(repoType) ? XML_FILE_EXTENSION : TSV_FILE_EXTENSION;
   }
 
   @NonNull
