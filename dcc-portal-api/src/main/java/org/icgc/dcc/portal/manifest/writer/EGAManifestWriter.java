@@ -17,39 +17,54 @@
  */
 package org.icgc.dcc.portal.manifest.writer;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.toList;
+import static org.icgc.dcc.common.core.util.Joiners.WHITESPACE;
+
+import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 import org.icgc.dcc.portal.manifest.model.ManifestFile;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.google.common.io.Resources;
 
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class EGAManifestWriter extends TSVManifestWriter {
+public class EGAManifestWriter {
+
+  /**
+   * Constants.
+   */
+  private static final String MANIFEST_TEMPLATE = "/templates/manifest.ega.sh.template";
 
   @SneakyThrows
   public static void write(OutputStream buffer, Multimap<String, ManifestFile> bundles) {
-    val tsv = createTsv(buffer);
+    val repoFileIds = resolveRepoFileIds(bundles);
+    val manifest = createManifest(repoFileIds);
 
-    for (val url : bundles.keySet()) {
-      val bundle = bundles.get(url);
-      val row = createRow(url, bundle);
-
-      tsv.write(row);
-    }
-
-    tsv.flush();
+    val writer = new OutputStreamWriter(buffer, UTF_8);
+    writer.write(manifest);
+    writer.flush();
   }
 
-  private static List<String> createRow(String url, Collection<ManifestFile> bundle) {
-    val row = Lists.<String> newArrayList();
-    row.add(join(bundle, ManifestFile::getRepoFileId));
+  private static List<String> resolveRepoFileIds(Multimap<String, ManifestFile> bundles) {
+    return bundles.values().stream().map(ManifestFile::getRepoFileId).collect(toList());
+  }
 
-    return row;
+  @SneakyThrows
+  private static String createManifest(List<String> repoFileIds) {
+    val template = readTemplate();
+    return template
+        .replace("{{ repoFileIds }}", WHITESPACE.join(repoFileIds))
+        .replace("{{ timestamp }}", System.currentTimeMillis() + "");
+  }
+
+  private static String readTemplate() throws IOException {
+    return Resources.toString(EGAManifestWriter.class.getResource(MANIFEST_TEMPLATE), UTF_8);
   }
 
 }

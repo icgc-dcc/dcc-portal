@@ -54,7 +54,15 @@ public final class Manifests {
   }
 
   public static String getFileExtension(Repository repo) {
-    return repo.isGNOS() ? "xml" : "tsv";
+    if (repo.isGNOS()) {
+      return "xml";
+    } else if (repo.isS3()) {
+      return "tsv";
+    } else if (repo.isEGA()) {
+      return "sh";
+    } else {
+      return "tsv";
+    }
   }
 
   private static Repository getRepo(Manifest manifest) {

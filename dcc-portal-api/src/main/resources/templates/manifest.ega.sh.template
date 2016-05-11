@@ -1,0 +1,72 @@
+#!/bin/bash
+# Script to download a EGA "manifest" generated from https://dcc.icgc.org/repositories
+# 
+# For information on the EGA Download Client, please see:
+#   https://www.ebi.ac.uk/ega/about/your_EGA_account/download_streaming_client#direct_command
+
+#
+# Configuration
+#
+
+# EGA username
+username=
+
+# EGA password
+password=
+
+# Where to place downloads (must exist)
+output_dir=
+
+# Path to EgaDemoClient.jar
+bin_dir=.
+
+#
+# Setup
+#
+
+file_ids="{{ repoFileIds }}"
+cipher=$(md5 -s "$username$password")
+label=icgc-download-{{ timestamp }}
+link=https://www.ebi.ac.uk/ega/about/your_EGA_account/download_streaming_client#download
+
+check() {
+  if [ which java >/dev/null 2>&1 ];
+  then
+     echo "Java not found. Exiting..."
+     exit 1
+  fi
+  if [ ! -f $bin_dir/EgaDemoClient.jar ];
+  then
+     echo "EGA client not found. Please download from $link and try again. Exiting..."
+     exit 1
+  fi
+}
+
+request() {
+  for file_id in $file_ids
+  do
+    echo "Requesing $file_id..."
+    java -jar $bin_dir/EgaDemoClient.jar -p $username $password -rf $file_id -re $cipher -label $label
+  done
+}
+
+download() {
+  echo "Downloading $file_id..."
+  java -jar $bin_dir/EgaDemoClient.jar -p $username $password -dr $label -path $output_dir
+}
+
+decrypt() {
+  echo "Decrypting..."
+  java -jar $bin_dir/EgaDemoClient.jar -p $username $password -dc $(ls -d $output_dir/*.cip) -dck $cipher
+}
+
+#
+# Run
+#
+
+check
+request
+download
+decrypt
+
+echo "Finished!"
