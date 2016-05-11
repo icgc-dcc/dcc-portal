@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
 import static javax.ws.rs.core.Response.ok;
-import static org.icgc.dcc.portal.resource.Resources.API_FILE_REPOS_VALUE;
+import static org.icgc.dcc.portal.manifest.Manifests.getFileName;
 import static org.icgc.dcc.portal.resource.Resources.API_FILTER_PARAM;
 import static org.icgc.dcc.portal.resource.Resources.API_FILTER_VALUE;
 import static org.icgc.dcc.portal.util.MediaTypes.GZIP;
@@ -81,15 +81,13 @@ public class ManifestResource extends Resource {
   /**
    * Constants.
    */
-
-  // TODO: Improve formal documentation
-
   private static final String API_MANIFEST_ID_PARAM = "manifestId";
   private static final String API_MANIFEST_ID_VALUE = "The manifest ID";
 
   private static final String API_FILE_FORMAT_VALUE = "The output format";
   private static final String API_FILE_FORMAT_PARAM = "format";
 
+  private static final String API_FILE_REPOS_VALUE = "The prioritized list of repo codes to use";
   private static final String API_FILE_REPOS_PARAM = "repos";
 
   private static final String API_FILE_FIELDS_VALUE = "What fields to include";
@@ -130,6 +128,10 @@ public class ManifestResource extends Resource {
       // Input
       @ApiParam(value = API_MANIFEST_ID_VALUE, required = true) @PathParam(API_MANIFEST_ID_PARAM) UUID manifestId,
 
+      // Input - Overrides
+      @ApiParam(value = API_FILE_REPOS_VALUE) @QueryParam(API_FILE_REPOS_PARAM) @DefaultValue("") ListParam repoParam,
+      @ApiParam(value = API_FILE_UNIQUE_VALUE) @QueryParam(API_FILE_UNIQUE_PARAM) @DefaultValue("false") boolean unique,
+
       // Output - Overrides
       @ApiParam(value = API_FILE_FORMAT_VALUE) @QueryParam(API_FILE_FORMAT_PARAM) @DefaultValue("") String format,
       @ApiParam(value = API_FILE_FIELDS_VALUE) @QueryParam(API_FILE_FIELDS_PARAM) @DefaultValue("") ListParam fieldsParam,
@@ -137,10 +139,18 @@ public class ManifestResource extends Resource {
 
     val manifest = manifestService.getManifest(manifestId);
 
-    // Overrides
+    // Input - Overrides
+    if (hasParam(API_FILE_REPOS_PARAM)) {
+      manifest.setRepos(repoParam.get());
+    }
+    if (hasParam(API_FILE_UNIQUE_PARAM)) {
+      manifest.setUnique(unique);
+    }
+
+    // Output - Overrides
     if (hasParam(API_FILE_FORMAT_PARAM)) {
       checkFormat(format);
-      manifest.setFormat(ManifestFormat.fromString(format));
+      manifest.setFormat(ManifestFormat.get(format));
 
       if (manifest.getFormat() != ManifestFormat.JSON) {
         // Needed to pass validation
@@ -179,7 +189,7 @@ public class ManifestResource extends Resource {
     checkFormat(format);
 
     val manifest = new Manifest()
-        .setFormat(ManifestFormat.fromString(format))
+        .setFormat(ManifestFormat.get(format))
         .setRepos(repoParam.get())
         .setFilters(filtersParam.get())
         .setFields(parseFields(fieldsParam))
@@ -215,8 +225,7 @@ public class ManifestResource extends Resource {
 
   private Response tarball(Manifest manifest) {
     return ok(entityStream(manifest), GZIP)
-        .header(CONTENT_DISPOSITION,
-            attachmentContent(manifest.getFileName(), manifest.getTimestamp()))
+        .header(CONTENT_DISPOSITION, attachmentContent(manifest))
         .build();
   }
 
@@ -226,8 +235,7 @@ public class ManifestResource extends Resource {
       return ok(entityStream(manifest), mediaType).build();
     } else {
       return ok(entityStream(manifest), TEXT_PLAIN_TYPE)
-          .header(CONTENT_DISPOSITION,
-              attachmentContent(manifest.getFileName(), manifest.getTimestamp()))
+          .header(CONTENT_DISPOSITION, attachmentContent(manifest))
           .build();
     }
   }
@@ -250,10 +258,10 @@ public class ManifestResource extends Resource {
         "'format' is not a valid value in: %s", Arrays.toString(ManifestFormat.values()).toLowerCase());
   }
 
-  private static ContentDisposition attachmentContent(String fileName, long timestamp) {
-    val date = new Date(timestamp);
+  private static ContentDisposition attachmentContent(Manifest manifest) {
+    val date = new Date(manifest.getTimestamp());
     return ContentDisposition.type("attachment")
-        .fileName(fileName)
+        .fileName(getFileName(manifest))
         .creationDate(date)
         .modificationDate(date)
         .readDate(date)

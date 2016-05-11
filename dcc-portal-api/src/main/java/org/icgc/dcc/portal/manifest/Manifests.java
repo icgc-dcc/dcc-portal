@@ -15,37 +15,54 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.manifest.model;
+package org.icgc.dcc.portal.manifest;
 
 import static lombok.AccessLevel.PRIVATE;
+import static org.icgc.dcc.common.core.util.Joiners.DOT;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import org.icgc.dcc.portal.manifest.model.Manifest;
+import org.icgc.dcc.portal.manifest.model.ManifestFormat;
+import org.icgc.dcc.portal.model.Repository;
 
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-@RequiredArgsConstructor(access = PRIVATE)
-public enum ManifestFormat {
+@NoArgsConstructor(access = PRIVATE)
+public final class Manifests {
 
-  TARBALL("tarball"), FILES("files"), JSON("json");
+  private final static String PREFIX = "manifest";
 
-  @NonNull
-  private final String key;
+  public static String getFileName(@NonNull Manifest manifest) {
+    val repo = getRepo(manifest);
 
-  @JsonCreator
-  public static ManifestFormat get(String key) {
-    return key == null ? null : ManifestFormat.valueOf(key.toUpperCase());
+    val timestamp = manifest.getTimestamp();
+    if (manifest.getFormat() == ManifestFormat.TARBALL) {
+      // Archive
+      return PREFIX + "." + timestamp + ".tar.gz";
+    } else if (repo != null) {
+      // Single repo
+      return getFileName(repo, timestamp);
+    } else {
+      // Concatenated manifest
+      return PREFIX + ".concatenated." + timestamp + ".txt";
+    }
   }
 
-  @JsonValue
-  public String getKey() {
-    return key;
+  public static String getFileName(Repository repo, long timestamp) {
+    return DOT.join(PREFIX, repo.getRepoCode(), timestamp, getFileExtension(repo));
   }
 
-  @Override
-  public String toString() {
-    return key;
+  public static String getFileExtension(Repository repo) {
+    return repo.isGNOS() ? "xml" : "txt";
+  }
+
+  private static Repository getRepo(Manifest manifest) {
+    if (manifest.getRepos().size() == 1) {
+      return Repository.get(manifest.getRepos().get(0));
+    }
+
+    return null;
   }
 
 }

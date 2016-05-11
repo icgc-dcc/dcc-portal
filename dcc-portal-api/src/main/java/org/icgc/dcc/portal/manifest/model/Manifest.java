@@ -27,7 +27,6 @@ import java.util.UUID;
 import org.icgc.dcc.portal.model.Identifiable;
 import org.icgc.dcc.portal.util.ObjectNodeDeserializer;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -35,7 +34,6 @@ import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 import lombok.Data;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -83,20 +81,5 @@ public class Manifest implements Identifiable<UUID> {
 
   boolean multipart;
   List<ManifestEntry> entries;
-
-  @JsonIgnore
-  public String getFileName() {
-    val prefix = "manifest.";
-    if (format == ManifestFormat.TARBALL) {
-      return prefix + timestamp + ".tar.gz";
-    } else {
-      // TODO: Fix extensions to match repos
-      if (repos.size() == 1) {
-        return prefix + repos.get(0) + "." + timestamp + ".txt";
-      } else {
-        return prefix + timestamp + ".txt";
-      }
-    }
-  }
 
 }

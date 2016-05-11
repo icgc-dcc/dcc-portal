@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.manifest.model;
+package org.icgc.dcc.portal.model;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -26,26 +26,59 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = PRIVATE)
-public enum ManifestFormat {
+public enum Repository {
 
-  TARBALL("tarball"), FILES("files"), JSON("json");
+  // @formatter:off
+  EGA("ega",                                    "EGA - United Kingdom"),
+  CGHUB("cghub",                                "CGHub - Santa Cruz"),  
+  TCGA("tcga",                                  "TCGA DCC - Bethesda"),   
+  PCAWG_BARCELONA("pcawg-barcelona",            "PCAWG - Barcelona"),  
+  PCAWG_CGHUB("pcawg-cghub",                    "PCAWG - Santa Cruz"),    
+  PCAWG_TOKYO("pcawg-tokyo",                    "PCAWG - Tokyo"),   
+  PCAWG_SEOUL("pcawg-seoul",                    "PCAWG - Seoul"),        
+  PCAWG_LONDON("pcawg-london",                  "PCAWG - London"),        
+  PCAWG_HEIDELBERG("pcawg-heidelberg",          "PCAWG - Heidelberg"),    
+  PCAWG_CHICAGO_ICGC("pcawg-chicago-icgc",      "PCAWG - Chicago (ICGC)"),
+  PCAWG_CHICAGO_TCGA("pcawg-chicago-tcga",      "PCAWG - Chicago (TCGA)"),
+  AWS_VIRGINIA("aws-virginia",                  "AWS - Virginia"),        
+  COLLABORATORY("collaboratory",                "Collaboratory");         
+  // @formatter:on
 
   @NonNull
-  private final String key;
+  private final String repoCode;
+  @NonNull
+  private final String name;
+
+  public boolean isS3() {
+    return this == AWS_VIRGINIA
+        || this == COLLABORATORY;
+  }
+
+  public boolean isGNOS() {
+    return this == CGHUB
+        || this == PCAWG_BARCELONA
+        || this == PCAWG_CGHUB
+        || this == PCAWG_TOKYO
+        || this == PCAWG_SEOUL
+        || this == PCAWG_LONDON
+        || this == PCAWG_HEIDELBERG
+        || this == PCAWG_CHICAGO_ICGC
+        || this == PCAWG_CHICAGO_TCGA;
+  }
 
   @JsonCreator
-  public static ManifestFormat get(String key) {
-    return key == null ? null : ManifestFormat.valueOf(key.toUpperCase());
+  public static Repository get(String repoCode) {
+    return repoCode == null ? null : Repository.valueOf(repoCode.toUpperCase().replaceAll("-", "_"));
   }
 
   @JsonValue
-  public String getKey() {
-    return key;
+  public String getRepoCode() {
+    return repoCode;
   }
 
   @Override
   public String toString() {
-    return key;
+    return repoCode;
   }
 
 }

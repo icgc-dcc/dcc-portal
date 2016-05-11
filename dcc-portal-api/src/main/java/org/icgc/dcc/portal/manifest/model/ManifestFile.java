@@ -19,6 +19,9 @@ package org.icgc.dcc.portal.manifest.model;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
+import org.icgc.dcc.portal.model.Repository;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wordnik.swagger.annotations.ApiModel;
 
@@ -49,5 +52,10 @@ public class ManifestFile {
 
   String donorId;
   String projectCode;
+
+  @JsonIgnore
+  public Repository getRepo() {
+    return Repository.get(repoCode);
+  }
 
 }
