@@ -63,6 +63,10 @@ if [ -z $output_dir ]; then
    echo "Variable 'output_dir' is required. Exiting..."
    exit 1
 fi
+if [ -z $bin_dir ]; then
+   echo "Variable 'bin_dir' is required. Exiting..."
+   exit 1
+fi
 if [ which java >/dev/null 2>&1 ]; then
    echo "Java not found. Exiting..."
    exit 2
