@@ -24,7 +24,7 @@
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   if (typeof window.$icgc === 'undefined') {
     (function(devConfig) {
-      
+
       // used to configure dev profile for the API class
       var _defaultDevConfiguration = devConfig || {},
           _defaultDevHost = _defaultDevConfiguration.HOST || 'localhost',
@@ -482,7 +482,7 @@
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound']);
 
       // Add UI Router Debug if there is a fatal state change error
-      $rootScope.$on('$stateChangeError', function () { 
+      $rootScope.$on('$stateChangeError', function () {
         console.error('State Change Error Occurred. Error occurred with arguments: ', arguments);
       });
 
@@ -536,12 +536,12 @@
                           AngularyticsProvider, $httpProvider, RestangularProvider,
                           markdownConverterProvider, localStorageServiceProvider, API,
     copyPasteProvider) {
-                            
+
     // Let copyPasteProvider know where the flash app for copying and pasting is
     var copyPastePath = window.$ICGC_DEV_CONFIG ? null : 'bower_components/zeroclipboard/dist/ZeroClipboard.swf';
     copyPasteProvider.zeroClipboardPath(copyPastePath);
-    
-    
+
+
     // Disables debugging information
     $compileProvider.debugInfoEnabled(false);
 
@@ -677,7 +677,7 @@
 
     // Donor, mutation or gene set ids
     ENTITY: 'entitySetId',
-    
+
     ENTITY_PREFIX: 'ES:',
 
     // Order matters, this is in most important to least important (For enrichment analysis)

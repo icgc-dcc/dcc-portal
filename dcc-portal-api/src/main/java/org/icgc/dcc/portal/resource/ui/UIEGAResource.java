@@ -19,7 +19,7 @@ package org.icgc.dcc.portal.resource.ui;
 
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
 import static com.sun.jersey.core.header.ContentDisposition.type;
-import static javax.ws.rs.core.MediaType.TEXT_XML;
+import static org.icgc.dcc.portal.util.MediaTypes.GZIP;
 
 import java.net.URL;
 
@@ -35,24 +35,24 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
-@Path("/v1/ui/collaboratory")
-public class UICollaboratoryResource extends Resource {
+@Path("/v1/ui/ega")
+public class UIEGAResource extends Resource {
 
   /**
    * Constants.
    */
-  private static final String COLLAB_META_URL = "https://object.cancercollaboratory.org:9080/oicr.icgc.meta/metadata/";
+  private static final String EGA_META_URL = " http://ega.ebi.ac.uk/ega/rest/download/v2/metadata/";
 
-  @Path("/metadata/{objectId}")
+  @Path("/metadata/{datasetId}")
   @GET
   @SneakyThrows
-  public Response collabMeta(@PathParam("objectId") String objectId) {
-    val input = new URL(COLLAB_META_URL + objectId).openStream();
+  public Response collabMeta(@PathParam("datasetId") String datasetId) {
+    val input = new URL(EGA_META_URL + datasetId).openStream();
 
     return Response.ok(input)
-        .type(TEXT_XML)
+        .type(GZIP)
         .header(CONTENT_DISPOSITION, type("attachment")
-            .fileName(objectId + ".xml")
+            .fileName(datasetId + ".tar.gz")
             .build())
         .build();
   }

@@ -382,7 +382,7 @@
       } else if (isS3 (fileCopy.repoType) && !isCollab(fileCopy.repoCode)) {
         parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath];
       } else if (isEGA (fileCopy.repoType)) {
-        parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath, fileCopy.repoDataSetIds[0]];
+        parts = ['api/v1/ui/ega/metadata/', fileCopy.repoDataSetIds[0]];
       } else {
         parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath, fileInfo.dataBundle.dataBundleId];
       }
