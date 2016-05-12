@@ -30,6 +30,7 @@ import org.dcc.portal.pql.meta.RepositoryFileTypeModel.Fields;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.icgc.dcc.portal.manifest.model.ManifestFile;
+import org.icgc.dcc.portal.model.Repository;
 import org.icgc.dcc.portal.model.RepositoryFile;
 import org.icgc.dcc.portal.model.RepositoryFile.Donor;
 import org.icgc.dcc.portal.model.RepositoryFile.FileCopy;
@@ -76,6 +77,7 @@ public class ManifestMapper {
   private static ManifestFile mapFileCopy(FileCopy fileCopy) {
     val indexFile = fileCopy.getIndexFile();
     val indexObjectId = (null == indexFile) ? "" : defaultString(indexFile.getObjectId());
+    val repo = Repository.get(fileCopy.getRepoCode());
 
     return new ManifestFile()
         .setName(defaultString(fileCopy.getFileName()))
@@ -83,7 +85,7 @@ public class ManifestMapper {
         .setMd5sum(defaultString(fileCopy.getFileMd5sum()))
         .setSize(fileCopy.getFileSize())
         .setIndexObjectId(indexObjectId)
-        .setRepoFileId(defaultString(fileCopy.getRepoFileId()))
+        .setRepoFileId(defaultString(repo.isGNOS() ? fileCopy.getRepoDataBundleId() : fileCopy.getRepoFileId()))
         .setRepoCode(defaultString(fileCopy.getRepoCode()))
         .setRepoType(defaultString(fileCopy.getRepoType()))
         .setRepoBaseUrl(defaultString(fileCopy.getRepoBaseUrl()))

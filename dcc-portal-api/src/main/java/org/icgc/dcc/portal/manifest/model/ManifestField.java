@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = PRIVATE)
 public enum ManifestField {
 
-  CONTENT("content"), ID("id"), MD5SUM("md5sum"), SIZE("size");
+  CONTENT("content"), ID("id"), MD5SUM("md5sum"), REPOFILEID("repoFileId"), SIZE("size");
 
   @NonNull
   private final String key;

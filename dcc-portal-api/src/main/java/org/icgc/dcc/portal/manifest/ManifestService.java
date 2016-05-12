@@ -222,6 +222,9 @@ public class ManifestService {
           if (fields.contains(ManifestField.MD5SUM)) {
             generator.writeStringField(ManifestField.MD5SUM.getKey(), file.getMd5sum());
           }
+          if (fields.contains(ManifestField.REPOFILEID)) {
+            generator.writeStringField(ManifestField.REPOFILEID.getKey(), file.getRepoFileId());
+          }
           if (fields.contains(ManifestField.SIZE)) {
             generator.writeNumberField(ManifestField.SIZE.getKey(), file.getSize());
           }

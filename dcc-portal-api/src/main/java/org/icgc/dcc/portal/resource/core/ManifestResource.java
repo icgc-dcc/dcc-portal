@@ -100,7 +100,7 @@ public class ManifestResource extends Resource {
 
   private static final String API_FILE_FIELDS_PARAM = "fields";
   private static final String API_FILE_FIELDS_VALUE =
-      "What addional fields to include when using format 'json'. Zero or more of 'id', 'size', 'md5sum', 'content' separated by a comma. All fields accept 'content' are properties of files. 'content' represents the a base64 encoded native manifest";
+      "What addional fields to include when using format 'json'. Zero or more of 'id', 'size', 'md5sum', 'repoFileId', or 'content' separated by a comma. All fields accept 'content' are properties of files. 'content' represents the a base64 encoded native manifest";
 
   private static final String API_FILE_MULTIPART_PARAM = "multipart";
   private static final String API_FILE_MULTIPART_VALUE =
