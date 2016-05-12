@@ -99,17 +99,19 @@ public class ToStringVisitor extends NodeVisitor<String, Void> {
 
   @Override
   public String visitTerm(TermNode node, Optional<Void> context) {
-    return format("%s (%s = %s)", getCommonHeader(node), node.getNameNode().getValue(), node.getValueNode().getValue());
+    String header = "";
+    if (node.getLookup().isDefine()) {
+      header = format("%s [%s %s]", getCommonHeader(node), node.getField(), node.getLookup());
+    } else {
+      header = format("%s [%s]", getCommonHeader(node), node.getField());
+    }
+
+    return buildToString(node, Optional.of(header));
   }
 
   @Override
   public String visitTerms(TermsNode node, Optional<Void> context) {
-    String header = "";
-    if (node.getLookup().getIndex().isEmpty()) {
-      header = format("%s [%s]", getCommonHeader(node), node.getField());
-    } else {
-      header = format("%s [%s %s]", getCommonHeader(node), node.getField(), node.getLookup());
-    }
+    val header = format("%s [%s]", getCommonHeader(node), node.getField());
 
     return buildToString(node, Optional.of(header));
   }

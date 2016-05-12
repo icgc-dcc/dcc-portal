@@ -21,6 +21,7 @@ import static org.dcc.portal.pql.meta.field.ArrayFieldModel.arrayOfStrings;
 import static org.dcc.portal.pql.meta.field.ArrayFieldModel.nestedArrayOfObjects;
 import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
+import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 
 import java.util.List;
@@ -97,7 +98,7 @@ public class MutationCentricTypeModel extends TypeModel {
         .add(string("chromosome", ImmutableSet.of("chromosome", "mutation.chromosome")))
         .add(long_("chromosome_start", ImmutableSet.of("start", "mutation.start")))
         .add(long_("chromosome_end", ImmutableSet.of("end", "mutation.end")))
-        .add(string("_mutation_id", "id"))
+        .add(identifiableString("_mutation_id", "id"))
         .add(string("mutation", "mutation"))
         .add(string("mutation_type", "type"))
         .add(string("reference_genome_allele", "referenceGenomeAllele"))
@@ -119,9 +120,6 @@ public class MutationCentricTypeModel extends TypeModel {
         .add(string(MUTATION_LOCATION, MUTATION_LOCATION))
 
         .add(string(SCORE, ImmutableSet.of(SCORE, "affectedDonorCountFiltered")))
-        .add(string(DONOR_ENTITY_SET_ID, DONOR_ENTITY_SET_ID))
-        .add(string(GENE_ENTITY_SET_ID, GENE_ENTITY_SET_ID))
-        .add(string(MUTATION_ENTITY_SET_ID, MUTATION_ENTITY_SET_ID))
         .build();
   }
 
@@ -140,7 +138,7 @@ public class MutationCentricTypeModel extends TypeModel {
             string("functional_impact_prediction_summary", "functionalImpact"),
             object("consequence", string("consequence_type", "consequenceType")),
             object("gene",
-                string("_gene_id", "gene.id"),
+                identifiableString("_gene_id", "gene.id"),
                 string("biotype", "gene.type"),
                 string("chromosome", "gene.chromosome"),
                 long_("end", "gene.end"),
@@ -176,7 +174,7 @@ public class MutationCentricTypeModel extends TypeModel {
 
   private static ObjectFieldModel defineDonor() {
     return object("donor",
-        string("_donor_id", "donor.id"),
+        identifiableString("_donor_id", "donor.id"),
         string("donor_sex", "donor.gender"),
         string("donor_tumour_stage_at_diagnosis", "donor.tumourStageAtDiagnosis"),
         string("donor_vital_status", "donor.vitalStatus"),
@@ -195,9 +193,6 @@ public class MutationCentricTypeModel extends TypeModel {
         .put(BIOLOGICAL_PROCESS, "transcript.gene.go_term.biological_process")
         .put(CELLULAR_COMPONENT, "transcript.gene.go_term.cellular_component")
         .put(MOLECULAR_FUNCTION, "transcript.gene.go_term.molecular_function")
-        .put(DONOR_ENTITY_SET_ID, "ssm_occurrence.donor._donor_id")
-        .put(GENE_ENTITY_SET_ID, "transcript.gene._gene_id")
-        .put(MUTATION_ENTITY_SET_ID, "_mutation_id")
         .put(LOOKUP_TYPE, "mutation-ids")
         .build();
   }

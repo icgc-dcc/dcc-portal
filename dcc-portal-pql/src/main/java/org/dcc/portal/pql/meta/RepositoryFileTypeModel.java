@@ -20,12 +20,11 @@ package org.dcc.portal.pql.meta;
 import static org.dcc.portal.pql.meta.field.ArrayFieldModel.nestedArrayOfObjects;
 import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
+import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 
 import java.util.List;
 import java.util.Map;
-
-import lombok.experimental.UtilityClass;
 
 import org.dcc.portal.pql.meta.field.ArrayFieldModel;
 import org.dcc.portal.pql.meta.field.FieldModel;
@@ -34,6 +33,8 @@ import org.dcc.portal.pql.meta.field.ObjectFieldModel;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+
+import lombok.experimental.UtilityClass;
 
 /**
  * TypeModel for Repository File index type
@@ -192,7 +193,7 @@ public class RepositoryFileTypeModel extends TypeModel {
 
     private ArrayFieldModel donors() {
       return nestedArrayOfObjects(EsFields.DONORS, DONORS, object(
-          string(EsFields.DONOR_ID, DONOR_ID),
+          identifiableString(EsFields.DONOR_ID, ImmutableSet.of(DONOR_ID, "donor.id")),
           string("program", PROGRAM),
           string("primary_site", PRIMARY_SITE),
           string("project_code", PROJECT_CODE),
@@ -229,11 +230,10 @@ public class RepositoryFileTypeModel extends TypeModel {
 
     // Main mapping
     private final List<FieldModel> MAPPINGS = ImmutableList.<FieldModel> builder()
-        .add(string("id", ImmutableSet.of(ID, FILE_ID)))
+        .add(identifiableString("id", ImmutableSet.of(ID, FILE_ID, "file.id")))
         .add(string("object_id", ImmutableSet.of(FILE_OBJECT_ID, FILE_UUID)))
         .add(string("access", ACCESS))
         .add(string("study", STUDY))
-        .add(string(REPO_FILE_ENTITY_SET_ID, REPO_FILE_ENTITY_SET_ID))
         .add(dataCategorization())
         .add(dataBundle())
         .add(fileCopies())
@@ -270,7 +270,6 @@ public class RepositoryFileTypeModel extends TypeModel {
       EsFields.DONORS);
 
   private static final Map<String, String> INTERNAL_ALIASES = ImmutableMap.<String, String> of(
-      REPO_FILE_ENTITY_SET_ID, EsFields.DONORS + "." + EsFields.DONOR_ID,
       LOOKUP_TYPE, TERMS_LOOKUP_DONOR_IDS);
 
 }

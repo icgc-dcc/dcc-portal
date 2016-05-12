@@ -110,7 +110,10 @@
       var data = {};
       
       if (typeof derived === 'undefined' || !derived) {
-        data.filters = encodeURI(JSON.stringify(params.filters));
+        
+        var fixedFilters = fixFilterForPQL(params.filters);
+        
+        data.filters = encodeURI(JSON.stringify(fixedFilters));
         data.size = params.size || 0;
       }
       
@@ -176,7 +179,7 @@
     * We want to materialize a new set in a synchronous request.
     */
     _service.materializeSync = function(type, params) {
-      var data = params2JSON(type, params);
+      var data = params2JSON(type, params, true);
       return Restangular.one('entityset')
         .customPOST(data, 'union', {async:false}, {'Content-Type': 'application/json'});
     };
@@ -283,6 +286,23 @@
       });
       return promise;
     };
+    
+    function fixFilterForPQL (filters) {
+      var workingFilter = filters;
+      
+      var uuid =  _.get(workingFilter, 'file.entitySetId.is', 'missing');
+      
+      if (uuid !== 'missing') {
+        _.set(workingFilter, 'donor.id.is');
+        workingFilter.donor.id.is = [Extensions.ENTITY_PREFIX + uuid];
+        delete workingFilter.file.entitySetId;
+        
+        if (_.isEmpty(workingFilter.file)) {
+          delete workingFilter.file;
+        }
+      }
+      return workingFilter;
+    }
 
     _service.createForwardRepositorySet = function(type, params, forwardUrl) {
       Page.startWork();
@@ -290,8 +310,8 @@
       params.description = '';
       params.sortBy = 'fileName';
       params.sortOrder = 'DESCENDING';
-
-      var data = params2JSON(type, params);
+      
+      var data = params2JSON(type, params);      
       var promise = Restangular.one('entityset').one('external')
       .post(undefined, data, {}, {'Content-Type': 'application/json'});
       promise.then(function(data) {

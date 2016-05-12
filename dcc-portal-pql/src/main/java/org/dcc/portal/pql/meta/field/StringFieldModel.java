@@ -27,19 +27,23 @@ import org.dcc.portal.pql.meta.visitor.FieldVisitor;
 public class StringFieldModel extends FieldModel {
 
   private StringFieldModel(String name) {
-    this(name, EMPTY_UI_ALIAS, NOT_NESTED);
+    this(name, EMPTY_UI_ALIAS, NOT_NESTED, false);
   }
 
   private StringFieldModel(String name, String alias) {
-    this(name, singleton(alias), NOT_NESTED);
+    this(name, singleton(alias), NOT_NESTED, false);
   }
 
-  private StringFieldModel(String name, Set<String> alias) {
-    this(name, alias, NOT_NESTED);
+  private StringFieldModel(String name, String alias, boolean identifiable) {
+    this(name, singleton(alias), NOT_NESTED, identifiable);
   }
 
-  private StringFieldModel(String name, Set<String> alias, boolean nested) {
-    super(name, alias, STRING, nested);
+  private StringFieldModel(String name, Set<String> alias, boolean identifiable) {
+    this(name, alias, NOT_NESTED, identifiable);
+  }
+
+  private StringFieldModel(String name, Set<String> alias, boolean nested, boolean identifiable) {
+    super(name, alias, STRING, nested, identifiable);
   }
 
   public static StringFieldModel string(String name) {
@@ -50,8 +54,16 @@ public class StringFieldModel extends FieldModel {
     return new StringFieldModel(name, alias);
   }
 
+  public static StringFieldModel identifiableString(String name, String alias) {
+    return new StringFieldModel(name, alias, true);
+  }
+
   public static StringFieldModel string(String name, Set<String> alias) {
-    return new StringFieldModel(name, alias);
+    return new StringFieldModel(name, alias, false);
+  }
+
+  public static StringFieldModel identifiableString(String name, Set<String> alias) {
+    return new StringFieldModel(name, alias, true);
   }
 
   @Override

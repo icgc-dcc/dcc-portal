@@ -55,7 +55,7 @@ public class ArrayFieldModel extends FieldModel {
   }
 
   private ArrayFieldModel(String name, Set<String> aliases, boolean nested, FieldModel element) {
-    super(name, aliases, ARRAY, nested);
+    super(name, aliases, ARRAY, nested, false);
     this.element = element;
   }
 

@@ -50,7 +50,7 @@ public abstract class ExpressionNode {
     this(Lists.newArrayList(children));
   }
 
-  public ExpressionNode(Iterable<ExpressionNode> children) {
+  public ExpressionNode(Iterable<? extends ExpressionNode> children) {
     this(Lists.newArrayList(children));
   }
 

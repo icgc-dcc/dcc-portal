@@ -17,13 +17,21 @@
  */
 package org.dcc.portal.pql.meta;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static org.dcc.portal.pql.meta.field.FieldModel.FIELD_SEPARATOR;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dcc.portal.pql.exception.SemanticException;
 import org.dcc.portal.pql.meta.field.FieldModel;
@@ -34,10 +42,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class TypeModel {
@@ -62,12 +66,6 @@ public abstract class TypeModel {
   public static final String GENE_LOCATION = "gene.location";
   public static final String MUTATION_LOCATION = "mutation.location";
 
-  public static final String ENTITY_SET_ID = "entitySetId";
-  public static final String DONOR_ENTITY_SET_ID = format("%s.%s", "donor", ENTITY_SET_ID);
-  public static final String GENE_ENTITY_SET_ID = format("%s.%s", "gene", ENTITY_SET_ID);
-  public static final String MUTATION_ENTITY_SET_ID = format("%s.%s", "mutation", ENTITY_SET_ID);
-  public static final String REPO_FILE_ENTITY_SET_ID = format("%s.%s", "file", ENTITY_SET_ID);
-
   public static final String SCORE = "_score";
 
   public static final String LOOKUP_PATH = "lookup.path";
@@ -88,11 +86,7 @@ public abstract class TypeModel {
       HAS_CURATED_SET,
       GENE_CURATED_SET_ID,
       GENE_LOCATION,
-      MUTATION_LOCATION,
-      DONOR_ENTITY_SET_ID,
-      GENE_ENTITY_SET_ID,
-      MUTATION_ENTITY_SET_ID,
-      REPO_FILE_ENTITY_SET_ID);
+      MUTATION_LOCATION);
 
   protected final Map<String, FieldModel> fieldsByFullPath;
   protected final Map<String, String> fieldsByAlias;
@@ -251,6 +245,22 @@ public abstract class TypeModel {
     return result;
   }
 
+  /**
+   * Get field alias by {@code field}.
+   * @param field is a fully qualified field
+   * @return alias of the {@code field}
+   * @throws IllegalArgumentException is the alias was not found
+   */
+  public final Set<String> getAliasByField(@NonNull String field) {
+    val aliases = fieldsByAlias.entrySet().stream()
+        .filter(entry -> entry.getValue().equals(field))
+        .map(entry -> entry.getKey())
+        .collect(toImmutableSet());
+    checkArgument(aliases.size() > 0, "Failed to resolve alias from field '%s'", field);
+
+    return aliases;
+  }
+
   @Override
   public String toString() {
     val builder = new StringBuilder();
@@ -332,6 +342,13 @@ public abstract class TypeModel {
     }
 
     return result.build().reverse();
+  }
+
+  public final boolean isIdentifiable(@NonNull String field) {
+    val fieldModel = fieldsByFullPath.get(field);
+    checkNotNull(fieldModel, "Failed to resolve field model form '%s'", field);
+
+    return fieldModel.isIdentifiable();
   }
 
   private String getFullName(String path) {

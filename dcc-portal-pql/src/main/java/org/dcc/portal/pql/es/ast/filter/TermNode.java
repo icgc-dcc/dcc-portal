@@ -18,6 +18,7 @@
 package org.dcc.portal.pql.es.ast.filter;
 
 import static com.google.common.base.Preconditions.checkState;
+import static org.dcc.portal.pql.es.model.LookupInfo.EMPTY_LOOKUP;
 
 import java.util.Optional;
 
@@ -28,11 +29,15 @@ import lombok.val;
 
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.TerminalNode;
+import org.dcc.portal.pql.es.model.LookupInfo;
 import org.dcc.portal.pql.es.visitor.NodeVisitor;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class TermNode extends ExpressionNode {
+
+  @NonNull
+  LookupInfo lookup;
 
   @NonNull
   TerminalNode nameNode;
@@ -41,23 +46,41 @@ public class TermNode extends ExpressionNode {
   TerminalNode valueNode;
 
   public TermNode(@NonNull TerminalNode name, @NonNull TerminalNode value) {
-    super(new ExpressionNode[] { name, value });
-    this.nameNode = name;
-    this.valueNode = value;
+    this(name, value, EMPTY_LOOKUP);
   }
 
   public TermNode(@NonNull String name, @NonNull Object value) {
+    this(name, value, EMPTY_LOOKUP);
+  }
+
+  public TermNode(@NonNull String name, @NonNull Object value, @NonNull LookupInfo lookup) {
     checkState(!name.isEmpty(), "Term node has an empty name.");
     val nameNode = new TerminalNode(name);
     val valueNode = new TerminalNode(value);
     super.addChildren(nameNode, valueNode);
     this.nameNode = nameNode;
     this.valueNode = valueNode;
+    this.lookup = lookup;
+  }
+
+  public TermNode(@NonNull TerminalNode name, @NonNull TerminalNode value, @NonNull LookupInfo lookup) {
+    super(new ExpressionNode[] { name, value });
+    this.nameNode = name;
+    this.valueNode = value;
+    this.lookup = lookup;
   }
 
   @Override
   public <T, A> T accept(@NonNull NodeVisitor<T, A> visitor, @NonNull Optional<A> context) {
     return visitor.visitTerm(this, context);
+  }
+
+  public String getField() {
+    return nameNode.getValueAsString();
+  }
+
+  public Object getValue() {
+    return valueNode.getValue();
   }
 
 }

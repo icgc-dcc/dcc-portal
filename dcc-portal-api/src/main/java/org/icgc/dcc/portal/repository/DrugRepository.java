@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.portal.repository;
 
-import static org.dcc.portal.pql.meta.Type.DRUG;
+import static org.dcc.portal.pql.meta.Type.DRUG_CENTRIC;
 import static org.icgc.dcc.portal.util.ElasticsearchResponseUtils.sanityCheck;
 
 import java.util.function.Consumer;
@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DrugRepository {
 
-  private static final String INDEX_TYPE = DRUG.getId();
+  private static final String INDEX_TYPE = DRUG_CENTRIC.getId();
 
   /**
    * Dependencies.
@@ -87,7 +87,7 @@ public class DrugRepository {
 
   @NonNull
   private SearchResponse pqlSearch(StatementNode pqlAst, String logMessage, Consumer<SearchRequestBuilder> customizer) {
-    val request = queryEngine.execute(pqlAst, DRUG).getRequestBuilder();
+    val request = queryEngine.execute(pqlAst, DRUG_CENTRIC).getRequestBuilder();
     return search(request, logMessage, customizer);
   }
 

@@ -95,7 +95,7 @@ public class FiltersConverterTest {
   @Test
   public void missingTest() {
     val result = converter.convertFilters(createFilters("{donor:{id:{not:'DO1'}, hasPathway:false}}"), DONOR_CENTRIC);
-    assertThat(result).isEqualTo("missing(gene.pathwayId),ne(donor.id,'DO1')");
+    assertThat(result).isEqualTo("ne(donor.id,'DO1'),missing(gene.pathwayId)");
   }
 
   @Test
@@ -165,35 +165,35 @@ public class FiltersConverterTest {
   @Test
   public void entitySetId_And_Id() {
     val jql =
-        "{gene: {entitySetId: {is: ['ab263008-db02-4631-a5c5-c4914a0fe6c8']}, id: {is: ['ENSG00000155657']}}}";
+        "{gene: {id: {is: ['ES:ab263008-db02-4631-a5c5-c4914a0fe6c8', 'ENSG00000155657']}}}";
     val filters = createFilters(jql);
     val pql = converter.convertFilters(filters, GENE_CENTRIC);
     assertThat(pql).isEqualTo(
-        "or(in(gene.entitySetId,'ab263008-db02-4631-a5c5-c4914a0fe6c8'),in(gene.id,'ENSG00000155657'))");
+        "in(gene.id,'ES:ab263008-db02-4631-a5c5-c4914a0fe6c8','ENSG00000155657')");
   }
 
   @Test
   public void entitySetId_And_Id_TwoCategories_GeneCentric() {
     val jql =
-        "{gene: {entitySetId: {is: ['ab263008-db02-4631-a5c5-c4914a0fe6c8']}, id: {is: ['ENSG00000155657']}}," +
-            "donor: {entitySetId: {is: ['ab263008-db02-4631-a5c5-c4914a0fe6c8']}, id: {is: ['some_donor_id']}}}";
+        "{gene: {id: {is: ['ES:ab263008-db02-4631-a5c5-c4914a0fe6c8', 'ENSG00000155657']}}," +
+            "donor: {id: {is: ['ES:ab263008-db02-4631-a5c5-c4914a0fe6c8', 'some_donor_id']}}}";
     val filters = createFilters(jql);
     val pql = converter.convertFilters(filters, GENE_CENTRIC);
     assertThat(pql)
         .isEqualTo(
-            "or(in(gene.entitySetId,'ab263008-db02-4631-a5c5-c4914a0fe6c8'),in(gene.id,'ENSG00000155657')),nested(donor,or(in(donor.entitySetId,'ab263008-db02-4631-a5c5-c4914a0fe6c8'),in(donor.id,'some_donor_id')))");
+            "in(gene.id,'ES:ab263008-db02-4631-a5c5-c4914a0fe6c8','ENSG00000155657'),nested(donor,in(donor.id,'ES:ab263008-db02-4631-a5c5-c4914a0fe6c8','some_donor_id'))");
   }
 
   @Test
   public void entitySetId_And_Id_TwoCategories_DonorCentric() {
     val jql =
-        "{gene: {entitySetId: {is: ['ab263008-db02-4631-a5c5-c4914a0fe6c8']}, id: {is: ['ENSG00000155657']}}," +
-            "donor: {entitySetId: {is: ['ab263008-db02-4631-a5c5-c4914a0fe6c8']}, id: {is: ['some_donor_id']}}}";
+        "{gene: {id: {is: ['ES:ab263008-db02-4631-a5c5-c4914a0fe6c8','ENSG00000155657']}}," +
+            "donor: {id: {is: ['ES:ab263008-db02-4631-a5c5-c4914a0fe6c8','some_donor_id']}}}";
     val filters = createFilters(jql);
     val pql = converter.convertFilters(filters, DONOR_CENTRIC);
     assertThat(pql)
         .isEqualTo(
-            "or(in(donor.entitySetId,'ab263008-db02-4631-a5c5-c4914a0fe6c8'),in(donor.id,'some_donor_id')),nested(gene,or(in(gene.entitySetId,'ab263008-db02-4631-a5c5-c4914a0fe6c8'),in(gene.id,'ENSG00000155657')))");
+            "in(donor.id,'ES:ab263008-db02-4631-a5c5-c4914a0fe6c8','some_donor_id'),nested(gene,in(gene.id,'ES:ab263008-db02-4631-a5c5-c4914a0fe6c8','ENSG00000155657'))");
   }
 
   @Test
@@ -430,7 +430,7 @@ public class FiltersConverterTest {
   public void nestedTest_two() {
     val filters = createFilters("{gene:{id:{is:'G1'},start:{is:123}}}");
     val result = converter.convertFilters(filters, DONOR_CENTRIC);
-    assertThat(result).isEqualTo("nested(gene,eq(gene.start,123),eq(gene.id,'G1'))");
+    assertThat(result).isEqualTo("nested(gene,eq(gene.id,'G1'),eq(gene.start,123))");
   }
 
   @Test
@@ -530,7 +530,7 @@ public class FiltersConverterTest {
     values.put("gene", new JqlField("start", IS, new JqlSingleValue(1), "gene"));
     assertThat(createFilterByNestedPath(DONOR_CENTRIC, values,
         Lists.newArrayList("gene")))
-            .isEqualTo("nested(gene,eq(gene.start,1),eq(gene.id,'G'))");
+            .isEqualTo("nested(gene,eq(gene.id,'G'),eq(gene.start,1))");
   }
 
   @Test
@@ -584,7 +584,7 @@ public class FiltersConverterTest {
         + "availableDataTypes:{is:'SSM'}}}");
     val result = converter.convertFilters(filters, Type.PROJECT);
     assertThat(result).isEqualTo("in(project.primaryCountries,'US'),"
-        + "eq(project.primarySite,'Blood'),eq(project.availableDataTypes,'SSM'),eq(project.id,'P1')");
+        + "eq(project.id,'P1'),eq(project.primarySite,'Blood'),eq(project.availableDataTypes,'SSM')");
   }
 
   @Test

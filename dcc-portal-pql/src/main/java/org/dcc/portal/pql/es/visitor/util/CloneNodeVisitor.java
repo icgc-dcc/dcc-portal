@@ -95,15 +95,12 @@ public class CloneNodeVisitor extends NodeVisitor<ExpressionNode, Void> {
 
   @Override
   public ExpressionNode visitTerm(TermNode node, Optional<Void> context) {
-    val nameNode = new TerminalNode(node.getNameNode().getValue());
-    val valueNode = new TerminalNode(node.getValueNode().getValue());
-
-    return new TermNode(nameNode, valueNode);
+    return new TermNode(node.getField(), node.getValue(), node.getLookup());
   }
 
   @Override
   public ExpressionNode visitTerms(TermsNode node, Optional<Void> context) {
-    val result = new TermsNode(node.getField(), node.getLookup());
+    val result = new TermsNode(node.getField());
     result.addChildren(visitChildren(node));
 
     return result;

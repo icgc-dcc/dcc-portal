@@ -53,12 +53,12 @@ public class ObjectFieldModel extends FieldModel {
   }
 
   private ObjectFieldModel(String name, String uiAlias, boolean nested, List<? extends FieldModel> fields) {
-    super(name, singleton(uiAlias), OBJECT, nested);
+    super(name, singleton(uiAlias), OBJECT, nested, false);
     this.fields = fields;
   }
 
   private ObjectFieldModel(String name, Set<String> uiAlias, boolean nested, List<? extends FieldModel> fields) {
-    super(name, uiAlias, OBJECT, nested);
+    super(name, uiAlias, OBJECT, nested, false);
     this.fields = fields;
   }
 

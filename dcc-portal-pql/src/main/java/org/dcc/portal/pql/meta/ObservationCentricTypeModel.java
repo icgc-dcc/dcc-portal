@@ -23,6 +23,7 @@ import static org.dcc.portal.pql.meta.field.ArrayFieldModel.nestedArrayOfObjects
 import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.nestedObject;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
+import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 
 import java.util.List;
@@ -87,9 +88,6 @@ public class ObservationCentricTypeModel extends TypeModel {
     fields.add(string(MUTATION_LOCATION, MUTATION_LOCATION));
 
     fields.add(string(SCORE, SCORE));
-    fields.add(string(DONOR_ENTITY_SET_ID, DONOR_ENTITY_SET_ID));
-    fields.add(string(GENE_ENTITY_SET_ID, GENE_ENTITY_SET_ID));
-    fields.add(string(MUTATION_ENTITY_SET_ID, MUTATION_ENTITY_SET_ID));
 
     return fields.build();
   }
@@ -97,7 +95,7 @@ public class ObservationCentricTypeModel extends TypeModel {
   private static ObjectFieldModel defineSsm() {
     return ObjectFieldModel.nestedObject("ssm",
         defineSsmGene(),
-        string("_mutation_id", ImmutableSet.of("mutation.id", "mutationId")),
+        identifiableString("_mutation_id", ImmutableSet.of("mutation.id", "mutationId")),
         string("mutation_type", "mutation.type"),
         defineSsmObservation(),
         string("chromosome", ImmutableSet.of("mutation.chromosome", "chromosome")),
@@ -115,7 +113,7 @@ public class ObservationCentricTypeModel extends TypeModel {
 
   private static ArrayFieldModel defineSsmGene() {
     return nestedArrayOfObjects("gene", object(
-        string("_gene_id", "gene.id"),
+        identifiableString("_gene_id", "gene.id"),
         string("biotype", "gene.type"),
         arrayOfStrings("pathway", "gene.pathwayId"),
         string("chromosome", "gene.chromosome"),
@@ -141,7 +139,7 @@ public class ObservationCentricTypeModel extends TypeModel {
 
   private static ObjectFieldModel defineDonor() {
     return ObjectFieldModel.nestedObject("donor",
-        string("_donor_id", ImmutableSet.of("donor.id", "donorId")),
+        identifiableString("_donor_id", ImmutableSet.of("donor.id", "donorId")),
         string("donor_sex", "donor.gender"),
         string("donor_tumour_stage_at_diagnosis", "donor.tumourStageAtDiagnosis"),
         string("donor_vital_status", "donor.vitalStatus"),
@@ -164,9 +162,6 @@ public class ObservationCentricTypeModel extends TypeModel {
         .put(BIOLOGICAL_PROCESS, "ssm.gene.go_term.biological_process")
         .put(CELLULAR_COMPONENT, "ssm.gene.go_term.cellular_component")
         .put(MOLECULAR_FUNCTION, "ssm.gene.go_term.molecular_function")
-        .put(DONOR_ENTITY_SET_ID, "donor._donor_id")
-        .put(GENE_ENTITY_SET_ID, "ssm.gene._gene_id")
-        .put(MUTATION_ENTITY_SET_ID, "ssm._mutation_id")
         .put(LOOKUP_TYPE, "mutation-ids")
         .build();
   }

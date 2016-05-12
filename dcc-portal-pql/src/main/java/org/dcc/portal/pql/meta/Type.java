@@ -34,7 +34,7 @@ public enum Type {
   PROJECT("project", "project"),
   REPOSITORY_FILE("file-centric", "file"),
   GENE_SET("gene-set", "gene-set"),
-  DRUG("drug-centric", "drug"),
+  DRUG_CENTRIC("drug-centric", "drug"),
   DIAGRAM("diagram", "diagram");
 
   @NonNull

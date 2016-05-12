@@ -24,29 +24,23 @@ import lombok.NonNull;
 import lombok.Value;
 
 import org.dcc.portal.pql.es.ast.ExpressionNode;
-import org.dcc.portal.pql.es.model.LookupInfo;
 import org.dcc.portal.pql.es.visitor.NodeVisitor;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class TermsNode extends ExpressionNode {
 
-  private static final LookupInfo EMPTY_LOOKUP = new LookupInfo("", "", "", "");
-
   @NonNull
   String field;
 
-  @NonNull
-  LookupInfo lookup;
-
-  public TermsNode(String field, ExpressionNode... children) {
-    this(field, EMPTY_LOOKUP, children);
-  }
-
-  public TermsNode(@NonNull String field, @NonNull LookupInfo lookup, ExpressionNode... children) {
+  public TermsNode(@NonNull String field, ExpressionNode... children) {
     super(children);
     this.field = field;
-    this.lookup = lookup;
+  }
+
+  public TermsNode(@NonNull String field, Iterable<? extends ExpressionNode> children) {
+    super(children);
+    this.field = field;
   }
 
   @Override

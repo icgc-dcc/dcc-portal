@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 import static org.dcc.portal.pql.meta.IndexModel.getRepositoryFileTypeModel;
-import static org.dcc.portal.pql.meta.TypeModel.ENTITY_SET_ID;
+import static org.icgc.dcc.portal.pql.convert.FiltersConverter.ENTITY_SET_ID;
 
 import java.util.EnumMap;
 import java.util.List;

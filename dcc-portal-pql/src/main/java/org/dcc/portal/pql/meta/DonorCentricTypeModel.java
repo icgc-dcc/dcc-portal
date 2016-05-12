@@ -23,6 +23,7 @@ import static org.dcc.portal.pql.meta.field.BooleanFieldModel.bool;
 import static org.dcc.portal.pql.meta.field.DoubleFieldModel.double_;
 import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
+import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 
 import java.util.List;
@@ -130,7 +131,7 @@ public class DonorCentricTypeModel extends TypeModel {
 
   private static List<FieldModel> initFields() {
     val fields = new ImmutableList.Builder<FieldModel>();
-    fields.add(string("_donor_id", "id"));
+    fields.add(identifiableString("_donor_id", "id"));
     fields.add(string("_project_id"));
     fields.add(initSummary());
     fields.add(string("disease_status_last_followup", "diseaseStatusLastFollowup"));
@@ -160,9 +161,6 @@ public class DonorCentricTypeModel extends TypeModel {
     fields.add(string(MUTATION_LOCATION, MUTATION_LOCATION));
 
     fields.add(string(SCORE, ImmutableSet.of(SCORE, "ssmAffectedGenes")));
-    fields.add(string(DONOR_ENTITY_SET_ID, DONOR_ENTITY_SET_ID));
-    fields.add(string(GENE_ENTITY_SET_ID, GENE_ENTITY_SET_ID));
-    fields.add(string(MUTATION_ENTITY_SET_ID, MUTATION_ENTITY_SET_ID));
 
     fields.add(string("prior_malignancy", "priorMalignancy"));
     fields.add(string("cancer_type_prior_malignancy", "cancerTypePriorMalignancy"));
@@ -210,7 +208,7 @@ public class DonorCentricTypeModel extends TypeModel {
 
   private static ArrayFieldModel initGene() {
     val element = object(
-        string("_gene_id", "gene.id"),
+        identifiableString("_gene_id", "gene.id"),
         object("_summary", long_("_ssm_count")),
         string("biotype", "gene.type"),
         string("chromosome", "gene.chromosome"),
@@ -230,7 +228,7 @@ public class DonorCentricTypeModel extends TypeModel {
 
   private static ObjectFieldModel initSmm() {
     return object(
-        string("_mutation_id", "mutation.id"),
+        identifiableString("_mutation_id", "mutation.id"),
         string("_type"),
         string("chromosome", "mutation.chromosome"),
         long_("chromosome_end", "mutation.end"),
@@ -288,9 +286,6 @@ public class DonorCentricTypeModel extends TypeModel {
         .put(BIOLOGICAL_PROCESS, "gene.go_term.biological_process")
         .put(CELLULAR_COMPONENT, "gene.go_term.cellular_component")
         .put(MOLECULAR_FUNCTION, "gene.go_term.molecular_function")
-        .put(DONOR_ENTITY_SET_ID, "_donor_id")
-        .put(GENE_ENTITY_SET_ID, "gene._gene_id")
-        .put(MUTATION_ENTITY_SET_ID, "gene.ssm._mutation_id")
         .put(LOOKUP_TYPE, "donor-ids")
         .build();
   }

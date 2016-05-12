@@ -40,7 +40,7 @@ import static org.dcc.portal.pql.meta.IndexModel.getProjectTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getRepositoryFileTypeModel;
 import static org.dcc.portal.pql.meta.Type.DIAGRAM;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
-import static org.dcc.portal.pql.meta.Type.DRUG;
+import static org.dcc.portal.pql.meta.Type.DRUG_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.OBSERVATION_CENTRIC;
@@ -79,7 +79,7 @@ public class EsAstTransformer {
           .put(OBSERVATION_CENTRIC, createFacetContext(getObservationCentricTypeModel()))
           .put(PROJECT, createFacetContext(getProjectTypeModel()))
           .put(REPOSITORY_FILE, createFacetContext(getRepositoryFileTypeModel()))
-          .put(DRUG, createFacetContext(getDrugTypeModel()))
+          .put(DRUG_CENTRIC, createFacetContext(getDrugTypeModel()))
           .put(DIAGRAM, createFacetContext(getDiagramTypeModel()))
           .build();
 

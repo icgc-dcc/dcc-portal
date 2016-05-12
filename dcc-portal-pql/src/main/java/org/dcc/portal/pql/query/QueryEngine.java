@@ -22,7 +22,7 @@ import static org.dcc.portal.pql.ast.visitor.Visitors.createEsAstVisitor;
 import static org.dcc.portal.pql.meta.IndexModel.getTypeModel;
 import static org.dcc.portal.pql.meta.Type.DIAGRAM;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
-import static org.dcc.portal.pql.meta.Type.DRUG;
+import static org.dcc.portal.pql.meta.Type.DRUG_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.OBSERVATION_CENTRIC;
@@ -65,7 +65,7 @@ public class QueryEngine {
     this.observationContext = new QueryContext(index, OBSERVATION_CENTRIC);
     this.projectContext = new QueryContext(index, PROJECT);
     this.repositoryFileContext = new QueryContext(index, REPOSITORY_FILE);
-    this.drugContext = new QueryContext(index, DRUG);
+    this.drugContext = new QueryContext(index, DRUG_CENTRIC);
     this.diagramContext = new QueryContext(index, DIAGRAM);
   }
 
@@ -104,7 +104,7 @@ public class QueryEngine {
       return projectContext;
     case REPOSITORY_FILE:
       return repositoryFileContext;
-    case DRUG:
+    case DRUG_CENTRIC:
       return drugContext;
     case DIAGRAM:
       return diagramContext;

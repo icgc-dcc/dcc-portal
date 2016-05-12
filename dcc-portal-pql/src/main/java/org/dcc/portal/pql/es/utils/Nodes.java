@@ -20,6 +20,7 @@ package org.dcc.portal.pql.es.utils;
 import static com.google.common.collect.Iterables.filter;
 import static java.lang.String.format;
 import static lombok.AccessLevel.PRIVATE;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,8 @@ import lombok.NonNull;
 import lombok.val;
 
 import org.dcc.portal.pql.es.ast.ExpressionNode;
+import org.dcc.portal.pql.es.ast.TerminalNode;
+import org.dcc.portal.pql.es.ast.filter.TermsNode;
 import org.dcc.portal.pql.es.visitor.NodeVisitor;
 
 import com.google.common.collect.Lists;
@@ -76,6 +79,20 @@ public final class Nodes {
     }
 
     return node == null ? Optional.empty() : Optional.of((T) node);
+  }
+
+  public static List<String> getStringValues(@NonNull TermsNode node) {
+    return node.getChildren().stream()
+        .map(child -> (TerminalNode) child)
+        .map(child -> child.getValueAsString())
+        .collect(toImmutableList());
+  }
+
+  public static List<? extends Object> getValues(@NonNull TermsNode node) {
+    return node.getChildren().stream()
+        .map(child -> (TerminalNode) child)
+        .map(child -> child.getValue())
+        .collect(toImmutableList());
   }
 
 }

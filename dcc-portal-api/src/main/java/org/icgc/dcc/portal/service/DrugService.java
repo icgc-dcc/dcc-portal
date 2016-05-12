@@ -20,7 +20,10 @@ package org.icgc.dcc.portal.service;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
-import static org.dcc.portal.pql.meta.Type.DRUG;
+import static org.dcc.portal.pql.meta.DrugCentricTypeModel.Fields.GENE_ID;
+import static org.dcc.portal.pql.meta.DrugCentricTypeModel.Fields.NAME;
+import static org.dcc.portal.pql.meta.Type.DRUG_CENTRIC;
+import static org.icgc.dcc.common.core.util.Separators.COMMA;
 import static org.icgc.dcc.portal.model.Drug.parse;
 
 import java.util.Collection;
@@ -52,10 +55,8 @@ import com.google.common.collect.FluentIterable;
 public class DrugService {
 
   private static final Jql2PqlConverter QUERY_CONVERTER = Jql2PqlConverter.getInstance();
-  // TODO: use DrugTypeModel.Fields
-  private static final String PQL_FIND_DRUGS_BY_GENES = "in (drug.ensemblGeneId, %s), sort (+name)";
+  private static final String PQL_FIND_DRUGS_BY_GENES = format("in (%s, %%s), sort (+%s)", GENE_ID, NAME);
   private static final String SINGLE_QUOTE = "'";
-  private static final String COMMA = ",";
 
   private final DrugRepository repository;
 
@@ -96,7 +97,7 @@ public class DrugService {
   }
 
   private static StatementNode toAst(Query query) {
-    val pql = QUERY_CONVERTER.convert(query, DRUG);
+    val pql = QUERY_CONVERTER.convert(query, DRUG_CENTRIC);
 
     return PqlParser.parse(pql);
   }

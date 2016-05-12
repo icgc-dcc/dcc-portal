@@ -1,0 +1,5 @@
+{ "index":{ "_index":"dcc-release-etl-cli", "_type":"drug-centric", "_id":"ZINC000000000905" }}
+{"inchikey":"UUVWYPNAQBNQJQ-UHFFFAOYSA-N","name":"hmm","genes":[{"uniprot":"P05177","ensembl_gene_id":"ENSG00000140505"}],"trials":[],"zinc_id":"ZINC000000000905","drug_class":"fda","external_references":{"drugbank":["DB00488"],"chembl":["CHEMBL1455"]},"synonyms":["Altretamine","Altretaminum [INN-Latin]","HEXAMETHYLMELAMINE","HTM","HXM","Hexalen"],"atc_codes":[{"code":"L01XX","atc_level5_codes":"L01XX03","description":"Other antineoplastic agents"}],"small_image_url":"http://zinc15.docking.org/substances/ZINC000000000905.png","large_image_url":"http://zinc15.docking.org/substances/ZINC000000000905-large.png","cancer_trial_count":0}
+
+{ "index":{ "_index":"terms-lookup", "_type":"gene-ids", "_id":"6d66b2bd-daed-431e-9a8d-b1d99be0bc18" }}
+{"values":["ENSG00000140505"]}

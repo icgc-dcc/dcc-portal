@@ -45,7 +45,7 @@ public class DoubleFieldModel extends FieldModel {
   }
 
   private DoubleFieldModel(String name, Set<String> aliases, boolean nested) {
-    super(name, aliases, DOUBLE, nested);
+    super(name, aliases, DOUBLE, nested, false);
   }
 
   public static DoubleFieldModel double_(@NonNull String name) {

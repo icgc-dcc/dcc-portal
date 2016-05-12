@@ -23,6 +23,8 @@ import lombok.Value;
 @Value
 public class LookupInfo {
 
+  public static final LookupInfo EMPTY_LOOKUP = new LookupInfo("", "", "", "");
+
   @NonNull
   String index;
   @NonNull

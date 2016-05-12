@@ -20,6 +20,7 @@ package org.dcc.portal.pql.es.visitor;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
+import static org.dcc.portal.pql.es.utils.Nodes.getValues;
 import static org.dcc.portal.pql.es.utils.VisitorHelpers.checkOptional;
 import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
 import static org.elasticsearch.index.query.FilterBuilders.existsFilter;
@@ -33,9 +34,13 @@ import static org.elasticsearch.index.query.FilterBuilders.termsFilter;
 import java.util.Optional;
 import java.util.Stack;
 
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.NestedNode;
-import org.dcc.portal.pql.es.ast.TerminalNode;
 import org.dcc.portal.pql.es.ast.aggs.FilterAggregationNode;
 import org.dcc.portal.pql.es.ast.aggs.NestedAggregationNode;
 import org.dcc.portal.pql.es.ast.filter.BoolNode;
@@ -65,11 +70,6 @@ import org.elasticsearch.index.query.RangeFilterBuilder;
 import org.elasticsearch.index.query.TermFilterBuilder;
 
 import com.google.common.collect.Lists;
-
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Visits {@link FilterNode} and builds FilterBuilders
@@ -176,12 +176,23 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   @Override
   public FilterBuilder visitTerm(@NonNull TermNode node, @NonNull Optional<QueryContext> context) {
     checkOptional(context);
-    val name = node.getNameNode().getValue().toString();
-    val value = node.getValueNode().getValue();
-    log.debug("[visitTerm] Name: {}, Value: {}", name, value);
-    val result = termFilter(name, value);
 
-    return createNestedFilter(node, name, result, context.get().getTypeModel());
+    FilterBuilder filter;
+    val field = node.getField();
+    val lookupInfo = node.getLookup();
+    if (lookupInfo.isDefine()) {
+      filter = FilterBuilders.termsLookupFilter(field)
+          .lookupIndex(lookupInfo.getIndex())
+          .lookupType(lookupInfo.getType())
+          .lookupPath(lookupInfo.getPath())
+          .lookupId(lookupInfo.getId());
+    } else {
+      val value = node.getValueNode().getValue();
+      log.debug("[visitTerm] Name: {}, Value: {}", field, value);
+      filter = termFilter(field, value);
+    }
+
+    return createNestedFilter(node, field, filter, context.get().getTypeModel());
   }
 
   @Override
@@ -219,22 +230,7 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   @Override
   public FilterBuilder visitTerms(@NonNull TermsNode node, @NonNull Optional<QueryContext> context) {
     checkOptional(context);
-    val values = Lists.newArrayList();
-    for (val child : node.getChildren()) {
-      values.add(((TerminalNode) child).getValue());
-    }
-
-    FilterBuilder termsFilter;
-    val lookupInfo = node.getLookup();
-    if (lookupInfo.isDefine()) {
-      termsFilter = FilterBuilders.termsLookupFilter(node.getField())
-          .lookupIndex(lookupInfo.getIndex())
-          .lookupType(lookupInfo.getType())
-          .lookupPath(lookupInfo.getPath())
-          .lookupId(lookupInfo.getId());
-    } else {
-      termsFilter = termsFilter(node.getField(), values);
-    }
+    val termsFilter = termsFilter(node.getField(), getValues(node));
 
     return createNestedFilter(node, node.getField(), termsFilter, context.get().getTypeModel());
   }

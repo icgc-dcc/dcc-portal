@@ -25,6 +25,7 @@ import static org.dcc.portal.pql.meta.field.ArrayFieldModel.arrayOfObjects;
 import static org.dcc.portal.pql.meta.field.ArrayFieldModel.arrayOfStrings;
 import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
+import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 
@@ -50,12 +51,12 @@ import com.google.common.collect.ImmutableSet;
 /**
  * Type model of Drug index type
  */
-public class DrugTypeModel extends TypeModel {
+public class DrugCentricTypeModel extends TypeModel {
 
-  private static final Type MY_TYPE = Type.DRUG;
+  private static final Type MY_TYPE = Type.DRUG_CENTRIC;
   private static final String TYPE_PREFIX = MY_TYPE.getPrefix();
 
-  public DrugTypeModel() {
+  public DrugCentricTypeModel() {
     super(Fields.MAPPINGS, INTERNAL_ALIASES, PUBLIC_FIELDS, INCLUDE_FIELDS);
   }
 
@@ -106,6 +107,7 @@ public class DrugTypeModel extends TypeModel {
     // public final String GENES_DESCRIPTION = fullAlias(GENES, "description");
     public final String UNIPROT = "uniprot";
     public final String ENSEMBL_GENE_ID = "ensemblGeneId";
+    public final String GENE_ID = "gene.id";
 
     public final String TRIALS = "trials";
     public final String TRIALS_CODE = fullAlias(TRIALS, "code");
@@ -142,10 +144,8 @@ public class DrugTypeModel extends TypeModel {
 
     private ArrayFieldModel genes() {
       return arrayOfObjects(esField(GENES), GENES, object(
-          // string("chembl", GENES_CHEMBL),
-          // string("description", GENES_DESCRIPTION),
           stringField(GENES, UNIPROT),
-          stringField(GENES, ENSEMBL_GENE_ID)));
+          identifiableString(esField(ENSEMBL_GENE_ID), GENE_ID)));
     }
 
     private ArrayFieldModel trialsConditions() {
@@ -174,7 +174,7 @@ public class DrugTypeModel extends TypeModel {
     // Top-level fields
     private final List<StringFieldModel> stringFields = transform(
         newArrayList(NAME, SMALL_IMAGE_URL, LARGE_IMAGE_URL, INCHIKEY, DRUG_CLASS),
-        DrugTypeModel::stringField);
+        DrugCentricTypeModel::stringField);
 
     private final List<FieldModel> otherFields = newArrayList(primaryKey(ZINC_ID), numberField(CANCER_TRIAL_COUNT),
         synonyms(), externalReferences(), atcCodes(), genes(), trials());

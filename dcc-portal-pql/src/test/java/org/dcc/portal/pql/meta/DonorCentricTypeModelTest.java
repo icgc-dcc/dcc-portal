@@ -60,4 +60,10 @@ public class DonorCentricTypeModelTest extends DonorCentricTypeModel {
     assertThat(getField("hasPathway")).isEqualTo("gene.pathwayId");
   }
 
+  @Test
+  public void getAliasByFieldTest() {
+    val alias = model.getAliasByField("gene.pathway");
+    assertThat(alias).containsOnly("gene.pathways", "gene.pathwayId");
+  }
+
 }

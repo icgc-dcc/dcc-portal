@@ -31,7 +31,7 @@ public class IndexModel {
   private static final ProjectTypeModel PROJECT_TYPE_MODEL = new ProjectTypeModel();
   private static final RepositoryFileTypeModel REPO_FILE_TYPE_MODEL = new RepositoryFileTypeModel();
   private static final GeneSetTypeModel GENE_SET_TYPE_MODEL = new GeneSetTypeModel();
-  private static final DrugTypeModel DRUG_TYPE_MODEL = new DrugTypeModel();
+  private static final DrugCentricTypeModel DRUG_TYPE_MODEL = new DrugCentricTypeModel();
   private static final DiagramTypeModel DIAGRAM_TYPE_MODEL = new DiagramTypeModel();
 
   public static TypeModel getTypeModel(Type type) {
@@ -50,7 +50,7 @@ public class IndexModel {
       return REPO_FILE_TYPE_MODEL;
     case GENE_SET:
       return GENE_SET_TYPE_MODEL;
-    case DRUG:
+    case DRUG_CENTRIC:
       return DRUG_TYPE_MODEL;
     case DIAGRAM:
       return DIAGRAM_TYPE_MODEL;

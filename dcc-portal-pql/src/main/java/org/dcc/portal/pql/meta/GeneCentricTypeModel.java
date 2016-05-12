@@ -22,6 +22,7 @@ import static org.dcc.portal.pql.meta.field.ArrayFieldModel.arrayOfStrings;
 import static org.dcc.portal.pql.meta.field.ArrayFieldModel.nestedArrayOfObjects;
 import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
+import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 
 import java.util.List;
@@ -84,7 +85,7 @@ public class GeneCentricTypeModel extends TypeModel {
 
   private static List<FieldModel> defineFields() {
     return new ImmutableList.Builder<FieldModel>()
-        .add(string("_gene_id", "id"))
+        .add(identifiableString("_gene_id", "id"))
         .add(string("symbol", "symbol"))
         .add(string("name", "name"))
         .add(string("biotype", "type"))
@@ -115,9 +116,6 @@ public class GeneCentricTypeModel extends TypeModel {
         .add(string(MUTATION_LOCATION, MUTATION_LOCATION))
 
         .add(string(SCORE, ImmutableSet.of(SCORE, "affectedDonorCountFiltered")))
-        .add(string(DONOR_ENTITY_SET_ID, DONOR_ENTITY_SET_ID))
-        .add(string(GENE_ENTITY_SET_ID, GENE_ENTITY_SET_ID))
-        .add(string(MUTATION_ENTITY_SET_ID, MUTATION_ENTITY_SET_ID))
 
         // NOTE: Centric and non-centric are modelled different. Set only exists in gene and not gene-centric
         .add(arrayOfObjects("sets", "sets", object()))
@@ -141,7 +139,7 @@ public class GeneCentricTypeModel extends TypeModel {
 
   private static ArrayFieldModel defineDonor() {
     val element = object(
-        string("_donor_id", "donor.id"),
+        identifiableString("_donor_id", "donor.id"),
         defineDonorSummary(),
         string("disease_status_last_followup", "donor.diseaseStatusLastFollowup"),
         string("donor_relapse_type", "donor.relapseType"),
@@ -169,7 +167,7 @@ public class GeneCentricTypeModel extends TypeModel {
 
   private static ArrayFieldModel defineSsm() {
     val element = object(
-        string("_mutation_id", "mutation.id"),
+        identifiableString("_mutation_id", "mutation.id"),
         string("mutation_type", "mutation.type"),
         string("chromosome", "mutation.chromosome"),
         long_("chromosome_end", "mutation.end"),
@@ -202,9 +200,6 @@ public class GeneCentricTypeModel extends TypeModel {
         .put(BIOLOGICAL_PROCESS, "go_term.biological_process")
         .put(CELLULAR_COMPONENT, "go_term.cellular_component")
         .put(MOLECULAR_FUNCTION, "go_term.molecular_function")
-        .put(DONOR_ENTITY_SET_ID, "donor._donor_id")
-        .put(GENE_ENTITY_SET_ID, "_gene_id")
-        .put(MUTATION_ENTITY_SET_ID, "donor.ssm._mutation_id")
         .put(LOOKUP_TYPE, "gene-ids")
         .build();
   }

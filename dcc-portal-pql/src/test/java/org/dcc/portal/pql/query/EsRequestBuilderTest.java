@@ -386,7 +386,7 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
   public void multipleGoTermId_InTest() {
     val pql =
         "select(*),and(in(gene.goTermId,'GO:0003674','GO:0003673'),in(gene.goTermId,'GO:0003672','GO:0003671')),"
-            + "in(gene.entitySetId,'b9b06e98-351a-4fd2-a86e-5071c78c66eb')";
+            + "in(gene.id,'b9b06e98-351a-4fd2-a86e-5071c78c66eb')";
     queryEngine.execute(pql, GENE_CENTRIC);
   }
 
@@ -394,7 +394,7 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
   public void multipleGoTermId_EqTest() {
     val pql =
         "select(*),and(eq(gene.goTermId,'GO:0003674'),eq(gene.goTermId,'GO:0003674')),"
-            + "in(gene.entitySetId,'b9b06e98-351a-4fd2-a86e-5071c78c66eb')";
+            + "in(gene.id,'b9b06e98-351a-4fd2-a86e-5071c78c66eb')";
     queryEngine.execute(pql, GENE_CENTRIC);
   }
 
@@ -414,7 +414,7 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
   public void multipleGeneSetId_InTest() {
     val pql =
         "select(*),and(in(gene.geneSetId,'GO:0003674','GO:0003673'),in(gene.geneSetId,'GO:0003672','GO:0003671')),"
-            + "in(gene.entitySetId,'b9b06e98-351a-4fd2-a86e-5071c78c66eb')";
+            + "in(gene.id,'b9b06e98-351a-4fd2-a86e-5071c78c66eb')";
     queryEngine.execute(pql, GENE_CENTRIC);
   }
 
@@ -422,7 +422,7 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
   public void multipleGeneSetId_EqTest() {
     val pql =
         "select(*),and(eq(gene.geneSetId,'GO:0003674'),eq(gene.geneSetId,'GO:0003674')),"
-            + "in(gene.entitySetId,'b9b06e98-351a-4fd2-a86e-5071c78c66eb')";
+            + "in(gene.id,'b9b06e98-351a-4fd2-a86e-5071c78c66eb')";
     queryEngine.execute(pql, GENE_CENTRIC);
   }
 

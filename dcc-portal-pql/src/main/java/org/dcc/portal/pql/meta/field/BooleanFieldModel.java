@@ -45,11 +45,11 @@ public class BooleanFieldModel extends FieldModel {
   }
 
   private BooleanFieldModel(String name, String alias, boolean nested) {
-    super(name, singleton(alias), BOOLEAN, nested);
+    super(name, singleton(alias), BOOLEAN, nested, false);
   }
 
   private BooleanFieldModel(String name, Set<String> alias, boolean nested) {
-    super(name, alias, BOOLEAN, nested);
+    super(name, alias, BOOLEAN, nested, false);
   }
 
   public static BooleanFieldModel bool(@NonNull String name) {

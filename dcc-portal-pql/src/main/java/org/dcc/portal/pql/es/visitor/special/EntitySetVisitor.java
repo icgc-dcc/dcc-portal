@@ -17,8 +17,10 @@
  */
 package org.dcc.portal.pql.es.visitor.special;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
-import static java.lang.String.format;
+import static com.google.common.collect.Iterables.get;
+import static org.dcc.portal.pql.es.utils.Nodes.getStringValues;
 import static org.dcc.portal.pql.es.utils.VisitorHelpers.checkOptional;
 import static org.dcc.portal.pql.es.utils.VisitorHelpers.visitChildren;
 import static org.dcc.portal.pql.meta.IndexModel.getTypeModel;
@@ -26,13 +28,19 @@ import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.REPOSITORY_FILE;
-import static org.dcc.portal.pql.meta.TypeModel.ENTITY_SET_ID;
 import static org.dcc.portal.pql.meta.TypeModel.LOOKUP_INDEX;
 import static org.dcc.portal.pql.meta.TypeModel.LOOKUP_PATH;
 import static org.dcc.portal.pql.meta.TypeModel.LOOKUP_TYPE;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.NestedNode;
@@ -55,18 +63,24 @@ import org.dcc.portal.pql.es.visitor.NodeVisitor;
 import org.dcc.portal.pql.meta.Type;
 import org.dcc.portal.pql.meta.TypeModel;
 import org.dcc.portal.pql.query.QueryContext;
+import org.icgc.dcc.common.core.util.Separators;
+import org.icgc.dcc.common.core.util.Splitters;
+import org.icgc.dcc.common.core.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
-
-import lombok.NonNull;
-import lombok.val;
 
 /**
  * Resolves querying by {@code entitySetId}.<br>
  * <b>NB:</b> Must be run one of the first because it does not modify structure of the AST, just 'enriches' search
  * parameters.
  */
+@Slf4j
 public class EntitySetVisitor extends NodeVisitor<Optional<ExpressionNode>, QueryContext> {
+
+  /**
+   * The prefix indicates that value of the field should be resolved using the terms lookup database.
+   */
+  public static final String IDENTIFIABLE_VALUE_PREFIX = "ES:";
 
   private static final List<Type> LOOKUP_TYPES =
       ImmutableList.of(DONOR_CENTRIC, GENE_CENTRIC, MUTATION_CENTRIC, REPOSITORY_FILE);
@@ -96,20 +110,63 @@ public class EntitySetVisitor extends NodeVisitor<Optional<ExpressionNode>, Quer
   @Override
   public Optional<ExpressionNode> visitTerms(@NonNull TermsNode node, @NonNull Optional<QueryContext> context) {
     checkOptional(context);
-    if (!isProcess(node.getField())) {
-      return Optional.empty();
+    val values = getStringValues(node);
+    val containsIdentifiableValue = values.stream()
+        .anyMatch(value -> hasIdentifiableValue(value));
+
+    if (containsIdentifiableValue) {
+      // Bool - Should
+      val identifiableValues = values.stream()
+          .filter(value -> hasIdentifiableValue(value))
+          .collect(toImmutableList());
+
+      val nonIdentifiableValues = values.stream()
+          .filter(value -> !hasIdentifiableValue(value))
+          .collect(toImmutableList());
+
+      val shouldNode = new ShouldBoolNode();
+      val field = node.getField();
+      // Clone this node without the identifiable values
+      shouldNode.addChildren(createTermsNode(field, nonIdentifiableValues));
+      // Add identifiable values as a list of TermNodes which will be resolved by this visitor
+      shouldNode.addChildren(createTermNodes(field, identifiableValues, context));
+
+      return Optional.of(new BoolNode(shouldNode));
     }
 
-    val field = resolveField(node, context.get().getTypeModel());
-    val lookupInfo = resolveLookup(getValue(node), resolveTypeModelByField(node.getField()));
-
-    return Optional.of(new TermsNode(field, lookupInfo, node.getChildrenArray()));
+    return Optional.empty();
   }
 
   @Override
   public Optional<ExpressionNode> visitTerm(@NonNull TermNode node, @NonNull Optional<QueryContext> context) {
-    // TODO: Think about moving all the processing from visitTerms, because visitTerms uses only the first value
+    checkOptional(context);
+    val field = node.getNameNode().getValueAsString();
+    val value = node.getValueNode().getValue();
+    val typeModel = context.get().getTypeModel();
+    val identifiable = typeModel.isIdentifiable(field);
+
+    if (identifiable && hasIdentifiableValue((String) value)) {
+      val stringValue = (String) value;
+      log.debug("'{}' has identifiable value '{}'", field, stringValue);
+      val id = getIdentifiableValue(stringValue);
+      log.debug("Resolved id value ({}) for '{}'", id, field);
+      val idValueTypeModel = resolveIdentifiableTypeModel(field, typeModel);
+      val lookupInfo = resolveLookup(id, idValueTypeModel);
+
+      return Optional.of(new TermNode(field, id, lookupInfo));
+    }
+
+    if (value instanceof String) {
+      val stringValue = (String) value;
+      checkState(!hasIdentifiableValue(stringValue), "Only identifiable fields can start with '%s' prefix. "
+          + "Field: '%s'. Value: '%s'", IDENTIFIABLE_VALUE_PREFIX, field, value);
+    }
+
     return Optional.empty();
+  }
+
+  private boolean hasIdentifiableValue(String value) {
+    return value.startsWith(IDENTIFIABLE_VALUE_PREFIX);
   }
 
   @Override
@@ -153,36 +210,67 @@ public class EntitySetVisitor extends NodeVisitor<Optional<ExpressionNode>, Quer
     return Optional.empty();
   }
 
-  private static String resolveField(TermsNode node, TypeModel typeModel) {
-    return typeModel.getInternalField(node.getField());
-  }
-
-  private static String getValue(ExpressionNode node) {
-    val terminalNode = (TerminalNode) node.getFirstChild();
-
-    return terminalNode.getValueAsString();
-  }
-
-  private static LookupInfo resolveLookup(String field, TypeModel typeModel) {
+  private static LookupInfo resolveLookup(String lookupId, TypeModel typeModel) {
     return new LookupInfo(
         typeModel.getInternalField(LOOKUP_INDEX),
         typeModel.getInternalField(LOOKUP_TYPE),
-        field,
+        lookupId,
         typeModel.getInternalField(LOOKUP_PATH));
   }
 
-  private static boolean isProcess(String field) {
-    return field.endsWith(ENTITY_SET_ID);
+  private static TypeModel resolveTypeModelByField(String field) {
+    val typeModel = LOOKUP_TYPES.stream()
+        .filter(type -> field.startsWith(type.getPrefix()))
+        .map(type -> getTypeModel(type))
+        .collect(Collectors.toImmutableList());
+    checkArgument(typeModel.size() == 1, "Failed to resolve TypeModel by field '%s'", field);
+
+    return typeModel.get(0);
   }
 
-  private static TypeModel resolveTypeModelByField(String field) {
-    for (val type : LOOKUP_TYPES) {
-      if (field.startsWith(type.getPrefix())) {
-        return getTypeModel(type);
-      }
+  private List<ExpressionNode> createTermNodes(String field, List<String> values, Optional<QueryContext> context) {
+    return values.stream()
+        .map(value -> new TermNode(field, value))
+        .map(node -> node.accept(this, context).get())
+        .collect(toImmutableList());
+  }
+
+  private static ExpressionNode createTermsNode(String field, List<String> values) {
+    val children = values.stream()
+        .map(value -> new TerminalNode(value))
+        .collect(toImmutableList());
+
+    return new TermsNode(field, children);
+  }
+
+  private static TypeModel resolveIdentifiableTypeModel(String field, TypeModel typeModel) {
+    val aliases = typeModel.getAliasByField(field);
+    val prefix = resolveIdentifiableTypeModelName(aliases);
+
+    return prefix.equals("id") ? typeModel : resolveTypeModelByField(prefix);
+  }
+
+  private static String resolveIdentifiableTypeModelName(Set<String> aliases) {
+    if (aliases.size() == 1) {
+      return get(aliases, 0);
     }
 
-    throw new IllegalArgumentException(format("Failed to resolve TypeModel by field '%s'", field));
+    // However, if a couple aliases available use the one with the prefix
+    val prefix = aliases.stream()
+        .map(alias -> Splitters.DOT.splitToList(alias))
+        .filter(parts -> parts.size() == 2)
+        .map(parts -> parts.get(0))
+        .collect(toImmutableList());
+    checkArgument(prefix.size() == 1, "Failed to resolve type model prefix from aliases %s", aliases);
+
+    return prefix.get(0);
   }
 
+  private String getIdentifiableValue(String value) {
+    val id = value.replaceFirst(IDENTIFIABLE_VALUE_PREFIX, Separators.EMPTY_STRING).trim();
+    // Verify it's a UUID
+    UUID.fromString(id);
+
+    return id;
+  }
 }

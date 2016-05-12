@@ -49,7 +49,7 @@ public class LongFieldModel extends FieldModel {
   }
 
   private LongFieldModel(String name, Set<String> aliases, boolean nested) {
-    super(name, aliases, LONG, nested);
+    super(name, aliases, LONG, nested, false);
   }
 
   public static LongFieldModel long_(@NonNull String name) {

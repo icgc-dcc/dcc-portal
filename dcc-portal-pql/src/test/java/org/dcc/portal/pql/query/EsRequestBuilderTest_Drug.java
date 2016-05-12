@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,74 +15,44 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.dcc.portal.pql.meta.field;
+package org.dcc.portal.pql.query;
 
-import java.util.Set;
+import static org.dcc.portal.pql.meta.Type.DRUG_CENTRIC;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import org.dcc.portal.pql.utils.BaseElasticsearchTest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.junit.Before;
+import org.junit.Test;
 
-import org.dcc.portal.pql.meta.visitor.FieldVisitor;
+@Slf4j
+public class EsRequestBuilderTest_Drug extends BaseElasticsearchTest {
 
-import com.google.common.collect.ImmutableSet;
+  QueryEngine queryEngine;
 
-@Getter
-@ToString
-@AllArgsConstructor
-public abstract class FieldModel {
-
-  public static final String FIELD_SEPARATOR = ".";
-  public static final Set<String> EMPTY_UI_ALIAS = ImmutableSet.of();
-  public static final String NO_NAME = "";
-  public static final boolean NOT_NESTED = false;
-  public static final boolean NESTED = true;
-
-  private String name;
-  private Set<String> alias;
-  private FieldType type;
-  @Setter
-  private boolean nested;
-
-  /**
-   * Indicates if the field's value could be used to resolved using the terms lookup table.
-   */
-  private boolean identifiable;
-
-  public static enum FieldType {
-    LONG,
-    DOUBLE,
-    STRING,
-    ARRAY,
-    BOOLEAN,
-    OBJECT
+  @Before
+  public void setUp() {
+    es.execute(createIndexMappings(DRUG_CENTRIC).withData(bulkFile(getClass())));
+    queryContext = new QueryContext(INDEX_NAME, DRUG_CENTRIC);
+    queryEngine = new QueryEngine(es.client(), INDEX_NAME);
   }
 
-  public boolean isLong() {
-    return type == FieldType.LONG;
+  @Test
+  public void geneLocationTest() {
+    val result = executeQuery("or(eq(drug.id, 'ZINC123'),"
+        + "in(gene.id, 'ENS123','ES:6d66b2bd-daed-431e-9a8d-b1d99be0bc18'))");
+    assertTotalHitsCount(result, 1);
+    containsOnlyIds(result, "ZINC000000000905");
   }
 
-  public boolean isDouble() {
-    return type == FieldType.DOUBLE;
-  }
+  private SearchResponse executeQuery(String query) {
+    val request = queryEngine.execute(query, DRUG_CENTRIC);
+    log.debug("Request - {}", request);
+    val result = request.getRequestBuilder().execute().actionGet();
+    log.debug("Result - {}", result);
 
-  public boolean isString() {
-    return type == FieldType.STRING;
+    return result;
   }
-
-  public boolean isArray() {
-    return type == FieldType.ARRAY;
-  }
-
-  public boolean isBoolean() {
-    return type == FieldType.BOOLEAN;
-  }
-
-  public boolean isObject() {
-    return type == FieldType.OBJECT;
-  }
-
-  public abstract <T> T accept(FieldVisitor<T> visitor);
 
 }

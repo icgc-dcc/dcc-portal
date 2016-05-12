@@ -26,10 +26,10 @@ import static com.google.common.collect.Maps.transformEntries;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newTreeSet;
 import static java.lang.String.format;
+import static org.dcc.portal.pql.es.visitor.special.EntitySetVisitor.IDENTIFIABLE_VALUE_PREFIX;
 import static org.dcc.portal.pql.meta.IndexModel.getTypeModel;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.PROJECT;
-import static org.dcc.portal.pql.meta.TypeModel.ENTITY_SET_ID;
 import static org.dcc.portal.pql.meta.TypeModel.GENE_SET_ID;
 import static org.dcc.portal.pql.util.Converters.stringValue;
 import static org.icgc.dcc.portal.pql.convert.model.Operation.ALL;
@@ -51,7 +51,6 @@ import org.icgc.dcc.common.core.util.Joiners;
 import org.icgc.dcc.portal.pql.convert.model.JqlArrayValue;
 import org.icgc.dcc.portal.pql.convert.model.JqlField;
 import org.icgc.dcc.portal.pql.convert.model.JqlFilters;
-import org.icgc.dcc.portal.pql.convert.model.JqlSingleValue;
 import org.icgc.dcc.portal.pql.convert.model.JqlValue;
 
 import com.google.common.base.Joiner;
@@ -80,7 +79,8 @@ public class FiltersConverter {
   private static final String EXISTS_TEMPLATE = "exists(%s)";
   private static final String MISSING_TEMPLATE = "missing(%s)";
   private static final String NESTED_TEMPLATE = "nested(%s,%s)";
-  public static final String ENTITY_SET_PREFIX = "ES:";
+  public static final String ENTITY_SET_PREFIX = IDENTIFIABLE_VALUE_PREFIX;
+  public static final String ENTITY_SET_ID = "entitySetId";
 
   private static final Ordering<String> NATURAL_ORDER = Ordering.<String> natural();
   private static final Joiner COMMA_JOINER = Joiners.COMMA.skipNulls();
@@ -356,8 +356,6 @@ public class FiltersConverter {
   private static String createTypeFilter(Collection<JqlField> fields, Type indexType) {
     val pathwayIdFields = Lists.<JqlField> newArrayList();
     val hasPathwayFields = Lists.<JqlField> newArrayList();
-    val entitySetIdFields = Lists.<JqlField> newArrayList();
-    val idFields = Lists.<JqlField> newArrayList();
     val remainingFields = Lists.<JqlField> newArrayList();
 
     // Separates fields into different categories.
@@ -368,10 +366,6 @@ public class FiltersConverter {
         pathwayIdFields.add(jqlField);
       } else if (fieldName.equals("hasPathway")) {
         hasPathwayFields.add(jqlField);
-      } else if (fieldName.equals(ENTITY_SET_ID)) {
-        entitySetIdFields.add(jqlField);
-      } else if (fieldName.equals("id")) {
-        idFields.add(jqlField);
       } else {
         remainingFields.add(jqlField);
       }
@@ -388,85 +382,17 @@ public class FiltersConverter {
       pathwayRelatedFilter = orFilterHelper(toPqlFilter(pathwayIdFields, indexType));
     }
 
-    // Special handling when entitySetId and id are both present; if not, process normally
-    String entitySetRelatedFilter = null;
-    if (entitySetIdFields.isEmpty() || idFields.isEmpty()) {
-
-      boolean notFacet = false;
-      val newIdFields = Lists.<JqlField> newArrayList();
-
-      if (idFields.isEmpty()) {
-        remainingFields.addAll(entitySetIdFields);
-        remainingFields.addAll(idFields);
-        return joinFilters(remainingFields, pathwayRelatedFilter, entitySetRelatedFilter, indexType);
-      }
-
-      // Inspect ids to see if we have an inline entity set
-      for (val idField : idFields) {
-
-        // Need to know if we need to wrap everything in a NOT at the end.
-        if (idField.getOperation() == NOT) {
-          notFacet = true;
-        }
-
-        List<Object> values;
-        if (idField.getValue().isArray()) {
-          val jqlValue = (JqlArrayValue) idField.getValue();
-          values = jqlValue.get();
-        } else {
-          val jqlValue = (JqlSingleValue) idField.getValue();
-          values = ImmutableList.of(jqlValue.get());
-        }
-
-        // Transform entitySetIds into entitySetFields and remove from entity id list.
-        for (val value : values) {
-          String strValue = value.toString();
-          if (strValue.startsWith(ENTITY_SET_PREFIX)) {
-            val newValue = new JqlArrayValue(ImmutableList.of(strValue.substring(3)));
-            val entitySetField = new JqlField(ENTITY_SET_ID, IS, newValue, idField.getPrefix());
-            val newValues = new ArrayList<Object>(values);
-            newValues.remove(value);
-
-            entitySetIdFields.add(entitySetField);
-
-            if (!newValues.isEmpty()) {
-              val newIdField = new JqlField("id", IS, new JqlArrayValue(newValues), idField.getPrefix());
-              newIdFields.add(newIdField);
-            }
-          }
-        }
-
-        entitySetIdFields.addAll(newIdFields);
-        entitySetRelatedFilter = toPqlFilter(entitySetIdFields, indexType);
-
-        if (!entitySetIdFields.isEmpty() && !newIdFields.isEmpty()) {
-          entitySetRelatedFilter = orFilterHelper(entitySetRelatedFilter);
-          entitySetRelatedFilter = notFacet ? format(NOT_TEMPLATE, entitySetRelatedFilter) : entitySetRelatedFilter;
-        } else if (!entitySetIdFields.isEmpty()) {
-          entitySetRelatedFilter = notFacet ? format(NOT_TEMPLATE, entitySetRelatedFilter) : entitySetRelatedFilter;
-        } else {
-          // There were no entitysets, use original unmodified fields
-          remainingFields.addAll(idFields);
-        }
-      }
-
-    } else {
-      entitySetIdFields.addAll(idFields);
-      entitySetRelatedFilter = orFilterHelper(toPqlFilter(entitySetIdFields, indexType));
-    }
-
-    return joinFilters(remainingFields, pathwayRelatedFilter, entitySetRelatedFilter, indexType);
+    return joinFilters(remainingFields, pathwayRelatedFilter, indexType);
   }
 
   private static String orFilterHelper(String filter) {
     return (null == filter) ? null : format(PQL_OR_TEMPLATE, filter);
   }
 
-  private static String joinFilters(ArrayList<JqlField> remaining, String pathways, String entitySets, Type type) {
+  private static String joinFilters(ArrayList<JqlField> remaining, String pathways, Type type) {
     return COMMA_JOINER.join(
         toPqlFilter(remaining, type),
-        pathways,
-        entitySets);
+        pathways);
   }
 
   private static boolean isNestedField(@NonNull JqlField field) {
