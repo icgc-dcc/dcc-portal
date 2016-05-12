@@ -18,13 +18,13 @@
 package org.icgc.dcc.portal.manifest.writer;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static org.icgc.dcc.common.core.util.Joiners.WHITESPACE;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.List;
+import java.util.Map;
 
 import org.icgc.dcc.portal.manifest.model.ManifestFile;
 
@@ -43,24 +43,25 @@ public class EGAManifestWriter {
 
   @SneakyThrows
   public static void write(OutputStream buffer, Multimap<String, ManifestFile> bundles) {
-    val repoFileIds = resolveRepoFileIds(bundles);
-    val manifest = createManifest(repoFileIds);
+    val mapping = resolveFileIdMap(bundles);
+    val manifest = createManifest(mapping);
 
     val writer = new OutputStreamWriter(buffer, UTF_8);
     writer.write(manifest);
     writer.flush();
   }
 
-  private static List<String> resolveRepoFileIds(Multimap<String, ManifestFile> bundles) {
-    return bundles.values().stream().map(ManifestFile::getRepoFileId).collect(toList());
+  private static Map<String, String> resolveFileIdMap(Multimap<String, ManifestFile> bundles) {
+    return bundles.values().stream().collect(toMap(ManifestFile::getRepoFileId, ManifestFile::getId));
   }
 
   @SneakyThrows
-  private static String createManifest(List<String> repoFileIds) {
+  private static String createManifest(Map<String, String> mapping) {
     val template = readTemplate();
     return template
-        .replace("{{ repoFileIds }}", WHITESPACE.join(repoFileIds))
-        .replace("{{ timestamp }}", System.currentTimeMillis() + "");
+        .replace("{{ repoFileIds }}", WHITESPACE.join(mapping.keySet()))
+        .replace("{{ timestamp }}", System.currentTimeMillis() + "")
+        .replace("{{ mapping }}", mapping.toString());
   }
 
   private static String readTemplate() throws IOException {

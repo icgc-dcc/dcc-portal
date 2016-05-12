@@ -1,72 +1,101 @@
 #!/bin/bash
-# Script to download a EGA "manifest" generated from https://dcc.icgc.org/repositories
-# 
-# For information on the EGA Download Client, please see:
+#
+# ICGC EGA Script Manifest
+#
+# Script to download ICGC files in EGA. Generated from https://dcc.icgc.org/repositories.
+# Requires Java and the EGA Download Client to be installed:
+#
+#   https://www.ebi.ac.uk/ega/about/your_EGA_account/download_streaming_client#download
+#
+# For information on the EGA Download Client commands, please see:
+#
 #   https://www.ebi.ac.uk/ega/about/your_EGA_account/download_streaming_client#direct_command
-
 #
-# Configuration
+# Example of how to download a client:
+#
+#   jar xf <(curl -s https://www.ebi.ac.uk/ega/sites/ebi.ac.uk.ega/files/documents/EgaDemoClient_2.2.2.zip)
 #
 
-# EGA username
+###############################################################################
+# User Configuration (Required)
+###############################################################################
+
+# Your EGA username (e.g. user@example.org):
 username=
 
-# EGA password
+# Your EGA password:
 password=
 
-# Where to place downloads (must exist)
+# Where to place downloads (must exist):
 output_dir=
 
-# Path to EgaDemoClient.jar
-bin_dir=.
+# Path to EgaDemoClient.jar (must exist at this location):
+bin_dir=
 
-#
-# Setup
-#
+###############################################################################
+# Manifest
+###############################################################################
 
 file_ids="{{ repoFileIds }}"
+mapping="{{ mapping }}"
+
+###############################################################################
+# Script Configuration
+###############################################################################
+
 cipher=$(md5 -s "$username$password")
-label=icgc-download-{{ timestamp }}
+label="icgc-download-{{ timestamp }}"
 link=https://www.ebi.ac.uk/ega/about/your_EGA_account/download_streaming_client#download
 
-check() {
-  if [ which java >/dev/null 2>&1 ];
-  then
-     echo "Java not found. Exiting..."
-     exit 1
-  fi
-  if [ ! -f $bin_dir/EgaDemoClient.jar ];
-  then
-     echo "EGA client not found. Please download from $link and try again. Exiting..."
-     exit 1
-  fi
-}
+###############################################################################
+# Checking
+###############################################################################
 
-request() {
-  for file_id in $file_ids
-  do
-    echo "Requesing $file_id..."
-    java -jar $bin_dir/EgaDemoClient.jar -p $username $password -rf $file_id -re $cipher -label $label
-  done
-}
+if [ -z $username ]; then
+   echo "Variable 'username' is required. Exiting..."
+   exit 1
+fi
+if [ -z $password ]; then
+   echo "Variable 'password' is required. Exiting..."
+   exit 1
+fi
+if [ -z $output_dir ]; then
+   echo "Variable 'output_dir' is required. Exiting..."
+   exit 1
+fi
+if [ which java >/dev/null 2>&1 ]; then
+   echo "Java not found. Exiting..."
+   exit 2
+fi
+if [ ! -f $bin_dir/EgaDemoClient.jar ]; then
+   echo "EGA client not found at $bin_dir. Please download from $link and try again. Exiting..."
+   exit 2
+fi
 
-download() {
-  echo "Downloading $file_id..."
-  java -jar $bin_dir/EgaDemoClient.jar -p $username $password -dr $label -path $output_dir
-}
+###############################################################################
+# Request
+###############################################################################
 
-decrypt() {
-  echo "Decrypting..."
-  java -jar $bin_dir/EgaDemoClient.jar -p $username $password -dc $(ls -d $output_dir/*.cip) -dck $cipher
-}
+echo "Requesting $mapping..."
 
-#
-# Run
-#
+for file_id in $file_ids
+do
+  echo "Requesting $file_id..."
+  java -jar $bin_dir/EgaDemoClient.jar -p $username $password -rf $file_id -re $cipher -label $label
+done
 
-check
-request
-download
-decrypt
+###############################################################################
+# Download
+###############################################################################
+
+echo "Downloading..."
+java -jar $bin_dir/EgaDemoClient.jar -p $username $password -dr $label -path $output_dir
+
+###############################################################################
+# Decrypt
+###############################################################################
+
+echo "Decrypting..."
+java -jar $bin_dir/EgaDemoClient.jar -p $username $password -dc $(ls -d $output_dir/*.cip) -dck $cipher
 
 echo "Finished!"
