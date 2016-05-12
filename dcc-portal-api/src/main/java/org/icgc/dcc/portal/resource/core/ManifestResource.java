@@ -20,6 +20,7 @@ package org.icgc.dcc.portal.resource.core;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
 import static com.sun.jersey.multipart.Boundary.BOUNDARY_PARAMETER;
+import static com.sun.jersey.multipart.MultiPartMediaTypes.MULTIPART_MIXED;
 import static com.sun.jersey.multipart.MultiPartMediaTypes.MULTIPART_MIXED_TYPE;
 import static java.util.Collections.singletonMap;
 import static java.util.stream.Collectors.toList;
@@ -74,7 +75,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @Path("/v1/manifests")
-@Api(value = "/manifests", description = "Resources relating to manifests")
+@Api(value = "/manifests", description = "Resources relating to file manifests of ICGC repositories")
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class ManifestResource extends Resource {
 
@@ -82,22 +83,29 @@ public class ManifestResource extends Resource {
    * Constants.
    */
   private static final String API_MANIFEST_ID_PARAM = "manifestId";
-  private static final String API_MANIFEST_ID_VALUE = "The manifest ID";
+  private static final String API_MANIFEST_ID_VALUE =
+      "The manifest ID of a previously created manifest. Format is a UUID";
 
-  private static final String API_FILE_FORMAT_VALUE = "The output format";
-  private static final String API_FILE_FORMAT_PARAM = "format";
-
-  private static final String API_FILE_REPOS_VALUE = "The prioritized list of repo codes to use";
   private static final String API_FILE_REPOS_PARAM = "repos";
+  private static final String API_FILE_REPOS_VALUE =
+      "The prioritized list of repo codes to use. When the 'unique' parameter is set to true, this field is required and the order of the repos will determine the source of uniqueness of a file if it exists in more than one repo. Zero or more repo codes separated by a comma.";
 
-  private static final String API_FILE_FIELDS_VALUE = "What fields to include";
-  private static final String API_FILE_FIELDS_PARAM = "fields";
-
-  private static final String API_FILE_UNIQUE_VALUE = "Only return unique files?";
   private static final String API_FILE_UNIQUE_PARAM = "unique";
+  private static final String API_FILE_UNIQUE_VALUE =
+      "Only return unique files by file id (e.g. FI1234)? Useful when file copies exist in more than one repo";
 
-  private static final String API_FILE_MULTIPART_VALUE = "Multipart output?";
+  private static final String API_FILE_FORMAT_PARAM = "format";
+  private static final String API_FILE_FORMAT_VALUE =
+      "The output format of the manifest. One of 'tarball', 'files', or 'json'. 'tarball' will return an archive of all native manifests spanned by the file set defined in the manifest. 'files' will return a series of files whose content type is subject to the 'multipart' parameter. 'json' will return a JSON representation of the manifest subject to the 'fields' parameter";
+
+  private static final String API_FILE_FIELDS_PARAM = "fields";
+  private static final String API_FILE_FIELDS_VALUE =
+      "What addional fields to include when using format 'json'. Zero or more of 'id', 'size', 'md5sum', 'content' separated by a comma. All fields accept 'content' are properties of files. 'content' represents the a base64 encoded native manifest";
+
   private static final String API_FILE_MULTIPART_PARAM = "multipart";
+  private static final String API_FILE_MULTIPART_VALUE =
+      "Use multipart output when a format of 'files' is specified  Useful when a manifest covers more than one repo and a requesting agent can accept multipart responses. Content type is "
+          + MULTIPART_MIXED;
 
   /**
    * Dependencies.
@@ -129,12 +137,12 @@ public class ManifestResource extends Resource {
       @ApiParam(value = API_MANIFEST_ID_VALUE, required = true) @PathParam(API_MANIFEST_ID_PARAM) UUID manifestId,
 
       // Input - Overrides
-      @ApiParam(value = API_FILE_REPOS_VALUE) @QueryParam(API_FILE_REPOS_PARAM) @DefaultValue("") ListParam repoParam,
+      @ApiParam(value = API_FILE_REPOS_VALUE, allowMultiple = true) @QueryParam(API_FILE_REPOS_PARAM) @DefaultValue("") ListParam repoParam,
       @ApiParam(value = API_FILE_UNIQUE_VALUE) @QueryParam(API_FILE_UNIQUE_PARAM) @DefaultValue("false") boolean unique,
 
       // Output - Overrides
       @ApiParam(value = API_FILE_FORMAT_VALUE) @QueryParam(API_FILE_FORMAT_PARAM) @DefaultValue("") String format,
-      @ApiParam(value = API_FILE_FIELDS_VALUE) @QueryParam(API_FILE_FIELDS_PARAM) @DefaultValue("") ListParam fieldsParam,
+      @ApiParam(value = API_FILE_FIELDS_VALUE, allowMultiple = true) @QueryParam(API_FILE_FIELDS_PARAM) @DefaultValue("") ListParam fieldsParam,
       @ApiParam(value = API_FILE_MULTIPART_VALUE) @QueryParam(API_FILE_MULTIPART_PARAM) @DefaultValue("") boolean multipart) {
 
     val manifest = manifestService.getManifest(manifestId);
@@ -174,13 +182,13 @@ public class ManifestResource extends Resource {
   @ApiOperation(value = "Generate manifest(s) on the fly as specified by the supplied parameters")
   public Response generateManifest(
       // Input
-      @ApiParam(value = API_FILE_REPOS_VALUE) @QueryParam(API_FILE_REPOS_PARAM) @DefaultValue("") ListParam repoParam,
+      @ApiParam(value = API_FILE_REPOS_VALUE, allowMultiple = true) @QueryParam(API_FILE_REPOS_PARAM) @DefaultValue("") ListParam repoParam,
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
       @ApiParam(value = API_FILE_UNIQUE_VALUE) @QueryParam(API_FILE_UNIQUE_PARAM) @DefaultValue("false") boolean unique,
 
       // Output
       @ApiParam(value = API_FILE_FORMAT_VALUE) @QueryParam(API_FILE_FORMAT_PARAM) @DefaultValue("json") String format,
-      @ApiParam(value = API_FILE_FIELDS_VALUE) @QueryParam(API_FILE_FIELDS_PARAM) @DefaultValue("") ListParam fieldsParam,
+      @ApiParam(value = API_FILE_FIELDS_VALUE, allowMultiple = true) @QueryParam(API_FILE_FIELDS_PARAM) @DefaultValue("") ListParam fieldsParam,
       @ApiParam(value = API_FILE_MULTIPART_VALUE) @QueryParam(API_FILE_MULTIPART_PARAM) @DefaultValue("false") boolean multipart) {
     log.debug("filtersParam: '{}', repoParam: '{}'", filtersParam, repoParam);
 
