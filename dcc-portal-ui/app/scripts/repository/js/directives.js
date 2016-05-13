@@ -33,6 +33,8 @@
       templateUrl: 'scripts/repository/views/bamiobio.html',
       link: function(scope, element) {
 
+        scope.closing = false;
+
         // iobio team wanted analytics of when their app is being loaded
         if (iobioGoogleAnalytics !== undefined) {
           iobioGoogleAnalytics('send', 'pageview');
@@ -291,10 +293,18 @@
             if (cfpLoadingBar.status < percentDone) {
               cfpLoadingBar.set(percentDone);
             }
-            // Update charts
-            updatePercentCharts(data, sampleDonutChart);
-            updateTotalReads(data.total_reads);
-            updateHistogramCharts(data);
+            // Update charts, make sure we are still receiving data before attempting to manuplate DOM. 
+            try {
+              if (!scope.closing && bam.sampleClient._socket.readyState === 1) {
+                updatePercentCharts(data, sampleDonutChart);
+                updateTotalReads(data.total_reads);
+                updateHistogramCharts(data);
+              }
+            } catch (error) {
+              // Gracefully report that an update was in flight during teardown. 
+              console.log('An error occured during chart update: ' + error);
+            }
+             
           }, options);
         }
 
@@ -984,6 +994,7 @@
         };
         
         scope.$on('$destroy', function() {
+          scope.closing = true;
           if (vcfiobio.sampleClient !== undefined) {
             vcfiobio.sampleClient.close(1000);
           }
