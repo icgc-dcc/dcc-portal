@@ -376,11 +376,12 @@
 
     this.buildMetaDataUrl = function (fileCopy, fileInfo) {
       var parts = [];
+      var metaId;
       if (isS3 (fileCopy.repoType) && isCollab(fileCopy.repoCode)) {
-        var metaId = fileCopy.repoMetadataPath.substr(fileCopy.repoMetadataPath.lastIndexOf('/')+1);
+        metaId = fileCopy.repoMetadataPath.substr(fileCopy.repoMetadataPath.lastIndexOf('/')+1);
         parts = ['api/v1/ui/collaboratory/metadata/', metaId];
       } else if (isS3 (fileCopy.repoType) && !isCollab(fileCopy.repoCode)) {
-        var metaId = fileCopy.repoMetadataPath.substr(fileCopy.repoMetadataPath.lastIndexOf('/')+1);
+        metaId = fileCopy.repoMetadataPath.substr(fileCopy.repoMetadataPath.lastIndexOf('/')+1);
         parts = ['api/v1/ui/aws/metadata/', metaId];
       } else if (isEGA (fileCopy.repoType)) {
         parts = ['api/v1/ui/ega/metadata/', fileCopy.repoDataSetIds[0]];
