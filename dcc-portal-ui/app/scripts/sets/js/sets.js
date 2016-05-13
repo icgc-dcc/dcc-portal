@@ -272,9 +272,10 @@
             });
           } else {
             $scope.selected.forEach(function(selectedIntersection) {
-              for (var i2=0; i2 < $scope.data.length; i2++) {
-                if (SetOperationService.isEqual($scope.data[i2].intersection, selectedIntersection)) {
-                  union.push( $scope.data[i2] );
+              for (var j=0; j < $scope.data.length; j++) {
+                if (SetOperationService.isEqual($scope.data[j].intersection, selectedIntersection)) {
+                  var newUnion = _.pick($scope.data[j], ['exclusions', 'intersection']);
+                  union.push(newUnion);
                   break;
                 }
               }
@@ -324,7 +325,7 @@
               templateUrl: '/scripts/downloader/views/request.html',
               controller: 'DownloadRequestController',
               resolve: {
-                filters: function() { return {donor:{entitySetId:{is:[data.id]}}}; }
+                filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + data.id]}}}; }
               }
             });
           });

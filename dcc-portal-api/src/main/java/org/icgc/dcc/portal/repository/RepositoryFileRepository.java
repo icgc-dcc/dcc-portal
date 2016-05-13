@@ -120,6 +120,7 @@ import org.icgc.dcc.portal.model.TermFacet.Term;
 import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.repository.TermsLookupRepository.TermLookupType;
+import org.icgc.dcc.portal.service.BadRequestException;
 import org.icgc.dcc.portal.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -177,6 +178,7 @@ public class RepositoryFileRepository {
   private static final String FILE_INDEX_TYPE = REPOSITORY_FILE.getId();
   private static final String FILE_DONOR_TEXT_INDEX_TYPE = Type.REPOSITORY_FILE_DONOR_TEXT.getId();
   private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
+  private static final String BAD_FILTER = "Expected '%s' in filter for %s.";
 
   /**
    * Dependencies.
@@ -230,7 +232,11 @@ public class RepositoryFileRepository {
       checkArgument(JQL_FIELD_NAME_MAPPING.containsKey(fieldAlias),
           "'%s' is not a valid field in this query.", fieldAlias);
 
-      val filterValues = transform(newArrayList(facetField.getValue().get(IS)),
+      val facetValue = facetField.getValue().path(IS);
+      if (facetValue.isMissingNode()) {
+        throw new BadRequestException(format(BAD_FILTER, "is", facetField.getKey()));
+      }
+      val filterValues = transform(newArrayList(facetValue),
           item -> item.textValue());
 
       if (fieldAlias.equals(ENTITY_SET_ID)) {
