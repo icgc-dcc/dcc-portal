@@ -154,13 +154,13 @@
       $scope.params.showCollaboratoryToken = PortalFeature.get('AUTH_TOKEN');
 
       function shouldRefreshLocation() {
-        var shouldRefresh = true,
+        var shouldRefresh = false,
             urlPath = $location.path().toLowerCase();
 
         switch(urlPath) {
-          // Prevent Refresh for the main page
-          case '/':
-            shouldRefresh = false;
+          // Currently, we only want a refresh for releases. 
+          case '/releases':
+            shouldRefresh = true;
             break;
           default:
             break;
@@ -183,16 +183,17 @@
               // Default to refreshing the page on login
               var transitionParams =  {
                 reload: true,
-                inherit: false,
-                notify: true
+                inherit: true,
+                notify: true,
+                location: false
               };
 
               Auth.login(data);
               $scope.params.user = Auth.getUser();
 
-              if (! shouldRefreshLocation()) {
-                transitionParams.inherit = true;
-                transitionParams.location = false;
+              if (shouldRefreshLocation()) {
+                transitionParams.inherit = false;
+                transitionParams.location = true;
               }
 
               // If we are on the homepage (i.e. $state.current.name is falsey) don't bother transitioning...
