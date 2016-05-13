@@ -33,19 +33,19 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
-@Path("/v1/ui/collaboratory")
-public class UICollaboratoryResource extends Resource {
+@Path("/v1/ui/aws")
+public class UIAWSResource extends Resource {
 
   /**
    * Constants.
    */
-  private static final String COLLAB_META_URL = "https://object.cancercollaboratory.org:9080/oicr.icgc.meta/metadata/";
+  private static final String AWS_META_URL = "https://s3-external-1.amazonaws.com/oicr.icgc.meta/metadata/";
 
   @Path("/metadata/{objectId}")
   @GET
   @SneakyThrows
   public Response getMeta(@PathParam("objectId") String objectId) {
-    val input = new URL(COLLAB_META_URL + objectId).openStream();
+    val input = new URL(AWS_META_URL + objectId).openStream();
 
     return Response.ok(input)
         .type(TEXT_XML)

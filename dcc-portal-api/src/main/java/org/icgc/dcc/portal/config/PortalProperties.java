@@ -99,6 +99,10 @@ public class PortalProperties extends Configuration {
 
   @Valid
   @JsonProperty
+  AuthProperties auth = new AuthProperties();
+
+  @Valid
+  @JsonProperty
   Map<String, Boolean> features = newHashMap();
 
   @Data
@@ -358,6 +362,14 @@ public class PortalProperties extends Configuration {
 
     @JsonProperty
     boolean enableHttpLogging;
+
+  }
+
+  @Data
+  public static class AuthProperties {
+
+    @JsonProperty
+    boolean enabled = true;
 
   }
 

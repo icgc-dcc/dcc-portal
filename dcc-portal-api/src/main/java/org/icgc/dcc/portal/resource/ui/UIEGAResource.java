@@ -41,12 +41,12 @@ public class UIEGAResource extends Resource {
   /**
    * Constants.
    */
-  private static final String EGA_META_URL = " http://ega.ebi.ac.uk/ega/rest/download/v2/metadata/";
+  private static final String EGA_META_URL = "http://ega.ebi.ac.uk/ega/rest/download/v2/metadata/";
 
   @Path("/metadata/{datasetId}")
   @GET
   @SneakyThrows
-  public Response collabMeta(@PathParam("datasetId") String datasetId) {
+  public Response getMeta(@PathParam("datasetId") String datasetId) {
     val input = new URL(EGA_META_URL + datasetId).openStream();
 
     return Response.ok(input)

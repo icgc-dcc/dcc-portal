@@ -48,6 +48,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.icgc.dcc.common.client.api.ICGCException;
 import org.icgc.dcc.common.client.api.daco.DACOClient.UserType;
+import org.icgc.dcc.portal.config.PortalProperties.AuthProperties;
 import org.icgc.dcc.portal.config.PortalProperties.CrowdProperties;
 import org.icgc.dcc.portal.model.User;
 import org.icgc.dcc.portal.resource.Resource;
@@ -73,12 +74,24 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class AuthResource extends Resource {
 
+  /**
+   * Constants.
+   */
   private static final String DACO_ACCESS_KEY = "daco";
   private static final String CLOUD_ACCESS_KEY = "cloudAccess";
   private static final String TOKEN_KEY = "token";
   private static final String PASSWORD_KEY = "password";
   private static final String USERNAME_KEY = "username";
 
+  /**
+   * Configuration.
+   */
+  @NonNull
+  private final AuthProperties properties;
+
+  /**
+   * Dependencies.
+   */
   @NonNull
   private final AuthService authService;
   @NonNull
@@ -86,6 +99,9 @@ public class AuthResource extends Resource {
   @NonNull
   private final CmsAuthService cmsService;
 
+  /**
+   * State.
+   */
   @Getter(lazy = true)
   private final Collection<String> cookiesToDelete = initCookiesToDelete();
 
@@ -95,6 +111,10 @@ public class AuthResource extends Resource {
   @GET
   @Path("/verify")
   public Response verify(@Context HttpHeaders requestHeaders) {
+    if (!properties.isEnabled()) {
+      throwAuthenticationException("Login disabled");
+    }
+
     val cookies = requestHeaders.getCookies();
     val sessionToken = getCookieValue(cookies.get(CrowdProperties.SESSION_TOKEN_NAME));
     val cudToken = getCookieValue(cookies.get(CrowdProperties.CUD_TOKEN_NAME));

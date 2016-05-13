@@ -22,6 +22,7 @@ import org.elasticsearch.client.Client;
 import org.icgc.dcc.common.core.mail.Mailer;
 import org.icgc.dcc.portal.auth.UserAuthProvider;
 import org.icgc.dcc.portal.auth.UserAuthenticator;
+import org.icgc.dcc.portal.config.PortalProperties.AuthProperties;
 import org.icgc.dcc.portal.config.PortalProperties.CacheProperties;
 import org.icgc.dcc.portal.config.PortalProperties.CrowdProperties;
 import org.icgc.dcc.portal.config.PortalProperties.DownloadProperties;
@@ -88,6 +89,7 @@ public class PortalConfig {
     val crowd = properties.getCrowd();
     val release = properties.getRelease();
     val download = properties.getDownload();
+    val auth = properties.getAuth();
     val setAnalysis = properties.getSetOperation();
     val features = properties.getFeatures();
 
@@ -97,6 +99,7 @@ public class PortalConfig {
         .releaseDate(release.getReleaseDate())
         .dataVersion(release.getDataVersion())
         .downloadEnabled(download.isEnabled())
+        .authEnabled(auth.isEnabled())
         .maxNumberOfHits(setAnalysis.maxNumberOfHits)
         .maxMultiplier(setAnalysis.maxMultiplier)
         .featureFlags(features)
@@ -160,6 +163,11 @@ public class PortalConfig {
   @Bean
   public OAuthProperties oauthProperties() {
     return properties.getOauth();
+  }
+
+  @Bean
+  public AuthProperties authProperties() {
+    return properties.getAuth();
   }
 
 }

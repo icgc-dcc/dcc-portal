@@ -38,6 +38,11 @@ public class Settings {
   boolean downloadEnabled;
 
   /**
+   * Auth settings.
+   */
+  boolean authEnabled;
+
+  /**
    * Crowd settings.
    */
   String ssoUrl;

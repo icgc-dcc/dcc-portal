@@ -26,7 +26,7 @@
 
   angular.module('icgc.auth.models', []);
 
-  angular.module('icgc.auth.models').factory('Auth', function ($window, $cookies, Restangular) {
+  angular.module('icgc.auth.models').factory('Auth', function ($window, $cookies, Restangular, Settings) {
     var user = {}, handler = Restangular.one('auth').withHttpConfig({cache: false});
 
     function hasSession() {
@@ -36,8 +36,15 @@
 
     function checkSession(succ) {
       user.verifying = true;
-      handler.one('verify').get().then(succ, function(){
-        user.verifying = false;
+      Settings.get().then(function(settings){
+         if (!settings.authEnabled){
+            user.disabled = true;
+            user.verifying = false;
+            return;
+         }
+         handler.one('verify').get().then(succ, function(){
+           user.verifying = false;
+         });
       });
     }
 
