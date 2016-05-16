@@ -23,7 +23,7 @@ import static java.lang.Math.min;
 import static lombok.AccessLevel.PRIVATE;
 import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
 import static org.icgc.dcc.portal.model.IndexModel.Type.DONOR_TEXT;
-import static org.icgc.dcc.portal.model.IndexModel.Type.REPOSITORY_FILE_DONOR_TEXT;
+import static org.icgc.dcc.portal.model.IndexModel.Type.FILE_DONOR_TEXT;
 import static org.icgc.dcc.portal.util.ElasticsearchRequestUtils.toBoolFilterFrom;
 import static org.icgc.dcc.portal.util.ElasticsearchRequestUtils.toDonorBoolFilter;
 import static org.icgc.dcc.portal.util.JsonUtils.MAPPER;
@@ -212,7 +212,7 @@ public class TermsLookupRepository {
   public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter) {
     val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
     return execute("Terms Lookup - Donor Search", true, (request) -> request
-        .setTypes(DONOR_TEXT.getId(), REPOSITORY_FILE_DONOR_TEXT.getId())
+        .setTypes(DONOR_TEXT.getId(), FILE_DONOR_TEXT.getId())
         .setQuery(query)
         .setSize(maxUnionCount)
         .setNoFields()

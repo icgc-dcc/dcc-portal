@@ -54,13 +54,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriBuilder;
 
-import org.icgc.dcc.portal.model.Query;
-import org.icgc.dcc.portal.model.RepositoryFile;
-import org.icgc.dcc.portal.model.RepositoryFiles;
+import org.icgc.dcc.portal.model.File;
+import org.icgc.dcc.portal.model.Files;
 import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.resource.core.ManifestResource;
-import org.icgc.dcc.portal.service.RepositoryFileService;
+import org.icgc.dcc.portal.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -81,7 +80,7 @@ import lombok.extern.slf4j.Slf4j;
 @Path("/v1/repository/files")
 @Produces(APPLICATION_JSON)
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
-public class RepositoryFileResource extends Resource {
+public class FileResource extends Resource {
 
   /**
    * Constants.
@@ -92,7 +91,7 @@ public class RepositoryFileResource extends Resource {
    * Dependencies.
    */
   @NonNull
-  private final RepositoryFileService repositoryFileService;
+  private final FileService fileService;
 
   @Path("/manifest/{manifestId}")
   @GET
@@ -103,19 +102,27 @@ public class RepositoryFileResource extends Resource {
     return Response.seeOther(uri).build();
   }
 
+  @GET
+  // TODO: This should just be /repositories. ps don't use underscores!!
+  @Path("/repo_map")
+  @Timed
+  public Map<String, String> getRepositoryMap() {
+    return fileService.findRepos();
+  }
+
   @Path("/{fileId}")
   @GET
   @Timed
-  @ApiOperation(value = "Find by fileId", response = RepositoryFile.class)
-  public RepositoryFile find(
+  @ApiOperation(value = "Find by fileId", response = File.class)
+  public File find(
       @ApiParam(value = "File Id", required = true) @PathParam("fileId") String id) {
-    return repositoryFileService.findOne(id);
+    return fileService.findOne(id);
   }
 
   @GET
   @Timed
-  @ApiOperation(value = "Returns a list of RepositoryFiles", response = RepositoryFile.class)
-  public RepositoryFiles findAll(
+  @ApiOperation(value = "Returns a list of Files", response = File.class)
+  public Files findAll(
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
       @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include,
@@ -127,7 +134,7 @@ public class RepositoryFileResource extends Resource {
     val filters = filtersParam.get();
     log.debug("Received filters: '{}'", filters);
 
-    return repositoryFileService.findAll(query().fields(fields).filters(filters)
+    return fileService.findAll(query().fields(fields).filters(filters)
         .from(from.get())
         .size(size.get())
         .sort(sort)
@@ -142,7 +149,7 @@ public class RepositoryFileResource extends Resource {
   @ApiOperation(value = "Counts the number of donors matching the filter.", response = Long.class)
   public Long getUniqueDonorCount(
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
-    return repositoryFileService.getDonorCount(toQuery(filtersParam));
+    return fileService.getDonorCount(query(filtersParam));
   }
 
   @GET
@@ -150,19 +157,19 @@ public class RepositoryFileResource extends Resource {
   @Path("/summary")
   public Map<String, Long> getSummary(
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
-    return repositoryFileService.getSummary(query().filters(filtersParam.get()).build());
+    return fileService.getSummary(query().filters(filtersParam.get()).build());
   }
 
   @GET
   @Timed
   @Path("/export")
   @Produces(TEXT_TSV)
-  @ApiOperation(value = "Exports repository file listings to a TSV file.", response = RepositoryFile.class)
-  public Response exportFiles(
+  @ApiOperation(value = "Exports repository file listings to a TSV file.", response = File.class)
+  public Response getExport(
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
 
     final StreamingOutput outputGenerator =
-        outputStream -> repositoryFileService.exportTableData(outputStream, toQuery(filtersParam));
+        outputStream -> fileService.exportFiles(outputStream, query(filtersParam));
 
     // Make this similar to client-side export naming format
     val fileName = String.format("repository_%s.tsv", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())));
@@ -172,29 +179,15 @@ public class RepositoryFileResource extends Resource {
   }
 
   @GET
-  @Path("/metadata")
-  @Timed
-  public Map<String, String> getIndexMetaData() {
-    return repositoryFileService.getIndexMetadata();
-  }
-
-  @GET
-  @Path("/repo_map")
-  @Timed
-  public Map<String, String> getRepositoryMap() {
-    return repositoryFileService.getRepositoryMap();
-  }
-
-  @GET
   @Path("/export/{setId}")
   @Produces(TEXT_TSV)
-  public Response getExportFromSet(@ApiParam(value = "Set Id", required = true) @PathParam("setId") String setId) {
-
+  public Response getExport(@ApiParam(value = "Set Id", required = true) @PathParam("setId") String setId) {
+  
     final StreamingOutput outputGenerator =
-        outputStream -> repositoryFileService.exportTableDataFromSet(outputStream, setId);
-
+        outputStream -> fileService.exportFiles(outputStream, setId);
+  
     val fileName = String.format("repository_%s.tsv", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())));
-
+  
     return ok(outputGenerator).header(CONTENT_DISPOSITION,
         type(TYPE_ATTACHMENT).fileName(fileName).creationDate(new Date()).build()).build();
   }
@@ -204,7 +197,7 @@ public class RepositoryFileResource extends Resource {
   @Timed
   @ApiOperation(value = "Get pancancer repositories statistics")
   public Map<String, Map<String, Map<String, Object>>> getPancancerStats() {
-    return repositoryFileService.getStudyStats("PCAWG");
+    return fileService.getStudyStats("PCAWG");
   }
 
   @GET
@@ -213,7 +206,7 @@ public class RepositoryFileResource extends Resource {
   @ApiOperation(value = "Get pancancer repositories statistics")
   public Map<String, Map<String, Map<String, Object>>> getStudyStats(
       @NonNull @ApiParam(value = "Study Name") @PathParam("study") String study) {
-    return repositoryFileService.getStudyStats(study);
+    return fileService.getStudyStats(study);
   }
 
   @GET
@@ -222,13 +215,14 @@ public class RepositoryFileResource extends Resource {
   @ApiOperation(value = "Get pancancer repositories statistics")
   public Map<String, Map<String, Map<String, Object>>> getRepoStats(
       @NonNull @ApiParam(value = "Repository Code") @PathParam("repoCode") String repoCode) {
-    return repositoryFileService.getRepoStats(repoCode);
+    return fileService.getRepoStats(repoCode);
   }
 
-  private static Query toQuery(FiltersParam filters) {
-    return query()
-        .filters(filters.get())
-        .build();
+  @GET
+  @Path("/metadata")
+  @Timed
+  public Map<String, String> getIndexMetaData() {
+    return fileService.getIndexMetadata();
   }
 
 }

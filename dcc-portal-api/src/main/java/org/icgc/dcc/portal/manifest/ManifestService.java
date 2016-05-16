@@ -23,7 +23,7 @@ import static com.sun.jersey.core.header.ContentDisposition.type;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
-import static org.dcc.portal.pql.meta.Type.REPOSITORY_FILE;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.util.function.Predicates.distinctByKey;
 import static org.icgc.dcc.portal.manifest.Manifests.getFileName;
@@ -51,7 +51,7 @@ import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Repository;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.repository.ManifestRepository;
-import org.icgc.dcc.portal.repository.RepositoryFileRepository;
+import org.icgc.dcc.portal.repository.FileRepository;
 import org.icgc.dcc.portal.repository.TermsLookupRepository;
 import org.icgc.dcc.portal.service.NotFoundException;
 import org.icgc.dcc.portal.util.MultiPartOutputStream;
@@ -93,7 +93,7 @@ public class ManifestService {
   @NonNull
   private final ManifestRepository manifestRepository;
   @NonNull
-  private final RepositoryFileRepository repositoryFileRepository;
+  private final FileRepository fileRepository;
   @NonNull
   private final TermsLookupRepository termsLookupRepository;
 
@@ -280,10 +280,10 @@ public class ManifestService {
 
   private SearchResponse findFiles(Query query) {
     val converter = Jql2PqlConverter.getInstance();
-    val pql = converter.convert(query, REPOSITORY_FILE);
+    val pql = converter.convert(query, FILE);
     log.debug("Received JQL: '{}'; converted to PQL: '{}'.", query.getFilters(), pql);
 
-    return repositoryFileRepository.findDownloadInfo(pql);
+    return fileRepository.findFileInfoPQL(pql);
   }
 
   private static void writeManifest(Repository repo, long timestamp,

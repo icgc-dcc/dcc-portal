@@ -27,7 +27,7 @@ import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.OBSERVATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.PROJECT;
-import static org.dcc.portal.pql.meta.Type.REPOSITORY_FILE;
+import static org.dcc.portal.pql.meta.Type.FILE;
 
 import java.util.Optional;
 
@@ -64,7 +64,7 @@ public class QueryEngine {
     this.mutationContext = new QueryContext(index, MUTATION_CENTRIC);
     this.observationContext = new QueryContext(index, OBSERVATION_CENTRIC);
     this.projectContext = new QueryContext(index, PROJECT);
-    this.repositoryFileContext = new QueryContext(index, REPOSITORY_FILE);
+    this.repositoryFileContext = new QueryContext(index, FILE);
     this.drugContext = new QueryContext(index, DRUG_CENTRIC);
     this.diagramContext = new QueryContext(index, DIAGRAM);
   }
@@ -102,7 +102,7 @@ public class QueryEngine {
       return observationContext;
     case PROJECT:
       return projectContext;
-    case REPOSITORY_FILE:
+    case FILE:
       return repositoryFileContext;
     case DRUG_CENTRIC:
       return drugContext;

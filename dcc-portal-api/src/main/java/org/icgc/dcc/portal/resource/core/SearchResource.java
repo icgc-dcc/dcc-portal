@@ -32,7 +32,7 @@ import org.icgc.dcc.portal.model.Keywords;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.resource.Resource;
-import org.icgc.dcc.portal.service.RepositoryFileService;
+import org.icgc.dcc.portal.service.FileService;
 import org.icgc.dcc.portal.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,7 +64,7 @@ public class SearchResource extends Resource {
   protected static final String DEFAULT_ORDER = "desc";
 
   private final SearchService searchService;
-  private final RepositoryFileService repositoryService;
+  private final FileService repositoryService;
 
   @GET
   @Timed

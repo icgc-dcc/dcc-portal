@@ -26,7 +26,7 @@ import static org.icgc.dcc.portal.model.IndexModel.Type.DRUG;
 import static org.icgc.dcc.portal.model.IndexModel.Type.GENE;
 import static org.icgc.dcc.portal.model.IndexModel.Type.MUTATION;
 import static org.icgc.dcc.portal.model.IndexModel.Type.PROJECT;
-import static org.icgc.dcc.portal.model.IndexModel.Type.REPOSITORY_FILE;
+import static org.icgc.dcc.portal.model.IndexModel.Type.FILE;
 
 import java.io.IOException;
 import java.util.List;
@@ -63,7 +63,7 @@ public class JqlFiltersDeserializer extends JsonDeserializer<JqlFilters> {
       DRUG.getId(),
       MUTATION.getId(),
       PROJECT.getId(),
-      REPOSITORY_FILE.getId());
+      FILE.getId());
 
   @Override
   public JqlFilters deserialize(@NonNull JsonParser jp, @NonNull DeserializationContext ctxt) throws IOException,

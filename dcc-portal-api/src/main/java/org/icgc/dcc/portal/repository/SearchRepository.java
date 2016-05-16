@@ -125,8 +125,8 @@ public class SearchRepository {
       .put(Types.GENE_SET, Type.GENESET_TEXT)
       .put(Types.GO_TERM, Type.GENESET_TEXT)
       .put(Types.CURATED_SET, Type.GENESET_TEXT)
-      .put(Types.FILE, Type.REPOSITORY_FILE_TEXT)
-      .put(Types.FILE_DONOR, Type.REPOSITORY_FILE_DONOR_TEXT)
+      .put(Types.FILE, Type.FILE_TEXT)
+      .put(Types.FILE_DONOR, Type.FILE_DONOR_TEXT)
       .put(Types.DRUG, Type.DRUG_TEXT)
       .build();
   private static final Map<String, String> TYPE_ID_MAPPINGS = transformValues(TYPE_MAPPINGS, type -> type.getId());

@@ -26,7 +26,7 @@ import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.OBSERVATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.PROJECT;
-import static org.dcc.portal.pql.meta.Type.REPOSITORY_FILE;
+import static org.dcc.portal.pql.meta.Type.FILE;
 
 import java.util.Map;
 
@@ -126,7 +126,7 @@ public final class Visitors {
           .put(MUTATION_CENTRIC, MUTATION_SCORE_QUERY_VISITOR)
           .put(OBSERVATION_CENTRIC, DEFAULT_SCORE_QUERY_VISITOR)
           .put(PROJECT, DEFAULT_SCORE_QUERY_VISITOR)
-          .put(REPOSITORY_FILE, DEFAULT_SCORE_QUERY_VISITOR)
+          .put(FILE, DEFAULT_SCORE_QUERY_VISITOR)
           .put(DRUG_CENTRIC, DEFAULT_SCORE_QUERY_VISITOR)
           .put(DIAGRAM, DEFAULT_SCORE_QUERY_VISITOR)
           .build();

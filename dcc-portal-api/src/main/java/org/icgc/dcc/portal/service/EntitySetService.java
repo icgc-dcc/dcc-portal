@@ -49,7 +49,7 @@ import org.icgc.dcc.portal.model.EntitySetDefinition;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.repository.EntitySetRepository;
-import org.icgc.dcc.portal.repository.RepositoryFileRepository;
+import org.icgc.dcc.portal.repository.FileRepository;
 import org.icgc.dcc.portal.repository.TermsLookupRepository;
 import org.icgc.dcc.portal.util.SearchResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +84,7 @@ public class EntitySetService {
   @NonNull
   private final TermsLookupRepository termsLookupRepository;
   @NonNull
-  private final RepositoryFileRepository repositoryFileRepository;
+  private final FileRepository fileRepository;
   @NonNull
   private final EntitySetRepository repository;
   @NonNull
@@ -225,7 +225,7 @@ public class EntitySetService {
         .defaultLimit(maxNumberOfHits)
         .build();
     val maxSetSize = entitySet.getLimit(maxNumberOfHits);
-    val entityIds = repositoryFileRepository.findAllDonorIds(query, maxSetSize);
+    val entityIds = fileRepository.findAllDonorIds(query, maxSetSize);
 
     val lookupType = entitySet.getType().toLookupType();
     termsLookupRepository.createTermsLookup(lookupType, newEntityId, entityIds, entitySet.isTransient());
@@ -248,7 +248,7 @@ public class EntitySetService {
         .defaultLimit(maxNumberOfHits)
         .build();
 
-    val entityIds = repositoryFileRepository.findAllFileIds(query);
+    val entityIds = fileRepository.findAllFileIds(query);
     val lookupType = entitySet.getType().toLookupType();
 
     val repoList = entitySet.getFilters().path("file").path("repoName").path("is");

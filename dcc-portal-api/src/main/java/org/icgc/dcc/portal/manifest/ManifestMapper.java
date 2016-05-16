@@ -19,21 +19,21 @@ package org.icgc.dcc.portal.manifest;
 
 import static org.apache.commons.lang.StringUtils.defaultString;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
-import static org.icgc.dcc.portal.repository.RepositoryFileRepository.toRawFieldName;
 import static org.icgc.dcc.portal.util.ElasticsearchResponseUtils.getString;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.dcc.portal.pql.meta.RepositoryFileTypeModel.Fields;
+import org.dcc.portal.pql.meta.FileTypeModel.Fields;
+import org.dcc.portal.pql.meta.IndexModel;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.icgc.dcc.portal.manifest.model.ManifestFile;
+import org.icgc.dcc.portal.model.File;
+import org.icgc.dcc.portal.model.File.Donor;
+import org.icgc.dcc.portal.model.File.FileCopy;
 import org.icgc.dcc.portal.model.Repository;
-import org.icgc.dcc.portal.model.RepositoryFile;
-import org.icgc.dcc.portal.model.RepositoryFile.Donor;
-import org.icgc.dcc.portal.model.RepositoryFile.FileCopy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
@@ -53,7 +53,7 @@ public class ManifestMapper {
    * Merge the fields with flattened file copies fields.
    */
   private static Stream<ManifestFile> mapHit(SearchHit hit) {
-    val file = RepositoryFile.parse(hit.sourceAsString());
+    val file = File.parse(hit.sourceAsString());
 
     // Collect common data
     val fileFields = mapFile(hit, file);
@@ -92,7 +92,7 @@ public class ManifestMapper {
         .setRepoDataPath(defaultString(fileCopy.getRepoDataPath()));
   }
 
-  private static Map<String, String> mapFile(SearchHit hit, RepositoryFile file) {
+  private static Map<String, String> mapFile(SearchHit hit, File file) {
     val fileFields = Maps.<String, String> newHashMap();
 
     for (val fieldName : ImmutableList.of(
@@ -116,7 +116,7 @@ public class ManifestMapper {
   }
 
   private static String mapValue(SearchHit hit, String fieldName) {
-    val rawFieldName = toRawFieldName(fieldName);
+    val rawFieldName = IndexModel.getFileTypeModel().getField(fieldName);
     val resultField = hit.getFields().get(rawFieldName);
 
     return null == resultField ? "" : defaultString(getString(resultField.getValues()));

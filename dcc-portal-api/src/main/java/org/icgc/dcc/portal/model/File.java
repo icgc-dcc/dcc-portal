@@ -36,14 +36,14 @@ import lombok.val;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ApiModel(value = "RepositoryFile")
-public class RepositoryFile {
+@ApiModel(value = "File")
+public class File {
 
-  private static final Class<RepositoryFile> MY_CLASS = RepositoryFile.class;
+  private static final Class<File> MY_CLASS = File.class;
   private static final ObjectMapper MAPPER = createMapper();
 
   @SneakyThrows
-  public static RepositoryFile parse(@NonNull String json) {
+  public static File parse(@NonNull String json) {
     return MAPPER.readValue(json, MY_CLASS);
   }
 

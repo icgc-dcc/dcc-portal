@@ -3,7 +3,7 @@ package org.icgc.dcc.portal.model;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
-import static org.dcc.portal.pql.meta.IndexModel.getRepositoryFileTypeModel;
+import static org.dcc.portal.pql.meta.IndexModel.getFileTypeModel;
 import static org.icgc.dcc.portal.pql.convert.FiltersConverter.ENTITY_SET_ID;
 
 import java.util.EnumMap;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.dcc.portal.pql.meta.RepositoryFileTypeModel;
+import org.dcc.portal.pql.meta.FileTypeModel;
 import org.dcc.portal.pql.meta.TypeModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +59,7 @@ public class IndexModel {
     PATHWAY("pathway"),
 
     GENE_SET("geneSet"),
-    REPOSITORY_FILE("file"),
+    FILE("file"),
 
     CONSEQUENCE("consequence"),
     TRANSCRIPT("transcript"),
@@ -97,8 +97,8 @@ public class IndexModel {
     GENE_CENTRIC("gene-centric"),
     MUTATION_CENTRIC("mutation-centric"),
     OCCURRENCE_CENTRIC("observation-centric"),
-    REPOSITORY_FILE("file"),
-    REPOSITORY_FILE_CENTRIC("file-centric"),
+    FILE("file"),
+    FILE_CENTRIC("file-centric"),
 
     DONOR_TEXT("donor-text"),
     GENE_TEXT("gene-text"),
@@ -106,8 +106,8 @@ public class IndexModel {
     PATHWAY_TEXT("pathway-text"),
     GENESET_TEXT("gene-set-text"),
     DIAGRAM("diagram"),
-    REPOSITORY_FILE_TEXT("file-text"),
-    REPOSITORY_FILE_DONOR_TEXT("donor-text"),
+    FILE_TEXT("file-text"),
+    FILE_DONOR_TEXT("donor-text"),
     DRUG_TEXT("drug-text"),
     PROJECT_TEXT("project-text");
 
@@ -115,34 +115,34 @@ public class IndexModel {
     private final String id;
   }
 
-  private static final TypeModel REPO_FILE_TYPE_MODEL = getRepositoryFileTypeModel();
+  private static final TypeModel REPO_FILE_TYPE_MODEL = getFileTypeModel();
 
   // These names are used by the client
-  private static final List<String> REPOSITORY_FILE_CLIENT_FIELD_ALIAS_MAPPING = ImmutableList.<String> builder()
-      .add(RepositoryFileTypeModel.Fields.ID)
-      .add(RepositoryFileTypeModel.Fields.REPO_NAME)
-      .add(RepositoryFileTypeModel.Fields.REPO_CODE)
-      .add(RepositoryFileTypeModel.Fields.FILE_NAME)
-      .add(RepositoryFileTypeModel.Fields.FILE_SIZE)
-      .add(RepositoryFileTypeModel.Fields.PROJECT_CODE)
-      .add(RepositoryFileTypeModel.Fields.PRIMARY_SITE)
-      .add(RepositoryFileTypeModel.Fields.STUDY)
-      .add(RepositoryFileTypeModel.Fields.DONOR_STUDY)
-      .add(RepositoryFileTypeModel.Fields.DATA_TYPE)
-      .add(RepositoryFileTypeModel.Fields.EXPERIMENTAL_STRATEGY)
-      .add(RepositoryFileTypeModel.Fields.FILE_FORMAT)
-      .add(RepositoryFileTypeModel.Fields.ACCESS)
-      .add(RepositoryFileTypeModel.Fields.DONOR_ID)
-      .add(RepositoryFileTypeModel.Fields.SUBMITTED_DONOR_ID)
-      .add(RepositoryFileTypeModel.Fields.SPECIMEN_ID)
-      .add(RepositoryFileTypeModel.Fields.SPECIMEN_TYPE)
-      .add(RepositoryFileTypeModel.Fields.SAMPLE_ID)
-      .add(RepositoryFileTypeModel.Fields.PROGRAM)
-      .add(RepositoryFileTypeModel.Fields.ANALYSIS_SOFTWARE)
+  private static final List<String> FILE_CLIENT_FIELD_ALIAS_MAPPING = ImmutableList.<String> builder()
+      .add(FileTypeModel.Fields.ID)
+      .add(FileTypeModel.Fields.REPO_NAME)
+      .add(FileTypeModel.Fields.REPO_CODE)
+      .add(FileTypeModel.Fields.FILE_NAME)
+      .add(FileTypeModel.Fields.FILE_SIZE)
+      .add(FileTypeModel.Fields.PROJECT_CODE)
+      .add(FileTypeModel.Fields.PRIMARY_SITE)
+      .add(FileTypeModel.Fields.STUDY)
+      .add(FileTypeModel.Fields.DONOR_STUDY)
+      .add(FileTypeModel.Fields.DATA_TYPE)
+      .add(FileTypeModel.Fields.EXPERIMENTAL_STRATEGY)
+      .add(FileTypeModel.Fields.FILE_FORMAT)
+      .add(FileTypeModel.Fields.ACCESS)
+      .add(FileTypeModel.Fields.DONOR_ID)
+      .add(FileTypeModel.Fields.SUBMITTED_DONOR_ID)
+      .add(FileTypeModel.Fields.SPECIMEN_ID)
+      .add(FileTypeModel.Fields.SPECIMEN_TYPE)
+      .add(FileTypeModel.Fields.SAMPLE_ID)
+      .add(FileTypeModel.Fields.PROGRAM)
+      .add(FileTypeModel.Fields.ANALYSIS_SOFTWARE)
       .build();
-  private static final ImmutableMap<String, String> REPOSITORY_FILE_FIELDS_MAPPING = ImmutableMap
+  private static final ImmutableMap<String, String> FILE_FIELDS_MAPPING = ImmutableMap
       .<String, String> builder()
-      .putAll(Maps.toMap(REPOSITORY_FILE_CLIENT_FIELD_ALIAS_MAPPING, alias -> REPO_FILE_TYPE_MODEL.getField(alias)))
+      .putAll(Maps.toMap(FILE_CLIENT_FIELD_ALIAS_MAPPING, alias -> REPO_FILE_TYPE_MODEL.getField(alias)))
       .put(API_ENTITY_SET_ID_FIELD_NAME, API_ENTITY_SET_ID_FIELD_NAME)
       .build();
 
@@ -514,7 +514,7 @@ public class IndexModel {
     FIELDS_MAPPING.put(Kind.PATHWAY, PATHWAY_FIELDS_MAPPING);
     FIELDS_MAPPING.put(Kind.GENE_SET, createFieldsMapping(Kind.GENE_SET));
     FIELDS_MAPPING.put(Kind.DIAGRAM, DIAGRAM_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.REPOSITORY_FILE, REPOSITORY_FILE_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(Kind.FILE, FILE_FIELDS_MAPPING);
   }
 
   /**

@@ -27,7 +27,6 @@ import static org.eclipse.jetty.util.resource.JarResource.newJarResource;
 import static org.eclipse.jetty.util.resource.Resource.newClassPathResource;
 import static org.eclipse.jetty.util.resource.Resource.newResource;
 import static org.icgc.dcc.portal.util.DropwizardUtils.removeDwExceptionMapper;
-import static org.icgc.dcc.portal.util.ListUtils.list;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -46,6 +45,7 @@ import org.icgc.dcc.portal.writer.ErrorMessageBodyWriter;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.container.filter.LoggingFilter;
 import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Bootstrap;
@@ -93,11 +93,11 @@ public class PortalMain extends SpringService<PortalProperties> {
     environment.enableJerseyFeature(FEATURE_LOGGING_DISABLE_ENTITY);
 
     environment.setJerseyProperty(PROPERTY_CONTAINER_REQUEST_FILTERS,
-        list(LoggingFilter.class.getName(),
+        ImmutableList.of(LoggingFilter.class.getName(),
             DownloadFilter.class.getName(),
             CachingFilter.class.getName()));
     environment.setJerseyProperty(PROPERTY_CONTAINER_RESPONSE_FILTERS,
-        list(LoggingFilter.class.getName(),
+        ImmutableList.of(LoggingFilter.class.getName(),
             VersionFilter.class.getName(),
             CrossOriginFilter.class.getName(),
             CachingFilter.class.getName()));

@@ -17,39 +17,55 @@
  */
 package org.icgc.dcc.portal.model;
 
-import java.util.List;
-import java.util.Map;
+import static com.yammer.dropwizard.testing.JsonHelpers.asJson;
+import static com.yammer.dropwizard.testing.JsonHelpers.jsonFixture;
+import static org.assertj.core.api.Assertions.assertThat;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import org.junit.Test;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@EqualsAndHashCode(callSuper = false)
-@ToString
-@Getter
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "Files")
-public class RepositoryFiles extends Paginated {
+/**
+ * Test suite for File class
+ */
+@Slf4j
+public class FileTest {
 
-  @ApiModelProperty(value = "List of external files", required = true)
-  List<RepositoryFile> hits;
+  private static final Class<File> TEST_TARGET_CLASS = File.class;
+  private static final ObjectMapper DEFAULT_MAPPER = new ObjectMapper();
+  private static final ObjectMapper CLASS_MAPPER = File.createMapper(); // configured with strategy
 
-  @JsonCreator
-  public RepositoryFiles(@JsonProperty("hits") List<RepositoryFile> hits) {
-    this.hits = hits;
+  private static final String TEST_JSON_DIRECTORY = "fixtures/model/";
+  private static final String TEST_JSON_FILE =
+      TEST_JSON_DIRECTORY + FileTest.class.getSimpleName() + ".json";
+
+  @Test
+  @SneakyThrows
+  public void test() {
+    val jsonFixture = jsonFixture(TEST_JSON_FILE);
+    val testPojo = File.parse(jsonFixture);
+
+    log.info("JSON read from fixture file: '{}'", jsonFixture);
+    log.info("JSON serialized from Pojo: '{}'", asJson(testPojo));
+
+    runTestWith(testPojo, TEST_JSON_FILE);
   }
 
-  // FIXME: Hack "facets"
-  Map<String, TermFacet> termFacets;
+  @SneakyThrows
+  private static void runTestWith(File testPojo, String jsonFixtureFilePath) {
+    val jsonNode = DEFAULT_MAPPER.readTree(jsonFixture(jsonFixtureFilePath));
+    val expectedPojo = CLASS_MAPPER.readValue(asJson(jsonNode), TEST_TARGET_CLASS);
 
-  public void setTermFacets(Map<String, TermFacet> t) {
-    termFacets = t;
+    assertThat(toJsonNode(testPojo))
+        .isEqualTo(toJsonNode(expectedPojo));
   }
 
+  @SneakyThrows
+  private static JsonNode toJsonNode(File pojo) {
+    return DEFAULT_MAPPER.readTree(asJson(pojo));
+  }
 }

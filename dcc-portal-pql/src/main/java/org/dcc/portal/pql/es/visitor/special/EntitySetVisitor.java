@@ -27,7 +27,7 @@ import static org.dcc.portal.pql.meta.IndexModel.getTypeModel;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-import static org.dcc.portal.pql.meta.Type.REPOSITORY_FILE;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.dcc.portal.pql.meta.TypeModel.LOOKUP_INDEX;
 import static org.dcc.portal.pql.meta.TypeModel.LOOKUP_PATH;
 import static org.dcc.portal.pql.meta.TypeModel.LOOKUP_TYPE;
@@ -83,7 +83,7 @@ public class EntitySetVisitor extends NodeVisitor<Optional<ExpressionNode>, Quer
   public static final String IDENTIFIABLE_VALUE_PREFIX = "ES:";
 
   private static final List<Type> LOOKUP_TYPES =
-      ImmutableList.of(DONOR_CENTRIC, GENE_CENTRIC, MUTATION_CENTRIC, REPOSITORY_FILE);
+      ImmutableList.of(DONOR_CENTRIC, GENE_CENTRIC, MUTATION_CENTRIC, FILE);
 
   @Override
   public Optional<ExpressionNode> visitRoot(@NonNull RootNode node, Optional<QueryContext> context) {

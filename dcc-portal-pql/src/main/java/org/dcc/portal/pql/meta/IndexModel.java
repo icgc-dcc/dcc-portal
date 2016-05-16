@@ -29,7 +29,7 @@ public class IndexModel {
   private static final MutationCentricTypeModel MUTATION_CENTRIC_TYPE_MODEL = new MutationCentricTypeModel();
   private static final ObservationCentricTypeModel OBSERVATION_CENTRIC_TYPE_MODEL = new ObservationCentricTypeModel();
   private static final ProjectTypeModel PROJECT_TYPE_MODEL = new ProjectTypeModel();
-  private static final RepositoryFileTypeModel REPO_FILE_TYPE_MODEL = new RepositoryFileTypeModel();
+  private static final FileTypeModel REPO_FILE_TYPE_MODEL = new FileTypeModel();
   private static final GeneSetTypeModel GENE_SET_TYPE_MODEL = new GeneSetTypeModel();
   private static final DrugCentricTypeModel DRUG_TYPE_MODEL = new DrugCentricTypeModel();
   private static final DiagramTypeModel DIAGRAM_TYPE_MODEL = new DiagramTypeModel();
@@ -46,7 +46,7 @@ public class IndexModel {
       return OBSERVATION_CENTRIC_TYPE_MODEL;
     case PROJECT:
       return PROJECT_TYPE_MODEL;
-    case REPOSITORY_FILE:
+    case FILE:
       return REPO_FILE_TYPE_MODEL;
     case GENE_SET:
       return GENE_SET_TYPE_MODEL;
@@ -79,7 +79,7 @@ public class IndexModel {
     return PROJECT_TYPE_MODEL;
   }
 
-  public static TypeModel getRepositoryFileTypeModel() {
+  public static TypeModel getFileTypeModel() {
     return REPO_FILE_TYPE_MODEL;
   }
 

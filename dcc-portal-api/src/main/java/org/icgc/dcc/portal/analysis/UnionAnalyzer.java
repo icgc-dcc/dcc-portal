@@ -38,8 +38,8 @@ import org.icgc.dcc.portal.model.UnionAnalysisResult;
 import org.icgc.dcc.portal.model.UnionUnit;
 import org.icgc.dcc.portal.model.UnionUnitWithCount;
 import org.icgc.dcc.portal.repository.EntitySetRepository;
+import org.icgc.dcc.portal.repository.FileRepository;
 import org.icgc.dcc.portal.repository.GeneRepository;
-import org.icgc.dcc.portal.repository.RepositoryFileRepository;
 import org.icgc.dcc.portal.repository.TermsLookupRepository;
 import org.icgc.dcc.portal.repository.UnionAnalysisRepository;
 import org.icgc.dcc.portal.util.SearchResponses;
@@ -90,7 +90,7 @@ public class UnionAnalyzer {
   @NonNull
   private final GeneRepository geneRepository;
   @NonNull
-  private final RepositoryFileRepository repositoryFileRepository;
+  private final FileRepository fileRepository;
 
   @Async
   public void calculateUnionUnitCounts(@NonNull final UUID id, @NonNull final UnionAnalysisRequest request) {

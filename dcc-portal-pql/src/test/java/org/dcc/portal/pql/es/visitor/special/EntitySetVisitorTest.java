@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-import static org.dcc.portal.pql.meta.Type.REPOSITORY_FILE;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.dcc.portal.pql.utils.Tests.createEsAst;
 
 import java.util.Optional;
@@ -77,7 +77,7 @@ public class EntitySetVisitorTest {
   @Test
   public void donorEntitySetTest_file() {
     val result = prepareResult("in(donor.id, 'ES: 6d66b2bd-daed-431e-9a8d-b1d99be0bc18', 'DO1', "
-        + "'ES: 6d66b2bd-daed-431e-9a8d-b1d99be0bc19')", REPOSITORY_FILE);
+        + "'ES: 6d66b2bd-daed-431e-9a8d-b1d99be0bc19')", FILE);
     val shouldNode = getShouldNode(result);
     val children = shouldNode.getChildren();
 
@@ -174,7 +174,7 @@ public class EntitySetVisitorTest {
 
   @Test
   public void fileRepoIdentifiableTermTest() {
-    val result = prepareResult(getQuery("file"), REPOSITORY_FILE);
+    val result = prepareResult(getQuery("file"), FILE);
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("id");

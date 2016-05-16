@@ -39,13 +39,13 @@ import lombok.experimental.UtilityClass;
 /**
  * TypeModel for Repository File index type
  */
-public class RepositoryFileTypeModel extends TypeModel {
+public class FileTypeModel extends TypeModel {
 
-  private static final Type MY_TYPE = Type.REPOSITORY_FILE;
+  private static final Type MY_TYPE = Type.FILE;
   private static final String TYPE_PREFIX = MY_TYPE.getPrefix();
   private static final String TERMS_LOOKUP_DONOR_IDS = "donor-ids";
 
-  public RepositoryFileTypeModel() {
+  public FileTypeModel() {
     super(Fields.MAPPINGS, INTERNAL_ALIASES, PUBLIC_FIELDS, INCLUDE_FIELDS);
   }
 

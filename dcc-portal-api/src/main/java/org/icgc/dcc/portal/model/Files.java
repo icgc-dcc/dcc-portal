@@ -15,32 +15,41 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.dcc.portal.pql.meta;
+package org.icgc.dcc.portal.model;
 
-import static lombok.AccessLevel.PRIVATE;
+import java.util.List;
+import java.util.Map;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@EqualsAndHashCode(callSuper = false)
+@ToString
 @Getter
-@RequiredArgsConstructor(access = PRIVATE)
-public enum Type {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@ApiModel(value = "Files")
+public class Files extends Paginated {
 
-  DONOR_CENTRIC("donor-centric", "donor"),
-  GENE_CENTRIC("gene-centric", "gene"),
-  MUTATION_CENTRIC("mutation-centric", "mutation"),
-  OBSERVATION_CENTRIC("observation-centric", "observation"),
-  PROJECT("project", "project"),
-  FILE("file-centric", "file"),
-  GENE_SET("gene-set", "gene-set"),
-  DRUG_CENTRIC("drug-centric", "drug"),
-  DIAGRAM("diagram", "diagram");
+  @ApiModelProperty(value = "List of external files", required = true)
+  List<File> hits;
 
-  @NonNull
-  private final String id;
+  @JsonCreator
+  public Files(@JsonProperty("hits") List<File> hits) {
+    this.hits = hits;
+  }
 
-  @NonNull
-  private final String prefix;
+  // FIXME: Hack "facets"
+  Map<String, TermFacet> termFacets;
+
+  public void setTermFacets(Map<String, TermFacet> t) {
+    termFacets = t;
+  }
 
 }

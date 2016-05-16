@@ -21,8 +21,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON user_gene_set TO dcc;
 --------------------------------------------------------------------------------
  
 CREATE TABLE IF NOT EXISTS enrichment_analysis(
-   id   UUID NOT NULL,
-   data TEXT NOT NULL,
+   id      UUID NOT NULL,
+   version INT,   
+   data    TEXT NOT NULL,
    
    PRIMARY KEY(id) 
 );
@@ -31,8 +32,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON enrichment_analysis TO dcc;
 -------------------------------------------------------------------------------- 
 
 CREATE TABLE IF NOT EXISTS union_analysis(
-   id   UUID NOT NULL,
-   data TEXT NOT NULL,
+   id      UUID NOT NULL,
+   version INT,   
+   data    TEXT NOT NULL,
 
    PRIMARY KEY(id)
 );
@@ -41,8 +43,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON union_analysis TO dcc;
 -------------------------------------------------------------------------------- 
 
 CREATE TABLE IF NOT EXISTS entity_set(
-   id   UUID NOT NULL,
-   data TEXT NOT NULL,
+   id      UUID NOT NULL,
+   version INT,   
+   data    TEXT NOT NULL,
 
    PRIMARY KEY(id)
 );
@@ -51,8 +54,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON entity_set TO dcc;
 -------------------------------------------------------------------------------- 
 
 CREATE TABLE IF NOT EXISTS phenotype_analysis(
-   id   UUID NOT NULL,
-   data TEXT NOT NULL,
+   id      UUID NOT NULL,
+   version INT,   
+   data    TEXT NOT NULL,
 
    PRIMARY KEY(id)
 );
@@ -61,8 +65,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON phenotype_analysis TO dcc;
 -------------------------------------------------------------------------------- 
 
 CREATE TABLE IF NOT EXISTS manifest(
-   id   UUID NOT NULL,
-   data TEXT NOT NULL,
+   id      UUID NOT NULL,
+   version INT,   
+   data    TEXT NOT NULL,
 
    PRIMARY KEY(id)
 );

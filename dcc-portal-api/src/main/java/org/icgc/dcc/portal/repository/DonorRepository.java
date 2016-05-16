@@ -580,7 +580,7 @@ public class DonorRepository implements Repository {
     val maxSize = 5000;
     val fields = isForExternalFile ? FILE_DONOR_ID_SEARCH_FIELDS : DONOR_ID_SEARCH_FIELDS;
     val indexName = isForExternalFile ? repoIndexName : index;
-    val indexType = isForExternalFile ? Type.REPOSITORY_FILE_DONOR_TEXT : Type.DONOR_TEXT;
+    val indexType = isForExternalFile ? Type.FILE_DONOR_TEXT : Type.DONOR_TEXT;
 
     val search = client.prepareSearch(indexName)
         .setTypes(indexType.getId())

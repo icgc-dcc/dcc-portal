@@ -37,7 +37,7 @@ import static org.dcc.portal.pql.meta.IndexModel.getGeneCentricTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getMutationCentricTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getObservationCentricTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getProjectTypeModel;
-import static org.dcc.portal.pql.meta.IndexModel.getRepositoryFileTypeModel;
+import static org.dcc.portal.pql.meta.IndexModel.getFileTypeModel;
 import static org.dcc.portal.pql.meta.Type.DIAGRAM;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.DRUG_CENTRIC;
@@ -45,7 +45,7 @@ import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.OBSERVATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.PROJECT;
-import static org.dcc.portal.pql.meta.Type.REPOSITORY_FILE;
+import static org.dcc.portal.pql.meta.Type.FILE;
 
 import java.util.Map;
 import java.util.Optional;
@@ -78,7 +78,7 @@ public class EsAstTransformer {
           .put(MUTATION_CENTRIC, createFacetContext(getMutationCentricTypeModel()))
           .put(OBSERVATION_CENTRIC, createFacetContext(getObservationCentricTypeModel()))
           .put(PROJECT, createFacetContext(getProjectTypeModel()))
-          .put(REPOSITORY_FILE, createFacetContext(getRepositoryFileTypeModel()))
+          .put(FILE, createFacetContext(getFileTypeModel()))
           .put(DRUG_CENTRIC, createFacetContext(getDrugTypeModel()))
           .put(DIAGRAM, createFacetContext(getDiagramTypeModel()))
           .build();

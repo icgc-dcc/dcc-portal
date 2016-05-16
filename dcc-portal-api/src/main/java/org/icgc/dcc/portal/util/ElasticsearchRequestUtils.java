@@ -19,7 +19,7 @@ package org.icgc.dcc.portal.util;
 
 import static java.util.Collections.emptyList;
 import static lombok.AccessLevel.PRIVATE;
-import static org.dcc.portal.pql.meta.Type.REPOSITORY_FILE;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.elasticsearch.action.search.SearchType.COUNT;
 import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
@@ -30,8 +30,8 @@ import static org.icgc.dcc.portal.util.SearchResponses.getTotalHitCount;
 
 import java.util.List;
 
+import org.dcc.portal.pql.meta.FileTypeModel.Fields;
 import org.dcc.portal.pql.meta.IndexModel;
-import org.dcc.portal.pql.meta.RepositoryFileTypeModel.Fields;
 import org.dcc.portal.pql.meta.TypeModel;
 import org.elasticsearch.action.get.GetRequestBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -54,8 +54,8 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor(access = PRIVATE)
 public class ElasticsearchRequestUtils {
 
-  private static final String FILE_INDEX_TYPE = REPOSITORY_FILE.getId();
-  private static final TypeModel TYPE_MODEL = IndexModel.getRepositoryFileTypeModel();
+  private static final String FILE_INDEX_TYPE = FILE.getId();
+  private static final TypeModel TYPE_MODEL = IndexModel.getFileTypeModel();
   private final static String FIELD_NAME = "_id";
 
   public static final String[] EMPTY_SOURCE_FIELDS = null;

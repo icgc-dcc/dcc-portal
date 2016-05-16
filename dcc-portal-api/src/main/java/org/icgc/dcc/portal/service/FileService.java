@@ -27,11 +27,10 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.lang.math.NumberUtils.toLong;
+import static org.elasticsearch.common.collect.Iterables.toArray;
 import static org.icgc.dcc.common.core.util.Joiners.COMMA;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
-import static org.icgc.dcc.portal.model.RepositoryFile.parse;
-import static org.icgc.dcc.portal.repository.RepositoryFileRepository.toRawFieldName;
-import static org.icgc.dcc.portal.repository.RepositoryFileRepository.toStringArray;
+import static org.icgc.dcc.portal.model.File.parse;
 import static org.icgc.dcc.portal.util.SearchResponses.hasHits;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
@@ -46,19 +45,20 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.dcc.portal.pql.meta.RepositoryFileTypeModel.Fields;
+import org.dcc.portal.pql.meta.FileTypeModel.Fields;
+import org.dcc.portal.pql.meta.IndexModel;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.collect.Iterables;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
+import org.icgc.dcc.portal.model.File;
+import org.icgc.dcc.portal.model.Files;
 import org.icgc.dcc.portal.model.Keyword;
 import org.icgc.dcc.portal.model.Keywords;
 import org.icgc.dcc.portal.model.Pagination;
 import org.icgc.dcc.portal.model.Query;
-import org.icgc.dcc.portal.model.RepositoryFile;
-import org.icgc.dcc.portal.model.RepositoryFiles;
-import org.icgc.dcc.portal.repository.RepositoryFileRepository;
+import org.icgc.dcc.portal.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvMapWriter;
@@ -78,7 +78,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
-public class RepositoryFileService {
+public class FileService {
 
   /**
    * Constants.
@@ -99,7 +99,8 @@ public class RepositoryFileService {
       .build();
   private static final Set<String> DATA_TABLE_EXPORT_MAP_FIELD_KEYS = toRawFieldSet(
       DATA_TABLE_EXPORT_MAP.keySet());
-  private static final String[] DATA_TABLE_EXPORT_MAP_FIELD_ARRAY = toStringArray(DATA_TABLE_EXPORT_MAP_FIELD_KEYS);
+  private static final String[] DATA_TABLE_EXPORT_MAP_FIELD_ARRAY =
+      toArray(DATA_TABLE_EXPORT_MAP_FIELD_KEYS, String.class);
 
   private static final Set<String> DATA_TABLE_EXPORT_SUMMARY_FIELDS = toRawFieldSet(newArrayList(
       Fields.DONOR_ID, Fields.PROJECT_CODE));
@@ -109,9 +110,9 @@ public class RepositoryFileService {
       union(DATA_TABLE_EXPORT_SUMMARY_FIELDS, DATA_TABLE_EXPORT_AVERAGE_FIELDS));
   private static final Map<Collection<String>, Function<SearchHitField, String>> DATA_TABLE_EXPORT_FIELD_PROCESSORS =
       ImmutableMap.<Collection<String>, Function<SearchHitField, String>> of(
-          DATA_TABLE_EXPORT_SUMMARY_FIELDS, RepositoryFileService::toSummarizedString,
-          DATA_TABLE_EXPORT_AVERAGE_FIELDS, RepositoryFileService::toAverageSizeString,
-          DATA_TABLE_EXPORT_OTHER_FIELDS, RepositoryFileService::toStringValue);
+          DATA_TABLE_EXPORT_SUMMARY_FIELDS, FileService::toSummarizedString,
+          DATA_TABLE_EXPORT_AVERAGE_FIELDS, FileService::toAverageSizeString,
+          DATA_TABLE_EXPORT_OTHER_FIELDS, FileService::toStringValue);
 
   private static final Joiner COMMA_JOINER = COMMA.skipNulls();
   private static final Keywords NO_MATCH_KEYWORD_SEARCH_RESULT = new Keywords(emptyList());
@@ -134,25 +135,29 @@ public class RepositoryFileService {
    * Dependencies
    */
   @NonNull
-  private final RepositoryFileRepository repositoryFileRepository;
+  private final FileRepository fileRepository;
 
-  public RepositoryFiles findAll(@NonNull Query query) {
-    val response = repositoryFileRepository.findAll(query);
+  public Map<String, String> findRepos() {
+    return fileRepository.findRepos();
+  }
+
+  public Files findAll(@NonNull Query query) {
+    val response = fileRepository.findAll(query);
     val hits = response.getHits();
-    val externalFiles = new RepositoryFiles(convertHitsToRepoFiles(hits));
+    val files = new Files(convertHitsToRepoFiles(hits));
 
-    externalFiles.setTermFacets(
-        repositoryFileRepository.convertAggregationsToFacets(response.getAggregations(), query));
-    externalFiles.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
+    files.setTermFacets(
+        fileRepository.getAggregationFacets(query, response.getAggregations()));
+    files.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
 
-    return externalFiles;
+    return files;
   }
 
   /**
    * Emulating keyword search, but without prefix/ngram analyzers..ie: exact match
    */
   public Keywords findRepoDonor(@NonNull Query query) {
-    val response = repositoryFileRepository.findRepoDonor(
+    val response = fileRepository.findRepoDonor(
         FILE_DONOR_INDEX_TYPE_TO_KEYWORD_FIELD_MAPPING.keySet(), query.getQuery());
     val hits = response.getHits();
 
@@ -166,59 +171,55 @@ public class RepositoryFileService {
     return new Keywords(newArrayList(keywords));
   }
 
-  public RepositoryFile findOne(@NonNull String fileId) {
+  public File findOne(@NonNull String fileId) {
     log.info("External repository file id is: '{}'.", fileId);
 
-    val response = repositoryFileRepository.findOne(fileId);
+    val response = fileRepository.findOne(fileId);
     return parse(response.getSourceAsString());
   }
 
   public long getDonorCount(@NonNull Query query) {
-    return repositoryFileRepository.getDonorCount(query);
+    return fileRepository.getDonorCount(query);
   }
 
   public Map<String, String> getIndexMetadata() {
-    return repositoryFileRepository.getIndexMetaData();
-  }
-
-  public Map<String, String> getRepositoryMap() {
-    return repositoryFileRepository.getRepositoryMap();
+    return fileRepository.getIndexMetaData();
   }
 
   public Map<String, Long> getSummary(@NonNull Query query) {
-    return repositoryFileRepository.getSummary(query);
+    return fileRepository.getSummary(query);
   }
 
   public Map<String, Map<String, Map<String, Object>>> getStudyStats(String study) {
-    return repositoryFileRepository.getStudyStats(study);
+    return fileRepository.getStudyStats(study);
   }
 
   public Map<String, Map<String, Map<String, Object>>> getRepoStats(String repoName) {
-    return repositoryFileRepository.getRepoStats(repoName);
+    return fileRepository.getRepoStats(repoName);
   }
 
-  public void exportTableData(OutputStream output, Query query) {
-    val prepResponse = repositoryFileRepository.prepareDataExport(query, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
+  public void exportFiles(OutputStream output, Query query) {
+    val prepResponse = fileRepository.findAll(query, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
 
-    generateTabDelimitedData(output, prepResponse, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
+    exportFiles(output, prepResponse, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
   }
 
-  public void exportTableDataFromSet(OutputStream output, String setId) {
-    val prepResponse = repositoryFileRepository.prepareSetDataExport(setId, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
+  public void exportFiles(OutputStream output, String setId) {
+    val prepResponse = fileRepository.findAll(setId, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
 
-    generateTabDelimitedData(output, prepResponse, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
+    exportFiles(output, prepResponse, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
   }
 
   @SneakyThrows
-  private void generateTabDelimitedData(OutputStream output, SearchResponse prepResponse, String[] keys) {
+  private void exportFiles(OutputStream output, SearchResponse prepResponse, String[] keys) {
     @Cleanup
     val writer = new CsvMapWriter(new BufferedWriter(new OutputStreamWriter(output, UTF_8)), TAB_PREFERENCE);
-    writer.writeHeader(toStringArray(DATA_TABLE_EXPORT_MAP.values()));
+    writer.writeHeader(toArray(DATA_TABLE_EXPORT_MAP.values(), String.class));
 
     String scrollId = prepResponse.getScrollId();
 
     while (true) {
-      val response = repositoryFileRepository.fetchSearchScrollData(scrollId);
+      val response = fileRepository.prepareSearchScroll(scrollId);
 
       if (!hasHits(response)) {
         break;
@@ -244,7 +245,7 @@ public class RepositoryFileService {
   }
 
   private static Set<String> toRawFieldSet(Collection<String> aliases) {
-    return aliases.stream().map(k -> toRawFieldName(k))
+    return aliases.stream().map(k -> IndexModel.getFileTypeModel().getField(k))
         .collect(toImmutableSet());
   }
 
@@ -253,7 +254,7 @@ public class RepositoryFileService {
   }
 
   private static String toSummarizedString(SearchHitField hitField) {
-    return combineUniqueItemsToString(hitField, RepositoryFileService::toSummarizedString);
+    return combineUniqueItemsToString(hitField, FileService::toSummarizedString);
   }
 
   private static String toSummarizedString(Set<Object> values) {
@@ -302,7 +303,7 @@ public class RepositoryFileService {
     return result;
   }
 
-  private static List<RepositoryFile> convertHitsToRepoFiles(SearchHits hits) {
+  private static List<File> convertHitsToRepoFiles(SearchHits hits) {
     return FluentIterable.from(hits)
         .transform(hit -> parse(hit.getSourceAsString()))
         .toList();

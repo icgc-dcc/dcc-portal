@@ -49,7 +49,7 @@ import org.icgc.dcc.portal.model.IndexModel.Type;
 import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.repository.BaseElasticSearchTest;
 import org.icgc.dcc.portal.repository.ManifestRepository;
-import org.icgc.dcc.portal.repository.RepositoryFileRepository;
+import org.icgc.dcc.portal.repository.FileRepository;
 import org.icgc.dcc.portal.repository.TermsLookupRepository;
 import org.icgc.dcc.portal.service.IndexService;
 import org.icgc.dcc.portal.test.TestIndex;
@@ -122,13 +122,13 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
     this.testIndex = TestIndex.REPOSITORY;
 
     // This creates and populates the test index with fixture data.
-    es.execute(createIndexMapping(Type.REPOSITORY_FILE_CENTRIC)
+    es.execute(createIndexMapping(Type.FILE_CENTRIC)
         .withData(bulkFile(getClass())));
     service =
         new ManifestService(
             new PortalProperties(),
             mock(ManifestRepository.class),
-            new RepositoryFileRepository(es.client(), testIndex.getName(), new IndexService()),
+            new FileRepository(es.client(), testIndex.getName(), new IndexService()),
             new TermsLookupRepository(es.client(), TERMS_LOOKUP, testIndex.getName(), new PortalProperties()));
   }
 
