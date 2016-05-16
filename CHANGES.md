@@ -1,7 +1,14 @@
 ICGC DCC - Portal - Change Log
 ===
 
-Change log for the DCC 2.0 Portal
+Change log for the DCC Data Portal
+
+4.0.15
+--
+  - Upgraded from Swagger 1.3.13 to 1.5.8
+  - Added enhanced manifest endpoint `/manifests` that allows `json`, `files` and `tarball` formats
+  - Support for ICGC21 (history, projects, etc.)
+  - Various bug fixes
 
 4.0.14
 --
