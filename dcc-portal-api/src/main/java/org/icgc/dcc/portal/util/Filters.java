@@ -23,6 +23,7 @@ import static org.icgc.dcc.portal.model.IndexModel.ALL;
 import static org.icgc.dcc.portal.model.IndexModel.API_ENTITY_SET_ID_FIELD_NAME;
 import static org.icgc.dcc.portal.model.IndexModel.IS;
 import static org.icgc.dcc.portal.model.IndexModel.Kind.GENE;
+import static org.icgc.dcc.portal.pql.convert.FiltersConverter.ENTITY_SET_PREFIX;
 import static org.icgc.dcc.portal.util.JsonUtils.MAPPER;
 
 import java.util.List;
@@ -150,11 +151,11 @@ public final class Filters {
     return result;
   }
 
-  public static ObjectNode mergeAnalysisInputGeneList(@NonNull ObjectNode current, @NonNull ObjectNode genelist) {
+  public static ObjectNode mergeAnalysisInputGeneList(@NonNull ObjectNode current, @NonNull ObjectNode geneEntitySet) {
     val result = current.deepCopy();
-    if (genelist.path("gene").path(API_ENTITY_SET_ID_FIELD_NAME).isMissingNode() == false) {
-      val geneListId = genelist.path("gene").path(API_ENTITY_SET_ID_FIELD_NAME).withArray(IS).get(0).asText();
-      result.with("gene").set(API_ENTITY_SET_ID_FIELD_NAME, is(geneListId));
+    if (geneEntitySet.path("gene").path("id").isMissingNode() == false) {
+      val entitySetId = geneEntitySet.path("gene").path("id").withArray(IS).get(0).asText();
+      result.with("gene").set("id", is(ENTITY_SET_PREFIX + entitySetId));
     }
     return result;
   }
