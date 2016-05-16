@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 @Value
 @NoArgsConstructor

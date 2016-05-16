@@ -45,10 +45,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.icgc.dcc.portal.model.BaseEntitySet.Type;
-import org.icgc.dcc.portal.model.param.UUIDSetParam;
 import org.icgc.dcc.portal.model.DerivedEntitySetDefinition;
 import org.icgc.dcc.portal.model.EntitySet;
 import org.icgc.dcc.portal.model.EntitySetDefinition;
+import org.icgc.dcc.portal.model.param.UUIDSetParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.BadRequestException;
 import org.icgc.dcc.portal.service.EntitySetService;
@@ -56,9 +56,9 @@ import org.icgc.dcc.portal.service.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -69,6 +69,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
+@Api("/entityset")
 @Path("/v1/entityset")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EntitySetResource extends Resource {

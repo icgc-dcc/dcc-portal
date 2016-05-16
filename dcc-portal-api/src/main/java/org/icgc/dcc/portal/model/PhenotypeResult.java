@@ -21,7 +21,7 @@ import java.util.List;
 
 import lombok.Value;
 
-import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModel;
 
 /**
  * Represents a result set of phenotype analysis

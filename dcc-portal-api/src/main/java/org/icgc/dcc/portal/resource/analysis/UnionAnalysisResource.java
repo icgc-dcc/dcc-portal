@@ -43,9 +43,9 @@ import org.icgc.dcc.portal.service.UnionAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -56,6 +56,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
+@Api("/analysis")
 @Path("/v1/analysis/union")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UnionAnalysisResource extends Resource {

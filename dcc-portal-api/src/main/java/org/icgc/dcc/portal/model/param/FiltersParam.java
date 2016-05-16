@@ -22,7 +22,7 @@ import static org.icgc.dcc.portal.util.JsonUtils.MAPPER;
 import java.net.URLDecoder;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModel;
 import com.yammer.dropwizard.jersey.params.AbstractParam;
 
 import lombok.SneakyThrows;

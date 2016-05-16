@@ -30,10 +30,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.val;
-
 import org.icgc.dcc.downloader.core.SelectionEntry;
 import org.icgc.dcc.portal.service.BadRequestException;
 
@@ -43,6 +39,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+
+import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class JsonUtils {
@@ -60,7 +60,7 @@ public final class JsonUtils {
 
   public static void moveField(ObjectNode objectNode, String fromFieldName, String toFieldName) {
     if (objectNode.has(fromFieldName)) {
-      objectNode.put(toFieldName, objectNode.remove(fromFieldName));
+      objectNode.set(toFieldName, objectNode.remove(fromFieldName));
     }
   }
 
@@ -104,12 +104,12 @@ public final class JsonUtils {
       // if field doesn't exist or is an embedded object
       if (jsonNode != null && jsonNode.isObject()) {
         val updated = merge(jsonNode, updateNode.get(fieldName));
-        ((ObjectNode) node).put(fieldName, updated);
+        ((ObjectNode) node).set(fieldName, updated);
       } else {
         if (node instanceof ObjectNode) {
           // Overwrite field
           val value = updateNode.get(fieldName);
-          ((ObjectNode) node).put(fieldName, value);
+          ((ObjectNode) node).set(fieldName, value);
         }
       }
     }

@@ -38,11 +38,12 @@ import org.icgc.dcc.portal.service.DiagramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wordnik.swagger.annotations.ApiParam;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 
 @Component
+@Api(hidden = true)
 @Path("/v1/ui/reactome")
 @Produces(APPLICATION_JSON)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))

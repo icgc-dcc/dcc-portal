@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import lombok.Value;
 
-import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModel;
 
 /**
  * Represents a TermsFacet for an entity set with summary info.

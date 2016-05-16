@@ -61,6 +61,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import io.swagger.annotations.Api;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Api("/auth")
 @Path("/v1/auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Slf4j

@@ -19,7 +19,7 @@ package org.icgc.dcc.portal.model;
 
 import lombok.Value;
 
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 @Value
 public class ShortUrl {

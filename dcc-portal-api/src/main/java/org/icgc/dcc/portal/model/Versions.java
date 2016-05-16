@@ -16,6 +16,7 @@
  */
 package org.icgc.dcc.portal.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Value;
 
 /**
@@ -24,10 +25,15 @@ import lombok.Value;
 @Value
 public class Versions {
 
+  @ApiModelProperty(value = "${versions.property.api}", readOnly = true)
   String api;
+  @ApiModelProperty(value = "${versions.property.portal}", readOnly = true)
   String portal;
+  @ApiModelProperty(value = "${versions.property.portalCommit}", readOnly = true)
   String portalCommit;
+  @ApiModelProperty(value = "${versions.property.indexCommit}", readOnly = true)
   String indexCommit;
+  @ApiModelProperty(value = "${versions.property.indexName}", readOnly = true)
   String indexName;
 
 }

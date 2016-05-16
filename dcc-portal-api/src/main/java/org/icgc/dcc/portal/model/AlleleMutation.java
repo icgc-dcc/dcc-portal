@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 @Data
 @AllArgsConstructor

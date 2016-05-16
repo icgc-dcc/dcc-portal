@@ -45,6 +45,7 @@ import org.springframework.stereotype.Component;
 
 import com.yammer.dropwizard.auth.Auth;
 
+import io.swagger.annotations.Api;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -53,6 +54,7 @@ import lombok.RequiredArgsConstructor;
  * <a href="https://github.com/icgc-dcc/dcc-auth">Authentication Server</a>
  */
 @Component
+@Api("/settings")
 @Path("/v1/settings/tokens")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TokenResource extends Resource {

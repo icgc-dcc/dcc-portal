@@ -36,11 +36,13 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.io.Resources;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
+@Api(hidden = true)
 @Path("/v1/ui/software")
 @Produces(APPLICATION_JSON)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))

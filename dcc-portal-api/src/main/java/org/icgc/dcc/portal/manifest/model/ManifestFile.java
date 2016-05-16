@@ -23,7 +23,7 @@ import org.icgc.dcc.portal.model.Repository;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModel;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

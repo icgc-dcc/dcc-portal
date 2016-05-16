@@ -28,16 +28,16 @@ import static org.icgc.dcc.portal.util.JsonUtils.MAPPER;
 import java.util.List;
 import java.util.UUID;
 
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * API filter utilities, not to be confused with Elasticsearch filters.
@@ -77,21 +77,21 @@ public final class Filters {
 
   public static ObjectNode geneSetFilter(@NonNull String geneSetId) {
     val geneFilter = geneFilter();
-    geneFilter.with("gene").put("geneSetId", is(geneSetId));
+    geneFilter.with("gene").set("geneSetId", is(geneSetId));
 
     return geneFilter;
   }
 
   public static ObjectNode geneTypeFilter(@NonNull String type) {
     val geneFilter = geneFilter();
-    geneFilter.with("gene").put("type", is(type));
+    geneFilter.with("gene").set("type", is(type));
 
     return geneFilter;
   }
 
   public static ObjectNode goTermFilter(@NonNull String goTermId) {
     val geneFilter = geneFilter();
-    geneFilter.with(GENE.getId()).put("goTermId", is(goTermId));
+    geneFilter.with(GENE.getId()).set("goTermId", is(goTermId));
 
     return geneFilter;
   }
@@ -105,14 +105,14 @@ public final class Filters {
 
   public static ObjectNode inputGeneSetIdFilter(@NonNull String inputGeneSetId) {
     val geneFilter = geneFilter();
-    geneFilter.with("gene").put(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId));
+    geneFilter.with("gene").set(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId));
 
     return geneFilter;
   }
 
   public static ObjectNode inputGeneSetFilter(@NonNull UUID inputGeneSetId) {
     val inputGeneSetFilter = geneFilter();
-    inputGeneSetFilter.with(GENE.getId()).put(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId.toString()));
+    inputGeneSetFilter.with(GENE.getId()).set(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId.toString()));
 
     return inputGeneSetFilter;
   }
@@ -154,7 +154,7 @@ public final class Filters {
     val result = current.deepCopy();
     if (genelist.path("gene").path(API_ENTITY_SET_ID_FIELD_NAME).isMissingNode() == false) {
       val geneListId = genelist.path("gene").path(API_ENTITY_SET_ID_FIELD_NAME).withArray(IS).get(0).asText();
-      result.with("gene").put(API_ENTITY_SET_ID_FIELD_NAME, is(geneListId));
+      result.with("gene").set(API_ENTITY_SET_ID_FIELD_NAME, is(geneListId));
     }
     return result;
   }
@@ -196,7 +196,7 @@ public final class Filters {
           val rightField = right.path(fieldName);
           val andField = andFilter(leftField, rightField);
 
-          and.put(fieldName, andField);
+          and.set(fieldName, andField);
         }
       } else if (field.isArray()) {
         val values = Sets.<Object> newLinkedHashSet();

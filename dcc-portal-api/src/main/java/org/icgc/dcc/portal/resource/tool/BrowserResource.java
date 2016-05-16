@@ -34,9 +34,11 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Doubles;
-import com.wordnik.swagger.annotations.ApiOperation;
 import com.yammer.metrics.annotation.Timed;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -49,6 +51,7 @@ import lombok.val;
 @Path("/browser")
 @Produces(TEXT_PLAIN)
 @Setter
+@Api(value = "/browser", description = "Operations for Genome Browser")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BrowserResource extends Resource {
 
@@ -79,7 +82,7 @@ public class BrowserResource extends Resource {
   @Timed
   @ApiOperation(value = "Retrieves a list of genes")
   public String getGene(
-      @QueryParam(ParameterNames.SEGMENT) String segment,
+      @ApiParam(ParameterNames.SEGMENT) @QueryParam(ParameterNames.SEGMENT) String segment,
       @QueryParam(ParameterNames.HISTOGRAM) String histogram,
       @QueryParam(ParameterNames.DATATYPE) String dataType,
       @QueryParam(ParameterNames.INTERVAL) String interval,

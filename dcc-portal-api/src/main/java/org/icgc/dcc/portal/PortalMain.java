@@ -34,13 +34,13 @@ import java.net.URISyntaxException;
 import java.util.Properties;
 
 import org.eclipse.jetty.util.resource.Resource;
-import org.icgc.dcc.portal.bundle.SwaggerBundle;
 import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.filter.CachingFilter;
 import org.icgc.dcc.portal.filter.CrossOriginFilter;
 import org.icgc.dcc.portal.filter.DownloadFilter;
 import org.icgc.dcc.portal.filter.VersionFilter;
 import org.icgc.dcc.portal.spring.SpringService;
+import org.icgc.dcc.portal.swagger.SwaggerBundle;
 import org.icgc.dcc.portal.util.VersionUtils;
 import org.icgc.dcc.portal.writer.ErrorMessageBodyWriter;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;

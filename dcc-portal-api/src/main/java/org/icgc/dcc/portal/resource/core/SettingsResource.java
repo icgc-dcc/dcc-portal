@@ -28,13 +28,16 @@ import org.icgc.dcc.portal.resource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wordnik.swagger.annotations.ApiOperation;
 import com.yammer.metrics.annotation.Timed;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * Fetch application settings
  */
 @Component
+@Api("/settings")
 @Path("/v1/settings")
 @Produces(APPLICATION_JSON)
 public class SettingsResource extends Resource {

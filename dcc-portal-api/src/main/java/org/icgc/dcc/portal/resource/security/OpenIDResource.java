@@ -43,6 +43,7 @@ import org.openid4java.message.ParameterList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import io.swagger.annotations.Api;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -52,6 +53,7 @@ import lombok.extern.slf4j.Slf4j;
  * Resource that performs OpenID authentication.
  */
 @Component
+@Api("/auth")
 @Path("/v1/auth/openid")
 @Produces(TEXT_PLAIN)
 @Slf4j

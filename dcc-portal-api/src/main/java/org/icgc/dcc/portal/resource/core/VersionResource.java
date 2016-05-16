@@ -28,14 +28,18 @@ import org.icgc.dcc.portal.resource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wordnik.swagger.annotations.ApiOperation;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.annotations.Tag;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @Path("/version")
 @Produces(APPLICATION_JSON)
+@Api(tags = { "version" })
+@SwaggerDefinition(tags = @Tag(name = "version", description = "${version.tag.description}"))
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class VersionResource extends Resource {
 
@@ -43,7 +47,7 @@ public class VersionResource extends Resource {
   private final Versions versions;
 
   @GET
-  @ApiOperation(value = "Retrieves system versions", response = Versions.class)
+  @ApiOperation(value = "${version.get.summary}", response = Versions.class)
   public Versions versions() {
     return versions;
   }

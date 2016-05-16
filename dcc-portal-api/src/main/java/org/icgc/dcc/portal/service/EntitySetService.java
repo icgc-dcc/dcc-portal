@@ -359,11 +359,11 @@ public class EntitySetService {
     val nodeFactory = new JsonNodeFactory(false);
     val root = nodeFactory.objectNode();
     val gene = nodeFactory.objectNode();
-    root.put("gene", gene);
+    root.set("gene", gene);
     val symbol = nodeFactory.objectNode();
-    gene.put("symbol", symbol);
+    gene.set("symbol", symbol);
     val isNode = nodeFactory.arrayNode();
-    symbol.put("is", isNode);
+    symbol.set("is", isNode);
 
     final String[] symbols = symbolList.split(",");
     for (val s : symbols) {

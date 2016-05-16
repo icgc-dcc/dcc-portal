@@ -26,8 +26,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -54,7 +54,7 @@ public class Query {
   private Integer defaultLimit;
 
   @JsonDeserialize(using = ObjectNodeDeserializer.class)
-  @ApiModelProperty(value = "The filters to apply to the search", dataType = "json")
+  @ApiModelProperty(value = "The filters to apply to the search")
   ObjectNode filters;
 
   List<String> fields;

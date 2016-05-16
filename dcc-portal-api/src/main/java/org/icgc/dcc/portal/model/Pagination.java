@@ -21,7 +21,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_EMPTY)

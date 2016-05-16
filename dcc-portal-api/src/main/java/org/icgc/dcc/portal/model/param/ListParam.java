@@ -22,7 +22,7 @@ import java.util.List;
 import org.icgc.dcc.common.core.util.Splitters;
 
 import com.google.common.base.Splitter;
-import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModel;
 import com.yammer.dropwizard.jersey.params.AbstractParam;
 
 @ApiModel(value = "Comma separated list of values")
