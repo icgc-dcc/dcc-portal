@@ -31,10 +31,12 @@ import javax.ws.rs.core.Response;
 import org.icgc.dcc.portal.resource.Resource;
 import org.springframework.stereotype.Component;
 
+import io.swagger.annotations.Api;
 import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
+@Api(hidden = true)
 @Path("/v1/ui/ega")
 public class UIEGAResource extends Resource {
 

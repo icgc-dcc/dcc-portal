@@ -30,7 +30,6 @@ import javax.ws.rs.PathParam;
 import org.icgc.dcc.portal.model.Repository;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableMap;
@@ -39,14 +38,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Component
 @Path("/" + RepositoryResource.NAME)
 @Api(tags = { RepositoryResource.NAME })
 @SwaggerDefinition(tags = @Tag(name = RepositoryResource.NAME, description = "Resources relating to external repositories"))
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RepositoryResource extends Resource {
 
   public static final String NAME = "repositories";
