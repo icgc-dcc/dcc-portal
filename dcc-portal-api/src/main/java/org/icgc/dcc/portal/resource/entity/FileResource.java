@@ -102,14 +102,6 @@ public class FileResource extends Resource {
     return Response.seeOther(uri).build();
   }
 
-  @GET
-  // TODO: This should just be /repositories. ps don't use underscores!!
-  @Path("/repo_map")
-  @Timed
-  public Map<String, String> getRepositoryMap() {
-    return fileService.findRepos();
-  }
-
   @Path("/{fileId}")
   @GET
   @Timed
@@ -182,12 +174,12 @@ public class FileResource extends Resource {
   @Path("/export/{setId}")
   @Produces(TEXT_TSV)
   public Response getExport(@ApiParam(value = "Set Id", required = true) @PathParam("setId") String setId) {
-  
+
     final StreamingOutput outputGenerator =
         outputStream -> fileService.exportFiles(outputStream, setId);
-  
+
     val fileName = String.format("repository_%s.tsv", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())));
-  
+
     return ok(outputGenerator).header(CONTENT_DISPOSITION,
         type(TYPE_ATTACHMENT).fileName(fileName).creationDate(new Date()).build()).build();
   }

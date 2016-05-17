@@ -5,7 +5,7 @@
  * You should have received a copy of the GNU General Public License along with                                  
  * this program. If not, see <http://www.gnu.org/licenses/>.                                                     
  *                                                                                                               
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY                           
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS AND ANY                           
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES                          
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT                           
  * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,                                
@@ -17,77 +17,39 @@
  */
 package org.icgc.dcc.portal.model;
 
-import static lombok.AccessLevel.PRIVATE;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+@Data
+@ApiModel(value = "Repository", description = "A representation of an external data resposity housing ICGC data sets")
+public class Repository implements Identifiable<String> {
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+  @ApiModelProperty(value = "The canonical ID of the repository", required = true)
+  String id;
 
-@RequiredArgsConstructor(access = PRIVATE)
-public enum Repository {
+  @ApiModelProperty(value = "The repository code. Currently same as `id`", required = true)
+  String code;
 
-  // @formatter:off
-  EGA("ega",                                    "EGA - United Kingdom"),
-  CGHUB("cghub",                                "CGHub - Santa Cruz"),  
-  TCGA("tcga",                                  "TCGA DCC - Bethesda"),   
-  PCAWG_BARCELONA("pcawg-barcelona",            "PCAWG - Barcelona"),  
-  PCAWG_CGHUB("pcawg-cghub",                    "PCAWG - Santa Cruz"),    
-  PCAWG_TOKYO("pcawg-tokyo",                    "PCAWG - Tokyo"),   
-  PCAWG_SEOUL("pcawg-seoul",                    "PCAWG - Seoul"),        
-  PCAWG_LONDON("pcawg-london",                  "PCAWG - London"),        
-  PCAWG_HEIDELBERG("pcawg-heidelberg",          "PCAWG - Heidelberg"),    
-  PCAWG_CHICAGO_ICGC("pcawg-chicago-icgc",      "PCAWG - Chicago (ICGC)"),
-  PCAWG_CHICAGO_TCGA("pcawg-chicago-tcga",      "PCAWG - Chicago (TCGA)"),
-  AWS_VIRGINIA("aws-virginia",                  "AWS - Virginia"),        
-  COLLABORATORY("collaboratory",                "Collaboratory");         
-  // @formatter:on
+  @ApiModelProperty(value = "The type of repository", required = true)
+  String type;
 
-  @NonNull
-  private final String repoCode;
-  @NonNull
-  private final String name;
+  @ApiModelProperty(value = "The name of the repository", required = true)
+  String name;
 
-  public boolean isS3() {
-    return this == AWS_VIRGINIA
-        || this == COLLABORATORY;
-  }
+  @ApiModelProperty(value = "The source organization of data of the repository", required = true)
+  String source;
 
-  public boolean isGNOS() {
-    return this == CGHUB
-        || this == PCAWG_BARCELONA
-        || this == PCAWG_CGHUB
-        || this == PCAWG_TOKYO
-        || this == PCAWG_SEOUL
-        || this == PCAWG_LONDON
-        || this == PCAWG_HEIDELBERG
-        || this == PCAWG_CHICAGO_ICGC
-        || this == PCAWG_CHICAGO_TCGA;
-  }
+  @ApiModelProperty(value = "Where the repository geographically resides", required = true)
+  String country;
 
-  public boolean isEGA() {
-    return this == EGA;
-  }
+  @ApiModelProperty(value = "The base URL of the repository", required = true)
+  String baseUrl;
 
-  @JsonCreator
-  public static Repository get(String repoCode) {
-    return repoCode == null ? null : Repository.valueOf(repoCode.toUpperCase().replaceAll("-", "_"));
-  }
+  @ApiModelProperty(value = "The data path of the repository relative to the `baseUrl`")
+  String dataPath;
 
-  @JsonValue
-  public String getRepoCode() {
-    return repoCode;
-  }
-
-  @JsonValue
-  public String getName() {
-    return name;
-  }
-
-  @Override
-  public String toString() {
-    return repoCode;
-  }
+  @ApiModelProperty(value = "The metadata path of the repository relative to the `baseUrl`")
+  String metadataPath;
 
 }

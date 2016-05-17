@@ -22,7 +22,7 @@ import static org.icgc.dcc.common.core.util.Joiners.DOT;
 
 import org.icgc.dcc.portal.manifest.model.Manifest;
 import org.icgc.dcc.portal.manifest.model.ManifestFormat;
-import org.icgc.dcc.portal.model.Repository;
+import org.icgc.dcc.portal.model.RepositoryServer;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -49,11 +49,11 @@ public final class Manifests {
     }
   }
 
-  public static String getFileName(Repository repo, long timestamp) {
+  public static String getFileName(RepositoryServer repo, long timestamp) {
     return DOT.join(PREFIX, repo.getRepoCode(), timestamp, getFileExtension(repo));
   }
 
-  public static String getFileExtension(Repository repo) {
+  public static String getFileExtension(RepositoryServer repo) {
     if (repo.isGNOS()) {
       return "xml";
     } else if (repo.isS3()) {
@@ -65,9 +65,9 @@ public final class Manifests {
     }
   }
 
-  private static Repository getRepo(Manifest manifest) {
+  private static RepositoryServer getRepo(Manifest manifest) {
     if (manifest.getRepos().size() == 1) {
-      return Repository.get(manifest.getRepos().get(0));
+      return RepositoryServer.get(manifest.getRepos().get(0));
     }
 
     return null;

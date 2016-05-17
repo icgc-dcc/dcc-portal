@@ -33,7 +33,7 @@ import org.icgc.dcc.portal.manifest.model.ManifestFile;
 import org.icgc.dcc.portal.model.File;
 import org.icgc.dcc.portal.model.File.Donor;
 import org.icgc.dcc.portal.model.File.FileCopy;
-import org.icgc.dcc.portal.model.Repository;
+import org.icgc.dcc.portal.model.RepositoryServer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
@@ -77,7 +77,7 @@ public class ManifestMapper {
   private static ManifestFile mapFileCopy(FileCopy fileCopy) {
     val indexFile = fileCopy.getIndexFile();
     val indexObjectId = (null == indexFile) ? "" : defaultString(indexFile.getObjectId());
-    val repo = Repository.get(fileCopy.getRepoCode());
+    val repo = RepositoryServer.get(fileCopy.getRepoCode());
 
     return new ManifestFile()
         .setName(defaultString(fileCopy.getFileName()))

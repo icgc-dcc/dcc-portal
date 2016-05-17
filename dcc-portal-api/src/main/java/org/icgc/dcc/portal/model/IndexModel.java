@@ -60,6 +60,7 @@ public class IndexModel {
 
     GENE_SET("geneSet"),
     FILE("file"),
+    REPOSITORY("repository"),
 
     CONSEQUENCE("consequence"),
     TRANSCRIPT("transcript"),
@@ -97,6 +98,7 @@ public class IndexModel {
     GENE_CENTRIC("gene-centric"),
     MUTATION_CENTRIC("mutation-centric"),
     OCCURRENCE_CENTRIC("observation-centric"),
+    REPOSITORY("repository"),
     FILE("file"),
     FILE_CENTRIC("file-centric"),
 

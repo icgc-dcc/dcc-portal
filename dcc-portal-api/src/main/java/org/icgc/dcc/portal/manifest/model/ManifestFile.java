@@ -19,7 +19,7 @@ package org.icgc.dcc.portal.manifest.model;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
-import org.icgc.dcc.portal.model.Repository;
+import org.icgc.dcc.portal.model.RepositoryServer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -55,8 +55,8 @@ public class ManifestFile {
   String projectCode;
 
   @JsonIgnore
-  public Repository getRepo() {
-    return Repository.get(repoCode);
+  public RepositoryServer getRepo() {
+    return RepositoryServer.get(repoCode);
   }
 
 }

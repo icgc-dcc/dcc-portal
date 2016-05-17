@@ -98,7 +98,10 @@ public class MessageResolverReaderListener implements ReaderListener {
     if (models == null) return;
 
     for (val model : models) {
-      resolveProperties(model.getProperties().values());
+      val properties = model.getProperties();
+      if (properties == null) return;
+
+      resolveProperties(properties.values());
     }
   }
 

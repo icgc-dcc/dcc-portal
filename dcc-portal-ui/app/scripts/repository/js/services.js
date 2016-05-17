@@ -19,6 +19,7 @@
   'use strict';
 
   var REPO_API_PATH = 'repository/files';
+  var REPOS_PATH = 'repositories';
   var toJson = angular.toJson;
   var uriString = _.flow (toJson, encodeURIComponent);
 
@@ -28,19 +29,8 @@
 
     // Initial values until the call to getRepoMap() returns.
     var _srv = this,
-        _repoCodeToName = {
-          'pcawg-chicago-tcga': 'PCAWG - Chicago (TCGA)',
-          'cghub': 'CGHub - Santa Cruz',
-          'pcawg-heidelberg': 'PCAWG - Heidelberg',
-          'pcawg-tokyo': 'PCAWG - Tokyo',
-          'aws-virginia': 'AWS - Virginia',
-          'pcawg-barcelona': 'PCAWG - Barcelona',
-          'pcawg-cghub': 'PCAWG - Santa Cruz',
-          'pcawg-chicago-icgc': 'PCAWG - Chicago (ICGC)',
-          'pcawg-london': 'PCAWG - London',
-          'tcga': 'TCGA DCC - Bethesda'
-        },
-        _repoNameToCode = _.invert (_repoCodeToName),
+        _repoCodeToName = {}, // This really shouldn't be needed. 
+        _repoNameToCode = {},
         _repoMapRefreshPromise = null;
 
 
@@ -52,7 +42,7 @@
     }
 
     function _getRepoMap() {
-      return Restangular.one (REPO_API_PATH).one('repo_map').get ({});
+      return Restangular.one(REPOS_PATH).get ({});
     }
 
     function _concatRepoCodes (repoNames) {
@@ -77,7 +67,12 @@
       _repoMapRefreshPromise = _getRepoMap();
 
       _repoMapRefreshPromise.then(function (restangularMapData) {
-        var repoMapData = restangularMapData.plain();
+        
+        
+        var repoMapData = _.reduce(restangularMapData.plain(), function(result, d) {
+          result[d.code] = d.name;
+          return result;
+        }, {});
         _repoCodeToName = repoMapData;
         _repoNameToCode = _.invert (repoMapData);
         _repoMapRefreshPromise = null;

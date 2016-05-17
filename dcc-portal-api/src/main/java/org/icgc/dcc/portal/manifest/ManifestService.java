@@ -48,7 +48,7 @@ import org.icgc.dcc.portal.manifest.writer.GNOSManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GenericManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.ICGCManifestWriter;
 import org.icgc.dcc.portal.model.Query;
-import org.icgc.dcc.portal.model.Repository;
+import org.icgc.dcc.portal.model.RepositoryServer;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.repository.ManifestRepository;
 import org.icgc.dcc.portal.repository.FileRepository;
@@ -274,7 +274,7 @@ public class ManifestService {
       val bundles = Multimaps.index(repoFiles, file -> formatFileURL(file));
 
       // Hand off
-      callback.handle(Repository.get(repoCode), bundles);
+      callback.handle(RepositoryServer.get(repoCode), bundles);
     }
   }
 
@@ -286,7 +286,7 @@ public class ManifestService {
     return fileRepository.findFileInfoPQL(pql);
   }
 
-  private static void writeManifest(Repository repo, long timestamp,
+  private static void writeManifest(RepositoryServer repo, long timestamp,
       ListMultimap<String, ManifestFile> downloadUrlGroups, OutputStream out) {
     if (repo.isGNOS()) {
       GNOSManifestWriter.write(out, downloadUrlGroups, timestamp);
@@ -349,7 +349,7 @@ public class ManifestService {
    */
   private interface BundlesCallback {
 
-    void handle(Repository repo, ListMultimap<String, ManifestFile> bundles)
+    void handle(RepositoryServer repo, ListMultimap<String, ManifestFile> bundles)
         throws IOException;
 
   }
