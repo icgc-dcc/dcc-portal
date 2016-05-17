@@ -24,12 +24,12 @@ import static com.sun.jersey.multipart.MultiPartMediaTypes.MULTIPART_MIXED;
 import static com.sun.jersey.multipart.MultiPartMediaTypes.MULTIPART_MIXED_TYPE;
 import static java.util.Collections.singletonMap;
 import static java.util.stream.Collectors.toList;
+import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
 import static javax.ws.rs.core.Response.ok;
 import static org.icgc.dcc.portal.manifest.Manifests.getFileName;
-import static org.icgc.dcc.portal.resource.Resources.API_FILTER_PARAM;
-import static org.icgc.dcc.portal.resource.Resources.API_FILTER_VALUE;
 import static org.icgc.dcc.portal.util.MediaTypes.GZIP;
 
 import java.util.Arrays;
@@ -40,6 +40,7 @@ import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -85,29 +86,42 @@ public class ManifestResource extends Resource {
   /**
    * Constants.
    */
-  private static final String API_MANIFEST_ID_PARAM = "manifestId";
-  private static final String API_MANIFEST_ID_VALUE =
+  private static final String MANIFEST_ID_PARAM = "manifestId";
+  private static final String MANIFEST_ID_DESC =
       "The manifest ID of a previously created manifest. Format is a UUID";
 
-  private static final String API_FILE_REPOS_PARAM = "repos";
-  private static final String API_FILE_REPOS_VALUE =
-      "The prioritized list of repo codes to use. When the 'unique' parameter is set to true, this field is required and the order of the repos will determine the source of uniqueness of a file if it exists in more than one repo. Zero or more repo codes separated by a comma.";
+  private static final String REPOS_PARAM = "repos";
+  private static final String REPOS_DESC =
+      "The prioritized list of repo codes to use. When the `unique` parameter is set to true, this field is required and the order of the repos will determine the source of uniqueness of a file if it exists in more than one repo. Zero or more repo codes separated by a comma.";
 
-  private static final String API_FILE_UNIQUE_PARAM = "unique";
-  private static final String API_FILE_UNIQUE_VALUE =
+  private static final String FILTERS_PARAM = "filters";
+  private static final String FILTERS_DEFAULT = "{}";
+  private static final String FILTERS_EXAMPLE = "{file:{id:{is:[\"FI1234\"]}}}";
+  private static final String FILTERS_DESC =
+      "The file selection filter to use as input to the manifest. Can be any JQL expression supported by the `/repository/files` endpoint. e.g. `"
+          + FILTERS_EXAMPLE + "`";
+
+  private static final String UNIQUE_PARAM = "unique";
+  private static final String UNIQUE_DEFAULT = "false";
+  private static final String UNIQUE_DESC =
       "Only return unique files by file id (e.g. FI1234)? Useful when file copies exist in more than one repo";
 
-  private static final String API_FILE_FORMAT_PARAM = "format";
-  private static final String API_FILE_FORMAT_VALUE =
-      "The output format of the manifest. One of 'tarball', 'files', or 'json'. 'tarball' will return an archive of all native manifests spanned by the file set defined in the manifest. 'files' will return a series of files whose content type is subject to the 'multipart' parameter. 'json' will return a JSON representation of the manifest subject to the 'fields' parameter";
+  private static final String FORMAT_PARAM = "format";
+  private static final String FORMAT_DEFAULT = "json";
+  private static final String FORMAT_VALUES = "tarball,files,json";
+  private static final String FORMAT_DESC =
+      "The output format of the manifest. One of `tarball`, `files`, or `json`. `tarball` will return an archive of all native manifests spanned by the file set defined in the manifest. `files` will return a series of files whose content type is subject to the `multipart` parameter. `json` will return a JSON representation of the manifest subject to the `fields` parameter";
 
-  private static final String API_FILE_FIELDS_PARAM = "fields";
-  private static final String API_FILE_FIELDS_VALUE =
-      "What addional fields to include when using format 'json'. Zero or more of 'id', 'size', 'md5sum', 'repoFileId', or 'content' separated by a comma. All fields accept 'content' are properties of files. 'content' represents the a base64 encoded native manifest";
+  private static final String FIELDS_PARAM = "fields";
+  private static final String FIELDS_DEFAULT = "id";
+  private static final String FIELDS_VALUES = "id,size,md5sum,repoFileId,content";
+  private static final String FIELDS_DESC =
+      "What additional fields to include when using format `json`. Zero or more of `id`, `size`, `md5sum`, `repoFileId`, or `content` separated by a comma. All fields accept `content` are properties of files. `content` represents the a base64 encoded native manifest";
 
-  private static final String API_FILE_MULTIPART_PARAM = "multipart";
-  private static final String API_FILE_MULTIPART_VALUE =
-      "Use multipart output when a format of 'files' is specified  Useful when a manifest covers more than one repo and a requesting agent can accept multipart responses. Content type is "
+  private static final String MULTIPART_PARAM = "multipart";
+  private static final String MULTIPART_DEFAULT = "false";
+  private static final String MULTIPART_DESC =
+      "Use multipart output when a format of `files` is specified  Useful when a manifest covers more than one repo and a requesting agent can accept multipart responses. Content type is "
           + MULTIPART_MIXED;
 
   /**
@@ -116,50 +130,78 @@ public class ManifestResource extends Resource {
   @NonNull
   private final ManifestService manifestService;
 
+  @GET
+  @Timed
+  @ApiOperation(value = "Generate manifest(s) on the fly as specified by the supplied parameters.", notes = "Does not store the result")
+  public Response generateManifest(
+      // Input
+      @ApiParam(value = REPOS_DESC, allowMultiple = true) @QueryParam(REPOS_PARAM) @DefaultValue("") ListParam repoParam,
+      @ApiParam(value = FILTERS_DESC) @QueryParam(FILTERS_PARAM) @DefaultValue(FILTERS_DEFAULT) FiltersParam filtersParam,
+      @ApiParam(value = UNIQUE_DESC) @QueryParam(UNIQUE_PARAM) @DefaultValue(UNIQUE_DEFAULT) boolean unique,
+
+      // Output
+      @ApiParam(value = FORMAT_DESC, allowableValues = FORMAT_VALUES) @QueryParam(FORMAT_PARAM) @DefaultValue(FORMAT_DEFAULT) String format,
+      @ApiParam(value = FIELDS_DESC, allowableValues = FIELDS_VALUES, allowMultiple = true) @QueryParam(FIELDS_PARAM) @DefaultValue(FIELDS_DEFAULT) ListParam fieldsParam,
+      @ApiParam(value = MULTIPART_DESC) @QueryParam(MULTIPART_PARAM) @DefaultValue(MULTIPART_DEFAULT) boolean multipart) {
+    val manifest = createManifest(repoParam, filtersParam, unique, format, fieldsParam, multipart);
+
+    log.debug("Rendering manifest: {}", manifest);
+    return renderManifest(manifest);
+  }
+
   @POST
-  @Consumes(APPLICATION_JSON)
-  @Produces(APPLICATION_JSON)
-  @ApiOperation(value = "Saves a manifest returning the posted body with its ID populated", response = Manifest.class)
-  public Manifest saveManifest(Manifest manifest) {
-    checkRequest(manifest == null,
-        "Manifest definition is required");
-    checkRequest(manifest.getFormat() == null,
-        "manifest 'format' is required");
-    validateManifest(manifest);
+  @Consumes(APPLICATION_FORM_URLENCODED)
+  @Produces(TEXT_PLAIN)
+  @ApiOperation(value = "Saves a manifest definition returning its ID", notes = "Note that properties of the manifest can be overriden when retrieved. All but the `filter` are considered stored \"defaults\" for when the manifest is accessed")
+  public String saveManifest(
+      // Input
+      @ApiParam(value = REPOS_DESC, allowMultiple = true) @FormParam(REPOS_PARAM) @DefaultValue("") ListParam repoParam,
+      @ApiParam(value = FILTERS_DESC) @FormParam(FILTERS_PARAM) @DefaultValue(FILTERS_DEFAULT) FiltersParam filtersParam,
+      @ApiParam(value = UNIQUE_DESC) @FormParam(UNIQUE_PARAM) @DefaultValue(UNIQUE_DEFAULT) boolean unique,
 
+      // Output
+      @ApiParam(value = FORMAT_DESC, allowableValues = FORMAT_VALUES) @FormParam(FORMAT_PARAM) @DefaultValue(FORMAT_DEFAULT) String format,
+      @ApiParam(value = FIELDS_DESC, allowableValues = FIELDS_VALUES, allowMultiple = true) @FormParam(FIELDS_PARAM) @DefaultValue(FIELDS_DEFAULT) ListParam fieldsParam,
+      @ApiParam(value = MULTIPART_DESC) @FormParam(MULTIPART_PARAM) @DefaultValue(MULTIPART_DEFAULT) boolean multipart) {
+    val manifest = createManifest(repoParam, filtersParam, unique, format, fieldsParam, multipart);
+
+    log.debug("Saving manifest: {}", manifest);
     manifestService.saveManifest(manifest);
+    log.debug("Saved manifest: {}", manifest.getId());
 
-    return manifest;
+    return manifest.getId().toString();
   }
 
   @GET
-  @Path("/{" + API_MANIFEST_ID_PARAM + "}")
-  @ApiOperation(value = "Retrieves a manifest by its ID, overriding output specification as indicated")
+  @Path("/{" + MANIFEST_ID_PARAM + "}")
+  @ApiOperation(value = "Retrieves a manifest by its ID, overriding output specification as indicated", notes = "Everything but the `filter` may be overriden")
   public Response getManifest(
       // Input
-      @ApiParam(value = API_MANIFEST_ID_VALUE, required = true) @PathParam(API_MANIFEST_ID_PARAM) UUID manifestId,
+      @ApiParam(value = MANIFEST_ID_DESC, required = true) @PathParam(MANIFEST_ID_PARAM) UUID manifestId,
 
       // Input - Overrides
-      @ApiParam(value = API_FILE_REPOS_VALUE, allowMultiple = true) @QueryParam(API_FILE_REPOS_PARAM) @DefaultValue("") ListParam repoParam,
-      @ApiParam(value = API_FILE_UNIQUE_VALUE) @QueryParam(API_FILE_UNIQUE_PARAM) @DefaultValue("false") boolean unique,
+      @ApiParam(value = REPOS_DESC, allowMultiple = true) @QueryParam(REPOS_PARAM) @DefaultValue("") ListParam repoParam,
+      @ApiParam(value = UNIQUE_DESC) @QueryParam(UNIQUE_PARAM) @DefaultValue("") boolean unique,
 
       // Output - Overrides
-      @ApiParam(value = API_FILE_FORMAT_VALUE) @QueryParam(API_FILE_FORMAT_PARAM) @DefaultValue("") String format,
-      @ApiParam(value = API_FILE_FIELDS_VALUE, allowMultiple = true) @QueryParam(API_FILE_FIELDS_PARAM) @DefaultValue("") ListParam fieldsParam,
-      @ApiParam(value = API_FILE_MULTIPART_VALUE) @QueryParam(API_FILE_MULTIPART_PARAM) @DefaultValue("") boolean multipart) {
+      @ApiParam(value = FORMAT_DESC, allowableValues = FORMAT_VALUES) @QueryParam(FORMAT_PARAM) @DefaultValue("") String format,
+      @ApiParam(value = FIELDS_DESC, allowableValues = FIELDS_VALUES, allowMultiple = true) @QueryParam(FIELDS_PARAM) @DefaultValue("") ListParam fieldsParam,
+      @ApiParam(value = MULTIPART_DESC) @QueryParam(MULTIPART_PARAM) @DefaultValue("") boolean multipart) {
 
+    // Get "defaults"
+    log.debug("Getting manifest: {}", manifestId);
     val manifest = manifestService.getManifest(manifestId);
 
-    // Input - Overrides
-    if (hasParam(API_FILE_REPOS_PARAM)) {
+    // Apply input overrides if present
+    if (hasParam(REPOS_PARAM)) {
       manifest.setRepos(repoParam.get());
     }
-    if (hasParam(API_FILE_UNIQUE_PARAM)) {
+    if (hasParam(UNIQUE_PARAM)) {
       manifest.setUnique(unique);
     }
 
-    // Output - Overrides
-    if (hasParam(API_FILE_FORMAT_PARAM)) {
+    // Apply output overrides if present
+    if (hasParam(FORMAT_PARAM)) {
       checkFormat(format);
       manifest.setFormat(ManifestFormat.get(format));
 
@@ -168,35 +210,29 @@ public class ManifestResource extends Resource {
         manifest.setFields(Collections.emptyList());
       }
     }
-    if (hasParam(API_FILE_FIELDS_PARAM)) {
+    if (hasParam(FIELDS_PARAM)) {
       manifest.setFields(parseFields(fieldsParam));
     }
-    if (hasParam(API_FILE_MULTIPART_PARAM)) {
+    if (hasParam(MULTIPART_PARAM)) {
       manifest.setMultipart(multipart);
     }
 
     validateManifest(manifest);
 
+    log.debug("Rendering manifest: {}", manifest);
     return renderManifest(manifest);
   }
 
-  @GET
-  @Timed
-  @ApiOperation(value = "Generate manifest(s) on the fly as specified by the supplied parameters")
-  public Response generateManifest(
+  private Manifest createManifest(
       // Input
-      @ApiParam(value = API_FILE_REPOS_VALUE, allowMultiple = true) @QueryParam(API_FILE_REPOS_PARAM) @DefaultValue("") ListParam repoParam,
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
-      @ApiParam(value = API_FILE_UNIQUE_VALUE) @QueryParam(API_FILE_UNIQUE_PARAM) @DefaultValue("false") boolean unique,
+      ListParam repoParam,
+      FiltersParam filtersParam,
+      boolean unique,
 
       // Output
-      @ApiParam(value = API_FILE_FORMAT_VALUE) @QueryParam(API_FILE_FORMAT_PARAM) @DefaultValue("json") String format,
-      @ApiParam(value = API_FILE_FIELDS_VALUE, allowMultiple = true) @QueryParam(API_FILE_FIELDS_PARAM) @DefaultValue("") ListParam fieldsParam,
-      @ApiParam(value = API_FILE_MULTIPART_VALUE) @QueryParam(API_FILE_MULTIPART_PARAM) @DefaultValue("false") boolean multipart) {
-    log.debug("filtersParam: '{}', repoParam: '{}'", filtersParam, repoParam);
-
-    checkRequest(isNullOrEmpty(format),
-        "'format' is required");
+      String format,
+      ListParam fieldsParam,
+      boolean multipart) {
     checkFormat(format);
 
     val manifest = new Manifest()
@@ -208,17 +244,14 @@ public class ManifestResource extends Resource {
         .setMultipart(multipart);
 
     validateManifest(manifest);
-
-    return renderManifest(manifest);
+    return manifest;
   }
 
   private void validateManifest(Manifest manifest) {
     checkRequest(manifest.isUnique() && manifest.getRepos().isEmpty(),
-        "If 'unique' is specified then 'repos' must be non-empty");
+        "If `unique` is specified then `repos` must be non-empty");
     checkRequest(manifest.getFormat() != ManifestFormat.FILES && manifest.isMultipart(),
-        "If 'multipart' is specified then format must be 'files'");
-    checkRequest(manifest.getFormat() != ManifestFormat.JSON && !manifest.getFields().isEmpty(),
-        "If the 'json' format is not specified then 'fields' must be empty");
+        "If `multipart` is specified then format must be `files`");
   }
 
   private Response renderManifest(Manifest manifest) {
@@ -265,8 +298,10 @@ public class ManifestResource extends Resource {
   }
 
   private static void checkFormat(String format) {
+    checkRequest(isNullOrEmpty(format),
+        "`format` is required");
     checkRequest(!isValidEnum(ManifestFormat.class, format.toUpperCase()),
-        "'format' is not a valid value in: %s", Arrays.toString(ManifestFormat.values()).toLowerCase());
+        "`format` is not a valid value in: %s", Arrays.toString(ManifestFormat.values()).toLowerCase());
   }
 
   private static ContentDisposition attachmentContent(Manifest manifest) {

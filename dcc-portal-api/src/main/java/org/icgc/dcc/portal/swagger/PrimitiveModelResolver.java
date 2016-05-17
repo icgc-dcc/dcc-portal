@@ -93,14 +93,13 @@ public class PrimitiveModelResolver extends ModelResolver {
   }
 
   private static boolean isString(JavaType type) {
-    return isA(type, JsonNode.class)
-        || isA(type, IntParam.class)
-        || isA(type, ListParam.class)
-        || isA(type, JacksonParam.class)
-        || isA(type, UUIDSetParam.class)
+    return isA(type, AlleleParam.class)
         || isA(type, FieldsParam.class)
         || isA(type, FiltersParam.class)
-        || isA(type, AlleleParam.class);
+        || isA(type, JacksonParam.class)
+        || isA(type, JsonNode.class)
+        || isA(type, ListParam.class)
+        || isA(type, UUIDSetParam.class);
   }
 
   private static boolean isInteger(JavaType type) {

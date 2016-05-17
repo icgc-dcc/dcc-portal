@@ -122,7 +122,7 @@ public class MessageResolver {
       public String values(String className) {
         Class<?> type = Class.forName(className);
         Object[] values = (Object[]) type.getMethod("values").invoke(null);
-        return Stream.of(values).map(value -> "'" + value + "'").collect(joining(", "));
+        return Stream.of(values).map(value -> value.toString()).collect(joining(","));
       }
 
     }

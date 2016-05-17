@@ -286,13 +286,13 @@
         filters: filters
       };
 
-      ExternalRepoService.createManifest(params).then(function (data) {
-        if (! data.id) {
+      ExternalRepoService.createManifest(params).then(function (id) {
+        if (! id) {
           console.log('No Manifest UUID is returned from API call.');
           return;
         }
         repoData.isGeneratingManifestID = false;
-        repoData.manifestID = data.id;
+        repoData.manifestID = id;
      });
     };
 

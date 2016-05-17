@@ -155,7 +155,7 @@
     };
 
     _srv.createManifest = function (params) {
-      return Restangular.service('manifests').post(params, {}, {'Content-Type': 'application/json'});
+      return Restangular.service('manifests').post(params);
     };
 
     _srv.getManifestUrl = function (ids, repos) {
