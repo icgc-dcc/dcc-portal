@@ -147,13 +147,13 @@
 
         Keyword.getList({q: $scope.query, type: $scope.type, size: pageSize, from: $scope.from})
           .then(function (response) {
-            var total = _.get (response, 'pagination', 0);
-            $scope.isFinished = (total < 1) || total - $scope.from < pageSize;
+            var pagination = _.get (response, 'pagination', {total: 0});
+            $scope.isFinished = (pagination.total < 1) || pagination.total - $scope.from < pageSize;
             $scope.isBusy = false;
             $scope.activeQuery = saved;
 
             if (settings.scroll) {
-              $scope.results.pagination = response.pagination ? response.pagination : {};
+              $scope.results.pagination = pagination;
               for (var i = 0; i < response.hits.length; i++) {
                 $scope.results.hits.push(response.hits[i]);
               }
