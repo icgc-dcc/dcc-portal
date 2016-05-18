@@ -863,10 +863,15 @@
       }
     });
 
-    // Remove any pagination on facet change
+    // Remove any pagination on facet change: see DCC-4589
     $scope.$on(FacetConstants.EVENTS.FACET_STATUS_CHANGE, function() {
-      if (LocationService.getJsonParam('files')) {
-        LocationService.removeParam('files');
+      var filesParam = LocationService.getJsonParam('files');
+      if (!_.isEmpty(filesParam)) {
+        var newParam = {
+          from: 1,
+          size: filesParam.size || 25
+          };
+        LocationService.setJsonParam('files', newParam);
       }
     });
 
