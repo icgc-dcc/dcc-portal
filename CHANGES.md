@@ -3,6 +3,16 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.0.x
+--
+  - Bug fix for paging when modifying filters in File Repository.
+
+4.0.17
+--
+  - New endpoint for repository meta data.
+  - Bug fix to keyword search which would continue to show the "show more" button when there were no results.
+  - Various fixes to entity set logic now that migration to 'ES:' prefix for sets is complete. 
+
 4.0.15
 --
   - Upgraded from Swagger 1.3.13 to 1.5.8
