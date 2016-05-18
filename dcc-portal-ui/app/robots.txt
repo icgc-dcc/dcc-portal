@@ -5,4 +5,5 @@ Disallow: /genes*
 Disallow: /mutations*
 Crawl-delay: 30
 
-User-agent: *
+User-agent: Googlebot
+Disallow: /mutations*
