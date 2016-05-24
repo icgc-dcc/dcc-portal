@@ -79,13 +79,15 @@ public class ManifestMapper {
     val indexObjectId = (null == indexFile) ? "" : defaultString(indexFile.getObjectId());
     val repo = RepositoryServer.get(fileCopy.getRepoCode());
 
+    val repoFileId = repo.isGNOS() ? fileCopy.getRepoDataBundleId() : fileCopy.getRepoFileId();
+
     return new ManifestFile()
         .setName(defaultString(fileCopy.getFileName()))
         .setFormat(defaultString(fileCopy.getFileFormat()))
         .setMd5sum(defaultString(fileCopy.getFileMd5sum()))
         .setSize(fileCopy.getFileSize())
         .setIndexObjectId(indexObjectId)
-        .setRepoFileId(defaultString(repo.isGNOS() ? fileCopy.getRepoDataBundleId() : fileCopy.getRepoFileId()))
+        .setRepoFileId(defaultString(repoFileId))
         .setRepoCode(defaultString(fileCopy.getRepoCode()))
         .setRepoType(defaultString(fileCopy.getRepoType()))
         .setRepoBaseUrl(defaultString(fileCopy.getRepoBaseUrl()))

@@ -151,7 +151,19 @@
     };
 
     _srv.createManifest = function (params) {
-      return Restangular.service('manifests').post(params);
+       console.log(params)
+      var data = {}
+      if (params.filters) {
+         data.filters = JSON.stringify(params.filters);
+      }
+      if (params.repos) {
+         data.repos = params.repos.join(',');
+      }
+      if (params.format) {
+         data.format = params.format;
+      }
+
+      return Restangular.service('manifests').post($.param(data), {}, {}, {'Content-Type': 'application/x-www-form-urlencoded'});
     };
 
     _srv.getManifestUrl = function (ids, repos) {
