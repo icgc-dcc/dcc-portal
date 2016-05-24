@@ -151,8 +151,7 @@
     };
 
     _srv.createManifest = function (params) {
-       console.log(params)
-      var data = {}
+      var data = {};
       if (params.filters) {
          data.filters = JSON.stringify(params.filters);
       }
@@ -163,7 +162,7 @@
          data.format = params.format;
       }
 
-      return Restangular.service('manifests').post($.param(data), {}, {}, {'Content-Type': 'application/x-www-form-urlencoded'});
+      return Restangular.service('manifests').post(jQuery.param(data));
     };
 
     _srv.getManifestUrl = function (ids, repos) {
