@@ -18,7 +18,9 @@
 package org.icgc.dcc.portal.resource.ui;
 
 import static javax.ws.rs.core.MediaType.TEXT_XML;
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 
+import java.io.IOException;
 import java.net.URL;
 
 import javax.ws.rs.GET;
@@ -26,13 +28,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
+import org.icgc.dcc.portal.model.RepositoryServer;
 import org.icgc.dcc.portal.resource.Resource;
 import org.springframework.stereotype.Component;
 
 import io.swagger.annotations.Api;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @Api(hidden = true)
 @Path("/v1/ui/collaboratory")
@@ -47,11 +52,20 @@ public class UICollaboratoryResource extends Resource {
   @GET
   @SneakyThrows
   public Response getMeta(@PathParam("objectId") String objectId) {
-    val input = new URL(COLLAB_META_URL + objectId).openStream();
+    val server = RepositoryServer.COLLABORATORY;
+    val metaUrl = new URL(COLLAB_META_URL + objectId);
+    try {
+      val input = metaUrl.openStream();
 
-    return Response.ok(input)
-        .type(TEXT_XML)
-        .build();
+      return Response.ok(input)
+          .type(TEXT_XML)
+          .build();
+    } catch (IOException e) {
+      val status = SERVICE_UNAVAILABLE;
+      val message = "Error accessing " + server.getName() + " metadata url " + metaUrl;
+      log.error(message, e);
+      return error(status, message + ". " + e.getMessage());
+    }
   }
 
 }

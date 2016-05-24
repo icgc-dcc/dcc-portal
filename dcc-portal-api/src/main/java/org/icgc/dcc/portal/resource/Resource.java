@@ -19,6 +19,7 @@ package org.icgc.dcc.portal.resource;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 import java.net.URI;
@@ -29,11 +30,14 @@ import java.util.function.Supplier;
 
 import javax.validation.Validation;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.icgc.dcc.common.core.json.JsonNodeBuilders.ObjectNodeBuilder;
 import org.icgc.dcc.common.core.util.Joiners;
 import org.icgc.dcc.common.core.util.Splitters;
+import org.icgc.dcc.portal.model.Error;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Query.QueryBuilder;
 import org.icgc.dcc.portal.model.param.FiltersParam;
@@ -240,6 +244,14 @@ public abstract class Resource {
 
       throw new BadRequestException(COMMA_JOINER.join(errorMessages));
     }
+  }
+
+  protected static Response error(Status status, String message) {
+    return Response
+        .status(status)
+        .type(APPLICATION_JSON_TYPE)
+        .entity(new Error(status, message))
+        .build();
   }
 
   protected static <E extends Enum<E>> boolean isValidEnum(Class<E> enumClass, String enumName) {

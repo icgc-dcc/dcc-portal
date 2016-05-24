@@ -19,8 +19,10 @@ package org.icgc.dcc.portal.resource.ui;
 
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
 import static com.sun.jersey.core.header.ContentDisposition.type;
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 import static org.icgc.dcc.portal.util.MediaTypes.GZIP;
 
+import java.io.IOException;
 import java.net.URL;
 
 import javax.ws.rs.GET;
@@ -28,13 +30,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
+import org.icgc.dcc.portal.model.RepositoryServer;
 import org.icgc.dcc.portal.resource.Resource;
 import org.springframework.stereotype.Component;
 
 import io.swagger.annotations.Api;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @Api(hidden = true)
 @Path("/v1/ui/ega")
@@ -49,14 +54,23 @@ public class UIEGAResource extends Resource {
   @GET
   @SneakyThrows
   public Response getMeta(@PathParam("datasetId") String datasetId) {
-    val input = new URL(EGA_META_URL + datasetId).openStream();
+    val server = RepositoryServer.EGA;
+    val metaUrl = new URL(EGA_META_URL + datasetId);
+    try {
+      val input = metaUrl.openStream();
 
-    return Response.ok(input)
-        .type(GZIP)
-        .header(CONTENT_DISPOSITION, type("attachment")
-            .fileName(datasetId + ".tar.gz")
-            .build())
-        .build();
+      return Response.ok(input)
+          .type(GZIP)
+          .header(CONTENT_DISPOSITION, type("attachment")
+              .fileName(datasetId + ".tar.gz")
+              .build())
+          .build();
+    } catch (IOException e) {
+      val status = SERVICE_UNAVAILABLE;
+      val message = "Error accessing " + server.getName() + " metadata url " + metaUrl;
+      log.error(message, e);
+      return error(status, message + ". " + e.getMessage());
+    }
   }
 
 }
