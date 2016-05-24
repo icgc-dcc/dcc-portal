@@ -29,7 +29,7 @@
 
     // Initial values until the call to getRepoMap() returns.
     var _srv = this,
-        _repoCodeToName = {}, // This really shouldn't be needed. 
+        _repoCodeToName = {}, // This really shouldn't be needed.
         _repoNameToCode = {},
         _repoMapRefreshPromise = null;
 
@@ -67,8 +67,8 @@
       _repoMapRefreshPromise = _getRepoMap();
 
       _repoMapRefreshPromise.then(function (restangularMapData) {
-        
-        
+
+
         var repoMapData = _.reduce(restangularMapData.plain(), function(result, d) {
           result[d.code] = d.name;
           return result;
@@ -91,6 +91,7 @@
       var precedence = [
           'AWS - Virginia',
           'Collaboratory',
+          'GDC - Chicago',
           'EGA - United Kingdom',
           'PCAWG - Barcelona',
           'PCAWG - Chicago (ICGC)',

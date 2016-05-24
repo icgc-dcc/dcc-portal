@@ -44,14 +44,15 @@ import org.icgc.dcc.portal.manifest.model.Manifest;
 import org.icgc.dcc.portal.manifest.model.ManifestField;
 import org.icgc.dcc.portal.manifest.model.ManifestFile;
 import org.icgc.dcc.portal.manifest.writer.EGAManifestWriter;
+import org.icgc.dcc.portal.manifest.writer.GDCManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GNOSManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GenericManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.ICGCManifestWriter;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.RepositoryServer;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
-import org.icgc.dcc.portal.repository.ManifestRepository;
 import org.icgc.dcc.portal.repository.FileRepository;
+import org.icgc.dcc.portal.repository.ManifestRepository;
 import org.icgc.dcc.portal.repository.TermsLookupRepository;
 import org.icgc.dcc.portal.service.NotFoundException;
 import org.icgc.dcc.portal.util.MultiPartOutputStream;
@@ -292,6 +293,8 @@ public class ManifestService {
       GNOSManifestWriter.write(out, downloadUrlGroups, timestamp);
     } else if (repo.isS3()) {
       ICGCManifestWriter.write(out, downloadUrlGroups);
+    } else if (repo.isGDC()) {
+      GDCManifestWriter.write(out, downloadUrlGroups);
     } else if (repo.isEGA()) {
       EGAManifestWriter.write(out, downloadUrlGroups);
     } else {
@@ -331,6 +334,8 @@ public class ManifestService {
           file.getRepoBaseUrl(),
           file.getRepoDataPath(),
           file.getDataBundleId());
+    } else if (file.getRepo().isGDC()) {
+      return file.getRepoFileId();
     } else {
       return formatFileURL(
           file.getRepoBaseUrl(),

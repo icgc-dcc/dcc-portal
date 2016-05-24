@@ -42,25 +42,6 @@
 
   var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
 
-// FIXME: No longer in use. To be removed.
-  /**
-   * This just controllers overall state
-   */
-/*
-  module.controller('RepositoryController', function($scope, $location, $state, Page) {
-    var _ctrl = this;
-
-    Page.setTitle('Data Repository');
-    Page.setPage('repository');
-
-    $scope.$watch(function () {
-      return $state.current.data.tab;
-    }, function () {
-      _ctrl.currentTab = $state.current.data.tab || 'icgc';
-    });
-
-  });
-*/
   /**
    * ICGC static repository controller
    */
@@ -351,6 +332,10 @@
       return equalsIgnoringCase (repoType, 'S3');
     }
 
+    function isGDC (repoType) {
+      return equalsIgnoringCase (repoType, 'GDC');
+    }
+
     function isGnos (repoType) {
       return equalsIgnoringCase (repoType, 'GNOS');
     }
@@ -385,6 +370,8 @@
         parts = ['api/v1/ui/aws/metadata/', metaId];
       } else if (isEGA (fileCopy.repoType)) {
         parts = ['api/v1/ui/ega/metadata/', fileCopy.repoDataSetIds[0]];
+      } else if (isGDC (fileCopy.repoType)) {
+        parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath, fileCopy.repoFileId];
       } else {
         parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath, fileInfo.dataBundle.dataBundleId];
       }
@@ -409,7 +396,7 @@
     };
 
     this.shouldShowMetaData = function (repoType) {
-      return isGnos (repoType) || isS3 (repoType) || isEGA (repoType);
+      return isGnos (repoType) || isS3 (repoType) || isEGA (repoType) || isGDC (repoType);
     };
 
     this.isS3 = isS3;

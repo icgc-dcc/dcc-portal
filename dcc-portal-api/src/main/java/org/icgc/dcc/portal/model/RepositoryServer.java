@@ -30,6 +30,7 @@ public enum RepositoryServer {
 
   // @formatter:off
   EGA("ega",                                    "EGA - United Kingdom"),
+  GDC("gdc",                                    "GDC - Chicago"),
   CGHUB("cghub",                                "CGHub - Santa Cruz"),  
   TCGA("tcga",                                  "TCGA DCC - Bethesda"),   
   PCAWG_BARCELONA("pcawg-barcelona",            "PCAWG - Barcelona"),  
@@ -64,6 +65,10 @@ public enum RepositoryServer {
         || this == PCAWG_HEIDELBERG
         || this == PCAWG_CHICAGO_ICGC
         || this == PCAWG_CHICAGO_TCGA;
+  }
+
+  public boolean isGDC() {
+    return this == GDC;
   }
 
   public boolean isEGA() {
