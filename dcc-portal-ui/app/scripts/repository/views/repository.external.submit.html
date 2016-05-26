@@ -39,10 +39,10 @@
              <td class="text-right">{{ repoData.fileCount | number }}</td>
              <td class="text-right">{{ repoData.fileSize | bytes }}</td>
              <td class="text-right manifest-cell">
-                 <span data-tooltip="Manifest ID creation is not applicable to {{repoName}}." data-tooltip-placement="left" data-ng-if="repoName !== 'AWS - Virginia' && repoName !== 'Collaboratory'" style="color: #888; font-size: 0.8rem;">
+                 <span data-tooltip="Manifest ID creation is not applicable to {{repoName}}." data-tooltip-placement="left" data-ng-if="repoName !== 'AWS - Virginia' && repoName !== 'Collaboratory - Toronto'" style="color: #888; font-size: 0.8rem;">
                      Not Applicable
                  </span>
-               <div class="manifest" data-ng-if="repoName === 'AWS - Virginia' || repoName === 'Collaboratory'">
+               <div class="manifest" data-ng-if="repoName === 'AWS - Virginia' || repoName === 'Collaboratory - Toronto'">
                  <button data-ng-if="! repoData.isGeneratingManifestID  && ! repoData.manifestID" class="t_button no-animate"
                    data-ng-click="createManifestId(repoName, repoData)">
                    Manifest ID
@@ -61,7 +61,7 @@
                   </div>
                  </div>
                </div>
-               <span data-ng-if="repoName != 'AWS - Virginia' && repoName != 'Collaboratory'">&nbsp;</span>
+               <span data-ng-if="repoName != 'AWS - Virginia' && repoName != 'Collaboratory - Toronto'">&nbsp;</span>
              </td>
            </tr>
          </tbody>

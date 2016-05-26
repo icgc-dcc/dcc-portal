@@ -54,6 +54,7 @@ crowd:
   ssoUrl: "https://ssoUrl?continue="
   ssoUrlGoogle: "https://ssoUrlGoogle?continue="
 
+# ICGC auth server config
 oauth:
   serviceUrl: "http://localhost:8443"
   clientId: "mgmt"
@@ -61,6 +62,9 @@ oauth:
   enableStrictSSL: false
   enableHttpLogging: true
 
+# Authorization
+auth:
+  enabled: false
 
 hazelcast:
   # Enable session replication?
@@ -94,7 +98,7 @@ elastic:
   indexName: etl-test-release17-0-0
   repoIndexName: test-icgc-repository
   nodeAddresses:
-    - host: "localhost"
+    - host: localhost
       port: 9300
       
   # List of TransportClient settings. 

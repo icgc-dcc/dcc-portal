@@ -90,7 +90,7 @@
 
       var precedence = [
           'AWS - Virginia',
-          'Collaboratory',
+          'Collaboratory - Toronto',
           'EGA - Hinxton',
           'GDC - Chicago',
           'PCAWG - Barcelona',
