@@ -19,12 +19,9 @@ package org.icgc.dcc.portal.manifest.model;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
-import org.icgc.dcc.portal.model.RepositoryServer;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModel;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -53,10 +50,5 @@ public class ManifestFile {
 
   String donorId;
   String projectCode;
-
-  @JsonIgnore
-  public RepositoryServer getRepo() {
-    return RepositoryServer.get(repoCode);
-  }
 
 }

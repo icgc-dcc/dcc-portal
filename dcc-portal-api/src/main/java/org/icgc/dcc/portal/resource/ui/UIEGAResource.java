@@ -30,11 +30,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-import org.icgc.dcc.portal.model.RepositoryServer;
+import org.icgc.dcc.portal.repository.RepositoryRepository;
 import org.icgc.dcc.portal.resource.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io.swagger.annotations.Api;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Api(hidden = true)
 @Path("/v1/ui/ega")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UIEGAResource extends Resource {
 
   /**
@@ -50,11 +54,17 @@ public class UIEGAResource extends Resource {
    */
   private static final String EGA_META_URL = "http://ega.ebi.ac.uk/ega/rest/download/v2/metadata/";
 
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  private final RepositoryRepository repositories;
+
   @Path("/metadata/{datasetId}")
   @GET
   @SneakyThrows
   public Response getMeta(@PathParam("datasetId") String datasetId) {
-    val server = RepositoryServer.EGA;
+    val repo = repositories.findOne("ega");
     val metaUrl = new URL(EGA_META_URL + datasetId);
     try {
       val input = metaUrl.openStream();
@@ -67,7 +77,7 @@ public class UIEGAResource extends Resource {
           .build();
     } catch (IOException e) {
       val status = SERVICE_UNAVAILABLE;
-      val message = "Error accessing " + server.getName() + " metadata url " + metaUrl;
+      val message = "Error accessing " + repo.getName() + " metadata url " + metaUrl;
       log.error(message, e);
       return error(status, message + ". " + e.getMessage());
     }

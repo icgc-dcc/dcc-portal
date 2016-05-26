@@ -91,8 +91,8 @@
       var precedence = [
           'AWS - Virginia',
           'Collaboratory',
+          'EGA - Hinxton',
           'GDC - Chicago',
-          'EGA - United Kingdom',
           'PCAWG - Barcelona',
           'PCAWG - Chicago (ICGC)',
           'PCAWG - Chicago (TCGA)',
@@ -101,7 +101,6 @@
           'PCAWG - Santa Cruz',
           'PCAWG - Seoul',
           'PCAWG - Tokyo',
-          'EGA - United Kingdom',
           'CGHub - Santa Cruz',
           'TCGA DCC - Bethesda'
       ];

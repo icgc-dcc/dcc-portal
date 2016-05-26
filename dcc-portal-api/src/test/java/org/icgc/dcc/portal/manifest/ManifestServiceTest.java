@@ -22,7 +22,9 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.common.core.util.Splitters.WHITESPACE;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
 import java.io.BufferedInputStream;
@@ -46,11 +48,12 @@ import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.manifest.model.Manifest;
 import org.icgc.dcc.portal.manifest.model.ManifestFormat;
 import org.icgc.dcc.portal.model.IndexModel.Type;
+import org.icgc.dcc.portal.model.Repository;
 import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.repository.BaseElasticSearchTest;
-import org.icgc.dcc.portal.repository.ManifestRepository;
 import org.icgc.dcc.portal.repository.FileRepository;
-import org.icgc.dcc.portal.repository.TermsLookupRepository;
+import org.icgc.dcc.portal.repository.ManifestRepository;
+import org.icgc.dcc.portal.repository.RepositoryRepository;
 import org.icgc.dcc.portal.service.IndexService;
 import org.icgc.dcc.portal.test.TestIndex;
 import org.junit.Before;
@@ -81,8 +84,6 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
   private static final String XML_FILE_EXTENSION = "xml";
   private static final String TSV_FILE_EXTENSION = "tsv";
   private static final String GNOS_REPO = "GNOS";
-
-  private static final String TERMS_LOOKUP = "terms-lookup";
 
   /**
    * We only have two documents in the test index. See this file for details:
@@ -121,15 +122,29 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
   public void setUp() {
     this.testIndex = TestIndex.REPOSITORY;
 
+    val repositories = mock(RepositoryRepository.class);
+
+    val gnosRepo = new Repository();
+    gnosRepo.setCode("pcawg-heidelberg");
+    gnosRepo.setType("GNOS");
+
+    val tcgaRepo = new Repository();
+    tcgaRepo.setCode("tcga");
+    tcgaRepo.setType("Web Archive");
+
+    when(repositories.findAll()).thenReturn(ImmutableList.of(gnosRepo, tcgaRepo));
+    when(repositories.findOne(eq(gnosRepo.getCode()))).thenReturn(gnosRepo);
+    when(repositories.findOne(eq(tcgaRepo.getCode()))).thenReturn(tcgaRepo);
+
     // This creates and populates the test index with fixture data.
     es.execute(createIndexMapping(Type.FILE_CENTRIC)
         .withData(bulkFile(getClass())));
     service =
         new ManifestService(
             new PortalProperties(),
+            repositories,
             mock(ManifestRepository.class),
-            new FileRepository(es.client(), testIndex.getName(), new IndexService()),
-            new TermsLookupRepository(es.client(), TERMS_LOOKUP, testIndex.getName(), new PortalProperties()));
+            new FileRepository(es.client(), testIndex.getName(), new IndexService()));
   }
 
   @Test

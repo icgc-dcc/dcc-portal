@@ -17,6 +17,8 @@
  */
 package org.icgc.dcc.portal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -51,5 +53,25 @@ public class Repository implements Identifiable<String> {
 
   @ApiModelProperty(value = "The metadata path of the repository relative to the `baseUrl`")
   String metadataPath;
+
+  @JsonIgnore
+  public boolean isGNOS() {
+    return type.equals("GNOS");
+  }
+
+  @JsonIgnore
+  public boolean isS3() {
+    return type.equals("S3");
+  }
+
+  @JsonIgnore
+  public boolean isGDC() {
+    return type.equals("GDC");
+  }
+
+  @JsonIgnore
+  public boolean isEGA() {
+    return type.equals("EGA");
+  }
 
 }

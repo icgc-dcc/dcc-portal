@@ -32,6 +32,7 @@ import org.icgc.dcc.portal.model.IndexModel.Kind;
 import org.icgc.dcc.portal.model.IndexModel.Type;
 import org.icgc.dcc.portal.model.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import lombok.SneakyThrows;
@@ -60,6 +61,7 @@ public class RepositoryRepository {
     this.client = client;
   }
 
+  @Cacheable("repository")
   public Repository findOne(String id) {
     val search = client.prepareGet(index, TYPE.getId(), id);
 
@@ -70,6 +72,7 @@ public class RepositoryRepository {
     return convertSource(response.getSourceAsString());
   }
 
+  @Cacheable("repositories")
   public List<Repository> findAll() {
     val search = client.prepareSearch(index).setTypes(TYPE.getId()).setSize(100).setSearchType(QUERY_THEN_FETCH);
 

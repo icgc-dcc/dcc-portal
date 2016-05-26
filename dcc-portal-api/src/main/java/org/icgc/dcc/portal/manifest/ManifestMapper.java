@@ -17,11 +17,13 @@
  */
 package org.icgc.dcc.portal.manifest;
 
+import static com.google.common.collect.Maps.uniqueIndex;
 import static org.apache.commons.lang.StringUtils.defaultString;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.portal.util.ElasticsearchResponseUtils.getString;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -33,11 +35,12 @@ import org.icgc.dcc.portal.manifest.model.ManifestFile;
 import org.icgc.dcc.portal.model.File;
 import org.icgc.dcc.portal.model.File.Donor;
 import org.icgc.dcc.portal.model.File.FileCopy;
-import org.icgc.dcc.portal.model.RepositoryServer;
+import org.icgc.dcc.portal.model.Repository;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -45,14 +48,23 @@ import lombok.val;
  */
 public class ManifestMapper {
 
-  public static Stream<ManifestFile> map(SearchResponse searchResult) {
+  /**
+   * Dependencies.
+   */
+  private final Map<String, Repository> repositories;
+
+  public ManifestMapper(@NonNull List<Repository> repositories) {
+    this.repositories = uniqueIndex(repositories, Repository::getCode);
+  }
+
+  public Stream<ManifestFile> map(SearchResponse searchResult) {
     return stream(searchResult.getHits()).flatMap(hit -> mapHit(hit));
   }
 
   /**
    * Merge the fields with flattened file copies fields.
    */
-  private static Stream<ManifestFile> mapHit(SearchHit hit) {
+  private Stream<ManifestFile> mapHit(SearchHit hit) {
     val file = File.parse(hit.sourceAsString());
 
     // Collect common data
@@ -64,23 +76,13 @@ public class ManifestMapper {
         .map(manifestFile -> mapManifestFile(manifestFile, fileFields));
   }
 
-  private static ManifestFile mapManifestFile(ManifestFile manifestFile, Map<String, String> fileFields) {
-    return manifestFile
-        .setId(fileFields.get(Fields.FILE_ID))
-        .setObjectId(fileFields.get(Fields.FILE_UUID))
-        .setStudy(fileFields.get(Fields.STUDY))
-        .setDataBundleId(fileFields.get(Fields.DATA_BUNDLE_ID))
-        .setDonorId(fileFields.get(Fields.DONOR_ID))
-        .setProjectCode(fileFields.get(Fields.PROJECT_CODE));
-  }
-
-  private static ManifestFile mapFileCopy(FileCopy fileCopy) {
+  private ManifestFile mapFileCopy(FileCopy fileCopy) {
     val indexFile = fileCopy.getIndexFile();
     val indexObjectId = (null == indexFile) ? "" : defaultString(indexFile.getObjectId());
-    val repo = RepositoryServer.get(fileCopy.getRepoCode());
-
+    val repo = repositories.get(fileCopy.getRepoCode());
+  
     val repoFileId = repo.isGNOS() ? fileCopy.getRepoDataBundleId() : fileCopy.getRepoFileId();
-
+  
     return new ManifestFile()
         .setName(defaultString(fileCopy.getFileName()))
         .setFormat(defaultString(fileCopy.getFileFormat()))
@@ -92,6 +94,16 @@ public class ManifestMapper {
         .setRepoType(defaultString(fileCopy.getRepoType()))
         .setRepoBaseUrl(defaultString(fileCopy.getRepoBaseUrl()))
         .setRepoDataPath(defaultString(fileCopy.getRepoDataPath()));
+  }
+
+  private static ManifestFile mapManifestFile(ManifestFile manifestFile, Map<String, String> fileFields) {
+    return manifestFile
+        .setId(fileFields.get(Fields.FILE_ID))
+        .setObjectId(fileFields.get(Fields.FILE_UUID))
+        .setStudy(fileFields.get(Fields.STUDY))
+        .setDataBundleId(fileFields.get(Fields.DATA_BUNDLE_ID))
+        .setDonorId(fileFields.get(Fields.DONOR_ID))
+        .setProjectCode(fileFields.get(Fields.PROJECT_CODE));
   }
 
   private static Map<String, String> mapFile(SearchHit hit, File file) {

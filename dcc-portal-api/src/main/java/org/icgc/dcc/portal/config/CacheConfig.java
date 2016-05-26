@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.portal.config;
 
-import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 import java.util.concurrent.ConcurrentMap;
 
@@ -42,11 +42,6 @@ import com.google.common.cache.CacheBuilder;
 @EnableCaching
 public class CacheConfig extends CachingConfigurerSupport {
 
-  /**
-   * Constants.
-   */
-  private static final int CACHE_TTL_DAYS = 7;
-
   @Override
   public CacheManager cacheManager() {
     return new ConcurrentMapCacheManager() {
@@ -62,8 +57,8 @@ public class CacheConfig extends CachingConfigurerSupport {
       private ConcurrentMap<Object, Object> createStore() {
         return CacheBuilder
             .newBuilder()
-            .expireAfterWrite(CACHE_TTL_DAYS, DAYS)
-            .maximumSize(100)
+            .expireAfterWrite(10, MINUTES)
+            .maximumSize(1000)
             .build()
             .asMap();
       }

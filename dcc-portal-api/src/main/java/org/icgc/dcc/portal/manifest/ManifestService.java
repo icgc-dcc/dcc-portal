@@ -25,8 +25,8 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
+import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.common.core.util.function.Predicates.distinctByKey;
-import static org.icgc.dcc.portal.manifest.Manifests.getFileName;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,17 +43,18 @@ import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.manifest.model.Manifest;
 import org.icgc.dcc.portal.manifest.model.ManifestField;
 import org.icgc.dcc.portal.manifest.model.ManifestFile;
+import org.icgc.dcc.portal.manifest.model.ManifestFormat;
 import org.icgc.dcc.portal.manifest.writer.EGAManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GDCManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GNOSManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GenericManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.ICGCManifestWriter;
 import org.icgc.dcc.portal.model.Query;
-import org.icgc.dcc.portal.model.RepositoryServer;
+import org.icgc.dcc.portal.model.Repository;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.repository.FileRepository;
 import org.icgc.dcc.portal.repository.ManifestRepository;
-import org.icgc.dcc.portal.repository.TermsLookupRepository;
+import org.icgc.dcc.portal.repository.RepositoryRepository;
 import org.icgc.dcc.portal.service.NotFoundException;
 import org.icgc.dcc.portal.util.MultiPartOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,7 @@ public class ManifestService {
    * Constants.
    */
   private static final int BUFFER_SIZE = 1024 * 100;
+  private static final String FILE_NAME_PREFIX = "manifest";
 
   /**
    * Configuration.
@@ -92,11 +94,28 @@ public class ManifestService {
    * Dependencies.
    */
   @NonNull
+  private final RepositoryRepository repositories;
+  @NonNull
   private final ManifestRepository manifestRepository;
   @NonNull
   private final FileRepository fileRepository;
-  @NonNull
-  private final TermsLookupRepository termsLookupRepository;
+
+  public String getFileName(@NonNull Manifest manifest) {
+    val repoCode = manifest.getRepos().size() == 1 ? manifest.getRepos().get(0) : null;
+
+    val timestamp = manifest.getTimestamp();
+    if (manifest.getFormat() == ManifestFormat.TARBALL) {
+      // Archive
+      return FILE_NAME_PREFIX + "." + timestamp + ".tar.gz";
+    } else if (repoCode != null) {
+      // Single repo
+      val repo = repositories.findOne(repoCode);
+      return formatFileName(repo, timestamp);
+    } else {
+      // Concatenated manifest
+      return FILE_NAME_PREFIX + ".concatenated." + timestamp + ".txt";
+    }
+  }
 
   @NonNull
   public Manifest getManifest(@NonNull UUID manifestId) {
@@ -157,7 +176,7 @@ public class ManifestService {
       ByteArrayOutputStream fileContents = new ByteArrayOutputStream(BUFFER_SIZE);
       writeManifest(repo, timestamp, bundles, fileContents);
 
-      String fileName = getFileName(repo, timestamp);
+      String fileName = formatFileName(repo, timestamp);
       archive.addManifest(fileName, fileContents);
     });
   }
@@ -169,10 +188,10 @@ public class ManifestService {
       val output = new MultiPartOutputStream(boundary, context.getOutput());
 
       eachRepository(context, searchResult, (repo, bundles) -> {
-        String fileName = getFileName(repo, timestamp);
+        String fileName = formatFileName(repo, timestamp);
         String fileType = DefaultMediaTypePredictor.getInstance().getMediaTypeFromFileName(fileName).toString();
-        output.startPart(fileType, new String[] { "ContentDisposition: " + type("attachment")
-            .fileName(getFileName(repo, timestamp)).build().toString() });
+        output.startPart(fileType, new String[] { "ContentDisposition: " +
+            type("attachment").fileName(fileName).build().toString() });
         writeManifest(repo, timestamp, bundles, output);
       });
     } else {
@@ -210,7 +229,7 @@ public class ManifestService {
     generator.writeStartArray();
     eachRepository(context, searchResult, (repo, bundles) -> {
       generator.writeStartObject();
-      generator.writeStringField("repo", repo.getRepoCode());
+      generator.writeStringField("repo", repo.getCode());
 
       // Files
       if (files) {
@@ -251,9 +270,8 @@ public class ManifestService {
 
   private void eachRepository(ManifestContext context, SearchResponse searchResult, BundlesCallback callback)
       throws IOException {
-
     // Map and filter
-    Stream<ManifestFile> files = ManifestMapper
+    Stream<ManifestFile> files = new ManifestMapper(repositories.findAll())
         .map(searchResult)
         .filter(file -> context.isActive(file.getRepoCode()));
 
@@ -269,13 +287,14 @@ public class ManifestService {
 
     // Iterate in order of priority
     for (val repoCode : prioritizeRepoCodes(context.getManifest().getRepos(), repoCodeFiles.keySet())) {
+      val repo = repositories.findOne(repoCode);
       val repoFiles = repoCodeFiles.get(repoCode);
 
       // Index
-      val bundles = Multimaps.index(repoFiles, file -> formatFileURL(file));
+      val bundles = Multimaps.index(repoFiles, file -> formatFileURL(repo, file));
 
       // Hand off
-      callback.handle(RepositoryServer.get(repoCode), bundles);
+      callback.handle(repo, bundles);
     }
   }
 
@@ -287,7 +306,7 @@ public class ManifestService {
     return fileRepository.findFileInfoPQL(pql);
   }
 
-  private static void writeManifest(RepositoryServer repo, long timestamp,
+  private static void writeManifest(Repository repo, long timestamp,
       ListMultimap<String, ManifestFile> downloadUrlGroups, OutputStream out) {
     if (repo.isGNOS()) {
       GNOSManifestWriter.write(out, downloadUrlGroups, timestamp);
@@ -322,19 +341,24 @@ public class ManifestService {
     return all ? natural() : explicit(priorities);
   }
 
+  private static String formatFileName(Repository repo, long timestamp) {
+    val ext = repo.isGNOS() ? "xml" : repo.isEGA() ? "sh" : "tsv";
+    return DOT.join(FILE_NAME_PREFIX, repo.getCode(), timestamp, ext);
+  }
+
   private static String formatFileURL(String baseUrl, String dataPath, String id) {
     return Stream.of(baseUrl, dataPath, id)
         .map(part -> part.replaceAll("^/+|/+$", ""))
         .collect(joining("/"));
   }
 
-  private static String formatFileURL(@NonNull ManifestFile file) {
-    if (file.getRepo().isGNOS()) {
+  private static String formatFileURL(@NonNull Repository repo, @NonNull ManifestFile file) {
+    if (repo.isGNOS()) {
       return formatFileURL(
           file.getRepoBaseUrl(),
           file.getRepoDataPath(),
           file.getDataBundleId());
-    } else if (file.getRepo().isGDC()) {
+    } else if (repo.isGDC()) {
       return file.getRepoFileId();
     } else {
       return formatFileURL(
@@ -354,7 +378,7 @@ public class ManifestService {
    */
   private interface BundlesCallback {
 
-    void handle(RepositoryServer repo, ListMultimap<String, ManifestFile> bundles)
+    void handle(Repository repo, ListMultimap<String, ManifestFile> bundles)
         throws IOException;
 
   }

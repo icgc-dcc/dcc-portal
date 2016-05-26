@@ -29,7 +29,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
 import static javax.ws.rs.core.Response.ok;
-import static org.icgc.dcc.portal.manifest.Manifests.getFileName;
 import static org.icgc.dcc.portal.util.MediaTypes.GZIP;
 
 import java.util.Arrays;
@@ -304,10 +303,10 @@ public class ManifestResource extends Resource {
         "`format` is not a valid value in: %s", Arrays.toString(ManifestFormat.values()).toLowerCase());
   }
 
-  private static ContentDisposition attachmentContent(Manifest manifest) {
+  private ContentDisposition attachmentContent(Manifest manifest) {
     val date = new Date(manifest.getTimestamp());
     return ContentDisposition.type("attachment")
-        .fileName(getFileName(manifest))
+        .fileName(manifestService.getFileName(manifest))
         .creationDate(date)
         .modificationDate(date)
         .readDate(date)
