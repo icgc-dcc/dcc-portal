@@ -49,6 +49,7 @@ import org.icgc.dcc.portal.manifest.writer.GDCManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GNOSManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GenericManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.ICGCManifestWriter;
+import org.icgc.dcc.portal.manifest.writer.PDCManifestWriter;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Repository;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
@@ -314,6 +315,8 @@ public class ManifestService {
       ICGCManifestWriter.write(out, downloadUrlGroups);
     } else if (repo.isGDC()) {
       GDCManifestWriter.write(out, downloadUrlGroups);
+    } else if (repo.isPDC()) {
+      PDCManifestWriter.write(out, downloadUrlGroups);
     } else if (repo.isEGA()) {
       EGAManifestWriter.write(out, downloadUrlGroups);
     } else {

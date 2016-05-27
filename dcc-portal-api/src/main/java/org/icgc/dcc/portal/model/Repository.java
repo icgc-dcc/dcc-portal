@@ -70,6 +70,11 @@ public class Repository implements Identifiable<String> {
   }
 
   @JsonIgnore
+  public boolean isPDC() {
+    return type.equals("PDC");
+  }
+
+  @JsonIgnore
   public boolean isEGA() {
     return type.equals("EGA");
   }

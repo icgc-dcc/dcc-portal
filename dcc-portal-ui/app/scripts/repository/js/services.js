@@ -93,6 +93,7 @@
           'Collaboratory - Toronto',
           'EGA - Hinxton',
           'GDC - Chicago',
+          'PDC - Chicago',
           'PCAWG - Barcelona',
           'PCAWG - Chicago (ICGC)',
           'PCAWG - Chicago (TCGA)',

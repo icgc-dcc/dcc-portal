@@ -219,7 +219,7 @@
               </a>
             </span>
 
-            <span ng-if="! showMetaData && !fileCtrlr.isEGA(fileCopy.repoType)"
+            <span ng-if="fileCopy.repoType == 'Web Archive'"
               ng-init="dataUrl = fileCtrlr.buildUrl (fileCopy.repoBaseUrl, fileCopy.repoDataPath, fileCopy.fileName)">
               <br>
               <a target="_blank" href="{{ dataUrl }}" tooltip="Show Data" title="{{ dataUrl }}">

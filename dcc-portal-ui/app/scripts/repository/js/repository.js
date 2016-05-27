@@ -336,16 +336,20 @@
       return equalsIgnoringCase (repoType, 'GDC');
     }
 
+    function isPDC (repoType) {
+      return equalsIgnoringCase (repoType, 'PDC');
+    }
+
     function isGnos (repoType) {
       return equalsIgnoringCase (repoType, 'GNOS');
     }
 
-    function isCollab (repoCode) {
-      return equalsIgnoringCase (repoCode, 'collaboratory');
-    }
-
     function isEGA (repoType) {
       return equalsIgnoringCase (repoType, 'EGA');
+    }
+
+    function isCollab (repoCode) {
+      return equalsIgnoringCase (repoCode, 'collaboratory');
     }
 
     // Public functions
