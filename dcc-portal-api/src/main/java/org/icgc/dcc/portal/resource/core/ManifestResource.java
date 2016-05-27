@@ -269,16 +269,20 @@ public class ManifestResource extends Resource {
   private Response tarball(Manifest manifest) {
     return ok(entityStream(manifest), GZIP)
         .header(CONTENT_DISPOSITION, attachmentContent(manifest))
+        .cacheControl(noCache())
         .build();
   }
 
   private Response files(Manifest manifest) {
     if (manifest.isMultipart()) {
       val mediaType = multipartMixed(manifest.getTimestamp());
-      return ok(entityStream(manifest), mediaType).build();
+      return ok(entityStream(manifest), mediaType)
+          .cacheControl(noCache())
+          .build();
     } else {
       return ok(entityStream(manifest), TEXT_PLAIN_TYPE)
           .header(CONTENT_DISPOSITION, attachmentContent(manifest))
+          .cacheControl(noCache())
           .build();
     }
   }

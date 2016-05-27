@@ -345,7 +345,7 @@ public class ManifestService {
   }
 
   private static String formatFileName(Repository repo, long timestamp) {
-    val ext = repo.isGNOS() ? "xml" : repo.isEGA() ? "sh" : "tsv";
+    val ext = repo.isGNOS() ? "xml" : repo.isEGA() || repo.isPDC() ? "sh" : "tsv";
     return DOT.join(FILE_NAME_PREFIX, repo.getCode(), timestamp, ext);
   }
 

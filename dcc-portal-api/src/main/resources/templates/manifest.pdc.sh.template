@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# ICGC PDC Script Manifest
+#
+# Script to download ICGC files in PDC. Generated from https://dcc.icgc.org/repositories.
+# Requires AWS CLI to be installed:
+#
+#   https://aws.amazon.com/cli/
+#
+# For information on the PDC, please see:
+#
+#   https://bionimbus-pdc.opensciencedatacloud.org/
+#
+

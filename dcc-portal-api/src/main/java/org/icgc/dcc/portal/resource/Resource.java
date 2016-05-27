@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import javax.validation.Validation;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -293,6 +294,13 @@ public abstract class Resource {
     source.removeAll(newArrayList("", null));
 
     return source;
+  }
+
+  protected CacheControl noCache() {
+    val cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+
+    return cacheControl;
   }
 
 }

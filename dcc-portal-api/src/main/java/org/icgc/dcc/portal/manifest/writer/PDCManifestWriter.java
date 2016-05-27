@@ -19,30 +19,52 @@ package org.icgc.dcc.portal.manifest.writer;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Set;
 
 import org.icgc.dcc.portal.manifest.model.ManifestFile;
 
 import com.google.common.collect.Multimap;
+import com.google.common.io.Resources;
 
 import lombok.SneakyThrows;
 import lombok.val;
 
 public class PDCManifestWriter {
 
+  /**
+   * Constants.
+   */
+  private static final String MANIFEST_TEMPLATE = "/templates/manifest.pdc.sh.template";
+
   @SneakyThrows
   public static void write(OutputStream buffer, Multimap<String, ManifestFile> bundles) {
+    val urls = bundles.keySet();
+
     val writer = new OutputStreamWriter(buffer, UTF_8);
-    for (val url : bundles.keySet()) {
-      writer.write("aws s3 cp " + formatS3URL(url) + " .\n");
+    writer.write(createManifest(urls));
+    writer.flush();
+  }
+
+  private static String createManifest(Set<String> urls) throws IOException {
+    val manifest = new StringBuilder(readTemplate());
+    for (val url : urls) {
+      val remoteFile = formatS3URL(url);
+      val localFile = ".";
+      manifest.append("aws s3 cp ").append(remoteFile).append(" ").append(localFile).append('\n');
     }
 
-    writer.flush();
+    return manifest.toString();
   }
 
   private static String formatS3URL(String url) {
     return url.replace("https://", "s3://").replaceFirst("/?$", "");
+  }
+
+  private static String readTemplate() throws IOException {
+    return Resources.toString(EGAManifestWriter.class.getResource(MANIFEST_TEMPLATE), UTF_8);
   }
 
 }
