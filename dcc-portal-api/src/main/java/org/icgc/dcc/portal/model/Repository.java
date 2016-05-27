@@ -17,6 +17,8 @@
  */
 package org.icgc.dcc.portal.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModel;
@@ -45,6 +47,12 @@ public class Repository implements Identifiable<String> {
   @ApiModelProperty(value = "Where the repository geographically resides", required = true)
   String country;
 
+  @ApiModelProperty(value = "The timezone of the repository", required = true)
+  String timezone;
+
+  @ApiModelProperty(hidden = true)
+  String siteUrl;
+
   @ApiModelProperty(value = "The base URL of the repository", required = true)
   String baseUrl;
 
@@ -53,6 +61,31 @@ public class Repository implements Identifiable<String> {
 
   @ApiModelProperty(value = "The metadata path of the repository relative to the `baseUrl`")
   String metadataPath;
+
+  @ApiModelProperty(value = "The storage system of the repository")
+  String storage;
+
+  @ApiModelProperty(value = "The operational environment of the repository")
+  String environment;
+
+  @ApiModelProperty(value = "The owning organization that runs and manages the repositories")
+  String organization;
+
+  @ApiModelProperty(value = "The access authority(ies) required to download data")
+  List<String> access;
+
+  @ApiModelProperty(hidden = true)
+  String description;
+  @ApiModelProperty(hidden = true)
+  String email;
+  @ApiModelProperty(hidden = true)
+  String dataUrl;
+  @ApiModelProperty(hidden = true)
+  String accessUrl;
+  @ApiModelProperty(hidden = true)
+  String metadataUrl;
+  @ApiModelProperty(hidden = true)
+  String registrationUrl;
 
   @JsonIgnore
   public boolean isGNOS() {

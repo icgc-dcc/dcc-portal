@@ -17,6 +17,7 @@
 
 package org.icgc.dcc.portal.repository;
 
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
 import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
@@ -35,6 +36,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -48,15 +52,17 @@ public class RepositoryRepository {
    */
   private static final Type TYPE = Type.REPOSITORY;
   private static final Kind KIND = Kind.REPOSITORY;
+  private static final ObjectMapper MAPPER = DEFAULT.disable(FAIL_ON_UNKNOWN_PROPERTIES); // Just in case we add more
+                                                                                          // fields upstream
 
   /**
-   * Depdencencies
+   * Dependencies.
    */
   private final Client client;
   private final String index;
 
   @Autowired
-  RepositoryRepository(Client client, IndexModel indexModel) {
+  RepositoryRepository(@NonNull Client client, @NonNull IndexModel indexModel) {
     this.index = indexModel.getRepoIndex();
     this.client = client;
   }
@@ -93,7 +99,7 @@ public class RepositoryRepository {
 
   @SneakyThrows
   private static Repository convertSource(String source) {
-    return DEFAULT.readValue(source, Repository.class);
+    return MAPPER.readValue(source, Repository.class);
   }
 
 }
