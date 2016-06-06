@@ -400,7 +400,8 @@
     };
 
     this.shouldShowMetaData = function (repoType) {
-      return isGnos (repoType) || isS3 (repoType) || isEGA (repoType) || isGDC (repoType);
+      /* JJ: Quality is too low: || isEGA (repoType) */
+      return isGnos (repoType) || isS3 (repoType) || isGDC (repoType);
     };
 
     this.isS3 = isS3;
