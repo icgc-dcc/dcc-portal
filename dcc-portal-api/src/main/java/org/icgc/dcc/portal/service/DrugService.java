@@ -29,11 +29,6 @@ import static org.icgc.dcc.portal.model.Drug.parse;
 import java.util.Collection;
 import java.util.List;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.query.PqlParser;
 import org.elasticsearch.search.SearchHit;
@@ -46,6 +41,11 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.FluentIterable;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Service to facilitate drug query operations
  */
@@ -55,7 +55,7 @@ import com.google.common.collect.FluentIterable;
 public class DrugService {
 
   private static final Jql2PqlConverter QUERY_CONVERTER = Jql2PqlConverter.getInstance();
-  private static final String PQL_FIND_DRUGS_BY_GENES = format("in (%s, %%s), sort (+%s)", GENE_ID, NAME);
+  private static final String PQL_FIND_DRUGS_BY_GENES = format("in (%s, %%s), sort (+%s), size(%%s)", GENE_ID, NAME);
   private static final String SINGLE_QUOTE = "'";
 
   private final DrugRepository repository;
@@ -66,7 +66,7 @@ public class DrugService {
   }
 
   @NonNull
-  public List<Drug> findDrugsByGeneIds(Collection<String> geneIds) {
+  public List<Drug> findDrugsByGeneIds(Collection<String> geneIds, int size) {
     if (geneIds.isEmpty()) {
       return emptyList();
     }
@@ -74,7 +74,7 @@ public class DrugService {
     val genes = geneIds.stream()
         .map(id -> SINGLE_QUOTE + id + SINGLE_QUOTE)
         .collect(joining(COMMA));
-    val pql = format(PQL_FIND_DRUGS_BY_GENES, genes);
+    val pql = format(PQL_FIND_DRUGS_BY_GENES, genes, size);
 
     return findAll(PqlParser.parse(pql));
   }

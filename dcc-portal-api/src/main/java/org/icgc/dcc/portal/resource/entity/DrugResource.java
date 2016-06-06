@@ -141,8 +141,9 @@ public class DrugResource extends Resource {
   @Timed
   @ApiOperation(value = RETURNS_LIST + "compound" + S + FOR_THE + GENE + S, response = List.class)
   public List<Drug> findDrugsByGeneIds(
-      @ApiParam(value = API_GENE_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_GENE_PARAM) IdsParam geneIds) {
-    return drugService.findDrugsByGeneIds(geneIds.get());
+      @ApiParam(value = API_GENE_VALUE + MULTIPLE_IDS, required = true) @PathParam(API_GENE_PARAM) IdsParam geneIds,
+      @ApiParam(value = API_SIZE_VALUE, required = false) @QueryParam(API_SIZE_PARAM) @DefaultValue(DEFAULT_SIZE) IntParam size) {
+    return drugService.findDrugsByGeneIds(geneIds.get(), size.get());
   }
 
   @GET

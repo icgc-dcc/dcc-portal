@@ -581,7 +581,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
     };
 
     _srv.getCompoundsByGeneId = function (geneId) {
-      return Restangular.one ('drugs').one ('genes').one (geneId).get();
+      return Restangular.one ('drugs').one ('genes').one (geneId).get({size: 500});
     };
 
   });
