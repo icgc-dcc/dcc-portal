@@ -184,7 +184,8 @@
   });
 
   module.controller('ExternalFileDownloadController',
-    function($scope, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService, params) {
+    function ($scope, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
+      Extensions, params) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
@@ -236,10 +237,31 @@
       $scope.selectedRepos = Object.keys(repos);
     });
 
+    /**
+     * Fixes the entitySet to the PQL compatible one if present.
+     */
+    function cleanEntitySet(oldFilter) {
+      var setId = _.get(oldFilter, 'file.entitySetId.is');
+
+      if (typeof setId !== 'undefined' && setId !== null) {
+        var newFilter = _.cloneDeep(oldFilter);
+        newFilter.donor = {id: {is: [Extensions.ENTITY_PREFIX + setId]}};
+        delete newFilter.file.entitySetId;
+        
+        if (_.isEmpty(newFilter.file)) {
+          delete newFilter.file;
+        }
+        
+        return newFilter;
+      }
+      
+      return oldFilter;
+    }
 
     $scope.download = function() {
       if (_.isEmpty($scope.selectedFiles)) {
-        ExternalRepoService.download(FilterService.filters(), $scope.selectedRepos);
+        var filters = cleanEntitySet(FilterService.filters());
+        ExternalRepoService.download(filters, $scope.selectedRepos);
       } else {
         ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
       }
