@@ -274,7 +274,7 @@
       repoData.manifestID = false;
 
       var selectedFiles = $scope.selectedFiles;
-      var filters = FilterService.filters();
+      var filters = cleanEntitySet(FilterService.filters());
 
       if (! _.isEmpty (selectedFiles)) {
         filters = _.set (filters, 'file.id.is', selectedFiles);
