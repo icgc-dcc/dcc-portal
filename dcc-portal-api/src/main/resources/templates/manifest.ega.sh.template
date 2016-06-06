@@ -5,7 +5,11 @@
 # Script to download ICGC files in EGA. Generated from https://dcc.icgc.org/repositories.
 # Requires Java and the EGA Download Client to be installed:
 #
+#   https://java.com/en/download/
 #   https://www.ebi.ac.uk/ega/about/your_EGA_account/download_streaming_client#download
+#
+# Please ensure you are using the latest version of the EGA Download Client and the correct version
+# of Java. See the link above more more details.
 #
 # For information on the EGA Download Client commands, please see:
 #
@@ -43,7 +47,7 @@ mapping="{{ mapping }}"
 # Script Configuration
 ###############################################################################
 
-cipher=$(md5 -s "$username$password")
+cipher=$(echo "$username$password" | md5sum | awk '{print $1}')
 label="icgc-download-{{ timestamp }}"
 link=https://www.ebi.ac.uk/ega/about/your_EGA_account/download_streaming_client#download
 
