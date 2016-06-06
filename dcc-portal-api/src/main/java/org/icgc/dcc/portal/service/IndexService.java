@@ -72,6 +72,11 @@ public class IndexService {
     if (indexMetaData == null) {
       clearCache();
       indexMetaData = getIndexMappings(client, indexName);
+
+      if (indexMetaData == null) {
+        // If it still is null, then just return the empty map.
+        return emptyMap();
+      }
     }
 
     val mappings = indexMetaData.mappings();
