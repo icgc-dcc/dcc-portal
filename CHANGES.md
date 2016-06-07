@@ -5,7 +5,14 @@ Change log for the DCC Data Portal
 
 4.0.x
 --
+
+4.0.23
+--
   - Bug fix for paging when modifying filters in File Repository.
+  - Bug fix for downloading and saving manifests when using an entity set in the repo filter.
+  - Can search for files based on Bundle ID.
+  - No longer trigger server errors when trying to retrieve mapping of repository index. 
+  - Gene entity page will show all available drugs instead of limiting to 10 drugs. 
 
 4.0.17
 --
