@@ -479,7 +479,7 @@
             <td><a href="{{ GeneCompoundsCtrl.compoundUrl }}{{ compound.zincId }}">{{ compound.name }} (<span>{{ compound.zincId }}</span>)</a></td>
             <td>{{ GeneCompoundsCtrl.concatAtcDescriptions (compound) }}</td>
             <td>{{ compound.drugClass | formatCompoundClass }}</td>
-            <td class="text-right"><a href="/compound/{{compound.zincId}}#!trials">{{ compound.cancerTrialCount | number }}</a></td>
+            <td class="text-right"><a href="/compound/{{compound.zincId}}#trials">{{ compound.cancerTrialCount | number }}</a></td>
         </tr>
         </tbody>
     </table>

@@ -71,13 +71,17 @@
        */
       $scope.fixScroll = function () {
         var current = jQuery('.current').children('a').attr('href');
-        //We do not want to immediately scroll away from the controls on page load. 
-        if (current !== '#summary') {
-          jQuery('body,html').stop(true, true);
-          var offset = jQuery(current).offset();
-          var to = offset.top - 40;
-          jQuery('body,html').animate({scrollTop: to}, 200); 
-        } 
+
+        // We do not want to immediately scroll away from the controls on page load. 
+        // Timeout of zero is used to ensure scroll happens after render. 
+        $timeout(function() {
+          if (current !== '#summary') {
+            jQuery('body,html').stop(true, true);
+            var offset = jQuery(current).offset();
+            var to = offset.top - 40;
+            jQuery('body,html').animate({scrollTop: to}, 200); 
+          } 
+        },0);
       };
 
       // Builds the project-donor distribution based on thie gene set
@@ -86,6 +90,7 @@
       // 3) Project-gene breakdwon
       // 4) Build reactome pathways, if applicable
       function refresh() {
+        $scope.fixScroll();
         var mergedGeneSetFilter = LocationService.mergeIntoFilters({gene:geneSetFilter});
         _ctrl.baseAdvQuery = mergedGeneSetFilter;
 
@@ -300,13 +305,12 @@
                 gene: geneFilter
               });
             });
-            //Timeout so that our scroll function gets called after render. 
-            $timeout(function() {$scope.fixScroll();},0);
           });
       }
     }
 
     function refresh() {
+      $scope.fixScroll();
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});
@@ -378,8 +382,6 @@
                   facet.percentage = facet.count / p.ssmTestedDonorCount;
                 });
               }
-              //Timeout so that our scroll function gets called after render. 
-              $timeout(function() {$scope.fixScroll();},0);            
             });
           });
         });
@@ -387,6 +389,7 @@
     }
 
     function refresh() {
+      $scope.fixScroll();
       GeneSets.one().get().then(function (p) {
         geneSet = p;
 
@@ -439,6 +442,7 @@
     }
 
     function refresh() {
+      $scope.fixScroll();
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});

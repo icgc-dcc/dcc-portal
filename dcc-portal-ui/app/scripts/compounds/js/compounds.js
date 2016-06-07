@@ -40,7 +40,8 @@ angular.module('icgc.compounds', ['icgc.compounds.controllers', 'icgc.compounds.
 
 angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
   .controller('CompoundCtrl', function ($scope, compoundManager, CompoundsService, Page,
-                                        FilterService, CompoundsServiceConstants ) {
+                                        FilterService, CompoundsServiceConstants,
+                                        $location, $timeout) {
 
     var _ctrl = this,
         _compound = null,
@@ -61,6 +62,20 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
       return promise;
     }
 
+    function fixScroll() {
+      var current = $location.hash();
+
+      // If we are linked to the page and we have a hash, wait for render to finish and scroll to position. 
+      $timeout(function () {
+        if (typeof current !== 'undefined' && current!== null && current !== '#summary') {
+          jQuery('body,html').stop(true, true);
+          var offset = jQuery(current).offset();
+          var to = offset.top - 40;
+          jQuery('body,html').animate({ scrollTop: to }, 200);
+        }
+      }, 0);
+    }
+
     function _init() {
       compoundManager.filters(FilterService.filters());
 
@@ -68,6 +83,7 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
 
       Page.setTitle('Compounds - ' + _compound.name.toUpperCase());
       Page.stopWork();
+      fixScroll();
     }
 
     function _initTargetedCompoundGenes(targetGenes) {
