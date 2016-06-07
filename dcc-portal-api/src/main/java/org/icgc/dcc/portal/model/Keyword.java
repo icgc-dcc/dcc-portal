@@ -23,15 +23,15 @@ import static org.icgc.dcc.portal.util.ElasticsearchResponseUtils.getString;
 import java.util.List;
 import java.util.Map;
 
-import lombok.Value;
-import lombok.val;
-
 import org.icgc.dcc.portal.model.IndexModel.Kind;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.ImmutableMap;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Value;
+import lombok.val;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -112,6 +112,9 @@ public class Keyword {
   String fileObjectId;
 
   @ApiModelProperty(required = false)
+  String fileBundleId;
+
+  @ApiModelProperty(required = false)
   List<String> tcgaParticipantBarcode;
 
   @ApiModelProperty(required = false)
@@ -174,6 +177,7 @@ public class Keyword {
 
     // File
     fileObjectId = getString(fieldMap.get(FIELDS.get("object_id")));
+    fileBundleId = getString(fieldMap.get(FIELDS.get("data_bundle_id")));
     dataType = getString(fieldMap.get(FIELDS.get("data_type")));
 
     fileName = (List<String>) fieldMap.get(FIELDS.get("file_name"));

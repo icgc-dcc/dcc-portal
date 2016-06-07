@@ -450,6 +450,7 @@ public class IndexModel {
       .put("object_id", "object_id")
       .put("data_type", "data_type")
       .put("project_code", "project_code")
+      .put("data_bundle_id", "data_bundle_id")
 
       // Drug-text
       .putAll(DRUG_KEYWORD_FIELDS)
@@ -529,7 +530,7 @@ public class IndexModel {
     GENE_SET_TYPE_GO("go_term"),
     GENE_SET_TYPE_PATHWAY("pathway"),
     GENE_SET_TYPE_CURATED("curated_set");
-
+    
     private final String type;
   }
 
