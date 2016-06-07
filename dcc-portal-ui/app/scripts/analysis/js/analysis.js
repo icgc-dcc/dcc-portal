@@ -76,7 +76,7 @@
    *   - NewAnalysisController: creates new analysis
    */
   module
-    .constant('DEFAULT_SELECTED_TAB_CONSTANT', 'sets')
+    .constant('DEFAULT_SELECTED_TAB_CONSTANT', 'analysis')
     .controller('AnalysisController', function ($scope, $timeout, $state, $location, Page,
                                                 AnalysisService, DEFAULT_SELECTED_TAB_CONSTANT) {
 

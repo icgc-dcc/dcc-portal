@@ -192,7 +192,7 @@
         title: 'Advanced Search'
       },
       dataAnalysis: {
-        href: href ('analysis.sets'), // Default to the sets tab
+        href: href ('analysis'), // DCC-4594 default is launch analysis
         title: 'Data Analysis'
       },
       dataReleases: {
