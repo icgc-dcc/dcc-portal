@@ -250,15 +250,13 @@
 
             _ctrl.pathway.highlights = pathwayHighlights;
 
-
-            $scope.$broadcast(PathwaysConstants.EVENTS.MODEL_READY_EVENT, {});
-
+            setTimeout(function () { // Wait before rendering legend, Same approach taken in the pathway viewer page. 
+              $scope.$broadcast(PathwaysConstants.EVENTS.MODEL_READY_EVENT, {});
+            }, 100);
 
           }).catch(function () {
             _ctrl.pathway.highlights = [];
           });
-
-
         }
 
         // Assign projects to controller so it can be rendered in the view
