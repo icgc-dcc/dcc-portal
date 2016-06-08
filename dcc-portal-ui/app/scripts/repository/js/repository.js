@@ -417,7 +417,8 @@
     };
 
     this.noNullConcat = function (values) {
-      var result = isEmptyArray (values) ? '' : _.filter (values, _.negate (isEmptyString)).join (commaAndSpace);
+      var flattened = _.flatten(values);
+      var result = isEmptyArray (flattened) ? '' : _.filter (flattened, _.negate (isEmptyString)).join (commaAndSpace);
       return stringOrDefault (result);
     };
 

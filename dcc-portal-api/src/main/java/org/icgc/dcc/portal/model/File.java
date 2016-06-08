@@ -23,9 +23,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.collect.Lists;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import lombok.Data;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -196,22 +196,22 @@ public class File {
     String study;
 
     @ApiModelProperty(value = "Sample ID of a repository file")
-    String sampleId;
+    List<String> sampleId = Lists.newArrayList();
 
     @ApiModelProperty(value = "Specimen ID of a repository file")
-    String specimenId;
+    List<String> specimenId = Lists.newArrayList();
 
     @ApiModelProperty(value = "Specimen type of a repository file")
-    String specimenType;
+    List<String> specimenType = Lists.newArrayList();
 
     @ApiModelProperty(value = "Donor submitter ID of a repository file")
     String submittedDonorId;
 
     @ApiModelProperty(value = "Sample submitter ID of a repository file")
-    String submittedSampleId;
+    List<String> submittedSampleId = Lists.newArrayList();
 
     @ApiModelProperty(value = "Specimen submitter ID of a repository file")
-    String submittedSpecimenId;
+    List<String> submittedSpecimenId = Lists.newArrayList();
 
     @ApiModelProperty(value = "Matched control sample ID of a repository file")
     String matchedControlSampleId;
@@ -226,10 +226,10 @@ public class File {
   public static final class OtherIdentifiers {
 
     @ApiModelProperty(value = "TCGA sample barcode of a repository file")
-    String tcgaSampleBarcode;
+    List<String> tcgaSampleBarcode = Lists.newArrayList();
 
     @ApiModelProperty(value = "TCGA aliquot barcode of a repository file")
-    String tcgaAliquotBarcode;
+    List<String> tcgaAliquotBarcode = Lists.newArrayList();
 
     @ApiModelProperty(value = "TCGA participant barcode of a repository file")
     String tcgaParticipantBarcode;

@@ -269,20 +269,20 @@
         <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaParticipantBarcode, donorInfo.submittedDonorId])" />
       </tr>
       <tr>
-        <th>Specimen ID</th>
-        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.specimenId)" />
+        <th>Specimen IDs</th>
+        <td ng-bind="fileCtrlr.noNullConcat (donorInfo.specimenId)" />
       </tr>
       <tr>
         <th>Specimen Submitter IDs</th>
         <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaSampleBarcode, donorInfo.submittedSpecimenId])" />
       </tr>
       <tr>
-        <th>Specimen Type</th>
-        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.specimenType)" />
+        <th>Specimen Types</th>
+        <td ng-bind="fileCtrlr.noNullConcat (donorInfo.specimenType)" />
       </tr>
       <tr>
-        <th>Sample ID</th>
-        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.sampleId)" />
+        <th>Sample IDs</th>
+        <td ng-bind="fileCtrlr.noNullConcat (donorInfo.sampleId)" />
       </tr>
       <tr>
         <th>Sample Submitter IDs</th>
