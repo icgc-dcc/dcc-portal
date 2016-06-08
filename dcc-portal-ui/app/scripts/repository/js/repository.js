@@ -247,14 +247,14 @@
         var newFilter = _.cloneDeep(oldFilter);
         newFilter.donor = {id: {is: [Extensions.ENTITY_PREFIX + setId]}};
         delete newFilter.file.entitySetId;
-        
+
         if (_.isEmpty(newFilter.file)) {
           delete newFilter.file;
         }
-        
+
         return newFilter;
       }
-      
+
       return oldFilter;
     }
 
@@ -397,7 +397,28 @@
       } else if (isEGA (fileCopy.repoType)) {
         parts = ['api/v1/ui/ega/metadata/', fileCopy.repoDataSetIds[0]];
       } else if (isGDC (fileCopy.repoType)) {
-        parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath, fileCopy.repoFileId];
+        // See https://wiki.oicr.on.ca/pages/viewpage.action?pageId=66946440
+        var expands = [
+          'analysis',
+          'annotations',
+          'cases',
+          'cases.samples',
+          'cases.samples.annotations',
+          'cases.samples.portions',
+          'cases.samples.portions.analytes',
+          'cases.samples.portions.analytes.aliquots',
+          'cases.samples.portions.analytes.aliquots.annotations',
+          'cases.samples.portions.analytes.annotations',
+          'cases.samples.portions.slides',
+          'cases.samples.portions.slides.annotations',
+          'cases.samples.portions.annotations',
+          'cases.annotations',
+          'cases.files',
+          'cases.summary.experimental_strategies',
+          'associated_entities'
+        ];
+
+        parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath, fileCopy.repoFileId, '?expand=' + expands.join(',')];
       } else {
         parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath, fileInfo.dataBundle.dataBundleId];
       }
