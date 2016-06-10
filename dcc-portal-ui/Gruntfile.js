@@ -58,7 +58,7 @@ module.exports = function (grunt) {
         * See: https://www.npmjs.com/package/grunt-bower-install-simple
         */
 
-        var config =  {options: { color: true } };
+        var config =  {options: { color: false } };
 
         if (configProvider.isProductionBuild()) {
           config.prod = { options: { production: true, interactive: false, forceLatest: false } };
