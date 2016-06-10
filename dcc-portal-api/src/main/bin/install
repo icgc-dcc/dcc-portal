@@ -34,9 +34,9 @@ slack_url = 'https://hooks.slack.com/services/<!fill in>'
 
 # Maven artifact location
 name = 'dcc-portal-api'
-server = 'https://seqwaremaven.oicr.on.ca/artifactory'
+server = 'https://artifacts.oicr.on.ca/artifactory'
 artifact = 'org/icgc/dcc/' + name
-api_path = 'http://seqwaremaven.oicr.on.ca/artifactory/api/storage'
+api_path = 'https://artifacts.oicr.on.ca/artifactory/api/storage'
 
 # System Paths
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
