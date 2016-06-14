@@ -395,23 +395,19 @@ a.no-style {
   /* RGBa with 0.6 opacity */
   background: hsla(100, 100, 100, 0.6);
   text-align: center;
+  left: 0;
 
   font-size: 6rem;
   color: $greyDark;
 
   i, img {
-    position: fixed;
-    top: 50%;
-    left: 50%;
+    @extend .absolute-center;
   }
   i {
-    margin-left: -2rem;
-    margin-top: -8rem;
+    height: 1em;
   }
   img {
     height: 3rem;
-    margin-left: .7rem;
-    margin-top: -6.5rem;
   }
 }
 
