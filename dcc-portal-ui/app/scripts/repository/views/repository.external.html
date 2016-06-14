@@ -40,7 +40,7 @@ More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
           data-proxy-type="file"
           data-proxy-facet-name="id"
           data-label="File"
-          data-placeholder="ID, Name, Object ID, Bundle ID" />
+          data-placeholder="e.g. F123, 7f87aa6a-b447-5092..." />
         <terms data-type="file"
           data-facet-name="repoName"
           data-facet="ExternalRepoController.files.termFacets.repoName"
@@ -172,7 +172,7 @@ More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
             <div class="clearfix"></div>
 
             <span class="action-toolbar pull-right">
-              <span data-ng-if="ExternalRepoController.fileSets" class="action-item">
+              <span class="action-item">
                   <i class="icon-floppy"></i><a href="" data-ng-click="ExternalRepoController.saveFileSet('file', ExternalRepoController.summary.fileCount)">Save File Set</a>
               </span>
               <span class="action-item">
@@ -210,7 +210,7 @@ More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
 
                     <!-- <th data-sortable data-type="files" data-field="fileSize">Size</th> -->
                     <th>Size</th>
-                    <th style="text-align:center"><abbr><i class="icon-chart-bar" tooltip="BAM Stats (available only for BAM Files in AWS and Collaboratory)" tooltip-placement="left"></i></abbr></th>
+                    <th style="text-align:center"><abbr><i class="icon-chart-bar" tooltip="BAM & VCF Stats (available only for BAM and VCF Files in AWS and Collaboratory)" tooltip-placement="left"></i></abbr></th>
 
                 </thead>
 

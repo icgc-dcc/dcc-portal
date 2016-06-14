@@ -322,12 +322,35 @@
 
     this.vcfIobio = PortalFeature.get('VCF_IOBIO');
 
-    this.fileInfo = fileInfo;
+    this.fileInfo = isGDCMutationFile(fileInfo) ? handleGDCFile(fileInfo): fileInfo;
     this.stringOrDefault = stringOrDefault;
     this.isEmptyString = isEmptyString;
     this.defaultString = defaultString;
 
     // Private helpers
+    function isGDCMutationFile(fileInfo) {
+      return fileInfo.fileCopies[0].repoCode === 'gdc' && 
+      (fileInfo.dataCategorization.dataType.search(/mutation/i) >= 0 ||
+      fileInfo.dataCategorization.dataType.search(/varia/i) >= 0);
+    }
+
+    function handleGDCFile(fileInfo) {
+      var donor = fileInfo.donors[0];
+      var normalIndex = fileInfo.donors[0].specimenType[0].search(/tumor/i) >= 0 ? 1 : 0;
+
+      ['sampleId', 'specimenId', 'submittedSampleId', 'submittedSpecimenId', 'specimenType',
+      'otherIdentifiers.tcgaSampleBarcode', 'otherIdentifiers.tcgaAliquotBarcode'].forEach(function(path) {
+        var list = _.get(donor, path, []);
+        if (list.length !==2 ) {
+          _.set(donor,path,[]); // DCC-4825 : Better to return nothing than a wrong value. 
+        } else {
+          list.splice(normalIndex,1);
+        }
+      });
+
+      return fileInfo;
+    }
+
     function convertToString (input) {
       return _.isString (input) ? input : (input || '').toString();
     }

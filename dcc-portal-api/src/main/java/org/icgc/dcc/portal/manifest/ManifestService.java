@@ -25,8 +25,10 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
+import static org.icgc.dcc.common.core.util.Joiners.COMMA;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.common.core.util.function.Predicates.distinctByKey;
+import static org.icgc.dcc.portal.model.EntitySetDefinition.SortOrder.DESCENDING;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -50,12 +52,15 @@ import org.icgc.dcc.portal.manifest.writer.GNOSManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.GenericManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.ICGCManifestWriter;
 import org.icgc.dcc.portal.manifest.writer.PDCManifestWriter;
+import org.icgc.dcc.portal.model.BaseEntitySet.Type;
+import org.icgc.dcc.portal.model.EntitySetDefinition;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Repository;
 import org.icgc.dcc.portal.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.repository.FileRepository;
 import org.icgc.dcc.portal.repository.ManifestRepository;
 import org.icgc.dcc.portal.repository.RepositoryRepository;
+import org.icgc.dcc.portal.service.EntitySetService;
 import org.icgc.dcc.portal.service.NotFoundException;
 import org.icgc.dcc.portal.util.MultiPartOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +76,7 @@ import com.sun.jersey.multipart.file.DefaultMediaTypePredictor;
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -84,6 +90,7 @@ public class ManifestService {
    */
   private static final int BUFFER_SIZE = 1024 * 100;
   private static final String FILE_NAME_PREFIX = "manifest";
+  private static final String MANIFEST_SET_NAME = "Saved manifest";
 
   /**
    * Configuration.
@@ -100,6 +107,8 @@ public class ManifestService {
   private final ManifestRepository manifestRepository;
   @NonNull
   private final FileRepository fileRepository;
+  @NonNull
+  private final EntitySetService entitySetService;
 
   public String getFileName(@NonNull Manifest manifest) {
     val repoCode = manifest.getRepos().size() == 1 ? manifest.getRepos().get(0) : null;
@@ -128,11 +137,24 @@ public class ManifestService {
     return manifest;
   }
 
+  @SneakyThrows
   public void saveManifest(@NonNull Manifest manifest) {
     val dataVersion = properties.getRelease().getDataVersion();
 
-    val manifestId = createManifestId();
-    manifest.setId(manifestId);
+    val entitySetDefinition =
+        new EntitySetDefinition(
+            DEFAULT.writeValueAsString(manifest.getFilters()),
+            "id",
+            DESCENDING,
+            MANIFEST_SET_NAME,
+            COMMA.join(manifest.getRepos()),
+            Type.FILE,
+            200000,
+            false);
+
+    val entitySet = entitySetService.createFileEntitySet(entitySetDefinition);
+
+    manifest.setId(entitySet.getId());
     manifest.setVersion(dataVersion);
 
     manifestRepository.save(manifest, dataVersion);
@@ -369,11 +391,6 @@ public class ManifestService {
           file.getRepoDataPath(),
           file.getName());
     }
-  }
-
-  private static UUID createManifestId() {
-    // Prevent "browser scanning" by using an opaque id
-    return UUID.randomUUID();
   }
 
   /**

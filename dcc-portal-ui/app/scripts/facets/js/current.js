@@ -82,6 +82,10 @@
         return true;
       }
 
+      if (_.get(filter, 'controlTerm', '').startsWith(Extensions.ENTITY_PREFIX)) {
+        return true;
+      }
+
       return _.contains (_.get (filter, 'controlFacet', ''), Extensions.ENTITY);
     };
     

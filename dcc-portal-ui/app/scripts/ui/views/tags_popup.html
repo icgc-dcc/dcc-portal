@@ -1,8 +1,9 @@
 <div class="t_suggest_flyout" data-ng-show="showResults()"
-    style="width:{{ ['file', 'donor'].indexOf (results.hits[0].type) > -1 ? '180%' : '100%' }}">
+    style="width:{{ ['file', 'donor'].indexOf (results.hits[0].type) > -1 || entitySetSearch ? '180%' : '100%' }}">
     <table class="t_suggest_flyout__hits">
         <tbody>
-        <tr data-ng-repeat="r in results.hits"
+        <tr data-ng-if="!entitySetSearch"
+            data-ng-repeat="r in results.hits"
             data-ng-mouseover="mouseover($index)"
             data-ng-mouseout="mouseout($index)"
             data-ng-class="{'active':r.active}"
@@ -77,19 +78,30 @@
                 </ul>
             </td>
         </tr>
-        <!--
-        <tr data-ng-if="results.pagination.total > 5"
-            data-ng-click="click()"
+
+        <!-- EntitySet Hits -->
+        <tr data-ng-if="entitySetSearch"
+            data-ng-repeat="r in results.hits"
+            data-ng-mouseover="mouseover($index)"
+            data-ng-mouseout="mouseout($index)"
+            data-ng-class="{'active':r.active}"
+            data-ng-switch="r.type"
+            data-ng-click="click(r)"
             class="t_suggest_flyout__hits__hit">
             <td class="t_suggest_flyout__hits__hit__type">
-                <i class="icon-search icon-2x"></i>
+                <span class="t_badge t_badge__file"></span>
             </td>
             <td class="t_suggest_flyout__hits__hit__text">
-                <span>Press <strong>Enter</strong> for more search results</span>
+                <span>
+                    <span data-ng-bind-html="r.name"></span>
+                </span>
+                <ul class="t_suggest_flyout__hits__hit__text__details">
+                    <li data-ng-bind-html="r.id"></li>
+                    <li data-ng-bind-html="r.description"></li>
+                </ul>
             </td>
-            </a>
         </tr>
-        -->
+
         </tbody>
     </table>
 </div>

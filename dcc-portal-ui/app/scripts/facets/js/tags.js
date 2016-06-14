@@ -87,17 +87,22 @@
     }
     
     function activeEntityHelper(type) {
+      var file = [];
+      var other = [];
+
       if (type === 'file') {
-        return Facets.getActiveTags({
+        file = Facets.getActiveTags({
           type: type,
           facet: Extensions.ENTITY
         });
-      } else {
-        return Facets.getActiveFromTags({
-          type: type,
-          facet: 'id'
-        }, true);
       }
+
+      other = Facets.getActiveFromTags({
+        type: type,
+        facet: 'id'
+      }, true);
+
+      return other.concat(file);
     }
 
     function setup() {
@@ -278,11 +283,20 @@
         type = 'file';
       }
 
-      Facets.removeTerm({
-        type: type,
-        facet: facet,
-        term: term
-      });
+      try {
+        Facets.removeTerm({
+          type: type,
+          facet: facet,
+          term: term
+        });
+      } catch (err) {
+        Facets.removeTerm({
+          type: type,
+          facet: 'id',
+          term: term
+        });
+      }
+
     };
 
     $scope.removeFacet = function () {

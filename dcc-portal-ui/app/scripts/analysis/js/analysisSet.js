@@ -67,8 +67,9 @@
       }
 
 
+      var base = item.type === 'file' ? 'repositories' : 'search';
       var shareParams = {
-        url: LocationService.buildURLFromPath('search' +
+        url: LocationService.buildURLFromPath(base +
                                               (item.advType !== '' ? ('/' +  item.advType) : '')),
         filters: JSON.stringify(item.advFilters)
       };

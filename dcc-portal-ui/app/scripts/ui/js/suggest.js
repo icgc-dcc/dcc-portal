@@ -20,10 +20,11 @@
 angular.module('icgc.ui.suggest', ['ngSanitize', 'icgc.common.text.utils']);
 
 angular.module('icgc.ui.suggest').controller('suggestController',
-  function ($scope, debounce, Keyword, Abridger) {
+  function ($scope, debounce, Keyword, Abridger, SetService) {
   var pageSize = 5, inactive = -1;
 
   $scope.active = inactive;
+  $scope.entitySetSearch = false;
 
   $scope.clearActive = function () {
     if ($scope.results) {
@@ -67,10 +68,21 @@ angular.module('icgc.ui.suggest').controller('suggestController',
 
       Keyword.getList({q: $scope.query, type: $scope.type ? $scope.type : '', size: pageSize})
         .then(function (response) {
-          $scope.isBusy = false;
-          $scope.active = inactive;
-          $scope.activeQuery = saved;
-          $scope.results = response;
+          if ($scope.type === 'file' && _.isEmpty(response.hits)) {
+            SetService.getMetaData($scope.query).then(function(setResponse) {
+              $scope.entitySetSearch = true;
+              $scope.isBusy = false;
+              $scope.active = inactive;
+              $scope.activeQuery = saved;
+              $scope.results = {hits: setResponse};
+            });
+          } else {
+            $scope.entitySetSearch = false;
+            $scope.isBusy = false;
+            $scope.active = inactive;
+            $scope.activeQuery = saved;
+            $scope.results = response;
+          }
         });
     }
   };
@@ -182,7 +194,8 @@ angular.module('icgc.ui.suggest').controller('suggestController',
   $scope.onChange = debounce($scope.onChangeFn, 200, false);
 });
 
-angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $document, $location, RouteInfoService) {
+angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $document, $location, RouteInfoService,
+  Extensions) {
   var dataRepoFileUrl = RouteInfoService.get ('dataRepositoryFile').href;
   var compoundUrl = RouteInfoService.get ('drugCompound').href;
 
@@ -211,6 +224,9 @@ angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $docu
           item = scope.results.hits[0];
         }
 
+        if (scope.entitySetSearch) {
+          item.id = Extensions.ENTITY_PREFIX + item.id;
+        }
         scope.addTerm(item);
         scope.query = '';
       }
@@ -339,7 +355,7 @@ angular.module('icgc.ui.suggest').directive('suggestPopup', function (LocationSe
   };
 });
 
-angular.module('icgc.ui.suggest').directive('tagsPopup', function () {
+angular.module('icgc.ui.suggest').directive('tagsPopup', function (Extensions) {
   return {
     restrict: 'E',
     replace: true,
@@ -356,6 +372,9 @@ angular.module('icgc.ui.suggest').directive('tagsPopup', function () {
       scope.click = function (item) {
         console.info(item);
         scope.query = '';
+        if (scope.entitySetSearch) {
+          item.id = Extensions.ENTITY_PREFIX + item.id;
+        }
         scope.addTerm(item);
       };
     }

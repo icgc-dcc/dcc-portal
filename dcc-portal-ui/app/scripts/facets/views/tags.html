@@ -1,9 +1,16 @@
 <ul class="t_facets__facet">
     <li class="t_facets__facet__title" data-ng-class="{t_facets__facet__title_active:actives.length}">
-        <span data-ng-click="collapsed=!collapsed" class="t_facets__facet__title__label">
+        
+        <span data-ng-click="collapsed=!collapsed" data-ng-if="type !== 'file'" class="t_facets__facet__title__label">
             <i data-ng-class="{'icon-caret-down':!collapsed, 'icon-caret-right':collapsed}"></i>
             {{label}}
         </span>
+
+        <span data-ng-click="collapsed=!collapsed" data-ng-if="type === 'file'"" class="t_facets__facet__title__label">
+            <i data-ng-class="{'icon-caret-down':!collapsed, 'icon-caret-right':collapsed}"></i>
+            <abbr data-tooltip="File ID, Object ID, Submitter Bundle ID, File Set ID, Manifest ID" tooltip-placement="right">{{label}}</abbr>
+        </span>
+        
         <span data-ng-if="actives.length > 0 || (shouldDisplayEntitySetId() && activeEntityIds.length > 0)"
           class="t_facets__facet__terms__inactive__reset t_tools">
             <span class="pull-right t_facets__facet__is__not" 

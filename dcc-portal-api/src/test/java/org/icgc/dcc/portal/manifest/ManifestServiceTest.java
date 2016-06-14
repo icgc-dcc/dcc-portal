@@ -54,6 +54,7 @@ import org.icgc.dcc.portal.repository.BaseElasticSearchTest;
 import org.icgc.dcc.portal.repository.FileRepository;
 import org.icgc.dcc.portal.repository.ManifestRepository;
 import org.icgc.dcc.portal.repository.RepositoryRepository;
+import org.icgc.dcc.portal.service.EntitySetService;
 import org.icgc.dcc.portal.service.IndexService;
 import org.icgc.dcc.portal.test.TestIndex;
 import org.junit.Before;
@@ -123,6 +124,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
     this.testIndex = TestIndex.REPOSITORY;
 
     val repositories = mock(RepositoryRepository.class);
+    val entitySetService = mock(EntitySetService.class);
 
     val gnosRepo = new Repository();
     gnosRepo.setCode("pcawg-heidelberg");
@@ -144,7 +146,8 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
             new PortalProperties(),
             repositories,
             mock(ManifestRepository.class),
-            new FileRepository(es.client(), testIndex.getName(), new IndexService()));
+            new FileRepository(es.client(), testIndex.getName(), new IndexService()),
+            entitySetService);
   }
 
   @Test

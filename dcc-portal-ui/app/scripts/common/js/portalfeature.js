@@ -92,8 +92,7 @@
           ICGC_CLOUD: true,
           SOFTWARE_PAGE: true,
           NOT_FACET: false,
-          VCF_IOBIO: false,
-          FILE_SETS: false
+          VCF_IOBIO: false
        };
 
       this.hasFeature = function(featureID) {
