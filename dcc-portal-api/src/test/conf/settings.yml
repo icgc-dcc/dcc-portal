@@ -3,6 +3,12 @@ http:
   # The root path for the Jersey servlet.
   rootPath: "/api/*"
 
+# Uncomment this for SSL
+#  connectorType: "nonblocking+ssl"
+#  ssl:
+#    keyStore: "src/test/conf/test.jks"
+#    keyStorePassword: "zzz123"  
+
   # HTTP request log settings.
   requestLog:
 
@@ -98,7 +104,7 @@ elastic:
   indexName: etl-test-release17-0-0
   repoIndexName: test-icgc-repository
   nodeAddresses:
-    - host: localhost
+    - host: elasticsearch1.res.oicr.on.ca
       port: 9300
       
   # List of TransportClient settings. 
