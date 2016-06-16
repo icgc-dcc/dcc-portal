@@ -700,5 +700,10 @@
     _ctrl.handleApplicationClick = function () {
       $scope.$broadcast('application:click');
     };
+
+    $scope.$on('$locationChangeStart', function () {
+      $scope.$emit('tooltip::hide');
+    });
+
   });
 })();
