@@ -11,7 +11,8 @@ Requiments
 
 	```
 	npm install -g grunt-cli@0.1.13
-	npm install -g bower@1.3.12`
+	npm install -g bower@1.3.12
+	npm install -g bower-art-resolver
 	```
 
 Setup
