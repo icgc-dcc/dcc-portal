@@ -1,0 +1,50 @@
+{% extends "index.html" %}
+
+{% block body %}
+
+    <script>
+        function popoutPortal() {
+            window.location = $('#portal-frame').attr('src');
+        }
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color:#101010;">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-brand">
+                    <a style="display: block; float:left; margin-right:10px;" target="_blank"
+                       href="https://github.com/{{ slot.pr_author }}">
+                        <img style="width:50px; border-radius:100%; margin:-10px 0px 0px 0px; "
+                             src="{{ slot.avatar_url }}">
+                    </a>
+                    <div style="display: inline-block;">
+                        <a style="display: block" target="_blank"
+                           href="https://github.com/icgc-dcc/dcc-portal/pull/{{ slot.pr }}">
+                            <span style="color: deepskyblue; margin-right: 10px; font-weight: 500;"># {{ slot.pr }}</span><span
+                                style="color:white">{{ slot.pr_title }}</span>
+                        </a>
+                        <span style="margin-top: -1rem; color: darkgrey; font-size: small; display:block;">{{ slot.description }}</span>
+                    </div>
+                </div>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/#slot-{{ slot.id }}"><i class="material-icons">home</i></a></li>
+                    <li><a target="_blank" onclick="popoutPortal()">
+                        <i class="material-icons">launch</i>
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <iframe id="portal-frame" style="width:100%; height: 100vh; margin-top:60px; border: none;" src="{{ slot.url }}"></iframe>
+
+{% endblock %}

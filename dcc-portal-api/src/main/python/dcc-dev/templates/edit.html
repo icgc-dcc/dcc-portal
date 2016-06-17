@@ -1,0 +1,113 @@
+{% extends "index.html" %}
+
+{% block body %}
+
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <img style="display: inline-block;" width="23" src="/static/icgc-logo.png">
+                    <span>DCC Development Server</span>
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Edit</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a target="_blank" href="http://oicr.on.ca"><img style="height:20px;"
+                                                                         src="/static/OICR2logo.png"></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+
+            <input type="hidden" name="slot_id" id="slot_id" value="{{ slot.id }}">
+
+            <form class="form-horizontal col-md-12" action="/save/{{ slot.id }}" method="post">
+                <h2>Info</h2>
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Name</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" name="name" id="name" placeholder="name"
+                               value="{{ slot.name }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description" class="col-sm-2 control-label">Description</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" name="description" id="description"
+                               placeholder="For ticket DCC-XXXX"
+                               value="{{ slot.description }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="directory" class="col-sm-2 control-label">Directory</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" name="directory" id="directory"
+                               placeholder="/bar/foo/dcc-portal"
+                               value="{{ slot.directory }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="url" class="col-sm-2 control-label">URL</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" name="url" id="url" placeholder="https://localhost:XXXX"
+                               value="{{ slot.url }}">
+                    </div>
+                </div>
+
+                <h2>Build</h2>
+
+                <div class="form-group radio">
+                    <div class="col-sm-offset-2">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="prRadios" value="0" checked>
+                                Do not deploy a new build.
+                            </label>
+                        </div>
+                    </div>
+
+                    {% for pr in prs %}
+                        <div class="col-sm-offset-2">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="prRadios" value="{{ pr.number }}">
+                                    #{{ pr.number }} - {{ pr.head.ref }} -
+                                    {{ pr.user.login }} <img style="border-radius:100%; width:35px;"
+                                                             src="{{ pr.user.avatar_url }}">
+                                    <a target="_blank" href="{{ pr.html_url }}">View on Github</a>
+                                </label>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+                <div class="form-group" style="margin-top: 50px;">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button title="Clicking this will make your wildest dreams come true." type="submit"
+                                class="btn btn-raised btn-info">Submit
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

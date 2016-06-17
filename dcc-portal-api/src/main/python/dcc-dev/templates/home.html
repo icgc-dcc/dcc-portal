@@ -1,0 +1,154 @@
+{% extends "index.html" %}
+
+{% block body %}
+
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img style="display: inline-block;" width="23" src="/static/icgc-logo.png">
+                    <span>DCC Development Server</span>
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Admin</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a target="_blank" href="http://oicr.on.ca"><img style="height:20px;"
+                                                                         src="/static/OICR2logo.png"></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <h1>Current Available Slots:</h1>
+        </div>
+
+        {% for slot in slots %}
+            <div class="row">
+                <a name="slot-{{ slot.id }}"></a>
+                <div class="col-md-12 jumbotron">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <table class="table table-condensed table-hover">
+                                <tbody>
+
+                                <tr>
+                                    <td>Slot #</td>
+                                    <td>{{ slot.id }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{{ slot.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Description</td>
+                                    <td>{{ slot.description }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Directory</td>
+                                    <td>{{ slot.directory }}</td>
+                                </tr>
+                                <tr>
+                                    <td>URL</td>
+                                    <td><a target="_blank" href="{{ slot.url }}">{{ slot.url }}</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-condensed table-hover col-md-6">
+                                <tbody>
+                                <tr>
+                                    <td>Pull Request #</td>
+                                    <td><a target="_blank"
+                                           href="https://github.com/icgc-dcc/dcc-portal/pull/{{ slot.pr }}">{{ slot.pr }}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Pull Request Title</td>
+                                    <td>
+                                        <a target="_blank"
+                                           href="https://github.com/icgc-dcc/dcc-portal/pull/{{ slot.pr }}">{{ slot.pr_title }}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Pull Request Author</td>
+                                    <td><a target="_blank" href="https://github.com/{{ slot.pr_author }}">
+                                        <img style="border-radius:100%; width:20px; margin-right:0.5rem;"
+                                             src="{{ slot.avatar_url }}">{{ slot.pr_author }}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Build Number</td>
+                                    <td>
+                                        <a target="_blank"
+                                           href="http://dcc-jenkins1.oicr.on.ca:8080/job/dcc-portal-pr/{{ slot.build_number }}/">{{ slot.build_number }}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Branch Name</td>
+                                    <td>{{ slot.branch }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Commit ID</td>
+                                    <td>
+                                        <a target="_blank"
+                                           href="https://github.com/icgc-dcc/dcc-portal/pull/{{ slot.pr }}/commits/{{ slot.commit_id }}">{{ slot.commit_id }}</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="col-md-10">
+                            {% if slot.status == 1 %}
+                                <a class="btn btn-raised btn-warning" href="/stop/{{ slot.id }}" role="button">Stop</a>
+                                <a class="btn btn-raised btn-success" role="button" disabled="disabled">Start</a>
+                                <a class="btn btn-raised btn-default" href="/edit/{{ slot.id }}" role="button">Edit</a>
+                                <a class="btn btn-raised btn-primary" href="/view/{{ slot.id }}" role="button">View
+                                    Portal»</a>
+                            {% else %}
+                                <a class="btn btn-raised btn-warning" role="button" disabled="disabled">Stop</a>
+                                <a class="btn btn-raised btn-success" href="/start/{{ slot.id }}"
+                                   role="button">Start</a>
+                                <a class="btn btn-raised btn-default" href="/edit/{{ slot.id }}" role="button">Edit</a>
+                                <a class="btn btn-raised btn-primary" role="button" disabled="disabled">View
+                                    Portal »</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-2">
+                            <span>
+                                {% if slot.status == 1 %}
+                                    <a href="/log/{{ slot.id }}" class="btn btn-success btn-fab" style="float:right">
+                                        <i class="material-icons">sentiment_satisfied</i>
+                                    </a>
+                                {% elif slot.status == 0 %}
+                                    <a href="/log/{{ slot.id }}" class="btn btn-default btn-fab" style="float:right">
+                                        <i class="material-icons">sentiment_neutral</i>
+                                    </a>
+                                {% elif slot.status == -1 %}
+                                    <a href="/log/{{ slot.id }}" class="btn btn-danger btn-fab" style="float:right">
+                                        <i class="material-icons">sentiment_very_dissatisfied</i>
+                                    </a>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
