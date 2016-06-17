@@ -118,13 +118,13 @@ Admin
                     <div>
                         <div class="col-md-10 col-xs-10">
                             {% if slot.status == 1 %}
-                                <a class="btn btn-raised btn-warning" href="/stop/{{ slot.id }}" role="button">Stop</a>
+                                <a class="btn btn-raised btn-danger" href="/stop/{{ slot.id }}" role="button">Stop</a>
                                 <a class="btn btn-raised btn-success" role="button" disabled="disabled">Start</a>
                                 <a class="btn btn-raised btn-default" href="/edit/{{ slot.id }}" role="button">Edit</a>
                                 <a class="btn btn-raised btn-primary" href="/view/{{ slot.id }}" role="button">View
                                     Portal »</a>
                             {% else %}
-                                <a class="btn btn-raised btn-warning" role="button" disabled="disabled">Stop</a>
+                                <a class="btn btn-raised btn-danger" role="button" disabled="disabled">Stop</a>
                                 <a class="btn btn-raised btn-success" href="/start/{{ slot.id }}"
                                    role="button">Start</a>
                                 <a class="btn btn-raised btn-default" href="/edit/{{ slot.id }}" role="button">Edit</a>
