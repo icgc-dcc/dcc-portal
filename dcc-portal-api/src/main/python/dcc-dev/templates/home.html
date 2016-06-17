@@ -1,5 +1,9 @@
 {% extends "index.html" %}
 
+{% block title %}
+Admin
+{% endblock %}
+
 {% block body %}
 
     <nav class="navbar navbar-default navbar-static-top">
@@ -37,7 +41,7 @@
         {% for slot in slots %}
             <div class="row">
                 <a name="slot-{{ slot.id }}"></a>
-                <div class="col-md-12 jumbotron">
+                <div class="col-md-12 col-xs-12 jumbotron">
                     <div class="col-md-12">
                         <div class="col-md-6">
                             <table class="table table-condensed table-hover">
@@ -112,13 +116,13 @@
                         </div>
                     </div>
                     <div>
-                        <div class="col-md-10">
+                        <div class="col-md-10 col-xs-10">
                             {% if slot.status == 1 %}
                                 <a class="btn btn-raised btn-warning" href="/stop/{{ slot.id }}" role="button">Stop</a>
                                 <a class="btn btn-raised btn-success" role="button" disabled="disabled">Start</a>
                                 <a class="btn btn-raised btn-default" href="/edit/{{ slot.id }}" role="button">Edit</a>
                                 <a class="btn btn-raised btn-primary" href="/view/{{ slot.id }}" role="button">View
-                                    Portal»</a>
+                                    Portal »</a>
                             {% else %}
                                 <a class="btn btn-raised btn-warning" role="button" disabled="disabled">Stop</a>
                                 <a class="btn btn-raised btn-success" href="/start/{{ slot.id }}"
@@ -128,7 +132,7 @@
                                     Portal »</a>
                             {% endif %}
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-xs-2">
                             <span>
                                 {% if slot.status == 1 %}
                                     <a href="/log/{{ slot.id }}" class="btn btn-success btn-fab" style="float:right">
