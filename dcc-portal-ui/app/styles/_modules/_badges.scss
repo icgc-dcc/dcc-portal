@@ -117,8 +117,6 @@ h1 {
   vertical-align: super;
 } */
 
-
-
 .t_badge__project, .t_badge__projects {
   background: $project;
 }
@@ -147,6 +145,65 @@ h1 {
   background: $magenta;
 }
 
+.t_badge__label {
+  text-transform: capitalize;
+
+  // TODO: use a sass map and a loop to create this instead of manually listing
+  // will cut down 
+  // Blocked by: requires sass 3.3 for map
+
+  .type-gene & {
+    color: $gene;
+  }
+
+  .type-donor & {
+    color: $donor;
+  }
+
+  .type-mutation & {
+    color: $mutation;
+  }
+
+  .type-pathway & {
+    color: $pathway;
+  }
+
+  .type-geneset & {
+    color: $pathway;
+  }
+
+  .type-compound & {
+    color: $compound;
+  }
+
+  .type-file & {
+    color: $file;
+  }
+
+  .type-project & {
+    color: $project;
+  }
+
+  .type-advanced & {
+    color: $blue;
+  }
+
+  .type-analysis & {
+    color: $mauve;
+  }
+
+  .type-download & {
+    color: $cyan;
+  }
+
+  .type-data_repositories & {
+    color: $repositories;
+  }
+
+  .type-q & {
+    color: $magenta;
+  }
+}
 
 .pcawg-badge {
   font-size: 0.5rem;

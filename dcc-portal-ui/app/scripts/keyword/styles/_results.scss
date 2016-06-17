@@ -5,8 +5,15 @@
 .t_quick__hit {
 }
 
+.t_quick__hit__title {
+  font-size: 1.2em;
+}
+
 .t_quick__hit__type {
-  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .t_quick__hit__text {
@@ -22,8 +29,8 @@
   font: {
     style: normal;
     weight: 700;
-  }
-  ;
+  };
+
   padding-right: .5rem;
   margin-right: .5rem;
 
@@ -36,6 +43,10 @@
 
 .t_quick__hit__text__details__value {
   font-style: italic;
+  white-space: nowrap;
+  padding-right: 1rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .results_show_more_bar {

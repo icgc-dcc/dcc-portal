@@ -49,13 +49,14 @@
     </div>
     <section>
         <table class="t_quick">
-            <tr data-ng-repeat="r in results.hits" data-ng-switch="r.type" class="t_quick__hit">
+            <tr data-ng-repeat="r in results.hits" data-ng-switch="r.type" class="t_quick__hit type-{{r.type}}">
                 <td class="t_quick__hit__type">
                     <span class="{{ badgeStyleClass (r.type) }}" />
+                    <div class="t_badge__label">{{r.type}}</div>
                 </td>
 
                 <td class="t_quick__hit__text" data-ng-switch-when="compound">
-                    <a href="{{ compoundEntityUrl }}{{ r.id }}" data-ng-bind-html="r.name | highlight: activeQuery"></a>
+                    <a class="t_quick__hit__title" href="{{ compoundEntityUrl }}{{ r.id }}" data-ng-bind-html="r.name | highlight: activeQuery"></a>
 
                     <ul class="t_quick__hit__text__details">
                         <li>
@@ -115,7 +116,7 @@
                 </td>
 
                 <td class="t_quick__hit__text" data-ng-switch-when="file">
-                    <a href="{{ dataRepoFileUrl }}{{ r.id }}" data-ng-bind-html="r.id | highlight:activeQuery"></a>
+                    <a class="t_quick__hit__title" href="{{ dataRepoFileUrl }}{{ r.id }}" data-ng-bind-html="r.id | highlight:activeQuery"></a>
 
                     <ul class="t_quick__hit__text__details">
                         <li>
@@ -143,7 +144,7 @@
                     </ul>
                 </td>
                 <td class="t_quick__hit__text" data-ng-switch-when="gene">
-                    <a href="/genes/{{r.id}}" data-ng-bind-html="r.symbol | highlight:activeQuery "></a>
+                    <a class="t_quick__hit__title" href="/genes/{{r.id}}" data-ng-bind-html="r.symbol | highlight:activeQuery "></a>
                     <ul class="t_quick__hit__text__details">
                         <li>
                             <span class="t_quick__hit__text__details__label">Name</span>
@@ -168,7 +169,7 @@
                     </ul>
                 </td>
                 <td class="t_quick__hit__text" data-ng-switch-when="donor">
-                    <a href="/donors/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <a class="t_quick__hit__title" href="/donors/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
                     <ul class="t_quick__hit__text__details">
                         <li>
                             <span class="t_quick__hit__text__details__label">Project</span>
@@ -194,7 +195,7 @@
                     </ul>
                 </td>
                 <td class="t_quick__hit__text" data-ng-switch-when="mutation">
-                    <a href="/mutations/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <a class="t_quick__hit__title" href="/mutations/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
                     <ul class="t_quick__hit__text__details">
                         <li>
                             <span class="t_quick__hit__text__details__label">DNA Changes</span>
@@ -209,7 +210,7 @@
                     </ul>
                 </td>
                 <td class="t_quick__hit__text" data-ng-switch-when="project">
-                    <a href="/projects/{{r.id}}" data-ng-bind-html="r.name | highlight:activeQuery "></a>
+                    <a class="t_quick__hit__title" href="/projects/{{r.id}}" data-ng-bind-html="r.name | highlight:activeQuery "></a>
                     <ul class="t_quick__hit__text__details">
                         <li>
                             <span class="t_quick__hit__text__details__label">Primary Site</span>
@@ -229,7 +230,7 @@
                     </ul>
                 </td>
                 <td class="t_quick__hit__text" data-ng-switch-when="pathway">
-                    <a href="/genesets/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <a class="t_quick__hit__title" href="/genesets/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
                     <ul class="t_quick__hit__text__details">
                         <li>
                             <span class="t_quick__hit__text__details__label">Gene Set Type</span>
@@ -242,7 +243,7 @@
                     </ul>
                 </td>
                 <td class="t_quick__hit__text" data-ng-switch-when="go_term">
-                    <a href="/genesets/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <a class="t_quick__hit__title" href="/genesets/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
                     <ul class="t_quick__hit__text__details">
                         <li>
                             <span class="t_quick__hit__text__details__label">Gene Set Type</span>
@@ -259,7 +260,7 @@
                     </ul>
                 </td>
                 <td class="t_quick__hit__text" data-ng-switch-when="curated_set">
-                    <a href="/genesets/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
+                    <a class="t_quick__hit__title" href="/genesets/{{r.id}}" data-ng-bind-html="r.id | highlight:activeQuery "></a>
                     <ul class="t_quick__hit__text__details">
                         <li>
                             <span class="t_quick__hit__text__details__label">Gene Set Type</span>
