@@ -7,15 +7,20 @@
   </div>
   <div class="modal-body" style="max-height:none;padding-bottom:0">
     <br>
-    <div
-         data-copy-to-clip data-copy-data="shortUrl" data-show-copy-tips="true"
-         data-on-copy-success-message="Share Link copied!"
-         data-on-copy-focus-on="#shortURLInput"
-         data-on-hover-message="Click here to copy the Share Link to your clipboard."
-         data-prompt-on-copy="false">
-      <input id="shortURLInput" placeholder="Loading..." class="input-block-level" type="text" value={{shortUrl}} />
-      <span class="icon-clippy" />
-    </div>
+    <input id="shortURLInput" placeholder="Loading..." class="input-block-level" type="text" value={{shortUrl}} />
+
+    <span
+       class="clip-icon"
+       data-copy-to-clip
+       data-copy-data="shortUrl"
+       data-show-copy-tips="true"
+       data-prompt-on-copy="false"
+       data-on-hover-message="Click to copy"
+       data-on-copy-success-message="Share Link copied!"
+       data-on-copy-focus-on="#shortURLInput">
+       <span class="icon-clippy"></span>
+    </span>
+
     <p data-ng-if="! customPopupDisclaimer">
       <small>You can also copy the link from your browser's address bar.</small>
     </p>

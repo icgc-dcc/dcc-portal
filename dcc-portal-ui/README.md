@@ -40,7 +40,7 @@ Setup
 Run
 ---
 
-- Start node development server: `grunt server`
+- Start node development server: `npm run dev`
 
 - Start the [Portal API](../dcc-portal-api/README.md)
 

@@ -34,6 +34,18 @@
       float: right;
       font-style: italic;
    }
+
+   .token-cell {
+      position: relative;
+      width: 20rem;
+      padding-right: 20px;
+      .clip-icon {
+         position: absolute;
+         top: 2px;
+         right: 3px;
+      }
+   }
+
    .token-id {
       height: 1.5rem;
       font-family: monospace;

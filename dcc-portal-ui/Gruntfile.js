@@ -23,6 +23,8 @@ var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
 
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -111,14 +113,23 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9000,
-        protocol: 'http',
+        protocol: 'https',
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost'
+        hostname: 'local.dcc.icgc.org'
       },
+      proxies: [
+        {
+          context: '/api',
+          host: 'localhost',
+          port: 8080,
+          https: false
+        }
+      ],
       livereload: {
         options: {
           middleware: function (connect) {
             return [
+              proxySnippet,
               modRewrite([
                 '!\\.html|\\images|\\.js|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.svg ' +
                 '/' + yeomanConfig.developIndexFile + ' [L]'
@@ -459,6 +470,7 @@ module.exports = function (grunt) {
       'ICGC-setBuildEnv:development',
       'injector:dev',
       'clean:server',
+      'configureProxies:server',
       'concurrent:server',
       'connect:livereload',
       //'open',

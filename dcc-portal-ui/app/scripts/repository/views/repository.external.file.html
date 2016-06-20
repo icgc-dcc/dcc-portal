@@ -43,16 +43,23 @@
         <th>Object ID</th>
         <td>
           <div ng-init="objectId = fileCtrlr.stringOrDefault (info.objectId);">
-            <div ng-if="objectId !== fileCtrlr.defaultString"
-                 data-copy-to-clip data-copy-data="objectId" data-show-copy-tips="true"
-                 data-on-copy-success-message="File Object ID copied!"
-                 data-on-copy-focus-on="#fileObjectID"
-                 data-on-hover-message="Click here to copy the Object ID to your clipboard."
-                 data-prompt-on-copy="false">
-                <span class="icon-clippy"></span>
-                <span id="fileObjectID" data-ng-bind="objectId">
-                </span>
-            </div>
+
+            <span id="fileObjectID" data-ng-bind="objectId"> </span>
+
+            <span
+              ng-if="dataBundleId !== fileCtrlr.defaultString"
+              class="clip-icon"
+              data-copy-to-clip
+              data-copy-data="objectId"
+              data-show-copy-tips="true"
+              data-prompt-on-copy="false"
+              data-on-copy-success-message="Copied!"
+              data-on-copy-focus-on="#fileObjectID"
+              data-on-hover-message="Copy to clipboard"
+            >
+               <span class="icon-clippy"></span>
+            </span>
+
             <span ng-if="objectId === fileCtrlr.defaultString" data-ng-bind="objectId" />
           </div>
         </td>
@@ -61,15 +68,22 @@
         <th>Submitter Bundle ID</th>
         <td>
           <div ng-init="dataBundleId = fileCtrlr.stringOrDefault (info.dataBundle.dataBundleId);">
-            <div ng-if="dataBundleId !== fileCtrlr.defaultString"
-                 data-copy-to-clip data-copy-data="dataBundleId" data-show-copy-tips="true"
-                 data-on-copy-success-message="Bundle ID copied!"
-                 data-on-copy-focus-on="#dataBundleID"
-                 data-on-hover-message="Click here to copy the Bundle ID to your clipboard."
-                 data-prompt-on-copy="false">
-                <span class="icon-clippy" />
-                <span id="dataBundleID" data-ng-bind="dataBundleId" />
-            </div>
+            <span id="dataBundleID" data-ng-bind="dataBundleId" />
+
+            <span
+              ng-if="dataBundleId !== fileCtrlr.defaultString"
+              class="clip-icon"
+              data-copy-to-clip
+              data-copy-data="dataBundleId"
+              data-show-copy-tips="true"
+              data-prompt-on-copy="false"
+              data-on-copy-success-message="Copied!"
+              data-on-copy-focus-on="#dataBundleID"
+              data-on-hover-message="Copy to clipboard"
+            >
+               <span class="icon-clippy"></span>
+            </span>
+
             <span ng-if="dataBundleId === fileCtrlr.defaultString" data-ng-bind="dataBundleId" />
           </div>
         </td>

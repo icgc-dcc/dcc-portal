@@ -71,7 +71,20 @@
                   <td colspan="5">No active tokens</td>
                </tr>
                <tr data-ng-repeat="token in activeTokens | orderBy:'expiresIn':true" data-ng-if="processing===false">
-                  <td><input type="text" class="token-id" readonly select-on-click value="{{token.id}}"></td>
+                  <td class="token-cell">
+                     <input type="text" class="token-id" readonly select-on-click value="{{token.id}}">
+
+                     <span
+                        class="clip-icon"
+                        data-copy-to-clip
+                        data-copy-data="token.id"
+                        data-show-copy-tips="true"
+                        data-prompt-on-copy="false"
+                        data-on-copy-success-message="Token copied!"
+                        data-on-copy-focus-on="input[type='text']">
+                        <span class="icon-clippy"></span>
+                     </span>
+                  </td>
                   <td style="max-width:20rem">{{token.description}}</td>
                   <td>
                      <span data-ng-repeat="scope in token.scope" class="badge token-badge" style="font-weight: normal">{{scope}}</span>

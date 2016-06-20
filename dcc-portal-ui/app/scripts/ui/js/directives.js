@@ -518,7 +518,8 @@ angular.module('icgc.ui.copyPaste', [])
                 _messageConfirmationBody.html(msg);
                   
                 _messageBubble.css({ 
-                    top: - (_messageBubble.outerHeight() + 3)
+                    top: - (_messageBubble.outerHeight() + 3),
+                    left: _targetElement.outerWidth()/2 - (_messageBubble.outerWidth()/2)
                 });
 
                 _messageBubble.fadeIn('fast');
@@ -597,7 +598,7 @@ angular.module('icgc.ui.copyPaste', [])
                   'aftercopy': function () { 
                     // Execute this in the angular context...
                     scope.$apply(scope.onCopy);
-                    _showTipMessage(true);
+                    _showTipMessage(true, null, 1300);
                     
                     // After the first copy if native copy is supported
                     // kill this client
@@ -638,7 +639,7 @@ angular.module('icgc.ui.copyPaste', [])
                         scope.onCopy();
                       }
 
-                      _showTipMessage(true);
+                      _showTipMessage(true, null, 1300);
 
                     }
                     catch (e) {

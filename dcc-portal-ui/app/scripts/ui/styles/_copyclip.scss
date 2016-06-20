@@ -1,6 +1,7 @@
 $copyClipBubbleBG: $tooltipFill;//#000;
 $borderColour: $tooltipBorder;
 $shadowColor: $tooltipShadowColor;
+$iconColor: #e9931c;
 
 .copy-to-clip {
   position: relative;
@@ -10,6 +11,10 @@ $shadowColor: $tooltipShadowColor;
    
   //}
 
+  .icon-clippy {
+    color: $iconColor;
+  }
+
 
  .copy-to-clip-message-container {
    background: $copyClipBubbleBG;
@@ -18,10 +23,9 @@ $shadowColor: $tooltipShadowColor;
    //color: #fff;
    color: #000;
    left: 10%;
-   width: 14rem;
    top: -3px;
    text-align: center;
-   padding: 5px;
+   padding: 5px 11px;
    font-weight: 300;
    line-height: 1.6rem;
    font-size: .9rem;
@@ -33,6 +37,7 @@ $shadowColor: $tooltipShadowColor;
    -webkit-filter: drop-shadow(0 1px 3px $shadowColor);
    -moz-box-shadow: 0 1px 3px $shadowColor;
    filter: drop-shadow(0 1px 3px $shadowColor);
+   white-space: nowrap;
 
    &:after {
      border-width: 6px;
@@ -44,8 +49,8 @@ $shadowColor: $tooltipShadowColor;
    
    .arrow {
      position: absolute;
-     left: 45%;
      top: 100%;
+     left: calc(50% - 8px);
      content: ' ';
      border-left: 8px solid transparent;
      border-right: 8px solid transparent;
