@@ -32,10 +32,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.util.resource.Resource;
 import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.filter.CachingFilter;
-import org.icgc.dcc.portal.filter.CrossOriginFilter;
 import org.icgc.dcc.portal.filter.DownloadFilter;
 import org.icgc.dcc.portal.filter.VersionFilter;
 import org.icgc.dcc.portal.spring.SpringService;
@@ -81,6 +81,16 @@ public class PortalMain extends SpringService<PortalProperties> {
   public void run(PortalProperties config, Environment environment) throws Exception {
     environment.setBaseResource(getBaseResource());
 
+    // Enable CORS headers
+    environment.addFilter(CrossOriginFilter.class, "/*")
+        .setInitParam(CrossOriginFilter.ALLOWED_METHODS_PARAM, "HEAD,GET,PUT,POST,DELETE,OPTIONS")
+        .setInitParam(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*")
+        .setInitParam(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*")
+        .setInitParam(CrossOriginFilter.ALLOWED_HEADERS_PARAM,
+            "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin")
+        .setInitParam(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, "true");
+
+    // Enable URL rewriting
     environment.addFilter(UrlRewriteFilter.class, "/*")
         .setInitParam("confPath", "urlrewrite.xml")
         .setInitParam("statusEnabled", "false");
@@ -99,7 +109,6 @@ public class PortalMain extends SpringService<PortalProperties> {
     environment.setJerseyProperty(PROPERTY_CONTAINER_RESPONSE_FILTERS,
         ImmutableList.of(LoggingFilter.class.getName(),
             VersionFilter.class.getName(),
-            CrossOriginFilter.class.getName(),
             CachingFilter.class.getName()));
 
     // Remove so we can replace with JSON

@@ -64,6 +64,11 @@
       <version>${dropwizard.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.yammer.dropwizard</groupId>
+      <artifactId>dropwizard-jdbi</artifactId>
+      <version>${dropwizard.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.github.nhuray</groupId>
       <artifactId>dropwizard-spring</artifactId>
       <version>${dropwizard-spring.version}</version>
@@ -104,6 +109,18 @@
       <artifactId>groovy-all</artifactId>
     </dependency>
 
+    <!-- Servlets -->
+    <dependency>
+      <groupId>com.sun.jersey.contribs</groupId>
+      <artifactId>jersey-multipart</artifactId>
+      <version>1.17.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlets</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    
     <!-- Spring -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -144,6 +161,11 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2.version}</version>
     </dependency>
 
     <!-- Hazelcast -->
@@ -205,6 +227,7 @@
       <artifactId>jersey-client</artifactId>
       <version>${jersey.version}</version>
     </dependency>
+    
 
     <!-- Test -->
     <dependency>
@@ -236,26 +259,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.sun.jersey.contribs</groupId>
-      <artifactId>jersey-multipart</artifactId>
-      <version>1.17.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.yammer.dropwizard</groupId>
-      <artifactId>dropwizard-jdbi</artifactId>
-      <version>${dropwizard.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>${h2.version}</version>
-    </dependency>
-    <dependency>
       <groupId>com.fasterxml.staxmate</groupId>
       <artifactId>staxmate</artifactId>
       <version>2.3.0</version>
       <scope>test</scope>
     </dependency>
+    
     <!-- For sending emails -->
     <dependency>
       <groupId>dumbster</groupId>
@@ -298,7 +307,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -343,6 +352,9 @@
     <!-- Versions - Dropwizard -->
     <dropwizard.version>0.6.2</dropwizard.version>
     <dropwizard-spring.version>0.2</dropwizard-spring.version>
+    
+    <!-- Versions - Servlets -->
+    <jetty.version>8.1.10.v20130312</jetty.version>
 
     <!-- Versions - Spring -->
     <spring.version>4.1.1.RELEASE</spring.version>
