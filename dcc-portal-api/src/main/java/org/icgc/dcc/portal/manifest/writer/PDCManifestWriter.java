@@ -18,10 +18,12 @@
 package org.icgc.dcc.portal.manifest.writer;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.icgc.dcc.common.core.util.Joiners.WHITESPACE;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.util.Set;
 
 import org.icgc.dcc.portal.manifest.model.ManifestFile;
@@ -51,16 +53,35 @@ public class PDCManifestWriter {
   private static String createManifest(Set<String> urls) throws IOException {
     val manifest = new StringBuilder(readTemplate());
     for (val url : urls) {
+      val endpointUrl = resolveEndpointURL(url);
       val remoteFile = formatS3URL(url);
       val localFile = ".";
-      manifest.append("aws s3 cp ").append(remoteFile).append(" ").append(localFile).append('\n');
+      val command =
+          formatCommand(
+              "aws",
+              "--profile", "pdc",
+              "--endpoint-url", endpointUrl,
+              "s3", "cp",
+              remoteFile, localFile);
+
+      manifest.append(command).append('\n');
     }
 
     return manifest.toString();
   }
 
+  @SneakyThrows
+  private static String resolveEndpointURL(String value) {
+    val url = new URL(value);
+    return url.getProtocol() + "://" + url.getHost();
+  }
+
   private static String formatS3URL(String url) {
-    return url.replace("https://", "s3://").replaceFirst("/?$", "");
+    return url.replace(resolveEndpointURL(url) + "/", "s3://");
+  }
+
+  private static String formatCommand(String... args) {
+    return WHITESPACE.join(args);
   }
 
   private static String readTemplate() throws IOException {

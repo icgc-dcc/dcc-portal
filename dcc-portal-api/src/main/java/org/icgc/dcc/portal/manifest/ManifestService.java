@@ -371,8 +371,8 @@ public class ManifestService {
     return DOT.join(FILE_NAME_PREFIX, repo.getCode(), timestamp, ext);
   }
 
-  private static String formatFileURL(String baseUrl, String dataPath, String id) {
-    return Stream.of(baseUrl, dataPath, id)
+  private static String formatFileURL(String... parts) {
+    return Stream.of(parts)
         .map(part -> part.replaceAll("^/+|/+$", ""))
         .collect(joining("/"));
   }
@@ -385,6 +385,10 @@ public class ManifestService {
           file.getDataBundleId());
     } else if (repo.isGDC()) {
       return file.getRepoFileId();
+    } else if (repo.isPDC()) {
+      return formatFileURL(
+          file.getRepoBaseUrl(),
+          file.getRepoDataPath());
     } else {
       return formatFileURL(
           file.getRepoBaseUrl(),

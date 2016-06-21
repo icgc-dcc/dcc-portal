@@ -418,6 +418,8 @@
         ];
 
         parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath, fileCopy.repoFileId, '?expand=' + expands.join(',')];
+      } else if (isPDC (fileCopy.repoType)) {
+        parts = ['https://griffin-objstore.opensciencedatacloud.org', fileCopy.repoMetadataPath];
       } else {
         parts = [fileCopy.repoBaseUrl, fileCopy.repoMetadataPath, fileInfo.dataBundle.dataBundleId];
       }
@@ -444,7 +446,7 @@
 
     this.shouldShowMetaData = function (repoType) {
       /* JJ: Quality is too low: || isEGA (repoType) */
-      return isGnos (repoType) || isS3 (repoType) || isGDC (repoType);
+      return isGnos (repoType) || isS3 (repoType) || isGDC (repoType) || isPDC(repoType);
     };
 
     this.isS3 = isS3;

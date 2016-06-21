@@ -11,4 +11,11 @@
 #
 #   https://bionimbus-pdc.opensciencedatacloud.org/
 #
+# Script assumes a valid ~/.aws/credentials file with a valid `pdc` profile:
+# 
+#   $ cat ~/.aws/credentials
+#   [pdc]
+#   aws_access_key_id=<your key id here>
+#   aws_secret_access_key=<your secret here>
+#
 
