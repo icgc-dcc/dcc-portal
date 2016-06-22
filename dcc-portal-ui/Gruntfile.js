@@ -90,7 +90,7 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}',
                 '<%= yeoman.app %>/scripts/**/styles/*.{scss,sass}',
                 '<%= yeoman.app %>/vendor/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server']
+        tasks: ['compass:server', 'autoprefixer']
       },
       injector: {
         files: ['<%= yeoman.app %>/index.html'],
@@ -237,6 +237,14 @@ module.exports = function (grunt) {
         options: {
           //debugInfo: true
         }
+      }
+    },
+    autoprefixer: {
+      options: {
+        browsers: ['last 1 version', '> 1%', 'ie 11']
+      },
+      files: {
+        '<%= yeoman.app %>/styles/styles.css': ['<%= yeoman.app %>/styles/styles.css']
       }
     },
     // not used since Uglify task does concat,
@@ -495,6 +503,7 @@ module.exports = function (grunt) {
     'ICGC-setBuildEnv:production',
     'clean:dist',
     'compass:dist', // run in case files were changed outside of grunt server (dev environment)
+    'autoprefixer',
     'bower-install',
     'jshint',
     'peg',
