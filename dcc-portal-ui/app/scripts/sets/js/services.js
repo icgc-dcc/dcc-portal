@@ -323,6 +323,34 @@
       return promise;
     };
 
+    _service.createSetFromSingleFile = function (fileId, size) {
+      Page.startWork();
+      var params = {
+        name: fileId + ' donors',
+        description: '',
+        sortBy: 'fileName',
+        sortOrder: 'DESCENDING',
+        filters: {
+          file: {
+            is: [fileId]
+          }
+        },
+        isTranient: true,
+        size: size
+      };
+
+      var data = params2JSON('donor', params);
+      var promise = Restangular.one('entityset').one('external')
+        .post(undefined, data, {}, { 'Content-Type': 'application/json' });
+      promise.then(function (data) {
+        Page.stopWork();
+        var newFilter = JSON.stringify({ donor: { id: { is: [Extensions.ENTITY_PREFIX + data.id] } } });
+        FilterService.filters(newFilter);
+        $location.path('/search').search('filters', newFilter);
+      });
+      return promise;
+    };
+
 
     /**
      * params.union

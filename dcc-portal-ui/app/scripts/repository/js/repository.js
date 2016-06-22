@@ -305,7 +305,7 @@
    * Controller for File Entity page
    */
   module.controller('ExternalFileInfoController',
-    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature) {
+    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature, SetService) {
 
     Page.setTitle('Repository File');
     Page.setPage('externalFileEntity');
@@ -372,6 +372,13 @@
     function isCollab (repoCode) {
       return equalsIgnoringCase (repoCode, 'collaboratory');
     }
+
+    /**
+     * View single file with many donors in Advanced Search
+     */
+    this.viewFileInSearch = function () {
+      SetService.createSetFromSingleFile(fileInfo.id, fileInfo.donors.length);
+    };
 
     // Public functions
     this.projectName = function (projectCode) {
@@ -661,6 +668,13 @@
       params.size = limit;
       params.isTransient = true;
       SetService.createForwardRepositorySet ('donor', params, '/search');
+    };
+
+    /**
+     * View single file with many donors in Advanced Search
+     */
+    _ctrl.viewFileInSearch = function (fileId, limit) {
+      SetService.createSetFromSingleFile(fileId, limit);
     };
 
     /**

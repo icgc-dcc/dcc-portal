@@ -250,9 +250,13 @@
 </section>
 
 <section id="donor">
-
   <div class="wide">
-    <h3>Donor</h3>
+    <h3>
+      Donor
+      <span class="pull-right open-in">
+    <span>Open in</span> <a href="" data-ng-click="fileCtrlr.viewFileInSearch()">Advanced Search</a>
+      </span>
+    </h3>
 
     <table class="table table-info fixed-width" ng-repeat="donorInfo in info.donors">
       <tr>
@@ -282,27 +286,27 @@
         <th>Donor Submitter IDs</th>
         <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaParticipantBarcode, donorInfo.submittedDonorId])" />
       </tr>
-      <tr>
+      <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th>Specimen IDs</th>
         <td ng-bind="fileCtrlr.noNullConcat (donorInfo.specimenId)" />
       </tr>
-      <tr>
+      <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th>Specimen Submitter IDs</th>
         <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaSampleBarcode, donorInfo.submittedSpecimenId])" />
       </tr>
-      <tr>
+      <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th>Specimen Types</th>
         <td ng-bind="fileCtrlr.noNullConcat (donorInfo.specimenType)" />
       </tr>
-      <tr>
+      <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th>Sample IDs</th>
         <td ng-bind="fileCtrlr.noNullConcat (donorInfo.sampleId)" />
       </tr>
-      <tr>
+      <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th>Sample Submitter IDs</th>
         <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaAliquotBarcode, donorInfo.submittedSampleId])" />
       </tr>
-      <tr>
+      <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th>Matched Control Sample ID</th>
         <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.matchedControlSampleId)" />
       </tr>

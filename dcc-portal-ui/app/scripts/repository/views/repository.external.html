@@ -228,7 +228,9 @@ More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
                     </td>
 
                     <td ng-init="donorData = ExternalRepoController.donorInfo (row.donors)">
-                      <a href="{{ donorData.href }}" tooltip="{{ donorData.tooltip }}"
+                      <a data-ng-if="row.donors.length < 2" href="{{ donorData.href }}" tooltip="{{ donorData.tooltip }}"
+                        ng-bind="donorData.text" />
+                      <a data-ng-if="row.donors.length >= 2" href="" data-ng-click="ExternalRepoController.viewFileInSearch(row.id, row.donors.length)" tooltip="{{ donorData.tooltip }}"
                         ng-bind="donorData.text" />
                     </td>
 
