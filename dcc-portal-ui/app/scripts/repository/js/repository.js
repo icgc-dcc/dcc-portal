@@ -480,7 +480,7 @@
    */
   module.controller ('ExternalRepoController', function ($scope, $window, $modal, LocationService, Page,
     ExternalRepoService, SetService, ProjectCache, CodeTable, RouteInfoService, $rootScope, PortalFeature,
-    FacetConstants) {
+    FacetConstants, Facets) {
 
     var dataRepoTitle = RouteInfoService.get ('dataRepositories').title,
         FilterService = LocationService.getFilterService();
@@ -498,11 +498,82 @@
 
     _ctrl.selectedFiles = [];
     _ctrl.summary = {};
+    _ctrl.facetCharts = {};
     _ctrl.dataRepoTitle = dataRepoTitle;
     _ctrl.dataRepoFileUrl = RouteInfoService.get ('dataRepositoryFile').href;
     _ctrl.advancedSearchInfo = RouteInfoService.get ('advancedSearch');
     _ctrl.fileSets = PortalFeature.get('FILE_SETS');
     _ctrl.vcfIobio = PortalFeature.get('VCF_IOBIO');
+    _ctrl.repoChartConfigOverrides = {
+      chart: {
+          type: 'column',
+          marginTop: 20,
+          marginBottom: 20,
+          backgroundColor: 'transparent',
+          spacingTop: 1,
+          spacingRight: 20,
+          spacingBottom: 20,
+          spacingLeft: 10
+      },
+      xAxis: {
+        labels: {
+          rotation: 0,
+          align: 'left',
+          x: -5,
+          y: 12,
+          formatter: function () {
+            var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
+            var isCloudRepo = _.includes(cloudRepos, this.value);
+            return isCloudRepo ? '\ue844' : '';
+          }
+        },
+        gridLineColor: 'transparent',
+        minorGridLineWidth: 0
+      },
+      yAxis: {
+        gridLineColor: 'transparent',
+        endOnTick: false,
+        maxPadding: 0.01,
+        labels: {
+          formatter: function () {
+            return this.value / 1000 + 'k';
+          }
+        },
+        lineWidth: 1,
+        title: {
+          align: 'high',
+          offset: 0,
+          margin: -20,
+          y: -10,
+          rotation: 0,
+          text: '# of Files'
+        }
+      },
+      plotOptions: {
+        series: {
+          minPointLength: 2,
+          pointPadding: 0,
+          maxPointWidth: 100,
+          borderRadiusTopLeft: 2,
+          borderRadiusTopRight: 2,
+          cursor: 'pointer',
+          stickyTracking: false,
+          point: {
+            events: {
+              click: function () {
+                Facets.toggleTerm({
+                  type: 'file',
+                  facet: 'repoName',
+                  term: this.category
+                });
+                $scope.$apply();
+              },
+              mouseOut: $scope.$emit.bind($scope, 'tooltip::hide')
+            }
+          }
+        }
+      }
+    };
 
     function toSummarizedString (values, name) {
       var size = _.size (values);
@@ -843,6 +914,30 @@
       });
     }
 
+    function processRepoData (data) {
+      var filteredRepoNames = _.get(LocationService.filters(), 'file.repoName.is', []);
+      var selectedColor = [253, 179, 97 ];
+      var unselectedColor = [22, 147, 192];
+      var minAlpha = 0.3;
+
+      var transformedItems = data.s.map(function (item, i, array) {
+        var isSelected = _.includes(filteredRepoNames, data.x[i]);
+        var baseColor = isSelected ? selectedColor : unselectedColor;
+        var alpha = array.length ?
+          1 - (1 - minAlpha) / array.length * i :
+          0;
+        var rgba = 'rgba(' + baseColor.concat(alpha).join(',') + ')';
+        return _.extend({}, item, {
+          color: rgba,
+          fillOpacity: 0.5
+        });
+      });
+
+      return _.extend({}, data, {
+        s: transformedItems
+      });
+    }
+
     function refresh() {
       var promise, params = {};
       var filesParam = LocationService.getJsonParam ('files');
@@ -870,6 +965,8 @@
         fixRepoNameInTableData (data.hits);
         _ctrl.files = data;
 
+        _ctrl.facetCharts = ExternalRepoService.createFacetCharts(data.termFacets);
+        _ctrl.facetCharts.repositories = processRepoData(_ctrl.facetCharts.repositories);
         // Sanity check, just reset everything
         _ctrl.undo();
       });

@@ -25,7 +25,7 @@
 
   var module = angular.module('icgc.repository.services', []);
 
-  module.service ('ExternalRepoService', function ($window, Restangular, API) {
+  module.service ('ExternalRepoService', function ($window, Restangular, API, HighchartsService) {
 
     // Initial values until the call to getRepoMap() returns.
     var _srv = this,
@@ -51,6 +51,13 @@
       }).join();
     }
 
+    function _createFacetPieChart (facets, facetName) {
+      return HighchartsService.pie({
+        type: 'file',
+        facet: facetName,
+        facets: facets
+      });
+    }
 
     //////////////////////////////////////////////////////////
     // Public API
@@ -176,6 +183,32 @@
 
     _srv.getFileInfo = function (id) {
       return Restangular.one (REPO_API_PATH, id).get();
+    };
+
+    function _shortenRepoName (name) {
+      return name;
+      // return name.slice(0, 5);
+    }
+
+    _srv.createFacetCharts = function (facets) {
+      return {
+        repositories: HighchartsService.bar({
+          hits: _.map(facets.repositoryNamesFiltered.terms, function (object) {
+            return {
+              count: object.count,
+              term: _shortenRepoName(object.term)
+            };
+          }),
+          name: 'file',
+          xAxis: 'term',
+          yValue: 'count'
+        }),
+        study: _createFacetPieChart(facets, 'study'),
+        primarySite: _createFacetPieChart(facets, 'primarySite'),
+        dataType: _createFacetPieChart(facets, 'dataType'),
+        software: _createFacetPieChart(facets, 'software'),
+        experimentalStrategy: _createFacetPieChart(facets, 'experimentalStrategy')
+      };
     };
 
 

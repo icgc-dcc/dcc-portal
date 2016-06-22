@@ -36,6 +36,9 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
       '#CE6503', '#FB7E09',
       '#1A9900', '#2C0'
     ],
+    lang: {
+      thousandsSep: ','
+    },
     yAxis: {
       gridLineColor: '#E0E0E0',
       labels: {

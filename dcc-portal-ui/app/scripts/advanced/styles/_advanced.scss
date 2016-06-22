@@ -2,11 +2,11 @@
   span {
     float: left;
   }
+  overflow: hidden;
 }
 
 .graphs-collapsed {
   max-height: 140px;
-  overflow-y: hidden;
 }
 
 .more-graphs-wrap {

@@ -592,17 +592,21 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
     replace: true,
     scope: {
       items: '=',
-      shouldShowNoDataMessage: '@'
+      shouldShowNoDataMessage: '@',
+      configOverrides: '&',
+      onRender: '&'
     },
     template: '<div id="container" style="margin: 0 auto">not working</div>',
     link: function ($scope, $element, $attrs) {
       var c, renderChart, chartsDefaults;
 
+      var onRender = $scope.onRender();
+
       renderChart = function (settings) {
         if (c) {
           c.destroy();
         }
-        c = new Highcharts.Chart(settings);
+        c = new Highcharts.Chart(settings, onRender);
       };
 
       chartsDefaults = {
@@ -694,7 +698,7 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
                     if ($attrs.format && $attrs.format === 'percentage') {
                       num = Number(event.target.y * 100).toFixed(2);
                     } else {
-                      num = event.target.y;
+                      num = Highcharts.numberFormat(event.target.y, 0);
                     }
 
                     return '<div>' +
@@ -718,7 +722,12 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
         }
       };
 
-      jQuery.extend(true, chartsDefaults, highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage));
+      jQuery.extend(
+        true,
+        chartsDefaults,
+        highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage),
+        $scope.configOverrides()
+      );
 
       $scope.$watch('items', function (newValue) {
         var deepCopy, newSettings;

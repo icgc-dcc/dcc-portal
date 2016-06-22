@@ -8,11 +8,6 @@
 </div>
 
 <div>
-<section style="border-bottom: none;">
-The ICGC DCC is periodically aggregating and indexing ICGC data hosted in multiple archives
-and <a href="/icgc-in-the-cloud/">cloud</a> repositories worldwide.
-More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
-</section>
 
 <aside class="t_sidebar">
 
@@ -130,7 +125,6 @@ More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
             <h3>No Files Found</h3>
         </div>
         <div data-ng-if="ExternalRepoController.files.hits.length">
-
             <section class="well" style="padding-top:0.5rem; padding-bottom:0.5rem">
                 <div class="quarter">
                     <button class="t_button" data-ng-click="ExternalRepoController.downloadManifest()">
@@ -169,6 +163,31 @@ More information <a href="http://docs.icgc.org/portal/repositories">here</a>.
                     </strong>
                 </div>
             </section>
+
+            <section class="graphs-container">
+              <div class="graphs">
+                <bar
+                  config-overrides="ExternalRepoController.repoChartConfigOverrides"
+                  items="ExternalRepoController.facetCharts.repositories"
+                  heading="Repository"
+                  ylabel="Files"
+                  type="bar"
+                  width="390"
+                  height="150"
+                  group-percent="3"
+                >
+                </bar>
+
+                <pie items='ExternalRepoController.facetCharts.primarySite' heading="Primary&nbsp;Site" label="Files" type="pie" width="160" group-percent="3"
+                   height="150"></pie>
+                <pie items='ExternalRepoController.facetCharts.dataType' heading="Data Type" label="Files" type="pie" width="160" group-percent="3"
+                   height="150"></pie>
+                <pie items='ExternalRepoController.facetCharts.experimentalStrategy' heading="Experimental&nbsp;Strategy" label="Files" type="pie" width="160" group-percent="3"
+                   height="150"></pie>
+              </div>
+
+            </section>
+
             <div class="clearfix"></div>
 
             <span class="action-toolbar pull-right">

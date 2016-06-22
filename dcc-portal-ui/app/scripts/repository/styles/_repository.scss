@@ -1,0 +1,42 @@
+#repository-page {
+  .graphs-container {
+    position: relative;
+    padding: 0;
+    padding-bottom: 1rem;
+    margin: 0 0 1rem;
+    &.collapsed {
+      margin-top: 2.5rem;
+      .graphs {
+        display: none
+      }
+    }
+  }
+
+  .graphs {
+    display: flex;
+    & > * {
+      float: none;
+    }
+
+    .highcharts-container {
+      // throw chart onto GPU to fix safari ghosting issues
+      transform: translateZ(0);
+    }
+
+    .highcharts-axis-labels {
+      pointer-events: none;
+
+      &.highcharts-xaxis-labels {
+        font-family: 'icgc-icons';
+        -webkit-font-smoothing: antialiased;
+        text {
+          fill: #166aa2 !important;
+        }
+      }
+    }
+
+    .highcharts-title {
+      font-size: 16px !important;
+    }
+  }
+}
