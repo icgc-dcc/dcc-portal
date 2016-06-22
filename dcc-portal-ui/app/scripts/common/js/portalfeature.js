@@ -91,7 +91,7 @@
           AUTH_TOKEN: true,
           ICGC_CLOUD: true,
           SOFTWARE_PAGE: true,
-          NOT_FACET: false,
+          NOT_FACET: true,
           VCF_IOBIO: false
        };
 

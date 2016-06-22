@@ -1,6 +1,13 @@
+$foregroundRed: #ff654b;
+
 .t_facets {
   a:hover {
     background: none;
+  }
+
+  .t_tools {
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -64,6 +71,10 @@
   text-overflow: ellipsis;
   vertical-align: middle;
   line-height: 1rem;
+
+  .t_facets__facet__not & {
+    color: $foregroundRed;
+  }
 }
 
 .t_facets__facet__terms__inactive__term__label {
@@ -155,7 +166,7 @@
 
 .t_facets__facet__not {
   background: lighten($red, 35%);
-  color: $black;
+  color: $foregroundRed;
   &:hover {
     background: lighten($red, 30%);
   }
@@ -211,5 +222,96 @@
   .t_facets__facet__terms__inactive__term__label,
   .t_facets__facet__terms__active__term__label__text {
     line-height: 2.2rem;
+  }
+}
+
+/************************************************
+ *   Toggle Button
+ ***********************************************/
+$togglerWidth: 52px;
+$nubWidth: 18px;
+$togglerFontSize: 10px;
+
+.inclusion-toggler {
+  display: inline-block;
+  font-size: $togglerFontSize;
+  overflow: hidden;
+  width: $togglerWidth;
+  height: $nubWidth;
+  border: 1px solid transparent;
+  position: relative;
+  border-radius: $nubWidth;
+  box-shadow: inset 0 2px 1px 1px rgba(black, 0.2);
+  transform: translateZ(0);
+  transition: background-color 0.15s 0.08s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    text-shadow: 1px 2px 2px rgba(black, 0.2);
+    box-shadow: inset 0 2px 1px 1px rgba(black, 0.3);
+  }
+
+  &.is {
+    background-color: #1693c0;
+  }
+
+  &.is-not {
+    background-color: #ff6651;
+
+    .include, .exclude, .nub {
+      // not sure why the "+ 2px" is necessary (we're using box-sizing: border-box), but it is
+      transform: translateX(calc( -#{$togglerWidth} + #{$nubWidth} + 2px ));
+    }
+  }
+
+  .include, .exclude, .nub {
+    transition: all 0.2s $inOutQuart;
+  }
+
+  .include, .exclude {
+    margin-top: 1px;
+  }
+
+  .nub {
+    border-radius: 50%;
+    color: #fff;
+    border: 1px solid grey;
+    width: $nubWidth;
+    height: $nubWidth;
+
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: #fff;
+
+    box-shadow: 0 2px 2px 2px rgba(0,0,0,0.3);
+  }
+
+  .include, .exclude {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .include {
+    padding-left: ($nubWidth / 3);
+    padding-right: $nubWidth;
+  }
+
+  .exclude {
+    position: absolute;
+    top: 0;
+    left: calc(100% - #{$nubWidth});
+    padding-left: $nubWidth;
+    padding-right: ($nubWidth / 3);
   }
 }

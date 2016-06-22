@@ -13,18 +13,17 @@
         
         <span data-ng-if="actives.length > 0 || (shouldDisplayEntitySetId() && activeEntityIds.length > 0)"
           class="t_facets__facet__terms__inactive__reset t_tools">
-            <span class="pull-right t_facets__facet__is__not" 
-                data-ng-if="enabled && type !== 'file' && !isNot"
-                data-ng-click="notFacet(facet)"
-                data-tooltip="Toggle this facet to IS NOT">
-                <i style="color:black;" class="icon-toggle-on"></i>
-            </span>
-            <span class="pull-right t_facets__facet__is__not" 
-                data-ng-if="enabled && type !== 'file' && isNot"
-                data-ng-click="isFacet(facet)"
-                data-tooltip="Toggle this facet to IS">
-                <i style="color:darkred;" class="icon-toggle-off"></i>
-            </span>
+            <div
+                class="t_facets__inclusion_toggle inclusion-toggler"
+                data-ng-if="enabled && type !== 'file-donor'"
+                data-ng-class="{'is': !isNot, 'is-not': isNot}"
+                data-ng-click="isNot ? isFacet(facet) : notFacet(facet)"
+                data-tooltip="Toggle this facet to IS {{ isNot ? 'NOT' : '' }}"
+            >
+                <div class="include">IS</div>
+                <div class="nub"></div>
+                <div class="exclude">NOT</div>
+            </div>
             <a data-ng-click="removeFacet()" class="t_tools__tool " href=""><i class="icon-undo"></i></a>
         </span>
     </li>
