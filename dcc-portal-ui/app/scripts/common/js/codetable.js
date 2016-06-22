@@ -90,7 +90,10 @@
       // Donor states
       'state': 'Donor Molecular Data',
       'live': 'Present in DCC',
-      'pending': 'Absent from DCC'
+      'pending': 'Absent from DCC',
+
+      // Experimental Strategies
+      'miRNA-Seq': 'miRNA-Seq'
     };
 
     var tooltipLookup = {
