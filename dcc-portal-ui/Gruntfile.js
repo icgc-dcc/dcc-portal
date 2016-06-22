@@ -24,6 +24,7 @@ var mountFolder = function (connect, dir) {
 };
 
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+var HOSTNAME = 'local.dcc.icgc.org';
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -97,7 +98,12 @@ module.exports = function (grunt) {
       },
       livereload: {
         options: {
-          livereload: LIVERELOAD_PORT
+          livereload: {
+            port: LIVERELOAD_PORT,
+            host: HOSTNAME,
+            key: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.key'),
+            cert: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.crt')
+          }
         },
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
@@ -115,7 +121,7 @@ module.exports = function (grunt) {
         port: 9000,
         protocol: 'https',
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'local.dcc.icgc.org'
+        hostname: HOSTNAME
       },
       proxies: [
         {
