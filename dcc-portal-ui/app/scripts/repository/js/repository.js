@@ -326,6 +326,8 @@
     this.stringOrDefault = stringOrDefault;
     this.isEmptyString = isEmptyString;
     this.defaultString = defaultString;
+    this.shouldLimitDisplayedDonors = true;
+    this.defaultDonorLimit = 5;
 
     function convertToString (input) {
       return _.isString (input) ? input : (input || '').toString();

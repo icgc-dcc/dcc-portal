@@ -253,12 +253,22 @@
   <div class="wide">
     <h3>
       Donors
-      <span class="pull-right open-in">
-    <span>Open in</span> <a href="" data-ng-click="fileCtrlr.viewFileInSearch()">Advanced Search</a>
+      <span ng-if="info.donors.length > 1" class="pull-right open-in">
+        <span>Open in</span> <a href="" data-ng-click="fileCtrlr.viewFileInSearch()">Advanced Search</a>
       </span>
     </h3>
 
-    <table class="table table-info fixed-width" ng-repeat="donorInfo in info.donors">
+    <div
+      class="t_table_top"
+      ng-if="info.donors.length > fileCtrlr.defaultDonorLimit && fileCtrlr.shouldLimitDisplayedDonors"
+    >
+      Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{:: info.donors.length}}</strong> donors.
+    </div>
+
+    <table
+      class="table table-info fixed-width"
+      ng-repeat="donorInfo in (fileCtrlr.shouldLimitDisplayedDonors ? info.donors.slice(0, fileCtrlr.defaultDonorLimit) : info.donors)"
+    >
       <tr>
         <th>Project ID</th>
         <td ng-init="projCode = donorInfo.projectCode">
@@ -311,6 +321,23 @@
         <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.matchedControlSampleId)" />
       </tr>
     </table>
+
+    <div
+      class="t_sh__toggle"
+      data-ng-show="info.donors.length > fileCtrlr.defaultDonorLimit"
+    >
+        <a
+          class="t_tools__tool"
+          data-ng-click="fileCtrlr.shouldLimitDisplayedDonors = !fileCtrlr.shouldLimitDisplayedDonors"
+          href=""
+        >
+          <span>
+             <i class="{{ !fileCtrlr.shouldLimitDisplayedDonors? 'icon-caret-up' : 'icon-caret-down' }}"></i>
+             {{ !fileCtrlr.shouldLimitDisplayedDonors ? "less" : (info.donors.length - fileCtrlr.defaultDonorLimit) + " more" }}
+          </span>
+        </a>
+    </div>
+
   </div>
 </section>
 <section id="bam-statistics" data-ng-if="fileCopies[0].fileFormat == 'BAM' && fileCtrlr.awsOrCollab(fileCopies)">
