@@ -3,8 +3,33 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
-4.0.x
+4.2.3
 --
+  - Fixed PDC support
+  - Upgraded Highcharts to 4.2.5
+  - Added Charts to Data Repositories page
+  - Unified behaviours for "copy to clipboard" widgets
+  - Added copy to clipboard to user tokens
+  - Updated search result layout. Added labels underneath the single-letter badges.
+  - Enabled 'IS NOT' support for Donor ID, Gene ID, Mutation ID in the Advanced Search Page, and File ID and Donor ID in the Data Repositories Page
+  - Switched to HTTPS mode by default for local development to enable local user-logins during dev.
+    - API calls are now proxied via [grunt-proxy](https://github.com/tutukin/grunt-proxy)
+    - Local development now needs to be run under https://local.dcc.icgc.org
+  - Added NPM scripts.
+    - Should now use `npm run dev` to start local UI development instead of `grunt server`. This will check if your host file contains the entry for local.dcc.icgc.org and prompt with instructions on how to add it if it doesn't find the entry.
+    - `npm run sethost` will add the entry for local.dcc.icgc.org in your host file
+  - Added better tumor/normal support for GDC files. 
+  - Made tables more compact for clinical files containing many donors. 
+  - Added ability to search for files by manifest ID. 
+  - Added Autoprefixer to UI build step
+  - Added source for the DCC-DEV server, which is a test portal provisioner
+  - Added `document.domain = document.domain` to index.html to allow interactions from DCC-DEV
+  - Bugfix: capitalization of miRNA-Seq
+  - Bugfix: tooltips from some D3 charts persisting between page navigations
+  - Bugfix: main loading indicator not centered on load
+  - Bugfix: Going to advanced search from files that have many donors. 
+  - Bugfix: Downloading manifests sometimes errored out for collab. 
+  - Bugfix: Keyword search paging was broken, now fixed. 
 
 4.0.26
 --
