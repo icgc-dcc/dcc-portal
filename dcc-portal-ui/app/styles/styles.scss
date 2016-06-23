@@ -268,6 +268,10 @@ ol {
 
 .h1-wrap {
   height: 5rem;
+  h1 {
+    display: flex;
+    align-items: center;
+  }
 }
 
 h1.ui-scrollfix, .sug-wrap.ui-scrollfix {
