@@ -18,9 +18,7 @@ Change log for the DCC Data Portal
   - Added NPM scripts.
     - Should now use `npm run dev` to start local UI development instead of `grunt server`. This will check if your host file contains the entry for local.dcc.icgc.org and prompt with instructions on how to add it if it doesn't find the entry.
     - `npm run sethost` will add the entry for local.dcc.icgc.org in your host file
-  - Added better tumor/normal support for GDC files. 
   - Made tables more compact for clinical files containing many donors. 
-  - Added ability to search for files by manifest ID. 
   - Added Autoprefixer to UI build step
   - Added source for the DCC-DEV server, which is a test portal provisioner
   - Added `document.domain = document.domain` to index.html to allow interactions from DCC-DEV
@@ -28,8 +26,14 @@ Change log for the DCC Data Portal
   - Bugfix: tooltips from some D3 charts persisting between page navigations
   - Bugfix: main loading indicator not centered on load
   - Bugfix: Going to advanced search from files that have many donors. 
-  - Bugfix: Downloading manifests sometimes errored out for collab. 
+
+4.2.2
+--
+  - Added better tumor/normal support for GDC files. 
+  - Added ability to search for files by manifest ID.
   - Bugfix: Keyword search paging was broken, now fixed. 
+  - Bugfix: Downloading manifests sometimes errored out for collab. 
+
 
 4.0.26
 --
