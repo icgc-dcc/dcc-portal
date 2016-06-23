@@ -368,7 +368,7 @@ angular.module('highcharts.directives').directive('donut', function ($rootScope,
           {
             name: $attrs.outerLabel,
             size: '120%',
-            innerSize: '95%',
+            innerSize: '70%',
             dataLabels: {
               enabled: false,
               overflow: 'justify',
