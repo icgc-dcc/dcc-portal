@@ -1,13 +1,13 @@
-<ul class="t_facets__facet">
+<ul class="t_facets__facet" ng-controller="tagsFacetCtrl as ctrl">
     <li class="t_facets__facet__title" data-ng-class="{t_facets__facet__title_active:actives.length}">
-        
-        <span data-ng-click="collapsed=!collapsed" data-ng-if="type !== 'file'" class="t_facets__facet__title__label">
-            <i data-ng-class="{'icon-caret-down':!collapsed, 'icon-caret-right':collapsed}"></i>
+
+        <span data-ng-click="ctrl.collapsed=!ctrl.collapsed" data-ng-if="type !== 'file'" class="t_facets__facet__title__label">
+            <i data-ng-class="{'icon-caret-down':!ctrl.collapsed, 'icon-caret-right':ctrl.collapsed}"></i>
             {{label}}
         </span>
 
-        <span data-ng-click="collapsed=!collapsed" data-ng-if="type === 'file'"" class="t_facets__facet__title__label">
-            <i data-ng-class="{'icon-caret-down':!collapsed, 'icon-caret-right':collapsed}"></i>
+        <span data-ng-click="ctrl.collapsed=!ctrl.collapsed" data-ng-if="type === 'file'"" class="t_facets__facet__title__label">
+            <i data-ng-class="{'icon-caret-down':!ctrl.collapsed, 'icon-caret-right':ctrl.collapsed}"></i>
             <abbr data-tooltip="File ID, Object ID, Submitter Bundle ID, File Set ID, Manifest ID" tooltip-placement="right">{{label}}</abbr>
         </span>
         
@@ -59,7 +59,7 @@
             </li>
         </ul>
     </li>
-    <li class="t_facets__facet__input" data-ng-hide="collapsed">
+    <li class="t_facets__facet__input" data-ng-hide="ctrl.collapsed">
         <input class="t_input__block"
                placeholder="{{ placeholder }}"
                data-types="{{ types }}"
