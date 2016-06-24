@@ -1,0 +1,27 @@
+.survival-graph {
+
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .x.axis path {
+    display: none;
+  }
+
+  .line {
+    fill: none;
+    // stroke: steelblue;
+    stroke-width: 1.5px;
+  }
+
+}
+
+.survival-analysis .survival-graph {
+  width: 100%;
+  svg {
+    width: 100%;
+    height: auto;
+  }
+}
