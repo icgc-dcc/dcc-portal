@@ -3,6 +3,15 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.2.5
+--
+  - Added x of y donors on File Entity page
+  - Added collapse / show on File Entity page when donors greater than 5 
+
+4.2.4
+--
+  - Removed NOT facet on File in Repository Browser
+
 4.2.3
 --
   - Fixed PDC support
