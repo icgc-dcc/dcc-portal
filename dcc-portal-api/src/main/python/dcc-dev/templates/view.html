@@ -6,9 +6,11 @@
 
 {% block body %}
 
-    <script>
+   <script>
+        // http://stackoverflow.com/questions/1481251/what-does-document-domain-document-domain-do
+        document.domain = document.domain;
         function popoutPortal() {
-            window.location = $('#portal-frame').attr('src');
+            window.location = window.frames[0].window.document.URL;
         }
     </script>
 
