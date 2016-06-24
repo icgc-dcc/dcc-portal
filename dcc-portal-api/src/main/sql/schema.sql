@@ -64,6 +64,17 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON phenotype_analysis TO dcc;
 
 -------------------------------------------------------------------------------- 
 
+CREATE TABLE IF NOT EXISTS survival_analysis(
+   id      UUID NOT NULL,
+   version INT,   
+   data    TEXT NOT NULL,
+
+   PRIMARY KEY(id)
+);
+GRANT SELECT, INSERT, UPDATE, DELETE ON survival_analysis TO dcc;
+
+-------------------------------------------------------------------------------- 
+
 CREATE TABLE IF NOT EXISTS manifest(
    id      UUID NOT NULL,
    version INT,   
