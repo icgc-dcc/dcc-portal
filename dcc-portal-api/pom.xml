@@ -115,12 +115,7 @@
       <artifactId>jersey-multipart</artifactId>
       <version>1.17.1</version>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-servlets</artifactId>
-      <version>${jetty.version}</version>
-    </dependency>
-    
+
     <!-- Spring -->
     <dependency>
       <groupId>org.springframework</groupId>
