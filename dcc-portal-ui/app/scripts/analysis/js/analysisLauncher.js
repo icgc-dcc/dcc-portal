@@ -129,6 +129,9 @@
       };
       return _launchAnalysis(payload, 'union', 'analysis/view/set/');
     };
+
+    _this.launchSurvival = function(setIds) {
+      return _launchAnalysis(setIds, 'survival', 'analysis/view/survival/');
     };
 
 
