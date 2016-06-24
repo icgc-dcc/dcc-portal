@@ -412,6 +412,9 @@ a.no-style {
   }
   i {
     height: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   img {
     height: 3rem;
