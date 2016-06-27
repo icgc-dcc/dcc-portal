@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.icgc.dcc.portal.analysis.SurvivalAnalyzer.Interval;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,6 +34,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 /**
  * Represents the result set of a survival plot analysis.
@@ -51,7 +54,7 @@ public class SurvivalAnalysis implements Identifiable<UUID> {
   private State state = State.FINISHED;
   private final long timestamp = new Date().getTime();
 
-  private List<Interval> resuts;
+  private List<Result> results;
 
   private final static class JsonPropertyName {
 
@@ -74,6 +77,14 @@ public class SurvivalAnalysis implements Identifiable<UUID> {
     this.version = dataVersion;
   }
 
+  @Value
+  public class Result {
+
+    UUID id;
+    List<Interval> intervals;
+
+  }
+
   @RequiredArgsConstructor
   @Getter
   public enum State {
@@ -82,17 +93,6 @@ public class SurvivalAnalysis implements Identifiable<UUID> {
 
     @NonNull
     private final String name;
-
-  }
-
-  @Data
-  public static class Interval {
-
-    int start;
-    int end;
-    int died;
-    int censored;
-    float survival;
 
   }
 

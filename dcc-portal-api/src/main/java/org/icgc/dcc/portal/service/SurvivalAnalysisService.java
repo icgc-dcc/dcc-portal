@@ -23,6 +23,7 @@ import static lombok.AccessLevel.PRIVATE;
 import java.util.List;
 import java.util.UUID;
 
+import org.icgc.dcc.portal.analysis.SurvivalAnalyzer;
 import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.model.SurvivalAnalysis;
 import org.icgc.dcc.portal.repository.SurvivalAnalysisRepository;
@@ -40,10 +41,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SurvivalAnalysisService {
 
+  /**
+   * Dependencies
+   */
   @NonNull
   private final SurvivalAnalysisRepository repository;
   @NonNull
   private final PortalProperties properties;
+  @NonNull
+  private final SurvivalAnalyzer analyzer;
 
   @Getter(lazy = true, value = PRIVATE)
   private final int currentDataVersion = resolveDataVersion();
@@ -66,7 +72,7 @@ public class SurvivalAnalysisService {
       throw new NotFoundException(analysisId.toString(), "survival analysis");
     }
 
-    return analysis;
+    return analyzer.analyze(analysis);
   }
 
   private int resolveDataVersion() {
