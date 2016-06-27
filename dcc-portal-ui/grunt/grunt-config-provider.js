@@ -48,6 +48,8 @@ module.exports = function (grunt) {
 
         grunt.log.oklns(message + _currentConfigBuildEnvironment);
 
+        grunt.config('env', _currentConfigBuildEnvironment);
+
         _updateAllTaskConfigs();
 
       });

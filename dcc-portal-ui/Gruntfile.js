@@ -22,6 +22,8 @@ var lrSnippet = require('connect-livereload')({ port: LIVERELOAD_PORT });
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
+var fs = require('fs');
+var path = require('path');
 
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 var HOSTNAME = 'local.dcc.icgc.org';
@@ -142,7 +144,15 @@ module.exports = function (grunt) {
               ]),
               lrSnippet,
               mountFolder(connect, '.tmp'),
-              mountFolder(connect, yeomanConfig.app)
+              function (req, res, next) {
+                if (req._parsedUrl.path === '/develop/html/index.develop.html') {
+                  var indexHtml = fs.readFileSync(path.resolve('app/index.html'), 'utf8');
+                  res.end(grunt.template.process(indexHtml));
+                } else {
+                  next();
+                }
+              },
+              mountFolder(connect, yeomanConfig.app),
             ];
           }
         }
@@ -264,7 +274,7 @@ module.exports = function (grunt) {
       }
     },
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
+      html: '<%= yeoman.dist %>/index.html',
       options: {
         dest: '<%= yeoman.dist %>',
         flow: {
@@ -359,6 +369,7 @@ module.exports = function (grunt) {
               '*.{ico,png,txt}',
               '.htaccess',
               'bower_components/**',
+              'index.html',
 
               // 'vendor/scripts/angularjs/*',
               'vendor/styles/genomeviewer/**/*',
@@ -388,7 +399,15 @@ module.exports = function (grunt) {
             dest: '<%= yeoman.dist %>/styles/fonts/',
             src: ['vendor/scripts/genome-viewer/vendor/fontawesome/fonts/*' ]
           }
-        ]
+        ],
+        options: {
+          process: function (content, srcpath) {
+            if (srcpath === 'app/index.html') {
+              return grunt.template.process(content);
+            }
+            return content;
+          }
+        }
       }
     },
     concurrent: {
@@ -440,7 +459,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= yeoman.dist %>/scripts',
           src: [
-            '*.js'
+            'scripts.js'
           ],
           dest: '<%= yeoman.dist %>/scripts',
           ext: '.js'
