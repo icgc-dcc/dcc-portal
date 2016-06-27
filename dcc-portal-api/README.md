@@ -25,6 +25,13 @@ cd dcc-portal/dcc-portal-api
 mvn -am
 ```
 
+To run from the command line without packaging into a jar:
+
+```shell
+cd dcc-portal-api
+mvn exec:java -Dexec.args="server path/to/settings.yml"
+```
+
 ## Configuration
 
 To configure the portal for running, the `elastic` and `icgc` portions of the `settings.yml` file

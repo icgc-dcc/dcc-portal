@@ -315,6 +315,32 @@
         </configuration>
       </plugin>
 
+      <!-- CLI execution -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>org.icgc.dcc.portal.PortalMain</mainClass>
+          <systemProperties>
+            <systemProperty>
+              <key>logback.configurationFile</key>
+              <value>src/main/conf/logback.xml</value>
+            </systemProperty>
+            <systemProperty>
+              <key>log.dir</key>
+              <value>target/logs</value>
+            </systemProperty>
+          </systemProperties>
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
