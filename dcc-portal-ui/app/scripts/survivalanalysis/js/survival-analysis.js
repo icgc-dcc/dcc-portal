@@ -18,11 +18,7 @@
 (function() {
   'use strict';
 
-  angular.module('icgc.survival', [
-    'icgc.survival.directives',
-    'icgc.survival.services',
-    'icgc.survival.controllers'
-  ]);
+  var module = angular.module('icgc.survival', ['icgc.donors.models']);
 
   var palette = ['#2196F3', '#f44336', '#FF9800', '#BBCC24', '#9C27B0', '#795548', '#3F51B5', '#9E9E9E', '#FFEB3B', '##c0392b'];
 
@@ -102,62 +98,65 @@
           .attr('class', 'line')
           .attr('d', line)
           .attr('stroke', palette[i % palette.length]);
+
+      // draw the data points as circles
+      // chart.selectAll('circle')
+      //     .data(data.filter(function (item) {
+      //       return item.censored;
+      //     }))
+      //     .enter().append('svg:circle')
+      //     .attr('cx', function(d) { return x(d.start) })
+      //     .attr('cy', function(d) { return y(d.survival) })
+      //     .attr('stroke-width', 'none')
+      //     .attr('fill', 'orange' )
+      //     .attr('fill-opacity', .5)
+      //     //.attr('visibility', 'hidden')
+      //     .attr('r', 3);
     });
 
     return chart;
 
 
-    // draw the data points as circles
-    // chart.selectAll('circle')
-    //     .data(data.filter(function (item) {
-    //       return item.censored;
-    //     }))
-    //     .enter().append('svg:circle')
-    //     .attr('cx', function(d) { return x(d.start) })
-    //     .attr('cy', function(d) { return y(d.survival) })
-    //     .attr('stroke-width', 'none')
-    //     .attr('fill', 'orange' )
-    //     .attr('fill-opacity', .5)
-    //     //.attr('visibility', 'hidden')
-    //     .attr('r', 3);
 
 
   }
 
-  angular.module('icgc.survival.directives', ['icgc.survival.services', 'icgc.survival.controllers'])
-    .directive('survivalResult', ['survivalPlotService', function(survivalPlotService) {
-      return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-          // TODO 1.5: this should be a one-way `<` binding
-          analysisId: '='
-        },
-        templateUrl: '/scripts/survivalanalysis/views/survival-analysis.html',
-        controller: 'survivalPlotController as plot',
-        link: function($scope, $element) {
-          console.log('linking');
-          var el = $element.find('.survival-graph').get(0);
-          survivalPlotService.getData($scope.analysisId).then(function (dataSets) {
-            var chart = makeChart(el);
-            renderChart(chart, el, dataSets)
-            window.addEventListener('resize', function () {
-              // d3.select(chart).selectAll('*').remove();
-              chart.selectAll('*').remove();
-              renderChart(chart, el, dataSets)
-              // chart.destroy();
-              // d3.select(chart).remove();
-              // chart = makeChart(element, data);
-            });
-          });
-        }
-      };
-    }]);
+  var survivalResultController = ['$scope', '$element', 'survivalPlotService', function ($scope, $element, survivalPlotService) {
+    var ctrl = this;
+    var chart, dataSets;
+    var el = $element.find('.survival-graph').get(0);
 
-  angular.module('icgc.survival.controllers', ['icgc.survival.services'])
-    .controller('survivalPlotController', [function () {
+    var update = function () {
+      chart.selectAll('*').remove();
+      renderChart(chart, el, dataSets);
+    };
 
-    }]);
+    this.$onInit = function () {
+      console.log('init');
+      survivalPlotService.getData(ctrl.analysisId).then(function (ds) {
+        chart = makeChart(el);
+        dataSets = ds;
+        window.addEventListener('resize', update);
+        // setTimeout required to avoid weird layout due to container not yet being on screen
+        setTimeout(update);
+      });
+    }
+
+
+    this.$onDestroy = function () {
+      window.removeEventListener('resize', update);
+    }
+
+  }];
+
+  module.component('survivalResult', {
+    templateUrl: '/scripts/survivalanalysis/views/survival-analysis.html',
+    bindings: {
+      analysisId: '<'
+    },
+    controller: survivalResultController
+
+  });
 
   var mockSurvivalData1 = [
     { start: 0, end: 100, died: 1, censored: 2, survival: 1 },
@@ -473,7 +472,7 @@
     return _.extend(item, {survival: item.survival - 0.02});
   });
 
-  angular.module('icgc.survival.services', ['icgc.donors.models'])
+  module
     .service('survivalPlotService', [function () {
 
       _.extend(this, {
