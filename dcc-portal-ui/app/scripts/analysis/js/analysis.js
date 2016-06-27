@@ -230,7 +230,8 @@
       },
       phenotype: {
         name: 'Phenotype Comparison',
-        description: 'Compare some characteristics (e.g. gender, vital status and age at diagnosis) between your donor sets.',
+        description: 'Compare some characteristics (e.g. gender, vital status and age at diagnosis)' +
+        ' between your donor sets.',
         demoDescription: 'Compare phenotypes across brain, breast, and colorectal cancer donors.'
       },
       survival: {
