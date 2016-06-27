@@ -132,10 +132,9 @@ public class SurvivalAnalyzer {
           (String) donors[i].field("_donor_id").getValue(),
           (String) donors[i].field("donor_vital_status").getValue(),
           time[i]);
-      if (censured[i]) {
-        currentInterval.addDonor(donor);
-      } else {
-        currentInterval.addDonor(donor);
+      currentInterval.addDonor(donor);
+
+      if (!censured[i]) {
         currentInterval.incDied();
       }
     }
