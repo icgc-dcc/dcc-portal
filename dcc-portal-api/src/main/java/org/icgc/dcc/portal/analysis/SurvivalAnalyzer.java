@@ -17,24 +17,72 @@
  */
 package org.icgc.dcc.portal.analysis;
 
+import static org.icgc.dcc.portal.model.Query.builder;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.elasticsearch.search.SearchHit;
 import org.icgc.dcc.portal.model.SurvivalAnalysis;
+import org.icgc.dcc.portal.model.SurvivalAnalysis.Result;
+import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.repository.DonorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.val;
 
+@Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SurvivalAnalyzer {
 
-  private final static String DONOR_FILTER = "{'donor':{'id':{'is':['ES:%s']}}}";
+  /**
+   * Constants
+   */
+  private final static String DONOR_FILTER =
+      "{'donor':{'id':{'is':['ES:%s']},'vitalStatus':{'is':['alive','deceased']}}}";
 
-  public static SurvivalAnalysis analyze(SurvivalAnalysis analysis) {
-    val setIds = analysis.getEntitySetIds();
+  /**
+   * Dependencies.
+   */
+  @NonNull
+  private final DonorRepository donorRepository;
+
+  public SurvivalAnalysis analyze(SurvivalAnalysis analysis) {
+
+    analysis.setResults(new ArrayList<Result>());
+    for (val id : analysis.getEntitySetIds()) {
+      val filter = new FiltersParam(String.format(DONOR_FILTER, id));
+      val query = builder()
+          .filters(filter.get())
+          .from(0)
+          .size(20000)
+          .sort("survivalTime")
+          .order("asc")
+          .build();
+
+      val result = donorRepository.findAllCentric(query);
+      val intervals = compute(result.getHits().getHits());
+
+      analysis.getResults().add(analysis.new Result(id, intervals));
+    }
 
     return analysis;
   }
 
-  static List<Interval> compute(int[] time, boolean[] censured) {
+  private static List<Interval> compute(SearchHit[] donors) {
+    int[] time = new int[donors.length];
+    boolean[] censured = new boolean[donors.length];
+
+    for (int i = 0; i < donors.length; i++) {
+      val donor = donors[i];
+      time[i] = (int) donor.field("donor_survival_time").getValue();
+      censured[i] = ((String) donor.field("donor_vital_status").getValue()).equalsIgnoreCase("alive");
+    }
 
     val intervals = new ArrayList<Interval>();
     int startTime = 0;
@@ -62,43 +110,47 @@ public class SurvivalAnalyzer {
 
     for (int i = 0; i < time.length; i++) {
 
-      int t = time[i];
+      long t = time[i];
 
       // If we have moved past the current interval compute the cumulative survival and adjust the # at risk
       // for the start of the next interval.
       if (t > currentInterval.getEnd()) {
-        atRisk -= currentInterval.getNumberCensured();
-        float survivors = atRisk - currentInterval.getNumberDied();
+        atRisk -= currentInterval.getCensured();
+        float survivors = atRisk - currentInterval.getDied();
         float tmp = survivors / atRisk;
         cumulativeSurvival *= tmp;
 
         // Skip to the next interval
-        atRisk -= currentInterval.getNumberDied();
+        atRisk -= currentInterval.getDied();
         while (intervalIter.hasNext() && t > currentInterval.getEnd()) {
           currentInterval = intervalIter.next();
           currentInterval.setCumulativeSurvival(cumulativeSurvival);
         }
       }
 
+      val donor = new DonorValue(
+          (String) donors[i].field("_donor_id").getValue(),
+          (String) donors[i].field("donor_vital_status").getValue(),
+          time[i]);
       if (censured[i]) {
-        currentInterval.addCensure(time[i]);
-
+        currentInterval.addDonor(donor);
       } else {
+        currentInterval.addDonor(donor);
         currentInterval.incDied();
       }
     }
     currentInterval.setCumulativeSurvival(cumulativeSurvival);
 
     return intervals;
-
   }
 
+  @Data
   public static class Interval {
 
     private int start;
     private int end;
-    private int numberDied;
-    private List<Integer> censored = new ArrayList<Integer>();
+    private int died;
+    private List<DonorValue> donors = new ArrayList<DonorValue>();
     private float cumulativeSurvival;
 
     public Interval(int start, int end) {
@@ -107,48 +159,30 @@ public class SurvivalAnalyzer {
     }
 
     void incDied() {
-      numberDied++;
+      died++;
     }
 
-    void addCensure(int time) {
-      censored.add(time);
+    void addDonor(DonorValue donor) {
+      donors.add(donor);
     }
 
-    public int getStart() {
-      return start;
+    public int getCensured() {
+      int sum = 0;
+      for (val donor : donors) {
+        sum += donor.getStatus().equalsIgnoreCase("alive") ? 1 : 0;
+      }
+      return sum;
     }
 
-    public void setStart(int start) {
-      this.start = start;
-    }
+  }
 
-    public int getEnd() {
-      return end;
-    }
+  @Value
+  public static class DonorValue {
 
-    public void setEnd(int end) {
-      this.end = end;
-    }
+    private final String id;
+    private final String status;
+    private final int survivalTime;
 
-    public int getNumberDied() {
-      return numberDied;
-    }
-
-    public List<Integer> getCensored() {
-      return censored;
-    }
-
-    public float getCumulativeSurvival() {
-      return cumulativeSurvival;
-    }
-
-    public void setCumulativeSurvival(float cumulativeSurvival) {
-      this.cumulativeSurvival = cumulativeSurvival;
-    }
-
-    public int getNumberCensured() {
-      return censored.size();
-    }
   }
 
 }
