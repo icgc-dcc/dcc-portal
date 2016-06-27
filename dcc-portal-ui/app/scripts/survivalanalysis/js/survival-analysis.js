@@ -20,7 +20,10 @@
 
   var module = angular.module('icgc.survival', ['icgc.donors.models']);
 
-  var palette = ['#2196F3', '#f44336', '#FF9800', '#BBCC24', '#9C27B0', '#795548', '#3F51B5', '#9E9E9E', '#FFEB3B', '##c0392b'];
+  var palette = [
+    '#2196F3', '#f44336', '#FF9800', '#BBCC24', '#9C27B0',
+    '#795548', '#3F51B5', '#9E9E9E', '#FFEB3B', '##c0392b'
+  ];
 
   function makeChart (el) {
     return d3.select(el).append('svg');
@@ -51,7 +54,7 @@
         .scale(y)
         .orient('left');
 
-    var chart = chart
+    chart
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
@@ -121,31 +124,33 @@
 
   }
 
-  var survivalResultController = ['$scope', '$element', 'survivalPlotService', function ($scope, $element, survivalPlotService) {
-    var ctrl = this;
-    var chart, dataSets;
-    var el = $element.find('.survival-graph').get(0);
+  var survivalResultController = [
+    '$scope', '$element', 'survivalPlotService',
+    function ($scope, $element, survivalPlotService) {
+      var ctrl = this;
+      var chart, dataSets;
+      var el = $element.find('.survival-graph').get(0);
 
-    var update = function () {
-      chart.selectAll('*').remove();
-      renderChart(chart, el, dataSets);
-    };
+      var update = function () {
+        chart.selectAll('*').remove();
+        renderChart(chart, el, dataSets);
+      };
 
-    this.$onInit = function () {
-      console.log('init');
-      survivalPlotService.getData(ctrl.analysisId).then(function (ds) {
-        chart = makeChart(el);
-        dataSets = ds;
-        window.addEventListener('resize', update);
-        // setTimeout required to avoid weird layout due to container not yet being on screen
-        setTimeout(update);
-      });
-    }
+      this.$onInit = function () {
+        console.log('init');
+        survivalPlotService.getData(ctrl.analysisId).then(function (ds) {
+          chart = makeChart(el);
+          dataSets = ds;
+          window.addEventListener('resize', update);
+          // setTimeout required to avoid weird layout due to container not yet being on screen
+          setTimeout(update);
+        });
+      };
 
 
-    this.$onDestroy = function () {
-      window.removeEventListener('resize', update);
-    }
+      this.$onDestroy = function () {
+        window.removeEventListener('resize', update);
+      };
 
   }];
 
