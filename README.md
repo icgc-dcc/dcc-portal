@@ -11,6 +11,17 @@ $ mvn
 
 ## Running
 
+### Command-line
+
+From the root of the project:
+
+```shell
+mvn -pl '!dcc-portal-ui' compile && mvn -pl dcc-portal-api exec:java -Dexec.args="server /absolute/path/to/settings.yml"
+```
+
+Technically the first part only has to be done when source files change.
+
+### IDE
 From Eclipse or IntelliJ:
 
 | Property   | Value                            |
