@@ -17,12 +17,11 @@
  */
 package org.icgc.dcc.portal.analysis;
 
-import static org.icgc.dcc.portal.model.Query.builder;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.elasticsearch.search.SearchHit;
+import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.SurvivalAnalysis;
 import org.icgc.dcc.portal.model.SurvivalAnalysis.Result;
 import org.icgc.dcc.portal.model.param.FiltersParam;
@@ -57,7 +56,7 @@ public class SurvivalAnalyzer {
     analysis.setResults(new ArrayList<Result>());
     for (val id : analysis.getEntitySetIds()) {
       val filter = new FiltersParam(String.format(DONOR_FILTER, id));
-      val query = builder()
+      val query = Query.builder()
           .filters(filter.get())
           .from(0)
           .size(20000)
