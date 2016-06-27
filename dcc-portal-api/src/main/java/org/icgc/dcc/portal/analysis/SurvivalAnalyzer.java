@@ -147,16 +147,11 @@ public class SurvivalAnalyzer {
   @Data
   public static class Interval {
 
-    private int start;
-    private int end;
+    private final int start;
+    private final int end;
     private int died;
     private List<DonorValue> donors = new ArrayList<DonorValue>();
     private float cumulativeSurvival;
-
-    public Interval(int start, int end) {
-      this.setStart(start);
-      this.setEnd(end);
-    }
 
     void incDied() {
       died++;
@@ -179,9 +174,9 @@ public class SurvivalAnalyzer {
   @Value
   public static class DonorValue {
 
-    private final String id;
-    private final String status;
-    private final int survivalTime;
+    String id;
+    String status;
+    int survivalTime;
 
   }
 
