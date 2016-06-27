@@ -52,10 +52,10 @@
     "karma": "0.12.31",
     "karma-chrome-launcher": "0.1.7",
     "karma-jasmine": "0.3.5",
-    "karma-phantomjs-launcher": "0.1.4",
+    "karma-phantomjs-launcher": "1.0.1",
     "karma-spec-reporter": "0.0.16",
     "matchdep": "1.0.1",
-    "phantomjs": "1.9.16",
+    "phantomjs": "2.1.7",
     "time-grunt": "1.2.2"
   },
   "engines": {

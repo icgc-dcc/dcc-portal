@@ -24,14 +24,16 @@ module.exports = function(config){
       'app/bower_components/angular-lodash/angular-lodash.js',
       'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'app/bower_components/angularjs-toaster/toaster.js',
+      'app/bower_components/zeroclipboard/dist/ZeroClipboard.js',
       'app/bower_components/highcharts/highcharts.js',
+      'bower_components/highcharts/modules/no-data-to-display.src.js',
       'app/bower_components/d3/d3.min.js',
       'app/bower_components/Blob/Blob.js',
       'app/bower_components/FileSaver/FileSaver.min.js',
       'app/bower_components/showdown/src/showdown.js',
       'app/bower_components/showdown/src/extensions/table.js',
       'app/bower_components/x2js/xml2json.js',
-      'app/vendor/scripts/table2CSV.js',
+      'app/scripts/ui/js/table2CSV.js',
 
       // === Test, mock files ===
       'app/bower_components/angular-mocks/angular-mocks.js',
