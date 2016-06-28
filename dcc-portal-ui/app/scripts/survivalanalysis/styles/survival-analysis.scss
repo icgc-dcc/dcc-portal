@@ -1,13 +1,24 @@
+$faded: #e6dede;
 .survival-graph {
 
-  .axis path, .axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
-  }
+  .axis {
+    path, line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
 
-  .x.axis path {
-    display: none;
+    path {
+      stroke: $faded
+    }
+
+    .tick text {
+      fill: #888
+    }
+  }
+  
+
+  .axis path {
   }
 
   .line {

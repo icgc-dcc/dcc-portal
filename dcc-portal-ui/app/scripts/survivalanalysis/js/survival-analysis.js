@@ -21,30 +21,52 @@
   var module = angular.module('icgc.survival', ['icgc.donors.models']);
 
   var palette = [
-    '#2196F3', '#f44336', '#FF9800', '#BBCC24', '#9C27B0',
-    '#795548', '#3F51B5', '#9E9E9E', '#FFEB3B', '##c0392b'
+    '#6baed6', '#fd8d3c', '#74c476'
+    // '#2196F3', '#f44336', '#FF9800', '#BBCC24', '#9C27B0',
+    // '#795548', '#3F51B5', '#9E9E9E', '#FFEB3B', '##c0392b'
   ];
 
   function makeChart (el) {
     return d3.select(el).append('svg');
   }
 
+  /*
+  dataSets: [
+    id: String,
+    intervals: [
+      {
+        censured: Number,
+        cumulativeSurvival: Number,
+        died: Number,
+        end: Number,
+        start: Number,
+      }
+    ]
+  ]
+  */
   function renderChart (chart, el, dataSets) {
     var elRect = el.getBoundingClientRect();
 
     var yAxisLabel = 'Survival Rate';
     var xAxisLabel = 'Duration';
 
-    var margin = {top: 20, right: 20, bottom: 30, left: 50};
-    var width = elRect.width - margin.left - margin.right;
+    var margin = {top: 20, right: 20, bottom: 30, left: 24};
+    var outerWidth = elRect.width;
+    var outerHeight = outerWidth * 0.5;
+    console.log(outerWidth, outerHeight);
+    
+    var axisWidth = outerWidth - margin.left - margin.right;
+    var axisHeight = outerHeight - margin.top - margin.bottom;
+    
+    console.log('axisWidth is', axisWidth);
+    console.log('outerWidth is', outerWidth);
     // var height = elRect.height - margin.top - margin.bottom;
-    var height = width * 0.5;
 
     var x = d3.scale.linear()
-        .range([0, width]);
+        .range([0, axisWidth]);
 
     var y = d3.scale.linear()
-        .range([height, 0]);
+        .range([axisHeight, 0]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -55,49 +77,30 @@
         .orient('left');
 
     chart
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
+        .attr('width', outerWidth)
+        .attr('height', outerHeight)
         .append('g')
           .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     var longestDuration = _.max(dataSets.map(function (data) {
-        return data.slice(-1)[0].end;
+        return data.intervals.slice(-1)[0].end;
       }));
+
+    console.log('the longest duration is ', longestDuration);
 
     x.domain([0, longestDuration]);
     y.domain([0, 1]);
 
-    // draw x axis
-    chart.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(xAxis)
-        .append('text')
-          .attr('x', width)
-          // .attr('dy', '.71em')
-          .style('text-anchor', 'end')
-          .text(xAxisLabel);
-
-    // draw y axis
-    chart.append('g')
-        .attr('class', 'y axis')
-        .call(yAxis)
-        .append('text')
-          .attr('transform', 'rotate(-90)')
-          .attr('y', 6)
-          .attr('dy', '.71em')
-          .style('text-anchor', 'end')
-          .text(yAxisLabel);
-
     dataSets.forEach(function (data, i) {
       var line = d3.svg.area()
           .interpolate('step-after')
-          .x(function(d) { return x(d.start); })
-          .y(function(d) { return y(d.survival); });
+          .x(function(interval) { return x(interval.start); })
+          .y(function(interval) { return y(interval.cumulativeSurvival); });
       
       // draw the data as an svg path
       chart.append('path')
-          .datum(data)
+          .datum(data.intervals)
+          .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
           .attr('class', 'line')
           .attr('d', line)
           .attr('stroke', palette[i % palette.length]);
@@ -117,6 +120,31 @@
       //     .attr('r', 3);
     });
 
+    // draw x axis
+    chart.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(' + margin.left + ',' + (axisHeight + margin.top) + ')')
+        .call(xAxis)
+        .append('text')
+          .attr('dy', 30)
+          .attr('x', axisWidth)
+          // .attr('dy', '.71em')
+          .style('text-anchor', 'end')
+          .text(xAxisLabel);
+
+    // draw y axis
+    chart.append('g')
+        .attr('class', 'y axis')
+        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
+        .call(yAxis)
+        .append('text')
+          // .attr('transform', 'rotate(-90)')
+          .attr('y', -10)
+          .attr('x', -24)
+          // .attr('dy', '.71em')
+          // .style('text-anchor', 'end')
+          .text(yAxisLabel);
+
     return chart;
 
 
@@ -124,7 +152,7 @@
 
   }
 
-  var survivalResultController = [
+  var survivalAnalysisController = [
     '$scope', '$element', 'survivalPlotService',
     function ($scope, $element, survivalPlotService) {
       var ctrl = this;
@@ -137,10 +165,12 @@
       };
 
       this.$onInit = function () {
-        console.log('init');
-        survivalPlotService.getData(ctrl.analysisId).then(function (ds) {
+        var dummySetIds = ["3787d3bd-96f8-41e7-b471-b1250a5cc952", "90e4034b-afb3-43e3-a19f-4b85ba0d6d98", "b211f054-6b79-4878-9638-a33d9711c60d"];
+        survivalPlotService.getData(ctrl.setIds || dummySetIds).then(function (data) {
+          console.log(data);
+
           chart = makeChart(el);
-          dataSets = ds;
+          dataSets = data.results;
           window.addEventListener('resize', update);
           // setTimeout required to avoid weird layout due to container not yet being on screen
           setTimeout(update);
@@ -154,12 +184,12 @@
 
   }];
 
-  module.component('survivalResult', {
+  module.component('survivalAnalysis', {
     templateUrl: '/scripts/survivalanalysis/views/survival-analysis.html',
     bindings: {
-      analysisId: '<'
+      setIds: '<'
     },
-    controller: survivalResultController
+    controller: survivalAnalysisController
 
   });
 
@@ -478,13 +508,22 @@
   });
 
   module
-    .service('survivalPlotService', [function () {
+    .service('survivalPlotService', ['Restangular', function (Restangular) {
 
       _.extend(this, {
-        getData: function () {
-          console.log('getting mock survival data');
+        getData: function (setIds) {
+          var data = setIds;
 
-          return Promise.resolve([mockSurvivalData1, mockSurvivalData2]);
+          return Restangular
+            .one('analysis')
+            .post('survival', data, {}, {'Content-Type': 'application/json'})
+            .then(function (response) {
+              console.log('api response: ',  response)
+              return Restangular.one('analysis/survival/' + response.id).get()
+            })
+            .then(function (response) {
+              return response.plain();
+            })
         }
       });
 
