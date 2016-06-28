@@ -144,6 +144,9 @@ module.exports = function (grunt) {
               ]),
               lrSnippet,
               mountFolder(connect, '.tmp'),
+
+              // TODO: This is necessary because the dev task doesn't transform the index.html
+              // take this out when the dev and dist tasks both transform the template
               function (req, res, next) {
                 if (req._parsedUrl.path === '/develop/html/index.develop.html') {
                   var indexHtml = fs.readFileSync(path.resolve('app/index.html'), 'utf8');
