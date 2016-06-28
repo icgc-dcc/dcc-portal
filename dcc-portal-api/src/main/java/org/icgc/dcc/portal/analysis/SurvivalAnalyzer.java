@@ -17,24 +17,32 @@
  */
 package org.icgc.dcc.portal.analysis;
 
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
+import static org.icgc.dcc.portal.model.BaseEntitySet.Type.DONOR;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.elasticsearch.search.SearchHit;
-import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.SurvivalAnalysis;
 import org.icgc.dcc.portal.model.SurvivalAnalysis.Result;
-import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.model.UnionUnit;
 import org.icgc.dcc.portal.repository.DonorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SurvivalAnalyzer {
@@ -50,24 +58,32 @@ public class SurvivalAnalyzer {
    */
   @NonNull
   private final DonorRepository donorRepository;
+  @NonNull
+  private final UnionAnalyzer unionAnalyzer;
 
   public SurvivalAnalysis analyze(SurvivalAnalysis analysis) {
 
     analysis.setResults(new ArrayList<Result>());
-    for (val id : analysis.getEntitySetIds()) {
-      val filter = new FiltersParam(String.format(DONOR_FILTER, id));
-      val query = Query.builder()
-          .filters(filter.get())
-          .from(0)
-          .size(20000)
-          .sort("survivalTime")
-          .order("asc")
-          .build();
 
-      val result = donorRepository.findAllCentric(query);
-      val intervals = compute(result.getHits().getHits());
+    val sets = analysis.getEntitySetIds();
+    val entitySetMapBuilder = new ImmutableMap.Builder<UUID, UnionUnit>();
 
-      analysis.getResults().add(analysis.new Result(id, intervals));
+    for (val id : sets) {
+      val exclusions = sets.stream()
+          .filter(s -> !s.equals(id))
+          .collect(toImmutableSet());
+
+      entitySetMapBuilder.put(id, new UnionUnit(ImmutableSet.<UUID> of(id), exclusions));
+    }
+
+    val entitySetMap = entitySetMapBuilder.build();
+    for (val e : entitySetMap.entrySet()) {
+      val response = unionAnalyzer.computeSetOperation(e.getValue(), DONOR);
+      log.info("Response size: {}", response.getHits().getTotalHits());
+
+      val intervals = compute(response.getHits().getHits());
+
+      analysis.getResults().add(analysis.new Result(e.getKey(), intervals));
     }
 
     return analysis;
@@ -128,7 +144,7 @@ public class SurvivalAnalyzer {
       }
 
       val donor = new DonorValue(
-          (String) donors[i].field("_donor_id").getValue(),
+          donors[i].getId(),
           (String) donors[i].field("donor_vital_status").getValue(),
           time[i]);
       currentInterval.addDonor(donor);
