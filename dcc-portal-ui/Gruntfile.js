@@ -166,9 +166,7 @@ module.exports = function (grunt) {
                 '!\\.html|\\images|\\.js|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.svg ' +
                 '/' + yeomanConfig.developIndexFile + ' [L]'
               ]),
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, yeomanConfig.dist),
-              mountFolder(connect, yeomanConfig.app)
+              mountFolder(connect, yeomanConfig.dist)
             ];
           }
         }
