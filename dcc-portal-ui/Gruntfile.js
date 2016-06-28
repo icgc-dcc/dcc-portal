@@ -22,8 +22,6 @@ var lrSnippet = require('connect-livereload')({ port: LIVERELOAD_PORT });
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
-var fs = require('fs');
-var path = require('path');
 
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 var HOSTNAME = 'local.dcc.icgc.org';
@@ -144,17 +142,6 @@ module.exports = function (grunt) {
               ]),
               lrSnippet,
               mountFolder(connect, '.tmp'),
-
-              // TODO: This is necessary because the dev task doesn't transform the index.html
-              // take this out when the dev and dist tasks both transform the template
-              function (req, res, next) {
-                if (req._parsedUrl.path === '/develop/html/index.develop.html') {
-                  var indexHtml = fs.readFileSync(path.resolve('app/index.html'), 'utf8');
-                  res.end(grunt.template.process(indexHtml));
-                } else {
-                  next();
-                }
-              },
               mountFolder(connect, yeomanConfig.app),
             ];
           }
@@ -179,7 +166,9 @@ module.exports = function (grunt) {
                 '!\\.html|\\images|\\.js|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.svg ' +
                 '/' + yeomanConfig.developIndexFile + ' [L]'
               ]),
-              mountFolder(connect, yeomanConfig.dist)
+              mountFolder(connect, '.tmp'),
+              mountFolder(connect, yeomanConfig.dist),
+              mountFolder(connect, yeomanConfig.app)
             ];
           }
         }
@@ -277,7 +266,7 @@ module.exports = function (grunt) {
       }
     },
     useminPrepare: {
-      html: '<%= yeoman.dist %>/index.html',
+      html: '<%= yeoman.app %>/index.html',
       options: {
         dest: '<%= yeoman.dist %>',
         flow: {
@@ -361,6 +350,34 @@ module.exports = function (grunt) {
     },
     // Put files not handled in other tasks here
     copy: {
+      // process index.template.html
+      // TODO: this should build into a separate intermediatary folder, instead of yeoman.app
+      index: {
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>',
+            dest: '<%= yeoman.app %>',
+            src: ['index.template.html'],
+            rename: function (dest, srcFile) {
+              console.log('!!!', dest, srcFile);
+              if (srcFile === 'index.template.html') {
+                return dest + '/index.html';
+              }
+              return dest + '/' + srcFile;
+            }
+          }
+        ],
+        options: {
+          process: function (content, srcpath) {
+            if (srcpath === 'app/index.template.html') {
+              return grunt.template.process(content);
+            }
+            return content;
+          },
+        },
+      },
       dist: {
         files: [
           {
@@ -379,7 +396,6 @@ module.exports = function (grunt) {
               'styles/images/**/*.{gif,webp,svg,png,jpg}',
               'scripts/*/images/**/*.{gif,webp,svg,png,jpg}',
               'styles/fonts/*',
-              'styles/*.css',
               'views/**/*',
               'scripts/**/*.html',
               'scripts/**/*.map',
@@ -403,15 +419,7 @@ module.exports = function (grunt) {
             dest: '<%= yeoman.dist %>/styles/fonts/',
             src: ['vendor/scripts/genome-viewer/vendor/fontawesome/fonts/*' ]
           }
-        ],
-        options: {
-          process: function (content, srcpath) {
-            if (srcpath === 'app/index.html') {
-              return grunt.template.process(content);
-            }
-            return content;
-          }
-        }
+        ]
       }
     },
     concurrent: {
@@ -505,6 +513,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'ICGC-setBuildEnv:development',
+      'copy:index',
       'injector:dev',
       'clean:server',
       'configureProxies:server',
@@ -531,10 +540,11 @@ module.exports = function (grunt) {
     'jshint',
     'peg',
     'karma',
-    'concurrent:dist',
-    'copy:dist',
+    'copy:index',
     'useminPrepare',
+    'concurrent:dist',
     'concat',
+    'copy:dist',
     //'jsdoc2md',
 //    'cdnify',
     'ngAnnotate',
