@@ -142,7 +142,7 @@ module.exports = function (grunt) {
               ]),
               lrSnippet,
               mountFolder(connect, '.tmp'),
-              mountFolder(connect, yeomanConfig.app),
+              mountFolder(connect, yeomanConfig.app)
             ];
           }
         }
@@ -361,7 +361,6 @@ module.exports = function (grunt) {
             dest: '<%= yeoman.app %>',
             src: ['index.template.html'],
             rename: function (dest, srcFile) {
-              console.log('!!!', dest, srcFile);
               if (srcFile === 'index.template.html') {
                 return dest + '/index.html';
               }
