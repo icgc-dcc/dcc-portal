@@ -153,7 +153,6 @@
 
       // ----- START SURVIVAL MOCK
       
-      console.log($scope.analysisId, $scope.analysisType);
       if ($scope.analysisType === 'survival') {
         // $scope.analysisResult = null;
         // $timeout(function() {

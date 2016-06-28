@@ -29,7 +29,7 @@
 (function() {
   'use strict';
 
-  var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services']);
+  var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services', 'icgc.survival']);
 
   module.directive('phenotypeResult', function(SetService, PhenotypeService) {
     return {
