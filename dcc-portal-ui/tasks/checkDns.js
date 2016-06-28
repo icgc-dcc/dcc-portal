@@ -10,7 +10,7 @@ dns.lookup('local.dcc.icgc.org', (err, addresses, family) => {
     console.log(chalk.white(`127.0.0.1 local.dcc.icgc.org`));
 
     if (isWindows) {
-      console.log(chalk.red(`You can do that manually, or run ${chalk.white('\`npm run sethost\`')} in a command prompt that has been run as an administrator`));
+      console.log(chalk.red(`You can do that manually, or run ${chalk.white('\`npm run sethost\`')} in a command prompt that has been ${chalk.bold('run as an administrator')}`));
     } else {
       console.log(chalk.red(`You can do that manually, or run ${chalk.white('\`sudo npm run sethost\`')}`));
     }
