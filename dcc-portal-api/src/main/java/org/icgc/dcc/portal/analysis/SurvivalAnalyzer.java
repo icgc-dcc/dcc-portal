@@ -21,6 +21,7 @@ import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.model.BaseEntitySet.Type.DONOR;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,18 +41,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SurvivalAnalyzer {
-
-  /**
-   * Constants
-   */
-  private final static String DONOR_FILTER =
-      "{'donor':{'id':{'is':['ES:%s']},'vitalStatus':{'is':['alive','deceased']}}}";
 
   /**
    * Dependencies.
@@ -62,9 +55,7 @@ public class SurvivalAnalyzer {
   private final UnionAnalyzer unionAnalyzer;
 
   public SurvivalAnalysis analyze(SurvivalAnalysis analysis) {
-
     analysis.setResults(new ArrayList<Result>());
-
     val sets = analysis.getEntitySetIds();
     val entitySetMapBuilder = new ImmutableMap.Builder<UUID, UnionUnit>();
 
@@ -77,12 +68,15 @@ public class SurvivalAnalyzer {
     }
 
     val entitySetMap = entitySetMapBuilder.build();
+
     for (val e : entitySetMap.entrySet()) {
       val response = unionAnalyzer.computeSetOperation(e.getValue(), DONOR);
-      log.info("Response size: {}", response.getHits().getTotalHits());
 
-      val intervals = compute(response.getHits().getHits());
+      val filteredDonors = Arrays.stream(response.getHits().getHits())
+          .filter(SurvivalAnalyzer::hasData)
+          .toArray(size -> new SearchHit[size]);
 
+      val intervals = compute(filteredDonors);
       analysis.getResults().add(analysis.new Result(e.getKey(), intervals));
     }
 
@@ -156,6 +150,11 @@ public class SurvivalAnalyzer {
     currentInterval.setCumulativeSurvival(cumulativeSurvival);
 
     return intervals;
+  }
+
+  private static boolean hasData(SearchHit donor) {
+    return ((String) donor.field("donor_vital_status").getValue()).equalsIgnoreCase("alive") ||
+        ((String) donor.field("donor_vital_status").getValue()).equalsIgnoreCase("deceased");
   }
 
   @Data
