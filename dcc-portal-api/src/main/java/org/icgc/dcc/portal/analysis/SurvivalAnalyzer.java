@@ -23,6 +23,7 @@ import static org.icgc.dcc.portal.model.BaseEntitySet.Type.DONOR;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.elasticsearch.search.SearchHit;
@@ -57,27 +58,17 @@ public class SurvivalAnalyzer {
   public SurvivalAnalysis analyze(SurvivalAnalysis analysis) {
     analysis.setResults(new ArrayList<Result>());
     val sets = analysis.getEntitySetIds();
-    val entitySetMapBuilder = new ImmutableMap.Builder<UUID, UnionUnit>();
+    val entitySetMap = getEntitySetMap(sets);
 
     for (val id : sets) {
-      val exclusions = sets.stream()
-          .filter(s -> !s.equals(id))
-          .collect(toImmutableSet());
-
-      entitySetMapBuilder.put(id, new UnionUnit(ImmutableSet.<UUID> of(id), exclusions));
-    }
-
-    val entitySetMap = entitySetMapBuilder.build();
-
-    for (val e : entitySetMap.entrySet()) {
-      val response = unionAnalyzer.computeSetOperation(e.getValue(), DONOR);
+      val response = unionAnalyzer.computeExclusion(entitySetMap.get(id), DONOR);
 
       val filteredDonors = Arrays.stream(response.getHits().getHits())
           .filter(SurvivalAnalyzer::hasData)
           .toArray(size -> new SearchHit[size]);
 
       val intervals = compute(filteredDonors);
-      analysis.getResults().add(analysis.new Result(e.getKey(), intervals));
+      analysis.getResults().add(analysis.new Result(id, intervals));
     }
 
     return analysis;
@@ -153,8 +144,22 @@ public class SurvivalAnalyzer {
   }
 
   private static boolean hasData(SearchHit donor) {
-    return ((String) donor.field("donor_vital_status").getValue()).equalsIgnoreCase("alive") ||
-        ((String) donor.field("donor_vital_status").getValue()).equalsIgnoreCase("deceased");
+    val status = (String) donor.field("donor_vital_status").getValue();
+    return status.equalsIgnoreCase("alive") || status.equalsIgnoreCase("deceased");
+  }
+
+  private static Map<UUID, UnionUnit> getEntitySetMap(List<UUID> sets) {
+    val entitySetMapBuilder = new ImmutableMap.Builder<UUID, UnionUnit>();
+
+    for (val id : sets) {
+      val exclusions = sets.stream()
+          .filter(s -> !s.equals(id))
+          .collect(toImmutableSet());
+
+      entitySetMapBuilder.put(id, new UnionUnit(ImmutableSet.<UUID> of(id), exclusions));
+    }
+
+    return entitySetMapBuilder.build();
   }
 
   @Data
