@@ -54,11 +54,10 @@
    </div>
    <div class="modal-footer">
       <button class="t_button" data-ng-click="cancel()">Cancel</button>
-      <button class="t_button" data-ng-click="sendRequest();"
+      <button class="t_button" data-ng-click="download();"
               data-ng-disabled="dlTotal==0 || isSendingRequest()">
-         <span data-ng-if="! isSendingRequest()"><i class="icon-download"></i></span>
-         <span data-ng-if="isSendingRequest()"><i class="icon-spinner icon-spin"></i></span>
-         Submit
+         <span data-ng-if="! isSendingRequest()"><i class="icon-download"></i>Download</span>
+         <span data-ng-if="isSendingRequest()"><i class="icon-spinner icon-spin"></i>Preparing...</span>
       </button>
    </div>
 </div>

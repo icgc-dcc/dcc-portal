@@ -24,8 +24,8 @@
   /**
    * Requesting dynamic download
    */
-  module.controller('DownloadRequestController', function($scope, $location, $modalInstance,
-    $filter, Donors, LocationService, DownloaderService, DataType, filters, RouteInfoService) {
+  module.controller('DownloadRequestController', function($scope, $location, $window, $modalInstance,
+    $filter, API, Donors, LocationService, DownloaderService, DataType, filters, RouteInfoService) {
 
     var _isSendingRequest = false;
 
@@ -79,7 +79,7 @@
       return _isSendingRequest;
     };
 
-    $scope.sendRequest = function() {
+    $scope.download = function() {
       var i, item, actives, linkURL;
 
       // Prevent sending the request multiple times
@@ -101,13 +101,12 @@
       DownloaderService
         .requestDownloadJob(filters, actives, null,
           linkURL, JSON.stringify(filters)).then(function (job) {
-          $modalInstance.dismiss('cancel');
-          $location.path('/download/' + job.downloadId).search('');
+            $window.location.assign(API.BASE_URL + '/download/' + job.downloadId);
+            $modalInstance.dismiss('cancel');
         })
         .finally(function() {
           _isSendingRequest = false;
         });
-
     };
 
 
@@ -135,15 +134,11 @@
         // Re-order it based on importance
         $scope.params.dataTypes = $filter('orderBy')($scope.params.dataTypes, sortFunc);
 
-
         $scope.params.processing = false;
       });
     };
 
 
     $scope.calculateSize();
-
   });
-
 })();
-
