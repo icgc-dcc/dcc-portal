@@ -48,7 +48,7 @@
   module.controller('GeneSetCtrl',
     function ($scope, $timeout, $state, LocationService, HighchartsService, Page, GeneSetHierarchy, GeneSetService,
       GeneSetVerificationService, FiltersUtil, ExternalLinks, geneSet, PathwaysConstants, Genes, CompoundsService, 
-      SetService) {
+      SetService, Restangular) {
 
 
       var _ctrl = this, 
@@ -74,15 +74,12 @@
       $scope.fixScroll = function () {
         var current = jQuery('.current').children('a').attr('href');
         // We do not want to immediately scroll away from the controls on page load. 
-        // Timeout of zero is used to ensure scroll happens after render. 
-        $timeout(function() {
-          if (current !== '#summary') {
-            jQuery('body,html').stop(true, true);
-            var offset = jQuery(current).offset();
-            var to = offset.top - 40;
-            jQuery('body,html').animate({scrollTop: to}, 200); 
-          } 
-        },0);
+        if (current !== '#summary') {
+          jQuery('body,html').stop(true, true);
+          var offset = jQuery(current).offset();
+          var to = offset.top - 40;
+          jQuery('body,html').animate({scrollTop: to}, 200); 
+        } 
       };
 
       // Builds the project-donor distribution based on thie gene set
@@ -259,7 +256,7 @@
               'size': _ctrl.geneSet.geneCount,
               'transient': true 
             }).then(function (entitySetData) {
-              CompoundsService.getCompoundsFromEntitySetId(entitySetData.id).then(function(drugs) {                
+              CompoundsService.getCompoundsFromEntitySetId(entitySetData.id).then(function(drugs) {
                 var drugMap = {};
                 _.forEach(drugs, function(drug) {
                   var zincId = drug.zincId;
@@ -376,7 +373,6 @@
     }
 
     function refresh() {
-      $scope.fixScroll();
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});
@@ -457,7 +453,6 @@
     }
 
     function refresh() {
-      $scope.fixScroll();
       GeneSets.one().get().then(function (p) {
         geneSet = p;
 
@@ -510,7 +505,6 @@
     }
 
     function refresh() {
-      $scope.fixScroll();
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});
