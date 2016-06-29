@@ -5,7 +5,8 @@ Parent project of the portal modules
 ## Build
 
 To compile, test and package the system, execute the following from the root of the repository:
-```
+
+```shell
 $ mvn
 ```
 
