@@ -1,0 +1,38 @@
+$faded: #e6dede;
+.survival-graph {
+
+  .axis {
+    path, line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    path {
+      stroke: $faded
+    }
+
+    .tick text {
+      fill: #888
+    }
+  }
+  
+
+  .axis path {
+  }
+
+  .line {
+    fill: none;
+    // stroke: steelblue;
+    stroke-width: 1.5px;
+  }
+
+}
+
+.survival-analysis .survival-graph {
+  width: 100%;
+  svg {
+    width: 100%;
+    height: auto;
+  }
+}

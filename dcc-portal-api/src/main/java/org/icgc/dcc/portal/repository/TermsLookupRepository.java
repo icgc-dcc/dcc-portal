@@ -22,6 +22,8 @@ import static com.google.common.base.Throwables.propagate;
 import static java.lang.Math.min;
 import static lombok.AccessLevel.PRIVATE;
 import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
+import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
+import static org.elasticsearch.search.sort.SortOrder.ASC;
 import static org.icgc.dcc.portal.model.IndexModel.Type.DONOR_TEXT;
 import static org.icgc.dcc.portal.model.IndexModel.Type.FILE_DONOR_TEXT;
 import static org.icgc.dcc.portal.util.ElasticsearchRequestUtils.toBoolFilterFrom;
@@ -65,7 +67,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired) )
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TermsLookupRepository {
 
   /**
@@ -109,10 +111,7 @@ public class TermsLookupRepository {
   @RequiredArgsConstructor(access = PRIVATE)
   public enum TermLookupType {
 
-    GENE_IDS("gene-ids"),
-    MUTATION_IDS("mutation-ids"),
-    DONOR_IDS("donor-ids"),
-    FILE_IDS("file-ids");
+    GENE_IDS("gene-ids"), MUTATION_IDS("mutation-ids"), DONOR_IDS("donor-ids"), FILE_IDS("file-ids");
 
     @NonNull
     private final String name;
@@ -200,13 +199,28 @@ public class TermsLookupRepository {
 
   public SearchResponse runUnionEsQuery(final String indexTypeName, @NonNull final SearchType searchType,
       @NonNull final BoolFilterBuilder boolFilter, final int max) {
-    val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
+    val query = filteredQuery(MATCH_ALL, boolFilter);
     return execute("Union ES Query", false, (request) -> request
         .setTypes(indexTypeName)
         .setSearchType(searchType)
         .setQuery(query)
         .setSize(max)
         .setNoFields());
+  }
+
+  /**
+   * Special case for Survival Analysis, the fields selected for return are the only ones we currently care about.
+   */
+  public SearchResponse runUnionEsQueryWithFields(final String indexTypeName, @NonNull final SearchType searchType,
+      @NonNull final BoolFilterBuilder boolFilter, final int max) {
+    val query = filteredQuery(MATCH_ALL, boolFilter);
+    return execute("Union ES Query", false, (request) -> request
+        .addSort("donor_survival_time", ASC)
+        .setTypes(indexTypeName)
+        .setSearchType(searchType)
+        .setQuery(query)
+        .setSize(max)
+        .addFields("donor_survival_time", "donor_vital_status"));
   }
 
   public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter) {

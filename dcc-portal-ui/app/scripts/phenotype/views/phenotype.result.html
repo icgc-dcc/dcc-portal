@@ -9,6 +9,13 @@
     <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
 </div>
 <div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
+
+    <div class="survival-analysis-wrapper">
+        <survival-analysis
+            set-ids="item.entitySetIds"
+        ></survival-analysis>
+    </div>
+
     <div>Your selected donor sets</div>
     <div class="wide">
         <table class="table">
