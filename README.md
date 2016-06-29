@@ -22,6 +22,7 @@ mvn -pl '!dcc-portal-ui' compile && mvn -pl dcc-portal-api exec:java -Dexec.args
 Technically the first part only has to be done when source files change.
 
 ### IDE
+
 From Eclipse or IntelliJ:
 
 | Property   | Value                            |
