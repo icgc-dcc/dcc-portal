@@ -1,8 +1,8 @@
 {
   "name": "dcc-portal-ui",
   "description": "ICGC DCC Data Portal UI",
-  "version": "4.0.26",
-  "license": "GPLv3",
+  "version": "4.2.6-SNAPSHOT",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
     "url": "git://github.com:icgc-dcc/dcc-portal.git"
