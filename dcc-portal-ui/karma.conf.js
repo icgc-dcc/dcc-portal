@@ -26,7 +26,7 @@ module.exports = function(config){
       'app/bower_components/angularjs-toaster/toaster.js',
       'app/bower_components/zeroclipboard/dist/ZeroClipboard.js',
       'app/bower_components/highcharts/highcharts.js',
-      'bower_components/highcharts/modules/no-data-to-display.src.js',
+      'app/bower_components/highcharts/modules/no-data-to-display.src.js',
       'app/bower_components/d3/d3.min.js',
       'app/bower_components/Blob/Blob.js',
       'app/bower_components/FileSaver/FileSaver.min.js',
@@ -39,7 +39,7 @@ module.exports = function(config){
       'app/bower_components/angular-mocks/angular-mocks.js',
 
       // === Application files ===
-      'app/scripts/app.js',
+      'app/scripts/app/js/app.js',
       'app/scripts/**/*.js',
 
       // include unit test specs
@@ -76,9 +76,7 @@ module.exports = function(config){
     // list of karma plugins
     plugins : [
         'karma-spec-reporter',
-        'karma-junit-reporter',
         'karma-chrome-launcher',
-        'karma-firefox-launcher',
         'karma-jasmine',
         'karma-phantomjs-launcher'
     ]
