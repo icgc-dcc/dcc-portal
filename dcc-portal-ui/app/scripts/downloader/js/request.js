@@ -109,7 +109,6 @@
         });
     };
 
-
     $scope.calculateSize = function () {
       $scope.params.processing = true;
       reset();
