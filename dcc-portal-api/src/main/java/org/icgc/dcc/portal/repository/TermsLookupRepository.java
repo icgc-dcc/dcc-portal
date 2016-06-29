@@ -22,6 +22,7 @@ import static com.google.common.base.Throwables.propagate;
 import static java.lang.Math.min;
 import static lombok.AccessLevel.PRIVATE;
 import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
+import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
 import static org.elasticsearch.search.sort.SortOrder.ASC;
 import static org.icgc.dcc.portal.model.IndexModel.Type.DONOR_TEXT;
 import static org.icgc.dcc.portal.model.IndexModel.Type.FILE_DONOR_TEXT;
@@ -198,7 +199,7 @@ public class TermsLookupRepository {
 
   public SearchResponse runUnionEsQuery(final String indexTypeName, @NonNull final SearchType searchType,
       @NonNull final BoolFilterBuilder boolFilter, final int max) {
-    val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
+    val query = filteredQuery(MATCH_ALL, boolFilter);
     return execute("Union ES Query", false, (request) -> request
         .setTypes(indexTypeName)
         .setSearchType(searchType)
@@ -212,7 +213,7 @@ public class TermsLookupRepository {
    */
   public SearchResponse runUnionEsQueryWithFields(final String indexTypeName, @NonNull final SearchType searchType,
       @NonNull final BoolFilterBuilder boolFilter, final int max) {
-    val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
+    val query = filteredQuery(MATCH_ALL, boolFilter);
     return execute("Union ES Query", false, (request) -> request
         .addSort("donor_survival_time", ASC)
         .setTypes(indexTypeName)

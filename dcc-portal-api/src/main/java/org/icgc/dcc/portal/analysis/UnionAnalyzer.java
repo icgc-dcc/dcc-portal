@@ -137,7 +137,7 @@ public class UnionAnalyzer {
     return SearchResponses.getHitIds(response);
   }
 
-  public SearchResponse computeSetOperation(@NonNull final UnionUnit unionUnit, BaseEntitySet.Type type) {
+  public SearchResponse computeExclusion(@NonNull final UnionUnit unionUnit, BaseEntitySet.Type type) {
     val response =
         unionOne(unionUnit, type, termsLookupRepository.getMaxPreviewNumberOfHits());
     return response;
