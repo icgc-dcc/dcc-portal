@@ -378,7 +378,7 @@ public class DownloadResource extends Resource {
   }
 
   private static boolean isUserDownload(User user, List<JobResponse> jobs) {
-    val userId = user == null ? ANONYMOUS_USER : user.getEmailAddress();
+    val userId = getUserId(user);
 
     return jobs.stream()
         .allMatch(job -> job.getJobInfo().getUser().equals(userId));
@@ -415,7 +415,10 @@ public class DownloadResource extends Resource {
   }
 
   private static String getUserId(User user) {
-    return user == null ? ANONYMOUS_USER : user.getEmailAddress();
+    val userId = user == null ? ANONYMOUS_USER : user.getEmailAddress();
+    checkRequest(userId == null, "Incorrectly authorized user.");
+
+    return userId;
   }
 
   private static boolean isControlled(String path) {
