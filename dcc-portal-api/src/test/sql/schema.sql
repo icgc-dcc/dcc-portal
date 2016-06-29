@@ -58,5 +58,13 @@ CREATE TABLE IF NOT EXISTS manifest(
    version  INT,
    data     TEXT
 );
+   
+--------------------------------------------------------------------------------
+   
+CREATE TABLE IF NOT EXISTS oncogrid_analysis(
+   id       UUID PRIMARY KEY,
+   version  INT,
+   data     TEXT
+);
 
 --------------------------------------------------------------------------------

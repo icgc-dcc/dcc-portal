@@ -33,7 +33,8 @@ module.exports = function(config){
       'app/bower_components/showdown/src/showdown.js',
       'app/bower_components/showdown/src/extensions/table.js',
       'app/bower_components/x2js/xml2json.js',
-      'app/scripts/ui/js/table2CSV.js',
+      'app/vendor/scripts/table2CSV.js',
+      'app/vendor/scripts/oncogrid/oncogrid-debug.js',
 
       // === Test, mock files ===
       'app/bower_components/angular-mocks/angular-mocks.js',

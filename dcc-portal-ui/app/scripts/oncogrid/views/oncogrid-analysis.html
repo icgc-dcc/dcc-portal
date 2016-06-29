@@ -1,0 +1,148 @@
+<div class="og-grid-align">
+    <h3>OncoGrid</h3>
+    <div>Your selected sets</div>
+</div>
+<div>
+    <div class="wide og-grid-align">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Set</th>
+                    <th class="text-right"># Items</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Donor</td>
+                    <td>{{item.donorSetName}}</td>
+                    <td class="text-right"><a href="{{donorLink}}">{{item.donorCount}}</a></td>
+                    <td style="font-size:1.25rem;">                            
+                        <span class="t_tools__tool">
+                            <i class="icon-file" data-tooltip="Export as TSV" data-ng-click="exportSet(item.donorSet)"></i>
+                        </span>
+                        <a class="t_tools__tool"
+                            data-tooltip="View in Data Repositores" href="{{repoLink}}">
+                            <i class="icon-download-cloud"></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gene</td>
+                    <td>{{item.geneSetName}}</td>
+                    <td class="text-right"><a href="{{geneLink}}">{{item.geneCount}}</a></td>
+                    <td style="font-size:1.25rem;">                            
+                        <span class="t_tools__tool">
+                            <i class="icon-file" data-tooltip="Export as TSV" data-ng-click="exportSet(item.geneSet)"></i>
+                        </span>
+                    </td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="wide og-grid-align">
+        <span class="action-toolbar">
+        Resulting Number of Mutation Occurrences: <a href="{{obsLink}}">{{obsCount}}</a>
+    </span>
+        <span class="action-toolbar pull-right">
+        <i class="icon-chart"></i><a href="{{gvLink}}">Genome Viewer</a>
+    </span>
+    </div>
+
+    <div class="clearfix"></div>
+    <br>
+
+    <h1 id="oncogrid-spinner" class="text-center oncogrid-spinner">
+        <i class="icon-spinner icon-spin" style="font-size:5rem"></i>
+    </h1>
+
+    <div id="oncogrid-container">
+
+        <div id="oncogrid-controls" class="og-grid-align" style="margin-top: 10px; min-height: 70px;">
+            <div style="float:left">
+                <table>
+                    <tr>
+                        <td>
+                            <button id="reload-button" data-tooltip="Reload grid" class="btn btn-default btn-onco" data-ng-click="reloadGrid()"><i class="icon-undo"></i></button>
+                        </td>
+                        <td>
+                            <button id="cluster-button" data-tooltip="Cluster data" class="btn btn-default btn-onco" data-ng-click="clusterData()"><i class="icon-sort"></i></button>
+                        </td>
+
+                        <td>
+                            <button id="heat-button" data-tooltip="Toggle heatmap view" class="btn btn-default btn-onco" data-ng-click="heatMap()"><i class="icon-fire"></i></button>
+                        </td>
+
+                        <td>
+                            <button id="grid-button" data-tooltip="Toggle grid lines" class="btn btn-default btn-onco" data-ng-click="gridLines()"><i class="icon-grid"></i></button>
+                        </td>
+
+                        <td>
+                            <button id="crosshair-button" data-tooltip="Toggle crosshair" class="btn btn-default btn-onco" data-ng-click="crosshair()"><i class="icon-target"></i></button>
+                        </td>
+
+                        <td>
+                            <button id="fullscreen-button" data-tooltip="Fullscreen" class="btn btn-default btn-onco" data-ng-click="requestFullScreen()"><i id="og-fullscreen-button" class="icon-resize-full"></i></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="og-legend" class="og-legend">
+                <table id="og-variant-legend" class="onco-table">
+                    <tr>
+                        <td>
+                            <div>
+                                <div class="onco-legend-square" style="background:#ff9b6c"></div><small>missense variant</small>
+                            </div>
+
+                            <div>
+                                <div class="onco-legend-square" style="background:#57dba4"></div><small>frameshift variant</small>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div>
+                                <div class="onco-legend-square" style="background:#ff2323"></div><small>start lost</small>
+                            </div>
+
+                            <div>
+                                <div class="onco-legend-square" style="background:#d3ec00"></div><small>stop lost</small>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div>
+                                <div class="onco-legend-square" style="background:#5abaff"></div><small>initiator codon variant</small>
+                            </div>
+
+                            <div>
+                                <div class="onco-legend-square" style="background:#af57db"></div><small>stop gained</small>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <table id="og-heatmap-legend" class="onco-table" style="display: none;">
+                    <tr>
+                        <td>Less</td>
+                        <td>
+                            <div class="onco-legend-square" style="background:#D33682; opacity: 0.25;"></div>
+                            <div class="onco-legend-square" style="background:#D33682; opacity: 0.50;"></div>
+                            <div class="onco-legend-square" style="background:#D33682; opacity: 0.75;"></div>
+                            <div class="onco-legend-square" style="background:#D33682; opacity: 1;"></div>
+                        </td>
+                        <td>More Mutations</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+        <div id="oncogrid-div" class="og-pointer-mode"></div>
+    </div>
+</div>

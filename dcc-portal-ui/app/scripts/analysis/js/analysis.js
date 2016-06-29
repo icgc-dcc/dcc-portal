@@ -166,7 +166,7 @@
           $scope.analysisResult = null;
           $timeout(function() {
             $scope.analysisResult = data;
-          }, 150);
+          }, 250);
           return;
         }
 
@@ -221,6 +221,11 @@
         ' such as gender, vital status and age at diagnosis between your donor sets.',
         demoDescription: 'Display survival analysis and compare phenotypes across brain, breast, and ' + 
         'colorectal cancer donors.'
+      },
+      oncogrid: {
+        name: 'OncoGrid',
+        description: 'Display OncoGrid diagram to visualize genetic alteration occurrences affecting a set of donors.',
+        demoDescription: 'Generate an OncoGrid using top 75 donors and genes for PCAWG liver projects.'
       },
       survival: {
         name: 'Survival Analysis',
@@ -282,6 +287,10 @@
       } else if (type === 'phenotype') {
         payload.dataType = 'donor';
         payload.inputSetCount = analysis.inputCount || '';
+      } else if (type === 'oncogrid') {
+        payload.dataType = 'oncogrid';
+        payload.geneCount = analysis.geneCount;
+        payload.donorCount = analysis.donorCount;
       } else {
         payload.dataType = analysis.type.toLowerCase();
         payload.inputSetCount = analysis.inputCount || '';

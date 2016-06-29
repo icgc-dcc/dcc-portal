@@ -18,23 +18,25 @@
 package org.icgc.dcc.portal.model;
 
 import static java.util.Collections.emptyList;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.util.ElasticsearchResponseUtils.getString;
+import static org.icgc.dcc.portal.util.ElasticsearchResponseUtils.toStringList;
 
 import java.util.List;
 import java.util.Map;
-
-import lombok.Value;
-import lombok.val;
 
 import org.icgc.dcc.portal.model.IndexModel.Kind;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Value;
+import lombok.val;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -57,6 +59,12 @@ public class Occurrence {
   String mutation;
   @ApiModelProperty(value = "Observation", required = true)
   List<Observation> observations;
+  @ApiModelProperty(value = "Gene Id", required = true)
+  List<String> geneId;
+  @ApiModelProperty(value = "Consequence Type", required = true)
+  List<String> consequenceType;
+  @ApiModelProperty(value = "Genes", required = true)
+  List<OccurrenceGene> genes;
 
   @JsonCreator
   public Occurrence(Map<String, Object> fieldMap) {
@@ -69,6 +77,9 @@ public class Occurrence {
     projectId = getString(fieldMap.get(fields.get("projectId")));
     mutation = getString(fieldMap.get(fields.get("mutation")));
     observations = buildObservations(getObservations(fieldMap));
+    geneId = toStringList(fieldMap.get(fields.get("gene.id")));
+    consequenceType = toStringList(fieldMap.get(fields.get("mutation.consequenceType")));
+    genes = buildGenes(getGenes(fieldMap));
   }
 
   @SuppressWarnings("unchecked")
@@ -89,6 +100,22 @@ public class Occurrence {
       observations.add(new Observation(map));
     }
     return observations;
+  }
+
+  @SuppressWarnings("unchecked")
+  private static List<Map<String, Object>> getGenes(Map<String, Object> fieldMap) {
+    val observationKey = "ssm.gene";
+    if (!fieldMap.containsKey(observationKey)) {
+      return emptyList();
+    }
+
+    return (List<Map<String, Object>>) fieldMap.get(observationKey);
+  }
+
+  private List<OccurrenceGene> buildGenes(List<Map<String, Object>> rawGeneList) {
+    if (rawGeneList == null) return null;
+
+    return rawGeneList.stream().map(OccurrenceGene::new).collect(toImmutableList());
   }
 
 }

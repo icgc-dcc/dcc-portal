@@ -20,6 +20,7 @@ package org.icgc.dcc.portal.config;
 import org.icgc.dcc.portal.repository.EnrichmentAnalysisRepository;
 import org.icgc.dcc.portal.repository.EntitySetRepository;
 import org.icgc.dcc.portal.repository.ManifestRepository;
+import org.icgc.dcc.portal.repository.OncogridAnalysisRepository;
 import org.icgc.dcc.portal.repository.PhenotypeAnalysisRepository;
 import org.icgc.dcc.portal.repository.SurvivalAnalysisRepository;
 import org.icgc.dcc.portal.repository.UnionAnalysisRepository;
@@ -73,6 +74,11 @@ public class RepositoryConfig {
   @Bean
   public ManifestRepository manifestRepository(DBI dbi) {
     return dbi.open(ManifestRepository.class);
+  }
+
+  @Bean
+  public OncogridAnalysisRepository oncogridAnalysisRepository(DBI dbi) {
+    return dbi.open(OncogridAnalysisRepository.class);
   }
 
   @Bean

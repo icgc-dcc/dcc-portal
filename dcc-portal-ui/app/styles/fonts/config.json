@@ -1025,6 +1025,18 @@
       "css": "cloud",
       "code": 59460,
       "src": "linecons"
+    },
+    {
+      "uid": "o1c30odwfvgcvi5b4jsg95sur8v6ghsp",
+      "css": "grid",
+      "code": 59470,
+      "src": "modernpics"
+    },
+    {
+      "uid": "3eadc3e443cf1c7e17f1b44d21254c00",
+      "css": "target",
+      "code": 59471,
+      "src": "entypo"
     }
   ]
 }

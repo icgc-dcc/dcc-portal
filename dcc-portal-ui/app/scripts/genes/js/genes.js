@@ -339,7 +339,7 @@
 
   var module = angular.module('icgc.genes.models', []);
 
-  module.service('Genes', function (Restangular, LocationService, Gene) {
+  module.service('Genes', function (Restangular, LocationService, Gene, FilterService, $q) {
     this.handler = Restangular.all('genes');
 
     this.getList = function (params) {
@@ -350,6 +350,36 @@
       };
 
       return this.handler.get('', angular.extend(defaults, params));
+    };
+    
+    this.getAll = function (params) {
+      var _self = this;
+
+      var defaults = {
+        size: 10,
+        from: 1,
+        filters: FilterService.filters()
+      };
+
+      var genes = [];
+      var deferred = $q.defer();
+
+      function pageAll(params) {
+        _self.handler.get('', angular.extend(defaults, params)).then(function (data) {
+          genes = genes.concat(data.hits);
+          var pagination = data.pagination;
+          if (pagination.page < pagination.pages) {
+            var newParams = params;
+            newParams.from = (pagination.page + 1 - 1) * 100 + 1;
+            pageAll(newParams);
+          } else {
+            deferred.resolve(genes);
+          }
+        });
+      }
+      
+       pageAll(params);
+       return deferred.promise;
     };
 
     this.one = function (id) {

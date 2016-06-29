@@ -27,7 +27,7 @@
       controller: 'MutationCtrl as MutationCtrl',
       resolve: {
         mutation: ['$stateParams', 'Mutations', function ($stateParams, Mutations) {
-          return Mutations.one($stateParams.id).get({include: ['occurrences', 'transcripts', 'consequences']});
+          return Mutations.one($stateParams.id).get({ include: ['occurrences', 'transcripts', 'consequences'] });
         }]
       }
     });
@@ -44,7 +44,7 @@
     Page.setTitle(mutation.id);
     Page.setPage('entity');
 
-    _ctrl.gvOptions = {location: false, panels: false, zoom: 100};
+    _ctrl.gvOptions = { location: false, panels: false, zoom: 100 };
 
     _ctrl.mutation = mutation;
     _ctrl.mutation.uiProteinTranscript = [];
@@ -73,20 +73,20 @@
 
 
     if (_ctrl.mutation.hasOwnProperty('consequences') && _ctrl.mutation.consequences.length) {
-      var affectedGeneIds = _.filter(_.pluck(_ctrl.mutation.consequences, 'geneAffectedId'), function(d) {
+      var affectedGeneIds = _.filter(_.pluck(_ctrl.mutation.consequences, 'geneAffectedId'), function (d) {
         return !_.isUndefined(d);
       });
 
       if (affectedGeneIds.length > 0) {
         Genes.getList({
-          filters: {gene:{id:{is: affectedGeneIds }}},
+          filters: { gene: { id: { is: affectedGeneIds } } },
           field: [],
           include: 'transcripts',
           size: 100
         }).then(function (genes) {
           var geneTranscripts = _.pluck(genes.hits, 'transcripts');
           var mergedTranscripts = [];
-          geneTranscripts.forEach(function(t) {
+          geneTranscripts.forEach(function (t) {
             mergedTranscripts = mergedTranscripts.concat(t);
           });
 
@@ -160,13 +160,13 @@
           var precedence = Consequence.precedence();
 
           if (data.facets.hasOwnProperty('consequenceType') &&
-              data.facets.consequenceType.hasOwnProperty('terms')) {
+            data.facets.consequenceType.hasOwnProperty('terms')) {
             data.facets.consequenceType.terms = data.facets.consequenceType.terms.sort(function (a, b) {
               return precedence.indexOf(a.term) - precedence.indexOf(b.term);
             });
           }
           if (data.facets.hasOwnProperty('functionalImpact') &&
-              data.facets.functionalImpact.hasOwnProperty('terms')) {
+            data.facets.functionalImpact.hasOwnProperty('terms')) {
             data.facets.functionalImpact.terms = data.facets.functionalImpact.terms.sort(function (a, b) {
               return ImpactOrder.indexOf(a.term) - ImpactOrder.indexOf(b.term);
             });
@@ -198,7 +198,7 @@
     };
   });
 
-  module.service('Occurrences', function (Restangular, FilterService, Occurrence) {
+  module.service('Occurrences', function (Restangular, FilterService, Occurrence, $q) {
     this.handler = Restangular.all('occurrences');
 
     this.getList = function (params) {
@@ -209,6 +209,36 @@
       };
 
       return this.handler.get('', angular.extend(defaults, params));
+    };
+
+    this.getAll = function (params) {
+      var _self = this;
+
+      var defaults = {
+        size: 10,
+        from: 1,
+        filters: {}
+      };
+
+      var observations = [];
+      var deferred = $q.defer();
+
+      function pageAll(params) {
+        _self.handler.get('', angular.extend(defaults, params)).then(function (data) {
+          observations = observations.concat(data.hits);
+          var pagination = data.pagination;
+          if (pagination.page < pagination.pages) {
+            var newParams = params;
+            newParams.from = (pagination.page + 1 - 1) * 100 + 1;
+            pageAll(newParams);
+          } else {
+            deferred.resolve(observations);
+          }
+        });
+      }
+      
+       pageAll(params);
+       return deferred.promise;
     };
 
     this.one = function (id) {

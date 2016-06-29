@@ -243,6 +243,7 @@
     'icgc.sets',
     'icgc.analysis',
     'icgc.phenotype',
+    'icgc.oncogrid',
     'icgc.beacon',
     'icgc.downloader',
     'icgc.pathwayviewer',

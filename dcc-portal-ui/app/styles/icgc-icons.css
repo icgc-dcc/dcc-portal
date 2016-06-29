@@ -132,6 +132,8 @@
 .icon-cw:before { content: '\e84b'; } /* '' */
 .icon-toggle-off:before { content: '\e84c'; } /* '' */
 .icon-toggle-on:before { content: '\e84d'; } /* '' */
+.icon-grid:before { content: '\e84e'; } /* '' */
+.icon-target:before { content: '\e84f'; } /* '' */
 
 /*
  *  Animation example, for spinners
