@@ -13,7 +13,7 @@ $ mvn
 
 ### Command-line
 
-From the root of the project:
+To run the server without building the UI or packaging the API into a jar, issue the following from the root of the project:
 
 ```shell
 mvn -pl '!dcc-portal-ui' compile && mvn -pl dcc-portal-api exec:java -Dexec.args="server /absolute/path/to/settings.yml"
