@@ -378,7 +378,7 @@ public class DownloadResource extends Resource {
   }
 
   private static boolean isUserDownload(User user, List<JobResponse> jobs) {
-    val userId = user == null ? ANONYMOUS_USER : user.getId();
+    val userId = user == null ? ANONYMOUS_USER : user.getEmailAddress();
 
     return jobs.stream()
         .allMatch(job -> job.getJobInfo().getUser().equals(userId));
@@ -415,7 +415,7 @@ public class DownloadResource extends Resource {
   }
 
   private static String getUserId(User user) {
-    return user == null ? ANONYMOUS_USER : user.getId();
+    return user == null ? ANONYMOUS_USER : user.getEmailAddress();
   }
 
   private static boolean isControlled(String path) {

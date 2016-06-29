@@ -93,11 +93,12 @@ public class DownloadResourceTest extends ResourceTest {
   private JwtService tokenService;
 
   private final UUID sessionToken = UUID.randomUUID();
-  private final User user = new User(USER_ID, sessionToken);
+  private final User user = new User(null, sessionToken);
 
   @Before
   public void setUp() throws Exception {
     user.setDaco(true);
+    user.setEmailAddress(USER_ID);
     sessionService.putUser(sessionToken, user);
   }
 
