@@ -43,7 +43,8 @@
   'use strict';
 
   var module = angular.module('icgc.genesets.controllers', ['icgc.genesets.services', 'icgc.pathways']);
-
+  
+  /*jshint -W072 */
   module.controller('GeneSetCtrl',
     function ($scope, $timeout, $state, LocationService, HighchartsService, Page, GeneSetHierarchy, GeneSetService,
       GeneSetVerificationService, FiltersUtil, ExternalLinks, geneSet, PathwaysConstants, Genes, CompoundsService, 
@@ -257,8 +258,10 @@
               'size': _ctrl.geneSet.geneCount,
               'transient': true 
             }).then(function (entitySetData) {
-              Restangular.one('entityset', entitySetData.id).get().then(function(entitySet) {
-                CompoundsService.getCompoundsFromEntitySetId(entitySetData.id).then(function(drugs) {                
+              Restangular.one('entityset', entitySetData.id).get()
+                .then(function(entitySet) {
+                CompoundsService.getCompoundsFromEntitySetId(entitySetData.id)
+                  .then(function(drugs) {                
                   var drugMap = {};
                   _.forEach(drugs, function(drug) {
                     var zincId = drug.zincId;
