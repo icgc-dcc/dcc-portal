@@ -3,4 +3,3 @@ app/styles/styles.css
 report/
 app/scripts/common/js/pql/pqlparser.js
 target/
-jshint.xml
