@@ -74,12 +74,15 @@
       $scope.fixScroll = function () {
         var current = jQuery('.current').children('a').attr('href');
         // We do not want to immediately scroll away from the controls on page load. 
-        if (current !== '#summary') {
-          jQuery('body,html').stop(true, true);
-          var offset = jQuery(current).offset();
-          var to = offset.top - 40;
-          jQuery('body,html').animate({scrollTop: to}, 200); 
-        } 
+        // Timeout of zero is used to ensure scroll happens after render. 
+        $timeout(function() {
+          if (current !== '#summary') {
+            jQuery('body,html').stop(true, true);
+            var offset = jQuery(current).offset();
+            var to = offset.top - 40;
+            jQuery('body,html').animate({scrollTop: to}, 200); 
+          } 
+        },0);
       };
 
       // Builds the project-donor distribution based on thie gene set
@@ -373,6 +376,7 @@
     }
 
     function refresh() {
+      $scope.fixScroll();
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});
@@ -453,6 +457,7 @@
     }
 
     function refresh() {
+      $scope.fixScroll();
       GeneSets.one().get().then(function (p) {
         geneSet = p;
 
@@ -505,6 +510,7 @@
     }
 
     function refresh() {
+      $scope.fixScroll();
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});
