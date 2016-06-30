@@ -258,10 +258,8 @@
               'size': _ctrl.geneSet.geneCount,
               'transient': true 
             }).then(function (entitySetData) {
-              Restangular.one('entityset', entitySetData.id).get()
-                .then(function(entitySet) {
-                CompoundsService.getCompoundsFromEntitySetId(entitySetData.id)
-                  .then(function(drugs) {                
+              Restangular.one('entityset', entitySetData.id).get().then(function() {
+                CompoundsService.getCompoundsFromEntitySetId(entitySetData.id).then(function(drugs) {                
                   var drugMap = {};
                   _.forEach(drugs, function(drug) {
                     var zincId = drug.zincId;
