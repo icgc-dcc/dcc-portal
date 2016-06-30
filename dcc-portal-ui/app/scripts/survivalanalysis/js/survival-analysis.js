@@ -127,7 +127,7 @@
             .attr('cx', function(d) { return x(d.survivalTime) })
             .attr('cy', function(d) { return y(d.survivalEstimate) })
             .attr('stroke-width', 'none')
-            .attr('fill', 'orange' )
+            .attr('fill', setColor )
             .attr('fill-opacity', .5)
             .attr('r', 3)
             .attr('cursor', 'pointer')
