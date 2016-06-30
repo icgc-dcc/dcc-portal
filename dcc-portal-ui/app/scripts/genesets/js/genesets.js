@@ -1,4 +1,3 @@
-<<<<<<< 2860e59eddb50fd7130d2c9c0739c73dd1bae6ca
 /*
  * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
  *
