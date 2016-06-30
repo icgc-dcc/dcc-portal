@@ -109,6 +109,8 @@
           .y(function(p) { return y(p.y); });
 
       var setGroup = svg.append('g')
+            .attr('class', 'serie')
+            .attr('set-id', data.id)
             .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
       var setColor = palette[i % palette.length];
 
@@ -124,14 +126,11 @@
           .data(data.donors)
           .enter()
           .append('svg:circle')
+            .attr('class', 'point')
+            .attr('status', function (d) { return d.status })
             .attr('cx', function(d) { return x(d.survivalTime) })
             .attr('cy', function(d) { return y(d.survivalEstimate) })
-            .attr('stroke-width', 'none')
             .attr('fill', setColor )
-            .attr('fill-opacity', .5)
-            .attr('r', 3)
-            .attr('cursor', 'pointer')
-            .attr('status', function (d) { return d.status })
             .on('mouseover', function (d) {
               onMouseEnterDonor(d3.event, d);
             })
