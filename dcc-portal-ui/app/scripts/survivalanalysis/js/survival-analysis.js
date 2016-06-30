@@ -120,8 +120,8 @@
           .attr('stroke', setColor);
 
       // draw the data points as circles
-      data.donors.alive && setGroup.selectAll('circle')
-          .data(data.donors.alive)
+      setGroup.selectAll('circle')
+          .data(data.donors)
           .enter()
           .append('svg:circle')
             .attr('cx', function(d) { return x(d.survivalTime) })
@@ -131,6 +131,7 @@
             .attr('fill-opacity', .5)
             .attr('r', 3)
             .attr('cursor', 'pointer')
+            .attr('status', function (d) { return d.status })
             .on('mouseover', function (d) {
               onMouseEnterDonor(d3.event, d);
             })
@@ -238,7 +239,7 @@
       }));
 
       return _.extend({}, dataSet, {
-        donors: _.groupBy(donors, 'status')
+        donors: donors
       });
     });
   }
