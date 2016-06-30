@@ -250,7 +250,7 @@
 
             _ctrl.pathway.mutationHighlights = pathwayMutationHighlights;
             
-            SetService.addSet('GENE', {
+            SetService.getTransientSet('GENE', {
               'filters': {gene:{pathwayId:{is:[parentPathwayId]}}},
               'sortBy': 'id',
               'sortOrder': 'ASCENDING',
@@ -258,59 +258,57 @@
               'size': _ctrl.geneSet.geneCount,
               'transient': true 
             }).then(function (entitySetData) {
-              Restangular.one('entityset', entitySetData.id).get().then(function() {
-                CompoundsService.getCompoundsFromEntitySetId(entitySetData.id).then(function(drugs) {                
-                  var drugMap = {};
-                  _.forEach(drugs, function(drug) {
-                    var zincId = drug.zincId;
-                    var name = drug.name;
-                    var genes = drug.genes;
-                    _.forEach(genes, function(gene) {
-                      var uniprotId = gene.uniprot;
-
-                      if (_.isUndefined(drugMap[uniprotId])) {
-                        drugMap[uniprotId] = [];
-                      }
-
-                      drugMap[uniprotId].push({
-                        'zincId': zincId,
-                        'name': name
-                      });
-                    });
-                  });
-
-                  var pathwayDrugHighlights = [];
-                  // Normalize into array
-                  _.forEach(map,function(value,id) {
-                    if(value && value.dbIds && drugMap[id]) {
-                      pathwayDrugHighlights.push({
-                        uniprotId:id,
-                        dbIds:value.dbIds.split(','),
-                        drugs:drugMap[id]
-                      });
+              CompoundsService.getCompoundsFromEntitySetId(entitySetData.id).then(function(drugs) {                
+                var drugMap = {};
+                _.forEach(drugs, function(drug) {
+                  var zincId = drug.zincId;
+                  var name = drug.name;
+                  var genes = drug.genes;
+                  _.forEach(genes, function(gene) {
+                    var uniprotId = gene.uniprot;
+                    
+                    if (_.isUndefined(drugMap[uniprotId])) {
+                      drugMap[uniprotId] = [];
                     }
-                  });
-
-                  // Get ensembl ids for all the genes so we can link to advSearch page
-                  uniprotIds = _.pluck(pathwayDrugHighlights, 'uniprotId');
-                  GeneSetVerificationService.verify( uniprotIds.join(',') ).then(function(data) {
-                    _.forEach(pathwayDrugHighlights,function(n){
-
-                      var geneKey = 'external_db_ids.uniprotkb_swissprot';
-                      if (! data.validGenes[geneKey]) {
-                        return;
-                      }
-
-                      var uniprotObj = data.validGenes[geneKey][n.uniprotId];
-                      if(!uniprotObj){
-                        return;
-                      }
-                      n.geneSymbol = uniprotObj[0].symbol;
-                      n.geneId = uniprotObj[0].id;
+                    
+                    drugMap[uniprotId].push({
+                      'zincId': zincId,
+                      'name': name
                     });
                   });
-                  _ctrl.pathway.drugHighlights = pathwayDrugHighlights;
                 });
+
+                var pathwayDrugHighlights = [];
+                // Normalize into array
+                _.forEach(map,function(value,id) {
+                  if(value && value.dbIds && drugMap[id]) {
+                    pathwayDrugHighlights.push({
+                      uniprotId:id,
+                      dbIds:value.dbIds.split(','),
+                      drugs:drugMap[id]
+                    });
+                  }
+                });
+
+                // Get ensembl ids for all the genes so we can link to advSearch page
+                uniprotIds = _.pluck(pathwayDrugHighlights, 'uniprotId');
+                GeneSetVerificationService.verify( uniprotIds.join(',') ).then(function(data) {
+                  _.forEach(pathwayDrugHighlights,function(n){
+
+                    var geneKey = 'external_db_ids.uniprotkb_swissprot';
+                    if (! data.validGenes[geneKey]) {
+                      return;
+                    }
+
+                    var uniprotObj = data.validGenes[geneKey][n.uniprotId];
+                    if(!uniprotObj){
+                      return;
+                    }
+                    n.geneSymbol = uniprotObj[0].symbol;
+                    n.geneId = uniprotObj[0].id;
+                  });
+                });
+                _ctrl.pathway.drugHighlights = pathwayDrugHighlights;
               });
             });
             
