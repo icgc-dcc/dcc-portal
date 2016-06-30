@@ -131,9 +131,15 @@
             .attr('fill-opacity', .5)
             .attr('r', 3)
             .attr('cursor', 'pointer')
-            .on('mouseover', onMouseEnterDonor)
-            .on('mouseout', onMouseLeaveDonor)
-            .on('click', onClickDonor)
+            .on('mouseover', function (d) {
+              onMouseEnterDonor(d3.event, d);
+            })
+            .on('mouseout', function (d) {
+              onMouseLeaveDonor(d3.event, d);
+            })
+            .on('click', function (d) {
+              onClickDonor(d3.event, d);
+            })
     });
 
     // draw x axis
@@ -177,9 +183,9 @@
           svg: svg, 
           container: el, 
           dataSets: dataSets,
-          onMouseEnterDonor: function (donor) {
+          onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
-              element: d3.event.target,
+              element: event.target,
               text: donor.id,
               placement: 'right',
               sticky: true
