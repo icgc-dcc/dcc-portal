@@ -48,7 +48,7 @@
   module.controller('GeneSetCtrl',
     function ($scope, $timeout, $state, LocationService, HighchartsService, Page, GeneSetHierarchy, GeneSetService,
       GeneSetVerificationService, FiltersUtil, ExternalLinks, geneSet, PathwaysConstants, Genes, CompoundsService, 
-      SetService, Restangular) {
+      SetService) {
 
 
       var _ctrl = this, 
