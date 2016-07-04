@@ -3,13 +3,12 @@
   <script type="text/template" class="survival-tip-template">
     <div>
       <strong><%= donor.id %></strong>
-      <p><%= labels.survivalEstimate %>: <%= donor.survivalEstimate %></p>
+      <div><%= labels.survivalEstimate %>: <%= (donor.survivalEstimate * 100).toFixed(2) %>%</div>
       <% if (donor.isCensored) { %>
-        <p><%= labels.censoredSurvivalTime %>: <%= donor.survivalTime %> <%= unit %> (censored)</p>
+        <div><%= labels.censoredSurvivalTime %>: <%= donor.survivalTime %> <%= unit %> (censored)</div>
       <% } else { %>
-        <p><%= labels.survivalTime %>: <%= donor.survivalTime %> <%= unit %> </p>
+        <div><%= labels.survivalTime %>: <%= donor.survivalTime %> <%= unit %> </div>
       <% } %>
-      <p>Status: <%= donor.status %></p>
     </div>
   </script>
 

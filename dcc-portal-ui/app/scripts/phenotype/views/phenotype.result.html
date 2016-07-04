@@ -13,6 +13,12 @@
         <strong>Overall Survival Analysis</strong>
         <survival-analysis
             set-ids="item.entitySetIds"
+            tip-labels="{
+                survivalEstimate: 'Survival estimate',
+                survivalTime: 'Time of death',
+                censoredSurvivalTime: 'Interval of last follow-up',
+            }"
+            censored-statuses="['alive']"
         ></survival-analysis>
     </div>
 

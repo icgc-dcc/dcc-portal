@@ -66,9 +66,14 @@
     var containerBounds = container.getBoundingClientRect();
 
     var yAxisLabel = 'Survival Rate';
-    var xAxisLabel = 'Duration';
+    var xAxisLabel = 'Duration ' + ' (days)';
 
-    var margin = {top: 20, right: 20, bottom: 30, left: 24};
+    var margin = {
+      top: 20,
+      right: 20,
+      bottom: 36,
+      left: 44
+    };
     var outerWidth = containerBounds.width;
     var outerHeight = outerWidth * 0.5;
 
@@ -101,6 +106,30 @@
 
     x.domain([0, longestDuration]);
     y.domain([0, 1]);
+
+    // draw x axis
+    svg.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(' + margin.left + ',' + (axisHeight + margin.top) + ')')
+        .call(xAxis)
+        .append('text')
+          .attr('class', 'axis-label')
+          .attr('dy', 30)
+          .attr('x', axisWidth / 2)
+          .style('text-anchor', 'end')
+          .text(xAxisLabel);
+
+    // draw y axis
+    svg.append('g')
+        .attr('class', 'y axis')
+        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
+        .call(yAxis)
+        .append('text')
+          .attr('class', 'axis-label')
+          .attr('transform', 'rotate(-90)')
+          .attr('y', -30)
+          .attr('x', - (margin.top + axisHeight / 2))
+          .text(yAxisLabel);
 
     dataSets.forEach(function (data, i) {
       var line = d3.svg.area()
@@ -142,60 +171,51 @@
             })
     });
 
-    // draw x axis
-    svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(' + margin.left + ',' + (axisHeight + margin.top) + ')')
-        .call(xAxis)
-        .append('text')
-          .attr('dy', 30)
-          .attr('x', axisWidth)
-          // .attr('dy', '.71em')
-          .style('text-anchor', 'end')
-          .text(xAxisLabel);
-
-    // draw y axis
-    svg.append('g')
-        .attr('class', 'y axis')
-        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
-        .call(yAxis)
-        .append('text')
-          // .attr('transform', 'rotate(-90)')
-          .attr('y', -10)
-          .attr('x', -24)
-          // .attr('dy', '.71em')
-          // .style('text-anchor', 'end')
-          .text(yAxisLabel);
-
     return svg;
   }
 
   var survivalAnalysisController = [
-    '$scope', '$element', 'survivalPlotService',
-    function ($scope, $element, survivalPlotService) {
+    '$scope',
+    '$element',
+    'survivalPlotService',
+    function (
+      $scope,
+      $element,
+      survivalPlotService
+    ) {
       var ctrl = this;
       var svg, dataSets;
-      var el = $element.find('.survival-graph').get(0);
+      var graphContainer = $element.find('.survival-graph').get(0);
+      var tipTemplate = _.template($element.find('.survival-tip-template').html());
+      // console.log(tipTemplate({donor: {id: 123}}));
 
       var update = function () {
         svg.selectAll('*').remove();
         renderChart({
           svg: svg, 
-          container: el, 
+          container: graphContainer, 
           dataSets: dataSets,
           onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
               element: event.target,
-              text: donor.id,
+              text: tipTemplate({
+                donor: _.extend(
+                  { isCensored: _.includes(ctrl.censoredStatuses,donor.status) },
+                  donor
+                ),
+                labels: ctrl.tipLabels,
+                unit: 'days'
+              }),
               placement: 'right',
               sticky: true
             });
           },
           onMouseLeaveDonor: function () {
-            $scope.$emit('tooltip::hide');
+            // $scope.$emit('tooltip::hide');
           },
-          onClickDonor: function (donor) {
+          onClickDonor: function (e, donor) {
             console.log('clicked on', donor)
+            window.open('/donors/'+donor.id, '_blank');
           }
         });
       };
@@ -204,7 +224,7 @@
         var dummySetIds = ["3787d3bd-96f8-41e7-b471-b1250a5cc952", "90e4034b-afb3-43e3-a19f-4b85ba0d6d98", "b211f054-6b79-4878-9638-a33d9711c60d"];
         survivalPlotService.getDataSets(ctrl.setIds || dummySetIds).then(function (ds) {
 
-          svg = makeChart(el);
+          svg = makeChart(graphContainer);
           dataSets = ds;
           window.addEventListener('resize', update);
           // setTimeout required to avoid weird layout due to container not yet being on screen
@@ -221,7 +241,9 @@
   module.component('survivalAnalysis', {
     templateUrl: '/scripts/survivalanalysis/views/survival-analysis.html',
     bindings: {
-      setIds: '<'
+      setIds: '<',
+      tipLabels: '<',
+      censoredStatuses: '<',
     },
     controller: survivalAnalysisController
 

@@ -15,6 +15,13 @@ $faded: #e6dede;
     .tick text {
       fill: #888
     }
+
+    .axis-label {
+      color: hsl(0, 0%, 60%);
+      font-size: 0.75rem;
+      fill: hsl(0, 0%, 60%);
+      font-weight: 300;
+    }
   }
   
 
