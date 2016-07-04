@@ -30,14 +30,6 @@
     return d3.select(el).append('svg');
   }
 
-  function processIntervals (intervals) {
-    return [{x: 0, y: 1}].concat(intervals.map(function (interval) {
-      return {
-        x: interval.end,
-        y: interval.cumulativeSurvival
-      }
-    }));
-  }
 
   function noop () {}
 
