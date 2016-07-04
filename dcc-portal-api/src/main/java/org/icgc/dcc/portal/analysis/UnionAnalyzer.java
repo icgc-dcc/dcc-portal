@@ -137,9 +137,10 @@ public class UnionAnalyzer {
     return SearchResponses.getHitIds(response);
   }
 
-  public SearchResponse computeExclusion(@NonNull final UnionUnit unionUnit, BaseEntitySet.Type type) {
+  public SearchResponse computeExclusion(@NonNull final UnionUnit unionUnit, BaseEntitySet.Type type,
+      List<String> fields, String sort) {
     val response =
-        unionOne(unionUnit, type, termsLookupRepository.getMaxPreviewNumberOfHits());
+        subtractOne(unionUnit, type, termsLookupRepository.getMaxPreviewNumberOfHits(), fields, sort);
     return response;
   }
 
@@ -226,13 +227,15 @@ public class UnionAnalyzer {
     return response;
   }
 
-  private SearchResponse unionOne(final UnionUnit definition, final BaseEntitySet.Type entityType,
-      final int max) {
-    val response = termsLookupRepository.runUnionEsQueryWithFields(
+  private SearchResponse subtractOne(final UnionUnit definition, final BaseEntitySet.Type entityType,
+      final int max, List<String> fields, String sort) {
+    val response = termsLookupRepository.runUnionEsQueryWithArgs(
         entityType.getIndexTypeName(),
         SearchType.QUERY_THEN_FETCH,
         toBoolFilterFrom(definition, entityType),
-        max);
+        max,
+        fields.toArray(new String[fields.size()]),
+        sort);
 
     return response;
   }

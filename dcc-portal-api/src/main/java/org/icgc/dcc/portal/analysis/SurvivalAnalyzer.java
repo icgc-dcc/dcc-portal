@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import org.elasticsearch.search.SearchHit;
 import org.icgc.dcc.portal.model.SurvivalAnalysis;
@@ -34,6 +35,7 @@ import org.icgc.dcc.portal.repository.DonorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -46,6 +48,23 @@ import lombok.val;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SurvivalAnalyzer {
+
+  /**
+   * Constants.
+   */
+  private final static List<String> OVERALL = ImmutableList.<String> of("alive");
+  private final static List<String> OVERALL_FIELDS =
+      ImmutableList.<String> of("donor_vital_status", "donor_survival_time");
+
+  private final static List<String> DISEASE_FREE = ImmutableList.<String> of(
+      "complete remission", "partial remission", "stable", "no evidence of disease");
+  public final static List<String> DISEASE_FREE_FIELDS = ImmutableList.<String> of(
+      "disease_status_last_followup", "donor_interval_of_last_followup", "donor_relapse_interval");
+  private final static List<String> DISEASE_STATUSES = ImmutableList.<String> builder()
+      .addAll(DISEASE_FREE)
+      .add("relapse")
+      .add("progression")
+      .build();
 
   /**
    * Dependencies.
@@ -61,27 +80,41 @@ public class SurvivalAnalyzer {
     val entitySetMap = getEntitySetMap(sets);
 
     for (val id : sets) {
-      val response = unionAnalyzer.computeExclusion(entitySetMap.get(id), DONOR);
+      val overallResponse =
+          unionAnalyzer.computeExclusion(entitySetMap.get(id), DONOR, OVERALL_FIELDS, "donor_survival_time");
+      SearchHit[] overallHits = overallResponse.getHits().getHits();
+      val overallDonors = filterDonors(overallHits, SurvivalAnalyzer::hasData);
+      val overallIntervals = compute(overallDonors, false);
 
-      val filteredDonors = Arrays.stream(response.getHits().getHits())
-          .filter(SurvivalAnalyzer::hasData)
-          .toArray(size -> new SearchHit[size]);
+      val diseaseResponse =
+          unionAnalyzer.computeExclusion(entitySetMap.get(id), DONOR, DISEASE_FREE_FIELDS,
+              "donor_interval_of_last_followup");
+      SearchHit[] diseaseHits = diseaseResponse.getHits().getHits();
+      val diseaseFreeDonors = filterDonors(diseaseHits, SurvivalAnalyzer::hasDiseaseStatusData);
+      val diseaseFreeIntervals = compute(diseaseFreeDonors, true);
 
-      val intervals = compute(filteredDonors);
-      analysis.getResults().add(analysis.new Result(id, intervals));
+      analysis.getResults().add(analysis.new Result(id, overallIntervals, diseaseFreeIntervals));
     }
 
     return analysis;
   }
 
-  private static List<Interval> compute(SearchHit[] donors) {
+  private static List<Interval> compute(SearchHit[] donors, boolean diseaseFree) {
     int[] time = new int[donors.length];
     boolean[] censured = new boolean[donors.length];
 
+    val censuredTerms = diseaseFree ? DISEASE_FREE : OVERALL;
+    val censuredField = diseaseFree ? "disease_status_last_followup" : "donor_vital_status";
+    val censuredTime = diseaseFree ? "donor_interval_of_last_followup" : "donor_survival_time";
+
     for (int i = 0; i < donors.length; i++) {
       val donor = donors[i];
-      time[i] = (int) donor.field("donor_survival_time").getValue();
-      censured[i] = ((String) donor.field("donor_vital_status").getValue()).equalsIgnoreCase("alive");
+      try {
+        time[i] = (int) donor.field(censuredTime).getValue();
+        censured[i] = censuredTerms.contains(donor.field(censuredField).getValue());
+      } catch (Exception e) {
+        throw e;
+      }
     }
 
     val intervals = new ArrayList<Interval>();
@@ -130,7 +163,7 @@ public class SurvivalAnalyzer {
 
       val donor = new DonorValue(
           donors[i].getId(),
-          (String) donors[i].field("donor_vital_status").getValue(),
+          (String) donors[i].field(censuredField).getValue(),
           time[i]);
       currentInterval.addDonor(donor);
 
@@ -145,7 +178,19 @@ public class SurvivalAnalyzer {
 
   private static boolean hasData(SearchHit donor) {
     val status = (String) donor.field("donor_vital_status").getValue();
-    return status.equalsIgnoreCase("alive") || status.equalsIgnoreCase("deceased");
+    val hasStatus = status.equalsIgnoreCase("alive") || status.equalsIgnoreCase("deceased");
+
+    val time = donor.field("donor_survival_time");
+    if (time == null) {
+      return false;
+    }
+
+    val hasTime = ((int) time.getValue()) > 0;
+    return hasStatus && hasTime;
+  }
+
+  private static boolean hasDiseaseStatusData(SearchHit donor) {
+    return donor.fields().keySet().containsAll(DISEASE_FREE_FIELDS);
   }
 
   private static Map<UUID, UnionUnit> getEntitySetMap(List<UUID> sets) {
@@ -160,6 +205,12 @@ public class SurvivalAnalyzer {
     }
 
     return entitySetMapBuilder.build();
+  }
+
+  private static SearchHit[] filterDonors(SearchHit[] hits, Predicate<SearchHit> predicate) {
+    return Arrays.stream(hits)
+        .filter(predicate)
+        .toArray(size -> new SearchHit[size]);
   }
 
   @Data
@@ -194,7 +245,7 @@ public class SurvivalAnalyzer {
 
     String id;
     String status;
-    int survivalTime;
+    int time;
 
   }
 

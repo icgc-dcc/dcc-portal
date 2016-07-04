@@ -220,7 +220,25 @@ public class TermsLookupRepository {
         .setSearchType(searchType)
         .setQuery(query)
         .setSize(max)
-        .addFields("donor_survival_time", "donor_vital_status"));
+        .addFields("donor_vital_status", "donor_survival_time", "donor_interval_of_last_followup"));
+  }
+
+  /**
+   * Special case for Survival Analysis, the fields selected for return are the only ones we currently care about.
+   */
+  public SearchResponse runUnionEsQueryWithArgs(final String indexTypeName,
+      @NonNull final SearchType searchType,
+      @NonNull final BoolFilterBuilder boolFilter, final int max,
+      @NonNull final String[] fields,
+      @NonNull final String sort) {
+    val query = filteredQuery(MATCH_ALL, boolFilter);
+    return execute("Union ES Query", false, (request) -> request
+        .addSort(sort, ASC)
+        .setTypes("donor")
+        .setSearchType(searchType)
+        .setQuery(query)
+        .setSize(max)
+        .addFields(fields));
   }
 
   public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter) {
