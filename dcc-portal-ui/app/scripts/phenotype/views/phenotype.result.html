@@ -83,7 +83,7 @@
                         class="text-right"
                         data-ng-repeat-end
                     >
-                        {{ overallSurvivalSet.donors.length / setMap[setIds[$index]].count * 100 | number: 2 }}
+                        {{ overallSurvivalSet.donors.length / overallSurvivalSet.meta.count * 100 | number: 2 }}
                     </td>
                 </tr>
             </tbody>

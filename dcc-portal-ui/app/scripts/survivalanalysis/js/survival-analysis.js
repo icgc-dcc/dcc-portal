@@ -107,7 +107,7 @@
 
       var setGroup = svg.append('g')
         .attr('class', 'serie')
-        .attr('set-id', data.id)
+        .attr('set-id', data.meta.id)
         .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
       var setColor = palette[i % palette.length];
 
@@ -216,8 +216,11 @@
 
   });
 
-  function denormalizeDonors(response) {
-    return response.results.map(function (dataSet) {
+  function processResponses(responses) {
+    var survivalData = responses.survivalData.plain().results;
+    var setsMeta = responses.setsMeta.plain();
+
+    return survivalData.map(function (dataSet) {
       var donors = _.flatten(dataSet.intervals.map(function (interval) {
         return interval.donors.map(function (donor) {
           return _.extend({}, donor, {
@@ -227,28 +230,45 @@
       }));
 
       return {
-        id: dataSet.id,
+        meta: _.find(setsMeta, {id: dataSet.id}),
         donors: donors
       };
     });
   }
 
   module
-    .service('SurvivalAnalysisService', ['Restangular', function (Restangular) {
+    .service('SurvivalAnalysisService', [
+      '$q',
+      'Restangular',
+      'SetService',
+      function(
+        $q,
+        Restangular,
+        SetService
+      ) {
 
       function fetchOverallSurvival (setIds) {
         var data = setIds;
+        
 
-        return Restangular
+        var fetchSurvival = Restangular
           .one('analysis')
           .post('survival', data, {}, {'Content-Type': 'application/json'})
           .then(function (response) {
             return Restangular.one('analysis/survival/' + response.id).get();
-          })
-          .then(function (response) {
-            return denormalizeDonors(response.plain());
+          });
+
+        var fetchSetsMeta = SetService.getMetaData(setIds);
+
+        return $q.all({
+          survivalData: fetchSurvival,
+          setsMeta: fetchSetsMeta,
+        })
+          .then(function (responses) {
+            return processResponses(responses);
           })
         ;
+
       }
 
       _.extend(this, {
