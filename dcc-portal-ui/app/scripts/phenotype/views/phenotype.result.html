@@ -1,4 +1,4 @@
-<h3 style="margin-bottom:0">Phenotype Comparison
+<h3 style="margin-bottom:0">Survival Analysis / Phenotype Comparison
     <span style="font-size:1rem" class="pull-right" data-ng-if="!isDeprecated">
         <share-button></share-button>
     </span>
@@ -8,19 +8,6 @@
     <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
 </div>
 <div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
-
-    <div class="survival-analysis-wrapper">
-        <strong>Overall Survival Analysis</strong>
-        <survival-analysis
-            set-ids="item.entitySetIds"
-            tip-labels="{
-                survivalEstimate: 'Survival estimate',
-                survivalTime: 'Time of death',
-                censoredSurvivalTime: 'Interval of last follow-up',
-            }"
-            censored-statuses="['alive']"
-        ></survival-analysis>
-    </div>
 
     <div>Your selected donor sets</div>
     <div class="wide">
@@ -41,6 +28,20 @@
     </div>
     <div class="clearfix"></div>
     <br>
+
+    <div class="survival-analysis-wrapper">
+        <strong>Survival Analysis</strong>
+        <div>Overall Survival</div>
+        <survival-analysis-graph
+            data-data-sets="overallSurvivalAnalysisDataSets"
+            tip-labels="{
+                survivalEstimate: 'Survival estimate',
+                survivalTime: 'Time of death',
+                censoredSurvivalTime: 'Interval of last follow-up',
+            }"
+            censored-statuses="['alive']"
+        ></survival-analysis-graph>
+    </div>
 
 
     <br>

@@ -31,7 +31,7 @@
 
   var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services', 'icgc.survival']);
 
-  module.directive('phenotypeResult', function(SetService, PhenotypeService) {
+  module.directive('phenotypeResult', function(SetService, PhenotypeService, SurvivalAnalysisService) {
     return {
       restrict: 'E',
       scope: {
@@ -42,6 +42,8 @@
 
         // From D3's cat20 scale
         $scope.seriesColours = ['#6baed6', '#fd8d3c', '#74c476'];
+
+        $scope.overallSurvivalAnalysisDataSets = undefined;
 
         function normalize() {
           // Normalize results: Sort by id, then sort by terms
@@ -103,6 +105,11 @@
             $scope.meanAge = age.data.map(function(d) { return d.summary.mean; });
 
           });
+
+          SurvivalAnalysisService.fetchOverallSurvival($scope.item.entitySetIds)
+            .then(function (dataSets) {
+              $scope.overallSurvivalAnalysisDataSets = dataSets;
+            });
 
         }
 

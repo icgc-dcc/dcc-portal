@@ -169,24 +169,28 @@
   var survivalAnalysisController = [
     '$scope',
     '$element',
-    'survivalPlotService',
     function (
       $scope,
-      $element,
-      survivalPlotService
+      $element
     ) {
       var ctrl = this;
-      var svg, dataSets;
       var graphContainer = $element.find('.survival-graph').get(0);
+      var svg = makeChart(graphContainer);
       var tipTemplate = _.template($element.find('.survival-tip-template').html());
-      // console.log(tipTemplate({donor: {id: 123}}));
+
+      console.log($scope.$id, ctrl.dataSets);
 
       var update = function () {
+        if (!ctrl.dataSets) {
+          console.log('no data to render');
+          return;
+        }
+        console.log('attempting to render');
         svg.selectAll('*').remove();
         renderChart({
           svg: svg, 
           container: graphContainer, 
-          dataSets: dataSets,
+          dataSets: ctrl.dataSets,
           onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
               element: event.target,
@@ -212,16 +216,13 @@
         });
       };
 
-      this.$onInit = function () {
-        var dummySetIds = ["3787d3bd-96f8-41e7-b471-b1250a5cc952", "90e4034b-afb3-43e3-a19f-4b85ba0d6d98", "b211f054-6b79-4878-9638-a33d9711c60d"];
-        survivalPlotService.getDataSets(ctrl.setIds || dummySetIds).then(function (ds) {
+      window.addEventListener('resize', update);
+      update();
 
-          svg = makeChart(graphContainer);
-          dataSets = ds;
-          window.addEventListener('resize', update);
-          // setTimeout required to avoid weird layout due to container not yet being on screen
+      this.$onChanges = function (changes) {
+        if (changes.dataSets) {
           setTimeout(update);
-        });
+        }
       };
 
       this.$onDestroy = function () {
@@ -230,10 +231,10 @@
 
   }];
 
-  module.component('survivalAnalysis', {
+  module.component('survivalAnalysisGraph', {
     templateUrl: '/scripts/survivalanalysis/views/survival-analysis.html',
     bindings: {
-      setIds: '<',
+      dataSets: '<',
       tipLabels: '<',
       censoredStatuses: '<',
     },
@@ -259,22 +260,24 @@
   }
 
   module
-    .service('survivalPlotService', ['Restangular', function (Restangular) {
+    .service('SurvivalAnalysisService', ['Restangular', function (Restangular) {
+
+      function fetchOverallSurvival (setIds) {
+        var data = setIds;
+
+        return Restangular
+          .one('analysis')
+          .post('survival', data, {}, {'Content-Type': 'application/json'})
+          .then(function (response) {
+            return Restangular.one('analysis/survival/' + response.id).get()
+          })
+          .then(function (response) {
+            return denormalizeDonors(response.plain());
+          })
+      }
 
       _.extend(this, {
-        getDataSets: function (setIds) {
-          var data = setIds;
-
-          return Restangular
-            .one('analysis')
-            .post('survival', data, {}, {'Content-Type': 'application/json'})
-            .then(function (response) {
-              return Restangular.one('analysis/survival/' + response.id).get()
-            })
-            .then(function (response) {
-              return denormalizeDonors(response.plain());
-            })
-        }
+        fetchOverallSurvival: fetchOverallSurvival
       });
 
     }]);
