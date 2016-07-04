@@ -81,24 +81,24 @@
     var axisHeight = outerHeight - margin.top - margin.bottom;
 
     var x = d3.scale.linear()
-        .range([0, axisWidth]);
+      .range([0, axisWidth]);
 
     var y = d3.scale.linear()
-        .range([axisHeight, 0]);
+      .range([axisHeight, 0]);
 
     var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient('bottom');
+      .scale(x)
+      .orient('bottom');
 
     var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient('left');
+      .scale(y)
+      .orient('left');
 
     svg
-        .attr('width', outerWidth)
-        .attr('height', outerHeight)
-        .append('g')
-          .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      .attr('width', outerWidth)
+      .attr('height', outerHeight)
+      .append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     var longestDuration = _.max(dataSets.map(function (data) {
         return data.intervals.slice(-1)[0].end;
@@ -109,66 +109,66 @@
 
     // draw x axis
     svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(' + margin.left + ',' + (axisHeight + margin.top) + ')')
-        .call(xAxis)
-        .append('text')
-          .attr('class', 'axis-label')
-          .attr('dy', 30)
-          .attr('x', axisWidth / 2)
-          .style('text-anchor', 'end')
-          .text(xAxisLabel);
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(' + margin.left + ',' + (axisHeight + margin.top) + ')')
+      .call(xAxis)
+      .append('text')
+        .attr('class', 'axis-label')
+        .attr('dy', 30)
+        .attr('x', axisWidth / 2)
+        .style('text-anchor', 'end')
+        .text(xAxisLabel);
 
     // draw y axis
     svg.append('g')
-        .attr('class', 'y axis')
-        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
-        .call(yAxis)
-        .append('text')
-          .attr('class', 'axis-label')
-          .attr('transform', 'rotate(-90)')
-          .attr('y', -30)
-          .attr('x', - (margin.top + axisHeight / 2))
-          .text(yAxisLabel);
+      .attr('class', 'y axis')
+      .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
+      .call(yAxis)
+      .append('text')
+        .attr('class', 'axis-label')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', -30)
+        .attr('x', - (margin.top + axisHeight / 2))
+        .text(yAxisLabel);
 
     dataSets.forEach(function (data, i) {
       var line = d3.svg.area()
-          .interpolate('step-before')
-          .x(function(p) { return x(p.x); })
-          .y(function(p) { return y(p.y); });
+        .interpolate('step-before')
+        .x(function(p) { return x(p.x); })
+        .y(function(p) { return y(p.y); });
 
       var setGroup = svg.append('g')
-            .attr('class', 'serie')
-            .attr('set-id', data.id)
-            .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+        .attr('class', 'serie')
+        .attr('set-id', data.id)
+        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
       var setColor = palette[i % palette.length];
 
       // draw the data as an svg path
       setGroup.append('path')
-          .datum(processIntervals(data.intervals))
-          .attr('class', 'line')
-          .attr('d', line)
-          .attr('stroke', setColor);
+        .datum(processIntervals(data.intervals))
+        .attr('class', 'line')
+        .attr('d', line)
+        .attr('stroke', setColor);
 
       // draw the data points as circles
       setGroup.selectAll('circle')
-          .data(data.donors)
-          .enter()
-          .append('svg:circle')
-            .attr('class', 'point')
-            .attr('status', function (d) { return d.status })
-            .attr('cx', function(d) { return x(d.survivalTime) })
-            .attr('cy', function(d) { return y(d.survivalEstimate) })
-            .attr('fill', setColor )
-            .on('mouseover', function (d) {
-              onMouseEnterDonor(d3.event, d);
-            })
-            .on('mouseout', function (d) {
-              onMouseLeaveDonor(d3.event, d);
-            })
-            .on('click', function (d) {
-              onClickDonor(d3.event, d);
-            })
+        .data(data.donors)
+        .enter()
+        .append('svg:circle')
+          .attr('class', 'point')
+          .attr('status', function (d) { return d.status })
+          .attr('cx', function(d) { return x(d.survivalTime) })
+          .attr('cy', function(d) { return y(d.survivalEstimate) })
+          .attr('fill', setColor )
+          .on('mouseover', function (d) {
+            onMouseEnterDonor(d3.event, d);
+          })
+          .on('mouseout', function (d) {
+            onMouseLeaveDonor(d3.event, d);
+          })
+          .on('click', function (d) {
+            onClickDonor(d3.event, d);
+          })
     });
 
     return svg;
