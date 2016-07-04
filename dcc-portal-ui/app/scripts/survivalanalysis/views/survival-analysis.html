@@ -1,6 +1,17 @@
 <div class="survival-analysis">
 
-  survival analysis
+  <script type="text/template" class="survival-tip-template">
+    <div>
+      <strong><%= donor.id %></strong>
+      <p><%= labels.survivalEstimate %>: <%= donor.survivalEstimate %></p>
+      <% if (donor.isCensored) { %>
+        <p><%= labels.censoredSurvivalTime %>: <%= donor.survivalTime %> <%= unit %> (censored)</p>
+      <% } else { %>
+        <p><%= labels.survivalTime %>: <%= donor.survivalTime %> <%= unit %> </p>
+      <% } %>
+      <p>Status: <%= donor.status %></p>
+    </div>
+  </script>
 
   <div class="survival-graph">
     

@@ -3,7 +3,6 @@
         <share-button></share-button>
     </span>
 </h3>
-<div><small>More phenotypes coming soon...</small></div><br>
 
 <div data-ng-if="isDeprecated" class="alert-error">
     <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
@@ -11,6 +10,7 @@
 <div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
 
     <div class="survival-analysis-wrapper">
+        <strong>Overall Survival Analysis</strong>
         <survival-analysis
             set-ids="item.entitySetIds"
         ></survival-analysis>
