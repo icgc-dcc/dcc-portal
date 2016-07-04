@@ -26,27 +26,8 @@
     // '#795548', '#3F51B5', '#9E9E9E', '#FFEB3B', '##c0392b'
   ];
 
-  function makeChart (el) {
-    return d3.select(el).append('svg');
-  }
-
-
   function noop () {}
 
-  /*
-  dataSets: [
-    id: String,
-    intervals: [
-      {
-        censured: Number,
-        cumulativeSurvival: Number,
-        died: Number,
-        end: Number,
-        start: Number,
-      }
-    ]
-  ]
-  */
   function renderChart (params) {
     var svg = params.svg;
     var container = params.container;
@@ -175,10 +156,8 @@
     ) {
       var ctrl = this;
       var graphContainer = $element.find('.survival-graph').get(0);
-      var svg = makeChart(graphContainer);
+      var svg = d3.select(graphContainer).append('svg');
       var tipTemplate = _.template($element.find('.survival-tip-template').html());
-
-      console.log($scope.$id, ctrl.dataSets);
 
       var update = function () {
         if (!ctrl.dataSets) {
