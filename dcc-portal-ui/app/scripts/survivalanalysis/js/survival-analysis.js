@@ -118,7 +118,7 @@
 
       // draw the data as an svg path
       setGroup.append('path')
-        .datum(data.donors.map(function (d) { return {x: d.survivalTime, y: d.survivalEstimate} }))
+        .datum(data.donors.map(function (d) { return {x: d.survivalTime, y: d.survivalEstimate}; }))
         .attr('class', 'line')
         .attr('d', line)
         .attr('stroke', setColor);
@@ -129,9 +129,9 @@
         .enter()
         .append('svg:circle')
           .attr('class', 'point')
-          .attr('status', function (d) { return d.status })
-          .attr('cx', function(d) { return x(d.survivalTime) })
-          .attr('cy', function(d) { return y(d.survivalEstimate) })
+          .attr('status', function (d) { return d.status; })
+          .attr('cx', function(d) { return x(d.survivalTime); })
+          .attr('cy', function(d) { return y(d.survivalEstimate); })
           .attr('fill', setColor )
           .on('mouseover', function (d) {
             onMouseEnterDonor(d3.event, d);
@@ -142,6 +142,7 @@
           .on('click', function (d) {
             onClickDonor(d3.event, d);
           })
+        ;
     });
 
     return svg;
@@ -189,7 +190,6 @@
             $scope.$emit('tooltip::hide');
           },
           onClickDonor: function (e, donor) {
-            console.log('clicked on', donor)
             window.open('/donors/'+donor.id, '_blank');
           }
         });
@@ -228,13 +228,13 @@
           return _.extend({}, donor, {
             survivalEstimate: interval.cumulativeSurvival
           });
-        })
+        });
       }));
 
       return {
         id: dataSet.id,
         donors: donors
-      }
+      };
     });
   }
 
@@ -248,11 +248,12 @@
           .one('analysis')
           .post('survival', data, {}, {'Content-Type': 'application/json'})
           .then(function (response) {
-            return Restangular.one('analysis/survival/' + response.id).get()
+            return Restangular.one('analysis/survival/' + response.id).get();
           })
           .then(function (response) {
             return denormalizeDonors(response.plain());
           })
+        ;
       }
 
       _.extend(this, {
