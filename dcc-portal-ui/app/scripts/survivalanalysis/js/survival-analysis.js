@@ -26,6 +26,7 @@
     var svg = params.svg;
     var container = params.container;
     var dataSets = params.dataSets;
+    var disabledDataSets = params.disabledDataSets;
     var onMouseEnterDonor = params.onMouseEnterDonor || noop;
     var onMouseLeaveDonor = params.onMouseLeaveDonor || noop;
     var onClickDonor = params.onClickDonor || noop;
@@ -68,9 +69,13 @@
       .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var longestDuration = _.max(dataSets.map(function (data) {
-        return data.donors.slice(-1)[0].survivalTime;
-      }));
+    var longestDuration = _.max(dataSets
+        .filter(function (data) {
+          return !_.includes(disabledDataSets, data);
+        })
+        .map(function (data) {
+          return data.donors.slice(-1)[0].survivalTime;
+        }));
 
     x.domain([0, longestDuration]);
     y.domain([0, 1]);
@@ -100,6 +105,9 @@
         .text(yAxisLabel);
 
     dataSets.forEach(function (data, i) {
+      if (_.includes(disabledDataSets, data)) {
+        return;
+      }
       var line = d3.svg.area()
         .interpolate('step-after')
         .x(function(p) { return x(p.x); })
@@ -155,6 +163,8 @@
       var svg = d3.select(graphContainer).append('svg');
       var tipTemplate = _.template($element.find('.survival-tip-template').html());
 
+      this.disabledDataSets = [];
+
       var update = function () {
         if (!ctrl.dataSets) {
           return;
@@ -164,6 +174,7 @@
           svg: svg, 
           container: graphContainer, 
           dataSets: ctrl.dataSets,
+          disabledDataSets: ctrl.disabledDataSets,
           palette: ctrl.palette,
           onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
@@ -192,6 +203,16 @@
       window.addEventListener('resize', update);
       update();
 
+      this.isDataSetDisabled = function (dataSet) {
+        return _.includes(ctrl.disabledDataSets, dataSet);
+      };
+
+      this.toggleDataSet = function (dataSet) {
+        ctrl.disabledDataSets = _.xor(ctrl.disabledDataSets, [dataSet]);
+        ctrl.isDataSetDisabled(dataSet);
+        update();
+      };
+
       this.$onChanges = function (changes) {
         if (changes.dataSets) {
           setTimeout(update);
@@ -208,12 +229,13 @@
     templateUrl: '/scripts/survivalanalysis/views/survival-analysis.html',
     bindings: {
       dataSets: '<',
+      initialDisabledDataSets: '<',
       tipLabels: '<',
       censoredStatuses: '<',
       palette: '<',
     },
-    controller: survivalAnalysisController
-
+    controller: survivalAnalysisController,
+    controllerAs: 'ctrl'
   });
 
   function processResponses(responses) {

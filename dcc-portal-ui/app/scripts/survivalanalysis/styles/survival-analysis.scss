@@ -59,10 +59,29 @@ $faded: #e6dede;
 
 }
 
-.survival-analysis .survival-graph {
-  width: 100%;
-  svg {
+.survival-analysis {
+
+  position: relative;
+
+  .survival-graph {
     width: 100%;
-    height: auto;
+    svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .legend {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .set {
+      cursor: pointer;
+      &.disabled {
+        color: #b7b7b7 !important;
+      }
+    }
+
   }
 }
