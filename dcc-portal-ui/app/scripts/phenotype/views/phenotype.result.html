@@ -31,7 +31,67 @@
 
     <div class="survival-analysis-wrapper">
         <strong>Survival Analysis</strong>
-        <div>Overall Survival</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th
+                        colspan="2"
+                        data-ng-repeat="donorSetId in setIds"
+                    >
+                        <div>
+                            <div style="color:{{seriesColours[$index]}}">
+                                {{setMap[donorSetId].name}}
+                            </div>
+                            <small>
+                                Donor count: {{setMap[setIds[$index]].count | number}}
+                            </small>
+                        </div>
+                    </tr>
+                </tr>
+                <tr>
+                    <th>Donors included in Analysis</th>
+                    <th
+                        data-ng-repeat-start="overallSurvivalSet in overallSurvivalAnalysisDataSets"
+                        class="text-right"
+                    >
+                        # Donors
+                    </th>
+                    <th
+                        class="text-right"
+                        data-ng-repeat-end
+                    > % </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr >
+                    <td
+                        style="color:{{seriesColours[$index]}}"
+                    >
+                        {{setMap[donorSetId].name}}
+                    </th>
+
+                    <td
+                        class="text-right"
+                        data-ng-repeat-start="overallSurvivalSet in overallSurvivalAnalysisDataSets"
+                    >
+                        {{ overallSurvivalSet.donors.length | number }}
+                        <a href="/search?filters={{setFilters[$index]}}">
+                        </a>
+                    </td>
+                    <td
+                        class="text-right"
+                        data-ng-repeat-end
+                    >
+                        {{ overallSurvivalSet.donors.length / setMap[setIds[$index]].count * 100 | number: 2 }}
+                            <!-- {{setMap[donorSetId].count | number}} -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+        <div class="clearfix">Overall Survival</div>
         <survival-analysis-graph
             data-data-sets="overallSurvivalAnalysisDataSets"
             tip-labels="{
