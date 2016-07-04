@@ -101,7 +101,7 @@
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     var longestDuration = _.max(dataSets.map(function (data) {
-        return data.intervals.slice(-1)[0].end;
+        return data.donors.slice(-1)[0].survivalTime;
       }));
 
     x.domain([0, longestDuration]);
@@ -133,7 +133,7 @@
 
     dataSets.forEach(function (data, i) {
       var line = d3.svg.area()
-        .interpolate('step-before')
+        .interpolate('step-after')
         .x(function(p) { return x(p.x); })
         .y(function(p) { return y(p.y); });
 
@@ -145,7 +145,7 @@
 
       // draw the data as an svg path
       setGroup.append('path')
-        .datum(processIntervals(data.intervals))
+        .datum(data.donors.map(function (d) { return {x: d.survivalTime, y: d.survivalEstimate} }))
         .attr('class', 'line')
         .attr('d', line)
         .attr('stroke', setColor);
@@ -211,7 +211,7 @@
             });
           },
           onMouseLeaveDonor: function () {
-            // $scope.$emit('tooltip::hide');
+            $scope.$emit('tooltip::hide');
           },
           onClickDonor: function (e, donor) {
             console.log('clicked on', donor)
@@ -249,7 +249,7 @@
 
   });
 
-  function processSurvivalResponse(response) {
+  function denormalizeDonors(response) {
     return response.results.map(function (dataSet) {
       var donors = _.flatten(dataSet.intervals.map(function (interval) {
         return interval.donors.map(function (donor) {
@@ -259,9 +259,10 @@
         })
       }));
 
-      return _.extend({}, dataSet, {
+      return {
+        id: dataSet.id,
         donors: donors
-      });
+      }
     });
   }
 
@@ -279,7 +280,7 @@
               return Restangular.one('analysis/survival/' + response.id).get()
             })
             .then(function (response) {
-              return processSurvivalResponse(response.plain());
+              return denormalizeDonors(response.plain());
             })
         }
       });
