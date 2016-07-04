@@ -20,12 +20,6 @@
 
   var module = angular.module('icgc.survival', ['icgc.donors.models']);
 
-  var palette = [
-    '#6baed6', '#fd8d3c', '#74c476'
-    // '#2196F3', '#f44336', '#FF9800', '#BBCC24', '#9C27B0',
-    // '#795548', '#3F51B5', '#9E9E9E', '#FFEB3B', '##c0392b'
-  ];
-
   function noop () {}
 
   function renderChart (params) {
@@ -35,6 +29,7 @@
     var onMouseEnterDonor = params.onMouseEnterDonor || noop;
     var onMouseLeaveDonor = params.onMouseLeaveDonor || noop;
     var onClickDonor = params.onClickDonor || noop;
+    var palette = params.palette;
 
     var containerBounds = container.getBoundingClientRect();
 
@@ -162,15 +157,14 @@
 
       var update = function () {
         if (!ctrl.dataSets) {
-          console.log('no data to render');
           return;
         }
-        console.log('attempting to render');
         svg.selectAll('*').remove();
         renderChart({
           svg: svg, 
           container: graphContainer, 
           dataSets: ctrl.dataSets,
+          palette: ctrl.palette,
           onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
               element: event.target,
@@ -216,6 +210,7 @@
       dataSets: '<',
       tipLabels: '<',
       censoredStatuses: '<',
+      palette: '<',
     },
     controller: survivalAnalysisController
 

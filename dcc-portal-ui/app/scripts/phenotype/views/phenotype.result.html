@@ -84,7 +84,6 @@
                         data-ng-repeat-end
                     >
                         {{ overallSurvivalSet.donors.length / setMap[setIds[$index]].count * 100 | number: 2 }}
-                            <!-- {{setMap[donorSetId].count | number}} -->
                     </td>
                 </tr>
             </tbody>
@@ -100,6 +99,7 @@
                 censoredSurvivalTime: 'Interval of last follow-up',
             }"
             censored-statuses="['alive']"
+            palette="seriesColours"
         ></survival-analysis-graph>
     </div>
 
