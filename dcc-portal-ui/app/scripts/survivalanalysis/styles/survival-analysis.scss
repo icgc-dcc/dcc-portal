@@ -39,7 +39,7 @@ $faded: #e6dede;
       transition: all 0.1s;
       cursor: pointer;
       stroke-width: none;
-      &:hover {
+      &:hover, &:active {
         r: 5;
       }
       &[status="alive"] {
@@ -49,7 +49,7 @@ $faded: #e6dede;
         opacity: 0;
         transition: r 0.3s, opacity 0.3s;
         r: 5;
-        &:hover {
+        &:hover, &:active {
           opacity: 1;
           r: 2;
         }
