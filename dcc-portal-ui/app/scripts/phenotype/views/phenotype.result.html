@@ -52,7 +52,7 @@
                 <tr>
                     <th>Donors included in Analysis</th>
                     <th
-                        data-ng-repeat-start="overallSurvivalSet in overallSurvivalAnalysisDataSets"
+                        data-ng-repeat-start="donorSetId in setIds"
                         class="text-right"
                     >
                         # Donors
@@ -64,18 +64,16 @@
                 </tr>
             </thead>
             <tbody>
-                <tr >
-                    <td
-                        style="color:{{seriesColours[$index]}}"
-                    >
-                        {{setMap[donorSetId].name}}
-                    </th>
+                <tr>
+                    <td>
+                        Overall Survival Analysis
+                    </td>
 
                     <td
                         class="text-right"
-                        data-ng-repeat-start="overallSurvivalSet in overallSurvivalAnalysisDataSets"
+                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.overall"
                     >
-                        {{ overallSurvivalSet.donors.length | number }}
+                        {{ survivalSet.donors.length | number }}
                         <a href="/search?filters={{setFilters[$index]}}">
                         </a>
                     </td>
@@ -83,7 +81,27 @@
                         class="text-right"
                         data-ng-repeat-end
                     >
-                        {{ overallSurvivalSet.donors.length / overallSurvivalSet.meta.count * 100 | number: 2 }}
+                        {{ survivalSet.donors.length / survivalSet.meta.count * 100 | number: 2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Disease Free Survival Analysis
+                    </td>
+
+                    <td
+                        class="text-right"
+                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.diseaseFree"
+                    >
+                        {{ survivalSet.donors.length | number }}
+                        <a href="/search?filters={{setFilters[$index]}}">
+                        </a>
+                    </td>
+                    <td
+                        class="text-right"
+                        data-ng-repeat-end
+                    >
+                        {{ survivalSet.donors.length / survivalSet.meta.count * 100 | number: 2 }}
                     </td>
                 </tr>
             </tbody>
@@ -92,7 +110,7 @@
         <br>
         <div class="clearfix">Overall Survival</div>
         <survival-analysis-graph
-            data-data-sets="overallSurvivalAnalysisDataSets"
+            data-data-sets="survivalAnalysisDataSets.overall"
             tip-labels="{
                 survivalEstimate: 'Survival estimate',
                 survivalTime: 'Time of death',
@@ -100,6 +118,20 @@
             }"
             censored-statuses="['alive']"
             palette="seriesColours"
+        ></survival-analysis-graph>
+
+        <br>
+        <div class="clearfix">Disease Free Survival</div>
+        <survival-analysis-graph
+            data-data-sets="survivalAnalysisDataSets.diseaseFree"
+            tip-labels="{
+                survivalEstimate: 'Disease free estimate',
+                survivalTime: 'Time of relapse / progression',
+                censoredSurvivalTime: 'Interval from primary treatment to last follow-up',
+            }"
+            censored-statuses="['progression', 'relapse']"
+            palette="seriesColours"
+            initial-disabled-data-sets="survivalAnalysisDataSets.diseaseFree"
         ></survival-analysis-graph>
     </div>
 

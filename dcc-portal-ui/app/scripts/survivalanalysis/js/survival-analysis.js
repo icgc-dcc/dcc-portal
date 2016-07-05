@@ -69,10 +69,10 @@
 
     var longestDuration = _.max(dataSets
         .filter(function (data) {
-          return !_.includes(disabledDataSets, data);
+          return !_.includes(disabledDataSets, data) && data.donors.length;
         })
         .map(function (data) {
-          return data.donors.slice(-1)[0].survivalTime;
+          return data.donors.slice(-1)[0].time;
         }));
 
     x.domain([0, longestDuration]);
@@ -119,7 +119,7 @@
 
       // draw the data as an svg path
       setGroup.append('path')
-        .datum(data.donors.map(function (d) { return {x: d.survivalTime, y: d.survivalEstimate}; }))
+        .datum(data.donors.map(function (d) { return {x: d.time, y: d.survivalEstimate}; }))
         .attr('class', 'line')
         .attr('d', line)
         .attr('stroke', setColor);
@@ -131,7 +131,7 @@
         .append('svg:circle')
           .attr('class', 'point')
           .attr('status', function (d) { return d.status; })
-          .attr('cx', function(d) { return x(d.survivalTime); })
+          .attr('cx', function(d) { return x(d.time); })
           .attr('cy', function(d) { return y(d.survivalEstimate); })
           .attr('fill', setColor )
           .on('mouseover', function (d) {
@@ -161,7 +161,7 @@
       var svg = d3.select(graphContainer).append('svg');
       var tipTemplate = _.template($element.find('.survival-tip-template').html());
 
-      this.disabledDataSets = [];
+      // this.disabledDataSets = [];
 
       var update = function () {
         if (!ctrl.dataSets) {
@@ -211,6 +211,10 @@
         update();
       };
 
+      this.$onInit = function () {
+        ctrl.disabledDataSets = ctrl.initialDisabledDataSets;
+      };
+
       this.$onChanges = function (changes) {
         if (changes.dataSets) {
           setTimeout(update);
@@ -240,20 +244,27 @@
     var survivalData = responses.survivalData.plain().results;
     var setsMeta = responses.setsMeta.plain();
 
-    return survivalData.map(function (dataSet) {
-      var donors = _.flatten(dataSet.intervals.map(function (interval) {
-        return interval.donors.map(function (donor) {
-          return _.extend({}, donor, {
-            survivalEstimate: interval.cumulativeSurvival
+    var processGraphData = function (graphType) {
+      return survivalData.map(function (dataSet) {
+        var donors = _.flatten(dataSet[graphType].map(function (interval) {
+          return interval.donors.map(function (donor) {
+            return _.extend({}, donor, {
+              survivalEstimate: interval.cumulativeSurvival
+            });
           });
-        });
-      }));
+        }));
 
-      return {
-        meta: _.find(setsMeta, {id: dataSet.id}),
-        donors: donors
-      };
-    });
+        return {
+          meta: _.find(setsMeta, {id: dataSet.id}),
+          donors: donors
+        };
+      });
+    };
+
+    return {
+      overall: processGraphData('overall'),
+      diseaseFree: processGraphData('diseaseFree')
+    };
   }
 
   module
@@ -267,9 +278,8 @@
         SetService
       ) {
 
-      function fetchOverallSurvival (setIds) {
+      function fetchSurvivalData (setIds) {
         var data = setIds;
-        
 
         var fetchSurvival = Restangular
           .one('analysis')
@@ -291,7 +301,7 @@
       }
 
       _.extend(this, {
-        fetchOverallSurvival: fetchOverallSurvival
+        fetchSurvivalData: fetchSurvivalData
       });
 
     }]);

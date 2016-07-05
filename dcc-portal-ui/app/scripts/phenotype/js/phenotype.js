@@ -43,7 +43,7 @@
         // From D3's cat20 scale
         $scope.seriesColours = ['#6baed6', '#fd8d3c', '#74c476'];
 
-        $scope.overallSurvivalAnalysisDataSets = undefined;
+        $scope.survivalAnalysisDataSets = undefined;
 
         function normalize() {
           // Normalize results: Sort by id, then sort by terms
@@ -106,9 +106,9 @@
 
           });
 
-          SurvivalAnalysisService.fetchOverallSurvival($scope.item.entitySetIds)
+          SurvivalAnalysisService.fetchSurvivalData($scope.item.entitySetIds)
             .then(function (dataSets) {
-              $scope.overallSurvivalAnalysisDataSets = dataSets;
+              $scope.survivalAnalysisDataSets = dataSets;
             });
 
         }
