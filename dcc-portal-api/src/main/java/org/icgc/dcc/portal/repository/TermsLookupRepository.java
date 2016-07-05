@@ -218,6 +218,9 @@ public class TermsLookupRepository {
       @NonNull final String[] fields,
       @NonNull final String sort) {
     val query = filteredQuery(MATCH_ALL, boolFilter);
+
+    // Donor type is not analyzed but this works due to terms-lookup on _id field.
+    // https://github.com/icgc-dcc/dcc-release/blob/develop/dcc-release-resources/src/main/resources/org/icgc/dcc/release/resources/mappings/donor.mapping.json#L12-L13
     return execute("Union ES Query", false, (request) -> request
         .addSort(sort, ASC)
         .setTypes(DONOR.getId())
