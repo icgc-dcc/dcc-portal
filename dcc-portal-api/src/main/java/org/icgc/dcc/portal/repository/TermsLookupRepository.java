@@ -24,6 +24,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
 import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
 import static org.elasticsearch.search.sort.SortOrder.ASC;
+import static org.icgc.dcc.portal.model.IndexModel.Type.DONOR;
 import static org.icgc.dcc.portal.model.IndexModel.Type.DONOR_TEXT;
 import static org.icgc.dcc.portal.model.IndexModel.Type.FILE_DONOR_TEXT;
 import static org.icgc.dcc.portal.util.ElasticsearchRequestUtils.toBoolFilterFrom;
@@ -211,16 +212,22 @@ public class TermsLookupRepository {
   /**
    * Special case for Survival Analysis, the fields selected for return are the only ones we currently care about.
    */
-  public SearchResponse runUnionEsQueryWithFields(final String indexTypeName, @NonNull final SearchType searchType,
-      @NonNull final BoolFilterBuilder boolFilter, final int max) {
+  public SearchResponse singleUnion(final String indexTypeName,
+      @NonNull final SearchType searchType,
+      @NonNull final BoolFilterBuilder boolFilter, final int max,
+      @NonNull final String[] fields,
+      @NonNull final String sort) {
     val query = filteredQuery(MATCH_ALL, boolFilter);
+
+    // Donor type is not analyzed but this works due to terms-lookup on _id field.
+    // https://github.com/icgc-dcc/dcc-release/blob/develop/dcc-release-resources/src/main/resources/org/icgc/dcc/release/resources/mappings/donor.mapping.json#L12-L13
     return execute("Union ES Query", false, (request) -> request
-        .addSort("donor_survival_time", ASC)
-        .setTypes(indexTypeName)
+        .addSort(sort, ASC)
+        .setTypes(DONOR.getId())
         .setSearchType(searchType)
         .setQuery(query)
         .setSize(max)
-        .addFields("donor_survival_time", "donor_vital_status"));
+        .addFields(fields));
   }
 
   public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter) {

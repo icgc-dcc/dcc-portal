@@ -81,7 +81,8 @@ public class SurvivalAnalysis implements Identifiable<UUID> {
   public class Result {
 
     UUID id;
-    List<Interval> intervals;
+    List<Interval> overall;
+    List<Interval> diseaseFree;
 
   }
 
