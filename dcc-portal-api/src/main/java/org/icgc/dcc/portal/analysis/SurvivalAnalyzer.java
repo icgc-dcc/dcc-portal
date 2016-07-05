@@ -22,6 +22,7 @@ import static org.icgc.dcc.portal.model.BaseEntitySet.Type.DONOR;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -55,16 +56,10 @@ public class SurvivalAnalyzer {
   private final static List<String> OVERALL = ImmutableList.<String> of("alive");
   private final static List<String> OVERALL_FIELDS =
       ImmutableList.<String> of("donor_vital_status", "donor_survival_time");
-
   private final static List<String> DISEASE_FREE = ImmutableList.<String> of(
       "complete remission", "partial remission", "stable", "no evidence of disease");
   public final static List<String> DISEASE_FREE_FIELDS = ImmutableList.<String> of(
       "disease_status_last_followup", "donor_interval_of_last_followup", "donor_relapse_interval");
-  private final static List<String> DISEASE_STATUSES = ImmutableList.<String> builder()
-      .addAll(DISEASE_FREE)
-      .add("relapse")
-      .add("progression")
-      .build();
 
   /**
    * Dependencies.
@@ -79,24 +74,29 @@ public class SurvivalAnalyzer {
     val sets = analysis.getEntitySetIds();
     val entitySetMap = getEntitySetMap(sets);
 
+    // TODO: Obviously WET here, maybe extract to helper.
     for (val id : sets) {
       val overallResponse =
           unionAnalyzer.computeExclusion(entitySetMap.get(id), DONOR, OVERALL_FIELDS, "donor_survival_time");
       SearchHit[] overallHits = overallResponse.getHits().getHits();
       val overallDonors = filterDonors(overallHits, SurvivalAnalyzer::hasData);
-      val overallIntervals = compute(overallDonors, false);
+      val overallIntervals = runAnalysis(overallDonors, false);
 
       val diseaseResponse =
           unionAnalyzer.computeExclusion(entitySetMap.get(id), DONOR, DISEASE_FREE_FIELDS,
               "donor_interval_of_last_followup");
       SearchHit[] diseaseHits = diseaseResponse.getHits().getHits();
       val diseaseFreeDonors = filterDonors(diseaseHits, SurvivalAnalyzer::hasDiseaseStatusData);
-      val diseaseFreeIntervals = compute(diseaseFreeDonors, true);
+      val diseaseFreeIntervals = runAnalysis(diseaseFreeDonors, true);
 
       analysis.getResults().add(analysis.new Result(id, overallIntervals, diseaseFreeIntervals));
     }
 
     return analysis;
+  }
+
+  private static List<Interval> runAnalysis(SearchHit[] hits, boolean diseaseFree) {
+    return hits.length == 0 ? Collections.emptyList() : compute(hits, diseaseFree);
   }
 
   private static List<Interval> compute(SearchHit[] donors, boolean diseaseFree) {
@@ -177,7 +177,12 @@ public class SurvivalAnalyzer {
   }
 
   private static boolean hasData(SearchHit donor) {
-    val status = (String) donor.field("donor_vital_status").getValue();
+    val statusField = donor.field("donor_vital_status");
+    if (statusField == null) {
+      return false;
+    }
+
+    val status = (String) statusField.getValue();
     val hasStatus = status.equalsIgnoreCase("alive") || status.equalsIgnoreCase("deceased");
 
     val time = donor.field("donor_survival_time");
