@@ -20,16 +20,14 @@
 
   var module = angular.module('icgc.survival', ['icgc.donors.models']);
 
-  function noop () {}
-
   function renderChart (params) {
     var svg = params.svg;
     var container = params.container;
     var dataSets = params.dataSets;
     var disabledDataSets = params.disabledDataSets;
-    var onMouseEnterDonor = params.onMouseEnterDonor || noop;
-    var onMouseLeaveDonor = params.onMouseLeaveDonor || noop;
-    var onClickDonor = params.onClickDonor || noop;
+    var onMouseEnterDonor = params.onMouseEnterDonor || _.noop;
+    var onMouseLeaveDonor = params.onMouseLeaveDonor || _.noop;
+    var onClickDonor = params.onClickDonor || _.noop;
     var palette = params.palette;
 
     var containerBounds = container.getBoundingClientRect();
@@ -288,8 +286,7 @@
         })
           .then(function (responses) {
             return processResponses(responses);
-          })
-        ;
+          });
 
       }
 

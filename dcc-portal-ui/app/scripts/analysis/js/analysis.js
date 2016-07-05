@@ -151,18 +151,6 @@
         return;
       }
 
-      // ----- START SURVIVAL MOCK
-      
-      if ($scope.analysisType === 'survival') {
-        // $scope.analysisResult = null;
-        // $timeout(function() {
-          // console.warn('mock survival data:', mockSurvivalData);
-          // $scope.analysisResult = mockSurvivalData;
-        // }, 150);
-        return;
-      }
-      // ----- END SURVIVAL MOCK
-
       var id = $scope.analysisId, type = $scope.analysisType;
       var promise = AnalysisService.getAnalysis(id, type);
 
