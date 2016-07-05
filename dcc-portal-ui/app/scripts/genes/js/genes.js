@@ -18,7 +18,7 @@
 (function () {
   'use strict';
 
-  var module = angular.module('icgc.genes', ['icgc.genes.controllers', 'ui.router']);
+  var module = angular.module('icgc.genes', ['icgc.genes.controllers', 'ui.router', 'app.common']);
 
   module.config(function ($stateProvider) {
     $stateProvider.state('gene', {
@@ -39,6 +39,64 @@
 (function () {
   'use strict';
 
+  var module = angular.module('app.common');
+  
+  // @bob what should the module be called? - chang  
+  module.directive('fixScroll', function ($timeout) {
+    /**
+     * Our function for keeping the page on the current section. 
+     */
+    function scrollToCurrent () {
+      var target = jQuery(window.location.hash);
+      
+      // We do not want to immediately scroll away from the controls on page load. 
+      // Timeout of zero is used to ensure scroll happens after render. 
+      $timeout(function() {
+          jQuery('body,html').stop(true, true);
+          var offset = jQuery(target).offset();
+          var to = offset.top - 40;
+          jQuery('body,html').animate({scrollTop: to}, 200); 
+      });
+    }
+    
+    function checkMutationSignificance () {
+      return true; //TODO: Check if mutation requires fixScroll invocation
+    }
+   
+    function createMutationObservers (elements) {
+      var observers = elements.map(function (element) {
+        var observer = new MutationObserver(function (mutations) {
+          var shouldScroll = mutations.reduce(function (isSignificantMutation, mutation) {
+            return isSignificantMutation || checkMutationSignificance(mutation);
+          });
+          if (shouldScroll) {
+            scrollToCurrent();
+          }
+        });
+        
+        observer.observe(element, { attributes: true, childList: true, characterData: true });
+        return observer;
+      });
+      
+      return observers;
+    }
+
+    return {
+      restrict: 'A',
+      link: function (scope, $element) {
+        var mutationObservers = createMutationObservers($element.find('.dynamic-height').get());
+        scope.$on('$destroy', function () {
+          mutationObservers.forEach(function (observer) {
+            observer.disconnect();
+          });
+        });
+      }
+    };
+  });
+    
+})();
+(function () {
+  'use strict';
   var module = angular.module('icgc.genes.controllers', ['icgc.genes.models']);
 
   module.controller('GeneCtrl', function ($scope, HighchartsService, Page, Projects, Mutations,
@@ -76,7 +134,6 @@
     _ctrl.uiGeneSets.pathwayList = extractAndSort(_ctrl.gene.sets, 'pathway');
     _ctrl.uiGeneSets.goList = extractAndSort(_ctrl.gene.sets, 'go_term');
     _ctrl.uiGeneSets.curatedList = extractAndSort(_ctrl.gene.sets, 'curated_set');
-
 
     function refresh() {
       _ctrl.gene.advQuery = LocationService.mergeIntoFilters({gene: {id: {is: [_ctrl.gene.id] }}});
