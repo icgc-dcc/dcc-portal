@@ -140,7 +140,7 @@ public class UnionAnalyzer {
   public SearchResponse computeExclusion(@NonNull final UnionUnit unionUnit, BaseEntitySet.Type type,
       List<String> fields, String sort) {
     val response =
-        subtractOne(unionUnit, type, termsLookupRepository.getMaxPreviewNumberOfHits(), fields, sort);
+        subtractOne(unionUnit, type, 20000, fields, sort);
     return response;
   }
 
@@ -229,7 +229,7 @@ public class UnionAnalyzer {
 
   private SearchResponse subtractOne(final UnionUnit definition, final BaseEntitySet.Type entityType,
       final int max, List<String> fields, String sort) {
-    val response = termsLookupRepository.runUnionEsQueryWithArgs(
+    val response = termsLookupRepository.singleUnion(
         entityType.getIndexTypeName(),
         SearchType.QUERY_THEN_FETCH,
         toBoolFilterFrom(definition, entityType),
