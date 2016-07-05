@@ -120,12 +120,10 @@ mail:
 # Data download
 download:
   enabled: false
-  uri: ""
-  dynamicRootPath: "/download/dynamic/r12"
-  staticRootPath: "/download/static"
-  currentReleaseSymlink: "/current /r12"
-  maxUsers: 16
-  stage: "DEVELOPMENT"
+  serverUrl: "http://localhost:9090"
+  sharedSecret: ""
+  aesKey: ""
+  publicServerUrl: "http://localhost:9090"
 
 web:
   # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs

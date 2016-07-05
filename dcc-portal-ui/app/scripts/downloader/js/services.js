@@ -42,9 +42,6 @@ angular.module('app.downloader.services').service('DownloaderService', function(
     return Downloader.getSizes(filters);
   };
 
-
-
-
   // Dealing with cache
   this.getCurrentJobIds = function() {
     var c = $window.localStorage.getItem('dcc.icgc.downloader');
@@ -59,21 +56,5 @@ angular.module('app.downloader.services').service('DownloaderService', function(
     console.log('Saving...', data);
     $window.localStorage.setItem('dcc.icgc.downloader', JSON.stringify(data));
   };
-
-  // Sync local cache against server state
-  /*
-  this.synchronize = function() {
-    var server, current, synced;
-    current = this.getCurrentJobIds();
-    server = this.getJobStatus(current);
-    synced = [];
-    current.forEach(function(jobId) {
-      if (server.indexOf(jobId) > -1) {
-        synced.push(jobId);
-      }
-    });
-    this.setCurrentJobIds(synced);
-  };
-  */
 
 });
