@@ -137,6 +137,13 @@ public class UnionAnalyzer {
     return SearchResponses.getHitIds(response);
   }
 
+  public SearchResponse computeExclusion(@NonNull final UnionUnit unionUnit, BaseEntitySet.Type type,
+      List<String> fields, String sort) {
+    val response =
+        subtractOne(unionUnit, type, 20000, fields, sort);
+    return response;
+  }
+
   @Async
   public void combineListsAsync(@NonNull final UUID newEntityId,
       @NonNull final DerivedEntitySetDefinition entitySetDefinition) {
@@ -216,6 +223,19 @@ public class UnionAnalyzer {
         SearchType.QUERY_THEN_FETCH,
         toBoolFilterFrom(definitions, entityType),
         max);
+
+    return response;
+  }
+
+  private SearchResponse subtractOne(final UnionUnit definition, final BaseEntitySet.Type entityType,
+      final int max, List<String> fields, String sort) {
+    val response = termsLookupRepository.singleUnion(
+        entityType.getIndexTypeName(),
+        SearchType.QUERY_THEN_FETCH,
+        toBoolFilterFrom(definition, entityType),
+        max,
+        fields.toArray(new String[fields.size()]),
+        sort);
 
     return response;
   }

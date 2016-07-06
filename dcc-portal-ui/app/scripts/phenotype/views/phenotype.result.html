@@ -1,14 +1,14 @@
-<h3 style="margin-bottom:0">Phenotype Comparison
+<h3 style="margin-bottom:0">Survival Analysis / Phenotype Comparison
     <span style="font-size:1rem" class="pull-right" data-ng-if="!isDeprecated">
         <share-button></share-button>
     </span>
 </h3>
-<div><small>More phenotypes coming soon...</small></div><br>
 
 <div data-ng-if="isDeprecated" class="alert-error">
     <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
 </div>
 <div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
+
     <div>Your selected donor sets</div>
     <div class="wide">
         <table class="table">
@@ -28,6 +28,123 @@
     </div>
     <div class="clearfix"></div>
     <br>
+
+    <div class="survival-analysis-wrapper">
+        <strong>Survival Analysis</strong>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th
+                        colspan="2"
+                        data-ng-repeat="donorSetId in setIds"
+                    >
+                        <div>
+                            <div style="color:{{seriesColours[$index]}}">
+                                {{setMap[donorSetId].name}}
+                            </div>
+                            <small>
+                                Donor count: {{setMap[setIds[$index]].count | number}}
+                            </small>
+                        </div>
+                    </tr>
+                </tr>
+                <tr>
+                    <th>Donors included in Analysis</th>
+                    <th
+                        data-ng-repeat-start="donorSetId in setIds"
+                        class="text-right"
+                    >
+                        # Donors
+                    </th>
+                    <th
+                        class="text-right"
+                        data-ng-repeat-end
+                    > % </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Overall Survival Analysis
+                    </td>
+
+                    <td
+                        class="text-right"
+                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.overall | orderBy: setIdOrder"
+                    >
+                        {{ survivalSet.donors.length | number }}
+                        <a href="/search?filters={{setFilters[$index]}}">
+                        </a>
+                    </td>
+                    <td
+                        class="text-right"
+                        data-ng-repeat-end
+                    >
+                        {{ survivalSet.donors.length / survivalSet.meta.count * 100 | number: 2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Disease Free Survival Analysis
+                    </td>
+
+                    <td
+                        class="text-right"
+                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.diseaseFree | orderBy: setIdOrder"
+                    >
+                        {{ survivalSet.donors.length | number }}
+                        <a href="/search?filters={{setFilters[$index]}}">
+                        </a>
+                    </td>
+                    <td
+                        class="text-right"
+                        data-ng-repeat-end
+                    >
+                        {{ survivalSet.donors.length / survivalSet.meta.count * 100 | number: 2 }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <div class="clearfix">Overall Survival</div>
+                    <survival-analysis-graph
+                        data-data-sets="survivalAnalysisDataSets.overall"
+                        tip-labels="{
+                            survivalEstimate: 'Survival estimate',
+                            survivalTime: 'Time of death',
+                            censoredSurvivalTime: 'Interval of last follow-up',
+                        }"
+                        censored-statuses="['alive']"
+                        palette="seriesColours"
+                    ></survival-analysis-graph>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="col-6">
+                        <div class="clearfix">Disease Free Survival</div>
+                        <survival-analysis-graph
+                            data-data-sets="survivalAnalysisDataSets.diseaseFree"
+                            tip-labels="{
+                                survivalEstimate: 'Disease free estimate',
+                                survivalTime: 'Time of relapse / progression',
+                                censoredSurvivalTime: 'Interval from primary treatment to last follow-up',
+                            }"
+                            censored-statuses="['progression', 'relapse']"
+                            palette="seriesColours"
+                        ></survival-analysis-graph>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        </div>
+    </div>
 
 
     <br>

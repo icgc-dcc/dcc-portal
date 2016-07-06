@@ -29,9 +29,9 @@
 (function() {
   'use strict';
 
-  var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services']);
+  var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services', 'icgc.survival']);
 
-  module.directive('phenotypeResult', function(SetService, PhenotypeService) {
+  module.directive('phenotypeResult', function(SetService, PhenotypeService, SurvivalAnalysisService) {
     return {
       restrict: 'E',
       scope: {
@@ -42,6 +42,8 @@
 
         // From D3's cat20 scale
         $scope.seriesColours = ['#6baed6', '#fd8d3c', '#74c476'];
+
+        $scope.survivalAnalysisDataSets = undefined;
 
         function normalize() {
           // Normalize results: Sort by id, then sort by terms
@@ -104,7 +106,16 @@
 
           });
 
+          SurvivalAnalysisService.fetchSurvivalData($scope.setIds)
+            .then(function (dataSets) {
+              $scope.survivalAnalysisDataSets = dataSets;
+            });
+
         }
+
+        $scope.setIdOrder = function (set) {
+          return $scope.setIds.indexOf(set.meta.id);
+        };
 
         $scope.$watch('item', function(n) {
           if (n) {

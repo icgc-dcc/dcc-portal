@@ -96,51 +96,42 @@
       return _isLaunchingAnalysis;
     };
 
+    function _launchAnalysis(data, resourceName, redirectRootPath) {
+      if (_isLaunchingAnalysis) {
+        return;
+      }
+
+      _isLaunchingAnalysis = true;
+
+      return Restangular
+        .one('analysis')
+        .post(resourceName, data, {}, {'Content-Type': 'application/json'})
+        .then(function(data) {
+          if (!data.id) {
+            console.log('Could not retrieve analysis data.id');
+          }
+          $location.path(redirectRootPath + data.id);
+        })
+        .finally(function() {
+          _isLaunchingAnalysis = false;
+        });
+    }
 
     /* Phenotype comparison only takes in donor set ids */
     _this.launchPhenotype = function(setIds) {
-
-      if (_isLaunchingAnalysis) {
-        return;
-      }
-
-      _isLaunchingAnalysis = true;
-
-      var payload = setIds;
-      var promise = Restangular.one('analysis').post('phenotype', payload, {}, {'Content-Type': 'application/json'});
-      promise.then(function(data) {
-        if (data.id) {
-          $location.path('analysis/view/phenotype/' + data.id);
-        }
-      })
-      .finally(function() {
-        _isLaunchingAnalysis = false;
-      });
+      return _launchAnalysis(setIds, 'phenotype', 'analysis/view/phenotype/');
     };
 
-
     _this.launchSet = function(type, setIds) {
-
-      if (_isLaunchingAnalysis) {
-        return;
-      }
-
-      _isLaunchingAnalysis = true;
-
       var payload = {
         lists: setIds,
         type: type.toUpperCase()
       };
-      var promise = Restangular.one('analysis').post('union', payload, {}, {'Content-Type': 'application/json'});
-      promise.then(function(data) {
-        if (!data.id) {
-          console.log('cannot create set operation');
-        }
-        $location.path('analysis/view/set/' + data.id);
-      })
-      .finally(function() {
-        _isLaunchingAnalysis = false;
-      });
+      return _launchAnalysis(payload, 'union', 'analysis/view/set/');
+    };
+
+    _this.launchSurvival = function(setIds) {
+      return _launchAnalysis(setIds, 'survival', 'analysis/view/survival/');
     };
 
 

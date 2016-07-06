@@ -1,0 +1,31 @@
+<div class="survival-analysis">
+
+  <script type="text/template" class="survival-tip-template">
+    <div>
+      <strong><%= donor.id %></strong>
+      <div><%= labels.survivalEstimate %>: <%= (donor.survivalEstimate * 100).toFixed(2) %>%</div>
+      <% if (donor.isCensored) { %>
+        <div><%= labels.censoredSurvivalTime %>: <%= donor.time %> <%= unit %> (censored)</div>
+      <% } else { %>
+        <div><%= labels.survivalTime %>: <%= donor.time %> <%= unit %> </div>
+      <% } %>
+    </div>
+  </script>
+
+  <ul class="legend">
+    <li
+      class="set"
+      ng-repeat="dataSet in ctrl.dataSets"
+      ng-class="{ disabled: ctrl.isDataSetDisabled(dataSet) }"
+      ng-style="{color: ctrl.palette[$index % ctrl.palette.length]}"
+      ng-click="ctrl.toggleDataSet(dataSet)"
+    >
+      {{ dataSet.meta.name }}
+    </li>
+  </ul>
+
+  <div class="survival-graph">
+    
+  </div>
+
+</div>

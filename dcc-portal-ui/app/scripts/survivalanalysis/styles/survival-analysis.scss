@@ -1,0 +1,87 @@
+$faded: #e6dede;
+.survival-graph {
+
+  .axis {
+    path, line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    path {
+      stroke: $faded
+    }
+
+    .tick text {
+      fill: #888
+    }
+
+    .axis-label {
+      color: hsl(0, 0%, 60%);
+      font-size: 0.75rem;
+      fill: hsl(0, 0%, 60%);
+      font-weight: 300;
+    }
+  }
+  
+
+  .axis path {
+  }
+
+  .line {
+    fill: none;
+    stroke-width: 1.5px;
+  }
+
+  .serie {
+    .point {
+      r: 3;
+      transition: all 0.1s;
+      cursor: pointer;
+      stroke-width: none;
+      &:hover, &:active {
+        r: 5;
+      }
+      &[status="alive"] {
+        opacity: 0.5;
+      }
+      &[status="deceased"] {
+        opacity: 0;
+        transition: r 0.3s, opacity 0.3s;
+        r: 5;
+        &:hover, &:active {
+          opacity: 1;
+          r: 2;
+        }
+      }
+    }
+  }
+
+}
+
+.survival-analysis {
+
+  position: relative;
+
+  .survival-graph {
+    width: 100%;
+    svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .legend {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .set {
+      cursor: pointer;
+      &.disabled {
+        color: #b7b7b7 !important;
+      }
+    }
+
+  }
+}
