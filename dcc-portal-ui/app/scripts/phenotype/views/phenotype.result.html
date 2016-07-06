@@ -71,7 +71,7 @@
 
                     <td
                         class="text-right"
-                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.overall"
+                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.overall | orderBy: setIdOrder"
                     >
                         {{ survivalSet.donors.length | number }}
                         <a href="/search?filters={{setFilters[$index]}}">
@@ -91,7 +91,7 @@
 
                     <td
                         class="text-right"
-                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.diseaseFree"
+                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.diseaseFree | orderBy: setIdOrder"
                     >
                         {{ survivalSet.donors.length | number }}
                         <a href="/search?filters={{setFilters[$index]}}">

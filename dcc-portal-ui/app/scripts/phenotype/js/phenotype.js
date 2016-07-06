@@ -113,6 +113,10 @@
 
         }
 
+        $scope.setIdOrder = function (set) {
+          return $scope.setIds.indexOf(set.meta.id);
+        };
+
         $scope.$watch('item', function(n) {
           if (n) {
             normalize();
