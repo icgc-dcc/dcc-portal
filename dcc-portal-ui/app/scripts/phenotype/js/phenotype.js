@@ -106,7 +106,7 @@
 
           });
 
-          SurvivalAnalysisService.fetchSurvivalData($scope.item.entitySetIds)
+          SurvivalAnalysisService.fetchSurvivalData($scope.setIds)
             .then(function (dataSets) {
               $scope.survivalAnalysisDataSets = dataSets;
             });
