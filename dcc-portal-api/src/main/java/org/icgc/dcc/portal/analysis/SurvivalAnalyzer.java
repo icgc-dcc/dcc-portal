@@ -59,7 +59,7 @@ public class SurvivalAnalyzer {
   private final static List<String> DISEASE_FREE = ImmutableList.<String> of(
       "complete remission", "partial remission", "stable", "no evidence of disease");
   public final static List<String> DISEASE_FREE_FIELDS = ImmutableList.<String> of(
-      "disease_status_last_followup", "donor_interval_of_last_followup", "donor_relapse_interval");
+      "disease_status_last_followup", "donor_interval_of_last_followup");
 
   /**
    * Dependencies.
