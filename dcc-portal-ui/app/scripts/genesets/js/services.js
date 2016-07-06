@@ -141,7 +141,6 @@
           impactFilter: _.isEmpty(mutationImpacts)? '': mutationImpacts.join(',')
         });
     };
-
   });
 
 
