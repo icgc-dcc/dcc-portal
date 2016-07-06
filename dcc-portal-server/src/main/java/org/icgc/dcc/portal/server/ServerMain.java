@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,47 +15,20 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.writer;
+package org.icgc.dcc.portal.server;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
+/**
+ * Application entry point.
+ */
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class }, scanBasePackages = "org.icgc.dcc.portal")
+public class ServerMain {
 
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.MessageBodyWriter;
-import javax.ws.rs.ext.Provider;
-
-import org.icgc.dcc.portal.model.Error;
-import org.springframework.stereotype.Component;
-
-@Component
-@Provider
-@Produces({ TEXT_PLAIN, APPLICATION_OCTET_STREAM })
-public class ErrorMessageBodyWriter implements MessageBodyWriter<Error> {
-
-  @Override
-  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return Error.class.isAssignableFrom(type);
-  }
-
-  @Override
-  public long getSize(Error error, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return error.toString().getBytes(UTF_8).length;
-  }
-
-  @Override
-  public void writeTo(Error error, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-      MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
-      WebApplicationException {
-    entityStream.write(error.toString().getBytes(UTF_8));
+  public static void main(String... args) {
+    SpringApplication.run(ServerMain.class, args);
   }
 
 }

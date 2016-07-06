@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,47 +15,42 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.writer;
+package org.icgc.dcc.portal.server.util;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static lombok.AccessLevel.PRIVATE;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.MessageBodyWriter;
-import javax.ws.rs.ext.Provider;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-import org.icgc.dcc.portal.model.Error;
-import org.springframework.stereotype.Component;
+@RequiredArgsConstructor(access = PRIVATE)
+public class SingletonBeansInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-@Component
-@Provider
-@Produces({ TEXT_PLAIN, APPLICATION_OCTET_STREAM })
-public class ErrorMessageBodyWriter implements MessageBodyWriter<Error> {
+  /**
+   * Beans.
+   */
+  @NonNull
+  private final Object[] singletonBeans;
 
-  @Override
-  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return Error.class.isAssignableFrom(type);
+  public static SingletonBeansInitializer singletonBeans(Object... singletonBeans) {
+    return new SingletonBeansInitializer(singletonBeans);
   }
 
   @Override
-  public long getSize(Error error, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return error.toString().getBytes(UTF_8).length;
+  public void initialize(ConfigurableApplicationContext applicationContext) {
+    for (val singletonBean : singletonBeans) {
+      registerBean(applicationContext, singletonBean);
+    }
   }
 
-  @Override
-  public void writeTo(Error error, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-      MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
-      WebApplicationException {
-    entityStream.write(error.toString().getBytes(UTF_8));
+  private void registerBean(ConfigurableApplicationContext applicationContext, Object singletonBean) {
+    val beanName = singletonBean.getClass().getCanonicalName();
+
+    val factory = applicationContext.getBeanFactory();
+    factory.registerSingleton(beanName, singletonBean);
   }
 
 }
