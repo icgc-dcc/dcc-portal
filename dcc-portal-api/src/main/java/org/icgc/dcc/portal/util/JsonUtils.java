@@ -30,26 +30,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.icgc.dcc.downloader.core.SelectionEntry;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+
 import org.icgc.dcc.portal.service.BadRequestException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-
-import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.val;
+import com.google.common.collect.ImmutableList;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class JsonUtils {
 
   // @formatter:off
   public static final TypeReference<ArrayList<String>> LIST_TYPE_REFERENCE = new TypeReference<ArrayList<String>>() {{}};
-  public static final TypeReference<ArrayList<org.icgc.dcc.downloader.core.SelectionEntry<String,String>>> LIST_ENTRY_TYPE_REFERENCE = new TypeReference<ArrayList<SelectionEntry<String,String>>>() {{}};
   // @formatter:on
 
   public static final ObjectMapper MAPPER = new ObjectMapper()
@@ -65,9 +65,15 @@ public final class JsonUtils {
   }
 
   @SneakyThrows
-  public static List<SelectionEntry<String, String>> parseListEntry(String json) {
-    if (json.trim().isEmpty()) return Lists.newArrayList();
-    return MAPPER.readValue(json, LIST_ENTRY_TYPE_REFERENCE);
+  public static List<String> parseDownloadDataTypeNames(@NonNull String json) {
+    val arrayNode = MAPPER.readValue(json, ArrayNode.class);
+    val dataTypeNames = ImmutableList.<String> builder();
+    for (val element : arrayNode) {
+      val typeName = element.get("key").textValue();
+      dataTypeNames.add(typeName);
+    }
+
+    return dataTypeNames.build();
   }
 
   @SneakyThrows

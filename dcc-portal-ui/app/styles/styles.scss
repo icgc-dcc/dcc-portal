@@ -15,7 +15,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 //-----------------------------------------------------------------------------
 // Base
 @import "_base/base";
@@ -35,7 +35,6 @@
 @import "../scripts/advanced/styles/advanced";
 @import "../scripts/keyword/styles/results";
 @import "../scripts/common/styles/footer";
-@import "../scripts/downloader/styles/download";
 @import "../scripts/analysis/styles/analysis";
 @import "../scripts/static/styles/team";
 //-----------------------------------------------------------------------------
@@ -159,24 +158,24 @@ section {
   background: $white;
   border-radius: 0;
   border-bottom: 1px solid $greyLight;
-  
+
   a {
     text-indent: initial;
-    
+
     &.link {
       white-space: nowrap;
     }
   }
 
   .indent {
-    text-align: justify; 
+    text-align: justify;
     text-indent: 1rem;
   }
-  
+
   &.no-border {
     border-bottom: none;
   }
-  
+
   &.no-vert-padding {
     padding-top: 0rem;
     padding-bottom: 0rem;

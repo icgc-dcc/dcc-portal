@@ -36,14 +36,11 @@ angular.module('app.downloader.model').factory('Downloader', function ($http, Re
       });
     },
 
-
     getSizes: function(filters) {
       return RestangularNoCache.one('download', 'size').get({
         filters: filters
       });
     },
-
-
 
     cancelJob: function (ids) {
       return RestangularNoCache.one('download', ids).one('cancel').get({});

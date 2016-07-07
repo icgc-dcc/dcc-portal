@@ -132,15 +132,11 @@ mail:
 # Data download
 download:
   enabled: true
-  uri: "hdfs://<namenode>:8020"
-  dynamicRootPath: "/download/dynamic"
-  staticRootPath: "/download/static"
-  currentReleaseSymlink: "/Current /dev-06e-6-31"
-  stage: "PRODUCTION"
-  quorum: "localhost"
-  oozieUrl: ""
-  appPath: ""
-  releaseName: "CURRENT_RELEASE"
+  serverUrl: "http://localhost:9090"
+  publicServerUrl: "http://localhost:9090"
+  sharedSecret: ""
+  aesKey: ""
+
 
 web:
   # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs

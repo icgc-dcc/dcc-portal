@@ -17,45 +17,49 @@
 
 package org.icgc.dcc.portal.config;
 
-import org.icgc.dcc.downloader.client.DownloaderClient;
-import org.icgc.dcc.downloader.client.ExportedDataFileSystem;
+import lombok.SneakyThrows;
+import lombok.val;
+
+import org.icgc.dcc.download.client.DownloadClient;
+import org.icgc.dcc.download.client.DownloadClientConfig;
+import org.icgc.dcc.download.client.impl.HttpDownloadClient;
+import org.icgc.dcc.download.client.impl.NoOpDownloadClient;
+import org.icgc.dcc.download.core.jwt.JwtConfig;
+import org.icgc.dcc.download.core.jwt.JwtService;
 import org.icgc.dcc.portal.config.PortalProperties.DownloadProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-
-import lombok.SneakyThrows;
-import lombok.val;
 
 @Lazy
 @Configuration
 public class DownloadConfig {
 
   @Bean
-  public DownloaderClient dynamicDownloader(DownloadProperties download) {
-    if (!download.isEnabled()) {
-      return null;
+  @SneakyThrows
+  public DownloadClient downloadClient(DownloadProperties properties) {
+    if (properties.isEnabled() == false) {
+      return new NoOpDownloadClient();
     }
 
-    return new DownloaderClient(
-        download.getUri() + download.getDynamicRootPath(),
-        download.getQuorum(),
-        download.getOozieUrl(),
-        download.getAppPath(),
-        download.getSupportEmailAddress(),
-        download.getCapacityThreshold(),
-        download.getReleaseName());
+    val clientConfig = new DownloadClientConfig()
+        .baseUrl(properties.getServerUrl())
+        .user(properties.getUser())
+        .password(properties.getPassword())
+        .requestLoggingEnabled(properties.isRequestLoggingEnabled())
+        .strictSSLCertificates(properties.isStrictSSLCertificates());
+
+    return new HttpDownloadClient(clientConfig);
   }
 
   @Bean
-  @SneakyThrows
-  public ExportedDataFileSystem exportedDataFileSystem(DownloadProperties download) {
-    if (!download.isEnabled()) {
-      return null;
-    }
+  public JwtService jwtService(DownloadProperties properties) {
+    val config = new JwtConfig();
+    config.setSharedSecret(properties.getSharedSecret());
+    config.setAesKey(properties.getAesKey());
+    config.setTtlHours(properties.getTtlHours());
 
-    val rootDir = download.getUri() + download.getStaticRootPath();
-    return new ExportedDataFileSystem(rootDir, download.getCurrentReleaseSymlink());
+    return new JwtService(config);
   }
 
 }

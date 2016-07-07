@@ -19,8 +19,6 @@ package org.icgc.dcc.portal.config;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
-import static com.google.inject.Stage.DEVELOPMENT;
-import static org.icgc.dcc.downloader.core.ArchiverConstant.ARCHIVE_CURRENT_RELEASE;
 
 import java.util.List;
 import java.util.Map;
@@ -30,19 +28,18 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.inject.Stage;
 import com.yammer.dropwizard.config.Configuration;
 import com.yammer.dropwizard.db.DatabaseConfiguration;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -150,43 +147,31 @@ public class PortalProperties extends Configuration {
     boolean enabled = true;
 
     @JsonProperty
-    String dynamicRootPath = "/icgc/download/dynamic";
+    String serverUrl = "";
 
     @JsonProperty
-    String staticRootPath = "/icgc/download/static";
+    String publicServerUrl = "";
 
     @JsonProperty
-    String uri = "";
+    String user = "";
 
     @JsonProperty
-    Stage stage = DEVELOPMENT;
+    String password = "";
 
     @JsonProperty
-    int maxUsers = 20;
+    boolean strictSSLCertificates = true;
 
     @JsonProperty
-    String currentReleaseSymlink = "ent /dev";
+    boolean requestLoggingEnabled;
 
     @JsonProperty
-    int maxDownloadSizeInMB = 400;
+    String sharedSecret;
 
     @JsonProperty
-    String releaseName = ARCHIVE_CURRENT_RELEASE;
+    String aesKey;
 
     @JsonProperty
-    String quorum = "localhost";
-
-    @JsonProperty
-    String oozieUrl = "http://localhost:11000/oozie";
-
-    @JsonProperty
-    String supportEmailAddress = "";
-
-    @JsonProperty
-    String appPath = "";
-
-    @JsonProperty
-    byte capacityThreshold = 20;
+    int ttlHours = 1;
 
   }
 
