@@ -72,9 +72,11 @@
                     <td
                         class="text-right"
                         data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.overall | orderBy: setIdOrder"
+                        data-ng-click="viewDonors(survivalSet.donors)"
+                        style="cursor: pointer;"
                     >
-                        {{ survivalSet.donors.length | number }}
-                        <a href="/search?filters={{setFilters[$index]}}">
+                        <a>
+                            {{ survivalSet.donors.length | number }}
                         </a>
                     </td>
                     <td
@@ -92,9 +94,11 @@
                     <td
                         class="text-right"
                         data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.diseaseFree | orderBy: setIdOrder"
+                        data-ng-click="viewDonors(survivalSet.donors)"
+                        style="cursor: pointer;"
                     >
-                        {{ survivalSet.donors.length | number }}
-                        <a href="/search?filters={{setFilters[$index]}}">
+                        <a>
+                            {{ survivalSet.donors.length | number }}
                         </a>
                     </td>
                     <td

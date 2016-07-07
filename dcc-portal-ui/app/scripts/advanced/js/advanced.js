@@ -421,7 +421,12 @@ angular.module('icgc.advanced.controllers', [
         // Ensure scope is destroyed as there may be unreferenced watchers on the filter. (see: facets/tags.js)
         $scope.$destroy();
 
-        SetService.createAndViewEntitySet('donor', params, dataRepoUrl);
+        SetService.createEntitySet('donor', params)
+          .then(function (set) {
+            invariant(set.id, 'Response from SetService.createEntitySet did not include an id!');
+            var newFilter = JSON.stringify({file: {entitySetId: {is: [set.id]}}});
+            LocationService.goToPath(dataRepoUrl, {filters: newFilter});
+          });
       };
 
       /**

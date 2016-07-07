@@ -31,7 +31,7 @@
 
   var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services', 'icgc.survival']);
 
-  module.directive('phenotypeResult', function(SetService, PhenotypeService, SurvivalAnalysisService) {
+  module.directive('phenotypeResult', function(FilterService, LocationService, Extensions, SetService, PhenotypeService, SurvivalAnalysisService) {
     return {
       restrict: 'E',
       scope: {
@@ -115,6 +115,35 @@
 
         $scope.setIdOrder = function (set) {
           return $scope.setIds.indexOf(set.meta.id);
+        };
+
+        $scope.viewDonors = function (donors) {
+          var donorIds = donors
+            .map(function (donor) {
+              return donor.id;
+            });
+
+          var params = {
+            filters: {
+              donor: {
+                id: {
+                  is: donorIds
+                }
+              }
+            },
+            size: donors.length,
+            isTransient: true,
+            name: 'Input donor set',
+            sortBy: 'ssmAffectedGenes',
+            sortOrder: 'DESCENDING',
+          };
+
+          SetService.createEntitySet('donor', params)
+            .then(function (set) {
+              invariant(set.id, 'Response from SetService.createEntitySet did not include an id!');
+              var newFilter = JSON.stringify({donor: {id: {is: [Extensions.ENTITY_PREFIX + set.id]}}});
+              LocationService.goToPath('/search', {filters: newFilter});
+            });
         };
 
         $scope.$watch('item', function(n) {
