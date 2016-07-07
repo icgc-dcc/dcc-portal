@@ -364,7 +364,7 @@ public class DownloadResource extends Resource {
   }
 
   private static void throwArchiveNotFound() {
-    throw new NotFoundException("The archive is not available for download anymore.", "download");
+    throw new NotFoundException("The archive is no longer available for download", "download");
   }
 
 }
