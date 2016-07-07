@@ -195,7 +195,9 @@ public class DownloadResource extends Resource {
       @ApiParam(value = "listing of the specified directory under the download relative directory", required = false) @PathParam("dir") String dir
       ) throws IOException {
     val files = downloadClient.listFiles(dir);
-    checkRequest(files == null, "Failed to list files.");
+    if (files == null) {
+      throwNotFoundException(dir);
+    }
     val authorized = isAuthorized(user);
 
     return files.stream()
@@ -238,7 +240,7 @@ public class DownloadResource extends Resource {
 
     val job = downloadClient.getJob(downloadId);
     if (job == null) {
-      throw new NotFoundException("The archive is not available for download anymore.", "download");
+      throwArchiveNotFound();
     }
 
     ensureUsersDownload(user, job);
@@ -262,7 +264,7 @@ public class DownloadResource extends Resource {
 
     val job = downloadClient.getJob(downloadId);
     if (job == null) {
-      throw new NotFoundException("The archive is not available for download anymore.", "download");
+      throwArchiveNotFound();
     }
 
     ensureUsersDownload(user, job);
@@ -355,6 +357,14 @@ public class DownloadResource extends Resource {
     }
 
     return downloadDataType;
+  }
+
+  private static void throwNotFoundException(String path) {
+    throw new NotFoundException(path, "Archive");
+  }
+
+  private static void throwArchiveNotFound() {
+    throw new NotFoundException("The archive is not available for download anymore.", "download");
   }
 
 }
