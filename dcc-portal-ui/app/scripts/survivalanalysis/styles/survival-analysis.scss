@@ -23,10 +23,6 @@ $faded: #e6dede;
       font-weight: 300;
     }
   }
-  
-
-  .axis path {
-  }
 
   .line {
     fill: none;
@@ -83,9 +79,23 @@ $faded: #e6dede;
     right: 0;
 
     .set {
-      cursor: pointer;
+      cursor: default;
+      font-size: 11px;
+      line-height: 1.7;
+      position: relative;
+      user-select: none;
       &.disabled {
         color: #b7b7b7 !important;
+      }
+      &.interactable {
+        cursor: pointer;
+      }
+      i {
+        font-size: 9px;
+        position: absolute;
+        margin-left: -2px;
+        margin-top: 1px;
+        transform: translateX(-100%);
       }
     }
 
