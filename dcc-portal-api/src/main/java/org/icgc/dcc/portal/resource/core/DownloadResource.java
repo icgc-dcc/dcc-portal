@@ -169,15 +169,9 @@ public class DownloadResource extends Resource {
       ) {
     // Work out the query for that returns only donor ids that matches the filter conditions
     val donorIds = donorService.findIds(Query.builder().filters(filters.get()).build());
-    Map<DownloadDataType, Long> sizes = null;
+    checkRequest(donorIds.isEmpty(), "No donors found for query '%s'", filters.get());
 
-    try {
-      sizes = downloadClient.getSizes(donorIds);
-    } catch (Exception e) {
-      log.error("Exception while resolving download files size: \n", e);
-    }
-    checkRequest(sizes == null, "Failed to resolve files size.");
-
+    val sizes = downloadClient.getSizes(donorIds);
     val dataTypeSizes = DownloadResources.normalizeSizes(sizes);
     val allowedDataTypes = resolveAllowedDataTypes(user);
     val allowedDataTypeSizes = getAllowedDataTypeSizes(dataTypeSizes, allowedDataTypes);
