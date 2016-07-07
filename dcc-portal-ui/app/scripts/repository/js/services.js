@@ -221,7 +221,7 @@
   module.service('RepositoryService', function ($filter, RestangularNoCache) {
 
     this.folder = function (path) {
-      return RestangularNoCache.one('download', 'info' + path)
+      return RestangularNoCache.one('download/info', path.replace(/^\//, ''))
               .get();
     };
 
