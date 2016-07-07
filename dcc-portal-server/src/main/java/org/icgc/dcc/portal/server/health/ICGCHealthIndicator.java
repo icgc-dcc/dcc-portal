@@ -14,50 +14,53 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.health;
+package org.icgc.dcc.portal.server.health;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.icgc.dcc.common.client.api.daco.DACOClient.UserType.CUD;
+
+import org.icgc.dcc.portal.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.hazelcast.core.HazelcastInstance;
-import com.yammer.metrics.core.HealthCheck;
-
 @Slf4j
 @Component
-public final class HazelcastHealthCheck extends HealthCheck {
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class ICGCHealthIndicator implements HealthIndicator {
 
   /**
    * Constants.
    */
-  private static final String CHECK_NAME = "hazelcast";
+  private static final String DACO_ENABLED_CUD_USER = "btiernay";
 
   /**
    * Dependencies
    */
-  private final HazelcastInstance hazelcastInstance;
-
-  @Autowired
-  public HazelcastHealthCheck(HazelcastInstance hazelcastInstance) {
-    super(CHECK_NAME);
-    this.hazelcastInstance = hazelcastInstance;
-  }
+  private final AuthService authService;
 
   @Override
-  protected Result check() throws Exception {
-    log.info("Checking the health of Hazelcast...");
-    if (hazelcastInstance == null) {
-      return Result.unhealthy("Service missing");
-    }
+  public Health health() {
+    log.info("Checking the health of ICGC...");
+    try {
+      val token = authService.getAuthToken();
+      if (isNullOrEmpty(token)) {
+        return Health.down().withDetail("message", "Token empty").build();
+      }
 
-    val memberCount = hazelcastInstance.getCluster().getMembers().size();
-    if (memberCount == 0) {
-      return Result.unhealthy("No members");
-    }
+      if (!authService.hasDacoAccess(DACO_ENABLED_CUD_USER, CUD)) {
+        return Health.down().withDetail("message", "Invalid DACO account").build();
+      }
 
-    return Result.healthy("%s members available", memberCount);
+      return Health.up().withDetail("message", "CUD and DACO valid").build();
+    } catch (Exception e) {
+      return Health.down(e).build();
+    }
   }
 
 }

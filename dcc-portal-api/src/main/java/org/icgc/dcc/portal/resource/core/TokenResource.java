@@ -34,6 +34,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.icgc.dcc.portal.auth.Auth;
 import org.icgc.dcc.portal.model.AccessToken;
 import org.icgc.dcc.portal.model.AccessTokenScopes;
 import org.icgc.dcc.portal.model.Tokens;
@@ -42,8 +43,6 @@ import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.yammer.dropwizard.auth.Auth;
 
 import io.swagger.annotations.Api;
 import lombok.NonNull;

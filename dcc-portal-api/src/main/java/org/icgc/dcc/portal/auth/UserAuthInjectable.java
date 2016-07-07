@@ -33,8 +33,6 @@ import org.icgc.dcc.portal.config.PortalProperties.CrowdProperties;
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.core.HttpContext;
 import com.sun.jersey.server.impl.inject.AbstractHttpContextInjectable;
-import com.yammer.dropwizard.auth.AuthenticationException;
-import com.yammer.dropwizard.auth.Authenticator;
 
 import lombok.Getter;
 import lombok.NonNull;

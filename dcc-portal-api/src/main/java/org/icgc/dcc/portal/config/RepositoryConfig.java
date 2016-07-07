@@ -17,6 +17,8 @@
 
 package org.icgc.dcc.portal.config;
 
+import javax.sql.DataSource;
+
 import org.icgc.dcc.portal.repository.EnrichmentAnalysisRepository;
 import org.icgc.dcc.portal.repository.EntitySetRepository;
 import org.icgc.dcc.portal.repository.ManifestRepository;
@@ -27,13 +29,6 @@ import org.skife.jdbi.v2.DBI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-
-import com.yammer.dropwizard.config.Environment;
-import com.yammer.dropwizard.db.DatabaseConfiguration;
-import com.yammer.dropwizard.jdbi.DBIFactory;
-
-import lombok.SneakyThrows;
-import lombok.val;
 
 @Lazy
 @Configuration
@@ -70,12 +65,8 @@ public class RepositoryConfig {
   }
 
   @Bean
-  @SneakyThrows
-  public DBI dbi(PortalProperties properties, Environment environment, DatabaseConfiguration database) {
-    val name = "postgresql";
-    val factory = new DBIFactory();
-
-    return factory.build(environment, database, name);
+  public DBI dbi(DataSource dataSource) {
+    return new DBI(dataSource);
   }
 
 }

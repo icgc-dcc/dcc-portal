@@ -15,21 +15,42 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.model.param;
+package org.icgc.dcc.portal.test;
 
-import java.util.List;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 
-public class IdsParam extends AbstractParam<List<String>> {
+/**
+ * A set of helper method for fixture files.
+ */
+public class FixtureHelpers {
 
-  public IdsParam(String input) {
-    super(input);
+  private FixtureHelpers() {
+    /* singleton */ }
+
+  /**
+   * Reads the given fixture file from {@code src/test/resources} and returns its contents as a UTF-8 string.
+   *
+   * @param filename the filename of the fixture file
+   * @return the contents of {@code src/test/resources/{filename}}
+   * @throws IOException if {@code filename} doesn't exist or can't be opened
+   */
+  public static String fixture(String filename) throws IOException {
+    return fixture(filename, Charsets.UTF_8);
   }
 
-  @Override
-  protected List<String> parse(String input) throws Exception {
-    // Just make sure we don't double up on quotes
-    return Lists.newArrayList(input.replaceAll("\"", "").split(","));
+  /**
+   * Reads the given fixture file from {@code src/test/resources} and returns its contents as a string.
+   *
+   * @param filename the filename of the fixture file
+   * @param charset the character set of {@code filename}
+   * @return the contents of {@code src/test/resources/{filename}}
+   * @throws IOException if {@code filename} doesn't exist or can't be opened
+   */
+  private static String fixture(String filename, Charset charset) throws IOException {
+    return Resources.toString(Resources.getResource(filename), charset).trim();
   }
 }

@@ -8,18 +8,23 @@ import static com.sun.jersey.api.core.ResourceConfig.PROPERTY_CONTAINER_RESPONSE
 import java.io.File;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 
+import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.filter.CachingFilter;
 import org.icgc.dcc.portal.filter.CrossOriginFilter;
 import org.icgc.dcc.portal.filter.DownloadFilter;
 import org.icgc.dcc.portal.filter.VersionFilter;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.spring.SpringComponentProviderFactory;
+import org.icgc.dcc.portal.swagger.PrimitiveModelResolver;
+import org.icgc.dcc.portal.util.VersionUtils;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
@@ -34,12 +39,11 @@ import com.sun.jersey.api.core.DefaultResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import com.sun.jersey.spi.inject.InjectableProvider;
-import com.yammer.dropwizard.jersey.InvalidEntityExceptionMapper;
-import com.yammer.dropwizard.jersey.OptionalQueryParamInjectableProvider;
-import com.yammer.dropwizard.jersey.OptionalResourceMethodDispatchAdapter;
-import com.yammer.dropwizard.jersey.caching.CacheControlledResourceMethodDispatchAdapter;
 import com.yammer.metrics.jersey.InstrumentedResourceMethodDispatchAdapter;
 
+import io.swagger.converter.ModelConverters;
+import io.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.listing.ApiListingResource;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +52,11 @@ import lombok.extern.slf4j.Slf4j;
 @EnableWebMvc
 @Configuration
 public class ServerConfig extends WebMvcConfigurerAdapter {
-
-  @Override
-  @SneakyThrows
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/**").addResourceLocations(getResourceLocation());
+  
+  @Bean
+  @ConfigurationProperties
+  public PortalProperties portal() {
+    return new PortalProperties();
   }
 
   @Bean
@@ -75,11 +79,11 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
   }
 
   @Bean
-  public ResourceConfig resourceConfig(GenericApplicationContext context, 
-      Set<Resource> resources, 
-      Set<ExceptionMapper<?>> mappers, 
+  public ResourceConfig resourceConfig(GenericApplicationContext context,
+      Set<Resource> resources,
+      Set<ExceptionMapper<?>> mappers,
       Set<InjectableProvider<?, ?>> injectables,
-      Set<MessageBodyReader<?>> readers, 
+      Set<MessageBodyReader<?>> readers,
       Set<MessageBodyWriter<?>> writers) {
     for (val resource : resources) {
       log.info(" - Registering resource: {}", resource.getClass().getSimpleName());
@@ -101,17 +105,14 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
     config.getFeatures().put(FEATURE_DISABLE_WADL, Boolean.TRUE);
     val classes = config.getClasses();
     classes.add(InstrumentedResourceMethodDispatchAdapter.class);
-    classes.add(CacheControlledResourceMethodDispatchAdapter.class);
-    classes.add(OptionalResourceMethodDispatchAdapter.class);
-    classes.add(OptionalQueryParamInjectableProvider.class);
-    
+
     val singletons = config.getSingletons();
     singletons.addAll(resources);
     singletons.addAll(mappers);
     singletons.addAll(injectables);
     singletons.addAll(readers);
     singletons.addAll(writers);
-    singletons.add(new InvalidEntityExceptionMapper());
+    singletons.add(new ApiListingResource());
     singletons.add(new SpringComponentProviderFactory(config, context));
 
     // Don't log entities because our JSONs can be huge
@@ -130,13 +131,46 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
     return config;
   }
 
+  @Override
   @SneakyThrows
-  private static String getResourceLocation() {
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("/**").addResourceLocations(getUILocation());
+    registry.addResourceHandler("/docs/**").addResourceLocations(getSwaggerLocation());
+  }
+
+  @PostConstruct
+  public void init() {
+    // Add converters
+    ModelConverters.getInstance().addConverter(new PrimitiveModelResolver());
+  
+    // Configure and scan
+    val config = new BeanConfig();
+  
+    config.setTitle("ICGC Data Portal API");
+    config.setVersion(VersionUtils.getApiVersion());
+    config.setResourcePackage(
+        Resource.class.getPackage().getName() + "," + PrimitiveModelResolver.class.getPackage().getName());
+    config.setBasePath("/api");
+    config.setScan(true);
+  }
+
+  @SneakyThrows
+  private static String getUILocation() {
     val url = ServerConfig.class.getProtectionDomain().getCodeSource().getLocation().toURI();
     if (url.toString().contains("jar")) {
       return "classpath:/app/";
     } else {
       return "file:" + new File("../dcc-portal-ui/app").getCanonicalPath() + "/";
+    }
+  }
+  
+  @SneakyThrows
+  private static String getSwaggerLocation() {
+    val url = ServerConfig.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+    if (url.toString().contains("jar")) {
+      return "classpath:/swagger-ui/";
+    } else {
+      return "file:" + new File("../dcc-portal-api/src/main/resources/swagger-ui").getCanonicalPath() + "/";
     }
   }
 

@@ -17,8 +17,8 @@
 
 package org.icgc.dcc.portal.model;
 
-import static com.yammer.dropwizard.testing.JsonHelpers.asJson;
-import static com.yammer.dropwizard.testing.JsonHelpers.jsonFixture;
+import static org.icgc.dcc.portal.test.JsonHelpers.asJson;
+import static org.icgc.dcc.portal.test.JsonHelpers.jsonFixture;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;

@@ -46,7 +46,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.core.HttpContext;
 import com.sun.jersey.api.representation.Form;
-import com.yammer.dropwizard.testing.ResourceTest;
+import org.icgc.dcc.portal.test.ResourceTest;
 
 import lombok.val;
 

@@ -17,19 +17,22 @@
  */
 package org.icgc.dcc.portal.model.param;
 
-import java.util.List;
+/**
+ * A parameter encapsulating integer values. All non-decimal values will return a {@code 400 Bad Request} response.
+ */
+public class IntParam extends AbstractParam<Integer> {
 
-import com.google.common.collect.Lists;
-
-public class IdsParam extends AbstractParam<List<String>> {
-
-  public IdsParam(String input) {
+  public IntParam(String input) {
     super(input);
   }
 
   @Override
-  protected List<String> parse(String input) throws Exception {
-    // Just make sure we don't double up on quotes
-    return Lists.newArrayList(input.replaceAll("\"", "").split(","));
+  protected String errorMessage(String input, Exception e) {
+    return '"' + input + "\" is not a number.";
+  }
+
+  @Override
+  protected Integer parse(String input) {
+    return Integer.valueOf(input);
   }
 }

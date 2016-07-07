@@ -45,6 +45,7 @@ import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.TermFacet;
 import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.model.param.IdsParam;
+import org.icgc.dcc.portal.model.param.IntParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.GeneService;
@@ -59,7 +60,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.io.CharStreams;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
-import com.yammer.dropwizard.jersey.params.IntParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;

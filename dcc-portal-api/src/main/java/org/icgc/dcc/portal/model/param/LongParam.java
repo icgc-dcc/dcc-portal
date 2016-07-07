@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,39 +15,26 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.task;
+package org.icgc.dcc.portal.model.param;
 
-import java.io.PrintWriter;
+/**
+ * A parameter encapsulating long values. All non-decimal values will return a {@code 400 Bad
+ * Request} response.
+ */
+public class LongParam extends AbstractParam<Long> {
 
-import org.icgc.dcc.portal.service.IndexService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.google.common.collect.ImmutableMultimap;
-import com.yammer.dropwizard.tasks.Task;
-
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-@Component
-public class ClearIndexCacheTask extends Task {
-
-  /**
-   * Dependencies
-   */
-  private final IndexService indexService;
-
-  @Autowired
-  public ClearIndexCacheTask(@NonNull IndexService indexService) {
-    super("clearCache");
-    this.indexService = indexService;
+  public LongParam(String input) {
+    super(input);
   }
 
   @Override
-  public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception {
-    log.info("Requesting clearCache task with parameters '{}'...", parameters);
-    indexService.clearCache();
+  protected String errorMessage(String input, Exception e) {
+    return '"' + input + "\" is not a number.";
+  }
+
+  @Override
+  protected Long parse(String input) {
+    return Long.valueOf(input);
   }
 
 }

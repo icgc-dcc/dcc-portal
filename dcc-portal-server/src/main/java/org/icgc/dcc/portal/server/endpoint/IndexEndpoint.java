@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,54 +15,58 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.util;
+package org.icgc.dcc.portal.server.endpoint;
 
-import static lombok.AccessLevel.PRIVATE;
+import org.icgc.dcc.portal.service.IndexService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.endpoint.Endpoint;
+import org.springframework.boot.actuate.endpoint.mvc.MvcEndpoint;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Iterator;
-
-import javax.ws.rs.ext.ExceptionMapper;
-
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.yammer.dropwizard.config.Environment;
-
 @Slf4j
-@NoArgsConstructor(access = PRIVATE)
-public final class DropwizardUtils {
+@Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@ConfigurationProperties(prefix = "endpoints." + IndexEndpoint.ENDPOINT_ID, ignoreUnknownFields = false)
+public class IndexEndpoint implements MvcEndpoint {
 
   /**
-   * See http://thoughtspark.org/2013/02/25/dropwizard-and-jersey-exceptionmappers/
+   * Constants.
    */
-  public static void removeDwExceptionMappers(Environment environment) {
-    Iterator<Object> iterator = environment.getJerseyResourceConfig().getSingletons().iterator();
+  protected static final String ENDPOINT_ID = "index";
+  
+  /**
+   * Dependencies
+   */
+  private final IndexService indexService;
 
-    // Remove all of Dropwizard's custom ExceptionMappers
-    while (iterator.hasNext()) {
-      Object singleton = iterator.next();
-      if (isDwExceptionMapper(singleton)) {
-        log.info("Removing Dropwizard exception mapper: {}", singleton.getClass());
-        iterator.remove();
-      }
-    }
+  @RequestMapping(method = RequestMethod.DELETE)
+  public @ResponseBody String clearCache() {
+    log.info("Requesting index clearCache...");
+    indexService.clearCache();
+    return "Cache cleared";
   }
 
-  public static void removeDwExceptionMapper(Environment environment, Class<?> mapper) {
-    Iterator<Object> iterator = environment.getJerseyResourceConfig().getSingletons().iterator();
-
-    // Remove single Dropwizard custom ExceptionMapper
-    while (iterator.hasNext()) {
-      Object singleton = iterator.next();
-      if (mapper.isAssignableFrom(singleton.getClass())) {
-        log.info("Removing Dropwizard exception mapper: {}, ({})", singleton, mapper);
-        iterator.remove();
-      }
-    }
+  @Override
+  public String getPath() {
+    return ENDPOINT_ID;
   }
 
-  public static boolean isDwExceptionMapper(Object s) {
-    return s instanceof ExceptionMapper && s.getClass().getName().startsWith("com.yammer.dropwizard.jersey.");
+  @Override
+  public boolean isSensitive() {
+    return true;
+  }
+
+  @Override
+  @SuppressWarnings("rawtypes")
+  public Class<? extends Endpoint> getEndpointType() {
+    return null;
   }
 
 }

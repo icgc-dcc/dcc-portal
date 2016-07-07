@@ -31,12 +31,12 @@ import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Release;
 import org.icgc.dcc.portal.model.Releases;
 import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.model.param.IntParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.ReleaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.yammer.dropwizard.jersey.params.IntParam;
 import com.yammer.metrics.annotation.Timed;
 
 import io.swagger.annotations.Api;

@@ -76,6 +76,7 @@ import org.icgc.dcc.portal.model.IndexModel;
 import org.icgc.dcc.portal.model.Mutations;
 import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.model.param.IdsParam;
+import org.icgc.dcc.portal.model.param.IntParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.GeneService;
@@ -85,7 +86,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.yammer.dropwizard.jersey.params.IntParam;
 import com.yammer.metrics.annotation.Timed;
 
 import io.swagger.annotations.Api;

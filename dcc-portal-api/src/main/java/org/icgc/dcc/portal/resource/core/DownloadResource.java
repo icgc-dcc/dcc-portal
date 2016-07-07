@@ -34,9 +34,6 @@ import static org.icgc.dcc.portal.download.DownloadResources.createUiJobInfoResp
 import static org.icgc.dcc.portal.download.DownloadResources.getAllowedDataTypeSizes;
 import static org.icgc.dcc.portal.download.DownloadResources.parseDownloadIds;
 import static org.icgc.dcc.portal.util.JsonUtils.parseDownloadDataTypeNames;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -56,15 +53,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.common.core.model.DownloadDataType;
 import org.icgc.dcc.download.client.DownloadClient;
 import org.icgc.dcc.download.core.jwt.JwtService;
 import org.icgc.dcc.download.core.model.DownloadFile;
 import org.icgc.dcc.download.core.model.JobUiInfo;
 import org.icgc.dcc.download.core.response.JobResponse;
+import org.icgc.dcc.portal.auth.Auth;
 import org.icgc.dcc.portal.config.PortalProperties.DownloadProperties;
 import org.icgc.dcc.portal.download.DownloadDataTypes;
 import org.icgc.dcc.portal.download.DownloadResources;
@@ -85,8 +80,13 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.yammer.dropwizard.auth.Auth;
 import com.yammer.metrics.annotation.Timed;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -141,8 +141,7 @@ public class DownloadResource extends Resource {
       @Auth(required = false) User user,
       @ApiParam(value = "Filter the search results", required = false) @QueryParam("filters") @DefaultValue("{}") FiltersParam filters,
       @ApiParam(value = "Archive param") @QueryParam("info") @DefaultValue("") String info,
-      @ApiParam(value = "UI representation of the filter string", required = false, access = "internal") @QueryParam("uiQueryStr") @DefaultValue("{}") String uiQueryStr
-      ) {
+      @ApiParam(value = "UI representation of the filter string", required = false, access = "internal") @QueryParam("uiQueryStr") @DefaultValue("{}") String uiQueryStr) {
     ensureServiceRunning();
     val donorIds = resolveDonorIds(filters);
 
@@ -198,8 +197,7 @@ public class DownloadResource extends Resource {
   @ApiOperation("Get download size by type subject to the supplied filter condition(s)")
   public Map<String, Object> getDataTypeSizePerFileType(
       @Auth(required = false) User user,
-      @ApiParam(value = "Filter the search donors") @QueryParam("filters") @DefaultValue("{}") FiltersParam filters
-      ) {
+      @ApiParam(value = "Filter the search donors") @QueryParam("filters") @DefaultValue("{}") FiltersParam filters) {
     // Work out the query for that returns only donor ids that matches the filter conditions
     val donorIds = donorService.findIds(Query.builder().filters(filters.get()).build());
     val dataTypeSizes = DownloadResources.normalizeSizes(downloadClient.getSizes(donorIds));
@@ -216,8 +214,8 @@ public class DownloadResource extends Resource {
   @ApiOperation("Get the job info based on IDs")
   public Map<String, Map<String, Object>> getDownloadInfo(
       @Auth(required = false) User user,
-      @ApiParam(value = "id", required = false) @PathParam("downloadIds") @DefaultValue("") IdsParam downloadIds
-      ) throws IOException {
+      @ApiParam(value = "id", required = false) @PathParam("downloadIds") @DefaultValue("") IdsParam downloadIds)
+      throws IOException {
     val ids = parseDownloadIds(downloadIds);
     checkState(ids.size() == 1, "The API doesn't support info for multiple download IDs");
     val id = ids.get(0);
@@ -235,8 +233,8 @@ public class DownloadResource extends Resource {
   @ApiOperation("Get file info under the specified directory")
   public List<FileInfo> listDirectory(
       @Auth(required = false) User user,
-      @ApiParam(value = "listing of the specified directory under the download relative directory", required = false) @PathParam("dir") String dir
-      ) throws IOException {
+      @ApiParam(value = "listing of the specified directory under the download relative directory", required = false) @PathParam("dir") String dir)
+      throws IOException {
     val files = downloadClient.listFiles(dir);
     val authorized = isAuthorized(user);
 
@@ -252,8 +250,8 @@ public class DownloadResource extends Resource {
   @Produces(APPLICATION_JSON)
   @ApiOperation("Get readme under the specified directory")
   public String getReadMe(
-      @ApiParam(value = "directory that contains the readme", required = false) @PathParam("dir") String dir
-      ) throws IOException {
+      @ApiParam(value = "directory that contains the readme", required = false) @PathParam("dir") String dir)
+      throws IOException {
     checkRequest(dir.trim().isEmpty(), "Invalid argument");
 
     val token = tokenService.createToken(dir);
@@ -267,8 +265,7 @@ public class DownloadResource extends Resource {
   public Response getStaticArchive(
       @Auth(required = false) User user,
       @ApiParam(value = "filename to download", required = true) @QueryParam("fn") @DefaultValue("") String filePath,
-      @HeaderParam(RANGE) String range
-      ) throws IOException {
+      @HeaderParam(RANGE) String range) throws IOException {
     checkRequest(filePath.trim().isEmpty(), "Invalid argument fn");
 
     if (!isAuthorized(user) && isControlled(filePath)) {
@@ -296,8 +293,7 @@ public class DownloadResource extends Resource {
   @ApiOperation("Get archive based by type subject to the supplied filter condition(s)")
   public Response getFullArchive(
       @Auth(required = false) User user,
-      @PathParam("downloadId") String downloadId
-      ) throws IOException {
+      @PathParam("downloadId") String downloadId) throws IOException {
     ensureServiceRunning();
 
     val job = downloadClient.getJob(downloadId);
@@ -320,8 +316,7 @@ public class DownloadResource extends Resource {
   public Response getIndividualTypeArchive(
       @Auth(required = false) User user,
       @PathParam("downloadId") String downloadId,
-      @PathParam("dataType") final String dataType
-      ) throws IOException {
+      @PathParam("dataType") final String dataType) throws IOException {
     ensureServiceRunning();
 
     val job = downloadClient.getJob(downloadId);

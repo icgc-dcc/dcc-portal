@@ -31,6 +31,7 @@ import org.icgc.dcc.portal.model.Beacon;
 import org.icgc.dcc.portal.model.BeaconQuery;
 import org.icgc.dcc.portal.model.BeaconResponse;
 import org.icgc.dcc.portal.service.BeaconService;
+import org.icgc.dcc.portal.test.ResourceTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -38,7 +39,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sun.jersey.api.client.ClientResponse;
-import com.yammer.dropwizard.testing.ResourceTest;
 
 import lombok.val;
 

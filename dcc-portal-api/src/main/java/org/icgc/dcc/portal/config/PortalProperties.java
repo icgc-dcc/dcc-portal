@@ -26,24 +26,17 @@ import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yammer.dropwizard.config.Configuration;
-import com.yammer.dropwizard.db.DatabaseConfiguration;
+
+import lombok.Data;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class PortalProperties extends Configuration {
+public class PortalProperties {
 
   @Valid
   @JsonProperty
@@ -84,11 +77,6 @@ public class PortalProperties extends Configuration {
   @Valid
   @JsonProperty
   SetOperationProperties setOperation = new SetOperationProperties();
-
-  @Valid
-  @NotNull
-  @JsonProperty
-  DatabaseConfiguration database = new DatabaseConfiguration();
 
   @Valid
   @JsonProperty
@@ -192,8 +180,7 @@ public class PortalProperties extends Configuration {
     @JsonProperty
     Map<String, String> client = newHashMap();
 
-    @Getter
-    @ToString
+    @Data
     public static class ElasticSearchNodeAddress {
 
       @JsonProperty

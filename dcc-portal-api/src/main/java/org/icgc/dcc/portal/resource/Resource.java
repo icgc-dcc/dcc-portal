@@ -42,6 +42,7 @@ import org.icgc.dcc.portal.model.Error;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Query.QueryBuilder;
 import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.model.param.IntParam;
 import org.icgc.dcc.portal.resource.entity.MutationResource;
 import org.icgc.dcc.portal.service.BadRequestException;
 import org.icgc.dcc.portal.util.JsonUtils;
@@ -52,7 +53,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
-import com.yammer.dropwizard.jersey.params.IntParam;
 
 import lombok.NonNull;
 import lombok.val;
@@ -230,9 +230,6 @@ public abstract class Resource {
     return queries;
   }
 
-  /**
-   * @see http://stackoverflow.com/questions/23704616/how-to-validate-a-single-parameter-in-dropwizard
-   */
   protected static void validate(@NonNull Object object) {
     val errorMessages = new ArrayList<String>();
     val validator = Validation.buildDefaultValidatorFactory().getValidator();

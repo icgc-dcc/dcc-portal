@@ -14,56 +14,42 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.health;
+package org.icgc.dcc.portal.server.health;
 
-import static org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus.RED;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.stereotype.Component;
+
+import com.hazelcast.core.HazelcastInstance;
+
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus;
-import org.elasticsearch.client.Client;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.yammer.metrics.core.HealthCheck;
-
 @Slf4j
 @Component
-public final class ElasticSearchHealthCheck extends HealthCheck {
-
-  /**
-   * Constants.
-   */
-  private static final String CHECK_NAME = "elasticsearch";
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class HazelcastHealthIndicator implements HealthIndicator {
 
   /**
    * Dependencies
    */
-  private final Client client;
-
-  @Autowired
-  public ElasticSearchHealthCheck(Client client) {
-    super(CHECK_NAME);
-    this.client = client;
-  }
+  private final HazelcastInstance hazelcastInstance;
 
   @Override
-  protected Result check() throws Exception {
-    log.info("Checking the health of ElasticSearch...");
-    if (client == null) {
-      return Result.unhealthy("Service missing");
+  public Health health() {
+    log.info("Checking the health of Hazelcast...");
+    if (hazelcastInstance == null) {
+      return Health.down().withDetail("message", "Service missing").build();
     }
 
-    val status = getStatus();
-    if (status == RED) {
-      return Result.unhealthy("Cluster health status is %s", status.name());
+    val memberCount = hazelcastInstance.getCluster().getMembers().size();
+    if (memberCount == 0) {
+      return Health.down().withDetail("message", "No members").build();
     }
 
-    return Result.healthy("Cluster health status is %s", status.name());
-  }
-
-  private ClusterHealthStatus getStatus() {
-    return client.admin().cluster().prepareHealth().execute().actionGet().getStatus();
+    return Health.up().withDetail("message", String.format("%s members available", memberCount)).build();
   }
 
 }

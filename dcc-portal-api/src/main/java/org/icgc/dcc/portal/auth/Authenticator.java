@@ -15,21 +15,32 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.model.param;
+package org.icgc.dcc.portal.auth;
 
-import java.util.List;
+import com.google.common.base.Optional;
 
-import com.google.common.collect.Lists;
+/**
+ * An interface for classes which authenticate user-provided credentials and return principal objects.
+ *
+ * @param <C> the type of credentials the authenticator can authenticate
+ * @param <P> the type of principals the authenticator returns
+ */
+public interface Authenticator<C, P> {
 
-public class IdsParam extends AbstractParam<List<String>> {
-
-  public IdsParam(String input) {
-    super(input);
-  }
-
-  @Override
-  protected List<String> parse(String input) throws Exception {
-    // Just make sure we don't double up on quotes
-    return Lists.newArrayList(input.replaceAll("\"", "").split(","));
-  }
+  /**
+   * Given a set of user-provided credentials, return an optional principal.
+   *
+   * <p>
+   * If the credentials are valid and map to a principal, returns an {@code Optional.of(p)}.
+   * </p>
+   *
+   * <p>
+   * If the credentials are invalid, returns an {@code Optional.absent()}.
+   * </p>
+   *
+   * @param credentials a set of user-provided credentials
+   * @return either an authenticated principal or an absent optional
+   * @throws AuthenticationException if the credentials cannot be authenticated due to an underlying error
+   */
+  Optional<P> authenticate(C credentials) throws AuthenticationException;
 }

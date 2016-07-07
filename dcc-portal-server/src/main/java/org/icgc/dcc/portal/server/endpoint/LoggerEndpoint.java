@@ -15,68 +15,63 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.task;
+package org.icgc.dcc.portal.server.endpoint;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-
-import java.io.PrintWriter;
 import java.util.List;
 
-import lombok.val;
+import javax.validation.Valid;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.actuate.endpoint.Endpoint;
+import org.springframework.boot.actuate.endpoint.mvc.MvcEndpoint;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
+import lombok.val;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.yammer.dropwizard.tasks.Task;
-
-/**
- * Task that changes log level of the portal.<br>
- * <br>
- * Usage: <br>
- * <li>Configure a user-defined log level for a single Logger</li>
- * {@code curl -XPOST -d "logger=org.icgc.dcc&level=INFO" http://localhost:8081/tasks/log-level}<br>
- * <br>
- * <li>Configure a user-defined log level for multiple Loggers</li>
- * {@code curl -XPOST -d "logger=org.icgc.dcc&logger=io.icgc.core&level=INFO" http://localhost:8081/tasks/log-level}<br>
- * <br>
- * <li>Configure the default log level for a single Logger</li>
- * {@code curl -XPOST -d "logger=org.icgc.dcc" http://localhost:8081/tasks/log-level}
- */
 @Component
-public class LogConfigurationTask extends Task {
+@ConfigurationProperties(prefix = "endpoints." + LoggerEndpoint.ENDPOINT_ID, ignoreUnknownFields = false)
+public class LoggerEndpoint implements MvcEndpoint {
 
-  private final LoggerContext loggerContext;
+  /**
+   * Constants.
+   */
+  protected static final String ENDPOINT_ID = "logger";
 
-  protected LogConfigurationTask() {
-    super("log-level");
-    this.loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-  }
-
-  @Override
-  public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception {
-    val loggerNames = getLoggerNames(parameters);
-    val loggerLevel = getLoggerLevel(parameters);
-
+  @RequestMapping(method = POST)
+  public @ResponseBody String updateLogger(@RequestParam("logger") List<String> loggerNames, @Valid @NotEmpty Level loggerLevel) {
+    val loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
     for (val loggerName : loggerNames) {
       val logger = loggerContext.getLogger(loggerName);
       logger.setLevel(loggerLevel);
-      output.println(String.format("Configured logging level for %s to %s", loggerName, loggerLevel));
-      output.flush();
+      return String.format("Configured logging level for %s to %s", loggerName, loggerLevel);
     }
+
+    return "Logger(s) not found: " + loggerNames;
   }
 
-  private List<String> getLoggerNames(ImmutableMultimap<String, String> parameters) {
-    return parameters.get("logger").asList();
+  @Override
+  public String getPath() {
+    return ENDPOINT_ID;
   }
 
-  private Level getLoggerLevel(ImmutableMultimap<String, String> parameters) {
-    val loggerLevels = parameters.get("level").asList();
+  @Override
+  public boolean isSensitive() {
+    return true;
+  }
 
-    return loggerLevels.isEmpty() ? null : Level.valueOf(loggerLevels.get(0));
+  @Override
+  @SuppressWarnings("rawtypes")
+  public Class<? extends Endpoint> getEndpointType() {
+    return null;
   }
 
 }

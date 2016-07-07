@@ -58,13 +58,13 @@ import org.icgc.dcc.portal.model.Occurrence;
 import org.icgc.dcc.portal.model.Occurrences;
 import org.icgc.dcc.portal.model.Projects;
 import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.model.param.IntParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.OccurrenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.yammer.dropwizard.jersey.params.IntParam;
 import com.yammer.metrics.annotation.Timed;
 
 import io.swagger.annotations.Api;

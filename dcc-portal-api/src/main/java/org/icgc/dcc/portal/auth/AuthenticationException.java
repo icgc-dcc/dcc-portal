@@ -15,21 +15,30 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.model.param;
+package org.icgc.dcc.portal.auth;
 
-import java.util.List;
+/**
+ * An exception thrown to indicate that an {@link Authenticator} is <b>unable</b> to check the validity of the given
+ * credentials.
+ *
+ * <p>
+ * <b>DO NOT USE THIS TO INDICATE THAT THE CREDENTIALS ARE INVALID.</b>
+ * </p>
+ */
+public class AuthenticationException extends Exception {
 
-import com.google.common.collect.Lists;
+  private static final long serialVersionUID = -5053567474138953905L;
 
-public class IdsParam extends AbstractParam<List<String>> {
-
-  public IdsParam(String input) {
-    super(input);
+  public AuthenticationException(String message) {
+    super(message);
   }
 
-  @Override
-  protected List<String> parse(String input) throws Exception {
-    // Just make sure we don't double up on quotes
-    return Lists.newArrayList(input.replaceAll("\"", "").split(","));
+  public AuthenticationException(String message, Throwable cause) {
+    super(message, cause);
   }
+
+  public AuthenticationException(Throwable cause) {
+    super(cause);
+  }
+
 }

@@ -17,9 +17,6 @@
 
 package org.icgc.dcc.portal.config;
 
-import lombok.NonNull;
-import lombok.val;
-
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.client.Client;
 import org.icgc.dcc.common.core.mail.Mailer;
@@ -42,7 +39,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import com.yammer.dropwizard.db.DatabaseConfiguration;
+import lombok.NonNull;
+import lombok.val;
 
 @EnableAsync
 @Configuration
@@ -127,11 +125,6 @@ public class PortalConfig {
   @Bean
   public ElasticSearchProperties elasticSearchProperties() {
     return properties.getElastic();
-  }
-
-  @Bean
-  public DatabaseConfiguration databaseProperties() {
-    return properties.getDatabase();
   }
 
   @Bean

@@ -69,7 +69,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.sun.jersey.api.client.ClientResponse;
-import com.yammer.dropwizard.testing.ResourceTest;
+import org.icgc.dcc.portal.test.ResourceTest;
 
 @Slf4j
 @RunWith(MockitoJUnitRunner.class)
