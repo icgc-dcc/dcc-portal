@@ -17,9 +17,9 @@
  */
 package org.icgc.dcc.portal.manifest;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.io.Files.getFileExtension;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.fest.util.Strings.isNullOrEmpty;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.common.core.util.Splitters.WHITESPACE;
 import static org.mockito.Matchers.eq;
