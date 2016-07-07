@@ -33,6 +33,7 @@
   "white": false,
 
   "globals": {
+    "invariant": true,
     "$icgcApp": false,
     "ZeroClipboard": false,
     "angular": false,
