@@ -18,8 +18,8 @@
 package org.icgc.dcc.portal.manifest;
 
 import static com.google.common.io.Files.getFileExtension;
-import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.fest.util.Strings.isNullOrEmpty;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.common.core.util.Splitters.WHITESPACE;
 import static org.mockito.Matchers.eq;
@@ -244,7 +244,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
     val content = resultCursor.collectDescendantText();
     val testContent = FluentIterable.from(WHITESPACE.splitToList(content))
         .transform(value -> value.trim())
-        .filter(value -> !isBlank(value))
+        .filter(value -> !isNullOrEmpty(value))
         .toList();
     assertThat(testContent).isEqualTo(ExpectedValues.CONTENT_FOR_XML);
 
