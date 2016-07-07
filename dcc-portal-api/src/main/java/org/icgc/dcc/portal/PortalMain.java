@@ -19,10 +19,10 @@ package org.icgc.dcc.portal;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Strings.padEnd;
+import static com.google.common.base.Strings.repeat;
 import static com.sun.jersey.api.container.filter.LoggingFilter.FEATURE_LOGGING_DISABLE_ENTITY;
 import static com.sun.jersey.api.core.ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS;
 import static com.sun.jersey.api.core.ResourceConfig.PROPERTY_CONTAINER_RESPONSE_FILTERS;
-import static org.apache.commons.lang.StringUtils.repeat;
 import static org.eclipse.jetty.util.resource.JarResource.newJarResource;
 import static org.eclipse.jetty.util.resource.Resource.newClassPathResource;
 import static org.eclipse.jetty.util.resource.Resource.newResource;

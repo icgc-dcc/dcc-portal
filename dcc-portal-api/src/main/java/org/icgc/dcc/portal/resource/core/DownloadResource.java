@@ -18,28 +18,22 @@
 package org.icgc.dcc.portal.resource.core;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.net.HttpHeaders.RANGE;
 import static java.util.Collections.singletonMap;
-import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.download.core.request.Redirects.getDynamicFileRedirect;
 import static org.icgc.dcc.download.core.request.Redirects.getStaticFileRedirect;
 import static org.icgc.dcc.portal.download.DownloadResources.createGetDataSizeResponse;
-import static org.icgc.dcc.portal.download.DownloadResources.createJobProgressResponse;
-import static org.icgc.dcc.portal.download.DownloadResources.createUiJobInfoResponse;
 import static org.icgc.dcc.portal.download.DownloadResources.getAllowedDataTypeSizes;
-import static org.icgc.dcc.portal.download.DownloadResources.parseDownloadIds;
 import static org.icgc.dcc.portal.util.JsonUtils.parseDownloadDataTypeNames;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,7 +47,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import lombok.val;
@@ -74,7 +67,6 @@ import org.icgc.dcc.portal.model.FileInfo;
 import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.User;
 import org.icgc.dcc.portal.model.param.FiltersParam;
-import org.icgc.dcc.portal.model.param.IdsParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.DonorService;
 import org.icgc.dcc.portal.service.ForbiddenAccessException;
@@ -83,7 +75,6 @@ import org.icgc.dcc.portal.service.ServiceUnavailableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.yammer.dropwizard.auth.Auth;
 import com.yammer.metrics.annotation.Timed;
@@ -146,49 +137,25 @@ public class DownloadResource extends Resource {
     ensureServiceRunning();
     val donorIds = resolveDonorIds(filters);
 
-    try {
-      val uiInfo = JobUiInfo.builder()
-          .filter(filters.toString())
-          .uiQueryStr(uiQueryStr)
-          .controlled(isAuthorized(user))
-          .user(getUserId(user))
-          .build();
+    val uiInfo = JobUiInfo.builder()
+        .filter(filters.toString())
+        .uiQueryStr(uiQueryStr)
+        .controlled(isAuthorized(user))
+        .user(getUserId(user))
+        .build();
 
-      val downloadId = downloadClient.submitJob(
+    String downloadId = null;
+    try {
+      downloadId = downloadClient.submitJob(
           donorIds,
           resolveDownloadDataTypes(user, info),
           uiInfo);
-
-      return new JobInfo(downloadId);
     } catch (Exception e) {
       log.error("Job submission failed.", e);
-      throw new NotFoundException("Sorry, job submission failed.", "download");
     }
-  }
+    checkRequest(downloadId == null, "Failed to submit download.");
 
-  @GET
-  @Timed
-  @Produces(APPLICATION_JSON)
-  @Path("/{downloadIds}/status")
-  @ApiOperation("Get download job status")
-  public List<Map<String, Object>> getJobStatus(
-      @Auth(required = false) User user,
-      @ApiParam(value = "download id") @PathParam("downloadIds") String downloadIds) {
-    // TODO: Change to one id only
-    val ids = ImmutableSet.copyOf(downloadIds.split(",", -1));
-    checkState(ids.size() == 1, "The API doesn't support status for multiple download IDs");
-
-    val jobs = ids.stream()
-        .map(id -> downloadClient.getJob(id))
-        .collect(toImmutableList());
-
-    ensureAccessPermissions(user, jobs);
-
-    val jobResponses = jobs.stream()
-        .map(job -> createJobProgressResponse(job))
-        .collect(toList());
-
-    return jobResponses;
+    return new JobInfo(downloadId);
   }
 
   @GET
@@ -202,30 +169,14 @@ public class DownloadResource extends Resource {
       ) {
     // Work out the query for that returns only donor ids that matches the filter conditions
     val donorIds = donorService.findIds(Query.builder().filters(filters.get()).build());
-    val dataTypeSizes = DownloadResources.normalizeSizes(downloadClient.getSizes(donorIds));
+    checkRequest(donorIds.isEmpty(), "No donors found for query '%s'", filters.get());
+
+    val sizes = downloadClient.getSizes(donorIds);
+    val dataTypeSizes = DownloadResources.normalizeSizes(sizes);
     val allowedDataTypes = resolveAllowedDataTypes(user);
     val allowedDataTypeSizes = getAllowedDataTypeSizes(dataTypeSizes, allowedDataTypes);
 
     return singletonMap("fileSize", createGetDataSizeResponse(allowedDataTypeSizes));
-  }
-
-  @GET
-  @Timed
-  @Produces(APPLICATION_JSON)
-  @Path("{downloadIds}/info")
-  @ApiOperation("Get the job info based on IDs")
-  public Map<String, Map<String, Object>> getDownloadInfo(
-      @Auth(required = false) User user,
-      @ApiParam(value = "id", required = false) @PathParam("downloadIds") @DefaultValue("") IdsParam downloadIds
-      ) throws IOException {
-    val ids = parseDownloadIds(downloadIds);
-    checkState(ids.size() == 1, "The API doesn't support info for multiple download IDs");
-    val id = ids.get(0);
-    val job = downloadClient.getJob(id);
-
-    ensureAccessPermissions(user, Collections.singletonList(job));
-
-    return singletonMap(id, createUiJobInfoResponse(job));
   }
 
   @GET
@@ -238,27 +189,15 @@ public class DownloadResource extends Resource {
       @ApiParam(value = "listing of the specified directory under the download relative directory", required = false) @PathParam("dir") String dir
       ) throws IOException {
     val files = downloadClient.listFiles(dir);
+    if (files == null) {
+      throwNotFoundException(dir);
+    }
     val authorized = isAuthorized(user);
 
     return files.stream()
         .filter(filterFiles(authorized))
         .map(file -> new FileInfo(file.getName(), file.getType().getSymbol(), file.getSize(), file.getDate()))
         .collect(toImmutableList());
-  }
-
-  @GET
-  @Timed
-  @Path("/readme{dir:.*}")
-  @Produces(APPLICATION_JSON)
-  @ApiOperation("Get readme under the specified directory")
-  public String getReadMe(
-      @ApiParam(value = "directory that contains the readme", required = false) @PathParam("dir") String dir
-      ) throws IOException {
-    checkRequest(dir.trim().isEmpty(), "Invalid argument");
-
-    val token = tokenService.createToken(dir);
-
-    return downloadClient.getReadme(token);
   }
 
   @ApiOperation("Get archive based by type subject to the supplied filter condition(s)")
@@ -276,13 +215,6 @@ public class DownloadResource extends Resource {
     }
 
     ensureServiceRunning();
-    if (filePath.contains("README.txt")) {
-      val body = getReadMe(filePath);
-
-      return Response.ok(body)
-          .type(MediaType.TEXT_PLAIN)
-          .build();
-    }
 
     val token = tokenService.createToken(filePath);
     val redirectUri = getStaticFileRedirect(publicServerUrl, token);
@@ -302,7 +234,7 @@ public class DownloadResource extends Resource {
 
     val job = downloadClient.getJob(downloadId);
     if (job == null) {
-      throw new NotFoundException("The archive is not available for download anymore.", "download");
+      throwArchiveNotFound();
     }
 
     ensureUsersDownload(user, job);
@@ -326,7 +258,7 @@ public class DownloadResource extends Resource {
 
     val job = downloadClient.getJob(downloadId);
     if (job == null) {
-      throw new NotFoundException("The archive is not available for download anymore.", "download");
+      throwArchiveNotFound();
     }
 
     ensureUsersDownload(user, job);
@@ -367,28 +299,6 @@ public class DownloadResource extends Resource {
   private void ensureServiceRunning() {
     if (!downloadClient.isServiceAvailable()) {
       throw new ServiceUnavailableException("Downloader is disabled");
-    }
-  }
-
-  private void ensureAccessPermissions(User user, List<JobResponse> jobs) {
-    val controlled = DownloadResources.hasControlledData(jobs);
-    if (isPermissionDenied(user, controlled) || !isUserDownload(user, jobs)) {
-      throw new ForbiddenAccessException("Unauthorized access", "download");
-    }
-  }
-
-  private static boolean isUserDownload(User user, List<JobResponse> jobs) {
-    val userId = getUserId(user);
-
-    return jobs.stream()
-        .allMatch(job -> job.getJobInfo().getUser().equals(userId));
-  }
-
-  private boolean isPermissionDenied(User user, boolean isControlled) {
-    if (isControlled && !isAuthorized(user)) {
-      return true;
-    } else {
-      return false;
     }
   }
 
@@ -442,4 +352,13 @@ public class DownloadResource extends Resource {
 
     return downloadDataType;
   }
+
+  private static void throwNotFoundException(String path) {
+    throw new NotFoundException(path, "Archive");
+  }
+
+  private static void throwArchiveNotFound() {
+    throw new NotFoundException("The archive is no longer available for download", "download");
+  }
+
 }

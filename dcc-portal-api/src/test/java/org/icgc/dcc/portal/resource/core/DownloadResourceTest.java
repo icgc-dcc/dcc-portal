@@ -164,55 +164,6 @@ public class DownloadResourceTest extends ResourceTest {
     assertThat(actualDownloadId.getDownloadId()).isEqualTo(expectedDownloadId);
   }
 
-  @Test
-  public void testGetJobStatus() throws Exception {
-    val jobId = "jobId1";
-    val jobResponse = new JobResponse();
-    jobResponse.setId(jobId);
-    jobResponse.setDataType(singleton(DONOR));
-    jobResponse.setJobInfo(JobUiInfo.builder()
-        .user(ANONYMOUS_USER)
-        .controlled(false)
-        .build());
-
-    when(downloadClient.getJob(jobId)).thenReturn(jobResponse);
-
-    val response = client()
-        .resource(RESOURCE + "/" + jobId + "/status")
-        .get(ClientResponse.class);
-
-    val body = response.getEntity(String.class);
-    val bodyJson = Jackson.DEFAULT.readValue(body, ArrayNode.class);
-    val expectedBody = $("[{downloadId:'jobId1',status:'SUCCEEDED',"
-        + "progress:[{dataType:'donor',completed:'true',numerator:'1',denominator:'1',percentage:'1.0'}]}]");
-    assertThat(bodyJson).isEqualTo(expectedBody);
-  }
-
-  @Test
-  public void testGetJobStatus_controlled() throws Exception {
-    val jobId = "jobId1";
-    val jobResponse = new JobResponse();
-    jobResponse.setId(jobId);
-    jobResponse.setDataType(singleton(DONOR));
-    jobResponse.setJobInfo(JobUiInfo.builder()
-        .user(USER_ID)
-        .controlled(true)
-        .build());
-
-    when(downloadClient.getJob(jobId)).thenReturn(jobResponse);
-
-    val response = client()
-        .resource(RESOURCE + "/" + jobId + "/status")
-        .cookie(new Cookie(CrowdProperties.SESSION_TOKEN_NAME, sessionToken.toString()))
-        .get(ClientResponse.class);
-
-    val body = response.getEntity(String.class);
-    val bodyJson = Jackson.DEFAULT.readValue(body, ArrayNode.class);
-    val expectedBody = $("[{downloadId:'jobId1',status:'SUCCEEDED',"
-        + "progress:[{dataType:'donor',completed:'true',numerator:'1',denominator:'1',percentage:'1.0'}]}]");
-    assertThat(bodyJson).isEqualTo(expectedBody);
-  }
-
   @Test(expected = ForbiddenAccessException.class)
   public void testGetJobStatus_controlledUnauthorized() throws Exception {
     val jobId = "jobId1";
@@ -320,69 +271,6 @@ public class DownloadResourceTest extends ResourceTest {
     val body = response.getEntity(String.class);
     val bodyJson = Jackson.DEFAULT.readValue(body, ObjectNode.class);
     val expectedBody = $("{fileSize:[{label:'donor',sizes:3}]}");
-    assertThat(bodyJson).isEqualTo(expectedBody);
-  }
-
-  @Test
-  public void testGetJobInfo_open() throws Exception {
-    val jobId = "jobId1";
-    val jobResponse = new JobResponse();
-    jobResponse.setId(jobId);
-    jobResponse.setDataType(singleton(DONOR));
-    jobResponse.setSubmissionTime(123L);
-    jobResponse.setFileSize(543L);
-    jobResponse.setJobInfo(JobUiInfo.builder()
-        .filter("testFilter")
-        .uiQueryStr("testUiQueryStr")
-        .user(ANONYMOUS_USER)
-        .controlled(false)
-        .build());
-
-    when(downloadClient.getJob(jobId)).thenReturn(jobResponse);
-
-    val response = client()
-        .resource(RESOURCE + "/" + jobId + "/info")
-        .get(ClientResponse.class);
-
-    val body = response.getEntity(String.class);
-    val bodyJson = Jackson.DEFAULT.readValue(body, ObjectNode.class);
-
-    log.info("Body: {}", bodyJson);
-
-    val expectedBody = $("{jobId1:{filter:'testFilter',uiQueryStr:'testUiQueryStr',startTime:123,et:123,"
-        + "hasEmail:'false','isControlled':'false',status:'FOUND',fileSize:543}}");
-    assertThat(bodyJson).isEqualTo(expectedBody);
-  }
-
-  @Test
-  public void testGetJobInfo_controlled() throws Exception {
-    val jobId = "jobId1";
-    val jobResponse = new JobResponse();
-    jobResponse.setId(jobId);
-    jobResponse.setDataType(singleton(DONOR));
-    jobResponse.setSubmissionTime(123L);
-    jobResponse.setFileSize(543L);
-    jobResponse.setJobInfo(JobUiInfo.builder()
-        .filter("testFilter")
-        .uiQueryStr("testUiQueryStr")
-        .user(USER_ID)
-        .controlled(true)
-        .build());
-
-    when(downloadClient.getJob(jobId)).thenReturn(jobResponse);
-
-    val response = client()
-        .resource(RESOURCE + "/" + jobId + "/info")
-        .cookie(new Cookie(CrowdProperties.SESSION_TOKEN_NAME, sessionToken.toString()))
-        .get(ClientResponse.class);
-
-    val body = response.getEntity(String.class);
-    val bodyJson = Jackson.DEFAULT.readValue(body, ObjectNode.class);
-
-    log.info("Body: {}", bodyJson);
-
-    val expectedBody = $("{jobId1:{filter:'testFilter',uiQueryStr:'testUiQueryStr',startTime:123,et:123,"
-        + "hasEmail:'false','isControlled':'true',status:'FOUND',fileSize:543}}");
     assertThat(bodyJson).isEqualTo(expectedBody);
   }
 
