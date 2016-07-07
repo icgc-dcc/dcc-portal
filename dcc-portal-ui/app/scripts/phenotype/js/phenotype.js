@@ -31,7 +31,14 @@
 
   var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services', 'icgc.survival']);
 
-  module.directive('phenotypeResult', function(FilterService, LocationService, Extensions, SetService, PhenotypeService, SurvivalAnalysisService) {
+  module.directive('phenotypeResult', function(
+    FilterService,
+    LocationService,
+    Extensions,
+    SetService,
+    PhenotypeService,
+    SurvivalAnalysisService
+  ) {
     return {
       restrict: 'E',
       scope: {
