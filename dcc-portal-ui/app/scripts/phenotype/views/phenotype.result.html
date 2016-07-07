@@ -108,30 +108,38 @@
         </table>
 
         <br>
-        <div class="clearfix">Overall Survival</div>
-        <survival-analysis-graph
-            data-data-sets="survivalAnalysisDataSets.overall"
-            tip-labels="{
-                survivalEstimate: 'Survival estimate',
-                survivalTime: 'Time of death',
-                censoredSurvivalTime: 'Interval of last follow-up',
-            }"
-            censored-statuses="['alive']"
-            palette="seriesColours"
-        ></survival-analysis-graph>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div>Overall Survival</div>
+                    <survival-analysis-graph
+                        data-data-sets="survivalAnalysisDataSets.overall"
+                        tip-labels="{
+                            survivalEstimate: 'Survival estimate',
+                            survivalTime: 'Time of death',
+                            censoredSurvivalTime: 'Interval of last follow-up',
+                        }"
+                        censored-statuses="['alive']"
+                        palette="seriesColours"
+                    ></survival-analysis-graph>
+                </div>
 
-        <br>
-        <div class="clearfix">Disease Free Survival</div>
-        <survival-analysis-graph
-            data-data-sets="survivalAnalysisDataSets.diseaseFree"
-            tip-labels="{
-                survivalEstimate: 'Disease free estimate',
-                survivalTime: 'Time of relapse / progression',
-                censoredSurvivalTime: 'Interval from primary treatment to last follow-up',
-            }"
-            censored-statuses="['progression', 'relapse']"
-            palette="seriesColours"
-        ></survival-analysis-graph>
+                <div class="col-md-6">
+                    <div>Disease Free Survival</div>
+                    <survival-analysis-graph
+                        data-data-sets="survivalAnalysisDataSets.diseaseFree"
+                        tip-labels="{
+                            survivalEstimate: 'Disease free estimate',
+                            survivalTime: 'Time of relapse / progression',
+                            censoredSurvivalTime: 'Interval from primary treatment to last follow-up',
+                        }"
+                        censored-statuses="['progression', 'relapse']"
+                        palette="seriesColours"
+                    ></survival-analysis-graph>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
