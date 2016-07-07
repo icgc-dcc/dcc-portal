@@ -3,6 +3,13 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.2.6
+--
+  - Added support for new Download Service
+  - Removed "downloader.html" screen as this is no longer needed
+  - Added spinner while download dialog is populated
+  - Added ability to download directly from the dialog
+
 4.2.5
 --
   - Added x of y donors on File Entity page

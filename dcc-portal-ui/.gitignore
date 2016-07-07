@@ -1,6 +1,6 @@
 app/styles/styles.css
+app/styles/bootstrap.css
 .apt_generated
 report/
 app/scripts/common/js/pql/pqlparser.js
 target/
-

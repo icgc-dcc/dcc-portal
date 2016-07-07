@@ -32,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvListWriter;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Joiner;
 
 import lombok.Cleanup;
@@ -40,6 +39,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
+import com.google.common.collect.Lists;
 
 @Slf4j
 @Service

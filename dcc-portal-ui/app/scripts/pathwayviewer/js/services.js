@@ -227,7 +227,8 @@ angular.module('icgc.pathwayviewer.directives.services', [])
         onClick:{},
         urlPath: '',
         strokeColor: '#696969',
-        highlightColor: 'red',
+        mutationHighlightColor: '#9b315b',
+        drugHighlightColor: 'navy',
         overlapColor : '#000000',
         subPathwayColor: 'navy'
       };
@@ -716,76 +717,29 @@ angular.module('icgc.pathwayviewer.directives.services', [])
        * Highlight: { id, value }
        *
        */
-      Renderer.prototype.highlightEntity = function (highlights, overlaps, model) {
-        var svg = this.svg, config = this.config;
-        var highlighted = [];
-        var nodeValues = {};
+      Renderer.prototype.highlightEntity = function (mutationHighlights, drugHighlights, overlaps, model) {
+        var svg = this.svg;
+        var config = this.config;
 
         // Remove old highlights if there are any
         svg.selectAll('.banner-text').remove();
         svg.selectAll('.value-banner').remove();
         svg.selectAll('.pathway-node').style('stroke','').style('stroke-width','');
 
-        // Compute final mutation highlight text value first
-        highlights.forEach(function (highlight) {
-          var nodes = model.getNodesByReactomeId(highlight.id);
-
-          if (! nodes) {
-            return;
-          }
-
-          nodes.forEach(function (node) {
-            var renderedValue = highlight.value;
-
-            if (highlighted.indexOf(node.id) >= 0){
-              nodeValues[node.id] =  '*';
-            } else {
-              nodeValues[node.id] =  renderedValue;
-              highlighted.push(node.id);
-            }
-          });
+        _drawAnnotations({
+          type: 'mutation',
+          nodeValues: _getNodeValues(mutationHighlights), 
+          location: 'right', 
+          color: config.mutationHighlightColor
         });
-
-
-        console.log('checking overlaps/highlights');
-
-        // Add SVG elements to nodes with highlight values
-        for (var nodeId in nodeValues) {
-          if (nodeValues.hasOwnProperty(nodeId)) {
-
-            var node = model.getNodeById(nodeId);
-            var renderedValue = nodeValues[nodeId];
-            var svgNode = svg.selectAll('.entity'+node.id);
-            svgNode.style('stroke',config.highlightColor);
-            svgNode.style('stroke-width','3px');
-
-            svg.append('rect')
-              .attr({
-                class:'value-banner value-banner'+nodeId,
-                x: (+node.position.x)+(+node.size.width) - 10,
-                y: (+node.position.y)- 7,
-                width:(renderedValue.toString().length*5)+10,
-                height:15,
-                rx: 7,
-                ry: 7,
-              }).style({
-              fill:config.highlightColor
-            });
-
-            svg.append('text').attr({
-              'class':'banner-text banner-text'+nodeId,
-              'x':(+node.position.x)+(+node.size.width) - 5,
-              'y':(+node.position.y)+4,
-              'pointer-events':'none',
-              'font-size':'9px',
-              'font-weight':'bold',
-              'fill':'white'
-            }).text(renderedValue);
-          }
-        }
-
-        var link = (typeof config.urlPath==='undefined') ? '' : 'url(\''+config.urlPath+'#blur\')';
-
+        _drawAnnotations({
+          type: 'drug', 
+          nodeValues: _getNodeValues(drugHighlights),
+          location: 'left', 
+          color: config.drugHighlightColor
+        });
+        
+        var link = (typeof config.urlPath === 'undefined') ? '' : 'url(\'' + config.urlPath + '#blur\')';
         _.keys(overlaps).forEach(function (id) {
 
           var nodes = model.getNodesByReactomeId(id);
@@ -805,6 +759,108 @@ angular.module('icgc.pathwayviewer.directives.services', [])
               .attr('stroke-linecap', 'round');
           });
         });
+        
+        function _getNodeValues(highlights) {
+          var nodeValues = {};
+          var highlighted = [];
+          // Compute final highlight text value first
+          highlights.forEach(function (highlight) {
+            var nodes = model.getNodesByReactomeId(highlight.id);
+
+            if (nodes.length === 0) {
+              return;
+            }
+            
+            nodes.forEach(function (node) {
+              var renderedValue = highlight.value;
+
+              if (highlighted.indexOf(node.id) >= 0){
+                nodeValues[node.id] =  '*';
+              } else {
+                nodeValues[node.id] =  renderedValue;
+                highlighted.push(node.id);
+              }
+            });
+          });
+          
+          return nodeValues;
+        }
+
+        function _drawAnnotations(annotations) {
+          var nodeValues = annotations.nodeValues;
+          var location = annotations.location;
+          var color = annotations.color;
+          
+          // Add SVG elements to nodes with highlight values
+          for (var nodeId in nodeValues) {
+            if (!(nodeValues.hasOwnProperty(nodeId))) {
+              continue;
+            }
+
+            var svgNode = svg.selectAll('.entity'+model.getNodeById(nodeId).id);
+            svgNode.style('stroke-width','3px');
+
+            var renderedValue = nodeValues[nodeId];
+            
+            // Draw rectangular container for annotation
+            svg.append('rect').attr({
+              class:'value-banner value-banner'+nodeId,
+              x: _coordinates(nodeId, location),
+              y: _coordinates(nodeId, 'top'),
+              width:(renderedValue.toString().length*5)+10,
+              height:15,
+              rx: 7,
+              ry: 7,
+            }).style({
+              fill:color
+            });
+
+            // Draw annotation value inside container
+            svg.append('text').attr({
+              'class':'banner-text banner-text'+nodeId,
+              'x': _coordinates(nodeId, location, true),
+              'y': _coordinates(nodeId, 'top', true),
+              'pointer-events':'none',
+              'font-size':'9px',
+              'font-weight':'bold',
+              'fill':'white'
+            }).text(renderedValue);
+          }
+          
+          function _coordinates(nodeId, location, forText) {
+            var node = model.getNodeById(nodeId);
+            var renderedValue = nodeValues[nodeId];
+            
+            var coordinateFunctionMap = {
+              'left' : function(forText) {
+                var leftX = (+node.position.x) - ((renderedValue.toString().length * 5) + 10) + 10;
+                if (forText) {
+                  leftX += 5;
+                }
+                
+                return leftX;
+              },
+              'right' : function(forText) {
+                var rightX = (+node.position.x) + (+node.size.width) - 10;
+                if (forText) {
+                  rightX += 5;
+                }
+                
+                return rightX;
+              },
+              'top' : function(forText) {
+                var topY = (+node.position.y) - 7;
+                if (forText) {
+                  topY += 11;
+                }
+                
+                return topY;
+              }
+            };
+            
+            return coordinateFunctionMap[location](forText);
+          }
+        }
       };
 
       Renderer.prototype.outlineSubPathway = function (svg, reactomeId) {

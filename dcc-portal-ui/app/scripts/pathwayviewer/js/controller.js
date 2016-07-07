@@ -33,12 +33,12 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
         onClick: {},
         urlPath: '',
         strokeColor: 'black',
-        highlightColor: 'red',
+        mutationHighlightColor: '#9b315b',
+        drugHighlightColor: 'navy',
         overlapColor: '#000000',
         subPathwayColor: 'blue',
         initScaleFactor: 0.90
       };
-
 
       this.config = config || _defaultConfig;
       this.rendererUtils = new RendererUtils();
@@ -135,7 +135,8 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
           },
           urlPath: config.urlPath,
           strokeColor: config.strokeColor,
-          highlightColor: config.highlightColor,
+          mutationHighlightColor: config.mutationHighlightColor,
+          drugHighlightColor: config.drugHighlightColor,
           overlapColor: config.overlapColor,
           subPathwayColor: config.subPathwayColor
         });
@@ -219,7 +220,12 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
         legendRenderer.renderReactionLabels(rendererUtils.getLegendLabels(35,Math.ceil(h*0.67),legendSvg),true);
         var model = new PathwayModel();
         model.nodes = [nodes[nodes.length-2], nodes[nodes.length-1]];
-        legendRenderer.highlightEntity([{id:'mutated',value:99}], {'overlapping': 0} ,model);
+        legendRenderer.highlightEntity(
+            [{id:'mutated',value:99}],
+            [{id:'druggable',value:99}],
+            {'overlapping': 0} ,
+            model
+        );
 
         legendSvg.selectAll('.reaction-failed-example')
           .classed('failed-reaction',true);
@@ -232,21 +238,8 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
        *  and transforms and renders with the form:
        *  [{id:123, value:10},{id:124, value:10},...]
        */
-      ReactomePathway.prototype.highlight = function (rawHighlights, overlaps) {
-        var highlights = [];
-        var nodesInPathway = this.nodesInPathway;
-        console.log(nodesInPathway);
-        rawHighlights.forEach(function (rh) {
-          rh.dbIds.forEach(function (dbId) {
-
-            // Only highlight it if it's part of the pathway we're zooming in on
-            // And only hide parts of it we are zooming in on a pathway
-            if((nodesInPathway.length === 0 || _.contains(nodesInPathway,dbId)) && rh.value >= 0){
-              highlights.push({id:dbId,value:rh.value});
-            }
-          });
-        });
-
+      ReactomePathway.prototype.highlight = function (rawMutationHighlights, rawDrugHighlights, overlaps) {
+         var nodesInPathway = this.nodesInPathway;
         _.keys(overlaps).forEach(function (dbId) {
             // Only highlight overlaps it if it's part of the pathway we're zooming in on
             // And only hide parts of it we are zooming in on a pathway
@@ -255,7 +248,36 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
             }
         });
 
-        this.renderer.highlightEntity(highlights, overlaps, this.model);
+        this.renderer.highlightEntity(
+            _retrieveHighlights('mutation', rawMutationHighlights, this.nodesInPathway),
+            _retrieveHighlights('drug', rawDrugHighlights, this.nodesInPathway),
+            overlaps,
+            this.model
+        );
+
+        function _retrieveHighlights(type, rawHighlights, nodesInPathway) {
+          var highlights = [];
+          rawHighlights.forEach(function (rawHighlight) {
+            rawHighlight.dbIds.forEach(function (dbId) {
+              // Only highlight it if it's part of the pathway we're zooming in on
+              // And only hide parts of it we are zooming in on a pathway
+              if((nodesInPathway.length === 0 || _.contains(nodesInPathway,dbId)) &&
+                  _getHighlightValue(rawHighlight, type) >= 0){
+                highlights.push({id:dbId,value:_getHighlightValue(rawHighlight, type)});
+              }
+            });
+          });
+          return highlights;
+        }
+
+        function _getHighlightValue(rawHighlight, type) {
+          var highlightValueFunctionMap = {
+            'mutation' : function (rawHighlight) { return rawHighlight.value; },
+            'drug' : function (rawHighlight) { return rawHighlight.drugs.length; }
+          };
+
+          return highlightValueFunctionMap[type](rawHighlight);
+        }
       };
 
     }

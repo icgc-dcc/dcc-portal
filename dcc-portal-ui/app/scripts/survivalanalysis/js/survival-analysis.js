@@ -29,6 +29,7 @@
     var onMouseLeaveDonor = params.onMouseLeaveDonor || _.noop;
     var onClickDonor = params.onClickDonor || _.noop;
     var palette = params.palette;
+    var markerType = params.markerType || 'circle';
 
     var containerBounds = container.getBoundingClientRect();
 
@@ -125,25 +126,38 @@
         .attr('stroke', setColor);
 
       // draw the data points as circles
-      setGroup.selectAll('circle')
+      var markers = setGroup.selectAll('circle')
         .data(data.donors)
-        .enter()
-        .append('svg:circle')
+        .enter();
+
+      if (markerType === 'line') {
+        markers = markers.append('svg:line')
+          .attr('class', 'point-line')
+          .attr('status', function (d) { return d.status; })
+          .attr('x1', function(d) { return x(d.time); })
+          .attr('y1', function(d) { return y(d.survivalEstimate); })
+          .attr('x2', function(d) { return x(d.time); })
+          .attr('y2', function(d) { return y(d.survivalEstimate) - 5; })
+          .attr('stroke', setColor);
+      } else {
+        markers = markers.append('svg:circle')
           .attr('class', 'point')
           .attr('status', function (d) { return d.status; })
           .attr('cx', function(d) { return x(d.time); })
           .attr('cy', function(d) { return y(d.survivalEstimate); })
-          .attr('fill', setColor )
-          .on('mouseover', function (d) {
-            onMouseEnterDonor(d3.event, d);
-          })
-          .on('mouseout', function (d) {
-            onMouseLeaveDonor(d3.event, d);
-          })
-          .on('click', function (d) {
-            onClickDonor(d3.event, d);
-          })
-        ;
+          .attr('fill', setColor );
+      }
+
+      markers
+        .on('mouseover', function (d) {
+          onMouseEnterDonor(d3.event, d);
+        })
+        .on('mouseout', function (d) {
+          onMouseLeaveDonor(d3.event, d);
+        })
+        .on('click', function (d) {
+          onClickDonor(d3.event, d);
+        });
     });
 
     return svg;
@@ -174,6 +188,7 @@
           dataSets: ctrl.dataSets,
           disabledDataSets: ctrl.disabledDataSets,
           palette: ctrl.palette,
+          markerType: 'line',
           onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
               element: event.target,

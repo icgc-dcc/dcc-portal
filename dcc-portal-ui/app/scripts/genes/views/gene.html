@@ -31,8 +31,8 @@
         </ul>
     </section>
 </aside>
-<article>
-<section id="summary">
+<article fix-scroll>
+<section id="summary" class="dynamic-height">
     <div class="wide">
         <h3>Summary</h3>
         <table class="table table-info">
@@ -173,7 +173,7 @@
         </table>
     </div>
 </section>
-<section id="projects"
+<section id="projects" class="dynamic-height"
          data-ng-class="{'loading': !GeneCtrl.gene.projects, 'empty': GeneCtrl.gene.fprojects.length == 0}">
     <h3 data-ng-if="!GeneCtrl.gene.projects"><i class="icon-spinner icon-spin"></i> Fetching Donors...</h3>
 
@@ -283,7 +283,7 @@
         </table>
     </div>
 </section>
-<section id="protein">
+<section id="protein" class="dynamic-height">
     <div data-ng-if="!GeneCtrl.gene.uiProteinTranscript.length" class="empty">
         <h3 data-ng-if="GeneCtrl.gene.affectedTranscriptIds.length">
             No Protein Coding Transcript Found.
@@ -306,7 +306,7 @@
         </form>
     </div>
 </section>
-<section id="genomic" class="gv_full_screen" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
+<section id="genomic" class="gv_full_screen dynamic-height" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
     <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome">Genomic Context
         <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
     </h3>
@@ -320,7 +320,7 @@
     </div>
     <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"></gvembed>
 </section>
-<section id="mutations"
+<section id="mutations" class="dynamic-height"
          data-ng-controller="GeneMutationsCtrl as GeneMutationsCtrl"
          data-ng-class="{'loading': !GeneMutationsCtrl.mutations.hits, 'empty': GeneMutationsCtrl.mutations.hits.length == 0}">
     <h3 data-ng-if="!GeneMutationsCtrl.mutations.hits">
@@ -426,7 +426,7 @@
     </div>
 </section>
 
-<section id="compounds"
+<section id="compounds" class="dynamic-height"
   ng-controller="GeneCompoundsCtrl as GeneCompoundsCtrl"
   ng-class="{ 'loading': GeneCompoundsCtrl.compounds === undefined, 'empty': GeneCompoundsCtrl.compoundslength === 0 }">
 

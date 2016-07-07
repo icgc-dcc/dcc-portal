@@ -4,8 +4,9 @@ Parent project of the portal modules
 
 ## Build
 
-From the command line:
-```
+To compile, test and package the system, execute the following from the root of the repository:
+
+```shell
 $ mvn
 ```
 
@@ -13,7 +14,7 @@ $ mvn
 
 ### Command-line
 
-From the root of the project:
+To run the server without building the UI or packaging the API into a jar, issue the following from the root of the project:
 
 ```shell
 mvn -pl '!dcc-portal-ui' compile && mvn -pl dcc-portal-api exec:java -Dexec.args="server /absolute/path/to/settings.yml"
@@ -22,6 +23,7 @@ mvn -pl '!dcc-portal-ui' compile && mvn -pl dcc-portal-api exec:java -Dexec.args
 Technically the first part only has to be done when source files change.
 
 ### IDE
+
 From Eclipse or IntelliJ:
 
 | Property   | Value                            |
