@@ -24,16 +24,12 @@
   /**
    * Requesting dynamic download
    */
-  module.controller('DownloadRequestController', function($scope, $location, $modalInstance,
-    $filter, Donors, LocationService, DownloaderService, DataType, filters, RouteInfoService) {
+  module.controller('DownloadRequestController', function($scope, $location, $window, $modalInstance,
+    $filter, API, Donors, LocationService, DownloaderService, DataType, filters, RouteInfoService) {
 
-    var emailRegex = /.+@.+\..+/i,
-        _isSendingRequest = false;
+    var _isSendingRequest = false;
 
     $scope.params = {};
-    $scope.params.useEmail = false;
-    $scope.params.isValidEmail = true;
-    $scope.params.emailAddress = '';
     $scope.params.processing = false;
     $scope.params.dataTypes = [];
 
@@ -68,16 +64,6 @@
       return index;
     }
 
-
-    $scope.validateEmail = function () {
-      // No email provided
-      if (_.isEmpty($scope.params.emailAddress)) {
-        $scope.params.isValidEmail = true;
-        return;
-      }
-      $scope.params.isValidEmail = $scope.params.emailAddress.match(emailRegex);
-    };
-
     $scope.cancel = function() {
       $modalInstance.dismiss('cancel');
     };
@@ -93,7 +79,7 @@
       return _isSendingRequest;
     };
 
-    $scope.sendRequest = function() {
+    $scope.download = function() {
       var i, item, actives, linkURL;
 
       // Prevent sending the request multiple times
@@ -113,17 +99,15 @@
       linkURL = $location.protocol() + '://' + $location.host() + ':' + $location.port() + '/download';
 
       DownloaderService
-        .requestDownloadJob(filters, actives, $scope.params.emailAddress,
+        .requestDownloadJob(filters, actives, null,
           linkURL, JSON.stringify(filters)).then(function (job) {
-          $modalInstance.dismiss('cancel');
-          $location.path('/download/' + job.downloadId).search('');
+            $window.location.assign(API.BASE_URL + '/download/' + job.downloadId);
+            $modalInstance.dismiss('cancel');
         })
         .finally(function() {
           _isSendingRequest = false;
         });
-
     };
-
 
     $scope.calculateSize = function () {
       $scope.params.processing = true;
@@ -149,15 +133,11 @@
         // Re-order it based on importance
         $scope.params.dataTypes = $filter('orderBy')($scope.params.dataTypes, sortFunc);
 
-
         $scope.params.processing = false;
       });
     };
 
 
     $scope.calculateSize();
-
   });
-
 })();
-

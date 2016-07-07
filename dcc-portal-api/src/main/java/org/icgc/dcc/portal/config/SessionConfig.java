@@ -17,7 +17,7 @@
 
 package org.icgc.dcc.portal.config;
 
-import static com.beust.jcommander.internal.Maps.newHashMap;
+import static com.google.common.collect.Maps.newHashMap;
 import static org.icgc.dcc.portal.service.SessionService.DISCOVERY_INFO_CACHE_NAME;
 
 import java.util.Map;
