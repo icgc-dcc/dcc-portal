@@ -266,21 +266,8 @@
     _service.createEntitySet = function (type, params) {
       invariant(params.name, 'Params is missing required property "name"');
       var data = params2JSON(type, params);
-      return Restangular.one('entityset')
-        .customPOST(data, undefined, {async:'false'}, {'Content-Type': 'application/json'});
-    };
-
-    _service.createAndViewEntitySet = function (type, params, forwardUrl) {
-      invariant(forwardUrl, 'Missing required argument: forwardUrl');
-      return Page.startWork(_service.createEntitySet(type, params)
-        .then(function (set) {
-          if (!set.id) {
-            console.log('there is no id!!!!');
-            return;
-          }
-          var newFilter = JSON.stringify({file: {entitySetId: {is: [set.id]}}});
-          $location.path(forwardUrl).search('filters', newFilter);
-        }));
+      return Page.startWork(Restangular.one('entityset')
+        .customPOST(data, undefined, {async:'false'}, {'Content-Type': 'application/json'}));
     };
 
     _service.getTransientSet = function(type, params) {
