@@ -44,7 +44,7 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
       this.rendererUtils = new RendererUtils();
       this.model = null;
 
-      
+
       /*
        * Takes in an xml of the pathway diagram and a list of reactions to zoom in
        * on and highlight. The color of the reactions is set with config.subPathwayColor
@@ -221,7 +221,7 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
         var model = new PathwayModel();
         model.nodes = [nodes[nodes.length-2], nodes[nodes.length-1]];
         legendRenderer.highlightEntity(
-            [{id:'mutated',value:99}], 
+            [{id:'mutated',value:99}],
             [{id:'druggable',value:99}],
             {'overlapping': 0} ,
             model
@@ -239,28 +239,29 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
        *  [{id:123, value:10},{id:124, value:10},...]
        */
       ReactomePathway.prototype.highlight = function (rawMutationHighlights, rawDrugHighlights, overlaps) {
+         var nodesInPathway = this.nodesInPathway;
         _.keys(overlaps).forEach(function (dbId) {
             // Only highlight overlaps it if it's part of the pathway we're zooming in on
             // And only hide parts of it we are zooming in on a pathway
-            if((this.nodesInPathway.length !== 0 && ! _.contains(this.nodesInPathway,dbId))){
+            if((nodesInPathway.length !== 0 && ! _.contains(nodesInPathway,dbId))){
               delete overlaps[dbId];
             }
         });
 
         this.renderer.highlightEntity(
-            _retrieveHighlights('mutation', rawMutationHighlights, this.nodesInPathway), 
+            _retrieveHighlights('mutation', rawMutationHighlights, this.nodesInPathway),
             _retrieveHighlights('drug', rawDrugHighlights, this.nodesInPathway),
             overlaps,
             this.model
         );
-        
+
         function _retrieveHighlights(type, rawHighlights, nodesInPathway) {
           var highlights = [];
           rawHighlights.forEach(function (rawHighlight) {
             rawHighlight.dbIds.forEach(function (dbId) {
               // Only highlight it if it's part of the pathway we're zooming in on
               // And only hide parts of it we are zooming in on a pathway
-              if((nodesInPathway.length === 0 || _.contains(nodesInPathway,dbId)) && 
+              if((nodesInPathway.length === 0 || _.contains(nodesInPathway,dbId)) &&
                   _getHighlightValue(rawHighlight, type) >= 0){
                 highlights.push({id:dbId,value:_getHighlightValue(rawHighlight, type)});
               }
@@ -268,13 +269,13 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
           });
           return highlights;
         }
-        
+
         function _getHighlightValue(rawHighlight, type) {
           var highlightValueFunctionMap = {
             'mutation' : function (rawHighlight) { return rawHighlight.value; },
             'drug' : function (rawHighlight) { return rawHighlight.drugs.length; }
           };
-          
+
           return highlightValueFunctionMap[type](rawHighlight);
         }
       };
