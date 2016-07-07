@@ -34,6 +34,7 @@ import static org.icgc.dcc.portal.util.SearchResponses.getHitIdsSet;
 import static org.icgc.dcc.portal.util.SearchResponses.getTotalHitCount;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -49,6 +50,7 @@ import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermsLookupFilterBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.model.BaseEntitySet;
 import org.icgc.dcc.portal.model.EntitySet.SubType;
@@ -216,18 +218,21 @@ public class TermsLookupRepository {
       @NonNull final SearchType searchType,
       @NonNull final BoolFilterBuilder boolFilter, final int max,
       @NonNull final String[] fields,
-      @NonNull final String sort) {
+      @NonNull final List<String> sort) {
     val query = filteredQuery(MATCH_ALL, boolFilter);
 
     // Donor type is not analyzed but this works due to terms-lookup on _id field.
     // https://github.com/icgc-dcc/dcc-release/blob/develop/dcc-release-resources/src/main/resources/org/icgc/dcc/release/resources/mappings/donor.mapping.json#L12-L13
-    return execute("Union ES Query", false, (request) -> request
-        .addSort(sort, ASC)
-        .setTypes(DONOR.getId())
-        .setSearchType(searchType)
-        .setQuery(query)
-        .setSize(max)
-        .addFields(fields));
+    return execute("Union ES Query", false, (request) -> {
+      request
+              .setTypes(DONOR.getId())
+              .setSearchType(searchType)
+              .setQuery(query)
+              .setSize(max)
+              .addFields(fields);
+
+      sort.forEach(s -> request.addSort(s, ASC));
+    });
   }
 
   public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter) {
