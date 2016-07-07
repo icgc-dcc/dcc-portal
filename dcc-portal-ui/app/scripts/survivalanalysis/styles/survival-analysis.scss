@@ -55,6 +55,12 @@ $faded: #e6dede;
         }
       }
     }
+
+    .point-line {
+      &[status="deceased"] {
+        opacity: 0;
+      }
+    }
   }
 
 }
