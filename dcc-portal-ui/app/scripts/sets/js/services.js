@@ -669,7 +669,7 @@
         .then(function (response) {
           var id = response.plain().id;
           return _service.getAnalysis(id);
-        })
+        });
     };
 
 

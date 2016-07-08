@@ -326,7 +326,7 @@
         var contents = _(dataSet)
           .map(function (set) {
             return set.donors.map(function (donor) {
-              return [set.meta.name, donor.id, donor.time, donor.status, donor.survivalEstimate].join('\t')
+              return [set.meta.name, donor.id, donor.time, donor.status, donor.survivalEstimate].join('\t');
             });
           })
           .flatten()

@@ -169,7 +169,7 @@
           invariant(dataSet, 'Missing required property "dataSet"');
           var headingMap = exportConfigs[graphType].headingMap;
           var tsv = SurvivalAnalysisService.dataSetToTSV(dataSet, headingMap);
-          var filename = $interpolate("{{filePrefix}}_{{ date | date:'yyyyMMdd' }}.tsv")({
+          var filename = $interpolate('{{filePrefix}}_{{ date | date:"yyyyMMdd" }}.tsv')({
             date: new Date(),
             filePrefix: exportConfigs[graphType].filePrefix
           }); 
