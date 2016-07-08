@@ -17,16 +17,17 @@
  */
 package org.icgc.dcc.portal.service;
 
+import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.difference;
 import static com.google.common.collect.Sets.intersection;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.union;
+import static com.google.common.primitives.Longs.tryParse;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
-import static org.apache.commons.lang.math.NumberUtils.toLong;
 import static org.elasticsearch.common.collect.Iterables.toArray;
 import static org.icgc.dcc.common.core.util.Joiners.COMMA;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
@@ -274,7 +275,7 @@ public class FileService {
     }
 
     val average = hitField.getValues().stream()
-        .mapToLong(o -> toLong(o.toString(), 0))
+        .mapToLong(o -> firstNonNull(tryParse(o.toString()), 0L))
         .average();
 
     return String.valueOf(average.orElse(0));

@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>4.2.7-SNAPSHOT</version>
+  <version>4.2.10-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -96,7 +96,7 @@
   <properties>
     <!-- Versions - DCC -->
     <dcc-common.version>4.2.5</dcc-common.version>
-    <dcc-download.version>4.2.5</dcc-download.version>
+    <dcc-download.version>4.2.9</dcc-download.version>
     <dcc-etl.version>3.8.19</dcc-etl.version>
     <dcc-repository.version>1.0.0</dcc-repository.version>
 

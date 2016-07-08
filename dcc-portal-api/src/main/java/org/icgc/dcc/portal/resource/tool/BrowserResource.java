@@ -18,8 +18,8 @@
 package org.icgc.dcc.portal.resource.tool;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import static org.apache.commons.lang.StringUtils.isBlank;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -119,15 +119,16 @@ public class BrowserResource extends Resource {
   String getData(String segment, String histogram, String dataType,
       String interval, String resource, String bioType, String consequenceType, String functionalImpact) {
 
-    checkRequest(isBlank(resource), "'resource' parameter is required but missing.");
+    checkRequest(isNullOrEmpty(resource), "'resource' parameter is required but missing.");
 
     val isHistogram = histogram != null && "true".equals(histogram);
     val errorMessage = "Histogram request requires '%s' parameter.";
-    checkRequest(isHistogram && isBlank(interval), errorMessage, ParameterNames.INTERVAL);
+    checkRequest(isHistogram && isNullOrEmpty(interval), errorMessage, ParameterNames.INTERVAL);
     checkRequest(isHistogram && Doubles.tryParse(interval) == null, "Bad value '%s' for '%s'", interval,
         ParameterNames.INTERVAL);
     checkRequest(isHistogram && Doubles.tryParse(interval) <= 0, "Historgram requires %s > 0", ParameterNames.INTERVAL);
-    checkRequest(!isHistogram && isBlank(segment), "'%s' parameter is required but missing.", ParameterNames.SEGMENT);
+    checkRequest(!isHistogram && isNullOrEmpty(segment), "'%s' parameter is required but missing.",
+        ParameterNames.SEGMENT);
 
     val queryMap = Maps.<String, String> newHashMap();
     queryMap.put(ParameterNames.SEGMENT, segment);

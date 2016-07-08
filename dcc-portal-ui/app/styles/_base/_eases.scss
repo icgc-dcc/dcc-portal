@@ -2,3 +2,9 @@ $inOutQuad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 $inOutQuart: cubic-bezier(0.77, 0, 0.175, 1);
 $inOutExpo: cubic-bezier(1, 0, 0, 1);
 $inOutSine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+$inQuad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+$outQuad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+$inExpo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+$outExpo: cubic-bezier(0.19, 1, 0.22, 1);
