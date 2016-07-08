@@ -163,10 +163,7 @@
     return svg;
   }
 
-  var survivalAnalysisController = [
-    '$scope',
-    '$element',
-    function (
+  var survivalAnalysisController = function (
       $scope,
       $element
     ) {
@@ -240,7 +237,7 @@
         window.removeEventListener('resize', update);
       };
 
-  }];
+  };
 
   module.component('survivalAnalysisGraph', {
     templateUrl: '/scripts/survivalanalysis/views/survival-analysis.html',
@@ -283,11 +280,7 @@
   }
 
   module
-    .service('SurvivalAnalysisService', [
-      '$q',
-      'Restangular',
-      'SetService',
-      function(
+    .service('SurvivalAnalysisService', function(
         $q,
         Restangular,
         SetService
@@ -312,13 +305,42 @@
           .then(function (responses) {
             return processResponses(responses);
           });
+      }
 
+      var defaultHeadingMap = {
+        setName: 'donor_set_name',
+        id: 'donor_id',
+        time: 'time',
+        status: 'donor_vital_status',
+        survivalEstimate: 'survival_estimate',
+      };
+
+      function dataSetToTSV (dataSet, headingMap) {
+        var headings = _({})
+          .defaults(defaultHeadingMap, headingMap)
+          .values()
+          .join('\t');
+
+        _.defaults({}, defaultHeadingMap, headingMap);
+
+        var contents = _(dataSet)
+          .map(function (set) {
+            return set.donors.map(function (donor) {
+              return [set.meta.name, donor.id, donor.time, donor.status, donor.survivalEstimate].join('\t')
+            });
+          })
+          .flatten()
+          .join('\n');
+
+        var tsv = headings + '\n' + contents;
+        return tsv;
       }
 
       _.extend(this, {
-        fetchSurvivalData: fetchSurvivalData
+        fetchSurvivalData: fetchSurvivalData,
+        dataSetToTSV: dataSetToTSV
       });
 
-    }]);
+    });
 
 })();

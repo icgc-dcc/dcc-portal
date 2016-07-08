@@ -32,12 +32,14 @@
   var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services', 'icgc.survival']);
 
   module.directive('phenotypeResult', function(
+    $interpolate,
     FilterService,
     LocationService,
     Extensions,
     SetService,
     PhenotypeService,
-    SurvivalAnalysisService
+    SurvivalAnalysisService,
+    ExportService
   ) {
     return {
       restrict: 'E',
@@ -116,9 +118,36 @@
           SurvivalAnalysisService.fetchSurvivalData($scope.setIds)
             .then(function (dataSets) {
               $scope.survivalAnalysisDataSets = dataSets;
+              SurvivalAnalysisService.dataSetToTSV(dataSets.overall);
             });
 
         }
+
+        var exportConfigs = {
+          overall: {
+            filePrefix: 'Overall_survival',
+            headingMap: {
+              time: 'overall_survival_time'
+            }
+          },
+          diseaseFree: {
+            filePrefix: 'Disease_free_survival',
+            headingMap: {
+              time: 'interval_last_follow_up',
+            }
+          }
+        };
+        $scope.exportDonors = function (graphType, dataSet) {
+          invariant(graphType, 'Missing required property "graphType"');
+          invariant(dataSet, 'Missing required property "dataSet"');
+          var headingMap = exportConfigs[graphType].headingMap;
+          var tsv = SurvivalAnalysisService.dataSetToTSV(dataSet, headingMap);
+          var filename = $interpolate("{{filePrefix}}_{{ date | date:'yyyyMMdd' }}.tsv")({
+            date: new Date(),
+            filePrefix: exportConfigs[graphType].filePrefix
+          }); 
+          ExportService.exportData(filename, tsv);
+        };
 
         $scope.setIdOrder = function (set) {
           return $scope.setIds.indexOf(set.meta.id);
