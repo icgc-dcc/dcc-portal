@@ -8,9 +8,8 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import org.icgc.dcc.portal.model.Error;
+import org.icgc.dcc.portal.server.util.InvalidEntityException;
 import org.springframework.stereotype.Component;
-
-import com.yammer.dropwizard.validation.InvalidEntityException;
 
 @Component
 @Provider

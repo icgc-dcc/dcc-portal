@@ -134,8 +134,13 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
   @Override
   @SneakyThrows
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/**").addResourceLocations(getUILocation());
-    registry.addResourceHandler("/docs/**").addResourceLocations(getSwaggerLocation());
+    val uiLocation = getUILocation();
+    log.info("UI location: {}", uiLocation);
+    registry.addResourceHandler("/**").addResourceLocations(uiLocation);
+    
+    val swaggerLocation = getSwaggerLocation();
+    log.info("Swagger location: {}", swaggerLocation);
+    registry.addResourceHandler("/docs/**").addResourceLocations(swaggerLocation);
   }
 
   @PostConstruct
