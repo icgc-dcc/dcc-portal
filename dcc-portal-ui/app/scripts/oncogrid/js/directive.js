@@ -18,18 +18,17 @@
 (function () {
   'use strict';
 
-  angular.module('icgc.oncogrid', ['icgc.oncogrid.directives', 'icgc.oncogrid.services']);
+  angular.module('icgc.oncogrid', ['icgc.oncogrid.directives', 'icgc.oncogrid.services', 'icgc.oncogrid.controllers']);
 
 })();
-
 
 (function ($, OncoGrid) {
   'use strict';
 
   var module = angular.module('icgc.oncogrid.directives', []);
 
-  module.directive('oncogridAnalysis', function (Donors, Genes, Occurrences, Consequence, 
-  $q, $filter, OncogridService, SetService, $timeout) {
+  module.directive('oncogridAnalysis', function (Donors, Genes, Occurrences, Consequence,
+    $q, $filter, OncogridService, SetService, $timeout) {
     return {
       restrict: 'E',
       scope: {
@@ -46,7 +45,7 @@
           $scope.donorSet = $scope.item.donorSet;
 
           $scope.donorFilter = OncogridService.donorFilter($scope.donorSet);
-          $scope.donorLink  = donorSearch + JSON.stringify($scope.donorFilter);
+          $scope.donorLink = donorSearch + JSON.stringify($scope.donorFilter);
 
           $scope.geneFilter = OncogridService.geneFilter($scope.geneSet);
           $scope.geneLink = geneSearch + JSON.stringify($scope.geneFilter);
@@ -56,34 +55,34 @@
           $scope.gvLink = '/browser/m?filters=' + JSON.stringify(obsFilter);
         }
 
-        $scope.materializeSets = function() {
+        $scope.materializeSets = function () {
           var donorPromise = OncogridService.getDonors($scope.donorSet)
-          .then(function (data) {
-            $scope.donors = data;
-          });
+            .then(function (data) {
+              $scope.donors = data;
+            });
 
           var genePromise = OncogridService.getGenes($scope.geneSet)
-          .then(function (data) {
-            $scope.genes = data;
-          });
+            .then(function (data) {
+              $scope.genes = data;
+            });
 
           var geneCuratedSetPromise = OncogridService.getCuratedSet($scope.geneSet)
-          .then(function (data) {
-            $scope.curatedList = _.map(data, function(g) {
-              return g.id;
+            .then(function (data) {
+              $scope.curatedList = _.map(data, function (g) {
+                return g.id;
+              });
             });
-          });
-        
+
           var occurrencePromise = OncogridService.getOccurences($scope.donorSet, $scope.geneSet)
-          .then(function (data) {
-            $scope.obsCount = data.length;
-            $scope.occurrences = data;
-          });
+            .then(function (data) {
+              $scope.obsCount = data.length;
+              $scope.occurrences = data;
+            });
 
           return $q.all([donorPromise, genePromise, geneCuratedSetPromise, occurrencePromise]);
         };
 
-        $scope.initOnco =  function() {
+        $scope.initOnco = function () {
 
           var donors = OncogridService.mapDonors($scope.donors);
           var genes = OncogridService.mapGenes($scope.genes, $scope.curatedList);
@@ -95,8 +94,8 @@
             };
           };
 
-          var sortBool = function(field) {
-            return function(a, b) {
+          var sortBool = function (field) {
+            return function (a, b) {
               if (a[field] && !b[field]) {
                 return -1;
               } else if (!a[field] && b[field]) {
@@ -108,7 +107,7 @@
           };
 
           var sortByString = function (field) {
-            return function(a, b) {
+            return function (a, b) {
               if (a[field] > b[field]) {
                 return 1;
               } else if (a[field] < b[field]) {
@@ -120,14 +119,14 @@
           };
 
           var donorTracks = [
-            { 'name': 'PCAWG', 'fieldName': 'pcawg', 'type': 'bool', 'sort': sortBool},
-            { 'name': 'Age at Diagnosis', 'fieldName': 'age', 'type': 'int', 'sort': sortInt},
-            { 'name': 'Vital Status', 'fieldName': 'vitalStatus', 'type': 'vital', 'sort': sortByString},
-            { 'name': 'Sex', 'fieldName': 'sex', 'type': 'sex', 'sort': sortByString},
-            { 'name': 'CNSM Exists', 'fieldName': 'cnsmExists', 'type': 'bool', 'sort': sortBool},
-            { 'name': 'STSM Exists', 'fieldName': 'stsmExists', 'type': 'bool', 'sort': sortBool},
-            { 'name': 'SGV Exists', 'fieldName': 'sgvExists', 'type': 'bool', 'sort': sortBool},
-            { 'name': 'METH-A Exists', 'fieldName': 'methArrayExists', 'type': 'bool', 'sort': sortBool}
+            { 'name': 'PCAWG', 'fieldName': 'pcawg', 'type': 'bool', 'sort': sortBool },
+            { 'name': 'Age at Diagnosis', 'fieldName': 'age', 'type': 'int', 'sort': sortInt },
+            { 'name': 'Vital Status', 'fieldName': 'vitalStatus', 'type': 'vital', 'sort': sortByString },
+            { 'name': 'Sex', 'fieldName': 'sex', 'type': 'sex', 'sort': sortByString },
+            { 'name': 'CNSM Exists', 'fieldName': 'cnsmExists', 'type': 'bool', 'sort': sortBool },
+            { 'name': 'STSM Exists', 'fieldName': 'stsmExists', 'type': 'bool', 'sort': sortBool },
+            { 'name': 'SGV Exists', 'fieldName': 'sgvExists', 'type': 'bool', 'sort': sortBool },
+            { 'name': 'METH-A Exists', 'fieldName': 'methArrayExists', 'type': 'bool', 'sort': sortBool }
           ];
 
           var donorOpacity = function (d) {
@@ -145,8 +144,8 @@
           };
 
           var geneTracks = [
-            { 'name': '# Donors affected ', 'fieldName': 'totalDonors', 'type': 'int', 'sort': sortInt},
-            { 'name': 'Curated Gene Census ', 'fieldName': 'cgc', 'type': 'bool', 'sort': sortBool}
+            { 'name': '# Donors affected ', 'fieldName': 'totalDonors', 'type': 'int', 'sort': sortInt },
+            { 'name': 'Curated Gene Census ', 'fieldName': 'cgc', 'type': 'bool', 'sort': sortBool }
           ];
 
           var maxDonorsAffected = _.max(genes, function (g) { return g.totalDonors; }).totalDonors;
@@ -162,27 +161,27 @@
           };
 
           var gridClick = function (o) {
-            window.location = obsSearch + 
-              '{"mutation":{"id": {"is":["'+ o.id +'"]}}}';
+            window.location = obsSearch +
+              '{"mutation":{"id": {"is":["' + o.id + '"]}}}';
           };
 
-          var donorClick = function(d) {
+          var donorClick = function (d) {
             window.location = /donors/ + d.id +
               '?filters={"mutation":{"functionalImpact":{"is":["High"]}}}';
           };
 
-          var donorHistogramClick = function(d) {
-            window.location = donorSearch + 
+          var donorHistogramClick = function (d) {
+            window.location = donorSearch +
               '{"donor":{"id":{"is": ["' + d.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}}}';
           };
 
-          var geneClick = function(g) {
+          var geneClick = function (g) {
             window.location = /genes/ + g.id +
               '?filters={"mutation":{"functionalImpact":{"is":["High"]}}}';
           };
 
-          var geneHistogramClick = function(g) {
-            window.location = geneSearch + 
+          var geneHistogramClick = function (g) {
+            window.location = geneSearch +
               '{"gene":{"id":{"is": ["' + g.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}}}';
           };
 
@@ -200,7 +199,7 @@
             genes: genes,
             observations: observations,
             element: '#oncogrid-div',
-            height: 150, 
+            height: 150,
             width: 680,
             colorMap: colorMap,
             gridClick: gridClick,
@@ -222,18 +221,18 @@
           $scope.grid.render();
         };
 
-        function cleanActives() {
+        $scope.cleanActives = function () {
           $('#crosshair-button').removeClass('active');
           $('#heat-button').removeClass('active');
           $('#grid-button').removeClass('active');
-          $('#oncogrid-div').removeClass('og-crosshair-mode');
-          $('#oncogrid-div').addClass('og-pointer-mode');          
-        }
+          var gridDiv = $('#oncogrid-div');
+          gridDiv.addClass('og-pointer-mode'); gridDiv.removeClass('og-crosshair-mode');
+        };
 
         $scope.$watch('item', function (n) {
           if (n) {
             if (typeof $scope.grid !== 'undefined' && $scope.grid !== null) {
-              cleanActives();
+              $scope.cleanActives();
               $scope.grid.destroy();
             }
             $('#oncogrid-spinner').toggle(true);
@@ -241,145 +240,47 @@
             $scope.materializeSets().then(function () {
               $('#oncogrid-spinner').toggle(false);
 
-                // Temporary fix: 
-                //http://stackoverflow.com/a/23444942
-                $('.btn-onco').click(function() {
-                  // Removes focus of the button.
-                  $(this).blur();
-                });
-              $scope.repoLink = SetService.createRepoLink({id: $scope.item.donorSet});
+              // Temporary fix:
+              //http://stackoverflow.com/a/23444942
+              $('.btn-onco').click(function () {
+                // Removes focus of the button.
+                $(this).blur();
+              });
+              $scope.repoLink = SetService.createRepoLink({ id: $scope.item.donorSet });
               $scope.initOnco();
-              $timeout(function() {
-                $scope.removeCleanDonors();
-                $scope.removeCleanGenes();
+              $timeout(function () {
+                $scope.grid.removeDonors(function(d){return d.score === 0;});
+                $scope.grid.removeGenes(function(d){return d.score === 0;});
               }, 400);
             });
           }
         });
 
-        // Export the subset(s), materialize the set along the way
-        $scope.exportSet = function (id) {
-          SetService.exportSet(id);
-        };
-
-        $scope.removeCleanDonors = function () {
-          var criteria = function (d) {
-            return d.score === 0;
-          };
-
-          $scope.grid.removeDonors(criteria);
-        };
-
-        $scope.removeCleanGenes = function () {
-          var criteria = function (d) {
-            return d.score === 0;
-          };
-
-          $scope.grid.removeGenes(criteria);
-        };
-
-        $scope.clusterData = function () {
-          $scope.grid.cluster();
-        };
-
-        $scope.reloadGrid = function () {
-          $scope.grid.destroy();
-          cleanActives();
-          $scope.grid = new OncoGrid(_.cloneDeep($scope.params));
-          $scope.grid.render();
-          $timeout(function() {
-            $scope.removeCleanDonors();
-            $scope.removeCleanGenes();
-          }, 400);
-        };
-
-        $scope.legend = function () {
-          $('#legend-button').toggleClass('active');
-          $('#og-legend').toggle();
-        };
-
-        function fullScreenHandler() {
+        $scope.fullScreenHandler = function () {
           if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
             $scope.grid.resize(680, 150, false);
           } else {
-            $scope.resizeFull();
+            $scope.grid.resize(screen.width - 400, screen.height - 300, true);
           }
-          $('#og-fullscreen-button').toggleClass('icon-resize-full');
-          $('#og-fullscreen-button').toggleClass('icon-resize-small');
-        }
+          var fButton = $('#og-fullscreen-button');
+          fButton.toggleClass('icon-resize-full');
+          fButton.toggleClass('icon-resize-small');
+        };
 
         if (document.addEventListener) {
-          document.addEventListener('webkitfullscreenchange', fullScreenHandler);
-          document.addEventListener('mozfullscreenchange', fullScreenHandler);
-          document.addEventListener('fullscreenchange', fullScreenHandler);
+          document.addEventListener('webkitfullscreenchange', $scope.fullScreenHandler);
+          document.addEventListener('mozfullscreenchange', $scope.fullScreenHandler);
+          document.addEventListener('fullscreenchange', $scope.fullScreenHandler);
         }
-
-
-        function exitFullScreen() {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-          }
-        }
-
-        $scope.requestFullScreen = function () {
-
-          if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
-            var element = document.getElementById('oncogrid-container');
-            if (element.requestFullscreen) {
-              element.requestFullscreen();
-            } else if (element.mozRequestFullScreen) {
-              element.mozRequestFullScreen();
-            } else if (element.webkitRequestFullScreen) {
-              element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-          } else {
-            exitFullScreen();
-          }
-
-        };
-
-        $scope.resizeFull = function () {
-          $scope.grid.resize(screen.width - 400, screen.height - 300, true);
-        };
-
-        $scope.heatMap = function () {
-          $('#heat-button').toggleClass('active');
-          $('#og-variant-legend').toggle();
-          $('#og-heatmap-legend').toggle();
-
-          $scope.grid.toggleHeatmap();
-        };
-
-        $scope.gridLines = function () {
-          $('#grid-button').toggleClass('active');
-          $scope.grid.toggleGridLines();
-        };
-
-        $scope.crosshair = function () {
-          $('#crosshair-button').toggleClass('active');
-          $('#oncogrid-div').toggleClass('og-pointer-mode');
-          $('#oncogrid-div').toggleClass('og-crosshair-mode');
-          $scope.grid.toggleCrosshair();
-        };
-
-        $scope.printGrid = function () {
-          var gridDiv = document.getElementById('oncogrid-div').outerHTML;
-          document.body.innerHTML = gridDiv;
-          window.print();
-        };
 
         $scope.$on('$destroy', function () {
           if (typeof $scope.grid !== 'undefined') {
             $scope.grid.destroy();
           }
-          
-          document.removeEventListener('webkitfullscreenchange', fullScreenHandler);
-          document.removeEventListener('mozfullscreenchange', fullScreenHandler);
-          document.removeEventListener('fullscreenchange', fullScreenHandler);
+
+          document.removeEventListener('webkitfullscreenchange', $scope.fullScreenHandler);
+          document.removeEventListener('mozfullscreenchange', $scope.fullScreenHandler);
+          document.removeEventListener('fullscreenchange', $scope.fullScreenHandler);
         });
 
       }
