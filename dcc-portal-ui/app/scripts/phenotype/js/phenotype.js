@@ -33,10 +33,16 @@
 
   module.directive('phenotypeResult', function(
     $interpolate,
+    $timeout,
+    $location,
+    $q,
+    Restangular,
+    RestangularNoCache,
     FilterService,
     LocationService,
     Extensions,
     SetService,
+    SetOperationService,
     PhenotypeService,
     SurvivalAnalysisService,
     ExportService
@@ -47,7 +53,7 @@
         item: '='
       },
       templateUrl: '/scripts/phenotype/views/phenotype.result.html',
-      link: function($scope) {
+      link: function($scope, $element) {
 
         // From D3's cat20 scale
         $scope.seriesColours = ['#6baed6', '#fd8d3c', '#74c476'];
@@ -89,8 +95,9 @@
             return PhenotypeService.entityFilters(id);
           });
 
+          var setMetaRequest = SetService.getMetaData($scope.setIds);
 
-          SetService.getMetaData($scope.setIds).then(function(results) {
+          setMetaRequest.then(function(results) {
             $scope.setMap = {};
             results.forEach(function(set) {
               set.advLink = SetService.createAdvLink(set);
@@ -114,6 +121,26 @@
             $scope.meanAge = age.data.map(function(d) { return d.summary.mean; });
 
           });
+
+          var setAnalysisRequest = SetService.createAnalysis($scope.setIds, 'DONOR'); 
+          
+            $q.all([setMetaRequest, setAnalysisRequest]).then(function (responses) {
+              var setData = responses[0];
+              var setAnalysisData = responses[1].result;
+              var setAnalysisId = responses[1].id;
+              var vennData = SetOperationService.transform(setAnalysisData);
+              var vennDiagram = new dcc.Venn23(vennData, {
+                urlPath: $location.url(),
+                setLabelFunc: function (id) {
+                  return _.find(setData, {id: id}).name;
+                },
+              });
+              var $canvasContainer = $element.find('.mini-venn-canvas');
+              vennDiagram.render( $canvasContainer[0] );
+              $canvasContainer.on('click', function () {
+                $location.path('/analysis/view/set/' + setAnalysisId);
+              });
+            });
 
           SurvivalAnalysisService.fetchSurvivalData($scope.setIds)
             .then(function (dataSets) {

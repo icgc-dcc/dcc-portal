@@ -1,0 +1,15 @@
+.mini-venn-canvas {
+  svg {
+    cursor: pointer;
+    transform: scale(1.3);
+    & > * {
+      pointer-events: none;
+    }
+  }
+  text:not(.venn-count) {
+    display: none;
+  }
+  .venn-count {
+      font-size: 22px; 
+  }
+}

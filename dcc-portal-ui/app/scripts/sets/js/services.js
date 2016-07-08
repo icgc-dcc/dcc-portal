@@ -98,7 +98,7 @@
    * Abstracts CRUD operations on entity lists (gene, donor, mutation)
    */
   module.service('SetService',
-    function ($window, $location, $q, Restangular, RestangularNoCache, API,
+    function ($window, $location, $q, $timeout, Restangular, RestangularNoCache, API,
               localStorageService, toaster, Extensions, Page, FilterService, RouteInfoService) {
 
     var LIST_ENTITY = 'entity';
@@ -650,6 +650,26 @@
       }
 
       return new ResolveSet(_Ids, waitMS, numTries);
+    };
+
+    _service.getAnalysis = function (id) {
+      return RestangularNoCache.one('analysis/union/' + id).get()
+        .then(function (wrappedResponse) {
+          var response = wrappedResponse.plain();
+          return response.state === 'IN_PROGRESS' ?
+            $timeout(_service.getAnalysis.bind(null, id), 800) : response;
+        });
+    };
+
+    _service.createAnalysis = function (setIds, setType) {
+      return Restangular.one('analysis').post('union', {
+        lists: setIds,
+        type: setType
+      }, {}, { 'Content-Type': 'application/json' })
+        .then(function (response) {
+          var id = response.plain().id;
+          return _service.getAnalysis(id);
+        })
     };
 
 
