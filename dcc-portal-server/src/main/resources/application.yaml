@@ -1,48 +1,43 @@
+#
+# Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.
+#
+# This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# DCC Portal Server - Configuration
+#
+
+###############################################################################
+# Profile - common
+###############################################################################
+
+# API
 server:
   port: 8080
 
-# Actuator
+# Management
 management:
   port: 8081
 
-# Database
-database:
-  # the name of your JDBC driver
-  driverClass: org.postgresql.Driver
-
-  # the username
-  user: 
-
-  # the password
-  password: 
-  
-  # the JDBC URL
+# Datasource
+spring.datasource:
+  driver-class-name: org.postgresql.Driver
   url: jdbc:postgresql://
-  
-  # any properties specific to your JDBC driver:
-  properties:
-    charSet: UTF-8
-
-  # the maximum amount of time to wait on an empty pool before throwing an exception
-  maxWaitForConnection: 1s
-
-  # the SQL query to run when validating a connection's liveness
-  validationQuery: "/* Portal DB Health Check */ SELECT 1"
-
-  # the minimum number of connections to keep open
-  minSize: 8
-
-  # the maximum number of connections to keep open
-  maxSize: 32
-
-  # whether or not idle connections should be validated
-  checkConnectionWhileIdle: false
-
-  # how long a connection must be held before it can be validated
-  checkConnectionHealthWhenIdleFor: 10s
-
-  # the maximum lifetime of an idle connection
-  closeConnectionIfIdleFor: 1 minute
+  username:
+  password:
+  max-active: 32
+  validation-query: "/* Portal DB Health Check */ SELECT 1"
 
 # Controls generation of "Last-Modified" and "ETag" HTTP headers
 cache:
@@ -98,7 +93,7 @@ hazelcast:
 
 # ElasticSearch index and hosts
 elastic:
-  indexName: "dcc-release-dcc-etl-cli"
+  indexName: "dcc-release"
   repoIndexName: "icgc-repository"
   nodeAddresses:
      - host: "localhost"
@@ -120,9 +115,8 @@ download:
   enabled: true
   serverUrl: "http://localhost:9090"
   publicServerUrl: "http://localhost:9090"
-  sharedSecret: ""
-  aesKey: ""
-
+  sharedSecret: "deadbeefdeadbeefdeadbeefdeadbeef"
+  aesKey: "deadbeefdeadbeef"
 
 web:
   # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs
@@ -172,54 +166,132 @@ setOperation:
 release:
   releaseDate: "placeholder"
   dataVersion: 2
+  
+# Feature Flags
+features:
+  AUTH_TOKEN: true
+  ICGC_CLOUD: true
+  SOFTWARE_PAGE: true
+  
+---
 
-# Logging settings
-logging:
+###############################################################################
+# Profile - "test"
+###############################################################################
 
-  # Settings for logging to stdout.
-  console:
+spring.profiles: test
 
-    # If true, write log statements to stdout.
-    enabled: true
+# Datasource
+spring.datasource:
+  driver-class-name: org.h2.Driver
+  url: jdbc:h2:mem:genelist;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=runscript from '/Users/btiernay/Workspaces/dcc/dcc-portal/dcc-portal-api/src/test/sql/schema.sql'
+  username:
+  password:
+  max-active: 10
+  max-idle: 1
+  min-idle: 1
 
-  # Settings for logging to a file.
-  file:
+# Authorization
+crowd:
+  ssoUrl: "https://ssoUrl?continue="
+  ssoUrlGoogle: "https://ssoUrlGoogle?continue="
 
-    # If true, write log statements to a file.
-    enabled: false
+# ICGC auth server config
+oauth:
+  serviceUrl: "http://localhost:8443"
+  clientId: "mgmt"
+  clientSecret: "pass"
+  enableStrictSSL: false
+  enableHttpLogging: true
 
-    # Do not write log statements below this threshold to the file.
-    threshold: INFO
+# Authorization
+auth:
+  enabled: false
 
-    # The file to which current statements will be logged.
-    currentLogFilename: ../logs/dcc-portal-api.log
+hazelcast:
+  # Enable session replication?
+  enabled: false
 
-    # When the log file rotates, the archived log will be renamed to this and gzipped. The
-    # %d is replaced with the previous day (yyyy-MM-dd). Custom rolling windows can be created
-    # by passing a SimpleDateFormat-compatible format as an argument: "%d{yyyy-MM-dd-hh}".
-    archivedLogFilenamePattern: ../logs/dcc-portal-api-%d.log.gz
+  # NB: Below hazelcast settings do not have default values. The portal won't start if they're unset
 
-    # The number of archived files to keep.
-    archivedFileCount: 10
+  # Credentials to enter a group. E.g. dev, uat, prod groups
+  groupName: ""
+  groupPassword: ""
 
-  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL
-  level: INFO
+  # Time-to-live settings.
+  # Maximum number of seconds for each entry to stay in the cache. Entries that are
+  # older than the set value and not updated for that time
+  # will get automatically evicted from the cache.
 
-  # Logger-specific levels
-  loggers:
+  # Expire inactive users in 15 minutes
+  usersCacheTTL: 900
 
-    # Jersey request logging
-    "com.sun.jersey.api.container.filter.LoggingFilter": INFO
+  # Expire openId authentication attempt in 2 minutes
+  openidAuthTTL: 120
 
-    # ElasticSearch query logging
-    "org.icgc.dcc.portal.service.BaseQueryService": WARN
+  # Enable multicast? If false then hosts must be provided. hosts not used otherwise
+  # Multicast must be disabled in an OpenStack / AWS environment
+  multicast: false
+  hosts:
+    - 127.0.0.1
 
-    # Very chatty
-    "com.wordnik.swagger.jsonschema.ApiModelParser": WARN
+# ElasticSearch index and hosts
+elastic:
+  indexName: icgc-release
+  repoIndexName: icgc-repository-test
+  nodeAddresses:
+    - host: elasticsearch1.res.oicr.on.ca
+      port: 9300
+      
+  # List of TransportClient settings. 
+  # E.g. 
+  # "client.transport.sniff": true 
+  client:
+    "client.transport.sniff": true
 
-    # dynamic downloader logging
-    "org.apache.hadoop.hbase": WARN
-    "org.apache.zookeeper": WARN
+# Mail
+mail:
+  enabled: false
+  recipientEmail:
+  
+web:
+  # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs
+  baseUrl: "http://localhost:8080"
 
-    # ERRORs should be converted to WARNs in Swagger 1.2.2
-    "com.wordnik.swagger.jaxrs.HelpApi": OFF
+# ICGC Client configuration
+icgc:
+
+  # CGP/DACO API endpoint
+  cgpUrl: "http://localhost"
+
+  # ShortUrl API endpoint
+  shortUrl: "http://localhost"
+
+  # CUD API endpoint
+  cudUrl: "http://localhost"
+
+  # CMS API endpoint
+  cmsUrl: "http://localhost"
+
+  # CUD credentials. Obtained from webdev@oicr.on.ca
+  cudAppId: "<fill in>"
+  cudUser: "<fill in>"
+  cudPassword: "<fill in>"
+
+  # OAuth credentials
+  # To generate the credentials go to icgc.org, log in, go to the "OAuth Settings" tab and request "Regenerate all tokens"
+  consumerKey: "<fill in>"
+  consumerSecret: "<fill in>"
+  accessToken: "<fill in>"
+  accessSecret: "<fill in>"
+
+  # Log HTTP requests to the API
+  enableHttpLogging: false
+
+  # Disallow self-signed SSL certificates
+  enableStrictSSL: false
+
+# Portal release configuration
+release:
+  releaseDate: "Month Day, Year"
+  dataVersion: 2
