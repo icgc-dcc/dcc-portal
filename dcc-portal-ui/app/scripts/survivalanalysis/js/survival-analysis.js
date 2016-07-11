@@ -40,7 +40,7 @@
       top: 20,
       right: 20,
       bottom: 46,
-      left: 44
+      left: 60
     };
     var outerWidth = containerBounds.width;
     var outerHeight = outerWidth * 0.5;
@@ -99,7 +99,7 @@
       .append('text')
         .attr('class', 'axis-label')
         .attr('transform', 'rotate(-90)')
-        .attr('y', -30)
+        .attr('y', -40)
         .attr('x', - (margin.top + axisHeight / 2))
         .text(yAxisLabel);
 

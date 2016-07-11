@@ -216,10 +216,11 @@
         demoDescription: 'Perform enrichment analysis on top 50 genes in Cancer Gene Census.'
       },
       phenotype: {
-        name: 'Phenotype Comparison',
-        description: 'Compare some characteristics (e.g. gender, vital status and age at diagnosis)' +
-        ' between your donor sets.',
-        demoDescription: 'Compare phenotypes across brain, breast, and colorectal cancer donors.'
+        name: 'Survival Analysis / Phenotype Comparison',
+        description: 'Display the survival analysis of your donor sets and compare some characteristics' +
+        ' such as gender, vital status and age at diagnosis between your donor sets.',
+        demoDescription: 'Display survival analysis and compare phenotypes across brain, breast, and ' + 
+        'colorectal cancer donors.'
       },
       survival: {
         name: 'Survival Analysis',
