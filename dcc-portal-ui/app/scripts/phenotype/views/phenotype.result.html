@@ -34,7 +34,13 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div ng-class="{'col-md-9': intersectionsExist, 'col-md-12': !intersectionsExist}">
+                <div
+                    style="padding: 0;"
+                    ng-class="{
+                        'col-md-9': intersectionsExist,
+                        'col-md-12': !intersectionsExist
+                        }"
+                >
         <table class="table">
             <thead>
                 <tr>
