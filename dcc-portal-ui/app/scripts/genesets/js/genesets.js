@@ -308,9 +308,9 @@
                     n.geneSymbol = uniprotObj[0].symbol;
                     n.geneId = uniprotObj[0].id;
                   });
+                  _ctrl.pathway.mutationHighlights = pathwayMutationHighlights;
+                  _ctrl.pathway.drugHighlights = pathwayDrugHighlights;
                 });
-                _ctrl.pathway.mutationHighlights = pathwayMutationHighlights;
-                _ctrl.pathway.drugHighlights = pathwayDrugHighlights;
               });
             });
             
