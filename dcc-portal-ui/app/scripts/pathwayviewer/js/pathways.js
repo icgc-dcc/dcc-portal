@@ -167,8 +167,6 @@
       _pathwayId = null,
       _parentPathwayId = null,
       _uiParentPathways = null,
-      _mutationUniprotIds = null,
-      _drugUniprotIds = null,
       _xml = null,
       _zooms = [''],
       _pathwayMutationHighlights = [],
