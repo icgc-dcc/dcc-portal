@@ -129,6 +129,15 @@
               var setAnalysisData = responses[1].result;
               var setAnalysisId = responses[1].id;
               var vennData = SetOperationService.transform(setAnalysisData);
+
+              $scope.intersectionsExist = setAnalysisData.filter(function (data) {
+                return data.intersection.length > 1 && data.count > 0;
+              }).length;
+
+              if (!$scope.intersectionsExist) {
+                return;
+              }
+
               var vennDiagram = new dcc.Venn23(vennData, {
                 height: 380,
                 urlPath: $location.url(),
