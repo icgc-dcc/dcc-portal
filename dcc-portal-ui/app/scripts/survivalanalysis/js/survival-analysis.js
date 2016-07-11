@@ -64,7 +64,7 @@
 
     svg
       .attr('width', outerWidth)
-      .attr('height', outerHeight)
+      .attr('height', outerHeight);
 
     var wrapper = svg.append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
