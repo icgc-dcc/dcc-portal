@@ -21,6 +21,7 @@ import static com.google.common.base.Functions.constant;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Maps.toMap;
@@ -28,7 +29,6 @@ import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
 import static java.util.Collections.singletonMap;
 import static lombok.AccessLevel.PRIVATE;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
 import static org.dcc.portal.pql.ast.function.FunctionBuilders.facets;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
@@ -325,8 +325,8 @@ public class DonorRepository implements Repository {
   }
 
   private static Optional<SimpleImmutableEntry<String, String>> createPair(final String first, final String second) {
-    checkArgument(isNotBlank(first));
-    checkArgument(isNotBlank(second));
+    checkArgument(!isNullOrEmpty(first));
+    checkArgument(!isNullOrEmpty(second));
 
     return Optional.of(new SimpleImmutableEntry<String, String>(first, second));
   }

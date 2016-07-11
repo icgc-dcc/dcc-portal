@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.repository;
 import static com.github.tlrx.elasticsearch.test.EsSetup.createIndex;
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Preconditions.checkState;
-import static org.apache.commons.lang.StringUtils.join;
+import static org.icgc.dcc.common.core.util.Joiners.COMMA;
 import static org.icgc.dcc.portal.util.JsonUtils.parseFilters;
 
 import java.io.File;
@@ -82,7 +82,7 @@ public abstract class BaseElasticSearchTest {
   }
 
   protected String joinFilters(String... filters) {
-    return "{" + join(filters, ",") + "}";
+    return "{" + COMMA.join(filters) + "}";
   }
 
   @SneakyThrows
