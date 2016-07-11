@@ -183,26 +183,27 @@
   
         // 4) if it's a reactome pathway, get diagram
         if(_ctrl.geneSet.source === 'Reactome' && _ctrl.uiParentPathways[0]) {
-          _ctrl.pathway = {};
+          _ctrl.pathway = {}; // initialize pathway object
+          var pathway = {}; // object to collect data
 
           var pathwayId = _ctrl.uiParentPathways[0].diagramId;
           var parentPathwayId = _ctrl.uiParentPathways[0].geneSetId;
 
           // Get pathway XML
           GeneSetService.getPathwayXML(pathwayId).then(function(xml) {
-            _ctrl.pathway.xml = xml;
+            pathway.xml = xml;
           }).catch(function() {
-            _ctrl.pathway.xml = '';
+            pathway.xml = '';
           });
 
 
           // If the diagram itself isnt the one being diagrammed, get list of stuff to zoom in on
           if(pathwayId !== parentPathwayId) {
             GeneSetService.getPathwayZoom(parentPathwayId).then(function(data) {
-                _ctrl.pathway.zooms = data;
+              pathway.zooms = data;
             });
           } else {
-            _ctrl.pathway.zooms = [''];
+            pathway.zooms = [''];
           }
 
           var mutationImpact = [];
@@ -308,8 +309,9 @@
                     n.geneSymbol = uniprotObj[0].symbol;
                     n.geneId = uniprotObj[0].id;
                   });
-                  _ctrl.pathway.mutationHighlights = pathwayMutationHighlights;
-                  _ctrl.pathway.drugHighlights = pathwayDrugHighlights;
+                  pathway.mutationHighlights = pathwayMutationHighlights;
+                  pathway.drugHighlights = pathwayDrugHighlights;
+                  _ctrl.pathway = pathway;
                 });
               });
             });
@@ -320,8 +322,9 @@
               $scope.$broadcast(PathwaysConstants.EVENTS.MODEL_READY_EVENT, {});
             }, 100);
           }).catch( function() {
-            _ctrl.pathway.mutationHighlights = [];
-            _ctrl.pathway.drugHighlights = [];
+            pathway.mutationHighlights = [];
+            pathway.drugHighlights = [];
+            _ctrl.pathway = pathway;
           });
         }
 
