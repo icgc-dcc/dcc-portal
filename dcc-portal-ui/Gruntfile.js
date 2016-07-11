@@ -161,11 +161,19 @@ module.exports = function (grunt) {
       dist: {
         options: {
           middleware: function (connect) {
+            var yeomanConfig = {
+              app: 'app',
+              dist: 'target/app',
+              developIndexFile: 'develop/html/index.develop.html'
+            };
+
             return [
+              proxySnippet,
               modRewrite([
                 '!\\.html|\\images|\\.js|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.svg ' +
-                '/' + yeomanConfig.developIndexFile + ' [L]'
+                '/index.html [L]'
               ]),
+              lrSnippet,
               mountFolder(connect, yeomanConfig.dist)
             ];
           }
@@ -477,8 +485,11 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build',
-        'connect:dist:keepalive']);
+      return grunt.task.run([
+        'build',
+        'configureProxies:server',
+        'connect:dist:keepalive'
+        ]);
     }
 
     grunt.task.run([
