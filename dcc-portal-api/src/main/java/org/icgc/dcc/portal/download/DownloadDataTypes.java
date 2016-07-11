@@ -34,6 +34,7 @@ public final class DownloadDataTypes {
       .add(DownloadDataType.SSM_OPEN)
       .add(DownloadDataType.DONOR)
       .addAll(DownloadDataType.CLINICAL)
+      .add(DownloadDataType.CNSM)
       .add(DownloadDataType.JCN)
       .add(DownloadDataType.METH_ARRAY)
       .add(DownloadDataType.METH_SEQ)
