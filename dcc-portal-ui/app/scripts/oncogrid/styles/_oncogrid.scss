@@ -11,26 +11,36 @@ $shadowColor: $tooltipShadowColor;
 }
 
 .og-grid-align {
-  margin-left: 60px;
+  margin-left: 0px;
 }
 
 #oncogrid-container {
-  overflow: scroll;
+  overflow: visible;
+}
+
+#oncogrid-no-data {
+  width: 50%;
 }
 
 #oncogrid-container:-webkit-full-screen {
   width: 100%;
   margin-left: 0px;
+  padding-left: 100px;
+  overflow: scroll;
 }
 
 #oncogrid-container:-moz-full-screen {
   width: 100%;
   margin-left: 0px;
+  padding-left: 100px;
+  overflow: scroll;
 }
 
 #oncogrid-container:fullscreen {
   width: 100%;
   margin-left: 0px;
+  padding-left: 100px;
+  overflow: scroll;
 }
 
 .onco-legend-square {
@@ -52,7 +62,7 @@ $shadowColor: $tooltipShadowColor;
 
 #oncogrid-div {
 
-    margin-left: -80px;
+    margin-left: -120px;
     
     .background {
       fill: #fff;
@@ -139,6 +149,10 @@ $shadowColor: $tooltipShadowColor;
         fill: darkred;
       }
     }
+
+    &.og-track-survivalTime {
+      fill: sienna
+    }
     
     &.og-track-sex {
       &.og-track-male {
@@ -165,7 +179,31 @@ $shadowColor: $tooltipShadowColor;
     &.og-track-methArrayExists {
       fill: lightsalmon;
     }
+
+    &.og-track-methSeqExists {
+      fill: darksalmon;
+    }
+
+    &.og-track-expArrayExists {
+      fill: lightcyan;
+    }
+
+    &.og-track-expSeqExists {
+      fill: darkcyan;
+    }
+
+    &.og-track-pexpExists {
+      fill: brown;
+    }
+
+    &.og-track-mirnaSeqExists {
+      fill: purple;
+    }
     
+    &.og-track-jcnExists {
+      fill: slategray;
+    }
+
     &.og-track-cgc {
       fill: darkgreen;
     }

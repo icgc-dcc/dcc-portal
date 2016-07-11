@@ -88,6 +88,12 @@
           var genes = OncogridService.mapGenes($scope.genes, $scope.curatedList);
           var observations = OncogridService.mapOccurences($scope.occurrences, donors, genes);
 
+          if (observations.length === 0) {
+            $('#oncogrid-controls').toggle();
+            $('#oncogrid-no-data').toggle();
+            return; 
+          }
+
           var sortInt = function (field) {
             return function (a, b) {
               return b[field] - a[field];
@@ -119,15 +125,31 @@
           };
 
           var donorTracks = [
-            { 'name': 'PCAWG', 'fieldName': 'pcawg', 'type': 'bool', 'sort': sortBool },
-            { 'name': 'Age at Diagnosis', 'fieldName': 'age', 'type': 'int', 'sort': sortInt },
-            { 'name': 'Vital Status', 'fieldName': 'vitalStatus', 'type': 'vital', 'sort': sortByString },
-            { 'name': 'Sex', 'fieldName': 'sex', 'type': 'sex', 'sort': sortByString },
-            { 'name': 'CNSM Exists', 'fieldName': 'cnsmExists', 'type': 'bool', 'sort': sortBool },
-            { 'name': 'STSM Exists', 'fieldName': 'stsmExists', 'type': 'bool', 'sort': sortBool },
-            { 'name': 'SGV Exists', 'fieldName': 'sgvExists', 'type': 'bool', 'sort': sortBool },
-            { 'name': 'METH-A Exists', 'fieldName': 'methArrayExists', 'type': 'bool', 'sort': sortBool }
+            { 'name': 'Age at Diagnosis', 'fieldName': 'age', 'type': 'int', 'sort': sortInt, 'group': 'Clinical'},
+            { 'name': 'Vital Status', 
+              'fieldName': 'vitalStatus', 'type': 'vital', 'sort': sortByString, 'group': 'Clinical' },
+                        { 'name': 'Survival Time', 
+              'fieldName': 'survivalTime', 'type': 'survival', 'sort': sortInt, 'group': 'Clinical'},
+            { 'name': 'Sex', 'fieldName': 'sex', 'type': 'sex', 'sort': sortByString, 'group': 'Clinical' },
+            { 'name': 'CNSM', 'fieldName': 'cnsmExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'STSM', 'fieldName': 'stsmExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'SGV', 'fieldName': 'sgvExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'METH-A' , 
+              'fieldName': 'methArrayExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'METH-S', 
+              'fieldName': 'methSeqExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'EXP-A', 
+              'fieldName': 'expArrayExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'EXP-S', 
+              'fieldName': 'expSeqExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'PEXP', 'fieldName': 'pexpExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'miRNA-S', 
+              'fieldName': 'mirnaSeqExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'JCN', 'fieldName': 'jcnExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
+            { 'name': 'PCAWG', 'fieldName': 'pcawg', 'type': 'bool', 'sort': sortBool, 'group': 'Study' }
           ];
+
+          var maxSurvival = _.max(_.map(donors, function(d) { return d.survivalTime; } ));
 
           var donorOpacity = function (d) {
             if (d.type === 'int') {
@@ -138,14 +160,18 @@
               return 1;
             } else if (d.type === 'bool') {
               return d.value ? 1 : 0;
+            } else if (d.type === 'survival') {
+              return d.value / maxSurvival;
             } else {
               return 0;
             }
           };
 
           var geneTracks = [
-            { 'name': '# Donors affected ', 'fieldName': 'totalDonors', 'type': 'int', 'sort': sortInt },
-            { 'name': 'Curated Gene Census ', 'fieldName': 'cgc', 'type': 'bool', 'sort': sortBool }
+            { 'name': '# Donors affected ',
+               'fieldName': 'totalDonors', 'type': 'int', 'sort': sortInt, 'group': 'ICGC' },
+            { 'name': 'Curated Gene Census ',
+               'fieldName': 'cgc', 'type': 'bool', 'sort': sortBool, 'group': 'Gene Sets'}
           ];
 
           var maxDonorsAffected = _.max(genes, function (g) { return g.totalDonors; }).totalDonors;
@@ -205,7 +231,7 @@
             gridClick: gridClick,
             heatMap: false,
             minCellHeight: 8,
-            trackHeight: 15,
+            trackHeight: 12,
             donorTracks: donorTracks,
             donorOpacityFunc: donorOpacity,
             donorClick: donorClick,
@@ -214,7 +240,7 @@
             geneOpacityFunc: geneOpacity,
             geneClick: geneClick,
             geneHistogramClick: geneHistogramClick,
-            margin: { top: 30, right: 50, bottom: 100, left: 80 }
+            margin: { top: 30, right: 50, bottom: 200, left: 80 }
           };
 
           $scope.grid = new OncoGrid(_.cloneDeep($scope.params));
@@ -222,6 +248,9 @@
         };
 
         $scope.cleanActives = function () {
+          $('#oncogrid-controls').show();
+          $('#oncogrid-no-data').hide();
+
           $('#crosshair-button').removeClass('active');
           $('#heat-button').removeClass('active');
           $('#grid-button').removeClass('active');
@@ -260,7 +289,8 @@
           if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
             $scope.grid.resize(680, 150, false);
           } else {
-            $scope.grid.resize(screen.width - 400, screen.height - 300, true);
+            // TODO: Maybe come up with a better way to deal with fullscreen spacing. 
+            $scope.grid.resize(screen.width - 400, screen.height - 400, true);
           }
           var fButton = $('#og-fullscreen-button');
           fButton.toggleClass('icon-resize-full');

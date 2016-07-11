@@ -129,11 +129,18 @@
           'age': (d.ageAtDiagnosis === undefined ? 0 : d.ageAtDiagnosis),
           'sex': (d.gender === undefined ? 'unknown' : d.gender),
           'vitalStatus': (d.vitalStatus === undefined ? false : (d.vitalStatus === 'alive' ? true : false)),
+          'survivalTime': (d.survivalTime === undefined ? 0 : d.survivalTime),
           'pcawg': _.has(d, 'studies') && d.studies.indexOf('PCAWG') >= 0,
           'cnsmExists': d.cnsmExists,
           'stsmExists': d.stsmExists,
           'sgvExists': d.sgvExists,
-          'methArrayExists': d.methArrayExists
+          'methArrayExists': d.methArrayExists,
+          'methSeqExists': d.methSeqExists,
+          'expArrayExists': d.expArrayExists,
+          'expSeqExists': d.expSeqExists,
+          'pexpExists': d.pexpExists,
+          'mirnaSeqExists': d.mirnaSeqExists,
+          'jcnExists': d.jcnExists
         };
       });
     };
