@@ -599,5 +599,15 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
     _srv.getCompoundsByGeneId = function (geneId) {
       return Restangular.one ('drugs').one ('genes').one (geneId).get({size: 500});
     };
-
+    
+    _srv.getCompoundsByGeneList = function (geneList) {
+      return Restangular.all('drugs').one('genes', geneList).getList();
+    };
+    
+    _srv.getCompoundsFromEntitySetId = function (entitySetId) {
+      return Restangular.one('drugs').get({
+        size: 10000, //TODO: Use paging to retrieve drugs instead of hard coding size limit
+        filters: {gene:{id:{is:['ES:' + entitySetId]}}}
+      });
+    };
   });

@@ -170,7 +170,7 @@
         _uniprotIds = null,
         _xml = null,
         _zooms = [''],
-        _pathwayHighlights = [],
+        _pathwayMutationHighlights = [],
         _geneOverlapExistsHash = {};
       
       
@@ -190,7 +190,7 @@
               _xml = xml;
               deferred.resolve();
             }).catch(function () {
-            $scope.pathway = {xml: '', zooms: [''], highlights: []};
+            $scope.pathway = {xml: '', zooms: [''], mutationHighlights: []};
           });
           
           return deferred.promise;
@@ -224,7 +224,7 @@
               if (value && value.dbIds) {
                 var dbIds = value.dbIds.split(',');
                 
-                _pathwayHighlights.push({
+                _pathwayMutationHighlights.push({
                   uniprotId: id,
                   dbIds: dbIds,
                   value: value.value
@@ -234,7 +234,7 @@
             
             //console.log(_geneOverlapExistsHash);
             // Get ensembl ids for all the genes so we can link to advSearch page
-            _uniprotIds = _.pluck(_pathwayHighlights, 'uniprotId');
+            _uniprotIds = _.pluck(_pathwayMutationHighlights, 'uniprotId');
             deferred.resolve();
           });
           return deferred.promise;
@@ -299,7 +299,7 @@
               
               var geneCount = 0;
               
-              _.forEach(_pathwayHighlights, function (n) {
+              _.forEach(_pathwayMutationHighlights, function (n) {
                 var geneKey = 'external_db_ids.uniprotkb_swissprot';
                 if (!data.validGenes[geneKey]) {
                   return;
@@ -337,7 +337,12 @@
         })
         .then(function () {
           $scope.geneSet = _geneSet;
-          $scope.pathway = {xml: _xml, zooms: _zooms, highlights: _pathwayHighlights, overlaps: _geneOverlapExistsHash};
+          $scope.pathway = {
+              xml: _xml,
+              zooms: _zooms,
+              mutationHighlights: _pathwayMutationHighlights,
+              overlaps: _geneOverlapExistsHash
+          };
           $scope.uiParentPathways = _uiParentPathways;
           
           setTimeout(function () {

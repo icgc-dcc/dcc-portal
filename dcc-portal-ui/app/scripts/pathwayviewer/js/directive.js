@@ -29,7 +29,8 @@
       replace: true,
       scope: {
         items: '=',
-        highlights: '=',
+        mutationHighlights: '=',
+        drugHighlights: '=',
         zooms: '=',
         overlaps: '='
       },
@@ -40,7 +41,8 @@
             rendered = false,
             zoomedOn = $scope.zooms || [''],
             xml = $scope.items,
-            highlights = $scope.highlights || [],
+            mutationHighlights = $scope.mutationHighlights || [],
+            drugHighlights = $scope.drugHighlights || [],
             overlaps = $scope.overlaps || [],
             scrollTimer,
             consequenceFilter = {
@@ -93,7 +95,7 @@
         var showInfo = function(){
           $('.pathway-info-controller').css('visibility','visible');
           $('.pathway-legend-controller').css('visibility','hidden');
-          $('.pathway-info').animate({left: '70%'});
+          $('.pathway-info').animate({left: '60%'});
         };
 
         var hideLegend = function(){
@@ -108,7 +110,7 @@
           $('.pathway-legend-controller').css('visibility','visible');
         };
 
-        var renderinfo = function(node, mutationCount, isClickableNode){
+        var renderinfo = function(node, mutationCount, drugCount, isClickableNode){
           $('.pathway-info-svg').html('');
 
           var padding = 2;
@@ -121,7 +123,8 @@
               .append('g');
           var infoRenderer = new pathwayViewerCtrl.Renderer(infoSvg, {
             onClick: null, urlPath: $location.url(), overlapColor: '#ff9900',
-            highlightColor: '#9b315b', strokeColor: '#696969'
+            mutationHighlightColor: '#9b315b', drugHighlightColor: 'navy',
+            strokeColor: '#696969'
           });
 
           node.size={width:120-padding*2,height:60-padding*2};
@@ -131,7 +134,13 @@
           if(isClickableNode){
             var model = new pathwayViewerCtrl.PathwayModel();
             model.nodes = [node];
-            infoRenderer.highlightEntity([{id:node.reactomeId,value:mutationCount}], overlaps, model);
+            
+            infoRenderer.highlightEntity(
+                mutationCount !== 0 ? [{id:node.reactomeId,value:mutationCount}] : [], 
+                drugCount !== 0 ? [{id:node.reactomeId,value:drugCount}] : [],
+                overlaps, 
+                model
+            );
           }
         };
 
@@ -141,13 +150,17 @@
           container: '#pathway-viewer-mini',
           onClick: function (d) {
             var mutationCount = '*',
+              drugCount = '*',
+              druggableGenesList = [],
               node = $.extend({}, d),
               overlappingGenesMap = {},
               overlappingGenesList = [],
-              geneList = [];
+              mutatedGenesList = [],
+              annotatedGenesList = [];
+            
 
             // Reset data
-            $scope.geneList = [];
+            $scope.annotatedGenesList = [];
             $scope.entityType = typeMap[d.type];
             $scope.subPathwayId = d.reactomeId;
 
@@ -170,41 +183,84 @@
             }
 
             // Create list of uniprot ids if we have any
-            if(highlights && node.isPartOfPathway){
-              highlights.forEach(function (highlight) {
+            if(mutationHighlights && node.isPartOfPathway){
+              mutationHighlights.forEach(function (mutationHighlight) {
 
-                if(_.contains(highlight.dbIds,d.reactomeId)){
+                if(_.contains(mutationHighlight.dbIds,d.reactomeId)){
 
-                  if(!highlight.advQuery){
+                  if(!mutationHighlight.advQuery){
                     return;
                   }
 
-                  _.set(highlight.advQuery, 'mutation.consequenceType', consequenceFilter);
+                  _.set(mutationHighlight.advQuery, 'mutation.consequenceType', consequenceFilter);
 
-                  geneList.push({
-                    symbol:highlight.geneSymbol,
-                    id:highlight.geneId,
-                    value:highlight.value,
-                    advQuery:highlight.advQuery
+                  mutatedGenesList.push({
+                    symbol:mutationHighlight.geneSymbol,
+                    id:mutationHighlight.geneId,
+                    value:mutationHighlight.value,
+                    advQuery:mutationHighlight.advQuery
                   });
                 }
               });
 
-              if(geneList.length === 1){
-                mutationCount = geneList[0].value;
+              if(mutatedGenesList.length === 1){
+                mutationCount = mutatedGenesList[0].value;
               }
 
-              $scope.geneList = _.sortBy(geneList, function(n) {
-                return -n.value;
-              });
             }
+            
+            // Create list of uniprot ids if we have any
+            if(drugHighlights && node.isPartOfPathway){
+              drugHighlights.forEach(function (drugHighlight) {
 
-            renderinfo(node, geneList.length > 0 ? mutationCount : 0,
-                        (geneList.length > 0 || overlappingGenesList.length > 0));
+                if(_.contains(drugHighlight.dbIds,d.reactomeId)){
+                  druggableGenesList.push({
+                    symbol:drugHighlight.geneSymbol,
+                    id:drugHighlight.geneId,
+                    drugs:drugHighlight.drugs,
+                  });
+                }
+              });
+
+              if(druggableGenesList.length === 1){
+                drugCount = druggableGenesList[0].drugs.length;
+              }
+
+            }
+            
+            var annotatedGeneIds = _.union(
+              _.pluck(mutatedGenesList, 'id'),
+              _.pluck(druggableGenesList, 'id')
+            );
+            
+            annotatedGeneIds.forEach(function (geneId) {
+              var mutatedGene = _.find(mutatedGenesList, function(o) { return o.id === geneId; });
+              var druggableGene = _.find(druggableGenesList, function(o) { return o.id === geneId; });
+              
+              annotatedGenesList.push({
+                id: geneId,
+                symbol: mutatedGene ? mutatedGene.symbol : druggableGene.symbol,
+                value: mutatedGene ? mutatedGene.value : undefined,
+                drugs: druggableGene ? druggableGene.drugs : [],
+                advQuery: mutatedGene ? mutatedGene.advQuery : []
+              });
+            });
+            
+            $scope.annotatedGenesList = _.sortBy(annotatedGenesList, function (gene) {
+              return gene.symbol;
+            });
+            
+            renderinfo(
+                node, 
+                mutatedGenesList.length > 0 ? mutationCount : 0,
+                druggableGenesList.length > 0 ? drugCount : 0,
+                (annotatedGenesList.length > 0 || overlappingGenesList.length > 0)
+            );
           },
           urlPath: $location.url(),
           strokeColor: '#696969',
-          highlightColor: '#9b315b',
+          mutationHighlightColor: '#9b315b',
+          drugHighlightColor: 'navy',
           overlapColor: '#ff9900',
           initScaleFactor: 0.90,
           subPathwayColor: 'navy'
@@ -297,8 +353,8 @@
             hideLegend();
           }
 
-          if(highlights.length || overlaps.length){
-            controller.highlight(highlights, overlaps);
+          if(mutationHighlights.length || drugHighlights.length || overlaps.length){
+            controller.highlight(mutationHighlights, drugHighlights, overlaps);
           }
         };
 
@@ -317,7 +373,7 @@
         });
 
         $scope.$watch('zooms', function (newValue, oldValue) {
-           if (newValue === oldValue) {
+          if (newValue === oldValue) {
             return;
           }
 
@@ -325,12 +381,21 @@
           handleRender();
         });
 
-        $scope.$watch('highlights', function (newValue, oldValue) {
-           if (! newValue || newValue === oldValue) {
+        $scope.$watch('mutationHighlights', function (newValue, oldValue) {
+          if (! newValue || newValue === oldValue) {
             return;
           }
 
-          highlights = newValue;
+          mutationHighlights = newValue;
+          handleRender();
+        });
+        
+        $scope.$watch('drugHighlights', function (newValue, oldValue) {
+          if (! newValue || newValue === oldValue) {
+            return;
+          }
+          
+          drugHighlights = newValue;
           handleRender();
         });
 
