@@ -223,7 +223,8 @@
       },
       survival: {
         name: 'Survival Analysis',
-        description: 'TBD',
+        description: 'Display the survival analysis of your donor sets and compare some characteristics' +
+        ' such as gender, vital status and age at diagnosis between your donor sets.',
         demoDescription: 'TBD'
       }
   };

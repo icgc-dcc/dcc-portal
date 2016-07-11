@@ -65,7 +65,8 @@
     svg
       .attr('width', outerWidth)
       .attr('height', outerHeight)
-      .append('g')
+
+    var wrapper = svg.append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     var longestDuration = _.max(dataSets
@@ -79,10 +80,10 @@
     x.domain([0, longestDuration]);
     y.domain([0, 1]);
 
-    // draw x axis
-    svg.append('g')
+    // Draw x axis
+    wrapper.append('g')
       .attr('class', 'x axis')
-      .attr('transform', 'translate(' + margin.left + ',' + (axisHeight + margin.top) + ')')
+      .attr('transform', 'translate( 0,' + axisHeight + ')')
       .call(xAxis)
       .append('text')
         .attr('class', 'axis-label')
@@ -91,10 +92,9 @@
         .style('text-anchor', 'end')
         .text(xAxisLabel);
 
-    // draw y axis
-    svg.append('g')
+    // Draw y axis
+    wrapper.append('g')
       .attr('class', 'y axis')
-      .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
       .call(yAxis)
       .append('text')
         .attr('class', 'axis-label')
@@ -112,20 +112,20 @@
         .x(function(p) { return x(p.x); })
         .y(function(p) { return y(p.y); });
 
-      var setGroup = svg.append('g')
+      var setGroup = wrapper.append('g')
         .attr('class', 'serie')
-        .attr('set-id', data.meta.id)
-        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+        .attr('set-id', data.meta.id);
+
       var setColor = palette[i % palette.length];
 
-      // draw the data as an svg path
+      // Draw the data as an svg path
       setGroup.append('path')
         .datum(data.donors.map(function (d) { return {x: d.time, y: d.survivalEstimate}; }))
         .attr('class', 'line')
         .attr('d', line)
         .attr('stroke', setColor);
 
-      // draw the data points as circles
+      // Draw the data points as circles
       var markers = setGroup.selectAll('circle')
         .data(data.donors)
         .enter();
@@ -171,8 +171,6 @@
       var graphContainer = $element.find('.survival-graph').get(0);
       var svg = d3.select(graphContainer).append('svg');
       var tipTemplate = _.template($element.find('.survival-tip-template').html());
-
-      // this.disabledDataSets = [];
 
       var update = function () {
         if (!ctrl.dataSets) {
