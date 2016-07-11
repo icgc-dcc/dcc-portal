@@ -21,11 +21,14 @@ import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.model.BaseEntitySet.Type.DONOR;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
+import com.google.common.collect.Maps;
 import org.elasticsearch.search.SearchHit;
 import org.icgc.dcc.portal.model.SurvivalAnalysis;
 import org.icgc.dcc.portal.model.UnionUnit;
+import org.icgc.dcc.portal.repository.EntitySetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,33 +69,52 @@ public class SurvivalAnalyzer {
    */
   @NonNull
   private final UnionAnalyzer unionAnalyzer;
+  @NonNull
+  private final EntitySetRepository entitySetRepository;
 
+  /**
+   * Method for computing the overall and disease free
+   * @param analysis SurvivalAnalysis object with no results.
+   * @return SurvivalAnalysis with populated results.
+   */
   public SurvivalAnalysis analyze(SurvivalAnalysis analysis) {
     analysis.setResults(new ArrayList<>());
-    val sets = analysis.getEntitySetIds();
-    val entitySetMap = getEntitySetMap(sets);
+    val setIds = analysis.getEntitySetIds();
+    val entitySetMap = getEntitySetMap(setIds);
 
-    for (val id : sets) {
-      val unionUnit = entitySetMap.get(id);
+    boolean intersection = false;
+    for (val setId : setIds) {
+      val unionUnit = entitySetMap.get(setId);
+
+      // The original size of the set, so we know if there is an intersection.
+      val originalCount = entitySetRepository.find(setId).getCount();
 
       val overallIntervals = runAnalysis(unionUnit, false, SurvivalAnalyzer::hasData);
       val diseaseFreeIntervals = runAnalysis(unionUnit, true, SurvivalAnalyzer::hasDiseaseStatusData);
 
-      analysis.getResults().add(analysis.new Result(id, overallIntervals, diseaseFreeIntervals));
+      analysis.getResults().add(
+              analysis.new Result(setId, overallIntervals.getValue(), diseaseFreeIntervals.getValue()));
+
+      if (overallIntervals.getKey() != originalCount.intValue() && !intersection) {
+        intersection = true;
+      }
     }
 
+    analysis.setIntersection(intersection);
     return analysis;
   }
 
-  private List<Interval> runAnalysis(UnionUnit unionunit, boolean diseaseFree, Predicate<SearchHit> filter) {
+  private Entry<Integer, List<Interval>> runAnalysis(UnionUnit unionunit, boolean diseaseFree,
+                                                     Predicate<SearchHit> filter) {
     val sort = diseaseFree ? DISEASE_FREE_SORT : OVERALL_SORT;
-
     val fields = diseaseFree ? DISEASE_FREE_FIELDS: OVERALL_FIELDS;
+
     val response = unionAnalyzer.computeExclusion(unionunit, DONOR, fields, sort);
     SearchHit[] hits = response.getHits().getHits();
     val donors = filterDonors(hits, filter);
 
-    return donors.length == 0 ? Collections.emptyList() : compute(donors, diseaseFree);
+    val intervals = donors.length == 0 ? Collections.<Interval> emptyList() : compute(donors, diseaseFree);
+    return Maps.immutableEntry(hits.length, intervals);
   }
 
   private static List<Interval> compute(SearchHit[] donors, boolean diseaseFree) {

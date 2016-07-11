@@ -54,6 +54,7 @@ public class SurvivalAnalysis implements Identifiable<UUID> {
   private State state = State.FINISHED;
   private final long timestamp = new Date().getTime();
 
+  private boolean intersection = false;
   private List<Result> results;
 
   private final static class JsonPropertyName {
