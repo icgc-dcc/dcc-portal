@@ -75,8 +75,12 @@ $faded: #e6dede;
 
   .legend {
     position: absolute;
-    top: 0;
+    bottom: 0;
+    left: 0;
     right: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 
     .set {
       cursor: default;
@@ -84,6 +88,10 @@ $faded: #e6dede;
       line-height: 1.7;
       position: relative;
       user-select: none;
+      display: inline-block;
+      & + .set {
+        margin-left: 20px;
+      }
       &.disabled {
         color: #b7b7b7 !important;
       }

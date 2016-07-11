@@ -130,6 +130,7 @@
               var setAnalysisId = responses[1].id;
               var vennData = SetOperationService.transform(setAnalysisData);
               var vennDiagram = new dcc.Venn23(vennData, {
+                height: 380,
                 urlPath: $location.url(),
                 setLabelFunc: function (id) {
                   return _.find(setData, {id: id}).name;

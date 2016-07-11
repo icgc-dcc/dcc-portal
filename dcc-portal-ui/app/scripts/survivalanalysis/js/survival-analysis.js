@@ -39,7 +39,7 @@
     var margin = {
       top: 20,
       right: 20,
-      bottom: 36,
+      bottom: 46,
       left: 44
     };
     var outerWidth = containerBounds.width;
