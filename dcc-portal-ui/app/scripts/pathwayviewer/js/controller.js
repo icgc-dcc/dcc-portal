@@ -240,7 +240,7 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
        */
       ReactomePathway.prototype.highlight = function (rawMutationHighlights, rawDrugHighlights, overlaps) {
          var nodesInPathway = this.nodesInPathway;
-        _.keys(overlaps).forEach(function (dbId) {
+         _.keys(overlaps).forEach(function (dbId) {
             // Only highlight overlaps it if it's part of the pathway we're zooming in on
             // And only hide parts of it we are zooming in on a pathway
             if((nodesInPathway.length !== 0 && ! _.contains(nodesInPathway,dbId))){
