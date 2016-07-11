@@ -5,8 +5,8 @@ import static org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus.
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus;
 import org.elasticsearch.client.Client;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.AbstractHealthIndicator;
+import org.springframework.boot.actuate.health.Health.Builder;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ElasticsearchHealthIndicator implements HealthIndicator {
+public class ElasticsearchHealthIndicator extends AbstractHealthIndicator {
 
   /**
    * Dependencies
@@ -24,18 +24,18 @@ public class ElasticsearchHealthIndicator implements HealthIndicator {
   private final Client client;
 
   @Override
-  public Health health() {
+  protected void doHealthCheck(Builder builder) throws Exception {
     log.info("Checking the health of ElasticSearch...");
     if (client == null) {
-      return Health.down().withDetail("message", "Service missing").build();
+      builder.down().withDetail("message", "Service missing").build();
     }
 
     val status = getStatus();
     if (status == RED) {
-      return Health.down().withDetail("message", String.format("Cluster health status is %s", status.name())).build();
+      builder.down().withDetail("message", String.format("Cluster health status is %s", status.name())).build();
     }
 
-    return  Health.up().withDetail("message", String.format("Cluster health status is %s", status.name())).build();
+    builder.up().withDetail("message", String.format("Cluster health status is %s", status.name())).build();
   }
 
   private ClusterHealthStatus getStatus() {

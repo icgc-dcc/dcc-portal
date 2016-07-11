@@ -21,8 +21,8 @@ import static org.icgc.dcc.common.client.api.daco.DACOClient.UserType.CUD;
 
 import org.icgc.dcc.portal.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.AbstractHealthIndicator;
+import org.springframework.boot.actuate.health.Health.Builder;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ICGCHealthIndicator implements HealthIndicator {
+public class ICGCHealthIndicator extends AbstractHealthIndicator {
 
   /**
    * Constants.
@@ -45,22 +45,18 @@ public class ICGCHealthIndicator implements HealthIndicator {
   private final AuthService authService;
 
   @Override
-  public Health health() {
+  protected void doHealthCheck(Builder builder) throws Exception {
     log.info("Checking the health of ICGC...");
-    try {
-      val token = authService.getAuthToken();
-      if (isNullOrEmpty(token)) {
-        return Health.down().withDetail("message", "Token empty").build();
-      }
-
-      if (!authService.hasDacoAccess(DACO_ENABLED_CUD_USER, CUD)) {
-        return Health.down().withDetail("message", "Invalid DACO account").build();
-      }
-
-      return Health.up().withDetail("message", "CUD and DACO valid").build();
-    } catch (Exception e) {
-      return Health.down(e).build();
+    val token = authService.getAuthToken();
+    if (isNullOrEmpty(token)) {
+      builder.down().withDetail("message", "Token empty").build();
     }
+
+    if (!authService.hasDacoAccess(DACO_ENABLED_CUD_USER, CUD)) {
+      builder.down().withDetail("message", "Invalid DACO account").build();
+    }
+
+    builder.up().withDetail("message", "CUD and DACO valid").build();
   }
 
 }

@@ -74,50 +74,6 @@
 
   <build>
     <plugins>
-      <!-- Test -->
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>**/*IT.java</exclude>
-            <exclude>**/*IntegrationTest.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-
-      <!-- Package -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>create-dist</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <attach>${package.attach}</attach>
-              <descriptors>
-                <descriptor>src/main/assembly/bin.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-
       <!-- CLI execution -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -144,6 +100,29 @@
         </configuration>
       </plugin>
 
+      <!-- Test -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/*IT.java</exclude>
+            <exclude>**/*IntegrationTest.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <!-- Package -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -153,21 +132,28 @@
             <goals>
               <goal>repackage</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>create-dist</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
             <configuration>
-            <!-- 
-              <requiresUnpack>
-                <dependency>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>dcc-portal-ui</artifactId>
-                  <version>${project.version}</version>
-                </dependency>
-              </requiresUnpack>
-             -->
+              <attach>${package.attach}</attach>
+              <descriptors>
+                <descriptor>src/main/assembly/bin.xml</descriptor>
+              </descriptors>
             </configuration>
           </execution>
         </executions>
       </plugin>
-
     </plugins>
   </build>
 

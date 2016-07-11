@@ -17,8 +17,8 @@
 package org.icgc.dcc.portal.server.health;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.AbstractHealthIndicator;
+import org.springframework.boot.actuate.health.Health.Builder;
 import org.springframework.stereotype.Component;
 
 import com.hazelcast.core.HazelcastInstance;
@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class HazelcastHealthIndicator implements HealthIndicator {
+public class HazelcastHealthIndicator extends AbstractHealthIndicator {
 
   /**
    * Dependencies
@@ -38,18 +38,18 @@ public class HazelcastHealthIndicator implements HealthIndicator {
   private final HazelcastInstance hazelcastInstance;
 
   @Override
-  public Health health() {
+  protected void doHealthCheck(Builder builder) throws Exception {
     log.info("Checking the health of Hazelcast...");
     if (hazelcastInstance == null) {
-      return Health.down().withDetail("message", "Service missing").build();
+      builder.down().withDetail("message", "Service missing").build();
     }
 
     val memberCount = hazelcastInstance.getCluster().getMembers().size();
     if (memberCount == 0) {
-      return Health.down().withDetail("message", "No members").build();
+      builder.down().withDetail("message", "No members").build();
     }
 
-    return Health.up().withDetail("message", String.format("%s members available", memberCount)).build();
+    builder.up().withDetail("message", String.format("%s members available", memberCount)).build();
   }
 
 }

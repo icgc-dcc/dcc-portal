@@ -19,8 +19,8 @@
 # Optimized for use with version 3.5.19 of the Wrapper.
 
 # Application
-APP_NAME="dcc-portal"
-APP_LONG_NAME="DCC Portal"
+APP_NAME="dcc-portal-server"
+APP_LONG_NAME="DCC Portal Server"
 
 # Wrapper
 WRAPPER_CMD="./wrapper"
@@ -95,19 +95,19 @@ PLIST_DOMAIN=org.tanukisoftware.wrapper
 # The following two lines are used by the chkconfig command. Change as is
 #  appropriate for your application.  They should remain commented.
 # chkconfig: 2345 20 80
-# description: DCC Portal
+# description: DCC Portal Server
  
 # Initialization block for the install_initd and remove_initd scripts used by
 #  SUSE linux distributions.
 ### BEGIN INIT INFO
-# Provides: dcc-portal
+# Provides: dcc-portal-server
 # Required-Start: $local_fs $network $syslog
 # Should-Start: 
 # Required-Stop:
 # Default-Start: 2 3 4 5
 # Default-Stop: 0 1 6
-# Short-Description: DCC Portal
-# Description: DCC Portal
+# Short-Description: DCC Portal Server
+# Description: DCC Portal Server
 ### END INIT INFO
 
 # Do not modify anything beyond this point
@@ -263,17 +263,12 @@ if [ "$DIST_OS" = "macosx" ]
 then
     OS_VER=`sw_vers | grep 'ProductVersion:' | grep -o '[0-9]*\.[0-9]*\.[0-9]*'`
     DIST_ARCH="universal"
-    if [[ "$OS_VER" < "10.5.0" ]]
-    then
-        DIST_BITS="32"
-    else
-        if [ "X`sysctl -n hw.cpu64bit_capable`" == "X1" ]  
-        then
-            DIST_BITS="64"
-        else
-            DIST_BITS="32"
-        fi
-    fi
+		if [ "X`sysctl -n hw.cpu64bit_capable`" == "X1" ]  
+		then
+		    DIST_BITS="64"
+		else
+		    DIST_BITS="32"
+		fi
     APP_PLIST_BASE=${PLIST_DOMAIN}.${APP_NAME}
     APP_PLIST=${APP_PLIST_BASE}.plist
 else
