@@ -106,14 +106,14 @@ public final class Filters {
 
   public static ObjectNode inputGeneSetIdFilter(@NonNull String inputGeneSetId) {
     val geneFilter = geneFilter();
-    geneFilter.with("gene").set(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId));
+    geneFilter.with("gene").set("id", is("ES:" + inputGeneSetId));
 
     return geneFilter;
   }
 
   public static ObjectNode inputGeneSetFilter(@NonNull UUID inputGeneSetId) {
     val inputGeneSetFilter = geneFilter();
-    inputGeneSetFilter.with(GENE.getId()).set(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId.toString()));
+    inputGeneSetFilter.with(GENE.getId()).set("id", is("ES:" + inputGeneSetId.toString()));
 
     return inputGeneSetFilter;
   }
@@ -182,10 +182,7 @@ public final class Filters {
     val and = emptyFilter();
 
     if (right.getNodeType() == left.getNodeType()) {
-
-      //
       // Same types
-      //
 
       // Arbitrary
       val field = left;
@@ -230,14 +227,10 @@ public final class Filters {
 
         return result;
       } else if (field.isMissingNode()) {
-        // Can't happen
+        // Can't happen - TODO: Explain Why it cannot happen. Also empty branch???
       }
     } else {
-
-      //
       // Different types
-      //
-
       if (left.isMissingNode()) {
         return right;
       } else if (right.isMissingNode()) {
