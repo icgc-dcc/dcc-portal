@@ -28,7 +28,7 @@
    * - phenotype analysis
    */
   module.controller('NewAnalysisController',
-    function($scope, $modal, $location, $timeout, Page, AnalysisService, Restangular, SetService, Extensions) {
+    function($scope, $modal, $location, $timeout, Page, AnalysisService, Restangular, SetService, Extensions, $q) {
 
     var _this = this,
         _isLaunchingAnalysis = false;
@@ -52,13 +52,7 @@
     _this.analysisDemoDescription = AnalysisService.analysisDemoDescription;
 
     _this.toggle = function(setId) {
-      if (_this.selectedIds.indexOf(setId) >= 0) {
-        _.remove(_this.selectedIds, function(id) {
-          return id === setId;
-        });
-      } else {
-        _this.selectedIds.push(setId);
-      }
+      _this.selectedIds = _.xor(_this.selectedIds, [setId]);
 
       // Apply filer to disable irrelevant results
       if (_this.selectedIds.length === 0) {
@@ -184,16 +178,18 @@
         geneSet: _this.selectedForOnco.gene
       };
       
-      var promise = Restangular.one('analysis').post('oncogrid', payload, {}, {'Content-Type': 'application/json'});
-      
-      promise.then(function(data) {
-        if (data.id) {
+      return Restangular
+        .one('analysis')
+        .post('oncogrid', payload, {}, { 'Content-Type': 'application/json' })
+        .then(function (data) {
+          if (!data.id) {
+            throw new Error('Received invalid response from analysis creation');
+          }
           $location.path('analysis/view/oncogrid/' + data.id);
-        }
-      })
-      .finally(function() {
-        _isLaunchingAnalysis = false;
-      });
+        })
+        .finally(function () {
+          _isLaunchingAnalysis = false;
+        });
     };
 
 
@@ -404,8 +400,13 @@
       };
 
       Page.startWork();
-      SetService.addSet('donor', donorSetParams).then(function (r1) {
-        SetService.addSet('gene', geneSetParams).then(function (r2) {
+      $q.all({
+        r1: SetService.addSet('donor', donorSetParams),
+        r2: SetService.addSet('gene', geneSetParams)
+      }).then(function (responses) {
+        var r1 = responses.r1;
+        var r2 = responses.r2;
+
           _this.selectedForOnco = {
             donor: r1.id,
             gene: r2.id
@@ -416,11 +417,7 @@
             _this.launchOncogridAnalysis([r1.id, r2.id]);
           }
           wait([r1.id, r2.id], 7, proxyLaunch);
-        });
-
       });
-      
-      
     };
 
     _this.launchEnrichment = function(setId) {

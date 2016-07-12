@@ -134,6 +134,9 @@
 .icon-toggle-on:before { content: '\e84d'; } /* '' */
 .icon-grid:before { content: '\e84e'; } /* '' */
 .icon-target:before { content: '\e84f'; } /* '' */
+.icon-info-circled:before { content: '\e850'; } /* '' */
+.icon-sort-alt-up:before { content: '\f160'; } /* '' */
+.icon-sort-alt-down:before { content: '\f161'; } /* '' */
 
 /*
  *  Animation example, for spinners

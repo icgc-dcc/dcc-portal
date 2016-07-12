@@ -28,7 +28,7 @@
   var module = angular.module('icgc.oncogrid.directives', []);
 
   module.directive('oncogridAnalysis', function (Donors, Genes, Occurrences, Consequence,
-    $q, $filter, OncogridService, SetService, $timeout) {
+    $q, $filter, OncogridService, SetService, $timeout, LocationService) {
     return {
       restrict: 'E',
       scope: {
@@ -53,6 +53,16 @@
           var obsFilter = OncogridService.observationFilter($scope.donorSet, $scope.geneSet);
           $scope.obsLink = obsSearch + JSON.stringify(obsFilter);
           $scope.gvLink = '/browser/m?filters=' + JSON.stringify(obsFilter);
+
+          $scope.donorShare = {
+            url: LocationService.buildURLFromPath('search'),
+            filters: JSON.stringify($scope.donorFilter)
+          };
+
+          $scope.geneShare = {
+            url: LocationService.buildURLFromPath('search/g'),
+            filters: JSON.stringify($scope.geneFilter)
+          };
         }
 
         $scope.materializeSets = function () {
@@ -198,7 +208,8 @@
 
           var donorHistogramClick = function (d) {
             window.location = donorSearch +
-              '{"donor":{"id":{"is": ["' + d.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}}}';
+              '{"donor":{"id":{"is": ["' + d.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}},' + 
+                '"gene":{"id":{"is":["ES:' + $scope.geneSet + '"]}}}';
           };
 
           var geneClick = function (g) {
@@ -208,7 +219,8 @@
 
           var geneHistogramClick = function (g) {
             window.location = geneSearch +
-              '{"gene":{"id":{"is": ["' + g.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}}}';
+              '{"gene":{"id":{"is": ["' + g.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}},'+ 
+                '"donor":{"id":{"is":["ES:' + $scope.donorSet + '"]}}}';
           };
 
           var colorMap = {
@@ -218,6 +230,14 @@
             'start_lost': '#ff2323',
             'stop_lost': '#d3ec00',
             'initiator_codon_variant': '#5abaff'
+          };
+
+          var trackLegends = {
+            'ICGC': OncogridService.icgcLegend(maxDonorsAffected),
+            'Gene Sets': OncogridService.geneSetLegend(),
+            'Clinical': OncogridService.clinicalLegend(maxSurvival),
+            'Data Types': OncogridService.dataTypeLegend(),
+            'Study': OncogridService.studyLegend()
           };
 
           $scope.params = {
@@ -230,8 +250,10 @@
             colorMap: colorMap,
             gridClick: gridClick,
             heatMap: false,
+            grid: true,
             minCellHeight: 8,
             trackHeight: 12,
+            trackLegends: trackLegends,
             donorTracks: donorTracks,
             donorOpacityFunc: donorOpacity,
             donorClick: donorClick,
@@ -254,6 +276,8 @@
           $('#crosshair-button').removeClass('active');
           $('#heat-button').removeClass('active');
           $('#grid-button').removeClass('active');
+
+          $('#og-crosshair-message').hide();
           var gridDiv = $('#oncogrid-div');
           gridDiv.addClass('og-pointer-mode'); gridDiv.removeClass('og-crosshair-mode');
         };
@@ -276,11 +300,11 @@
                 $(this).blur();
               });
               $scope.repoLink = SetService.createRepoLink({ id: $scope.item.donorSet });
+              $scope.crosshairMode = false;
               $scope.initOnco();
-              $timeout(function () {
-                $scope.grid.removeDonors(function(d){return d.score === 0;});
-                $scope.grid.removeGenes(function(d){return d.score === 0;});
-              }, 400);
+              $('#grid-button').addClass('active');
+              $scope.grid.removeDonors(function(d){return d.score === 0;});
+              $scope.grid.removeGenes(function(d){return d.score === 0;});
             });
           }
         });

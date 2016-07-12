@@ -198,7 +198,7 @@
     };
   });
 
-  module.service('Occurrences', function (Restangular, FilterService, Occurrence, $q) {
+  module.service('Occurrences', function (Restangular, FilterService, Occurrence, ApiService) {
     this.handler = Restangular.all('occurrences');
 
     this.getList = function (params) {
@@ -212,33 +212,7 @@
     };
 
     this.getAll = function (params) {
-      var _self = this;
-
-      var defaults = {
-        size: 10,
-        from: 1,
-        filters: {}
-      };
-
-      var observations = [];
-      var deferred = $q.defer();
-
-      function pageAll(params) {
-        _self.handler.get('', angular.extend(defaults, params)).then(function (data) {
-          observations = observations.concat(data.hits);
-          var pagination = data.pagination;
-          if (pagination.page < pagination.pages) {
-            var newParams = params;
-            newParams.from = (pagination.page + 1 - 1) * 100 + 1;
-            pageAll(newParams);
-          } else {
-            deferred.resolve(observations);
-          }
-        });
-      }
-      
-       pageAll(params);
-       return deferred.promise;
+      return ApiService.getAll(this.handler, params);
     };
 
     this.one = function (id) {

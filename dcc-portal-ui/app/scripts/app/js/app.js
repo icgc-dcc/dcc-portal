@@ -529,10 +529,8 @@
    */
 
   module.constant('API', {
-    BASE_URL: $icgcApp.getAPI().getBasePathURL()
+    BASE_URL: $icgcApp.getAPI().getBasePathURL(),
   });
-
-
 
   module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, $compileProvider,
                           AngularyticsProvider, $httpProvider, RestangularProvider,

@@ -20,9 +20,25 @@
 
     var module = angular.module('icgc.oncogrid.controllers', []);
 
-    module.controller('OncogridController', function($scope, SetService, $timeout) {
+    module.controller('OncogridController', function($scope, LocationService, OncogridService, SetService,
+        $timeout, $modal, Extensions, Settings) {
+        var _this = this;
 
-        $scope.clusterData = function () {
+        Settings.get().then(function(settings) {
+            _this.downloadEnabled = settings.downloadEnabled || false;
+        });
+
+        _this.downloadDonorData = function(id) {
+            $modal.open({
+                templateUrl: '/scripts/downloader/views/request.html',
+                controller: 'DownloadRequestController',
+                resolve: {
+                filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + id]}}}; }
+                }
+            });
+        };
+
+        _this.clusterData = function () {
             $scope.grid.cluster();
         };
 
@@ -31,23 +47,21 @@
             SetService.exportSet(id);
         };
 
-        $scope.reloadGrid = function () {
+        _this.reloadGrid = function () {
             $scope.grid.destroy();
             $scope.cleanActives();
+            $('#grid-button').addClass('active');
             $scope.grid = new OncoGrid(_.cloneDeep($scope.params));
             $scope.grid.render();
-            $timeout(function() {
-                $scope.grid.removeDonors(function(d){return d.score === 0;});
-                $scope.grid.removeGenes(function(d){return d.score === 0;});
-            }, 400);
+            $scope.grid.removeDonors(function(d){return d.score === 0;});
+            $scope.grid.removeGenes(function(d){return d.score === 0;});
+                
+            if ($scope.crosshairMode) {
+                _this.crosshair();
+            }
         };
 
-        $scope.legend = function () {
-            $('#legend-button').toggleClass('active');
-            $('#og-legend').toggle();
-        };
-
-        $scope.heatMap = function () {
+        _this.heatMap = function () {
             $('#heat-button').toggleClass('active');
             $('#og-variant-legend').toggle();
             $('#og-heatmap-legend').toggle();
@@ -55,12 +69,14 @@
             $scope.grid.toggleHeatmap();
         };
 
-        $scope.gridLines = function () {
+        _this.gridLines = function () {
             $('#grid-button').toggleClass('active');
             $scope.grid.toggleGridLines();
         };
 
-        $scope.crosshair = function () {
+        _this.crosshair = function () {
+            $scope.crosshairMode = $scope.crosshairMode ? false : true;
+            $('#og-crosshair-message').toggle();
             $('#crosshair-button').toggleClass('active');
             var gridDriv = $('#oncogrid-div');
             gridDriv.toggleClass('og-pointer-mode'); gridDriv.toggleClass('og-crosshair-mode');
@@ -88,7 +104,7 @@
             }
         }
 
-        $scope.requestFullScreen = function () {
+        _this.requestFullScreen = function () {
 
             if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
                 enterFullScreen();

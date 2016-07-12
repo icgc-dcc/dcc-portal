@@ -270,7 +270,7 @@
 
   var module = angular.module('icgc.donors.models', ['restangular', 'icgc.common.location']);
 
-  module.service('Donors', function (Restangular, LocationService, FilterService, Donor, $q) {
+  module.service('Donors', function (Restangular, LocationService, FilterService, Donor, ApiService) {
     this.handler = Restangular.one('donors');
 
     this.getList = function (params) {
@@ -314,33 +314,7 @@
     };
     
     this.getAll = function (params) {
-      var _self = this;
-
-      var defaults = {
-        size: 10,
-        from: 1,
-        filters: FilterService.filters()
-      };
-
-      var donors = [];
-      var deferred = $q.defer();
-
-      function pageAll(params) {
-        _self.handler.get(angular.extend(defaults, params)).then(function (data) {
-          donors = donors.concat(data.hits);
-          var pagination = data.pagination;
-          if (pagination.page < pagination.pages) {
-            var newParams = params;
-            newParams.from = (pagination.page + 1 - 1) * 100 + 1;
-            pageAll(newParams);
-          } else {
-            deferred.resolve(donors);
-          }
-        });
-      }
-      
-       pageAll(params);
-       return deferred.promise;
+      return ApiService.getAll(Restangular.all('donors'), params);
     };
 
     this.one = function (id) {

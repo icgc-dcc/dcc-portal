@@ -2,6 +2,29 @@ $border: $tooltipBorder;
 $fill: $tooltipFill;
 $shadowColor: $tooltipShadowColor;
 
+// Oncogrid Legend Colours
+$ageColor: #638f56; 
+$aliveColor: #1693c0;
+$deceasedColor: darkred;
+$survivalColor: sienna;
+$maleColor: #420692;
+$femaleColor: rgb(220, 96, 156);
+
+$cnsmColor: mediumseagreen;
+$stsmColor: darkslategrey;
+$sgvColor: darkkhaki;
+$methAColor: lightsalmon;
+$methSeqColor: darksalmon;
+$expAColor: cyan;
+$expSeqColor: darkcyan;
+$pexpColor: brown;
+$mirnaColor: purple;
+$jcnColor: slategray;
+
+$cgcColor: darkgreen;
+$totalDonorColor: mediumpurple;
+$pcawgColor: #e9931c;
+
 .og-pointer-mode {
   cursor: pointer;
 }
@@ -14,12 +37,21 @@ $shadowColor: $tooltipShadowColor;
   margin-left: 0px;
 }
 
+.og-selection-region {
+  fill: #1693c0;
+}
+
 #oncogrid-container {
   overflow: visible;
 }
 
 #oncogrid-no-data {
   width: 50%;
+}
+
+#og-crosshair-message {
+  font-size: 0.8rem;
+  vertical-align: top;
 }
 
 #oncogrid-container:-webkit-full-screen {
@@ -51,18 +83,104 @@ $shadowColor: $tooltipShadowColor;
   vertical-align: middle;
 }
 
+.onco-track-legend {
+  margin-right: 5px;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+
+  &.onco-age-legend {
+    background: $ageColor;
+  }
+
+  &.onco-alive-legend {
+    background: $aliveColor;
+  }
+
+  &.onco-deceased-legend {
+    background: $deceasedColor;
+  }
+
+  &.onco-survival-legend {
+    background: $survivalColor;
+  }
+
+  &.onco-male-legend {
+    background: $maleColor;
+  }
+
+  &.onco-female-legend {
+    background: $femaleColor;
+  }
+
+  &.onco-cnsm-legend {
+    background: $cnsmColor;
+  }
+
+  &.onco-stsm-legend {
+    background: $stsmColor;
+  }
+
+  &.onco-sgv-legend {
+    background: $sgvColor;
+  }
+
+  &.onco-metha-legend {
+    background: $methAColor;
+  }
+
+  &.onco-meths-legend {
+    background: $methSeqColor;
+  }
+
+  &.onco-expa-legend {
+    background: $expAColor;
+  }
+
+  &.onco-exps-legend {
+    background: $expSeqColor;
+  }
+
+  &.onco-pexp-legend {
+    background: $pexpColor;
+  }
+
+  &.onco-mirna-legend {
+    background: $mirnaColor;
+  }
+
+  &.onco-jcn-legend {
+    background: $jcnColor;
+  }
+
+  &.onco-cgc-legend {
+    background: $cgcColor;
+  }
+
+  &.onco-total-donor-legend {
+    background: $totalDonorColor;
+  }
+
+  &.onco-pcawg-legend {
+    background: $pcawgColor;
+  }
+}
+
 .onco-table {
   border: 1px solid #e6e6e6;
   font-size: .9rem;
-  background: #f2f2f2;
+  background: rgba(242, 242, 242, 0.38);
   border-spacing: 0;
   float:left; 
   margin-left: 25px;
 }
 
 #oncogrid-div {
-
     margin-left: -120px;
+
+    #og-maingrid-svg {
+      margin-top: -20px;
+    }
     
     .background {
       fill: #fff;
@@ -94,7 +212,7 @@ $shadowColor: $tooltipShadowColor;
     .og-label-text-font {
       font-size: 0.5rem;
     }
-    
+
     .og-track-label {
       font-size: 0.5rem;
     }
@@ -137,83 +255,83 @@ $shadowColor: $tooltipShadowColor;
   
   rect {
     &.og-track-age {
-      fill: #638f56;
+      fill: $ageColor;
     }
     
     &.og-track-vitalStatus {
       &.og-track-true {
-        fill: #1693c0;
+        fill: $aliveColor;
       }
       
       &.og-track-false {
-        fill: darkred;
+        fill: $deceasedColor;
       }
     }
 
     &.og-track-survivalTime {
-      fill: sienna
+      fill: $survivalColor;
     }
     
     &.og-track-sex {
       &.og-track-male {
-        fill: #420692;
+        fill: $maleColor;
       }
       
       &.og-track-female {
-        fill: rgb(220, 96, 156);
+        fill: $femaleColor;
       }
     }
     
     &.og-track-cnsmExists {
-      fill: mediumseagreen;
+      fill: $cnsmColor;
     }
     
     &.og-track-stsmExists {
-      fill: darkslategrey;
+      fill: $stsmColor;
     }
     
     &.og-track-sgvExists {
-      fill: darkkhaki;
+      fill: $sgvColor;
     }
     
     &.og-track-methArrayExists {
-      fill: lightsalmon;
+      fill: $methAColor;
     }
 
     &.og-track-methSeqExists {
-      fill: darksalmon;
+      fill: $methSeqColor;
     }
 
     &.og-track-expArrayExists {
-      fill: lightcyan;
+      fill: $expAColor;
     }
 
     &.og-track-expSeqExists {
-      fill: darkcyan;
+      fill: $expSeqColor;
     }
 
     &.og-track-pexpExists {
-      fill: brown;
+      fill: $pexpColor;
     }
 
     &.og-track-mirnaSeqExists {
-      fill: purple;
+      fill: $mirnaColor;
     }
     
     &.og-track-jcnExists {
-      fill: slategray;
+      fill: $jcnColor;
     }
 
     &.og-track-cgc {
-      fill: darkgreen;
+      fill: $cgcColor;
     }
     
     &.og-track-totalDonors {
-      fill: mediumpurple;
+      fill: $totalDonorColor;
     }
     
     &.og-track-pcawg {
-      fill: #e9931c;
+      fill: $pcawgColor;
     }
   }
 
@@ -229,4 +347,23 @@ $shadowColor: $tooltipShadowColor;
     stroke: black;
   }
   
+}
+
+.oncogrid-suggestions {
+  margin-top: 0rem;
+
+  .cta {
+      display: inline-block;
+      padding: 0rem;
+
+      .cta-detail, .cta-title {
+        color: #9b315b;
+      }
+
+      .cta-title {
+        font-size: 22px;
+        margin-bottom: 5px;
+      }
+  }
+
 }

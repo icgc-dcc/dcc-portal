@@ -31,6 +31,7 @@
     _srv.getDonors = function (donorSet) {
       return Donors.getAll({
         filters: _srv.donorFilter(donorSet),
+        from: 1,
         size: 100
       });
     };
@@ -38,6 +39,7 @@
     _srv.getGenes = function (geneSet) {
       return Genes.getAll({
         filters: _srv.geneFilter(geneSet),
+        from: 1,
         size: 100
       });
     };
@@ -45,6 +47,7 @@
     _srv.getCuratedSet = function (geneSet) {
       return Genes.getAll({
         filters: _srv.curatedFilter(geneSet),
+        from: 1,
         size: 100
       });
     };
@@ -188,6 +191,80 @@
             .value();
     };
 
+    _srv.icgcLegend = function(max) {
+      var value = '<b># of Donors Affected:</b> </br>' + 
+              '0 <div class="onco-track-legend onco-total-donor-legend" style="opacity:0.1"></div>' + 
+              '<div class="onco-track-legend onco-total-donor-legend" style="opacity:0.4"></div>' + 
+              '<div class="onco-track-legend onco-total-donor-legend" style="opacity:0.7"></div>' +
+              '<div class="onco-track-legend onco-total-donor-legend" style="opacity:1"></div>' +
+              max;
+
+      return value;
+    };
+
+    _srv.geneSetLegend = function() {
+      var value = '<b> Gene Sets: </b> <br>' + 
+              '<div class="onco-track-legend onco-cgc-legend"></div> Gene belongs to Cancer Gene Census';
+  
+      return value;
+    };
+
+    _srv.clinicalLegend = function(maxSurvival) {
+      var value =  '<b>Clinical Data:</b> <br>' +
+      '<b>Age at Diagnosis (years): </b> ' + 
+        '0 <div class="onco-track-legend onco-age-legend" style="opacity:0.05"></div>' +
+        '<div class="onco-track-legend onco-age-legend" style="opacity:0.4"></div>' + 
+        '<div class="onco-track-legend onco-age-legend" style="opacity:0.7"></div>' + 
+        '<div class="onco-track-legend onco-age-legend" style="opacity:1"></div> 100+ <br>' + 
+      '<b>Vital Status:</b> ' +
+        'Deceased: <div class="onco-track-legend onco-deceased-legend"></div> ' + 
+        'Alive: <div class="onco-track-legend onco-alive-legend"></div><br>' + 
+      '<b>Survival Time (days):</b> ' +
+        '0 <div class="onco-track-legend onco-survival-legend" style="opacity:0.05"></div>' +
+        '<div class="onco-track-legend onco-survival-legend" style="opacity:0.4"></div>' + 
+        '<div class="onco-track-legend onco-survival-legend" style="opacity:0.7"></div>' + 
+        '<div class="onco-track-legend onco-survival-legend" style="opacity:1"></div>' + 
+        maxSurvival + '<br>' + 
+      '<b>Sex:</b> ' + 'Male <div class="onco-track-legend onco-male-legend"></div> ' + 
+        'Female <div class="onco-track-legend onco-female-legend"></div><br>';
+
+      return value;
+    };
+
+    _srv.dataTypeLegend = function() {
+      var value = '<b>Available Data Types:</b><br>' +
+        '<div class="onco-track-legend onco-cnsm-legend"></div> ' +
+          'Copy Number Somatic Mutations (CNSM) <br>' +
+        '<div class="onco-track-legend onco-stsm-legend"></div> ' +
+          'Structural Somatic Mutations (StSM) <br>' +
+        '<div class="onco-track-legend onco-sgv-legend"></div> ' +
+          'Simple Germline Variants (SGV) <br>' +
+        '<div class="onco-track-legend onco-metha-legend"></div> ' +
+          'Array-based DNA Methylation (METH-A) <br>' +
+        '<div class="onco-track-legend onco-meths-legend"></div> ' +
+          'Sequence-based DNA Methylation (METH-S) <br>' +
+        '<div class="onco-track-legend onco-expa-legend"></div> ' +
+          'Array-based Gene Expression (EXP-A) <br>' +
+        '<div class="onco-track-legend onco-exps-legend"></div> ' +
+          'Sequence-based Gene Expression (EXP-S) <br>' +
+        '<div class="onco-track-legend onco-pexp-legend"></div> ' +
+          'Protein Expression (PEXP) <br>' +
+        '<div class="onco-track-legend onco-mirna-legend"></div> ' +
+          'Sequence-based miRNA Expression (miRNA) <br>' +
+        '<div class="onco-track-legend onco-jcn-legend"></div> ' +
+          'Exon Junctions (JCN) <br>';
+                  
+      return value;
+    };
+
+    _srv.studyLegend = function() {
+      var value = '<b>Studies:</b> <br>' + 
+        '<div class="onco-track-legend onco-pcawg-legend" style="opacity:1"></div>' +
+        'Donor in PCAWG Study';
+
+      return value;
+    };
+
     /**
      * Private Helpers
      */
@@ -199,13 +276,18 @@
         var ret = _.clone(o);
         ret.geneId = g.geneId;
 
-        ret.consequence = $filter('orderBy')(g.consequence, function (t) {
+        var consequences = $filter('orderBy')(g.consequence, function (t) {
           var index = precedence.indexOf(t.consequenceType);
           if (index === -1) {
             return precedence.length + 1;
           }
           return index;
-        })[0];
+        });
+
+        ret.consequence = _(consequences).filter(function (d) { return d.functionalImpact === 'High'; } ).value()[0];
+        if (ret.consequence === undefined) {
+          ret.consequence = {functionalImpact: null, consequenceType: null};
+        }
 
         expanded.push(ret);
       }).value();
