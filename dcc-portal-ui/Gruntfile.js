@@ -348,6 +348,33 @@ module.exports = function (grunt) {
     },
     // Put files not handled in other tasks here
     copy: {
+      // process index.template.html
+      // TODO: this should build into a separate intermediatary folder, instead of yeoman.app
+      index: {
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>',
+            dest: '<%= yeoman.app %>',
+            src: ['index.template.html'],
+            rename: function (dest, srcFile) {
+              if (srcFile === 'index.template.html') {
+                return dest + '/index.html';
+              }
+              return dest + '/' + srcFile;
+            }
+          }
+        ],
+        options: {
+          process: function (content, srcpath) {
+            if (srcpath === 'app/index.template.html') {
+              return grunt.template.process(content);
+            }
+            return content;
+          },
+        },
+      },
       dist: {
         files: [
           {
@@ -359,6 +386,7 @@ module.exports = function (grunt) {
               '*.{ico,png,txt}',
               '.htaccess',
               'bower_components/**',
+              'index.html',
 
               // 'vendor/scripts/angularjs/*',
               'vendor/styles/genomeviewer/**/*',
@@ -440,7 +468,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= yeoman.dist %>/scripts',
           src: [
-            '*.js'
+            'scripts.js'
           ],
           dest: '<%= yeoman.dist %>/scripts',
           ext: '.js'
@@ -482,6 +510,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'ICGC-setBuildEnv:development',
+      'copy:index',
       'injector:dev',
       'clean:server',
       'configureProxies:server',
@@ -508,6 +537,7 @@ module.exports = function (grunt) {
     'jshint',
     'peg',
     'karma',
+    'copy:index',
     'useminPrepare',
     'concurrent:dist',
     'concat',

@@ -1,4 +1,5 @@
 <!doctype html>
+<% var minExt = grunt.config('env') === 'production' ? '.min' : '' %>
 <!--
 ~ Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
 ~
@@ -155,26 +156,26 @@
 <!-- build:js scripts/angular-libs.js -->
 
 <!-- Helper Libs for Angular App -->
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/lodash/lodash.js"></script>
+<script src="bower_components/jquery/dist/jquery<%= minExt %>.js"></script>
+<script src="bower_components/lodash/lodash<%= minExt %>.js"></script>
 
 <!-- Angular Libs -->
-<script src="bower_components/angularjs/angular.js"></script>
-<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-<script src="bower_components/angular-animate/angular-animate.js"></script>
-<script src="bower_components/angular-cookies/angular-cookies.js"></script>
-<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
-<script src="bower_components/restangular/dist/restangular.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-<script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
-<script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
-<script src="bower_components/angularytics/dist/angularytics.js"></script>
-<script src="bower_components/angular-ui-utils/scrollfix.js"></script>
+<script src="bower_components/angularjs/angular<%= minExt %>.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize<%= minExt %>.js"></script>
+<script src="bower_components/angular-animate/angular-animate<%= minExt %>.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies<%= minExt %>.js"></script>
+<script src="bower_components/angular-loading-bar/build/loading-bar<%= minExt %>.js"></script>
+<script src="bower_components/restangular/dist/restangular<%= minExt %>.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router<%= minExt %>.js"></script>
+<script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll<%= minExt %>.js"></script>
+<script src="bower_components/angular-local-storage/dist/angular-local-storage<%= minExt %>.js"></script>
+<script src="bower_components/angularytics/dist/angularytics<%= minExt %>.js"></script>
+<script src="bower_components/angular-ui-utils/scrollfix<%= minExt %>.js"></script>
 <script src="bower_components/angular-markdown-directive/markdown.js"></script>
 <script src="bower_components/angular-lodash/angular-lodash.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="bower_components/angularjs-toaster/toaster.js"></script>
-<script src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+<script src="bower_components/zeroclipboard/dist/ZeroClipboard<%= minExt %>.js"></script>
 <!-- endbuild -->
 
 <!-- ********************************************************* -->
@@ -189,9 +190,9 @@
 <script src="bower_components/d3/d3.min.js"></script>
 <script src="bower_components/Blob/Blob.js"></script>
 <script src="bower_components/FileSaver/FileSaver.min.js"></script>
-<script src="bower_components/showdown/src/showdown.js"></script>
-<script src="bower_components/showdown/src/extensions/table.js"></script>
-<script src="bower_components/x2js/xml2json.js"></script>
+<script src="bower_components/showdown/<%= grunt.config('env') === 'production' ? 'compressed/Showdown.min.js' : 'src/showdown.js' %>"></script>
+<script src="bower_components/showdown/<%= grunt.config('env') === 'production' ? 'compressed/extensions/table.min.js' : 'src/extensions/table.js' %>"></script>
+<script src="bower_components/x2js/xml2json<%= minExt %>.js"></script>
 <script src="scripts/ui/js/table2CSV.js"></script>
 <!-- endbuild -->
 
