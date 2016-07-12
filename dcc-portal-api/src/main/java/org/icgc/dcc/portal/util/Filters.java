@@ -112,8 +112,12 @@ public final class Filters {
   }
 
   public static ObjectNode inputGeneSetFilter(@NonNull UUID inputGeneSetId) {
+    // Method appears to be used by multiple contexts, with and without `ES:`
+    val setId = inputGeneSetId.toString();
+    val id = setId.contains("ES:") ? setId : ENTITY_SET_PREFIX + setId;
+
     val inputGeneSetFilter = geneFilter();
-    inputGeneSetFilter.with(GENE.getId()).set("id", is("ES:" + inputGeneSetId.toString()));
+    inputGeneSetFilter.with(GENE.getId()).set("id", is(id));
 
     return inputGeneSetFilter;
   }
@@ -155,7 +159,7 @@ public final class Filters {
     val result = current.deepCopy();
     if (geneEntitySet.path("gene").path("id").isMissingNode() == false) {
       val entitySetId = geneEntitySet.path("gene").path("id").withArray(IS).get(0).asText();
-      result.with("gene").set("id", is(ENTITY_SET_PREFIX + entitySetId));
+      result.with("gene").set("id", is(entitySetId));
     }
     return result;
   }
