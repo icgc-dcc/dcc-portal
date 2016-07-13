@@ -184,13 +184,15 @@
   });
 
   module.controller('ExternalFileDownloadController',
-    function ($scope, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params) {
+    function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
+      Extensions, params, Restangular) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
       $modalInstance.dismiss('cancel');
     };
+
+    $scope.filters = FilterService.filters;
 
     var p = {};
     p.size = 0;
@@ -228,14 +230,54 @@
           repos[repoName] = {};
         }
 
+        repos[repoName].repoCode = ExternalRepoService.getRepoCodeFromName(repoName);
         repos[repoName].fileSize = findRepoData(facets.repositorySizes.terms, repoName);
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
         repos[repoName].fileCount = term.count;
+        repos[repoName].hasManifest = _.includes(['AWS - Virginia', 'Collaboratory - Toronto'], repoName);
       });
 
       $scope.repos = repos;
       $scope.selectedRepos = Object.keys(repos);
     });
+
+    function encodeQuery (queryMap) {
+      return _.map(queryMap, function (val, key) {
+        return val ? key + '=' + encodeURIComponent(val) : '';
+      }).filter(Boolean).join('&');
+    }
+
+    $scope.getRepoManifestUrl = function (params) {
+      var repoCodes = _.isArray(params.repoCodes) ? params.repoCodes : [params.repoCodes];
+      var filters = JSON.stringify(params.filters);
+      var format = params.format || 'files';
+
+      var query = encodeQuery({
+        repoCodes: repoCodes,
+        format: format,
+        filters: filters,
+      });
+
+      console.log(query);
+
+      var url = location.origin + '/api/v1/manifests?' + query;
+      return url;
+    };
+
+    $scope.getRepoManifestShortUrl = function (repoData) {
+      var longUrl = $scope.getRepoManifestUrl({
+        repoCodes: [repoData.repoCode],
+        filters: FilterService.filters()
+      });
+
+      repoData.isGeneratingManifestShortUrl = true;
+
+      return Restangular.one('short', '').get({ url: longUrl, shouldUseParamsOnlyForRequest: true })
+        .then(function (response) {
+          repoData.isGeneratingManifestShortUrl = false;
+          repoData.shortUrl = response.plain().shortUrl;
+        });
+    };
 
     /**
      * Fixes the entitySet to the PQL compatible one if present.
