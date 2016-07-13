@@ -20,7 +20,6 @@ package org.icgc.dcc.portal.util;
 import static com.google.common.base.Preconditions.checkState;
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.portal.model.IndexModel.ALL;
-import static org.icgc.dcc.portal.model.IndexModel.API_ENTITY_SET_ID_FIELD_NAME;
 import static org.icgc.dcc.portal.model.IndexModel.IS;
 import static org.icgc.dcc.portal.model.IndexModel.Kind.GENE;
 import static org.icgc.dcc.portal.pql.convert.FiltersConverter.ENTITY_SET_PREFIX;
@@ -45,6 +44,8 @@ import lombok.val;
  */
 @NoArgsConstructor(access = PRIVATE)
 public final class Filters {
+
+  private static final String ID = "id";
 
   public static ObjectNode emptyFilter() {
     return MAPPER.createObjectNode();
@@ -106,7 +107,7 @@ public final class Filters {
 
   public static ObjectNode inputGeneSetIdFilter(@NonNull String inputGeneSetId) {
     val geneFilter = geneFilter();
-    geneFilter.with("gene").set("id", is("ES:" + inputGeneSetId));
+    geneFilter.with("gene").set(ID, is(ENTITY_SET_PREFIX + inputGeneSetId));
 
     return geneFilter;
   }
@@ -114,10 +115,10 @@ public final class Filters {
   public static ObjectNode inputGeneSetFilter(@NonNull UUID inputGeneSetId) {
     // Method appears to be used by multiple contexts, with and without `ES:`
     val setId = inputGeneSetId.toString();
-    val id = setId.contains("ES:") ? setId : ENTITY_SET_PREFIX + setId;
+    val id = setId.startsWith(ENTITY_SET_PREFIX) ? setId : ENTITY_SET_PREFIX + setId;
 
     val inputGeneSetFilter = geneFilter();
-    inputGeneSetFilter.with(GENE.getId()).set("id", is(id));
+    inputGeneSetFilter.with(GENE.getId()).set(ID, is(id));
 
     return inputGeneSetFilter;
   }
@@ -158,7 +159,7 @@ public final class Filters {
   public static ObjectNode mergeAnalysisInputGeneList(@NonNull ObjectNode current, @NonNull ObjectNode geneEntitySet) {
     val result = current.deepCopy();
     if (geneEntitySet.path("gene").path("id").isMissingNode() == false) {
-      val entitySetId = geneEntitySet.path("gene").path("id").withArray(IS).get(0).asText();
+      val entitySetId = geneEntitySet.path("gene").path(ID).withArray(IS).get(0).asText();
       result.with("gene").set("id", is(entitySetId));
     }
     return result;
