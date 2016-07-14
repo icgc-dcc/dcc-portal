@@ -9,7 +9,7 @@
 
     <!-- body -->
     <div class="modal-body" >
-        <div data-ng-hide="params.isLoading"> 
+        <div data-ng-if="!params.isLoading"> 
             <div data-ng-if="params.setLimit">
                 <div>Save top: </div>
                 <input type="text" maxlength="9" size="9"
@@ -36,7 +36,7 @@
             </div>
         </div>
         
-        <div data-ng-show="params.isLoading" class="ng-hide"><i class="icon-spinner icon-spin"></i> Loading...</div>
+        <div data-ng-if="params.isLoading"><i class="icon-spinner icon-spin"></i> Loading...</div>
     </div>
     
     <!-- footer -->
