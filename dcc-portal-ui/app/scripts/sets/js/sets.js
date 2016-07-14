@@ -32,39 +32,6 @@
 
   var module = angular.module('icgc.sets.controllers', []);
 
-  // module.animation('.expand', [function() {
-  //   console.log('is this even called');
-  //   return {
-  //     // make note that other events (like addClass/removeClass)
-  //     // have different function input parameters
-  //     enter: function(element, doneFn) {
-  //       console.log('expand is entering');
-  //       // debugger
-
-  //       // jQuery(element)
-  //       //   .css({height: 0})
-  //       //   .slideDown('slow', doneFn);
-  //       var $el = jQuery(element);
-  //       var elHeight = $el.height();
-  //       $el.css({height: 0});
-  //       $el.animate({height: elHeight}, 300);
-
-  //       // remember to call doneFn so that angular
-  //       // knows that the animation has concluded
-  //     },
-
-  //     move: function(element, doneFn) {
-  //       console.log('expand is move');
-  //       jQuery(element).fadeIn(1000, doneFn);
-  //     },
-
-  //     leave: function(element, doneFn) {
-  //       console.log('expand is leave');
-  //       jQuery(element).fadeOut(1000, doneFn);
-  //     }
-  //   }
-  // }]);
-
   module.controller('SetUploadController',
     function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
                setType, setLimit, setUnion, selectedIds) {
@@ -190,12 +157,10 @@
       $scope.params.setSize = Math.min($scope.setLimit || 0, settings.maxNumberOfHits);
       $scope.params.setSizeLimit = $scope.params.setSize;
       $scope.params.setName = 'My ' + setType + ' set';
-      $scope.validateInput();
       $timeout(function () {
         $scope.params.isLoading = false;
         $scope.validateInput();
       }, 500);
-      // $scope.params.isLoading = false;
       $scope.uiFilters = LocationService.filters();
     });
 
