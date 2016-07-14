@@ -14,6 +14,14 @@
   }
 }
 
+.survival-table {
+  .icon-info {
+    font-size: 10px;
+    cursor: help;
+    color: #6baed6;
+  }
+}
+
 .survival-graphs {
   position: relative;
   survival-analysis-graph {
@@ -29,12 +37,5 @@
       left: 0;
       pointer-events: none;
     }
-  }
-
-  .icon-file {
-    position: absolute;
-    z-index: 1;
-    top: 2px;
-    right: 2px;
   }
 }
