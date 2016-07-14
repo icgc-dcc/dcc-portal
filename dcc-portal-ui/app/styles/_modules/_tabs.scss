@@ -36,6 +36,12 @@
   }
 }
 
+.t_tabs--no-accent .t_tabs__tab{
+  &.active, &:hover {
+    border-top: 1px solid $greyLighter; 
+  }
+}
+
 .t_tabs__tab {
   display: inline-block;
   background: $greyLightest;
