@@ -143,7 +143,7 @@
                 height: 380,
                 urlPath: $location.url(),
                 setLabelFunc: function (id) {
-                  return _.find(setData, {id: id}).name;
+                  return 'S' + (setData.indexOf(_.find(setData, {id: id})) + 1);
                 },
               });
               var $canvasContainer = $element.find('.mini-venn-canvas');

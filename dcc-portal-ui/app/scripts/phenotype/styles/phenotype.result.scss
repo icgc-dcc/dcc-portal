@@ -1,16 +1,21 @@
 .mini-venn-canvas {
   svg {
     cursor: pointer;
-    transform: scale(1.3);
+    transform: scale(1.2);
     & > * {
       pointer-events: none;
     }
   }
-  text:not(.venn-count) {
-    display: none;
-  }
-  .venn-count {
+
+  text {
       font-size: 22px; 
+  }
+
+  &.only-two {
+    overflow: hidden;
+    svg {
+      transform: scale(1.2) translateY(30px);
+    }
   }
 }
 
