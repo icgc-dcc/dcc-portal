@@ -1,0 +1,111 @@
+$faded: #e6dede;
+.survival-graph {
+
+  .axis {
+    path, line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    path {
+      stroke: $faded
+    }
+
+    .tick text {
+      fill: #888
+    }
+
+    .axis-label {
+      color: hsl(0, 0%, 60%);
+      font-size: 0.75rem;
+      fill: hsl(0, 0%, 60%);
+      font-weight: 300;
+    }
+  }
+
+  .line {
+    fill: none;
+    stroke-width: 1.5px;
+  }
+
+  .serie {
+    .point {
+      r: 3;
+      transition: all 0.1s;
+      cursor: pointer;
+      stroke-width: none;
+      &:hover, &:active {
+        r: 5;
+      }
+      &[status="alive"] {
+        opacity: 0.5;
+      }
+      &[status="deceased"] {
+        opacity: 0;
+        transition: r 0.3s, opacity 0.3s;
+        r: 5;
+        &:hover, &:active {
+          opacity: 1;
+          r: 2;
+        }
+      }
+    }
+
+    .point-line {
+      &[status="deceased"] {
+        opacity: 0;
+      }
+    }
+  }
+
+}
+
+.survival-analysis {
+
+  position: relative;
+
+  .survival-graph {
+    width: 100%;
+    svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .legend {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+
+    .set {
+      cursor: default;
+      font-size: 11px;
+      line-height: 1.7;
+      position: relative;
+      user-select: none;
+      display: inline-block;
+      & + .set {
+        margin-left: 20px;
+      }
+      &.disabled {
+        color: #b7b7b7 !important;
+      }
+      &.interactable {
+        cursor: pointer;
+      }
+      i {
+        font-size: 9px;
+        position: absolute;
+        margin-left: -2px;
+        margin-top: 1px;
+        transform: translateX(-100%);
+      }
+    }
+
+  }
+}

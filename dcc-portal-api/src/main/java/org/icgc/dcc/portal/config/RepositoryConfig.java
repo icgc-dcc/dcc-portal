@@ -21,6 +21,7 @@ import org.icgc.dcc.portal.repository.EnrichmentAnalysisRepository;
 import org.icgc.dcc.portal.repository.EntitySetRepository;
 import org.icgc.dcc.portal.repository.ManifestRepository;
 import org.icgc.dcc.portal.repository.PhenotypeAnalysisRepository;
+import org.icgc.dcc.portal.repository.SurvivalAnalysisRepository;
 import org.icgc.dcc.portal.repository.UnionAnalysisRepository;
 import org.icgc.dcc.portal.repository.UserGeneSetRepository;
 import org.skife.jdbi.v2.DBI;
@@ -62,6 +63,11 @@ public class RepositoryConfig {
   @Bean
   public PhenotypeAnalysisRepository phenotypeAnalysisRepository(DBI dbi) {
     return dbi.open(PhenotypeAnalysisRepository.class);
+  }
+
+  @Bean
+  public SurvivalAnalysisRepository survivalAnalysisRepository(DBI dbi) {
+    return dbi.open(SurvivalAnalysisRepository.class);
   }
 
   @Bean
