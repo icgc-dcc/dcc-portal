@@ -59,6 +59,7 @@
         $scope.seriesColours = ['#6baed6', '#fd8d3c', '#74c476'];
 
         $scope.survivalAnalysisDataSets = undefined;
+        $scope.activeSurvivalGraph = 'overall';
 
         function normalize() {
           // Normalize results: Sort by id, then sort by terms
