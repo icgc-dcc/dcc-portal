@@ -20,7 +20,6 @@ package org.icgc.dcc.portal.util;
 import static com.google.common.base.Preconditions.checkState;
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.portal.model.IndexModel.ALL;
-import static org.icgc.dcc.portal.model.IndexModel.API_ENTITY_SET_ID_FIELD_NAME;
 import static org.icgc.dcc.portal.model.IndexModel.IS;
 import static org.icgc.dcc.portal.model.IndexModel.Kind.GENE;
 import static org.icgc.dcc.portal.pql.convert.FiltersConverter.ENTITY_SET_PREFIX;
@@ -45,6 +44,8 @@ import lombok.val;
  */
 @NoArgsConstructor(access = PRIVATE)
 public final class Filters {
+
+  private static final String ID = "id";
 
   public static ObjectNode emptyFilter() {
     return MAPPER.createObjectNode();
@@ -106,14 +107,18 @@ public final class Filters {
 
   public static ObjectNode inputGeneSetIdFilter(@NonNull String inputGeneSetId) {
     val geneFilter = geneFilter();
-    geneFilter.with("gene").set(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId));
+    geneFilter.with("gene").set(ID, is(ENTITY_SET_PREFIX + inputGeneSetId));
 
     return geneFilter;
   }
 
   public static ObjectNode inputGeneSetFilter(@NonNull UUID inputGeneSetId) {
+    // Method appears to be used by multiple contexts, with and without `ES:`
+    val setId = inputGeneSetId.toString();
+    val id = setId.startsWith(ENTITY_SET_PREFIX) ? setId : ENTITY_SET_PREFIX + setId;
+
     val inputGeneSetFilter = geneFilter();
-    inputGeneSetFilter.with(GENE.getId()).set(API_ENTITY_SET_ID_FIELD_NAME, is(inputGeneSetId.toString()));
+    inputGeneSetFilter.with(GENE.getId()).set(ID, is(id));
 
     return inputGeneSetFilter;
   }
@@ -154,8 +159,8 @@ public final class Filters {
   public static ObjectNode mergeAnalysisInputGeneList(@NonNull ObjectNode current, @NonNull ObjectNode geneEntitySet) {
     val result = current.deepCopy();
     if (geneEntitySet.path("gene").path("id").isMissingNode() == false) {
-      val entitySetId = geneEntitySet.path("gene").path("id").withArray(IS).get(0).asText();
-      result.with("gene").set("id", is(ENTITY_SET_PREFIX + entitySetId));
+      val entitySetId = geneEntitySet.path("gene").path(ID).withArray(IS).get(0).asText();
+      result.with("gene").set("id", is(entitySetId));
     }
     return result;
   }
@@ -182,10 +187,7 @@ public final class Filters {
     val and = emptyFilter();
 
     if (right.getNodeType() == left.getNodeType()) {
-
-      //
       // Same types
-      //
 
       // Arbitrary
       val field = left;
@@ -230,14 +232,10 @@ public final class Filters {
 
         return result;
       } else if (field.isMissingNode()) {
-        // Can't happen
+        // Can't happen - TODO: Explain Why it cannot happen. Also empty branch???
       }
     } else {
-
-      //
       // Different types
-      //
-
       if (left.isMissingNode()) {
         return right;
       } else if (right.isMissingNode()) {

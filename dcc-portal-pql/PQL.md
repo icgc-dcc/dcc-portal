@@ -101,7 +101,7 @@ of the portal to enter direct PQL queries.
 ### ANTLR
 ANTRL is the tool used for generating the lexer and parser classes which are based off of the grammar file we defined. 
 
-The grammar file [Pql.g4](src/main/antl4/org/icgc/dcc/portal/pql/antrl4/Pql.g4) contains the definition the language. 
+The grammar file [Pql.g4](src/main/antlr4/org/icgc/dcc/portal/pql/antlr4/Pql.g4) contains the definition the language. 
 It is worthwhile to give the file a quick read to gain a basic understanding of how statements are constructed in PQL. 
 
 ### Visitors

@@ -331,7 +331,7 @@
           });
         };
 
-        $scope.viewInExternal = function(item) {
+        $scope.viewInExternal = function (item) {
           Page.startWork();
           var params, type, name;
           type = $scope.item.type.toLowerCase();
@@ -342,13 +342,22 @@
             type: $scope.item.type.toLowerCase(),
             name: name
           };
+
+          var filterTemplate = function(id) {
+            if (type === 'donor') {
+              return {file: {entitySetId: {is: [id]}}};
+            } else if (type === 'file') {
+              return {file: {id: {is: [Extensions.ENTITY_PREFIX + id]}}};
+            }
+          };
+
           SetService.materializeSync(type, params).then(function(data) {
             Page.stopWork();
             if (! data.id) {
               console.log('there is no id!!!!');
               return;
             } else {
-              var newFilter = JSON.stringify({file: {entitySetId: {is: [data.id]}}});
+              var newFilter = JSON.stringify(filterTemplate(data.id));
               $location.path (dataRepoUrl).search ('filters', newFilter);
             }
           });
