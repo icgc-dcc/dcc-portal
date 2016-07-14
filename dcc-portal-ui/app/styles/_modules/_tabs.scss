@@ -29,6 +29,13 @@
   margin-top: -1px;
 }
 
+.t_tabs--smaller {
+  .t_tabs__tab {
+    padding: 0.4rem 0.7rem;
+    width: auto;
+  }
+}
+
 .t_tabs__tab {
   display: inline-block;
   background: $greyLightest;
