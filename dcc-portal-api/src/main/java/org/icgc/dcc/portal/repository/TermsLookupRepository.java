@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Throwables.propagate;
 import static java.lang.Math.min;
 import static lombok.AccessLevel.PRIVATE;
+import static org.dcc.portal.pql.meta.Type.*;
 import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
 import static org.icgc.dcc.portal.model.IndexModel.Type.DONOR_TEXT;
 import static org.icgc.dcc.portal.model.IndexModel.Type.FILE_DONOR_TEXT;
@@ -201,12 +202,17 @@ public class TermsLookupRepository {
   public SearchResponse runUnionEsQuery(final String indexTypeName, @NonNull final SearchType searchType,
       @NonNull final BoolFilterBuilder boolFilter, final int max) {
     val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
-    return execute("Union ES Query", false, (request) -> request
+    return execute("Union ES Query", false, (request) -> {request
         .setTypes(indexTypeName)
         .setSearchType(searchType)
         .setQuery(query)
         .setSize(max)
-        .setNoFields());
+        .setNoFields();
+
+      if (indexTypeName.equalsIgnoreCase(FILE.getId())) {
+        request.setIndices(repoIndexName);
+      }
+    });
   }
 
   public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter) {
