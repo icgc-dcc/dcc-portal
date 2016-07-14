@@ -41,7 +41,7 @@
                         'col-md-12': !intersectionsExist
                         }"
                 >
-        <table class="table">
+        <table class="table survival-table">
             <thead>
                 <tr>
                     <th></th>
@@ -60,7 +60,19 @@
                     </tr>
                 </tr>
                 <tr>
-                    <th>Donors included in Analysis</th>
+                    <th>
+                        Donors included in Analysis
+                        <sup>
+                            <i
+                                class="icon-info"
+                                data-tooltip="
+                                    Criteria to include donor from your sets in the survival analysis: <br>
+                                    - donor does not overlap between your selected donor sets <br>
+                                    - donor has complete data for the purpose of the analysis (event and time-to-event) <br>
+                                "
+                            ></i>
+                        </sup>
+                    </th>
                     <th
                         data-ng-repeat-start="donorSetId in setIds"
                         class="text-right"
