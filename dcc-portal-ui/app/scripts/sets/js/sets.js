@@ -33,7 +33,7 @@
   var module = angular.module('icgc.sets.controllers', []);
 
   module.controller('SetUploadController',
-    function($scope, $modalInstance, LocationService, SetService, Settings, 
+    function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
                setType, setLimit, setUnion, selectedIds) {
 
     $scope.setLimit = setLimit;
@@ -157,8 +157,10 @@
       $scope.params.setSize = Math.min($scope.setLimit || 0, settings.maxNumberOfHits);
       $scope.params.setSizeLimit = $scope.params.setSize;
       $scope.params.setName = 'My ' + setType + ' set';
-      $scope.validateInput();
-      $scope.params.isLoading = false;
+      $timeout(function () {
+        $scope.params.isLoading = false;
+        $scope.validateInput();
+      }, 500);
       $scope.uiFilters = LocationService.filters();
     });
 
