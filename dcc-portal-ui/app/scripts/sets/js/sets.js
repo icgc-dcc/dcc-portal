@@ -49,6 +49,7 @@
     $scope.params.setSize = 0;
     $scope.params.setUnion = setUnion;
     $scope.params.selectedIds = selectedIds;
+    $scope.params.isLoading = true;
 
 
     /**
@@ -157,6 +158,7 @@
       $scope.params.setSizeLimit = $scope.params.setSize;
       $scope.params.setName = 'My ' + setType + ' set';
       $scope.validateInput();
+      $scope.params.isLoading = false;
       $scope.uiFilters = LocationService.filters();
     });
 
