@@ -254,6 +254,7 @@
     'icgc.tokens',
     'icgc.pathways',
     'icgc.historyManager',
+    'icgc.survival',
 
     // old
     'app.ui',

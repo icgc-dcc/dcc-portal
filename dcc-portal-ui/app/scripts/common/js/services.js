@@ -51,8 +51,15 @@
           page = p;
         }
       },
-      startWork: function () {
+      startWork: function (work) {
+        invariant(!work || work.then, 'Optional argument "work" must be a promise.');
         working++;
+        if (work) {
+          work.finally(function () {
+            working--;
+          });
+          return work;
+        }
       },
       stopWork: function () {
         if (working > 0) {

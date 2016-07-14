@@ -408,14 +408,25 @@ angular.module('icgc.advanced.controllers', [
         });
       };
 
-      _controller.viewExternal = function(type, limit) {
-        var params = {};
-        params.filters = _locationFilterCache.filters();
-        params.size = limit;
-        params.isTransient = true;
+      _controller.viewExternalDonors = function(limit) {
+        var params = {
+          filters: _locationFilterCache.filters(),
+          size: limit,
+          isTransient: true,
+          name: 'Input donor set',
+          sortBy: 'ssmAffectedGenes',
+          sortOrder: 'DESCENDING',
+        };
+
         // Ensure scope is destroyed as there may be unreferenced watchers on the filter. (see: facets/tags.js)
         $scope.$destroy();
-        SetService.createForwardSet (type, params, dataRepoUrl);
+
+        SetService.createEntitySet('donor', params)
+          .then(function (set) {
+            invariant(set.id, 'Response from SetService.createEntitySet did not include an id!');
+            var newFilter = JSON.stringify({file: {entitySetId: {is: [set.id]}}});
+            LocationService.goToPath(dataRepoUrl, {filters: newFilter});
+          });
       };
 
       /**

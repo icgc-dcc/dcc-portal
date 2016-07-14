@@ -33,7 +33,8 @@
                     <td>{{getSetShortHand(item, setList)}}</td>
                     <td>{{setMap[item].name}}</td>
                     <td class="text-right">
-                        <a href="{{setMap[item].advLink}}">{{setMap[item].count | number}}</a>
+                        <a data-ng-if="setType !== 'file'" href="{{setMap[item].advLink}}">{{setMap[item].count | number}}</a>
+                        <span data-ng-if="setType === 'file'">{{setMap[item].count | number}}</span>
                     </td>
                     <td>{{setMap[item].type.toLowerCase() | readable}}</td>
                 </tr>
@@ -66,8 +67,8 @@
                         <set-notation data-item="item" data-set-list="setList"></set-notation>
                     </td>
                     <td class="text-right">
-                        <a data-ng-if="item.count > 0" data-ng-click="redirect(item)" href="">{{item.count | number}}</a>
-                        <span data-ng-if="item.count === 0">{{item.count | number}}</span>
+                        <a data-ng-if="item.count > 0 && setType !== 'file'"" data-ng-click="redirect(item)" href="">{{item.count | number}}</a>
+                        <span data-ng-if="item.count === 0 || setType === 'file'"">{{item.count | number}}</span>
                     </td>
                     <td>
                         <span style="float:left; font-size:1.25rem">
@@ -75,7 +76,7 @@
                                 <i class="icon-floppy" data-tooltip="Save as new set" data-ng-click="calculateUnion(item); saveDerivedSet()"></i>
                                 <i class="icon-file" data-tooltip="Export as TSV" data-ng-click="export(item)"></i>
                             </span>
-                            <span class="t_tools__tool" data-ng-if="item.count > 0 && setType === 'donor'">
+                            <span class="t_tools__tool" data-ng-if="item.count > 0 && (setType === 'donor')">
                               <i data-ng-if="downloadsEnabled" class="icon-download" data-tooltip="Download Donor Data" data-ng-click="downloadDerivedSet(item)"></i>
                               <i class="icon-download-cloud" data-tooltip="View in {{:: dataRepoTitle}}" data-ng-click="viewInExternal(item)"></i>
                             </span>
@@ -96,7 +97,7 @@
                                 <i class="icon-file" data-tooltip="Export" data-ng-click="export()"></i>
                             </span>
                             <span class="t_tools__tool" data-ng-if="setType === 'donor'">
-                              <i data-ng-if="downloadsEnabled" class="icon-download" data-tooltip="Download Donor Data" data-ng-click="downloadDerivedSet()"></i>
+                              <i data-ng-if="downloadsEnabled && setType === 'donor'" class="icon-download" data-tooltip="Download Donor Data" data-ng-click="downloadDerivedSet()"></i>
                               <i class="icon-download-cloud" data-tooltip="View in {{:: dataRepoTitle}}" data-ng-click="viewInExternal()"></i>
                             </span>
                         </span>

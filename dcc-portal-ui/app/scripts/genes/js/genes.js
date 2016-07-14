@@ -84,12 +84,14 @@
     return {
       restrict: 'A',
       link: function (scope, $element) {
-        var mutationObservers = createMutationObservers($element.find('.dynamic-height').get());
-        scope.$on('$destroy', function () {
-          mutationObservers.forEach(function (observer) {
-            observer.disconnect();
+        if (jQuery(window.location.hash).length) {
+          var mutationObservers = createMutationObservers($element.find('.dynamic-height').get());
+          scope.$on('$destroy', function () {
+            mutationObservers.forEach(function (observer) {
+              observer.disconnect();
+            });
           });
-        });
+        }
       }
     };
   });
