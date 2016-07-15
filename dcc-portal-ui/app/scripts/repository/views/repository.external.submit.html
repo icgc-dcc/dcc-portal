@@ -39,12 +39,17 @@
              <td class="text-right">{{ repoData.fileSize | bytes }}</td>
              <td class="text-right">
                 <div class="btn-group">
-                  <button
+                  <a
+                    href="{{getRepoManifestUrl({
+                      repoCodes: [repoData.repoCode],
+                      filters: filters()
+                    })}}"
+                    target="_blank"
                     type="button"
                     class="btn btn-xs btn-default"
                   >
                     <i class="icon-download"></i>
-                  </button>
+                  </a>
 
                   <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>

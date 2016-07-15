@@ -243,28 +243,8 @@
       $scope.selectedRepos = Object.keys(repos);
     });
 
-    function encodeQuery (queryMap) {
-      return _.map(queryMap, function (val, key) {
-        return val ? key + '=' + encodeURIComponent(val) : '';
-      }).filter(Boolean).join('&');
-    }
 
-    $scope.getRepoManifestUrl = function (params) {
-      var repoCodes = _.isArray(params.repoCodes) ? params.repoCodes : [params.repoCodes];
-      var filters = JSON.stringify(params.filters);
-      var format = params.format || 'files';
-
-      var query = encodeQuery({
-        repoCodes: repoCodes,
-        format: format,
-        filters: filters,
-      });
-
-      console.log(query);
-
-      var url = location.origin + '/api/v1/manifests?' + query;
-      return url;
-    };
+    $scope.getRepoManifestUrl = ExternalRepoService.getRepoManifestUrl;
 
     $scope.getRepoManifestShortUrl = function (repoData) {
       var longUrl = $scope.getRepoManifestUrl({
@@ -305,7 +285,16 @@
     $scope.download = function() {
       if (_.isEmpty($scope.selectedFiles)) {
         var filters = cleanEntitySet(FilterService.filters());
-        ExternalRepoService.download(filters, $scope.selectedRepos);
+
+        var manifestUrl = $scope.getRepoManifestUrl({
+          repoCodes: _.map($scope.repos, 'repoCode'),
+          filters: filters,
+          format: 'tarball',
+          unique: true
+        });
+
+        $window.location.href = manifestUrl;
+
       } else {
         ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
       }
