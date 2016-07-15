@@ -230,6 +230,7 @@
           repos[repoName] = {};
         }
 
+        repos[repoName].repoName = repoName;
         repos[repoName].repoCode = ExternalRepoService.getRepoCodeFromName(repoName);
         repos[repoName].fileSize = findRepoData(facets.repositorySizes.terms, repoName);
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
@@ -237,7 +238,8 @@
         repos[repoName].hasManifest = _.includes(['AWS - Virginia', 'Collaboratory - Toronto'], repoName);
       });
 
-      $scope.repos = repos;
+      $scope.repos = _.values(repos);
+      console.log($scope.repos);
       $scope.selectedRepos = Object.keys(repos);
     });
 

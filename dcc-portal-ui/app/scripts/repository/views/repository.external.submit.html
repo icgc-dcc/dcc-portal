@@ -21,15 +21,18 @@
            </th>
          </thead>
 
-         <tbody>
+         <tbody dnd-list="repos">
             <tr
-              data-ng-repeat-start="(repoName, repoData) in repos"
+              data-ng-repeat-start="repoData in repos"
               data-ng-class="{
                 alt: $index % 2 === 0
               }"
+              dnd-moved="repos.splice($index, 1)"
+              dnd-draggable="repoData"
+              dnd-effect-allowed="move"
             >
              <td>
-                {{ repoName }}
+                {{ repoData.repoName }}
              </td>
              <td class="text-right">{{ repoData.donorCount | number }}</td>
              <td class="text-right">{{ repoData.fileCount | number }}</td>
@@ -63,7 +66,7 @@
                         data-ng-click="
                           !repoData.manifestID &&
                           !repoData.isGeneratingManifestID &&
-                          createManifestId(repoName, repoData)"
+                          createManifestId(repoData.repoName, repoData)"
                       >
                         Manifest ID
                       </a>
@@ -83,7 +86,7 @@
              </td>
            </tr>
 
-            <tr class="extra" data-ng-repeat-end data-ng-if="
+            <tr class="extras" data-ng-repeat-end data-ng-if="
               repoData.isGeneratingManifestID ||
               repoData.isGeneratingManifestShortUrl ||
               repoData.manifestID ||
@@ -94,28 +97,89 @@
                   <i class="icon-spinner icon-spin"></i>
                 </div>
 
-                <div class="manifest" data-ng-if="repoData.hasManifest">
-                  <div data-ng-if="repoData.manifestID">
-                    <div data-copy-to-clip data-copy-data="repoData.manifestID"
-                      data-show-copy-tips="true" data-prompt-on-copy="true"
-                      data-on-copy-success-message="Manifest ID copied!"
-                      data-on-copy-focus-on="input[type='text']">
-                      <input size="38" type="text" class="input_manifest" value="{{repoData.manifestID}}"/>
-                    </div>
-                  </div>
-                </div>
+                <div class="container-fluid">
 
-                <div
-                  data-ng-if="repoData.shortUrl"
-                >
-                  <div>
-                    <div data-copy-to-clip data-copy-data="repoData.shortUrl"
-                      data-show-copy-tips="true" data-prompt-on-copy="true"
-                      data-on-copy-success-message="Short URL copied!"
-                      data-on-copy-focus-on="input[type='text']">
-                      <input size="38" type="text" class="input_manifest" value="{{repoData.shortUrl}}"/>
+                  <div class="row" data-ng-if="repoData.shortUrl">
+                    <div class="col-md-3">
+                      Manifest URL
+                    </div>
+                    <div class="col-md-9 text-left">
+                      <input
+                        onClick="this.select()"
+                        size="18"
+                        type="text"
+                        value="{{repoData.shortUrl}}"
+                      />
+                      <span
+                          class="clip-icon"
+                          style="cursor: pointer;"
+                          data-copy-to-clip
+                          data-copy-data="repoData.shortUrl"
+                          data-show-copy-tips="true"
+                          data-prompt-on-copy="false"
+                          data-on-copy-success-message="Copied!"
+                          data-on-hover-message="Copy to clipboard"
+                        >
+                          <span class="icon-clippy"></span>
+                      </span>
                     </div>
                   </div>
+
+                  <div class="row" data-ng-if-start="repoData.manifestID">
+                    <div class="col-md-3">
+                      Manifest ID
+                    </div>
+                    <div class="col-md-9 text-left">
+                      
+                      <div class="manifest" data-ng-if="repoData.hasManifest">
+                        <input
+                          onClick="this.select()"
+                          size="38"
+                          type="text"
+                          value="{{repoData.manifestID}}"
+                        />
+                        <span
+                          class="clip-icon"
+                          style="cursor: pointer;"
+                          data-copy-to-clip
+                          data-copy-data="repoData.manifestID"
+                          data-show-copy-tips="true"
+                          data-prompt-on-copy="false"
+                          data-on-copy-success-message="Copied!"
+                          data-on-hover-message="Copy to clipboard"
+                        >
+                          <span class="icon-clippy"></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" data-ng-if-end>
+                    <div class="col-md-3">
+                      Usage example
+                    </div>
+                    <div class="col-md-9 text-left">
+                      <input
+                        onClick="this.select()"
+                        size="76"
+                        type="text"
+                        value="{{ 'bin/icgc-storage-client manifest --manifest ' + repoData.manifestID }}"
+                      />
+                      <span
+                        class="clip-icon"
+                        style="cursor: pointer;"
+                        data-copy-to-clip
+                        data-copy-data="'bin/icgc-storage-client manifest --manifest ' + repoData.manifestID"
+                        data-show-copy-tips="true"
+                        data-prompt-on-copy="false"
+                        data-on-copy-success-message="Copied!"
+                        data-on-hover-message="Copy to clipboard"
+                      >
+                        <span class="icon-clippy"></span>
+                      </span>
+                    </div>
+                  </div>
+
                 </div>
 
              </td>

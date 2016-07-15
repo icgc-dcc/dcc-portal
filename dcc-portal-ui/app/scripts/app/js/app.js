@@ -211,6 +211,7 @@
     'btford.markdown',
     'LocalStorageModule',
     'toaster',
+    'dndLists',
 
 
     // 3rd party

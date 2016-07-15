@@ -45,26 +45,42 @@
       border-left: 0;
       border-right: 0;
       tr {
+        transition: background 0.3s ease;
         &:nth-child(odd) {
           background: inherit;
         }
         &.alt {
           background-color: #f2f2f2;
         }
-        &.extra td {
-          padding: 24px 0;
-        }
-        &.extra + tr {
-          border-top: 1px solid #f2f2f2;
+        &.dndDraggingSource, &.ng-leave {
+          display: none;
         }
       }
       td, th {
         border-left: 0;
       }
+
+      .extras {
+        td {
+          padding: 12px 0;
+        }
+        & + tr {
+          border-top: 1px solid #f2f2f2;
+        }
+        code {
+          padding: 2px 4px;
+        }
+      }
     }
+
 
     .manifest-btn {
       cursor: pointer;
+    }
+
+    input[type="text"] {
+      padding: 2px 4px;
+      border: 0;
     }
 
     .dropdown-menu {
