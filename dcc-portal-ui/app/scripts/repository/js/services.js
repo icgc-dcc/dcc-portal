@@ -154,7 +154,7 @@
       var format = params.format || 'files';
 
       var query = encodeQuery({
-        repoCodes: repoCodes,
+        repos: repoCodes,
         format: format,
         filters: filters,
       });
