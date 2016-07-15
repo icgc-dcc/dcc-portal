@@ -239,7 +239,6 @@
       });
 
       $scope.repos = _.values(repos);
-      console.log($scope.repos);
       $scope.selectedRepos = Object.keys(repos);
     });
 
