@@ -1,11 +1,16 @@
 <section>
 <div data-ng-if="!analysisId" data-ng-controller="NewAnalysisController as NAC" class="analysis">
     <div style="font-size:1.25rem">
+        <span class="action-toolbar" data-ng-show="NAC.analysisType !== null">
+          <span class="action-item"  style="border:none">
+            <i class="icon-beaker"></i><a href="" data-ng-click="NAC.analysisType = null">Analysis</a>
+          </span>                  
+        </span>
         <span data-ng-show="NAC.analysisType !== null">&gt;</span>
         <span data-ng-show="NAC.analysisType !== null">
-            Select {{NAC.analysisType === 'enrichment'?'set':'sets'}} for 
-            <strong>{{NAC.analysisName(NAC.analysisType)}}</strong>
-        </span>
+          Select {{NAC.analysisType === 'enrichment'?'set':'sets'}} for 
+          <strong>{{NAC.analysisName(NAC.analysisType)}}</strong>
+        </span>      
     </div>
 
     <div data-ng-show="NAC.analysisType === null">
