@@ -157,6 +157,7 @@
         repos: repoCodes,
         format: format,
         filters: filters,
+        unique: params.unique
       });
 
       return API.BASE_URL + '/manifests?' + query;
