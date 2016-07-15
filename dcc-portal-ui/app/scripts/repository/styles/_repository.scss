@@ -45,14 +45,17 @@
       border-left: 0;
       border-right: 0;
       tr {
-        transition: background 0.3s ease;
+        transition: all 0.3s ease;
         &:nth-child(odd) {
           background: inherit;
         }
         &.alt {
           background-color: #f2f2f2;
         }
-        &.dndDraggingSource, &.ng-leave {
+        &.dndDraggingSource,
+        &.dndDraggingSource + .extras,
+        &.ng-leave,
+        &.ng-leave + .extras, {
           display: none;
         }
       }
