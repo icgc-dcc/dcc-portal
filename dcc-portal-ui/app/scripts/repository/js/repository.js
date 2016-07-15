@@ -482,7 +482,7 @@
     };
 
     this.buildManifestUrl = function (fileId, repos) {
-       return ExternalRepoService.getManifestUrl(fileId, repos);
+       return ExternalRepoService.getManifestUrlByFileIds(fileId, repos);
     };
 
     this.equalsIgnoringCase = equalsIgnoringCase;

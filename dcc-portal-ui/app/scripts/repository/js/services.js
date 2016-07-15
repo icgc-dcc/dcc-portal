@@ -149,7 +149,7 @@
     };
 
     _srv.downloadSelected = function (ids, repos) {
-      $window.location.href = _srv.getManifestUrl(ids, repos);
+      $window.location.href = _srv.getManifestUrlByFileIds(ids, repos);
     };
 
     _srv.export = function (filters) {
@@ -172,9 +172,9 @@
       return Restangular.service('manifests').post(jQuery.param(data));
     };
 
-    _srv.getManifestUrl = function (ids, repos) {
       return API.BASE_URL + '/manifests?filters=' +
         uriString ({file:{id:{is:ids}}}) + '&repos=' + _concatRepoCodes (repos) + '&format=files';
+    _srv.getManifestUrlByFileIds = function (ids, repos) {
     };
 
     _srv.getMetaData = function() {
