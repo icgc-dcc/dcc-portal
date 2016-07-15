@@ -58,6 +58,10 @@
         &.ng-leave + .extras, {
           display: none;
         }
+        &:not(.extras) {
+          cursor: move;
+          cursor: -webkit-grab;
+        }
       }
       td, th {
         border-left: 0;
