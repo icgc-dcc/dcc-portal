@@ -46,56 +46,55 @@
              <td class="text-right">{{ repoData.fileCount | number }}</td>
              <td class="text-right">{{ repoData.fileSize | bytes }}</td>
              <td class="text-right">
-                <div class="btn-group">
-                  <a
-                    href="{{getRepoManifestUrl({
-                      repoCodes: [repoData.repoCode],
-                      filters: filters()
-                    })}}"
-                    target="_blank"
-                    type="button"
-                    class="btn btn-xs btn-default orange-icon"
-                  >
-                    <i class="icon-download"></i>
-                  </a>
+                <a
+                  href="{{getRepoManifestUrl({
+                    repoCodes: [repoData.repoCode],
+                    filters: filters()
+                  })}}"
+                  target="_blank"
+                  type="button"
+                  class="btn btn-xs btn-default orange-icon"
+                >
+                  <i class="icon-download"></i>
+                </a>
 
-                  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
+                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
 
-                  <ul class="dropdown-menu">
-                    <li>
-                      <a ng-click="getRepoManifestShortUrl(repoData)"
-                      >
-                        Manifest URL
-                      </a>
-                    </li>
-                    <li ng-if="repoData.hasManifest">
-                      <a
-                        ng-class="{
-                          disabled: repoData.manifestID || repoData.isGeneratingManifestID
-                        }"
-                        data-ng-click="
-                          !repoData.manifestID &&
-                          !repoData.isGeneratingManifestID &&
-                          createManifestId(repoData.repoName, repoData)"
-                      >
-                        Manifest ID
-                      </a>
-                      <popover
-                        popover-anchor-label=""
-                        popover-assist-icon-class="icon-help"
-                        popover-assist-icon-position-before="false"
-                      >
+                <ul class="dropdown-menu">
+                  <li>
+                    <a ng-click="getRepoManifestShortUrl(repoData)"
+                    >
+                      Manifest URL
+                    </a>
+                  </li>
+                  <li ng-if="repoData.hasManifest">
+                    <a
+                      ng-class="{
+                        disabled: repoData.manifestID || repoData.isGeneratingManifestID
+                      }"
+                      data-ng-click="
+                        !repoData.manifestID &&
+                        !repoData.isGeneratingManifestID &&
+                        createManifestId(repoData.repoName, repoData)"
+                    >
+                      Manifest ID
+                    </a>
+                    <popover
+                      popover-anchor-label=""
+                      popover-assist-icon-class="icon-help"
+                      popover-assist-icon-position-before="false"
+                    >
 
-                          In addition to the manifest file, the ICGC Storage Client accepts manifest ID to download files selected in your query.
-                          Please see the <a href="http://docs.icgc.org/cloud/guide/#manifest-from-the-data-portal" target="_blank"><i class="icon-external-link"></i>User Guide</a> to learn more.
-                          </a>
-                      </popover>
-                    </li>
-                  </ul>
-                </div>
+                        In addition to the manifest file, the ICGC Storage Client accepts manifest ID to download files selected in your query.
+                        Please see the <a href="http://docs.icgc.org/cloud/guide/#manifest-from-the-data-portal" target="_blank"><i class="icon-external-link"></i>User Guide</a> to learn more.
+                        </a>
+                    </popover>
+                  </li>
+                </ul>
+
              </td>
            </tr>
 

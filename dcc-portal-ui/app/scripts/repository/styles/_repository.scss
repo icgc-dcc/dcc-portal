@@ -41,14 +41,16 @@
   }
 
   .download-manifests {
+    .modal-header {
+      border-bottom: 0;
+      padding: 15px 15px 5px 15px;
+    }
+
     .modal-body {
       padding: 0;
       p {
         line-height: 1.5;
         margin: 0.5em 15px;
-        &:first-child {
-          margin-top: 15px;
-        }
       }
     }
 
@@ -87,6 +89,10 @@
         }
         .orange-icon {
           color: $iconColor;
+        }
+        .btn-default:not(:hover) {
+          border: 1px solid transparent;
+          background-color: transparent;
         }
         .spinner-container {
           display: flex;
