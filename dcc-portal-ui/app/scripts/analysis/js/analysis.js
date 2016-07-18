@@ -166,7 +166,7 @@
           $scope.analysisResult = null;
           $timeout(function() {
             $scope.analysisResult = data;
-          }, 250);
+          }, 150);
           return;
         }
 
