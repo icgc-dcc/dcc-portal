@@ -41,9 +41,22 @@
   }
 
   .download-manifests {
+    .modal-body {
+      padding: 0;
+      p {
+        line-height: 1.5;
+        margin: 0.5em 15px;
+        &:first-child {
+          margin-top: 15px;
+        }
+      }
+    }
     table {
       border-left: 0;
       border-right: 0;
+      border-bottom: 0;
+      margin-top: 15px;
+      margin-bottom: 0;
       tr {
         transition: all 0.3s ease;
         &:nth-child(odd) {
