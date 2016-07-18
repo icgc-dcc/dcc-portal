@@ -51,6 +51,16 @@
         }
       }
     }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 12px;
+      .t_button {
+        margin-left: 0.7em;
+      }
+    }
+
     table {
       border-left: 0;
       border-right: 0;
@@ -75,10 +85,12 @@
           background-color: #f2f2f2;
           border: 2px dotted #999;
         }
-        .t_button {
-          padding-top: 1px;
-          padding-bottom: 1px;
-          border: 1px solid #ce6503
+        .orange-icon {
+          color: $iconColor;
+        }
+        .spinner-container {
+          display: flex;
+          justify-content: center;
         }
       }
       td, th {
@@ -101,7 +113,9 @@
       cursor: move;
       cursor: -webkit-grab;
     }
-
+    .handle {
+      color: #999;
+    }
 
     .manifest-btn {
       cursor: pointer;

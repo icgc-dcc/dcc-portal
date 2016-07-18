@@ -18,7 +18,6 @@
        <table class="table table-info">
          <thead>
            <th></th>
-           <!-- <th class="text-right">#</th> -->
            <th style="width: 40%;">Repository</th>
            <th class="text-right"># Donors</th>
            <th class="text-right"># Files</th>
@@ -37,7 +36,7 @@
               dnd-draggable="repoData"
               dnd-effect-allowed="move"
             >
-             <td class="handle">&nbsp;:::</td>
+             <td class="handle text-right ">{{$index + 1}} &nbsp;::: </td>
              <td>
                 {{ repoData.repoName }}
              </td>
@@ -53,12 +52,12 @@
                     })}}"
                     target="_blank"
                     type="button"
-                    class="btn btn-xs btn-default t_button"
+                    class="btn btn-xs btn-default orange-icon"
                   >
                     <i class="icon-download"></i>
                   </a>
 
-                  <button type="button" class="btn btn-default btn-xs dropdown-toggle t_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="btn btn-default btn-xs dropdown-toggle orange-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
@@ -105,7 +104,7 @@
               repoData.shortUrl"
             >
               <td colspan="6" class="text-right">
-                <div data-ng-if="repoData.isGeneratingManifestShortUrl || repoData.isGeneratingManifestID">
+                <div class="spinner-container" data-ng-if="repoData.isGeneratingManifestShortUrl || repoData.isGeneratingManifestID">
                   <i class="icon-spinner icon-spin"></i>
                 </div>
 
@@ -138,10 +137,10 @@
                   </div>
 
                   <div class="row" data-ng-if-start="repoData.manifestID">
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                       Manifest ID
                     </div>
-                    <div class="col-md-9 text-left">
+                    <div class="col-sm-9 text-left">
                       
                       <div class="manifest" data-ng-if="repoData.hasManifest">
                         <input
@@ -167,10 +166,10 @@
                   </div>
 
                   <div class="row" data-ng-if-end>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                       Usage example
                     </div>
-                    <div class="col-md-9 text-left">
+                    <div class="col-sm-9 text-left">
                       <input
                         onClick="this.select()"
                         class="code"
