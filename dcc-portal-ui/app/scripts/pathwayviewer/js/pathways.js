@@ -164,19 +164,19 @@
            return geneSet;
          });
       },
-      getPathwayXML = function (geneSet) {
-        return GeneSetService.getPathwayXML(geneSet).then(function (pathwayXML) {
-          return pathwayXML;
-        });
-      },
       getUIParentPathways = function (geneSet) {
-        return GeneSetHierarchy.uiPathwayHierachy(geneSet.hierarchy, geneSet);
+        return GeneSetHierarchy.uiPathwayHierarchy(geneSet.hierarchy, geneSet);
       },
       getParentPathwayId = function (geneSet) {
-        return getUIParentPathways(geneSet).geneSetId;
+        return getUIParentPathways(geneSet)[0].geneSetId;
       },
       getPathwayId = function (geneSet) {
-        return getUIParentPathways(geneSet).diagramId;
+        return getUIParentPathways(geneSet)[0].diagramId;
+      },
+      getPathwayXML = function (geneSet) {
+        return GeneSetService.getPathwayXML(getPathwayId(geneSet)).then(function (pathwayXML) {
+          return pathwayXML;
+        });
       },
       getPathwayZoom = function (geneSet) {
         if (getParentPathwayId(geneSet) === getPathwayId(geneSet)) {
@@ -274,7 +274,7 @@
           geneList.push.apply(geneList, overlapGeneExternalIDs);
         });
 
-        var geneOverlapExistsHash;
+        var geneOverlapExistsHash = {};
         _.forEach(geneList, function (g) {
           geneOverlapExistsHash[g] = true;
         });
@@ -314,7 +314,7 @@
       getGeneOverlapExistsHashUsingDbIds = function (geneOverlapExistsHash, annotatedHighlights) {
         var geneOverlapExistsHashUsingDbIds = Object.assign({}, geneOverlapExistsHash);
         var geneCount = 0;
-        _.forEach(annotatedHighlights, function (annotatedHighlight) {  
+        _.forEach(annotatedHighlights, function (annotatedHighlight) {
           if (angular.isDefined(geneOverlapExistsHashUsingDbIds[annotatedHighlight.uniprotId])) {
             geneCount++;
 
@@ -382,11 +382,13 @@
           ]);
         })
         .then(function (results) {
-          pathwayData.overlaps = getGeneOverlapExistsHashUsingDbIds(results[0]);
+          pathwayData.overlaps = getGeneOverlapExistsHashUsingDbIds(results[0], _.union(results[1], results[2]));
           pathwayData.mutationHighlights = results[1];
           pathwayData.drugHighlights = results[2];
         })
         .then(function () {
+          pathwayData.geneSet.showPathway = true;
+
           $scope.geneSet = pathwayData.geneSet;
           $scope.pathway = {
             xml: pathwayData.xml,
