@@ -23,13 +23,13 @@
         </div>
         <ul class="open-id-providers" data-ng-hide="params.provider=='openid'||params.provider=='verisign'&&!verisignUsername||connecting">
             <li class="open-id-provider" data-ng-class="{active: params.provider=='icgc'}"
-                data-ng-click="params.provider='icgc';tryLogin();"><span class="logo"><img
+                data-ng-click="params.provider='icgc'"><span class="logo"><img
                     src="/styles/images/icgc_open_id.png"></span></li>
             <li class="open-id-provider" data-ng-class="{active: params.provider=='google'}"
-                data-ng-click="params.provider='google';tryLogin();"><span class="logo"><img
+                data-ng-click="params.provider='google'"><span class="logo"><img
                     src="/styles/images/google_open_id.png"></span></li>
             <li class="open-id-provider" data-ng-class="{active: params.provider=='yahoo'}"
-                data-ng-click="params.provider='yahoo';tryLogin();"><span class="logo"><img style="margin-bottom: .5rem" src="/styles/images/yahoo_open_id.png"></span>
+                data-ng-click="params.provider='yahoo'"><span class="logo"><img style="margin-bottom: .5rem" src="/styles/images/yahoo_open_id.png"></span>
             </li>
         </ul>
 

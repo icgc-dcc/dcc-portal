@@ -145,7 +145,7 @@
     function ($window, $scope, $location, $modal, Auth, CUD, OpenID, $state, $stateParams, PortalFeature) {
 
       $scope.params = {};
-      $scope.params.provider = 'icgc';
+      $scope.params.provider = 'google';
       $scope.params.error = null;
       $scope.params.user = null;
       $scope.params.openIDUrl = null;
