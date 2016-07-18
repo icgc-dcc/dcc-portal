@@ -18,6 +18,7 @@
        <table class="table table-info">
          <thead>
            <th></th>
+           <th class="text-right">#</th>
            <th style="width: 40%;">Repository</th>
            <th class="text-right"># Donors</th>
            <th class="text-right"># Files</th>
@@ -36,7 +37,8 @@
               dnd-draggable="repoData"
               dnd-effect-allowed="move"
             >
-             <td class="handle text-right ">{{$index + 1}} &nbsp;::: </td>
+             <td class="handle text-right ">&nbsp;::: </td>
+             <td class="text-right">{{$index + 1}}</td>
              <td>
                 {{ repoData.repoName }}
              </td>
@@ -57,7 +59,7 @@
                     <i class="icon-download"></i>
                   </a>
 
-                  <button type="button" class="btn btn-default btn-xs dropdown-toggle orange-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
@@ -103,7 +105,7 @@
               repoData.manifestID ||
               repoData.shortUrl"
             >
-              <td colspan="6" class="text-right">
+              <td colspan="7" class="text-right">
                 <div class="spinner-container" data-ng-if="repoData.isGeneratingManifestShortUrl || repoData.isGeneratingManifestID">
                   <i class="icon-spinner icon-spin"></i>
                 </div>
@@ -198,7 +200,7 @@
            </tr>
 
            <tr class="dndPlaceholder">
-             <td colspan="6">&nbsp;</td>
+             <td colspan="7">&nbsp;</td>
            </tr>
 
          </tbody>
