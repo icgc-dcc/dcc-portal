@@ -264,4 +264,32 @@
     };
   });
 
+  module.service('FullScreenService', function() {
+
+    var exitFullScreen = function() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    };
+
+    var enterFullScreen = function(element) {
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    };
+
+    return {
+      exitFullScreen: exitFullScreen,
+      enterFullScreen: enterFullScreen
+    };
+  });
+
 })();

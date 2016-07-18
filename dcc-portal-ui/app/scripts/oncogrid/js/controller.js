@@ -21,7 +21,7 @@
     var module = angular.module('icgc.oncogrid.controllers', []);
 
     module.controller('OncogridController', function($scope, LocationService, OncogridService, SetService,
-        $timeout, $modal, Extensions, Settings) {
+        $timeout, $modal, Extensions, Settings, FullScreenService) {
         var _this = this;
 
         Settings.get().then(function(settings) {
@@ -84,24 +84,12 @@
         };
 
         function exitFullScreen() {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            }
+            FullScreenService.exitFullScreen();
         }
 
         function enterFullScreen() {
             var element = document.getElementById('oncogrid-container');
-            if (element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if (element.mozRequestFullScreen) {
-                element.mozRequestFullScreen();
-            } else if (element.webkitRequestFullScreen) {
-                element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
+            FullScreenService.enterFullScreen(element);
         }
 
         _this.requestFullScreen = function () {
