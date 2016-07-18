@@ -161,6 +161,8 @@
 
             // Reset data
             $scope.annotatedGenesList = [];
+            $scope.sortField = 'symbol';
+            $scope.sortDescendingly = false;
             $scope.entityType = typeMap[d.type];
             $scope.subPathwayId = d.reactomeId;
 
@@ -244,9 +246,7 @@
               });
             });
                         
-            $scope.annotatedGenesList = _.sortBy(annotatedGenesList, function (gene) {
-              return gene.symbol;
-            });
+            $scope.annotatedGenesList = annotatedGenesList;
             
             renderinfo(
                 node, 
