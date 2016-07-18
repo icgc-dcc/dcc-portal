@@ -157,256 +157,257 @@
       $scope.pathway = {};
 
       _addFilters(pathway);
-
       _selectedPathway = pathway;
 
-      var id = pathway.geneSetId;
+      var getGeneSet = function (geneSetId) {
+         return Restangular.one('genesets').one(geneSetId).get().then(function (geneSet) {
+           return geneSet;
+         });
+      },
+      getPathwayXML = function (geneSet) {
+        return GeneSetService.getPathwayXML(geneSet).then(function (pathwayXML) {
+          return pathwayXML;
+        });
+      },
+      getUIParentPathways = function (geneSet) {
+        return GeneSetHierarchy.uiPathwayHierachy(geneSet.hierarchy, geneSet);
+      },
+      getParentPathwayId = function (geneSet) {
+        return getUIParentPathways(geneSet).geneSetId;
+      },
+      getPathwayId = function (geneSet) {
+        return getUIParentPathways(geneSet).diagramId;
+      },
+      getPathwayZoom = function (geneSet) {
+        if (getParentPathwayId(geneSet) === getPathwayId(geneSet)) {
+          return $q.resolve;
+        }
+       
+        return GeneSetService.getPathwayZoom(getParentPathwayId(geneSet)).then(function (pathwayZoom) {
+          return pathwayZoom;
+        });
+      },
+      getPathwayProteinMap = function (geneSet) {
+        return GeneSetService.getPathwayProteinMap(getParentPathwayId(geneSet), []).then(function (pathwayProteinMap) {
+          return pathwayProteinMap;
+        });
+      },
+      getEntitySetId = function (geneSet) {
+        return SetService.getTransientSet('GENE', {
+          'filters': {gene:{pathwayId:{is:[getParentPathwayId(geneSet)]}}},
+          'sortBy': 'id',
+          'sortOrder': 'ASCENDING',
+          'name': getParentPathwayId(geneSet),
+          'size': geneSet.geneCount,
+          'transient': true 
+        }).then(function (entitySetData) {
+          return entitySetData.id;
+        });
+      },
+      getDrugs = function (entitySetId) {
+        return CompoundsService.getCompoundsFromEntitySetId(entitySetId).then(function(drugs) {  
+          return drugs;
+        });
+      },
+      getMutationHighlights = function (pathwayProteinMap) {
+        var pathwayMutationHighlights = [];
+        _.forEach(pathwayProteinMap, function (value, id) {
+          if (value && value.dbIds) {
+            var dbIds = value.dbIds.split(',');
+            pathwayMutationHighlights.push({
+              uniprotId: id,
+              dbIds: dbIds,
+              value: value.value
+            });
+          }
+        });
+        return pathwayMutationHighlights;
+      },
+      getDrugHighlights = function (drugs, pathwayProteinMap) {
+        var drugMap = {};
+        _.forEach(drugs, function(drug) {
+          _.forEach(drug.genes, function(gene) {
+            var uniprotId = gene.uniprot;
+            
+            if (_.isUndefined(drugMap[uniprotId])) {
+              drugMap[uniprotId] = [];
+            }
 
-
-      var _geneSet = null,
-      _pathwayId = null,
-      _parentPathwayId = null,
-      _uiParentPathways = null,
-      _xml = null,
-      _zooms = [''],
-      _pathwayMutationHighlights = [],
-      _pathwayDrugHighlights = [],
-      _geneOverlapExistsHash = {};
-
-
-      Restangular.one('genesets').one(id).get()
-        .then(function (geneSet) {
-          _geneSet = geneSet;
-          _uiParentPathways = GeneSetHierarchy.uiPathwayHierarchy(_geneSet.hierarchy, _geneSet);
-          _geneSet.showPathway = true;
-          _pathwayId = _uiParentPathways[0].diagramId;
-          _parentPathwayId = _uiParentPathways[0].geneSetId;
-        })
-        .then(function () {
-          var deferred = $q.defer();
-
-          GeneSetService.getPathwayXML(_pathwayId)
-            .then(function (xml) {
-              _xml = xml;
-              deferred.resolve();
-            }).catch(function () {
-              $scope.pathway = {
-                xml: '',
-                zooms: [''],
-                mutationHighlights: [],
-                drugHighlights: []
-              };
+            drugMap[uniprotId].push({
+              'zincId': drug.zincId,
+              'name': drug.name
+            });
           });
-
-          return deferred.promise;
-        })
-        .then(function () {
-          var deferred = $q.defer();
-
-          // If the diagram itself isnt the one being diagrammed, get list of stuff to zoom in on
-          if (_pathwayId !== _parentPathwayId) {
-            GeneSetService.getPathwayZoom(_parentPathwayId).then(function (data) {
-              _zooms = data;
-              deferred.resolve();
+        });
+       
+        var pathwayDrugHighlights = [];
+        _.forEach(pathwayProteinMap,function(value,id) {
+          if(value && value.dbIds && drugMap[id]) {
+            pathwayDrugHighlights.push({
+              uniprotId:id,
+              dbIds:value.dbIds.split(','),
+              drugs:drugMap[id]
             });
           }
-          else {
-            _zooms = [''];
-            deferred.resolve();
+        });
+        return pathwayDrugHighlights;
+      },
+      getGeneListData = function (pathway) {
+        return Restangular.one('genes').get({filters: pathway.geneSetOverlapFilters}).then(function (geneListData) {
+          return geneListData;
+        });
+      },
+      getGeneOverlapExistsHash = function (geneListData) {
+        if (!_.get(geneListData, 'hits[0]')) {
+          return {};
+        }
+
+        var geneList = [];
+        _.forEach(geneListData.hits, function (gene) {
+          var overlapGeneExternalIDs = _.get(gene,  'externalDbIds.uniprotkb_swissprot', false);
+
+          // We can't join by this ID (with the pathway viewer) so throw away
+          if (!overlapGeneExternalIDs) {
+            return;
           }
 
-          return deferred.promise;
-        })
-        .then(function () {
-          var deferred = $q.defer();
+          geneList.push.apply(geneList, overlapGeneExternalIDs);
+        });
 
-          GeneSetService.getPathwayProteinMap(_parentPathwayId, []).then(function (map) {
- 
-            // Normalize into array
-            _.forEach(map, function (value, id) {
-              if (value && value.dbIds) {
-                var dbIds = value.dbIds.split(',');
+        var geneOverlapExistsHash;
+        _.forEach(geneList, function (g) {
+          geneOverlapExistsHash[g] = true;
+        });
+        return geneOverlapExistsHash;
+      },
+      getGeneAnnotatedHighlights = function (highlightData) {
+        var uniprotIds = _.map(highlightData.highlights, 'uniprotId');
+        return GeneSetVerificationService.verify(uniprotIds.join(',')).then(function (data) {
+          var annotatedHighlights = [];
+          _.forEach(highlightData.highlights, function (highlight) {
+            var annotatedHighlight = Object.assign({}, highlight);
+            var geneKey = 'external_db_ids.uniprotkb_swissprot';
+            if (!data.validGenes[geneKey]) {
+              return;
+            }
 
-                _pathwayMutationHighlights.push({
-                  uniprotId: id,
-                  dbIds: dbIds,
-                  value: value.value
-                });
-              }
-            });
+            var uniprotObj = data.validGenes[geneKey][annotatedHighlight.uniprotId];
+            if (!uniprotObj) {
+              return;
+            }
 
-            SetService.getTransientSet('GENE', {
-              'filters': {gene:{pathwayId:{is:[_parentPathwayId]}}},
-              'sortBy': 'id',
-              'sortOrder': 'ASCENDING',
-              'name': _parentPathwayId,
-              'size': _geneSet.geneCount,
-              'transient': true 
-            }).then(function (entitySetData) {
-              CompoundsService.getCompoundsFromEntitySetId(entitySetData.id).then(function(drugs) {                
-                var drugMap = {};
-                _.forEach(drugs, function(drug) {
-                  _.forEach(drug.genes, function(gene) {
-                    var uniprotId = gene.uniprot;
-
-                    if (_.isUndefined(drugMap[uniprotId])) {
-                      drugMap[uniprotId] = [];
-                    }
-
-                    drugMap[uniprotId].push({
-                      'zincId': drug.zincId,
-                      'name': drug.name
-                    });
-                  });
-                });
-
-                // Normalize into array
-                _.forEach(map,function(value,id) {
-                  if(value && value.dbIds && drugMap[id]) {
-                    _pathwayDrugHighlights.push({
-                      uniprotId:id,
-                      dbIds:value.dbIds.split(','),
-                      drugs:drugMap[id]
-                    });
-                  }
-                });
-                deferred.resolve();
-              });
-              //console.log(_geneOverlapExistsHash);
-            });
-            return deferred.promise;
-          })
-          .then(function () {
-            var deferred = $q.defer();
-
-            Restangular.one('genes').get({filters: pathway.geneSetOverlapFilters})
-              .then(function (geneListData) {
-
-              // Check if there are hits (i.e. any gene overlap) - otherwise resolve the promise
-              if (!_.get(geneListData, 'hits[0]')) {
-                deferred.resolve();
-                return;
-              }
-
-              var pathwayGeneID = 'externalDbIds.uniprotkb_swissprot',
-              geneList = [];
-
-              _.forEach(geneListData.hits, function (gene) {
-                var overlapGeneExternalIDs = _.get(gene, pathwayGeneID, false);
-                /*, overlapGene = {},*/
-
-                // We can't join by this ID (with the pathway viewer) so throw away
-                if (!overlapGeneExternalIDs) {
-                  return;
-                }
-
-                // Create auxiliary gene object that we can later reference
-                /*
-                 var  overlapGene = {
-                   geneId: gene.id,
-                   name: gene.name,
-                   geneSymbol: gene['symbol']
-                 };
-
-                 _.forEach(overlapGeneExternalIDs, function(dbID) {
-                   _geneOverlapExistsHash[dbID] = overlapGene;
-                 });
-                */
-                //console.log(overlapGene);
-                geneList.push.apply(geneList, overlapGeneExternalIDs);
-
-              });
-
-              _.forEach(geneList, function (g) {
-                _geneOverlapExistsHash[g] = true;
-              });
-
-
-              //console.log('Overlap genes returned: ' +
-              // _.keys(_geneOverlapExistsHash).length, '\nProtein Map Intersect Overlap Length = ' +
-              //  (_.intersection(_.values(_uniprotIds), _.keys(_geneOverlapExistsHash)).length) );
-              deferred.resolve();
-
-            });
-            return deferred.promise;
-          })
-          .then(function () {
-            var deferred = $q.defer();
-            addGeneAnnotations({
-              highlights: _pathwayMutationHighlights, 
-              includeAdvQuery: true,
-              promiseToResolve: null
-            });
-            addGeneAnnotations({
-              highlights: _pathwayDrugHighlights,
-              includeAdvQuery: false,
-              promiseToResolve: deferred
-            });
-            return deferred.promise;          
-
-            function addGeneAnnotations(highlightData) {
-              var uniprotIds = _.map(highlightData.highlights, 'uniprotId');
-              GeneSetVerificationService.verify(uniprotIds.join(',')).then(function (data) {
-
-                var geneCount = 0;
-
-                _.forEach(highlightData.highlights, function (n) {
-                  var geneKey = 'external_db_ids.uniprotkb_swissprot';
-                  if (!data.validGenes[geneKey]) {
-                    return;
-                  }
-
-                  var uniprotObj = data.validGenes[geneKey][n.uniprotId];
-                  if (!uniprotObj) {
-                    return;
-                  }
-
-                  var ensemblId = uniprotObj[0].id;
-                  if (highlightData.includeAdvQuery) {
-                    n.advQuery = LocationService.mergeIntoFilters({
-                      gene: {
-                        id: {is: [ensemblId]}
-                      }
-                    });
-                  }
-                  n.geneSymbol = uniprotObj[0].symbol;
-                  n.geneId = ensemblId;
-
-                  if (angular.isDefined(_geneOverlapExistsHash[n.uniprotId])) {
-                    geneCount++;
-
-                    _.forEach(n.dbIds, function (dbID) {
-                      // Swap in Reactome keys but maintain the id we use this to determine overlaps in O(1)
-                      // later... The dbID is used as a reference to the reactome SVG nodes...
-                      _geneOverlapExistsHash[dbID] = {id: n.uniprotId, geneId: n.geneId, geneSymbol: n.geneSymbol};
-                    });
-                    delete _geneOverlapExistsHash[n.uniprotId];
-                  }
-                });
-                console.log(geneCount + ' Overlapped genes validated! ');
-                if (highlightData.promiseToResolve) {
-                  highlightData.promiseToResolve.resolve();
-                }
+            var ensemblId = uniprotObj[0].id;
+            if (highlightData.includeAdvQuery) {
+              annotatedHighlight.advQuery = LocationService.mergeIntoFilters({
+                gene: {id: {is: [ensemblId]}}
               });
             }
-          })
-         .then(function () {
-            $scope.geneSet = _geneSet;
-            $scope.pathway = {
-                xml: _xml,
-                zooms: _zooms,
-                mutationHighlights: _pathwayMutationHighlights,
-                drugHighlights: _pathwayDrugHighlights,
-                overlaps: _geneOverlapExistsHash
-            };
-            $scope.uiParentPathways = _uiParentPathways;
+            annotatedHighlight.geneSymbol = uniprotObj[0].symbol;
+            annotatedHighlight.geneId = ensemblId;
 
-            setTimeout(function () {
-              $scope.$broadcast(PathwaysConstants.EVENTS.MODEL_READY_EVENT, {});
-            }, 100);
+            annotatedHighlights.push(annotatedHighlight);
           });
-      });
 
+          return annotatedHighlights;
+        });
+      },
+      getGeneOverlapExistsHashUsingDbIds = function (geneOverlapExistsHash, annotatedHighlights) {
+        var geneOverlapExistsHashUsingDbIds = Object.assign({}, geneOverlapExistsHash);
+        var geneCount = 0;
+        _.forEach(annotatedHighlights, function (annotatedHighlight) {  
+          if (angular.isDefined(geneOverlapExistsHashUsingDbIds[annotatedHighlight.uniprotId])) {
+            geneCount++;
+
+            _.forEach(annotatedHighlight.dbIds, function (dbID) {
+              // Swap in Reactome keys but maintain the id we use this to determine overlaps in O(1)
+              // later... The dbID is used as a reference to the reactome SVG nodes...
+              geneOverlapExistsHashUsingDbIds[dbID] = {
+                id: annotatedHighlight.uniprotId,
+                geneId: annotatedHighlight.geneId,
+                geneSymbol: annotatedHighlight.geneSymbol
+              };
+            });
+            delete geneOverlapExistsHashUsingDbIds[annotatedHighlight.uniprotId];
+          }
+        });
+        console.log(geneCount + ' Overlapped genes validated! ');
+        return geneOverlapExistsHashUsingDbIds;
+      };
+
+      var pathwayData = {};
+      getGeneSet(pathway.geneSetId)
+        .then(function (geneSet) {
+          pathwayData.geneSet = geneSet;
+
+          return $q.all([
+            getPathwayProteinMap(geneSet),
+            getEntitySetId(geneSet),
+            getPathwayXML(geneSet),
+            getPathwayZoom(geneSet),
+            getUIParentPathways(geneSet)
+          ]);
+        })
+        .then(function (results) {
+          var pathwayProteinMap = results[0];
+          var entitySetId = results[1];
+
+          pathwayData.xml = results[2];
+          pathwayData.zooms = results[3];
+          pathwayData.uiParentPathways = results[4];
+
+          return $q.all([
+            getGeneListData(pathway),
+            pathwayProteinMap,
+            getDrugs(entitySetId)
+          ]);
+        })
+        .then(function (results) {
+          var geneListData = results[0];
+          var pathwayProteinMap = results[1];
+          var drugs = results[2];
+
+          var mutationHighlights = getMutationHighlights(pathwayProteinMap);
+          var drugHighlights = getDrugHighlights(drugs, pathwayProteinMap);
+
+          return $q.all([
+            getGeneOverlapExistsHash(geneListData),
+            getGeneAnnotatedHighlights({
+              highlights: mutationHighlights,
+              includeAdvQuery: true
+            }),
+            getGeneAnnotatedHighlights({
+              highlights: drugHighlights,
+              includeAdvQuery: false
+            })
+          ]);
+        })
+        .then(function (results) {
+          pathwayData.overlaps = getGeneOverlapExistsHashUsingDbIds(results[0]);
+          pathwayData.mutationHighlights = results[1];
+          pathwayData.drugHighlights = results[2];
+        })
+        .then(function () {
+          $scope.geneSet = pathwayData.geneSet;
+          $scope.pathway = {
+            xml: pathwayData.xml,
+            zooms: pathwayData.zooms,
+            mutationHighlights: pathwayData.mutationHighlights,
+            drugHighlights: pathwayData.drugHighlights,
+            overlaps: pathwayData.overlaps
+          };
+          $scope.uiParentPathways = pathwayData.uiParentPathways;
+
+          setTimeout(function () {
+            $scope.$broadcast(PathwaysConstants.EVENTS.MODEL_READY_EVENT, {});
+          }, 100);
+        }).catch(function () {
+          $scope.pathway = {
+            xml: '',
+            zooms: [''],
+            mutationHighlights: [],
+            drugHighlights: []
+          };
+        });
     };
     
     // Initialize our controller and it's corresponding scope.
