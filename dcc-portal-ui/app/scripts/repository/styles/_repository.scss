@@ -58,9 +58,14 @@
         &.ng-leave + .extras, {
           display: none;
         }
-        &:not(.extras) {
-          cursor: move;
-          cursor: -webkit-grab;
+        &.dndPlaceholder {
+          background-color: #f2f2f2;
+          border: 2px dotted #999;
+        }
+        .t_button {
+          padding-top: 1px;
+          padding-bottom: 1px;
+          border: 1px solid #ce6503
         }
       }
       td, th {
@@ -74,10 +79,14 @@
         & + tr {
           border-top: 1px solid #f2f2f2;
         }
-        code {
-          padding: 2px 4px;
+        .code {
+          font-family: monospace;
         }
       }
+    }
+    .handle, *[draggable="true"] {
+      cursor: move;
+      cursor: -webkit-grab;
     }
 
 

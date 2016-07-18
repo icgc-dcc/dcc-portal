@@ -13,6 +13,7 @@
        <br>
        <table class="table table-info">
          <thead>
+           <th></th>
            <th style="width: 40%;">Repository</th>
            <th class="text-right"># Donors</th>
            <th class="text-right"># Files</th>
@@ -31,6 +32,7 @@
               dnd-draggable="repoData"
               dnd-effect-allowed="move"
             >
+             <td class="handle">&nbsp;:::</td>
              <td>
                 {{ repoData.repoName }}
              </td>
@@ -46,12 +48,12 @@
                     })}}"
                     target="_blank"
                     type="button"
-                    class="btn btn-xs btn-default"
+                    class="btn btn-xs btn-default t_button"
                   >
                     <i class="icon-download"></i>
                   </a>
 
-                  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="btn btn-default btn-xs dropdown-toggle t_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
@@ -97,7 +99,7 @@
               repoData.manifestID ||
               repoData.shortUrl"
             >
-              <td colspan="5" class="text-right">
+              <td colspan="6" class="text-right">
                 <div data-ng-if="repoData.isGeneratingManifestShortUrl || repoData.isGeneratingManifestID">
                   <i class="icon-spinner icon-spin"></i>
                 </div>
@@ -105,10 +107,10 @@
                 <div class="container-fluid">
 
                   <div class="row" data-ng-if="repoData.shortUrl">
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                       Manifest URL
                     </div>
-                    <div class="col-md-9 text-left">
+                    <div class="col-sm-9 text-left">
                       <input
                         onClick="this.select()"
                         size="18"
@@ -166,6 +168,7 @@
                     <div class="col-md-9 text-left">
                       <input
                         onClick="this.select()"
+                        class="code"
                         size="76"
                         type="text"
                         value="{{ 'bin/icgc-storage-client manifest --manifest ' + repoData.manifestID }}"
@@ -189,6 +192,11 @@
 
              </td>
            </tr>
+
+           <tr class="dndPlaceholder">
+             <td colspan="6">&nbsp;</td>
+           </tr>
+
          </tbody>
        </table>
     </div>
