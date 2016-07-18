@@ -30,6 +30,7 @@
     var onClickDonor = params.onClickDonor || _.noop;
     var palette = params.palette;
     var markerType = params.markerType || 'circle';
+    var xDomain = params.xDomain || [];
 
     var containerBounds = container.getBoundingClientRect();
 
@@ -67,6 +68,7 @@
       .attr('height', outerHeight);
 
     var wrapper = svg.append('g')
+        .attr('class', 'wrapper')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     var longestDuration = _.max(dataSets
@@ -77,7 +79,7 @@
           return data.donors.slice(-1)[0].time;
         }));
 
-    x.domain([0, longestDuration]);
+    x.domain([xDomain[0] || 0, xDomain[1] || longestDuration]);
     y.domain([0, 1]);
 
     // Draw x axis
@@ -102,6 +104,26 @@
         .attr('y', -40)
         .attr('x', - (margin.top + axisHeight / 2))
         .text(yAxisLabel);
+    
+    function brushend() {
+      var extent = brush.extent();
+      console.log(extent);
+
+      svg.selectAll('*').remove();
+      renderChart(_.extend({}, params, {
+        xDomain: extent
+      }));
+      svg.select('.brush').call(brush.clear());
+    }
+    var brush = d3.svg.brush()
+      .x(x)
+      .on('brushend', brushend);
+
+    wrapper.append("g")
+      .attr("class", "brush")
+      .call(brush)
+      .selectAll('rect')
+      .attr('height', axisHeight);
 
     dataSets.forEach(function (data, i) {
       if (_.includes(disabledDataSets, data)) {

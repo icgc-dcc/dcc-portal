@@ -59,6 +59,12 @@ $faded: #e6dede;
     }
   }
 
+  .brush .extent {
+    stroke: #fff;
+    fill-opacity: .125;
+    shape-rendering: crispEdges;
+    pointer-events: none;
+  }
 }
 
 .survival-analysis {
