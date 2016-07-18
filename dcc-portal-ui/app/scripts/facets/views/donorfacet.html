@@ -9,7 +9,7 @@
 
             <div
                 class="t_facets__inclusion_toggle inclusion-toggler"
-                data-ng-if="enabled && type !== 'file-donor'"
+                data-ng-if="type !== 'file-donor'"
                 data-ng-class="{'is': !isNot, 'is-not': isNot}"
                 data-ng-click="isNot ? isFacet(facet) : notFacet(facet)"
                 data-tooltip="Toggle this facet to IS {{ isNot ? 'NOT' : '' }}"
