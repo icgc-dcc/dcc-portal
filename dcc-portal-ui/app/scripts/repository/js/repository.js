@@ -502,7 +502,6 @@
     _ctrl.dataRepoTitle = dataRepoTitle;
     _ctrl.dataRepoFileUrl = RouteInfoService.get ('dataRepositoryFile').href;
     _ctrl.advancedSearchInfo = RouteInfoService.get ('advancedSearch');
-    _ctrl.fileSets = PortalFeature.get('FILE_SETS');
     _ctrl.repoChartConfigOverrides = {
       chart: {
           type: 'column',
