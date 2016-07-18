@@ -7,6 +7,7 @@ Change log for the DCC Data Portal
 --
   - Added new OncoGrid analysis using newly written OncoGrid library (https://github.com/icgc/oncogrid)
   - Set Analysis now supports operations on File Sets
+  - Added Survival analysis into Phenotype Comparison analysis
   - Refactoring and consolidation of page all functionality
   - Minor bug fixes and style updates. 
 
