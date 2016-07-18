@@ -3,6 +3,13 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.2.12
+--
+  - Added new OncoGrid analysis using newly written OncoGrid library (https://github.com/icgc/oncogrid)
+  - Set Analysis now supports operations on File Sets
+  - Refactoring and consolidation of page all functionality
+  - Minor bug fixes and style updates. 
+
 4.2.6
 --
   - Added support for new Download Service
