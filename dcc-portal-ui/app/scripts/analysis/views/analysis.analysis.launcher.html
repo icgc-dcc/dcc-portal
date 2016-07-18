@@ -87,6 +87,30 @@
                         </div>
                     </div>
                 </div>
+                <div class="analysis-tile-container">
+                    <div class="analysis-tile" data-ng-click="NAC.analysisType='oncogrid'">
+                        <h2
+                           class="analysis-title"
+                        >{{NAC.analysisName('oncogrid')}}</h2>
+                        <img
+                           class="analysis-illustration"
+                           src="/styles/images/analysis-onco.svg"
+                        />
+                        <div class="analysis-tile-detail">{{NAC.analysisDescription('oncogrid')}}</div>
+                    </div>
+                    <div class="tile-extra-container" data-ng-click="NAC.demoOncogrid()">
+                        <div class="tile-extra">
+                           <h3 class="demo-title">
+                              Demo
+                           </h3>
+                           <div class="demo-description">
+                              {{NAC.analysisDemoDescription('oncogrid')}}
+                           </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
             <div class="analysis-suggestions">
                 <a class="cta" href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">
@@ -268,6 +292,51 @@
             </div>
         </div>
 
+        <!-- OncoGrid -->
+        <div data-ng-if="NAC.analysisType === 'oncogrid'">
+            <div><em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(100 donors maximum)</small>, then click on Run.</em></div>
+            <div>Demo: <a href="" data-ng-click="NAC.demoOncogrid()">{{NAC.analysisDemoDescription('oncogrid')}}</a></div>
+            
+            <div> 
+                <div>Select 1 Gene set and 1 Donor set, then click on Run.</div>
+                <table class="table table-selectable"> 
+                    <thead>
+                        <th></th>
+                        <th>Item Type</th>
+                        <th>Name</th>
+                        <th>Note</th>
+                        <th class="text-right"># Items</th>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-if="NAC.allSets.length === 0">
+                            <td colspan="5" class="text-center"><strong>No saved sets</strong></td>
+                        </tr>
+                        <tr data-ng-repeat="item in NAC.allSets" style="color:{{NAC.validForOnco(item)?'':'#CCC'}}"> 
+                            <td class="text-center" style="width:2rem"> 
+                               <span data-ng-if="NAC.validForOnco(item)" data-ng-click="NAC.toggleOnco(item.id, item.type);">
+                                  <i data-ng-class="{'icon-check-empty': NAC.selectedIds.indexOf(item.id) === -1, 'icon-check': NAC.selectedIds.indexOf(item.id) >=0}"></i>
+                               </span>
+                            </td>
+                            <td>{{item.type | readable}}</td>
+                            <td>{{item.name}}</td>
+                            <td style="max-width: 30rem">{{item.description}}</td>
+                            <td class="text-right"> 
+                                <a href="{{item.advLink}}">{{item.count | number}}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <button class="t_button" 
+                    data-ng-disabled="NAC.selectedIds.length < 2 || NAC.selectedIds.length > 2 || NAC.isLaunchingAnalysis() || !NAC.isValidOncoSelection()"
+                    data-ng-click="NAC.launchOncogridAnalysis(NAC.selectedIds)">
+                    <span data-ng-if="NAC.isLaunchingAnalysis()"><i class="icon-spinner icon-spin"></i></span>
+                    Run
+                </button>
+            </div>
+            
+        </div>
+
         <!-- survival -->
         <div data-ng-if="NAC.analysisType === 'survival'">
             <div><em>{{NAC.analysisDescription('survival')}}</em></div>
@@ -324,4 +393,3 @@
     </div>
 </div>
 </section>
-

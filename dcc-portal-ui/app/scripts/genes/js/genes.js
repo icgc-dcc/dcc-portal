@@ -339,7 +339,7 @@
 
   var module = angular.module('icgc.genes.models', []);
 
-  module.service('Genes', function (Restangular, LocationService, Gene) {
+  module.service('Genes', function (Restangular, LocationService, Gene, ApiService) {
     this.handler = Restangular.all('genes');
 
     this.getList = function (params) {
@@ -350,6 +350,10 @@
       };
 
       return this.handler.get('', angular.extend(defaults, params));
+    };
+    
+    this.getAll = function (params) {
+      return ApiService.getAll(this.handler, params); 
     };
 
     this.one = function (id) {

@@ -222,6 +222,11 @@
         demoDescription: 'Display survival analysis and compare phenotypes across brain, breast, and ' + 
         'colorectal cancer donors.'
       },
+      oncogrid: {
+        name: 'OncoGrid',
+        description: 'Display OncoGrid diagram to visualize genetic alteration occurrences affecting a set of donors.',
+        demoDescription: 'Generate an OncoGrid using top 75 donors and genes for PCAWG liver projects.'
+      },
       survival: {
         name: 'Survival Analysis',
         description: 'Display the survival analysis of your donor sets and compare some characteristics' +
@@ -282,6 +287,10 @@
       } else if (type === 'phenotype') {
         payload.dataType = 'donor';
         payload.inputSetCount = analysis.inputCount || '';
+      } else if (type === 'oncogrid') {
+        payload.dataType = 'oncogrid';
+        payload.geneCount = analysis.geneCount;
+        payload.donorCount = analysis.donorCount;
       } else {
         payload.dataType = analysis.type.toLowerCase();
         payload.inputSetCount = analysis.inputCount || '';
