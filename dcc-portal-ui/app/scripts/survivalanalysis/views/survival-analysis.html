@@ -12,8 +12,8 @@
   </script>
 
   <ul class="legend">
-    <li ng-if="ctrl.shouldShowReset()">
-      <i class="reset-button icon-undo" ng-click="ctrl.handleClickReset()"></i>
+    <li ng-if="ctrl.canUndo()">
+      <i class="undo-button icon-undo" ng-click="ctrl.handleClickUndo()"></i>
     </li>
     <li
       class="set"

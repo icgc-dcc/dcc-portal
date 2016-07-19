@@ -211,7 +211,11 @@
       var graphContainer = $element.find('.survival-graph').get(0);
       var svg = d3.select(graphContainer).append('svg');
       var tipTemplate = _.template($element.find('.survival-tip-template').html());
-      var xDomain, disabledDataSets;
+      var stateStack = [];
+      var state = {
+        xDomain: undefined,
+        disabledDataSets: undefined
+      };
 
       var update = function (params) {
         if (!ctrl.dataSets) {
@@ -222,10 +226,10 @@
           svg: svg, 
           container: graphContainer, 
           dataSets: ctrl.dataSets,
-          disabledDataSets: disabledDataSets,
+          disabledDataSets: state.disabledDataSets,
           palette: ctrl.palette,
           markerType: 'line',
-          xDomain: xDomain,
+          xDomain: state.xDomain,
           onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
               element: event.target,
@@ -249,46 +253,46 @@
           },
           onDomainChange: function (newXDomain) {
             $scope.$apply(function () {
-              xDomain = newXDomain;
-              update();
-            });
+              updateState({xDomain: newXDomain});
+            })
           }
         }, params));
+      };
+
+      var updateState = function (newState) {
+        stateStack = stateStack.concat(state);
+        state = _.extend({}, state, newState);
+        update();
       };
 
       window.addEventListener('resize', update);
       update();
 
-      var reset = function () {
-        xDomain = undefined;
-        disabledDataSets = ctrl.initialDisabledDataSets;
-      };
-
-      this.shouldShowReset = function () {
-        console.log(disabledDataSets);
-        return _.some([
-          xDomain !== undefined,
-          _.xor(_.map(disabledDataSets, '$$hashKey'), _.map(ctrl.initialDisabledDataSets, '$$hashKey')).length
-        ]);
+      this.canUndo = function () {
+        return stateStack.length > 1;
       };
 
       this.handleClickReset = function () {
-        reset();
+        updateState(stateStack[0]);
+        stateStack = [];
+      };
+
+      this.handleClickUndo = function () {
+        state = _.last(stateStack);
+        stateStack = _.without(stateStack, state);
         update();
       };
 
       this.isDataSetDisabled = function (dataSet) {
-        return _.includes(disabledDataSets, dataSet);
+        return _.includes(state.disabledDataSets, dataSet);
       };
 
       this.toggleDataSet = function (dataSet) {
-        disabledDataSets = _.xor(disabledDataSets, [dataSet]);
-        ctrl.isDataSetDisabled(dataSet);
-        update();
+        updateState({disabledDataSets: _.xor(state.disabledDataSets, [dataSet])});
       };
 
       this.$onInit = function () {
-        disabledDataSets = ctrl.initialDisabledDataSets;
+        updateState({disabledDataSets: ctrl.initialDisabledDataSets});
       };
 
       this.$onChanges = function (changes) {
