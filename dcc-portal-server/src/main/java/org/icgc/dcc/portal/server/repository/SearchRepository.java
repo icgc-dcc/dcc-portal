@@ -73,36 +73,34 @@ import lombok.extern.slf4j.Slf4j;
 public class SearchRepository {
 
   // Constants
-  @UtilityClass
-  private class Types {
+  private static class Types {
 
-    public final String PATHWAY = "pathway";
-    public final String CURATED_SET = "curated_set";
-    public final String GO_TERM = "go_term";
-    public final String DONOR = "donor";
-    public final String PROJECT = "project";
-    public final String GENE = "gene";
-    public final String MUTATION = "mutation";
-    public final String GENE_SET = "geneSet";
-    public final String FILE = "file";
-    public final String FILE_DONOR = "file-donor";
-    public final String DRUG = "compound";
+    public static final String PATHWAY = "pathway";
+    public static final String CURATED_SET = "curated_set";
+    public static final String GO_TERM = "go_term";
+    public static final String DONOR = "donor";
+    public static final String PROJECT = "project";
+    public static final String GENE = "gene";
+    public static final String MUTATION = "mutation";
+    public static final String GENE_SET = "geneSet";
+    public static final String FILE = "file";
+    public static final String FILE_DONOR = "file-donor";
+    public static final String DRUG = "compound";
 
   }
 
-  @UtilityClass
   private class FieldNames {
 
     // Fields to be included as prefix queries
-    public final String FILE_NAME = "file_name";
-    public final String ID = "id";
-    public final String INCHIKEY = "inchikey";
-    public final String DRUG_BANK = "external_references_drugbank";
-    public final String CHEMBL = "external_references_chembl";
-    public final String ATC_CODES = "atc_codes_code";
-    public final String ATC_LEVEL5_CODES = "atc_level5_codes";
+    public static final String FILE_NAME = "file_name";
+    public static final String ID = "id";
+    public static final String INCHIKEY = "inchikey";
+    public static final String DRUG_BANK = "external_references_drugbank";
+    public static final String CHEMBL = "external_references_chembl";
+    public static final String ATC_CODES = "atc_codes_code";
+    public static final String ATC_LEVEL5_CODES = "atc_level5_codes";
 
-    public final String GENE_MUTATIONS = "geneMutations";
+    public static final String GENE_MUTATIONS = "geneMutations";
 
   }
 

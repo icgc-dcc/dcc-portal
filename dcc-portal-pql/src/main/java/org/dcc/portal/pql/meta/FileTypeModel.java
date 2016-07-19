@@ -34,8 +34,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * TypeModel for Repository File index type
  */
@@ -43,7 +41,7 @@ public class FileTypeModel extends TypeModel {
 
   private static final Type MY_TYPE = Type.FILE;
   private static final String TYPE_PREFIX = MY_TYPE.getPrefix();
-  private static final String TERMS_LOOKUP_DONOR_IDS = "donor-ids";
+  private static final String TERMS_LOOKUP_DONOR_IDS = "file-ids";
 
   public FileTypeModel() {
     super(Fields.MAPPINGS, INTERNAL_ALIASES, PUBLIC_FIELDS, INCLUDE_FIELDS);
@@ -67,103 +65,101 @@ public class FileTypeModel extends TypeModel {
   /**
    * Raw ES fields
    */
-  @UtilityClass
-  public class EsFields {
+  public static class EsFields {
 
-    public final String FILE_COPIES = "file_copies";
-    public final String DONORS = "donors";
-    public final String DONOR_ID = "donor_id";
+    public static final String FILE_COPIES = "file_copies";
+    public static final String DONORS = "donors";
+    public static final String DONOR_ID = "donor_id";
 
   }
 
   /**
    * Field aliases
    */
-  @UtilityClass
-  public class Fields {
+  public static class Fields {
 
     // Sub-object aliases
-    public final String DATA_CATEGORIZATION = "dataCategorization";
-    public final String DATA_BUNDLE = "dataBundle";
-    public final String FILE_COPIES = "fileCopies";
-    public final String INDEX_FILE = "indexFile";
-    public final String DONORS = "donors";
-    public final String OTHER_IDENTIFIERS = "otherIdentifiers";
-    public final String ANALYSIS_METHOD = "analysisMethod";
-    public final String REFERENCE_GENOME = "referenceGenome";
+    public static final String DATA_CATEGORIZATION = "dataCategorization";
+    public static final String DATA_BUNDLE = "dataBundle";
+    public static final String FILE_COPIES = "fileCopies";
+    public static final String INDEX_FILE = "indexFile";
+    public static final String DONORS = "donors";
+    public static final String OTHER_IDENTIFIERS = "otherIdentifiers";
+    public static final String ANALYSIS_METHOD = "analysisMethod";
+    public static final String REFERENCE_GENOME = "referenceGenome";
 
     // Individual field aliases
-    public final String DATA_TYPE = "dataType";
-    public final String EXPERIMENTAL_STRATEGY = "experimentalStrategy";
-    public final String DATA_BUNDLE_ID = "dataBundleId";
+    public static final String DATA_TYPE = "dataType";
+    public static final String EXPERIMENTAL_STRATEGY = "experimentalStrategy";
+    public static final String DATA_BUNDLE_ID = "dataBundleId";
 
-    public final String REPO_CODE = "repoCode";
-    public final String REPO_ORG = "repoOrg";
-    public final String REPO_NAME = "repoName";
-    public final String REPO_TYPE = "repoType";
-    public final String REPO_COUNTRY = "repoCountry";
-    public final String REPO_BASE_URL = "repoBaseUrl";
-    public final String REPO_DATA_PATH = "repoDataPath";
-    public final String REPO_METADATA_PATH = "repoMetadataPath";
+    public static final String REPO_CODE = "repoCode";
+    public static final String REPO_ORG = "repoOrg";
+    public static final String REPO_NAME = "repoName";
+    public static final String REPO_TYPE = "repoType";
+    public static final String REPO_COUNTRY = "repoCountry";
+    public static final String REPO_BASE_URL = "repoBaseUrl";
+    public static final String REPO_DATA_PATH = "repoDataPath";
+    public static final String REPO_METADATA_PATH = "repoMetadataPath";
 
-    public final String FILE_NAME = "fileName";
-    public final String FILE_FORMAT = "fileFormat";
-    public final String FILE_MD5SUM = "fileMd5sum";
-    public final String FILE_SIZE = "fileSize";
-    public final String LAST_MODIFIED = "lastModified";
-    public final String LAST_UPDATED = "lastUpdated";
+    public static final String FILE_NAME = "fileName";
+    public static final String FILE_FORMAT = "fileFormat";
+    public static final String FILE_MD5SUM = "fileMd5sum";
+    public static final String FILE_SIZE = "fileSize";
+    public static final String LAST_MODIFIED = "lastModified";
+    public static final String LAST_UPDATED = "lastUpdated";
 
-    public final String INDEX_FILE_ID = INDEX_FILE + ".id";
-    public final String INDEX_OBJECT_UUID = INDEX_FILE + ".objectId";
-    public final String INDEX_FILE_NAME = INDEX_FILE + ".fileName";
-    public final String INDEX_FILE_FORMAT = INDEX_FILE + ".fileFormat";
-    public final String INDEX_FILE_MD5SUM = INDEX_FILE + ".fileMd5sum";
-    public final String INDEX_FILE_SIZE = INDEX_FILE + ".fileSize";
+    public static final String INDEX_FILE_ID = INDEX_FILE + ".id";
+    public static final String INDEX_OBJECT_UUID = INDEX_FILE + ".objectId";
+    public static final String INDEX_FILE_NAME = INDEX_FILE + ".fileName";
+    public static final String INDEX_FILE_FORMAT = INDEX_FILE + ".fileFormat";
+    public static final String INDEX_FILE_MD5SUM = INDEX_FILE + ".fileMd5sum";
+    public static final String INDEX_FILE_SIZE = INDEX_FILE + ".fileSize";
 
-    public final String PROGRAM = "program";
-    public final String DONOR_STUDY = "donorStudy";
-    public final String DONOR_ID = "donorId";
-    public final String PRIMARY_SITE = "primarySite";
-    public final String PROJECT_CODE = "projectCode";
-    public final String SAMPLE_ID = "sampleId";
-    public final String SPECIMEN_ID = "specimenId";
-    public final String SPECIMEN_TYPE = "specimenType";
-    public final String SUBMITTED_DONOR_ID = "submittedDonorId";
-    public final String SUBMITTED_SAMPLE_ID = "submittedSampleId";
-    public final String SUBMITTED_SPECIMEN_ID = "submittedSpecimenId";
-    public final String MATCHED_CONTROL_SAMPLE_ID = "matchedControlSampleId";
+    public static final String PROGRAM = "program";
+    public static final String DONOR_STUDY = "donorStudy";
+    public static final String DONOR_ID = "donorId";
+    public static final String PRIMARY_SITE = "primarySite";
+    public static final String PROJECT_CODE = "projectCode";
+    public static final String SAMPLE_ID = "sampleId";
+    public static final String SPECIMEN_ID = "specimenId";
+    public static final String SPECIMEN_TYPE = "specimenType";
+    public static final String SUBMITTED_DONOR_ID = "submittedDonorId";
+    public static final String SUBMITTED_SAMPLE_ID = "submittedSampleId";
+    public static final String SUBMITTED_SPECIMEN_ID = "submittedSpecimenId";
+    public static final String MATCHED_CONTROL_SAMPLE_ID = "matchedControlSampleId";
 
-    public final String TCGA_ALIQUOT_BARCODE = "tcgaAliquotBarcode";
-    public final String TCGA_PARTICIPANT_BARCODE = "tcgaParticipantBarcode";
-    public final String TCGA_SAMPLE_BARCODE = "tcgaSampleBarcode";
+    public static final String TCGA_ALIQUOT_BARCODE = "tcgaAliquotBarcode";
+    public static final String TCGA_PARTICIPANT_BARCODE = "tcgaParticipantBarcode";
+    public static final String TCGA_SAMPLE_BARCODE = "tcgaSampleBarcode";
 
-    public final String ANALYSIS_TYPE = "analysisType";
-    public final String ANALYSIS_SOFTWARE = "software";
+    public static final String ANALYSIS_TYPE = "analysisType";
+    public static final String ANALYSIS_SOFTWARE = "software";
 
-    public final String REFERENCE_NAME = "referenceName";
-    public final String GENOME_BUILD = "genomeBuild";
-    public final String DOWNLOAD_URL = "downloadUrl";
+    public static final String REFERENCE_NAME = "referenceName";
+    public static final String GENOME_BUILD = "genomeBuild";
+    public static final String DOWNLOAD_URL = "downloadUrl";
 
-    public final String ID = "id";
-    public final String FILE_UUID = "fileUuid";
-    public final String FILE_OBJECT_ID = "fileObjectId";
-    public final String FILE_ID = "fileId";
-    public final String ACCESS = "access";
-    public final String STUDY = "study";
+    public static final String ID = "id";
+    public static final String FILE_UUID = "fileUuid";
+    public static final String FILE_OBJECT_ID = "fileObjectId";
+    public static final String FILE_ID = "fileId";
+    public static final String ACCESS = "access";
+    public static final String STUDY = "study";
 
     // Sub-object mappings
-    private ObjectFieldModel dataCategorization() {
+    private static ObjectFieldModel dataCategorization() {
       return object("data_categorization", DATA_CATEGORIZATION,
           string("data_type", DATA_TYPE),
           string("experimental_strategy", EXPERIMENTAL_STRATEGY));
     }
 
-    private ObjectFieldModel dataBundle() {
+    private static ObjectFieldModel dataBundle() {
       return object("data_bundle", DATA_BUNDLE,
           string("data_bundle_id", DATA_BUNDLE_ID));
     }
 
-    private ArrayFieldModel fileCopies() {
+    private static ArrayFieldModel fileCopies() {
       return nestedArrayOfObjects(EsFields.FILE_COPIES, FILE_COPIES, object(
           string("repo_code", REPO_CODE),
           string("repo_org", REPO_ORG),
@@ -181,7 +177,7 @@ public class FileTypeModel extends TypeModel {
           long_("last_modified", ImmutableSet.of(LAST_MODIFIED, LAST_UPDATED))));
     }
 
-    private ObjectFieldModel indexFile() {
+    private static ObjectFieldModel indexFile() {
       return object("index_file", INDEX_FILE,
           string("id", INDEX_FILE_ID),
           string("object_id", INDEX_OBJECT_UUID),
@@ -191,7 +187,7 @@ public class FileTypeModel extends TypeModel {
           long_("file_size", INDEX_FILE_SIZE));
     }
 
-    private ArrayFieldModel donors() {
+    private static ArrayFieldModel donors() {
       return nestedArrayOfObjects(EsFields.DONORS, DONORS, object(
           identifiableString(EsFields.DONOR_ID, ImmutableSet.of(DONOR_ID, "donor.id")),
           string("program", PROGRAM),
@@ -208,20 +204,20 @@ public class FileTypeModel extends TypeModel {
           otherIdentifiers()));
     }
 
-    private ObjectFieldModel otherIdentifiers() {
+    private static ObjectFieldModel otherIdentifiers() {
       return object("other_identifiers", OTHER_IDENTIFIERS,
           string("tcga_sample_barcode", TCGA_SAMPLE_BARCODE),
           string("tcga_aliquot_barcode", TCGA_ALIQUOT_BARCODE),
           string("tcga_participant_barcode", TCGA_PARTICIPANT_BARCODE));
     }
 
-    private ObjectFieldModel analysisMethod() {
+    private static ObjectFieldModel analysisMethod() {
       return object("analysis_method", ANALYSIS_METHOD,
           string("analysis_type", ANALYSIS_TYPE),
           string("software", ANALYSIS_SOFTWARE));
     }
 
-    private ObjectFieldModel referenceGenome() {
+    private static ObjectFieldModel referenceGenome() {
       return object("reference_genome", REFERENCE_GENOME,
           string("reference_name", REFERENCE_NAME),
           string("genome_build", GENOME_BUILD),
@@ -229,7 +225,7 @@ public class FileTypeModel extends TypeModel {
     }
 
     // Main mapping
-    private final List<FieldModel> MAPPINGS = ImmutableList.<FieldModel> builder()
+    private static final List<FieldModel> MAPPINGS = ImmutableList.<FieldModel> builder()
         .add(identifiableString("id", ImmutableSet.of(ID, FILE_ID, "file.id")))
         .add(string("object_id", ImmutableSet.of(FILE_OBJECT_ID, FILE_UUID)))
         .add(string("access", ACCESS))

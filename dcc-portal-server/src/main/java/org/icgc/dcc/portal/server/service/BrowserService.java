@@ -42,11 +42,11 @@ public class BrowserService {
 
   private final BrowserRepository browserRepository;
 
-  @UtilityClass
-  private class ParameterNames {
+  private static class ParameterNames {
 
-    private final String SEGMENT = "segment";
-    private final String RESOURCE = "resource";
+    private static final String SEGMENT = "segment";
+    private static final String RESOURCE = "resource";
+    
   }
 
   /**
