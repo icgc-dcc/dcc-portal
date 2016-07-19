@@ -90,7 +90,7 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}',
                 '<%= yeoman.app %>/scripts/**/styles/*.{scss,sass}',
                 '<%= yeoman.app %>/vendor/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server', 'autoprefixer']
+        tasks: ['compass:server', 'postcss']
       },
       injector: {
         files: ['<%= yeoman.app %>/index.html'],
@@ -161,11 +161,19 @@ module.exports = function (grunt) {
       dist: {
         options: {
           middleware: function (connect) {
+            var yeomanConfig = {
+              app: 'app',
+              dist: 'target/app',
+              developIndexFile: 'develop/html/index.develop.html'
+            };
+
             return [
+              proxySnippet,
               modRewrite([
                 '!\\.html|\\images|\\.js|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.svg ' +
-                '/' + yeomanConfig.developIndexFile + ' [L]'
+                '/index.html [L]'
               ]),
+              lrSnippet,
               mountFolder(connect, yeomanConfig.dist)
             ];
           }
@@ -239,13 +247,14 @@ module.exports = function (grunt) {
         }
       }
     },
-    autoprefixer: {
+    postcss: {
       options: {
-        browsers: ['last 1 version', '> 1%', 'ie 11']
+        map: true,
+        processors: [
+          require('autoprefixer')({browsers: 'last 3 versions'})
+        ]
       },
-      files: {
-        '<%= yeoman.app %>/styles/styles.css': ['<%= yeoman.app %>/styles/styles.css']
-      }
+      '<%= yeoman.app %>/styles/styles.css': ['<%= yeoman.app %>/styles/styles.css'],
     },
     // not used since Uglify task does concat,
     // but still available if needed
@@ -476,8 +485,11 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build',
-        'connect:dist:keepalive']);
+      return grunt.task.run([
+        'build',
+        'configureProxies:server',
+        'connect:dist:keepalive'
+        ]);
     }
 
     grunt.task.run([
@@ -503,7 +515,7 @@ module.exports = function (grunt) {
     'ICGC-setBuildEnv:production',
     'clean:dist',
     'compass:dist', // run in case files were changed outside of grunt server (dev environment)
-    'autoprefixer',
+    'postcss',
     'bower-install',
     'jshint',
     'peg',

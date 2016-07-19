@@ -1,0 +1,46 @@
+.mini-venn-canvas {
+  svg {
+    cursor: pointer;
+    transform: scale(1.2);
+    & > * {
+      pointer-events: none;
+    }
+  }
+
+  text {
+      font-size: 22px; 
+  }
+
+  &.only-two {
+    overflow: hidden;
+    svg {
+      transform: scale(1.2) translateY(30px);
+    }
+  }
+}
+
+.survival-table {
+  .icon-info {
+    font-size: 10px;
+    cursor: help;
+    color: #6baed6;
+  }
+}
+
+.survival-graphs {
+  position: relative;
+  survival-analysis-graph {
+    display: block;
+    opacity: 1;
+    transition: 0.4s opacity ease;
+    width: 100%;
+
+    &.disabled {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  }
+}

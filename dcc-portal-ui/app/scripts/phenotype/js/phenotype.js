@@ -29,19 +29,37 @@
 (function() {
   'use strict';
 
-  var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services']);
+  var module = angular.module('icgc.phenotype.directives', ['icgc.phenotype.services', 'icgc.survival']);
 
-  module.directive('phenotypeResult', function(SetService, PhenotypeService) {
+  module.directive('phenotypeResult', function(
+    $interpolate,
+    $timeout,
+    $location,
+    $q,
+    Restangular,
+    RestangularNoCache,
+    FilterService,
+    LocationService,
+    Extensions,
+    SetService,
+    SetOperationService,
+    PhenotypeService,
+    SurvivalAnalysisService,
+    ExportService
+  ) {
     return {
       restrict: 'E',
       scope: {
         item: '='
       },
       templateUrl: '/scripts/phenotype/views/phenotype.result.html',
-      link: function($scope) {
+      link: function($scope, $element) {
 
         // From D3's cat20 scale
         $scope.seriesColours = ['#6baed6', '#fd8d3c', '#74c476'];
+
+        $scope.survivalAnalysisDataSets = undefined;
+        $scope.activeSurvivalGraph = 'overall';
 
         function normalize() {
           // Normalize results: Sort by id, then sort by terms
@@ -78,8 +96,9 @@
             return PhenotypeService.entityFilters(id);
           });
 
+          var setMetaRequest = SetService.getMetaData($scope.setIds);
 
-          SetService.getMetaData($scope.setIds).then(function(results) {
+          setMetaRequest.then(function(results) {
             $scope.setMap = {};
             results.forEach(function(set) {
               set.advLink = SetService.createAdvLink(set);
@@ -104,7 +123,102 @@
 
           });
 
+          var setAnalysisRequest = SetService.createAnalysis($scope.setIds, 'DONOR'); 
+          
+            $q.all([setMetaRequest, setAnalysisRequest]).then(function (responses) {
+              var setData = responses[0];
+              var setAnalysisData = responses[1].result;
+              var setAnalysisId = responses[1].id;
+              var vennData = SetOperationService.transform(setAnalysisData);
+
+              $scope.intersectionsExist = setAnalysisData.filter(function (data) {
+                return data.intersection.length > 1 && data.count > 0;
+              }).length;
+
+              if (!$scope.intersectionsExist) {
+                return;
+              }
+
+              var vennDiagram = new dcc.Venn23(vennData, {
+                height: 380,
+                urlPath: $location.url(),
+                setLabelFunc: function (id) {
+                  return 'S' + (setData.indexOf(_.find(setData, {id: id})) + 1);
+                },
+              });
+              var $canvasContainer = $element.find('.mini-venn-canvas');
+              vennDiagram.render( $canvasContainer[0] );
+              $canvasContainer.on('click', function () {
+                $location.path('/analysis/view/set/' + setAnalysisId);
+              });
+            });
+
+          SurvivalAnalysisService.fetchSurvivalData($scope.setIds)
+            .then(function (dataSets) {
+              $scope.survivalAnalysisDataSets = dataSets;
+              SurvivalAnalysisService.dataSetToTSV(dataSets.overall);
+            });
+
         }
+
+        var exportConfigs = {
+          overall: {
+            filePrefix: 'Overall_survival',
+            headingMap: {
+              time: 'overall_survival_time'
+            }
+          },
+          diseaseFree: {
+            filePrefix: 'Disease_free_survival',
+            headingMap: {
+              time: 'interval_last_follow_up',
+            }
+          }
+        };
+        $scope.exportDonors = function (graphType, dataSet) {
+          invariant(graphType, 'Missing required property "graphType"');
+          invariant(dataSet, 'Missing required property "dataSet"');
+          var headingMap = exportConfigs[graphType].headingMap;
+          var tsv = SurvivalAnalysisService.dataSetToTSV(dataSet, headingMap);
+          var filename = $interpolate('{{filePrefix}}_{{ date | date:"yyyyMMdd" }}.tsv')({
+            date: new Date(),
+            filePrefix: exportConfigs[graphType].filePrefix
+          }); 
+          ExportService.exportData(filename, tsv);
+        };
+
+        $scope.setIdOrder = function (set) {
+          return $scope.setIds.indexOf(set.meta.id);
+        };
+
+        $scope.viewDonors = function (donors) {
+          var donorIds = donors
+            .map(function (donor) {
+              return donor.id;
+            });
+
+          var params = {
+            filters: {
+              donor: {
+                id: {
+                  is: donorIds
+                }
+              }
+            },
+            size: donors.length,
+            isTransient: true,
+            name: 'Input donor set',
+            sortBy: 'ssmAffectedGenes',
+            sortOrder: 'DESCENDING',
+          };
+
+          SetService.createEntitySet('donor', params)
+            .then(function (set) {
+              invariant(set.id, 'Response from SetService.createEntitySet did not include an id!');
+              var newFilter = JSON.stringify({donor: {id: {is: [Extensions.ENTITY_PREFIX + set.id]}}});
+              LocationService.goToPath('/search', {filters: newFilter});
+            });
+        };
 
         $scope.$watch('item', function(n) {
           if (n) {

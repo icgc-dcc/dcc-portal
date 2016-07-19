@@ -226,4 +226,70 @@
     };
   });
 
+  module.service('ApiService', function (FilterService) {
+    
+    var getAll = function(resource, params) {
+      var defaults = {
+        size: 100,
+        from: 1,
+        filters: FilterService.filters()
+      };
+
+      var newParams = _.extend({}, defaults, params);
+
+      var acc = [];
+
+      function page(params) {
+        console.log(resource.route + ' ' + JSON.stringify(params));
+        return resource.get('', params).then(function (data) {
+          console.log(data.plain());
+          acc = acc.concat(data.hits);
+          var pagination = data.pagination;
+          if (pagination.page < pagination.pages) {
+            var newParams = _.extend({}, params, {
+              from: (pagination.page + 1 - 1) * 100 + 1
+            });
+            return page(newParams);
+          } else {
+            return acc;
+          }
+        });
+      }
+      
+      return page(newParams);
+    };
+    
+    return {
+      getAll: getAll
+    };
+  });
+
+  module.service('FullScreenService', function() {
+
+    var exitFullScreen = function() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    };
+
+    var enterFullScreen = function(element) {
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    };
+
+    return {
+      exitFullScreen: exitFullScreen,
+      enterFullScreen: enterFullScreen
+    };
+  });
+
 })();

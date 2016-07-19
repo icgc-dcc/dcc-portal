@@ -8,34 +8,37 @@
     </div>
 
     <!-- body -->
-    <div class="modal-body">
-        <div data-ng-if="params.setLimit">
-            <div>Save top: </div>
-            <input type="text" maxlength="9" size="9"
-                data-select-on-click
-                integer-validator
-                data-ng-model="params.setSize" data-ng-change="validateInput()">
-            <br>
-            <small>You can save up to the top {{params.setSizeLimit | number}} {{params.setType}}s</small>
+    <div class="modal-body" >
+        <div data-ng-if="!params.isLoading"> 
+            <div data-ng-if="params.setLimit">
+                <div>Save top: </div>
+                <input type="text" maxlength="9" size="9"
+                    data-select-on-click
+                    integer-validator
+                    data-ng-model="params.setSize" data-ng-change="validateInput()">
+                <br>
+                <small>You can save up to the top {{params.setSizeLimit | number}} {{params.setType}}s</small>
+            </div>
+
+
+            <div>
+                <div>Name:</div>
+                <input type="text" data-ng-model="params.setName" maxlength="32" data-select-on-click data-ng-change="validateInput()"></input>
+            </div>
+
+            <div>
+                <div>Note:</div>
+                <textarea cols="50" rows="3"
+                    data-ng-model="params.setDescription"
+                    data-ng-change="validateInput()"
+                    placeholder="(Optional)" maxlength="256" data-select-on-click></textarea>
+                <small>{{256 - params.setDescription.length}} chars left</small>
+            </div>
         </div>
-
-
-        <div>
-            <div>Name:</div>
-            <input type="text" data-ng-model="params.setName" maxlength="32" data-select-on-click data-ng-change="validateInput()"></input>
-        </div>
-
-        <div>
-            <div>Note:</div>
-            <textarea cols="50" rows="3"
-                data-ng-model="params.setDescription"
-                data-ng-change="validateInput()"
-                placeholder="(Optional)" maxlength="256" data-select-on-click></textarea>
-            <small>{{256 - params.setDescription.length}} chars left</small>
-        </div>
-
+        
+        <div data-ng-if="params.isLoading"><i class="icon-spinner icon-spin"></i> Loading...</div>
     </div>
-
+    
     <!-- footer -->
     <div class="modal-footer">
         <button class="t_button" data-ng-click="cancel()">Cancel</button>

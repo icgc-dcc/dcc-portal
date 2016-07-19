@@ -45,7 +45,7 @@ angular.module('icgc.modules.genomeviewer.header').controller('GenomeViewerHeade
   $scope.panels = {
     karyotype: false,
     chromosome: false,
-    regionOverview: true
+    overviewTrackList: true
   };
 
   $scope.reset = function (e) {

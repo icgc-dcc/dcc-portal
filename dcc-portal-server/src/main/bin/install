@@ -1,0 +1,245 @@
+#!/usr/bin/python
+# Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.
+#
+# This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Expecting Python version 2.6 or 2.7
+
+import json
+import argparse
+import os
+import sys
+import subprocess
+from urllib2 import urlopen, Request, HTTPError, URLError
+from xml.dom.minidom import parseString
+from datetime import datetime
+
+
+# Environmental configuration
+cache = ''
+domain = 'dev.dcc.icgc.org'
+slack_url = 'https://hooks.slack.com/services/<!fill in>'
+
+# Maven artifact location
+name = 'dcc-portal-server'
+server = 'https://artifacts.oicr.on.ca/artifactory'
+artifact = 'org/icgc/dcc/' + name
+api_path = 'https://artifacts.oicr.on.ca/artifactory/api/storage'
+
+# System Paths
+base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+log_file_path = base + '/logs/install.log'
+bin_dir = base + '/bin/'
+lib_dir = base + '/lib/'
+
+
+def log(message):
+    log_message = datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' + message + '\n'
+    with open(log_file_path, 'a') as log_file:
+        log_file.write(log_message)
+
+
+# Gets the latest version number from the provided artifactory path
+def get_latest_version(path):
+    url = path+'/maven-metadata.xml'
+    request = Request(url)
+    latest_version = parseString(urlopen(request).read()).getElementsByTagName('latest')[0].firstChild.nodeValue
+    return latest_version
+
+# Gets the latest version number from the provided artifactory path
+def get_latest_value(path):
+    url = path+'/maven-metadata.xml'
+    request = Request(url)
+    latest_version = parseString(urlopen(request).read()).getElementsByTagName('value')[0].firstChild.nodeValue
+    return latest_version
+
+
+# Gets the URI of the latest artifact for the provided artifactory path
+def get_latest(path, api_url):
+    latest_version = get_latest_version(path)
+
+    jar = name + '-' + latest_version + '.jar'
+    full_url = path + '/' + latest_version + '/' + jar
+
+    full_api_url = api_url + '/' + latest_version + '/' + jar + '?properties'
+    jar_json = json.loads(urlopen(Request(full_api_url)).read().decode('utf-8'))
+    global commit_id
+    commit_id = jar_json['properties']['vcs.revision'][0]
+
+    return full_url
+
+
+# Gets the URI of the latest artifact for the provided artifactory path
+def get_latest_build(path, api_url):
+    latest_version = get_latest_version(path)
+    latest_value = get_latest_value(path + '/' + latest_version)
+
+    jar = name + '-' + latest_value + '.jar'
+    full_url = path + '/' + latest_version + '/' + jar
+
+    full_api_url = api_url + '/' + latest_version + '/' + jar + '?properties'
+    jar_json = json.loads(urlopen(Request(full_api_url)).read().decode('utf-8'))
+    global commit_id
+    commit_id = jar_json['properties']['vcs.revision'][0]
+
+    return full_url
+
+
+def get_from_version(path, version):
+    jar = name + '-' + version + '.jar'
+    full_url = path + '/' + version + '/' + jar
+
+    full_api_url = api_url + '/' + version + '/' + jar + '?properties'
+    jar_json = json.loads(urlopen(Request(full_api_url)).read().decode('utf-8'))
+    global commit_id
+    commit_id = jar_json['properties']['vcs.revision'][0]
+
+    return full_url
+
+
+# Gets artifact based on build number
+def get_from_build(path, url, build):
+    latest_version = get_latest_version(path)
+    request_url = url+'/'+latest_version+'/'
+    request = Request(request_url)
+    data = json.loads(urlopen(request).read().decode('utf-8'))
+    files = data['children']
+
+    jars = list(filter((lambda child: str(child['uri']).endswith('.jar')), files))
+
+    for jar in jars:
+        uri = jar['uri'][1:] + '?properties'
+        jar_json = json.loads(urlopen(Request(request_url+uri)).read().decode('utf-8'))
+        if jar_json['properties']['build.number'][0] == str(build):
+            global commit_id
+            commit_id = jar_json['properties']['vcs.revision'][0]
+            jar_uri = jar_json['uri']
+            return json.loads(urlopen(Request(jar_uri)).read().decode('utf-8'))['downloadUri']
+
+    print "Could not find requested build version."
+    exit(2)
+
+
+def handle_release(url, api_url, arg):
+    if str(arg) == 'latest':
+        return get_latest(url, api_url)
+    else:
+        return get_from_version(url, arg)
+
+
+def handle_snapshot(url, api_url, arg):
+    if str(arg) == 'latest':
+        return get_latest_build(url, api_url)
+    else:
+        return get_from_build(url, api_url, arg)
+
+
+def handle_pullrequest(url, api_url, arg):
+    if str(arg) == 'latest':
+        return get_latest_build(url, api_url)
+    else:
+        return get_from_build(url, api_url, arg)
+
+
+def download_and_install(url):
+    file_name = url.split('/')[-1]
+    file_request = urlopen(url)
+    jar_file = open(lib_dir+file_name, 'wb')
+
+    meta = file_request.info()
+    file_size = int(meta.getheaders("Content-Length")[0])
+    print "Downloading: %s Bytes: %s" % (file_name, file_size)
+
+    file_size_dl = 0
+    block_sz = 8192
+    while True:
+        buffer = file_request.read(block_sz)
+        if not buffer:
+            break
+
+        file_size_dl += len(buffer)
+        jar_file.write(buffer)
+        status = r"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / file_size)
+        status = status + chr(8)*(len(status)+1)
+        print status,
+
+    jar_file.close()
+
+    os.remove(lib_dir+name+'.jar')
+    os.symlink(lib_dir+file_name, lib_dir+name+'.jar')
+
+
+parser = argparse.ArgumentParser(description='This script installs the ' + name + ' from Artifactory, relinks the jar and restarts the daemon.')
+group = parser.add_mutually_exclusive_group()
+group.add_argument('-r', '--release', help='Install release with version (e.g. 4.0.3 , use "latest" for latest)')
+group.add_argument('-s', '--snapshot', help='Install snapshot with build number from current snapshot version (use "latest" for latest build)')
+group.add_argument('-p', '--pullrequest', help='Install pr snapshot with build number (use "latest" for latest)')
+args = parser.parse_args()
+
+
+download_url = ''
+commit_id = ''
+if args.release:
+    repo = "/dcc-release/"
+    path = server+repo+artifact
+    api_url = api_path+repo+artifact
+    download_url = handle_release(path, api_url, args.release)
+elif args.snapshot:
+    repo = "/dcc-snapshot/"
+    path = server+repo+artifact
+    api_url = api_path+repo+artifact
+    download_url = handle_snapshot(path, api_url, args.snapshot)
+elif args.pullrequest:
+    repo = "/dcc-pr-snapshot/"
+    path = server+repo+artifact
+    api_url = api_path+repo+artifact
+    download_url = handle_pullrequest(path, api_url, args.pullrequest)
+
+
+log('Downloading JAR: ' + download_url)
+download_and_install(download_url)
+
+
+# Clear varnish cache
+if len(cache) > 0:
+    log('Clearing Varnish Cache...')
+    cache_request = Request(cache)
+    try:
+        urlopen(cache_request)
+    except HTTPError as e:
+        log('Clearing Varnish Cache Failed with code: ' + e.code)
+        print 'The server could not clear the varnish cache.'
+        print 'Error code: ', e.code
+    except URLError as e:
+        log('Clearing Varnish Cache Failed with code: ' + e.code)
+        print 'The server could not reach varnish.'
+        print 'Error code: ', e.code
+
+
+# Restart portal
+subprocess.call([bin_dir+name, 'restart'])
+message = '<!channel>: Deployed portal to https://'+ \
+         domain + ' using: \n* install ' + sys.argv[1] + ' ' + sys.argv[2] + ',\n* commit ' + \
+         'https://github.com/icgc-dcc/dcc-portal/commit/' + commit_id + '\n* jar ' + download_url
+
+# Send Slack Message
+payload = {
+    'text': message,
+    'channel': '#deployments',
+    'username': domain,
+    'icon_emoji': ':icgc:',
+    'color': 'warning'
+}
+urlopen(Request(slack_url, json.dumps(payload)))

@@ -1,14 +1,14 @@
-<h3 style="margin-bottom:0">Phenotype Comparison
+<h3 style="margin-bottom:0">Survival Analysis / Phenotype Comparison
     <span style="font-size:1rem" class="pull-right" data-ng-if="!isDeprecated">
         <share-button></share-button>
     </span>
 </h3>
-<div><small>More phenotypes coming soon...</small></div><br>
 
 <div data-ng-if="isDeprecated" class="alert-error">
     <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
 </div>
 <div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
+
     <div>Your selected donor sets</div>
     <div class="wide">
         <table class="table">
@@ -28,6 +28,178 @@
     </div>
     <div class="clearfix"></div>
     <br>
+
+    <div class="survival-analysis-wrapper">
+        <strong>Survival analysis</strong>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div
+                    style="padding: 0;"
+                    ng-class="{
+                        'col-md-9': intersectionsExist,
+                        'col-md-12': !intersectionsExist
+                        }"
+                >
+        <table class="table survival-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th
+                        colspan="2"
+                        data-ng-repeat="donorSetId in setIds"
+                    >
+                        <div>
+                            <div>
+                                <span style="color:{{seriesColours[$index]}}">{{setMap[donorSetId].name}}</span>
+                                <sub>( S{{($index + 1)}} )</sub>
+                            </div>
+                            <small>
+                                Donor count: {{setMap[setIds[$index]].count | number}}
+                            </small>
+                        </div>
+                    </tr>
+                </tr>
+                <tr>
+                    <th>
+                        Donors included in Analysis
+                        <sup>
+                            <i
+                                class="icon-info"
+                                data-tooltip="
+                                    Criteria to include donor from your sets in the survival analysis: <br>
+                                    - donor does not overlap between your selected donor sets <br>
+                                    - donor has complete data for the purpose of the analysis (event and time-to-event) <br>
+                                "
+                            ></i>
+                        </sup>
+                    </th>
+                    <th
+                        data-ng-repeat-start="donorSetId in setIds"
+                        class="text-right"
+                    >
+                        # Donors
+                    </th>
+                    <th
+                        class="text-right"
+                        data-ng-repeat-end
+                    > % </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Overall Survival Analysis
+                    </td>
+
+                    <td
+                        class="text-right"
+                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.overall | orderBy: setIdOrder"
+                        data-ng-click="viewDonors(survivalSet.donors)"
+                        style="cursor: pointer;"
+                    >
+                        <a>
+                            {{ survivalSet.donors.length | number }}
+                        </a>
+                    </td>
+                    <td
+                        class="text-right"
+                        data-ng-repeat-end
+                    >
+                        {{ survivalSet.donors.length / survivalSet.meta.count * 100 | number: 2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Disease Free Survival Analysis
+                    </td>
+
+                    <td
+                        class="text-right"
+                        data-ng-repeat-start="survivalSet in survivalAnalysisDataSets.diseaseFree | orderBy: setIdOrder"
+                        data-ng-click="viewDonors(survivalSet.donors)"
+                        style="cursor: pointer;"
+                    >
+                        <a>
+                            {{ survivalSet.donors.length | number }}
+                        </a>
+                    </td>
+                    <td
+                        class="text-right"
+                        data-ng-repeat-end
+                    >
+                        {{ survivalSet.donors.length / survivalSet.meta.count * 100 | number: 2 }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+                </div>
+                <div
+                    ng-show="intersectionsExist &&
+                        (survivalAnalysisDataSets.overall.length > 2 ||
+                        survivalAnalysisDataSets.overall.length < 4 ) "
+                    class="col-md-3"
+                >
+                    <div
+                        class="mini-venn-canvas"
+                        ng-class="{ 'only-two': survivalAnalysisDataSets.overall.length === 2 }"
+                    ></div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="t_tabs t_tabs__isolated t_tabs--smaller t_tabs--no-accent">
+            <div
+                class="t_tabs__tab"
+                ng-class="{
+                    active: activeSurvivalGraph === 'overall'
+                }"
+                ng-click="activeSurvivalGraph = 'overall'"
+            >Overall Survival</div>
+            <div
+                class="t_tabs__tab"
+                ng-class="{
+                    active: activeSurvivalGraph === 'diseaseFree'
+                }"
+                ng-click="activeSurvivalGraph = 'diseaseFree'"
+            >Disease Free Survival</div>
+            <i
+                class="icon-file t_tools t_tools__tool pull-right"
+                ng-click="(activeSurvivalGraph === 'overall') ?
+                    exportDonors('overall', survivalAnalysisDataSets.overall) :
+                    exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
+                data-tooltip="Export data for {{ activeSurvivalGraph === 'overall' ? 'overall' : 'disease free' }} survival analysis as TSV"
+                data-tooltip-placement="left"
+            ></i>
+        </div>
+
+        <div class="survival-graphs">
+            <survival-analysis-graph
+                ng-class="{disabled: activeSurvivalGraph !== 'overall' && activeSurvivalGraph !== undefined}"
+                data-data-sets="survivalAnalysisDataSets.overall"
+                tip-labels="{
+                    survivalEstimate: 'Survival estimate',
+                    survivalTime: 'Time of death',
+                    censoredSurvivalTime: 'Interval of last follow-up',
+                }"
+                censored-statuses="['alive']"
+                palette="seriesColours"
+            ></survival-analysis-graph>
+
+            <survival-analysis-graph
+                ng-class="{disabled: activeSurvivalGraph !== 'diseaseFree'}"
+                data-data-sets="survivalAnalysisDataSets.diseaseFree"
+                tip-labels="{
+                    survivalEstimate: 'Disease free estimate',
+                    survivalTime: 'Time of relapse / progression',
+                    censoredSurvivalTime: 'Interval from primary treatment to last follow-up',
+                }"
+                censored-statuses="['progression', 'relapse']"
+                palette="seriesColours"
+            ></survival-analysis-graph>
+        </div>
+    </div>
 
 
     <br>

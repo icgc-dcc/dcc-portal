@@ -31,6 +31,9 @@
                    <small data-ng-if="item.type === 'phenotype'" class="t_suggest_detail">
                    Donor - {{item.inputSetCount}} sets
                    </small>
+                   <small data-ng-if="item.type === 'oncogrid'" class="t_suggest_detail">
+                       {{item.donorCount}} Donors & {{item.geneCount}} Genes
+                   </small>
                    <span class="" data-ng-click="$event.stopPropagation(); ListController.remove(item.id, analysisId);">
                        <i class="icon-cancel pull-right select-list-cancel"
                           data-tooltip="Delete Analysis"
@@ -58,6 +61,16 @@
             <div data-ng-if="analysisType === 'phenotype'">
                 <div data-ng-if="!error">
                     <phenotype-result data-item="analysisResult"></phenotype-result>
+                </div>
+            </div>
+            <div data-ng-if="analysisType === 'oncogrid'">
+                <div data-ng-if="!error">
+                    <oncogrid-analysis data-item="analysisResult"></oncogrid-analysis>
+                </div>
+            </div>
+            <div data-ng-if="analysisType === 'survival'">
+                <div data-ng-if="!error">
+                    <survival-analysis data-analysis-id="analysisId"></survival-analysis>
                 </div>
             </div>
             <div class="clearfix"></div>
