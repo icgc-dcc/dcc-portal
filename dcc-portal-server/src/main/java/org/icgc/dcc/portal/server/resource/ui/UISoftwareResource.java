@@ -28,7 +28,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import org.icgc.dcc.portal.resource.Resource;
+import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.service.SoftwareService;
 import org.icgc.dcc.portal.service.SoftwareService.ArtifactFolder;
 import org.icgc.dcc.portal.service.SoftwareService.MavenArtifactVersion;
