@@ -32,7 +32,7 @@
             <h3>Latest Release Tarball</h3>
             <p>Users are encouraged to use the latest version of our software to keep current with bug fixes, enhancements and new features. Click on the following to download the latest client package:</p>
             <p>
-               <a id="latest-version" class="t_button" target="_blank" href="api/v1/ui/software/icgc-storage-client/latest">Download</a>
+               <a id="latest-storage-version" class="t_button" target="_blank" href="api/v1/ui/software/icgc-storage-client/latest">Download</a>
             </p>
             <h3>Previous Release Tarballs</h3>
             <p>It is strongly recommended to use the latest release to take advantage of newest features and bug fixes.</p>
@@ -47,7 +47,7 @@
                      <th>Signature</th>
                   </tr>
                </thead>
-               <tbody id="versions">
+               <tbody id="storage-versions">
                   <tr data-ng-repeat="v in versions">
                      <td>{{ v.version }}</td>
                      <td><a target="_blank" href="api/v1/ui/software/{{ artifactId }}/{{ v.version }}">{{ artifactId }}-{{ v.version }}-dist.tar.gz</a></td>
@@ -68,11 +68,11 @@
             <p>To interact with all ICGC data repositories, you can use the ICGC get software. For system requirements and usage information, please see the <a href="http://docs.icgc.org/cloud/icgc-get/"><i class="icon-external-link"></i>User Guide</a>.</p>
 
             <h3>Latest Release Zipfile</h3>
-            <p>Users are encouraged to use the latest version of our software to keep current with bug fixes, enhancements and new features. Click on the following to download the latest client package:</p>
+            <p>Users are encouraged to use the latest version of our software to keep current with bug fixes, enhancements and new features. Click on the following to download the latest client version:</p>
             <p>
-               <a id="latest-version" class="t_button" target="_blank" href="api/v1/ui/software/icgc-get/latest">Download</a>
+               <a id="latest-get-version" class="t_button" target="_blank" href="api/v1/ui/software/icgc-get/latest">Download</a>
             </p>
-            <h3>Previous Release Zipfiless</h3>
+            <h3>Previous Release Zipfiles</h3>
             <p>It is strongly recommended to use the latest release to take advantage of newest features and bug fixes.</p>
 
             <p>However, if you wish to use an old version you may choose from the following:</p>
@@ -80,15 +80,16 @@
                <thead>
                   <tr>
                      <th>Version</th>
-                     <th>Dist</th>
+                     <th>Zip</th>
                      <th>MD5</th>
                      <th>Signature</th>
                   </tr>
                </thead>
-               <tbody id="versions">
-                  <tr data-ng-repeat="v in versions">
+               <tbody id="get-versions">
+                  <tr data-ng-repeat="v in icgcGetVersions">
                      <td>{{ v.version }}</td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ artifactId }}/{{ v.version }}">{{ artifactId }}-{{ v.version }}-dist.zip</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}/{{ v.version }}">{{ icgcGetArtifactId }}-{{ v.version }}-dist.zip</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}/{{ v.version }}/md5">{{ icgcGetArtifactId }}-{{ v.version }}-dist.zip.md5</a></td>
                   </tr>
                </tbody>
             </table>
@@ -115,7 +116,7 @@
             <p>From a file:<pre>$ gpg --import icgc-software.pub</pre></p>
             <p>Once the public key has been imported you can verify the signature:</p>
             <p><pre>$ gpg icgc-storage-client-0.0.27-dist.tar.gz.asc</pre></p>
-            <p>If successful, the ouput should contain the following:</p>
+            <p>If successful, the output should contain the following:</p>
             <p>
 <pre>
 gpg: assuming signed data in 'icgc-storage-client-0.0.27-dist.tar.gz'

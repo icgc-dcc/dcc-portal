@@ -31,7 +31,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
-public class ICGCGetService {
+public class SoftwareService {
 
   /**
    * Constants.
@@ -39,9 +39,10 @@ public class ICGCGetService {
   private static final ObjectMapper MAPPER = new ObjectMapper();
   private static final Map<String, String> PARAMS = ImmutableMap.of(
       "groupId", "org.icgc.dcc",
-      "artifactId", "icgc-get",
       "classifier", "dist",
-      "repository", "dcc-release");
+      "ICGCClassifier", "osx_x64",
+      "repository", "dcc-release",
+      "ICGCRepository", "dcc-binaries");
 
   /**
    * Configuration.
@@ -49,30 +50,43 @@ public class ICGCGetService {
   private String mavenRepositoryUrl = "https://artifacts.oicr.on.ca/artifactory";
 
   @SneakyThrows
-  public List<MavenArtifactVersion> getVersions() {
-    val versionsUrl = mavenRepositoryUrl + "/api/search/versions?g=" +
-        PARAMS.get("groupId") + "&a=" +
-        PARAMS.get("artifactId") + "&repos=" + PARAMS.get("repository");
+  public List<MavenArtifactVersion> getVersions(String artifactId) {
+    String versionsUrl;
+    if (artifactId.equals("icgc-get")) {
+      versionsUrl = mavenRepositoryUrl + "/api/search/versions?&g=" +
+          artifactId + "&repos=" + PARAMS.get("ICGCRepository");
+
+    } else {
+      versionsUrl = mavenRepositoryUrl + "/api/search/versions?g=" + PARAMS.get("groupId") + "&a=" +
+          artifactId + "&repos=" + PARAMS.get("repository");
+    }
 
     val url = new URL(versionsUrl);
     val response = MAPPER.readValue(url, MavenArtifactResults.class);
     return response.results;
   }
 
-  public String getLatestVersionUrl() {
-    return getVersionUrl("%5BRELEASE%5D");
+  public String getLatestVersionUrl(String artifactId) {
+    if (artifactId.equals("icgc-get")) {
+      return getVersionUrl("0.2.11", artifactId);
+    }
+    return getVersionUrl("%5BRELEASE%5D", artifactId);
   }
 
-  public String getVersionChecksumUrl(String version) {
-    return getVersionUrl(version) + ".md5";
+  public String getVersionChecksumUrl(String version, String artifactId) {
+    return getVersionUrl(version, artifactId) + ".md5";
   }
 
-  public String getVersionSignatureUrl(String version) {
-    return getVersionUrl(version) + ".asc";
+  public String getVersionSignatureUrl(String version, String artifactId) {
+    return getVersionUrl(version, artifactId) + ".asc";
   }
 
-  public String getVersionUrl(String version) {
-    val artifactId = PARAMS.get("artifactId");
+  public String getVersionUrl(String version, String artifactId) {
+    if (artifactId.equals("icgc-get")) {
+      val classifier = PARAMS.get("ICGCClassifier");
+      return getRepositoryUrl(artifactId) + "/" + artifactId + "/" + version + "/" + artifactId + "_v" + version + "_"
+          + classifier + ".zip";
+    }
     val classifier = PARAMS.get("classifier");
     return getGroupUrl() + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + "-"
         + classifier + ".tar.gz";
@@ -80,11 +94,16 @@ public class ICGCGetService {
 
   private String getGroupUrl() {
     val groupId = PARAMS.get("groupId");
-    return getRepositoryUrl() + "/" + groupId.replaceAll("\\.", "/");
+    return getRepositoryUrl("icgc-storage-client") + "/" + groupId.replaceAll("\\.", "/");
   }
 
-  private String getRepositoryUrl() {
-    val repository = PARAMS.get("repository");
+  private String getRepositoryUrl(String artifactId) {
+    String repository;
+    if (artifactId.equals("icgc-get")) {
+      repository = PARAMS.get("ICGCRepository");
+    } else {
+      repository = PARAMS.get("repository");
+    }
     return mavenRepositoryUrl + "/simple/" + repository;
   }
 

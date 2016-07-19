@@ -117,7 +117,6 @@ elastic:
   nodeAddresses:
      - host: "localhost"
        port: 9300
-
   # List of TransportClient settings. 
   # E.g. 
   # "client.transport.sniff": true 

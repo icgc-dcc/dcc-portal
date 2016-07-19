@@ -43,9 +43,13 @@
       Page.setTitle('Software Downloads');
 
       $scope.artifactId = 'icgc-storage-client';
+      $scope.icgcGetArtifactId = 'icgc-get'
       jQuery.get('api/v1/ui/software/' + $scope.artifactId + '/versions', function(versions) {
          $scope.versions = versions;
       });
+      jQuery.get('api/v1/ui/software/' + $scope.icgcGetArtifactId + '/versions', function(versions) {
+          $scope.icgcGetVersions = versions;
+       });
    });
 
 })();
