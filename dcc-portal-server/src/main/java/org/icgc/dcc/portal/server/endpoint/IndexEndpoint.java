@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.portal.server.endpoint;
 
-import org.icgc.dcc.portal.service.IndexService;
+import org.icgc.dcc.portal.server.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.Endpoint;
 import org.springframework.boot.actuate.endpoint.mvc.MvcEndpoint;

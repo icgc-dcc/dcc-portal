@@ -184,7 +184,7 @@ spring.profiles: test
 # Datasource
 spring.datasource:
   driver-class-name: org.h2.Driver
-  url: jdbc:h2:mem:genelist;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=runscript from '/Users/btiernay/Workspaces/dcc/dcc-portal/dcc-portal-api/src/test/sql/schema.sql'
+  url: jdbc:h2:mem:genelist;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=runscript from 'src/test/sql/schema.sql'
   username:
   password:
   max-active: 10

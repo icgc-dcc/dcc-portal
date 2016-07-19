@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.icgc.dcc.portal.model.Error;
+import org.icgc.dcc.portal.server.model.Error;
 import org.icgc.dcc.portal.server.util.InvalidEntityException;
 import org.springframework.stereotype.Component;
 

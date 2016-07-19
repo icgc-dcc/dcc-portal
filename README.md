@@ -17,7 +17,7 @@ $ mvn
 To run the server without building the UI or packaging the API into a jar, issue the following from the root of the project:
 
 ```shell
-mvn -pl '!dcc-portal-ui' compile && mvn -pl dcc-portal-api exec:java -Dexec.args="server /absolute/path/to/settings.yml"
+mvn -pl '!dcc-portal-ui' compile && mvn -pl dcc-portal-server exec:java -Dexec.args="mvn exec:java -Dexec.args="--spring.profiles.active=test --spring.config.location=path/to/application.yml"
 ```
 
 Technically the first part only has to be done when source files change.
@@ -39,7 +39,7 @@ the dcc-portal-ui as a module.*
 
 Sub-system modules:
 
-- [Portal API](dcc-portal-api/README.md)
+- [Portal Server](dcc-portal-portal/README.md)
 - [Portal UI](dcc-portal-ui/README.md)
 - [Portal PQL](dcc-portal-pql/README.md)
 
