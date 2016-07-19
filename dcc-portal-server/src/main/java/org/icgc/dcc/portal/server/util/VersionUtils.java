@@ -27,13 +27,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PRIVATE)
 public final class VersionUtils {
 
+  /**
+   * Constants
+   */
   private static final String LOCAL_VERSION = "?";
-
-  private static final String VERSION = firstNonNull( //
-      VersionUtils.class.getPackage().getImplementationVersion(), //
-      LOCAL_VERSION);
-
   private static final Properties SCM_INFO = loadScmInfo();
+  private static final String VERSION = firstNonNull(
+      VersionUtils.class.getPackage().getImplementationVersion(),
+      LOCAL_VERSION);
 
   public static Properties getScmInfo() {
     return SCM_INFO;
