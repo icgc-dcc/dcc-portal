@@ -48,6 +48,17 @@
     var axisWidth = outerWidth - margin.left - margin.right;
     var axisHeight = outerHeight - margin.top - margin.bottom;
 
+    var longestDuration = _.max(dataSets
+        .filter(function (data) {
+          return !_.includes(disabledDataSets, data) && data.donors.length;
+        })
+        .map(function (data) {
+          return data.donors.slice(-1)[0].time;
+        }));
+    
+    var xDomain = params.xDomain || [0, longestDuration];
+    var onDomainChange = params.onDomainChange;
+
     var x = d3.scale.linear()
       .range([0, axisWidth]);
 
@@ -70,15 +81,6 @@
         .attr('class', 'wrapper')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var longestDuration = _.max(dataSets
-        .filter(function (data) {
-          return !_.includes(disabledDataSets, data) && data.donors.length;
-        })
-        .map(function (data) {
-          return data.donors.slice(-1)[0].time;
-        }));
-
-    var xDomain = params.xDomain || [0, longestDuration];
     x.domain([xDomain[0], xDomain[1]]);
     y.domain([0, 1]);
 
@@ -109,10 +111,7 @@
       var extent = brush.extent();
       svg.select('.brush').call(brush.clear());
       if (extent[1] - extent[0] > 1) {
-        svg.selectAll('*').remove();
-        renderChart(_.extend({}, params, {
-          xDomain: extent
-        }));
+        onDomainChange(extent);
       }
     }
     var brush = d3.svg.brush()
@@ -212,19 +211,21 @@
       var graphContainer = $element.find('.survival-graph').get(0);
       var svg = d3.select(graphContainer).append('svg');
       var tipTemplate = _.template($element.find('.survival-tip-template').html());
+      var xDomain;
 
-      var update = function () {
+      var update = function (params) {
         if (!ctrl.dataSets) {
           return;
         }
         svg.selectAll('*').remove();
-        renderChart({
+        renderChart(_.defaults({
           svg: svg, 
           container: graphContainer, 
           dataSets: ctrl.dataSets,
           disabledDataSets: ctrl.disabledDataSets,
           palette: ctrl.palette,
           markerType: 'line',
+          xDomain: xDomain,
           onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
               element: event.target,
@@ -245,8 +246,12 @@
           },
           onClickDonor: function (e, donor) {
             window.open('/donors/'+donor.id, '_blank');
+          },
+          onDomainChange: function (newXDomain) {
+            xDomain = newXDomain;
+            update();
           }
-        });
+        }, params));
       };
 
       window.addEventListener('resize', update);
