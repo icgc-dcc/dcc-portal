@@ -33,7 +33,7 @@
 
            return templateURL;
          },
-         controller: 'SoftwareController';
+         controller: 'SoftwareController'
       });
    });
 
@@ -43,7 +43,7 @@
       Page.setTitle('Software Downloads');
 
       $scope.artifactId = 'icgc-storage-client';
-      $scope.icgcGetArtifactId = 'icgc-get'
+      $scope.icgcGetArtifactId = 'icgc-get';
       jQuery.get('api/v1/ui/software/' + $scope.artifactId + '/versions', function(versions) {
          $scope.versions = versions;
       });
