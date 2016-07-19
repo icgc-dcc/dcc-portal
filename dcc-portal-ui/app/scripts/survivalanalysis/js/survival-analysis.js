@@ -211,7 +211,7 @@
       var graphContainer = $element.find('.survival-graph').get(0);
       var svg = d3.select(graphContainer).append('svg');
       var tipTemplate = _.template($element.find('.survival-tip-template').html());
-      var xDomain;
+      var xDomain, disabledDataSets;
 
       var update = function (params) {
         if (!ctrl.dataSets) {
@@ -222,7 +222,7 @@
           svg: svg, 
           container: graphContainer, 
           dataSets: ctrl.dataSets,
-          disabledDataSets: ctrl.disabledDataSets,
+          disabledDataSets: disabledDataSets,
           palette: ctrl.palette,
           markerType: 'line',
           xDomain: xDomain,
@@ -248,8 +248,10 @@
             window.open('/donors/'+donor.id, '_blank');
           },
           onDomainChange: function (newXDomain) {
-            xDomain = newXDomain;
-            update();
+            $scope.$apply(function () {
+              xDomain = newXDomain;
+              update();
+            });
           }
         }, params));
       };
@@ -257,18 +259,36 @@
       window.addEventListener('resize', update);
       update();
 
+      var reset = function () {
+        xDomain = undefined;
+        disabledDataSets = ctrl.initialDisabledDataSets;
+      };
+
+      this.shouldShowReset = function () {
+        console.log(disabledDataSets);
+        return _.some([
+          xDomain !== undefined,
+          _.xor(_.map(disabledDataSets, '$$hashKey'), _.map(ctrl.initialDisabledDataSets, '$$hashKey')).length
+        ]);
+      };
+
+      this.handleClickReset = function () {
+        reset();
+        update();
+      };
+
       this.isDataSetDisabled = function (dataSet) {
-        return _.includes(ctrl.disabledDataSets, dataSet);
+        return _.includes(disabledDataSets, dataSet);
       };
 
       this.toggleDataSet = function (dataSet) {
-        ctrl.disabledDataSets = _.xor(ctrl.disabledDataSets, [dataSet]);
+        disabledDataSets = _.xor(disabledDataSets, [dataSet]);
         ctrl.isDataSetDisabled(dataSet);
         update();
       };
 
       this.$onInit = function () {
-        ctrl.disabledDataSets = ctrl.initialDisabledDataSets;
+        disabledDataSets = ctrl.initialDisabledDataSets;
       };
 
       this.$onChanges = function (changes) {
