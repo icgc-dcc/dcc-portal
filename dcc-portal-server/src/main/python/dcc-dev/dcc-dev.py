@@ -127,7 +127,7 @@ def deploy_by_build(slot_id, build_number):
 def get_status(slot):
     try:
         directory = slot['directory']
-        exe = os.path.join(directory, 'bin', 'dcc-portal-api')
+        exe = os.path.join(directory, 'bin', 'dcc-portal-server')
 
         args = [exe, 'status']
         p = subprocess.Popen(args, stdout=subprocess.PIPE)
@@ -145,7 +145,7 @@ def get_status(slot):
 
 def get_logs(slot):
     directory = slot['directory']
-    logfile = os.path.join(directory, 'logs', 'dcc-portal-api.log')
+    logfile = os.path.join(directory, 'logs', 'dcc-portal-server.log')
 
     args = ['tail', '-n', '500', logfile]
     p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -202,7 +202,7 @@ def stop(slot_id):
     slot = get_slot(slot_id)
     directory = slot['directory']
 
-    prog = os.path.join(directory, 'bin', 'dcc-portal-api')
+    prog = os.path.join(directory, 'bin', 'dcc-portal-server')
 
     args = [prog, 'stop']
     p = subprocess.Popen(args, stdout=subprocess.PIPE)
@@ -216,7 +216,7 @@ def start(slot_id):
     slot = get_slot(slot_id)
     directory = slot['directory']
 
-    prog = os.path.join(directory, 'bin', 'dcc-portal-api')
+    prog = os.path.join(directory, 'bin', 'dcc-portal-server')
 
     args = [prog, 'start']
     p = subprocess.Popen(args, stdout=subprocess.PIPE)

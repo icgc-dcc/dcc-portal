@@ -297,7 +297,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
       val mean = analysisResult.getSummary().getMean();
 
       // Note: the expected mean values used below depend on the fixture data defined in
-      // /dcc-portal-api/src/test/resources/fixtures/DonorRepositoryTest.json. If data in that file has changed, these
+      // /dcc-portal-server/src/test/resources/fixtures/DonorRepositoryTest.json. If data in that file has changed, these
       // values might no longer represent the expected result. In that case, update these accordingly.
       if (uuid.equals(id1)) {
         assertThat(mean).isEqualTo(109.6);

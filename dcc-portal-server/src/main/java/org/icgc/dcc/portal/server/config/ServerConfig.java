@@ -175,7 +175,7 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
     if (url.toString().contains("jar")) {
       return "classpath:/swagger-ui/";
     } else {
-      return "file:" + new File("../dcc-portal-api/src/main/resources/swagger-ui").getCanonicalPath() + "/";
+      return "file:" + new File("src/main/resources/swagger-ui").getCanonicalPath() + "/";
     }
   }
 
