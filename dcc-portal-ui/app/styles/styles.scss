@@ -56,9 +56,12 @@
 @import "../../scripts/highcharts/styles/highcharts";
 @import "../../scripts/proteinstructureviewer/styles/protein";
 @import "../../scripts/genomemaps/styles/genomemaps";
+@import "../../scripts/phenotype/styles/phenotype.result.scss";
+@import "../../scripts/survivalanalysis/styles/survival-analysis.scss";
 
 // --
 // Pages
+@import "../../scripts/oncogrid/styles/oncogrid";
 @import "../../scripts/pathwayviewer/styles/pathwayviewer";
 
 @import "../../scripts/repositories/styles/repositories";
@@ -410,6 +413,9 @@ a.no-style {
   }
   i {
     height: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   img {
     height: 3rem;

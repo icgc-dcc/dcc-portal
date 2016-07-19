@@ -270,7 +270,7 @@
 
   var module = angular.module('icgc.donors.models', ['restangular', 'icgc.common.location']);
 
-  module.service('Donors', function (Restangular, LocationService, Donor) {
+  module.service('Donors', function (Restangular, LocationService, FilterService, Donor, ApiService) {
     this.handler = Restangular.one('donors');
 
     this.getList = function (params) {
@@ -311,6 +311,10 @@
 
         return data;
       });
+    };
+    
+    this.getAll = function (params) {
+      return ApiService.getAll(Restangular.all('donors'), params);
     };
 
     this.one = function (id) {

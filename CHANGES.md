@@ -3,6 +3,22 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.3.1
+--
+  - Hox fix for `OncoGridResource` not extending from `Resource`
+
+4.3.0
+--
+  - Migration to Spring Boot
+
+4.2.12
+--
+  - Added new OncoGrid analysis using newly written OncoGrid library (https://github.com/icgc/oncogrid)
+  - Set Analysis now supports operations on File Sets
+  - Added Survival analysis into Phenotype Comparison analysis
+  - Refactoring and consolidation of page all functionality
+  - Minor bug fixes and style updates. 
+
 4.2.6
 --
   - Added support for new Download Service

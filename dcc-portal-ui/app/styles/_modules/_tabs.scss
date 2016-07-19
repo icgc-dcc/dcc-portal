@@ -29,6 +29,19 @@
   margin-top: -1px;
 }
 
+.t_tabs--smaller {
+  .t_tabs__tab {
+    padding: 0.4rem 0.7rem;
+    width: auto;
+  }
+}
+
+.t_tabs--no-accent .t_tabs__tab{
+  &.active, &:hover {
+    border-top: 1px solid $greyLighter; 
+  }
+}
+
 .t_tabs__tab {
   display: inline-block;
   background: $greyLightest;

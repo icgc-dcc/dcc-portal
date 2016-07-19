@@ -42,7 +42,7 @@ Run
 
 - Start node development server: `npm run dev`
 
-- Start the [Portal API](../dcc-portal-api/README.md)
+- Start the [Portal Server](../dcc-portal-server/README.md)
 
 - View the site: [localhost:9000](http://localhost:9000/)
 
