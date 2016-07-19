@@ -33,7 +33,7 @@
 
            return templateURL;
          },
-         controller: 'SoftwareController'
+         controller: 'SoftwareController';
       });
    });
 
