@@ -124,6 +124,16 @@
       .selectAll('rect')
       .attr('height', axisHeight);
 
+    var maskName = 'mask_' + _.uniqueId();
+
+    svg.append('clipPath')
+      .attr('id', maskName)
+      .append('rect')
+        .attr('x', 0)
+        .attr('y', -10)
+        .attr('width', axisWidth)
+        .attr('height', axisHeight + margin.top);
+
     dataSets.forEach(function (data, i) {
       if (_.includes(disabledDataSets, data)) {
         return;
@@ -135,7 +145,8 @@
 
       var setGroup = wrapper.append('g')
         .attr('class', 'serie')
-        .attr('set-id', data.meta.id);
+        .attr('set-id', data.meta.id)
+        .attr('clip-path', 'url(' + window.location.href + '#' + maskName + ')');
 
       var setColor = palette[i % palette.length];
 
