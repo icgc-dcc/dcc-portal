@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response;
 
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.SoftwareService;
+import org.icgc.dcc.portal.service.SoftwareService.ArtifactFolder;
 import org.icgc.dcc.portal.service.SoftwareService.MavenArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -67,14 +68,14 @@ public class UISoftwareResource extends Resource {
   @GET
   @Produces(APPLICATION_JSON)
   public List<MavenArtifactVersion> getArtifacts() {
-    val results = softwareService.getVersions("icgc-storage-client");
+    val results = softwareService.getMavenVersions("icgc-storage-client");
     return results;
   }
 
   @Path("/icgc-get/versions")
   @GET
   @Produces(APPLICATION_JSON)
-  public List<MavenArtifactVersion> getICGCGetArtifacts() {
+  public List<ArtifactFolder> getICGCGetArtifacts() {
     val results = softwareService.getVersions("icgc-get");
     return results;
   }

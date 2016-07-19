@@ -79,7 +79,7 @@
             <table class="table table-striped">
                <thead>
                   <tr>
-                     <th>Version</th>
+                     <th>{{ icgcGetVersions }}</th>
                      <th>Zip</th>
                      <th>MD5</th>
                      <th>Signature</th>
@@ -88,8 +88,8 @@
                <tbody id="get-versions">
                   <tr data-ng-repeat="v in icgcGetVersions">
                      <td>{{ v.version }}</td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}/{{ v.version }}">{{ icgcGetArtifactId }}-{{ v.version }}-dist.zip</a></td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}/{{ v.version }}/md5">{{ icgcGetArtifactId }}-{{ v.version }}-dist.zip.md5</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}{{ v.uri }}">{{ icgcGetArtifactId }}-{{ v.uri }}-dist.zip</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}{{ v.uri }}/md5">{{ icgcGetArtifactId }}-{{ v.uri }}-dist.zip.md5</a></td>
                   </tr>
                </tbody>
             </table>

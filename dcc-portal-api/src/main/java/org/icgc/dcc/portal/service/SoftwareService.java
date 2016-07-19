@@ -50,17 +50,19 @@ public class SoftwareService {
   private String mavenRepositoryUrl = "https://artifacts.oicr.on.ca/artifactory";
 
   @SneakyThrows
-  public List<MavenArtifactVersion> getVersions(String artifactId) {
+  public List<ArtifactFolder> getVersions(String artifactId) {
     String versionsUrl;
-    if (artifactId.equals("icgc-get")) {
-      versionsUrl = mavenRepositoryUrl + "/api/search/versions?&g=" +
-          artifactId + "&repos=" + PARAMS.get("ICGCRepository");
+    versionsUrl = mavenRepositoryUrl + "/api/storage/" + PARAMS.get("ICGCRepository") + "/" +
+        artifactId;
+    val url = new URL(versionsUrl);
+    val response = MAPPER.readValue(url, ArtifactFolderResults.class);
+    return response.children;
+  }
 
-    } else {
-      versionsUrl = mavenRepositoryUrl + "/api/search/versions?g=" + PARAMS.get("groupId") + "&a=" +
-          artifactId + "&repos=" + PARAMS.get("repository");
-    }
-
+  @SneakyThrows
+  public List<MavenArtifactVersion> getMavenVersions(String artifactId) {
+    val versionsUrl = mavenRepositoryUrl + "/api/search/versions?g=" + PARAMS.get("groupId") + "&a=" +
+        artifactId + "&repos=" + PARAMS.get("repository");
     val url = new URL(versionsUrl);
     val response = MAPPER.readValue(url, MavenArtifactResults.class);
     return response.results;
@@ -68,7 +70,7 @@ public class SoftwareService {
 
   public String getLatestVersionUrl(String artifactId) {
     if (artifactId.equals("icgc-get")) {
-      return getVersionUrl("0.2.11", artifactId);
+      return getVersionUrl("0.2.10", artifactId);
     }
     return getVersionUrl("%5BRELEASE%5D", artifactId);
   }
@@ -120,6 +122,27 @@ public class SoftwareService {
     String version;
     boolean integration;
 
+  }
+
+  @Data
+  public static class ArtifactFolderResults {
+
+    String repo;
+    String Path;
+    String created;
+    String createdBy;
+    String lastModified;
+    String modifiedBy;
+    String lastUpdated;
+    List<ArtifactFolder> children;
+    String uri;
+  }
+
+  @Data
+  public static class ArtifactFolder {
+
+    String uri;
+    boolean folder;
   }
 
 }
