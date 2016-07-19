@@ -202,7 +202,6 @@
 
       promise.then(function(data) {
         if (! data.id) {
-          console.log('there is no id!!!!');
           return;
         }
 
@@ -212,13 +211,14 @@
         }
 
         data.type = data.type.toLowerCase();
-        //setList.splice(1, 0, data);
-        setList.unshift(data);
+
+        setList.unshift(data);        
+
         localStorageService.set(LIST_ENTITY, setList);
         toaster.pop('', 'Saving ' + data.name,
           'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
       });
-
+      console.log('Shouldve been added');
       return promise;
     };
 
@@ -370,45 +370,44 @@
       return promise;
     };
 
-
-
-
     /*
      * Attemp to sync with the server - fires only once, up to controller to do polling
      */
-    _service.sync = function() {
-      var pendingLists, pendingListsIDs, promise;
+    _service.sync = function(numTries) {
+      numTries = numTries === undefined ? 1 : numTries
 
-      pendingLists = _.filter(setList, function(d) {
-        return d.state !== 'FINISHED';
-      });
-      pendingListsIDs = _.pluck(pendingLists, 'id');
+      var pendingListsIDs = _(setList)
+        .filter({state: 'PENDING'})
+        .map('id')
+        .value();
+
+      console.trace();
 
       // No need to update
-      if (pendingListsIDs.length === 0) {
-        return;
+      if (numTries === 0) {
+        return $q.reject(new Error('no pending, out of numTries'));
+      } else if (pendingListsIDs.length === 0) {
+        return $q.resolve();
       }
 
-      promise = _service.getMetaData(pendingListsIDs);
-      promise.then(function(updatedList) {
-        updatedList.forEach(function(item) {
-          var index = _.findIndex(setList, function(d) {
-            return item.id === d.id;
-          });
-          if (index >= 0) {
-            setList[index].count = item.count;
-            setList[index].state = item.state;
-          }
-        });
 
-        // Save update back
-        localStorageService.set(LIST_ENTITY, setList);
-        _service.refreshList();
+      return _service.fetchSetMetaData(pendingListsIDs).then(function (updatedList) {
+        _service.updateSets(updatedList);
+        if (_.some(updatedList, {state: 'PENDING'})) {          
+          return $timeout(function() {
+            return _service.sync( numTries - 1 );
+          }, 3000);
+        }
       });
-      return promise;
+      
     };
 
-
+    _service.fetchSetMetaData = function(pendingListsIDs){
+      return _service.getMetaData(pendingListsIDs)
+        .then(function(updatedList) {
+          return updatedList;
+      });
+    };
 
     _service.refreshList = function() {
       setList.forEach(function(set) {
@@ -455,6 +454,8 @@
 
     /****** Local storage related API ******/
     _service.getAll = function() {
+      //  console.log("Local storage getAll : ", localStorage.getItem('icgc.entity'));
+      // console.log("getAll setList : ", setList);
       return setList;
     };
 
@@ -465,8 +466,9 @@
     };
 
     _service.initService = function() {
+      // console.log("initService before setList : ", setList);
       setList = localStorageService.get(LIST_ENTITY) || [];
-
+      // console.log("initService after setList : ", setList);
       // Reset everything to PENDNG
       setList.forEach(function(set) {
         set.state = 'PENDING';
