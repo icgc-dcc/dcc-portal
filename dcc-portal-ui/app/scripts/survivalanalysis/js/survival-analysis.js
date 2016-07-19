@@ -77,7 +77,9 @@
       .attr('width', outerWidth)
       .attr('height', outerHeight);
 
-    var wrapper = svg.append('g')
+    var wrapperFragment = document.createDocumentFragment();
+
+    var wrapper = d3.select(wrapperFragment).append('svg:g')
         .attr('class', 'wrapper')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -85,11 +87,11 @@
     y.domain([0, 1]);
 
     // Draw x axis
-    wrapper.append('g')
+    wrapper.append('svg:g')
       .attr('class', 'x axis')
       .attr('transform', 'translate( 0,' + axisHeight + ')')
       .call(xAxis)
-      .append('text')
+      .append('svg:text')
         .attr('class', 'axis-label')
         .attr('dy', 30)
         .attr('x', axisWidth / 2)
@@ -97,10 +99,10 @@
         .text(xAxisLabel);
 
     // Draw y axis
-    wrapper.append('g')
+    wrapper.append('svg:g')
       .attr('class', 'y axis')
       .call(yAxis)
-      .append('text')
+      .append('svg:text')
         .attr('class', 'axis-label')
         .attr('transform', 'rotate(-90)')
         .attr('y', -40)
@@ -118,7 +120,7 @@
       .x(x)
       .on('brushend', brushend);
 
-    wrapper.append("g")
+    wrapper.append('svg:g')
       .attr("class", "brush")
       .call(brush)
       .selectAll('rect')
@@ -126,9 +128,9 @@
 
     var maskName = 'mask_' + _.uniqueId();
 
-    svg.append('clipPath')
+    svg.append('svg:clipPath')
       .attr('id', maskName)
-      .append('rect')
+      .append('svg:rect')
         .attr('x', 0)
         .attr('y', -10)
         .attr('width', axisWidth)
@@ -143,7 +145,7 @@
         .x(function(p) { return x(p.x); })
         .y(function(p) { return y(p.y); });
 
-      var setGroup = wrapper.append('g')
+      var setGroup = wrapper.append('svg:g')
         .attr('class', 'serie')
         .attr('set-id', data.meta.id)
         .attr('clip-path', 'url(' + window.location.href + '#' + maskName + ')');
@@ -158,7 +160,7 @@
       });
 
       // Draw the data as an svg path
-      setGroup.append('path')
+      setGroup.append('svg:path')
         .datum(donorsInRange
           .map(function (d) { return {x: d.time, y: d.survivalEstimate}; }))
         .attr('class', 'line')
@@ -199,6 +201,8 @@
           onClickDonor(d3.event, d);
         });
     });
+    
+    svg.node().appendChild(wrapperFragment);
 
     return svg;
   }
