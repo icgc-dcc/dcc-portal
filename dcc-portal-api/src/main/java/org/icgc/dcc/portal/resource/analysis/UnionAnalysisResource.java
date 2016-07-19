@@ -81,7 +81,7 @@ public class UnionAnalysisResource extends Resource {
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Creates a set analysis asynchronously. Status can be retrieved by polling the /{id} GET endpoint.", response = UnionAnalysisResult.class)
-  public Response sumbitAnalysis(
+  public Response submitAnalysis(
       @ApiParam(value = API_SET_ANALYSIS_DEFINITION_VALUE) final UnionAnalysisRequest request) {
 
     checkRequest(request == null, "The payload of /analysis/union is null.");

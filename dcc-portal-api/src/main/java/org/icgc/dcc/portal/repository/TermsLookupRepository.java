@@ -21,7 +21,11 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Throwables.propagate;
 import static java.lang.Math.min;
 import static lombok.AccessLevel.PRIVATE;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
+import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
+import static org.elasticsearch.search.sort.SortOrder.ASC;
+import static org.icgc.dcc.portal.model.IndexModel.Type.DONOR;
 import static org.icgc.dcc.portal.model.IndexModel.Type.DONOR_TEXT;
 import static org.icgc.dcc.portal.model.IndexModel.Type.FILE_DONOR_TEXT;
 import static org.icgc.dcc.portal.util.ElasticsearchRequestUtils.toBoolFilterFrom;
@@ -31,6 +35,7 @@ import static org.icgc.dcc.portal.util.SearchResponses.getHitIdsSet;
 import static org.icgc.dcc.portal.util.SearchResponses.getTotalHitCount;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -65,7 +70,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired) )
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TermsLookupRepository {
 
   /**
@@ -109,10 +114,7 @@ public class TermsLookupRepository {
   @RequiredArgsConstructor(access = PRIVATE)
   public enum TermLookupType {
 
-    GENE_IDS("gene-ids"),
-    MUTATION_IDS("mutation-ids"),
-    DONOR_IDS("donor-ids"),
-    FILE_IDS("file-ids");
+    GENE_IDS("gene-ids"), MUTATION_IDS("mutation-ids"), DONOR_IDS("donor-ids"), FILE_IDS("file-ids");
 
     @NonNull
     private final String name;
@@ -201,12 +203,42 @@ public class TermsLookupRepository {
   public SearchResponse runUnionEsQuery(final String indexTypeName, @NonNull final SearchType searchType,
       @NonNull final BoolFilterBuilder boolFilter, final int max) {
     val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
-    return execute("Union ES Query", false, (request) -> request
-        .setTypes(indexTypeName)
-        .setSearchType(searchType)
-        .setQuery(query)
-        .setSize(max)
-        .setNoFields());
+    return execute("Union ES Query", false, (request) -> {
+      request
+          .setTypes(indexTypeName)
+          .setSearchType(searchType)
+          .setQuery(query)
+          .setSize(max)
+          .setNoFields();
+
+      if (indexTypeName.equalsIgnoreCase(FILE.getId())) {
+        request.setIndices(repoIndexName);
+      }
+    });
+  }
+
+  /**
+   * Special case for Survival Analysis, the fields selected for return are the only ones we currently care about.
+   */
+  public SearchResponse singleUnion(final String indexTypeName,
+      @NonNull final SearchType searchType,
+      @NonNull final BoolFilterBuilder boolFilter, final int max,
+      @NonNull final String[] fields,
+      @NonNull final List<String> sort) {
+    val query = filteredQuery(MATCH_ALL, boolFilter);
+
+    // Donor type is not analyzed but this works due to terms-lookup on _id field.
+    // https://github.com/icgc-dcc/dcc-release/blob/develop/dcc-release-resources/src/main/resources/org/icgc/dcc/release/resources/mappings/donor.mapping.json#L12-L13
+    return execute("Union ES Query", false, (request) -> {
+      request
+          .setTypes(DONOR.getId())
+          .setSearchType(searchType)
+          .setQuery(query)
+          .setSize(max)
+          .addFields(fields);
+
+      sort.forEach(s -> request.addSort(s, ASC));
+    });
   }
 
   public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter) {

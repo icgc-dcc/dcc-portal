@@ -243,6 +243,7 @@
     'icgc.sets',
     'icgc.analysis',
     'icgc.phenotype',
+    'icgc.oncogrid',
     'icgc.beacon',
     'icgc.downloader',
     'icgc.pathwayviewer',
@@ -254,6 +255,7 @@
     'icgc.tokens',
     'icgc.pathways',
     'icgc.historyManager',
+    'icgc.survival',
 
     // old
     'app.ui',
@@ -527,10 +529,8 @@
    */
 
   module.constant('API', {
-    BASE_URL: $icgcApp.getAPI().getBasePathURL()
+    BASE_URL: $icgcApp.getAPI().getBasePathURL(),
   });
-
-
 
   module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, $compileProvider,
                           AngularyticsProvider, $httpProvider, RestangularProvider,

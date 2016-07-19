@@ -33,11 +33,11 @@
   var module = angular.module('icgc.sets.controllers', []);
 
   module.controller('SetUploadController',
-    function($scope, $modalInstance, LocationService, SetService, Settings, 
+    function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
                setType, setLimit, setUnion, selectedIds) {
 
     $scope.setLimit = setLimit;
-    $scope.isValid = true;
+    $scope.isValid = false;
 
 
     // Input data parameters
@@ -49,6 +49,7 @@
     $scope.params.setSize = 0;
     $scope.params.setUnion = setUnion;
     $scope.params.selectedIds = selectedIds;
+    $scope.params.isLoading = true;
 
 
     /**
@@ -156,6 +157,10 @@
       $scope.params.setSize = Math.min($scope.setLimit || 0, settings.maxNumberOfHits);
       $scope.params.setSizeLimit = $scope.params.setSize;
       $scope.params.setName = 'My ' + setType + ' set';
+      $timeout(function () {
+        $scope.params.isLoading = false;
+        $scope.validateInput();
+      }, 500);
       $scope.uiFilters = LocationService.filters();
     });
 
@@ -331,7 +336,7 @@
           });
         };
 
-        $scope.viewInExternal = function(item) {
+        $scope.viewInExternal = function (item) {
           Page.startWork();
           var params, type, name;
           type = $scope.item.type.toLowerCase();
@@ -342,13 +347,22 @@
             type: $scope.item.type.toLowerCase(),
             name: name
           };
+
+          var filterTemplate = function(id) {
+            if (type === 'donor') {
+              return {file: {entitySetId: {is: [id]}}};
+            } else if (type === 'file') {
+              return {file: {id: {is: [Extensions.ENTITY_PREFIX + id]}}};
+            }
+          };
+
           SetService.materializeSync(type, params).then(function(data) {
             Page.stopWork();
             if (! data.id) {
               console.log('there is no id!!!!');
               return;
             } else {
-              var newFilter = JSON.stringify({file: {entitySetId: {is: [data.id]}}});
+              var newFilter = JSON.stringify(filterTemplate(data.id));
               $location.path (dataRepoUrl).search ('filters', newFilter);
             }
           });

@@ -45,7 +45,23 @@ CREATE TABLE IF NOT EXISTS phenotype_analysis(
 
 --------------------------------------------------------------------------------
 
+CREATE TABLE IF NOT EXISTS survival_analysis(
+   id       UUID PRIMARY KEY,
+   version  INT,
+   data     TEXT
+);
+
+--------------------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS manifest(
+   id       UUID PRIMARY KEY,
+   version  INT,
+   data     TEXT
+);
+   
+--------------------------------------------------------------------------------
+   
+CREATE TABLE IF NOT EXISTS oncogrid_analysis(
    id       UUID PRIMARY KEY,
    version  INT,
    data     TEXT
