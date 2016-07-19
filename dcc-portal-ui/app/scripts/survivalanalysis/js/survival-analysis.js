@@ -30,7 +30,6 @@
     var onClickDonor = params.onClickDonor || _.noop;
     var palette = params.palette;
     var markerType = params.markerType || 'circle';
-    var xDomain = params.xDomain || [];
 
     var containerBounds = container.getBoundingClientRect();
 
@@ -79,7 +78,8 @@
           return data.donors.slice(-1)[0].time;
         }));
 
-    x.domain([xDomain[0] || 0, xDomain[1] || longestDuration]);
+    var xDomain = params.xDomain || [0, longestDuration];
+    x.domain([xDomain[0], xDomain[1]]);
     y.domain([0, 1]);
 
     // Draw x axis
@@ -150,16 +150,24 @@
 
       var setColor = palette[i % palette.length];
 
+ 
+      var donorsInRange = data.donors.filter(function (donor, i, arr) {
+        return _.inRange(donor.time, xDomain[0], xDomain[1] + 1) ||
+          ( arr[i - 1] && donor.time >= xDomain[1] && arr[i - 1].time <= xDomain[1] ) ||
+          ( arr[i + 1] && donor.time <= xDomain[0] && arr[i + 1].time >= xDomain[0] );
+      });
+
       // Draw the data as an svg path
       setGroup.append('path')
-        .datum(data.donors.map(function (d) { return {x: d.time, y: d.survivalEstimate}; }))
+        .datum(donorsInRange
+          .map(function (d) { return {x: d.time, y: d.survivalEstimate}; }))
         .attr('class', 'line')
         .attr('d', line)
         .attr('stroke', setColor);
 
       // Draw the data points as circles
       var markers = setGroup.selectAll('circle')
-        .data(data.donors)
+        .data(donorsInRange)
         .enter();
 
       if (markerType === 'line') {
