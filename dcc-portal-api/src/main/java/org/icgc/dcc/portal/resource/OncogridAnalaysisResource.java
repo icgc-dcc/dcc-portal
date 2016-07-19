@@ -18,7 +18,6 @@
 package org.icgc.dcc.portal.resource;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.icgc.dcc.portal.resource.Resource.checkRequest;
 
 import java.util.UUID;
 
@@ -42,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @Path("/v1/analysis/oncogrid")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class OncogridAnalaysisResource {
+public class OncogridAnalaysisResource extends Resource {
 
   @NonNull
   private final OncogridAnalysisService service;
