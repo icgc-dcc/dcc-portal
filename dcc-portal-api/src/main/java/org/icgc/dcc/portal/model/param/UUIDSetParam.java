@@ -21,7 +21,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.google.common.collect.Sets;
-import com.yammer.dropwizard.jersey.params.AbstractParam;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;

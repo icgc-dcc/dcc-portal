@@ -19,7 +19,6 @@ package org.icgc.dcc.portal.model.param;
 import static com.google.common.collect.Iterables.toArray;
 
 import com.google.common.base.Splitter;
-import com.yammer.dropwizard.jersey.params.AbstractParam;
 
 public class FieldsParam extends AbstractParam<String[]> {
 

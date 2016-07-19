@@ -20,12 +20,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.regex.Pattern;
 
-import lombok.NonNull;
-
 import org.icgc.dcc.portal.model.AlleleMutation;
 import org.icgc.dcc.portal.util.AlleleParser;
 
-import com.yammer.dropwizard.jersey.params.AbstractParam;
+import lombok.NonNull;
 
 public class AlleleParam extends AbstractParam<AlleleMutation> {
 

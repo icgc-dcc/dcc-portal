@@ -22,9 +22,8 @@ import static org.icgc.dcc.portal.util.JsonUtils.MAPPER;
 import java.net.URLDecoder;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.swagger.annotations.ApiModel;
-import com.yammer.dropwizard.jersey.params.AbstractParam;
 
+import io.swagger.annotations.ApiModel;
 import lombok.SneakyThrows;
 
 @ApiModel(value = FiltersParam.EXTRA_DETAIL_FOR_DONOR_COUNT_FILTER_PARAM)

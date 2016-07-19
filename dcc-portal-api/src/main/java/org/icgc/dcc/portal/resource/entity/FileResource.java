@@ -57,13 +57,13 @@ import javax.ws.rs.core.UriBuilder;
 import org.icgc.dcc.portal.model.File;
 import org.icgc.dcc.portal.model.Files;
 import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.model.param.IntParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.resource.core.ManifestResource;
 import org.icgc.dcc.portal.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.yammer.dropwizard.jersey.params.IntParam;
 import com.yammer.metrics.annotation.Timed;
 
 import io.swagger.annotations.Api;

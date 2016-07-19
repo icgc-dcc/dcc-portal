@@ -37,6 +37,7 @@ import org.icgc.dcc.portal.model.Query;
 import org.icgc.dcc.portal.model.Transcript;
 import org.icgc.dcc.portal.model.param.FiltersParam;
 import org.icgc.dcc.portal.model.param.IdsParam;
+import org.icgc.dcc.portal.model.param.IntParam;
 import org.icgc.dcc.portal.resource.Resource;
 import org.icgc.dcc.portal.service.GeneService;
 import org.icgc.dcc.portal.service.MutationService;
@@ -46,7 +47,6 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.yammer.dropwizard.jersey.params.IntParam;
 import com.yammer.metrics.annotation.Timed;
 
 import io.swagger.annotations.Api;

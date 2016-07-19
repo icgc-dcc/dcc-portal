@@ -34,7 +34,9 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
 import org.icgc.dcc.portal.model.Error;
+import org.springframework.stereotype.Component;
 
+@Component
 @Provider
 @Produces({ TEXT_PLAIN, APPLICATION_OCTET_STREAM })
 public class ErrorMessageBodyWriter implements MessageBodyWriter<Error> {
@@ -52,7 +54,7 @@ public class ErrorMessageBodyWriter implements MessageBodyWriter<Error> {
   @Override
   public void writeTo(Error error, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
       MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
-          WebApplicationException {
+      WebApplicationException {
     entityStream.write(error.toString().getBytes(UTF_8));
   }
 

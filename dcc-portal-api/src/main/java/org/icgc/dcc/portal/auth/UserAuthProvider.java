@@ -25,18 +25,11 @@ import com.sun.jersey.core.spi.component.ComponentContext;
 import com.sun.jersey.core.spi.component.ComponentScope;
 import com.sun.jersey.spi.inject.Injectable;
 import com.sun.jersey.spi.inject.InjectableProvider;
-import com.yammer.dropwizard.auth.Auth;
-import com.yammer.dropwizard.auth.Authenticator;
 
 import lombok.NonNull;
 
 /**
- * Authentication provider to provide the following to Jersey:
- * </p>
- * <ul>
- * <li>Bridge between Dropwizard and Jersey for HMAC authentication</li>
- * <li>Provides additional {@link org.icgc.dcc.portal.model.security.Authority} information</li>
- * </ul>
+ * Authentication provider.
  * 
  * @param <T> the principal type.
  */

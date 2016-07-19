@@ -28,7 +28,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.ClientResponse;
-import com.yammer.dropwizard.testing.ResourceTest;
+import org.icgc.dcc.portal.test.ResourceTest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TranscriptResourceTest extends ResourceTest {

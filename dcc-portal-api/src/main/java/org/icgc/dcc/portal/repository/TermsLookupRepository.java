@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Throwables.propagate;
 import static java.lang.Math.min;
 import static lombok.AccessLevel.PRIVATE;
-import static org.dcc.portal.pql.meta.Type.*;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
 import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
 import static org.elasticsearch.search.sort.SortOrder.ASC;
@@ -51,7 +51,6 @@ import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermsLookupFilterBuilder;
-import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.icgc.dcc.portal.config.PortalProperties;
 import org.icgc.dcc.portal.model.BaseEntitySet;
 import org.icgc.dcc.portal.model.EntitySet.SubType;
@@ -204,12 +203,13 @@ public class TermsLookupRepository {
   public SearchResponse runUnionEsQuery(final String indexTypeName, @NonNull final SearchType searchType,
       @NonNull final BoolFilterBuilder boolFilter, final int max) {
     val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
-    return execute("Union ES Query", false, (request) -> {request
-        .setTypes(indexTypeName)
-        .setSearchType(searchType)
-        .setQuery(query)
-        .setSize(max)
-        .setNoFields();
+    return execute("Union ES Query", false, (request) -> {
+      request
+          .setTypes(indexTypeName)
+          .setSearchType(searchType)
+          .setQuery(query)
+          .setSize(max)
+          .setNoFields();
 
       if (indexTypeName.equalsIgnoreCase(FILE.getId())) {
         request.setIndices(repoIndexName);
@@ -231,11 +231,11 @@ public class TermsLookupRepository {
     // https://github.com/icgc-dcc/dcc-release/blob/develop/dcc-release-resources/src/main/resources/org/icgc/dcc/release/resources/mappings/donor.mapping.json#L12-L13
     return execute("Union ES Query", false, (request) -> {
       request
-              .setTypes(DONOR.getId())
-              .setSearchType(searchType)
-              .setQuery(query)
-              .setSize(max)
-              .addFields(fields);
+          .setTypes(DONOR.getId())
+          .setSearchType(searchType)
+          .setQuery(query)
+          .setSize(max)
+          .addFields(fields);
 
       sort.forEach(s -> request.addSort(s, ASC));
     });

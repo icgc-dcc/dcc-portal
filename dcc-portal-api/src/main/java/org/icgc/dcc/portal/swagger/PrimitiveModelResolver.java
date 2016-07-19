@@ -25,14 +25,14 @@ import java.util.Iterator;
 import org.icgc.dcc.portal.model.param.AlleleParam;
 import org.icgc.dcc.portal.model.param.FieldsParam;
 import org.icgc.dcc.portal.model.param.FiltersParam;
+import org.icgc.dcc.portal.model.param.IntParam;
 import org.icgc.dcc.portal.model.param.JacksonParam;
 import org.icgc.dcc.portal.model.param.ListParam;
+import org.icgc.dcc.portal.model.param.LongParam;
 import org.icgc.dcc.portal.model.param.UUIDSetParam;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.yammer.dropwizard.jersey.params.IntParam;
-import com.yammer.dropwizard.jersey.params.LongParam;
 
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
