@@ -108,11 +108,12 @@
     function brushend() {
       var extent = brush.extent();
       svg.select('.brush').call(brush.clear());
-      console.log(extent);
-      svg.selectAll('*').remove();
-      renderChart(_.extend({}, params, {
-        xDomain: extent
-      }));
+      if (extent[1] - extent[0] > 1) {
+        svg.selectAll('*').remove();
+        renderChart(_.extend({}, params, {
+          xDomain: extent
+        }));
+      }
     }
     var brush = d3.svg.brush()
       .x(x)
