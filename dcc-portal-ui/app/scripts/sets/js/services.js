@@ -143,12 +143,6 @@
       return data;
     }
 
-    /*
-    this.saveAll = function(lists) {
-      localStorageService.set(LIST_ENTITY, lists);
-    };
-    */
-
     _service.createAdvLink = function(set) {
       var type = set.type.toLowerCase(), filters = {};
       filters[type] = {};
@@ -198,39 +192,51 @@
     _service.addSet = function(type, params) {
       var promise = null;
       var data = params2JSON(type, params);
-      promise = Restangular.one('entityset').post(undefined, data, {}, {'Content-Type': 'application/json'});
+      var addSetSaving;
 
-      promise.then(function(data) {
+
+      if(! data.isTransient){
+        addSetSaving = _service.savingToaster(data.name);
+      }
+      
+
+      promise = Restangular.one('entityset').post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
+
+      promise.then(function(data) {        
+        
         if (! data.id) {
           return;
         }
 
         // If flagged as transient, don't save to local storage
-        if (data.subtype === 'TRANSIENT') {
+        if (data.subtype === 'TRANSIENT') { 
           return;
         }
 
         data.type = data.type.toLowerCase();
 
-        setList.unshift(data);        
-
+        setList.unshift(data);
         localStorageService.set(LIST_ENTITY, setList);
-        toaster.pop('', 'Saving ' + data.name,
-          'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
+        
+        _service.saveSuccessToaster(data.name);
+        toaster.clear(addSetSaving);
+
       });
-      console.log('Shouldve been added');
+      
       return promise;
     };
 
     _service.addExternalSet = function(type, params) {
       var promise = null;
       var data = params2JSON(type, params);
+
+      
+
       promise = Restangular.one('entityset').one('external')
         .post(undefined, data, {}, {'Content-Type': 'application/json'});
 
       promise.then(function(data) {
         if (! data.id) {
-          console.log('there is no id!!!!');
           return;
         }
 
@@ -239,12 +245,15 @@
           return;
         }
 
+        var addSetSaving = _service.savingToaster(data.name);
+
         data.type = data.type.toLowerCase();
-        //setList.splice(1, 0, data);
+
         setList.unshift(data);
         localStorageService.set(LIST_ENTITY, setList);
-        toaster.pop('', 'Saving ' + data.name,
-          'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
+
+        _service.saveSuccessToaster(data.name);
+        toaster.clear(addSetSaving);
       });
 
       return promise;
@@ -352,61 +361,25 @@
       var promise = null;
       var data = params2JSON(type, params, true);
 
-      promise = Restangular.one('entityset').post('union', data, {}, {'Content-Type': 'application/json'});
+      promise = Restangular.one('entityset').post('union', data, {async: 'false'}, {'Content-Type': 'application/json'});
+
       promise.then(function(data) {
         if (! data.id) {
           console.log('there is an error in creating derived set');
           return;
         }
+        var addSetSaving = _service.savingToaster(data.name);
 
         data.type = data.type.toLowerCase();
+
         setList.unshift(data);
-        // setList.splice(1, 0, data);
         localStorageService.set(LIST_ENTITY, setList);
-        toaster.pop('', 'Saving ' + data.name,
-          'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
+
+        _service.saveSuccessToaster(data.name);
+        toaster.clear(addSetSaving);
       });
 
       return promise;
-    };
-
-    /*
-     * Attemp to sync with the server - fires only once, up to controller to do polling
-     */
-    _service.sync = function(numTries) {
-      numTries = numTries === undefined ? 1 : numTries
-
-      var pendingListsIDs = _(setList)
-        .filter({state: 'PENDING'})
-        .map('id')
-        .value();
-
-      console.trace();
-
-      // No need to update
-      if (numTries === 0) {
-        return $q.reject(new Error('no pending, out of numTries'));
-      } else if (pendingListsIDs.length === 0) {
-        return $q.resolve();
-      }
-
-
-      return _service.fetchSetMetaData(pendingListsIDs).then(function (updatedList) {
-        _service.updateSets(updatedList);
-        if (_.some(updatedList, {state: 'PENDING'})) {          
-          return $timeout(function() {
-            return _service.sync( numTries - 1 );
-          }, 3000);
-        }
-      });
-      
-    };
-
-    _service.fetchSetMetaData = function(pendingListsIDs){
-      return _service.getMetaData(pendingListsIDs)
-        .then(function(updatedList) {
-          return updatedList;
-      });
     };
 
     _service.refreshList = function() {
@@ -454,8 +427,6 @@
 
     /****** Local storage related API ******/
     _service.getAll = function() {
-      //  console.log("Local storage getAll : ", localStorage.getItem('icgc.entity'));
-      // console.log("getAll setList : ", setList);
       return setList;
     };
 
@@ -466,34 +437,12 @@
     };
 
     _service.initService = function() {
-      // console.log("initService before setList : ", setList);
-      setList = localStorageService.get(LIST_ENTITY) || [];
-      // console.log("initService after setList : ", setList);
-      // Reset everything to PENDNG
-      setList.forEach(function(set) {
-        set.state = 'PENDING';
-      });
 
+      setList = localStorageService.get(LIST_ENTITY) || [];
       _service.refreshList();
 
       return setList;
     };
-
-
-    _service.updateSets = function(sets) {
-      sets.forEach(function(item) {
-        var index = _.findIndex(setList, function(d) {
-          return item.id === d.id;
-        });
-        if (index >= 0) {
-          setList[index].count = item.count;
-          setList[index].state = item.state;
-        }
-      });
-      localStorageService.set(LIST_ENTITY, setList);
-      _service.refreshList();
-    };
-
 
     _service.removeSeveral = function(ids) {
       _.remove(setList, function(list) {
@@ -509,42 +458,6 @@
       });
       localStorageService.set(LIST_ENTITY, setList);
       return true;
-    };
-
-
-    // Make sure the demo is in place
-    _service.initDemo = function() {
-      var settingsPromise = Restangular.one('settings').get();
-
-      function addDemo(demo) {
-        demo.type = demo.type.toLowerCase();
-        demo.readonly = true;
-
-        // Check if already exist
-        var exist = _.some(setList, function(set) {
-          return set.id === demo.id;
-        });
-        if (exist === false) {
-          setList.unshift(demo); // Demo always goes first
-          localStorageService.set(LIST_ENTITY, setList);
-        } else {
-          setList[0] = demo; // Always overwrite demo in order to get updates
-          localStorageService.set(LIST_ENTITY, setList);
-        }
-      }
-
-      settingsPromise.then(function(settings) {
-        if (settings.hasOwnProperty('demoListUuid')) {
-          var uuid = settings.demoListUuid;
-          var demoPromise = _service.getMetaData([uuid]);
-
-          demoPromise.then(function(results) {
-            addDemo(results[0]);
-            _service.refreshList();
-          });
-        }
-      });
-
     };
 
     // Wait for sets to getResolved
@@ -581,9 +494,6 @@
         return _this;
       };
 
-
-      ////
-
       function _defaultRetrievalTargetPromiseFunction() {
         return _service.getMetaData(_Ids);
       }
@@ -596,8 +506,6 @@
 
         return resolvedSets.length === _Ids.length;
       }
-
-      ////
 
       function _reset() {
         _numTries = _originalNumTries;
@@ -674,6 +582,14 @@
         });
     };
 
+    _service.savingToaster = function(setName){
+      return toaster.pop('warning', 'Saving ' + setName,'Please wait', 0, 'trustedHtml');
+    }
+
+    _service.saveSuccessToaster = function(setName){
+      return toaster.pop('success', setName + ' Saved',
+             'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
+    }
 
     // Initialize
     var setList = _service.initService();

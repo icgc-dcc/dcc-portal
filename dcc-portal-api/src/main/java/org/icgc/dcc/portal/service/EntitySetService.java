@@ -127,6 +127,7 @@ public class EntitySetService {
       materializeListAsync(newEntitySet.getId(), entitySetDefinition);
     } else {
       materializeList(newEntitySet.getId(), entitySetDefinition);
+      return getEntitySet(newEntitySet.getId());
     }
     return newEntitySet;
   }
@@ -149,6 +150,7 @@ public class EntitySetService {
       analyzer.combineListsAsync(newEntitySet.getId(), entitySetDefinition);
     } else {
       analyzer.combineLists(newEntitySet.getId(), entitySetDefinition);
+      return getEntitySet(newEntitySet.getId());
     }
     return newEntitySet;
   }
