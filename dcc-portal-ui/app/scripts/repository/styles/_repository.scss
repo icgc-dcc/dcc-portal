@@ -79,9 +79,17 @@
         &.ng-leave + .extras, {
           display: none;
         }
-        &.dndPlaceholder {
-          background-color: #f2f2f2;
-          border: 2px dotted #999;
+        &.dndPlaceholder td {
+          padding: 0 !important;
+          &:before{
+            box-sizing: border-box;
+            content: '\00a0';
+            width: 100%;
+            height: 100%;
+            display: block;
+            background-color: #edf8ff;
+            border: 2px dotted #1693c0;
+          }
         }
         .orange-icon {
           color: $iconColor;
