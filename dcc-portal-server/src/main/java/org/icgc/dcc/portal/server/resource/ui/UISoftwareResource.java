@@ -111,6 +111,22 @@ public class UISoftwareResource extends Resource {
     URL redirect = new URL(softwareService.getVersionUrl(version, "icgc-get"));
     return Response.seeOther(redirect.toURI()).build();
   }
+  
+  @Path("/icgc-get/{version}/linux")
+  @GET
+  @SneakyThrows
+  public Response getICGCGetLinuxVersion(@PathParam("version") String version) {
+    URL redirect = new URL(softwareService.getLinuxVersionUrl(version, "icgc-get"));
+    return Response.seeOther(redirect.toURI()).build();
+  }
+  
+  @Path("/icgc-get/{version}/osx")
+  @GET
+  @SneakyThrows
+  public Response getICGCGetOsxVersion(@PathParam("version") String version) {
+    URL redirect = new URL(softwareService.getMacVersionUrl(version, "icgc-get"));
+    return Response.seeOther(redirect.toURI()).build();
+  }
 
   @Path("/icgc-storage-client/{version}/md5")
   @GET

@@ -80,15 +80,15 @@
                <thead>
                   <tr>
                      <th>Version</th>
-                     <th>Zip</th>
-                     <th>MD5</th>
+                     <th>Mac</th>
+                     <th>Linux</th>
                   </tr>
                </thead>
                <tbody id="get-versions">
                   <tr data-ng-repeat="v in icgcGetVersions">
                      <td>{{ v.uri }}</td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}{{ v.uri }}">{{ icgcGetArtifactId }}-{{ v.uri }}-dist.zip</a></td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}{{ v.uri }}/md5">{{ icgcGetArtifactId }}-{{ v.uri }}-dist.zip.md5</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}{{ v.uri }}/osx">{{ icgcGetArtifactId }}-{{ v.uri }}-osx-dist.zip</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}{{ v.uri }}/linux">{{ icgcGetArtifactId }}-{{ v.uri }}-linux-dist.zip.md5</a></td>
                   </tr>
                </tbody>
             </table>

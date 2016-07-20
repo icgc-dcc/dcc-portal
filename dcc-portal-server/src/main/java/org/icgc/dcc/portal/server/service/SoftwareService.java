@@ -40,9 +40,12 @@ public class SoftwareService {
   private static final Map<String, String> PARAMS = ImmutableMap.of(
       "groupId", "org.icgc.dcc",
       "classifier", "dist",
-      "ICGCClassifier", "osx_x64",
       "repository", "dcc-release",
-      "ICGCRepository", "dcc-binaries");
+      );
+  private static final Map<String, String> ICGCPARAMS = ImmutableMap.of(
+		  "osxClassifier", "osx_x64",
+		  "linuxClassifier", "linux_x64",
+		  "repository", "dcc-binaries");
 
   /**
    * Configuration.
@@ -52,7 +55,7 @@ public class SoftwareService {
   @SneakyThrows
   public List<ArtifactFolder> getVersions(String artifactId) {
     String versionsUrl;
-    versionsUrl = mavenRepositoryUrl + "/api/storage/" + PARAMS.get("ICGCRepository") + "/" +
+    versionsUrl = mavenRepositoryUrl + "/api/storage/" + ICGCPARAMS.get("repository") + "/" +
         artifactId;
     val url = new URL(versionsUrl);
     val response = MAPPER.readValue(url, ArtifactFolderResults.class);
@@ -70,6 +73,7 @@ public class SoftwareService {
 
   public String getLatestVersionUrl(String artifactId) {
     if (artifactId.equals("icgc-get")) {
+      List<ArtifactFolder> Versions = getVersions(artifactId);
       return getVersionUrl("0.2.10", artifactId);
     }
     return getVersionUrl("%5BRELEASE%5D", artifactId);
@@ -82,12 +86,18 @@ public class SoftwareService {
   public String getVersionSignatureUrl(String version, String artifactId) {
     return getVersionUrl(version, artifactId) + ".asc";
   }
-
+  
+  public String getLinuxVersionURL(String version, String artifactId){
+  	return getVersionUrl(version, artifactId) + ICGCPARAMS.get("linuxClassifier") + ".zip"
+  }
+  
+  public String getMacVersionURL(String version, String artifactId){
+	  	return getVersionUrl(version, artifactId) + ICGCPARAMS.get("osxClassifier") + ".zip"
+  }
+  
   public String getVersionUrl(String version, String artifactId) {
     if (artifactId.equals("icgc-get")) {
-      val classifier = PARAMS.get("ICGCClassifier");
-      return getRepositoryUrl(artifactId) + "/" + artifactId + "/" + version + "/" + artifactId + "_v" + version + "_"
-          + classifier + ".zip";
+         return getRepositoryUrl(artifactId) + "/" + artifactId + "/" + version + "/" + artifactId + "_v" + version + "_";
     }
     val classifier = PARAMS.get("classifier");
     return getGroupUrl() + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + "-"
