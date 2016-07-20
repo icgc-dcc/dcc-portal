@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.portal.server.config.PortalProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 import org.icgc.dcc.portal.server.service.AuthenticationException;
 import org.icgc.dcc.portal.server.service.ForbiddenAccessException;
 

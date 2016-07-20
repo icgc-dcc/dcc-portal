@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import javax.ws.rs.core.Response;
 
-import org.icgc.dcc.portal.server.mapper.NotFoundExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.NotFoundExceptionMapper;
 import org.icgc.dcc.portal.server.model.Gene;
 import org.icgc.dcc.portal.server.model.Genes;
 import org.icgc.dcc.portal.server.model.Mutation;

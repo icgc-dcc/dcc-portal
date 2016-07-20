@@ -39,7 +39,7 @@ import org.dcc.portal.pql.meta.Type;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.icgc.dcc.portal.server.analysis.UnionAnalyzer;
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.BaseEntitySetDefinition;
 import org.icgc.dcc.portal.server.model.DerivedEntitySetDefinition;
@@ -90,7 +90,7 @@ public class EntitySetService {
   @NonNull
   private final UnionAnalyzer analyzer;
   @NonNull
-  private final PortalProperties properties;
+  private final ServerProperties properties;
   @NonNull
   private final QueryEngine queryEngine;
 

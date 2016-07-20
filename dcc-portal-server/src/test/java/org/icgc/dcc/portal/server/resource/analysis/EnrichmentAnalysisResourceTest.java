@@ -31,7 +31,7 @@ import java.util.UUID;
 
 import javax.ws.rs.core.MediaType;
 
-import org.icgc.dcc.portal.server.mapper.BadRequestExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.BadRequestExceptionMapper;
 import org.icgc.dcc.portal.server.model.EnrichmentAnalysis;
 import org.icgc.dcc.portal.server.model.EnrichmentParams;
 import org.icgc.dcc.portal.server.service.EnrichmentAnalysisService;

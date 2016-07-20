@@ -32,7 +32,7 @@ import org.hibernate.validator.constraints.URL;
 import org.icgc.dcc.common.client.api.ICGCException;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLClient;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLResponse;
-import org.icgc.dcc.portal.server.config.PortalProperties.WebProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.WebProperties;
 import org.icgc.dcc.portal.server.model.ShortUrl;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.service.BadRequestException;

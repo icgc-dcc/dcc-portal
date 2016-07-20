@@ -14,13 +14,11 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.mapper;
+package org.icgc.dcc.portal.server.jersey.mapper;
 
-import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.status;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static org.apache.commons.lang.StringUtils.capitalize;
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -28,29 +26,25 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import org.icgc.dcc.portal.server.model.Error;
-import org.icgc.dcc.portal.server.service.NotFoundException;
+import org.icgc.dcc.portal.server.service.ServiceUnavailableException;
 import org.springframework.stereotype.Component;
 
 @Component
 @Provider
-public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
+public class ServiceUnavailableExceptionMapper implements ExceptionMapper<ServiceUnavailableException> {
 
-  private final static Status STATUS = NOT_FOUND;
+  private final static Status STATUS = SERVICE_UNAVAILABLE;
 
   @Override
-  public Response toResponse(NotFoundException e) {
+  public Response toResponse(ServiceUnavailableException e) {
     return status(STATUS)
         .type(APPLICATION_JSON_TYPE)
         .entity(errorResponse(e))
         .build();
   }
 
-  private Error errorResponse(NotFoundException e) {
-    return new Error(STATUS, message(e));
-  }
-
-  private String message(NotFoundException e) {
-    return format("%s with id '%s' not found.", capitalize(e.getEntityName()), e.getId());
+  private Error errorResponse(ServiceUnavailableException e) {
+    return new Error(STATUS, e.getMessage());
   }
 
 }

@@ -15,7 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.icgc.dcc.portal.server.filter;
+package org.icgc.dcc.portal.server.jersey.filter;
 
 import static javax.ws.rs.core.Response.fromResponse;
 

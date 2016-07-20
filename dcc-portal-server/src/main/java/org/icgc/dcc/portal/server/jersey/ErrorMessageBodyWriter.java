@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,35 +15,55 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.mapper;
+package org.icgc.dcc.portal.server.jersey;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
-import static javax.ws.rs.core.Response.status;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import org.dcc.portal.pql.exception.SemanticException;
+import org.icgc.dcc.common.core.json.Jackson;
 import org.icgc.dcc.portal.server.model.Error;
 import org.springframework.stereotype.Component;
 
+import lombok.SneakyThrows;
+
 @Component
 @Provider
-public class SemanticExceptionMapper implements ExceptionMapper<SemanticException> {
+@Produces({ APPLICATION_JSON, APPLICATION_OCTET_STREAM })
+public class ErrorMessageBodyWriter implements MessageBodyWriter<Error> {
 
   @Override
-  public Response toResponse(SemanticException e) {
-    return status(BAD_REQUEST)
-        .type(APPLICATION_JSON_TYPE)
-        .entity(errorResponse(e))
-        .build();
-
+  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    return Error.class.isAssignableFrom(type);
   }
 
-  private Error errorResponse(SemanticException e) {
-    return new Error(BAD_REQUEST, e.getMessage());
+  @Override
+  public long getSize(Error error, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    return convert(error).length();
   }
 
+  @Override
+  public void writeTo(Error error, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
+      MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
+      throws IOException, WebApplicationException {
+    entityStream.write(convert(error).getBytes(UTF_8));
+  }
+
+  @SneakyThrows
+  private static String convert(Error error) {
+    return Jackson.DEFAULT.writeValueAsString(error);
+  }
+  
 }

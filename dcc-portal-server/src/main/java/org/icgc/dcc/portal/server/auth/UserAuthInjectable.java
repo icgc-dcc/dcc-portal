@@ -28,7 +28,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 
-import org.icgc.dcc.portal.server.config.PortalProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.core.HttpContext;

@@ -15,14 +15,14 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.filter;
+package org.icgc.dcc.portal.server.jersey.filter;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
 import lombok.Setter;
 
-import org.icgc.dcc.portal.server.config.PortalProperties.DownloadProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
 import org.icgc.dcc.portal.server.resource.core.DownloadResource;
 import org.icgc.dcc.portal.server.service.NotAvailableException;
 import org.springframework.beans.factory.annotation.Autowired;

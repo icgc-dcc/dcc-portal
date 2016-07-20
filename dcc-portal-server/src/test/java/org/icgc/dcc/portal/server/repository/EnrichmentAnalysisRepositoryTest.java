@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.UUID;
 
-import lombok.val;
-
 import org.icgc.dcc.portal.server.model.EnrichmentAnalysis;
+import org.icgc.dcc.portal.server.test.Tests;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.skife.jdbi.v2.DBI;
+
+import lombok.val;
 
 public class EnrichmentAnalysisRepositoryTest {
 
@@ -35,7 +35,7 @@ public class EnrichmentAnalysisRepositoryTest {
 
   @Before
   public void setUp() {
-    val dbi = new DBI("jdbc:h2:mem:genelist;MODE=PostgreSQL;INIT=runscript from 'src/test/sql/schema.sql'");
+    val dbi = Tests.createDBI();
     this.repository = dbi.open(EnrichmentAnalysisRepository.class);
   }
 

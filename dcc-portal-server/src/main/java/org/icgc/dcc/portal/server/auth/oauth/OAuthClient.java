@@ -41,7 +41,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.icgc.dcc.common.core.security.DumbHostnameVerifier;
 import org.icgc.dcc.common.core.security.DumbX509TrustManager;
 import org.icgc.dcc.common.core.util.Splitters;
-import org.icgc.dcc.portal.server.config.PortalProperties.OAuthProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.OAuthProperties;
 import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.model.Tokens;
 import org.icgc.dcc.portal.server.service.BadRequestException;

@@ -29,7 +29,7 @@ import java.util.UUID;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.DerivedEntitySetDefinition;
 import org.icgc.dcc.portal.server.model.EntitySet;
@@ -79,7 +79,7 @@ public class UnionAnalyzer {
   @Value("#{repoIndexName}")
   private final String repoIndexName;
   @NonNull
-  private final PortalProperties properties;
+  private final ServerProperties properties;
 
   @NonNull
   private final UnionAnalysisRepository unionAnalysisRepository;

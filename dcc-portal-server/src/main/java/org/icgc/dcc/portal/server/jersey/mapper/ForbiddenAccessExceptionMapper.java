@@ -14,11 +14,11 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.mapper;
+package org.icgc.dcc.portal.server.jersey.mapper;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.status;
-import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
+import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -26,24 +26,24 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import org.icgc.dcc.portal.server.model.Error;
-import org.icgc.dcc.portal.server.service.ServiceUnavailableException;
+import org.icgc.dcc.portal.server.service.ForbiddenAccessException;
 import org.springframework.stereotype.Component;
 
 @Component
 @Provider
-public class ServiceUnavailableExceptionMapper implements ExceptionMapper<ServiceUnavailableException> {
+public class ForbiddenAccessExceptionMapper implements ExceptionMapper<ForbiddenAccessException> {
 
-  private final static Status STATUS = SERVICE_UNAVAILABLE;
+  private final static Status STATUS = FORBIDDEN;
 
   @Override
-  public Response toResponse(ServiceUnavailableException e) {
+  public Response toResponse(ForbiddenAccessException e) {
     return status(STATUS)
         .type(APPLICATION_JSON_TYPE)
         .entity(errorResponse(e))
         .build();
   }
 
-  private Error errorResponse(ServiceUnavailableException e) {
+  private Error errorResponse(ForbiddenAccessException e) {
     return new Error(STATUS, e.getMessage());
   }
 

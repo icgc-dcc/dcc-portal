@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.portal.server.analysis.EnrichmentAnalyzer;
 import org.icgc.dcc.portal.server.analysis.EnrichmentReporter;
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet.Type;
 import org.icgc.dcc.portal.server.model.EnrichmentAnalysis;
 import org.icgc.dcc.portal.server.model.EntitySet;
@@ -58,7 +58,7 @@ public class EnrichmentAnalysisService {
   @NonNull
   private final EntitySetRepository entitySetRepository;
   @NonNull
-  private final PortalProperties properties;
+  private final ServerProperties properties;
 
   @Getter(lazy = true)
   private final int dataVersion = loadDataVersion();

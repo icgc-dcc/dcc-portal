@@ -31,7 +31,7 @@ import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet.State;
@@ -320,7 +320,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
   private void setUpTermsLookup(final UUID id1, final UUID id2) {
     val termsLookupRepository =
         new TermsLookupRepository(es.client(), TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName(),
-            new PortalProperties());
+            new ServerProperties());
     val lookupType = TermLookupType.DONOR_IDS;
 
     val donorSet1 = newArrayList("DO1", "DO3", "DO5", "DO7", "DO9");

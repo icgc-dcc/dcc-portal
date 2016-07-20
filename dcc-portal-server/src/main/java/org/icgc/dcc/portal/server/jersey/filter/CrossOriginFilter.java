@@ -15,7 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.icgc.dcc.portal.server.filter;
+package org.icgc.dcc.portal.server.jersey.filter;
 
 import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS;
 import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS;

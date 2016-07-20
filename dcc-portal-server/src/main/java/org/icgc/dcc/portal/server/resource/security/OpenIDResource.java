@@ -35,7 +35,7 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import org.icgc.dcc.portal.server.auth.openid.OpenIDAuthService;
-import org.icgc.dcc.portal.server.config.PortalProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.service.BadRequestException;

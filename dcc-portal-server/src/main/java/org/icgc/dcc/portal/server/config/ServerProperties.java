@@ -36,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class PortalProperties {
+public class ServerProperties {
 
   @Valid
   @JsonProperty
@@ -186,8 +186,8 @@ public class PortalProperties {
       @JsonProperty
       String host = "localhost";
 
-      @Min(1)
-      @Max(65535)
+      @Min(value = 1, message = "Property 'elastic.nodeAddresses[].port' must be greater than or equal to {value} but was '${validatedValue}'")
+      @Max(value = 65535, message = "'Property 'elastic.nodeAddresses[].port' must be less than than or equal to {value} but was '${validatedValue}'")
       @JsonProperty
       int port = 9300;
 
@@ -273,7 +273,7 @@ public class PortalProperties {
     String smtpServer = "";
     int smtpPort = 25;
 
-    @Email
+    @Email(message = "Property 'mail.senderEmail' must be a valid email address but was '${validatedValue}")
     String senderEmail = "no-reply@oicr.on.ca";
 
     String senderName = "DCC Portal";
@@ -285,11 +285,11 @@ public class PortalProperties {
   public static class ReleaseProperties {
 
     @JsonProperty
-    @NotEmpty
+    @NotEmpty(message = "Property 'release.releaseDate' must not be empty")
     String releaseDate;
 
     @JsonProperty
-    @Min(1)
+    @Min(value = 1, message = "Property 'release.dataVersion' must be greater than or equal to {value} but was '${validatedValue}'")
     int dataVersion;
   }
 
@@ -308,8 +308,8 @@ public class PortalProperties {
   public static class WebProperties {
 
     @JsonProperty
-    @NotEmpty
-    @URL
+    @URL(message = "Property 'web.baseUrl' must be a valid URL but was '${validatedValue}'")
+    @NotEmpty(message = "Property 'web.baseUrl' must not be empty")
     String baseUrl;
 
   }
@@ -317,12 +317,12 @@ public class PortalProperties {
   @Data
   public static class OAuthProperties {
 
-    @URL
-    @NotEmpty
+    @URL(message = "Property 'oauth.serviceUrl' must be a valid URL but was '${validatedValue}'")
+    @NotEmpty(message = "Property 'oauth.serviceUrl' must not be empty")
     @JsonProperty
     String serviceUrl;
 
-    @NotEmpty
+    @NotEmpty(message = "Property 'oauth.clientId' must not be empty")
     @JsonProperty
     String clientId;
 

@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer;
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.SurvivalAnalysis;
 import org.icgc.dcc.portal.server.repository.SurvivalAnalysisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class SurvivalAnalysisService {
   @NonNull
   private final SurvivalAnalysisRepository repository;
   @NonNull
-  private final PortalProperties properties;
+  private final ServerProperties properties;
   @NonNull
   private final SurvivalAnalyzer analyzer;
 

@@ -25,8 +25,8 @@ import java.util.Set;
 import lombok.val;
 
 import org.icgc.dcc.common.core.util.Splitters;
-import org.icgc.dcc.portal.server.config.PortalProperties;
-import org.icgc.dcc.portal.server.config.PortalProperties.OAuthProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.OAuthProperties;
 import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.service.BadRequestException;
 import org.junit.Before;
@@ -100,7 +100,7 @@ public class OAuthClientIntegrationTest {
   }
 
   private static OAuthProperties createOAuthProperties() {
-    val result = new PortalProperties.OAuthProperties();
+    val result = new ServerProperties.OAuthProperties();
     result.setServiceUrl(SERVICE_URL);
     result.setClientId("mgmt");
     result.setClientSecret("pass");

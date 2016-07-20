@@ -48,7 +48,7 @@ To run the application once built:
 
 ```shell
 cd dcc-portal/dcc-portal-server
-java -jar target/dcc-portal-server-[version].jar server src/test/conf/settings.yml
+java -jar target/dcc-portal-server-[version].jar --spring.profiles.active=test --spring.config.location=src/main/resources/application.yml
 ``` 
   
 ## Keystore Management
