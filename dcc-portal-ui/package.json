@@ -12,7 +12,8 @@
     "unsethost": "hostile remove local.dcc.icgc.org",
     "checkhost": "node tasks/checkDns.js",
     "predev": "npm run checkhost",
-    "dev": "grunt server"
+    "dev": "grunt server",
+    "dev:prodapi": "API_SOURCE=production npm run dev"
   },
   "devDependencies": {
     "autoprefixer": "6.3.7",
