@@ -148,8 +148,6 @@ public class FileService {
     val hits = response.getHits();
     val files = new Files(convertHitsToRepoFiles(hits));
 
-    //files.setTermFacets(
-    //    fileRepository.getAggregationFacets(query, response.getAggregations()));
     files.setTermFacets(AggregationToFacetConverter.getInstance().convert(response.getAggregations()));
     files.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
 
@@ -308,10 +306,7 @@ public class FileService {
 
   private static List<File> convertHitsToRepoFiles(SearchHits hits) {
     return FluentIterable.from(hits)
-        .transform(hit -> {
-          String source = hit.getSourceAsString();
-          return parse(source);
-        })
+        .transform(hit -> parse(hit.getSourceAsString()))
         .toList();
   }
 
