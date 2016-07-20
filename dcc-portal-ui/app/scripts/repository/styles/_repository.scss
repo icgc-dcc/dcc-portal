@@ -86,9 +86,11 @@
         .orange-icon {
           color: $iconColor;
         }
-        .btn-default:not(:hover) {
-          border: 1px solid transparent;
+        .btn-default{
           background-color: transparent;
+          &:not(:hover) {
+            border: 1px solid transparent;
+          }
         }
         .spinner-container {
           display: flex;
