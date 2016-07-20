@@ -77,11 +77,7 @@ public class SoftwareService {
     return getVersionUrl("%5BRELEASE%5D", ICGCPARAMS.get("artifactId"));
   }
   public String getLatestICGCGetVersionUrl(String os){
-	  List<ArtifactFolder> Versions = getVersions("icgc-get");
-
-	  return getICGCGetVersionUrl("0.2.10", os);
-	  
-	  
+	    return getICGCGetVersionUrl("0.2.10", os);
   }
   public String getVersionChecksumUrl(String version) {
     return getVersionUrl(version, PARAMS.get("artifactId")) + ".md5";
