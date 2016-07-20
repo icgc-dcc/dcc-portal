@@ -35,7 +35,7 @@ var apiProxySettings = process.env.API_SOURCE === 'production' ? {
       host: 'localhost',
       port: 8080,
       https: false
-    }
+    };
 
 // # Globbing
 // for performance reasons we're only matching one level down:
