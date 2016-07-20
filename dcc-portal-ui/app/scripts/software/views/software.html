@@ -50,9 +50,9 @@
                <tbody id="storage-versions">
                   <tr data-ng-repeat="v in versions">
                      <td>{{ v.version }}</td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ artifactId }}/{{ v.version }}">{{ artifactId }}-{{ v.version }}-dist.tar.gz</a></td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ artifactId }}/{{ v.version }}/md5">{{ artifactId }}-{{ v.version }}-dist.tar.gz.md5</a></td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ artifactId }}/{{ v.version }}/asc">{{ artifactId }}-{{ v.version }}-dist.tar.gz.asc</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcStorageClient.artifactId }}/{{ v.version }}">{{ icgcStorageClient.artifactId }}-{{ v.version }}-dist.tar.gz</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcStorageClient.artifactId }}/{{ v.version }}/md5">{{ icgcStorageClient.artifactId }}-{{ v.version }}-dist.tar.gz.md5</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcStorageClient.artifactId }}/{{ v.version }}/asc">{{ icgcStorageClient.artifactId }}-{{ v.version }}-dist.tar.gz.asc</a></td>
                   </tr>
                </tbody>
             </table>
@@ -70,7 +70,8 @@
             <h3>Latest Release Zipfile</h3>
             <p>Users are encouraged to use the latest version of our software to keep current with bug fixes, enhancements and new features. Click on the following to download the latest client version:</p>
             <p>
-               <a id="latest-get-version" class="t_button" target="_blank" href="api/v1/ui/software/icgc-get/latest">Download</a>
+               <a id="latest-get-version" class="t_button" target="_blank" href="api/v1/ui/software/icgc-get/latest/osx">Download for Mac</a>
+               <a id="latest-get-version" class="t_button" target="_blank" href="api/v1/ui/software/icgc-get/latest/linux">Download for Linux</a>
             </p>
             <h3>Previous Release Zipfiles</h3>
             <p>It is strongly recommended to use the latest release to take advantage of newest features and bug fixes.</p>
@@ -87,8 +88,8 @@
                <tbody id="get-versions">
                   <tr data-ng-repeat="v in icgcGetVersions">
                      <td>{{ v.uri }}</td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}{{ v.uri }}/osx">{{ icgcGetArtifactId }}-{{ v.uri }}-osx-dist.zip</a></td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGetArtifactId }}{{ v.uri }}/linux">{{ icgcGetArtifactId }}-{{ v.uri }}-linux-dist.zip.md5</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}{{ v.uri }}/osx">{{ icgcGet.artifactId }}-{{ v.uri }}-osx-dist.zip</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}{{ v.uri }}/linux">{{ icgcGet.artifactId }}-{{ v.uri }}-linux-dist.zip.md5</a></td>
                   </tr>
                </tbody>
             </table>

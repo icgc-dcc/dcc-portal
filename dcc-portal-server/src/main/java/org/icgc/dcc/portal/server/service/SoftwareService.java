@@ -39,11 +39,13 @@ public class SoftwareService {
   private static final ObjectMapper MAPPER = new ObjectMapper();
   private static final Map<String, String> PARAMS = ImmutableMap.of(
       "groupId", "org.icgc.dcc",
+      "artifactId", "icgc-storage-client",
       "classifier", "dist",
-      "repository", "dcc-release",
+      "repository", "dcc-release"
       );
   private static final Map<String, String> ICGCPARAMS = ImmutableMap.of(
 		  "osxClassifier", "osx_x64",
+		  "artifactId", "icgc-get",
 		  "linuxClassifier", "linux_x64",
 		  "repository", "dcc-binaries");
 
@@ -71,28 +73,32 @@ public class SoftwareService {
     return response.results;
   }
 
-  public String getLatestVersionUrl(String artifactId) {
-    if (artifactId.equals("icgc-get")) {
-      List<ArtifactFolder> Versions = getVersions(artifactId);
-      return getVersionUrl("0.2.10", artifactId);
-    }
-    return getVersionUrl("%5BRELEASE%5D", artifactId);
+  public String getLatestVersionUrl() {
+    return getVersionUrl("%5BRELEASE%5D", ICGCPARAMS.get("artifactId"));
+  }
+  public String getLatestICGCGetVersionUrl(String os){
+	  List<ArtifactFolder> Versions = getVersions("icgc-get");
+
+	  return getICGCGetVersionUrl("0.2.10", os);
+	  
+	  
+  }
+  public String getVersionChecksumUrl(String version) {
+    return getVersionUrl(version, PARAMS.get("artifactId")) + ".md5";
   }
 
-  public String getVersionChecksumUrl(String version, String artifactId) {
-    return getVersionUrl(version, artifactId) + ".md5";
-  }
-
-  public String getVersionSignatureUrl(String version, String artifactId) {
-    return getVersionUrl(version, artifactId) + ".asc";
+  public String getVersionSignatureUrl(String version) {
+    return getVersionUrl(version, PARAMS.get("artifactId")) + ".asc";
   }
   
-  public String getLinuxVersionURL(String version, String artifactId){
-  	return getVersionUrl(version, artifactId) + ICGCPARAMS.get("linuxClassifier") + ".zip"
-  }
-  
-  public String getMacVersionURL(String version, String artifactId){
-	  	return getVersionUrl(version, artifactId) + ICGCPARAMS.get("osxClassifier") + ".zip"
+  public String getICGCGetVersionUrl(String version, String os){
+	  String classifier;
+	  if (os.equals("linux")){
+		  classifier = ICGCPARAMS.get("linuxClassifier");
+	  } else{
+		  classifier = ICGCPARAMS.get("osxClassifier");
+	  }
+  	return getVersionUrl(version, ICGCPARAMS.get("artifactId")) + classifier + ".zip";
   }
   
   public String getVersionUrl(String version, String artifactId) {
@@ -112,7 +118,7 @@ public class SoftwareService {
   private String getRepositoryUrl(String artifactId) {
     String repository;
     if (artifactId.equals("icgc-get")) {
-      repository = PARAMS.get("ICGCRepository");
+      repository = ICGCPARAMS.get("repository");
     } else {
       repository = PARAMS.get("repository");
     }

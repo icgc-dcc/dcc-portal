@@ -48,10 +48,10 @@
       $scope.icgcGet = {
     		  artifactId:'icgc-get'
       };
-      jQuery.get('api/v1/ui/software/' + $scope.icgcStorageClient[artifactId] + '/versions', function(versions) {
+      jQuery.get('api/v1/ui/software/' + $scope.icgcStorageClient.artifactId + '/versions', function(versions) {
          $scope.versions = versions;
       });
-      jQuery.get('api/v1/ui/software/' + $scope.icgcGet[artifactId] + '/versions', function(versions) {
+      jQuery.get('api/v1/ui/software/' + $scope.icgcGet.artifactId + '/versions', function(versions) {
           $scope.icgcGetVersions = versions;
        });
    });

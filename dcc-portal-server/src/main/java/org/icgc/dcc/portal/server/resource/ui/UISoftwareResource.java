@@ -84,18 +84,19 @@ public class UISoftwareResource extends Resource {
   @GET
   @SneakyThrows
   public Response getLatest() {
-    URL redirect = new URL(softwareService.getLatestVersionUrl("icgc-storage-client"));
+    URL redirect = new URL(softwareService.getLatestVersionUrl());
     return Response.seeOther(redirect.toURI()).build();
   }
 
-  @Path("/icgc-get/latest")
+  @Path("/icgc-get/latest/{os}")
   @GET
   @SneakyThrows
-  public Response getICGCGetLatest() {
-    URL redirect = new URL(softwareService.getLatestVersionUrl("icgc-get"));
+  public Response getICGCGetLatest(@PathParam("os") String os) {
+    URL redirect = new URL(softwareService.getLatestICGCGetVersionUrl(os));
     return Response.seeOther(redirect.toURI()).build();
   }
 
+  
   @Path("/icgc-storage-client/{version}")
   @GET
   @SneakyThrows
@@ -103,28 +104,12 @@ public class UISoftwareResource extends Resource {
     URL redirect = new URL(softwareService.getVersionUrl(version, "icgc-storage-client"));
     return Response.seeOther(redirect.toURI()).build();
   }
-
-  @Path("/icgc-get/{version}")
-  @GET
-  @SneakyThrows
-  public Response getICGCGetVersion(@PathParam("version") String version) {
-    URL redirect = new URL(softwareService.getVersionUrl(version, "icgc-get"));
-    return Response.seeOther(redirect.toURI()).build();
-  }
   
-  @Path("/icgc-get/{version}/linux")
+  @Path("/icgc-get/{version}/{os}")
   @GET
   @SneakyThrows
-  public Response getICGCGetLinuxVersion(@PathParam("version") String version) {
-    URL redirect = new URL(softwareService.getLinuxVersionUrl(version, "icgc-get"));
-    return Response.seeOther(redirect.toURI()).build();
-  }
-  
-  @Path("/icgc-get/{version}/osx")
-  @GET
-  @SneakyThrows
-  public Response getICGCGetOsxVersion(@PathParam("version") String version) {
-    URL redirect = new URL(softwareService.getMacVersionUrl(version, "icgc-get"));
+  public Response getICGCGetLinuxVersion(@PathParam("version") String version, @PathParam("os") String os) {
+    URL redirect = new URL(softwareService.getICGCGetVersionUrl(version, os));
     return Response.seeOther(redirect.toURI()).build();
   }
 
@@ -132,7 +117,7 @@ public class UISoftwareResource extends Resource {
   @GET
   @SneakyThrows
   public Response getVersionChecksum(@PathParam("version") String version) {
-    val redirect = new URL(softwareService.getVersionChecksumUrl(version, "icgc-storage-client"));
+    val redirect = new URL(softwareService.getVersionChecksumUrl(version));
     return Response.seeOther(redirect.toURI()).build();
   }
 
@@ -140,7 +125,7 @@ public class UISoftwareResource extends Resource {
   @GET
   @SneakyThrows
   public Response getVersionSignature(@PathParam("version") String version) {
-    val redirect = new URL(softwareService.getVersionSignatureUrl(version, "icgc-storage-client"));
+    val redirect = new URL(softwareService.getVersionSignatureUrl(version));
     return Response.seeOther(redirect.toURI()).build();
   }
 
