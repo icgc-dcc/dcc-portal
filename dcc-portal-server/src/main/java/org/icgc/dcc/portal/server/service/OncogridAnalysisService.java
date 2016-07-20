@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.util.UUID;
 
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.OncogridAnalysis;
 import org.icgc.dcc.portal.server.repository.EntitySetRepository;
 import org.icgc.dcc.portal.server.repository.OncogridAnalysisRepository;
@@ -43,7 +43,7 @@ public class OncogridAnalysisService {
   @NonNull
   private final EntitySetRepository entitySetRepository;
   @NonNull
-  private final PortalProperties properties;
+  private final ServerProperties properties;
 
   @Getter(lazy = true, value = PRIVATE)
   private final int currentDataVersion = resolveDataVersion();

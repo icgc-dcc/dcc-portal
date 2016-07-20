@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.filter;
+package org.icgc.dcc.portal.server.jersey.filter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import lombok.val;
 
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.config.PortalProperties.CacheProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.CacheProperties;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

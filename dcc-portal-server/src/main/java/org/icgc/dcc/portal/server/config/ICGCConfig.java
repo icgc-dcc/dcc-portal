@@ -23,7 +23,7 @@ import org.icgc.dcc.common.client.api.cms.CMSClient;
 import org.icgc.dcc.common.client.api.cud.CUDClient;
 import org.icgc.dcc.common.client.api.daco.DACOClient;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLClient;
-import org.icgc.dcc.portal.server.config.PortalProperties.ICGCProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.ICGCProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;

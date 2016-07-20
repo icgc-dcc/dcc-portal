@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import org.icgc.dcc.portal.server.mapper.NotFoundExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.NotFoundExceptionMapper;
 import org.icgc.dcc.portal.server.model.Donors;
 import org.icgc.dcc.portal.server.model.Genes;
 import org.icgc.dcc.portal.server.model.Mutation;

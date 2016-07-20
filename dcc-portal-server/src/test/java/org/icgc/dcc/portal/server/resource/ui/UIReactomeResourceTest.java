@@ -21,8 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import org.icgc.dcc.portal.server.mapper.BadRequestExceptionMapper;
-import org.icgc.dcc.portal.server.mapper.IllegalArgumentExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.BadRequestExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.IllegalArgumentExceptionMapper;
 import org.icgc.dcc.portal.server.service.DiagramService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

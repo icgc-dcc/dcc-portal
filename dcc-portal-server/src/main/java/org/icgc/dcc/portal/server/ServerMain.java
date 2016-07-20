@@ -24,7 +24,7 @@ import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration
 /**
  * Application entry point.
  */
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class }, scanBasePackages = "org.icgc.dcc.portal.server")
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class ServerMain {
 
   public static void main(String... args) {

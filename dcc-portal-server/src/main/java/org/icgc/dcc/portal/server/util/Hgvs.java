@@ -14,37 +14,29 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.mapper;
+package org.icgc.dcc.portal.server.util;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
-import static javax.ws.rs.core.Response.status;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.primitives.Ints.tryParse;
+import static lombok.AccessLevel.PRIVATE;
+import lombok.NoArgsConstructor;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+@NoArgsConstructor(access = PRIVATE)
+public final class Hgvs {
 
-import org.icgc.dcc.portal.server.model.Error;
-import org.icgc.dcc.portal.server.service.BadRequestException;
-import org.springframework.stereotype.Component;
+  /**
+   * Utility to parse HGVS (Human Genome Variation Society) coordinates.
+   * 
+   * @param hgvs - the HGVS value to parse
+   * @return the parsed coordinate
+   * 
+   * @see https://jira.oicr.on.ca/browse/DCC-1045?focusedCommentId=48945#comment-48945
+   * @see http://www.hgvs.org/mutnomen/
+   */
+  public static Integer parseHgvs(String hgvs) {
+    String textNumber = firstNonNull(hgvs, "").replaceAll("[^\\d.]", "");
 
-@Component
-@Provider
-public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestException> {
-
-  private final static Status STATUS = BAD_REQUEST;
-
-  @Override
-  public Response toResponse(BadRequestException e) {
-    return status(STATUS)
-        .type(APPLICATION_JSON_TYPE)
-        .entity(errorResponse(e))
-        .build();
-  }
-
-  private Error errorResponse(BadRequestException e) {
-    return new Error(STATUS, e.getMessage());
+    return firstNonNull(tryParse(textNumber), -1);
   }
 
 }

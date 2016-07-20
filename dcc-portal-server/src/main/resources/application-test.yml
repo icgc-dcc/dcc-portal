@@ -15,60 +15,47 @@
 # IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# DCC Portal Server - Default Configuration
+# DCC Portal Server - Test Configuration
 #
 
 ###############################################################################
-# Profile - common
+# Profile - "test"
 ###############################################################################
 
-# API
-server:
-  port: 8080
-
-# Management
-management:
-  port: 8081
+spring.profiles: test
 
 # Datasource
 spring.datasource:
-  driver-class-name: org.postgresql.Driver
-  url: jdbc:postgresql://
+  driver-class-name: org.h2.Driver
+  url: jdbc:h2:mem:genelist;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=runscript from 'classpath:sql/schema.sql'
   username:
   password:
-  max-active: 32
-  validation-query: "/* Portal DB Health Check */ SELECT 1"
+  max-active: 10
+  max-idle: 1
+  min-idle: 1
 
-# Controls generation of "Last-Modified" and "ETag" HTTP headers
-cache:
-  enabled: true
-
-  # Enable Last-Modified HTTP header generation
-  enableLastModified: true
-
-  # List of resources for which Last-Modified HTTP header should not be generated. Format: regex accepted by java.lang.String
-  excludeLastModified: ["^v\\d+/short$", "^v\\d+/auth/.*$", "^v\\d+/download.*$", "^v\\d+/analysis.*$", "^v\\d+/entityset.*$", "^v\\d+/settings.*$", "^v\\d+/repository/files.*$" ]
-
-  # Enable ETag HTTP header generation
-  enableETag: false
-
-  # List of resources for which ETag HTTP header should not be generated. Format: regex accepted by java.lang.String
-  excludeETag: []
-
-# Authentication
+# Authorization
 crowd:
-  ssoUrl: ""
-  
+  ssoUrl: "https://ssoUrl?continue="
+  ssoUrlGoogle: "https://ssoUrlGoogle?continue="
+
+# ICGC auth server config
 oauth:
-  serviceUrl: "https://localhost:8443"
+  serviceUrl: "http://localhost:8443"
   clientId: "mgmt"
   clientSecret: "pass"
-  enableHttpLogging: true
   enableStrictSSL: false
+  enableHttpLogging: true
+
+# Authorization
+auth:
+  enabled: false
 
 hazelcast:
-  # NB: Below hazelcast settings do not have default values. The portal won't start if they're unset
+  # Enable session replication?
   enabled: false
+
+  # NB: Below hazelcast settings do not have default values. The portal won't start if they're unset
 
   # Credentials to enter a group. E.g. dev, uat, prod groups
   groupName: ""
@@ -84,21 +71,21 @@ hazelcast:
 
   # Expire openId authentication attempt in 2 minutes
   openidAuthTTL: 120
-  
+
   # Enable multicast? If false then hosts must be provided. hosts not used otherwise
   # Multicast must be disabled in an OpenStack / AWS environment
   multicast: false
   hosts:
-    - localhost
+    - 127.0.0.1
 
 # ElasticSearch index and hosts
 elastic:
-  indexName: "dcc-release"
-  repoIndexName: "icgc-repository"
+  indexName: icgc-release
+  repoIndexName: icgc-repository-test
   nodeAddresses:
-     - host: "localhost"
-       port: 9300
-
+    - host: elasticsearch1.res.oicr.on.ca
+      port: 9300
+      
   # List of TransportClient settings. 
   # E.g. 
   # "client.transport.sniff": true 
@@ -109,66 +96,45 @@ elastic:
 mail:
   enabled: false
   recipientEmail:
-
-# Data download
-download:
-  enabled: true
-  serverUrl: "http://localhost:9090"
-  publicServerUrl: "http://localhost:9090"
-  sharedSecret: "deadbeefdeadbeefdeadbeefdeadbeef"
-  aesKey: "deadbeefdeadbeef"
-
+  
 web:
   # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs
-  baseUrl: ""
+  baseUrl: "http://localhost:8080"
 
 # ICGC Client configuration
 icgc:
 
   # CGP/DACO API endpoint
-  cgpUrl: ""
+  cgpUrl: "http://localhost"
+
   # ShortUrl API endpoint
-  shortUrl: ""
+  shortUrl: "http://localhost"
 
   # CUD API endpoint
-  cudUrl: ""
-  
+  cudUrl: "http://localhost"
+
   # CMS API endpoint
-  cmsUrl: ""
+  cmsUrl: "http://localhost"
 
   # CUD credentials. Obtained from webdev@oicr.on.ca
-  cudAppId: ""
-  cudUser: ""
-  cudPassword: ""
+  cudAppId: "<fill in>"
+  cudUser: "<fill in>"
+  cudPassword: "<fill in>"
 
   # OAuth credentials
   # To generate the credentials go to icgc.org, log in, go to the "OAuth Settings" tab and request "Regenerate all tokens"
-  consumerKey: ""
-  consumerSecret: ""
-  accessToken: ""
-  accessSecret: ""
+  consumerKey: "<fill in>"
+  consumerSecret: "<fill in>"
+  accessToken: "<fill in>"
+  accessSecret: "<fill in>"
 
   # Log HTTP requests to the API
   enableHttpLogging: false
 
   # Disallow self-signed SSL certificates
-  enableStrictSSL: true
+  enableStrictSSL: false
 
-# Set analysis configuration
-setOperation:
-
-  # Limit for number of items to return from ElasticSearch
-  maxPreviewNumberOfHits: 1000
-  maxNumberOfHits: 20000
-  maxMultiplier: 3
-
-# Release metadata configuration
+# Portal release configuration
 release:
-  releaseDate: "placeholder"
+  releaseDate: "Month Day, Year"
   dataVersion: 2
-  
-# Feature Flags
-features:
-  AUTH_TOKEN: true
-  ICGC_CLOUD: true
-  SOFTWARE_PAGE: true

@@ -33,7 +33,7 @@ import org.icgc.dcc.common.client.api.cud.CUDClient;
 import org.icgc.dcc.common.client.api.cud.User;
 import org.icgc.dcc.common.client.api.daco.DACOClient;
 import org.icgc.dcc.common.client.api.daco.DACOClient.UserType;
-import org.icgc.dcc.portal.server.config.PortalProperties.ICGCProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.ICGCProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

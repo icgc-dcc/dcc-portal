@@ -41,7 +41,7 @@ PIDDIR="."
 # PASS_THROUGH tells the script to pass all arguments through to the JVM
 #  as is.  If FIXED_COMMAND is specified then all arguments will be passed.
 #  If not set then all arguments starting with the second will be passed.
-#PASS_THROUGH=true
+PASS_THROUGH=true
 
 # If uncommented, causes the Wrapper to be shutdown using an anchor file.
 #  When launched with the 'start' command, it will also ignore all INT and

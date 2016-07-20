@@ -616,7 +616,7 @@
 
     Restangular.setErrorInterceptor(function (response) {
 
-      if (response.status !== 401) {
+      if (response.status !== 401 && response.status !== -1) {
         console.error ('Response Error: ', toJson (response));
       }
 

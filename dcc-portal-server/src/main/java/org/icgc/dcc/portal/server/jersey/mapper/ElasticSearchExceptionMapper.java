@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,28 +15,56 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.util;
+package org.icgc.dcc.portal.server.jersey.mapper;
 
-import static lombok.AccessLevel.PRIVATE;
-import lombok.NoArgsConstructor;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
+import static javax.ws.rs.core.Response.status;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
-import org.elasticsearch.action.ActionRequestBuilder;
-import org.elasticsearch.action.get.GetRequestBuilder;
+import java.util.Random;
 
-@NoArgsConstructor(access = PRIVATE)
-public final class FormatUtils {
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
-  /**
-   * Formats a object's string representation with leading {@code 'es'} prefix for easy console grepping. This is to
-   * complement the same style used in Jersey's {@code LoggingFilter}.
-   */
-  public static String formatRequest(ActionRequestBuilder<?, ?, ?, ?> builder) {
-    String text =
-        builder == null ? "null" : (builder instanceof GetRequestBuilder ? builder.request().toString() : builder
-            .toString());
-    String prefix = "es > ";
+import org.elasticsearch.ElasticsearchException;
+import org.icgc.dcc.portal.server.model.Error;
+import org.springframework.stereotype.Component;
 
-    return prefix + text.replaceAll("\n", "\n" + prefix);
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Component
+@Provider
+public class ElasticSearchExceptionMapper implements ExceptionMapper<ElasticsearchException> {
+
+  private final static Status STATUS = INTERNAL_SERVER_ERROR;
+  private static final Random RANDOM = new Random();
+
+  @Override
+  public Response toResponse(ElasticsearchException e) {
+
+    val id = RANDOM.nextLong();
+    log.error(formatLogMessage(id), e);
+
+    return status(STATUS)
+        .type(APPLICATION_JSON_TYPE)
+        .entity(errorResponse(e, id))
+        .build();
+  }
+
+  protected String formatLogMessage(long id) {
+    return String.format("Error handling a request: %016x", id);
+  }
+
+  private Error errorResponse(ElasticsearchException e, long id) {
+    return new Error(STATUS, message(e, id));
+  }
+
+  private String message(ElasticsearchException e, long id) {
+    return String.format("%s", formatLogMessage(id));
   }
 
 }
