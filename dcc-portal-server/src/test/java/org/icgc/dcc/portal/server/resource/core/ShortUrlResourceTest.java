@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 import org.icgc.dcc.common.client.api.ICGCUnknownException;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLClient;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLResponse;
-import org.icgc.dcc.portal.server.config.PortalProperties.WebProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.WebProperties;
 import org.icgc.dcc.portal.server.mapper.NotFoundExceptionMapper;
 import org.icgc.dcc.portal.server.service.BadRequestException;
 import org.icgc.dcc.portal.server.service.ServiceUnavailableException;

@@ -48,8 +48,8 @@ import javax.ws.rs.core.Response.Status;
 
 import org.icgc.dcc.common.client.api.ICGCException;
 import org.icgc.dcc.common.client.api.daco.DACOClient.UserType;
-import org.icgc.dcc.portal.server.config.PortalProperties.AuthProperties;
-import org.icgc.dcc.portal.server.config.PortalProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.service.AuthService;

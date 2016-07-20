@@ -25,7 +25,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.icgc.dcc.portal.server.config.PortalProperties.CacheProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.CacheProperties;
 
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.Responses;

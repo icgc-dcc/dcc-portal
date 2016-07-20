@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import lombok.val;
 
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.config.PortalProperties.CacheProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.CacheProperties;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -36,7 +36,7 @@ import javax.ws.rs.ext.Provider;
 import lombok.NonNull;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.config.PortalProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 import org.icgc.dcc.portal.server.model.Error;
 import org.icgc.dcc.portal.server.resource.security.AuthResource;
 import org.icgc.dcc.portal.server.resource.security.OpenIDResource;

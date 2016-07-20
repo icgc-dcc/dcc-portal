@@ -22,7 +22,7 @@ import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.TermLo
 import java.util.Set;
 import java.util.UUID;
 
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet.Type;
 import org.icgc.dcc.portal.server.model.EntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet.SubType;
@@ -51,7 +51,7 @@ public class UserGeneSetService {
   @NonNull
   private final TermsLookupRepository termsLookupRepository;
   @NonNull
-  private final PortalProperties properties;
+  private final ServerProperties properties;
 
   @Getter(lazy = true)
   private final int dataVersion = loadDataVersion();

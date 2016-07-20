@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.PhenotypeAnalysis;
 import org.icgc.dcc.portal.server.repository.DonorRepository;
 import org.icgc.dcc.portal.server.repository.PhenotypeAnalysisRepository;
@@ -49,7 +49,7 @@ public class PhenotypeAnalysisService {
   @NonNull
   private final DonorRepository esRepository;
   @NonNull
-  private final PortalProperties properties;
+  private final ServerProperties properties;
 
   @Getter(lazy = true, value = PRIVATE)
   private final int currentDataVersion = resolveDataVersion();
