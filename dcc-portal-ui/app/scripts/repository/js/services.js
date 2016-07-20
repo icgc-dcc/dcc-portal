@@ -193,7 +193,7 @@
     _srv.createFacetCharts = function (facets) {
       return {
         repositories: HighchartsService.bar({
-          hits: _.map(facets.repositoryNamesFiltered.terms, function (object) {
+          hits: _.map(facets.repoName.terms, function (object) {
             return {
               count: object.count,
               term: _shortenRepoName(object.term)

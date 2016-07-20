@@ -67,9 +67,15 @@ public class FileTypeModel extends TypeModel {
    */
   public static class EsFields {
 
+    public static final String ID = "id";
     public static final String FILE_COPIES = "file_copies";
     public static final String DONORS = "donors";
     public static final String DONOR_ID = "donor_id";
+    public static final String DATA_BUNDLE = "data_bundle";
+    public static final String OBJECT_ID = "object_id";
+    public static final String ANALYSIS_METHOD = "analysis_method";
+    public static final String STUDY = "study";
+    public static final String ACCESS = "access";
 
   }
 
@@ -241,11 +247,16 @@ public class FileTypeModel extends TypeModel {
 
   // Used for select(*) - default projection
   public static final List<String> PUBLIC_FIELDS = ImmutableList.of(
-      Fields.DATA_BUNDLE_ID,
       Fields.FILE_UUID,
       Fields.FILE_ID,
       Fields.FILE_COPIES,
-      Fields.DONORS);
+      Fields.DONORS,
+      Fields.ANALYSIS_METHOD,
+      Fields.STUDY,
+      Fields.DATA_BUNDLE,
+      Fields.ACCESS,
+      Fields.REFERENCE_GENOME,
+      Fields.DATA_CATEGORIZATION);
 
   public static final List<String> AVAILABLE_FACETS = ImmutableList.<String> builder()
       .add(Fields.PROJECT_CODE)
@@ -262,8 +273,16 @@ public class FileTypeModel extends TypeModel {
       .build();
 
   private static final List<String> INCLUDE_FIELDS = ImmutableList.of(
+      EsFields.ID,
+      EsFields.OBJECT_ID,
+      EsFields.STUDY,
+      EsFields.ACCESS,
+      EsFields.ANALYSIS_METHOD,
+      EsFields.DATA_BUNDLE,
       EsFields.FILE_COPIES,
-      EsFields.DONORS);
+      EsFields.DONORS,
+      "data_categorization",
+      "reference_genome");
 
   private static final Map<String, String> INTERNAL_ALIASES = ImmutableMap.<String, String> of(
       LOOKUP_TYPE, TERMS_LOOKUP_DONOR_IDS);

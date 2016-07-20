@@ -59,6 +59,7 @@ import org.icgc.dcc.portal.server.model.Keyword;
 import org.icgc.dcc.portal.server.model.Keywords;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -147,8 +148,9 @@ public class FileService {
     val hits = response.getHits();
     val files = new Files(convertHitsToRepoFiles(hits));
 
-    files.setTermFacets(
-        fileRepository.getAggregationFacets(query, response.getAggregations()));
+    //files.setTermFacets(
+    //    fileRepository.getAggregationFacets(query, response.getAggregations()));
+    files.setTermFacets(AggregationToFacetConverter.getInstance().convert(response.getAggregations()));
     files.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
 
     return files;
@@ -306,7 +308,10 @@ public class FileService {
 
   private static List<File> convertHitsToRepoFiles(SearchHits hits) {
     return FluentIterable.from(hits)
-        .transform(hit -> parse(hit.getSourceAsString()))
+        .transform(hit -> {
+          String source = hit.getSourceAsString();
+          return parse(source);
+        })
         .toList();
   }
 
