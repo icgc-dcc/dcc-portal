@@ -314,9 +314,7 @@
           Page.stopWork();
 
           geneDonorCountsRestangular = Restangular
-                                        .one('ui')
-                                        .one('search')
-                                        .one('gene-project-donor-counts', _.pluck (genes.hits, 'id'));
+            .one('ui/search/gene-project-donor-counts/' + _.map(genes.hits, 'id').join(','));
 
           _ctrl.isLoadingData = true;
 

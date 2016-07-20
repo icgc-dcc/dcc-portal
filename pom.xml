@@ -9,14 +9,14 @@
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>4.2.12-SNAPSHOT</version>
+  <version>4.3.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
   <description>${project.name}</description>
 
   <modules>
-    <module>dcc-portal-api</module>
+    <module>dcc-portal-server</module>
     <module>dcc-portal-ui</module>
     <module>dcc-portal-pql</module>
   </modules>
@@ -75,8 +75,8 @@
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>annotations</artifactId>
       <scope>provided</scope>
-    </dependency>  
-  
+    </dependency>
+
     <!-- Test - DCC -->
     <dependency>
       <groupId>${project.groupId}</groupId>

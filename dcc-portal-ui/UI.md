@@ -148,7 +148,7 @@ across the application. UI components are great examples what we be expected to 
 1. From within the DCC Portal route go to  ```dcc-portal-ui/```
 2. Ensure you have previously installed NodeJS and ran an ```npm install```
 3. Start up the DCC Portal API - this will ensure that your DCC API webservices will not fail. Refer to
- the DCC-Portal-API [README.md](../dcc-portal-api/README.md) for more details.
+ the Portal Server [README.md](../dcc-portal-server/README.md) for more details.
 4. Type in the command ```grunt server```
 5. Open your favourite development browser at ```http://localost:9000```
 6. From this point on any changes made to the application in the ```app/scripts```. Refer to the [README.md](./README.md) for more details

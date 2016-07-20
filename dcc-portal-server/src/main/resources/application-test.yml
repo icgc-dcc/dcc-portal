@@ -1,0 +1,140 @@
+#
+# Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.
+#
+# This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# DCC Portal Server - Test Configuration
+#
+
+###############################################################################
+# Profile - "test"
+###############################################################################
+
+spring.profiles: test
+
+# Datasource
+spring.datasource:
+  driver-class-name: org.h2.Driver
+  url: jdbc:h2:mem:genelist;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=runscript from 'classpath:sql/schema.sql'
+  username:
+  password:
+  max-active: 10
+  max-idle: 1
+  min-idle: 1
+
+# Authorization
+crowd:
+  ssoUrl: "https://ssoUrl?continue="
+  ssoUrlGoogle: "https://ssoUrlGoogle?continue="
+
+# ICGC auth server config
+oauth:
+  serviceUrl: "http://localhost:8443"
+  clientId: "mgmt"
+  clientSecret: "pass"
+  enableStrictSSL: false
+  enableHttpLogging: true
+
+# Authorization
+auth:
+  enabled: false
+
+hazelcast:
+  # Enable session replication?
+  enabled: false
+
+  # NB: Below hazelcast settings do not have default values. The portal won't start if they're unset
+
+  # Credentials to enter a group. E.g. dev, uat, prod groups
+  groupName: ""
+  groupPassword: ""
+
+  # Time-to-live settings.
+  # Maximum number of seconds for each entry to stay in the cache. Entries that are
+  # older than the set value and not updated for that time
+  # will get automatically evicted from the cache.
+
+  # Expire inactive users in 15 minutes
+  usersCacheTTL: 900
+
+  # Expire openId authentication attempt in 2 minutes
+  openidAuthTTL: 120
+
+  # Enable multicast? If false then hosts must be provided. hosts not used otherwise
+  # Multicast must be disabled in an OpenStack / AWS environment
+  multicast: false
+  hosts:
+    - 127.0.0.1
+
+# ElasticSearch index and hosts
+elastic:
+  indexName: icgc-release
+  repoIndexName: icgc-repository-test
+  nodeAddresses:
+    - host: elasticsearch1.res.oicr.on.ca
+      port: 9300
+      
+  # List of TransportClient settings. 
+  # E.g. 
+  # "client.transport.sniff": true 
+  client:
+    "client.transport.sniff": true
+
+# Mail
+mail:
+  enabled: false
+  recipientEmail:
+  
+web:
+  # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs
+  baseUrl: "http://localhost:8080"
+
+# ICGC Client configuration
+icgc:
+
+  # CGP/DACO API endpoint
+  cgpUrl: "http://localhost"
+
+  # ShortUrl API endpoint
+  shortUrl: "http://localhost"
+
+  # CUD API endpoint
+  cudUrl: "http://localhost"
+
+  # CMS API endpoint
+  cmsUrl: "http://localhost"
+
+  # CUD credentials. Obtained from webdev@oicr.on.ca
+  cudAppId: "<fill in>"
+  cudUser: "<fill in>"
+  cudPassword: "<fill in>"
+
+  # OAuth credentials
+  # To generate the credentials go to icgc.org, log in, go to the "OAuth Settings" tab and request "Regenerate all tokens"
+  consumerKey: "<fill in>"
+  consumerSecret: "<fill in>"
+  accessToken: "<fill in>"
+  accessSecret: "<fill in>"
+
+  # Log HTTP requests to the API
+  enableHttpLogging: false
+
+  # Disallow self-signed SSL certificates
+  enableStrictSSL: false
+
+# Portal release configuration
+release:
+  releaseDate: "Month Day, Year"
+  dataVersion: 2
