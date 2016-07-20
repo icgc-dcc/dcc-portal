@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,42 +15,56 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.mapper;
+package org.icgc.dcc.portal.server.jersey.mapper;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.status;
-import static javax.ws.rs.core.Response.Status.CONFLICT;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+
+import java.util.Random;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import org.elasticsearch.ElasticsearchException;
 import org.icgc.dcc.portal.server.model.Error;
-import org.icgc.dcc.portal.server.service.NotAvailableException;
 import org.springframework.stereotype.Component;
 
-/**
- * A exception mapper for HttpConflictException to handle HTTP status 409.
- */
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 @Provider
-public class NotAvailableExceptionMapper implements ExceptionMapper<NotAvailableException> {
+public class ElasticSearchExceptionMapper implements ExceptionMapper<ElasticsearchException> {
 
-  /*
-   * HTTP 409
-   */
-  private final static Status STATUS = CONFLICT;
+  private final static Status STATUS = INTERNAL_SERVER_ERROR;
+  private static final Random RANDOM = new Random();
 
   @Override
-  public Response toResponse(NotAvailableException e) {
+  public Response toResponse(ElasticsearchException e) {
+
+    val id = RANDOM.nextLong();
+    log.error(formatLogMessage(id), e);
+
     return status(STATUS)
         .type(APPLICATION_JSON_TYPE)
-        .entity(errorResponse(e))
+        .entity(errorResponse(e, id))
         .build();
   }
 
-  private static Error errorResponse(NotAvailableException e) {
-    return new Error(STATUS, e.getMessage());
+  protected String formatLogMessage(long id) {
+    return String.format("Error handling a request: %016x", id);
   }
+
+  private Error errorResponse(ElasticsearchException e, long id) {
+    return new Error(STATUS, message(e, id));
+  }
+
+  private String message(ElasticsearchException e, long id) {
+    return String.format("%s", formatLogMessage(id));
+  }
+
 }

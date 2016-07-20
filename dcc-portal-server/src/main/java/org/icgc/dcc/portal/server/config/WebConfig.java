@@ -29,10 +29,10 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 
-import org.icgc.dcc.portal.server.filter.CachingFilter;
-import org.icgc.dcc.portal.server.filter.CrossOriginFilter;
-import org.icgc.dcc.portal.server.filter.DownloadFilter;
-import org.icgc.dcc.portal.server.filter.VersionFilter;
+import org.icgc.dcc.portal.server.jersey.filter.CachingFilter;
+import org.icgc.dcc.portal.server.jersey.filter.CrossOriginFilter;
+import org.icgc.dcc.portal.server.jersey.filter.DownloadFilter;
+import org.icgc.dcc.portal.server.jersey.filter.VersionFilter;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.spring.SpringComponentProviderFactory;
 import org.icgc.dcc.portal.server.swagger.PrimitiveModelResolver;
@@ -70,6 +70,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   @Bean
   public FilterRegistrationBean urlRewrite() {
     val urlRewrite = new FilterRegistrationBean();
+    urlRewrite.setOrder(0);
     urlRewrite.setFilter(new UrlRewriteFilter());
     urlRewrite.addInitParameter("confPath", "urlrewrite.xml");
     urlRewrite.addInitParameter("statusEnabled", "false");
@@ -80,6 +81,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   @Bean
   public ServletRegistrationBean jersey(ResourceConfig resourceConfig) {
     val jersey = new ServletRegistrationBean();
+    jersey.setOrder(1);
     jersey.setServlet(new ServletContainer(resourceConfig));
     jersey.addUrlMappings("/api/*");
 
@@ -173,18 +175,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     if (url.toString().contains("jar")) {
       return "classpath:/app/";
     } else {
-      return "file:" + new File("../dcc-portal-ui/app").getCanonicalPath() + "/";
+      val repoDir = new File(WebConfig.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getParentFile().getParentFile();
+      val uiDir = new File(repoDir, "dcc-portal-ui");
+      
+      return "file:" + uiDir.getCanonicalPath() + "/app/";
     }
   }
   
   @SneakyThrows
   private static String getSwaggerLocation() {
-    val url = WebConfig.class.getProtectionDomain().getCodeSource().getLocation().toURI();
-    if (url.toString().contains("jar")) {
-      return "classpath:/swagger-ui/";
-    } else {
-      return "file:" + new File("src/main/resources/swagger-ui").getCanonicalPath() + "/";
-    }
+    return "classpath:/swagger-ui/";
+
   }
 
 }

@@ -50,7 +50,7 @@ import org.icgc.dcc.portal.server.auth.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
 import org.icgc.dcc.portal.server.download.JobInfo;
-import org.icgc.dcc.portal.server.mapper.BadRequestExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.BadRequestExceptionMapper;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.service.DonorService;

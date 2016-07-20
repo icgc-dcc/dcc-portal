@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,47 +15,65 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.writer;
+package org.icgc.dcc.portal.server.jersey.filter;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
+import lombok.Setter;
 
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.MessageBodyWriter;
-import javax.ws.rs.ext.Provider;
-
-import org.icgc.dcc.portal.server.model.Error;
+import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
+import org.icgc.dcc.portal.server.resource.core.DownloadResource;
+import org.icgc.dcc.portal.server.service.NotAvailableException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sun.jersey.spi.container.ContainerRequest;
+import com.sun.jersey.spi.container.ContainerRequestFilter;
+
+/**
+ * Filter for globally disabling access to {@link DownloadResource} resources if {@link DownloadProperties#isEnabled()}
+ * is {@code false}.
+ */
+@Setter
 @Component
-@Provider
-@Produces({ TEXT_PLAIN, APPLICATION_OCTET_STREAM })
-public class ErrorMessageBodyWriter implements MessageBodyWriter<Error> {
+public class DownloadFilter implements ContainerRequestFilter {
+
+  /**
+   * Configuration.
+   */
+  @Autowired
+  private DownloadProperties download;
+
+  /**
+   * State.
+   */
+  @Context
+  private UriInfo uriInfo;
 
   @Override
-  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return Error.class.isAssignableFrom(type);
+  public ContainerRequest filter(ContainerRequest request) {
+    if (isDownloadDisabled() && isDownloadURL()) {
+      throw new NotAvailableException("Download service unavailable. Please try again later");
+    }
+
+    return request;
   }
 
-  @Override
-  public long getSize(Error error, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return error.toString().getBytes(UTF_8).length;
+  private String getRequestPath() {
+    return uriInfo.getAbsolutePath().getPath();
   }
 
-  @Override
-  public void writeTo(Error error, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-      MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
-      WebApplicationException {
-    entityStream.write(error.toString().getBytes(UTF_8));
+  private String getDownloadPath() {
+    return uriInfo.getBaseUriBuilder().path(DownloadResource.class).build().getPath();
+  }
+
+  private boolean isDownloadDisabled() {
+    return !download.isEnabled();
+  }
+
+  private boolean isDownloadURL() {
+    return getRequestPath().contains(getDownloadPath());
   }
 
 }

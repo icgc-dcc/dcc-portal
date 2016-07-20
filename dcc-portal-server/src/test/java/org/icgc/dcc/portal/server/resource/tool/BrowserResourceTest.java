@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.server.resource.tool;
 import static com.sun.jersey.api.client.ClientResponse.Status.BAD_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.icgc.dcc.portal.server.mapper.BadRequestExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.BadRequestExceptionMapper;
 import org.icgc.dcc.portal.server.service.BrowserService;
 import org.icgc.dcc.portal.server.test.ResourceTest;
 import org.junit.Ignore;

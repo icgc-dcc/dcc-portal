@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.icgc.dcc.portal.server.config.ServerProperties.CacheProperties;
+import org.skife.jdbi.v2.DBI;
 
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.Responses;
@@ -40,7 +41,14 @@ import lombok.val;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class Tests {
-
+  
+  /**
+   * Create a DBI instance for testing using the embedded H2 database schema.
+   */
+  public static DBI createDBI() {
+    return new DBI("jdbc:h2:genelist;MODE=PostgreSQL;INIT=runscript from 'classpath:sql/schema.sql'");
+  }
+  
   /**
    * Creates a stub of {@link ContainerRequest} that is used for testing.
    * 

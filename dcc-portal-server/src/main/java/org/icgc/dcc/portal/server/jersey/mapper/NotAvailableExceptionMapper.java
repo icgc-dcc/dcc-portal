@@ -15,65 +15,42 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.filter;
+package org.icgc.dcc.portal.server.jersey.mapper;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
+import static javax.ws.rs.core.Response.status;
+import static javax.ws.rs.core.Response.Status.CONFLICT;
 
-import lombok.Setter;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
-import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
-import org.icgc.dcc.portal.server.resource.core.DownloadResource;
+import org.icgc.dcc.portal.server.model.Error;
 import org.icgc.dcc.portal.server.service.NotAvailableException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerRequestFilter;
-
 /**
- * Filter for globally disabling access to {@link DownloadResource} resources if {@link DownloadProperties#isEnabled()}
- * is {@code false}.
+ * A exception mapper for HttpConflictException to handle HTTP status 409.
  */
-@Setter
 @Component
-public class DownloadFilter implements ContainerRequestFilter {
+@Provider
+public class NotAvailableExceptionMapper implements ExceptionMapper<NotAvailableException> {
 
-  /**
-   * Configuration.
+  /*
+   * HTTP 409
    */
-  @Autowired
-  private DownloadProperties download;
-
-  /**
-   * State.
-   */
-  @Context
-  private UriInfo uriInfo;
+  private final static Status STATUS = CONFLICT;
 
   @Override
-  public ContainerRequest filter(ContainerRequest request) {
-    if (isDownloadDisabled() && isDownloadURL()) {
-      throw new NotAvailableException("Download service unavailable. Please try again later");
-    }
-
-    return request;
+  public Response toResponse(NotAvailableException e) {
+    return status(STATUS)
+        .type(APPLICATION_JSON_TYPE)
+        .entity(errorResponse(e))
+        .build();
   }
 
-  private String getRequestPath() {
-    return uriInfo.getAbsolutePath().getPath();
+  private static Error errorResponse(NotAvailableException e) {
+    return new Error(STATUS, e.getMessage());
   }
-
-  private String getDownloadPath() {
-    return uriInfo.getBaseUriBuilder().path(DownloadResource.class).build().getPath();
-  }
-
-  private boolean isDownloadDisabled() {
-    return !download.isEnabled();
-  }
-
-  private boolean isDownloadURL() {
-    return getRequestPath().contains(getDownloadPath());
-  }
-
 }

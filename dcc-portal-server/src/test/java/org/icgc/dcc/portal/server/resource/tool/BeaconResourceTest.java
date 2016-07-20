@@ -24,8 +24,8 @@ import static org.mockito.Mockito.when;
 
 import javax.ws.rs.core.MediaType;
 
-import org.icgc.dcc.portal.server.mapper.BadRequestExceptionMapper;
-import org.icgc.dcc.portal.server.mapper.IllegalArgumentExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.BadRequestExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.IllegalArgumentExceptionMapper;
 import org.icgc.dcc.portal.server.model.AlleleMutation;
 import org.icgc.dcc.portal.server.model.Beacon;
 import org.icgc.dcc.portal.server.model.BeaconQuery;
