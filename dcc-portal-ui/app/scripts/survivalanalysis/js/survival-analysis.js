@@ -121,7 +121,7 @@
       .on('brushend', brushend);
 
     wrapper.append('svg:g')
-      .attr("class", "brush")
+      .attr('class', 'brush')
       .call(brush)
       .selectAll('rect')
       .attr('height', axisHeight);
@@ -258,7 +258,7 @@
           onDomainChange: function (newXDomain) {
             $scope.$apply(function () {
               updateState({xDomain: newXDomain});
-            })
+            });
           }
         }, params));
       };
