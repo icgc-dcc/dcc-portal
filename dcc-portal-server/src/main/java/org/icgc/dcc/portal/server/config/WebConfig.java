@@ -21,7 +21,6 @@ import static com.sun.jersey.api.core.ResourceConfig.FEATURE_DISABLE_WADL;
 import static com.sun.jersey.api.core.ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS;
 import static com.sun.jersey.api.core.ResourceConfig.PROPERTY_CONTAINER_RESPONSE_FILTERS;
 
-import java.io.File;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -144,13 +143,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   @Override
   @SneakyThrows
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    val uiLocation = getUILocation();
-    log.info("UI location: {}", uiLocation);
-    registry.addResourceHandler("/**").addResourceLocations(uiLocation);
-    
-    val swaggerLocation = getSwaggerLocation();
-    log.info("Swagger location: {}", swaggerLocation);
-    registry.addResourceHandler("/docs/**").addResourceLocations(swaggerLocation);
+    registry.addResourceHandler("/").addResourceLocations("classpath:/app/index.html");
+    registry.addResourceHandler("/**").addResourceLocations("classpath:/app/");
+    registry.addResourceHandler("/docs/**").addResourceLocations("classpath:/swagger-ui/");
   }
 
   @PostConstruct
@@ -167,25 +162,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         Resource.class.getPackage().getName() + "," + PrimitiveModelResolver.class.getPackage().getName());
     config.setBasePath("/api");
     config.setScan(true);
-  }
-
-  @SneakyThrows
-  private static String getUILocation() {
-    val url = WebConfig.class.getProtectionDomain().getCodeSource().getLocation().toURI();
-    if (url.toString().contains("jar")) {
-      return "classpath:/app/";
-    } else {
-      val repoDir = new File(WebConfig.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getParentFile().getParentFile();
-      val uiDir = new File(repoDir, "dcc-portal-ui");
-      
-      return "file:" + uiDir.getCanonicalPath() + "/app/";
-    }
-  }
-  
-  @SneakyThrows
-  private static String getSwaggerLocation() {
-    return "classpath:/swagger-ui/";
-
   }
 
 }

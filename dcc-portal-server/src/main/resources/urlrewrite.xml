@@ -19,13 +19,6 @@
 
 <!-- See http://urlrewritefilter.googlecode.com/svn/trunk/src/doc/manual/4.0/index.html -->
 <urlrewrite>
-  <!-- Legacy portal redirect -->
-  <rule>
-    <condition type="method">GET</condition>
-    <from>^/pages/docs/(.*)$</from>
-    <to type="redirect" last="true">https://legacy-portal.dcc.icgc.org/pages/docs/$1</to>
-  </rule>
-
   <!-- For AngularJS HTML5 mode -->
   <rule>
     <condition type="method">GET</condition>
@@ -36,13 +29,8 @@
   <!-- Alias -->
   <rule>
     <condition type="method">GET</condition>
-    <from>^/$</from>
-    <to last="true">/</to>
-  </rule>  
-  <rule>
-    <condition type="method">GET</condition>
-    <from>^/docs$</from>
-    <to last="true" type="redirect">/docs/</to>
+    <from>^/docs/?$</from>
+    <to last="true">/docs/index.html</to>
   </rule>
   <rule>
     <condition type="method">GET</condition>
@@ -50,11 +38,4 @@
     <to last="true">/favicon.ico</to>
   </rule>
 
-  <!-- Cache control -->
-  <!-- 
-  <rule>
-    <from>.*</from>
-    <set type="response-header" name="Cache-Control">public, max-age=3600, must-revalidate</set>
-  </rule> 
-   -->
 </urlrewrite>

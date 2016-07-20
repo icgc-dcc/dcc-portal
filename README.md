@@ -24,10 +24,10 @@ dcc-portal-server/target/dcc-portal-server-[version]-dist.tar.gz
 To run the server without building the UI or packaging the API into a jar, issue the following from the root of the project:
 
 ```shell
-mvn -pl '!dcc-portal-ui' compile && mvn -pl dcc-portal-server exec:java -Dexec.args="--spring.profiles.active=test --spring.config.location=/path/to/application.yml"
+mvn -pl dcc-portal-server spring-boot:run -Drun.profiles=test
 ```
 
-Technically the first part only has to be done when source files change.
+One can append `-Drun.arguments="arg1,arg2,arg3"` to pass arguments to the application. See the [spring-boot:run](http://docs.spring.io/spring-boot/docs/current/maven-plugin/run-mojo.html) documentations for details.
 
 ### IDE
 
