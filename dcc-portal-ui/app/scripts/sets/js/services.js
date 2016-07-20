@@ -200,7 +200,8 @@
       }
       
 
-      promise = Restangular.one('entityset').post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
+      promise = Restangular.one('entityset')
+                .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
 
       promise.then(function(data) {        
         
@@ -361,7 +362,8 @@
       var promise = null;
       var data = params2JSON(type, params, true);
 
-      promise = Restangular.one('entityset').post('union', data, {async: 'false'}, {'Content-Type': 'application/json'});
+      promise = Restangular.one('entityset')
+                .post('union', data, {async: 'false'}, {'Content-Type': 'application/json'});
 
       promise.then(function(data) {
         if (! data.id) {
@@ -584,12 +586,12 @@
 
     _service.savingToaster = function(setName){
       return toaster.pop('warning', 'Saving ' + setName,'Please wait', 0, 'trustedHtml');
-    }
+    };
 
     _service.saveSuccessToaster = function(setName){
       return toaster.pop('success', setName + ' Saved',
              'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
-    }
+    };
 
     // Initialize
     var setList = _service.initService();
