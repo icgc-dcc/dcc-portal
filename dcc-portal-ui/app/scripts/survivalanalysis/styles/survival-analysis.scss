@@ -80,6 +80,9 @@ $faded: #e6dede;
     &:hover {
       transform: scale(1.1);
     }
+    &.disabled {
+      visibility: hidden;
+    }
   }
 
   .survival-graph {

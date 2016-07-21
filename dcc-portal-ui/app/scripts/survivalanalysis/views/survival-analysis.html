@@ -12,8 +12,12 @@
   </script>
 
   <ul class="legend">
-    <li ng-if="ctrl.canUndo()">
-      <i class="undo-button icon-undo" ng-click="ctrl.handleClickUndo()"></i>
+    <li>
+      <i
+        class="undo-button icon-undo"
+        ng-class="{disabled: !ctrl.canUndo()}"
+        ng-click="ctrl.handleClickUndo()"
+      ></i>
     </li>
     <li
       class="set"
