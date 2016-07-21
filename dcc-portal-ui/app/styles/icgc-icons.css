@@ -135,9 +135,12 @@
 .icon-grid:before { content: '\e84e'; } /* '' */
 .icon-target:before { content: '\e84f'; } /* '' */
 .icon-info-circled:before { content: '\e850'; } /* '' */
+.icon-sort-name-up:before { content: '\f15d'; } /* '' */
+.icon-sort-name-down:before { content: '\f15e'; } /* '' */
 .icon-sort-alt-up:before { content: '\f160'; } /* '' */
 .icon-sort-alt-down:before { content: '\f161'; } /* '' */
-
+.icon-sort-number-up:before { content: '\f162'; } /* '' */
+.icon-sort-number-down:before { content: '\f163'; } /* '' */
 /*
  *  Animation example, for spinners
  */
