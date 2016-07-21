@@ -36,33 +36,31 @@
          controller: 'SoftwareController'
       });
    });
-
-   module.service('Software', function($scope, Restangular){
-	 var _service = this;
-	   $scope.icgcStorageClient = {
-	     artifactId: 'icgc-storage-client'
-	   };
-	   $scope.icgcGet = {
-	     artifactId:'icgc-get'
-	   };
-	   return Restangular.one('short', '').get()
-   });
-   module.controller('SoftwareController', function($scope, Page) {
-     Page.stopWork();
+   
+   module.controller('SoftwareController', function($scope, Page, Restangular) {
+	 var _ctrl = this;
+	 Page.stopWork();
      Page.setPage('entity');
      Page.setTitle('Software Downloads');
-
-     $scope.icgcStorageClient = {
-       artifactId: 'icgc-storage-client'
-     };
      $scope.icgcGet = {
-       artifactId:'icgc-get'
+   		  artifactId:'icgc-get'
      };
-     jQuery.get('api/v1/ui/software/' + $scope.icgcStorageClient.artifactId + '/versions', function(versions) {
-       $scope.versions = versions;
-     });
-     jQuery.get('api/v1/ui/software/' + $scope.icgcGet.artifactId + '/versions', function(versions) {
-       $scope.icgcGetVersions = versions;
+     $scope.icgcStorageClient = {
+      		  artifactId:'icgc-storage-client'
+     };
+
+     Restangular
+       .all('ui/software/' + $scope.icgcStorageClient.artifactId + '/versions')
+       .getList()
+       .then(function(response){
+    	 $scope.versions = response.plain();
+       });
+
+     Restangular
+       .all('ui/software/' + $scope.icgcGet.artifactId + '/versions')
+       .getList()
+       .then(function(response){
+  	     $scope.icgcGetVersions = response.plain();
      });
    });
 

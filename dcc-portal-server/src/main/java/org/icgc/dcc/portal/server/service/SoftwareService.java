@@ -55,7 +55,7 @@ public class SoftwareService {
   @SneakyThrows
   public List<MavenArtifactVersion> getMavenVersions(String artifactId, SoftwareProperties config) {
     val versionsUrl = mavenRepositoryUrl + "/api/search/versions?g=" + config.getGroupId() + "&a=" +
-        artifactId + "&repos=" + config.getArtifactId();
+        artifactId + "&repos=" + config.getRepository();
     val url = new URL(versionsUrl);
     val response = MAPPER.readValue(url, MavenArtifactResults.class);
     return response.results;
