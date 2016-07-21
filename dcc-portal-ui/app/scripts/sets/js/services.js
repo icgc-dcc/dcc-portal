@@ -230,6 +230,7 @@
     _service.addExternalSet = function(type, params) {
       var promise = null;
       var data = params2JSON(type, params);
+      var addSetSaving;
 
       if(! data.isTransient){
         addSetSaving = _service.savingToaster(data.name);
@@ -365,6 +366,7 @@
     _service.addDerivedSet = function(type, params) {
       var promise = null;
       var data = params2JSON(type, params, true);
+      var addSetSaving;
 
       if(! data.isTransient){
         addSetSaving = _service.savingToaster(data.name);
