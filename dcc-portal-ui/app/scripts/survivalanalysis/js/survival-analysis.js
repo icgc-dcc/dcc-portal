@@ -43,7 +43,7 @@
       left: 60
     };
     var outerWidth = containerBounds.width;
-    var outerHeight = outerWidth * 0.5;
+    var outerHeight = params.height || outerWidth * 0.5;
 
     var axisWidth = outerWidth - margin.left - margin.right;
     var axisHeight = outerHeight - margin.top - margin.bottom;
@@ -209,7 +209,8 @@
 
   var survivalAnalysisController = function (
       $scope,
-      $element
+      $element,
+      FullScreenService
     ) {
       var ctrl = this;
       var graphContainer = $element.find('.survival-graph').get(0);
@@ -221,10 +222,19 @@
         disabledDataSets: undefined
       };
 
+      var isFullScreen = function () {
+        return _.includes([
+          document.fullscreenElement,
+          document.webkitFullscreenElement,
+          document.mozFullscreenElement
+          ], $element.get(0))
+      };
+
       var update = function (params) {
         if (!ctrl.dataSets) {
           return;
         }
+
         svg.selectAll('*').remove();
         renderChart(_.defaults({
           svg: svg, 
@@ -234,6 +244,7 @@
           palette: ctrl.palette,
           markerType: 'line',
           xDomain: state.xDomain,
+          height: isFullScreen() && ( window.innerHeight - 100 ),
           onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
               element: event.target,
@@ -286,6 +297,14 @@
         stateStack = _.without(stateStack, state);
         update();
       };
+
+      this.isFullScreen = isFullScreen;
+
+      this.handleClickEnterFullScreen = function () {
+        FullScreenService.enterFullScreen($element.get(0));
+      };
+
+      this.handleClickExitFullScreen = FullScreenService.exitFullScreen;
 
       this.isDataSetDisabled = function (dataSet) {
         return _.includes(state.disabledDataSets, dataSet);
