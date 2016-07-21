@@ -18,7 +18,6 @@
 package org.icgc.dcc.portal.server.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.eclipse.jetty.http.HttpStatus.NOT_FOUND_404;
 import static org.icgc.dcc.portal.server.resource.Resources.AFFECTED_BY_THE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_DONOR_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_DONOR_VALUE;
@@ -161,7 +160,7 @@ public class GeneResource extends Resource {
   @GET
   @Timed
   @ApiOperation(value = FIND_BY_ID, notes = FIND_BY_ID_ERROR, response = Gene.class)
-  @ApiResponses(value = { @ApiResponse(code = NOT_FOUND_404, message = GENE + NOT_FOUND) })
+  @ApiResponses(value = { @ApiResponse(code = 404, message = GENE + NOT_FOUND) })
   public Gene find(
       @ApiParam(value = API_GENE_VALUE, required = true) @PathParam(API_GENE_PARAM) String geneId,
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,

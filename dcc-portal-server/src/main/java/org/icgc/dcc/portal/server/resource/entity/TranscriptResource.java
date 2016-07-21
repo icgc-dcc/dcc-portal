@@ -18,7 +18,6 @@
 package org.icgc.dcc.portal.server.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.eclipse.jetty.http.HttpStatus.NOT_FOUND_404;
 
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class TranscriptResource extends Resource {
   @GET
   @Timed
   @ApiOperation(value = "Find a transcript by id", notes = "If a transcript does not exist with the specified id an error will be returned", response = Transcript.class)
-  @ApiResponses(value = { @ApiResponse(code = NOT_FOUND_404, message = "Transcript not found") })
+  @ApiResponses(value = { @ApiResponse(code = 404, message = "Transcript not found") })
   public Transcript find(
       @ApiParam(value = "Transcript ID", required = true) @PathParam("transcriptId") String transcriptId,
       @ApiParam(value = "Select fields returned", allowMultiple = true) @QueryParam("field") List<String> fields) {
