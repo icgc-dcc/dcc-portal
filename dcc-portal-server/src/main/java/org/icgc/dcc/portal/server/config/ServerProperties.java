@@ -88,6 +88,10 @@ public class ServerProperties {
 
   @Valid
   @JsonProperty
+  SoftwareProperties soft = new SoftwareProperties();
+
+  @Valid
+  @JsonProperty
   Map<String, Boolean> features = newHashMap();
 
   @Data
@@ -345,4 +349,32 @@ public class ServerProperties {
 
   }
 
+  @Data
+  public static class SoftwareProperties {
+
+    @JsonProperty
+    String groupId = "org.icgc.dcc";
+
+    @JsonProperty
+    String artifactId = "icgc-storage-client";
+
+    @JsonProperty
+    String classifier = "dist";
+
+    @JsonProperty
+    String repository = "dcc-release";
+
+    @JsonProperty
+    String icgcRepository = "dcc-binaries"; 
+
+    @JsonProperty
+    String icgcArtifactId = "icgc-get";
+
+    @JsonProperty
+    String osxClassifier = "osx_x64";
+
+    @JsonProperty
+    String linuxClassifier = "linux_x64";
+
+  }
 }

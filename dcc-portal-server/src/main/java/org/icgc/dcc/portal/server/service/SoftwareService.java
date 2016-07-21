@@ -19,12 +19,11 @@ package org.icgc.dcc.portal.server.service;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 
+import org.icgc.dcc.portal.server.config.ServerProperties.SoftwareProperties;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
 
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -37,17 +36,6 @@ public class SoftwareService {
    * Constants.
    */
   private static final ObjectMapper MAPPER = new ObjectMapper();
-  private static final Map<String, String> PARAMS = ImmutableMap.of(
-      "groupId", "org.icgc.dcc",
-      "artifactId", "icgc-storage-client",
-      "classifier", "dist",
-      "repository", "dcc-release"
-      );
-  private static final Map<String, String> ICGCPARAMS = ImmutableMap.of(
-		  "osxClassifier", "osx_x64",
-		  "artifactId", "icgc-get",
-		  "linuxClassifier", "linux_x64",
-		  "repository", "dcc-binaries");
 
   /**
    * Configuration.
@@ -55,9 +43,9 @@ public class SoftwareService {
   private String mavenRepositoryUrl = "https://artifacts.oicr.on.ca/artifactory";
 
   @SneakyThrows
-  public List<ArtifactFolder> getVersions(String artifactId) {
+  public List<ArtifactFolder> getVersions(String artifactId, SoftwareProperties config) {
     String versionsUrl;
-    versionsUrl = mavenRepositoryUrl + "/api/storage/" + ICGCPARAMS.get("repository") + "/" +
+    versionsUrl = mavenRepositoryUrl + "/api/storage/" + config.getIcgcRepository() + "/" +
         artifactId;
     val url = new URL(versionsUrl);
     val response = MAPPER.readValue(url, ArtifactFolderResults.class);
@@ -65,58 +53,63 @@ public class SoftwareService {
   }
 
   @SneakyThrows
-  public List<MavenArtifactVersion> getMavenVersions(String artifactId) {
-    val versionsUrl = mavenRepositoryUrl + "/api/search/versions?g=" + PARAMS.get("groupId") + "&a=" +
-        artifactId + "&repos=" + PARAMS.get("repository");
+  public List<MavenArtifactVersion> getMavenVersions(String artifactId, SoftwareProperties config) {
+    val versionsUrl = mavenRepositoryUrl + "/api/search/versions?g=" + config.getGroupId() + "&a=" +
+        artifactId + "&repos=" + config.getArtifactId();
     val url = new URL(versionsUrl);
     val response = MAPPER.readValue(url, MavenArtifactResults.class);
     return response.results;
   }
 
-  public String getLatestVersionUrl() {
-    return getVersionUrl("%5BRELEASE%5D", ICGCPARAMS.get("artifactId"));
-  }
-  public String getLatestICGCGetVersionUrl(String os){
-	    return getICGCGetVersionUrl("0.2.10", os);
-  }
-  public String getVersionChecksumUrl(String version) {
-    return getVersionUrl(version, PARAMS.get("artifactId")) + ".md5";
+  public String getLatestVersionUrl(SoftwareProperties config) {
+    return getVersionUrl("%5BRELEASE%5D", config.getArtifactId(), config);
   }
 
-  public String getVersionSignatureUrl(String version) {
-    return getVersionUrl(version, PARAMS.get("artifactId")) + ".asc";
+  public String getLatestICGCGetVersionUrl(String os, SoftwareProperties config) {
+    List<ArtifactFolder> result = getVersions("icgc-get", config);
+
+    return getICGCGetVersionUrl("0.2.10", os, config);
   }
-  
-  public String getICGCGetVersionUrl(String version, String os){
-	  String classifier;
-	  if (os.equals("linux")){
-		  classifier = ICGCPARAMS.get("linuxClassifier");
-	  } else{
-		  classifier = ICGCPARAMS.get("osxClassifier");
-	  }
-  	return getVersionUrl(version, ICGCPARAMS.get("artifactId")) + classifier + ".zip";
+
+  public String getVersionChecksumUrl(String version, SoftwareProperties config) {
+    return getVersionUrl(version, config.getArtifactId(), config) + ".md5";
   }
-  
-  public String getVersionUrl(String version, String artifactId) {
-    if (artifactId.equals("icgc-get")) {
-         return getRepositoryUrl(artifactId) + "/" + artifactId + "/" + version + "/" + artifactId + "_v" + version + "_";
+
+  public String getVersionSignatureUrl(String version, SoftwareProperties config) {
+    return getVersionUrl(version, config.getArtifactId(), config) + ".asc";
+  }
+
+  public String getICGCGetVersionUrl(String version, String os, SoftwareProperties config) {
+    String classifier;
+    if (os.equals("linux")) {
+      classifier = config.getLinuxClassifier();
+    } else {
+      classifier = config.getOsxClassifier();
     }
-    val classifier = PARAMS.get("classifier");
-    return getGroupUrl() + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + "-"
+    return getVersionUrl(version, config.getIcgcArtifactId(), config) + classifier + ".zip";
+  }
+
+  public String getVersionUrl(String version, String artifactId, SoftwareProperties config) {
+    if (artifactId.equals("icgc-get")) {
+      return getRepositoryUrl(artifactId, config) + "/" + artifactId + "/" + version + "/" + artifactId + "_v" + version
+          + "_";
+    }
+    val classifier = config.getClassifier();
+    return getGroupUrl(config) + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + "-"
         + classifier + ".tar.gz";
   }
 
-  private String getGroupUrl() {
-    val groupId = PARAMS.get("groupId");
-    return getRepositoryUrl("icgc-storage-client") + "/" + groupId.replaceAll("\\.", "/");
+  private String getGroupUrl(SoftwareProperties config) {
+    val groupId = config.getGroupId();
+    return getRepositoryUrl("icgc-storage-client", config) + "/" + groupId.replaceAll("\\.", "/");
   }
 
-  private String getRepositoryUrl(String artifactId) {
+  private String getRepositoryUrl(String artifactId, SoftwareProperties config) {
     String repository;
     if (artifactId.equals("icgc-get")) {
-      repository = ICGCPARAMS.get("repository");
+      repository = config.getIcgcRepository();
     } else {
-      repository = PARAMS.get("repository");
+      repository = config.getRepository();
     }
     return mavenRepositoryUrl + "/simple/" + repository;
   }
@@ -148,6 +141,7 @@ public class SoftwareService {
     String lastUpdated;
     List<ArtifactFolder> children;
     String uri;
+
   }
 
   @Data
@@ -155,6 +149,23 @@ public class SoftwareService {
 
     String uri;
     boolean folder;
+
   }
 
+  public int compareVersion(String[] arg0, String[] arg1) {
+    int length = arg0.length;
+    if (arg1.length > arg0.length) length = arg1.length;
+
+    for (int i = 0; i < length; i++) {
+      String s0 = null;
+      if (i < arg0.length) s0 = arg0[i];
+      Integer i0 = (s0 == null) ? 0 : Integer.parseInt(s0);
+      String s1 = null;
+      if (i < arg1.length) s1 = arg1[i];
+      Integer i1 = (s1 == null) ? 0 : Integer.parseInt(s1);
+      if (i0.compareTo(i1) < 0) return -1;
+      else if (i1.compareTo(i0) < 0) return 1;
+    }
+    return 0;
+  };
 }
