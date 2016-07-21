@@ -51,7 +51,7 @@ import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermsLookupFilterBuilder;
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet.SubType;
 import org.icgc.dcc.portal.server.model.UnionUnit;
@@ -91,7 +91,7 @@ public class TermsLookupRepository {
   @Value("#{repoIndexName}")
   private final String repoIndexName;
   @NonNull
-  private final PortalProperties properties;
+  private final ServerProperties properties;
 
   /**
    * Configuration.

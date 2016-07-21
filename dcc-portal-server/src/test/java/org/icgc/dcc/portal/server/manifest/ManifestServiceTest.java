@@ -44,7 +44,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.staxmate.SMInputFactory;
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.manifest.model.Manifest;
 import org.icgc.dcc.portal.server.manifest.model.ManifestFormat;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
@@ -143,7 +143,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
         .withData(bulkFile(getClass())));
     service =
         new ManifestService(
-            new PortalProperties(),
+            new ServerProperties(),
             repositories,
             mock(ManifestRepository.class),
             new FileRepository(es.client(), testIndex.getName(), new IndexService()),

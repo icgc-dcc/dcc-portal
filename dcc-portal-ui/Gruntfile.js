@@ -25,6 +25,17 @@ var mountFolder = function (connect, dir) {
 
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 var HOSTNAME = 'local.dcc.icgc.org';
+var apiProxySettings = process.env.API_SOURCE === 'production' ? {
+      context: '/api',
+      host: 'dcc.icgc.org',
+      port: 443,
+      https: true
+    } : {
+      context: '/api',
+      host: 'localhost',
+      port: 8080,
+      https: false
+    };
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -42,7 +53,7 @@ module.exports = function (grunt) {
   // configurable paths
   var yeomanConfig = {
     app: 'app',
-    dist: 'target/app',
+    dist: 'target/classes/app',
     developIndexFile: 'develop/html/index.develop.html'
   };
 
@@ -124,12 +135,7 @@ module.exports = function (grunt) {
         hostname: HOSTNAME
       },
       proxies: [
-        {
-          context: '/api',
-          host: 'localhost',
-          port: 8080,
-          https: false
-        }
+        apiProxySettings
       ],
       livereload: {
         options: {

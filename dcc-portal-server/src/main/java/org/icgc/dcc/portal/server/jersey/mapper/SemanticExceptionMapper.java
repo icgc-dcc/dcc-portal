@@ -15,42 +15,35 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.mapper;
+package org.icgc.dcc.portal.server.jersey.mapper;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.status;
-import static javax.ws.rs.core.Response.Status.CONFLICT;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import org.dcc.portal.pql.exception.SemanticException;
 import org.icgc.dcc.portal.server.model.Error;
-import org.icgc.dcc.portal.server.service.NotAvailableException;
 import org.springframework.stereotype.Component;
 
-/**
- * A exception mapper for HttpConflictException to handle HTTP status 409.
- */
 @Component
 @Provider
-public class NotAvailableExceptionMapper implements ExceptionMapper<NotAvailableException> {
-
-  /*
-   * HTTP 409
-   */
-  private final static Status STATUS = CONFLICT;
+public class SemanticExceptionMapper implements ExceptionMapper<SemanticException> {
 
   @Override
-  public Response toResponse(NotAvailableException e) {
-    return status(STATUS)
+  public Response toResponse(SemanticException e) {
+    return status(BAD_REQUEST)
         .type(APPLICATION_JSON_TYPE)
         .entity(errorResponse(e))
         .build();
+
   }
 
-  private static Error errorResponse(NotAvailableException e) {
-    return new Error(STATUS, e.getMessage());
+  private Error errorResponse(SemanticException e) {
+    return new Error(BAD_REQUEST, e.getMessage());
   }
+
 }

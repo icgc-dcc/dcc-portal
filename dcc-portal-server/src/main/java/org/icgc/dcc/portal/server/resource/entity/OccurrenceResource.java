@@ -18,7 +18,6 @@
 package org.icgc.dcc.portal.server.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.eclipse.jetty.http.HttpStatus.NOT_FOUND_404;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_PARAM;
@@ -120,7 +119,7 @@ public class OccurrenceResource extends Resource {
   @GET
   @Timed
   @ApiOperation(value = FIND_BY_ID, notes = FIND_BY_ID_ERROR, response = Occurrence.class)
-  @ApiResponses(value = { @ApiResponse(code = NOT_FOUND_404, message = OCCURRENCE + NOT_FOUND) })
+  @ApiResponses(value = { @ApiResponse(code = 404, message = OCCURRENCE + NOT_FOUND) })
   public Occurrence find(
       @ApiParam(value = API_OCCURRENCE_VALUE, required = true) @PathParam(API_OCCURRENCE_PARAM) String occurrenceId,
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,

@@ -41,7 +41,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.icgc.dcc.portal.server.config.PortalProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.manifest.model.Manifest;
 import org.icgc.dcc.portal.server.manifest.model.ManifestField;
 import org.icgc.dcc.portal.server.manifest.model.ManifestFile;
@@ -96,7 +96,7 @@ public class ManifestService {
    * Configuration.
    */
   @NonNull
-  private final PortalProperties properties;
+  private final ServerProperties properties;
 
   /**
    * Dependencies.

@@ -53,7 +53,7 @@ import org.icgc.dcc.download.core.model.DownloadFile;
 import org.icgc.dcc.download.core.model.JobUiInfo;
 import org.icgc.dcc.download.core.response.JobResponse;
 import org.icgc.dcc.portal.server.auth.Auth;
-import org.icgc.dcc.portal.server.config.PortalProperties.DownloadProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
 import org.icgc.dcc.portal.server.download.DownloadDataTypes;
 import org.icgc.dcc.portal.server.download.DownloadResources;
 import org.icgc.dcc.portal.server.download.JobInfo;

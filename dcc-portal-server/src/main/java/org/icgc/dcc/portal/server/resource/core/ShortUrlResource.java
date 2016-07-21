@@ -19,20 +19,18 @@ package org.icgc.dcc.portal.server.resource.core;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.apache.commons.validator.routines.UrlValidator.ALLOW_LOCAL_URLS;
+
+import java.net.MalformedURLException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.apache.commons.validator.routines.UrlValidator;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.constraints.URL;
 import org.icgc.dcc.common.client.api.ICGCException;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLClient;
 import org.icgc.dcc.common.client.api.shorturl.ShortURLResponse;
-import org.icgc.dcc.portal.server.config.PortalProperties.WebProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.WebProperties;
 import org.icgc.dcc.portal.server.model.ShortUrl;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.service.BadRequestException;
@@ -55,24 +53,31 @@ import lombok.extern.slf4j.Slf4j;
 @Api(value = "/short", description = "URL shortening service")
 public class ShortUrlResource extends Resource {
 
+  /**
+   * Constants.
+   */
   public static final String SHORT_URL_PARAM = "url";
 
   private static final String LONG_DESCRIPTION =
       "The valid ICGC Data Portal URL to be shortened.";
-  private static final UrlValidator URL_VALIDATOR = new UrlValidator(ALLOW_LOCAL_URLS);
 
+  /**
+   * Configuration.
+   */
+  @NonNull
+  private final String baseUrl;
+
+  /**
+   * Dependencies.
+   */
   @NonNull
   private final ShortURLClient apiClient;
 
-  @URL
-  @NotEmpty
-  private final String baseUrl;
-
   @Autowired
-  public ShortUrlResource(@NonNull ShortURLClient apiClient, @NonNull WebProperties config) {
-    this.apiClient = apiClient;
+  public ShortUrlResource(@NonNull WebProperties config, @NonNull ShortURLClient apiClient) {
     // Ensure baseUrl does not end with '/'
     this.baseUrl = config.getBaseUrl().replaceFirst("/$", "");
+    this.apiClient = apiClient;
   }
 
   @GET
@@ -102,7 +107,11 @@ public class ShortUrlResource extends Resource {
   }
 
   private static void validateRequestUrl(String url) {
-    checkState(URL_VALIDATOR.isValid(url), "Request URL '%s' is not a valid URL", url);
+    try {
+      new java.net.URL(url);
+    } catch (MalformedURLException e) {
+      checkState(false, "Request URL '%s' is not a valid URL", url);
+    }
   }
 
   private static void checkState(boolean expression, String message) {

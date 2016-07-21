@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import org.icgc.dcc.portal.server.mapper.NotFoundExceptionMapper;
+import org.icgc.dcc.portal.server.jersey.mapper.NotFoundExceptionMapper;
 import org.icgc.dcc.portal.server.model.Donors;
 import org.icgc.dcc.portal.server.model.Gene;
 import org.icgc.dcc.portal.server.model.Query;

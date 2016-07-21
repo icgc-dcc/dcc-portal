@@ -25,7 +25,7 @@ import java.util.UUID;
 
 import org.icgc.dcc.portal.server.auth.openid.DistributedConsumerAssociationStore;
 import org.icgc.dcc.portal.server.auth.openid.DistributedNonceVerifier;
-import org.icgc.dcc.portal.server.config.PortalProperties.HazelcastProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.HazelcastProperties;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.service.SessionService;
 import org.openid4java.consumer.ConsumerManager;

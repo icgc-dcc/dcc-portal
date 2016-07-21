@@ -26,7 +26,7 @@ import org.icgc.dcc.download.client.impl.HttpDownloadClient;
 import org.icgc.dcc.download.client.impl.NoOpDownloadClient;
 import org.icgc.dcc.download.core.jwt.JwtConfig;
 import org.icgc.dcc.download.core.jwt.JwtService;
-import org.icgc.dcc.portal.server.config.PortalProperties.DownloadProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
