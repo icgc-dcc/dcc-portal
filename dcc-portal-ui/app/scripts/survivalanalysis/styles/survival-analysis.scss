@@ -61,7 +61,8 @@ $faded: #e6dede;
 
   .brush .extent {
     stroke: #fff;
-    fill-opacity: .125;
+    fill: $selection;
+    fill-opacity: .2;
     shape-rendering: crispEdges;
     pointer-events: none;
   }
