@@ -1,6 +1,6 @@
 # Portal Query Language
 
-1. [Indended Audience](#indended-audience)
+1. [Indended Audience](#intended-audience)
 2. [Learning Objectives](#learning-objectives)
 3. [Terms](#terms)
 4. [Querying In The Portal](#querying-in-the-portal)
@@ -182,7 +182,7 @@ case FOO:
  
 * [Data Model](../MODEL.md)
 * [UI](../dcc-portal-ui/UI.md)
-* [API](../dcc-portal-api/API.md)
+* [Server](../dcc-portal-server/SERVER.md)
 
 ## Useful Links
 

@@ -1,0 +1,174 @@
+#
+# Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.
+#
+# This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# DCC Portal Server - Default Configuration
+#
+
+###############################################################################
+# Profile - common
+###############################################################################
+
+# API
+server:
+  port: 8080
+
+# Management
+management:
+  port: 8081
+
+# Datasource
+spring.datasource:
+  driver-class-name: org.postgresql.Driver
+  url: jdbc:postgresql://
+  username:
+  password:
+  max-active: 32
+  validation-query: "/* Portal DB Health Check */ SELECT 1"
+
+# Controls generation of "Last-Modified" and "ETag" HTTP headers
+cache:
+  enabled: true
+
+  # Enable Last-Modified HTTP header generation
+  enableLastModified: true
+
+  # List of resources for which Last-Modified HTTP header should not be generated. Format: regex accepted by java.lang.String
+  excludeLastModified: ["^v\\d+/short$", "^v\\d+/auth/.*$", "^v\\d+/download.*$", "^v\\d+/analysis.*$", "^v\\d+/entityset.*$", "^v\\d+/settings.*$", "^v\\d+/repository/files.*$" ]
+
+  # Enable ETag HTTP header generation
+  enableETag: false
+
+  # List of resources for which ETag HTTP header should not be generated. Format: regex accepted by java.lang.String
+  excludeETag: []
+
+# Authentication
+crowd:
+  ssoUrl: ""
+  
+oauth:
+  serviceUrl: "https://localhost:8443"
+  clientId: "mgmt"
+  clientSecret: "pass"
+  enableHttpLogging: true
+  enableStrictSSL: false
+
+hazelcast:
+  # NB: Below hazelcast settings do not have default values. The portal won't start if they're unset
+  enabled: false
+
+  # Credentials to enter a group. E.g. dev, uat, prod groups
+  groupName: ""
+  groupPassword: ""
+
+  # Time-to-live settings.
+  # Maximum number of seconds for each entry to stay in the cache. Entries that are
+  # older than the set value and not updated for that time
+  # will get automatically evicted from the cache.
+
+  # Expire inactive users in 15 minutes
+  usersCacheTTL: 900
+
+  # Expire openId authentication attempt in 2 minutes
+  openidAuthTTL: 120
+  
+  # Enable multicast? If false then hosts must be provided. hosts not used otherwise
+  # Multicast must be disabled in an OpenStack / AWS environment
+  multicast: false
+  hosts:
+    - localhost
+
+# ElasticSearch index and hosts
+elastic:
+  indexName: "dcc-release"
+  repoIndexName: "icgc-repository"
+  nodeAddresses:
+     - host: "localhost"
+       port: 9300
+
+  # List of TransportClient settings. 
+  # E.g. 
+  # "client.transport.sniff": true 
+  client:
+    "client.transport.sniff": true
+
+# Mail
+mail:
+  enabled: false
+  recipientEmail:
+
+# Data download
+download:
+  enabled: true
+  serverUrl: "http://localhost:9090"
+  publicServerUrl: "http://localhost:9090"
+  sharedSecret: "deadbeefdeadbeefdeadbeefdeadbeef"
+  aesKey: "deadbeefdeadbeef"
+
+web:
+  # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs
+  baseUrl: ""
+
+# ICGC Client configuration
+icgc:
+
+  # CGP/DACO API endpoint
+  cgpUrl: ""
+  # ShortUrl API endpoint
+  shortUrl: ""
+
+  # CUD API endpoint
+  cudUrl: ""
+  
+  # CMS API endpoint
+  cmsUrl: ""
+
+  # CUD credentials. Obtained from webdev@oicr.on.ca
+  cudAppId: ""
+  cudUser: ""
+  cudPassword: ""
+
+  # OAuth credentials
+  # To generate the credentials go to icgc.org, log in, go to the "OAuth Settings" tab and request "Regenerate all tokens"
+  consumerKey: ""
+  consumerSecret: ""
+  accessToken: ""
+  accessSecret: ""
+
+  # Log HTTP requests to the API
+  enableHttpLogging: false
+
+  # Disallow self-signed SSL certificates
+  enableStrictSSL: true
+
+# Set analysis configuration
+setOperation:
+
+  # Limit for number of items to return from ElasticSearch
+  maxPreviewNumberOfHits: 1000
+  maxNumberOfHits: 20000
+  maxMultiplier: 3
+
+# Release metadata configuration
+release:
+  releaseDate: "placeholder"
+  dataVersion: 2
+  
+# Feature Flags
+features:
+  AUTH_TOKEN: true
+  ICGC_CLOUD: true
+  SOFTWARE_PAGE: true

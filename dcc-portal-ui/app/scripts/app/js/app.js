@@ -243,6 +243,7 @@
     'icgc.sets',
     'icgc.analysis',
     'icgc.phenotype',
+    'icgc.oncogrid',
     'icgc.beacon',
     'icgc.downloader',
     'icgc.pathwayviewer',
@@ -528,10 +529,8 @@
    */
 
   module.constant('API', {
-    BASE_URL: $icgcApp.getAPI().getBasePathURL()
+    BASE_URL: $icgcApp.getAPI().getBasePathURL(),
   });
-
-
 
   module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, $compileProvider,
                           AngularyticsProvider, $httpProvider, RestangularProvider,
@@ -617,7 +616,7 @@
 
     Restangular.setErrorInterceptor(function (response) {
 
-      if (response.status !== 401) {
+      if (response.status !== 401 && response.status !== -1) {
         console.error ('Response Error: ', toJson (response));
       }
 

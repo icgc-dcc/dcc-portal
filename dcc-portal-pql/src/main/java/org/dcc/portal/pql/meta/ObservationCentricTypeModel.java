@@ -29,8 +29,6 @@ import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 import java.util.List;
 import java.util.Map;
 
-import lombok.val;
-
 import org.dcc.portal.pql.meta.field.ArrayFieldModel;
 import org.dcc.portal.pql.meta.field.FieldModel;
 import org.dcc.portal.pql.meta.field.ObjectFieldModel;
@@ -39,10 +37,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import lombok.val;
+
 public class ObservationCentricTypeModel extends TypeModel {
 
   private final static String TYPE_PREFIX = "observation";
-  private static final List<String> INCLUDE_FIELDS = ImmutableList.of("ssm.gene.consequence", "ssm.observation");
+  private static final List<String> INCLUDE_FIELDS =
+      ImmutableList.of("ssm.gene.consequence", "ssm.observation", "ssm.gene");
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "chromosome",
       "donor.primarySite",
@@ -52,7 +53,10 @@ public class ObservationCentricTypeModel extends TypeModel {
       "mutationId",
       "observation",
       "projectId",
-      "start");
+      "start",
+      "gene.id",
+      "mutation.consequenceType",
+      "gene");
 
   public ObservationCentricTypeModel() {
     super(defineFields(), defineInternalAliases(), PUBLIC_FIELDS, INCLUDE_FIELDS);
@@ -112,7 +116,7 @@ public class ObservationCentricTypeModel extends TypeModel {
   }
 
   private static ArrayFieldModel defineSsmGene() {
-    return nestedArrayOfObjects("gene", object(
+    return nestedArrayOfObjects("gene", "gene", object(
         identifiableString("_gene_id", "gene.id"),
         string("biotype", "gene.type"),
         arrayOfStrings("pathway", "gene.pathwayId"),
@@ -126,9 +130,7 @@ public class ObservationCentricTypeModel extends TypeModel {
             arrayOfStrings("molecular_function")),
         nestedArrayOfObjects("consequence", "consequences", object(
             string("consequence_type", "mutation.consequenceType"),
-            string("functional_impact_prediction_summary", "mutation.functionalImpact")
-            ))
-        ));
+            string("functional_impact_prediction_summary", "mutation.functionalImpact")))));
   }
 
   private static ObjectFieldModel defineProject() {

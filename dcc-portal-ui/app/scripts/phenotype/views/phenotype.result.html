@@ -50,8 +50,9 @@
                         data-ng-repeat="donorSetId in setIds"
                     >
                         <div>
-                            <div style="color:{{seriesColours[$index]}}">
-                                {{setMap[donorSetId].name}}
+                            <div>
+                                <span style="color:{{seriesColours[$index]}}">{{setMap[donorSetId].name}}</span>
+                                <sub>( S{{($index + 1)}} )</sub>
                             </div>
                             <small>
                                 Donor count: {{setMap[setIds[$index]].count | number}}
@@ -133,8 +134,16 @@
             </tbody>
         </table>
                 </div>
-                <div ng-show="intersectionsExist" class="col-md-3">
-                    <div class="mini-venn-canvas"></div>
+                <div
+                    ng-show="intersectionsExist &&
+                        (survivalAnalysisDataSets.overall.length > 2 ||
+                        survivalAnalysisDataSets.overall.length < 4 ) "
+                    class="col-md-3"
+                >
+                    <div
+                        class="mini-venn-canvas"
+                        ng-class="{ 'only-two': survivalAnalysisDataSets.overall.length === 2 }"
+                    ></div>
                 </div>
             </div>
         </div>

@@ -67,6 +67,7 @@
     "lineD3":false,
     "barChartAltD3":false,
     "groupedBarD3":false,
-    "histogramD3VCF":false
+    "histogramD3VCF":false,
+    "OncoGrid": false
   }
 }
