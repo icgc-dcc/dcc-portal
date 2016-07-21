@@ -159,7 +159,7 @@
       _addFilters(pathway);
       _selectedPathway = pathway;
 
-      PathwayDataService.getPathwayData(pathway)
+      PathwayDataService.getPathwayData(pathway.geneSetId, pathway.geneSetOverlapFilters)
         .then(function (pathwayData) {
           $scope.geneSet = pathwayData.geneSet;
           $scope.pathway = {

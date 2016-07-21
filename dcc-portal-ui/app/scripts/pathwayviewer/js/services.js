@@ -745,7 +745,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           var nodes = model.getNodesByReactomeId(id);
 
           nodes.forEach(function (node) {
-            console.warn('Overlap found for node: ', node);
+            //console.warn('Overlap found for node: ', node);
 
             var svgNode = svg.selectAll('.entity'+node.id);
 
@@ -1105,7 +1105,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
             reactomeId: _getIDForType(type),
             text:{content:type,position:{x:x,y:y}}
           };
-          console.log(node);
+          //console.log(node);
           if (type === overlappedNodeText) {
             node.size.height += 10;
           }
@@ -1312,8 +1312,12 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       });
       return pathwayDrugHighlights;
     };
-    _pathwayDataService.getGeneListData = function (pathway) {
-      return Restangular.one('genes').get({filters: pathway.geneSetOverlapFilters}).then(function (geneListData) {
+    _pathwayDataService.getGeneListData = function (geneSetOverlapFilters) {
+      if (!geneSetOverlapFilters) {
+        return $q.resolve;
+      }
+
+      return Restangular.one('genes').get({filters: geneSetOverlapFilters}).then(function (geneListData) {
         return geneListData;
       });
     };
@@ -1344,6 +1348,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       var uniprotIds = _.map(highlightData.highlights, 'uniprotId');
       return GeneSetVerificationService.verify(uniprotIds.join(',')).then(function (data) {
         var annotatedHighlights = [];
+
         _.forEach(highlightData.highlights, function (highlight) {
           var annotatedHighlight = Object.assign({}, highlight);
           var geneKey = 'external_db_ids.uniprotkb_swissprot';
@@ -1372,31 +1377,34 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       });
     };
     _pathwayDataService.getGeneOverlapExistsHashUsingDbIds = function (geneOverlapExistsHash, annotatedHighlights) {
-      var geneOverlapExistsHashUsingDbIds = Object.assign({}, geneOverlapExistsHash);
       var geneCount = 0;
-      _.forEach(annotatedHighlights, function (annotatedHighlight) {
-        if (angular.isDefined(geneOverlapExistsHashUsingDbIds[annotatedHighlight.uniprotId])) {
-          geneCount++;
+      var geneOverlapExistsHashUsingDbIds = Object.assign({}, geneOverlapExistsHash);
 
-          _.forEach(annotatedHighlight.dbIds, function (dbID) {
-            // Swap in Reactome keys but maintain the id we use this to determine overlaps in O(1)
-            // later... The dbID is used as a reference to the reactome SVG nodes...
-            geneOverlapExistsHashUsingDbIds[dbID] = {
-              id: annotatedHighlight.uniprotId,
-              geneId: annotatedHighlight.geneId,
-              geneSymbol: annotatedHighlight.geneSymbol
-            };
-          });
-          delete geneOverlapExistsHashUsingDbIds[annotatedHighlight.uniprotId];
-        }
-      });
+      if (geneOverlapExistsHash && annotatedHighlights) {
+        _.forEach(annotatedHighlights, function (annotatedHighlight) {
+          if (angular.isDefined(geneOverlapExistsHashUsingDbIds[annotatedHighlight.uniprotId])) {
+            geneCount++;
+
+            _.forEach(annotatedHighlight.dbIds, function (dbID) {
+              // Swap in Reactome keys but maintain the id we use this to determine overlaps in O(1)
+              // later... The dbID is used as a reference to the reactome SVG nodes...
+              geneOverlapExistsHashUsingDbIds[dbID] = {
+                id: annotatedHighlight.uniprotId,
+                geneId: annotatedHighlight.geneId,
+                geneSymbol: annotatedHighlight.geneSymbol
+              };
+            });
+            delete geneOverlapExistsHashUsingDbIds[annotatedHighlight.uniprotId];
+          }
+        });
+      }
       console.log(geneCount + ' Overlapped genes validated! ');
       return geneOverlapExistsHashUsingDbIds;
     };
 
-    _pathwayDataService.getPathwayData = function (pathway) {
+    _pathwayDataService.getPathwayData = function (geneSetId, geneSetOverlapFilters) {
       var pathwayData = {};
-      return _pathwayDataService.getGeneSet(pathway.geneSetId)
+      return _pathwayDataService.getGeneSet(geneSetId)
       .then(function (geneSet) {
         pathwayData.geneSet = geneSet;
 
@@ -1417,7 +1425,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
         pathwayData.uiParentPathways = results[4];
 
         return $q.all([
-          _pathwayDataService.getGeneListData(pathway),
+          _pathwayDataService.getGeneListData(geneSetOverlapFilters),
           pathwayProteinMap,
           _pathwayDataService.getDrugs(entitySetId)
         ]);
@@ -1446,6 +1454,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
         pathwayData.overlaps = _pathwayDataService.getGeneOverlapExistsHashUsingDbIds(
           results[0], _.union(results[1], results[2])
         );
+
         pathwayData.mutationHighlights = results[1];
         pathwayData.drugHighlights = results[2];
 
