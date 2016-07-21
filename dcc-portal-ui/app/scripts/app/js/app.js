@@ -534,13 +534,7 @@
 
   module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, $compileProvider,
                           AngularyticsProvider, $httpProvider, RestangularProvider,
-                          markdownConverterProvider, localStorageServiceProvider, API,
-    copyPasteProvider) {
-
-    // Let copyPasteProvider know where the flash app for copying and pasting is
-    var copyPastePath = window.$ICGC_DEV_CONFIG ? null : 'bower_components/zeroclipboard/dist/ZeroClipboard.swf';
-    copyPasteProvider.zeroClipboardPath(copyPastePath);
-
+                          markdownConverterProvider, localStorageServiceProvider, API) {
 
     // Disables debugging information
     $compileProvider.debugInfoEnabled(false);
