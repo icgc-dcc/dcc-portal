@@ -194,11 +194,9 @@
       var data = params2JSON(type, params);
       var addSetSaving;
 
-
       if(! data.isTransient){
         addSetSaving = _service.savingToaster(data.name);
-      }
-      
+      }      
 
       promise = Restangular.one('entityset')
                 .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
@@ -217,6 +215,8 @@
         data.type = data.type.toLowerCase();
 
         setList.unshift(data);
+        _service.refreshList();
+
         localStorageService.set(LIST_ENTITY, setList);
         
         _service.saveSuccessToaster(data.name);
@@ -231,7 +231,9 @@
       var promise = null;
       var data = params2JSON(type, params);
 
-      
+      if(! data.isTransient){
+        addSetSaving = _service.savingToaster(data.name);
+      }
 
       promise = Restangular.one('entityset').one('external')
         .post(undefined, data, {}, {'Content-Type': 'application/json'});
@@ -251,6 +253,8 @@
         data.type = data.type.toLowerCase();
 
         setList.unshift(data);
+        _service.refreshList();
+
         localStorageService.set(LIST_ENTITY, setList);
 
         _service.saveSuccessToaster(data.name);
@@ -362,6 +366,10 @@
       var promise = null;
       var data = params2JSON(type, params, true);
 
+      if(! data.isTransient){
+        addSetSaving = _service.savingToaster(data.name);
+      }
+
       promise = Restangular.one('entityset')
                 .post('union', data, {async: 'false'}, {'Content-Type': 'application/json'});
 
@@ -370,11 +378,12 @@
           console.log('there is an error in creating derived set');
           return;
         }
-        var addSetSaving = _service.savingToaster(data.name);
 
         data.type = data.type.toLowerCase();
 
         setList.unshift(data);
+        _service.refreshList();
+
         localStorageService.set(LIST_ENTITY, setList);
 
         _service.saveSuccessToaster(data.name);
@@ -393,7 +402,7 @@
         // Grab the type (base advanced search router and corresponding filters)
         set.advType = ''; // default route is donors or just route is '/search';
         set.advFilters = filters;
-
+        
         if (['gene', 'mutation'].indexOf(set.type) !== -1) {
           // Grab the type (base advanced search router and corresponding filters)
           set.advType = set.type.charAt(0); // route is '/search' plus either '/g' or '/m'
