@@ -59,11 +59,30 @@ $faded: #e6dede;
     }
   }
 
+  .brush .extent {
+    stroke: #fff;
+    fill: $selection;
+    shape-rendering: crispEdges;
+    pointer-events: none;
+  }
+
 }
 
 .survival-analysis {
-
   position: relative;
+
+  .undo-button {
+    display: block;
+    color: $iconColor;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:hover {
+      transform: scale(1.1);
+    }
+    &.disabled {
+      visibility: hidden;
+    }
+  }
 
   .survival-graph {
     width: 100%;
@@ -82,7 +101,7 @@ $faded: #e6dede;
     display: flex;
     justify-content: center;
 
-    .set {
+    & > li {
       cursor: default;
       font-size: 11px;
       line-height: 1.7;
@@ -98,7 +117,7 @@ $faded: #e6dede;
       &.interactable {
         cursor: pointer;
       }
-      i {
+      .icon-check, .icon-check-empty {
         font-size: 9px;
         position: absolute;
         margin-left: -2px;

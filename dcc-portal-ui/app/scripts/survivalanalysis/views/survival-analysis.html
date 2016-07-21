@@ -1,5 +1,4 @@
 <div class="survival-analysis">
-
   <script type="text/template" class="survival-tip-template">
     <div>
       <strong><%= donor.id %></strong>
@@ -13,6 +12,13 @@
   </script>
 
   <ul class="legend">
+    <li>
+      <i
+        class="undo-button icon-undo"
+        ng-class="{disabled: !ctrl.canUndo()}"
+        ng-click="ctrl.handleClickUndo()"
+      ></i>
+    </li>
     <li
       class="set"
       ng-repeat="dataSet in ctrl.dataSets"

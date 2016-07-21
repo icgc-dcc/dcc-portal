@@ -48,6 +48,17 @@
     var axisWidth = outerWidth - margin.left - margin.right;
     var axisHeight = outerHeight - margin.top - margin.bottom;
 
+    var longestDuration = _.max(dataSets
+        .filter(function (data) {
+          return !_.includes(disabledDataSets, data) && data.donors.length;
+        })
+        .map(function (data) {
+          return data.donors.slice(-1)[0].time;
+        }));
+    
+    var xDomain = params.xDomain || [0, longestDuration];
+    var onDomainChange = params.onDomainChange;
+
     var x = d3.scale.linear()
       .range([0, axisWidth]);
 
@@ -66,26 +77,21 @@
       .attr('width', outerWidth)
       .attr('height', outerHeight);
 
-    var wrapper = svg.append('g')
+    var wrapperFragment = document.createDocumentFragment();
+
+    var wrapper = d3.select(wrapperFragment).append('svg:g')
+        .attr('class', 'wrapper')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var longestDuration = _.max(dataSets
-        .filter(function (data) {
-          return !_.includes(disabledDataSets, data) && data.donors.length;
-        })
-        .map(function (data) {
-          return data.donors.slice(-1)[0].time;
-        }));
-
-    x.domain([0, longestDuration]);
+    x.domain([xDomain[0], xDomain[1]]);
     y.domain([0, 1]);
 
     // Draw x axis
-    wrapper.append('g')
+    wrapper.append('svg:g')
       .attr('class', 'x axis')
       .attr('transform', 'translate( 0,' + axisHeight + ')')
       .call(xAxis)
-      .append('text')
+      .append('svg:text')
         .attr('class', 'axis-label')
         .attr('dy', 30)
         .attr('x', axisWidth / 2)
@@ -93,15 +99,42 @@
         .text(xAxisLabel);
 
     // Draw y axis
-    wrapper.append('g')
+    wrapper.append('svg:g')
       .attr('class', 'y axis')
       .call(yAxis)
-      .append('text')
+      .append('svg:text')
         .attr('class', 'axis-label')
         .attr('transform', 'rotate(-90)')
         .attr('y', -40)
         .attr('x', - (margin.top + axisHeight / 2))
         .text(yAxisLabel);
+    
+    function brushend() {
+      var extent = brush.extent();
+      svg.select('.brush').call(brush.clear());
+      if (extent[1] - extent[0] > 1) {
+        onDomainChange(extent);
+      }
+    }
+    var brush = d3.svg.brush()
+      .x(x)
+      .on('brushend', brushend);
+
+    wrapper.append('svg:g')
+      .attr('class', 'brush')
+      .call(brush)
+      .selectAll('rect')
+      .attr('height', axisHeight);
+
+    var maskName = 'mask_' + _.uniqueId();
+
+    svg.append('svg:clipPath')
+      .attr('id', maskName)
+      .append('svg:rect')
+        .attr('x', 0)
+        .attr('y', -10)
+        .attr('width', axisWidth)
+        .attr('height', axisHeight + margin.top);
 
     dataSets.forEach(function (data, i) {
       if (_.includes(disabledDataSets, data)) {
@@ -112,22 +145,31 @@
         .x(function(p) { return x(p.x); })
         .y(function(p) { return y(p.y); });
 
-      var setGroup = wrapper.append('g')
+      var setGroup = wrapper.append('svg:g')
         .attr('class', 'serie')
-        .attr('set-id', data.meta.id);
+        .attr('set-id', data.meta.id)
+        .attr('clip-path', 'url(' + window.location.href + '#' + maskName + ')');
 
       var setColor = palette[i % palette.length];
 
+ 
+      var donorsInRange = data.donors.filter(function (donor, i, arr) {
+        return _.inRange(donor.time, xDomain[0], xDomain[1] + 1) ||
+          ( arr[i - 1] && donor.time >= xDomain[1] && arr[i - 1].time <= xDomain[1] ) ||
+          ( arr[i + 1] && donor.time <= xDomain[0] && arr[i + 1].time >= xDomain[0] );
+      });
+
       // Draw the data as an svg path
-      setGroup.append('path')
-        .datum(data.donors.map(function (d) { return {x: d.time, y: d.survivalEstimate}; }))
+      setGroup.append('svg:path')
+        .datum(donorsInRange
+          .map(function (d) { return {x: d.time, y: d.survivalEstimate}; }))
         .attr('class', 'line')
         .attr('d', line)
         .attr('stroke', setColor);
 
       // Draw the data points as circles
       var markers = setGroup.selectAll('circle')
-        .data(data.donors)
+        .data(donorsInRange)
         .enter();
 
       if (markerType === 'line') {
@@ -159,6 +201,8 @@
           onClickDonor(d3.event, d);
         });
     });
+    
+    svg.node().appendChild(wrapperFragment);
 
     return svg;
   }
@@ -171,19 +215,25 @@
       var graphContainer = $element.find('.survival-graph').get(0);
       var svg = d3.select(graphContainer).append('svg');
       var tipTemplate = _.template($element.find('.survival-tip-template').html());
+      var stateStack = [];
+      var state = {
+        xDomain: undefined,
+        disabledDataSets: undefined
+      };
 
-      var update = function () {
+      var update = function (params) {
         if (!ctrl.dataSets) {
           return;
         }
         svg.selectAll('*').remove();
-        renderChart({
+        renderChart(_.defaults({
           svg: svg, 
           container: graphContainer, 
           dataSets: ctrl.dataSets,
-          disabledDataSets: ctrl.disabledDataSets,
+          disabledDataSets: state.disabledDataSets,
           palette: ctrl.palette,
           markerType: 'line',
+          xDomain: state.xDomain,
           onMouseEnterDonor: function (event, donor) {
             $scope.$emit('tooltip::show', {
               element: event.target,
@@ -204,25 +254,49 @@
           },
           onClickDonor: function (e, donor) {
             window.open('/donors/'+donor.id, '_blank');
+          },
+          onDomainChange: function (newXDomain) {
+            $scope.$apply(function () {
+              updateState({xDomain: newXDomain});
+            });
           }
-        });
+        }, params));
+      };
+
+      var updateState = function (newState) {
+        stateStack = stateStack.concat(state);
+        state = _.extend({}, state, newState);
+        update();
       };
 
       window.addEventListener('resize', update);
       update();
 
-      this.isDataSetDisabled = function (dataSet) {
-        return _.includes(ctrl.disabledDataSets, dataSet);
+      this.canUndo = function () {
+        return stateStack.length > 1;
       };
 
-      this.toggleDataSet = function (dataSet) {
-        ctrl.disabledDataSets = _.xor(ctrl.disabledDataSets, [dataSet]);
-        ctrl.isDataSetDisabled(dataSet);
+      this.handleClickReset = function () {
+        updateState(stateStack[0]);
+        stateStack = [];
+      };
+
+      this.handleClickUndo = function () {
+        state = _.last(stateStack);
+        stateStack = _.without(stateStack, state);
         update();
       };
 
+      this.isDataSetDisabled = function (dataSet) {
+        return _.includes(state.disabledDataSets, dataSet);
+      };
+
+      this.toggleDataSet = function (dataSet) {
+        updateState({disabledDataSets: _.xor(state.disabledDataSets, [dataSet])});
+      };
+
       this.$onInit = function () {
-        ctrl.disabledDataSets = ctrl.initialDisabledDataSets;
+        updateState({disabledDataSets: ctrl.initialDisabledDataSets});
       };
 
       this.$onChanges = function (changes) {
