@@ -40,6 +40,18 @@
       <artifactId>jersey-servlet</artifactId>
       <version>${jersey.version}</version>
     </dependency>
+    
+  <!-- Jackson Datatypes -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-guava</artifactId>
+        <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+		<groupId>com.fasterxml.jackson.datatype</groupId>
+		<artifactId>jackson-datatype-jdk8</artifactId>
+		<version>${jackson.version}</version>
+	</dependency>
 
   <!-- DCC -->
     <dependency>
