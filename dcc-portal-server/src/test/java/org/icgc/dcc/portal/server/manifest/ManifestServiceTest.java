@@ -38,12 +38,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import javax.xml.stream.XMLInputFactory;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.IOUtils;
-import org.codehaus.staxmate.SMInputFactory;
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.manifest.model.Manifest;
 import org.icgc.dcc.portal.server.manifest.model.ManifestFormat;
@@ -78,7 +77,6 @@ import lombok.val;
  */
 public class ManifestServiceTest extends BaseElasticSearchTest {
 
-  private static final SMInputFactory XML_READER_FACTORY = new SMInputFactory(XMLInputFactory.newInstance());
   private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
   private static final ObjectNode EMPTY_FILTER = new FiltersParam("{}").get();
 
@@ -232,23 +230,18 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
 
   @SneakyThrows
   private static void validateXmlFile(File file) {
-    val xmlDom = XML_READER_FACTORY.rootElementCursor(file);
-    xmlDom.advance();
+    val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 
-    val resultCursor = xmlDom.childElementCursor("Result");
-    resultCursor.advance();
-
-    val testRecordId = resultCursor.getAttrValue("id");
+    val result = doc.getElementsByTagName("Result").item(0);
+    val testRecordId = result.getAttributes().getNamedItem("id").getTextContent();
     assertThat(testRecordId).isEqualTo("1");
 
-    val content = resultCursor.collectDescendantText();
+    val content = result.getTextContent();
     val testContent = FluentIterable.from(WHITESPACE.splitToList(content))
         .transform(value -> value.trim())
         .filter(value -> !isNullOrEmpty(value))
         .toList();
     assertThat(testContent).isEqualTo(ExpectedValues.CONTENT_FOR_XML);
-
-    xmlDom.getStreamReader().closeCompletely();
   }
 
   private static void validateTsvFile(File file) {

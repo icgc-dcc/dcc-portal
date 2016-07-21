@@ -18,11 +18,12 @@
 package org.icgc.dcc.portal.server.manifest.writer;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
-import static org.apache.commons.lang.time.DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT;
-import static org.apache.commons.lang.time.DateFormatUtils.formatUTC;
+import static java.time.ZoneOffset.UTC;
+import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 
 import java.io.OutputStream;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -54,7 +55,6 @@ public class GNOSManifestWriter {
   private static final String GNOS_FILE_SIZE = "filesize";
   private static final String GNOS_CHECK_SUM = "checksum";
 
-  private static final String DATE_FORMAT_PATTERN = ISO_DATETIME_TIME_ZONE_FORMAT.getPattern();
   private static final String FILE_ENCODING = UTF_8.name();
 
   @SneakyThrows
@@ -117,15 +117,15 @@ public class GNOSManifestWriter {
       throws XMLStreamException {
     for (val file : info) {
       writer.writeStartElement(GNOS_FILE);
-  
+
       addXmlElement(writer, GNOS_FILE_NAME, file.getName());
       addXmlElement(writer, GNOS_FILE_SIZE, file.getSize() + "");
-  
+
       writer.writeStartElement(GNOS_CHECK_SUM);
       writer.writeAttribute("type", "md5");
       writer.writeCharacters(file.getMd5sum());
       writer.writeEndElement();
-  
+
       writer.writeEndElement();
     }
   }
@@ -145,7 +145,8 @@ public class GNOSManifestWriter {
   }
 
   private static String formatToUtc(@NonNull Date timestamp) {
-    return formatUTC(timestamp, DATE_FORMAT_PATTERN);
+    val zdt = ZonedDateTime.ofInstant(timestamp.toInstant(), UTC);
+    return zdt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
   }
 
 }
