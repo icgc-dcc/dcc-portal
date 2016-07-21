@@ -64,7 +64,7 @@
                placeholder="{{ placeholder }}"
                data-types="{{ types }}"
                data-suggest="tags"/>
-        <i class="t_suggest__embedded t_suggest__embedded__right  icon-spin icon-spinner" data-ng-show='isBusy'></i>
+        <i class="t_suggest__embedded t_suggest__embedded__right  icon-spin icon-spinner" data-ng-if='isBusy'></i>
         <i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel"
            data-ng-click="query='';quick()" data-ng-show='query && !isBusy'></i>
     </li>
