@@ -25,10 +25,10 @@
          url: '/software',
          templateUrl: function() {
            var templateURL = '',
-               isSoftwarePageEnabled = PortalFeatureProvider.hasFeature('SOFTWARE_PAGE') !== false;
+             isSoftwarePageEnabled = PortalFeatureProvider.hasFeature('SOFTWARE_PAGE') !== false;
 
            if (isSoftwarePageEnabled) {
-              templateURL = 'scripts/software/views/software.html';
+             templateURL = 'scripts/software/views/software.html';
            }
 
            return templateURL;
@@ -38,15 +38,14 @@
    });
    
    module.controller('SoftwareController', function($scope, Page, Restangular) {
-	 var _ctrl = this;
 	 Page.stopWork();
      Page.setPage('entity');
      Page.setTitle('Software Downloads');
      $scope.icgcGet = {
-   		  artifactId:'icgc-get'
+   	   artifactId:'icgc-get'
      };
      $scope.icgcStorageClient = {
-      		  artifactId:'icgc-storage-client'
+       artifactId:'icgc-storage-client'
      };
 
      Restangular

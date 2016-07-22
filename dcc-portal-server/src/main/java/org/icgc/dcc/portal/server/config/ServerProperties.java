@@ -88,7 +88,7 @@ public class ServerProperties {
 
   @Valid
   @JsonProperty
-  SoftwareProperties soft = new SoftwareProperties();
+  SoftwareProperties software = new SoftwareProperties();
 
   @Valid
   @JsonProperty
@@ -365,7 +365,7 @@ public class ServerProperties {
     String repository = "dcc-release";
 
     @JsonProperty
-    String icgcRepository = "dcc-binaries"; 
+    String icgcRepository = "dcc-binaries";
 
     @JsonProperty
     String icgcArtifactId = "icgc-get";
@@ -375,6 +375,9 @@ public class ServerProperties {
 
     @JsonProperty
     String linuxClassifier = "linux_x64";
+
+    @JsonProperty
+    String mavenRepositoryUrl = "https://artifacts.oicr.on.ca/artifactory";
 
   }
 }

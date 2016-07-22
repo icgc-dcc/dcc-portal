@@ -164,6 +164,6 @@ public class ServerConfig {
 
   @Bean
   public SoftwareProperties softProperties() {
-    return properties().getSoft();
+    return properties().getSoftware();
   }
 }
