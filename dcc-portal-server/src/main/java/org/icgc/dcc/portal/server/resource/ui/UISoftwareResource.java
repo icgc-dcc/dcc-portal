@@ -68,7 +68,7 @@ public class UISoftwareResource extends Resource {
   @GET
   @Produces(APPLICATION_JSON)
   public List<MavenArtifactVersion> getArtifacts() {
-    val results = softwareService.getMavenVersions("icgc-storage-client");
+    val results = softwareService.getMavenVersions();
     return results;
   }
 
@@ -76,7 +76,7 @@ public class UISoftwareResource extends Resource {
   @GET
   @Produces(APPLICATION_JSON)
   public List<ArtifactFolder> getICGCGetArtifacts() {
-    val results = softwareService.getVersions("icgc-get");
+    val results = softwareService.getIcgcGetVersions();
     return results;
   }
 
@@ -100,7 +100,7 @@ public class UISoftwareResource extends Resource {
   @GET
   @SneakyThrows
   public Response getVersion(@PathParam("version") String version) {
-    URL redirect = new URL(softwareService.getVersionUrl(version, "icgc-storage-client"));
+    URL redirect = new URL(softwareService.getIcgcStorageClientVersionUrl(version));
     return Response.seeOther(redirect.toURI()).build();
   }
 
