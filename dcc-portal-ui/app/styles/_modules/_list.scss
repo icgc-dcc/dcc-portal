@@ -17,39 +17,59 @@
 
 .select-list {
   width: 100%;
-  padding: 0.25rem 0.5rem; 
-  border-radius:0.5rem; 
-  border:1px solid $greyLight;
-  overflow-y: scroll;
+  max-height: 42rem;
+  overflow-y: auto;
+  box-shadow: inset -2px 0px 2px 0px rgba(0,0,0,0.2);
 }
 
 .select-list-item {
   cursor: pointer;
-  padding: 0.50rem;
+  padding: 0.5rem;
+  padding-left: calc(0.5rem + 3px);
+  transition: all 0.2s ease;
+  border-bottom:1px solid $greyLighter;
+  position: relative;
+  transform: translateZ(0);
+  overflow: hidden;
 
-  &:nth-child(even) {
-    background: $greyLightest;
-  }
-
-  &:nth-child(odd) {
-    background: $greyLightestEver;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background-color: $mauve;
+    transform: translateY(100%);
+    transition: all 0.2s;
   }
 
   &:hover {
-    background: $cyan;
-    color: $white;
+    background-color: $selection;
   }
 
   &.active {
-    background: $blue;
-    color: $white;
+    box-shadow: -2px 2px 2px 0px rgba(0, 0, 0, 0.2);
+    background: $white;
+    color: $black;
+    &:before {
+      transform: translateY(0);
+    }
   }
 
   .select-list-cancel {
-    background: none;
-    border-radius: 0.25rem;
-    &:hover {
-      background: $red;
+    background: transparent;
+    color: $greyLight;
+
+    &:hover:before {
+      background-color: lighten($greyDark, 20%);
+      color: $white;
+    }
+
+    &:before {
+      padding: 0.15rem;
+      border-radius: 50%;
+      transition: all 0.2s;
     }
   }
 
