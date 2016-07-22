@@ -1,14 +1,11 @@
 <section class="analysis">
     <div class="sidepanel" data-ng-controller="AnalysisListController as ListController">
-        <div>
-           
-        </div>
 
-        <div class="select-list" style="margin-top: 0.5rem" data-ng-if="ListController.analysisList.length === 0">
+        <div class="select-list" data-ng-if="ListController.analysisList.length === 0">
         You have no saved analyses.
         </div>
 
-        <div class="select-list" style="margin-top: 0.5rem; max-height:40rem" data-ng-if="ListController.analysisList.length > 0">
+        <div class="select-list" data-ng-if="ListController.analysisList.length > 0">
             <div class="select-list-item"
                  data-ng-repeat="item in ListController.analysisList" 
                  data-ng-click="ListController.getAnalysis(item.id, item.type)"
@@ -42,14 +39,12 @@
             </div>
         </div>
 
-        <div>
-          <span class="pull-right"  style="margin-top: 0.5rem">
-            <button class="t_button t_button__destructive" data-ng-click="ListController.removeAllAnalyses()" 
+        <div class="pull-right" style="margin-top: 10px">
+          <button class="t_button t_button__destructive" data-ng-click="ListController.removeAllAnalyses()" 
                   data-ng-disabled="ListController.analysisList.length === 0"
                   data-tooltip="Delete All Analyses">
-                  <i class="icon-trash"></i> Delete all
-              </button>
-          </span>
+            <i class="icon-trash"></i> Delete all
+          </button>
         </div>        
     </div>
     
