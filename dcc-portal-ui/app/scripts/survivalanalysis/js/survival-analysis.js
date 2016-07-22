@@ -227,7 +227,7 @@
           document.fullscreenElement,
           document.webkitFullscreenElement,
           document.mozFullscreenElement
-          ], $element.get(0))
+          ], $element.get(0));
       };
 
       var update = function (params) {
