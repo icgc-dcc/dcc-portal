@@ -17,11 +17,11 @@
  */
 package org.icgc.dcc.portal.server.service;
 
-import static java.util.stream.Collectors.toList;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.icgc.dcc.portal.server.config.ServerProperties.SoftwareProperties;
 import org.springframework.stereotype.Service;
@@ -70,7 +70,7 @@ public class SoftwareService {
 
   public String getLatestICGCGetVersionUrl(String os) {
     val result = getIcgcGetVersions();
-    val versions = result.stream().map(ArtifactFolder::getUri).map(Version::new).collect(toList());
+    val versions = result.stream().map(ArtifactFolder::getUri).map(Version::new).collect(Collectors.toList());
     Version version = versions.stream().sorted().findFirst().orElse(null);
     return getICGCGetVersionUrl(version.get(), os);
   }
@@ -160,14 +160,6 @@ public class SoftwareService {
     return letters;
   }
 
-  public List<Version> makeVersions(List<String> strings) {
-    List<Version> results = new ArrayList<Version>();
-    for (String uri : strings) {
-      results.add(new Version(uri));
-    }
-    return results;
-  }
-
   public class Version implements Comparable<Version> {
 
     private String version;
@@ -177,8 +169,8 @@ public class SoftwareService {
     }
 
     public Version(String version) {
-      if (version == null) throw new IllegalArgumentException("Version can not be null");
-      if (!version.matches("/[0-9]+(\\.[0-9]+)*")) throw new IllegalArgumentException("Invalid version format");
+      checkState(version != null);
+      checkState(!version.matches("/[0-9]+(\\.[0-9]+)*"));
       this.version = version.substring(1);
     }
 
