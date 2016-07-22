@@ -264,7 +264,7 @@
     };
   });
 
-  module.service('FullScreenService', function() {
+  module.service('FullScreenService', function($rootScope) {
 
     var exitFullScreen = function() {
         if (document.exitFullscreen) {
@@ -285,6 +285,17 @@
             element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
         }
     };
+
+    function onFullScreenChange() {
+      // Digest cycle won't get auto-triggered when fullscreen mode exits natively
+      if(!$rootScope.$$phase) {
+        $rootScope.$apply();
+      }
+    }
+
+    document.addEventListener('fullscreenchange', onFullScreenChange, false);
+    document.addEventListener('webkitfullscreenchange', onFullScreenChange, false);
+    document.addEventListener('mozfullscreenchange', onFullScreenChange, false);
 
     return {
       exitFullScreen: exitFullScreen,
