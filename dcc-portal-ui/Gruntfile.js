@@ -517,6 +517,11 @@ module.exports = function (grunt) {
     'karma'
   ]);
 
+  grunt.registerTask('test-bower', [
+    'ICGC-setBuildEnv:production',
+    'bower-install',
+    ]);
+
   grunt.registerTask('build', [
     'ICGC-setBuildEnv:production',
     'clean:dist',
