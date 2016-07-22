@@ -176,6 +176,7 @@ def download_and_install(url):
         status = status + chr(8)*(len(status)+1)
         print status,
 
+    print "\n"
     jar_file.close()
 
     os.remove(lib_dir+name+'.jar')
