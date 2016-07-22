@@ -22,13 +22,14 @@ import argparse
 import os
 import sys
 import subprocess
-from urllib2 import urlopen, Request, HTTPError, URLError
+import httplib
+from urllib2 import urlopen, Request
 from xml.dom.minidom import parseString
 from datetime import datetime
 
 
 # Environmental configuration
-cache = ''
+cache = '' # Hostname and port of varnish, no protocol or trailing slash
 domain = 'dev.dcc.icgc.org'
 slack_url = 'https://hooks.slack.com/services/<!fill in>'
 
@@ -215,18 +216,25 @@ download_and_install(download_url)
 # Clear varnish cache
 if len(cache) > 0:
     log('Clearing Varnish Cache...')
-    cache_request = Request(cache)
+    conn = httplib.HTTPConnection(cache)
     try:
-        urlopen(cache_request)
-    except HTTPError as e:
-        log('Clearing Varnish Cache Failed with code: ' + e.code)
+        conn.request('BAN', '')
+    except httplib.HTTPException as e:
+        log('Clearing Varnish Cache Failed with a HTTPException')
         print 'The server could not clear the varnish cache.'
-        print 'Error code: ', e.code
-    except URLError as e:
-        log('Clearing Varnish Cache Failed with code: ' + e.code)
-        print 'The server could not reach varnish.'
-        print 'Error code: ', e.code
-
+        print str(e)
+    except Error as e:
+        log('General Exception occured, double check hostname.')
+        print 'General Exception occured, double check hostname and logs. '
+        print str(e)
+    finally:
+        status = conn.getresponse().status
+        if status != 200:
+            log('Failed to clear cache: ' + str(status))
+            print 'Failed to clear Cache: ' + str(status)
+        else: 
+            log('Cache Cleared: ' + str(status))
+            print 'Cache Cleared: ' + str(status)
 
 # Restart portal
 subprocess.call([bin_dir+name, 'restart'])
