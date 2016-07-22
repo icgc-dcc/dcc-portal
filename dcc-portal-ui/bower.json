@@ -59,7 +59,7 @@
     "angular-scenario": "1.4.11"
   },
   "resolutions": {
-    "angular": "1.5.7",
+    "angular": "~1.5.7",
     "lodash": "3.10.1"
   }
 }
