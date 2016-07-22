@@ -14,7 +14,7 @@
     "predev": "npm run checkhost",
     "dev": "grunt server",
     "dev:prodapi": "API_SOURCE=production npm run dev",
-    "test-bower": "rm -rf app/bower_components/ && rm -rf ~/.cache/bower/ && grunt test-bower --verbose && cat app/bower_components/angular/bower.json | grep version"
+    "test-bower": "rm -rf app/bower_components/ && rm -rf ~/.cache/bower/ && bower install -V 2>&1 | tee test-bower-$(date +%Y%m%d%H%M%S).txt && cat app/bower_components/angular/bower.json | grep version"
   },
   "devDependencies": {
     "autoprefixer": "6.3.7",
