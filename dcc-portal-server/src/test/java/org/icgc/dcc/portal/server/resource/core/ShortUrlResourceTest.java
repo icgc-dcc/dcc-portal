@@ -28,13 +28,13 @@ import org.icgc.dcc.portal.server.config.ServerProperties.WebProperties;
 import org.icgc.dcc.portal.server.jersey.mapper.NotFoundExceptionMapper;
 import org.icgc.dcc.portal.server.service.BadRequestException;
 import org.icgc.dcc.portal.server.service.ServiceUnavailableException;
+import org.icgc.dcc.portal.server.test.ResourceTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sun.jersey.api.client.ClientResponse;
-import org.icgc.dcc.portal.server.test.ResourceTest;
 
 import lombok.val;
 
@@ -57,7 +57,7 @@ public class ShortUrlResourceTest extends ResourceTest {
     val webConfig = new WebProperties();
     webConfig.setBaseUrl(BASE_URL);
 
-    shortUrlResource = new ShortUrlResource(shortURLClient, webConfig);
+    shortUrlResource = new ShortUrlResource(webConfig, shortURLClient);
     addResource(shortUrlResource);
     addProvider(NotFoundExceptionMapper.class);
   }

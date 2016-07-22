@@ -34,13 +34,13 @@ describe('Test SetService', function() {
     httpMock.when('GET', '/scripts/releases/views/home.html').respond({});
     httpMock.when('GET', '/scripts/releases/views/home-beta.html').respond({});
 
-    httpMock.when('POST', API.BASE_URL + '/entityset').respond({
+    httpMock.when('POST', API.BASE_URL + '/entityset?async=false').respond({
       id: 'uu-id-1',
       name: 'regular set',
       type: 'donor',
       count: 10
     });
-    httpMock.when('POST', API.BASE_URL + '/entityset/union').respond({
+    httpMock.when('POST', API.BASE_URL + '/entityset/union?async=false').respond({
       id: 'uu-id-2',
       name: 'derived set',
       type: 'donor',

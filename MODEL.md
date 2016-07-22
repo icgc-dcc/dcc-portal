@@ -73,7 +73,7 @@ child documents.
 
 Every `-centric` type must have a corresponding `TypeModel` class. For the `donor-centric` document type, we have 
 `DonorCentricTypeModel`. All the `TypeModel` classes are in the package `org.dcc.portal.pql.meta`. For more information
-about the `TypeModel` refer to the [PQL](../dcc-portal-pql/PQL.md) documentation.
+about the `TypeModel` refer to the [PQL](dcc-portal-pql/PQL.md) documentation.
 
 The results of these centric queries are used to populate the model classes that extend `Paginated`. 
 In the donors examples, the model class responsible is `org.icgc.dcc.portal.model.Donors`. 
@@ -87,9 +87,9 @@ from the ETL documentation.
 
 ## Additional Reading
  
-* [UI](../dcc-portal-ui/UI.md)
-* [Server](../dcc-portal-server/SERVER.md)
-* [PQL](../dcc-portal-pql/PQL.md)
+* [UI](dcc-portal-ui/UI.md)
+* [Server](dcc-portal-server/SERVER.md)
+* [PQL](dcc-portal-pql/PQL.md)
 
 ## Useful Links
 

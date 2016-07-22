@@ -19,7 +19,6 @@ package org.icgc.dcc.portal.server.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.eclipse.jetty.http.HttpStatus.NOT_FOUND_404;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_SET_PARAM;
@@ -162,7 +161,7 @@ public class GeneSetResource extends Resource {
   @GET
   @Timed
   @ApiOperation(value = "Find a gene set by id", notes = "If a gene set does not exist with the specified id an error will be returned", response = GeneSet.class)
-  @ApiResponses(value = { @ApiResponse(code = NOT_FOUND_404, message = "GeneSet not found") })
+  @ApiResponses(value = { @ApiResponse(code = 404, message = "GeneSet not found") })
   public GeneSet find(
       @ApiParam(value = "GeneSet ID", required = true) @PathParam("Id") String id,
       @ApiParam(value = "Select fields returned", allowMultiple = true) @QueryParam("field") List<String> fields) {

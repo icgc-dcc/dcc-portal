@@ -184,13 +184,15 @@
   });
 
   module.controller('ExternalFileDownloadController',
-    function ($scope, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params) {
+    function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
+      Extensions, params, Restangular) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
       $modalInstance.dismiss('cancel');
     };
+
+    $scope.filters = FilterService.filters;
 
     var p = {};
     p.size = 0;
@@ -228,14 +230,35 @@
           repos[repoName] = {};
         }
 
+        repos[repoName].repoName = repoName;
+        repos[repoName].repoCode = ExternalRepoService.getRepoCodeFromName(repoName);
         repos[repoName].fileSize = findRepoData(facets.repositorySizes.terms, repoName);
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
         repos[repoName].fileCount = term.count;
+        repos[repoName].hasManifest = _.includes(['AWS - Virginia', 'Collaboratory - Toronto'], repoName);
       });
 
-      $scope.repos = repos;
+      $scope.repos = _.values(repos);
       $scope.selectedRepos = Object.keys(repos);
     });
+
+
+    $scope.getRepoManifestUrl = ExternalRepoService.getRepoManifestUrl;
+
+    $scope.getRepoManifestShortUrl = function (repoData) {
+      var longUrl = $scope.getRepoManifestUrl({
+        repoCodes: [repoData.repoCode],
+        filters: FilterService.filters()
+      });
+
+      repoData.isGeneratingManifestShortUrl = true;
+
+      return Restangular.one('short', '').get({ url: longUrl, shouldUseParamsOnlyForRequest: true })
+        .then(function (response) {
+          repoData.isGeneratingManifestShortUrl = false;
+          repoData.shortUrl = response.plain().shortUrl;
+        });
+    };
 
     /**
      * Fixes the entitySet to the PQL compatible one if present.
@@ -261,7 +284,16 @@
     $scope.download = function() {
       if (_.isEmpty($scope.selectedFiles)) {
         var filters = cleanEntitySet(FilterService.filters());
-        ExternalRepoService.download(filters, $scope.selectedRepos);
+
+        var manifestUrl = $scope.getRepoManifestUrl({
+          repoCodes: _.map($scope.repos, 'repoCode'),
+          filters: filters,
+          format: 'tarball',
+          unique: true
+        });
+
+        $window.location.href = manifestUrl;
+
       } else {
         ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
       }
@@ -319,8 +351,6 @@
       });
     }
     refresh();
-
-    this.vcfIobio = PortalFeature.get('VCF_IOBIO');
 
     this.fileInfo = fileInfo;
     this.stringOrDefault = stringOrDefault;
@@ -438,7 +468,7 @@
     };
 
     this.buildManifestUrl = function (fileId, repos) {
-       return ExternalRepoService.getManifestUrl(fileId, repos);
+       return ExternalRepoService.getManifestUrlByFileIds(fileId, repos);
     };
 
     this.equalsIgnoringCase = equalsIgnoringCase;
@@ -504,8 +534,6 @@
     _ctrl.dataRepoTitle = dataRepoTitle;
     _ctrl.dataRepoFileUrl = RouteInfoService.get ('dataRepositoryFile').href;
     _ctrl.advancedSearchInfo = RouteInfoService.get ('advancedSearch');
-    _ctrl.fileSets = PortalFeature.get('FILE_SETS');
-    _ctrl.vcfIobio = PortalFeature.get('VCF_IOBIO');
     _ctrl.repoChartConfigOverrides = {
       chart: {
           type: 'column',
