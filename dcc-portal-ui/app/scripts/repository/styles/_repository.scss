@@ -44,9 +44,32 @@
 
     .modal-body {
       padding: 0;
+
+      .modal-info-wrapper {
+        display: flex;
+        margin-top: 15px;
+        .modal-info-figure {
+          flex-shrink: 0;
+          width: 25%;
+          max-width: 160px;
+          max-height: 120px;
+          align-self: center;
+        }
+        .modal-info {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin-left: 15px;
+          margin-right: 15px;
+        }
+        .modal-info-figure + .modal-info {
+          margin-left: 0;
+        }
+      }
+
       p {
         line-height: 1.5;
-        margin: 0.5em 15px;
+        margin: 0.5em 0;
       }
     }
 
