@@ -9,7 +9,7 @@ module.exports = function(config){
       // include relevant Angular files and libs
       'app/bower_components/jquery/dist/jquery.js',
       'app/bower_components/lodash/lodash.js',
-      'app/bower_components/angularjs/angular.js',
+      'app/bower_components/angular/angular.js',
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-animate/angular-animate.js',
       'app/bower_components/angular-cookies/angular-cookies.js',
