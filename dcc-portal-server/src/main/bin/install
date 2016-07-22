@@ -207,7 +207,9 @@ elif args.pullrequest:
     path = server+repo+artifact
     api_url = api_path+repo+artifact
     download_url = handle_pullrequest(path, api_url, args.pullrequest)
-
+else:
+    parser.print_help()
+    exit(0)
 
 log('Downloading JAR: ' + download_url)
 download_and_install(download_url)
