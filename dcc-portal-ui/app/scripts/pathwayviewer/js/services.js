@@ -1215,12 +1215,10 @@ angular.module('icgc.pathwayviewer.directives.services', [])
     };
   })
   .service('PathwayDataService', function ($q, Restangular, GeneSetHierarchy, GeneSetService, SetService,
-                                               CompoundsService, GeneSetVerificationService, LocationService) {
+                                           CompoundsService, GeneSetVerificationService, LocationService) {
     var _pathwayDataService = this;
     _pathwayDataService.getGeneSet = function (geneSetId) {
-       return Restangular.one('genesets').one(geneSetId).get().then(function (geneSet) {
-         return geneSet;
-       });
+      return Restangular.one('genesets').one(geneSetId).get();
     };
     _pathwayDataService.getUIParentPathways = function (geneSet) {
       return GeneSetHierarchy.uiPathwayHierarchy(geneSet.hierarchy, geneSet);
@@ -1232,25 +1230,17 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       return _pathwayDataService.getUIParentPathways(geneSet)[0].diagramId;
     };
     _pathwayDataService.getPathwayXML = function (geneSet) {
-      return GeneSetService.getPathwayXML(_pathwayDataService.getPathwayId(geneSet)).then(function (pathwayXML) {
-        return pathwayXML;
-      });
+      return GeneSetService.getPathwayXML(_pathwayDataService.getPathwayId(geneSet));
     };
     _pathwayDataService.getPathwayZoom = function (geneSet) {
       if (_pathwayDataService.getParentPathwayId(geneSet) === _pathwayDataService.getPathwayId(geneSet)) {
         return $q.resolve;
       }
  
-     return GeneSetService.getPathwayZoom(_pathwayDataService.getParentPathwayId(geneSet))
-       .then(function (pathwayZoom) {
-         return pathwayZoom;
-       });
+      return GeneSetService.getPathwayZoom(_pathwayDataService.getParentPathwayId(geneSet));
     };
     _pathwayDataService.getPathwayProteinMap = function (geneSet) {
-    return GeneSetService.getPathwayProteinMap(_pathwayDataService.getParentPathwayId(geneSet), [])
-      .then(function (pathwayProteinMap) {
-        return pathwayProteinMap;
-      });
+      return GeneSetService.getPathwayProteinMap(_pathwayDataService.getParentPathwayId(geneSet), []);
     };
     _pathwayDataService.getEntitySetId = function (geneSet) {
       return SetService.getTransientSet('GENE', {
@@ -1265,9 +1255,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       });
     };
     _pathwayDataService.getDrugs = function (entitySetId) {
-      return CompoundsService.getCompoundsFromEntitySetId(entitySetId).then(function(drugs) {  
-        return drugs;
-      });
+      return CompoundsService.getCompoundsFromEntitySetId(entitySetId);
     };
     _pathwayDataService.getMutationHighlights = function (pathwayProteinMap) {
       var pathwayMutationHighlights = [];
@@ -1299,7 +1287,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           });
         });
       });
-       
+
       var pathwayDrugHighlights = [];
       _.forEach(pathwayProteinMap,function(value,id) {
         if(value && value.dbIds && drugMap[id]) {
@@ -1317,9 +1305,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
         return $q.resolve;
       }
 
-      return Restangular.one('genes').get({filters: geneSetOverlapFilters}).then(function (geneListData) {
-        return geneListData;
-      });
+      return Restangular.one('genes').get({filters: geneSetOverlapFilters});
     };
     _pathwayDataService.getGeneOverlapExistsHash = function (geneListData) {
       if (!_.get(geneListData, 'hits[0]')) {
@@ -1408,55 +1394,46 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       .then(function (geneSet) {
         pathwayData.geneSet = geneSet;
 
-        return $q.all([
-          _pathwayDataService.getPathwayProteinMap(geneSet),
-          _pathwayDataService.getEntitySetId(geneSet),
-          _pathwayDataService.getPathwayXML(geneSet),
-          _pathwayDataService.getPathwayZoom(geneSet),
-          _pathwayDataService.getUIParentPathways(geneSet)
-        ]);
+        return $q.all({
+          pathwayProteinMap: _pathwayDataService.getPathwayProteinMap(geneSet),
+          entitySetId: _pathwayDataService.getEntitySetId(geneSet),
+          pathwayXML: _pathwayDataService.getPathwayXML(geneSet),
+          zoomSet: _pathwayDataService.getPathwayZoom(geneSet),
+          uiParentPathways: _pathwayDataService.getUIParentPathways(geneSet)
+        });
       })
       .then(function (results) {
-        var pathwayProteinMap = results[0];
-        var entitySetId = results[1];
+        pathwayData.xml = results.pathwayXML;
+        pathwayData.zooms = results.zoomSet;
+        pathwayData.uiParentPathways = results.uiParentPathways;
 
-        pathwayData.xml = results[2];
-        pathwayData.zooms = results[3];
-        pathwayData.uiParentPathways = results[4];
-
-        return $q.all([
-          _pathwayDataService.getGeneListData(geneSetOverlapFilters),
-          pathwayProteinMap,
-          _pathwayDataService.getDrugs(entitySetId)
-        ]);
+        return $q.all({
+          geneListData: _pathwayDataService.getGeneListData(geneSetOverlapFilters),
+          pathwayProteinMap: results.pathwayProteinMap,
+          drugs: _pathwayDataService.getDrugs(results.entitySetId)
+        });
       })
       .then(function (results) {
-        var geneListData = results[0];
-        var pathwayProteinMap = results[1];
-        var drugs = results[2];
-
-        var mutationHighlights = _pathwayDataService.getMutationHighlights(pathwayProteinMap);
-        var drugHighlights = _pathwayDataService.getDrugHighlights(drugs, pathwayProteinMap);
-
-        return $q.all([
-          _pathwayDataService.getGeneOverlapExistsHash(geneListData),
-          _pathwayDataService.getGeneAnnotatedHighlights({
-            highlights: mutationHighlights,
+        return $q.all({
+          geneOverlapExistsHash: _pathwayDataService.getGeneOverlapExistsHash(results.geneListData),
+          annotatedMutationHighlights: _pathwayDataService.getGeneAnnotatedHighlights({
+            highlights: _pathwayDataService.getMutationHighlights(results.pathwayProteinMap),
             includeAdvQuery: true
           }),
-          _pathwayDataService.getGeneAnnotatedHighlights({
-            highlights: drugHighlights,
+          annotatedDrugHighlights: _pathwayDataService.getGeneAnnotatedHighlights({
+            highlights: _pathwayDataService.getDrugHighlights(results.drugs, results.pathwayProteinMap),
             includeAdvQuery: false
           })
-        ]);
+        });
       })
       .then(function (results) {
         pathwayData.overlaps = _pathwayDataService.getGeneOverlapExistsHashUsingDbIds(
-          results[0], _.union(results[1], results[2])
+          results.geneOverlapExistsHash,
+          _.union(results.annotatedMutationHighlights, results.annotatedDrugHighlights)
         );
 
-        pathwayData.mutationHighlights = results[1];
-        pathwayData.drugHighlights = results[2];
+        pathwayData.mutationHighlights = results.annotatedMutationHighlights;
+        pathwayData.drugHighlights = results.annotatedDrugHighlights;
 
         pathwayData.geneSet.showPathway = true;
           

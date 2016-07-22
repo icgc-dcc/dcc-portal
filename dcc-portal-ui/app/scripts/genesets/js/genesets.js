@@ -32,8 +32,8 @@
           return GeneSets.one($stateParams.id).get().then(function (geneSet) {
 
                 return geneSet;
-            });            
-          }]     
+            });
+          }]
         }
       });
   });
@@ -51,10 +51,8 @@
 
 
       var _ctrl = this, 
-          geneSetFilter = {}; // Build adv query based on type
-          
-          
-                 
+      geneSetFilter = {}; // Build adv query based on type
+
       Page.setTitle(geneSet.id);
       Page.setPage('entity');
 
@@ -63,9 +61,6 @@
       geneSetFilter[_ctrl.geneSet.queryType] = {is:[_ctrl.geneSet.id]};
 
       _ctrl.ExternalLinks = ExternalLinks;
-
-      
-      
 
       /**
        * Our function for keeping the page on the current section. 
@@ -186,12 +181,7 @@
 
           PathwayDataService.getPathwayData(geneSet.id, null)
             .then(function (pathwayData) {
-              _ctrl.pathway = {
-                xml: pathwayData.xml,
-                zooms: pathwayData.zooms,
-                mutationHighlights: pathwayData.mutationHighlights,
-                drugHighlights: pathwayData.drugHighlights
-              };
+              _ctrl.pathway = _.pick(pathwayData, 'xml', 'zooms', 'mutationHighlights', 'drugHighlights');
 
               // Wait before rendering legend, 
               // Same approach taken in the pathway viewer page. 

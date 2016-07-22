@@ -69,31 +69,30 @@
       $scope.analysis.isLoading = true;
 
       SetService.pollingResolveSetFactory(Id, 2000, 10)
-      	.setRetrievalEntityFunction(function () {
-        	return RestangularNoCache.one('analysis/enrichment', Id).get();
-      	})
+        .setRetrievalEntityFunction(function () {
+          return RestangularNoCache.one('analysis/enrichment', Id).get();
+        })
         .setResolvedEntityFunction(function (entityData) {
           return entityData.state.toUpperCase() === 'FINISHED';
         })
         .resolve()
-      	.then(function (entityData) {
+        .then(function (entityData) {
+          _initAnalysisScope(entityData);
 
-	        _initAnalysisScope(entityData);
-
-        	if (!_selectedPathway) {
+          if (!_selectedPathway) {
             return;
-        	}
+          }
 
-       	var _updateSelectedPathway = _.first(
-           _.filter(entityData.results, function (pathway) {
-            return pathway.geneSetId === _selectedPathway.geneSetId;
-          })
-        );
+          var _updateSelectedPathway = _.first(
+            _.filter(entityData.results, function (pathway) {
+              return pathway.geneSetId === _selectedPathway.geneSetId;
+            })
+          );
 
-        _.assign(_selectedPathway, _updateSelectedPathway);
-        $scope.analysis.isLoading = false;
+          _.assign(_selectedPathway, _updateSelectedPathway);
+          $scope.analysis.isLoading = false;
 
-      });
+        });
     }
 
     function _initAnalysisScope(entityRecords) {
@@ -162,13 +161,7 @@
       PathwayDataService.getPathwayData(pathway.geneSetId, pathway.geneSetOverlapFilters)
         .then(function (pathwayData) {
           $scope.geneSet = pathwayData.geneSet;
-          $scope.pathway = {
-            xml: pathwayData.xml,
-            zooms: pathwayData.zooms,
-            mutationHighlights: pathwayData.mutationHighlights,
-            drugHighlights: pathwayData.drugHighlights,
-            overlaps: pathwayData.overlaps
-          };
+          $scope.pathway = _.pick(pathwayData, 'xml', 'zooms', 'mutationHighlights', 'drugHighlights', 'overlaps');
           $scope.uiParentPathways = pathwayData.uiParentPathways;
 
           setTimeout(function () {
