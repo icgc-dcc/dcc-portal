@@ -20,20 +20,10 @@
 
   var module = angular.module('icgc.releases', ['icgc.portalfeature','icgc.releases.controllers', 'ui.router']);
 
-  module.config(function ($stateProvider, PortalFeatureProvider) {
+  module.config(function ($stateProvider) {
     $stateProvider.state('home', {
       url: '/',
-      templateUrl: function() {
-       
-        var _templateURL = '/scripts/releases/views/home.html',
-            isICGCCloudFunctionlityEnabled = PortalFeatureProvider.hasFeature('ICGC_CLOUD') !== false;
-       
-        if (isICGCCloudFunctionlityEnabled) {
-          _templateURL = '/scripts/releases/views/home-beta.html';
-        }
-
-        return _templateURL;
-      },
+      templateUrl: '/scripts/releases/views/home.html',
       controller: 'ReleaseCtrl as ReleaseCtrl',
       resolve: {
         release: ['Releases', function (Releases) {

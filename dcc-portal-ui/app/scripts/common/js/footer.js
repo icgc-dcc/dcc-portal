@@ -45,13 +45,7 @@
 
     $scope.portalFeature = PortalFeature;
 
-    $scope.stagedFeatures = {
-      getCloudLinks: function() {
-        if (PortalFeature.get('ICGC_CLOUD')) {
-          return cloudLinks;
-        }
-      }
-    };
+    $scope.stagedFeatures = cloudLinks;
   });
 
 })();

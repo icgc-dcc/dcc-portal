@@ -320,8 +320,6 @@
     }
     refresh();
 
-    this.vcfIobio = PortalFeature.get('VCF_IOBIO');
-
     this.fileInfo = fileInfo;
     this.stringOrDefault = stringOrDefault;
     this.isEmptyString = isEmptyString;
@@ -504,8 +502,6 @@
     _ctrl.dataRepoTitle = dataRepoTitle;
     _ctrl.dataRepoFileUrl = RouteInfoService.get ('dataRepositoryFile').href;
     _ctrl.advancedSearchInfo = RouteInfoService.get ('advancedSearch');
-    _ctrl.fileSets = PortalFeature.get('FILE_SETS');
-    _ctrl.vcfIobio = PortalFeature.get('VCF_IOBIO');
     _ctrl.repoChartConfigOverrides = {
       chart: {
           type: 'column',
