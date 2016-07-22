@@ -24,6 +24,7 @@ module.exports = function(config){
       'app/bower_components/angular-lodash/angular-lodash.js',
       'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'app/bower_components/angularjs-toaster/toaster.js',
+      'app/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js',
       'app/bower_components/zeroclipboard/dist/ZeroClipboard.js',
       'app/bower_components/highcharts/highcharts.js',
       'app/bower_components/highcharts/modules/no-data-to-display.src.js',
