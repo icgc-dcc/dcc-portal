@@ -44,12 +44,11 @@ public class SoftwareService {
    */
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
-  @NonNull
-  private final ServerProperties properties;
-
   /**
    * Configuration.
    */
+  @NonNull
+  private final ServerProperties properties;
 
   @SneakyThrows
   public List<ArtifactFolder> getIcgcGetVersions() {

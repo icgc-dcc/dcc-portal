@@ -88,7 +88,8 @@
     .provider('PortalFeature', function() {
 
        var _enabledFeatures = {
-          AUTH_TOKEN: true
+          AUTH_TOKEN: true,
+          ICGC_GET: false
        };
 
       this.hasFeature = function(featureID) {

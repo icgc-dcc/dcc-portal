@@ -28,10 +28,12 @@
       });
    });
    
-   module.controller('SoftwareController', function($scope, Page, Restangular) {
+   module.controller('SoftwareController', function($scope, Page, Restangular, PortalFeature, Auth) {
 	 Page.stopWork();
      Page.setPage('entity');
      Page.setTitle('Software Downloads');
+     $scope.showIcgcGet = PortalFeature.get('ICGC_GET');
+     $scope.user = Auth.getUser();
      $scope.icgcGet = {
    	   artifactId:'icgc-get'
      };
