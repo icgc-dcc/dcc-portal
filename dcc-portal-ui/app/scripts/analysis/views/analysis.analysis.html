@@ -10,31 +10,32 @@
                  data-ng-repeat="item in ListController.analysisList" 
                  data-ng-click="ListController.getAnalysis(item.id, item.type)"
                  data-ng-class="{active:  item.id === analysisId}">
-               <span>
+               <span class="select-list-item-detail">
                   <i
                     class="icon-cancel pull-right select-list-cancel"
                     data-ng-click="$event.stopPropagation(); ListController.remove(item.id, analysisId);"
                     data-tooltip="Delete Analysis"
                     data-tooltip-placement="right">
                   </i>
-                   {{ ListController.analysisName(item.type) }}
-                   <br>
-                   <small data-ng-if="item.type === 'enrichment'" class="t_suggest_detail">
-                       {{item.universe | universe}} - {{item.maxGeneCount | number}} {{item.maxGeneCount !== 1? "genes": "gene" }}
-                   </small>
-                   <small data-ng-if="item.type === 'set'" class="t_suggest_detail">
-                       {{item.dataType | readable}} - {{item.inputSetCount}} sets
-                   </small>
-                   <small data-ng-if="item.type === 'phenotype'" class="t_suggest_detail">
-                   Donor - {{item.inputSetCount}} sets
-                   </small>
-                   <small data-ng-if="item.type === 'oncogrid'" class="t_suggest_detail">
-                       {{item.donorCount}} Donors & {{item.geneCount}} Genes
-                   </small>
-                    <small class="pull-right t_suggest_detail"> 
-                      {{item.timestamp | date:"yyyy-MM-dd"}}
-                   </small>
-                   
+                  <span>{{ ListController.analysisName(item.type) }}</span>
+                  <br>
+                  
+                  <small data-ng-if="item.type === 'enrichment'" class="t_suggest_detail">
+                    {{item.universe | universe}} - {{item.maxGeneCount | number}} {{item.maxGeneCount !== 1? "genes": "gene" }}
+                  </small>
+                  <small data-ng-if="item.type === 'set'" class="t_suggest_detail">
+                    {{item.dataType | readable}} - {{item.inputSetCount}} sets
+                  </small>
+                  <small data-ng-if="item.type === 'phenotype'" class="t_suggest_detail">
+                    Donor - {{item.inputSetCount}} sets
+                  </small>
+                  <small data-ng-if="item.type === 'oncogrid'" class="t_suggest_detail">
+                    {{item.donorCount}} Donors & {{item.geneCount}} Genes
+                  </small>
+                  <br>
+                  <small class="pull-left t_suggest_detail list-item-date"> 
+                    {{item.timestamp | date:"yyyy-MM-dd"}}
+                  </small>
                </span>
             </div>
         </div>
@@ -50,7 +51,7 @@
     
 
     <div class="content ng-cloak analysis-content">
-        <div style="margin: 0rem 0rem" data-ng-if="analysisId">
+        <div style="padding: 2rem 1rem" data-ng-if="analysisId">
             <div data-ng-if="analysisType === 'enrichment'" >
                 <div data-ng-if="!error">
                     <enrichment-result data-item="analysisResult"></enrichment-result>

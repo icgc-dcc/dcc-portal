@@ -19,7 +19,7 @@
   width: 100%;
   max-height: 42rem;
   overflow-y: auto;
-  box-shadow: inset -2px 0px 2px 0px rgba(0,0,0,0.2);
+  box-shadow: inset -2px 0px 0px 0px rgba(0,0,0,0.2);
 }
 
 .select-list-item {
@@ -57,18 +57,27 @@
     }
   }
 
+  .select-list-item-detail{
+    display: block;
+    line-height: 20px;
+
+    .list-item-date{
+      color: $grey;
+    }
+  }
+
   .select-list-cancel {
     background: transparent;
     color: $greyLight;
 
     &:hover:before {
-      background-color: lighten($greyDark, 20%);
+      background-color: $red;
       color: $white;
     }
 
     &:before {
       padding: 0.15rem;
-      border-radius: 50%;
+      border-radius: 25%;
       transition: all 0.2s;
     }
   }
