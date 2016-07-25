@@ -1272,21 +1272,20 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       return pathwayMutationHighlights;
     };
     _pathwayDataService.getDrugHighlights = function (drugs, pathwayProteinMap) {
-      var drugMap = {};
-      _.forEach(drugs, function(drug) {
-        _.forEach(drug.genes, function(gene) {
-          var uniprotId = gene.uniprot;
-
-          if (_.isUndefined(drugMap[uniprotId])) {
-              drugMap[uniprotId] = [];
-          }
-
-          drugMap[uniprotId].push({
-            'zincId': drug.zincId,
-            'name': drug.name
+      var drugMap = _(drugs)
+        .map(function (drug) {
+          return drug.genes.map (function (gene) {
+            return {
+              uniprot: gene.uniprot,
+              zincId: drug.zincId,
+              name: drug.name
+            };
           });
-        });
-      });
+        })
+        .flatten()
+        .groupBy('uniprot')
+        .value();
+
 
       var pathwayDrugHighlights = [];
       _.forEach(pathwayProteinMap,function(value,id) {
