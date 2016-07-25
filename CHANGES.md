@@ -9,7 +9,12 @@ Change log for the DCC Data Portal
   - Add option to use prod API for UI dev
   - Removed `dropdown.js`
   - `dcc-portal-server` pom.xml cleansing and refactoring
-  - DCC-4996: Analysis tab refresh bug
+  - DCC-4996: Analysis tab now shows Saved Sets immediately
+  - Removed Publication section from Cancer projects
+  - Updated Analysis result side panel's styling
+  - Added "zoom", "undo" and "fullscreen" features to survival analysis graphs
+  - Layout and feature updates for manifest download modal
+  - Changed bower dependency on `angularjs` to `angular`, fixes intermittent build errors.
   
 4.3.2
 --
