@@ -88,13 +88,13 @@
                <tbody id="get-versions">
                   <tr data-ng-repeat="v in icgcGetVersions">
                      <td>{{ v.uri }}</td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}{{ v.uri }}/osx">{{ icgcGet.artifactId }}-{{ v.uri }}-osx-dist.zip</a></td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}{{ v.uri }}/linux">{{ icgcGet.artifactId }}-{{ v.uri }}-linux-dist.zip.md5</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}{{ v.uri }}/osx">{{ icgcGet.artifactId }}-{{ v.uri.substring(1) }}-osx-dist.zip</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}{{ v.uri }}/linux">{{ icgcGet.artifactId }}-{{ v.uri.substring(1) }}-linux-dist.zip.md5</a></td>
                   </tr>
                </tbody>
             </table>
             <h3>Docker Images</h3>
-            <p>For Docker images, please visit our <a href="https://hub.docker.com/r/icgc/icgc-get/" target="_blank"><i class="icon-external-link"></i>Docker Hub repository.  This provides the necessary operating environment for ICGC get, and will be automatically downloaded by the tool if the docker daemon is running on your computer.</a>.</p>
+            <p>For Docker images, please visit our <a href="https://hub.docker.com/r/icgc/icgc-get/" target="_blank"><i class="icon-external-link"></i>Docker Hub repository.</a>  This provides the necessary operating environment for ICGC get, and will be automatically downloaded by the tool if the docker daemon is running on your computer.</p>
          </div>
       </section>
    </article>

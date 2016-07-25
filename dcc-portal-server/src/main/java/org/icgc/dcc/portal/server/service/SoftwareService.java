@@ -20,26 +20,32 @@ package org.icgc.dcc.portal.server.service;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.icgc.dcc.portal.server.config.ServerProperties.SoftwareProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SoftwareService {
 
   /**
    * Constants.
    */
   private static final ObjectMapper MAPPER = new ObjectMapper();
-  private static final SoftwareProperties config = new SoftwareProperties();
+
+  @NonNull
+  private final ServerProperties properties;
 
   /**
    * Configuration.
@@ -48,17 +54,24 @@ public class SoftwareService {
   @SneakyThrows
   public List<ArtifactFolder> getIcgcGetVersions() {
     String versionsUrl;
-    versionsUrl = config.getMavenRepositoryUrl() + "/api/storage/" + config.getIcgcRepository() + "/" +
-        config.getIcgcArtifactId();
+    versionsUrl = properties.getSoftware().getMavenRepositoryUrl() + "/api/storage/"
+        + properties.getSoftware().getIcgcRepository() + "/" + properties.getSoftware().getIcgcGroupId();
     val url = new URL(versionsUrl);
     val response = MAPPER.readValue(url, ArtifactFolderResults.class);
+    for (Iterator<ArtifactFolder> i = response.children.iterator(); i.hasNext();) {
+      ArtifactFolder child = i.next();
+      if (!child.folder) {
+        i.remove();
+      }
+    }
     return response.children;
   }
 
   @SneakyThrows
   public List<MavenArtifactVersion> getMavenVersions() {
-    val versionsUrl = config.getMavenRepositoryUrl() + "/api/search/versions?g=" + config.getGroupId() + "&a=" +
-        config.getArtifactId() + "&repos=" + config.getRepository();
+    val versionsUrl = properties.getSoftware().getMavenRepositoryUrl() + "/api/search/versions?g="
+        + properties.getSoftware().getGroupId() + "&a=" +
+        properties.getSoftware().getArtifactId() + "&repos=" + properties.getSoftware().getRepository();
     val url = new URL(versionsUrl);
     val response = MAPPER.readValue(url, MavenArtifactResults.class);
     return response.results;
@@ -68,12 +81,12 @@ public class SoftwareService {
     return getIcgcStorageClientVersionUrl("%5BRELEASE%5D");
   }
 
-  public String getLatestICGCGetVersionUrl(String os) {
+  public String getLatestIcgcGetVersionUrl(String os) {
     val result = getIcgcGetVersions();
-    val strings = result.stream().map(ArtifactFolder::getUri).collect(Collectors.toList());
-    val versions = strings.stream().map(Version::new).collect(Collectors.toList());
-    Version version = versions.stream().sorted().findFirst().orElse(null);
-    return getICGCGetVersionUrl(version.get(), os);
+    val uris = result.stream().map(ArtifactFolder::getUri);
+    val versions = uris.map(Version::new);
+    val latestVersion = versions.sorted().findFirst().orElse(null);
+    return getIcgcGetVersionUrl(latestVersion.get(), os);
   }
 
   public String getVersionChecksumUrl(String version) {
@@ -84,38 +97,40 @@ public class SoftwareService {
     return getIcgcStorageClientVersionUrl(version) + ".asc";
   }
 
-  public String getICGCGetVersionUrl(String version, String os) {
+  public String getIcgcGetVersionUrl(String version, String os) {
     String classifier;
     if (os.equals("linux")) {
-      classifier = config.getLinuxClassifier();
+      classifier = properties.getSoftware().getLinuxClassifier();
     } else {
-      classifier = config.getOsxClassifier();
+      classifier = properties.getSoftware().getOsxClassifier();
     }
-    return getRepositoryUrl(config.getIcgcArtifactId()) + "/" + config.getIcgcArtifactId() + "/" + version + "/"
-        + config.getIcgcArtifactId() + "_v" + version
+    return getRepositoryUrl(properties.getSoftware().getIcgcArtifactId()) + "/"
+        + properties.getSoftware().getIcgcArtifactId() + "/" + version + "/"
+        + properties.getSoftware().getIcgcArtifactId() + "_v" + version
         + "_" + classifier + ".zip";
   }
 
   public String getIcgcStorageClientVersionUrl(String version) {
-    val classifier = config.getClassifier();
-    return getGroupUrl() + "/" + config.getArtifactId() + "/" + version + "/" + config.getArtifactId() + "-" + version
+    val classifier = properties.getSoftware().getClassifier();
+    return getGroupUrl() + "/" + properties.getSoftware().getArtifactId() + "/" + version + "/"
+        + properties.getSoftware().getArtifactId() + "-" + version
         + "-"
         + classifier + ".tar.gz";
   }
 
   private String getGroupUrl() {
-    val groupId = config.getGroupId();
-    return getRepositoryUrl(config.getArtifactId()) + "/" + groupId.replaceAll("\\.", "/");
+    val groupId = properties.getSoftware().getGroupId();
+    return getRepositoryUrl(properties.getSoftware().getArtifactId()) + "/" + groupId.replaceAll("\\.", "/");
   }
 
   private String getRepositoryUrl(String artifactId) {
     String repository;
-    if (artifactId.equals(config.getIcgcArtifactId())) {
-      repository = config.getIcgcRepository();
+    if (artifactId.equals(properties.getSoftware().getIcgcArtifactId())) {
+      repository = properties.getSoftware().getIcgcRepository();
     } else {
-      repository = config.getRepository();
+      repository = properties.getSoftware().getRepository();
     }
-    return config.getMavenRepositoryUrl() + "/simple/" + repository;
+    return properties.getSoftware().getMavenRepositoryUrl() + "/simple/" + repository;
   }
 
   @Data
@@ -166,7 +181,6 @@ public class SoftwareService {
 
     public Version(String version) {
       checkState(version != null);
-      // checkState(!version.matches("/[0-9.]+"));
       this.version = version.substring(1);
     }
 

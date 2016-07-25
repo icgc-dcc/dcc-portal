@@ -75,7 +75,7 @@ public class UISoftwareResource extends Resource {
   @Path("/icgc-get/versions")
   @GET
   @Produces(APPLICATION_JSON)
-  public List<ArtifactFolder> getICGCGetArtifacts() {
+  public List<ArtifactFolder> getIcgcGetArtifacts() {
     val results = softwareService.getIcgcGetVersions();
     return results;
   }
@@ -92,7 +92,7 @@ public class UISoftwareResource extends Resource {
   @GET
   @SneakyThrows
   public Response getICGCGetLatest(@PathParam("os") String os) {
-    URL redirect = new URL(softwareService.getLatestICGCGetVersionUrl(os));
+    URL redirect = new URL(softwareService.getLatestIcgcGetVersionUrl(os));
     return Response.seeOther(redirect.toURI()).build();
   }
 
@@ -108,7 +108,7 @@ public class UISoftwareResource extends Resource {
   @GET
   @SneakyThrows
   public Response getICGCGetLinuxVersion(@PathParam("version") String version, @PathParam("os") String os) {
-    URL redirect = new URL(softwareService.getICGCGetVersionUrl(version, os));
+    URL redirect = new URL(softwareService.getIcgcGetVersionUrl(version, os));
     return Response.seeOther(redirect.toURI()).build();
   }
 

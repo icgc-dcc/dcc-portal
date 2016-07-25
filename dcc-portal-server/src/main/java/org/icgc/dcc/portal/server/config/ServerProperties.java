@@ -368,6 +368,9 @@ public class ServerProperties {
     String icgcRepository = "dcc-binaries";
 
     @JsonProperty
+    String icgcGroupId = "org/icgc";
+
+    @JsonProperty
     String icgcArtifactId = "icgc-get";
 
     @JsonProperty
