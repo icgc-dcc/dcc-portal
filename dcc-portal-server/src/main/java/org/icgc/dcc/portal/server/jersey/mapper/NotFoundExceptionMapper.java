@@ -20,7 +20,7 @@ import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.status;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static org.apache.commons.lang.StringUtils.capitalize;
+import static org.icgc.dcc.portal.server.util.Strings.capitalize;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;

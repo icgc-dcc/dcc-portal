@@ -88,11 +88,7 @@
     .provider('PortalFeature', function() {
 
        var _enabledFeatures = {
-          AUTH_TOKEN: true,
-          ICGC_CLOUD: true,
-          SOFTWARE_PAGE: true,
-          NOT_FACET: true,
-          VCF_IOBIO: false
+          AUTH_TOKEN: true
        };
 
       this.hasFeature = function(featureID) {

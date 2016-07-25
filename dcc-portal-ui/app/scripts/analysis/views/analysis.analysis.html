@@ -1,53 +1,57 @@
 <section class="analysis">
     <div class="sidepanel" data-ng-controller="AnalysisListController as ListController">
-        <div>
-            <button class="t_button t_button__destructive" data-ng-click="ListController.removeAllAnalyses()" 
-                data-ng-disabled="ListController.analysisList.length === 0"
-                data-tooltip="Delete All Analyses">
-                <i class="icon-trash"></i> Delete all
-            </button>
-        </div>
 
-        <div class="select-list" style="margin-top: 0.5rem" data-ng-if="ListController.analysisList.length === 0">
+        <div class="select-list" data-ng-if="ListController.analysisList.length === 0">
         You have no saved analyses.
         </div>
 
-        <div class="select-list" style="margin-top: 0.5rem; max-height:40rem" data-ng-if="ListController.analysisList.length > 0">
+        <div class="select-list" data-ng-if="ListController.analysisList.length > 0">
             <div class="select-list-item"
                  data-ng-repeat="item in ListController.analysisList" 
                  data-ng-click="ListController.getAnalysis(item.id, item.type)"
                  data-ng-class="{active:  item.id === analysisId}">
-               <span>
-                   {{ ListController.analysisName(item.type) }}
-                   <small class="pull-right t_suggest_detail"> 
-                      {{item.timestamp | date:"yyyy-MM-dd"}}
-                   </small><br>
-                   <small data-ng-if="item.type === 'enrichment'" class="t_suggest_detail">
-                       {{item.universe | universe}} - {{item.maxGeneCount | number}} {{item.maxGeneCount !== 1? "genes": "gene" }}
-                   </small>
-                   <small data-ng-if="item.type === 'set'" class="t_suggest_detail">
-                       {{item.dataType | readable}} - {{item.inputSetCount}} sets
-                   </small>
-                   <small data-ng-if="item.type === 'phenotype'" class="t_suggest_detail">
-                   Donor - {{item.inputSetCount}} sets
-                   </small>
-                   <small data-ng-if="item.type === 'oncogrid'" class="t_suggest_detail">
-                       {{item.donorCount}} Donors & {{item.geneCount}} Genes
-                   </small>
-                   <span class="" data-ng-click="$event.stopPropagation(); ListController.remove(item.id, analysisId);">
-                       <i class="icon-cancel pull-right select-list-cancel"
-                          data-tooltip="Delete Analysis"
-                          data-tooltip-placement="right">
-                       </i>
-                   </span>
+               <span class="select-list-item-detail">
+                  <i
+                    class="icon-cancel pull-right select-list-cancel"
+                    data-ng-click="$event.stopPropagation(); ListController.remove(item.id, analysisId);"
+                    data-tooltip="Delete Analysis"
+                    data-tooltip-placement="right">
+                  </i>
+                  <span>{{ ListController.analysisName(item.type) }}</span>
+                  <br>
+                  
+                  <small data-ng-if="item.type === 'enrichment'" class="t_suggest_detail">
+                    {{item.universe | universe}} - {{item.maxGeneCount | number}} {{item.maxGeneCount !== 1? "genes": "gene" }}
+                  </small>
+                  <small data-ng-if="item.type === 'set'" class="t_suggest_detail">
+                    {{item.dataType | readable}} - {{item.inputSetCount}} sets
+                  </small>
+                  <small data-ng-if="item.type === 'phenotype'" class="t_suggest_detail">
+                    Donor - {{item.inputSetCount}} sets
+                  </small>
+                  <small data-ng-if="item.type === 'oncogrid'" class="t_suggest_detail">
+                    {{item.donorCount}} Donors & {{item.geneCount}} Genes
+                  </small>
+                  <br>
+                  <small class="pull-left t_suggest_detail list-item-date"> 
+                    {{item.timestamp | date:"yyyy-MM-dd"}}
+                  </small>
                </span>
             </div>
         </div>
+
+        <div class="pull-right" style="margin-top: 10px">
+          <button class="t_button t_button__destructive" data-ng-click="ListController.removeAllAnalyses()" 
+                  data-ng-disabled="ListController.analysisList.length === 0"
+                  data-tooltip="Delete All Analyses">
+            <i class="icon-trash"></i> Delete all
+          </button>
+        </div>        
     </div>
     
 
     <div class="content ng-cloak analysis-content">
-        <div style="margin: 0rem 0rem" data-ng-if="analysisId">
+        <div style="padding: 2rem 1rem" data-ng-if="analysisId">
             <div data-ng-if="analysisType === 'enrichment'" >
                 <div data-ng-if="!error">
                     <enrichment-result data-item="analysisResult"></enrichment-result>

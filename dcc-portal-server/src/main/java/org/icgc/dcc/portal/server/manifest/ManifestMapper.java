@@ -18,7 +18,7 @@
 package org.icgc.dcc.portal.server.manifest;
 
 import static com.google.common.collect.Maps.uniqueIndex;
-import static org.apache.commons.lang.StringUtils.defaultString;
+import static org.icgc.dcc.portal.server.util.Strings.defaultString;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 

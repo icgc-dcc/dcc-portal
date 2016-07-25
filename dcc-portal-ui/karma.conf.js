@@ -9,7 +9,7 @@ module.exports = function(config){
       // include relevant Angular files and libs
       'app/bower_components/jquery/dist/jquery.js',
       'app/bower_components/lodash/lodash.js',
-      'app/bower_components/angularjs/angular.js',
+      'app/bower_components/angular/angular.js',
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-animate/angular-animate.js',
       'app/bower_components/angular-cookies/angular-cookies.js',
@@ -24,6 +24,7 @@ module.exports = function(config){
       'app/bower_components/angular-lodash/angular-lodash.js',
       'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'app/bower_components/angularjs-toaster/toaster.js',
+      'app/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js',
       'app/bower_components/zeroclipboard/dist/ZeroClipboard.js',
       'app/bower_components/highcharts/highcharts.js',
       'app/bower_components/highcharts/modules/no-data-to-display.src.js',

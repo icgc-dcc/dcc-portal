@@ -182,7 +182,6 @@
 
     var verifyPromise = null;
     var delay = 1000;
-    var syncResult;
 
     // Fields for searching by custom gene identifiers
     $scope.params = {};
@@ -199,14 +198,6 @@
 
     $scope.params.savedSets = SetService.getAllGeneSets();
     $scope.params.selectedSavedSet = -1;
-
-    syncResult = SetService.sync();
-    if (syncResult) {
-      syncResult.then(function() {
-        $scope.params.savedSets = SetService.getAllGeneSets();
-        $scope.params.selectedSavedSet = -1;
-      });
-    }
 
     // Output
     $scope.out = {};
