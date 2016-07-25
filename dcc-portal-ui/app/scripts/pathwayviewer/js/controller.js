@@ -44,7 +44,6 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
       this.rendererUtils = new RendererUtils();
       this.model = null;
 
-
       /*
        * Takes in an xml of the pathway diagram and a list of reactions to zoom in
        * on and highlight. The color of the reactions is set with config.subPathwayColor
@@ -148,7 +147,7 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
         this.renderer.renderReactionLabels(this.rendererUtils.generateReactionLabels(model.getReactions()));
 
         // Zoom in on the elements of interest if there are any
-        if(zoomedOnElements[0].length !== 0){
+        if(zoomedOnElements[0] && zoomedOnElements[0].length !== 0){
 
           var subPathwayReactions = _.filter(model.getReactions(),
             function(n){return _.contains(zoomedOnElements,n.reactomeId);});
@@ -239,8 +238,10 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
        *  [{id:123, value:10},{id:124, value:10},...]
        */
       ReactomePathway.prototype.highlight = function (rawMutationHighlights, rawDrugHighlights, overlaps) {
-         var nodesInPathway = this.nodesInPathway;
+        var nodesInPathway = this.nodesInPathway;
+
         _.keys(overlaps).forEach(function (dbId) {
+
             // Only highlight overlaps it if it's part of the pathway we're zooming in on
             // And only hide parts of it we are zooming in on a pathway
             if((nodesInPathway.length !== 0 && ! _.contains(nodesInPathway,dbId))){

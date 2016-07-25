@@ -288,7 +288,7 @@
     _service.getTransientSet = function(type, params) {
       var data = params2JSON(type, params);
       return Restangular.one('entityset')
-        .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});      
+        .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
     };
     
     function fixFilterForPQL (filters) {
