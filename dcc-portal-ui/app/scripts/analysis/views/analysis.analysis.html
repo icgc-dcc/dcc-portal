@@ -10,18 +10,16 @@
                  data-ng-repeat="item in ListController.analysisList" 
                  data-ng-click="ListController.getAnalysis(item.id, item.type)"
                  data-ng-class="{active:  item.id === analysisId}">
-               <span>
-                  <small class="pull-right t_suggest_detail"> 
-                    {{item.timestamp | date:"yyyy-MM-dd"}}
-                  </small>
-                  {{ ListController.analysisName(item.type) }}
-                  <br>
+               <span class="select-list-item-detail">
                   <i
                     class="icon-cancel pull-right select-list-cancel"
                     data-ng-click="$event.stopPropagation(); ListController.remove(item.id, analysisId);"
                     data-tooltip="Delete Analysis"
                     data-tooltip-placement="right">
                   </i>
+                  <span>{{ ListController.analysisName(item.type) }}</span>
+                  <br>
+                  
                   <small data-ng-if="item.type === 'enrichment'" class="t_suggest_detail">
                     {{item.universe | universe}} - {{item.maxGeneCount | number}} {{item.maxGeneCount !== 1? "genes": "gene" }}
                   </small>
@@ -33,6 +31,10 @@
                   </small>
                   <small data-ng-if="item.type === 'oncogrid'" class="t_suggest_detail">
                     {{item.donorCount}} Donors & {{item.geneCount}} Genes
+                  </small>
+                  <br>
+                  <small class="pull-left t_suggest_detail list-item-date"> 
+                    {{item.timestamp | date:"yyyy-MM-dd"}}
                   </small>
                </span>
             </div>

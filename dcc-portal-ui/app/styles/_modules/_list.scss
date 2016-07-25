@@ -57,18 +57,27 @@
     }
   }
 
+  .select-list-item-detail{
+    display: block;
+    line-height: 20px;
+
+    .list-item-date{
+      color: $grey;
+    }
+  }
+
   .select-list-cancel {
     background: transparent;
     color: $greyLight;
 
     &:hover:before {
-      background-color: lighten($greyDark, 20%);
+      background-color: $red;
       color: $white;
     }
 
     &:before {
       padding: 0.15rem;
-      border-radius: 50%;
+      border-radius: 25%;
       transition: all 0.2s;
     }
   }
