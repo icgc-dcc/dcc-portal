@@ -60,6 +60,7 @@
 
         $scope.survivalAnalysisDataSets = undefined;
         $scope.activeSurvivalGraph = 'overall';
+        $scope.setAnalysisId = undefined;
 
         function normalize() {
           // Normalize results: Sort by id, then sort by terms
@@ -130,6 +131,7 @@
               var setAnalysisData = responses[1].result;
               var setAnalysisId = responses[1].id;
               var vennData = SetOperationService.transform(setAnalysisData);
+              $scope.setAnalysisId = setAnalysisId;
 
               $scope.intersectionsExist = setAnalysisData.filter(function (data) {
                 return data.intersection.length > 1 && data.count > 0;

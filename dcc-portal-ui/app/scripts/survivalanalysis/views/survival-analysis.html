@@ -19,6 +19,10 @@
         ng-click="ctrl.handleClickUndo()"
       ></i>
     </li>
+    <li class="fullscreen-toggle">
+      <i ng-if="!ctrl.isFullScreen()" ng-click="ctrl.handleClickEnterFullScreen()" class="icon-resize-full"></i>
+      <i ng-if="ctrl.isFullScreen()" ng-click="ctrl.handleClickExitFullScreen()" class="icon-resize-small"></i>
+    </li>
     <li
       class="set"
       ng-repeat="dataSet in ctrl.dataSets"
@@ -38,6 +42,7 @@
       {{ dataSet.meta.name }}
     </li>
   </ul>
+
 
   <div class="survival-graph">
     

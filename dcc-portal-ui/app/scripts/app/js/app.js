@@ -32,10 +32,11 @@
           _developerLocalMode = _defaultDevConfiguration.DEVELOPER_LOCAL_MODE === true ? true : false;
 
       // API Base class
-      function API(version, localUIDevRun, host, port, context) {
+      function API(version, localUIDevRun, host, port, context, protocol) {
         var _version = version || 1,
-            _host = host || (localUIDevRun === true ? _defaultDevHost : null),
-            _port =  port || (localUIDevRun === true ? _defaultDevPort : null),
+            _protocol = protocol || window.location.protocol,
+            _host = host || (localUIDevRun === true ? _defaultDevHost : null) || window.location.hostname,
+            _port =  port || (localUIDevRun === true ? _defaultDevPort : null) || window.location.port,
             _context = context || '/api',
             _isDebugEnabled = false;
 
@@ -46,9 +47,7 @@
 
 
         this.getBasePathURL = function() {
-          return  (_host ? '//' + _host : '') +
-              (_port ? ':' + _port : '')  +
-              (_context + '/v' + _version);
+          return _protocol + '//' + _host + (_port ? ':' + _port : '') + (_context + '/v' + _version);
         };
 
         this.setDebugEnabled = function(isDebugEnabled) {
@@ -211,6 +210,7 @@
     'btford.markdown',
     'LocalStorageModule',
     'toaster',
+    'dndLists',
 
 
     // 3rd party
@@ -534,13 +534,7 @@
 
   module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, $compileProvider,
                           AngularyticsProvider, $httpProvider, RestangularProvider,
-                          markdownConverterProvider, localStorageServiceProvider, API,
-    copyPasteProvider) {
-
-    // Let copyPasteProvider know where the flash app for copying and pasting is
-    var copyPastePath = window.$ICGC_DEV_CONFIG ? null : 'bower_components/zeroclipboard/dist/ZeroClipboard.swf';
-    copyPasteProvider.zeroClipboardPath(copyPastePath);
-
+                          markdownConverterProvider, localStorageServiceProvider, API) {
 
     // Disables debugging information
     $compileProvider.debugInfoEnabled(false);

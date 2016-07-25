@@ -1,5 +1,5 @@
 .analysis {
-   display: table;
+   display: flex;
    width: 100%;
    padding:0px;
 
@@ -166,6 +166,7 @@
 
       &.analysis-content {
          width: 75%;
+         padding: 2rem 1rem;
       }
    }
 

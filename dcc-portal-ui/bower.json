@@ -27,7 +27,7 @@
     "tests"
   ],
   "dependencies": {
-    "angularjs": "1.5.7",
+    "angular": "1.5.7",
     "angular-sanitize": "1.4.11",
     "angular-animate": "1.4.11",
     "angular-cookies": "1.4.11",
@@ -52,13 +52,14 @@
     "lodash": "3.10.1",
     "angular-mocks": "1.4.11",
     "zeroclipboard": "2.2.0",
-    "bootstrap": "3.3.6"
+    "bootstrap": "3.3.6",
+    "angular-drag-and-drop-lists": "^1.4.0"
   },
   "devDependencies": {
     "angular-scenario": "1.4.11"
   },
   "resolutions": {
-    "angular": "1.5.7",
+    "angular": "~1.5.7",
     "lodash": "3.10.1"
   }
 }
