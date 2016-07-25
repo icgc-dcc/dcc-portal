@@ -23,9 +23,6 @@ import static org.dcc.portal.pql.es.visitor.aggs.MissingAggregationVisitor.MISSI
 
 import java.util.Map;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
@@ -35,11 +32,16 @@ import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.nested.ReverseNested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
+import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
 import org.icgc.dcc.portal.server.model.TermFacet;
 import org.icgc.dcc.portal.server.model.TermFacet.Term;
+import org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AggregationToFacetConverter {
@@ -102,8 +104,11 @@ public class AggregationToFacetConverter {
   private static long resolveDocCount(String aggName, Bucket bucket) {
     val aggregations = bucket.getAggregations();
     if (hasAggregations(aggregations)) {
+      if (aggName.equals(CustomAggregationKeys.REPO_SIZE)) {
+        InternalSum sumAgg = aggregations.get(CustomAggregationKeys.FILE_SIZE);
+        return (long) sumAgg.getValue();
+      }
       ReverseNested reverseNestedAggregation = aggregations.get(aggName);
-
       return reverseNestedAggregation.getDocCount();
     }
 

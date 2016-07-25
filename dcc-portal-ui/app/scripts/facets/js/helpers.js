@@ -114,15 +114,6 @@
       if (_.has(filters, [params.type, params.facet, which])) {
         filters[params.type][params.facet][into] = filters[params.type][params.facet][which];
         delete filters[params.type][params.facet][which];
-        if (params.facet === 'id') {
-          if (_.has(filters, [params.type, 'entitySetId', which])) {
-            filters[params.type].entitySetId[into] = filters[params.type].entitySetId[which];
-            delete filters[params.type].entitySetId[which];
-          }
-        }
-      } else if (_.has(filters, [params.type, 'entitySetId', which])) {
-        filters[params.type].entitySetId[into] = filters[params.type].entitySetId[which];
-        delete filters[params.type].entitySetId[which];
       } else if (params.type === 'go_term') {
         filters.gene[params.facet][into] = filters.gene[params.facet][which];
         delete filters.gene[params.facet][which];
@@ -309,7 +300,7 @@
 
       filters = FilterService.filters();
       if (params.facet === 'id') {
-        return _.has(filters, params.type+'.'+params.facet+'.not') || _.has(filters, params.type+'.entitySetId.not');
+        return _.has(filters, params.type+'.'+params.facet+'.not');
       } else if (params.type === 'go_term') {
         return _.has(filters, ['gene',params.facet,'not']);
       } else {

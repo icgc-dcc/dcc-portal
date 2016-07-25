@@ -92,8 +92,7 @@
     $scope.isNot = function(terms) {
       var currentFilters = LocationService.filters();
       if (terms.facet === 'id') {
-        return _.has(currentFilters, terms.type+'.'+terms.facet+'.not') || 
-          _.has(currentFilters, terms.type+'.entitySetId.not');
+        return _.has(currentFilters, terms.type+'.'+terms.facet+'.not');
       } else if (terms.type === 'go_term') {
         return _.has(currentFilters, ['gene',terms.facet,'not']);
       } else {

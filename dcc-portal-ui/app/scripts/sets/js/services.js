@@ -110,10 +110,7 @@
       var data = {};
       
       if (typeof derived === 'undefined' || !derived) {
-        
-        var fixedFilters = fixFilterForPQL(params.filters);
-        
-        data.filters = encodeURI(JSON.stringify(fixedFilters));
+        data.filters = encodeURI(JSON.stringify(params.filters));
         data.size = params.size || 0;
       }
       
@@ -275,23 +272,6 @@
       return Restangular.one('entityset')
         .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});      
     };
-    
-    function fixFilterForPQL (filters) {
-      var workingFilter = filters;
-      
-      var uuid =  _.get(workingFilter, 'file.entitySetId.is', 'missing');
-      
-      if (uuid !== 'missing') {
-        _.set(workingFilter, 'donor.id.is');
-        workingFilter.donor.id.is = [Extensions.ENTITY_PREFIX + uuid];
-        delete workingFilter.file.entitySetId;
-        
-        if (_.isEmpty(workingFilter.file)) {
-          delete workingFilter.file;
-        }
-      }
-      return workingFilter;
-    }
 
     _service.createForwardRepositorySet = function(type, params, forwardUrl) {
       Page.startWork();

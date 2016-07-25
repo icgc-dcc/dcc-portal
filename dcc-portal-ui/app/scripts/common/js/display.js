@@ -55,22 +55,22 @@
      * other donor IDs in the 'donorId' filter.
      */
     function adjustExternalFileFilters (filters, translations) {
-      var path = ['file', Extensions.ENTITY, 'is'];
-      var entitySetIds = _.get (filters, path, []);
+      var donorIdPath = 'file.donorId.is';
+      var entitySetIds = _.get (filters, donorIdPath, []);
 
-      if ((! _.isArray (entitySetIds)) || _.isEmpty (entitySetIds)) {
+      if (entitySetIds.length === 0) {
         return filters;
       }
 
       entitySetIds = _.map (entitySetIds, function (id) {
-        return translations [id] || id;
+        if (id.startsWith(Extensions.ENTITY_PREFIX)) {
+          return translations [id.substring(3)] || id;
+        } else {
+          return id;
+        }
       });
 
-      var donorIdPath = 'file.donorId.is';
-      var donorIds = _.get (filters, donorIdPath, []);
-
-      delete filters.file [Extensions.ENTITY];
-      return _.set (filters, donorIdPath, entitySetIds.concat (donorIds));
+      return _.set (filters, donorIdPath, entitySetIds);
     }
 
     /*

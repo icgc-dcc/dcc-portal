@@ -191,9 +191,12 @@
     }
 
     _srv.createFacetCharts = function (facets) {
+      var sorted = facets.repoName.terms.sort(function (a, b) {
+        return b.count - a.count;
+      });
       return {
         repositories: HighchartsService.bar({
-          hits: _.map(facets.repoName.terms, function (object) {
+          hits: _.map(sorted, function (object) {
             return {
               count: object.count,
               term: _shortenRepoName(object.term)

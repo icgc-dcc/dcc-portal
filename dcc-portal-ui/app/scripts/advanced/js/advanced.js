@@ -55,7 +55,7 @@ angular.module('icgc.advanced.controllers', [
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService,
               AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular,
-              RouteInfoService, FacetConstants) {
+              RouteInfoService, FacetConstants, Extensions) {
 
       var _controller = this,
           dataRepoRouteInfo = RouteInfoService.get ('dataRepositories'),
@@ -424,7 +424,7 @@ angular.module('icgc.advanced.controllers', [
         SetService.createEntitySet('donor', params)
           .then(function (set) {
             invariant(set.id, 'Response from SetService.createEntitySet did not include an id!');
-            var newFilter = JSON.stringify({file: {entitySetId: {is: [set.id]}}});
+            var newFilter = JSON.stringify({file: {donorId: {is: [Extensions.ENTITY_PREFIX + set.id]}}});
             LocationService.goToPath(dataRepoUrl, {filters: newFilter});
           });
       };

@@ -201,6 +201,7 @@
       }
       p.filters.file.id = {is: $scope.selectedFiles};
     }
+    p.include = 'facets';
 
     function findRepoData(list, term) {
       return _.find(list, function(t) { return t.term === term; }).count || 0;
@@ -216,7 +217,7 @@
 
       // Build the repo table
       var repos = {};
-      facets.repositoryNamesFiltered.terms.forEach(function(term) {
+      facets.repoName.terms.forEach(function(term) {
         var repoName = term.term;
 
         // Restrict to active repos if it is available
@@ -237,30 +238,9 @@
       $scope.selectedRepos = Object.keys(repos);
     });
 
-    /**
-     * Fixes the entitySet to the PQL compatible one if present.
-     */
-    function cleanEntitySet(oldFilter) {
-      var setId = _.get(oldFilter, 'file.entitySetId.is');
-
-      if (typeof setId !== 'undefined' && setId !== null) {
-        var newFilter = _.cloneDeep(oldFilter);
-        newFilter.donor = {id: {is: [Extensions.ENTITY_PREFIX + setId]}};
-        delete newFilter.file.entitySetId;
-
-        if (_.isEmpty(newFilter.file)) {
-          delete newFilter.file;
-        }
-
-        return newFilter;
-      }
-
-      return oldFilter;
-    }
-
     $scope.download = function() {
       if (_.isEmpty($scope.selectedFiles)) {
-        var filters = cleanEntitySet(FilterService.filters());
+        var filters = FilterService.filters();
         ExternalRepoService.download(filters, $scope.selectedRepos);
       } else {
         ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
@@ -274,7 +254,7 @@
       repoData.manifestID = false;
 
       var selectedFiles = $scope.selectedFiles;
-      var filters = cleanEntitySet(FilterService.filters());
+      var filters = FilterService.filters();
 
       if (! _.isEmpty (selectedFiles)) {
         filters = _.set (filters, 'file.id.is', selectedFiles);
