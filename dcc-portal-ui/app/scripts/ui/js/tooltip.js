@@ -29,6 +29,7 @@
       restrict: 'E',
       replace: true,
       scope: {
+        isLocal: '<'
       },
       templateUrl: 'template/tooltip.html',
       link: function (scope, element) {
@@ -79,7 +80,7 @@
           }
         }
 
-        $rootScope.$on('tooltip::show', function(evt, params) {
+        function handleShow(evt, params) {
           scope.$apply(function() {
             if (params.text) {
               scope.html = $sce.trustAsHtml(params.text);
@@ -98,13 +99,14 @@
               $window.onmousemove = function(e){
                 if(element.hasClass('sticky')){
                   var position = calculateAbsoluteCoordinates(scope.placement, params.element, {
-                    left: e.pageX,
-                    top: e.pageY - (scope.placement === 'top' ? 8 : 0),
+                    left: e.pageX - element.parent().offset().left,
+                    top:  e.pageY - (scope.placement === 'top' ? 8 : 0) - element.parent().offset().top,
                     width: 10,
                     height: -6
                   });
                   element.css('top', position.top);
                   element.css('left', position.left);
+                  // console.log(element.parent().get(0));
                 }
               };
             }
@@ -114,12 +116,17 @@
             element.css('left', position.left);
             element.removeClass('sticky');
           }
-        });
-        $rootScope.$on('tooltip::hide', function() {
+        }
+
+        function handleHide () {
           element.css('visibility', 'hidden');
           element.css('top', -999);
           element.css('left', -999);
-        });
+        }
+
+        var scopeToListenOn = scope.isLocal ? scope : $rootScope;
+        scopeToListenOn.$on('tooltip::show', handleShow);
+        scopeToListenOn.$on('tooltip::hide', handleHide);
       }
     };
   });
