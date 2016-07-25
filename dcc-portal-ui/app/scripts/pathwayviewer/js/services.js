@@ -832,7 +832,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
             var renderedValue = nodeValues[nodeId];
             
             var coordinateFunctionMap = {
-              'left' : function(forText) {
+              left : function(forText) {
                 var leftX = (+node.position.x) - ((renderedValue.toString().length * 5) + 10) + 10;
                 if (forText) {
                   leftX += 5;
@@ -840,7 +840,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
                 
                 return leftX;
               },
-              'right' : function(forText) {
+              right : function(forText) {
                 var rightX = (+node.position.x) + (+node.size.width) - 10;
                 if (forText) {
                   rightX += 5;
@@ -848,7 +848,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
                 
                 return rightX;
               },
-              'top' : function(forText) {
+              top : function(forText) {
                 var topY = (+node.position.y) - 7;
                 if (forText) {
                   topY += 11;
