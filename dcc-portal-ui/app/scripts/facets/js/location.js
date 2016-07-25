@@ -20,10 +20,9 @@
 angular.module('icgc.facets.location', []);
 
 angular.module('icgc.facets.location')
-  .controller('locationFacetCtrl', function ($scope, Facets, FilterService, Chromosome, PortalFeature) {
+  .controller('locationFacetCtrl', function ($scope, Facets, FilterService, Chromosome) {
 
   var submitted;
-  $scope.enabled = PortalFeature.get('NOT_FACET');
 
   //$scope.regex = /^(chr)?[xy0-9]+(:\d+(\-\d+)?)?$/i;
   $scope.regex = /^(chr)?(x|y|mt|[0-9]+)(:\d+(\-\d+)?)?$/i;

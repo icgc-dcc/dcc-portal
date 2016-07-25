@@ -18,7 +18,7 @@
 package org.icgc.dcc.portal.server.resource.analysis;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
+import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ANALYSIS_ID_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ANALYSIS_ID_VALUE;
 

@@ -24,9 +24,6 @@
     SetService, Settings, LocationService, RouteInfoService, Extensions) {
 
     var _this = this;
-    var syncSetTimeout;
-
-    _this.syncError = false;
     _this.entitySets = SetService.getAll();
     _this.selectedSets = [];
     _this.checkAll = false;
@@ -95,15 +92,9 @@
 
 
     _this.addCustomGeneSet = function() {
-      var inst = $modal.open({
+      $modal.open({
         templateUrl: '/scripts/genelist/views/upload.html',
         controller: 'GeneListController'
-      });
-
-      // Successful submit
-      inst.result.then(function() {
-        $timeout.cancel(syncSetTimeout);
-        synchronizeSets(10);
       });
     };
 
@@ -114,10 +105,8 @@
         return set.state !== 'FINISHED';
       });
       if (toRemove.length > 0) {
-        _this.syncError = false;
         SetService.removeSeveral(_.pluck(toRemove, 'id'));
         _this.checkAll = false; // reset
-        synchronizeSets(1);
       }
     };
 
@@ -131,44 +120,11 @@
 
       var toRemove = _this.selectedSets;
       if (toRemove.length > 0) {
-        _this.syncError = false;
         SetService.removeSeveral(_.pluck(toRemove, 'id'));
         _this.checkAll = false; // reset
       }
     };
 
-
-    function synchronizeSets(numTries) {
-      var pendingLists, pendingListsIDs, promise;
-      pendingLists = _.filter(_this.entitySets, function(d) {
-        return d.state !== 'FINISHED';
-      });
-      pendingListsIDs = _.pluck(pendingLists, 'id');
-
-      if (pendingLists.length <= 0) {
-        return;
-      }
-
-      if (numTries <= 0) {
-        console.log('Stopping, numTries runs out');
-        _this.syncError = true;
-        return;
-      }
-
-      promise = SetService.getMetaData(pendingListsIDs);
-      promise.then(function(results) {
-        SetService.updateSets(results);
-        syncSetTimeout = $timeout(function() {
-          synchronizeSets(--numTries);
-        }, 3000);
-      });
-    }
-
-    $scope.$on('destroy', function() {
-      $timeout.cancel(syncSetTimeout);
-    });
-
-    synchronizeSets(10);
   });
 
 

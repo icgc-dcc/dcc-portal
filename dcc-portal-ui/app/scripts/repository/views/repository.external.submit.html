@@ -1,4 +1,4 @@
-<div class="modal-content">
+<div class="modal-content download-manifests">
     <div class="modal-header clearfix">
       <h3 class="pull-left">Download manifests</h3>
       <button class="pull-right t_button" data-ng-click="cancel()"><i
@@ -7,69 +7,213 @@
     </div>
 
     <div class="modal-body">
-       A manifest is a text file passed to download clients in order to download files.
-       You will get a single manifest file per repository. Please note that some files may be stored in multiple repositories.
-       The list below is restricted by your repository filter.
-       <br>
+      <div class="modal-info-wrapper">
+        <img class="modal-info-figure" src="/styles/images/checklist.svg" />
+        <div class="modal-info">
+          <p>A manifest is a text file passed to download clients in order to download selected files of interest. Each repository's manifest file can be individually downloaded.
+          </p>
+          <p>When choosing "Download All", a manifest containing unique files from all repositories will be generated. Some files may be stored in multiple repositories. Duplicates from repositories lower in the list will not be included. You may drag to reorder the list to affect the generated manifest.
+          </p>
+          <p>
+          The available repositories below are restricted by your search filter:
+          </p>
+        </div>
+      </div>
+
        <table class="table table-info">
          <thead>
+           <th class="text-right" colspan="2">Priority</th>
            <th style="width: 40%;">Repository</th>
            <th class="text-right"># Donors</th>
            <th class="text-right"># Files</th>
            <th class="text-right">Total file size</th>
            <th class="text-right">
-             <popover class="light"
-                      popover-anchor-label="Manifest ID"
-                      popover-assist-icon-class="icon-help"
-                      popover-assist-icon-position-before="false">
-
-                 In addition to the manifest file, the ICGC Storage Client accepts manifest ID to download files selected in your query.
-                 Please see the <a href="http://docs.icgc.org/cloud/guide/#manifest-from-the-data-portal" target="_blank"><i class="icon-external-link"></i>User Guide</a> to learn more.
-                 </a>
-             </popover>
-             </th>
+           </th>
          </thead>
 
-         <tbody>
-           <tr data-ng-repeat="(repoName, repoData) in repos">
+         <tbody dnd-list="repos">
+            <tr
+              data-ng-repeat-start="repoData in repos"
+              data-ng-class="{
+                alt: $index % 2 === 0
+              }"
+              dnd-moved="repos.splice($index, 1)"
+              dnd-draggable="repoData"
+              dnd-effect-allowed="move"
+            >
+             <td class="handle text-right ">&nbsp;::: </td>
+             <td class="text-right">{{$index + 1}}.</td>
              <td>
-               {{ repoName }}
+                {{ repoData.repoName }}
              </td>
              <td class="text-right">{{ repoData.donorCount | number }}</td>
              <td class="text-right">{{ repoData.fileCount | number }}</td>
              <td class="text-right">{{ repoData.fileSize | bytes }}</td>
-             <td class="text-right manifest-cell">
-                 <span data-tooltip="Manifest ID creation is not applicable to {{repoName}}." data-tooltip-placement="left" data-ng-if="repoName !== 'AWS - Virginia' && repoName !== 'Collaboratory - Toronto'" style="color: #888; font-size: 0.8rem;">
-                     Not Applicable
-                 </span>
-               <div class="manifest" data-ng-if="repoName === 'AWS - Virginia' || repoName === 'Collaboratory - Toronto'">
-                 <button data-ng-if="! repoData.isGeneratingManifestID  && ! repoData.manifestID" class="t_button no-animate"
-                   data-ng-click="createManifestId(repoName, repoData)">
-                   Manifest ID
-                 </button>
-                 <div data-ng-if="repoData.isGeneratingManifestID">
-                   <i class="icon-spinner icon-spin"></i>
-                  </div>
-                 <div data-ng-if="repoData.manifestID">
-                  <div data-copy-to-clip data-copy-data="repoData.manifestID"
-                       data-show-copy-tips="true" data-prompt-on-copy="true"
-                       data-on-copy-success-message="Manifest ID copied!"
-                       data-on-copy-focus-on="input[type='text']">
-                    <input size="38" type="text" class="input_manifest" value="{{repoData.manifestID}}"/>
-                    <!-- button style="border: 0; background: transparent;" title="Copy Manifest ID" class="icon-clippy">
-                    </button -->
-                  </div>
-                 </div>
-               </div>
-               <span data-ng-if="repoName != 'AWS - Virginia' && repoName != 'Collaboratory - Toronto'">&nbsp;</span>
+             <td class="text-right">
+                <a
+                  href="{{getRepoManifestUrl({
+                    repoCodes: [repoData.repoCode],
+                    filters: filters()
+                  })}}"
+                  target="_blank"
+                  type="button"
+                  class="btn btn-xs btn-default orange-icon"
+                >
+                  <i class="icon-download"></i>
+                </a>
+
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a ng-click="getRepoManifestShortUrl(repoData)"
+                      >
+                        Manifest URL
+                      </a>
+                    </li>
+                    <li ng-if="repoData.hasManifest">
+                      <a
+                        ng-class="{
+                          disabled: repoData.manifestID || repoData.isGeneratingManifestID
+                        }"
+                        data-ng-click="
+                          !repoData.manifestID &&
+                          !repoData.isGeneratingManifestID &&
+                          createManifestId(repoData.repoName, repoData)"
+                      >
+                        Manifest ID
+                      </a>
+                      <popover
+                        popover-anchor-label=""
+                        popover-assist-icon-class="icon-help"
+                        popover-assist-icon-position-before="false"
+                      >
+
+                          In addition to the manifest file, the ICGC Storage Client accepts manifest ID to download files selected in your query.
+                          Please see the <a href="http://docs.icgc.org/cloud/guide/#manifest-from-the-data-portal" target="_blank" class="light"><i class="icon-external-link"></i>User Guide</a> to learn more.
+                          </a>
+                      </popover>
+                    </li>
+                  </ul>
+                </div>
+
              </td>
            </tr>
+
+            <tr class="extras" data-ng-repeat-end data-ng-if="
+              repoData.isGeneratingManifestID ||
+              repoData.isGeneratingManifestShortUrl ||
+              repoData.manifestID ||
+              repoData.shortUrl"
+            >
+              <td colspan="7" class="text-right">
+                <div class="spinner-container" data-ng-if="repoData.isGeneratingManifestShortUrl || repoData.isGeneratingManifestID">
+                  <i class="icon-spinner icon-spin"></i>
+                </div>
+
+                <div class="container-fluid">
+
+                  <div class="row" data-ng-if="repoData.shortUrl">
+                    <div class="col-sm-3">
+                      Manifest URL
+                    </div>
+                    <div class="col-sm-9 text-left">
+                      <input
+                        onClick="this.select()"
+                        size="18"
+                        type="text"
+                        value="{{repoData.shortUrl}}"
+                      />
+                      <span
+                          class="clip-icon"
+                          style="cursor: pointer;"
+                          data-copy-to-clip
+                          data-copy-data="repoData.shortUrl"
+                          data-show-copy-tips="true"
+                          data-prompt-on-copy="false"
+                          data-on-copy-success-message="Copied!"
+                          data-on-hover-message="Copy to clipboard"
+                        >
+                          <span class="icon-clippy"></span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="row" data-ng-if-start="repoData.manifestID">
+                    <div class="col-sm-3">
+                      Manifest ID
+                    </div>
+                    <div class="col-sm-9 text-left">
+                      
+                      <div class="manifest" data-ng-if="repoData.hasManifest">
+                        <input
+                          onClick="this.select()"
+                          size="38"
+                          type="text"
+                          value="{{repoData.manifestID}}"
+                        />
+                        <span
+                          class="clip-icon"
+                          style="cursor: pointer;"
+                          data-copy-to-clip
+                          data-copy-data="repoData.manifestID"
+                          data-show-copy-tips="true"
+                          data-prompt-on-copy="false"
+                          data-on-copy-success-message="Copied!"
+                          data-on-hover-message="Copy to clipboard"
+                        >
+                          <span class="icon-clippy"></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" data-ng-if-end>
+                    <div class="col-sm-3">
+                      Usage example
+                    </div>
+                    <div class="col-sm-9 text-left">
+                      <input
+                        onClick="this.select()"
+                        class="code"
+                        size="76"
+                        type="text"
+                        value="{{ 'bin/icgc-storage-client manifest --manifest ' + repoData.manifestID }}"
+                      />
+                      <span
+                        class="clip-icon"
+                        style="cursor: pointer;"
+                        data-copy-to-clip
+                        data-copy-data="'bin/icgc-storage-client manifest --manifest ' + repoData.manifestID"
+                        data-show-copy-tips="true"
+                        data-prompt-on-copy="false"
+                        data-on-copy-success-message="Copied!"
+                        data-on-hover-message="Copy to clipboard"
+                      >
+                        <span class="icon-clippy"></span>
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+
+             </td>
+           </tr>
+
+           <tr class="dndPlaceholder">
+             <td colspan="7"></td>
+           </tr>
+
          </tbody>
        </table>
     </div>
 
     <div class="modal-footer">
       <button class="t_button" data-ng-click="cancel();">Cancel</button>
-      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i>Download</button>
+      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i>Download All</button>
     </div>
 </div>

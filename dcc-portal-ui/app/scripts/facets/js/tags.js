@@ -22,9 +22,8 @@
 
   module.controller('tagsFacetCtrl',
     function ($scope, $modal, Facets, FilterService, LocationService, HighchartsService, FiltersUtil,
-      Extensions, GeneSets, Genes, GeneSetNameLookupService, SetService, GeneSymbols, PortalFeature) {
+      Extensions, GeneSets, Genes, GeneSetNameLookupService, SetService, GeneSymbols) {
 
-    $scope.enabled = PortalFeature.get('NOT_FACET');
     $scope.Extensions = Extensions;
 
     var _fetchNameForSelections = function ( selections ) {

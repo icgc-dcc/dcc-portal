@@ -3,6 +3,21 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.3.3
+--
+  - Added .settings to `dcc-portal-server`
+  - Add option to use prod API for UI dev
+  - Removed `dropdown.js`
+  - `dcc-portal-server` pom.xml cleansing and refactoring
+  - DCC-4996: Analysis tab refresh bug
+  
+4.3.2
+--
+  - Migration of files from `dcc-portal-api` to `dcc-portal-server`
+  - URL encoding fixes
+  - Enhanced command line running using `mvn spring-boot:run`
+  - Simplified classpath resolution of static files
+
 4.3.1
 --
   - Hox fix for `OncoGridResource` not extending from `Resource`
@@ -19,6 +34,28 @@ Change log for the DCC Data Portal
   - Refactoring and consolidation of page all functionality
   - Minor bug fixes and style updates. 
 
+4.2.11
+--
+  - Added missing CNSM data type to the public downloads
+  
+4.2.10
+--
+  - Downloader improvements
+  - Bugfix: URL encodings 
+  - Bugfix: / in URL of "download/info/{release}"
+   
+4.2.9
+--
+  - Analysis launcher page layout update
+  
+4.2.8
+--
+  - Bugfix: Fixed bad `this` in Pathway Viewer reference
+  
+4.2.7
+--
+  - Added drugs overlay in Pathway Viewer
+  
 4.2.6
 --
   - Added support for new Download Service
