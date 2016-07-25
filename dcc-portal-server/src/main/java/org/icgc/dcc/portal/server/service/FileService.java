@@ -27,7 +27,7 @@ import static com.google.common.collect.Sets.union;
 import static com.google.common.primitives.Longs.tryParse;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toMap;
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
+import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 import static org.elasticsearch.common.collect.Iterables.toArray;
 import static org.icgc.dcc.common.core.util.Joiners.COMMA;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;

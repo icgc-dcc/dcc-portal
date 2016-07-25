@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.server.resource;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
+import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 
 import java.net.URI;
 import java.util.ArrayList;

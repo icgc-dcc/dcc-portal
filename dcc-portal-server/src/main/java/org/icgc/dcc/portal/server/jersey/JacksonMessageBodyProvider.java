@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.google.common.collect.ImmutableList;
 
@@ -39,7 +41,9 @@ public class JacksonMessageBodyProvider extends JacksonJaxbJsonProvider {
 
   private static final ObjectMapper MAPPER = new ObjectMapper()
       .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES) // Correctness
-      .setSerializationInclusion(JsonInclude.Include.NON_NULL); // Swagger
+      .setSerializationInclusion(JsonInclude.Include.NON_NULL) // Swagger
+      .registerModule(new GuavaModule()) // Needed to serialize MultiMaps and other Guava collections
+      .registerModule(new Jdk8Module()); // For serializing types like Optionals.
 
   /**
    * The default group array used in case any of the validate methods is called without a group.

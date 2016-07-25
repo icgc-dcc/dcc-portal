@@ -17,12 +17,12 @@
 
 package org.icgc.dcc.portal.server.model;
 
-import static org.apache.commons.httpclient.HttpStatus.getStatusText;
-
 import java.io.IOException;
 import java.io.Serializable;
 
 import javax.ws.rs.core.Response.StatusType;
+
+import org.springframework.http.HttpStatus;
 
 import lombok.Value;
 
@@ -50,6 +50,13 @@ public class Error implements Serializable {
   }
 
   private static String formatMessage(int code, String message) {
-    return getStatusText(code) + (message == null ? "." : ". " + message);
+    String status = String.valueOf(code);
+    try {
+      status = HttpStatus.valueOf(code).getReasonPhrase();
+    } catch (Exception e) {
+      // Swallow
+    }
+
+    return status + (message == null ? "." : ". " + message);
   }
 }

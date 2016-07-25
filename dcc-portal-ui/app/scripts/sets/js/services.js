@@ -140,12 +140,6 @@
       return data;
     }
 
-    /*
-    this.saveAll = function(lists) {
-      localStorageService.set(LIST_ENTITY, lists);
-    };
-    */
-
     _service.createAdvLink = function(set) {
       var type = set.type.toLowerCase(), filters = {};
       filters[type] = {};
@@ -195,39 +189,55 @@
     _service.addSet = function(type, params) {
       var promise = null;
       var data = params2JSON(type, params);
-      promise = Restangular.one('entityset').post(undefined, data, {}, {'Content-Type': 'application/json'});
+      var addSetSaving;
 
-      promise.then(function(data) {
+      if(! data.isTransient){
+        addSetSaving = _service.savingToaster(data.name);
+      }      
+
+      promise = Restangular.one('entityset')
+                .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
+
+      promise.then(function(data) {        
+        
         if (! data.id) {
-          console.log('there is no id!!!!');
           return;
         }
 
         // If flagged as transient, don't save to local storage
-        if (data.subtype === 'TRANSIENT') {
+        if (data.subtype === 'TRANSIENT') { 
           return;
         }
 
         data.type = data.type.toLowerCase();
-        //setList.splice(1, 0, data);
-        setList.unshift(data);
-        localStorageService.set(LIST_ENTITY, setList);
-        toaster.pop('', 'Saving ' + data.name,
-          'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
-      });
 
+        setList.unshift(data);
+        _service.refreshList();
+
+        localStorageService.set(LIST_ENTITY, setList);
+        
+        _service.saveSuccessToaster(data.name);
+        toaster.clear(addSetSaving);
+
+      });
+      
       return promise;
     };
 
     _service.addExternalSet = function(type, params) {
       var promise = null;
       var data = params2JSON(type, params);
+      var addSetSaving;
+
+      if(! data.isTransient){
+        addSetSaving = _service.savingToaster(data.name);
+      }
+
       promise = Restangular.one('entityset').one('external')
         .post(undefined, data, {}, {'Content-Type': 'application/json'});
 
       promise.then(function(data) {
         if (! data.id) {
-          console.log('there is no id!!!!');
           return;
         }
 
@@ -236,12 +246,17 @@
           return;
         }
 
+        var addSetSaving = _service.savingToaster(data.name);
+
         data.type = data.type.toLowerCase();
-        //setList.splice(1, 0, data);
+
         setList.unshift(data);
+        _service.refreshList();
+
         localStorageService.set(LIST_ENTITY, setList);
-        toaster.pop('', 'Saving ' + data.name,
-          'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
+
+        _service.saveSuccessToaster(data.name);
+        toaster.clear(addSetSaving);
       });
 
       return promise;
@@ -331,8 +346,15 @@
     _service.addDerivedSet = function(type, params) {
       var promise = null;
       var data = params2JSON(type, params, true);
+      var addSetSaving;
 
-      promise = Restangular.one('entityset').post('union', data, {}, {'Content-Type': 'application/json'});
+      if(! data.isTransient){
+        addSetSaving = _service.savingToaster(data.name);
+      }
+
+      promise = Restangular.one('entityset')
+                .post('union', data, {async: 'false'}, {'Content-Type': 'application/json'});
+
       promise.then(function(data) {
         if (! data.id) {
           console.log('there is an error in creating derived set');
@@ -340,55 +362,18 @@
         }
 
         data.type = data.type.toLowerCase();
+
         setList.unshift(data);
-        // setList.splice(1, 0, data);
-        localStorageService.set(LIST_ENTITY, setList);
-        toaster.pop('', 'Saving ' + data.name,
-          'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
-      });
-
-      return promise;
-    };
-
-
-
-
-    /*
-     * Attemp to sync with the server - fires only once, up to controller to do polling
-     */
-    _service.sync = function() {
-      var pendingLists, pendingListsIDs, promise;
-
-      pendingLists = _.filter(setList, function(d) {
-        return d.state !== 'FINISHED';
-      });
-      pendingListsIDs = _.pluck(pendingLists, 'id');
-
-      // No need to update
-      if (pendingListsIDs.length === 0) {
-        return;
-      }
-
-      promise = _service.getMetaData(pendingListsIDs);
-      promise.then(function(updatedList) {
-        updatedList.forEach(function(item) {
-          var index = _.findIndex(setList, function(d) {
-            return item.id === d.id;
-          });
-          if (index >= 0) {
-            setList[index].count = item.count;
-            setList[index].state = item.state;
-          }
-        });
-
-        // Save update back
-        localStorageService.set(LIST_ENTITY, setList);
         _service.refreshList();
+
+        localStorageService.set(LIST_ENTITY, setList);
+
+        _service.saveSuccessToaster(data.name);
+        toaster.clear(addSetSaving);
       });
+
       return promise;
     };
-
-
 
     _service.refreshList = function() {
       setList.forEach(function(set) {
@@ -399,7 +384,7 @@
         // Grab the type (base advanced search router and corresponding filters)
         set.advType = ''; // default route is donors or just route is '/search';
         set.advFilters = filters;
-
+        
         if (['gene', 'mutation'].indexOf(set.type) !== -1) {
           // Grab the type (base advanced search router and corresponding filters)
           set.advType = set.type.charAt(0); // route is '/search' plus either '/g' or '/m'
@@ -445,33 +430,12 @@
     };
 
     _service.initService = function() {
+
       setList = localStorageService.get(LIST_ENTITY) || [];
-
-      // Reset everything to PENDNG
-      setList.forEach(function(set) {
-        set.state = 'PENDING';
-      });
-
       _service.refreshList();
 
       return setList;
     };
-
-
-    _service.updateSets = function(sets) {
-      sets.forEach(function(item) {
-        var index = _.findIndex(setList, function(d) {
-          return item.id === d.id;
-        });
-        if (index >= 0) {
-          setList[index].count = item.count;
-          setList[index].state = item.state;
-        }
-      });
-      localStorageService.set(LIST_ENTITY, setList);
-      _service.refreshList();
-    };
-
 
     _service.removeSeveral = function(ids) {
       _.remove(setList, function(list) {
@@ -487,42 +451,6 @@
       });
       localStorageService.set(LIST_ENTITY, setList);
       return true;
-    };
-
-
-    // Make sure the demo is in place
-    _service.initDemo = function() {
-      var settingsPromise = Restangular.one('settings').get();
-
-      function addDemo(demo) {
-        demo.type = demo.type.toLowerCase();
-        demo.readonly = true;
-
-        // Check if already exist
-        var exist = _.some(setList, function(set) {
-          return set.id === demo.id;
-        });
-        if (exist === false) {
-          setList.unshift(demo); // Demo always goes first
-          localStorageService.set(LIST_ENTITY, setList);
-        } else {
-          setList[0] = demo; // Always overwrite demo in order to get updates
-          localStorageService.set(LIST_ENTITY, setList);
-        }
-      }
-
-      settingsPromise.then(function(settings) {
-        if (settings.hasOwnProperty('demoListUuid')) {
-          var uuid = settings.demoListUuid;
-          var demoPromise = _service.getMetaData([uuid]);
-
-          demoPromise.then(function(results) {
-            addDemo(results[0]);
-            _service.refreshList();
-          });
-        }
-      });
-
     };
 
     // Wait for sets to getResolved
@@ -559,9 +487,6 @@
         return _this;
       };
 
-
-      ////
-
       function _defaultRetrievalTargetPromiseFunction() {
         return _service.getMetaData(_Ids);
       }
@@ -574,8 +499,6 @@
 
         return resolvedSets.length === _Ids.length;
       }
-
-      ////
 
       function _reset() {
         _numTries = _originalNumTries;
@@ -652,6 +575,14 @@
         });
     };
 
+    _service.savingToaster = function(setName){
+      return toaster.pop('warning', 'Saving ' + setName,'Please wait', 0, 'trustedHtml');
+    };
+
+    _service.saveSuccessToaster = function(setName){
+      return toaster.pop('success', setName + ' Saved',
+             'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
+    };
 
     // Initialize
     var setList = _service.initService();

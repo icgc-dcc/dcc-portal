@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.server.pql.convert;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
+import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 import static org.dcc.portal.pql.ast.builder.PqlBuilders.count;
 import static org.dcc.portal.pql.query.PqlParser.parse;
 

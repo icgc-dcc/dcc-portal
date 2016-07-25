@@ -23,6 +23,12 @@
   var toJson = angular.toJson;
   var uriString = _.flow (toJson, encodeURIComponent);
 
+  var encodeQuery = function (queryMap) {
+    return _.map(queryMap, function (val, key) {
+      return val ? key + '=' + encodeURIComponent(val) : '';
+    }).filter(Boolean).join('&');
+  };
+
   var module = angular.module('icgc.repository.services', []);
 
   module.service ('ExternalRepoService', function ($window, Restangular, API, HighchartsService) {
@@ -142,14 +148,23 @@
       return Restangular.one (REPO_API_PATH + '/summary').get (params);
     };
 
+    _srv.getRepoManifestUrl = function (params) {
+      var repoCodes = _.isArray(params.repoCodes) ? params.repoCodes : [params.repoCodes];
+      var filters = JSON.stringify(params.filters);
+      var format = params.format || 'files';
 
-    _srv.download = function (filters, repos) {
-      $window.location.href = API.BASE_URL + '/manifests?filters=' +
-        uriString (filters) + '&repos=' + _concatRepoCodes (repos) + '&format=tarball';
+      var query = encodeQuery({
+        repos: repoCodes,
+        format: format,
+        filters: filters,
+        unique: params.unique
+      });
+
+      return API.BASE_URL + '/manifests?' + query;
     };
 
     _srv.downloadSelected = function (ids, repos) {
-      $window.location.href = _srv.getManifestUrl(ids, repos);
+      $window.location.href = _srv.getManifestUrlByFileIds(ids, repos);
     };
 
     _srv.export = function (filters) {
@@ -172,9 +187,12 @@
       return Restangular.service('manifests').post(jQuery.param(data));
     };
 
-    _srv.getManifestUrl = function (ids, repos) {
-      return API.BASE_URL + '/manifests?filters=' +
-        uriString ({file:{id:{is:ids}}}) + '&repos=' + _concatRepoCodes (repos) + '&format=files';
+    _srv.getManifestUrlByFileIds = function (ids, repos) {
+      return _srv.getRepoManifestUrl({
+        filters: {file:{id:{is:ids}}},
+        repoCodes: _concatRepoCodes (repos),
+        format: 'files'
+      });
     };
 
     _srv.getMetaData = function() {

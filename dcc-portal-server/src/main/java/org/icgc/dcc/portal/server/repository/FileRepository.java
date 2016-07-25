@@ -24,7 +24,7 @@ import static java.lang.String.format;
 import static java.math.RoundingMode.CEILING;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.IntStream.range;
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
+import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 import static org.dcc.portal.pql.ast.function.FunctionBuilders.limit;
 import static org.dcc.portal.pql.ast.function.FunctionBuilders.select;
 import static org.dcc.portal.pql.ast.function.FunctionBuilders.sortBuilder;
