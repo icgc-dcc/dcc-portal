@@ -84,7 +84,6 @@ import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
-import org.elasticsearch.search.aggregations.bucket.missing.MissingBuilder;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.nested.NestedBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -112,7 +111,6 @@ import com.google.common.primitives.Ints;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.Value;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -722,22 +720,6 @@ public class FileRepository {
     public static final String SIZE = "size";
     public static final String FORMAT = "format";
     public static final String DONOR_PRIMARY_SITE = "donorPrimarySite";
-
-  }
-
-  @Value
-  private static class TermsMissingAggPair {
-
-    TermsBuilder terms;
-    MissingBuilder missing;
-
-    public static TermsMissingAggPair from(String aggregationKey, String fieldName) {
-      val termsAgg = terms(aggregationKey).field(fieldName)
-          .size(MAX_FACET_TERM_COUNT);
-      val missingAgg = missing(MISSING).field(fieldName);
-
-      return new TermsMissingAggPair(termsAgg, missingAgg);
-    }
 
   }
 
