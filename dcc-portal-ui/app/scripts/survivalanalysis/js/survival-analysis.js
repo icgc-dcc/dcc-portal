@@ -246,7 +246,7 @@
           xDomain: state.xDomain,
           height: isFullScreen() && ( window.innerHeight - 100 ),
           onMouseEnterDonor: function (event, donor) {
-            $scope.$emit('tooltip::show', {
+            $scope.$broadcast('tooltip::show', {
               element: event.target,
               text: tipTemplate({
                 donor: _.extend(
@@ -261,7 +261,7 @@
             });
           },
           onMouseLeaveDonor: function () {
-            $scope.$emit('tooltip::hide');
+            $scope.$broadcast('tooltip::hide');
           },
           onClickDonor: function (e, donor) {
             window.open('/donors/'+donor.id, '_blank');
