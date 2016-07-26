@@ -28,7 +28,7 @@
       });
    });
    
-   module.controller('SoftwareController', function($scope, Page, Restangular, PortalFeature, Auth) {
+   module.controller('SoftwareController', function($scope, Page, Restangular, PortalFeature) {
 	 Page.stopWork();
      Page.setPage('entity');
      Page.setTitle('Software Downloads');
