@@ -257,18 +257,24 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
         );
 
         function _retrieveHighlights(type, rawHighlights, nodesInPathway) {
-          var highlights = [];
-          rawHighlights.forEach(function (rawHighlight) {
-            rawHighlight.dbIds.forEach(function (dbId) {
-              // Only highlight it if it's part of the pathway we're zooming in on
-              // And only hide parts of it we are zooming in on a pathway
-              if((nodesInPathway.length === 0 || _.contains(nodesInPathway,dbId)) &&
-                  _getHighlightValue(rawHighlight, type) >= 0){
-                highlights.push({id:dbId,value:_getHighlightValue(rawHighlight, type)});
-              }
-            });
-          });
-          return highlights;
+          return _(rawHighlights)
+            .map(function (rawHighlight) {
+              var highlightValue = _getHighlightValue(rawHighlight, type);
+
+              return rawHighlight.dbIds
+                .filter(function (dbId) {
+                  return nodesInPathway.length === 0 ||
+                    (_.contains(nodesInPathway, dbId) && highlightValue >= 0);
+                })
+                .map(function (dbId) {
+                  return {
+                    id: dbId,
+                    value: highlightValue
+                  };
+                });
+            })
+            .flatten()
+            .value();
         }
 
         function _getHighlightValue(rawHighlight, type) {
@@ -280,7 +286,6 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
           return highlightValueFunctionMap[type](rawHighlight);
         }
       };
-
     }
 
 
