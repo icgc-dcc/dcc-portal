@@ -29,7 +29,8 @@
       restrict: 'E',
       replace: true,
       scope: {
-        isLocal: '<'
+        isLocal: '<',
+        params: '<',
       },
       templateUrl: 'template/tooltip.html',
       link: function (scope, element) {
@@ -81,14 +82,12 @@
         }
 
         function handleShow(evt, params) {
-          scope.$apply(function() {
-            if (params.text) {
-              scope.html = $sce.trustAsHtml(params.text);
-            }
-            if (params.placement) {
-              scope.placement = params.placement;
-            }
-          });
+          if (params.text) {
+            scope.html = $sce.trustAsHtml(params.text);
+          }
+          if (params.placement) {
+            scope.placement = params.placement;
+          }
 
           element.css('visibility', 'visible');
 
@@ -124,9 +123,20 @@
           element.css('left', -999);
         }
 
-        var scopeToListenOn = scope.isLocal ? scope : $rootScope;
-        scopeToListenOn.$on('tooltip::show', handleShow);
-        scopeToListenOn.$on('tooltip::hide', handleHide);
+        if (!scope.isLocal) {
+          $rootScope.$on('tooltip::show', scope.$apply.bind(scope, handleShow));
+          $rootScope.$on('tooltip::hide', handleHide);
+        } else {
+          scope.$watch('params', function (newParams) {
+            if (!newParams) {
+              return;
+            } else if (newParams.isVisible) {
+              handleShow(null, newParams)
+            } else {
+              handleHide();
+            }
+          });
+        }
       }
     };
   });
