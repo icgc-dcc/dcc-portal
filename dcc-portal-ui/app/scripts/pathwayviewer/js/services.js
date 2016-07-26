@@ -1258,46 +1258,58 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       return CompoundsService.getCompoundsFromEntitySetId(entitySetId);
     };
     _pathwayDataService.getMutationHighlights = function (pathwayProteinMap) {
-      var pathwayMutationHighlights = [];
-      _.forEach(pathwayProteinMap, function (value, id) {
-        if (value && value.dbIds) {
-          var dbIds = value.dbIds.split(',');
-          pathwayMutationHighlights.push({
-            uniprotId: id,
-            dbIds: dbIds,
-            value: value.value
-          });
-        }
-      });
-      return pathwayMutationHighlights;
+      return _(pathwayProteinMap.plain())
+        .map(function (pathwayProtein, uniprotId) {
+          return _.assign({}, pathwayProtein, {uniprotId: uniprotId});
+        })
+        .compact()
+        .filter(function (pathwayProtein) {
+          return pathwayProtein.dbIds;
+        })
+        .map(function (pathwayProtein) {
+          return {
+            uniprotId: pathwayProtein.uniprotId,
+            dbIds: pathwayProtein.dbIds.split(','),
+            value: pathwayProtein.value
+          };
+        })
+        .value();
     };
     _pathwayDataService.getDrugHighlights = function (drugs, pathwayProteinMap) {
-      var drugMap = _(drugs)
-        .map(function (drug) {
-          return drug.genes.map (function (gene) {
-            return {
-              uniprot: gene.uniprot,
-              zincId: drug.zincId,
-              name: drug.name
-            };
-          });
+      var drugMap = getDrugMap(drugs);
+
+      return _(pathwayProteinMap.plain())
+        .map(function (pathwayProtein, uniprotId) {
+          return _.assign({}, pathwayProtein, {uniprotId: uniprotId});
         })
-        .flatten()
-        .groupBy('uniprot')
+        .compact()
+        .filter(function (pathwayProtein) {
+          return pathwayProtein.dbIds && drugMap[pathwayProtein.uniprotId];
+        })
+        .map(function (pathwayProtein) {
+          return {
+            uniprotId: pathwayProtein.uniprotId,
+            dbIds: pathwayProtein.dbIds.split(','),
+            drugs: drugMap[pathwayProtein.uniprotId]
+          };
+        })
         .value();
 
-
-      var pathwayDrugHighlights = [];
-      _.forEach(pathwayProteinMap,function(value,id) {
-        if(value && value.dbIds && drugMap[id]) {
-          pathwayDrugHighlights.push({
-            uniprotId:id,
-            dbIds:value.dbIds.split(','),
-            drugs:drugMap[id]
-          });
-        }
-      });
-      return pathwayDrugHighlights;
+      function getDrugMap(drugs) {
+        return _(drugs)
+          .map(function (drug) {
+            return drug.genes.map (function (gene) {
+              return {
+                uniprot: gene.uniprot,
+                zincId: drug.zincId,
+                name: drug.name
+              };
+            });
+          })
+          .flatten()
+          .groupBy('uniprot')
+          .value();
+      }
     };
     _pathwayDataService.getGeneListData = function (geneSetOverlapFilters) {
       if (!geneSetOverlapFilters) {
