@@ -116,6 +116,9 @@
         }
         .orange-icon {
           color: $iconColor;
+          &.space-right {
+            margin-right: 23px;
+          }
         }
         .btn-default{
           background-color: transparent;
