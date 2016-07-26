@@ -53,7 +53,7 @@ angular.module('icgc.advanced', ['icgc.advanced.controllers', 'ui.router'])
 angular.module('icgc.advanced.controllers', [
     'icgc.advanced.services', 'icgc.sets.services', 'icgc.facets'])
     .controller('AdvancedCtrl',
-    function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService,
+    function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
               AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular,
               RouteInfoService, FacetConstants, Extensions) {
 

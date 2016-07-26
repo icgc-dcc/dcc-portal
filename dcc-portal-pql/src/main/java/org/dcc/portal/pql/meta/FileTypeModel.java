@@ -278,7 +278,7 @@ public class FileTypeModel extends TypeModel {
       EsFields.STUDY,
       EsFields.ACCESS,
       EsFields.ANALYSIS_METHOD,
-      EsFields.DATA_BUNDLE,
+      "data_bundle.data_bundle_id",
       EsFields.FILE_COPIES,
       EsFields.DONORS,
       "data_categorization",
