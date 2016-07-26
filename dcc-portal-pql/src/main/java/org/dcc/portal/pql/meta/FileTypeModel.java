@@ -72,10 +72,13 @@ public class FileTypeModel extends TypeModel {
     public static final String DONORS = "donors";
     public static final String DONOR_ID = "donor_id";
     public static final String DATA_BUNDLE = "data_bundle";
+    public static final String DATA_BUNDLE_ID = "data_bundle.data_bundle_id";
     public static final String OBJECT_ID = "object_id";
     public static final String ANALYSIS_METHOD = "analysis_method";
     public static final String STUDY = "study";
     public static final String ACCESS = "access";
+    public static final String DATA_CATEGORIZATION = "data_categorization";
+    public static final String REFERENCE_GENOME = "reference_genome";
 
   }
 
@@ -278,11 +281,11 @@ public class FileTypeModel extends TypeModel {
       EsFields.STUDY,
       EsFields.ACCESS,
       EsFields.ANALYSIS_METHOD,
-      "data_bundle.data_bundle_id",
+      EsFields.DATA_BUNDLE_ID,
       EsFields.FILE_COPIES,
       EsFields.DONORS,
-      "data_categorization",
-      "reference_genome");
+      EsFields.DATA_CATEGORIZATION,
+      EsFields.REFERENCE_GENOME);
 
   private static final Map<String, String> INTERNAL_ALIASES = ImmutableMap.<String, String> of(
       LOOKUP_TYPE, TERMS_LOOKUP_DONOR_IDS);

@@ -236,8 +236,9 @@ public class FileRepository {
   public SearchResponse findAll(Query query, final String[] fields) {
     val pqlAst = PQL_CONVERTER.convert(query, FILE);
     val request = queryEngine.execute(pqlAst, FILE).getRequestBuilder();
+    int pageSize = 5000;
 
-    request.setSize(5000)
+    request.setSize(pageSize)
         .setScroll(KEEP_ALIVE)
         .addFields(fields);
 

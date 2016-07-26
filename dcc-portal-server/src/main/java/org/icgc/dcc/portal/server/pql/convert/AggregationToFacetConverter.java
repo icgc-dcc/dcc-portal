@@ -104,6 +104,7 @@ public class AggregationToFacetConverter {
   private static long resolveDocCount(String aggName, Bucket bucket) {
     val aggregations = bucket.getAggregations();
     if (hasAggregations(aggregations)) {
+      // Repository Sizes is a custom Sum aggregation from FileRepository.
       if (aggName.equals(CustomAggregationKeys.REPO_SIZE)) {
         InternalSum sumAgg = aggregations.get(CustomAggregationKeys.FILE_SIZE);
         return (long) sumAgg.getValue();
