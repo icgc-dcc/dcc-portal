@@ -46,6 +46,9 @@
       if ($scope.type === 'file' && $scope.facetName === 'id') {
         return true;
       }
+      if ($scope.type === 'file' && $scope.facetName === 'donorId') {
+        return true;
+      }
       return $scope.type !== 'file' && $scope.facetName !== 'id';
     };
 
