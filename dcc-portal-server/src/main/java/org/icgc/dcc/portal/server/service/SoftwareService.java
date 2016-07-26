@@ -104,7 +104,7 @@ public class SoftwareService {
       classifier = properties.getSoftware().getOsxClassifier();
     }
     return getRepositoryUrl(properties.getSoftware().getIcgcArtifactId()) + "/"
-        + properties.getSoftware().getIcgcArtifactId() + "/" + version + "/"
+        + properties.getSoftware().getIcgcGroupId() + "/" + version + "/"
         + properties.getSoftware().getIcgcArtifactId() + "_v" + version
         + "_" + classifier + ".zip";
   }

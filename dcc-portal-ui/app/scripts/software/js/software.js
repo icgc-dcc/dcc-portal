@@ -33,7 +33,6 @@
      Page.setPage('entity');
      Page.setTitle('Software Downloads');
      $scope.showIcgcGet = PortalFeature.get('ICGC_GET');
-     $scope.user = Auth.getUser();
      $scope.icgcGet = {
    	   artifactId:'icgc-get'
      };

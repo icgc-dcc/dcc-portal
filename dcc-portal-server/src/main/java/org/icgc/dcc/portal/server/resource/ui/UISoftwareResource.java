@@ -88,7 +88,7 @@ public class UISoftwareResource extends Resource {
     return Response.seeOther(redirect.toURI()).build();
   }
 
-  @Path("/icgc-get/latest/{os}")
+  @Path("/icgc-get/{os}/latest")
   @GET
   @SneakyThrows
   public Response getICGCGetLatest(@PathParam("os") String os) {
