@@ -93,19 +93,19 @@
 
           if(params.sticky){
             element.addClass('sticky');
+            var $parent = element.parent();
 
-            if(!$window.onmousemove){
-              $window.onmousemove = function(e){
+            if(!$parent.get(0).onmousemove){
+              $parent.get(0).onmousemove = function(e){
                 if(element.hasClass('sticky')){
                   var position = calculateAbsoluteCoordinates(scope.placement, params.element, {
-                    left: e.pageX - element.parent().offset().left,
-                    top:  e.pageY - (scope.placement === 'top' ? 8 : 0) - element.parent().offset().top,
+                    left: e.pageX - (scope.isLocal ? $parent.offset().left : 0),
+                    top:  e.pageY - (scope.placement === 'top' ? 8 : 0) - (scope.isLocal ? $parent.offset().top : 0),
                     width: 10,
                     height: -6
                   });
                   element.css('top', position.top);
                   element.css('left', position.left);
-                  // console.log(element.parent().get(0));
                 }
               };
             }
@@ -124,7 +124,9 @@
         }
 
         if (!scope.isLocal) {
-          $rootScope.$on('tooltip::show', scope.$apply.bind(scope, handleShow));
+          $rootScope.$on('tooltip::show', function (evt, params) {
+            scope.$apply(handleShow.bind(null, evt, params));
+          });
           $rootScope.$on('tooltip::hide', handleHide);
         } else {
           scope.$watch('params', function (newParams) {
