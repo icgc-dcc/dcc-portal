@@ -256,7 +256,6 @@ public class FileTypeModel extends TypeModel {
       Fields.DONORS,
       Fields.ANALYSIS_METHOD,
       Fields.STUDY,
-      Fields.DATA_BUNDLE,
       Fields.ACCESS,
       Fields.REFERENCE_GENOME,
       Fields.DATA_CATEGORIZATION);
