@@ -12,6 +12,7 @@
          <ul class="t_subnav__items">
             <li data-spy="overview" class="t_subnav__items__item current"><a data-scrollto href="#overview">Overview</a></li>
             <li data-spy="storage-client" class="t_subnav__items__item"><a data-scrollto href="#storage-client">Storage Client</a></li>
+            <li data-spy="icgc-get" data-ng-if="showIcgcGet" class="t_subnav__items__item"><a data-scrollto href="#icgc-get">icgc-get</a></li>
             <li data-spy="verifying-downloads" class="t_subnav__items__item"><a data-scrollto href="#verifying-downloads">Public Key</a></li>
          </ul>
       </nav>
@@ -87,7 +88,7 @@
                </thead>
                <tbody id="get-versions">
                   <tr data-ng-repeat="v in icgcGetVersions">
-                     <td>{{ v.uri }}</td>
+                     <td>{{ v.uri.substring(1) }}</td>
                      <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}{{ v.uri }}/osx">{{ icgcGet.artifactId }}-{{ v.uri.substring(1) }}-osx-dist.zip</a></td>
                      <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}{{ v.uri }}/linux">{{ icgcGet.artifactId }}-{{ v.uri.substring(1) }}-linux-dist.zip.md5</a></td>
                   </tr>
