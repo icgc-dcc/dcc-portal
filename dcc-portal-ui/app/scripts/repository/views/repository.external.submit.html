@@ -27,8 +27,7 @@
            <th class="text-right"># Donors</th>
            <th class="text-right"># Files</th>
            <th class="text-right">Total file size</th>
-           <th class="text-right">
-           </th>
+           <th class="text-right">Manifests</th>
          </thead>
 
          <tbody dnd-list="repos">
@@ -62,19 +61,13 @@
                   <i class="icon-download"></i>
                 </a>
 
-                <div class="btn-group">
+                <div class="btn-group" ng-if="repoData.hasManifest">
                   <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
 
                   <ul class="dropdown-menu pull-right">
-                    <li>
-                      <a ng-click="getRepoManifestShortUrl(repoData)"
-                      >
-                        Manifest URL
-                      </a>
-                    </li>
                     <li ng-if="repoData.hasManifest">
                       <a
                         ng-class="{
@@ -88,9 +81,11 @@
                         Manifest ID
                       </a>
                       <popover
+                        class="pop-below"
                         popover-anchor-label=""
                         popover-assist-icon-class="icon-help"
                         popover-assist-icon-position-before="false"
+                        popover-hide-delay="0"
                       >
 
                           In addition to the manifest file, the ICGC Storage Client accepts manifest ID to download files selected in your query.
