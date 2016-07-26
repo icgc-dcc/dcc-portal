@@ -135,13 +135,13 @@ public class EntitySetService {
   public EntitySet createExternalEntitySet(@NonNull final EntitySetDefinition entitySetDefinition) {
     val newEntitySet = createAndSaveNewListFrom(entitySetDefinition);
     materializeRepositoryList(newEntitySet.getId(), entitySetDefinition);
-    return newEntitySet;
+    return getEntitySet(newEntitySet.getId());
   }
 
   public EntitySet createFileEntitySet(@NonNull final EntitySetDefinition entitySetDefinition) {
     val newEntitySet = createAndSaveNewListFrom(entitySetDefinition);
     materializeFileSet(newEntitySet.getId(), entitySetDefinition);
-    return newEntitySet;
+    return getEntitySet(newEntitySet.getId());
   }
 
   public EntitySet computeEntitySet(@NonNull final DerivedEntitySetDefinition entitySetDefinition, boolean async) {
@@ -246,7 +246,7 @@ public class EntitySetService {
         .filters(entitySet.getFilters())
         .sort("id")
         .order("desc")
-        .size(maxNumberOfHits)
+        .size(entitySet.getSize())
         .defaultLimit(maxNumberOfHits)
         .build();
 
