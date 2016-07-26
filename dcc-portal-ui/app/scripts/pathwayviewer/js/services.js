@@ -1319,27 +1319,15 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       return Restangular.one('genes').get({filters: geneSetOverlapFilters});
     };
     _pathwayDataService.getGeneOverlapExistsHash = function (geneListData) {
-      if (!_.get(geneListData, 'hits[0]')) {
-        return {};
-      }
-
-      var geneList = [];
-      _.forEach(geneListData.hits, function (gene) {
-        var overlapGeneExternalIDs = _.get(gene,  'externalDbIds.uniprotkb_swissprot', false);
-
-        // We can't join by this ID (with the pathway viewer) so throw away
-        if (!overlapGeneExternalIDs) {
-          return;
-        }
-
-        geneList.push.apply(geneList, overlapGeneExternalIDs);
-      });
-
-      var geneOverlapExistsHash = {};
-      _.forEach(geneList, function (g) {
-        geneOverlapExistsHash[g] = true;
-      });
-      return geneOverlapExistsHash;
+      return _(_.get(geneListData, 'hits', {}))
+        .map('externalDbIds.uniprotkb_swissprot')
+        .flatten()
+        .compact()
+        .zipObject()
+        .mapValues(function () {
+          return true;
+        })
+        .value();
     };
     _pathwayDataService.getGeneAnnotatedHighlights = function (highlightData) {
       var uniprotIds = _.map(highlightData.highlights, 'uniprotId');
