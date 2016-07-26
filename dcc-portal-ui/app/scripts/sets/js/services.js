@@ -392,8 +392,7 @@
         } else {
           set.advLink = '/search?filters=' + JSON.stringify(filters);
           var fileFilters = {};
-          fileFilters.file = {};
-          fileFilters.file[Extensions.ENTITY] = {is: [set.id]};
+          fileFilters.file = {donorId: {is: [Extensions.ENTITY_PREFIX + set.id]}};
           set.repoLink = dataRepoUrl + '?filters=' + JSON.stringify(fileFilters);
         }
       });
