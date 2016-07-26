@@ -9,7 +9,6 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-
   <artifactId>dcc-portal-pql</artifactId>
   <name>${project.artifactId}</name>
   <description>${project.name}</description>
@@ -51,7 +50,7 @@
       <artifactId>elasticsearch-test</artifactId>
     </dependency>
   </dependencies>
-  
+
 
   <build>
     <plugins>

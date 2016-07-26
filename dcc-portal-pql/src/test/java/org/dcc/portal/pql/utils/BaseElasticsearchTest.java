@@ -58,7 +58,7 @@ public class BaseElasticsearchTest {
    */
   protected static final String INDEX_NAME = "dcc-release-etl-cli";
   protected static final String SETTINGS_FILE_NAME = "index.settings.json";
-  protected static final String JSON_DIR = "org/icgc/dcc/etl/resources/mappings";
+  protected static final String JSON_DIR = "org/icgc/dcc/release/resources/mappings";
   protected static final String FIXTURES_DIR = "src/test/resources/fixtures";
   protected static final URL SETTINGS_FILE = getMappingFileUrl(SETTINGS_FILE_NAME);
 
