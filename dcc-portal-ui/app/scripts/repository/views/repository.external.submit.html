@@ -43,6 +43,7 @@
              <td class="handle text-right ">&nbsp;::: </td>
              <td class="text-right">{{$index + 1}}.</td>
              <td>
+                <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
              </td>
              <td class="text-right">{{ repoData.donorCount | number }}</td>
@@ -81,18 +82,19 @@
                       >
                         Manifest ID
                       </a>
-                      <popover
-                        class="pop-below"
-                        popover-anchor-label=""
-                        popover-assist-icon-class="icon-help"
-                        popover-assist-icon-position-before="false"
-                        popover-hide-delay="0"
-                      >
+                      <a class="info-link" href="http://docs.icgc.org/cloud/guide/#manifest-from-the-data-portal" target="_blank">
+                        <popover
+                          class="pop-below"
+                          popover-anchor-label=""
+                          popover-assist-icon-class="icon-help"
+                          popover-assist-icon-position-before="false"
+                          popover-hide-delay="0"
+                        >
 
-                          In addition to the manifest file, the ICGC Storage Client accepts manifest ID to download files selected in your query.
-                          Please see the <a href="http://docs.icgc.org/cloud/guide/#manifest-from-the-data-portal" target="_blank" class="light"><i class="icon-external-link"></i>User Guide</a> to learn more.
-                          </a>
-                      </popover>
+                            In addition to the manifest file, the ICGC Storage Client accepts manifest ID to download files selected in your query.
+                            Click to view the User Guide and learn more.
+                        </popover>
+                      </a>
                     </li>
                   </ul>
                 </div>

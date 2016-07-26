@@ -189,12 +189,15 @@
             }
           }
         }
-
-        .popover {
+        .info-link {
           position: absolute;
           top: 0;
           right: 0;
-          padding: 0;
+          padding-left: 0;
+          padding-right: 0;
+        }
+        .popover-body span {
+          word-break: normal;
         }
       }
 
