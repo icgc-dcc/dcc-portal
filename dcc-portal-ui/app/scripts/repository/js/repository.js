@@ -263,6 +263,10 @@
         });
     };
 
+    $scope.closeDropdowns = function () {
+      jQuery('.btn-group.open').trigger('click');
+    };
+
     /**
      * Fixes the entitySet to the PQL compatible one if present.
      */
