@@ -1332,33 +1332,27 @@ angular.module('icgc.pathwayviewer.directives.services', [])
     _pathwayDataService.getGeneAnnotatedHighlights = function (highlightData) {
       var uniprotIds = _.map(highlightData.highlights, 'uniprotId');
       return GeneSetVerificationService.verify(uniprotIds.join(',')).then(function (data) {
-        var annotatedHighlights = [];
-
-        _.forEach(highlightData.highlights, function (highlight) {
-          var annotatedHighlight = Object.assign({}, highlight);
-          var geneKey = 'external_db_ids.uniprotkb_swissprot';
-          if (!data.validGenes[geneKey]) {
-            return;
-          }
-
-          var uniprotObj = data.validGenes[geneKey][annotatedHighlight.uniprotId];
-          if (!uniprotObj) {
-            return;
-          }
-
-          var ensemblId = uniprotObj[0].id;
-          if (highlightData.includeAdvQuery) {
-            annotatedHighlight.advQuery = LocationService.mergeIntoFilters({
-              gene: {id: {is: [ensemblId]}}
+        var geneKey = 'external_db_ids.uniprotkb_swissprot';
+        if (!data.validGenes[geneKey]) {
+          return [];
+        }
+        
+        return _(highlightData.highlights)
+          .map(function (highlight) {
+            var uniprotObj = data.validGenes[geneKey][highlight.uniprotId];
+            if (!uniprotObj) {
+              return highlight;
+            }
+            
+            return _.assign({}, highlight, {
+              geneSymbol: uniprotObj[0].symbol,
+              geneId: uniprotObj[0].id,
+              advQuery: highlightData.includeAdvQuery ?
+                LocationService.mergeIntoFilters({gene: {id: {is: uniprotObj[0].id}}}) :
+                {}
             });
-          }
-          annotatedHighlight.geneSymbol = uniprotObj[0].symbol;
-          annotatedHighlight.geneId = ensemblId;
-
-          annotatedHighlights.push(annotatedHighlight);
-        });
-
-        return annotatedHighlights;
+          })
+          .value();
       });
     };
     _pathwayDataService.getGeneOverlapExistsHashUsingDbIds = function (geneOverlapExistsHash, annotatedHighlights) {
