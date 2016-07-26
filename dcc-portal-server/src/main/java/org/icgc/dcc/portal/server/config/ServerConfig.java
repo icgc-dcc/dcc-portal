@@ -32,6 +32,7 @@ import org.icgc.dcc.portal.server.config.ServerProperties.ICGCProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.MailProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.OAuthProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.WebProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.SoftwareProperties;
 import org.icgc.dcc.portal.server.model.Settings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -161,4 +162,8 @@ public class ServerConfig {
     return properties().getAuth();
   }
 
+  @Bean
+  public SoftwareProperties softProperties() {
+    return properties().getSoftware();
+  }
 }

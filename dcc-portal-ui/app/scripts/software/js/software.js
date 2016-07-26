@@ -27,16 +27,32 @@
          controller: 'SoftwareController'
       });
    });
+   
+   module.controller('SoftwareController', function($scope, Page, Restangular, PortalFeature) {
+	 Page.stopWork();
+     Page.setPage('entity');
+     Page.setTitle('Software Downloads');
+     $scope.showIcgcGet = PortalFeature.get('ICGC_GET');
+     $scope.icgcGet = {
+   	   artifactId:'icgc-get'
+     };
+     $scope.icgcStorageClient = {
+       artifactId:'icgc-storage-client'
+     };
 
-   module.controller('SoftwareController', function($scope, Page) {
-      Page.stopWork();
-      Page.setPage('entity');
-      Page.setTitle('Software Downloads');
+     Restangular
+       .all('ui/software/' + $scope.icgcStorageClient.artifactId + '/versions')
+       .getList()
+       .then(function(response){
+    	 $scope.versions = response.plain();
+       });
 
-      $scope.artifactId = 'icgc-storage-client';
-      jQuery.get('api/v1/ui/software/' + $scope.artifactId + '/versions', function(versions) {
-         $scope.versions = versions;
-      });
+     Restangular
+       .all('ui/software/' + $scope.icgcGet.artifactId + '/versions')
+       .getList()
+       .then(function(response){
+  	     $scope.icgcGetVersions = response.plain();
+     });
    });
 
 })();
