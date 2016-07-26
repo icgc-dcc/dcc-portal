@@ -24,7 +24,7 @@
    * Centralized tooltip directive. There should be only one per application
    * This act as the tooltip "server" that waits for tooltip events
    */
-  module.directive('tooltipControl', function ($position, $rootScope, $sce, $window) {
+  module.directive('tooltipControl', function ($position, $rootScope, $sce) {
     return {
       restrict: 'E',
       replace: true,
@@ -100,7 +100,7 @@
                 if(element.hasClass('sticky')){
                   var position = calculateAbsoluteCoordinates(scope.placement, params.element, {
                     left: e.pageX - (scope.isLocal ? $parent.offset().left : 0),
-                    top:  e.pageY - (scope.placement === 'top' ? 8 : 0) - (scope.isLocal ? $parent.offset().top : 0),
+                    top: e.pageY - (scope.placement === 'top' ? 8 : 0) - (scope.isLocal ? $parent.offset().top : 0),
                     width: 10,
                     height: -6
                   });
@@ -133,7 +133,7 @@
             if (!newParams) {
               return;
             } else if (newParams.isVisible) {
-              handleShow(null, newParams)
+              handleShow(null, newParams);
             } else {
               handleHide();
             }

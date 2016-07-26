@@ -246,7 +246,6 @@
           xDomain: state.xDomain,
           height: isFullScreen() && ( window.innerHeight - 100 ),
           onMouseEnterDonor: function (event, donor) {
-            // $scope.$broadcast('tooltip::show', {
             $scope.$apply(function () {
               ctrl.tooltipParams = {
                 isVisible: true,
@@ -261,11 +260,10 @@
                 }),
                 placement: 'right',
                 sticky: true
-              }
+              };
             });
           },
           onMouseLeaveDonor: function () {
-            // $scope.$broadcast('tooltip::hide');
             $scope.$apply(function () {
               ctrl.tooltipParams = {
                 isVisible: false
