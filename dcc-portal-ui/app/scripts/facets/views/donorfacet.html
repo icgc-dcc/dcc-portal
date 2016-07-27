@@ -34,7 +34,7 @@
                 <span class="t_facets__facet__terms__active__term__label__text">
                 <i class="icon-ok"></i>
                 <span data-tooltip="{{ item }}"
-                      data-tooltip-placement="top">{{ entityIdMap [item.substring(3)] || item }}</span>
+                      data-tooltip-placement="top">{{ entityIdMap [item.replace('ES:', '')] || item }}</span>
                 </span>
             </li>
         </ul>

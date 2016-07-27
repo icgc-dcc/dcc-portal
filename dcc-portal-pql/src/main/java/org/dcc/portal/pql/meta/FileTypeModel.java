@@ -41,7 +41,6 @@ public class FileTypeModel extends TypeModel {
 
   private static final Type MY_TYPE = Type.FILE;
   private static final String TYPE_PREFIX = MY_TYPE.getPrefix();
-  private static final String TERMS_LOOKUP_DONOR_IDS = "file-ids";
 
   public FileTypeModel() {
     super(Fields.MAPPINGS, INTERNAL_ALIASES, PUBLIC_FIELDS, INCLUDE_FIELDS);
@@ -287,6 +286,6 @@ public class FileTypeModel extends TypeModel {
       EsFields.REFERENCE_GENOME);
 
   private static final Map<String, String> INTERNAL_ALIASES = ImmutableMap.<String, String> of(
-      LOOKUP_TYPE, TERMS_LOOKUP_DONOR_IDS);
+      LOOKUP_TYPE, FILE_LOOKUP);
 
 }

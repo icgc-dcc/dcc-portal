@@ -36,7 +36,7 @@
                   <i class="icon-ok" />
                   <span tooltip="{{:: gene.tooltip }}"
                         tooltip-placement="top"
-                        ng-bind="entityIdMap[gene.uiText.substring(3)]|| gene.uiText" />
+                        ng-bind="entityIdMap[gene.uiText.replace('ES:', '')]|| gene.uiText" />
                 </span>
             </li>
 

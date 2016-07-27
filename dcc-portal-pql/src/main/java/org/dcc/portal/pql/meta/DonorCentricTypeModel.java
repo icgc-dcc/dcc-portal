@@ -284,7 +284,7 @@ public class DonorCentricTypeModel extends TypeModel {
         .put(BIOLOGICAL_PROCESS, "gene.go_term.biological_process")
         .put(CELLULAR_COMPONENT, "gene.go_term.cellular_component")
         .put(MOLECULAR_FUNCTION, "gene.go_term.molecular_function")
-        .put(LOOKUP_TYPE, "donor-ids")
+        .put(LOOKUP_TYPE, DONOR_LOOKUP)
         .build();
   }
 

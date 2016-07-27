@@ -229,6 +229,7 @@ public class FileRepository {
 
   /**
    * This findAll is used to export files to file and requires a scroll.
+   * 
    * @param query object with filter
    * @param fields that we require in the response
    * @return SearchResponse with scroll
@@ -330,7 +331,6 @@ public class FileRepository {
    * Get total file size, total donor count and total number of files based on query
    */
   public Map<String, Long> getSummary(Query query) {
-
     val donorSubAggs = donorIdAgg(SummaryAggregationKeys.DONOR)
         .subAggregation(
             terms(SummaryAggregationKeys.PROJECT).size(1000).field(toRawFieldName(Fields.PROJECT_CODE)))
@@ -345,7 +345,6 @@ public class FileRepository {
         .addAggregation(donorSubAggs);
 
     val response = request.get();
-
     log.debug("getSummary aggregation result is: '{}'.", response);
 
     val aggResult = response.getAggregations();
@@ -431,7 +430,13 @@ public class FileRepository {
     return result.build();
   }
 
-  // Special aggregation to get unique donor count for each repository
+  /**
+   * Special aggregation to get unique donor count for each repository
+   * 
+   * @param facets - Map of facet name to term facet.
+   * @param query - The query object
+   * @return Facet representing the donor counts for each repo.
+   */
   public TermFacet searchGroupByRepoNameDonorId(Map<String, TermFacet> facets, Query query) {
     val facet = facets.get(CustomAggregationKeys.REPO_SIZE);
     val terms = facet.getTerms();

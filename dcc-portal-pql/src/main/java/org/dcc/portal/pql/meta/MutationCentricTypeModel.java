@@ -75,8 +75,8 @@ public class MutationCentricTypeModel extends TypeModel {
       // "functionalImpactNested",
       "mutation.location",
       "sequencingStrategy"
-      // "sequencingStrategyNested"
-      );
+  // "sequencingStrategyNested"
+  );
 
   public MutationCentricTypeModel() {
     super(defineFields(), defineInternalAliases(), PUBLIC_FIELDS, INCLUDE_FIELDS);
@@ -149,8 +149,7 @@ public class MutationCentricTypeModel extends TypeModel {
                 object("go_term", "gene.GoTerm",
                     arrayOfStrings("biological_process"),
                     arrayOfStrings("cellular_component"),
-                    arrayOfStrings("molecular_function"))
-            )));
+                    arrayOfStrings("molecular_function")))));
   }
 
   private static ArrayFieldModel defineSsmOccurrence() {
@@ -161,8 +160,7 @@ public class MutationCentricTypeModel extends TypeModel {
             nestedArrayOfObjects("observation", object(
                 string("platform", "platform"),
                 string("verification_status", "verificationStatus"),
-                string("sequencing_strategy", "sequencingStrategy")))
-        ));
+                string("sequencing_strategy", "sequencingStrategy")))));
   }
 
   private static ObjectFieldModel defineProject() {
@@ -193,7 +191,7 @@ public class MutationCentricTypeModel extends TypeModel {
         .put(BIOLOGICAL_PROCESS, "transcript.gene.go_term.biological_process")
         .put(CELLULAR_COMPONENT, "transcript.gene.go_term.cellular_component")
         .put(MOLECULAR_FUNCTION, "transcript.gene.go_term.molecular_function")
-        .put(LOOKUP_TYPE, "mutation-ids")
+        .put(LOOKUP_TYPE, MUTATION_LOOKUP)
         .build();
   }
 

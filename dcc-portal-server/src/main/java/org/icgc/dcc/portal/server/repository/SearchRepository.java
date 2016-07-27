@@ -21,6 +21,7 @@ import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.lang.String.format;
+import static lombok.AccessLevel.PRIVATE;
 import static org.elasticsearch.action.search.SearchType.DFS_QUERY_THEN_FETCH;
 import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
 import static org.elasticsearch.index.query.FilterBuilders.termFilter;
@@ -63,6 +64,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -72,7 +74,8 @@ import lombok.extern.slf4j.Slf4j;
 public class SearchRepository {
 
   // Constants
-  private static class Types {
+  @NoArgsConstructor(access = PRIVATE)
+  private static final class Types {
 
     public static final String PATHWAY = "pathway";
     public static final String CURATED_SET = "curated_set";
@@ -88,7 +91,8 @@ public class SearchRepository {
 
   }
 
-  private class FieldNames {
+  @NoArgsConstructor(access = PRIVATE)
+  private static final class FieldNames {
 
     // Fields to be included as prefix queries
     public static final String FILE_NAME = "file_name";

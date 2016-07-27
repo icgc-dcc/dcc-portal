@@ -39,7 +39,7 @@
 
                 <span class="t_facets__facet__terms__active__term__label__text">
                     <i class="icon-ok"></i>
-                    <span>{{ entityIdMap [item.substring(3)] || item }}</span>
+                    <span>{{ entityIdMap [item.replace('ES:', '')] || item }}</span>
                 </span>
             </li>
         </ul>

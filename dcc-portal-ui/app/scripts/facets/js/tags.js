@@ -127,7 +127,7 @@
       // Find any entity set ids among the entity ids in order to query for their names
       var setIds = _($scope.activeEntityIds)
         .filter(function(id) { return id.indexOf(Extensions.ENTITY_PREFIX) === 0;})
-        .map(function(id) { return id.substring(3);})
+        .map(function(id) { return id.replace('ES:', '');})
         .value();
 
       if (setIds.length > 0) {
