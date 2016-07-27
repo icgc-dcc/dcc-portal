@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -33,9 +33,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import lombok.NonNull;
-import lombok.val;
-
 import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 import org.icgc.dcc.portal.server.model.Error;
 import org.icgc.dcc.portal.server.resource.security.AuthResource;
@@ -44,6 +41,9 @@ import org.icgc.dcc.portal.server.service.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
+
+import lombok.NonNull;
+import lombok.val;
 
 @Component
 @Provider
