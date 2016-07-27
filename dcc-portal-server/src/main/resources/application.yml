@@ -22,6 +22,9 @@
 # Profile - common
 ###############################################################################
 
+# Application
+spring.application.name: dcc-portal
+
 # API
 server:
   port: 8080
