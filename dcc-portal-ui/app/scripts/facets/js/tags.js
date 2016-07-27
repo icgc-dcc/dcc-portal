@@ -92,12 +92,12 @@
       fileDonor = Facets.getActiveFromTags({
         type: 'file',
         facet:'donorId'
-      }, true);
+      });
 
       other = Facets.getActiveFromTags({
         type: type,
         facet: 'id'
-      }, true);
+      });
 
       return other.concat(fileDonor);
     }

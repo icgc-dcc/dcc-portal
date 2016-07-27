@@ -321,7 +321,7 @@
       return _.difference(params.terms, params.actives);
     }
 
-    function getActiveFromTags(params, isSet) {
+    function getActiveFromTags(params) {
       var list = getActiveTags(params);
       var retList = [];
       _.forEach(list, function(item) {
