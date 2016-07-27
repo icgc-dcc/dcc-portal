@@ -48,30 +48,6 @@
       filter.gene[type] = {is: geneSetIds};
       return filter;
     };
-   
-    /*
-     * This only applies when we're in the External File page. It "moves" (and merges) the 'entitySetId' filter
-     * into the 'donorId' filter. The reason is to make 'Uploaded Donor Set' appear as a filter along with
-     * other donor IDs in the 'donorId' filter.
-     */
-    function adjustExternalFileFilters (filters, translations) {
-      var donorIdPath = 'file.donorId.is';
-      var entitySetIds = _.get (filters, donorIdPath, []);
-
-      if (entitySetIds.length === 0) {
-        return filters;
-      }
-
-      entitySetIds = _.map (entitySetIds, function (id) {
-        if (id.startsWith(Extensions.ENTITY_PREFIX)) {
-          return translations [id.substring(3)] || id;
-        } else {
-          return id;
-        }
-      });
-
-      return _.set (filters, donorIdPath, entitySetIds);
-    }
 
     /*
      * Builds a model that is is similar in strcuture to filters param, augmented
@@ -83,7 +59,6 @@
       var self = this;
 
       var queryFilters = _.cloneDeep (filters);
-      // queryFilters = adjustExternalFileFilters (queryFilters, entityIDMap);
 
       angular.forEach (queryFilters, function (typeFilters, typeKey) {
         display[typeKey] = {};
