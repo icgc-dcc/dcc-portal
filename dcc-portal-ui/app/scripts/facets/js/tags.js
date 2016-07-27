@@ -130,7 +130,7 @@
         .map(function(id) { return id.substring(3);})
         .value();
 
-      if ($scope.activeEntityIds.length > 0) {
+      if (setIds.length > 0) {
         SetService.getMetaData (setIds).then (function (results) {
           $scope.entityIdMap = SetService.lookupTable (results);
         });

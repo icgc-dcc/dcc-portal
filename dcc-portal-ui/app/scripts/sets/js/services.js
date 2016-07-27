@@ -314,7 +314,9 @@
         sortOrder: 'DESCENDING',
         filters: {
           file: {
-            is: [fileId]
+            id: {
+              is: [fileId]
+            }
           }
         },
         isTranient: true,
