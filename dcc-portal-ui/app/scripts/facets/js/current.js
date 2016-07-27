@@ -27,18 +27,6 @@
     $scope.Facets = Facets;
     $scope.Extensions = Extensions;
 
-    var donorSetFiltersInRepositoryFile = [{
-      term: 'Uploaded donor set',
-      controlTerm: 'Uploaded donor set',
-      controlFacet: 'donorId',
-      controlType: 'file'
-    }, {
-      term: 'Input donor set',
-      controlTerm: 'Input donor set',
-      controlFacet: 'donorId',
-      controlType: 'file'
-    }];
-
     $scope.prepositionBuilder = function (typeName, facet, terms) {
       if ($scope.isNot({type:typeName, facet:facet})) {
         if ($scope.inPluralForm (terms)) {
@@ -69,24 +57,8 @@
 
       var filter = _.first (filters);
 
-      /*
-       * This handles a special case for 'Uploaded Donor Set' in External Repository.
-       * In this scenario, we cannot compare the value of 'controlFacet' to Extensions.ENTITY,
-       * due to the transformation applied in adjustExternalFileFilters() of
-       * FiltersUtil service (/scripts/common/display.js). See comments in
-       * adjustExternalFileFilters() for more details.
-       * The strict comparison to elements in donorSetFiltersInRepositoryFile is for extra
-       * caution only, ensuring we only apply this when we're in External Repository page.
-       */
-      if (_.some (donorSetFiltersInRepositoryFile, function (o) {return _.isEqual (filter, o);})) {
-        return true;
-      }
-
-      if (_.get(filter, 'controlTerm', '').startsWith(Extensions.ENTITY_PREFIX)) {
-        return true;
-      }
-
-      return _.contains (_.get (filter, 'controlFacet', ''), Extensions.ENTITY);
+      return (_.get(filter, 'controlTerm', '').startsWith(Extensions.ENTITY_PREFIX));
+    
     };
     
     $scope.isNot = function(terms) {

@@ -83,7 +83,7 @@
       var self = this;
 
       var queryFilters = _.cloneDeep (filters);
-      queryFilters = adjustExternalFileFilters (queryFilters, entityIDMap);
+      // queryFilters = adjustExternalFileFilters (queryFilters, entityIDMap);
 
       angular.forEach (queryFilters, function (typeFilters, typeKey) {
         display[typeKey] = {};
@@ -149,7 +149,7 @@
           facetIter.forEach(function(term) {
             var uiTerm = term, isPredefined = false;
             
-            if (facetKey === Extensions.ENTITY || facetKey === 'id') {
+            if (facetKey === 'id' || facetKey === 'donorId') {
               if (term.indexOf(Extensions.ENTITY_PREFIX) === 0) {
                 uiTerm = entityIDMap[term.substring(3)] || term;
               } else {
