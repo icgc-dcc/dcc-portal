@@ -29,7 +29,7 @@
     </li>
     <li>
         <ul class="t_facets__facet__terms__active">
-            <li ng-if="shouldDisplayEntitySetId()"
+            <li ng-if="shouldDisplayEntitySetId() && (type==='mutation' || (type==='file' && facetName==='id')"
                 class="t_facets__facet__terms__active__term__label {{activeClass}}"
                 data-active-term
                 data-item="item"

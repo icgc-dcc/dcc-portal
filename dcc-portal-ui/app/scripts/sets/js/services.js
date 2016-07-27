@@ -249,8 +249,6 @@
           return;
         }
 
-        var addSetSaving = _service.savingToaster(data.name);
-
         data.type = data.type.toLowerCase();
 
         setList.unshift(data);

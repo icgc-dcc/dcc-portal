@@ -38,7 +38,8 @@ import lombok.val;
 @RequiredArgsConstructor(access = PRIVATE)
 public enum TestIndex {
 
-  RELEASE("test-icgc-release", "org/icgc/dcc/etl/resources/mappings"), REPOSITORY("test-icgc-repository", "org/icgc/dcc/repository/resources/mappings");
+  RELEASE("test-icgc-release", "org/icgc/dcc/release/resources/mappings"),
+  REPOSITORY("test-icgc-repository", "org/icgc/dcc/repository/resources/mappings");
 
   @Getter
   private final String name;
