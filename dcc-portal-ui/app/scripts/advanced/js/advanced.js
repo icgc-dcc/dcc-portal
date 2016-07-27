@@ -375,7 +375,6 @@ angular.module('icgc.advanced.controllers', [
 
       _controller.downloadDonorData = function() {
         $modal.open({
-          size: 'lg',
           templateUrl: '/scripts/downloader/views/request.html',
           controller: 'DownloadRequestController',
           resolve: {
