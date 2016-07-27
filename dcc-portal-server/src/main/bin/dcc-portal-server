@@ -18,6 +18,9 @@
 # These settings can be modified to fit the needs of your application
 # Optimized for use with version 3.5.19 of the Wrapper.
 
+# Prevent Spring Boot relaxed binding errors
+unset MAIL
+
 # Application
 APP_NAME="dcc-portal-server"
 APP_LONG_NAME="DCC Portal Server"
