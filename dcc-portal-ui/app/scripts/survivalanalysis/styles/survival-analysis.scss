@@ -53,6 +53,7 @@ $faded: #e6dede;
     }
 
     .point-line {
+      cursor: pointer;
       &[status="deceased"] {
         opacity: 0;
       }
