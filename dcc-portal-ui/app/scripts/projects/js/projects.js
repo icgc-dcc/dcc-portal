@@ -520,7 +520,7 @@
   });
 
   module.controller('ProjectGeneCtrl',
-    function($scope, $attrs, HighchartsService, Projects, Donors, LocationService, ProjectCache, $stateParams, LoadState) {
+    function($scope, HighchartsService, Projects, Donors, LocationService, ProjectCache, $stateParams, LoadState) {
     var _ctrl = this,
         _projectId = $stateParams.id || null,
         project = Projects.one(_projectId),
