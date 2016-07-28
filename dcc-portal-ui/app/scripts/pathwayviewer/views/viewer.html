@@ -24,11 +24,29 @@
       
       <table class="table pathway-gene-table" data-ng-if="annotatedGenesList.length>0">
         <tr>
-          <th class="pathway-gene-header-label pathway-gene-header">Gene</th>
-          <th class="pathway-gene-header-label pathway-gene-header"># ICGC Mutations</th>
-          <th class="pathway-gene-header-label pathway-gene-header"># Targeting Drugs</th>
+          <th class="pathway-gene-header-label pathway-gene-header">
+            <a href="" data-ng-click="sortField = 'symbol'; sortDescendingly = !sortDescendingly">
+              Gene
+              <span data-ng-show="sortField == 'symbol' && !sortDescendingly" class="fa fa-caret-down"></span>
+              <span data-ng-show="sortField == 'symbol' && sortDescendingly" class="fa fa-caret-up"></span>
+            </a>
+          </th>
+          <th class="pathway-gene-header-label pathway-gene-header">
+            <a href="" data-ng-click="sortField = 'value'; sortDescendingly = !sortDescendingly">
+              # ICGC Mutations
+              <span data-ng-show="sortField == 'value' && !sortDescendingly" class="fa fa-caret-down"></span>
+              <span data-ng-show="sortField == 'value' && sortDescendingly" class="fa fa-caret-up"></span>
+            </a>
+          </th>
+          <th class="pathway-gene-header-label pathway-gene-header">
+            <a href="" data-ng-click="sortField = 'drugs.length'; sortDescendingly = !sortDescendingly">
+              # Targeting Drugs
+              <span data-ng-show="sortField == 'drugs.length' && !sortDescendingly" class="fa fa-caret-down"></span>
+              <span data-ng-show="sortField == 'drugs.length' && sortDescendingly" class="fa fa-caret-up"></span>
+            </a>
+          </th>
         </tr>
-        <tr data-ng-repeat="gene in annotatedGenesList" data-ng-class="{'gene-overlap-result': overlappingGenesMap[gene.id]}">
+        <tr data-ng-repeat="gene in annotatedGenesList | orderBy:sortField:sortDescendingly" data-ng-class="{'gene-overlap-result': overlappingGenesMap[gene.id]}">
           <th class="pathway-gene-label"><a href="/genes/{{ gene.id }}">{{ gene.symbol }}</a></th>
           <th class="pathway-gene-label"><a href="/search/m?filters={{ gene.advQuery }}">{{ gene.value }}</a></th>
           <th class="pathway-gene-label">
