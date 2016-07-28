@@ -19,52 +19,37 @@ package org.icgc.dcc.portal.server.jersey.mapper;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.status;
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
-
-import java.util.Random;
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.elasticsearch.ElasticsearchException;
 import org.icgc.dcc.portal.server.model.Error;
 import org.springframework.stereotype.Component;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import com.sun.jersey.api.client.ClientHandlerException;
 
-@Slf4j
+/**
+ * TODO: Remove when https://jira.oicr.on.ca/browse/DCC-5045 is addressed
+ */
 @Component
 @Provider
-public class ElasticSearchExceptionMapper implements ExceptionMapper<ElasticsearchException> {
+public class ClientHandlerExceptionMapper implements ExceptionMapper<ClientHandlerException> {
 
-  private final static Status STATUS = INTERNAL_SERVER_ERROR;
-  private static final Random RANDOM = new Random();
+  private final static Status STATUS = SERVICE_UNAVAILABLE;
 
   @Override
-  public Response toResponse(ElasticsearchException e) {
-
-    val id = RANDOM.nextLong();
-    log.error(formatLogMessage(id), e);
-
+  public Response toResponse(ClientHandlerException e) {
     return status(STATUS)
         .type(APPLICATION_JSON_TYPE)
-        .entity(errorResponse(e, id))
+        .entity(errorResponse(e))
         .build();
   }
 
-  protected String formatLogMessage(long id) {
-    return String.format("Error handling a request: %016x", id);
-  }
-
-  private Error errorResponse(ElasticsearchException e, long id) {
-    return new Error(STATUS, message(e, id));
-  }
-
-  private String message(ElasticsearchException e, long id) {
-    return String.format("%s", formatLogMessage(id));
+  private Error errorResponse(ClientHandlerException e) {
+    return new Error(STATUS, e.getMessage());
   }
 
 }

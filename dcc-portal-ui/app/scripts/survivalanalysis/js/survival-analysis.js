@@ -246,22 +246,29 @@
           xDomain: state.xDomain,
           height: isFullScreen() && ( window.innerHeight - 100 ),
           onMouseEnterDonor: function (event, donor) {
-            $scope.$emit('tooltip::show', {
-              element: event.target,
-              text: tipTemplate({
-                donor: _.extend(
-                  { isCensored: _.includes(ctrl.censoredStatuses,donor.status) },
-                  donor
-                ),
-                labels: ctrl.tipLabels,
-                unit: 'days'
-              }),
-              placement: 'right',
-              sticky: true
+            $scope.$apply(function () {
+              ctrl.tooltipParams = {
+                isVisible: true,
+                element: event.target,
+                text: tipTemplate({
+                  donor: _.extend(
+                    { isCensored: _.includes(ctrl.censoredStatuses,donor.status) },
+                    donor
+                  ),
+                  labels: ctrl.tipLabels,
+                  unit: 'days'
+                }),
+                placement: 'right',
+                sticky: true
+              };
             });
           },
           onMouseLeaveDonor: function () {
-            $scope.$emit('tooltip::hide');
+            $scope.$apply(function () {
+              ctrl.tooltipParams = {
+                isVisible: false
+              };
+            });
           },
           onClickDonor: function (e, donor) {
             window.open('/donors/'+donor.id, '_blank');

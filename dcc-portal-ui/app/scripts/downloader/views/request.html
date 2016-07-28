@@ -14,7 +14,13 @@
       <div data-ng-if="params.processing">
          <i class="icon-spinner icon-spin"></i> Calculating download sizes...
       </div>
-      <div data-ng-if="!params.processing">
+
+      <div class="alert alert-warning" data-ng-if="params.downloadEnabled === false" style="margin:0rem;">
+        Download Donor Data section is currently unavailable due to maintenance.<br>
+        Please contact <a href="mailto:dcc-support@icgc.org">support</a> if you require assistance.
+      </div>
+
+      <div data-ng-if="!params.processing && params.downloadEnabled">
          <span>Search criteria results in <strong>{{totalDonor | number}}</strong> donors. Select data types to download:</span>
          <table class="table table-info">
             <thead>

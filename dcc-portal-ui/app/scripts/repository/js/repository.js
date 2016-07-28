@@ -123,6 +123,10 @@
           });
         });
 
+      },function (error) {
+        if(error.status === 503){
+          _ctrl.downloadEnabled = false;
+        }        
       });
     }
 
