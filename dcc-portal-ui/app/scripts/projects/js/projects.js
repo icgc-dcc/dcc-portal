@@ -526,7 +526,7 @@
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
     
-    var loadState = new LoadState({$scope: $scope});
+    var loadState = new LoadState({scope: $scope});
 
     function success(genes) {
       if (genes.hasOwnProperty('hits') ) {
@@ -623,7 +623,7 @@
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
 
-    var loadState = new LoadState({ $scope: $scope });
+    var loadState = new LoadState({ scope: $scope });
 
     function success(mutations) {
       if (mutations.hasOwnProperty('hits')) {
@@ -710,7 +710,7 @@
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
 
-    var loadState = new LoadState({ $scope: $scope });
+    var loadState = new LoadState({ scope: $scope });
 
     function success(donors) {
       if (donors.hasOwnProperty('hits')) {

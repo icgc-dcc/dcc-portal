@@ -158,7 +158,6 @@
 
   function LoadState(params) {
     params = params || {};
-    var $scope = params.$scope;
     var selfLoadState = { isLoading: !!params.isLoading };
     var contributingLoadStates = _.compact([selfLoadState].concat(params.contributingLoadStates));
 
@@ -184,15 +183,19 @@
       },
       endLoad() {
         selfLoadState.isLoading = false;
+      },
+      register(scope) {
+        invariant(_.isFunction(scope.registerLoadState), 'Required function $scope.registerLoadState is invalid');
+        invariant(_.isFunction(scope.deregisterLoadState), 'Required function $scope.deregisterLoadState is invalid');
+        scope.registerLoadState(loadState);
+        scope.$on('$destroy', function () {
+          scope.deregisterLoadState(loadState);
+        });
       }
     };
 
-    if ($scope && $scope.registerLoadState) {
-      invariant(_.isFunction($scope.deregisterLoadState), 'Cleanup function deregisterLoadState missing from $scope');
-      $scope.registerLoadState(loadState);
-      $scope.$on('$destroy', function () {
-        $scope.deregisterLoadState(loadState);
-      });
+    if (params.scope) {
+      loadState.register(params.scope);
     }
 
     return loadState;
