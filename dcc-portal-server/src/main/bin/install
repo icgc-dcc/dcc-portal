@@ -31,7 +31,8 @@ from datetime import datetime
 # Environmental configuration
 cache = '' # Hostname and port of varnish, no protocol or trailing slash
 domain = 'dev.dcc.icgc.org'
-slack_url = 'https://hooks.slack.com/services/<!fill in>'
+slack_token = "<!fill in>"
+slack_url = 'https://hooks.slack.com/services/' + slack_token
 
 # Maven artifact location
 name = 'dcc-portal-server'
@@ -58,6 +59,16 @@ def get_latest_version(path):
     request = Request(url)
     latest_version = parseString(urlopen(request).read()).getElementsByTagName('latest')[0].firstChild.nodeValue
     return latest_version
+
+
+# Gets the version number from the last 5 snapshots. 
+def get_versions(path):
+    url = path+'/maven-metadata.xml'
+    response = parseString(urlopen(Request(url)).read())
+    version_xml = response.getElementsByTagName('versions')[0].getElementsByTagName('version')
+    versions = map(lambda node: node.firstChild.nodeValue, version_xml)
+    return versions
+
 
 # Gets the latest version number from the provided artifactory path
 def get_latest_value(path):
@@ -112,22 +123,24 @@ def get_from_version(path, version):
 
 # Gets artifact based on build number
 def get_from_build(path, url, build):
-    latest_version = get_latest_version(path)
-    request_url = url+'/'+latest_version+'/'
-    request = Request(request_url)
-    data = json.loads(urlopen(request).read().decode('utf-8'))
-    files = data['children']
+    available_versions = get_versions(path)
 
-    jars = list(filter((lambda child: str(child['uri']).endswith('.jar')), files))
+    for version in available_versions:
+        request_url = url+'/'+version+'/'
+        request = Request(request_url)
+        data = json.loads(urlopen(request).read().decode('utf-8'))
+        files = data['children']
 
-    for jar in jars:
-        uri = jar['uri'][1:] + '?properties'
-        jar_json = json.loads(urlopen(Request(request_url+uri)).read().decode('utf-8'))
-        if jar_json['properties']['build.number'][0] == str(build):
-            global commit_id
-            commit_id = jar_json['properties']['vcs.revision'][0]
-            jar_uri = jar_json['uri']
-            return json.loads(urlopen(Request(jar_uri)).read().decode('utf-8'))['downloadUri']
+        jars = list(filter((lambda child: str(child['uri']).endswith('.jar')), files))
+
+        for jar in jars:
+            uri = jar['uri'][1:] + '?properties'
+            jar_json = json.loads(urlopen(Request(request_url+uri)).read().decode('utf-8'))
+            if jar_json['properties']['build.number'][0] == str(build):
+                global commit_id
+                commit_id = jar_json['properties']['vcs.revision'][0]
+                jar_uri = jar_json['uri']
+                return json.loads(urlopen(Request(jar_uri)).read().decode('utf-8'))['downloadUri']
 
     print "Could not find requested build version."
     exit(2)
@@ -226,10 +239,9 @@ if len(cache) > 0:
         log('Clearing Varnish Cache Failed with a HTTPException')
         print 'The server could not clear the varnish cache.'
         print str(e)
-    except Error as e:
-        log('General Exception occured, double check hostname.')
-        print 'General Exception occured, double check hostname and logs. '
-        print str(e)
+    except:
+        log('General Exception occurred, double check hostname.')
+        print 'General Exception occurred, double check hostname and logs. '
     finally:
         status = conn.getresponse().status
         if status != 200:
@@ -239,18 +251,21 @@ if len(cache) > 0:
             log('Cache Cleared: ' + str(status))
             print 'Cache Cleared: ' + str(status)
 
+
 # Restart portal
 subprocess.call([bin_dir+name, 'restart'])
 message = '<!channel>: Deployed portal to https://'+ \
          domain + ' using: \n* install ' + sys.argv[1] + ' ' + sys.argv[2] + ',\n* commit ' + \
          'https://github.com/icgc-dcc/dcc-portal/commit/' + commit_id + '\n* jar ' + download_url
 
-# Send Slack Message
-payload = {
-    'text': message,
-    'channel': '#deployments',
-    'username': domain,
-    'icon_emoji': ':icgc:',
-    'color': 'warning'
-}
-urlopen(Request(slack_url, json.dumps(payload)))
+
+if len(slack_token) > 0 and len(slack_url) > 0:
+    # Send Slack Message
+    payload = {
+        'text': message,
+        'channel': '#deployments',
+        'username': domain,
+        'icon_emoji': ':icgc:',
+        'color': 'warning'
+    }
+    urlopen(Request(slack_url, json.dumps(payload)))
