@@ -1348,7 +1348,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
               geneSymbol: uniprotObj[0].symbol,
               geneId: uniprotObj[0].id,
               advQuery: highlightData.includeAdvQuery ?
-                LocationService.mergeIntoFilters({gene: {id: {is: uniprotObj[0].id}}}) :
+                LocationService.mergeIntoFilters({gene: {id: {is: [uniprotObj[0].id]}}}) :
                 {}
             });
           })
