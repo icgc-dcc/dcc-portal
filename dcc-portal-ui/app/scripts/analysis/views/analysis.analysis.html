@@ -40,13 +40,11 @@
             </div>
         </div>
 
-        <div class="pull-right" style="margin-top: 10px">
-          <button class="t_button t_button__destructive" data-ng-click="ListController.removeAllAnalyses()" 
-                  data-ng-disabled="ListController.analysisList.length === 0"
-                  data-tooltip="Delete All Analyses">
-            <i class="icon-trash"></i> Delete all
-          </button>
-        </div>        
+        <button class="delete-button t_button t_button__destructive pull-right" data-ng-click="ListController.removeAllAnalyses()" 
+                data-ng-disabled="ListController.analysisList.length === 0"
+                data-tooltip="Delete All Analyses">
+        <i class="icon-trash"></i> Delete all
+        </button>        
     </div>
     
 

@@ -32,8 +32,8 @@
           return GeneSets.one($stateParams.id).get().then(function (geneSet) {
 
                 return geneSet;
-            });            
-          }]     
+            });
+          }]
         }
       });
   });
@@ -47,15 +47,12 @@
   /*jshint -W072 */
   module.controller('GeneSetCtrl',
     function ($scope, $timeout, $state, LocationService, HighchartsService, Page, GeneSetHierarchy, GeneSetService,
-      GeneSetVerificationService, FiltersUtil, ExternalLinks, geneSet, PathwaysConstants, Genes, CompoundsService, 
-      SetService) {
+      GeneSetVerificationService, FiltersUtil, ExternalLinks, geneSet, PathwaysConstants, PathwayDataService) {
 
 
       var _ctrl = this, 
-          geneSetFilter = {}; // Build adv query based on type
-          
-          
-                 
+      geneSetFilter = {}; // Build adv query based on type
+
       Page.setTitle(geneSet.id);
       Page.setPage('entity');
 
@@ -64,9 +61,6 @@
       geneSetFilter[_ctrl.geneSet.queryType] = {is:[_ctrl.geneSet.id]};
 
       _ctrl.ExternalLinks = ExternalLinks;
-
-      
-      
 
       /**
        * Our function for keeping the page on the current section. 
@@ -183,145 +177,24 @@
   
         // 4) if it's a reactome pathway, get diagram
         if(_ctrl.geneSet.source === 'Reactome' && _ctrl.uiParentPathways[0]) {
-          _ctrl.pathway = {};
+          _ctrl.pathway = {}; // initialize pathway object
 
-          var pathwayId = _ctrl.uiParentPathways[0].diagramId;
-          var parentPathwayId = _ctrl.uiParentPathways[0].geneSetId;
+          PathwayDataService.getPathwayData(geneSet.id, null)
+            .then(function (pathwayData) {
+              _ctrl.pathway = _.pick(pathwayData, 'xml', 'zooms', 'mutationHighlights', 'drugHighlights');
 
-          // Get pathway XML
-          GeneSetService.getPathwayXML(pathwayId).then(function(xml) {
-            _ctrl.pathway.xml = xml;
-          }).catch(function() {
-            _ctrl.pathway.xml = '';
-          });
-
-
-          // If the diagram itself isnt the one being diagrammed, get list of stuff to zoom in on
-          if(pathwayId !== parentPathwayId) {
-            GeneSetService.getPathwayZoom(parentPathwayId).then(function(data) {
-                _ctrl.pathway.zooms = data;
-            });
-          } else {
-            _ctrl.pathway.zooms = [''];
-          }
-
-          var mutationImpact = [];
-          if (mergedGeneSetFilter.mutation && mergedGeneSetFilter.mutation.functionalImpact) {
-            mutationImpact = mergedGeneSetFilter.mutation.functionalImpact.is;
-          }
-
-
-          // Populate and store pathway's mutation highlights
-          GeneSetService.getPathwayProteinMap(parentPathwayId, mutationImpact).then(function(map) {
-            var pathwayMutationHighlights = [], uniprotIds;
-
-            // Normalize into array
-            _.forEach(map,function(value,id) {
-              if(value && value.dbIds) {
-                pathwayMutationHighlights.push({
-                  uniprotId:id,
-                  dbIds:value.dbIds.split(','),
-                  value:value.value
-                });
-              }
-            });
-
-            // Get ensembl ids for all the genes so we can link to advSearch page
-            uniprotIds = _.pluck(pathwayMutationHighlights, 'uniprotId');
-            GeneSetVerificationService.verify( uniprotIds.join(',') ).then(function(data) {
-              _.forEach(pathwayMutationHighlights,function(n){
-
-                var geneKey = 'external_db_ids.uniprotkb_swissprot';
-                if (! data.validGenes[geneKey]) {
-                  return;
-                }
-
-                var uniprotObj = data.validGenes[geneKey][n.uniprotId];
-                if(!uniprotObj){
-                  return;
-                }
-                var ensemblId = uniprotObj[0].id;
-                n.advQuery =  LocationService.mergeIntoFilters({
-                  gene: {
-                    id:  {is: [ensemblId]}
-                  }
-                });
-                n.geneSymbol = uniprotObj[0].symbol;
-                n.geneId = ensemblId;
-              });
-            });
-            
-            SetService.getTransientSet('GENE', {
-              'filters': {gene:{pathwayId:{is:[parentPathwayId]}}},
-              'sortBy': 'id',
-              'sortOrder': 'ASCENDING',
-              'name': parentPathwayId,
-              'size': _ctrl.geneSet.geneCount,
-              'transient': true 
-            }).then(function (entitySetData) {
-              CompoundsService.getCompoundsFromEntitySetId(entitySetData.id).then(function(drugs) {                
-                var drugMap = {};
-                _.forEach(drugs, function(drug) {
-                  var zincId = drug.zincId;
-                  var name = drug.name;
-                  var genes = drug.genes;
-                  _.forEach(genes, function(gene) {
-                    var uniprotId = gene.uniprot;
-                    
-                    if (_.isUndefined(drugMap[uniprotId])) {
-                      drugMap[uniprotId] = [];
-                    }
-                    
-                    drugMap[uniprotId].push({
-                      'zincId': zincId,
-                      'name': name
-                    });
-                  });
-                });
-
-                var pathwayDrugHighlights = [];
-                // Normalize into array
-                _.forEach(map,function(value,id) {
-                  if(value && value.dbIds && drugMap[id]) {
-                    pathwayDrugHighlights.push({
-                      uniprotId:id,
-                      dbIds:value.dbIds.split(','),
-                      drugs:drugMap[id]
-                    });
-                  }
-                });
-
-                // Get ensembl ids for all the genes so we can link to advSearch page
-                uniprotIds = _.pluck(pathwayDrugHighlights, 'uniprotId');
-                GeneSetVerificationService.verify( uniprotIds.join(',') ).then(function(data) {
-                  _.forEach(pathwayDrugHighlights,function(n){
-
-                    var geneKey = 'external_db_ids.uniprotkb_swissprot';
-                    if (! data.validGenes[geneKey]) {
-                      return;
-                    }
-
-                    var uniprotObj = data.validGenes[geneKey][n.uniprotId];
-                    if(!uniprotObj){
-                      return;
-                    }
-                    n.geneSymbol = uniprotObj[0].symbol;
-                    n.geneId = uniprotObj[0].id;
-                  });
-                });
-                _ctrl.pathway.mutationHighlights = pathwayMutationHighlights;
-                _ctrl.pathway.drugHighlights = pathwayDrugHighlights;
-              });
-            });
-            
-            // Wait before rendering legend, 
-            // Same approach taken in the pathway viewer page. 
-            setTimeout(function () {
-              $scope.$broadcast(PathwaysConstants.EVENTS.MODEL_READY_EVENT, {});
-            }, 100);
+              // Wait before rendering legend, 
+              // Same approach taken in the pathway viewer page. 
+              setTimeout(function () {
+                $scope.$broadcast(PathwaysConstants.EVENTS.MODEL_READY_EVENT, {});
+              }, 100);
           }).catch( function() {
-            _ctrl.pathway.mutationHighlights = [];
-            _ctrl.pathway.drugHighlights = [];
+            _ctrl.pathway = {
+              xml: '',
+              zooms: [''],
+              mutationHighlights: [],
+              drugHighlights: []
+            };
           });
         }
 
