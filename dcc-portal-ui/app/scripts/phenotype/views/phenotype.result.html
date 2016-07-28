@@ -90,6 +90,12 @@
                 <tr>
                     <td>
                         Overall Survival Analysis
+                        <i
+                            class="icon-file t_tools t_tools__tool pull-right"
+                            ng-click="exportDonors('overall', survivalAnalysisDataSets.overall)"
+                            data-tooltip="Export data for {{ activeSurvivalGraph === 'overall' ? 'overall' : 'disease free' }} survival analysis as TSV"
+                            data-tooltip-placement="left"
+                        ></i>
                     </td>
 
                     <td
@@ -112,6 +118,12 @@
                 <tr>
                     <td>
                         Disease Free Survival Analysis
+                        <i
+                            class="icon-file t_tools t_tools__tool pull-right"
+                            ng-click="exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
+                            data-tooltip="Export data for {{ activeSurvivalGraph === 'overall' ? 'overall' : 'disease free' }} survival analysis as TSV"
+                            data-tooltip-placement="left"
+                        ></i>
                     </td>
 
                     <td
@@ -174,14 +186,6 @@
                 }"
                 ng-click="activeSurvivalGraph = 'diseaseFree'"
             >Disease Free Survival</div>
-            <i
-                class="icon-file t_tools t_tools__tool pull-right"
-                ng-click="(activeSurvivalGraph === 'overall') ?
-                    exportDonors('overall', survivalAnalysisDataSets.overall) :
-                    exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
-                data-tooltip="Export data for {{ activeSurvivalGraph === 'overall' ? 'overall' : 'disease free' }} survival analysis as TSV"
-                data-tooltip-placement="left"
-            ></i>
         </div>
 
         <div class="survival-graphs">
