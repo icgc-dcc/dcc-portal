@@ -156,6 +156,49 @@
     };
   });
 
+  function LoadState(params) {
+    params = params || {};
+    var $scope = params.$scope;
+    var selfLoadState = { isLoading: !!params.isLoading };
+    var contributingLoadStates = _.compact([selfLoadState].concat(params.contributingLoadStates));
+
+    var loadState = {
+      get isLoading() {
+        return _.some(contributingLoadStates, 'isLoading');
+      },
+      set isLoading(val) {
+        selfLoadState.isLoading = val;
+      },
+      addContributingLoadState(loadState) {
+        if (_.contains(contributingLoadStates, loadState)) {
+          console.warn('load state is already in contributing loadStates, this shouldnt happen');
+          return;
+        }
+        contributingLoadStates = contributingLoadStates.concat(loadState);
+      },
+      removeContributingLoadState(loadState) {
+        contributingLoadStates = _.without(contributingLoadStates, loadState);
+      },
+      startLoad() {
+        selfLoadState.isLoading = true;
+      },
+      endLoad() {
+        selfLoadState.isLoading = false;
+      }
+    };
+
+    if ($scope && $scope.registerLoadState) {
+      invariant(_.isFunction($scope.deregisterLoadState), 'Cleanup function deregisterLoadState missing from $scope');
+      $scope.registerLoadState(loadState);
+      $scope.$on('$destroy', function () {
+        $scope.deregisterLoadState(loadState);
+      });
+    }
+
+    return loadState;
+  }
+
+  module.constant('LoadState', LoadState);
 
   module.filter('unique', function () {
     return function (items) {
