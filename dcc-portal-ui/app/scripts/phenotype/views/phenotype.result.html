@@ -7,7 +7,10 @@
 <div data-ng-if="isDeprecated" class="alert-error">
     <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
 </div>
-<div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
+
+<i class="icon-spin icon-spinner" ng-class="{'ng-hide': survivalAnalysisDataSets.overall.length}"></i>
+
+<div data-ng-if="survivalAnalysisDataSets.overall.length" data-disable-events="isDeprecated">
 
     <div>Your selected donor sets</div>
     <div class="wide">
