@@ -168,28 +168,28 @@
       set isLoading(val) {
         selfLoadState.isLoading = val;
       },
-      addContributingLoadState(loadState) {
+      addContributingLoadState: function (loadState) {
         if (_.contains(contributingLoadStates, loadState)) {
           console.warn('load state is already in contributing loadStates, this shouldnt happen');
           return;
         }
         contributingLoadStates = contributingLoadStates.concat(loadState);
       },
-      removeContributingLoadState(loadState) {
+      removeContributingLoadState: function (loadState) {
         contributingLoadStates = _.without(contributingLoadStates, loadState);
       },
-      loadWhile(promise) {
+      loadWhile: function (promise) {
         invariant(_.isFunction(promise.then), 'loadWhileAsync requires a promise');
         loadState.startLoad();
         return promise.finally(loadState.endLoad);
       },
-      startLoad() {
+      startLoad: function () {
         selfLoadState.isLoading = true;
       },
-      endLoad() {
+      endLoad: function () {
         selfLoadState.isLoading = false;
       },
-      register(scope) {
+      register: function (scope) {
         invariant(_.isFunction(scope.registerLoadState), 'Required function $scope.registerLoadState is invalid');
         invariant(_.isFunction(scope.deregisterLoadState), 'Required function $scope.deregisterLoadState is invalid');
         scope.registerLoadState(loadState);
