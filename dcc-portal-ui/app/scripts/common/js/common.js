@@ -178,6 +178,11 @@
       removeContributingLoadState(loadState) {
         contributingLoadStates = _.without(contributingLoadStates, loadState);
       },
+      loadWhile(promise) {
+        invariant(_.isFunction(promise.then), 'loadWhileAsync requires a promise');
+        loadState.startLoad();
+        return promise.finally(loadState.endLoad);
+      },
       startLoad() {
         selfLoadState.isLoading = true;
       },
