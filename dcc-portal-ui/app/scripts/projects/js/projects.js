@@ -504,9 +504,7 @@
         });
       });
 
-      loadState.startLoad();
-      $q.all([ fetchAndUpdateMutations, fetchAndUpdateStudies ])
-        .finally(loadState.endLoad);
+      loadState.loadWhile($q.all([ fetchAndUpdateMutations, fetchAndUpdateStudies ]));
     }
 
     $scope.$on('$locationChangeSuccess', function (event, dest) {
@@ -595,10 +593,10 @@
     }
 
     function refresh() {
-      loadState.startLoad();
-      Projects.one(_projectId).getGenes({filters: LocationService.filters()})
-        .then(success)
-        .finally(loadState.endLoad);
+
+      loadState.loadWhile(
+        Projects.one(_projectId).getGenes({filters: LocationService.filters()}).then(success)
+      );
     }
 
 
@@ -685,10 +683,9 @@
     }
 
     function refresh() {
-      loadState.startLoad();
-      project.getMutations({include: 'consequences', filters: LocationService.filters()})
-        .then(success)
-        .finally(loadState.endLoad);
+      loadState.loadWhile(
+        project.getMutations({include: 'consequences', filters: LocationService.filters()}).then(success)
+      );
     }
 
     $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
@@ -735,10 +732,9 @@
     }
 
     function refresh() {
-      loadState.startLoad();
-      Projects.one(_projectId).getDonors({ filters: LocationService.filters()})
-        .then(success)
-        .finally(loadState.endLoad);
+      loadState.loadWhile(
+        Projects.one(_projectId).getDonors({ filters: LocationService.filters()}).then(success)
+      );
     }
 
     $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
