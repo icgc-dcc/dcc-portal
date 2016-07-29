@@ -88,6 +88,9 @@
       border-bottom: 0;
       margin-top: 15px;
       margin-bottom: 0;
+      th.text-right:last-child {
+        padding-right: 1em;
+      }
       tr {
         transition: all 0.3s ease;
         &:nth-child(odd) {
