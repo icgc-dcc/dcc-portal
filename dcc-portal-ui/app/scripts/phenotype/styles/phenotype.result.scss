@@ -48,4 +48,19 @@
       pointer-events: none;
     }
   }
+
+  survival-analysis-graph {
+    .title {
+      text-transform: none;
+      font-size: 26px;
+      text-align: center;
+      margin-top: 12px;
+      margin-bottom: 0;
+    }
+    &:not(:fullscreen) {
+      .title {
+        display: none;
+      }
+    }
+  }
 }

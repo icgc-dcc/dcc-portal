@@ -345,6 +345,7 @@
       tipLabels: '<',
       censoredStatuses: '<',
       palette: '<',
+      title: '<'
     },
     controller: survivalAnalysisController,
     controllerAs: 'ctrl'
