@@ -98,6 +98,12 @@
           var genes = OncogridService.mapGenes($scope.genes, $scope.curatedList);
           var observations = OncogridService.mapOccurences($scope.occurrences, donors, genes);
 
+          // Clean gene & donor data before using for oncogrid. 
+          var donorObs = _.map(observations, 'donorId');
+          var geneObs = _.map(observations, 'geneId');
+          donors = _.filter(donors, function(d) { return donorObs.indexOf(d.id) >= 0;});
+          genes = _.filter(genes, function(g) { return geneObs.indexOf(g.id) >= 0;});
+
           if (observations.length === 0) {
             $('#oncogrid-controls').toggle();
             $('#oncogrid-no-data').toggle();
@@ -303,8 +309,6 @@
               $scope.crosshairMode = false;
               $scope.initOnco();
               $('#grid-button').addClass('active');
-              $scope.grid.removeDonors(function(d){return d.score === 0;});
-              $scope.grid.removeGenes(function(d){return d.score === 0;});
             });
           }
         });
