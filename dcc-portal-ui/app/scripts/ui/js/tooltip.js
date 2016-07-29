@@ -115,7 +115,7 @@
               element.css('top', position.top);
               element.css('left', position.left);
               element.removeClass('sticky');
-            })
+            });
           }
         }
 
