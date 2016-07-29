@@ -95,7 +95,7 @@
         var showInfo = function(){
           $('.pathway-info-controller').css('visibility','visible');
           $('.pathway-legend-controller').css('visibility','hidden');
-          $('.pathway-info').animate({left: '60%'});
+          $('.pathway-info').animate({left: '50%'});
         };
 
         var hideLegend = function(){

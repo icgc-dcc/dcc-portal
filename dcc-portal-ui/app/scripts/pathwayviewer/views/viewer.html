@@ -27,22 +27,25 @@
           <th class="pathway-gene-header-label pathway-gene-header">
             <a href="" data-ng-click="sortField = 'symbol'; sortDescendingly = !sortDescendingly">
               Gene
-              <span data-ng-show="sortField == 'symbol' && !sortDescendingly" class="fa fa-caret-down"></span>
-              <span data-ng-show="sortField == 'symbol' && sortDescendingly" class="fa fa-caret-up"></span>
+              <span data-ng-if="sortField === 'symbol' && !sortDescendingly" class="icon-sort-down"></span>
+              <span data-ng-if="sortField === 'symbol' && sortDescendingly" class="icon-sort-up"></span>
+              <span data-ng-if="sortField !== 'symbol'" class="icon-sort" style="color:hsl(0,0%,80%)"></span>
             </a>
           </th>
           <th class="pathway-gene-header-label pathway-gene-header">
             <a href="" data-ng-click="sortField = 'value'; sortDescendingly = !sortDescendingly">
               # ICGC Mutations
-              <span data-ng-show="sortField == 'value' && !sortDescendingly" class="fa fa-caret-down"></span>
-              <span data-ng-show="sortField == 'value' && sortDescendingly" class="fa fa-caret-up"></span>
+              <span data-ng-if="sortField === 'value' && !sortDescendingly" class="icon-sort-down"></span>
+              <span data-ng-if="sortField === 'value' && sortDescendingly" class="icon-sort-up"></span>
+              <span data-ng-if="sortField !== 'value'" class="icon-sort" style="color:hsl(0,0%,80%)"></span>
             </a>
           </th>
           <th class="pathway-gene-header-label pathway-gene-header">
             <a href="" data-ng-click="sortField = 'drugs.length'; sortDescendingly = !sortDescendingly">
               # Targeting Compounds
-              <span data-ng-show="sortField == 'drugs.length' && !sortDescendingly" class="fa fa-caret-down"></span>
-              <span data-ng-show="sortField == 'drugs.length' && sortDescendingly" class="fa fa-caret-up"></span>
+              <span data-ng-if="sortField === 'drugs.length' && !sortDescendingly" class="icon-sort-down"></span>
+              <span data-ng-if="sortField === 'drugs.length' && sortDescendingly" class="icon-sort-up"></span>
+              <span data-ng-if="sortField !== 'drugs.length'" class="icon-sort" style="color:hsl(0,0%,80%)"></span>
             </a>
           </th>
         </tr>
