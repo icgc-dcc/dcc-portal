@@ -271,27 +271,6 @@
       jQuery('.btn-group.open').trigger('click');
     };
 
-    /**
-     * Fixes the entitySet to the PQL compatible one if present.
-     */
-    function cleanEntitySet(oldFilter) {
-      var setId = _.get(oldFilter, 'file.entitySetId.is');
-
-      if (typeof setId !== 'undefined' && setId !== null) {
-        var newFilter = _.cloneDeep(oldFilter);
-        newFilter.donor = {id: {is: [Extensions.ENTITY_PREFIX + setId]}};
-        delete newFilter.file.entitySetId;
-
-        if (_.isEmpty(newFilter.file)) {
-          delete newFilter.file;
-        }
-
-        return newFilter;
-      }
-
-      return oldFilter;
-    }
-
     $scope.download = function() {
       if (_.isEmpty($scope.selectedFiles)) {
         var filters = FilterService.filters();
