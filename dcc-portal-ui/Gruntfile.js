@@ -107,6 +107,10 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/index.html'],
         tasks: ['injector:dev']
       },
+      scripts: {
+        files: ['<%= yeoman.app %>/scripts/**/*.js'],
+        tasks: ['newer:jshint']
+      },
       livereload: {
         options: {
           livereload: {
