@@ -34,19 +34,18 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
-import lombok.experimental.UtilityClass;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired }) )
+@RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class BrowserService {
 
   private final BrowserRepository browserRepository;
 
-  @UtilityClass
-  private class ParameterNames {
+  private static class ParameterNames {
 
-    private final String SEGMENT = "segment";
-    private final String RESOURCE = "resource";
+    private static final String SEGMENT = "segment";
+    private static final String RESOURCE = "resource";
+
   }
 
   /**
@@ -107,12 +106,13 @@ public class BrowserService {
 
     val projectFilterValue = queryMap.get("consequence_type");
     val projectFilters = parseList(projectFilterValue);
-    
+
     val impactFilterValue = queryMap.get("functional_impact");
     val impactFilters = parseList(impactFilterValue);
 
-    val searchResponse = browserRepository.getMutation(segmentId, start, stop, consequenceTypes, projectFilters, impactFilters);
-    
+    val searchResponse =
+        browserRepository.getMutation(segmentId, start, stop, consequenceTypes, projectFilters, impactFilters);
+
     return BrowserParsers.parseMutations(segmentId, start, stop, consequenceTypes, projectFilters, searchResponse);
   }
 
@@ -140,7 +140,7 @@ public class BrowserService {
   private List<Object> getSegmentGene(String segmentId, Long start, Long stop, Map<String, String> queryMap) {
     val biotypeValue = queryMap.get("biotype");
     val biotypes = parseList(biotypeValue);
-    
+
     val impactFilterValue = queryMap.get("functional_impact");
     val impactFilters = parseList(impactFilterValue);
 
@@ -153,7 +153,7 @@ public class BrowserService {
   private List<Object> getHistogramSegmentGene(String segmentId, Long start, Long stop, Map<String, String> queryMap) {
     val biotypeValue = queryMap.get("biotype");
     val biotypes = parseList(biotypeValue);
-    
+
     val impactFilterValue = queryMap.get("functional_impact");
     val impactFilters = parseList(impactFilterValue);
 

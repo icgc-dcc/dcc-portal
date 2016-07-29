@@ -30,6 +30,7 @@
     var _isSendingRequest = false;
 
     $scope.params = {};
+    $scope.params.downloadEnabled = true;    
     $scope.params.processing = false;
     $scope.params.dataTypes = [];
 
@@ -134,6 +135,11 @@
         $scope.params.dataTypes = $filter('orderBy')($scope.params.dataTypes, sortFunc);
 
         $scope.params.processing = false;
+      },function (error) {        
+        if(error.status === 503){
+          $scope.params.processing = false;
+          $scope.params.downloadEnabled = false;
+        }         
       });
     };
 

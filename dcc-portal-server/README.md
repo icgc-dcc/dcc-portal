@@ -25,12 +25,36 @@ cd dcc-portal/dcc-portal-server
 mvn -am
 ```
 
-To run from the command line without packaging into a jar:
+## Running
+
+### Command-line
+To run a basic test setup, execute the following:
 
 ```shell
-cd dcc-portal-server
-mvn exec:java -Dexec.args="--spring.profiles.active=<profile> --spring.config.location=path/to/application.yml"
+mvn -pl dcc-portal-server spring-boot:run -Drun.profiles=test
 ```
+
+To run a basic development setup, execute the following supplying information about the config server:
+
+```shell
+mvn -pl dcc-portal-server spring-boot:run -Drun.profiles=development -Drun.arguments='--spring.cloud.config.uri=http://<user>:<password>@<config-server-host>'
+```
+
+See the [spring-boot:run](http://docs.spring.io/spring-boot/docs/current/maven-plugin/run-mojo.html) documentations for further configuration details.
+
+### IDE
+
+From Eclipse or IntelliJ:
+
+| Property   | Value                                   |
+| ---------- | --------------------------------------- |
+| Main Class | `org.icgc.dcc.portal.server.ServerMain` |
+| VM Options | `-Xmx6G`                                |
+| Arguments  | `--spring.profiles.active=test` |
+
+*Note: If Eclipse or IntelliJ are taking a long time to build before running, try excluding
+the dcc-portal-ui as a module.*
+    
 
 ## Configuration
 

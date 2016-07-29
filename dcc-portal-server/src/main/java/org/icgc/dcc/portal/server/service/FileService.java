@@ -59,7 +59,10 @@ import org.icgc.dcc.portal.server.model.Keyword;
 import org.icgc.dcc.portal.server.model.Keywords;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.TermFacet;
+import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.repository.FileRepository;
+import org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvMapWriter;
@@ -147,10 +150,16 @@ public class FileService {
     val hits = response.getHits();
     val files = new Files(convertHitsToRepoFiles(hits));
 
-    files.setTermFacets(
-        fileRepository.getAggregationFacets(query, response.getAggregations()));
-    files.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
+    val termFacets = AggregationToFacetConverter.getInstance().convert(response.getAggregations());
+    val donorCount = fileRepository.searchGroupByRepoNameDonorId(termFacets, query);
 
+    val allFacets = ImmutableMap.<String, TermFacet> builder()
+        .putAll(termFacets)
+        .put(CustomAggregationKeys.REPO_DONOR_COUNT, donorCount)
+        .build();
+
+    files.setTermFacets(allFacets);
+    files.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
     return files;
   }
 

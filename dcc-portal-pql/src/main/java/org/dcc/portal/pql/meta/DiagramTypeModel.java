@@ -10,8 +10,6 @@ import org.dcc.portal.pql.meta.field.FieldModel;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import lombok.experimental.UtilityClass;
-
 public class DiagramTypeModel extends TypeModel {
 
   public DiagramTypeModel() {
@@ -36,8 +34,7 @@ public class DiagramTypeModel extends TypeModel {
   /**
    * Field aliases
    */
-  @UtilityClass
-  public class Fields {
+  public static class Fields {
 
     public static String PATHWAY_ID = "pathwayId";
     public static String HIGHLIGHTS = "highlights";
@@ -45,20 +42,19 @@ public class DiagramTypeModel extends TypeModel {
     public static String PROTEIN_MAP = "protein_map";
 
     // Main mapping
-    private final List<FieldModel> MAPPINGS = ImmutableList.<FieldModel> builder()
+    private static final List<FieldModel> MAPPINGS = ImmutableList.<FieldModel> builder()
         .add(string(EsFields.DIAGRAM_ID, PATHWAY_ID)).build();
   }
 
   /**
    * Raw ES fields
    */
-  @UtilityClass
-  public class EsFields {
+  public static class EsFields {
 
-    public final String DIAGRAM_ID = "diagram_id";
-    public final String XML = "xml";
-    public final String HIGHLIGHTS = "highlights";
-    public final String PROTEIN_MAP = "protein_map";
+    public static final String DIAGRAM_ID = "diagram_id";
+    public static final String XML = "xml";
+    public static final String HIGHLIGHTS = "highlights";
+    public static final String PROTEIN_MAP = "protein_map";
 
   }
 

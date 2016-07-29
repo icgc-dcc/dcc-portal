@@ -43,10 +43,10 @@
       if ($scope.type === 'mutation' && $scope.facetName === 'id') {
         return true;
       }
-      if ($scope.type === 'file' && $scope.facetName === 'id') {
+      if ($scope.type === 'file' && $scope.facetName === 'donorId') {
         return true;
       }
-      return $scope.type !== 'file' && $scope.facetName !== 'id';
+      return $scope.type === 'file' && $scope.facetName === 'id';
     };
 
     var isGeneType = $scope.isGeneType = function() {
@@ -86,22 +86,20 @@
     }
     
     function activeEntityHelper(type) {
-      var file = [];
+      var fileDonor = [];
       var other = [];
-
-      if (type === 'file') {
-        file = Facets.getActiveTags({
-          type: type,
-          facet: Extensions.ENTITY
-        });
-      }
+      
+      fileDonor = Facets.getActiveFromTags({
+        type: 'file',
+        facet:'donorId'
+      });
 
       other = Facets.getActiveFromTags({
         type: type,
         facet: 'id'
-      }, true);
+      });
 
-      return other.concat(file);
+      return other.concat(fileDonor);
     }
 
     function setup() {
@@ -116,7 +114,7 @@
       $scope.actives = Facets.getActiveFromTags({
         type: type,
         facet: facet
-      }, false);
+      });
       
       setActiveClass();
 
@@ -126,8 +124,14 @@
       // Fetch display names for entity lists
       $scope.entityIdMap = {};
 
-      if ($scope.activeEntityIds.length > 0) {
-        SetService.getMetaData ($scope.activeEntityIds).then (function (results) {
+      // Find any entity set ids among the entity ids in order to query for their names
+      var setIds = _($scope.activeEntityIds)
+        .filter(function(id) { return id.indexOf(Extensions.ENTITY_PREFIX) === 0;})
+        .map(function(id) { return id.replace('ES:', '');})
+        .value();
+
+      if (setIds.length > 0) {
+        SetService.getMetaData (setIds).then (function (results) {
           $scope.entityIdMap = SetService.lookupTable (results);
         });
       }

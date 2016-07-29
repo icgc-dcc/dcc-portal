@@ -350,7 +350,7 @@
 
           var filterTemplate = function(id) {
             if (type === 'donor') {
-              return {file: {entitySetId: {is: [id]}}};
+              return {file: {donorId: {is: [Extensions.ENTITY_PREFIX + id]}}};
             } else if (type === 'file') {
               return {file: {id: {is: [Extensions.ENTITY_PREFIX + id]}}};
             }

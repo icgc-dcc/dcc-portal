@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>4.3.4-SNAPSHOT</version>
+    <version>4.3.5-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -19,6 +19,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
       <version>${spring-boot.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-config</artifactId>
+      <version>${spring-cloud.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -322,6 +327,7 @@
   <properties>
     <!-- Versions - Spring -->
     <spring-boot.version>1.3.6.RELEASE</spring-boot.version>
+    <spring-cloud.version>1.1.2.RELEASE</spring-cloud.version>
 
     <!-- Versions - Jersey -->
     <jersey.version>1.17.1</jersey.version>
@@ -350,7 +356,6 @@
 
     <!-- Versions - Spring Boot Maven  -->
     <spring-maven-plugin.version>1.3.6.RELEASE</spring-maven-plugin.version>
-    <exec-maven-plugin.version>1.5.0</exec-maven-plugin.version>
   </properties>
 
 </project>

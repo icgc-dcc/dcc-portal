@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>4.3.4-SNAPSHOT</version>
+  <version>4.3.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -80,8 +80,8 @@
     <!-- Test - DCC -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-etl-resources</artifactId>
-      <version>${dcc-etl.version}</version>
+      <artifactId>dcc-release-resources</artifactId>
+      <version>${dcc-release.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -95,8 +95,8 @@
   <properties>
     <!-- Versions - DCC -->
     <dcc-common.version>4.2.5</dcc-common.version>
-    <dcc-download.version>4.2.9</dcc-download.version>
-    <dcc-etl.version>3.8.19</dcc-etl.version>
+    <dcc-download.version>4.2.12</dcc-download.version>
+    <dcc-release.version>4.1.4</dcc-release.version>
     <dcc-repository.version>1.0.0</dcc-repository.version>
 
     <elasticsearch-test.version>1.2.1</elasticsearch-test.version>

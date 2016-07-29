@@ -5,10 +5,9 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>4.3.4-SNAPSHOT</version>
+    <version>4.3.5-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-
 
   <artifactId>dcc-portal-pql</artifactId>
   <name>${project.artifactId}</name>
@@ -51,7 +50,7 @@
       <artifactId>elasticsearch-test</artifactId>
     </dependency>
   </dependencies>
-  
+
 
   <build>
     <plugins>
