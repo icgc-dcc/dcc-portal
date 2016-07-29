@@ -45,7 +45,11 @@
 
     $scope.portalFeature = PortalFeature;
 
-    $scope.stagedFeatures = cloudLinks;
+    $scope.stagedFeatures = {
+      getCloudLinks: function() {
+        return cloudLinks;
+      }
+    };
   });
 
 })();
