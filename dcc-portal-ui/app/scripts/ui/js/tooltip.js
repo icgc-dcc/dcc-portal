@@ -110,10 +110,12 @@
               };
             }
           }else{
-            var position = calculateAbsoluteCoordinates(params.placement, params.element, params.elementPosition);
-            element.css('top', position.top);
-            element.css('left', position.left);
-            element.removeClass('sticky');
+            setTimeout(function () {
+              var position = calculateAbsoluteCoordinates(params.placement, params.element, params.elementPosition);
+              element.css('top', position.top);
+              element.css('left', position.left);
+              element.removeClass('sticky');
+            });
           }
         }
 

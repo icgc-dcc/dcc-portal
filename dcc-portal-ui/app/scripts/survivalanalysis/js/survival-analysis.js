@@ -141,7 +141,7 @@
         return;
       }
       var line = d3.svg.area()
-        .interpolate('step-after')
+        .interpolate('step-before')
         .x(function(p) { return x(p.x); })
         .y(function(p) { return y(p.y); });
 
@@ -179,7 +179,7 @@
           .attr('x1', function(d) { return x(d.time); })
           .attr('y1', function(d) { return y(d.survivalEstimate); })
           .attr('x2', function(d) { return x(d.time); })
-          .attr('y2', function(d) { return y(d.survivalEstimate) - 5; })
+          .attr('y2', function(d) { return y(d.survivalEstimate) + (d.status === 'deceased' ? 10 : -5); })
           .attr('stroke', setColor);
       } else {
         markers = markers.append('svg:circle')
@@ -345,6 +345,7 @@
       tipLabels: '<',
       censoredStatuses: '<',
       palette: '<',
+      title: '<'
     },
     controller: survivalAnalysisController,
     controllerAs: 'ctrl'

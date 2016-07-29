@@ -53,6 +53,7 @@ $faded: #e6dede;
     }
 
     .point-line {
+      cursor: pointer;
       &[status="deceased"] {
         opacity: 0;
       }
@@ -98,6 +99,16 @@ $faded: #e6dede;
     svg {
       width: 100%;
       height: auto;
+    }
+  }
+
+  .icon-spinner {
+    width: 18px;
+    height: 18px;
+    opacity: 0.6;
+    &:before {
+      height: 1em;
+      @extend .absolute-center;
     }
   }
 
