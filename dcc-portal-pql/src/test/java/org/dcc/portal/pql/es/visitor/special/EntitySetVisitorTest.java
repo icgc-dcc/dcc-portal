@@ -20,9 +20,13 @@ package org.dcc.portal.pql.es.visitor.special;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-import static org.dcc.portal.pql.meta.Type.FILE;
+import static org.dcc.portal.pql.meta.TypeModel.DONOR_LOOKUP;
+import static org.dcc.portal.pql.meta.TypeModel.FILE_LOOKUP;
+import static org.dcc.portal.pql.meta.TypeModel.GENE_LOOKUP;
+import static org.dcc.portal.pql.meta.TypeModel.MUTATION_LOOKUP;
 import static org.dcc.portal.pql.utils.Tests.createEsAst;
 
 import java.util.Optional;
@@ -97,7 +101,7 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("_mutation_id");
-    assertLookupInfo(termNode.getLookup(), "mutation-ids");
+    assertLookupInfo(termNode.getLookup(), MUTATION_LOOKUP);
   }
 
   @Test
@@ -106,7 +110,7 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("ssm_occurrence.donor._donor_id");
-    assertLookupInfo(termNode.getLookup(), "donor-ids");
+    assertLookupInfo(termNode.getLookup(), DONOR_LOOKUP);
   }
 
   @Test
@@ -115,7 +119,7 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("transcript.gene._gene_id");
-    assertLookupInfo(termNode.getLookup(), "gene-ids");
+    assertLookupInfo(termNode.getLookup(), GENE_LOOKUP);
   }
 
   @Test
@@ -124,7 +128,7 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("gene.ssm._mutation_id");
-    assertLookupInfo(termNode.getLookup(), "mutation-ids");
+    assertLookupInfo(termNode.getLookup(), MUTATION_LOOKUP);
   }
 
   @Test
@@ -133,7 +137,7 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("_donor_id");
-    assertLookupInfo(termNode.getLookup(), "donor-ids");
+    assertLookupInfo(termNode.getLookup(), DONOR_LOOKUP);
   }
 
   @Test
@@ -142,7 +146,7 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("gene._gene_id");
-    assertLookupInfo(termNode.getLookup(), "gene-ids");
+    assertLookupInfo(termNode.getLookup(), GENE_LOOKUP);
   }
 
   @Test
@@ -151,7 +155,7 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("donor.ssm._mutation_id");
-    assertLookupInfo(termNode.getLookup(), "mutation-ids");
+    assertLookupInfo(termNode.getLookup(), MUTATION_LOOKUP);
   }
 
   @Test
@@ -160,7 +164,7 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("donor._donor_id");
-    assertLookupInfo(termNode.getLookup(), "donor-ids");
+    assertLookupInfo(termNode.getLookup(), DONOR_LOOKUP);
   }
 
   @Test
@@ -169,7 +173,7 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("_gene_id");
-    assertLookupInfo(termNode.getLookup(), "gene-ids");
+    assertLookupInfo(termNode.getLookup(), GENE_LOOKUP);
   }
 
   @Test
@@ -178,7 +182,16 @@ public class EntitySetVisitorTest {
     val termNode = getTermNode(result);
 
     assertThat(termNode.getField()).isEqualTo("id");
-    assertLookupInfo(termNode.getLookup(), "donor-ids");
+    assertLookupInfo(termNode.getLookup(), FILE_LOOKUP);
+  }
+
+  @Test
+  public void fileRepoDonorIdentifiableTermTest() {
+    val result = prepareResult(getQuery("donor"), FILE);
+    val termNode = getTermNode(result);
+
+    assertThat(termNode.getField()).isEqualTo("donors.donor_id");
+    assertLookupInfo(termNode.getLookup(), DONOR_LOOKUP);
   }
 
   @Test

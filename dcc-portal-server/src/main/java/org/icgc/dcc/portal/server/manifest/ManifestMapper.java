@@ -18,9 +18,9 @@
 package org.icgc.dcc.portal.server.manifest;
 
 import static com.google.common.collect.Maps.uniqueIndex;
-import static org.icgc.dcc.portal.server.util.Strings.defaultString;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
+import static org.icgc.dcc.portal.server.util.Strings.defaultString;
 
 import java.util.Collections;
 import java.util.List;
@@ -80,9 +80,9 @@ public class ManifestMapper {
     val indexFile = fileCopy.getIndexFile();
     val indexObjectId = (null == indexFile) ? "" : defaultString(indexFile.getObjectId());
     val repo = repositories.get(fileCopy.getRepoCode());
-  
+
     val repoFileId = repo.isGNOS() ? fileCopy.getRepoDataBundleId() : fileCopy.getRepoFileId();
-  
+
     return new ManifestFile()
         .setName(defaultString(fileCopy.getFileName()))
         .setFormat(defaultString(fileCopy.getFileFormat()))
@@ -129,11 +129,18 @@ public class ManifestMapper {
     return fileFields;
   }
 
+  @SuppressWarnings("unchecked")
   private static String mapValue(SearchHit hit, String fieldName) {
     val rawFieldName = IndexModel.getFileTypeModel().getField(fieldName);
-    val resultField = hit.getFields().get(rawFieldName);
+    String[] path = rawFieldName.split("\\.");
 
-    return null == resultField ? "" : defaultString(getString(resultField.getValues()));
+    Object resultField = hit.getSource();
+    for (int i = 0; i < path.length; i++) {
+      val node = path[i];
+      resultField = ((Map<String, Object>) resultField).get(node);
+    }
+
+    return null == resultField ? "" : defaultString(getString(resultField));
   }
 
 }
