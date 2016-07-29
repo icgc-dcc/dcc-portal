@@ -22,6 +22,10 @@ import static com.google.common.base.Throwables.propagate;
 import static java.lang.Math.min;
 import static lombok.AccessLevel.PRIVATE;
 import static org.dcc.portal.pql.meta.Type.FILE;
+import static org.dcc.portal.pql.meta.TypeModel.DONOR_LOOKUP;
+import static org.dcc.portal.pql.meta.TypeModel.FILE_LOOKUP;
+import static org.dcc.portal.pql.meta.TypeModel.GENE_LOOKUP;
+import static org.dcc.portal.pql.meta.TypeModel.MUTATION_LOOKUP;
 import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
 import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
 import static org.elasticsearch.search.sort.SortOrder.ASC;
@@ -114,7 +118,10 @@ public class TermsLookupRepository {
   @RequiredArgsConstructor(access = PRIVATE)
   public enum TermLookupType {
 
-    GENE_IDS("gene-ids"), MUTATION_IDS("mutation-ids"), DONOR_IDS("donor-ids"), FILE_IDS("file-ids");
+    GENE_IDS(GENE_LOOKUP),
+    MUTATION_IDS(MUTATION_LOOKUP),
+    DONOR_IDS(DONOR_LOOKUP),
+    FILE_IDS(FILE_LOOKUP);
 
     @NonNull
     private final String name;

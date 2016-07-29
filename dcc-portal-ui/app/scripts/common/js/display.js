@@ -48,30 +48,6 @@
       filter.gene[type] = {is: geneSetIds};
       return filter;
     };
-   
-    /*
-     * This only applies when we're in the External File page. It "moves" (and merges) the 'entitySetId' filter
-     * into the 'donorId' filter. The reason is to make 'Uploaded Donor Set' appear as a filter along with
-     * other donor IDs in the 'donorId' filter.
-     */
-    function adjustExternalFileFilters (filters, translations) {
-      var path = ['file', Extensions.ENTITY, 'is'];
-      var entitySetIds = _.get (filters, path, []);
-
-      if ((! _.isArray (entitySetIds)) || _.isEmpty (entitySetIds)) {
-        return filters;
-      }
-
-      entitySetIds = _.map (entitySetIds, function (id) {
-        return translations [id] || id;
-      });
-
-      var donorIdPath = 'file.donorId.is';
-      var donorIds = _.get (filters, donorIdPath, []);
-
-      delete filters.file [Extensions.ENTITY];
-      return _.set (filters, donorIdPath, entitySetIds.concat (donorIds));
-    }
 
     /*
      * Builds a model that is is similar in strcuture to filters param, augmented
@@ -83,7 +59,6 @@
       var self = this;
 
       var queryFilters = _.cloneDeep (filters);
-      queryFilters = adjustExternalFileFilters (queryFilters, entityIDMap);
 
       angular.forEach (queryFilters, function (typeFilters, typeKey) {
         display[typeKey] = {};
@@ -149,7 +124,7 @@
           facetIter.forEach(function(term) {
             var uiTerm = term, isPredefined = false;
             
-            if (facetKey === Extensions.ENTITY || facetKey === 'id') {
+            if (facetKey === 'id' || facetKey === 'donorId') {
               if (term.indexOf(Extensions.ENTITY_PREFIX) === 0) {
                 uiTerm = entityIDMap[term.substring(3)] || term;
               } else {

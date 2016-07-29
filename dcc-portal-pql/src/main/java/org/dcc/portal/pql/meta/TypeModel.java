@@ -29,10 +29,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.dcc.portal.pql.exception.SemanticException;
 import org.dcc.portal.pql.meta.field.FieldModel;
 import org.dcc.portal.pql.meta.visitor.CreateAliasVisitor;
@@ -42,6 +38,10 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class TypeModel {
@@ -71,6 +71,11 @@ public abstract class TypeModel {
   public static final String LOOKUP_PATH = "lookup.path";
   public static final String LOOKUP_INDEX = "lookup.index";
   public static final String LOOKUP_TYPE = "lookup.type";
+
+  public static final String DONOR_LOOKUP = "donor-ids";
+  public static final String GENE_LOOKUP = "gene-ids";
+  public static final String MUTATION_LOOKUP = "mutation-ids";
+  public static final String FILE_LOOKUP = "file-ids";
 
   /**
    * Contains fields that help to resolve 'the special cases in the API'. This fields should not be split when alias to

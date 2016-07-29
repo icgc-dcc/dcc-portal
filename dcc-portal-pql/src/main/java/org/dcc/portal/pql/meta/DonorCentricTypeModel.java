@@ -29,9 +29,6 @@ import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 import java.util.List;
 import java.util.Map;
 
-import lombok.val;
-import lombok.experimental.UtilityClass;
-
 import org.dcc.portal.pql.meta.field.ArrayFieldModel;
 import org.dcc.portal.pql.meta.field.FieldModel;
 import org.dcc.portal.pql.meta.field.ObjectFieldModel;
@@ -40,6 +37,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import lombok.val;
+
 public class DonorCentricTypeModel extends TypeModel {
 
   private final static String TYPE_PREFIX = "donor";
@@ -47,10 +46,9 @@ public class DonorCentricTypeModel extends TypeModel {
   /**
    * Field aliases
    */
-  @UtilityClass
-  public class Fields {
+  public static class Fields {
 
-    public final String PROJECT_ID = "projectId";
+    public static final String PROJECT_ID = "projectId";
 
   }
 
@@ -286,7 +284,7 @@ public class DonorCentricTypeModel extends TypeModel {
         .put(BIOLOGICAL_PROCESS, "gene.go_term.biological_process")
         .put(CELLULAR_COMPONENT, "gene.go_term.cellular_component")
         .put(MOLECULAR_FUNCTION, "gene.go_term.molecular_function")
-        .put(LOOKUP_TYPE, "donor-ids")
+        .put(LOOKUP_TYPE, DONOR_LOOKUP)
         .build();
   }
 

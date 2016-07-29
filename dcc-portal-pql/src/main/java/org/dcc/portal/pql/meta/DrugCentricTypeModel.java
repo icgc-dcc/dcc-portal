@@ -35,9 +35,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
-
 import org.dcc.portal.pql.meta.field.ArrayFieldModel;
 import org.dcc.portal.pql.meta.field.FieldModel;
 import org.dcc.portal.pql.meta.field.LongFieldModel;
@@ -47,6 +44,8 @@ import org.dcc.portal.pql.meta.field.StringFieldModel;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+
+import lombok.NonNull;
 
 /**
  * Type model of Drug index type
@@ -78,89 +77,88 @@ public class DrugCentricTypeModel extends TypeModel {
   /**
    * Field aliases and mappings
    */
-  @UtilityClass
-  public class Fields {
+  public static class Fields {
 
     // Aliases
-    public final String ID = "id";
-    public final String ZINC_ID = "zincId";
-    public final String NAME = "name";
-    public final String SMALL_IMAGE_URL = "smallImageUrl";
-    public final String LARGE_IMAGE_URL = "largeImageUrl";
-    public final String INCHIKEY = "inchikey";
-    public final String DRUG_CLASS = "drugClass";
+    public static final String ID = "id";
+    public static final String ZINC_ID = "zincId";
+    public static final String NAME = "name";
+    public static final String SMALL_IMAGE_URL = "smallImageUrl";
+    public static final String LARGE_IMAGE_URL = "largeImageUrl";
+    public static final String INCHIKEY = "inchikey";
+    public static final String DRUG_CLASS = "drugClass";
 
-    public final String CANCER_TRIAL_COUNT = "cancerTrialCount";
-    public final String SYNONYMS = "synonyms";
+    public static final String CANCER_TRIAL_COUNT = "cancerTrialCount";
+    public static final String SYNONYMS = "synonyms";
 
-    public final String EXTERNAL_REFERENCES = "externalReferences";
-    public final String CHEMBL = fullAlias(EXTERNAL_REFERENCES, "chembl");
-    public final String DRUG_BANK = "drugbank";
+    public static final String EXTERNAL_REFERENCES = "externalReferences";
+    public static final String CHEMBL = fullAlias(EXTERNAL_REFERENCES, "chembl");
+    public static final String DRUG_BANK = "drugbank";
 
-    public final String ATC_CODES = "atcCodes";
-    public final String ATC_CODE = fullAlias(ATC_CODES, "code");
-    public final String ATC_DESCRIPTION = fullAlias(ATC_CODES, "description");
-    public final String ATC_LEVEL5_CODES = "atcLevel5Codes";
+    public static final String ATC_CODES = "atcCodes";
+    public static final String ATC_CODE = fullAlias(ATC_CODES, "code");
+    public static final String ATC_DESCRIPTION = fullAlias(ATC_CODES, "description");
+    public static final String ATC_LEVEL5_CODES = "atcLevel5Codes";
 
-    public final String GENES = "genes";
+    public static final String GENES = "genes";
     // public final String GENES_CHEMBL = fullAlias(GENES, "chembl");
     // public final String GENES_DESCRIPTION = fullAlias(GENES, "description");
-    public final String UNIPROT = "uniprot";
-    public final String ENSEMBL_GENE_ID = "ensemblGeneId";
-    public final String GENE_ID = "gene.id";
+    public static final String UNIPROT = "uniprot";
+    public static final String ENSEMBL_GENE_ID = "ensemblGeneId";
+    public static final String GENE_ID = "gene.id";
 
-    public final String TRIALS = "trials";
-    public final String TRIALS_CODE = fullAlias(TRIALS, "code");
-    public final String TRIALS_DESCRIPTION = fullAlias(TRIALS, "description");
-    public final String TRIALS_PHASE_NAME = "phaseName";
-    public final String TRIALS_START_DATE = "startDate";
-    public final String TRIALS_STATUS_NAME = "statusName";
+    public static final String TRIALS = "trials";
+    public static final String TRIALS_CODE = fullAlias(TRIALS, "code");
+    public static final String TRIALS_DESCRIPTION = fullAlias(TRIALS, "description");
+    public static final String TRIALS_PHASE_NAME = "phaseName";
+    public static final String TRIALS_START_DATE = "startDate";
+    public static final String TRIALS_STATUS_NAME = "statusName";
 
-    public final String TRIALS_CONDITIONS = fullAlias(TRIALS, "conditions");
-    public final String TRIALS_CONDITIONS_NAME = fullAlias(TRIALS_CONDITIONS, "name");
-    public final String TRIALS_CONDITIONS_SHORT_NAME = fullAlias(TRIALS_CONDITIONS, "shortName");
+    public static final String TRIALS_CONDITIONS = fullAlias(TRIALS, "conditions");
+    public static final String TRIALS_CONDITIONS_NAME = fullAlias(TRIALS_CONDITIONS, "name");
+    public static final String TRIALS_CONDITIONS_SHORT_NAME = fullAlias(TRIALS_CONDITIONS, "shortName");
 
-    public final String TRIALS_DRUGS_MAPPINGS = fullAlias(TRIALS, "drugMappings");
-    public final String TRIALS_DRUGS_MAPPINGS_DESCRIPTION = fullAlias(TRIALS_DRUGS_MAPPINGS, "description");
-    public final String TRIALS_DRUGS_MAPPINGS_IDS = fullAlias(TRIALS_DRUGS_MAPPINGS, "ids");
+    public static final String TRIALS_DRUGS_MAPPINGS = fullAlias(TRIALS, "drugMappings");
+    public static final String TRIALS_DRUGS_MAPPINGS_DESCRIPTION = fullAlias(TRIALS_DRUGS_MAPPINGS, "description");
+    public static final String TRIALS_DRUGS_MAPPINGS_IDS = fullAlias(TRIALS_DRUGS_MAPPINGS, "ids");
 
     // Sub-object mappings
-    private ArrayFieldModel synonyms() {
+    private static ArrayFieldModel synonyms() {
       return arrayOfStrings(esField(SYNONYMS), SYNONYMS);
     }
 
-    private ObjectFieldModel externalReferences() {
+    private static ObjectFieldModel externalReferences() {
       return object(esField(EXTERNAL_REFERENCES), EXTERNAL_REFERENCES,
           arrayOfStrings("chembl", CHEMBL),
           arrayOfStrings(esField(DRUG_BANK), multiAliases(EXTERNAL_REFERENCES, DRUG_BANK)));
     }
 
-    private ArrayFieldModel atcCodes() {
+    private static ArrayFieldModel atcCodes() {
       return arrayOfObjects(esField(ATC_CODES), ATC_CODES, object(
           string("code", ATC_CODE),
           string("description", ATC_DESCRIPTION),
           stringField(ATC_CODES, ATC_LEVEL5_CODES)));
     }
 
-    private ArrayFieldModel genes() {
+    private static ArrayFieldModel genes() {
       return arrayOfObjects(esField(GENES), GENES, object(
           stringField(GENES, UNIPROT),
           identifiableString(esField(ENSEMBL_GENE_ID), GENE_ID)));
     }
 
-    private ArrayFieldModel trialsConditions() {
+    private static ArrayFieldModel trialsConditions() {
       return arrayOfObjects("conditions", TRIALS_CONDITIONS, object(
           string("name", TRIALS_CONDITIONS_NAME),
           string("short_name", TRIALS_CONDITIONS_SHORT_NAME)));
     }
 
-    private ArrayFieldModel trialsDrugMappings() {
+    private static ArrayFieldModel trialsDrugMappings() {
       return arrayOfObjects("drug_mappings", TRIALS_DRUGS_MAPPINGS, object(
           string("description", TRIALS_DRUGS_MAPPINGS_DESCRIPTION),
           arrayOfStrings("ids", TRIALS_DRUGS_MAPPINGS_IDS)));
     }
 
-    private ArrayFieldModel trials() {
+    private static ArrayFieldModel trials() {
       return arrayOfObjects(esField(TRIALS), TRIALS, object(
           string("code", TRIALS_CODE),
           string("description", TRIALS_DESCRIPTION),
@@ -172,15 +170,16 @@ public class DrugCentricTypeModel extends TypeModel {
     }
 
     // Top-level fields
-    private final List<StringFieldModel> stringFields = transform(
+    private static final List<StringFieldModel> stringFields = transform(
         newArrayList(NAME, SMALL_IMAGE_URL, LARGE_IMAGE_URL, INCHIKEY, DRUG_CLASS),
         DrugCentricTypeModel::stringField);
 
-    private final List<FieldModel> otherFields = newArrayList(primaryKey(ZINC_ID), numberField(CANCER_TRIAL_COUNT),
-        synonyms(), externalReferences(), atcCodes(), genes(), trials());
+    private static final List<FieldModel> otherFields =
+        newArrayList(primaryKey(ZINC_ID), numberField(CANCER_TRIAL_COUNT),
+            synonyms(), externalReferences(), atcCodes(), genes(), trials());
 
     // Main mapping
-    private final List<FieldModel> MAPPINGS = combine(Stream.of(stringFields, otherFields));
+    private static final List<FieldModel> MAPPINGS = combine(Stream.of(stringFields, otherFields));
 
   }
 

@@ -22,20 +22,6 @@
     </li>
     <li>
         <ul class="t_facets__facet__terms__active">
-            <li class="t_facets__facet__terms__active__term__label {{activeClass}}"
-                data-active-term
-                data-item="item"
-                data-ng-repeat="item in activeEntityIds"
-                data-ng-click="removeSpecificTerm(type, Extensions.ENTITY, item)"
-                data-ng-mouseenter="mouseOver($event)"
-                data-ng-mouseleave="mouseLeave($event)">
-
-                <span class="t_facets__facet__terms__active__term__label__text">
-                <i class="icon-ok"></i>
-                <span data-tooltip="{{ item }}"
-                      data-tooltip-placement="top">{{ (entityIdMap[item] || item) }}</span>
-                </span>
-            </li>
 
             <li ng-if="isGeneType()"
                 class="t_facets__facet__terms__active__term__label {{activeClass}}"
@@ -50,7 +36,7 @@
                   <i class="icon-ok" />
                   <span tooltip="{{:: gene.tooltip }}"
                         tooltip-placement="top"
-                        ng-bind="gene.uiText" />
+                        ng-bind="entityIdMap[gene.uiText.replace('ES:', '')]|| gene.uiText" />
                 </span>
             </li>
 
