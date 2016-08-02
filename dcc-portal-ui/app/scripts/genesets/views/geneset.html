@@ -411,8 +411,12 @@
          data-ng-class="{'loading': !GeneSetCtrl.geneSet.projects, 'empty': GeneSetCtrl.geneSet.projects.length == 0}">
     <div data-ng-if="GeneSetCtrl.pathway">
         <h3>Pathway Viewer</h3>
-        <h4 data-ng-if="GeneSetCtrl.pathway.xml!==''">Drag and scroll to explore the pathway. Double click to reset the view.</h4>
-        <pathway-viewer data-items="GeneSetCtrl.pathway.xml" 
+        <h3 class="spinner-container" data-ng-if="!GeneSetCtrl.pathway.xml">
+            <i class="icon-spinner icon-spin"></i>
+            Retrieving Pathway Data...
+        </h3>
+        <h4 data-ng-if="GeneSetCtrl.pathway.xml">Drag and scroll to explore the pathway. Double click to reset the view.</h4>
+        <pathway-viewer data-items="GeneSetCtrl.pathway.xml"
                         data-zooms="GeneSetCtrl.pathway.zooms"
                         data-mutation-highlights="GeneSetCtrl.pathway.mutationHighlights"
                         data-drug-highlights="GeneSetCtrl.pathway.drugHighlights" >

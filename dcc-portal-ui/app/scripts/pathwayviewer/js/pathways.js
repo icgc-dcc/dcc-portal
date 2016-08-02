@@ -167,7 +167,8 @@
           setTimeout(function () {
             $scope.$broadcast(PathwaysConstants.EVENTS.MODEL_READY_EVENT, {});
           }, 100);
-        }).catch(function () {
+        })
+        .catch(function () {
           $scope.pathway = {
             xml: '',
             zooms: [''],
