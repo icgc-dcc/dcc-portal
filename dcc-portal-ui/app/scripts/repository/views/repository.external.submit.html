@@ -46,9 +46,9 @@
              <td>
                 {{ repoData.repoName }}
              </td>
-             <td class="text-right">{{ summary[repoData.repoName].donorCount | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileCount | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileSize | bytes }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].donorCount || 0 | number }} / {{ repoData.donorCount | number }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].fileCount || 0 | number }} / {{ repoData.fileCount | number }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].fileSize || 0 | bytes }} / {{ repoData.fileSize | bytes }}</td>
              <td class="text-right">
                 <a
                   href="{{getRepoManifestUrl({
