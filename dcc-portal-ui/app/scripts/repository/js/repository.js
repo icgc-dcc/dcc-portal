@@ -245,6 +245,16 @@
 
       $scope.repos = _.values(repos);
       $scope.selectedRepos = Object.keys(repos);
+
+      var manifestSummaryQuery = {
+        query: p,
+        repoNames: _.map(repos, 'repoName')
+      };
+
+      return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
+        function(summary) {
+          $scope.summary = summary;
+        });
     });
 
     $scope.getRepoManifestUrl = ExternalRepoService.getRepoManifestUrl;

@@ -46,9 +46,9 @@
              <td>
                 {{ repoData.repoName }}
              </td>
-             <td class="text-right">{{ repoData.donorCount | number }}</td>
-             <td class="text-right">{{ repoData.fileCount | number }}</td>
-             <td class="text-right">{{ repoData.fileSize | bytes }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].donorCount | number }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].fileCount | number }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].fileSize | bytes }}</td>
              <td class="text-right">
                 <a
                   href="{{getRepoManifestUrl({

@@ -240,7 +240,7 @@ public class FileService {
           long size = getRepoSize((InternalNested) bucket.getAggregations().get("repositorySizes"));
           long donorCount = getDonorCount((InternalNested) bucket.getAggregations().get("repositoryDonors"));
 
-          Map<String, Long> map = ImmutableMap.of("count", count, "size", size, "donorCount", donorCount);
+          Map<String, Long> map = ImmutableMap.of("fileCount", count, "fileSize", size, "donorCount", donorCount);
           return new SimpleImmutableEntry<String, Map<String, Long>>(repo, map);
         }).collect(Collectors.toImmutableMap(e -> e.getKey(), e -> e.getValue()));
 

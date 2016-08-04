@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -222,6 +223,7 @@ public class FileResource extends Resource {
   @POST
   @Path("/summary/manifest")
   @Timed
+  @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
   public Map<String, Map<String, Long>> getManifestSummary(ManifestSummaryQuery summary) {
     return fileService.getManifestSummary(summary);
