@@ -54,6 +54,7 @@ import org.elasticsearch.common.collect.Iterables;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.bucket.filters.Filters.Bucket;
 import org.elasticsearch.search.aggregations.bucket.filters.InternalFilters;
 import org.elasticsearch.search.aggregations.bucket.nested.InternalNested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -234,12 +235,12 @@ public class FileService {
     val repos = summary.getRepoNames();
     val responseMap = repos.stream()
         .map(repo -> {
-          val bucket = filtersAggs.getBucketByKey(repo);
-          val count = bucket.getDocCount();
-          val size = getRepoSize((InternalNested) bucket.getAggregations().get("repositorySizes"));
-          val donorCount = getDonorCount((InternalNested) bucket.getAggregations().get("repositoryDonors"));
+          Bucket bucket = filtersAggs.getBucketByKey(repo);
+          long count = bucket.getDocCount();
+          long size = getRepoSize((InternalNested) bucket.getAggregations().get("repositorySizes"));
+          long donorCount = getDonorCount((InternalNested) bucket.getAggregations().get("repositoryDonors"));
 
-          val map = ImmutableMap.of("count", count, "size", size, "donorCount", donorCount);
+          Map<String, Long> map = ImmutableMap.of("count", count, "size", size, "donorCount", donorCount);
           return new SimpleImmutableEntry<String, Map<String, Long>>(repo, map);
         }).collect(Collectors.toImmutableMap(e -> e.getKey(), e -> e.getValue()));
 
