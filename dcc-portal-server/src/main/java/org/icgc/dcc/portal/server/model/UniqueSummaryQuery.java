@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ManifestSummaryQuery {
+public class UniqueSummaryQuery {
 
   Query query;
   List<String> repoNames;

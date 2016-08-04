@@ -39,7 +39,6 @@ import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.avg;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.filter;
-import static org.elasticsearch.search.aggregations.AggregationBuilders.global;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.missing;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.nested;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.sum;
@@ -95,7 +94,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
-import org.icgc.dcc.portal.server.model.ManifestSummaryQuery;
+import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.SearchFieldMapper;
 import org.icgc.dcc.portal.server.model.TermFacet;
@@ -422,19 +421,17 @@ public class FileRepository {
     val repoSizeTermsSubAgg = terms(repoSizeAggKey).size(MAX_FACET_TERM_COUNT).field(repoNameFieldName)
         .subAggregation(
             sum(CustomAggregationKeys.FILE_SIZE).field(toRawFieldName(Fields.FILE_SIZE)));
-    val repoSizeSubAgg = global(repoSizeAggKey)
-        .subAggregation(nestedAgg(repoSizeAggKey, EsFields.FILE_COPIES, repoSizeTermsSubAgg));
+    val repoSizeSubAgg = nestedAgg(repoSizeAggKey, EsFields.FILE_COPIES, repoSizeTermsSubAgg);
     result.add(repoSizeSubAgg);
 
-    val missingSizeAgg = global(repoSizeAggKey + MISSING)
-        .subAggregation(nestedAgg(repoSizeAggKey + MISSING, EsFields.FILE_COPIES,
-            missing(repoSizeAggKey + MISSING).field(toRawFieldName(Fields.FILE_SIZE))));
+    val missingSizeAgg = nestedAgg(repoSizeAggKey + MISSING, EsFields.FILE_COPIES,
+        missing(repoSizeAggKey + MISSING).field(toRawFieldName(Fields.FILE_SIZE)));
     result.add(missingSizeAgg);
 
     return result.build();
   }
 
-  public SearchResponse getManifestSummary(ManifestSummaryQuery summary) {
+  public SearchResponse getManifestSummary(UniqueSummaryQuery summary) {
     val pqlAst = PQL_CONVERTER.convert(summary.getQuery(), FILE);
     val request = queryEngine.execute(pqlAst, FILE).getRequestBuilder();
 
@@ -452,9 +449,9 @@ public class FileRepository {
         nestedAgg(repoSizeAggKey, EsFields.FILE_COPIES, repoSizeTermsSubAgg);
 
     for (val repo : repoNames) {
-      val filter = boolFilter().must(nestedFilter("file_copies", termFilter("file_copies.repo_name", repo)));
+      val filter = boolFilter().must(nestedFilter(EsFields.FILE_COPIES, termFilter("file_copies.repo_name", repo)));
       for (val excluded : exclude) {
-        filter.mustNot(nestedFilter("file_copies", termFilter("file_copies.repo_name", excluded)));
+        filter.mustNot(nestedFilter(EsFields.FILE_COPIES, termFilter("file_copies.repo_name", excluded)));
       }
 
       filtersAggs.filter(repo, filter);
