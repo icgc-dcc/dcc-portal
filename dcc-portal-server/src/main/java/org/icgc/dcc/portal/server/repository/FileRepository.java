@@ -94,11 +94,11 @@ import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
-import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.SearchFieldMapper;
 import org.icgc.dcc.portal.server.model.TermFacet;
 import org.icgc.dcc.portal.server.model.TermFacet.Term;
+import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.server.service.IndexService;
@@ -448,6 +448,7 @@ public class FileRepository {
     val repoSizeAgg =
         nestedAgg(repoSizeAggKey, EsFields.FILE_COPIES, repoSizeTermsSubAgg);
 
+    // Filters aggregation, where each new filter excludes all the repos that came before it to enforce uniqueness
     for (val repo : repoNames) {
       val filter = boolFilter().must(nestedFilter(EsFields.FILE_COPIES, termFilter("file_copies.repo_name", repo)));
       for (val excluded : exclude) {
