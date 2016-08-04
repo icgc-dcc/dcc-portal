@@ -252,10 +252,22 @@
       };
 
       return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
-        function(summary) {
+        function (summary) {
           $scope.summary = summary;
         });
     });
+
+    $scope.movedCallback = function(index) {
+      $scope.repos.splice(index, 1);
+      var manifestSummaryQuery = {
+        query: p,
+        repoNames: _.map($scope.repos, 'repoName')
+      };
+      return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
+        function (summary) {
+          $scope.summary = summary;
+        }); 
+    };
 
     $scope.getRepoManifestUrl = ExternalRepoService.getRepoManifestUrl;
 
