@@ -27,11 +27,11 @@ import static com.google.common.collect.Sets.union;
 import static com.google.common.primitives.Longs.tryParse;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toMap;
-import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 import static org.elasticsearch.common.collect.Iterables.toArray;
 import static org.icgc.dcc.common.core.util.Joiners.COMMA;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.File.parse;
+import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 import static org.icgc.dcc.portal.server.util.SearchResponses.hasHits;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
@@ -39,6 +39,7 @@ import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -53,10 +54,16 @@ import org.elasticsearch.common.collect.Iterables;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.bucket.filters.InternalFilters;
+import org.elasticsearch.search.aggregations.bucket.nested.InternalNested;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
+import org.icgc.dcc.common.core.util.stream.Collectors;
 import org.icgc.dcc.portal.server.model.File;
 import org.icgc.dcc.portal.server.model.Files;
 import org.icgc.dcc.portal.server.model.Keyword;
 import org.icgc.dcc.portal.server.model.Keywords;
+import org.icgc.dcc.portal.server.model.ManifestSummaryQuery;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.TermFacet;
@@ -218,6 +225,33 @@ public class FileService {
     val prepResponse = fileRepository.findAll(setId, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
 
     exportFiles(output, prepResponse, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
+  }
+
+  public Map<String, Map<String, Long>> getManifestSummary(ManifestSummaryQuery summary) {
+    val response = fileRepository.getManifestSummary(summary);
+
+    val filtersAggs = (InternalFilters) response.getAggregations().asMap().get("summary");
+    val repos = summary.getRepoNames();
+    val responseMap = repos.stream()
+        .map(repo -> {
+          val bucket = filtersAggs.getBucketByKey(repo);
+          val count = bucket.getDocCount();
+          val size = getRepoSize((InternalNested) bucket.getAggregations().get("repositorySizes"));
+          val donorCount = getDonorCount((InternalNested) bucket.getAggregations().get("repositoryDonors"));
+
+          val map = ImmutableMap.of("count", count, "size", size, "donorCount", donorCount);
+          return new SimpleImmutableEntry<String, Map<String, Long>>(repo, map);
+        }).collect(Collectors.toImmutableMap(e -> e.getKey(), e -> e.getValue()));
+
+    return responseMap;
+  }
+
+  private long getDonorCount(InternalNested aggs) {
+    return ((Terms) aggs.getAggregations().get("repositoryDonors")).getBuckets().size();
+  }
+
+  private long getRepoSize(InternalNested aggs) {
+    return (long) ((InternalSum) aggs.getAggregations().get("repositorySizes")).getValue();
   }
 
   @SneakyThrows

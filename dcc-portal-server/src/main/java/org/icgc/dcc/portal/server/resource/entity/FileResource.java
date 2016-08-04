@@ -46,6 +46,7 @@ import java.util.Map;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -56,6 +57,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.icgc.dcc.portal.server.model.File;
 import org.icgc.dcc.portal.server.model.Files;
+import org.icgc.dcc.portal.server.model.ManifestSummaryQuery;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.model.param.IntParam;
 import org.icgc.dcc.portal.server.resource.Resource;
@@ -215,6 +217,14 @@ public class FileResource extends Resource {
   @Timed
   public Map<String, String> getIndexMetaData() {
     return fileService.getIndexMetadata();
+  }
+
+  @POST
+  @Path("/summary/manifest")
+  @Timed
+  @Produces(APPLICATION_JSON)
+  public Map<String, Map<String, Long>> getManifestSummary(ManifestSummaryQuery summary) {
+    return fileService.getManifestSummary(summary);
   }
 
 }
