@@ -57,6 +57,7 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.bucket.filters.Filters.Bucket;
 import org.elasticsearch.search.aggregations.bucket.filters.InternalFilters;
 import org.elasticsearch.search.aggregations.bucket.nested.InternalNested;
+import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
 import org.icgc.dcc.common.core.util.stream.Collectors;
@@ -237,7 +238,7 @@ public class FileService {
         .map(repo -> {
           Bucket bucket = filtersAggs.getBucketByKey(repo);
           long count = bucket.getDocCount();
-          long size = getRepoSize((InternalNested) bucket.getAggregations().get("repositorySizes"));
+          long size = getRepoSize((InternalNested) bucket.getAggregations().get("repositorySizes"), repo);
           long donorCount = getDonorCount((InternalNested) bucket.getAggregations().get("repositoryDonors"));
 
           Map<String, Long> map = ImmutableMap.of("fileCount", count, "fileSize", size, "donorCount", donorCount);
@@ -251,8 +252,16 @@ public class FileService {
     return ((Terms) aggs.getAggregations().get("repositoryDonors")).getBuckets().size();
   }
 
-  private long getRepoSize(InternalNested aggs) {
-    return (long) ((InternalSum) aggs.getAggregations().get("repositorySizes")).getValue();
+  private long getRepoSize(InternalNested aggs, String repo) {
+    val stringTerms = (StringTerms) aggs.getAggregations().get("repositorySizes");
+    InternalSum internalSum;
+    try {
+      internalSum = (InternalSum) stringTerms.getBucketByKey(repo).getAggregations().get("fileSize");
+    } catch (NullPointerException e) {
+      // If there are no matching documents for this repo, the bucket will be empty (null).
+      return 0;
+    }
+    return (long) internalSum.getValue();
   }
 
   @SneakyThrows

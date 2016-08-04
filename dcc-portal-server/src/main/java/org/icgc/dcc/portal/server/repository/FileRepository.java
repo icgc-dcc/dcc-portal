@@ -445,9 +445,11 @@ public class FileRepository {
     val repoSizeAggKey = CustomAggregationKeys.REPO_SIZE;
 
     val filtersAggs = AggregationBuilders.filters("summary");
+    val repoSizeTermsSubAgg = terms(repoSizeAggKey).size(MAX_FACET_TERM_COUNT).field(toRawFieldName(Fields.REPO_NAME))
+        .subAggregation(
+            sum(CustomAggregationKeys.FILE_SIZE).field(toRawFieldName(Fields.FILE_SIZE)));
     val repoSizeAgg =
-        nested(repoSizeAggKey).path("file_copies")
-            .subAggregation(sum(repoSizeAggKey).field(toRawFieldName(Fields.FILE_SIZE)));
+        nestedAgg(repoSizeAggKey, EsFields.FILE_COPIES, repoSizeTermsSubAgg);
 
     for (val repo : repoNames) {
       val filter = boolFilter().must(nestedFilter("file_copies", termFilter("file_copies.repo_name", repo)));
