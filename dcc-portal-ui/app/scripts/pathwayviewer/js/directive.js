@@ -375,6 +375,7 @@
             return;
           }
 
+          rendered = false;
           zoomedOn = newValue;
           handleRender();
         });
