@@ -27,11 +27,14 @@ import static com.google.common.collect.Sets.union;
 import static com.google.common.primitives.Longs.tryParse;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toMap;
-import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 import static org.elasticsearch.common.collect.Iterables.toArray;
 import static org.icgc.dcc.common.core.util.Joiners.COMMA;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.File.parse;
+import static org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys.REPO_DONOR_COUNT;
+import static org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys.REPO_SIZE;
+import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
 import static org.icgc.dcc.portal.server.util.SearchResponses.hasHits;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
@@ -39,9 +42,11 @@ import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -53,10 +58,17 @@ import org.elasticsearch.common.collect.Iterables;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.bucket.filters.Filters.Bucket;
+import org.elasticsearch.search.aggregations.bucket.filters.InternalFilters;
+import org.elasticsearch.search.aggregations.bucket.nested.InternalNested;
+import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
 import org.icgc.dcc.portal.server.model.File;
 import org.icgc.dcc.portal.server.model.Files;
 import org.icgc.dcc.portal.server.model.Keyword;
 import org.icgc.dcc.portal.server.model.Keywords;
+import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.TermFacet;
@@ -218,6 +230,43 @@ public class FileService {
     val prepResponse = fileRepository.findAll(setId, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
 
     exportFiles(output, prepResponse, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
+  }
+
+  public Map<String, Map<String, Long>> getUniqueFileAggregations(UniqueSummaryQuery summary) {
+    val response = fileRepository.getManifestSummary(summary);
+
+    val filtersAggs = (InternalFilters) response.getAggregations().asMap().get("summary");
+    val repos = summary.getRepoNames();
+    val responseMap = repos.stream()
+        .map(repo -> {
+          // Map each repo to an entry keyed off the repo name with the fileCount, fileSize, and donorCount
+          // aggregations in a Map as the value.
+          Bucket bucket = filtersAggs.getBucketByKey(repo);
+          long count = bucket.getDocCount();
+          long size = getRepoSize((InternalNested) bucket.getAggregations().get(REPO_SIZE), repo);
+          long donorCount = getDonorCount((InternalNested) bucket.getAggregations().get(REPO_DONOR_COUNT));
+
+          Map<String, Long> map = ImmutableMap.of("fileCount", count, "fileSize", size, "donorCount", donorCount);
+          return new SimpleImmutableEntry<String, Map<String, Long>>(repo, map);
+        }).collect(toImmutableMap(Entry::getKey, Entry::getValue));
+
+    return responseMap;
+  }
+
+  private long getDonorCount(InternalNested aggs) {
+    return ((Terms) aggs.getAggregations().get(REPO_DONOR_COUNT)).getBuckets().size();
+  }
+
+  private long getRepoSize(InternalNested aggs, String repo) {
+    val stringTerms = (StringTerms) aggs.getAggregations().get(REPO_SIZE);
+    val repoBucket = stringTerms.getBucketByKey(repo);
+    // If there are no matching documents for this repo, the bucket will be empty (null).
+    if (repoBucket != null && repoBucket.getAggregations() != null) {
+      val internalSum = (InternalSum) stringTerms.getBucketByKey(repo).getAggregations().get("fileSize");
+      return (long) internalSum.getValue();
+    } else {
+      return 0;
+    }
   }
 
   @SneakyThrows

@@ -36,7 +36,7 @@
               data-ng-class="{
                 alt: $index % 2 === 0
               }"
-              dnd-moved="repos.splice($index, 1)"
+              dnd-moved="movedCallback($index)"
               dnd-draggable="repoData"
               dnd-dragstart="closeDropdowns()"
               dnd-effect-allowed="move"
@@ -47,9 +47,9 @@
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
              </td>
-             <td class="text-right">{{ repoData.donorCount | number }}</td>
-             <td class="text-right">{{ repoData.fileCount | number }}</td>
-             <td class="text-right">{{ repoData.fileSize | bytes }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].donorCount || 0 | number }} / {{ repoData.donorCount | number }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].fileCount || 0 | number }} / {{ repoData.fileCount | number }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].fileSize || 0 | bytes }} / {{ repoData.fileSize | bytes }}</td>
              <td class="text-right">
                 <a
                   href="{{getRepoManifestUrl({

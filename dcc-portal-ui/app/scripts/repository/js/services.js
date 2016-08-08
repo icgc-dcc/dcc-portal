@@ -95,6 +95,11 @@
     };
 
 
+    _srv.getManifestSummary = function(params) {
+      return Restangular.all(REPO_API_PATH + '/summary/manifest')
+        .customPOST(params, undefined, undefined, {'Content-Type': 'application/json'});
+    };
+
     _srv.getList = function (params) {
       var defaults = {
         size: 10,
