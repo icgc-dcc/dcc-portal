@@ -88,6 +88,9 @@
       border-bottom: 0;
       margin-top: 15px;
       margin-bottom: 0;
+      th.text-right:last-child {
+        padding-right: 1em;
+      }
       tr {
         transition: all 0.3s ease;
         &:nth-child(odd) {
@@ -116,6 +119,9 @@
         }
         .orange-icon {
           color: $iconColor;
+          &.space-right {
+            margin-right: 23px;
+          }
         }
         .btn-default{
           background-color: transparent;
@@ -186,11 +192,15 @@
             }
           }
         }
-
-        .popover {
+        .info-link {
           position: absolute;
           top: 0;
           right: 0;
+          padding-left: 0;
+          padding-right: 0;
+        }
+        .popover-body span {
+          word-break: normal;
         }
       }
 

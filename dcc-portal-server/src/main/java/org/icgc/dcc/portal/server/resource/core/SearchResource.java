@@ -19,6 +19,8 @@ package org.icgc.dcc.portal.server.resource.core;
 
 import static java.util.Collections.emptyList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 
 import java.util.List;
 
@@ -28,6 +30,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.Keywords;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
@@ -38,6 +41,7 @@ import org.icgc.dcc.portal.server.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.ImmutableMap;
 import com.yammer.metrics.annotation.Timed;
 
 import io.swagger.annotations.Api;
@@ -57,6 +61,7 @@ public class SearchResource extends Resource {
 
   private static final Keywords EMPTY_RESULT = new Keywords(emptyList());
   private static final String DEFAULT_FILTERS = "{}";
+  private static final ImmutableMap<String, String> FIELD_MAPPING = FIELDS_MAPPING.get(IndexModel.Kind.KEYWORD);
 
   protected static final String DEFAULT_SIZE = "10";
   protected static final String DEFAULT_FROM = "1";
@@ -81,6 +86,14 @@ public class SearchResource extends Resource {
     if (q.isEmpty()) {
       return EMPTY_RESULT;
     }
+
+    val unknownFields = fields.stream()
+        .filter(f -> FIELD_MAPPING.get(f) == null)
+        .collect(toImmutableList());
+
+    checkRequest(unknownFields.size() > 0,
+        "The following fields are not supported by keyword search: %s",
+        unknownFields.toString());
 
     val query = Query.builder().query(q);
     val keywords = type.equals("file-donor") ? repositoryService.findRepoDonor(query.build()) : searchService.findAll(

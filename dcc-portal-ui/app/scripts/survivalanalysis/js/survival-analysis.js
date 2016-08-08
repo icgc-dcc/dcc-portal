@@ -141,7 +141,7 @@
         return;
       }
       var line = d3.svg.area()
-        .interpolate('step-after')
+        .interpolate('step-before')
         .x(function(p) { return x(p.x); })
         .y(function(p) { return y(p.y); });
 
@@ -179,7 +179,7 @@
           .attr('x1', function(d) { return x(d.time); })
           .attr('y1', function(d) { return y(d.survivalEstimate); })
           .attr('x2', function(d) { return x(d.time); })
-          .attr('y2', function(d) { return y(d.survivalEstimate) - 5; })
+          .attr('y2', function(d) { return y(d.survivalEstimate) + (d.status === 'deceased' ? 10 : -5); })
           .attr('stroke', setColor);
       } else {
         markers = markers.append('svg:circle')
@@ -246,22 +246,29 @@
           xDomain: state.xDomain,
           height: isFullScreen() && ( window.innerHeight - 100 ),
           onMouseEnterDonor: function (event, donor) {
-            $scope.$emit('tooltip::show', {
-              element: event.target,
-              text: tipTemplate({
-                donor: _.extend(
-                  { isCensored: _.includes(ctrl.censoredStatuses,donor.status) },
-                  donor
-                ),
-                labels: ctrl.tipLabels,
-                unit: 'days'
-              }),
-              placement: 'right',
-              sticky: true
+            $scope.$apply(function () {
+              ctrl.tooltipParams = {
+                isVisible: true,
+                element: event.target,
+                text: tipTemplate({
+                  donor: _.extend(
+                    { isCensored: _.includes(ctrl.censoredStatuses,donor.status) },
+                    donor
+                  ),
+                  labels: ctrl.tipLabels,
+                  unit: 'days'
+                }),
+                placement: 'right',
+                sticky: true
+              };
             });
           },
           onMouseLeaveDonor: function () {
-            $scope.$emit('tooltip::hide');
+            $scope.$apply(function () {
+              ctrl.tooltipParams = {
+                isVisible: false
+              };
+            });
           },
           onClickDonor: function (e, donor) {
             window.open('/donors/'+donor.id, '_blank');
@@ -338,6 +345,7 @@
       tipLabels: '<',
       censoredStatuses: '<',
       palette: '<',
+      title: '<'
     },
     controller: survivalAnalysisController,
     controllerAs: 'ctrl'

@@ -614,7 +614,7 @@
         console.error ('Response Error: ', toJson (response));
       }
 
-      if (response.status >= 500) {
+      if (response.status === 500) {
         Notify.setMessage ('' + response.data.message || response.statusText);
         Notify.showErrors();
       } else if (response.status === 404) {

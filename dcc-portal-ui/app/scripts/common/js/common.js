@@ -337,6 +337,10 @@
         }
     };
 
+    var getFullScreenElement = function () {
+      return document.fullScreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
+    };
+
     function onFullScreenChange() {
       // Digest cycle won't get auto-triggered when fullscreen mode exits natively
       if(!$rootScope.$$phase) {
@@ -350,7 +354,10 @@
 
     return {
       exitFullScreen: exitFullScreen,
-      enterFullScreen: enterFullScreen
+      enterFullScreen: enterFullScreen,
+      get fullScreenElement () {
+        return getFullScreenElement();
+      }
     };
   });
 

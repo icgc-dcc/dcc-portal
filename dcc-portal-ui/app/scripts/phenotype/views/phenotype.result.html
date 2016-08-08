@@ -7,7 +7,10 @@
 <div data-ng-if="isDeprecated" class="alert-error">
     <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
 </div>
-<div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
+
+<i class="icon-spin icon-spinner" ng-class="{'ng-hide': survivalAnalysisDataSets.overall.length}"></i>
+
+<div data-ng-if="survivalAnalysisDataSets.overall.length" data-disable-events="isDeprecated">
 
     <div>Your selected donor sets</div>
     <div class="wide">
@@ -62,17 +65,11 @@
                 </tr>
                 <tr>
                     <th>
-                        Donors included in Analysis
-                        <sup>
-                            <i
-                                class="icon-info"
-                                data-tooltip="
+                        <abbr data-tooltip="
                                     Criteria to include donor from your sets in the survival analysis: <br>
                                     - donor does not overlap between your selected donor sets <br>
                                     - donor has complete data for the purpose of the analysis (event and time-to-event) <br>
-                                "
-                            ></i>
-                        </sup>
+                                ">Donors included in Analysis</abbr>
                     </th>
                     <th
                         data-ng-repeat-start="donorSetId in setIds"
@@ -90,6 +87,12 @@
                 <tr>
                     <td>
                         Overall Survival Analysis
+                        <i
+                            class="icon-file t_tools t_tools__tool pull-right"
+                            ng-click="exportDonors('overall', survivalAnalysisDataSets.overall)"
+                            data-tooltip="Export data for {{ activeSurvivalGraph === 'overall' ? 'overall' : 'disease free' }} survival analysis as TSV"
+                            data-tooltip-placement="left"
+                        ></i>
                     </td>
 
                     <td
@@ -112,6 +115,12 @@
                 <tr>
                     <td>
                         Disease Free Survival Analysis
+                        <i
+                            class="icon-file t_tools t_tools__tool pull-right"
+                            ng-click="exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
+                            data-tooltip="Export data for {{ activeSurvivalGraph === 'overall' ? 'overall' : 'disease free' }} survival analysis as TSV"
+                            data-tooltip-placement="left"
+                        ></i>
                     </td>
 
                     <td
@@ -174,14 +183,6 @@
                 }"
                 ng-click="activeSurvivalGraph = 'diseaseFree'"
             >Disease Free Survival</div>
-            <i
-                class="icon-file t_tools t_tools__tool pull-right"
-                ng-click="(activeSurvivalGraph === 'overall') ?
-                    exportDonors('overall', survivalAnalysisDataSets.overall) :
-                    exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
-                data-tooltip="Export data for {{ activeSurvivalGraph === 'overall' ? 'overall' : 'disease free' }} survival analysis as TSV"
-                data-tooltip-placement="left"
-            ></i>
         </div>
 
         <div class="survival-graphs">
@@ -195,6 +196,7 @@
                 }"
                 censored-statuses="['alive']"
                 palette="seriesColours"
+                title="'Overall Survival Analysis'"
             ></survival-analysis-graph>
 
             <survival-analysis-graph
@@ -207,6 +209,7 @@
                 }"
                 censored-statuses="['progression', 'relapse']"
                 palette="seriesColours"
+                title="'Disease Free Survival Analysis'"
             ></survival-analysis-graph>
         </div>
     </div>

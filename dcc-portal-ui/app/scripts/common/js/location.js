@@ -154,7 +154,7 @@
           }
         });
  
-        return retList.concat(this.extractSetIdsFileHelper(filters)); 
+        return retList;
       },
       
       extractSetIdsHelper: function(filters) {
@@ -171,25 +171,12 @@
             } else if (_.has(entityFilters, 'not')) {
               result = result.concat( entityFilters.not );
             }
-          }
-
-        });
-        return result;
-      },
-      
-      extractSetIdsFileHelper: function(filters) {
-        var result = [];
-        ['file'].forEach(function(type) {
-          if (filters.hasOwnProperty(type) === false) {
-            return;
-          }
-
-          if (filters[type].hasOwnProperty(Extensions.ENTITY)) {
-            var entityFilters = filters[type][Extensions.ENTITY];
-            if (entityFilters.hasOwnProperty('is')) {
-              result = result.concat( entityFilters.is );
-            } else if (_.has(entityFilters, 'not')) {
-              result = result.concat( entityFilters.not );
+          } else if (filters[type].hasOwnProperty('donorId')) {
+            var donorIdFilters = filters[type].donorId;
+            if (donorIdFilters.hasOwnProperty('is')) {
+              result = result.concat( donorIdFilters.is );
+            } else if (_.has(donorIdFilters, 'not')) {
+              result = result.concat( donorIdFilters.not );
             }
           }
 

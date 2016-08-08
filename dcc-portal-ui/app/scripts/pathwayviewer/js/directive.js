@@ -95,7 +95,7 @@
         var showInfo = function(){
           $('.pathway-info-controller').css('visibility','visible');
           $('.pathway-legend-controller').css('visibility','hidden');
-          $('.pathway-info').animate({left: '60%'});
+          $('.pathway-info').animate({left: '50%'});
         };
 
         var hideLegend = function(){
@@ -161,6 +161,8 @@
 
             // Reset data
             $scope.annotatedGenesList = [];
+            $scope.sortField = 'symbol';
+            $scope.sortDescendingly = false;
             $scope.entityType = typeMap[d.type];
             $scope.subPathwayId = d.reactomeId;
 
@@ -195,10 +197,10 @@
                   _.set(mutationHighlight.advQuery, 'mutation.consequenceType', consequenceFilter);
 
                   mutatedGenesList.push({
-                    symbol:mutationHighlight.geneSymbol,
-                    id:mutationHighlight.geneId,
-                    value:mutationHighlight.value,
-                    advQuery:mutationHighlight.advQuery
+                    symbol: mutationHighlight.geneSymbol,
+                    id: mutationHighlight.geneId,
+                    value: mutationHighlight.value,
+                    advQuery: mutationHighlight.advQuery
                   });
                 }
               });
@@ -212,12 +214,11 @@
             // Create list of uniprot ids if we have any
             if(drugHighlights && node.isPartOfPathway){
               drugHighlights.forEach(function (drugHighlight) {
-
                 if(_.contains(drugHighlight.dbIds,d.reactomeId)){
                   druggableGenesList.push({
-                    symbol:drugHighlight.geneSymbol,
-                    id:drugHighlight.geneId,
-                    drugs:drugHighlight.drugs,
+                    symbol: drugHighlight.geneSymbol,
+                    id: drugHighlight.geneId,
+                    drugs: drugHighlight.drugs,
                   });
                 }
               });
@@ -225,14 +226,13 @@
               if(druggableGenesList.length === 1){
                 drugCount = druggableGenesList[0].drugs.length;
               }
-
             }
-            
+
             var annotatedGeneIds = _.union(
               _.pluck(mutatedGenesList, 'id'),
               _.pluck(druggableGenesList, 'id')
             );
-            
+
             annotatedGeneIds.forEach(function (geneId) {
               var mutatedGene = _.find(mutatedGenesList, function(o) { return o.id === geneId; });
               var druggableGene = _.find(druggableGenesList, function(o) { return o.id === geneId; });
@@ -245,10 +245,8 @@
                 advQuery: mutatedGene ? mutatedGene.advQuery : []
               });
             });
-            
-            $scope.annotatedGenesList = _.sortBy(annotatedGenesList, function (gene) {
-              return gene.symbol;
-            });
+                        
+            $scope.annotatedGenesList = annotatedGenesList;
             
             renderinfo(
                 node, 
@@ -377,6 +375,7 @@
             return;
           }
 
+          rendered = false;
           zoomedOn = newValue;
           handleRender();
         });
@@ -408,7 +407,7 @@
           handleRender();
         });
 
-        // Render legend last to ensure all dependancies are initialized. Timeout of 0 does not work in firefox.
+        // Render legend last to ensure all dependencies are initialized. Timeout of 0 does not work in firefox.
         $scope.$on(PathwaysConstants.EVENTS.MODEL_READY_EVENT, function() {
 
             //var rect = $('.pathway-legend')[0].getBoundingClientRect();

@@ -15,56 +15,25 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.jersey.mapper;
+package org.icgc.dcc.portal.server.model;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
-import static javax.ws.rs.core.Response.status;
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import java.util.List;
 
-import java.util.Random;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import org.elasticsearch.ElasticsearchException;
-import org.icgc.dcc.portal.server.model.Error;
-import org.springframework.stereotype.Component;
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class UniqueSummaryQuery {
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-@Component
-@Provider
-public class ElasticSearchExceptionMapper implements ExceptionMapper<ElasticsearchException> {
-
-  private final static Status STATUS = INTERNAL_SERVER_ERROR;
-  private static final Random RANDOM = new Random();
-
-  @Override
-  public Response toResponse(ElasticsearchException e) {
-
-    val id = RANDOM.nextLong();
-    log.error(formatLogMessage(id), e);
-
-    return status(STATUS)
-        .type(APPLICATION_JSON_TYPE)
-        .entity(errorResponse(e, id))
-        .build();
-  }
-
-  protected String formatLogMessage(long id) {
-    return String.format("Error handling a request: %016x", id);
-  }
-
-  private Error errorResponse(ElasticsearchException e, long id) {
-    return new Error(STATUS, message(e, id));
-  }
-
-  private String message(ElasticsearchException e, long id) {
-    return String.format("%s", formatLogMessage(id));
-  }
+  Query query;
+  List<String> repoNames;
 
 }

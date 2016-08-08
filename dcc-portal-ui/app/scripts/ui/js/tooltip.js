@@ -24,11 +24,13 @@
    * Centralized tooltip directive. There should be only one per application
    * This act as the tooltip "server" that waits for tooltip events
    */
-  module.directive('tooltipControl', function ($position, $rootScope, $sce, $window) {
+  module.directive('tooltipControl', function ($position, $rootScope, $sce) {
     return {
       restrict: 'E',
       replace: true,
       scope: {
+        isLocal: '<',
+        params: '<',
       },
       templateUrl: 'template/tooltip.html',
       link: function (scope, element) {
@@ -79,27 +81,26 @@
           }
         }
 
-        $rootScope.$on('tooltip::show', function(evt, params) {
-          scope.$apply(function() {
-            if (params.text) {
-              scope.html = $sce.trustAsHtml(params.text);
-            }
-            if (params.placement) {
-              scope.placement = params.placement;
-            }
-          });
+        function handleShow(evt, params) {
+          if (params.text) {
+            scope.html = $sce.trustAsHtml(params.text);
+          }
+          if (params.placement) {
+            scope.placement = params.placement;
+          }
 
           element.css('visibility', 'visible');
 
           if(params.sticky){
             element.addClass('sticky');
+            var $parent = element.parent();
 
-            if(!$window.onmousemove){
-              $window.onmousemove = function(e){
+            if(!$parent.get(0).onmousemove){
+              $parent.get(0).onmousemove = function(e){
                 if(element.hasClass('sticky')){
                   var position = calculateAbsoluteCoordinates(scope.placement, params.element, {
-                    left: e.pageX,
-                    top: e.pageY - (scope.placement === 'top' ? 8 : 0),
+                    left: e.pageX - (scope.isLocal ? $parent.offset().left : 0),
+                    top: e.pageY - (scope.placement === 'top' ? 8 : 0) - (scope.isLocal ? $parent.offset().top : 0),
                     width: 10,
                     height: -6
                   });
@@ -109,17 +110,37 @@
               };
             }
           }else{
-            var position = calculateAbsoluteCoordinates(params.placement, params.element, params.elementPosition);
-            element.css('top', position.top);
-            element.css('left', position.left);
-            element.removeClass('sticky');
+            setTimeout(function () {
+              var position = calculateAbsoluteCoordinates(params.placement, params.element, params.elementPosition);
+              element.css('top', position.top);
+              element.css('left', position.left);
+              element.removeClass('sticky');
+            });
           }
-        });
-        $rootScope.$on('tooltip::hide', function() {
+        }
+
+        function handleHide () {
           element.css('visibility', 'hidden');
           element.css('top', -999);
           element.css('left', -999);
-        });
+        }
+
+        if (!scope.isLocal) {
+          $rootScope.$on('tooltip::show', function (evt, params) {
+            scope.$apply(handleShow.bind(null, evt, params));
+          });
+          $rootScope.$on('tooltip::hide', handleHide);
+        } else {
+          scope.$watch('params', function (newParams) {
+            if (!newParams) {
+              return;
+            } else if (newParams.isVisible) {
+              handleShow(null, newParams);
+            } else {
+              handleHide();
+            }
+          });
+        }
       }
     };
   });

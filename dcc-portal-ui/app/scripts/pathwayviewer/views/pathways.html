@@ -102,9 +102,17 @@
                 </tbody>
             </table>
         <div data-ng-if="pathway">
-            <h4 data-ng-if="pathway.xml!==''">Drag and scroll to explore the pathway. Double click to reset the view.</h4>
+            <h3 class="spinner-container" data-ng-if="!pathway.xml">
+                <i class="icon-spinner icon-spin"></i>
+                Retrieving Pathway Data...
+            </h3>
+            <h4 data-ng-if="pathway.xml">Drag and scroll to explore the pathway. Double click to reset the view.</h4>
             
-            <pathway-viewer data-items="pathway.xml" data-zooms="pathway.zooms" data-mutation-highlights="pathway.mutationHighlights" data-overlaps="pathway.overlaps">
+            <pathway-viewer data-items="pathway.xml"
+            				data-zooms="pathway.zooms"
+            				data-mutation-highlights="pathway.mutationHighlights"
+            				data-drug-highlights="pathway.drugHighlights"
+            				data-overlaps="pathway.overlaps">
             </pathway-viewer>
         </div>
         <h3 data-ng-if="!pathway">

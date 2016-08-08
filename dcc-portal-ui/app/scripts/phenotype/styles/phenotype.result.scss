@@ -25,6 +25,10 @@
     cursor: help;
     color: #6baed6;
   }
+  .icon-file {
+    font-size: 14px;
+    margin: 0;
+  }
 }
 
 .survival-graphs {
@@ -42,6 +46,21 @@
       top: 0;
       left: 0;
       pointer-events: none;
+    }
+  }
+
+  survival-analysis-graph {
+    .title {
+      text-transform: none;
+      font-size: 26px;
+      text-align: center;
+      margin-top: 12px;
+      margin-bottom: 0;
+    }
+    &:not(:fullscreen) {
+      .title {
+        display: none;
+      }
     }
   }
 }
