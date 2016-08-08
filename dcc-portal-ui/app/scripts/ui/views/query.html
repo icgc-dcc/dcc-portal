@@ -13,10 +13,10 @@
             </span>
 
             <span data-ng-if="terms.is"> 
-                {{ terms.is.length !== 1? "IN (" : [Extensions.ENTITY].indexOf(terms.is[0].controlFacet) === -1? "IS" : "IN (" }} 
+                {{ terms.is.length !== 1? "IN (" : "IS" }} 
             </span>
             <span data-ng-if="terms.not"> 
-                {{ terms.not.length !== 1? "NOT IN (" : [Extensions.ENTITY].indexOf(terms.not[0].controlFacet) === -1? "IS NOT" : "NOT IN (" }} 
+                {{ terms.not.length !== 1? "NOT IN (" : "IS NOT" }} 
             </span>
 
             <span data-ng-if="terms.is" data-ng-repeat="termObj in terms.is track by termObj.term">

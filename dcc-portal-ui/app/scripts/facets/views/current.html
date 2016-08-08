@@ -9,7 +9,6 @@
         <li data-ng-repeat="(typeName, type) in filters">
             <ul>
                 <li data-ng-repeat="(facet, terms) in type track by facet" class="t_facets__facet">
-
                     <span class="t_facets__facet__label"
                           data-ng-mouseenter="hoverStyle={'text-decoration':'line-through'}; $event.stopPropagation();"
                           data-ng-mouseleave="hoverStyle={}; $event.stopPropagation()"

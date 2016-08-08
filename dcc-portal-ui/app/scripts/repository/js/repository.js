@@ -42,6 +42,8 @@
 
   var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
 
+  var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
+
   /**
    * ICGC static repository controller
    */
@@ -207,6 +209,7 @@
       }
       p.filters.file.id = {is: $scope.selectedFiles};
     }
+    p.include = 'facets';
 
     function findRepoData(list, term) {
       return _.find(list, function(t) { return t.term === term; }).count || 0;
@@ -222,7 +225,7 @@
 
       // Build the repo table
       var repos = {};
-      facets.repositoryNamesFiltered.terms.forEach(function(term) {
+      facets.repoName.terms.forEach(function(term) {
         var repoName = term.term;
 
         // Restrict to active repos if it is available
@@ -240,12 +243,34 @@
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
         repos[repoName].fileCount = term.count;
         repos[repoName].hasManifest = _.includes(['AWS - Virginia', 'Collaboratory - Toronto'], repoName);
+        repos[repoName].isCloud = _.includes(cloudRepos, repoName);
       });
 
       $scope.repos = _.values(repos);
       $scope.selectedRepos = Object.keys(repos);
+
+      var manifestSummaryQuery = {
+        query: p,
+        repoNames: _.map(repos, 'repoName')
+      };
+
+      return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
+        function (summary) {
+          $scope.summary = summary;
+        });
     });
 
+    $scope.movedCallback = function(index) {
+      $scope.repos.splice(index, 1);
+      var manifestSummaryQuery = {
+        query: p,
+        repoNames: _.map($scope.repos, 'repoName')
+      };
+      return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
+        function (summary) {
+          $scope.summary = summary;
+        }); 
+    };
 
     $scope.getRepoManifestUrl = ExternalRepoService.getRepoManifestUrl;
 
@@ -264,30 +289,13 @@
         });
     };
 
-    /**
-     * Fixes the entitySet to the PQL compatible one if present.
-     */
-    function cleanEntitySet(oldFilter) {
-      var setId = _.get(oldFilter, 'file.entitySetId.is');
-
-      if (typeof setId !== 'undefined' && setId !== null) {
-        var newFilter = _.cloneDeep(oldFilter);
-        newFilter.donor = {id: {is: [Extensions.ENTITY_PREFIX + setId]}};
-        delete newFilter.file.entitySetId;
-
-        if (_.isEmpty(newFilter.file)) {
-          delete newFilter.file;
-        }
-
-        return newFilter;
-      }
-
-      return oldFilter;
-    }
+    $scope.closeDropdowns = function () {
+      jQuery('.btn-group.open').trigger('click');
+    };
 
     $scope.download = function() {
       if (_.isEmpty($scope.selectedFiles)) {
-        var filters = cleanEntitySet(FilterService.filters());
+        var filters = FilterService.filters();
 
         var manifestUrl = $scope.getRepoManifestUrl({
           repoCodes: _.map($scope.repos, 'repoCode'),
@@ -297,7 +305,6 @@
         });
 
         $window.location.href = manifestUrl;
-
       } else {
         ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
       }
@@ -310,7 +317,7 @@
       repoData.manifestID = false;
 
       var selectedFiles = $scope.selectedFiles;
-      var filters = cleanEntitySet(FilterService.filters());
+      var filters = FilterService.filters();
 
       if (! _.isEmpty (selectedFiles)) {
         filters = _.set (filters, 'file.id.is', selectedFiles);
@@ -556,7 +563,6 @@
           x: -5,
           y: 12,
           formatter: function () {
-            var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
             var isCloudRepo = _.includes(cloudRepos, this.value);
             return isCloudRepo ? '\ue844' : '';
           }

@@ -11,6 +11,8 @@
     </div>
   </script>
 
+  <h1 class="title" ng-if="ctrl.title">{{ ctrl.title }}</h1>
+
   <ul class="legend">
     <li>
       <i
@@ -43,6 +45,7 @@
     </li>
   </ul>
 
+  <i class="icon-spin icon-spinner absolute-center" ng-class="{'ng-hide': ctrl.dataSets.length}"></i>
 
   <div class="survival-graph">
     

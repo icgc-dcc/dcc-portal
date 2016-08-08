@@ -95,6 +95,11 @@
     };
 
 
+    _srv.getManifestSummary = function(params) {
+      return Restangular.all(REPO_API_PATH + '/summary/manifest')
+        .customPOST(params, undefined, undefined, {'Content-Type': 'application/json'});
+    };
+
     _srv.getList = function (params) {
       var defaults = {
         size: 10,
@@ -209,9 +214,12 @@
     }
 
     _srv.createFacetCharts = function (facets) {
+      var sorted = facets.repoName.terms.sort(function (a, b) {
+        return b.count - a.count;
+      });
       return {
         repositories: HighchartsService.bar({
-          hits: _.map(facets.repositoryNamesFiltered.terms, function (object) {
+          hits: _.map(sorted, function (object) {
             return {
               count: object.count,
               term: _shortenRepoName(object.term)

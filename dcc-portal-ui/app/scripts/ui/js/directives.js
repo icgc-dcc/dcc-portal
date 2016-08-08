@@ -254,7 +254,8 @@ angular.module('icgc.ui.popover', [])
         'popoverTitle': '@',
         'assistIconClass': '@popoverAssistIconClass',
         'assistIconPositionBefore': '@popoverAssistIconPositionBefore',
-        'isOpen': '=popoverIsOpen'
+        'isOpen': '=popoverIsOpen',
+        'hideDelay': '@popoverHideDelay'
       },
       templateUrl: '/scripts/ui/views/popover.html',
       link: function (scope, element) {
@@ -265,7 +266,7 @@ angular.module('icgc.ui.popover', [])
               _popoverContent = _popoverEl.find('.popover-inner-container'),
               _self = this,
               _containerHoverCount = 0,
-              _timeout_in_ms = 700;
+              _timeout_in_ms = scope.hideDelay || 700;
 
           function _init() {
 
