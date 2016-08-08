@@ -199,6 +199,7 @@
     };
 
     $scope.filters = FilterService.filters;
+    $scope.shouldDedupe = true;
 
     var p = {};
     p.size = 0;
