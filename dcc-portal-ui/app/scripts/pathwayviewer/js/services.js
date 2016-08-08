@@ -1032,15 +1032,55 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       RendererUtils.prototype.getLegendNodes =  function(marginLeft,marginTop, svg){
         var nodes = [];
         var mutatedNodeText = 'Mutated Gene(s)';
+        var druggableNodeText = 'Targetable Gene(s)';
         var overlappedNodeText = 'Overlapping Gene(s)';
         var failedText = 'Failed Output';
         var lofText = 'LossOfFunction';
         var x = marginLeft, y= marginTop;
         var types = [
-          'Complex','Protein','EntitySet','Chemical','Compartment','ProcessNode',
-          failedText,lofText, mutatedNodeText, overlappedNodeText
+          'Complex','Protein',
+          'EntitySet','Chemical',
+          'Compartment','ProcessNode',
+          failedText,lofText,
+          mutatedNodeText, null, 
+          druggableNodeText, null,
+          overlappedNodeText
         ];
 
+        for(var i=0;i<types.length;i++){
+          x = i%2 === 0 ? marginLeft : marginLeft+130;
+          y = Math.floor(i/2)*40 + marginTop + 5*Math.floor(i/2);
+          var type = types[i];
+
+          if (type === null) {
+            continue;
+          }
+
+          var node = {
+            position:{x:x,y:y},
+            size:{width:110,height:30},
+            type: _getNodeType(type),
+            id: _getIDForType(type),
+            crossed:type===failedText?true:false,
+            lof:type===lofText?true:false,
+            grayed: false,
+            reactomeId: _getIDForType(type),
+            text:{content:type,position:{x:x,y:y}}
+          };
+          //console.log(node);
+
+          nodes.push(node);
+
+          if (type === mutatedNodeText) {
+            addMutatedNodeComment();
+          }
+
+          if (type === druggableNodeText) {
+            addDruggableNodeComment();
+          }
+        }
+
+        return nodes;
 
         function _getIDForType(type) {
           var _id = 'fake';
@@ -1048,6 +1088,9 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           switch(type) {
             case mutatedNodeText:
               _id = 'mutated';
+              break;
+            case druggableNodeText:
+              _id = 'druggable';
               break;
             case overlappedNodeText:
               _id = 'overlapping';
@@ -1082,40 +1125,10 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           return newType;
         }
 
-
-        for(var i=0;i<types.length;i++){
-          x = i%2===0?marginLeft:marginLeft+100+10;
-          y = Math.floor(i/2)*40 + marginTop + 5*Math.floor(i/2);
-          var type = types[i];
-
-          if (type === overlappedNodeText) {
-            x = marginLeft;
-            y = Math.floor((i+ 1)/2)*40 + marginTop + 5*Math.floor((i+1)/2);
-          }
-
-
-          var node = {
-            position:{x:x,y:y},
-            size:{width:90,height:30},
-            type: _getNodeType(type),
-            id: _getIDForType(type),
-            crossed:type===failedText?true:false,
-            lof:type===lofText?true:false,
-            grayed: false,
-            reactomeId: _getIDForType(type),
-            text:{content:type,position:{x:x,y:y}}
-          };
-          //console.log(node);
-          if (type === overlappedNodeText) {
-            node.size.height += 10;
-          }
-
-          nodes.push(node);
-
-          if (type === mutatedNodeText) {
+        function addMutatedNodeComment() {
             // Add extra comment for mutated gene node to show what the value in the corner means
             svg.append('foreignObject').attr({
-              x: marginLeft+90,
+              x: marginLeft+100,
               y: y - 15,
               width:100,
               height:35,
@@ -1123,17 +1136,22 @@ angular.module('icgc.pathwayviewer.directives.services', [])
             }).append('xhtml:body')
               .attr('class','RenderableNodeText')
               .html('<table class="RenderableNodeTextCell"><tr><td valign="middle">'+
-                    '&larr; # ICGC Mutations'+'</td></tr></table>');
-
-
-          }
-
-
+                    '<--- # ICGC Mutations'+'</td></tr></table>');
         }
 
-
-
-        return nodes;
+        function addDruggableNodeComment() {
+            // Add extra comment for druggable gene node to show what the value in the corner means
+            svg.append('foreignObject').attr({
+              x: 5,
+              y: y - 22,
+              width:275,
+              height:35,
+              'fill':'none'
+            }).append('xhtml:body')
+              .attr('class','RenderableNodeText')
+              .html('<table class="RenderableNodeTextCell"><tr><td valign="middle">'+
+                    '<------------------------------ # Targeting Compounds'+'</td></tr></table>');
+        }
       };
 
       /*
@@ -1240,9 +1258,15 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       return GeneSetService.getPathwayZoom(_pathwayDataService.getParentPathwayId(geneSet));
     };
     _pathwayDataService.getPathwayProteinMap = function (geneSet) {
-      return GeneSetService.getPathwayProteinMap(_pathwayDataService.getParentPathwayId(geneSet), []);
+      var geneSetFilter = {};
+      geneSetFilter[geneSet.queryType] = {is: [geneSet.id]};
+      var mergedGeneSetFilter = LocationService.mergeIntoFilters({gene:geneSetFilter});
+      var mutationImpact = mergedGeneSetFilter.mutation && mergedGeneSetFilter.mutation.functionalImpact ?
+        mergedGeneSetFilter.mutation.functionalImpact.is : [];
+
+      return GeneSetService.getPathwayProteinMap(_pathwayDataService.getParentPathwayId(geneSet), mutationImpact);
     };
-    _pathwayDataService.getEntitySetId = function (geneSet) {
+    _pathwayDataService.getEntitySetId = function (geneSet) {      
       return SetService.getTransientSet('GENE', {
         'filters': {gene:{pathwayId:{is:[_pathwayDataService.getParentPathwayId(geneSet)]}}},
         'sortBy': 'id',
@@ -1383,6 +1407,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
 
     _pathwayDataService.getPathwayData = function (geneSetId, geneSetOverlapFilters) {
       var pathwayData = {};
+
       return _pathwayDataService.getGeneSet(geneSetId)
       .then(function (geneSet) {
         pathwayData.geneSet = geneSet;
@@ -1429,7 +1454,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
         pathwayData.drugHighlights = results.annotatedDrugHighlights;
 
         pathwayData.geneSet.showPathway = true;
-          
+
         return pathwayData;
       });
     };
