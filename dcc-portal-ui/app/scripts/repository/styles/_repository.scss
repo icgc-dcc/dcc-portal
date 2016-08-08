@@ -213,7 +213,7 @@
 
   .numerator, .separator, .denominator {
     position: relative;
-    transition: all 0.3s ease;
+    transition: all 0.3s $inOutSine;
     -webkit-font-smoothing: subpixel-antialiased;
   }
   .numerator, .denominator {
@@ -247,7 +247,7 @@
   &.emphasize-numerator, .emphasize-numerator & {
     .numerator {
       padding-right: 0.2em;
-      transition-delay: 0.1;
+      transition-delay: 0.15;
     }
     .separator {
       border-color: #bbb;
@@ -274,7 +274,7 @@
     }
     .denominator {
       transform: translateX(-50%) translateY(0%);
-      transition-delay: 0.1s;
+      transition-delay: 0.15s;
     }
   }
 
@@ -284,7 +284,7 @@
     }
     .numerator {
       transform: translateX(50%);
-      transition-delay: 0.1s;
+      transition-delay: 0.15s;
     }
     .separator {
       transform: translateX(30px) translateY(60%) scale(0.8);
