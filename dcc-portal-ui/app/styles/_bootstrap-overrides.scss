@@ -1,0 +1,19 @@
+.popover.pop-below {
+  .popover-outer-container {
+    top: 2.7rem;
+    left: -25.5rem;
+    .popover-inner-container {
+      margin-top: 0.4rem;
+      margin-left: 0.4rem;
+    }
+    .popover-inner-container-border {
+      top: 0;
+      left: 0;
+      .arrow {
+        right: 17px;
+        top: -16px;
+        transform: rotate(-90deg);
+      }
+    }
+  }
+}

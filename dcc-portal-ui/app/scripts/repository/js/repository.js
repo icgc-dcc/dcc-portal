@@ -42,6 +42,8 @@
 
   var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
 
+  var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
+
   /**
    * ICGC static repository controller
    */
@@ -241,6 +243,7 @@
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
         repos[repoName].fileCount = term.count;
         repos[repoName].hasManifest = _.includes(['AWS - Virginia', 'Collaboratory - Toronto'], repoName);
+        repos[repoName].isCloud = _.includes(cloudRepos, repoName);
       });
 
       $scope.repos = _.values(repos);
@@ -262,6 +265,10 @@
           repoData.isGeneratingManifestShortUrl = false;
           repoData.shortUrl = response.plain().shortUrl;
         });
+    };
+
+    $scope.closeDropdowns = function () {
+      jQuery('.btn-group.open').trigger('click');
     };
 
     $scope.download = function() {
@@ -534,7 +541,6 @@
           x: -5,
           y: 12,
           formatter: function () {
-            var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
             var isCloudRepo = _.includes(cloudRepos, this.value);
             return isCloudRepo ? '\ue844' : '';
           }
