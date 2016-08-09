@@ -516,10 +516,8 @@
     $scope.$watch(function () {
       return loadState.isLoading;
     }, function(isLoading){
-      if (isLoading === false) {
-        if($location.hash()){
-          $window.scrollToSelector('#' + $location.hash(), {offset: 30, speed: 800});
-        }
+      if (isLoading === false && $location.hash()) {
+        $window.scrollToSelector('#' + $location.hash(), {offset: 30, speed: 800});
       }
     });
 
