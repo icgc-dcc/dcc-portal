@@ -41,6 +41,15 @@
   }
 
   .download-manifests {
+    // overrides due to padding in manifest tds
+    .stateful-fraction:before {
+      top: -.2rem;
+      bottom: -.2rem;
+      left: -.4rem;
+      right: -.4rem;
+      width: auto;
+      height: auto;
+    }
 
     .modal-body {
       padding: 0;
@@ -210,11 +219,34 @@
 
 .stateful-fraction {
   display: flex;
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(237, 248, 255, 0.8);
+    // background-image: linear-gradient(to right, transparent 0%, rgba(237, 248, 255, 0.8) 25%, rgba(237, 248, 255, 0.8) 75%, transparent);
+    z-index: 0;
+    display: none;
+  }
+  &.tweening{
+    &:before {
+      display: block;
+    }
+    .numerator {
+      color: rgba(77, 81, 83, 0.5);
+    }
+  }
 
   .numerator, .separator, .denominator {
     position: relative;
     transition: all 0.3s $inOutSine;
     -webkit-font-smoothing: subpixel-antialiased;
+    z-index: 1;
   }
   .numerator, .denominator {
     width: 50%;
