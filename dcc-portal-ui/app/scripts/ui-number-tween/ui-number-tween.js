@@ -29,13 +29,19 @@ ngmodule.directive('numberTween', function () {
       filter: '<',
     },
     link: function (scope, $element) {
-      $element.text(scope.filter(scope.value));
-      scope.$watch('value', function (newValue) {
-        $element.stop().animate({ val: newValue }, {
-          step: function (now) {
-            this.innerText = scope.filter(Math.round(now));
-          }
-        });
+      var getValue = function (value) {
+        return scope.filter ? scope.filter(value) : value;
+      };
+      $element.text(getValue());
+      scope.$watch('value', function (newValue, oldValue) {
+        $element
+          .stop()
+          .animate({ val: oldValue }, 0)
+          .animate({ val: newValue }, {
+            step: function (now) {
+              this.innerText = getValue(Math.round(now));
+            }
+          });
       });
     }
   }
