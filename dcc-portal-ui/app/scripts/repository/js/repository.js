@@ -191,7 +191,7 @@
 
   module.controller('ExternalFileDownloadController',
     function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params, Restangular) {
+      Extensions, params, Restangular, $filter) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
@@ -199,6 +199,7 @@
     };
 
     $scope.filters = FilterService.filters;
+    $scope.$filter = $filter;
 
     var p = {};
     p.size = 0;
