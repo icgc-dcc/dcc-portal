@@ -409,12 +409,19 @@
     refresh();
   });
 
-  module.controller('ProjectCtrl', function ($scope, $window, Page, PubMed, project,
-    Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService) {
+  module.controller('ProjectCtrl', function ($scope, $window, $q, Page, PubMed, project,
+    Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState) {
     var _ctrl = this;
 
     Page.setTitle(project.id);
     Page.setPage('entity');
+    
+    var loadState = new LoadState();
+
+    $scope.registerLoadState = loadState.addContributingLoadState;
+    $scope.deregisterLoadState = loadState.removeContributingLoadState;
+
+    _ctrl.loadState = loadState;
 
     var dataRepoRouteInfo = RouteInfoService.get ('dataRepositories');
     var dataRepoUrl = dataRepoRouteInfo.href;
@@ -472,12 +479,12 @@
       };
 
       // Get mutation impact for side panel
-      Mutations.getList(params).then(function (d) {
+      var fetchAndUpdateMutations = Mutations.getList(params).then(function (d) {
         _ctrl.mutationFacets = d.facets;
       });
 
       // Get study facets for summay section
-      Donors.getList(params).then(function(d) {
+      var fetchAndUpdateStudies = Donors.getList(params).then(function(d) {
         _ctrl.studies = d.facets.studies.terms || [];
 
         // Remove no-data term
@@ -496,6 +503,8 @@
 
         });
       });
+
+      loadState.loadWhile($q.all([ fetchAndUpdateMutations, fetchAndUpdateStudies ]));
     }
 
     $scope.$on('$locationChangeSuccess', function (event, dest) {
@@ -509,11 +518,13 @@
   });
 
   module.controller('ProjectGeneCtrl',
-    function($scope, HighchartsService, Projects, Donors, LocationService, ProjectCache, $stateParams) {
+    function($scope, HighchartsService, Projects, Donors, LocationService, ProjectCache, $stateParams, LoadState) {
     var _ctrl = this,
         _projectId = $stateParams.id || null,
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
+    
+    var loadState = new LoadState({scope: $scope});
 
     function success(genes) {
       if (genes.hasOwnProperty('hits') ) {
@@ -582,7 +593,10 @@
     }
 
     function refresh() {
-      Projects.one(_projectId).getGenes({filters: LocationService.filters()}).then(success);
+
+      loadState.loadWhile(
+        Projects.one(_projectId).getGenes({filters: LocationService.filters()}).then(success)
+      );
     }
 
 
@@ -600,13 +614,14 @@
   });
 
   module.controller('ProjectMutationsCtrl',
-    function ($scope, HighchartsService, Projects, Donors, LocationService, ProjectCache, $stateParams) {
+    function ($scope, HighchartsService, Projects, Donors, LocationService, ProjectCache, $stateParams, LoadState) {
 
     var _ctrl = this,
         _projectId = $stateParams.id || null,
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
 
+    var loadState = new LoadState({ scope: $scope });
 
     function success(mutations) {
       if (mutations.hasOwnProperty('hits')) {
@@ -668,7 +683,9 @@
     }
 
     function refresh() {
-      project.getMutations({include: 'consequences', filters: LocationService.filters()}).then(success);
+      loadState.loadWhile(
+        project.getMutations({include: 'consequences', filters: LocationService.filters()}).then(success)
+      );
     }
 
     $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
@@ -684,11 +701,13 @@
   });
 
   module.controller('ProjectDonorsCtrl', function ($scope, HighchartsService, Projects,
-                                                   Donors, LocationService, $stateParams) {
+                                                   Donors, LocationService, $stateParams, LoadState) {
     var _ctrl = this,
         _projectId = $stateParams.id || null,
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
+
+    var loadState = new LoadState({ scope: $scope });
 
     function success(donors) {
       if (donors.hasOwnProperty('hits')) {
@@ -713,7 +732,9 @@
     }
 
     function refresh() {
-      Projects.one(_projectId).getDonors({ filters: LocationService.filters()}).then(success);
+      loadState.loadWhile(
+        Projects.one(_projectId).getDonors({ filters: LocationService.filters()}).then(success)
+      );
     }
 
     $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {

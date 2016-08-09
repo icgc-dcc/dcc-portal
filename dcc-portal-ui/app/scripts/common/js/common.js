@@ -156,6 +156,57 @@
     };
   });
 
+  function LoadState(params) {
+    params = params || {};
+    var selfLoadState = { isLoading: !!params.isLoading };
+    var contributingLoadStates = _.compact([selfLoadState].concat(params.contributingLoadStates));
+
+    var loadState = {
+      get isLoading() {
+        return _.some(contributingLoadStates, 'isLoading');
+      },
+      set isLoading(val) {
+        selfLoadState.isLoading = val;
+      },
+      addContributingLoadState: function (loadState) {
+        if (_.contains(contributingLoadStates, loadState)) {
+          console.warn('load state is already in contributing loadStates, this shouldnt happen');
+          return;
+        }
+        contributingLoadStates = contributingLoadStates.concat(loadState);
+      },
+      removeContributingLoadState: function (loadState) {
+        contributingLoadStates = _.without(contributingLoadStates, loadState);
+      },
+      loadWhile: function (promise) {
+        invariant(_.isFunction(promise.then), 'loadWhileAsync requires a promise');
+        loadState.startLoad();
+        return promise.finally(loadState.endLoad);
+      },
+      startLoad: function () {
+        selfLoadState.isLoading = true;
+      },
+      endLoad: function () {
+        selfLoadState.isLoading = false;
+      },
+      register: function (scope) {
+        invariant(_.isFunction(scope.registerLoadState), 'Required function $scope.registerLoadState is invalid');
+        invariant(_.isFunction(scope.deregisterLoadState), 'Required function $scope.deregisterLoadState is invalid');
+        scope.registerLoadState(loadState);
+        scope.$on('$destroy', function () {
+          scope.deregisterLoadState(loadState);
+        });
+      }
+    };
+
+    if (params.scope) {
+      loadState.register(params.scope);
+    }
+
+    return loadState;
+  }
+
+  module.constant('LoadState', LoadState);
 
   module.filter('unique', function () {
     return function (items) {
