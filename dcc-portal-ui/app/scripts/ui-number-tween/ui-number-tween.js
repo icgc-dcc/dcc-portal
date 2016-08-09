@@ -27,22 +27,34 @@ ngmodule.directive('numberTween', function () {
     scope: {
       value: '<',
       filter: '<',
+      onTweenStart: '&',
+      onTweenEnd: '&',
     },
     link: function (scope, $element) {
       var getValue = function (value) {
         return scope.filter ? scope.filter(value) : value;
       };
-      $element.text(getValue());
+      var onTweenStart = scope.onTweenStart();
+      var onTweenEnd = scope.onTweenEnd();
+
+      $element.text(getValue(scope.value));
+
       scope.$watch('value', function (newValue, oldValue) {
+        if (newValue === oldValue) {
+          return;
+        }
+
         $element
           .stop()
           .animate({ val: oldValue }, 0)
           .animate({ val: newValue }, {
             step: function (now) {
               this.innerText = getValue(Math.round(now));
-            }
+            },
+            start: onTweenStart,
+            always: onTweenEnd,
           });
       });
     }
-  }
+  };
 });
