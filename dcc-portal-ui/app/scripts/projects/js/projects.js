@@ -518,7 +518,7 @@
     }, function(isLoading){
       if (isLoading === false) {
         if($location.hash()){
-          scrollToSelector('#' + $location.hash(), {offset: 30, speed: 800});
+          $window.scrollToSelector('#' + $location.hash(), {offset: 30, speed: 800});
         }
       }
     });

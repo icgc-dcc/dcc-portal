@@ -69,12 +69,13 @@ angular.module('icgc.ui.scroll.scrollto', [])
     elm.bind('click', function (e) {
       e.preventDefault();
       var offset = Number(attrs.offset) || 40;
-      var speed = Number(attrs.speed) | 800;
-      attrs.scrollto = attrs.scrollto || attrs.href;
+      var speed = Number(attrs.speed) || 800;
 
-      if (attrs.scrollto) {
-        console.warn('the scrollto attribute is deprecated, please use href instead');
-      }
+       if (attrs.scrollto) {
+          console.warn('The scrollto attribute is deprecated, please use href instead');
+        }
+
+      attrs.scrollto = attrs.scrollto || attrs.href;    
 
       scrollToSelector(attrs.scrollto, { offset: offset, speed: speed });
     });
@@ -156,7 +157,7 @@ angular.module('icgc.ui.scroll.scrollSpy', []).directive('scrollSpy', function (
 });
 
 function scrollToSelector (selector, options) {
-  invariant(selector, 'Missing required argument `selector`')
+  invariant(selector, 'Missing required argument `selector`');
   options = _.defaults({
     offset: 40,
     speed: 800
