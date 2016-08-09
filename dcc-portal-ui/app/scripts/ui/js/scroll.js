@@ -63,31 +63,20 @@ angular.module('icgc.ui.scroll.resetScroll', []).directive('resetScroll', functi
   };
 });
 
-angular.module('icgc.ui.scroll.scrollto', []).directive('scrollto', function () {
+angular.module('icgc.ui.scroll.scrollto', [])
+.directive('scrollto', function () {
   return function (scope, elm, attrs) {
     elm.bind('click', function (e) {
-      var top,
-          scrollOffset = 40,
-          animationSpeed = 800;
-          
-          if (angular.isDefined(attrs.scrollOffset) && angular.isNumber(parseInt(attrs.scrollOffset, 10))) {
-            scrollOffset = parseInt(attrs.scrollOffset, 10);
-          }
-          
-           if (angular.isDefined(attrs.animationSpeed) && angular.isNumber(parseInt(attrs.animationSpeed, 10))) {
-            animationSpeed = parseInt(attrs.animationSpeed, 10);
-          }
-
       e.preventDefault();
-      
-      if (attrs.href) {
-        attrs.scrollto = attrs.href;
+      var offset = Number(attrs.offset) || 40;
+      var speed = Number(attrs.speed) | 800;
+      attrs.scrollto = attrs.scrollto || attrs.href;
+
+      if (attrs.scrollto) {
+        console.warn('the scrollto attribute is deprecated, please use href instead');
       }
-      
-      
-      // scrollOffset is the offset to scroll bay
-      top = jQuery(attrs.scrollto).offset().top - scrollOffset;
-      jQuery('body,html').animate({ scrollTop: top }, animationSpeed);
+
+      scrollToSelector(attrs.scrollto, { offset: offset, speed: speed });
     });
   };
 });
@@ -165,5 +154,16 @@ angular.module('icgc.ui.scroll.scrollSpy', []).directive('scrollSpy', function (
     }
   };
 });
+
+function scrollToSelector (selector, options) {
+  invariant(selector, 'Missing required argument `selector`')
+  options = _.defaults({
+    offset: 40,
+    speed: 800
+  }, options);
+
+  var top = jQuery(selector).offset().top - options.offset;
+  jQuery('body,html').animate({ scrollTop: top }, options.speed);
+}
 
 

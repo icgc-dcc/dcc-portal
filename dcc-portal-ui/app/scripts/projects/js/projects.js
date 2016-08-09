@@ -409,7 +409,7 @@
     refresh();
   });
 
-  module.controller('ProjectCtrl', function ($scope, $window, $q, Page, PubMed, project,
+  module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page, PubMed, project,
     Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState) {
     var _ctrl = this;
 
@@ -510,6 +510,16 @@
     $scope.$on('$locationChangeSuccess', function (event, dest) {
       if (dest.indexOf('projects') !== -1) {
         refresh();
+      }
+    });
+
+    $scope.$watch(function () {
+      return loadState.isLoading;
+    }, function(isLoading){
+      if (isLoading === false) {
+        if($location.hash()){
+          scrollToSelector('#' + $location.hash(), {offset: 30, speed: 800});
+        }
       }
     });
 
