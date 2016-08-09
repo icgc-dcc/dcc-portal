@@ -201,6 +201,14 @@
     $scope.filters = FilterService.filters;
     $scope.$filter = $filter;
 
+    $scope.handleNumberTweenStart = function (tween) {
+      jQuery(tween.elem).closest('.stateful-fraction').addClass('tweening');
+    };
+
+    $scope.handleNumberTweenEnd = function (tween) {
+      jQuery(tween.elem).closest('.stateful-fraction').removeClass('tweening');
+    };
+
     var p = {};
     p.size = 0;
     p.filters = FilterService.filters();

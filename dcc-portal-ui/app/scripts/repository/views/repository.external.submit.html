@@ -50,7 +50,13 @@
               <td>
                 <div class="stateful-fraction" ng-class="{'focus-denominator': repoData.__hover, 'emphasize-numerator': !repoData.__hover && !__hoverDownloadAll, 'focus-numerator': __hoverDownloadAll}">
                   <span class="numerator">
-                    <number-tween value="summary[repoData.repoName].donorCount || 0" filter="$filter('number')"></number-tween>
+                    <number-tween
+                      ng-if="summary[repoData.repoName].donorCount !== undefined"
+                      value="summary[repoData.repoName].donorCount"
+                      filter="$filter('number')"
+                      on-tween-start="handleNumberTweenStart"
+                      on-tween-end="handleNumberTweenEnd"
+                    ></number-tween>
                   </span>
                   <span class="separator"></span>
                   <span class="denominator">{{ repoData.donorCount | number }}</span>
@@ -59,7 +65,13 @@
              <td>
                 <div class="stateful-fraction" ng-class="{'focus-denominator': repoData.__hover, 'emphasize-numerator': !repoData.__hover && !__hoverDownloadAll, 'focus-numerator': __hoverDownloadAll}">
                   <span class="numerator">
-                    <number-tween value="summary[repoData.repoName].fileCount || 0" filter="$filter('number')"></number-tween>
+                    <number-tween
+                      ng-if="summary[repoData.repoName].fileCount !== undefined"
+                      value="summary[repoData.repoName].fileCount || 0"
+                      filter="$filter('number')"
+                      on-tween-start="handleNumberTweenStart"
+                      on-tween-end="handleNumberTweenEnd"
+                    ></number-tween>
                   </span>
                   <span class="separator"></span>
                   <span class="denominator">{{ repoData.fileCount | number }}</span>
@@ -68,7 +80,13 @@
              <td>
                 <div class="stateful-fraction" ng-class="{'focus-denominator': repoData.__hover, 'emphasize-numerator': !repoData.__hover && !__hoverDownloadAll, 'focus-numerator': __hoverDownloadAll}">
                   <span class="numerator">
-                    <number-tween value="summary[repoData.repoName].fileSize || 0" filter="$filter('bytes')"></number-tween>
+                    <number-tween
+                      ng-if="summary[repoData.repoName].fileSize !== undefined"
+                      value="summary[repoData.repoName].fileSize || 0"
+                      filter="$filter('bytes')"
+                      on-tween-start="handleNumberTweenStart"
+                      on-tween-end="handleNumberTweenEnd"
+                    ></number-tween>
                   </span>
                   <span class="separator"></span>
                   <span class="denominator">{{ repoData.fileSize | bytes }}</span>
