@@ -17,6 +17,7 @@
  */
 package org.dcc.portal.pql.es.visitor;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 
 import java.util.Optional;
@@ -30,9 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class NotNestedVisitorTest extends BaseElasticsearchTest {
 
   CreateQueryBuilderVisitor visitor = new CreateQueryBuilderVisitor();
@@ -55,8 +54,7 @@ public class NotNestedVisitorTest extends BaseElasticsearchTest {
     ExpressionNode esAst = createTree(query);
     esAst = esAstTransformator.process(esAst, queryContext);
     val request = esVisitor.buildSearchRequest(esAst, context);
-
-    log.info("ES Visitor Visitor: {}", request);
+    assertThat(request).isNotNull();
   }
 
   @Test
@@ -67,8 +65,7 @@ public class NotNestedVisitorTest extends BaseElasticsearchTest {
     ExpressionNode esAst = createTree(query);
     esAst = esAstTransformator.process(esAst, queryContext);
     val request = esVisitor.buildSearchRequest(esAst, context);
-
-    log.info("ES Visitor Visitor: {}", request);
+    assertThat(request).isNotNull();
   }
 
 }
