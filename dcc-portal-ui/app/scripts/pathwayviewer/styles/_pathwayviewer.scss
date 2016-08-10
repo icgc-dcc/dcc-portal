@@ -348,6 +348,12 @@ $compartmentBorder:#ffc38b;
 
 .pathway-gene-header-label{
   font-weight: normal !important;
+  word-wrap: break-word;
+  white-space: normal !important;
+  @media(max-width: 800px){
+    font-size: 0.7rem !important;
+  }
+  
 }
 
 .pathway-legend .RenderableNodeText .RenderableNodeTextCell{
@@ -378,7 +384,6 @@ $compartmentBorder:#ffc38b;
 .pathway-info-svg{
   padding-left:15%;
   padding-right:15%;
-  max-height: 150px;
 }
 
 .failed-reaction {

@@ -411,7 +411,7 @@
         $scope.$on(PathwaysConstants.EVENTS.MODEL_READY_EVENT, function() {
 
             //var rect = $('.pathway-legend')[0].getBoundingClientRect();
-            controller.renderLegend(240, 671);
+            controller.renderLegend(270, 671);
 
         });
 
