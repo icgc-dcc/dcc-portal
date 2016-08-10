@@ -54,6 +54,7 @@
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
+                <i ng-style="{'display': summary[repoData.repoName].donorCount === undefined ? '' : 'none'}" class="icon-spinner icon-spin"></i>
             </td>
              <td class="text-right">
                <number-tween
@@ -63,6 +64,7 @@
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
+                <i ng-style="{'display': summary[repoData.repoName].fileCount === undefined ? '' : 'none'}" class="icon-spinner icon-spin"></i>
             </td>
              <td class="text-right">
                <number-tween
@@ -72,6 +74,7 @@
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
+                <i ng-style="{'display': summary[repoData.repoName].fileSize === undefined ? '' : 'none'}" class="icon-spinner icon-spin"></i>
             </td>
            </tr>
 
