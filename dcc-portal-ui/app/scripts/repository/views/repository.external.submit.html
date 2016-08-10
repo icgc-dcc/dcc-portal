@@ -161,6 +161,15 @@
 
     <div class="modal-footer">
       <button class="t_button" data-ng-click="cancel();">Cancel</button>
-      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i>Download All</button>
+      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i>Download</button>
+      <button
+        class="t_button"
+        data-ng-repeat="repoData in repos"
+        data-ng-if="repos.length === 1 && repoData.hasManifest"
+        data-ng-disabled="repoData.manifestID || repoData.isGeneratingManifestID"
+        data-ng-click="(!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
+      >
+        Manifest ID
+      </button>
     </div>
 </div>
