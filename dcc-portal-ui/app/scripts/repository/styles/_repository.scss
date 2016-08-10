@@ -140,7 +140,7 @@
 
       tbody {
         td {
-          transition: background-color 0.3s $inOutSine;
+          transition: all 0.3s $inOutSine;
           background-color: transparent;
           &.tweening {
             background-color: rgba(237, 248, 255, 0.8);
