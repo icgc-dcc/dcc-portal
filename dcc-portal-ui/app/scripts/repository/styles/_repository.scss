@@ -91,6 +91,17 @@
       th.text-right:last-child {
         padding-right: 1em;
       }
+
+      thead {
+        .info-link {
+          margin-left: -10px;
+          margin-right: -10px;
+        }
+        .popover {
+          color: #000;
+        }
+      }
+
       tr {
         transition: all 0.3s ease;
         &:nth-child(odd) {
