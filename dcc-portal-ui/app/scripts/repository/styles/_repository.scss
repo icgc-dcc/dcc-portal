@@ -114,7 +114,7 @@
             height: 100%;
             display: block;
             background-color: #edf8ff;
-            border: 2px dotted #1693c0;
+            border: 1px dotted #ccc;
           }
         }
         .orange-icon {
@@ -136,6 +136,17 @@
       }
       td, th {
         border-left: 0;
+      }
+
+      tbody {
+        td {
+          transition: background-color 0.3s $inOutSine;
+          background-color: transparent;
+          &.tweening {
+            background-color: rgba(237, 248, 255, 0.8);
+            color: #8e6d90; 
+          }
+        }
       }
 
       .extras {

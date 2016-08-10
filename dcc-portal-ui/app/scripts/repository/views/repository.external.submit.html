@@ -46,9 +46,33 @@
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
              </td>
-             <td class="text-right">{{ summary[repoData.repoName].donorCount || 0 | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileCount || 0 | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileSize || 0 | bytes }}</td>
+             <td class="text-right">
+                <number-tween
+                  ng-if="summary[repoData.repoName].donorCount !== undefined"
+                  value="summary[repoData.repoName].donorCount"
+                  filter="$filter('number')"
+                  on-tween-start="handleNumberTweenStart"
+                  on-tween-end="handleNumberTweenEnd"
+                ></number-tween>
+            </td>
+             <td class="text-right">
+               <number-tween
+                  ng-if="summary[repoData.repoName].fileCount !== undefined"
+                  value="summary[repoData.repoName].fileCount"
+                  filter="$filter('number')"
+                  on-tween-start="handleNumberTweenStart"
+                  on-tween-end="handleNumberTweenEnd"
+                ></number-tween>
+            </td>
+             <td class="text-right">
+               <number-tween
+                  ng-if="summary[repoData.repoName].fileSize !== undefined"
+                  value="summary[repoData.repoName].fileSize"
+                  filter="$filter('bytes')"
+                  on-tween-start="handleNumberTweenStart"
+                  on-tween-end="handleNumberTweenEnd"
+                ></number-tween>
+            </td>
            </tr>
 
             <tr class="extras" data-ng-repeat-end data-ng-if="
