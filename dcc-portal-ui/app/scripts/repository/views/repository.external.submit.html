@@ -46,6 +46,9 @@
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
              </td>
+             <td class="text-right">{{ summary[repoData.repoName].donorCount || 0 | number }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].fileCount || 0 | number }}</td>
+             <td class="text-right">{{ summary[repoData.repoName].fileSize || 0 | bytes }}</td>
            </tr>
 
             <tr class="extras" data-ng-repeat-end data-ng-if="
