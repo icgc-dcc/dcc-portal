@@ -22,7 +22,7 @@
 
        <table class="table table-info">
          <thead>
-           <th class="text-right" colspan="2">Priority</th>
+           <th class="text-center" colspan="2">Priority</th>
            <th style="width: 40%;">Repository</th>
            <th class="text-right"># Donors</th>
            <th class="text-right"># Files</th>
@@ -41,7 +41,7 @@
               dnd-effect-allowed="move"
             >
              <td class="handle text-right ">&nbsp;::: </td>
-             <td class="text-right">{{$index + 1}}.</td>
+             <td class="text-left">{{$index + 1}}</td>
              <td>
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
