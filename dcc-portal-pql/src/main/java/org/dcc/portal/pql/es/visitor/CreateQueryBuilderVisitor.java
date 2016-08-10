@@ -26,6 +26,7 @@ import org.dcc.portal.pql.es.ast.NestedNode;
 import org.dcc.portal.pql.es.ast.filter.BoolNode;
 import org.dcc.portal.pql.es.ast.filter.FilterNode;
 import org.dcc.portal.pql.es.ast.filter.MustBoolNode;
+import org.dcc.portal.pql.es.ast.filter.NotNode;
 import org.dcc.portal.pql.es.ast.filter.ShouldBoolNode;
 import org.dcc.portal.pql.es.ast.query.FunctionScoreNode;
 import org.dcc.portal.pql.es.ast.query.QueryNode;
@@ -61,6 +62,13 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
     return QueryBuilders
         .nestedQuery(node.getPath(), scoreQuery)
         .scoreMode(node.getScoreMode().getId());
+  }
+
+  @Override
+  public QueryBuilder visitNot(@NonNull NotNode node, @NonNull Optional<QueryContext> context) {
+    val innerQuery = node.getFirstChild().accept(this, context);
+
+    return QueryBuilders.boolQuery().mustNot(innerQuery);
   }
 
   @Override

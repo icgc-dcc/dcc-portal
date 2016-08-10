@@ -197,6 +197,7 @@ public class DonorRepository implements Repository {
   @NonNull
   public SearchResponse findAllCentric(StatementNode pqlAst) {
     val request = queryEngine.execute(pqlAst, DONOR_CENTRIC);
+    log.info("POO: {}", request);
     val response = request.getRequestBuilder().execute().actionGet();
 
     return response;
