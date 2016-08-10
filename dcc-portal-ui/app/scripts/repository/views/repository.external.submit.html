@@ -27,7 +27,6 @@
            <th class="text-right"># Donors</th>
            <th class="text-right"># Files</th>
            <th class="text-right">Total file size</th>
-           <th class="text-right">Manifests</th>
          </thead>
 
          <tbody dnd-list="repos">
@@ -47,60 +46,6 @@
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
              </td>
-             <td class="text-right">{{ summary[repoData.repoName].donorCount || 0 | number }} / {{ repoData.donorCount | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileCount || 0 | number }} / {{ repoData.fileCount | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileSize || 0 | bytes }} / {{ repoData.fileSize | bytes }}</td>
-             <td class="text-right">
-                <a
-                  href="{{getRepoManifestUrl({
-                    repoCodes: [repoData.repoCode],
-                    filters: filters()
-                  })}}"
-                  target="_blank"
-                  type="button"
-                  class="btn btn-xs btn-default orange-icon"
-                  ng-class="{ 'space-right': !repoData.hasManifest }"
-                >
-                  <i class="icon-download"></i>
-                </a>
-
-                <div class="btn-group" ng-if="repoData.hasManifest">
-                  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-
-                  <ul class="dropdown-menu pull-right">
-                    <li ng-if="repoData.hasManifest">
-                      <a
-                        ng-class="{
-                          disabled: repoData.manifestID || repoData.isGeneratingManifestID
-                        }"
-                        data-ng-click="
-                          !repoData.manifestID &&
-                          !repoData.isGeneratingManifestID &&
-                          createManifestId(repoData.repoName, repoData)"
-                      >
-                        Manifest ID
-                      </a>
-                      <a class="info-link" href="http://docs.icgc.org/cloud/guide/#manifest-from-the-data-portal" target="_blank">
-                        <popover
-                          class="pop-below"
-                          popover-anchor-label=""
-                          popover-assist-icon-class="icon-help"
-                          popover-assist-icon-position-before="false"
-                          popover-hide-delay="0"
-                        >
-
-                            In addition to the manifest file, the ICGC Storage Client accepts manifest ID to download files selected in your query.
-                            Click on the <i class="icon-help"></i> to view the User Guide and learn more.
-                        </popover>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-
-             </td>
            </tr>
 
             <tr class="extras" data-ng-repeat-end data-ng-if="
@@ -109,7 +54,7 @@
               repoData.manifestID ||
               repoData.shortUrl"
             >
-              <td colspan="7" class="text-right">
+              <td colspan="6" class="text-right">
                 <div class="spinner-container" data-ng-if="repoData.isGeneratingManifestShortUrl || repoData.isGeneratingManifestID">
                   <i class="icon-spinner icon-spin"></i>
                 </div>
