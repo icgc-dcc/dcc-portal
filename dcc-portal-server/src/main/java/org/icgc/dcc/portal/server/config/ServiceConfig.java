@@ -17,13 +17,16 @@
 
 package org.icgc.dcc.portal.server.config;
 
-import javax.annotation.PostConstruct;
-
 import org.icgc.dcc.portal.server.service.GeneService;
 import org.icgc.dcc.portal.server.service.OccurrenceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 public class ServiceConfig {
 
@@ -37,10 +40,13 @@ public class ServiceConfig {
   private GeneService geneService;
 
   /**
-   * Initialization.
+   * Initialization of services.
+   * <p>
+   * This fires as late as possible in the boot sequence. See {@link ApplicationReadyEvent} for details.
    */
-  @PostConstruct
-  public void initCache() {
+  @EventListener(ApplicationReadyEvent.class)
+  public void init() {
+    log.info("Initializing services...");
     occurrenceService.init();
     geneService.init();
   }

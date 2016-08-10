@@ -20,11 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.common.lang3.tuple.Pair;
 import org.elasticsearch.search.SearchHit;
@@ -41,12 +36,18 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -73,7 +74,8 @@ public class GeneService {
   @Async
   public void init() {
     try {
-      log.debug("Building EnsemblId-to-GeneSymbol lookup table...");
+      val watch = Stopwatch.createStarted();
+      log.info("[init] Initializing EnsemblId-to-GeneSymbol lookup table...");
 
       // The key is a gene symbol and the value is an ensembl ID.
       val groupedByGeneSymbol = geneRepository.getGeneSymbolEnsemblIdMap();
@@ -82,13 +84,13 @@ public class GeneService {
           .flatMap(Collection::stream)
           .collect(toImmutableMap(Pair::getKey, Pair::getValue));
 
-      log.debug("EnsemblId-to-GeneSymbol lookup table ({} entries) is: {}", lookupTable.size(), lookupTable);
+      log.debug("[init] EnsemblId-to-GeneSymbol lookup table ({} entries) is: {}", lookupTable.size(), lookupTable);
 
       ensemblIdGeneSymbolMap.set(lookupTable);
 
-      log.debug("Finished building EnsemblId-to-GeneSymbol lookup table.");
+      log.info("[init] Finished initializing EnsemblId-to-GeneSymbol lookup table in {}", watch);
     } catch (Exception e) {
-      log.error("Error building EnsemblId-to-GeneSymbol lookup table.", e);
+      log.error("[init] Error intializing EnsemblId-to-GeneSymbol lookup table.", e);
       propagate(e);
     }
   }
