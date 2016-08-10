@@ -24,9 +24,9 @@
          <thead>
            <th class="text-right" colspan="2">Priority</th>
            <th style="width: 40%;">Repository</th>
-           <th class="text-right"># Donors</th>
-           <th class="text-right"># Files</th>
-           <th class="text-right">Total file size</th>
+           <th class="text-center" style="min-width: 9em;"># Donors</th>
+           <th class="text-center" style="min-width: 9em;"># Files</th>
+           <th class="text-center" style="min-width: 10em;">Total file size</th>
            <th class="text-right">Manifests</th>
          </thead>
 
@@ -47,10 +47,52 @@
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
              </td>
-             <td class="text-right">{{ summary[repoData.repoName].donorCount || 0 | number }} / {{ repoData.donorCount | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileCount || 0 | number }} / {{ repoData.fileCount | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileSize || 0 | bytes }} / {{ repoData.fileSize | bytes }}</td>
-             <td class="text-right">
+              <td>
+                <div class="stateful-fraction" ng-class="{'focus-denominator': repoData.__hover, 'emphasize-numerator': !repoData.__hover && !__hoverDownloadAll, 'focus-numerator': __hoverDownloadAll}">
+                  <span class="numerator">
+                    <number-tween
+                      ng-if="summary[repoData.repoName].donorCount !== undefined"
+                      value="summary[repoData.repoName].donorCount"
+                      filter="$filter('number')"
+                      on-tween-start="handleNumberTweenStart"
+                      on-tween-end="handleNumberTweenEnd"
+                    ></number-tween>
+                  </span>
+                  <span class="separator"></span>
+                  <span class="denominator">{{ repoData.donorCount | number }}</span>
+                </div>
+              </td>
+             <td>
+                <div class="stateful-fraction" ng-class="{'focus-denominator': repoData.__hover, 'emphasize-numerator': !repoData.__hover && !__hoverDownloadAll, 'focus-numerator': __hoverDownloadAll}">
+                  <span class="numerator">
+                    <number-tween
+                      ng-if="summary[repoData.repoName].fileCount !== undefined"
+                      value="summary[repoData.repoName].fileCount || 0"
+                      filter="$filter('number')"
+                      on-tween-start="handleNumberTweenStart"
+                      on-tween-end="handleNumberTweenEnd"
+                    ></number-tween>
+                  </span>
+                  <span class="separator"></span>
+                  <span class="denominator">{{ repoData.fileCount | number }}</span>
+                </div>
+             </td>
+             <td>
+                <div class="stateful-fraction" ng-class="{'focus-denominator': repoData.__hover, 'emphasize-numerator': !repoData.__hover && !__hoverDownloadAll, 'focus-numerator': __hoverDownloadAll}">
+                  <span class="numerator">
+                    <number-tween
+                      ng-if="summary[repoData.repoName].fileSize !== undefined"
+                      value="summary[repoData.repoName].fileSize || 0"
+                      filter="$filter('bytes')"
+                      on-tween-start="handleNumberTweenStart"
+                      on-tween-end="handleNumberTweenEnd"
+                    ></number-tween>
+                  </span>
+                  <span class="separator"></span>
+                  <span class="denominator">{{ repoData.fileSize | bytes }}</span>
+                </div>
+             </td>
+             <td class="text-right" ng-mouseenter="repoData.__hover = true" ng-mouseleave="repoData.__hover = false">
                 <a
                   href="{{getRepoManifestUrl({
                     repoCodes: [repoData.repoCode],
@@ -213,6 +255,13 @@
 
     <div class="modal-footer">
       <button class="t_button" data-ng-click="cancel();">Cancel</button>
-      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i>Download All</button>
+      <button
+        class="t_button"
+        data-ng-click="download()"
+        ng-mouseenter="__hoverDownloadAll = true"
+        ng-mouseleave="__hoverDownloadAll = false"
+      >
+        <i class="icon-download"></i>Download All
+      </button>
     </div>
 </div>

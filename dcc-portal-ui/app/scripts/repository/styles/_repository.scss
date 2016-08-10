@@ -41,6 +41,15 @@
   }
 
   .download-manifests {
+    // overrides due to padding in manifest tds
+    .stateful-fraction:before {
+      top: -.2rem;
+      bottom: -.2rem;
+      left: -.4rem;
+      right: -.4rem;
+      width: auto;
+      height: auto;
+    }
 
     .modal-body {
       padding: 0;
@@ -114,7 +123,7 @@
             height: 100%;
             display: block;
             background-color: #edf8ff;
-            border: 2px dotted #1693c0;
+            border: 1px dotted #ccc;
           }
         }
         .orange-icon {
@@ -204,6 +213,118 @@
         }
       }
 
+    }
+  }
+}
+
+.stateful-fraction {
+  display: flex;
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(237, 248, 255, 0.8);
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.3s $inOutSine;
+  }
+  &.tweening{
+    &:before {
+      opacity: 1;
+    }
+    .numerator {
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .numerator, .separator, .denominator {
+    position: relative;
+    transition: all 0.3s $inOutSine;
+    -webkit-font-smoothing: subpixel-antialiased;
+    z-index: 1;
+  }
+  .numerator, .denominator {
+    width: 50%;
+    flex-grow: 1;
+  }
+  .numerator {
+    text-align: right;
+    transform: translateY(-6%);
+  }
+  .separator {
+    height: 1.3em;
+    margin-left: 0.4em;
+    margin-right: 0.2em;
+    transform: translateY(60%) translateZ(0);
+    &:before {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 1.3em;
+      background-color: #bbb;
+      transform: rotateZ(36deg);
+    }
+  }
+  .denominator {
+    text-align: left;
+    transform: translateY(20%) scale(0.8);
+  }
+
+
+  &.emphasize-numerator, .emphasize-numerator & {
+    .numerator {
+      padding-right: 0.2em;
+      transition-delay: 0.15;
+    }
+    .separator {
+      border-color: #bbb;
+      margin-left: 0.2em;
+      transition-delay: 0.07s;
+    }
+    .separator, .denominator {
+      color: #bbb;
+      transition-delay: 0s;
+    }
+  }
+
+  &.focus-denominator, .focus-denominator & {
+    .numerator, .separator {
+      opacity: 0;
+    }
+    .numerator {
+      transform: translateX(-30px) scale(0.8);
+      transition-delay: 0s;
+    }
+    .separator {
+      transform: translateX(-30px) translateY(60%) scale(0.8);
+      transition-delay: 0.07s;
+    }
+    .denominator {
+      transform: translateX(-50%) translateY(0%);
+      transition-delay: 0.15s;
+    }
+  }
+
+  &.focus-numerator, .focus-numerator & {
+    .denominator, .separator {
+      opacity: 0;
+    }
+    .numerator {
+      transform: translateX(50%);
+      transition-delay: 0.15s;
+    }
+    .separator {
+      transform: translateX(30px) translateY(60%) scale(0.8);
+      transition-delay: 0.07s;
+    }
+    .denominator {
+      transform: translateX(30px) scale(0.8) translateY(0%);
+      transition-delay: 0s;
     }
   }
 }
