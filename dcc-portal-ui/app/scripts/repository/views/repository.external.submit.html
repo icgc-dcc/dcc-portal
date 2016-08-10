@@ -156,6 +156,14 @@
            </tr>
 
          </tbody>
+         <tfoot>
+           <tr class="totals" style="font-weight: bold;">
+             <td colspan="3" class="text-right">Totals:</td>
+             <td class="text-right">{{ summary | _:'map':'donorCount' | _:'compact' | _:'sum' | number }}</td>
+             <td class="text-right">{{ summary | _:'map':'fileCount' | _:'compact' | _:'sum' | number }}</td>
+             <td class="text-right">{{ summary | _:'map':'fileSize' | _:'compact' | _:'sum' | bytes }}</td>
+           </tr>
+         </tfoot>
        </table>
     </div>
 
