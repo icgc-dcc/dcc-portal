@@ -26,13 +26,13 @@ ngmodule.directive('numberTween', function () {
     template: '<span></span>',
     scope: {
       value: '<',
-      filter: '<',
+      formatter: '<',
       onTweenStart: '&',
       onTweenEnd: '&',
     },
     link: function (scope, $element) {
       var getValue = function (value) {
-        return scope.filter ? scope.filter(value) : value;
+        return scope.formatter ? scope.formatter(value) : value;
       };
       var onTweenStart = scope.onTweenStart();
       var onTweenEnd = scope.onTweenEnd();

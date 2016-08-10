@@ -50,7 +50,7 @@
                 <number-tween
                   ng-if="summary[repoData.repoName].donorCount !== undefined"
                   value="summary[repoData.repoName].donorCount"
-                  filter="$filter('number')"
+                  formatter="$filter('number')"
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
@@ -59,7 +59,7 @@
                <number-tween
                   ng-if="summary[repoData.repoName].fileCount !== undefined"
                   value="summary[repoData.repoName].fileCount"
-                  filter="$filter('number')"
+                  formatter="$filter('number')"
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
@@ -68,7 +68,7 @@
                <number-tween
                   ng-if="summary[repoData.repoName].fileSize !== undefined"
                   value="summary[repoData.repoName].fileSize"
-                  filter="$filter('bytes')"
+                  formatter="$filter('bytes')"
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
@@ -182,8 +182,7 @@
          </tbody>
          <tfoot>
            <tr class="totals" style="font-weight: bold;">
-             <td colspan="3" class="text-right">Totals:</td>
-             <td class="text-right">{{ summary | _:'map':'donorCount' | _:'compact' | _:'sum' | number }}</td>
+             <td colspan="4" class="text-right">Totals:</td>
              <td class="text-right">{{ summary | _:'map':'fileCount' | _:'compact' | _:'sum' | number }}</td>
              <td class="text-right">{{ summary | _:'map':'fileSize' | _:'compact' | _:'sum' | bytes }}</td>
            </tr>
