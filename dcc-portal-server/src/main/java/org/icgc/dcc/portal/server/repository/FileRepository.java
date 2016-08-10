@@ -153,6 +153,9 @@ public class FileRepository {
 
   private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
 
+  // This should be larger than the reported number of files, otherwise total size and donor numbers will be wrong
+  private static final int MAX_FILE_BUCKET_SIZE = 300000;
+
   /**
    * Dependencies.
    */
@@ -698,7 +701,7 @@ public class FileRepository {
 
   private static NestedBuilder donorIdAgg(String aggKey) {
     return nestedAgg(aggKey, EsFields.DONORS,
-        terms(aggKey).size(100000).field(DONOR_ID_RAW_FIELD_NAME));
+        terms(aggKey).size(MAX_FILE_BUCKET_SIZE).field(DONOR_ID_RAW_FIELD_NAME));
   }
 
   private static TermsBuilder primarySiteAgg(@NonNull String fieldAlias, int size) {
@@ -708,7 +711,7 @@ public class FileRepository {
   }
 
   private static TermsBuilder averageFileSizePerFileCopyAgg(@NonNull String aggName) {
-    return terms(aggName).size(100000).field(toRawFieldName(Fields.FILE_ID))
+    return terms(aggName).size(MAX_FILE_BUCKET_SIZE).field(toRawFieldName(Fields.FILE_ID))
         .subAggregation(nestedAgg(aggName, EsFields.FILE_COPIES,
             avg(aggName).field(toRawFieldName(Fields.FILE_SIZE))));
   }
