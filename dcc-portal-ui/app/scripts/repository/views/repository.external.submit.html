@@ -20,14 +20,28 @@
         </div>
       </div>
 
-       <table class="table table-info">
+      <label class="pull-right">
+        <input
+          type="checkbox"
+          ng-model="shouldDedupe"
+          class="hidden"
+        >
+        <div class="btn btn-xs">
+          <i ng-class="{
+              'icon-check': shouldDedupe,
+              'icon-check-empty': !shouldDedupe
+            }"></i>
+          Deduplicate
+        </div>
+      </label> 
+       <table class="table table-info" ng-class="{'can-reorder': shouldDedupe}">
          <thead>
-           <th class="text-right" colspan="2">Priority</th>
-           <th style="width: 40%;">Repository</th>
+           <th ng-if="shouldDedupe" class="repo-priority text-right" colspan="2">Priority</th>
+           <th class="repo-name" style="width: 40%;">Repository</th>
            <th class="text-right"># Donors</th>
            <th class="text-right"># Files</th>
            <th class="text-right">Total file size</th>
-           <th class="text-right">Manifests</th>
+           <th ng-if="!shouldDedupe" class="text-right">Manifests</th>
          </thead>
 
          <tbody dnd-list="repos">
@@ -40,17 +54,26 @@
               dnd-draggable="repoData"
               dnd-dragstart="closeDropdowns()"
               dnd-effect-allowed="move"
+              dnd-disable-if="!shouldDedupe"
             >
-             <td class="handle text-right ">&nbsp;::: </td>
-             <td class="text-right">{{$index + 1}}.</td>
-             <td>
+             <td ng-if="shouldDedupe" class="handle text-right ">&nbsp;::: </td>
+             <td ng-if="shouldDedupe" class="repo-priority text-right">{{$index + 1}}.</td>
+
+             <td class="repo-name">
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
              </td>
-             <td class="text-right">{{ summary[repoData.repoName].donorCount || 0 | number }} / {{ repoData.donorCount | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileCount || 0 | number }} / {{ repoData.fileCount | number }}</td>
-             <td class="text-right">{{ summary[repoData.repoName].fileSize || 0 | bytes }} / {{ repoData.fileSize | bytes }}</td>
-             <td class="text-right">
+
+             <td ng-if="shouldDedupe" class="text-right">{{ summary[repoData.repoName].donorCount || 0 | number }}</td>
+             <td ng-if="!shouldDedupe" class="text-right">{{ repoData.donorCount | number }}</td>
+
+             <td ng-if="shouldDedupe" class="text-right">{{ summary[repoData.repoName].fileCount || 0 | number }}</td>
+             <td ng-if="!shouldDedupe" class="text-right">{{ repoData.fileCount | number }}</td>
+
+             <td ng-if="shouldDedupe" class="text-right">{{ summary[repoData.repoName].fileSize || 0 | bytes }}</td>
+             <td ng-if="!shouldDedupe" class="text-right">{{ repoData.fileSize | bytes }}</td>
+
+             <td ng-if="!shouldDedupe" class="text-right">
                 <a
                   href="{{getRepoManifestUrl({
                     repoCodes: [repoData.repoCode],
@@ -109,7 +132,7 @@
               repoData.manifestID ||
               repoData.shortUrl"
             >
-              <td colspan="7" class="text-right">
+              <td colspan="5" class="text-right">
                 <div class="spinner-container" data-ng-if="repoData.isGeneratingManifestShortUrl || repoData.isGeneratingManifestID">
                   <i class="icon-spinner icon-spin"></i>
                 </div>
@@ -213,6 +236,6 @@
 
     <div class="modal-footer">
       <button class="t_button" data-ng-click="cancel();">Cancel</button>
-      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i>Download All</button>
+      <button ng-disabled="!shouldDedupe" class="t_button" data-ng-click="shouldDedupe && download()"><i class="icon-download"></i>Download All</button>
     </div>
 </div>

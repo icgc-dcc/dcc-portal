@@ -86,9 +86,9 @@
       border-left: 0;
       border-right: 0;
       border-bottom: 0;
-      margin-top: 15px;
+      margin-top: 0;
       margin-bottom: 0;
-      th.text-right:last-child {
+      th.text-right:last-child, td.text-right:last-child {
         padding-right: 1em;
       }
       tr {
@@ -136,6 +136,20 @@
       }
       td, th {
         border-left: 0;
+      }
+
+      .handle {
+        width: 2em;
+      }
+      .repo-priority {
+        width: 2em;
+        & + td, & + th {
+          padding-left: 1em;
+        }
+      }
+
+      th:first-child, td:first-child {
+        padding-left: 1em;
       }
 
       .extras {
