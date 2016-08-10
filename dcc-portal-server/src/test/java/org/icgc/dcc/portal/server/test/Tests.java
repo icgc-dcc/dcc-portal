@@ -41,14 +41,14 @@ import lombok.val;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class Tests {
-  
+
   /**
    * Create a DBI instance for testing using the embedded H2 database schema.
    */
   public static DBI createDBI() {
-    return new DBI("jdbc:h2:genelist;MODE=PostgreSQL;INIT=runscript from 'classpath:sql/schema.sql'");
+    return new DBI("jdbc:h2:portal;MODE=PostgreSQL;INIT=runscript from 'classpath:sql/schema.sql'");
   }
-  
+
   /**
    * Creates a stub of {@link ContainerRequest} that is used for testing.
    * 
