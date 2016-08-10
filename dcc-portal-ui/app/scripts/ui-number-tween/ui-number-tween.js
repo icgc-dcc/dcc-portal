@@ -17,7 +17,7 @@
 
 'use strict';
 
-var ngmodule = angular.module('icgc.ui');
+var ngmodule = angular.module('icgc.ui.numberTween', []);
 
 ngmodule.directive('numberTween', function () {
   return {
