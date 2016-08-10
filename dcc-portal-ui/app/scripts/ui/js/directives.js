@@ -32,7 +32,8 @@ angular.module('icgc.ui', [
   'icgc.ui.fileUpload',
   'icgc.ui.badges',
   'icgc.ui.copyPaste',
-  'icgc.ui.popover'
+  'icgc.ui.popover',
+  'icgc.ui.numberTween'
 ]);
 
 

@@ -88,7 +88,7 @@
       border-bottom: 0;
       margin-top: 15px;
       margin-bottom: 0;
-      th.text-right:last-child {
+      td.text-right:last-child, th.text-right:last-child {
         padding-right: 1em;
       }
       tr {
@@ -114,7 +114,7 @@
             height: 100%;
             display: block;
             background-color: #edf8ff;
-            border: 2px dotted #1693c0;
+            border: 1px dotted #ccc;
           }
         }
         .orange-icon {
@@ -136,6 +136,17 @@
       }
       td, th {
         border-left: 0;
+      }
+
+      tbody {
+        td {
+          transition: all 0.3s $inOutSine;
+          background-color: transparent;
+          &.tweening {
+            background-color: rgba(237, 248, 255, 0.8);
+            color: #8e6d90; 
+          }
+        }
       }
 
       .extras {

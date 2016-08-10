@@ -69,6 +69,16 @@
     };
   });
 
+  module.filter('_', function () {
+    return function () {
+      var input = arguments[0];
+      var method = arguments[1];
+      invariant(_.isString(method), 'The first argument must be a string that specifies a lodash method name');
+      var args = Array.prototype.slice.call(arguments, 2);
+      return _[method].apply(null, [input].concat(args));
+    };
+  });
+
   module.filter('startsWith', function () {
     return function (string, start) {
       var ret = null;
