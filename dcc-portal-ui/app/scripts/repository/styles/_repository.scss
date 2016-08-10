@@ -91,6 +91,10 @@
       td.text-right:last-child, th.text-right:last-child {
         padding-right: 1em;
       }
+      th:first-child:not(.text-right):not(.text-center),
+      th:first-child:not(.text-right):not(.text-center) {
+        padding-left: 1em;
+      }
       tr {
         transition: all 0.3s ease;
         &:nth-child(odd) {

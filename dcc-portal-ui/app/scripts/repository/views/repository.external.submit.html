@@ -12,7 +12,7 @@
         <div class="modal-info">
           <p>A manifest is a text file passed to download clients in order to download selected files of interest. Each repository's manifest file can be individually downloaded.
           </p>
-          <p>When choosing "Download All", a manifest containing unique files from all repositories will be generated. Some files may be stored in multiple repositories. Duplicates from repositories lower in the list will not be included. You may drag to reorder the list to affect the generated manifest.
+          <p>When choosing "Download", a manifest containing unique files from all repositories will be generated. Some files may be stored in multiple repositories. Duplicates from repositories lower in the list will not be included. You may drag to reorder the list to affect the generated manifest.
           </p>
           <p>
           The available repositories below are restricted by your search filter:
@@ -22,7 +22,7 @@
 
        <table class="table table-info">
          <thead>
-           <th class="text-center" colspan="2">Priority</th>
+           <th class="text-center" colspan="2" ng-if="repos.length > 1">Priority</th>
            <th style="width: 40%;">Repository</th>
            <th class="text-right"># Donors</th>
            <th class="text-right"># Files</th>
@@ -40,8 +40,8 @@
               dnd-dragstart="closeDropdowns()"
               dnd-effect-allowed="move"
             >
-             <td class="handle text-right ">&nbsp;::: </td>
-             <td class="text-left">{{$index + 1}}</td>
+             <td class="handle text-right" ng-if="repos.length > 1">&nbsp;::: </td>
+             <td class="text-left" ng-if="repos.length > 1">{{$index + 1}}</td>
              <td>
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
@@ -54,6 +54,7 @@
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
+                <i ng-style="{'display': summary[repoData.repoName].donorCount === undefined ? '' : 'none'}" class="icon-spinner icon-spin"></i>
             </td>
              <td class="text-right">
                <number-tween
@@ -63,6 +64,7 @@
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
+                <i ng-style="{'display': summary[repoData.repoName].fileCount === undefined ? '' : 'none'}" class="icon-spinner icon-spin"></i>
             </td>
              <td class="text-right">
                <number-tween
@@ -72,6 +74,7 @@
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
+                <i ng-style="{'display': summary[repoData.repoName].fileSize === undefined ? '' : 'none'}" class="icon-spinner icon-spin"></i>
             </td>
            </tr>
 
@@ -180,7 +183,7 @@
            </tr>
 
          </tbody>
-         <tfoot>
+         <tfoot ng-show="repos.length > 1">
            <tr class="totals" style="font-weight: bold;">
              <td colspan="4" class="text-right">Totals:</td>
              <td class="text-right">{{ summary | _:'map':'fileCount' | _:'compact' | _:'sum' | number }}</td>
