@@ -8,6 +8,14 @@ Change log for the DCC Data Portal
   -  Added exception mapper for 503 errors
   -  'Download unavailable' message while the service is down for maintenance 
   -  angular-animate and angular-cookies version update
+  -  Added directive for animating number changes - `<number-tween>`  
+    See [PR#74](https://github.com/icgc-dcc/dcc-portal/pull/74) for usage instructions
+  - Changes to simplify manifest download modal
+  - jshint will now run during development and grunt-notify will notify errors
+  - `LoadState` added. [See PR#58](https://github.com/icgc-dcc/dcc-portal/pull/58) for usage instructions
+  - Updated analysis results sidebar layout
+  - New instances of `<tooltip-controls>` can now be created to be used localized within a component.  
+    See [PR#52](https://github.com/icgc-dcc/dcc-portal/pull/52) for usage instructions
 
 4.3.4
 --
