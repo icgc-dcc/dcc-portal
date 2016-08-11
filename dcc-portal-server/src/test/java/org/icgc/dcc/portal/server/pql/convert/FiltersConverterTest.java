@@ -23,9 +23,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.IndexModel.getDonorCentricTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getMutationCentricTypeModel;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.icgc.dcc.portal.server.pql.convert.FiltersConverter.createFilterByNestedPath;
 import static org.icgc.dcc.portal.server.pql.convert.FiltersConverter.groupFieldsByNestedPath;
 import static org.icgc.dcc.portal.server.pql.convert.FiltersConverter.groupNestedPaths;
@@ -77,7 +77,7 @@ public class FiltersConverterTest {
   @Test
   public void notTest() {
     val result = converter.convertFilters(createFilters("{donor:{id:{not:'DO1'}}}"), DONOR_CENTRIC);
-    assertThat(result).isEqualTo("ne(donor.id,'DO1')");
+    assertThat(result).isEqualTo("not(eq(donor.id,'DO1'))");
   }
 
   @Test
@@ -95,7 +95,7 @@ public class FiltersConverterTest {
   @Test
   public void missingTest() {
     val result = converter.convertFilters(createFilters("{donor:{id:{not:'DO1'}, hasPathway:false}}"), DONOR_CENTRIC);
-    assertThat(result).isEqualTo("ne(donor.id,'DO1'),missing(gene.pathwayId)");
+    assertThat(result).isEqualTo("missing(gene.pathwayId),not(eq(donor.id,'DO1'))");
   }
 
   @Test

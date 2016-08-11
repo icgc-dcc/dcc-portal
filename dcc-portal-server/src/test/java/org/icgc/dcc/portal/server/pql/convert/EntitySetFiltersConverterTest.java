@@ -48,7 +48,7 @@ public class EntitySetFiltersConverterTest {
 
   @Test
   public void donorEntitySetNotTest_gene() {
-    assertFilterConversion("{donor:{id:{not:['ES:abc']}}}", "nested(donor,not(in(donor.id,'ES:abc')))",
+    assertFilterConversion("{donor:{id:{not:['ES:abc']}}}", "not(nested(donor,in(donor.id,'ES:abc')))",
         GENE_CENTRIC);
   }
 
@@ -60,7 +60,7 @@ public class EntitySetFiltersConverterTest {
 
   @Test
   public void donorEntitySetNotTest_mutation() {
-    assertFilterConversion("{donor:{id:{not:['ES:abc']}}}", "nested(ssm_occurrence,not(in(donor.id,'ES:abc')))",
+    assertFilterConversion("{donor:{id:{not:['ES:abc']}}}", "not(nested(ssm_occurrence,in(donor.id,'ES:abc')))",
         MUTATION_CENTRIC);
   }
 
@@ -71,7 +71,7 @@ public class EntitySetFiltersConverterTest {
 
   @Test
   public void geneEntitySetNotTest_donor() {
-    assertFilterConversion("{gene:{id:{not:['ES:abc']}}}", "nested(gene,not(in(gene.id,'ES:abc')))",
+    assertFilterConversion("{gene:{id:{not:['ES:abc']}}}", "not(nested(gene,in(gene.id,'ES:abc')))",
         DONOR_CENTRIC);
   }
 
@@ -93,7 +93,7 @@ public class EntitySetFiltersConverterTest {
 
   @Test
   public void geneEntitySetNotTest_mutation() {
-    assertFilterConversion("{gene:{id:{not:['ES:abc']}}}", "nested(transcript,not(in(gene.id,'ES:abc')))",
+    assertFilterConversion("{gene:{id:{not:['ES:abc']}}}", "not(nested(transcript,in(gene.id,'ES:abc')))",
         MUTATION_CENTRIC);
   }
 
@@ -105,7 +105,7 @@ public class EntitySetFiltersConverterTest {
 
   @Test
   public void mutationEntitySetNotTest_donor() {
-    assertFilterConversion("{mutation:{id:{not:['ES:abc']}}}", "nested(gene.ssm,not(in(mutation.id,'ES:abc')))",
+    assertFilterConversion("{mutation:{id:{not:['ES:abc']}}}", "not(nested(gene.ssm,in(mutation.id,'ES:abc')))",
         DONOR_CENTRIC);
   }
 
@@ -117,7 +117,7 @@ public class EntitySetFiltersConverterTest {
 
   @Test
   public void mutationEntitySetNotTest_gene() {
-    assertFilterConversion("{mutation:{id:{not:['ES:abc']}}}", "nested(donor.ssm,not(in(mutation.id,'ES:abc')))",
+    assertFilterConversion("{mutation:{id:{not:['ES:abc']}}}", "not(nested(donor.ssm,in(mutation.id,'ES:abc')))",
         GENE_CENTRIC);
   }
 

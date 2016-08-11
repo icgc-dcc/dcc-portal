@@ -17,7 +17,6 @@
  */
 package org.icgc.dcc.portal.server.pql.convert;
 
-import static com.google.common.base.Predicates.not;
 import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
@@ -26,6 +25,9 @@ import static com.google.common.collect.Maps.transformEntries;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newTreeSet;
 import static java.lang.String.format;
+import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static org.dcc.portal.pql.es.visitor.special.EntitySetVisitor.IDENTIFIABLE_VALUE_PREFIX;
 import static org.dcc.portal.pql.meta.IndexModel.getTypeModel;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
@@ -39,8 +41,11 @@ import static org.icgc.dcc.portal.server.pql.convert.model.Operation.NOT;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -54,7 +59,6 @@ import org.icgc.dcc.portal.server.pql.convert.model.JqlFilters;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlValue;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
@@ -115,28 +119,57 @@ public class FiltersConverter {
     }
 
     // These fields are required to create the correct nesting order. E.g. nested(gene, nested(gene.ssm ...))
-    val fieldsGrouppedByNestedPath = ArrayListMultimap.<String, JqlField> create();
+    val fieldsGroupedByNestedPath = groupFields(filters, indexType, f -> f.getOperation() != NOT);
+    val notFieldsGroupedByNestedPath = groupFields(filters, indexType, f -> f.getOperation() == NOT);
 
-    // filterKind is 'donor' in a filter {donor:{id:{is:'DO1'}}}
+    val groupedFilters = getGroupedFilters(fieldsGroupedByNestedPath, indexType, false);
+    val notFilters = getGroupedFilters(notFieldsGroupedByNestedPath, indexType, true);
+
+    return Stream.concat(groupedFilters.values().stream(), notFilters.values().stream()).collect(joining(","));
+  }
+
+  private ListMultimap<String, JqlField> groupFields(JqlFilters filters, Type indexType,
+      Predicate<JqlField> streamFilter) {
+    val groupedByNestedPath = ArrayListMultimap.<String, JqlField> create();
+
     for (val entry : filters.getKindValues().entrySet()) {
-      val fieldsByNestedPath = groupFieldsByNestedPath(entry.getKey(), entry.getValue(), indexType);
-      fieldsGrouppedByNestedPath.putAll(fieldsByNestedPath);
+      // This guy needs to be mutable because groupFieldsByNestedPath method mutates it.
+      List<JqlField> values = entry.getValue().stream()
+          .filter(streamFilter)
+          // We transform NOT operations to IS operations as we are moving the NOT higher up in the AST.
+          .map(f -> f.getOperation() == NOT ? new JqlField(f.getName(), IS, f.getValue(), f.getPrefix()) : f)
+          .collect(toList());
+      if (values.size() > 0) {
+        val fieldsByNestedPath = groupFieldsByNestedPath(entry.getKey(), values, indexType);
+        groupedByNestedPath.putAll(fieldsByNestedPath);
+      }
     }
 
-    log.debug("Fields by nested path: {}", fieldsGrouppedByNestedPath);
-    val sortedDescPaths = newTreeSet(fieldsGrouppedByNestedPath.keySet()).descendingSet();
+    return groupedByNestedPath;
+  }
+
+  private Map<String, String> getGroupedFilters(ListMultimap<String, JqlField> fieldsGroupedByNestedPath,
+      Type indexType, boolean isNotFilter) {
+    Map<String, String> groupedFilters = new HashMap<>();
+    if (fieldsGroupedByNestedPath.size() == 0) {
+      return emptyMap();
+    }
+
+    log.debug("Fields by nested path: {}", fieldsGroupedByNestedPath);
+    val sortedDescPaths = newTreeSet(fieldsGroupedByNestedPath.keySet()).descendingSet();
     log.debug("Sorted: {}", sortedDescPaths);
     val groupedPaths = groupNestedPaths(sortedDescPaths, getTypeModel(indexType));
     log.debug("Groupped paths: {}", groupedPaths);
 
-    val groupedFilters = transformEntries(groupedPaths.asMap(), (key, values) -> {
-      final String filter = createFilterByNestedPath(indexType, fieldsGrouppedByNestedPath,
+    groupedFilters = transformEntries(groupedPaths.asMap(), (key, values) -> {
+      final String filter = createFilterByNestedPath(indexType, fieldsGroupedByNestedPath,
           newArrayList(newTreeSet(values).descendingSet()));
 
-      return isEncloseWithCommonParent(values) ? encloseWithCommonParent(key, filter) : filter;
+      String retFilter = isEncloseWithCommonParent(values) ? encloseWithCommonParent(key, filter) : filter;
+      return isNotFilter ? format(NOT_TEMPLATE, retFilter) : retFilter;
     });
 
-    return COMMA_JOINER.join(groupedFilters.values());
+    return groupedFilters;
   }
 
   private static JqlFilters cleanProjectFilters(JqlFilters filters) {
@@ -418,13 +451,14 @@ public class FiltersConverter {
     // The fields must be correctly separated before the next steps.
     val isMutation = (indexType == MUTATION_CENTRIC) && typePrefix.equals("mutation");
     if (isMutation) {
-      final Predicate<JqlField> nestedPredicate = (f) -> isNestedField(f);
+      final Predicate<JqlField> nestedPred = (f) -> isNestedField(f);
+      final Predicate<JqlField> notNestedPred = (f) -> !isNestedField(f);
 
-      val nonNestedFields = filter(fields, not(nestedPredicate));
+      val nonNestedFields = fields.stream().filter(notNestedPred).collect(toList());
       result.putAll(EMPTY_NESTED_PATH, nonNestedFields);
 
       // Resets the 'fields' variable for further processing (down below).
-      fields = newArrayList(filter(fields, nestedPredicate));
+      fields = fields.stream().filter(nestedPred).collect(toList());
     }
 
     val typeModel = getTypeModel(indexType);
