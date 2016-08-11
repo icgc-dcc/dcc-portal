@@ -123,8 +123,8 @@ public class FiltersConverter {
     val fieldsGroupedByNestedPath = groupFields(filters, indexType, IS);
     val notFieldsGroupedByNestedPath = groupFields(filters, indexType, NOT);
 
-    Map<String, String> groupedFilters = getGroupedFilters(fieldsGroupedByNestedPath, indexType, false);
-    Map<String, String> notFilters = getGroupedFilters(notFieldsGroupedByNestedPath, indexType, true);
+    val groupedFilters = getGroupedFilters(fieldsGroupedByNestedPath, indexType, false);
+    val notFilters = getGroupedFilters(notFieldsGroupedByNestedPath, indexType, true);
 
     return Stream.concat(groupedFilters.values().stream(), notFilters.values().stream()).collect(joining(","));
   }
