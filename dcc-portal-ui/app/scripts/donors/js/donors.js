@@ -318,7 +318,6 @@
     };
 
     this.one = function (id) {
-      console.log('Donors One: ', arguments);
       return id ? Donor.init(id) : Donor;
     };
   });
