@@ -24,6 +24,7 @@ Change log for the DCC Data Portal
 4.3.4
 --
   - Removed Publication section from Cancer projects
+  - Cleanup of unused feature flags and associated logic
 
 4.3.3
 --
