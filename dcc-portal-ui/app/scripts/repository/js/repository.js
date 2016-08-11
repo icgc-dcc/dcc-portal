@@ -313,7 +313,7 @@
           unique: true
         });
 
-        $window.location.href = manifestUrl;
+        $window.open(manifestUrl);
       } else {
         ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
       }
