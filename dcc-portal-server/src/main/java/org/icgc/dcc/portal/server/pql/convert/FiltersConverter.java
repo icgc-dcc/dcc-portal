@@ -56,7 +56,6 @@ import org.icgc.dcc.portal.server.pql.convert.model.JqlArrayValue;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlField;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlFilters;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlValue;
-import org.icgc.dcc.portal.server.pql.convert.model.Operation;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
@@ -120,8 +119,8 @@ public class FiltersConverter {
     }
 
     // These fields are required to create the correct nesting order. E.g. nested(gene, nested(gene.ssm ...))
-    val fieldsGroupedByNestedPath = groupFields(filters, indexType, IS);
-    val notFieldsGroupedByNestedPath = groupFields(filters, indexType, NOT);
+    val fieldsGroupedByNestedPath = groupFields(filters, indexType, f -> f.getOperation() != NOT);
+    val notFieldsGroupedByNestedPath = groupFields(filters, indexType, f -> f.getOperation() == NOT);
 
     val groupedFilters = getGroupedFilters(fieldsGroupedByNestedPath, indexType, false);
     val notFilters = getGroupedFilters(notFieldsGroupedByNestedPath, indexType, true);
@@ -129,14 +128,15 @@ public class FiltersConverter {
     return Stream.concat(groupedFilters.values().stream(), notFilters.values().stream()).collect(joining(","));
   }
 
-  private ListMultimap<String, JqlField> groupFields(JqlFilters filters, Type indexType, Operation operation) {
+  private ListMultimap<String, JqlField> groupFields(JqlFilters filters, Type indexType,
+      java.util.function.Predicate<JqlField> streamFilter) {
     val groupedByNestedPath = ArrayListMultimap.<String, JqlField> create();
 
     for (val entry : filters.getKindValues().entrySet()) {
       // This guy needs to be mutable because groupFieldsByNestedPath method mutates it.
       List<JqlField> values = entry.getValue().stream()
-          .filter(f -> f.getOperation() == operation)
-          .map(f -> operation == NOT ? new JqlField(f.getName(), IS, f.getValue(), f.getPrefix()) : f)
+          .filter(streamFilter)
+          .map(f -> f.getOperation() == NOT ? new JqlField(f.getName(), IS, f.getValue(), f.getPrefix()) : f)
           .collect(toList());
       if (values.size() > 0) {
         val fieldsByNestedPath = groupFieldsByNestedPath(entry.getKey(), values, indexType);
@@ -148,7 +148,7 @@ public class FiltersConverter {
   }
 
   private Map<String, String> getGroupedFilters(ListMultimap<String, JqlField> fieldsGroupedByNestedPath,
-      Type indexType, boolean notFilter) {
+      Type indexType, boolean isNotFilter) {
     Map<String, String> groupedFilters = new HashMap<>();
     if (fieldsGroupedByNestedPath.size() == 0) {
       return groupedFilters;
@@ -164,8 +164,8 @@ public class FiltersConverter {
       final String filter = createFilterByNestedPath(indexType, fieldsGroupedByNestedPath,
           newArrayList(newTreeSet(values).descendingSet()));
 
-      val retFilter = isEncloseWithCommonParent(values) ? encloseWithCommonParent(key, filter) : filter;
-      return notFilter ? format(NOT_TEMPLATE, retFilter) : retFilter;
+      String retFilter = isEncloseWithCommonParent(values) ? encloseWithCommonParent(key, filter) : filter;
+      return isNotFilter ? format(NOT_TEMPLATE, retFilter) : retFilter;
     });
 
     return groupedFilters;
