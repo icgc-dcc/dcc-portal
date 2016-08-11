@@ -22,6 +22,7 @@ import static com.google.common.base.Preconditions.checkState;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class SoftwareService {
   private final ServerProperties properties;
 
   @SneakyThrows
-  public List<ArtifactFolder> getIcgcGetVersions() {
+  public List<Version> getIcgcGetVersions() {
     String versionsUrl;
     versionsUrl = properties.getSoftware().getMavenRepositoryUrl() + "/api/storage/"
         + properties.getSoftware().getIcgcRepository() + "/" + properties.getSoftware().getIcgcGroupId();
@@ -63,7 +64,10 @@ public class SoftwareService {
         i.remove();
       }
     }
-    return response.children;
+    val uris = response.children.stream().map(ArtifactFolder::getUri);
+    val versions = uris.map(Version::new);
+    val sortedVersions = versions.sorted().collect(Collectors.toList());
+    return sortedVersions;
   }
 
   @SneakyThrows
@@ -82,9 +86,7 @@ public class SoftwareService {
 
   public String getLatestIcgcGetVersionUrl(String os) {
     val result = getIcgcGetVersions();
-    val uris = result.stream().map(ArtifactFolder::getUri);
-    val versions = uris.map(Version::new);
-    val latestVersion = versions.sorted().findFirst().orElse(null);
+    val latestVersion = result.stream().findFirst().orElse(null);
     return getIcgcGetVersionUrl(latestVersion.get(), os);
   }
 
@@ -172,7 +174,7 @@ public class SoftwareService {
 
   public class Version implements Comparable<Version> {
 
-    private String version;
+    public String version;
 
     public final String get() {
       return this.version;
