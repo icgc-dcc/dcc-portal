@@ -121,18 +121,6 @@
             border: 1px dotted #ccc;
           }
         }
-        .orange-icon {
-          color: $iconColor;
-          &.space-right {
-            margin-right: 23px;
-          }
-        }
-        .btn-default{
-          background-color: transparent;
-          &:not(:hover) {
-            border: 1px solid transparent;
-          }
-        }
         .spinner-container {
           display: flex;
           justify-content: center;
@@ -163,6 +151,16 @@
         .code {
           font-family: monospace;
         }
+        .row + .row {
+          margin-top: 1em;
+        }
+        code {
+          padding: 2px 4px;
+          font-size: 12.6px;
+          color: #c7254e;
+          background-color: #f9f2f4;
+          border-radius: 4px;
+        }
       }
     }
     .handle, *[draggable="true"] {
@@ -177,7 +175,7 @@
       cursor: pointer;
     }
 
-    input[type="text"] {
+    input.inconspicuous {
       padding: 2px 4px;
       border: 0;
     }
