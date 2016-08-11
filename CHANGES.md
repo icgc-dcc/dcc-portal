@@ -3,6 +3,16 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.3.5
+--
+  -  Added exception mapper for 503 errors
+  -  'Download unavailable' message while the service is down for maintenance 
+  -  angular-animate and angular-cookies version update
+
+4.3.4
+--
+  - Removed Publication section from Cancer projects
+
 4.3.3
 --
   - Added .settings to `dcc-portal-server`
@@ -10,7 +20,6 @@ Change log for the DCC Data Portal
   - Removed `dropdown.js`
   - `dcc-portal-server` pom.xml cleansing and refactoring
   - DCC-4996: Analysis tab now shows Saved Sets immediately
-  - Removed Publication section from Cancer projects
   - Updated Analysis result side panel's styling
   - Added "zoom", "undo" and "fullscreen" features to survival analysis graphs
   - Layout and feature updates for manifest download modal
