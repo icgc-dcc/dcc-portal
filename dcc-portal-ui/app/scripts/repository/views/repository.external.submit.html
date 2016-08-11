@@ -12,7 +12,11 @@
         <div class="modal-info">
           <p>A manifest is a text file passed to download clients in order to download selected files of interest. Each repository's manifest file can be individually downloaded.
           </p>
-          <p>When choosing "Download", a manifest containing unique files from all repositories will be generated. Some files may be stored in multiple repositories. Duplicates from repositories lower in the list will not be included. You may drag to reorder the list to affect the generated manifest.
+          <p ng-if="repos.length > 1">When choosing "Download", a manifest containing unique files from all repositories will be generated. Some files may be stored in multiple repositories. Duplicates from repositories lower in the list will not be included. You may drag to reorder the list to affect the generated manifest.
+          </p>
+          <p>
+            See the <a href="http://docs.icgc.org/cloud/guide/#manifest-command" target="_blank" class="light">User Guide<i class="icon-external-link"></i></a> for more information on manifest files
+            <span ng-if="repos.length === 1 && repos[0].hasManifest">and manifest IDs</span>.
           </p>
           <p>
           The available repositories below are restricted by your search filter:
