@@ -121,27 +121,31 @@
                     <div class="col-sm-3">
                       Manifest ID
                     </div>
-                    <div class="col-sm-9 text-left">
+                    <div class="col-md-5 text-left">
                       
                       <div class="manifest" data-ng-if="repoData.hasManifest">
-                        <input
-                          onClick="this.select()"
-                          size="38"
-                          type="text"
-                          value="{{repoData.manifestID}}"
-                        />
-                        <span
-                          class="clip-icon"
-                          style="cursor: pointer;"
-                          data-copy-to-clip
-                          data-copy-data="repoData.manifestID"
-                          data-show-copy-tips="true"
-                          data-prompt-on-copy="false"
-                          data-on-copy-success-message="Copied!"
-                          data-on-hover-message="Copy to clipboard"
-                        >
-                          <span class="icon-clippy"></span>
-                        </span>
+                        <div class="input-group clipboard-group">
+                          <input
+                            class="manifest-id form-control input-sm code text-center"
+                            onClick="this.select()"
+                            size="38"
+                            type="text"
+                            value="{{repoData.manifestID}}"
+                          />
+                          <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm" type="button"
+                                data-copy-to-clip
+                                data-copy-data="repoData.manifestID"
+                                data-show-copy-tips="true"
+                                data-prompt-on-copy="false"
+                                data-on-copy-success-message="Copied!"
+                                data-on-hover-message="Copy to clipboard"
+                                >
+                                <i class="icon-clippy"></i>
+                            </button>
+                            
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -153,23 +157,11 @@
                     <div class="col-sm-9 text-left">
                       <input
                         onClick="this.select()"
-                        class="code"
+                        class="code inconspicuous full-width"
                         size="76"
                         type="text"
                         value="{{ 'bin/icgc-storage-client manifest --manifest ' + repoData.manifestID }}"
                       />
-                      <span
-                        class="clip-icon"
-                        style="cursor: pointer;"
-                        data-copy-to-clip
-                        data-copy-data="'bin/icgc-storage-client manifest --manifest ' + repoData.manifestID"
-                        data-show-copy-tips="true"
-                        data-prompt-on-copy="false"
-                        data-on-copy-success-message="Copied!"
-                        data-on-hover-message="Copy to clipboard"
-                      >
-                        <span class="icon-clippy"></span>
-                      </span>
                     </div>
                   </div>
 
