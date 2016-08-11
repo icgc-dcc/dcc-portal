@@ -26,6 +26,7 @@ import static com.google.common.collect.Maps.transformEntries;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newTreeSet;
 import static java.lang.String.format;
+import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.dcc.portal.pql.es.visitor.special.EntitySetVisitor.IDENTIFIABLE_VALUE_PREFIX;
@@ -151,7 +152,7 @@ public class FiltersConverter {
       Type indexType, boolean isNotFilter) {
     Map<String, String> groupedFilters = new HashMap<>();
     if (fieldsGroupedByNestedPath.size() == 0) {
-      return groupedFilters;
+      return emptyMap();
     }
 
     log.debug("Fields by nested path: {}", fieldsGroupedByNestedPath);

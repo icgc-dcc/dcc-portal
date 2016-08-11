@@ -39,7 +39,7 @@ public class ScoreSortVisitorTest {
   @Test
   public void containsScore() {
     val root = createEsAst("select(id), sort(id, +_score)");
-    log.info("Before visitor: {}", root);
+    log.debug("Before visitor: {}", root);
     val result = root.accept(visitor, Optional.empty());
     log.debug("After visitor: {}", result);
 
