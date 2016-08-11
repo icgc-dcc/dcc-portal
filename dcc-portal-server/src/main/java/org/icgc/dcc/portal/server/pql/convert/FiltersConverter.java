@@ -17,7 +17,6 @@
  */
 package org.icgc.dcc.portal.server.pql.convert;
 
-import static com.google.common.base.Predicates.not;
 import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
@@ -46,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -59,7 +59,6 @@ import org.icgc.dcc.portal.server.pql.convert.model.JqlFilters;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlValue;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
@@ -130,13 +129,14 @@ public class FiltersConverter {
   }
 
   private ListMultimap<String, JqlField> groupFields(JqlFilters filters, Type indexType,
-      java.util.function.Predicate<JqlField> streamFilter) {
+      Predicate<JqlField> streamFilter) {
     val groupedByNestedPath = ArrayListMultimap.<String, JqlField> create();
 
     for (val entry : filters.getKindValues().entrySet()) {
       // This guy needs to be mutable because groupFieldsByNestedPath method mutates it.
       List<JqlField> values = entry.getValue().stream()
           .filter(streamFilter)
+          // We transform NOT operations to IS operations as we are moving the NOT higher up in the AST.
           .map(f -> f.getOperation() == NOT ? new JqlField(f.getName(), IS, f.getValue(), f.getPrefix()) : f)
           .collect(toList());
       if (values.size() > 0) {
@@ -451,13 +451,14 @@ public class FiltersConverter {
     // The fields must be correctly separated before the next steps.
     val isMutation = (indexType == MUTATION_CENTRIC) && typePrefix.equals("mutation");
     if (isMutation) {
-      final Predicate<JqlField> nestedPredicate = (f) -> isNestedField(f);
+      final Predicate<JqlField> nestedPred = (f) -> isNestedField(f);
+      final Predicate<JqlField> notNestedPred = (f) -> !isNestedField(f);
 
-      val nonNestedFields = filter(fields, not(nestedPredicate));
+      val nonNestedFields = fields.stream().filter(notNestedPred).collect(toList());
       result.putAll(EMPTY_NESTED_PATH, nonNestedFields);
 
       // Resets the 'fields' variable for further processing (down below).
-      fields = newArrayList(filter(fields, nestedPredicate));
+      fields = fields.stream().filter(nestedPred).collect(toList());
     }
 
     val typeModel = getTypeModel(indexType);
