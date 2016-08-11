@@ -16,6 +16,10 @@ Change log for the DCC Data Portal
   - Updated analysis results sidebar layout
   - New instances of `<tooltip-controls>` can now be created to be used localized within a component.  
     See [PR#52](https://github.com/icgc-dcc/dcc-portal/pull/52) for usage instructions
+  - Improves the way entity sets are handleing in the UI for the File Repository
+  - Bug fix for NPEs caused by invalid fields in keyword search
+  - Updates to OncoGrid rendering so that it does not block sidebar animations in analysis page
+  - Bug fix for File Repository summary numbers. Increased maximum number of term buckets to 300,000
 
 4.3.4
 --
