@@ -18,14 +18,6 @@
   }
 }
 
-.btn-gradiated {
-  background-image: linear-gradient(#fcfcfc, #eee);
-  &:hover {
-    background-image: linear-gradient(#eee, #ddd);
-    border-color: #ccc;
-  }
-}
-
 .clipboard-group {
   .input-sm {
     min-height: 28px;
@@ -33,10 +25,6 @@
     padding-bottom: 3px;
     font-size: 12px;
     line-height: 20px;
-  }
-
-  .btn {
-    @extend .btn-gradiated;
   }
 
   .btn-sm {
