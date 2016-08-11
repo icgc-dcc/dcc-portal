@@ -26,6 +26,7 @@ import static com.google.common.collect.Maps.transformEntries;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newTreeSet;
 import static java.lang.String.format;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.dcc.portal.pql.es.visitor.special.EntitySetVisitor.IDENTIFIABLE_VALUE_PREFIX;
 import static org.dcc.portal.pql.meta.IndexModel.getTypeModel;
@@ -55,6 +56,7 @@ import org.icgc.dcc.portal.server.pql.convert.model.JqlArrayValue;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlField;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlFilters;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlValue;
+import org.icgc.dcc.portal.server.pql.convert.model.Operation;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
@@ -118,69 +120,55 @@ public class FiltersConverter {
     }
 
     // These fields are required to create the correct nesting order. E.g. nested(gene, nested(gene.ssm ...))
-    val fieldsGrouppedByNestedPath = ArrayListMultimap.<String, JqlField> create();
-    val notFieldsGrouppedByNestedPath = ArrayListMultimap.<String, JqlField> create();
+    val fieldsGroupedByNestedPath = groupFields(filters, indexType, IS);
+    val notFieldsGroupedByNestedPath = groupFields(filters, indexType, NOT);
 
-    // filterKind is 'donor' in a filter {donor:{id:{is:'DO1'}}}
+    Map<String, String> groupedFilters = getGroupedFilters(fieldsGroupedByNestedPath, indexType, false);
+    Map<String, String> notFilters = getGroupedFilters(notFieldsGroupedByNestedPath, indexType, true);
+
+    return Stream.concat(groupedFilters.values().stream(), notFilters.values().stream()).collect(joining(","));
+  }
+
+  private ListMultimap<String, JqlField> groupFields(JqlFilters filters, Type indexType, Operation operation) {
+    val groupedByNestedPath = ArrayListMultimap.<String, JqlField> create();
+
     for (val entry : filters.getKindValues().entrySet()) {
-      // This guy needs to be mutable because of groupFieldsByNestedPath.
-      List<JqlField> values =
-          entry.getValue().stream().filter(f -> f.getOperation() != NOT).collect(toList());
+      // This guy needs to be mutable because groupFieldsByNestedPath method mutates it.
+      List<JqlField> values = entry.getValue().stream()
+          .filter(f -> f.getOperation() == operation)
+          .map(f -> operation == NOT ? new JqlField(f.getName(), IS, f.getValue(), f.getPrefix()) : f)
+          .collect(toList());
       if (values.size() > 0) {
         val fieldsByNestedPath = groupFieldsByNestedPath(entry.getKey(), values, indexType);
-        fieldsGrouppedByNestedPath.putAll(fieldsByNestedPath);
+        groupedByNestedPath.putAll(fieldsByNestedPath);
       }
     }
 
-    // filterKind is 'donor' in a filter {donor:{id:{is:'DO1'}}}
-    for (val entry : filters.getKindValues().entrySet()) {
-      // This guy needs to be mutable because of groupFieldsByNestedPath.
-      List<JqlField> values =
-          entry.getValue().stream().filter(f -> f.getOperation() == NOT)
-              .map(f -> new JqlField(f.getName(), IS, f.getValue(), f.getPrefix()))
-              .collect(toList());
-      if (values.size() > 0) {
-        val fieldsByNestedPath = groupFieldsByNestedPath(entry.getKey(), values, indexType);
-        notFieldsGrouppedByNestedPath.putAll(fieldsByNestedPath);
-      }
-    }
+    return groupedByNestedPath;
+  }
 
+  private Map<String, String> getGroupedFilters(ListMultimap<String, JqlField> fieldsGroupedByNestedPath,
+      Type indexType, boolean notFilter) {
     Map<String, String> groupedFilters = new HashMap<>();
-    if (fieldsGrouppedByNestedPath.size() > 0) {
-      log.debug("Fields by nested path: {}", fieldsGrouppedByNestedPath);
-      val sortedDescPaths = newTreeSet(fieldsGrouppedByNestedPath.keySet()).descendingSet();
-      log.debug("Sorted: {}", sortedDescPaths);
-      val groupedPaths = groupNestedPaths(sortedDescPaths, getTypeModel(indexType));
-      log.debug("Groupped paths: {}", groupedPaths);
-
-      groupedFilters = transformEntries(groupedPaths.asMap(), (key, values) -> {
-        final String filter = createFilterByNestedPath(indexType, fieldsGrouppedByNestedPath,
-            newArrayList(newTreeSet(values).descendingSet()));
-
-        return isEncloseWithCommonParent(values) ? encloseWithCommonParent(key, filter) : filter;
-      });
+    if (fieldsGroupedByNestedPath.size() == 0) {
+      return groupedFilters;
     }
 
-    Map<String, String> notFilters = new HashMap<>();
-    if (notFieldsGrouppedByNestedPath.size() > 0) {
-      log.debug("Fields by nested path: {}", notFieldsGrouppedByNestedPath);
-      val sortedDescPaths = newTreeSet(notFieldsGrouppedByNestedPath.keySet()).descendingSet();
-      log.debug("Sorted: {}", sortedDescPaths);
-      val groupedPaths = groupNestedPaths(sortedDescPaths, getTypeModel(indexType));
-      log.debug("Groupped paths: {}", groupedPaths);
+    log.debug("Fields by nested path: {}", fieldsGroupedByNestedPath);
+    val sortedDescPaths = newTreeSet(fieldsGroupedByNestedPath.keySet()).descendingSet();
+    log.debug("Sorted: {}", sortedDescPaths);
+    val groupedPaths = groupNestedPaths(sortedDescPaths, getTypeModel(indexType));
+    log.debug("Groupped paths: {}", groupedPaths);
 
-      notFilters = transformEntries(groupedPaths.asMap(), (key, values) -> {
-        final String filter = createFilterByNestedPath(indexType, notFieldsGrouppedByNestedPath,
-            newArrayList(newTreeSet(values).descendingSet()));
+    groupedFilters = transformEntries(groupedPaths.asMap(), (key, values) -> {
+      final String filter = createFilterByNestedPath(indexType, fieldsGroupedByNestedPath,
+          newArrayList(newTreeSet(values).descendingSet()));
 
-        return format(NOT_TEMPLATE, isEncloseWithCommonParent(values) ? encloseWithCommonParent(key, filter) : filter);
-      });
-    }
+      val retFilter = isEncloseWithCommonParent(values) ? encloseWithCommonParent(key, filter) : filter;
+      return notFilter ? format(NOT_TEMPLATE, retFilter) : retFilter;
+    });
 
-    val groupedValues = COMMA_JOINER.join(groupedFilters.values()).replaceAll(",$", "");
-    val notValues = COMMA_JOINER.join(notFilters.values()).replaceAll(",$", "");
-
-    return COMMA_JOINER.join(groupedValues, notValues).replaceAll(",$", "").replaceAll("^,", "");
+    return groupedFilters;
   }
 
   private static JqlFilters cleanProjectFilters(JqlFilters filters) {
