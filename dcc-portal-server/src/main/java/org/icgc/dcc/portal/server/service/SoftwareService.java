@@ -28,6 +28,7 @@ import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
@@ -87,7 +88,7 @@ public class SoftwareService {
   public String getLatestIcgcGetVersionUrl(String os) {
     val result = getIcgcGetVersions();
     val latestVersion = result.stream().findFirst().orElse(null);
-    return getIcgcGetVersionUrl(latestVersion.get(), os);
+    return getIcgcGetVersionUrl(latestVersion.version, os);
   }
 
   public String getVersionChecksumUrl(String version) {
@@ -174,8 +175,9 @@ public class SoftwareService {
 
   public class Version implements Comparable<Version> {
 
-    public String version;
+    private String version;
 
+    @JsonValue
     public final String get() {
       return this.version;
     }
