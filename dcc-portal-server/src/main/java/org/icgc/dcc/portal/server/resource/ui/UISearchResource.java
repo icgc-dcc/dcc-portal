@@ -99,6 +99,8 @@ public class UISearchResource extends Resource {
       @ApiParam(value = "From") @QueryParam("from") @DefaultValue("1") IntParam from,
       @ApiParam(value = "Size") @QueryParam("size") @DefaultValue("10") IntParam size) {
 
+    checkRequest(donorId == null, "donorId query param is required.");
+
     val query =
         Query.builder().filters(filters.get()).sort("_score").from(from.get()).size(size.get()).order(DEFAULT_ORDER)
             .includes(ImmutableList.of("consequences")).build();
