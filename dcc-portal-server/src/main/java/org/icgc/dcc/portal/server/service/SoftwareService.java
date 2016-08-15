@@ -28,7 +28,6 @@ import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
@@ -175,12 +174,7 @@ public class SoftwareService {
 
   public class Version implements Comparable<Version> {
 
-    private String version;
-
-    @JsonValue
-    public final String get() {
-      return this.version;
-    }
+    public String version;
 
     public Version(String version) {
       checkState(version != null);
@@ -190,8 +184,8 @@ public class SoftwareService {
     @Override
     public int compareTo(Version that) {
       if (that == null) return 1;
-      String[] thisParts = this.get().split("\\.");
-      String[] thatParts = that.get().split("\\.");
+      String[] thisParts = this.version.split("\\.");
+      String[] thatParts = that.version.split("\\.");
       int length = Math.max(thisParts.length, thatParts.length);
       for (int i = 0; i < length; i++) {
         int thisPart = i < thisParts.length ? Integer.parseInt(thisParts[i]) : 0;

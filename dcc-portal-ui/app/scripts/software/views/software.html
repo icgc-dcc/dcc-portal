@@ -88,9 +88,9 @@
                </thead>
                <tbody id="get-versions">
                   <tr data-ng-repeat="v in icgcGetVersions">
-                     <td>{{ v.version }}</td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}/{{ v['version'] }}/osx">{{ icgcGet.artifactId }}-{{ v['version'] }}-osx-dist.zip</a></td>
-                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}/{{ v['version'] }}/linux">{{ icgcGet.artifactId }}-{{ v['version'] }}-linux-dist.zip</a></td>
+                     <td>{{ v.version}}</td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}/{{ v.version }}/osx">{{ icgcGet.artifactId }}-{{ v.version }}-osx-dist.zip</a></td>
+                     <td><a target="_blank" href="api/v1/ui/software/{{ icgcGet.artifactId }}/{{ v.version }}/linux">{{ icgcGet.artifactId }}-{{ v.version }}-linux-dist.zip</a></td>
                   </tr>
                </tbody>
             </table>
