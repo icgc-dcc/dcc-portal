@@ -20,13 +20,17 @@ package org.icgc.dcc.portal.server.service;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
@@ -51,7 +55,7 @@ public class SoftwareService {
   private final ServerProperties properties;
 
   @SneakyThrows
-  public List<ArtifactFolder> getIcgcGetVersions() {
+  public List<Version> getIcgcGetVersions() {
     String versionsUrl;
     versionsUrl = properties.getSoftware().getMavenRepositoryUrl() + "/api/storage/"
         + properties.getSoftware().getIcgcRepository() + "/" + properties.getSoftware().getIcgcGroupId();
@@ -63,7 +67,10 @@ public class SoftwareService {
         i.remove();
       }
     }
-    return response.children;
+    val uris = response.children.stream().map(ArtifactFolder::getUri);
+    val versions = uris.map(Version::new);
+    val sortedVersions = versions.sorted().collect(Collectors.toList());
+    return sortedVersions;
   }
 
   @SneakyThrows
@@ -82,10 +89,8 @@ public class SoftwareService {
 
   public String getLatestIcgcGetVersionUrl(String os) {
     val result = getIcgcGetVersions();
-    val uris = result.stream().map(ArtifactFolder::getUri);
-    val versions = uris.map(Version::new);
-    val latestVersion = versions.sorted().findFirst().orElse(null);
-    return getIcgcGetVersionUrl(latestVersion.get(), os);
+    val latestVersion = result.stream().findFirst().orElse(null);
+    return getIcgcGetVersionUrl(latestVersion.version, os);
   }
 
   public String getVersionChecksumUrl(String version) {
@@ -174,6 +179,13 @@ public class SoftwareService {
 
     private String version;
 
+    @JsonValue
+    public final Map<String, String> getJson() {
+      Map<String, String> map = new HashMap<String, String>();
+      map.put("version", this.version);
+      return map;
+    }
+
     public final String get() {
       return this.version;
     }
@@ -186,8 +198,8 @@ public class SoftwareService {
     @Override
     public int compareTo(Version that) {
       if (that == null) return 1;
-      String[] thisParts = this.get().split("\\.");
-      String[] thatParts = that.get().split("\\.");
+      String[] thisParts = this.version.split("\\.");
+      String[] thatParts = that.version.split("\\.");
       int length = Math.max(thisParts.length, thatParts.length);
       for (int i = 0; i < length; i++) {
         int thisPart = i < thisParts.length ? Integer.parseInt(thisParts[i]) : 0;
