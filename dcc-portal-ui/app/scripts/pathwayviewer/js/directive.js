@@ -409,10 +409,7 @@
 
         // Render legend last to ensure all dependencies are initialized. Timeout of 0 does not work in firefox.
         $scope.$on(PathwaysConstants.EVENTS.MODEL_READY_EVENT, function() {
-
-            //var rect = $('.pathway-legend')[0].getBoundingClientRect();
             controller.renderLegend(270, 671);
-
         });
 
         // Needed to fix url paths for SVGs on url change due to <base> tag required by angular
