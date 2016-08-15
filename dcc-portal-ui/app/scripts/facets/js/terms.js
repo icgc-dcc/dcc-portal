@@ -164,7 +164,8 @@
         defined: '@',
         collapsed: '@',
 
-        iconGetter: '&iconGetter'
+        iconGetter: '&iconGetter',
+        showWhenEmpty: '<'
       },
       transclude: true,
       templateUrl: '/scripts/facets/views/terms.html',

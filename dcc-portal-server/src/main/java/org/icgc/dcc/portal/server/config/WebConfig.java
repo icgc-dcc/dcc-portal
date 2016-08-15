@@ -46,6 +46,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.container.filter.LoggingFilter;
 import com.sun.jersey.api.core.DefaultResourceConfig;
@@ -150,18 +151,23 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
   @PostConstruct
   public void init() {
+    val watch = Stopwatch.createStarted();
+    log.info("[init] Initializing Swagger...");
+
     // Add converters
     ModelConverters.getInstance().addConverter(new PrimitiveModelResolver());
-  
+
     // Configure and scan
     val config = new BeanConfig();
-  
+
     config.setTitle("ICGC Data Portal API");
     config.setVersion(VersionUtils.getApiVersion());
     config.setResourcePackage(
         Resource.class.getPackage().getName() + "," + PrimitiveModelResolver.class.getPackage().getName());
     config.setBasePath("/api");
     config.setScan(true);
+
+    log.info("[init] Finished initializing Swagger in {}", watch);
   }
 
 }

@@ -88,8 +88,12 @@
       border-bottom: 0;
       margin-top: 15px;
       margin-bottom: 0;
-      th.text-right:last-child {
+      td.text-right:last-child, th.text-right:last-child {
         padding-right: 1em;
+      }
+      th:first-child:not(.text-right):not(.text-center),
+      th:first-child:not(.text-right):not(.text-center) {
+        padding-left: 1em;
       }
       tr {
         transition: all 0.3s ease;
@@ -114,19 +118,7 @@
             height: 100%;
             display: block;
             background-color: #edf8ff;
-            border: 2px dotted #1693c0;
-          }
-        }
-        .orange-icon {
-          color: $iconColor;
-          &.space-right {
-            margin-right: 23px;
-          }
-        }
-        .btn-default{
-          background-color: transparent;
-          &:not(:hover) {
-            border: 1px solid transparent;
+            border: 1px dotted #ccc;
           }
         }
         .spinner-container {
@@ -138,6 +130,17 @@
         border-left: 0;
       }
 
+      tbody {
+        td {
+          transition: all 0.3s $inOutSine;
+          background-color: transparent;
+          &.tweening {
+            background-color: rgba(237, 248, 255, 0.8);
+            color: #8e6d90; 
+          }
+        }
+      }
+
       .extras {
         td {
           padding: 12px 0;
@@ -147,6 +150,16 @@
         }
         .code {
           font-family: monospace;
+        }
+        .row + .row {
+          margin-top: 1em;
+        }
+        code {
+          padding: 2px 4px;
+          font-size: 12.6px;
+          color: #c7254e;
+          background-color: #f9f2f4;
+          border-radius: 4px;
         }
       }
     }
@@ -162,7 +175,7 @@
       cursor: pointer;
     }
 
-    input[type="text"] {
+    input.inconspicuous {
       padding: 2px 4px;
       border: 0;
     }

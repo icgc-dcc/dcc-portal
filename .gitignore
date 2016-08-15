@@ -62,6 +62,7 @@ logs/
 
 # H2 database
 *.h2.db
+*.mv.db
 *.lock.db
 *.trace.db
 

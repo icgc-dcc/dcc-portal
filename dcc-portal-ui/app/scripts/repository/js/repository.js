@@ -191,7 +191,7 @@
 
   module.controller('ExternalFileDownloadController',
     function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params, Restangular) {
+      Extensions, params, Restangular, $filter) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
@@ -199,6 +199,15 @@
     };
 
     $scope.filters = FilterService.filters;
+    $scope.$filter = $filter;
+
+    $scope.handleNumberTweenStart = function (tween) {
+      jQuery(tween.elem).closest('td').addClass('tweening');
+    };
+
+    $scope.handleNumberTweenEnd = function (tween) {
+      jQuery(tween.elem).closest('td').removeClass('tweening');
+    };
 
     var p = {};
     p.size = 0;
@@ -304,7 +313,7 @@
           unique: true
         });
 
-        $window.location.href = manifestUrl;
+        $window.open(manifestUrl);
       } else {
         ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
       }

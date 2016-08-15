@@ -1,4 +1,4 @@
-<ul class="t_facets__facet" data-ng-show="facet.terms.length || actives.length">
+<ul class="t_facets__facet" data-ng-show="showWhenEmpty || facet.terms.length || actives.length">
     <li class="t_facets__facet__title" data-ng-class="{t_facets__facet__title_active:actives.length}">
         <span data-ng-click="collapsed=!collapsed" class="t_facets__facet__title__label">
             <i data-ng-class="{'icon-caret-down':!collapsed, 'icon-caret-right':collapsed}"></i>

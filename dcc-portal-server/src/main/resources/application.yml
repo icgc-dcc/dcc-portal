@@ -175,3 +175,6 @@ features:
   AUTH_TOKEN: true
   ICGC_CLOUD: true
   SOFTWARE_PAGE: true
+  
+# Banner
+spring.main.banner-mode: log
