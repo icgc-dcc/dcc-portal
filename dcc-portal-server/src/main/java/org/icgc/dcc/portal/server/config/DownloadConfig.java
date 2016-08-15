@@ -26,6 +26,8 @@ import org.icgc.dcc.download.client.impl.HttpDownloadClient;
 import org.icgc.dcc.download.client.impl.NoOpDownloadClient;
 import org.icgc.dcc.download.core.jwt.JwtConfig;
 import org.icgc.dcc.download.core.jwt.JwtService;
+import org.icgc.dcc.download.core.jwt.JwtServiceImpl;
+import org.icgc.dcc.download.core.jwt.NoOpJwtService;
 import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +40,7 @@ public class DownloadConfig {
   @Bean
   @SneakyThrows
   public DownloadClient downloadClient(DownloadProperties properties) {
-    if (properties.isEnabled() == false) {
+    if (!properties.isEnabled()) {
       return new NoOpDownloadClient();
     }
 
@@ -54,12 +56,16 @@ public class DownloadConfig {
 
   @Bean
   public JwtService jwtService(DownloadProperties properties) {
+    if (!properties.isEnabled()) {
+      return new NoOpJwtService();
+    }
+
     val config = new JwtConfig();
     config.setSharedSecret(properties.getSharedSecret());
     config.setAesKey(properties.getAesKey());
     config.setTtlHours(properties.getTtlHours());
 
-    return new JwtService(config);
+    return new JwtServiceImpl(config);
   }
 
 }
