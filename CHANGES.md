@@ -5,6 +5,8 @@ Change log for the DCC Data Portal
 
 4.3.5
 --
+  -  Made information table in pathway viewer sortable
+  -  Added mutation annotations to nodes, information table, and legend in pathway viewer
   -  Added exception mapper for 503 errors
   -  'Download unavailable' message while the service is down for maintenance 
   -  angular-animate and angular-cookies version update
