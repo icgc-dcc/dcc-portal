@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.resource.ui;
 
 import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
@@ -99,7 +100,7 @@ public class UISearchResource extends Resource {
       @ApiParam(value = "From") @QueryParam("from") @DefaultValue("1") IntParam from,
       @ApiParam(value = "Size") @QueryParam("size") @DefaultValue("10") IntParam size) {
 
-    checkRequest(donorId == null, "donorId query param is required.");
+    checkRequest(isNullOrEmpty(donorId), "donorId query param is required.");
 
     val query =
         Query.builder().filters(filters.get()).sort("_score").from(from.get()).size(size.get()).order(DEFAULT_ORDER)
