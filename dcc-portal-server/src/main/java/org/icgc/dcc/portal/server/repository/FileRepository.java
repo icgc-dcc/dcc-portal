@@ -229,7 +229,7 @@ public class FileRepository {
     aggs().stream().forEach(agg -> request.addAggregation(agg));
 
     val response = request.get();
-    log.info("New Response: {}", response);
+    log.debug("New Response: {}", response);
     return response;
   }
 
