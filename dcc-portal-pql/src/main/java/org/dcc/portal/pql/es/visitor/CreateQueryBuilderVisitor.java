@@ -23,17 +23,20 @@ import static java.lang.String.format;
 import java.util.Optional;
 
 import org.dcc.portal.pql.es.ast.NestedNode;
+import org.dcc.portal.pql.es.ast.TerminalNode;
 import org.dcc.portal.pql.es.ast.filter.BoolNode;
 import org.dcc.portal.pql.es.ast.filter.FilterNode;
 import org.dcc.portal.pql.es.ast.filter.MustBoolNode;
 import org.dcc.portal.pql.es.ast.filter.NotNode;
 import org.dcc.portal.pql.es.ast.filter.ShouldBoolNode;
+import org.dcc.portal.pql.es.ast.filter.TermsNode;
 import org.dcc.portal.pql.es.ast.query.FunctionScoreNode;
 import org.dcc.portal.pql.es.ast.query.QueryNode;
 import org.dcc.portal.pql.es.utils.Nodes;
 import org.dcc.portal.pql.es.utils.Visitors;
 import org.dcc.portal.pql.query.QueryContext;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
+import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
@@ -57,15 +60,28 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
 
   @Override
   public QueryBuilder visitNested(@NonNull NestedNode node, @NonNull Optional<QueryContext> context) {
-    val scoreQuery = node.getFirstChild().accept(this, context);
+    if (node.getFirstChild() instanceof TermsNode) {
+      val termsNode = (TermsNode) node.getFirstChild();
+      return QueryBuilders
+          .nestedQuery(node.getPath(), QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+              FilterBuilders.termFilter(termsNode.getField(), ((TerminalNode) termsNode.getFirstChild()).getValue())));
+    }
+
+    val query = node.getFirstChild().accept(this, context);
 
     return QueryBuilders
-        .nestedQuery(node.getPath(), scoreQuery)
+        .nestedQuery(node.getPath(), query)
         .scoreMode(node.getScoreMode().getId());
   }
 
   @Override
   public QueryBuilder visitNot(@NonNull NotNode node, @NonNull Optional<QueryContext> context) {
+    if (node.getFirstChild() instanceof TermsNode) {
+      val termsNode = (TermsNode) node.getFirstChild();
+      return QueryBuilders.boolQuery().mustNot(
+          QueryBuilders.termQuery(termsNode.getField(), ((TerminalNode) termsNode.getFirstChild()).getValue()));
+    }
+
     val innerQuery = node.getFirstChild().accept(this, context);
 
     return QueryBuilders.boolQuery().mustNot(innerQuery);
