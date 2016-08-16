@@ -3,7 +3,7 @@
     <h3 class="pull-left">
       Manifest ID
     </h3>
-    <button class="pull-right t_button" data-ng-click="close()">
+    <button class="pull-right t_button" data-ng-click="vm.close()">
       <i class="icon-cancel"></i>
     </button>
   </div>
@@ -48,7 +48,7 @@ repositories.
       <span>
         Usage example:
       </span>
-      <code class="inline-code">
+      <code class="inline-code" ng-class="{ 'text-center': vm.loadState.isLoading }">
         <span ng-if="vm.manifestId">./icgc-get download {{vm.manifestId}}</span>
         <i
           class="icon-spin icon-spinner"
@@ -59,6 +59,6 @@ repositories.
   </div>
 
   <div class="modal-footer">
-    <button class="t_button" data-ng-click="close();">OK</button>
+    <button class="t_button" data-ng-click="vm.close();">OK</button>
   </div>
 </div>
