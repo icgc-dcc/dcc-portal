@@ -194,7 +194,8 @@
     ExternalRepoService,
     params,
     FilterService,
-    LoadState
+    LoadState,
+    $modalInstance
   ) {
     var vm = this;
     var loadState = new LoadState(); 
@@ -225,6 +226,7 @@
     _.extend(this, {
       manifestId: undefined,
       loadState: loadState,
+      close: _.partial($modalInstance.dismiss, 'cancel'),
     });
   });
 
