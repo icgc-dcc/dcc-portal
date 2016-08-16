@@ -1,30 +1,35 @@
-<div class="modal-content download-manifests light">
+<div class="modal-content icgc-get light">
   <div class="modal-header clearfix">
     <h3 class="pull-left">
       Manifest ID
     </h3>
-    <button class="pull-right t_button" data-ng-click="cancel()">
+    <button class="pull-right t_button" data-ng-click="close()">
       <i class="icon-cancel"></i>
     </button>
   </div>
   <div class="modal-body">
     <div class="modal-info-wrapper flex-column">
-      <p>icgc-get intro text</p>
-
-      <p>Manifest ID:</p>
       <div>
-        <div class="input-group clipboard-group" ng-if="!!vm.manifestId">
+        icgc-get is a universal download client for accessing ICGC data residing in various data
+repositories. 
+        <br>
+        See the <a href="http://docs.icgc.org/cloud/icgc-get/" target="_blank">User Guide<i class="icon-external-link"></i></a> for usage instructions.
+      </div>
+      <br>
+      <div>
+        <span>Manifest ID:</span>
+        <div class="input-group clipboard-group" ng-if="vm.manifestId">
           <input
             class="manifest-id form-control input-sm code text-center"
             onClick="this.select()"
             size="38"
             type="text"
             value="{{vm.manifestId}}"
-          />
+          >
           <span class="input-group-btn">
             <button class="btn btn-default btn-sm" type="button"
                 data-copy-to-clip
-                data-copy-data="vm.manifestID"
+                data-copy-data="vm.manifestId"
                 data-show-copy-tips="true"
                 data-prompt-on-copy="false"
                 data-on-copy-success-message="Copied!"
@@ -32,7 +37,6 @@
                 >
                 <i class="icon-clippy"></i>
             </button>
-            
           </span>
         </div>
         <i
@@ -40,18 +44,21 @@
           ng-class="{ 'hidden': !vm.loadState.isLoading }"
         ></i>
       </div>
-
-      <translate></translate>
-      
-
-
-    </div>
-    <div>
-      
+      <br>
+      <span>
+        Usage example:
+      </span>
+      <code class="inline-code">
+        <span ng-if="vm.manifestId">./icgc-get download {{vm.manifestId}}</span>
+        <i
+          class="icon-spin icon-spinner"
+          ng-class="{ 'hidden': !vm.loadState.isLoading }"
+        ></i>
+      </code>
     </div>
   </div>
 
   <div class="modal-footer">
-    <button class="t_button" data-ng-click="cancel();">OK</button>
+    <button class="t_button" data-ng-click="close();">OK</button>
   </div>
 </div>
