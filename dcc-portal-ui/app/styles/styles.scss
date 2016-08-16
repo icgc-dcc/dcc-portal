@@ -474,4 +474,7 @@ a.no-style {
   color: #c7254e;
   background-color: #f9f2f4;
   border-radius: 4px;
+  [class^="icon-"]:before, [class*=" icon-"]:before {
+    line-height: inherit;
+  }
 }
