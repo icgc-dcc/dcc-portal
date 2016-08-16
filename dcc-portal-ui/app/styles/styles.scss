@@ -465,3 +465,13 @@ a.no-style {
 //  -ms-opacity: 1;
 //  opacity: 1;
 //}
+
+
+.inline-code {
+  font-family: $mono-stack;
+  padding: 2px 4px;
+  font-size: 12.6px;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
