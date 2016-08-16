@@ -386,12 +386,12 @@ public class DonorRepository implements Repository {
             search.addAggregation(buildTermsStatsAggsBuilder(statsFacetNameFieldPair.getKey(), actualFieldName));
           });
 
-      log.info("Sub-search for DonorSet ID [{}] is: '{}'", setId, search);
+      log.debug("Sub-search for DonorSet ID [{}] is: '{}'", setId, search);
       multiSearch.add(search);
     }
 
     val multiResponse = multiSearch.execute().actionGet();
-    log.info("MultiResponse is: '{}'.", multiResponse);
+    log.debug("MultiResponse is: '{}'.", multiResponse);
 
     return multiResponse;
   }
@@ -452,7 +452,7 @@ public class DonorRepository implements Repository {
 
   @Override
   public long count(Query query) {
-    log.info("Converting {}", query.getFilters());
+    log.debug("Converting {}", query.getFilters());
 
     val pql = CONVERTER.convertCount(query, DONOR_CENTRIC);
 
@@ -465,7 +465,7 @@ public class DonorRepository implements Repository {
     MultiSearchRequestBuilder search = client.prepareMultiSearch();
 
     for (val query : queries.values()) {
-      log.info("Converting {}", query.getFilters());
+      log.debug("Converting {}", query.getFilters());
       val pql = CONVERTER.convertCount(query, DONOR_CENTRIC);
       val request = queryEngine.execute(pql, DONOR_CENTRIC);
       search.add(request.getRequestBuilder());
@@ -479,7 +479,7 @@ public class DonorRepository implements Repository {
 
     for (val nestedQuery : queries.values()) {
       for (val innerQuery : nestedQuery.values()) {
-        log.info("Nested converting {}", innerQuery);
+        log.debug("Nested converting {}", innerQuery);
 
         val pql = CONVERTER.convertCount(innerQuery, DONOR_CENTRIC);
         val request = queryEngine.execute(pql, DONOR_CENTRIC);

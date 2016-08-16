@@ -208,17 +208,18 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
           onClick: function(){},
           urlPath: config.urlPath,
           strokeColor: config.strokeColor,
-          highlightColor: config.highlightColor,
+          mutationHighlightColor: config.mutationHighlightColor,
+          drugHighlightColor: config.drugHighlightColor,
           overlapColor: config.overlapColor
         });
 
         var nodes = rendererUtils.getLegendNodes(20,0,legendSvg);
 
         legendRenderer.renderNodes(nodes);
-        legendRenderer.renderEdges(rendererUtils.getLegendLines(40,Math.ceil(h*0.44),legendSvg));
-        legendRenderer.renderReactionLabels(rendererUtils.getLegendLabels(35,Math.ceil(h*0.67),legendSvg),true);
+        legendRenderer.renderEdges(rendererUtils.getLegendLines(40,Math.ceil(h*0.50),legendSvg));
+        legendRenderer.renderReactionLabels(rendererUtils.getLegendLabels(35,Math.ceil(h*0.72),legendSvg),true);
         var model = new PathwayModel();
-        model.nodes = [nodes[nodes.length-2], nodes[nodes.length-1]];
+        model.nodes = _.takeRight(nodes,3);
         legendRenderer.highlightEntity(
             [{id:'mutated',value:99}],
             [{id:'druggable',value:99}],

@@ -3,6 +3,29 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.3.5
+--
+  -  Added exception mapper for 503 errors
+  -  'Download unavailable' message while the service is down for maintenance 
+  -  angular-animate and angular-cookies version update
+  -  Added directive for animating number changes - `<number-tween>`  
+    See [PR#74](https://github.com/icgc-dcc/dcc-portal/pull/74) for usage instructions
+  - Changes to simplify manifest download modal
+  - jshint will now run during development and grunt-notify will notify errors
+  - `LoadState` added. [See PR#58](https://github.com/icgc-dcc/dcc-portal/pull/58) for usage instructions
+  - Updated analysis results sidebar layout
+  - New instances of `<tooltip-controls>` can now be created to be used localized within a component.  
+    See [PR#52](https://github.com/icgc-dcc/dcc-portal/pull/52) for usage instructions
+  - Improves the way entity sets are handleing in the UI for the File Repository
+  - Bug fix for NPEs caused by invalid fields in keyword search
+  - Updates to OncoGrid rendering so that it does not block sidebar animations in analysis page
+  - Bug fix for File Repository summary numbers. Increased maximum number of term buckets to 300,000
+
+4.3.4
+--
+  - Removed Publication section from Cancer projects
+  - Cleanup of unused feature flags and associated logic
+
 4.3.3
 --
   - Added .settings to `dcc-portal-server`
@@ -10,7 +33,6 @@ Change log for the DCC Data Portal
   - Removed `dropdown.js`
   - `dcc-portal-server` pom.xml cleansing and refactoring
   - DCC-4996: Analysis tab now shows Saved Sets immediately
-  - Removed Publication section from Cancer projects
   - Updated Analysis result side panel's styling
   - Added "zoom", "undo" and "fullscreen" features to survival analysis graphs
   - Layout and feature updates for manifest download modal

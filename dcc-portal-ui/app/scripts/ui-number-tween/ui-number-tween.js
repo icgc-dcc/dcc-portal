@@ -15,33 +15,46 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ---------------------------------------------------------------------------
-// Imports
+'use strict';
 
-//-----------------------------------------------------------------------------
-// Settings
+var ngmodule = angular.module('icgc.ui.numberTween', []);
 
-$mono-stack : "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
-$sans-stack : 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-$cond-stack: serif;
-$serif-stack: serif;
-$amp-stack: serif;
-$caps-stack: serif;
+ngmodule.directive('numberTween', function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    template: '<span></span>',
+    scope: {
+      value: '<',
+      formatter: '<',
+      onTweenStart: '&',
+      onTweenEnd: '&',
+    },
+    link: function (scope, $element) {
+      var getValue = function (value) {
+        return scope.formatter ? scope.formatter(value) : value;
+      };
+      var onTweenStart = scope.onTweenStart();
+      var onTweenEnd = scope.onTweenEnd();
 
-//-----------------------------------------------------------------------------
-// Mixins
+      $element.text(getValue(scope.value));
 
-@mixin serif { font-family: $serif-stack; }
-@mixin sans { font-family: $sans-stack; }
-@mixin cond { font-family: $cond-stack; }
+      scope.$watch('value', function (newValue, oldValue) {
+        if (newValue === oldValue) {
+          return;
+        }
 
-@mixin caps($serif: false) {
-  @if $serif {
-    font-family: $caps-stack;
-  }
-  text-transform: uppercase;
-}
-
-.mono {
-  font-family: $mono-stack;
-}
+        $element
+          .stop()
+          .animate({ val: oldValue }, 0)
+          .animate({ val: newValue }, {
+            step: function (now) {
+              this.innerText = getValue(Math.round(now));
+            },
+            start: onTweenStart,
+            always: onTweenEnd,
+          });
+      });
+    }
+  };
+});

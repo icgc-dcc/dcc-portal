@@ -186,6 +186,7 @@ public class DownloadResource extends Resource {
       @Auth(required = false) User user,
       @ApiParam(value = "listing of the specified directory under the download relative directory", required = false) @PathParam("dir") String dir)
       throws IOException {
+    ensureServiceRunning();
     val files = downloadClient.listFiles(dir);
     if (files == null) {
       throwNotFoundException(dir);

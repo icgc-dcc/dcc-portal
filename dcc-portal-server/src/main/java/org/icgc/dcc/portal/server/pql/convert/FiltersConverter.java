@@ -17,7 +17,6 @@
  */
 package org.icgc.dcc.portal.server.pql.convert;
 
-import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.filterKeys;
@@ -34,6 +33,7 @@ import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.PROJECT;
 import static org.dcc.portal.pql.meta.TypeModel.GENE_SET_ID;
 import static org.dcc.portal.pql.util.Converters.stringValue;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.pql.convert.model.Operation.ALL;
 import static org.icgc.dcc.portal.server.pql.convert.model.Operation.HAS;
 import static org.icgc.dcc.portal.server.pql.convert.model.Operation.IS;
@@ -181,7 +181,7 @@ public class FiltersConverter {
   }
 
   private static List<JqlField> filterValidProjectFilters(List<JqlField> source) {
-    return newArrayList(filter(source, f -> VALID_PROJECT_FILTERS.contains(f.getName())));
+    return source.stream().filter(f -> VALID_PROJECT_FILTERS.contains(f.getName())).collect(toImmutableList());
   }
 
   private String encloseWithCommonParent(String commonPath, String filter) {

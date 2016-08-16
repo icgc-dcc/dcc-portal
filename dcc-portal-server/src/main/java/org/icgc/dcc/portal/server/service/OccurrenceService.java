@@ -24,10 +24,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.Occurrence;
 import org.icgc.dcc.portal.server.model.Occurrences;
@@ -38,7 +34,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -52,15 +53,16 @@ public class OccurrenceService {
   @Async
   public void init() {
     try {
-      log.info("Retrieving donor mutations for caching...");
+      val watch = Stopwatch.createStarted();
+      log.info("[init] Initializing donor mutations cache...");
 
       val donorMutationDistribution = occurrenceRepository.getProjectDonorMutationDistribution();
       val immutableCopy = Collections.unmodifiableMap(donorMutationDistribution);
       projectMutationCache.set(immutableCopy);
 
-      log.info("Finished adding donor mutations to cache in app.");
+      log.info("[init] Finished initializing donor mutations cache in {}", watch);
     } catch (Exception e) {
-      log.error("Error caching donor mutations: ", e);
+      log.error("[init] Error initializing donor mutations cache: ", e);
 
       propagate(e);
     }

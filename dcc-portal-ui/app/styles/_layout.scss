@@ -168,3 +168,17 @@ section {
 .full-width {
   width: 100%;
 }
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  @extend .flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  @extend .flex;
+  flex-direction: column;
+}
