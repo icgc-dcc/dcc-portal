@@ -320,15 +320,12 @@ $compartmentBorder:#ffc38b;
 .pathway-info{
   width: 50%;
   opacity: 0.95;
+  overflow-y: auto;
 }
-
-
 
 .pathway-info-content{
   line-height: 1.4rem;
   padding:5%;
-  height: 70%;
-  overflow-y: auto;
   
   .pathway-gene-table{
     margin:2rem auto; 
