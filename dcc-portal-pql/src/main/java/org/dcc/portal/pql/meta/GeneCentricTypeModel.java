@@ -65,6 +65,7 @@ public class GeneCentricTypeModel extends TypeModel {
       "gene.location",
       "pathwayId",
       "pathways",
+      "drug",
 
       // NOTE: Centric and non-centric are modelled different. Set only exists in gene and not gene-centric
       "sets");
@@ -106,6 +107,8 @@ public class GeneCentricTypeModel extends TypeModel {
             arrayOfStrings("biological_process"),
             arrayOfStrings("cellular_component"),
             arrayOfStrings("molecular_function")))
+        .add(string("drug", "drug"))
+
 
         // Fake fields for GeneSetFilterVisitor
         .add(string(GENE_GO_TERM_ID, GENE_GO_TERM_ID))

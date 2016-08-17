@@ -130,7 +130,9 @@ public class ObservationCentricTypeModel extends TypeModel {
             arrayOfStrings("molecular_function")),
         nestedArrayOfObjects("consequence", "consequences", object(
             string("consequence_type", "mutation.consequenceType"),
-            string("functional_impact_prediction_summary", "mutation.functionalImpact")))));
+            string("functional_impact_prediction_summary", "mutation.functionalImpact"))),
+        string("drug", "gene.drug")
+    ));
   }
 
   private static ObjectFieldModel defineProject() {

@@ -149,7 +149,8 @@ public class MutationCentricTypeModel extends TypeModel {
                 object("go_term", "gene.GoTerm",
                     arrayOfStrings("biological_process"),
                     arrayOfStrings("cellular_component"),
-                    arrayOfStrings("molecular_function")))));
+                    arrayOfStrings("molecular_function")),
+                string("drug", "gene.drug"))));
   }
 
   private static ArrayFieldModel defineSsmOccurrence() {

@@ -219,7 +219,8 @@ public class DonorCentricTypeModel extends TypeModel {
             arrayOfStrings("biological_process"),
             arrayOfStrings("cellular_component"),
             arrayOfStrings("molecular_function")),
-        nestedArrayOfObjects("ssm", initSmm()));
+        nestedArrayOfObjects("ssm", initSmm()),
+        string("drug", "gene.drug"));
 
     return nestedArrayOfObjects("gene", element);
   }
