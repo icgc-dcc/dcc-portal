@@ -19,7 +19,11 @@ package org.dcc.portal.pql.es.visitor;
 
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
+import static java.util.Optional.empty;
+import static org.elasticsearch.index.query.FilterBuilders.termsFilter;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
+import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
@@ -41,7 +45,6 @@ import org.dcc.portal.pql.es.utils.Nodes;
 import org.dcc.portal.pql.es.utils.Visitors;
 import org.dcc.portal.pql.query.QueryContext;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
@@ -65,11 +68,9 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
 
   @Override
   public QueryBuilder visitNested(@NonNull NestedNode node, @NonNull Optional<QueryContext> context) {
-    if (node.getFirstChild() instanceof TermsNode) {
-      val termsNode = (TermsNode) node.getFirstChild();
-      return QueryBuilders
-          .nestedQuery(node.getPath(), QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-              FilterBuilders.termFilter(termsNode.getField(), ((TerminalNode) termsNode.getFirstChild()).getValue())));
+    val nestedOpt = nestedSoloTerm(node);
+    if (nestedOpt.isPresent()) {
+      return nestedOpt.get();
     }
 
     val query = node.getFirstChild().accept(this, context);
@@ -142,6 +143,33 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
     }
 
     return boolQueryBuilder;
+  }
+
+  /**
+   * This helper gets called for a nested Node while inside of a 'NOT'. The goal is to prevent scoring on a not(nested)
+   * node. We also use filtered queries rather than regular queries in order to allow for caching of the term filters.
+   * 
+   * @param node - NestedNode representing the Nested query inside of a 'NOT'
+   * @return Optional with NestedQueryBuilder if we have a lone term or terms node in the nested, otherwrise empty
+   */
+  private static Optional<QueryBuilder> nestedSoloTerm(NestedNode node) {
+    if (node.getFirstChild() instanceof TermsNode) {
+      val termsNode = (TermsNode) node.getFirstChild();
+      val values =
+          termsNode.getChildren().stream()
+              .map(child -> ((TerminalNode) child).getValue())
+              .collect(toImmutableList());
+      val query = nestedQuery(node.getPath(), filteredQuery(QueryBuilders.matchAllQuery(),
+          termsFilter(termsNode.getField(), values)));
+      return Optional.of(query);
+    } else if (node.getFirstChild() instanceof TermNode) {
+      val termNode = (TermNode) node.getFirstChild();
+      val query = nestedQuery(node.getPath(), filteredQuery(QueryBuilders.matchAllQuery(),
+          termsFilter(termNode.getField(), termNode.getValueNode().getValue())));
+      return Optional.of(query);
+    }
+
+    return empty();
   }
 
   private static void verifyQueryChildren(QueryNode node) {

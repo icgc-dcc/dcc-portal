@@ -136,10 +136,9 @@ public class FiltersConverter {
       // This guy needs to be mutable because groupFieldsByNestedPath method mutates it.
       List<JqlField> values = entry.getValue().stream()
           .filter(streamFilter)
-          // We transform NOT operations to IS operations as we are moving the NOT higher up in the AST.
-          .map(f -> f.getOperation() == NOT ? new JqlField(f.getName(), IS, f.getValue(), f.getPrefix()) : f)
+          .map(this::removeNot)
           .collect(toList());
-      if (values.size() > 0) {
+      if (!values.isEmpty()) {
         val fieldsByNestedPath = groupFieldsByNestedPath(entry.getKey(), values, indexType);
         groupedByNestedPath.putAll(fieldsByNestedPath);
       }
@@ -148,10 +147,24 @@ public class FiltersConverter {
     return groupedByNestedPath;
   }
 
+  /**
+   * We transform NOT operations to IS operations as we are moving the NOT higher up in the AST.
+   * 
+   * @param field JqlField
+   * @return JqlField where the operation is IS.
+   */
+  private JqlField removeNot(JqlField field) {
+    if (field.getOperation() == NOT) {
+      return new JqlField(field.getName(), IS, field.getValue(), field.getPrefix());
+    } else {
+      return field;
+    }
+  }
+
   private Map<String, String> getGroupedFilters(ListMultimap<String, JqlField> fieldsGroupedByNestedPath,
       Type indexType, boolean isNotFilter) {
     Map<String, String> groupedFilters = new HashMap<>();
-    if (fieldsGroupedByNestedPath.size() == 0) {
+    if (fieldsGroupedByNestedPath.isEmpty()) {
       return emptyMap();
     }
 
@@ -163,7 +176,7 @@ public class FiltersConverter {
 
     groupedFilters = transformEntries(groupedPaths.asMap(), (key, values) -> {
       final String filter = createFilterByNestedPath(indexType, fieldsGroupedByNestedPath,
-          newArrayList(newTreeSet(values).descendingSet()));
+          newArrayList(newTreeSet(values).descendingSet()), isNotFilter);
 
       String retFilter = isEncloseWithCommonParent(values) ? encloseWithCommonParent(key, filter) : filter;
       return isNotFilter ? format(NOT_TEMPLATE, retFilter) : retFilter;
@@ -273,7 +286,7 @@ public class FiltersConverter {
    * @param sortedDescPaths - descending sorted paths. E.g. gene.ssm - gene
    */
   static String createFilterByNestedPath(Type indexType, ListMultimap<String, JqlField> sortedFields,
-      List<String> sortedDescPaths) {
+      List<String> sortedDescPaths, boolean isNotFilter) {
     val size = sortedDescPaths.size();
 
     if (size < 1) {
@@ -292,7 +305,8 @@ public class FiltersConverter {
     val result = prepareForReduce(tail(sortedDescPaths))
         .reduce(initialValue, (accumulated, value) -> {
           final String nestedPath = unboxReduceValue(value);
-          final String newReducedValue = resolveRestNestedPath(indexType, accumulated, nestedPath, sortedFields);
+          final String newReducedValue =
+              resolveRestNestedPath(indexType, accumulated, nestedPath, sortedFields, isNotFilter);
 
           return createReduceValuePair(newReducedValue, nestedPath);
         });
@@ -309,13 +323,14 @@ public class FiltersConverter {
   }
 
   private static String resolveRestNestedPath(Type indexType, Pair<String, String> reduceValuePair, String nestedPath,
-      ListMultimap<String, JqlField> sortedFields) {
+      ListMultimap<String, JqlField> sortedFields, boolean isNotFilter) {
     val filter = createTypeFilter(sortedFields.get(nestedPath), indexType);
     val reducedValue = unboxReduceValue(reduceValuePair);
     val previousSiblingPath = reduceValuePair.getSecond();
 
     return isNestFilter(nestedPath,
-        indexType) ? (isChildNesting(nestedPath, previousSiblingPath) ? format("nested(%s,and(%s,%s))",
+        indexType) ? (isChildNesting(nestedPath, previousSiblingPath) ? format(
+            isNotFilter ? "nested(%s,or(%s,%s))" : "nested(%s,and(%s,%s))",
             resolveNestedPath(nestedPath, indexType), reducedValue,
             filter) : format("nested(%s,%s),%s", nestedPath, filter, reducedValue)) : format("%s,%s", filter,
                 reducedValue);
