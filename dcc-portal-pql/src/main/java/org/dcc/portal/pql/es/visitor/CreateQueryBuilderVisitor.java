@@ -19,6 +19,10 @@ package org.dcc.portal.pql.es.visitor;
 
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 
 import java.util.Optional;
 
@@ -29,6 +33,7 @@ import org.dcc.portal.pql.es.ast.filter.FilterNode;
 import org.dcc.portal.pql.es.ast.filter.MustBoolNode;
 import org.dcc.portal.pql.es.ast.filter.NotNode;
 import org.dcc.portal.pql.es.ast.filter.ShouldBoolNode;
+import org.dcc.portal.pql.es.ast.filter.TermNode;
 import org.dcc.portal.pql.es.ast.filter.TermsNode;
 import org.dcc.portal.pql.es.ast.query.FunctionScoreNode;
 import org.dcc.portal.pql.es.ast.query.QueryNode;
@@ -75,16 +80,25 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
   }
 
   @Override
-  public QueryBuilder visitNot(@NonNull NotNode node, @NonNull Optional<QueryContext> context) {
-    if (node.getFirstChild() instanceof TermsNode) {
-      val termsNode = (TermsNode) node.getFirstChild();
-      return QueryBuilders.boolQuery().mustNot(
-          QueryBuilders.termQuery(termsNode.getField(), ((TerminalNode) termsNode.getFirstChild()).getValue()));
-    }
+  public QueryBuilder visitTerm(@NonNull TermNode node, @NonNull Optional<QueryContext> context) {
+    return termQuery(node.getField(), node.getValueNode().getValue());
+  }
 
+  @Override
+  public QueryBuilder visitTerms(@NonNull TermsNode termsNode, @NonNull Optional<QueryContext> context) {
+    val values =
+        termsNode.getChildren().stream()
+            .map(child -> ((TerminalNode) child).getValue())
+            .collect(toImmutableList());
+
+    return termsQuery(termsNode.getField(), values);
+  }
+
+  @Override
+  public QueryBuilder visitNot(@NonNull NotNode node, @NonNull Optional<QueryContext> context) {
     val innerQuery = node.getFirstChild().accept(this, context);
 
-    return QueryBuilders.boolQuery().mustNot(innerQuery);
+    return boolQuery().mustNot(innerQuery);
   }
 
   @Override

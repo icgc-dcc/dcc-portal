@@ -49,7 +49,7 @@ public class NotNestedVisitorTest extends BaseElasticsearchTest {
 
   @Test
   public void testNot_basic() {
-    val query = "not(nested(gene, eq(gene.id, 'G1')))";
+    val query = "nested(gene, not(eq(gene.id, 'G1')))";
 
     ExpressionNode esAst = createTree(query);
     esAst = esAstTransformator.process(esAst, queryContext);
