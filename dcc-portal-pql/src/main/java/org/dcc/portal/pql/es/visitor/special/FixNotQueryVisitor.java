@@ -35,15 +35,16 @@ import org.dcc.portal.pql.query.QueryContext;
 import lombok.NonNull;
 import lombok.val;
 
+/**
+ * DCC-5113 This visitor is for when we have a query made up of only a NOT node. Since we don't score on NOTs, we need
+ * to generate a match all query with scoring in order to generate scores for all returned hits.
+ */
 public class FixNotQueryVisitor extends NodeVisitor<ExpressionNode, QueryContext> {
 
   @Override
   public ExpressionNode visitRoot(@NonNull RootNode node, Optional<QueryContext> context) {
-    val queryNode = Nodes.getOptionalChild(node, QueryNode.class);
-    if (queryNode.isPresent()) {
-      queryNode.get().accept(this, context);
-    }
-
+    val optionalChild = Nodes.getOptionalChild(node, QueryNode.class);
+    optionalChild.ifPresent(queryNode -> queryNode.accept(this, context));
     return node;
   }
 
@@ -53,6 +54,7 @@ public class FixNotQueryVisitor extends NodeVisitor<ExpressionNode, QueryContext
 
     if (filterNode.isPresent()) {
       val bool = filterNode.get().accept(this, context);
+      // We want to replace the filter node with a bool node. Filter node is guaranteed to be fist.
       node.setChild(0, bool);
     }
 
@@ -64,7 +66,7 @@ public class FixNotQueryVisitor extends NodeVisitor<ExpressionNode, QueryContext
     val child = node.getFirstChild();
 
     if (child instanceof NotNode) {
-      NotNode notNode = (NotNode) child;
+      val notNode = (NotNode) child;
       val bool = notNode.accept(this, context);
       return bool;
     }

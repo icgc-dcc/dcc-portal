@@ -23,6 +23,7 @@ import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import java.util.Optional;
 
 import org.dcc.portal.pql.es.ast.ExpressionNode;
+import org.dcc.portal.pql.es.ast.query.QueryNode;
 import org.dcc.portal.pql.meta.Type;
 import org.dcc.portal.pql.query.EsRequestBuilder;
 import org.dcc.portal.pql.query.QueryContext;
@@ -50,22 +51,26 @@ public class NotNestedVisitorTest extends BaseElasticsearchTest {
   @Test
   public void testNot_basic() {
     val query = "nested(gene, not(eq(gene.id, 'G1')))";
-
-    ExpressionNode esAst = createTree(query);
-    esAst = esAstTransformator.process(esAst, queryContext);
-    val request = esVisitor.buildSearchRequest(esAst, context);
-    assertThat(request).isNotNull();
+    runTests(query, 1);
   }
 
   @Test
   public void testNot_complex() {
     val query = "select(*), eq(id, 'D1'), nested(gene, eq(gene.type, 'protein_coding'), eq(gene.chromosome, '12'))," +
         "not(nested(gene, eq(gene.id, 'G1'))), not(nested(gene, eq(gene.symbol, 'TTN')))";
+    runTests(query, 2);
+  }
 
+  private void runTests(String query, int children) {
     ExpressionNode esAst = createTree(query);
+    assertThat(esAst.childrenCount()).isEqualTo(children);
+    assertThat(esAst.getFirstChild()).isInstanceOf(QueryNode.class);
+
     esAst = esAstTransformator.process(esAst, queryContext);
     val request = esVisitor.buildSearchRequest(esAst, context);
-    assertThat(request).isNotNull();
+    val source = request.toString();
+    // Ensure we generated a match_all for lone not node for scoring.
+    assertThat(source).contains("match_all");
   }
 
 }

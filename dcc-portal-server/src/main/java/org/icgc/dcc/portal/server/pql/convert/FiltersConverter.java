@@ -133,8 +133,7 @@ public class FiltersConverter {
     val groupedByNestedPath = ArrayListMultimap.<String, JqlField> create();
 
     for (val entry : filters.getKindValues().entrySet()) {
-      // This guy needs to be mutable because groupFieldsByNestedPath method mutates it.
-      List<JqlField> values = entry.getValue().stream()
+      val values = entry.getValue().stream()
           .filter(streamFilter)
           .map(this::removeNot)
           .collect(toList());
