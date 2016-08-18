@@ -84,6 +84,7 @@ public abstract class ScoreQueryVisitor extends NodeVisitor<ExpressionNode, Quer
     val filterNodeOpt = Nodes.getOptionalChild(queryNode, FilterNode.class);
     checkState(filterNodeOpt.isPresent(), "Malformed QueryNode \n%s", queryNode);
 
+    // Do not generate scores for NOT nodes.
     if (filterNodeOpt.get().hasChildren() && filterNodeOpt.get().getFirstChild() instanceof NotNode) {
       return queryNode;
     }

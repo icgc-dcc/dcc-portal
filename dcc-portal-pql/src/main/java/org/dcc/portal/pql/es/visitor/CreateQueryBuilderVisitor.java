@@ -21,8 +21,10 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static java.util.Optional.empty;
 import static org.elasticsearch.index.query.FilterBuilders.termsFilter;
+import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
+import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
@@ -80,8 +82,21 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
         .scoreMode(node.getScoreMode().getId());
   }
 
+  /**
+   * We will only visit this in the case of a NOT node.
+   */
   @Override
   public QueryBuilder visitTerm(@NonNull TermNode node, @NonNull Optional<QueryContext> context) {
+    val lookup = node.getLookup();
+    if (lookup != null && !lookup.getId().isEmpty()) {
+      val termsLookup = termsLookupFilter(node.getField())
+          .lookupPath(lookup.getPath())
+          .lookupIndex(lookup.getIndex())
+          .lookupType(lookup.getType())
+          .lookupId(lookup.getId());
+
+      return filteredQuery(matchAllQuery(), termsLookup);
+    }
     return termQuery(node.getField(), node.getValueNode().getValue());
   }
 

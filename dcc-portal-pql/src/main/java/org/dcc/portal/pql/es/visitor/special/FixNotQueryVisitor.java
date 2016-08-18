@@ -76,21 +76,24 @@ public class FixNotQueryVisitor extends NodeVisitor<ExpressionNode, QueryContext
 
   @Override
   public ExpressionNode visitNot(NotNode node, Optional<QueryContext> context) {
-    val child = node.getFirstChild();
-    if (child instanceof NestedNode) {
-      val scoreQueryVisitor = Visitors.createScoreQueryVisitor(context.get().getType());
-      // This is guaranteed to be a Nested as it is the default empty query.
-      val scoreRoot = scoreQueryVisitor.visitRoot(new RootNode(new ExpressionNode[0]), context);
+    // This is guaranteed to be a Nested as it is the default empty query.
+    val scoreRoot = createScore(context);
 
-      // Either we are scoring with a script on this, or we are not.
-      if (scoreRoot.hasChildren() && scoreRoot.getFirstChild().hasChildren()) {
-        val res = (NestedNode) scoreRoot.getFirstChild().getFirstChild();
-        val boolNode = new BoolNode(new MustBoolNode(res, node));
-        return boolNode;
-      }
+    // Either we are scoring with a script on this, or we are not.
+    if (scoreRoot.hasChildren() && scoreRoot.getFirstChild().hasChildren()) {
+      val res = (NestedNode) scoreRoot.getFirstChild().getFirstChild();
+
+      // We don't care what the inner not query looks like, we just want to score along side it.
+      val boolNode = new BoolNode(new MustBoolNode(res, node));
+      return boolNode;
     }
 
     return node;
+  }
+
+  private ExpressionNode createScore(Optional<QueryContext> context) {
+    val scoreQueryVisitor = Visitors.createScoreQueryVisitor(context.get().getType());
+    return scoreQueryVisitor.visitRoot(new RootNode(new ExpressionNode[0]), context);
   }
 
 }

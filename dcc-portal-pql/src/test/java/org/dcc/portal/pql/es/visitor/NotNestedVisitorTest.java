@@ -23,6 +23,11 @@ import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import java.util.Optional;
 
 import org.dcc.portal.pql.es.ast.ExpressionNode;
+import org.dcc.portal.pql.es.ast.NestedNode;
+import org.dcc.portal.pql.es.ast.filter.FilterNode;
+import org.dcc.portal.pql.es.ast.filter.NotNode;
+import org.dcc.portal.pql.es.ast.filter.TermNode;
+import org.dcc.portal.pql.es.ast.query.FunctionScoreNode;
 import org.dcc.portal.pql.es.ast.query.QueryNode;
 import org.dcc.portal.pql.meta.Type;
 import org.dcc.portal.pql.query.EsRequestBuilder;
@@ -59,6 +64,35 @@ public class NotNestedVisitorTest extends BaseElasticsearchTest {
     val query = "select(*), eq(id, 'D1'), nested(gene, eq(gene.type, 'protein_coding'), eq(gene.chromosome, '12'))," +
         "not(nested(gene, eq(gene.id, 'G1'))), not(nested(gene, eq(gene.symbol, 'TTN')))";
     runTests(query, 2);
+  }
+
+  @Test
+  public void testNot_entityset() {
+    val query = "nested(gene, not(eq(gene.id, 'ES:63b0a76f-4cd1-4d8d-8fab-43cfaa7629f9')))";
+    ExpressionNode esAst = createTree(query);
+    esAst = esAstTransformator.process(esAst, queryContext);
+
+    // Rigorously test structure, a brittle test here is a good thing.
+    val queryNode = esAst.getFirstChild();
+    assertThat(queryNode).isInstanceOf(QueryNode.class);
+    val nestedNode = queryNode.getFirstChild();
+    assertThat(nestedNode).isInstanceOf(NestedNode.class);
+    val functionNode = nestedNode.getFirstChild();
+    assertThat(functionNode).isInstanceOf(FunctionScoreNode.class);
+    val filterNode = functionNode.getFirstChild();
+    assertThat(filterNode).isInstanceOf(FilterNode.class);
+    val notNode = filterNode.getFirstChild();
+    assertThat(notNode).isInstanceOf(NotNode.class);
+    val termNode = notNode.getFirstChild();
+    assertThat(termNode).isInstanceOf(TermNode.class);
+
+    val lookup = ((TermNode) termNode).getLookup();
+    assertThat(lookup.getType()).isEqualTo("gene-ids");
+    assertThat(lookup.getId()).isEqualTo("63b0a76f-4cd1-4d8d-8fab-43cfaa7629f9");
+
+    val request = esVisitor.buildSearchRequest(esAst, context);
+    val source = request.toString();
+    assertThat(source).contains("\"index\" : \"terms-lookup\"");
   }
 
   private void runTests(String query, int children) {
