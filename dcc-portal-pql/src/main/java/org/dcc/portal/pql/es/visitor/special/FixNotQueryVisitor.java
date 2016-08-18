@@ -45,6 +45,7 @@ public class FixNotQueryVisitor extends NodeVisitor<ExpressionNode, QueryContext
   public ExpressionNode visitRoot(@NonNull RootNode node, Optional<QueryContext> context) {
     val optionalChild = Nodes.getOptionalChild(node, QueryNode.class);
     optionalChild.ifPresent(queryNode -> queryNode.accept(this, context));
+
     return node;
   }
 
@@ -68,6 +69,7 @@ public class FixNotQueryVisitor extends NodeVisitor<ExpressionNode, QueryContext
     if (child instanceof NotNode) {
       val notNode = (NotNode) child;
       val bool = notNode.accept(this, context);
+
       return bool;
     }
 

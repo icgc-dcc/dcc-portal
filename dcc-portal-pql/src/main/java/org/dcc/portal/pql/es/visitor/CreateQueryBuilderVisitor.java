@@ -102,12 +102,12 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
 
   @Override
   public QueryBuilder visitTerms(@NonNull TermsNode termsNode, @NonNull Optional<QueryContext> context) {
-    val values =
+    val terms =
         termsNode.getChildren().stream()
             .map(child -> ((TerminalNode) child).getValue())
             .collect(toImmutableList());
 
-    return termsQuery(termsNode.getField(), values);
+    return termsQuery(termsNode.getField(), terms);
   }
 
   @Override

@@ -103,6 +103,7 @@ public class NotNestedVisitorTest extends BaseElasticsearchTest {
     esAst = esAstTransformator.process(esAst, queryContext);
     val request = esVisitor.buildSearchRequest(esAst, context);
     val source = request.toString();
+
     // Ensure we generated a match_all for lone not node for scoring.
     assertThat(source).contains("match_all");
   }
