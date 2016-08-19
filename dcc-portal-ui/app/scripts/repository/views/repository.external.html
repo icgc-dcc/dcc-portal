@@ -126,11 +126,23 @@
         </div>
         <div data-ng-if="ExternalRepoController.files.hits.length">
             <section class="well" style="padding-top:0.5rem; padding-bottom:0.5rem">
-                <div class="quarter">
+
+                <div class="quarter" data-ng-if="!ExternalRepoController.showIcgcGet">
                     <button class="t_button" data-ng-click="ExternalRepoController.downloadManifest()">
                       <i class="icon-download"></i>Download manifests
                     </button>
                 </div>
+                <div class="quarter" data-ng-if="ExternalRepoController.showIcgcGet">
+                  <button class="t_button" data-ng-click="ExternalRepoController.downloadManifest()">
+                    <i class="icon-file"></i>Manifests
+                  </button>
+
+                  <button class="t_button" data-ng-click="ExternalRepoController.showIcgcGetModal()">
+                    <i class="icon-download-cloud"></i>
+                    <span class="mono">icgc-get</span>
+                  </button>
+                </div>
+
                 <div class="quarter">
                     <i class="icon-file" style="font-size:1.25rem"></i>
                     <strong >

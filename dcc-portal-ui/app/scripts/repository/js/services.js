@@ -31,7 +31,7 @@
 
   var module = angular.module('icgc.repository.services', []);
 
-  module.service ('ExternalRepoService', function ($window, Restangular, API, HighchartsService) {
+  module.service ('ExternalRepoService', function ($window, $q, Restangular, API, HighchartsService) {
 
     // Initial values until the call to getRepoMap() returns.
     var _srv = this,
@@ -132,6 +132,30 @@
         }
 
         return data;
+      });
+    };
+
+    _srv.getRelevantRepos = function (filters) {
+      var params = {
+        size: 0,
+        include: 'facets',
+        filters: filters || {},
+      };
+
+      return $q.all({
+        relevantRepoNames: _srv.getList(params)
+          .then(Restangular.stripRestangular)
+          .then(function (response) {
+            var repoNames = _.map(response.termFacets.repoName.terms, 'term');
+            return repoNames;
+          }),
+        repos: _getRepoMap().then(Restangular.stripRestangular),
+      }).then(function (responses) {
+        var relevantRepoNames = responses.relevantRepoNames;
+        var relevantRepos = responses.repos.filter(function (repo) {
+          return _.includes(relevantRepoNames, repo.name);
+        });
+        return relevantRepos;
       });
     };
 

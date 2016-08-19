@@ -26,29 +26,25 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import org.icgc.dcc.download.core.DownloadServiceUnavailableException;
 import org.icgc.dcc.portal.server.model.Error;
 import org.springframework.stereotype.Component;
 
-import com.sun.jersey.api.client.ClientHandlerException;
-
-/**
- * TODO: Remove when https://jira.oicr.on.ca/browse/DCC-5045 is addressed
- */
 @Component
 @Provider
-public class ClientHandlerExceptionMapper implements ExceptionMapper<ClientHandlerException> {
+public class DownloadServiceUnavailableExceptionMapper implements ExceptionMapper<DownloadServiceUnavailableException> {
 
   private final static Status STATUS = SERVICE_UNAVAILABLE;
 
   @Override
-  public Response toResponse(ClientHandlerException e) {
+  public Response toResponse(DownloadServiceUnavailableException e) {
     return status(STATUS)
         .type(APPLICATION_JSON_TYPE)
         .entity(errorResponse(e))
         .build();
   }
 
-  private Error errorResponse(ClientHandlerException e) {
+  private Error errorResponse(DownloadServiceUnavailableException e) {
     return new Error(STATUS, e.getMessage());
   }
 

@@ -162,7 +162,7 @@ public class MutationRepository implements Repository {
       search.add(buildCountSearchFromQuery(s, CENTRIC_TYPE));
     }
 
-    log.info("{}", search);
+    log.debug("{}", search);
     return search.execute().actionGet();
   }
 
@@ -230,7 +230,7 @@ public class MutationRepository implements Repository {
             new String[] { "transcript.consequence.aa_mutation", "transcript.functional_impact_prediction_summary"
             });
 
-    log.info("!!! {}", search);
+    log.debug("!!! {}", search);
 
     val response = search.execute().actionGet();
     return response;
