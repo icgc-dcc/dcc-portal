@@ -17,8 +17,6 @@
  */
 package org.icgc.dcc.portal.server.pql.convert;
 
-import static com.google.common.base.Predicates.not;
-import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.filterKeys;
@@ -26,12 +24,14 @@ import static com.google.common.collect.Maps.transformEntries;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newTreeSet;
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 import static org.dcc.portal.pql.es.visitor.special.EntitySetVisitor.IDENTIFIABLE_VALUE_PREFIX;
 import static org.dcc.portal.pql.meta.IndexModel.getTypeModel;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.PROJECT;
 import static org.dcc.portal.pql.meta.TypeModel.GENE_SET_ID;
 import static org.dcc.portal.pql.util.Converters.stringValue;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.pql.convert.model.Operation.ALL;
 import static org.icgc.dcc.portal.server.pql.convert.model.Operation.HAS;
 import static org.icgc.dcc.portal.server.pql.convert.model.Operation.IS;
@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -54,7 +55,6 @@ import org.icgc.dcc.portal.server.pql.convert.model.JqlFilters;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlValue;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
@@ -148,7 +148,7 @@ public class FiltersConverter {
   }
 
   private static List<JqlField> filterValidProjectFilters(List<JqlField> source) {
-    return newArrayList(filter(source, f -> VALID_PROJECT_FILTERS.contains(f.getName())));
+    return source.stream().filter(f -> VALID_PROJECT_FILTERS.contains(f.getName())).collect(toImmutableList());
   }
 
   private String encloseWithCommonParent(String commonPath, String filter) {
@@ -419,12 +419,13 @@ public class FiltersConverter {
     val isMutation = (indexType == MUTATION_CENTRIC) && typePrefix.equals("mutation");
     if (isMutation) {
       final Predicate<JqlField> nestedPredicate = (f) -> isNestedField(f);
+      final Predicate<JqlField> notNestedPredicate = (f) -> !isNestedField(f);
 
-      val nonNestedFields = filter(fields, not(nestedPredicate));
+      val nonNestedFields = fields.stream().filter(notNestedPredicate).collect(toList());
       result.putAll(EMPTY_NESTED_PATH, nonNestedFields);
 
       // Resets the 'fields' variable for further processing (down below).
-      fields = newArrayList(filter(fields, nestedPredicate));
+      fields = fields.stream().filter(nestedPredicate).collect(toList());
     }
 
     val typeModel = getTypeModel(indexType);

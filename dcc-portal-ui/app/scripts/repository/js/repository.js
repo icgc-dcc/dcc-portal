@@ -189,6 +189,47 @@
 
   });
 
+  module.controller('ExternalFileIcgcGetController', function (
+    $scope,
+    ExternalRepoService,
+    params,
+    FilterService,
+    LoadState,
+    $modalInstance
+  ) {
+    var vm = this;
+    var loadState = new LoadState(); 
+
+    var filters = _.extend({},
+      FilterService.filters(),
+      _.isEmpty(params.selectedFiles) ? {
+        file: {
+          id: params.selectedFiles
+        }
+      } : {}
+    );
+
+    var requestManifestId = ExternalRepoService.getRelevantRepos(filters)
+      .then(function (repos) {
+        return ExternalRepoService.createManifest({
+          filters: filters,
+          repos: repos,
+          format: 'json'
+        });
+      })
+      .then(function (manifestId) {
+        vm.manifestId = manifestId;
+      });
+    
+    loadState.loadWhile(requestManifestId);
+
+    _.extend(this, {
+      manifestId: undefined,
+      loadState: loadState,
+      close: _.partial($modalInstance.dismiss, 'cancel'),
+    });
+  });
+
   module.controller('ExternalFileDownloadController',
     function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
       Extensions, params, Restangular, $filter) {
@@ -313,7 +354,7 @@
           unique: true
         });
 
-        $window.location.href = manifestUrl;
+        $window.open(manifestUrl);
       } else {
         ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
       }
@@ -548,6 +589,7 @@
     var projectMap = {};
     var _ctrl = this;
 
+    _ctrl.showIcgcGet = PortalFeature.get('ICGC_GET');
     _ctrl.selectedFiles = [];
     _ctrl.summary = {};
     _ctrl.facetCharts = {};
@@ -858,6 +900,21 @@
       $modal.open ({
         templateUrl: '/scripts/repository/views/repository.external.submit.html',
         controller: 'ExternalFileDownloadController',
+        size: 'lg',
+        resolve: {
+          params: function() {
+            return {
+              selectedFiles: _ctrl.selectedFiles
+            };
+          }
+        }
+      });
+    };
+
+    _ctrl.showIcgcGetModal = function() {
+      $modal.open ({
+        templateUrl: '/scripts/repository/views/repository.external.icgc-get.html',
+        controller: 'ExternalFileIcgcGetController as vm',
         size: 'lg',
         resolve: {
           params: function() {

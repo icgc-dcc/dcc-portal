@@ -318,7 +318,6 @@
     };
 
     this.one = function (id) {
-      console.log('Donors One: ', arguments);
       return id ? Donor.init(id) : Donor;
     };
   });
@@ -327,9 +326,10 @@
     var _this = this;
     this.handler = {};
 
-    this.init = function (id) {
-      this.id = id;
-      this.handler = Restangular.one('donors', id);
+    this.init = function (ids) {
+      ids = _.isArray(ids) ? ids.join(',') : ids;
+      this.id = ids;
+      this.handler = Restangular.one('donors/' + ids);
       return _this;
     };
 

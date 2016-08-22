@@ -67,7 +67,7 @@ public class UISoftwareResource extends Resource {
   @Path("/icgc-storage-client/versions")
   @GET
   @Produces(APPLICATION_JSON)
-  public List<MavenArtifactVersion> getArtifacts() {
+  public List<MavenArtifactVersion> getVersions() {
     val results = softwareService.getMavenVersions();
     return results;
   }
@@ -75,7 +75,7 @@ public class UISoftwareResource extends Resource {
   @Path("/icgc-get/versions")
   @GET
   @Produces(APPLICATION_JSON)
-  public List<Version> getIcgcGetArtifacts() {
+  List<Version> getIcgcGetVersions() {
     val results = softwareService.getIcgcGetVersions();
     return results;
   }
