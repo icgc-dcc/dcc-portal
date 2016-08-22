@@ -385,6 +385,9 @@
         if (type === 'curated_set') {
           return path_ ('curatedtags');
         }
+        if (type === 'compound') {
+          return path_ ('compoundtags');
+        }
 
         var facetName = attr.facetName;
 
