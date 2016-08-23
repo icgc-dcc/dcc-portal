@@ -75,7 +75,7 @@ public class UISoftwareResource extends Resource {
   @Path("/icgc-get/versions")
   @GET
   @Produces(APPLICATION_JSON)
-  List<Version> getIcgcGetVersions() {
+  public List<Version> getIcgcGetVersions() {
     val results = softwareService.getIcgcGetVersions();
     return results;
   }

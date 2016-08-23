@@ -177,7 +177,7 @@ public class SoftwareService {
 
   public class Version implements Comparable<Version> {
 
-    public String version;
+    private String version;
 
     @JsonValue
     public final Map<String, String> getJson() {
