@@ -246,7 +246,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
 });
 
 angular.module('highcharts.directives').directive('donut', function ($rootScope, ProjectCache, $state, Facets,
-                                                                     highchartsService) {
+                                                                     highchartsService, gettextCatalog) {
   return {
     restrict: 'E',
     replace: true,
@@ -255,7 +255,7 @@ angular.module('highcharts.directives').directive('donut', function ($rootScope,
       subTitle: '@',
       shouldShowNoDataMessage: '@'
     },
-    template: '<div id="container" style="margin: 0 auto">not working</div>',
+    template: '<div id="container" style="margin: 0 auto">' + gettextCatalog.getString('not working') + '</div>',
     link: function ($scope, $element, $attrs) {
       var c, renderChart, chartsDefaults, filter;
       var projectLookup = {};

@@ -142,7 +142,8 @@
   angular.module('icgc.auth.controllers', ['icgc.auth.models']);
 
   angular.module('icgc.auth.controllers').controller('authController',
-    function ($window, $scope, $location, $modal, Auth, CUD, OpenID, $state, $stateParams, PortalFeature) {
+    function ($window, $scope, $location, $modal, Auth, CUD, OpenID, $state, $stateParams, 
+      PortalFeature, gettextCatalog) {
 
       $scope.params = {};
       $scope.params.provider = 'google';
@@ -210,9 +211,9 @@
       function errorMap(e) {
         switch (e.code) {
         case '1796':
-          return  $scope.params.openIDUrl + ' is not a known provider';
+          return  $scope.params.openIDUrl + ' ' + gettextCatalog.getString('is not a known provider');
         case '1798':
-          return 'Could not connect to ' + $scope.params.openIDUrl;
+          return gettextCatalog.getString('Could not connect to') + ' ' + $scope.params.openIDUrl;
         default:
           return e.message;
         }

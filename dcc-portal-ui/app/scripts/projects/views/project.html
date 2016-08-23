@@ -8,11 +8,14 @@
 
   <section>
     <i class="icon-attention or icon-attention-1"></i>
-    No data for this project has been submitted directly to ICGC DCC yet. However, go to the
-    <a href="{{:: ProjectCtrl.urlToExternalRepository() }}">
-      {{:: ProjectCtrl.dataRepoTitle }} browser
-    </a>
-     to see the list of data files hosted in {{:: ProjectCtrl.dataRepoTitle }} for this project.
+    <translate>No data for this project has been submitted directly to ICGC DCC yet.</translate>
+    <translate>
+        However, go to the
+        <a href="{{:: ProjectCtrl.urlToExternalRepository() }}">
+        {{:: ProjectCtrl.dataRepoTitle }} browser
+        </a>
+        to see the list of data files hosted in {{:: ProjectCtrl.dataRepoTitle }} for this project.
+    </translate>
   </section>
 </span>
 
@@ -26,23 +29,23 @@
 <aside data-ui-scrollfix=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
-            <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary">Summary</a></li>
-            <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="genes" class="t_subnav__items__item"><a data-scrollto href="#genes">Mutated Genes</a></li>
-            <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="mutations" class="t_subnav__items__item"><a data-scrollto href="#mutations">Mutations</a></li>
-            <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="donors" class="t_subnav__items__item"><a data-scrollto href="#donors">Donors</a></li>
+            <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
+            <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="genes" class="t_subnav__items__item"><a data-scrollto href="#genes"><translate>Mutated Genes</translate></a></li>
+            <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="mutations" class="t_subnav__items__item"><a data-scrollto href="#mutations"><translate>Mutations</translate></a></li>
+            <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="donors" class="t_subnav__items__item"><a data-scrollto href="#donors"><translate>Donors</translate></a></li>
             <!--<li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="publications" class="t_subnav__items__item"><a data-scrollto
                                                                          href="#publications">Publications</a>
             </li>-->
             <li><br></li>
             <li class="t_subnav__items__item">
-                <span>Page Filters</span>
+                <span><translate>Page Filters</translate></span>
             </li>
             <li class="t_subnav__items__box">
                 <ul class="t_facets">
                     <terms data-type="mutation"
                            data-facet-name="functionalImpact"
                            data-hide-count="true"
-                           data-label="Mutation Impact"
+                           data-label="{{'Mutation Impact' | translate}}"
                            data-facet="ProjectCtrl.mutationFacets.functionalImpact"
                            data-show-when-empty="true"
                     ></terms>
@@ -58,33 +61,33 @@
 <article>
 <section id="summary">
 <div class="half">
-    <h3>Summary</h3>
+    <h3><translate>Summary</translate></h3>
     <table class="table table-info">
         <tr>
-            <th>Code</th>
+            <th><translate>Code</translate></th>
             <td>{{ProjectCtrl.project.id}}</td>
         </tr>
         <tr>
-            <th>Name</th>
+            <th><translate>Name</translate></th>
             <td>
                 <a href="http://icgc.org/node/{{ProjectCtrl.project.icgcId}}" target="_blank">
                     <i class="icon-external-link"></i>{{ProjectCtrl.project.name}}</a>
             </td>
         </tr>
         <tr>
-            <th>Primary Site</th>
+            <th><translate>Primary Site</translate></th>
             <td>{{ProjectCtrl.project.primarySite}}</td>
         </tr>
         <tr>
-            <th>Tumour Type</th>
+            <th><translate>Tumour Type</translate></th>
             <td>{{ProjectCtrl.project.tumourType}}</td>
         </tr>
         <tr>
-            <th>Tumour Subtype</th>
+            <th><translate>Tumour Subtype</translate></th>
             <td>{{ProjectCtrl.project.tumourSubtype}}</td>
         </tr>
         <tr>
-            <th>Countries</th>
+            <th><translate>Countries</translate></th>
             <td>
                 <ul data-ng-repeat="country in ProjectCtrl.project.primaryCountries">
                     <li>{{country}}</li>
@@ -92,8 +95,10 @@
             </td>
         </tr>
         <tr data-ng-if="ProjectCtrl.project.state === 'live' && ProjectCtrl.studies.length > 0">
-            <th>Number of donors in
-              <a href="/pcawg">PCAWG</a>
+            <th>
+                <translate>
+                    Number of donors in <a href="/pcawg">PCAWG</a>
+                </translate>
             </th>
             <td>
                 <ul>
@@ -108,7 +113,7 @@
             </td>
         </tr>
         <tr>
-            <th>Number of donors with molecular data in DCC </th>
+            <th><translate>Number of donors with molecular data in DCC</translate> </th>
             <td>
                 <span data-ng-if="ProjectCtrl.project.totalLiveDonorCount > 0">
                     <a data-ui-sref=
@@ -119,7 +124,7 @@
             </td>
         </tr>
         <tr>
-            <th>Total number of donors</th>
+            <th><translate>Total number of donors</translate></th>
             <td>
                 <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]}}}"})'>
                     {{::ProjectCtrl.project.totalDonorCount | number}}
@@ -128,62 +133,67 @@
         </tr>
 
     </table>
-    <div data-ng-if="ProjectCtrl.hasExp"><h3>Experimental Analyses</h3>
+    <div data-ng-if="ProjectCtrl.hasExp"><h3><translate>Experimental Analysis</translate></h3>
         <table class="table table-info">
             <tr data-ng-repeat="(k,v) in ProjectCtrl.project.experimentalAnalysisPerformedSampleCounts track by k">
                 <th><abbr data-tooltip="{{ k | define }}">{{k}}</abbr></th>
                 <td>
-                    {{v}} samples from
-                    <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"analysisTypes\":{\"is\":[\"{{k}}\"]}}}"})'>
-                        {{ProjectCtrl.project.experimentalAnalysisPerformedDonorCounts[k]}}
-                    </a>
-                    donors
+                    <translate>
+                        {{v}} samples from
+                        <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"analysisTypes\":{\"is\":[\"{{k}}\"]}}}"})'>
+                            {{ProjectCtrl.project.experimentalAnalysisPerformedDonorCounts[k]}}
+                        </a>
+                        donors
+                    </translate>
                 </td>
             </tr>
         </table>
         <p>
-            <button type="button" class="t_button" data-ng-click="ProjectCtrl.downloadSample()"><i
-                    class="icon-download"></i>Download Sample Sheet
+            <button type="button" class="t_button" data-ng-click="ProjectCtrl.downloadSample()">
+                <i class="icon-download"></i>
+                <translate>Download Sample Sheet</translate>
             </button>
         </p>
 
         <div data-ng-if="ProjectCtrl.project.repository.length > 0">
-            <h3>Raw data is available at</h3>
+            <h3><translate>Raw data is available at</translate></h3>
             <table class="table table-info">
                 <tr data-ng-repeat="repo in ProjectCtrl.project.repository" data-ng-switch="repo">
                     <td>
                         <a data-ng-switch-when="EGA" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectEGA()}}">
-                            <i class="icon-external-link"></i>European Genome-phenome Archive</a>
+                            <i class="icon-external-link"></i><translate>European Genome-phenome Archive</translate></a>
 
                         <a data-ng-switch-when="dbSNP" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectSNP()}}">
-                            <i class="icon-external-link"></i>NCBI dbSNP</a>
+                            <i class="icon-external-link"></i><translate>NCBI dbSNP</translate></a>
 
                         <a data-ng-switch-when="TCGA" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectTCGA()}}">
-                            <i class="icon-external-link"></i>The Cancer Genome Atlas</a>
+                            <i class="icon-external-link"></i><translate>The Cancer Genome Atlas</translate></a>
 
                         <a data-ng-switch-when="CGHub" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectCGHub(ProjectCtrl.project.id.split('-')[0])}}">
-                            <i class="icon-external-link"></i>Cancer Genomics Hub</a>
+                            <i class="icon-external-link"></i><translate>Cancer Genomics Hub</translate></a>
 
                         <a data-ng-switch-when="GEO" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGEO()}}">
-                            <i class="icon-external-link"></i>Gene Expression Omnibus</a>
+                            <i class="icon-external-link"></i><translate>Gene Expression Omnibus</translate></a>
                     </td>
                 </tr>
             </table>
-            <div>An approved <a target="_blank" href="http://icgc.org/daco"><i class="icon-external-link"></i>data
-                access request</a> is required.
+            <div>
+                <translate>
+                    An approved <a target="_blank" href="http://icgc.org/daco"><i class="icon-external-link"></i>data access request</a> is required.
+                </translate>
             </div>
         </div>
 
     </div>
 </div>
 <div class="half omega">
-    <h3>Available Data Types</h3>
+    <h3><translate>Available Data Types:</translate></h3>
     <div data-ng-if="ProjectCtrl.project.state === 'pending'" class="well">
-    Only clinical data has been submitted to ICGC DCC.
+    <translate>Only clinical data has been submitted to ICGC DCC.</translate>
     </div>
     <table class="table table-info" data-ng-if="ProjectCtrl.project.state === 'live'">
         <tr>
-            <th>Clinical Data</th>
+            <th><translate>Clinical Data</translate></th>
             <td>
                 <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]}}}"})'>
                     {{ProjectCtrl.project.totalDonorCount | number}} donors
@@ -191,7 +201,7 @@
             </td>
         </tr>
         <tr>
-            <th>Simple Somatic Mutations (SSM)</th>
+            <th><translate>Simple Somatic Mutations (SSM)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.ssmTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"ssm\"]}}}"})'>
@@ -201,7 +211,7 @@
             </td>
         </tr>
         <tr>
-            <th>Copy Number Somatic Mutations (CNSM)</th>
+            <th><translate>Copy Number Somatic Mutations (CNSM)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.cnsmTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"cnsm\"]}}}"})'>
@@ -211,7 +221,7 @@
             </td>
         </tr>
         <tr>
-            <th>Structural Somatic Mutations (StSM)</th>
+            <th><translate>Structural Somatic Mutations (StSM)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.stsmTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"stsm\"]}}}"})'>
@@ -221,7 +231,7 @@
             </td>
         </tr>
         <tr>
-            <th>Simple Germline Variants (SGV)</th>
+            <th><translate>Simple Germline Variants (SGV)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.sgvTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"sgv\"]}}}"})'>
@@ -231,7 +241,7 @@
             </td>
         </tr>
         <tr>
-            <th>Array-based DNA Methylation (METH-A)</th>
+            <th><translate>Array-based DNA Methylation (METH-A)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.methArrayTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"meth_array\"]}}}"})'>
@@ -241,7 +251,7 @@
             </td>
         </tr>
         <tr>
-            <th>Sequence-based DNA Methylation (METH-S)</th>
+            <th><translate>Sequence-based DNA Methylation (METH-S)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.methSeqTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"meth_seq\"]}}}"})'>
@@ -251,7 +261,7 @@
             </td>
         </tr>
         <tr>
-            <th>Array-based Gene Expression (EXP-A)</th>
+            <th><translate>Array-based Gene Expression (EXP-A)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.expArrayTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"exp_array\"]}}}"})'>
@@ -261,7 +271,7 @@
             </td>
         </tr>
         <tr>
-            <th>Sequence-based Gene Expression (EXP-S)</th>
+            <th><translate>Sequence-based Gene Expression (EXP-S)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.expSeqTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"exp_seq\"]}}}"})'>
@@ -271,7 +281,7 @@
             </td>
         </tr>
         <tr>
-            <th>Protein Expression (PEXP)</th>
+            <th><translate>Protein Expression (PEXP)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.pexpTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"pexp\"]}}}"})'>
@@ -281,7 +291,7 @@
             </td>
         </tr>
         <tr>
-            <th>Sequence-based miRNA Expression (miRNA)</th>
+            <th><translate>Sequence-based miRNA Expression (miRNA)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.mirnaSeqTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"mirna_seq\"]}}}"})'>
@@ -291,7 +301,7 @@
             </td>
         </tr>
         <tr>
-            <th>Exon junction (JCN)</th>
+            <th><translate>Exon Junction (JCN)</translate></th>
             <td>
                 <a data-ng-if="ProjectCtrl.project.jcnTestedDonorCount > 0"
                    data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"jcn\"]}}}"})'>
@@ -301,7 +311,7 @@
             </td>
         </tr>
     </table>
-    <span class="open-in">Open in</span>
+    <span class="open-in"><translate>Open in</translate></span>
     <a href="{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}">
       <i class="icon-database"></i>{{:: ProjectCtrl.dataReleasesTitle }}
     </a>
@@ -312,15 +322,16 @@
          data-ng-controller="ProjectGeneCtrl as ProjectGeneCtrl"
          data-ng-class="{'loading': !ProjectGeneCtrl.genes.hits, 'empty': ProjectGeneCtrl.genes.hits.length == 0}">
     <h3 data-ng-if="!ProjectGeneCtrl.genes.hits">
-        <i class="icon-spinner icon-spin"></i> Fetching Mutated Genes...
+        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutated Genes...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectGeneCtrl.genes.hits.length == 0">
-        No Mutated Genes Found.
+        <translate>No Mutated Genes Found.</translate>
     </h3>
 
     <div data-ng-if="ProjectGeneCtrl.genes.hits.length > 0">
-        <h3>Most Frequently Mutated Genes
+        <h3>
+            <translate>Most Frequently Mutated Genes</translate>
             <span data-open-in-list='/g?filters={{ProjectGeneCtrl.genes.advQuery}}'></span>
         </h3>
 
@@ -328,34 +339,36 @@
             <bar data-ng-if="ProjectGeneCtrl.bar.hasData" format="percentage"
                  class="wide" height=200 items="ProjectGeneCtrl.bar"
                  title=""
-                 ylabel="% of Donors Affected">
+                 ylabel="{{'% of Donors Affected' | translate}}">
             </bar>
         </div>
         <div class="t_table_top">
-            Showing <strong>{{ProjectGeneCtrl.genes.hits.length | number}}</strong> of
-            <strong>{{ProjectGeneCtrl.genes.pagination.total | number}}</strong> genes
+            <translate has-markup>
+                Showing <strong>{{ProjectGeneCtrl.genes.hits.length | number}}</strong> of
+                <strong>{{ProjectGeneCtrl.genes.pagination.total | number}}</strong> genes
+            </translate>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_genes"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
             <tr>
-                <th rowspan="2">Symbol</th>
-                <th rowspan="2">Name</th>
-                <th rowspan="2"><abbr data-tooltip="Gene location on the genome, chr:start-end">Location</abbr></th>
-                <th rowspan="2">Type</th>
-                <th colspan="2" class="text-center"># Donors affected</th>
+                <th rowspan="2"><translate>Symbol</translate></th>
+                <th rowspan="2"><translate>Name</translate></th>
+                <th rowspan="2"><abbr data-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}"><translate>Location</translate></abbr></th>
+                <th rowspan="2"><translate>Type</translate></th>
+                <th colspan="2" class="text-center"><translate># Donors affected</translate></th>
                 <th rowspan="2" class="text-center">
-                    <abbr data-tooltip="Number of SSM in the Gene" data-tooltip-placement="left"># Mutations</abbr>
+                    <abbr data-tooltip="{{'Number of SSM in the Gene' | translate}}" data-tooltip-placement="left"><translate># Mutations</translate></abbr>
                 </th>
             </tr>
             <tr>
                 <th class="text-center">
                     <abbr data-tooltip="Breakdown of Affected Donors in {{ ProjectCtrl.project.id }}<br># Donors where Gene is mutated / # SSM tested donors">
-                        in {{ProjectCtrl.project.id}}
+                        <translate>in</translate> {{ProjectCtrl.project.id}}
                     </abbr> <i class="icon-caret-down"></i></th>
                 <th class="text-center">
-                    <abbr data-tooltip="# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project."
-                          tooltip-placement="left">Across all Projects</abbr></th>
+                    <abbr data-tooltip="{{'# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+                          tooltip-placement="left"><translate>Across all Projects</translate></abbr></th>
             </tr>
             </thead>
             <tbody>
@@ -417,15 +430,15 @@
         <table class="hidden" id="{{ProjectCtrl.project.id}}_genes">
             <thead>
             <tr>
-                <th>Symbol</th>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Type</th>
-                <th>Number of donors from the current project with the current gene mutated</th>
-                <th>Total number of SSM-tested donors from the current project</th>
-                <th>Percentage of affected donors</th>
-                <th>Donors affected by Gene in all projects</th>
-                <th>Mutations</th>
+                <th><translate>Symbol</translate></th>
+                <th><translate>Name</translate></th>
+                <th><translate>Location</translate></th>
+                <th><translate>Type</translate></th>
+                <th><translate>Number of donors from the current project with the current gene mutated</translate></th>
+                <th><translate>Total number of SSM-tested donors from the current project</translate></th>
+                <th><translate>Percentage of affected donors</translate></th>
+                <th><translate>Donors affected by Gene in all projects</translate></th>
+                <th><translate>Mutations</translate></th>
             </tr>
             </thead>
             <tbody>
@@ -454,27 +467,30 @@
          data-ng-controller="ProjectMutationsCtrl as ProjectMutationsCtrl"
          data-ng-class="{'loading': !ProjectMutationsCtrl.mutations.hits, 'empty': ProjectMutationsCtrl.mutations.hits.length == 0}">
     <h3 data-ng-if="!ProjectMutationsCtrl.mutations.hits">
-        <i class="icon-spinner icon-spin"></i> Fetching Mutations...
+        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectMutationsCtrl.mutations.hits.length == 0">
-        No Mutations Found.
+        <translate>No Mutations Found.</translate>
     </h3>
 
     <div data-ng-if="ProjectMutationsCtrl.mutations.hits.length > 0">
-        <h3>Most Frequent Mutations
+        <h3>
+            <translate>Most Frequent Mutations</translate>
             <span data-open-in-list='/m?filters={{ProjectMutationsCtrl.mutations.advQuery}}'></span>
         </h3>
 
         <div class="clearfix">
             <bar class="wide" data-ng-if="ProjectMutationsCtrl.bar.hasData" height=200 items="ProjectMutationsCtrl.bar"
                  title=""
-                 ylabel="Donors affected"></bar>
+                 ylabel="{{'Donors affected' | translate}}"></bar>
         </div>
 
         <div class="t_table_top">
-            Showing <strong>{{ProjectMutationsCtrl.mutations.hits.length}}</strong> of
-            <strong>{{ProjectMutationsCtrl.mutations.pagination.total | number}}</strong> mutations
+            <translate>
+                Showing <strong>{{ProjectMutationsCtrl.mutations.hits.length}}</strong> of
+                <strong>{{ProjectMutationsCtrl.mutations.pagination.total | number}}</strong> mutations
+            </translate>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_mutations"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
@@ -482,22 +498,23 @@
             <tr>
                 <th rowspan="2">ID</th>
                 <th rowspan="2">
-                    <abbr data-tooltip="Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}">DNA
-                        change</abbr>
+                    <abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+                        <translate>DNA change</translate>
+                    </abbr>
                 </th>
-                <th rowspan="2">Type</th>
+                <th rowspan="2"><translate>Type</translate></th>
                 <th rowspan="2">
-                    <abbr data-tooltip="Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.">Consequences</abbr>
+                    <abbr data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
                 </th>
-                <th colspan="2" class="text-center"># Donors affected</th>
+                <th colspan="2" class="text-center"><translate># Donors affected</translate></th>
             </tr>
             <tr>
                 <th class="text-center"
                     data-tooltip="Breakdown of Affected Donors in {{ ProjectCtrl.project.id }}<br># Donors affected / # SSM tested donors">
-                    <abbr>in {{ProjectCtrl.project.id}}</abbr> <i class="icon-caret-down"></i></th>
+                    <abbr><translate>in</translate> {{ProjectCtrl.project.id}}</abbr> <i class="icon-caret-down"></i></th>
                 <th class="text-center">
-                    <abbr data-tooltip="# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project."
-                          data-tooltip-placement="left">Across all Project</abbr></th>
+                    <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}'"
+                          data-tooltip-placement="left"><translate>Across all Project</translate></abbr></th>
             </tr>
             </thead>
             <tbody>
@@ -553,14 +570,14 @@
         <table class="hidden" id="{{ProjectCtrl.project.id}}_mutations">
             <thead>
             <tr>
-                <th>Mutation ID</th>
-                <th>Genomic DNA Change</th>
-                <th>Type</th>
-                <th>Consequences</th>
-                <th>Number of affected donors from the current project</th>
-                <th>Number of SSM-tested donors from the current project</th>
-                <th>Percentage of affected donors</th>
-                <th>Other Projects Mutation Observed</th>
+                <th><translate>Mutation ID</translate></th>
+                <th><translate>Genomic DNA Change</translate></th>
+                <th><translate>Type</translate></th>
+                <th><translate>Consequences</translate></th>
+                <th><translate>Number of affected donors from the current project</translate></th>
+                <th><translate>Number of SSM-tested donors from the current project</translate></th>
+                <th><translate>Percentage of affected donors</translate></th>
+                <th><translate>Other Projects Mutation Observed</translate></th>
             </tr>
             </thead>
             <tbody>
@@ -591,45 +608,48 @@
          data-ng-controller="ProjectDonorsCtrl as ProjectDonorsCtrl"
          data-ng-class="{'loading': !ProjectDonorsCtrl.donors.hits, 'empty': ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0}">
     <h3 data-ng-if="!ProjectDonorsCtrl.donors.hits && ProjectCtrl.project.ssmTestedDonorCount > 0">
-        <i class="icon-spinner icon-spin"></i> Fetching Donors...
+        <i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0">
-        No Affected Donors Found.
+        <translate>No Affected Donors Found.</translate>
     </h3>
 
     <div data-ng-if="ProjectDonorsCtrl.donors.hits.length > 0 && ProjectCtrl.project.ssmTestedDonorCount > 0">
-        <h3>Most Affected Donors
+        <h3>
+            <translate>Most Affected Donors</translate>
             <span data-open-in-list='?filters={{ProjectDonorsCtrl.donors.advQuery}}' data-type='donor'></span>
         </h3>
 
         <div class="clearfix">
             <bar class="wide" data-ng-if="ProjectDonorsCtrl.bar.hasData" height=200 items="ProjectDonorsCtrl.bar"
                  title=""
-                 ylabel="Genes affected"></bar>
+                 ylabel="{{'Genes affected' | translate}}"></bar>
         </div>
 
         <div class="t_table_top">
-            Showing <strong>{{ProjectDonorsCtrl.donors.hits.length}}</strong> of <strong>{{ProjectDonorsCtrl.donors.pagination.total
-            | number}}</strong> donors
+            <translate>
+                Showing <strong>{{ProjectDonorsCtrl.donors.hits.length}}</strong> of 
+                <strong>{{ProjectDonorsCtrl.donors.pagination.total | number}}</strong> donors
+            </translate>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_donors"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
             <tr>
-                <th rowspan="2">ID</th>
-                <th rowspan="2">Site</th>
-                <th rowspan="2">Gender</th>
-                <th rowspan="2" class="text-center"><abbr data-tooltip="Age at Diagnosis">Age</abbr></th>
-                <th rowspan="2"><abbr data-tooltip="Tumour Stage at Diagnosis">Stage</abbr></th>
+                <th rowspan="2"><translate>ID</translate></th>
+                <th rowspan="2"><translate>Site</translate></th>
+                <th rowspan="2"><translate>Gender</translate></th>
+                <th rowspan="2" class="text-center"><abbr data-tooltip="{{'Age at Diagnosis' | translate}}"><translate>Age</translate></abbr></th>
+                <th rowspan="2"><abbr data-tooltip="{{'Tumour Stage at Diagnosis' | translate}}"><translate>Stage</translate></abbr></th>
                 <th rowspan="2" class="text-center">
-                    <abbr data-tooltip="Survival Time in days">Survival<br>(days)</abbr>
+                    <abbr data-tooltip="{{'Survival Time in days' | translate}}"><translate has-markup>Survival<br>(days)</translate></abbr>
                 </th>
-                <th rowspan="2"><abbr data-tooltip="Experimental analyses performed">Analyses</abbr></th>
-                <th colspan="11" class="text-center">Available Data Types</th>
-                <th rowspan="2" data-tooltip="Number of SSM"><abbr># Mutations</abbr></th>
+                <th rowspan="2"><abbr data-tooltip="{{'Experimental analysis performed' | translate}}"><translate>Analysis</translate></abbr></th>
+                <th colspan="11" class="text-center"><translate>Available Data Types:</translate></th>
+                <th rowspan="2" data-tooltip="{{'Number of SSM' | translate}}"><abbr><translate># Mutations</translate></abbr></th>
                 <th rowspan="2">
-                    <abbr data-tooltip="Number of Genes with SSM" data-tooltip-placement="left"># Genes <i class="icon-caret-down"></i></abbr>
+                    <abbr data-tooltip="{{'Number of Genes with SSM' | translate}}" data-tooltip-placement="left"><translate># Genes</translate> <i class="icon-caret-down"></i></abbr>
                 </th>
             </tr>
             <tr>
@@ -687,13 +707,13 @@
         <table class="hidden" id="{{ProjectCtrl.project.id}}_donors">
             <thead>
             <tr>
-                <th>Donor ID</th>
-                <th>Site</th>
-                <th>Gender</th>
-                <th>Age at Diagnosis</th>
-                <th>Tumor Stage at Diagnosis</th>
-                <th>Survival Time (days)</th>
-                <th>Experimental Analyses</th>
+                <th><translate>Donor ID</translate></th>
+                <th><translate>Site</translate></th>
+                <th><translate>Gender</translate></th>
+                <th><translate>Age at Diagnosis</translate></th>
+                <th><translate>Tumor Stage at Diagnosis</translate></th>
+                <th><translate>Survival Time (days)</translate></th>
+                <th><translate>Experimental Analysis</translate></th>
                 <th>SSM</th>
                 <th>CNSM</th>
                 <th>StSM</th>
@@ -705,8 +725,8 @@
                 <th>PEXP</th>
                 <th>miRNA-S</th>
                 <th>JCN</th>
-                <th>Mutations</th>
-                <th>Mutated Genes</th>
+                <th><translate>Mutations</translate></th>
+                <th><translate>Mutated Genes</translate></th>
             </tr>
             </thead>
             <tbody>

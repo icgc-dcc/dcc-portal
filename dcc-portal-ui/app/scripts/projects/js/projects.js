@@ -68,10 +68,10 @@
 
   module.controller('ProjectsCtrl',
     function ($q, $scope, $state, $filter, ProjectState, Page, Projects, CodeTable,
-               HighchartsService, Donors, Restangular, LocationService) {
+               HighchartsService, Donors, Restangular, LocationService, gettextCatalog) {
 
     var _ctrl = this;
-    Page.setTitle('Cancer Projects');
+    Page.setTitle(gettextCatalog.getString('Cancer Projects'));
     Page.setPage('projects');
 
     _ctrl.Page = Page;
@@ -207,11 +207,11 @@
       var toHumanReadable = function (n, singular) {
         return '' + formatNumber (n) + ' ' + pluralizer (n, singular);
       };
-      var subtitle = toHumanReadable (_ctrl.totalDonors, 'Donor');
+      var subtitle = toHumanReadable (_ctrl.totalDonors, gettextCatalog.getString('Donor'));
       var projects = _.get (_ctrl, 'projects.hits', undefined);
 
       return subtitle + (_.isArray (projects) ?
-        ' across ' + toHumanReadable (projects.length, 'Project') : '');
+        ' across ' + toHumanReadable (projects.length, gettextCatalog.getString('Project')) : '');
     };
 
     _ctrl.hasDonutData = function () {

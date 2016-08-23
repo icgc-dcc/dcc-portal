@@ -8,11 +8,12 @@
 <span data-ng-if="DonorCtrl.isPendingDonor">
   <section>
     <i class="icon-attention or icon-attention-1"></i>
-    No data for this donor has been submitted directly to ICGC DCC yet. However, go to the
+    <translate>No data for this donor has been submitted directly to ICGC DCC yet.</translate>
+    <translate has-markup>However, go to the
     <a href="{{:: DonorCtrl.urlToExternalRepository() }}">
       {{:: DonorCtrl.dataRepoTitle }} browser
     </a>
-     to see the list of data files hosted in {{:: DonorCtrl.dataRepoTitle }} for this donor.
+     to see the list of data files hosted in {{:: DonorCtrl.dataRepoTitle }} for this donor.</translate>
   </section>
 </span>
 
@@ -21,20 +22,20 @@
 <aside data-ui-scrollfix=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
-            <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary">Summary</a></li>
-            <li data-spy="clinical" class="t_subnav__items__item"><a data-scrollto href="#clinical">Clinical Data</a></li>
-            <li data-spy="mutations" class="t_subnav__items__item" data-ng-if="DonorCtrl.donor.state==='live'"><a data-scrollto href="#mutations">Mutations</a></li>
-            <li data-spy="specimen" class="t_subnav__items__item"><a data-scrollto href="#specimen">Specimen</a></li>
+            <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
+            <li data-spy="clinical" class="t_subnav__items__item"><a data-scrollto href="#clinical"><translate>Clinical Data</translate></a></li>
+            <li data-spy="mutations" class="t_subnav__items__item" data-ng-if="DonorCtrl.donor.state==='live'"><a data-scrollto href="#mutations"><translate>Mutations</translate></a></li>
+            <li data-spy="specimen" class="t_subnav__items__item"><a data-scrollto href="#specimen"><translate>Specimen</translate></a></li>
             <li><br></li>
             <li class="t_subnav__items__item" data-ng-if="DonorCtrl.mutationFacets.functionalImpact.total > 0">
-                <span>Page Filters</span>
+                <span><translate>Page Filters</translate></span>
             </li>
             <li class="t_subnav__items__box" data-ng-if="DonorCtrl.mutationFacets.functionalImpact.total > 0">
                 <ul class="t_facets">
                     <terms data-type="mutation"
                            data-facet-name="functionalImpact"
                            data-hide-count="true"
-                           data-label="Mutation Impact"
+                           data-label="{{'Mutation Impact' | translate}}"
                            data-facet="DonorCtrl.mutationFacets.functionalImpact"></terms>
                 </ul>
             </li>
@@ -44,40 +45,40 @@
 <article>
 <section id="summary">
     <div class="half">
-        <h3>Summary</h3>
+        <h3><translate>Summary</translate></h3>
         <table class="table table-info">
             <tr>
                 <th>ID</th>
                 <td>{{ DonorCtrl.donor.id }}</td>
             </tr>
             <tr>
-                <th>Submitter ID</th>
+                <th><translate>Submitter ID</translate></th>
                 <td>{{ DonorCtrl.donor.submittedDonorId }}</td>
             </tr>
             <tr>
-                <th>Project Name</th>
+                <th><translate>Project Name</translate></th>
                 <td>
                    <a href="/projects/{{DonorCtrl.donor.projectId}}">{{ DonorCtrl.donor.projectName }}</a>
                 </td>
             </tr>
             <tr>
-                <th>Project Code</th>
+                <th><translate>Project Code</translate></th>
                 <td>{{ DonorCtrl.donor.projectId }}</td>
             </tr>
             <tr>
-                <th>Primary Site</th>
+                <th><translate>Primary Site</translate></th>
                 <td>{{ DonorCtrl.donor.primarySite }}</td>
             </tr>
             <tr>
-                <th>Tumour Type</th>
+                <th><translate>Tumour Type</translate></th>
                 <td>{{ DonorCtrl.donor.tumourType }}</td>
             </tr>
             <tr>
-                <th>Tumour Subtype</th>
+                <th><translate>Tumour Subtype</translate></th>
                 <td>{{ DonorCtrl.donor.tumourSubtype }}</td>
             </tr>
             <tr>
-                <th>Total number of mutations</th>
+                <th><translate>Total number of mutations</translate></th>
                 <td><a data-ng-if="DonorCtrl.donor.ssmCount > 0"
                        href='/search/m?filters={"donor":{"id":{"is":["{{DonorCtrl.donor.id}}"]}}}'>
                     {{ DonorCtrl.donor.ssmCount | numberPT }}</a>
@@ -87,57 +88,57 @@
         </table>
     </div>
     <div class="half omega">
-        <h3>Available Data Types</h3>
+        <h3><translate>Available Data Types:</translate></h3>
         <div data-ng-if="DonorCtrl.donor.state === 'pending'" class="well">
-            Only clinical data has been submitted to ICGC DCC.
+            <translate>Only clinical data has been submitted to ICGC DCC.</translate>
         </div>
         <table class="table table-info" data-ng-if="DonorCtrl.donor.state === 'live'">
             <tr>
-                <th>Clinical Data</th>
+                <th><translate>Clinical Data</translate></th>
                 <td class="text-center"><i class="icon-ok"></i></td>
             </tr>
             <tr>
-                <th>Simple Somatic Mutations (SSM)</th>
+                <th><translate>Simple Somatic Mutations (SSM)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.ssmCount"></span></td>
             </tr>
             <tr>
-                <th>Copy Number Somatic Mutations (CNSM)</th>
+                <th><translate>Copy Number Somatic Mutations (CNSM)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.cnsmExists"></span></td>
             </tr>
             <tr>
-                <th>Structural Somatic Mutations (StSM)</th>
+                <th><translate>Structural Somatic Mutations (StSM)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.stsmExists"></span></td>
             </tr>
             <tr>
-                <th>Simple Germline Variants (SGV)</th>
+                <th><translate>Simple Germline Variants (SGV)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.sgvExists"></span></td>
             </tr>
             <tr>
-                <th>Array-based DNA Methylation (METH-A)</th>
+                <th><translate>Array-based DNA Methylation (METH-A)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.methArrayExists"></span></td>
             </tr>
             <tr>
-                <th>Sequence-based DNA Methylation (METH-S)</th>
+                <th><translate>Sequence-based DNA Methylation (METH-S)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.methSeqExists"></span></td>
             </tr>
             <tr>
-                <th>Array-based Gene Expression (EXP-A)</th>
+                <th><translate>Array-based Gene Expression (EXP-A)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.expArrayExists"></span></td>
             </tr>
             <tr>
-                <th>Sequence-based Gene Expression (EXP-S)</th>
+                <th><translate>Sequence-based Gene Expression (EXP-S)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.expSeqExists"></span></td>
             </tr>
             <tr>
-                <th>Protein Expression (PEXP)</th>
+                <th><translate>Protein Expression (PEXP)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.pexpExists"></span></td>
             </tr>
             <tr>
-                <th>Sequence-based miRNA Expression (miRNA)</th>
+                <th><translate>Sequence-based miRNA Expression (miRNA)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.mirnaSeqExists"></span></td>
             </tr>
             <tr>
-                <th>Exon Junctions (JCN)</th>
+                <th><translate>Exon Junctions (JCN)</translate></th>
                 <td class="text-center"><span data-exists="DonorCtrl.donor.jcnExists"></span></td>
             </tr>
         </table>
@@ -145,53 +146,53 @@
         <div>
             <button class="t_button" type="button" data-ng-click="DonorCtrl.downloadDonorData()" data-ng-disabled="!DonorCtrl.downloadEnabled">
                 <i class="icon-download"></i>
-                <span> Download Donor Data</span>
+                <span> <translate>Download Donor Data</translate></span>
             </button>
             <br>
-            <span data-ng-if="!DonorCtrl.downloadEnabled" class="alert-warning">Data download is currently unavailable.</span>
+            <span data-ng-if="!DonorCtrl.downloadEnabled" class="alert-warning"><translate>Data download is currently unavailable.</translate></span>
         </div>
 
     </div>
 </section>
 
 <section id="clinical">
-    <h3>Clinical Data
+    <h3><translate>Clinical Data</translate>
         <small class="pull-right" style="font-size: 1.0rem" data-ng-if="DonorCtrl.donor.clinicalXML">
-            <a href="{{DonorCtrl.donor.clinicalXML}}" target="_blank"><i class="icon-external-link"></i>TCGA Clinical XML</a>
+            <a href="{{DonorCtrl.donor.clinicalXML}}" target="_blank"><i class="icon-external-link"></i><translate>TCGA Clinical XML</translate></a>
         </small>
     </h3>
     <div class="half">
         <table class="table table-info">
             <tr>
-                <th>Age at diagnosis</th>
+                <th><translate>Age at Diagnosis</translate></th>
                 <td>{{ DonorCtrl.donor.ageAtDiagnosis | numberPT }}</td>
             </tr>
             <tr>
-                <th>Age at enrollment</th>
+                <th><translate>Age at enrollment</translate></th>
                 <td>{{ DonorCtrl.donor.ageAtEnrollment | numberPT }}</td>
             </tr>
             <tr>
-                <th>Age at last followup</th>
+                <th><translate>Age at last followup</translate></th>
                 <td>{{ DonorCtrl.donor.ageAtLastFollowup | numberPT }}</td>
             </tr>
             <tr>
-                <th>Diagnosis ICD-10 code</th>
+                <th><translate>Diagnosis ICD-10 code</translate></th>
                 <td>{{ DonorCtrl.donor.diagnosisIcd10 }}</td>
             </tr>
             <tr>
-                <th>Disease status at last followup</th>
+                <th><translate>Disease status at last followup</translate></th>
                 <td>{{ DonorCtrl.donor.diseaseStatusLastFollowup }}</td>
             </tr>
             <tr>
-                <th>Interval of last followup (days)</th>
+                <th><translate>Interval of last followup (days)</translate></th>
                 <td>{{ DonorCtrl.donor.intervalOfLastFollowup | numberPT }}</td>
             </tr>
             <tr>
-                <th>Gender</th>
+                <th><translate>Gender</translate></th>
                 <td>{{ DonorCtrl.donor.gender }}</td>
             </tr>
             <tr>
-                <th>Vital status</th>
+                <th><translate>Vital status</translate></th>
                 <td>{{ DonorCtrl.donor.vitalStatus }}</td>
             </tr>
         </table>
@@ -199,39 +200,39 @@
     <div class="half omega">
         <table class="table table-info">
             <tr>
-                <th>Tumour stage at diagnosis</th>
+                <th><translate>Tumour stage at diagnosis</translate></th>
                 <td>{{ DonorCtrl.donor.tumourStageAtDiagnosis }}</td>
             </tr>
             <tr>
-                <th>Tumour staging system at diagnosis</th>
+                <th><translate>Tumour staging system at diagnosis</translate></th>
                 <td>{{ DonorCtrl.donor.tumourStagingSystemAtDiagnosis }}</td>
             </tr>
             <tr>
-                <th>Tumour stage at diagnosis supplemental</th>
+                <th><translate>Tumour stage at diagnosis supplemental</translate></th>
                 <td>{{ DonorCtrl.donor.tumourStageAtDiagnosisSupplemental }}</td>
             </tr>
             <tr>
-                <th>Relapse type</th>
+                <th><translate>Relapse Type</translate></th>
                 <td>{{ DonorCtrl.donor.relapseType }}</td>
             </tr>
             <tr>
-                <th>Relapse interval (days)</th>
+                <th><translate>Relapse interval (days)</translate></th>
                 <td>{{ DonorCtrl.donor.relapseInterval | numberPT }}</td>
             </tr>
             <tr>
-                <th>Survival time (days)</th>
+                <th><translate>Survival time (days)</translate></th>
                 <td>{{ DonorCtrl.donor.survivalTime | numberPT }}</td>
             </tr>
             <tr>
-                <th>Prior Malignancy</th>
+                <th><translate>Prior Malignancy</translate></th>
                 <td>{{ DonorCtrl.donor.priorMalignancy }}</td>
             </tr>
             <tr>
-                <th>Cancer Type Prior Malignancy</th>
+                <th><translate>Cancer Type Prior Malignancy</translate></th>
                 <td>{{ DonorCtrl.donor.cancerTypePriorMalignancy }}</td>
             </tr>
             <tr>
-                <th>Cancer history first degree relative</th>
+                <th><translate>Cancer history first degree relative</translate></th>
                 <td>{{ DonorCtrl.donor.cancerHistoryFirstDegreeRelative }}</td>
             </tr>
         </table>
@@ -241,7 +242,7 @@
     <div data-ng-init="supplementalCollapsed=true">
        <span data-ng-show="DonorCtrl.hasSupplementalFiles(DonorCtrl.donor)">
            <a href="" data-ng-click="supplementalCollapsed=!supplementalCollapsed">
-               Supplemental files:
+               <translate>Supplemental files</translate>:
                {{ DonorCtrl.donor.family? " " + DonorCtrl.donor.family.length + " Family, " : "" }}
                {{ DonorCtrl.donor.exposure? " " + DonorCtrl.donor.exposure.length + " Exposure, " : "" }}
                {{ DonorCtrl.donor.therapy? " " + DonorCtrl.donor.therapy.length + " Therapy" : "" }}
@@ -259,13 +260,13 @@
          data-ng-if="DonorCtrl.donor.state === 'live'"
          data-ng-controller="DonorMutationsCtrl as DonorMutationsCtrl"
          data-ng-class="{'loading': !DonorMutationsCtrl.mutations.hits, 'empty': DonorMutationsCtrl.mutations.hits.length == 0}">
-    <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits"><i class="icon-spinner icon-spin"></i> Fetching Mutations...
+    <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits"><i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
     </h3>
 
-    <h3 data-ng-if="DonorMutationsCtrl.mutations.hits.length == 0">No Mutations Reported.</h3>
+    <h3 data-ng-if="DonorMutationsCtrl.mutations.hits.length == 0"><translate>No Mutations Reported.</translate></h3>
 
     <div data-ng-if="DonorMutationsCtrl.mutations.hits.length > 0">
-        <h3>Most Frequent Mutations
+        <h3><translate>Most Frequent Mutations</translate>
             <span
             data-open-in-list='/m?filters={{DonorMutationsCtrl.mutations.advQuery}}'
             context="donor"
@@ -273,20 +274,21 @@
         </h3>
 
         <div class="t_table_top">
-            Showing <strong>{{ DonorMutationsCtrl.mutations.hits.length }}</strong> of
-            <strong>{{ DonorMutationsCtrl.mutations.pagination.total | numberPT }}</strong> mutations
+            <translate has-markup>Showing <strong>{{ DonorMutationsCtrl.mutations.hits.length }}</strong> of
+            <strong>{{ DonorMutationsCtrl.mutations.pagination.total | numberPT }}</strong> mutations</translate>
             <span data-toolbar data-dl="{{DonorCtrl.donor.id}}_mutations"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
             <tr>
                 <th rowspan="2">ID</th>
-                <th rowspan="2"><abbr data-tooltip="Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}">DNA
-                    change</abbr></th>
-                <th rowspan="2">Type</th>
-                <th rowspan="2"><abbr data-tooltip="Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.">Consequences</abbr>
+                <th rowspan="2"><abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+                    <translate>DNA change</translate></abbr>
                 </th>
-                <th colspan="2" class="text-center"># Donors affected</th>
+                <th rowspan="2">Type</th>
+                <th rowspan="2"><abbr data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
+                </th>
+                <th colspan="2" class="text-center"><translate># Donors affected</translate></th>
             </tr>
             <tr>
                 <th class="text-center">
@@ -294,8 +296,8 @@
                         {{ DonorCtrl.donor.projectId }}
                     </abbr> <i class="icon-caret-down"></i></th>
                 <th class="text-center">
-                    <abbr data-tooltip="# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project."
-                          data-tooltip-placement="left">Across all Projects</abbr></th>
+                    <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+                          data-tooltip-placement="left"><translate>Across all Projects</translate></abbr></th>
             </tr>
             </thead>
             <tbody>
@@ -355,14 +357,14 @@
         <table class="hidden" id="{{DonorCtrl.donor.id}}_mutations">
             <thead>
             <tr>
-                <th>Mutation ID</th>
-                <th>Genomic DNA Change</th>
-                <th>Mutation Type</th>
-                <th>Consequences</th>
-                <th>Number of affected donors from the same project as this donor</th>
-                <th>Number of SSM-tested donors from the same project as this donor</th>
-                <th>Percentage of affected donors</th>
-                <th>Projects</th>
+                <th><translate>Mutation ID</translate></th>
+                <th><translate>Genomic DNA Change</translate></th>
+                <th><translate>Mutation Type</translate></th>
+                <th><translate>Consequences</translate></th>
+                <th><translate>Number of affected donors from the same project as this donor</translate></th>
+                <th><translate>Number of SSM-tested donors from the same project as this donor</translate></th>
+                <th><translate>Percentage of affected donors</translate></th>
+                <th><translate>Projects</translate></th>
             </tr>
             </thead>
             <tbody>
@@ -390,10 +392,10 @@
 </section>
 <section id="specimen" data-ng-controller="DonorSpecimenCtrl as DonorSpecimenCtrl"
          data-ng-class="{'empty': DonorCtrl.donor.specimen.length == 0}">
-    <h3 data-ng-if="DonorCtrl.donor.specimen.length == 0">No Specimen Found.</h3>
+    <h3 data-ng-if="DonorCtrl.donor.specimen.length == 0"><translate>No Specimen Found.</translate></h3>
 
     <div data-ng-if="DonorCtrl.donor.specimen.length > 0">
-        <h3>Specimen</h3>
+        <h3><translate>Specimen</translate></h3>
 
         <div data-ng-include="'scripts/donors/views/donor.specimen.html'"></div>
     </div>

@@ -168,7 +168,7 @@
   /*
   * Create a grid of all nodes for legend
   */
-  RendererUtils.prototype.getLegendNodes =  function(marginLeft,marginTop, svg){
+  RendererUtils.prototype.getLegendNodes =  function(marginLeft,marginTop, svg, gettextCatalog){
     var nodes = [];
     var mutatedNodeText = 'Mutated Gene(s)';
     var failedText = 'Failed Output';
@@ -234,7 +234,7 @@
       }).append('xhtml:body')
       .attr('class','RenderableNodeText')
       .html('<table class="RenderableNodeTextCell"><tr><td valign="middle">'+
-          '&larr; # ICGC Mutations'+'</td></tr></table>');
+          '&larr; ' + gettextCatalog.getString('# ICGC Mutations') + '</td></tr></table>');
     
     return nodes;
   };

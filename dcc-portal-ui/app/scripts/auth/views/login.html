@@ -1,23 +1,23 @@
 <div class="login-nav-bar">
    <span data-ng-show="params.user.verifying">
-     <i class="icon-spinner icon-spin"></i> Verifying...
+     <i class="icon-spinner icon-spin"></i> <translate>Verifying...</translate>
    </span>
    <span data-ng-show="params.user.token && !params.user.verifying">
       <i data-ng-show="params.user.daco"
       class="icon-shield data-available"
          data-tooltip-placement="bottom"
-         data-tooltip="DACO Access Authorized"></i>
+         data-tooltip="{{'DACO Access Authorized' | translate}}"></i>
       <i data-ng-hide="params.user.daco"
          class="icon-shield data-missing"
          data-tooltip-placement="bottom"
-         data-tooltip="DACO Access Unauthorized"></i>
+         data-tooltip="{{'DACO Access Unauthorized' | translate}}"></i>
        <i data-ng-show="params.user.cloudAccess"
           class="icon-cloud-1 data-available"
-          data-tooltip="Cloud Access Authorized"
+          data-tooltip="{{'Cloud Access Authorized' | translate}}"
           data-tooltip-placement="bottom"></i>
        <i data-ng-show="! params.user.cloudAccess"
           class="icon-cloud-1 data-missing"
-          data-tooltip="Cloud Access Unauthorized"
+          data-tooltip="{{'Cloud Access Unauthorized' | translate}}"
           data-tooltip-placement="bottom"></i>
 
       <span data-ng-bind="params.user.email"></span>
@@ -25,15 +25,15 @@
         <li class="tool-item" data-ng-show="params.user.daco && params.showCollaboratoryToken" >
           <a href=""
             data-ng-click="openTokenManagerPopup()"
-            data-tooltip="Manage your ICGC access tokens"
+            data-tooltip="{{'Manage your ICGC access tokens' | translate}}"
             class="tool-bttn"
             data-tooltip-placement="bottom">
-              <i class="icon-key"></i>Token Manager
+              <i class="icon-key"></i><translate>Token Manager</translate>
           </a>
         </li><!--
         --><li class="tool-item">
           <a href="" data-ng-click="logout()" class="tool-bttn">
-            <i class="icon-logout"></i>Logout
+            <i class="icon-logout"></i><translate>Logout</translate>
           </a>
         </li>
       </ul>
@@ -41,7 +41,7 @@
     <ul class="toolbar" data-ng-hide="params.user.token || params.user.verifying">
         <li class="tool-item tool-item-single">
             <a data-ng-click="openLoginPopup()" href="">
-              <i class="icon-login"></i>Login
+              <i class="icon-login"></i><translate>Login</translate>
            </a>
         </li>
     </ul>

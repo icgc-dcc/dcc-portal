@@ -211,6 +211,7 @@
     'LocalStorageModule',
     'toaster',
     'dndLists',
+    'gettext',
 
 
     // 3rd party
@@ -480,9 +481,8 @@
 
     })
     .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager) {
-
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound']);
-
+    
       // Add UI Router Debug if there is a fatal state change error
       $rootScope.$on('$stateChangeError', function () {
         console.error('State Change Error Occurred. Error occurred with arguments: ', arguments);
@@ -576,8 +576,8 @@
       'team', {
         url: '/team',
         templateUrl: '/scripts/static/views/team.html',
-        controller: ['Page', function (Page) {
-          Page.setTitle('The Team');
+        controller: ['Page', function (Page, gettextCatalog) {
+          Page.setTitle(gettextCatalog.getString('The Team'));
           Page.setPage('entity');
         }]
       });
@@ -587,7 +587,7 @@
 
       $injector.invoke(['Notify', 'Page', function(Notify, Page) {
         Page.setPage('error');
-        Notify.setMessage('Cannot find: ' + $location.url());
+        Notify.setMessage('Cannot find:' + ' ' + $location.url());
         Notify.showErrors();
       }]);
     });

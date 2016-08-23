@@ -71,7 +71,7 @@ angular.module('icgc.ui.trees', []).directive('pathwayTree', function($compile) 
 
     }
   };
-}).directive('inferredTree', function($compile) {
+}).directive('inferredTree', function($compile, gettextCatalog) {
   return {
     restrict: 'E',
     replace: true,
@@ -79,7 +79,8 @@ angular.module('icgc.ui.trees', []).directive('pathwayTree', function($compile) 
       tree: '='
     },
     template: '<div><span data-ng-click="toggle()">' +
-      '<i data-ng-class="{\'icon-check-empty\':!showID, \'icon-check\':showID}"></i> Show GO IDs</span>' +
+      '<i data-ng-class="{\'icon-check-empty\':!showID, \'icon-check\':showID}"></i> ' + 
+      gettextCatalog.getString('Show GO IDs') + '</span>' +
       '<div class="tree"></div></div>',
     link: function($scope, $element) {
 
@@ -93,29 +94,34 @@ angular.module('icgc.ui.trees', []).directive('pathwayTree', function($compile) 
 
         if (relation === 'is_a') {
           return element.text('I ')
-            .attr('data-tooltip', hasGrandChild? 'Inferred is a' : 'Is a')
+            .attr('data-tooltip', 
+              hasGrandChild? gettextCatalog.getString('Inferred is a') : gettextCatalog.getString('Is a'))
             .attr('class', 'goterm_is_a');
         } else if (relation === 'part_of') {
           return element.text('P')
-            .attr('data-tooltip', hasGrandChild? 'Inferred part of' : 'Part of')
+            .attr('data-tooltip', 
+              hasGrandChild? gettextCatalog.getString('Inferred part of') : gettextCatalog.getString('Part of'))
             .attr('class', 'goterm_part_of');
         } else if (relation === 'regulates') {
           return element.text('R')
-            .attr('data-tooltip', hasGrandChild? 'Inferred regulates' : 'Regulates')
+            .attr('data-tooltip', 
+              hasGrandChild? gettextCatalog.getString('Inferred regulates') : gettextCatalog.getString('Regulates'))
             .attr('class', 'goterm_regulates');
         } else if (relation === 'positively_regulates') {
           return element.text('R')
-            .attr('data-tooltip', hasGrandChild? 'Inferred positively regulates' : 'Positively regulates')
+            .attr('data-tooltip', hasGrandChild? gettextCatalog.getString('Inferred positively regulates') : 
+            gettextCatalog.getString('Positively regulates'))
             .attr('class', 'goterm_positively_regulates');
         } else if (relation === 'negatively_regulates') {
           return element.text('R')
-            .attr('data-tooltip', hasGrandChild? 'Inferred negatively regulates' : 'Negatively regulates')
+            .attr('data-tooltip', hasGrandChild? gettextCatalog.getString('Inferred negatively regulates') : 
+            gettextCatalog.getString('Negatively regulates'))
             .attr('class', 'goterm_negatively_regulates');
         } else if (relation === 'self') {
           return element.text('');
         } else {
           return element.text('U')
-            .attr('data-tooltip', 'Unknown - Not possible to infer relation')
+            .attr('data-tooltip', gettextCatalog.getString('Unknown - Not possible to infer relation'))
             .attr('class', 'goterm_unknown');
         }
       }

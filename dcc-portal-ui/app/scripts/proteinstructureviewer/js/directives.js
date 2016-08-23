@@ -24,7 +24,8 @@
 
 // The core proteinstructure directive -- this is used with a (possible) mutation to display
 // the structure. But the core value is the gene identifier.
-  module.directive('proteinstructure', function (chartmaker, $location, Protein, LocationService, $window) {
+  module.directive('proteinstructure', function (chartmaker, $location, Protein, LocationService, 
+    $window, gettextCatalog) {
 
     // This might look n**2, but it's not supposed to be.
     function transformDomains(domains) {
@@ -187,10 +188,10 @@
                   }
 
                   var FI = getOverallFunctionalImpact(d);
-                  return 'Mutation ID: ' + d.ref + '<br>' +
-                         'Number of donors: ' + d.value + '<br>' +
-                         'Amino acid change: ' + d.id + '<br>' +
-                         'Functional Impact: ' + FI;
+                  return gettextCatalog.getString('Mutation ID') + ': ' + d.ref + '<br>' +
+                         gettextCatalog.getString('Number of donors: ') + d.value + '<br>' +
+                         gettextCatalog.getString('Amino acid change: ') + d.id + '<br>' +
+                         gettextCatalog.getString('Functional Impact') + ': ' + FI;
                 };
 
                 var position = null;

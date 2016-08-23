@@ -49,7 +49,6 @@
     Page.setTitle(donor.id);
     Page.setPage('entity');
 
-
     _ctrl.hasSupplementalFiles = function(donor) {
       return donor.family || donor.exposure || donor.therapy;
     };

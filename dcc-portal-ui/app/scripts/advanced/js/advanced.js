@@ -55,7 +55,7 @@ angular.module('icgc.advanced.controllers', [
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
               AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular,
-              RouteInfoService, FacetConstants, Extensions) {
+              RouteInfoService, FacetConstants, Extensions, gettextCatalog) {
 
       var _controller = this,
           dataRepoRouteInfo = RouteInfoService.get ('dataRepositories'),
@@ -239,7 +239,7 @@ angular.module('icgc.advanced.controllers', [
 
       function _init() {
 
-        Page.setTitle('Advanced Search');
+        Page.setTitle(gettextCatalog.getString('Advanced Search'));
         Page.setPage('advanced');
 
         // Force a refresh of the tabs for good measure!

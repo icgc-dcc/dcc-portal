@@ -27,9 +27,11 @@ angular.module('icgc.compounds', ['icgc.compounds.controllers', 'icgc.compounds.
       templateUrl: 'scripts/compounds/views/compound.html',
       controller: 'CompoundCtrl as CompoundCtrl',
       resolve: {
-        compoundManager: ['Page', '$stateParams', 'CompoundsService', function (Page, $stateParams, CompoundsService) {
+        compoundManager: ['Page', '$stateParams', 'CompoundsService', 'gettextCatalog', function (Page, $stateParams, 
+          CompoundsService, gettextCatalog) {
+
           Page.startWork();
-          Page.setTitle('Compounds');
+          Page.setTitle(gettextCatalog.getString('Compounds'));
           Page.setPage('entity');
           return CompoundsService.getCompoundManagerFactory($stateParams.compoundId);
         }]
@@ -41,7 +43,7 @@ angular.module('icgc.compounds', ['icgc.compounds.controllers', 'icgc.compounds.
 angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
   .controller('CompoundCtrl', function ($scope, compoundManager, CompoundsService, Page,
                                         FilterService, CompoundsServiceConstants,
-                                        $location, $timeout) {
+                                        $location, $timeout, gettextCatalog) {
 
     var _ctrl = this,
         _compound = null,
@@ -81,7 +83,7 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
 
       _initCompound();
 
-      Page.setTitle('Compounds - ' + _compound.name.toUpperCase());
+      Page.setTitle(gettextCatalog.getString('Compounds') + ' - ' + _compound.name.toUpperCase());
       Page.stopWork();
       fixScroll();
     }

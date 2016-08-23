@@ -2,7 +2,7 @@
     <div class="sidepanel" data-ng-controller="AnalysisListController as ListController">
 
         <div class="select-list" data-ng-if="ListController.analysisList.length === 0">
-        You have no saved analyses.
+        <translate>You have no saved analyses.</translate>
         </div>
 
         <div class="select-list" data-ng-if="ListController.analysisList.length > 0">
@@ -14,23 +14,27 @@
                   <i
                     class="icon-cancel pull-right select-list-cancel"
                     data-ng-click="$event.stopPropagation(); ListController.remove(item.id, analysisId);"
-                    data-tooltip="Delete Analysis"
+                    data-tooltip="{{'Delete Analysis' | translate}}"
                     data-tooltip-placement="right">
                   </i>
                   <span>{{ ListController.analysisName(item.type) }}</span>
                   <br>
                   
                   <small data-ng-if="item.type === 'enrichment'" class="t_suggest_detail">
-                    {{item.universe | universe}} - {{item.maxGeneCount | number}} {{item.maxGeneCount !== 1? "genes": "gene" }}
+                    <translate translate-comment="Please change 'genes' and 'gene' to appropreate translation">
+                        {{item.universe | universe}} - {{item.maxGeneCount | number}} {{item.maxGeneCount !== 1? "genes": "gene" }}
+                    </translate>
                   </small>
                   <small data-ng-if="item.type === 'set'" class="t_suggest_detail">
-                    {{item.dataType | readable}} - {{item.inputSetCount}} sets
+                    <translate translate-comment="'Mutation' - 'N' sets">
+                        {{item.dataType | readable}} - {{item.inputSetCount}} sets
+                    </translate>
                   </small>
                   <small data-ng-if="item.type === 'phenotype'" class="t_suggest_detail">
-                    Donor - {{item.inputSetCount}} sets
+                    <translate>Donor - {{item.inputSetCount}} sets</translate>
                   </small>
                   <small data-ng-if="item.type === 'oncogrid'" class="t_suggest_detail">
-                    {{item.donorCount}} Donors & {{item.geneCount}} Genes
+                    <translate>{{item.donorCount}} Donors &amp; {{item.geneCount}} Genes</translate>
                   </small>
                   <br>
                   <small class="pull-left t_suggest_detail list-item-date"> 
@@ -42,8 +46,8 @@
 
         <button class="delete-button t_button t_button__destructive pull-right" data-ng-click="ListController.removeAllAnalyses()" 
                 data-ng-disabled="ListController.analysisList.length === 0"
-                data-tooltip="Delete All Analyses">
-        <i class="icon-trash"></i> Delete all
+                data-tooltip="{{'Delete All Analysis' | translate}}">
+        <i class="icon-trash"></i> <translate>Delete all</translate>
         </button>        
     </div>
     
@@ -78,7 +82,7 @@
             <div class="clearfix"></div>
     
             <div data-ng-if="error" class="alert-error">
-                <i class="icon-attention"></i><span>Analysis <strong>{{analysisId}}</strong> cannot be found on the server. It may no longer be valid with respect to current portal data.</span>
+                <i class="icon-attention"></i><span><translate has-markup>Analysis <strong>{{analysisId}}</strong> cannot be found on the server. It may no longer be valid with respect to current portal data.</translate></span>
             </div>
         </div>
     </div>

@@ -1,66 +1,65 @@
 <div data-ng-if="!AdvancedCtrl.Donor.donors || ! AdvancedCtrl.Donor.hitsLoaded || AdvancedCtrl.Donor.isLoading" class="loading loading-text"><h3><i class="icon-spinner icon-spin"></i>
-    Loading Donors...
+    <translate>Loading Donors...</translate>
 </h3></div>
-<div data-ng-if="AdvancedCtrl.Donor.donors.hits.length == 0 && AdvancedCtrl.Donor.hitsLoaded && ! AdvancedCtrl.Donor.isLoading" class="empty loading-text"><h3>No Donors Found.</h3></div>
+<div data-ng-if="AdvancedCtrl.Donor.donors.hits.length == 0 && AdvancedCtrl.Donor.hitsLoaded && ! AdvancedCtrl.Donor.isLoading" class="empty loading-text"><h3><translate>No Donors Found.</translate></h3></div>
 <div data-ng-show="AdvancedCtrl.Donor.donors.hits.length && AdvancedCtrl.Donor.hitsLoaded && ! AdvancedCtrl.Donor.isLoading">
     <section style="position: relative">
         <div data-ng-class="{'graphs-collapsed': !donorExpand}" class="graphs">
-            <pie items='AdvancedCtrl.Donor.pieProjectId' heading="Project" label="Donors" type="pie" width="195" group-percent="3"
+            <pie items='AdvancedCtrl.Donor.pieProjectId' heading="{{'Project' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195" group-percent="3"
                  height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.piePrimarySite' heading="Primary Site" label="Donors" type="pie" width="195"
+            <pie items='AdvancedCtrl.Donor.piePrimarySite' heading="{{'Primary Site' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                  height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieGender' heading="Gender" label="Donors" type="pie" width="195"
+            <pie items='AdvancedCtrl.Donor.pieGender' heading="{{'Gender' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                  height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieTumourStage' heading="Tumour Stage" label="Donors" type="pie" width="195"
+            <pie items='AdvancedCtrl.Donor.pieTumourStage' heading="{{'Tumour Stage' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                  height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieVitalStatus' heading="Vital Status" label="Donors" type="pie" width="195"
+            <pie items='AdvancedCtrl.Donor.pieVitalStatus' heading="{{'Vital Status' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                  height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieStatusFollowup' heading="Disease Status" label="Donors" type="pie"
+            <pie items='AdvancedCtrl.Donor.pieStatusFollowup' heading="{{'Disease Status' | translate}}" label="{{'Donors' | translate}}" type="pie"
                  width="195" height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieRelapseType' heading="Relapse Type" label="Donors" type="pie" width="195"
+            <pie items='AdvancedCtrl.Donor.pieRelapseType' heading="{{'Relapse Type' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                  height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieAge' heading="Age" label="Donors" type="pie"
+            <pie items='AdvancedCtrl.Donor.pieAge' heading="{{'Age' | translate}}" label="{{'Donors' | translate}}" type="pie"
                  width="195" height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieDataTypes' heading="Data Types" label="Donors" type="pie"
+            <pie items='AdvancedCtrl.Donor.pieDataTypes' heading="{{'Data Types' | translate}}" label="{{'Donors' | translate}}" type="pie"
                  width="195" height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieAnalysisTypes' heading="Analysis Types" label="Donors" type="pie"
+            <pie items='AdvancedCtrl.Donor.pieAnalysisTypes' heading="{{'Analysis Types' | translate}}" label="{{'Donors' | translate}}" type="pie"
                  width="195" height="150"></pie>
         </div>
         <div class="more-graphs-wrap">
             <span data-ng-click="donorExpand=!donorExpand" class="more-graphs t_tools__tool">
-                <span data-ng-if="!donorExpand"><i class="icon-angle-down"></i> Show More</span>
-                <span data-ng-if="donorExpand"><i class="icon-angle-up"></i> Show Less</span>
+                <span data-ng-if="!donorExpand"><i class="icon-angle-down"></i> <translate>Show More</translate></span>
+                <span data-ng-if="donorExpand"><i class="icon-angle-up"></i> <translate>Show Less</translate></span>
             </span>
         </div>
     </section>
     <section>
         <h3>
-            Donors
-
+            <translate>Donors</translate>
             <span class="action-toolbar pull-right">
                <span class="action-item">
-                   <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('donor', AdvancedCtrl.Donor.donors.pagination.total)">Save Donor Set</a>
+                   <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('donor', AdvancedCtrl.Donor.donors.pagination.total)"><translate>Save Donor Set</translate></a>
                </span>
                <span class="action-item" data-ng-if="!AdvancedCtrl.downloadEnabled">
-                   <i class="icon-download"></i><span>Data download is<br> currently unavailable</span>
+                   <i class="icon-download"></i><span><translate has-markup>Data download is<br> currently unavailable</translate></span>
                </span>
                <span class="action-item" data-ng-if="AdvancedCtrl.downloadEnabled">
                    <span>
-                      <i class="icon-download"></i><a href="" data-ng-click="AdvancedCtrl.downloadDonorData()">Download Donor Data</a>
+                      <i class="icon-download"></i><a href="" data-ng-click="AdvancedCtrl.downloadDonorData()"><translate>Download Donor Data</translate></a>
                    </span>
                </span>
                <span class="action-item">
                    <span>
                       <i class="icon-download-cloud"></i><span>
                       <a href="" data-ng-click="AdvancedCtrl.viewExternalDonors(AdvancedCtrl.Donor.donors.pagination.total)">
-                      View in {{:: AdvancedCtrl.dataRepoTitle }}</a></span>
+                      <translate>View in</translate> {{:: AdvancedCtrl.dataRepoTitle }}</a></span>
                    </span>
                </span>
             </span>
         </h3>
 
         <div class="t_table_top">
-            <span data-table-counts data-label="donors" data-page="AdvancedCtrl.Donor.donors.pagination"></span>
+            <span data-table-counts data-label="{{'donors' | translate}}" data-page="AdvancedCtrl.Donor.donors.pagination"></span>
             <span data-toolbar data-dl="donors"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
@@ -68,25 +67,24 @@
             <tr>
                 <th rowspan="2" data-sortable data-type="donors" data-field="id">ID
                 </th>
-                <th rowspan="2" data-sortable data-type="donors" data-field="projectId">Project</th>
-                <th rowspan="2" data-sortable data-type="donors" data-field="primarySite">Site</th>
-                <th rowspan="2" data-sortable data-type="donors" data-field="gender">Gender</th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="projectId"><translate>Project</translate></th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="primarySite"><translate>Site</translate></th>
+                <th rowspan="2" data-sortable data-type="donors" data-field="gender"><translate>Gender</translate></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="ageAtDiagnosis" class="text-center">
-                    <abbr data-tooltip="Age at Diagnosis">Age</abbr>
+                    <abbr data-tooltip="{{'Age at Diagnosis' | translate}}"><translate>Age</translate></abbr>
                 </th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="tumourStageAtDiagnosis">
-                    <abbr data-tooltip="Tumour Stage at Diagnosis">Stage</abbr></th>
+                    <abbr data-tooltip="{{'Tumour Stage at Diagnosis' | translate}}"><translate>Stage</translate></abbr></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="survivalTime" class="text-center">
-                    <abbr data-tooltip="Survival Time in days">Survival<br>(days)</abbr>
+                    <abbr data-tooltip="{{'Survival Time in days' | translate}}"><translate has-markup>Survival<br>(days)</translate></abbr>
                 </th>
-                <th colspan="11" class="text-center">Available Data Types</th>
+                <th colspan="11" class="text-center"><translate>Available Data Types:</translate></th>
                 <th rowspan="2">
-                    <abbr data-tooltip="Number of SSM<br>Filtered by Current Search Criteria">#
-                        Mutations</abbr></th>
+                    <abbr data-tooltip="{{'Number of SSM<br>Filtered by Current Search Criteria' | translate}}"><translate># Mutations</translate></abbr></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="ssmAffectedGenes" data-active="true"
                     data-reversed="true">
-                    <abbr data-tooltip="Number of Genes with SSM<br>Filtered by Current Search Criteria"
-                          data-tooltip-placement="left"># Genes</abbr>
+                    <abbr data-tooltip="{{'Number of Genes with SSM<br>Filtered by Current Search Criteria' | translate}}"
+                          data-tooltip-placement="left"><translate># Genes</translate></abbr>
                 </th>
             </tr>
             <tr>
@@ -182,13 +180,13 @@
         <table class="hidden" id="donors" data-ng-if="AdvancedCtrl.Page.isExporting()">
             <thead>
             <tr>
-                <td>Donor ID</td>
-                <td>Project Code</td>
-                <td>Primary Site</td>
-                <td>Gender</td>
-                <td>Age at Diagnosis</td>
-                <td>Tumor Stage at Diagnosis</td>
-                <td>Survival Time (days)</td>
+                <td><translate>Donor ID</translate></td>
+                <td><translate>Project Code</translate></td>
+                <td><translate>Primary Site</translate></td>
+                <td><translate>Gender</translate></td>
+                <td><translate>Age at Diagnosis</translate></td>
+                <td><translate>Tumor Stage at Diagnosis</translate></td>
+                <td><translate>Survival Time (days)</translate></td>
                 <td>SSM</td>
                 <td>CNSM</td>
                 <td>STSM</td>
@@ -200,8 +198,8 @@
                 <td>PEXP</td>
                 <td>miRNA-S</td>
                 <td>JCN</td>
-                <td>Mutations</td>
-                <td>Mutated Genes</td>
+                <td><translate>Mutations</translate></td>
+                <td><translate>Mutated Genes</translate></td>
             </tr>
             </thead>
             <tbody>

@@ -407,7 +407,7 @@ angular.module('icgc.ui.copyPaste', [])
     // Configure ZeroClipboard in case we need to use it later.
     ZeroClipboard.config(angular.extend(zeroClipboardPathConfig, copyPaste.config));
   })
-  .directive('copyToClip', function ($document) {
+  .directive('copyToClip', function ($document, gettextCatalog) {
 
         return {
           restrict: 'A',
@@ -725,7 +725,7 @@ angular.module('icgc.ui.copyPaste', [])
                 }
                 
                  if (_promptOnCopy) {
-                  _showTipMessage(null, 'Click here to copy to your clipboard.');
+                  _showTipMessage(null, gettextCatalog.getString('Click here to copy to your clipboard.'));
                 }
                 
                 // Destroy the ZeroClipboard Client if it exists...and remove listeners

@@ -1,52 +1,54 @@
 <div data-ng-if="! AdvancedCtrl.Gene.genes || ! AdvancedCtrl.Gene.hitsLoaded || AdvancedCtrl.Gene.isLoading" class="loading loading-text"><h3><i class="icon-spinner icon-spin"></i>
-    Loading Genes...
+    <translate>Loading Genes...</translate>
 </h3></div>
-<div data-ng-if="AdvancedCtrl.Gene.genes.hits.length == 0 && AdvancedCtrl.Gene.hitsLoaded && ! AdvancedCtrl.Gene.isLoading" class="empty loading-text"><h3>No Genes Found.</h3></div>
+<div data-ng-if="AdvancedCtrl.Gene.genes.hits.length == 0 && AdvancedCtrl.Gene.hitsLoaded && ! AdvancedCtrl.Gene.isLoading" class="empty loading-text"><h3><translate>No Genes Found.</translate></h3></div>
 <section data-ng-show="AdvancedCtrl.Gene.genes.hits.length && AdvancedCtrl.Gene.hitsLoaded && ! AdvancedCtrl.Gene.isLoading">
 
-    <h3>Genes
+    <h3>
+        <translate>Genes</translate>
         <span class="action-toolbar pull-right">
             <span class="action-item">
-                <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('gene', AdvancedCtrl.Gene.genes.pagination.total)">Save Gene Set</a>
+                <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('gene', AdvancedCtrl.Gene.genes.pagination.total)"><translate>Save Gene Set</translate></a>
             </span>
             <span class="action-item">
-               <i class="icon-beaker"></i><a href="" data-ng-click="AdvancedCtrl.enrichmentAnalysis(AdvancedCtrl.Gene.genes.pagination.total)">Enrichment Analysis</a>
+               <i class="icon-beaker"></i><a href="" data-ng-click="AdvancedCtrl.enrichmentAnalysis(AdvancedCtrl.Gene.genes.pagination.total)"><translate>Enrichment Analysis</translate></a>
             </span>
             <span class="action-item">
-               <i class="icon-chart"></i><a href="/browser/g?filters={{AdvancedCtrl.Location.filters()}}">Genome Viewer</a>
+               <i class="icon-chart"></i><a href="/browser/g?filters={{AdvancedCtrl.Location.filters()}}"><translate>Genome Viewer</translate></a>
             </span>
         </span>
     </h3>
 
     <div class="t_table_top">
-        <span data-table-counts data-label="genes" data-page="AdvancedCtrl.Gene.genes.pagination"></span>
+        <span data-table-counts data-label="{{'genes' | translate}}" data-page="AdvancedCtrl.Gene.genes.pagination"></span>
         <span data-toolbar data-dl="genes"></span>
     </div>
 
     <table class="table table-bordered table-striped table-condensed">
         <thead>
         <tr>
-            <th rowspan="2" data-sortable data-type="genes" data-field="symbol">Symbol
+            <th rowspan="2" data-sortable data-type="genes" data-field="symbol">
+                <translate>Symbol</translate>
             </th>
-            <th rowspan="2" data-sortable data-type="genes" data-field="name">Name</th>
+            <th rowspan="2" data-sortable data-type="genes" data-field="name"><translate>Name</translate></th>
             <th rowspan="2" data-sortable data-type="genes" data-field="start"><abbr
-                    data-tooltip="Gene location on the genome, chr:start-end">Location</abbr></th>
-            <th rowspan="2" data-sortable data-type="genes" data-field="type">Type</th>
-            <th colspan="2" class="text-center"># Donors affected</th>
+                    data-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}"><translate>Location</translate></abbr></th>
+            <th rowspan="2" data-sortable data-type="genes" data-field="type"><translate>Type</translate></th>
+            <th colspan="2" class="text-center"><translate># Donors affected</translate></th>
             <th rowspan="2" class="text-center">
-                <abbr data-tooltip="Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria"
-                      data-tooltip-placement="left"># Mutations</abbr>
+                <abbr data-tooltip="{{'Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria' | translate}}"
+                      data-tooltip-placement="left"><translate># Mutations</translate></abbr>
             </th>
         </tr>
         <tr>
             <th data-sortable data-type="genes" data-field="affectedDonorCountFiltered" data-active="true"
                 data-reversed="true" class="text-center">
-                <abbr data-tooltip="Number of Donors where Gene contains SSM<br>Filtered by Current Search Criteria / unfiltered # donors the gene is mutated.">
-                Total</abbr>
+                <abbr data-tooltip="{{'Number of Donors where Gene contains SSM<br>Filtered by Current Search Criteria / unfiltered # donors the gene is mutated.' | translate}}">
+                <translate>Total</translate></abbr>
             </th>
             <th class="text-center">
-                <abbr data-tooltip="# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.">
-                    Across all Projects</abbr>
+                <abbr data-tooltip="{{'# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}">
+                    <translate>Across all Projects</translate></abbr>
             </th>
         </tr>
         </thead>
@@ -107,13 +109,13 @@
     <table class="hidden" id="genes" data-ng-hide="AdvancedCtrl.Page.isExporting()">
         <thead>
         <tr>
-            <th>Symbol</th>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Type</th>
-            <th>Affected Donors</th>
-            <th>Projects</th>
-            <th>Mutations</th>
+            <th><translate>Symbol</translate></th>
+            <th><translate>Name</translate></th>
+            <th><translate>Location</translate></th>
+            <th><translate>Type</translate></th>
+            <th><translate>Affected Donors</translate></th>
+            <th><translate>Projects</translate></th>
+            <th><translate>Mutations</translate></th>
         </tr>
         </thead>
         <tbody>

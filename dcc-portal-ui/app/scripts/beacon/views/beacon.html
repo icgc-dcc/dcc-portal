@@ -1,17 +1,17 @@
 <div class="h1-wrap">
     <h1 data-ui-scrollfix="79" class="sticky-scrollfix">
-    <i class="t_badge t_badge_icon t_badge__search"><i class="icon-fire"></i></i>ICGC GA4GH Beacon
+    <i class="t_badge t_badge_icon t_badge__search"><i class="icon-fire"></i></i><translate>ICGC GA4GH Beacon</translate>
 </h1>
 </div>
 <section class="beaconquery" >
     <div class="narrow" >
-        <h3>Query</h3>
+        <h3><translate>Query</translate></h3>
         <br>
-        <div>Please enter your search criteria below and then click 'Search' to see the result.</div>
+        <div><translate>Please enter your search criteria below and then click 'Search' to see the result.</translate></div>
         <table>
             <tr>
                 <td align="right">
-                    <span>Dataset</span>
+                    <span><translate>Dataset</translate></span>
                 </td>
                 <td>
                     <select tabindex="1" class="beacon-form-control" data-ng-model="params.project"
@@ -22,7 +22,7 @@
             </tr>
             <tr>
                 <td align="right">
-                  <span>Chromosome ID *</span>
+                  <span><translate>Chromosome ID *</translate></span>
                 </td>
                 <td>
                     <select tabindex="2" class="beacon-form-control" data-ng-model="params.chr"
@@ -31,11 +31,11 @@
             </tr>
             <tr>
                 <td align="right">
-                  <span><abbr data-tooltip="1-based start position in chromosome">Position</abbr> *</span>
+                  <span><abbr data-tooltip="{{'1-based start position in chromosome' | translate}}"><translate>Position</translate></abbr> *</span>
                 </td>
                 <td>
                     <input search-on-enter tabindex="3" data-ng-class="{'invalid': invalidParams.isPosition}"
-                           placeholder="e.g. 29885594" type="text" integer-validator data-ng-model="params.position"
+                           placeholder="{{'e.g. 29885594' | translate}}" type="text" integer-validator data-ng-model="params.position"
                            data-ng-change="checkParams();">
                            <i data-tooltip="Must be less than Chromosome {{params.chr}}'s length: {{lengths[params.chr]}}"
                               data-tooltip-placement="right" class="invalid-icon icon-attention"
@@ -44,54 +44,54 @@
             </tr>
             <tr>
                 <td align="right">
-                  <span><abbr data-tooltip="Genome ID: Currently only GRCh37">Reference</abbr> *</span>
+                  <span><abbr data-tooltip="{{'Genome ID: Currently only GRCh37' | translate}}"><translate>Reference</translate></abbr> *</span>
                 </td>
                 <td>
                     <input search-on-enter tabindex="4" data-ng-class="{'invalid': invalidParams.isReference}"
-                           type="text" placeholder="e.g. GRCh37" data-ng-model="params.reference"
+                           type="text" placeholder="{{'e.g. GRCh37' | translate}}" data-ng-model="params.reference"
                            data-ng-change="checkParams();">
-                           <i data-tooltip="Currently only GRCh37" data-tooltip-placement="right"
+                           <i data-tooltip="{{'Currently only GRCh37' | translate}}" data-tooltip-placement="right"
                               class="invalid-icon icon-attention" data-ng-if="invalidParams.isReference"></i>
                 </td>
             </tr>
             <tr>
                 <td align="right">
-                  <span><abbr data-tooltip="One or more of: A, C, T, G or an indel">Mutated Allele(s)</abbr> *</span>
+                  <span><abbr data-tooltip="{{'One or more of: A, C, T, G or an indel' | translate}}"><translate>Mutated Allele(s)</translate></abbr> *</span>
                 </td>
                 <td>
                     <input search-on-enter tabindex="5" data-ng-class="{'invalid': invalidParams.isAllele}" allele-validator
-                           placeholder="e.g. C, TTACG, GG" type="text" data-ng-model="params.allele"
+                           placeholder="{{'e.g. C, TTACG, GG' | translate}}" type="text" data-ng-model="params.allele"
                            data-ng-change="checkParams();">
-                           <i data-tooltip="Must be of form [ACTG]+ or an indel" data-tooltip-placement="right"
+                           <i data-tooltip="{{'Must be of form [ACTG]+ or an indel' | translate}}" data-tooltip-placement="right"
                               class="invalid-icon icon-attention" data-ng-if="invalidParams.isAllele"></i>
                 </td>
             </tr>
             <tr>
                 <td></td>
                 <td align="right" >
-                    <button tabindex="7" class="t_button beacon-button" data-ng-click="resetQuery();">Reset</button>&nbsp;
+                    <button tabindex="7" class="t_button beacon-button" data-ng-click="resetQuery();"><translate>Reset</translate></button>&nbsp;
                     <button tabindex="6" data-ng-style="{'margin-right':(invalidParams.isPosition||invalidParams.isReference||invalidParams.isAllele)?'1.7em':'0'}"
                             class="t_button beacon-button" data-ng-click="submitQuery();"
-                            data-ng-disabled="hasInvalidParams">Search</button>
+                            data-ng-disabled="hasInvalidParams"><translate>Search</translate></button>
                 </td>
             </tr>
         </table>
       <div data-ng-if="result.exists">
         <div class="beacon-result-section" >
-            <h3>Result</h3>
-            <div>The result of your Beacon query was:</div><a href="{{requestedUrl}}" target="_blank">
+            <h3><translate>Result</translate></h3>
+            <div><translate>The result of your Beacon query was</translate>:</div><a href="{{requestedUrl}}" target="_blank">
             <br>
             <div class="beacon-result" data-ng-if="result.value == 'true'">
                 <div class="beacon-icon-container beacon-true-container"><i class="icon-ok beacon-icon"></i></div>
-                <div class="beacon-icon-text beacon-true-text" data-ng-style="{'transition':inProgress?'':'background-color 1.5s ease-out','background-color':inProgress?'#DBF3DB':'white'}">TRUE</div>
+                <div class="beacon-icon-text beacon-true-text" data-ng-style="{'transition':inProgress?'':'background-color 1.5s ease-out','background-color':inProgress?'#DBF3DB':'white'}"><translate>TRUE</translate></div>
             </div>
             <div class="beacon-result" data-ng-if="result.value == 'false'">
                 <div class="beacon-icon-container beacon-false-container"><i class="icon-cancel beacon-icon"></i></div>
-                <div class="beacon-icon-text beacon-false-text" data-ng-style="{'transition':inProgress?'':'background-color 1.5s ease-out','background-color':inProgress?'#EEB2B2':'white'}">FALSE</div>
+                <div class="beacon-icon-text beacon-false-text" data-ng-style="{'transition':inProgress?'':'background-color 1.5s ease-out','background-color':inProgress?'#EEB2B2':'white'}"><translate>FALSE</translate></div>
             </div>
             <div class="beacon-result" data-ng-if="result.value == 'null'">
                 <div class="beacon-icon-container beacon-null-container"><i class="icon-help beacon-icon"></i></div>
-                <div class="beacon-icon-text beacon-null-text" data-ng-style="{'transition':inProgress?'':'background-color 1.5s ease-out','background-color':inProgress?'#EDEDED':'white'}">NULL</div>
+                <div class="beacon-icon-text beacon-null-text" data-ng-style="{'transition':inProgress?'':'background-color 1.5s ease-out','background-color':inProgress?'#EDEDED':'white'}"><translate>NULL</translate></div>
             </div>
             </a>
             <br>
@@ -101,34 +101,34 @@
         <br>
     </div>
     <div class="half beacon-notes">
-    <h3>Information</h3>
+    <h3><translate>Information</translate></h3>
     <br>
     <div>
-        A <a href="http://ga4gh.org/#/beacon" target="_blank">Beacon</a> is a simple service that answers the question: <span class="beaconquestion">Have you observed this mutated allele?</span><br>The ICGC Beacon searches for mutated alleles observed in somatic mutations only. The Beacon is designed to accept a query and responds with one of the three results described below. <br><br>
-        <h4>Results</h4>
+        <translate has-markup>A <a href="http://ga4gh.org/#/beacon" target="_blank">Beacon</a> is a simple service that answers the question</translate>: <span class="beaconquestion"><translate>Have you observed this mutated allele?</translate></span><br><translate>The ICGC Beacon searches for mutated alleles observed in somatic mutations only. The Beacon is designed to accept a query and responds with one of the three results described below.</translate> <br><br>
+        <h4><translate>Results</translate></h4>
         <div class="beacon-callout-container">
           <div class="beacon-callout beacon-callout-true">
-            <h4>true</h4>
-            Returned when a matching mutation is found at the queried position.<br><br><br>
-            For an example, try this <a ng-click="exampleQuery('true');" href=""><i class="icon-search"></i>query</a>.
+            <h4><translate>true</translate></h4>
+            <translate>Returned when a matching mutation is found at the queried position.</translate><br><br><br>
+            <translate has-markup>For an example, try this <a ng-click="exampleQuery('true');" href=""><i class="icon-search"></i>query</a>.</translate>
           </div>
           <div class="beacon-callout beacon-callout-false">
-            <h4>false</h4>
-            Returned when a mutation is found at that position but does not match the mutated allele(s).<br><br>
-            For an example, try this <a ng-click="exampleQuery('false');" href=""><i class="icon-search"></i>query</a>.
+            <h4><translate>false</translate></h4>
+            <translate>Returned when a mutation is found at that position but does not match the mutated allele(s).</translate><br><br>
+            <translate has-markup>For an example, try this <a ng-click="exampleQuery('false');" href=""><i class="icon-search"></i>query</a>.</translate>
           </div>
           <div class="beacon-callout beacon-callout-null">
-            <h4>Null</h4>
-            Returned when no mutation is found at the queried position in the selected dataset(s).<br><br>
-            For an example, try this <a ng-click="exampleQuery('null');" href=""><i class="icon-search"></i>query</a>.
+            <h4><translate>Null</translate></h4>
+            <translate>Returned when no mutation is found at the queried position in the selected dataset(s).</translate><br><br>
+            <translate has-markup>For an example, try this <a ng-click="exampleQuery('null');" href=""><i class="icon-search"></i>query</a>.</translate>
           </div>
         </div>
         <br>
-        <h4>Links</h4>
-        For more information about each dataset, please visit our <a href="/projects">Cancer Projects page</a>.<br>
-        Read the <a target="_blank" href="/docs/#!/beacon/query_get_0">ICGC API documentation</a> for programmatic access to this
-        Beacon.<br>Beacon is a project of the <a  target="_blank" href="http://genomicsandhealth.org/"><i class="icon-external-link"></i>Global Alliance for Genomics &amp; Health</a>. You can read more about Beacons at <a  target="_blank" href="http://ga4gh.org/#/beacon"><i class="icon-external-link"></i>GA4GH's Beacon Project</a> and see the latest details on their <a target="_blank" href="https://github.com/ga4gh/beacon-team"><i class="icon-external-link"></i>GitHub page</a>.<br><small></small>
+        <h4><translate>Links</translate></h4>
+        <translate has-markup>For more information about each dataset, please visit our <a href="/projects">Cancer Projects page</a>.</translate><br>
+        <translate has-markup>Read the <a target="_blank" href="/docs/#!/beacon/query_get_0">ICGC API documentation</a> for programmatic access to this
+        Beacon.</translate><br><translate has-markup>Beacon is a project of the <a  target="_blank" href="http://genomicsandhealth.org/"><i class="icon-external-link"></i>Global Alliance for Genomics &amp; Health</a>.</translate> <translate has-markup>You can read more about Beacons at <a  target="_blank" href="http://ga4gh.org/#/beacon"><i class="icon-external-link"></i>GA4GH's Beacon Project</a> and see the latest details on their <a target="_blank" href="https://github.com/ga4gh/beacon-team"><i class="icon-external-link"></i>GitHub page</a>.</translate><br><small></small>
     </div>
     <br>
-    <div class="alert alert-warning beacon-alert">This Beacon is based off of the v0.2 Specification which is still in progress and is subject to change without notice. Please contact <a href="mailto:theglobalalliance@genomicsandhealth.org">theglobalalliance@genomicsandhealth.org</a> for additonal information.</div></div>
+    <div class="alert alert-warning beacon-alert"><translate has-markup>This Beacon is based off of the v0.2 Specification which is still in progress and is subject to change without notice. Please contact <a href="mailto:theglobalalliance@genomicsandhealth.org">theglobalalliance@genomicsandhealth.org</a> for additonal information.</translate></div></div>
 </section>

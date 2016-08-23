@@ -1,12 +1,12 @@
 <div id="pathway-viewer-mini" class="pathwayviewercontainer text-center">
   <div data-ng-if="items===''" class="empty loading-text">
-    <h3>No Diagram Available</h3>
+    <h3><translate>No Diagram Available</translate></h3>
   </div>
     <i class="fa fa-expand pathway-fullscreen-controller"></i>
     
   <div class="pathway-legend">
     <i data-ng-if="items!==''" data-ng-click="legendClick()" class="fa fa-question-circle pathway-legend-controller"></i>
-    <h4>LEGEND</h4>
+    <h4><translate>LEGEND</translate></h4>
     <div class="pathway-legend-container">
       <div class="pathway-legend-content"></div>
     </div>
@@ -14,19 +14,19 @@
   
   <div class="pathway-info">
     <i style="visibility:hidden" class="fa fa-chevron-circle-right pathway-info-controller"></i>
-    <h4>DETAILS</h4>
+    <h4><translate>DETAILS</translate></h4>
     <div>{{entityType}}</div>
     <div class="pathway-info-svg"></div>
     <div class="pathway-info-content">
       <div class="subpath-link" data-ng-if="entityType=='ProcessNode'">
-        <a href="/genesets/R-HSA-{{ subPathwayId }}">VIEW THIS SUB-PATHWAY: R-HSA-{{ subPathwayId }}</a>
+        <a href="/genesets/R-HSA-{{ subPathwayId }}"><translate>VIEW THIS SUB-PATHWAY: R-HSA-{{ subPathwayId }}</translate></a>
       </div>
       
       <table class="table pathway-gene-table" data-ng-if="annotatedGenesList.length>0">
         <tr>
           <th class="pathway-gene-header-label pathway-gene-header">
             <a href="" data-ng-click="sortField = 'symbol'; sortDescendingly = !sortDescendingly">
-              Gene
+              <translate>Gene</translate>
               <span data-ng-if="sortField === 'symbol' && !sortDescendingly" class="icon-sort-down"></span>
               <span data-ng-if="sortField === 'symbol' && sortDescendingly" class="icon-sort-up"></span>
               <span data-ng-if="sortField !== 'symbol'" class="icon-sort" style="color:hsl(0,0%,80%)"></span>
@@ -34,7 +34,7 @@
           </th>
           <th class="pathway-gene-header-label pathway-gene-header">
             <a href="" data-ng-click="sortField = 'value'; sortDescendingly = !sortDescendingly">
-              # ICGC Mutations
+              <translate># ICGC Mutations</translate>
               <span data-ng-if="sortField === 'value' && !sortDescendingly" class="icon-sort-down"></span>
               <span data-ng-if="sortField === 'value' && sortDescendingly" class="icon-sort-up"></span>
               <span data-ng-if="sortField !== 'value'" class="icon-sort" style="color:hsl(0,0%,80%)"></span>
@@ -42,7 +42,7 @@
           </th>
           <th class="pathway-gene-header-label pathway-gene-header">
             <a href="" data-ng-click="sortField = 'drugs.length'; sortDescendingly = !sortDescendingly">
-              # Targeting Compounds
+              <translate># Targeting Compounds</translate>
               <span data-ng-if="sortField === 'drugs.length' && !sortDescendingly" class="icon-sort-down"></span>
               <span data-ng-if="sortField === 'drugs.length' && sortDescendingly" class="icon-sort-up"></span>
               <span data-ng-if="sortField !== 'drugs.length'" class="icon-sort" style="color:hsl(0,0%,80%)"></span>
@@ -62,7 +62,7 @@
       
       <table class="table pathway-gene-table" data-ng-if="mutatedGenesList.length == 0 && overlappingGenesList.length > 0">
         <tr>
-          <th class="pathway-gene-header-label pathway-gene-header">Gene</th>
+          <th class="pathway-gene-header-label pathway-gene-header"><translate>Gene</translate></th>
         </tr>
         <tr data-ng-repeat="gene in overlappingGenesList" class="gene-overlap-result">
           <th class="pathway-gene-label"><a href="/genes/{{ gene.geneId }}">{{ gene.geneSymbol }}</a></th>

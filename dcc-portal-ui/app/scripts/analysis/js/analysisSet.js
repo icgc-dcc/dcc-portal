@@ -21,7 +21,7 @@
   var module = angular.module('icgc.analysis.controllers');
 
   module.controller('SavedSetController', function($scope, $window, $location, $timeout, $modal,
-    SetService, Settings, LocationService, RouteInfoService, Extensions) {
+    SetService, Settings, LocationService, RouteInfoService, Extensions, gettextCatalog) {
 
     var _this = this;
     _this.entitySets = SetService.getAll();
@@ -113,7 +113,7 @@
 
     /* User inititated set removal */
     _this.removeSets = function() {
-      var confirmRemove = $window.confirm('Are you sure you want to remove selected sets?');
+      var confirmRemove = $window.confirm(gettextCatalog.getString('Are you sure you want to remove selected sets?'));
       if (!confirmRemove || confirmRemove === false) {
         return;
       }
