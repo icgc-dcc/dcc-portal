@@ -250,7 +250,6 @@
     'icgc.pathwayviewer',
     'icgc.repositories',
     'icgc.repository',
-    'icgc.software',
     'icgc.pancancer',
     'icgc.auth',
     'icgc.tokens',

@@ -20,20 +20,18 @@ package org.icgc.dcc.portal.server.service;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -177,18 +175,8 @@ public class SoftwareService {
 
   public class Version implements Comparable<Version> {
 
+    @Getter
     private String version;
-
-    @JsonValue
-    public final Map<String, String> getJson() {
-      Map<String, String> map = new HashMap<String, String>();
-      map.put("version", this.version);
-      return map;
-    }
-
-    public final String get() {
-      return this.version;
-    }
 
     public Version(String version) {
       checkState(version != null);
