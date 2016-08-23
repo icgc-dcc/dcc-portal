@@ -80,7 +80,7 @@
           colours: HighchartsService.primarySiteColours,
           yaxis:{label: gettextCatalog.getString('# of Donors'),ticks:8},
           xaxis: {
-            label:'Release',
+            label: gettextCatalog.getString('Release'),
             ticksValueRange: [4, 22],
             secondaryLabel: function(data){return releaseDates[data];}
           },
@@ -91,7 +91,7 @@
           },
           tooltipShowFunc: function(elem, project, currentDonors,release) {
             function getLabel() {
-              return '<strong>'+project+'</strong><br>' + gettextCatalog.getString('Release:') + 
+              return '<strong>'+project+'</strong><br>' + gettextCatalog.getString('Release') + ':' + 
               release + ' <br>' + gettextCatalog.getString('# of Donors') + ' ' + currentDonors;
             }
 

@@ -22,10 +22,15 @@
             <translate>You may drag to reorder the list to affect the generated manifest.</translate>
           </p>
           <p>
-            <translate has-markup>
-              See the <a href="http://docs.icgc.org/cloud/guide/#manifest-command" target="_blank" class="light">User Guide<i class="icon-external-link"></i></a> for more information on manifest files
-              <span ng-if="repos.length === 1 && repos[0].hasManifest">and manifest IDs</span>.
-            </translate>
+            <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">See the</translate>
+            <a href="http://docs.icgc.org/cloud/guide/#manifest-command" target="_blank" class="light">
+              <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">User Guide</translate>
+              <i class="icon-external-link"></i>
+            </a>
+            <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">for more information on manifest files</translate>
+            <span ng-if="repos.length === 1 && repos[0].hasManifest">
+              <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">and manifest IDs</translate>
+            </span>.
           </p>
           <p>
             <translate>The available repositories below are restricted by your search filter:</translate>

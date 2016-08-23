@@ -5187,6 +5187,7 @@ msgstr ""
 msgid "Upload Donor Set"
 msgstr ""
 
+#: app/scripts/facets/views/genetags.html:74
 #: app/scripts/genelist/views/upload.html:4
 msgid "Upload Gene Set"
 msgstr ""

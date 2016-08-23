@@ -1132,4 +1132,11 @@
 
   });
 
+  // This is a workaroud required for Internationalization of 'Experimental&nbsp;Strategy'
+  module.filter('addEntity', function(){
+    return function(string){
+      return string.split(' ').join('\u00A0');
+    };
+  });
+
 })();

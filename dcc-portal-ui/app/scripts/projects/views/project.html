@@ -138,13 +138,11 @@
             <tr data-ng-repeat="(k,v) in ProjectCtrl.project.experimentalAnalysisPerformedSampleCounts track by k">
                 <th><abbr data-tooltip="{{ k | define }}">{{k}}</abbr></th>
                 <td>
-                    <translate>
-                        {{v}} samples from
-                        <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"analysisTypes\":{\"is\":[\"{{k}}\"]}}}"})'>
-                            {{ProjectCtrl.project.experimentalAnalysisPerformedDonorCounts[k]}}
-                        </a>
-                        donors
-                    </translate>
+                    <translate translate-comment="N samples from N donors">{{v}} samples from</translate>
+                    <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"analysisTypes\":{\"is\":[\"{{k}}\"]}}}"})'>
+                        {{ProjectCtrl.project.experimentalAnalysisPerformedDonorCounts[k]}}
+                    </a>
+                    <translate translate-comment="N samples from N donors">donors</translate>
                 </td>
             </tr>
         </table>
