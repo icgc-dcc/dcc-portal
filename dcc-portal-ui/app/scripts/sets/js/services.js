@@ -575,12 +575,14 @@
     };
 
     _service.savingToaster = function(setName){
-      return toaster.pop('warning', gettextCatalog.getString('Saving') + 
-        setName, gettextCatalog.getString('Please wait'), 0, 'trustedHtml');
+      /// ${setName} is a noun
+      return toaster.pop('warning', _.template(gettextCatalog.getString('Saving ${setName}')({setName: setName})), 
+        gettextCatalog.getString('Please wait'), 0, 'trustedHtml');
     };
 
     _service.saveSuccessToaster = function(setName){
-      return toaster.pop('success', setName + gettextCatalog.getString(' Saved'),
+      /// ${setName} is a noun
+      return toaster.pop('success', _.template(gettextCatalog.getString('${setName} Saved'))({setName : setName}),
              gettextCatalog.getString('View in <a href="/analysis/sets">Data Analysis</a>'), 4000, 'trustedHtml');
     };
 

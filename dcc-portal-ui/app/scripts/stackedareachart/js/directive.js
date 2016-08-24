@@ -70,8 +70,7 @@
 
         $scope.showPlot = false;
         $scope.defaultGraphHeight = 600;
-        $scope.defaultGraphTitle = gettextCatalog.getString('Cumulative Count of Project Donors with' +
-          ' Molecular Data in DCC by Release');
+        $scope.defaultGraphTitle = gettextCatalog.getString('Cumulative Count of Project Donors with Molecular Data in DCC by Release');
 
         var config = {
           margin:{top: 10, right: 40, bottom: 60, left: 40},

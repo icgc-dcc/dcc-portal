@@ -211,9 +211,11 @@
       function errorMap(e) {
         switch (e.code) {
         case '1796':
-          return  $scope.params.openIDUrl + ' ' + gettextCatalog.getString('is not a known provider');
+          /// openIDUrl would be a login provider such as Google, yahoo or ICGC
+          return  _.template(gettextCatalog.getString('${openIDUrl} is not a known provider'))({openIDUrl : $scope.params.openIDUrl});
         case '1798':
-          return gettextCatalog.getString('Could not connect to') + ' ' + $scope.params.openIDUrl;
+          /// openIDUrl would be a login provider such as Google, yahoo or ICGC
+          return _.template(gettextCatalog.getString('Could not connect to ${openIDUrl}'))({openIDUrl : $scope.params.openIDUrl});
         default:
           return e.message;
         }

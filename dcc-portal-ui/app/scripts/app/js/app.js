@@ -479,7 +479,11 @@
       }]);
 
     })
-    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager) {
+    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog) {
+      
+      // Setting the initial language to English CA.
+      gettextCatalog.setCurrentLanguage('en_CA');
+
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound']);
     
       // Add UI Router Debug if there is a fatal state change error

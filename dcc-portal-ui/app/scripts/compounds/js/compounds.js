@@ -82,8 +82,8 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
       compoundManager.filters(FilterService.filters());
 
       _initCompound();
-
-      Page.setTitle(gettextCatalog.getString('Compounds') + ' - ' + _compound.name.toUpperCase());
+      /// ${compoundName} compound name
+      Page.setTitle(_.template(gettextCatalog.getString('Compounds - ${compoundName}'))({compoundName: _compound.name.toUpperCase()}));
       Page.stopWork();
       fixScroll();
     }

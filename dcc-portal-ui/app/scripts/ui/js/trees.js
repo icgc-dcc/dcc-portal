@@ -109,13 +109,13 @@ angular.module('icgc.ui.trees', []).directive('pathwayTree', function($compile) 
             .attr('class', 'goterm_regulates');
         } else if (relation === 'positively_regulates') {
           return element.text('R')
-            .attr('data-tooltip', hasGrandChild? gettextCatalog.getString('Inferred positively regulates') : 
-            gettextCatalog.getString('Positively regulates'))
+            .attr('data-tooltip', 
+              hasGrandChild? gettextCatalog.getString('Inferred positively regulates') : gettextCatalog.getString('Positively regulates'))
             .attr('class', 'goterm_positively_regulates');
         } else if (relation === 'negatively_regulates') {
           return element.text('R')
-            .attr('data-tooltip', hasGrandChild? gettextCatalog.getString('Inferred negatively regulates') : 
-            gettextCatalog.getString('Negatively regulates'))
+            .attr('data-tooltip', 
+              hasGrandChild? gettextCatalog.getString('Inferred negatively regulates') : gettextCatalog.getString('Negatively regulates'))
             .attr('class', 'goterm_negatively_regulates');
         } else if (relation === 'self') {
           return element.text('');

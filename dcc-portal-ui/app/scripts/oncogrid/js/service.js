@@ -192,7 +192,7 @@
     };
 
     _srv.icgcLegend = function(max) {
-      var value = '<b>' + gettextCatalog.getString('# of Donors Affected:') + '</b> </br>' + 
+      var value = '<b>' + gettextCatalog.getString('# of Donors Affected') + ':</b> </br>' + 
               '0 <div class="onco-track-legend onco-total-donor-legend" style="opacity:0.1"></div>' + 
               '<div class="onco-track-legend onco-total-donor-legend" style="opacity:0.4"></div>' + 
               '<div class="onco-track-legend onco-total-donor-legend" style="opacity:0.7"></div>' +
@@ -203,7 +203,7 @@
     };
 
     _srv.geneSetLegend = function() {
-      var value = '<b> ' + gettextCatalog.getString('Gene Sets:') + ' </b> <br>' + 
+      var value = '<b> ' + gettextCatalog.getString('Gene Sets') + ': </b> <br>' + 
               '<div class="onco-track-legend onco-cgc-legend"></div> '+
               gettextCatalog.getString('Gene belongs to Cancer Gene Census');
   
@@ -212,15 +212,15 @@
 
     _srv.clinicalLegend = function(maxSurvival) {
       var value =  '<b>' + gettextCatalog.getString('Clinical Data') + ':</b> <br>' +
-      '<b>' + gettextCatalog.getString('Age at Diagnosis (years):') + ' </b> ' + 
+      '<b>' + gettextCatalog.getString('Age at Diagnosis (years)') + ': </b> ' + 
         '0 <div class="onco-track-legend onco-age-legend" style="opacity:0.05"></div>' +
         '<div class="onco-track-legend onco-age-legend" style="opacity:0.4"></div>' + 
         '<div class="onco-track-legend onco-age-legend" style="opacity:0.7"></div>' + 
         '<div class="onco-track-legend onco-age-legend" style="opacity:1"></div> 100+ <br>' + 
-      '<b>' + gettextCatalog.getString('Vital Status:') + '</b> ' +
-        gettextCatalog.getString('Deceased:') + ' <div class="onco-track-legend onco-deceased-legend"></div> ' + 
-        gettextCatalog.getString('Alive:') + ' <div class="onco-track-legend onco-alive-legend"></div><br>' + 
-      '<b>' + gettextCatalog.getString('Survival Time (days):') + '</b> ' +
+      '<b>' + gettextCatalog.getString('Vital Status') + ':</b> ' +
+        gettextCatalog.getString('Deceased') + ': <div class="onco-track-legend onco-deceased-legend"></div> ' + 
+        gettextCatalog.getString('Alive') + ': <div class="onco-track-legend onco-alive-legend"></div><br>' + 
+      '<b>' + gettextCatalog.getString('Survival Time (days)') + ':</b> ' +
         '0 <div class="onco-track-legend onco-survival-legend" style="opacity:0.05"></div>' +
         '<div class="onco-track-legend onco-survival-legend" style="opacity:0.4"></div>' + 
         '<div class="onco-track-legend onco-survival-legend" style="opacity:0.7"></div>' + 
@@ -234,7 +234,7 @@
     };
 
     _srv.dataTypeLegend = function() {
-      var value = '<b>' + gettextCatalog.getString('Available Data Types:') + '</b><br>' +
+      var value = '<b>' + gettextCatalog.getString('Available Data Types') + ':</b><br>' +
         '<div class="onco-track-legend onco-cnsm-legend"></div> ' +
           gettextCatalog.getString('Copy Number Somatic Mutations (CNSM)') + ' <br>' +
         '<div class="onco-track-legend onco-stsm-legend"></div> ' +

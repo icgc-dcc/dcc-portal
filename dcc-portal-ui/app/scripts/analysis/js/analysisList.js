@@ -27,7 +27,7 @@
     var _this = this;
 
     var REMOVE_ONE = gettextCatalog.getString('Are you sure you want to remove this analysis?');
-    var REMOVE_ALL = gettextCatalog.getString('Are you sure you want to remove all analyses?');
+    var REMOVE_ALL = gettextCatalog.getString('Are you sure you want to remove all analysis?');
 
     _this.newAnalysis = function() {
       $location.path('analysis').search({});

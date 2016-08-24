@@ -189,8 +189,8 @@
 
                   var FI = getOverallFunctionalImpact(d);
                   return gettextCatalog.getString('Mutation ID') + ': ' + d.ref + '<br>' +
-                         gettextCatalog.getString('Number of donors: ') + d.value + '<br>' +
-                         gettextCatalog.getString('Amino acid change: ') + d.id + '<br>' +
+                         gettextCatalog.getString('Number of donors') + ': ' + d.value + '<br>' +
+                         gettextCatalog.getString('Amino acid change') + ': ' + d.id + '<br>' +
                          gettextCatalog.getString('Functional Impact') + ': ' + FI;
                 };
 
@@ -247,7 +247,7 @@
               if (chartData.mutations.length > 0) {
                 chart.display(element);
               } else {
-                chart.displayError(element, 'No Mutation occurs in coding region of this Gene.');
+                chart.displayError(element, gettextCatalog.getString('No Mutation occurs in coding region of this Gene.'));
               }
             });
           }

@@ -61,8 +61,8 @@
 
               return '<strong>' + data.name + ' [' + data.id + ']</strong><br />' +
                 'Median: ' + numberFilterFn(data.medium) + '<br />' +
-                '# Donors: ' + data.donorCount + '<br />' +
-                '# Mutations: ' + numberFilterFn(data.mutationCount);
+                gettextCatalog.getString('# Donors') + ': ' + data.donorCount + '<br />' +
+                gettextCatalog.getString('# Mutations') + ': ' + numberFilterFn(data.mutationCount);
             }
 
             var position = {

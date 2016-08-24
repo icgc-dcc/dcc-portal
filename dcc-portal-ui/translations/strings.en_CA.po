@@ -3,6 +3,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"X-Generator: Poedit 1.8.8\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_CA\n"
 
 #: app/scripts/genes/views/gene.html:502
 msgid "# Clinical Trials"
@@ -52,7 +60,9 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:50
 #: app/scripts/projects/views/project.html:368
-msgid "# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project."
+msgid ""
+"# Donors where gene contains SSM filtered by current criteria / # SSM tested "
+"donors portal wide. Expand to see breakdown by project."
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:37
@@ -60,7 +70,9 @@ msgstr ""
 #: app/scripts/genes/views/gene.html:392
 #: app/scripts/genesets/views/geneset.html:497
 #: app/scripts/projects/views/project.html:514
-msgid "# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project."
+msgid ""
+"# Donors where mutation is observed filtered by current criteria / # SSM "
+"tested donors portal wide. Expand to see breakdown by project."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:35
@@ -198,11 +210,16 @@ msgstr ""
 
 #: app/scripts/genelist/views/upload.html:31
 #: app/scripts/genelist/views/upload.html:49
-msgid "- Gene identifier: Symbol or Ensembl ID or UniProtKB-SwissProt ID <br> - Delimiters between gene identifiers: comma, space or one gene per line <br> - If you upload a file, format file is text file (.txt, .csv, .tsv)"
+msgid ""
+"- Gene identifier: Symbol or Ensembl ID or UniProtKB-SwissProt ID <br> - "
+"Delimiters between gene identifiers: comma, space or one gene per line <br> "
+"- If you upload a file, format file is text file (.txt, .csv, .tsv)"
 msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.result.html:73
-msgid "0 enriched gene set with FDR &le; {{item.params.fdr}}. You may increase the FDR q-value threshold and launch Enrichment Analysis again."
+msgid ""
+"0 enriched gene set with FDR &le; {{item.params.fdr}}. You may increase the "
+"FDR q-value threshold and launch Enrichment Analysis again."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:34
@@ -227,13 +244,18 @@ msgstr ""
 
 #: app/scripts/repositories/views/home.html:57
 msgid ""
-"<a href=\"/icgc-in-the-cloud/aws\">Amazon Web Services</a> is a well established commercial cloud providing a highly reliable, scalable, \n"
-"                  low-cost infrastructure platform in the cloud in 190 countries around the world. \n"
-"                  ICGC datasets are currently hosted at the US East (Northern Virginia) EC2 facility."
+"<a href=\"/icgc-in-the-cloud/aws\">Amazon Web Services</a> is a well "
+"established commercial cloud providing a highly reliable, scalable, \n"
+"                  low-cost infrastructure platform in the cloud in 190 "
+"countries around the world. \n"
+"                  ICGC datasets are currently hosted at the US East "
+"(Northern Virginia) EC2 facility."
 msgstr ""
 
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:297
-msgid "<em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(100 donors maximum)</small>, then click on Run.</em>"
+msgid ""
+"<em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set "
+"<small>(100 donors maximum)</small>, then click on Run.</em>"
 msgstr ""
 
 #: app/scripts/common/views/header.html:5
@@ -241,7 +263,9 @@ msgid "<span id=\"icgc\">ICGC</span> Data Portal"
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.file.html:262
-msgid "<span>Open in</span> <a href=\"\" data-ng-click=\"fileCtrlr.viewFileInSearch()\">Advanced Search</a>"
+msgid ""
+"<span>Open in</span> <a href=\"\" data-ng-click=\"fileCtrlr."
+"viewFileInSearch()\">Advanced Search</a>"
 msgstr ""
 
 #: app/scripts/ui/views/suggest_popup.html:86
@@ -249,23 +273,35 @@ msgid "<span>Press <strong>Enter</strong> for more search results</span>"
 msgstr ""
 
 #: app/scripts/keyword/views/results.html:22
-msgid "<strong>{{ results.pagination.total | number }}</strong> results found for <span class=\"match\">{{query}}</span>"
+msgid ""
+"<strong>{{ results.pagination.total | number }}</strong> results found for "
+"<span class=\"match\">{{query}}</span>"
 msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.result.html:95
-msgid "<strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched gene sets with <abbr data-tooltip=\"{{TooltipText.ENRICHMENT.FDR}}\">FDR</abbr> &le; <strong>{{item.params.fdr}}</strong>"
+msgid ""
+"<strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched "
+"gene sets with <abbr data-tooltip=\"{{TooltipText.ENRICHMENT.FDR}}\">FDR</"
+"abbr> &le; <strong>{{item.params.fdr}}</strong>"
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:107
-msgid "A <a href=\"http://ga4gh.org/#/beacon\" target=\"_blank\">Beacon</a> is a simple service that answers the question"
+msgid ""
+"A <a href=\"http://ga4gh.org/#/beacon\" target=\"_blank\">Beacon</a> is a "
+"simple service that answers the question"
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.submit.html:14
-msgid "A manifest is a text file passed to download clients in order to download selected files of interest. Each repository's manifest file can be individually downloaded."
+msgid ""
+"A manifest is a text file passed to download clients in order to download "
+"selected files of interest. Each repository's manifest file can be "
+"individually downloaded."
 msgstr ""
 
 #: app/scripts/common/js/version.js:38
-msgid "A new version of the application has been released. Please refresh your browser before continuing."
+msgid ""
+"A new version of the application has been released. Please refresh your "
+"browser before continuing."
 msgstr ""
 
 #: app/scripts/mutations/views/mutation.html:110
@@ -307,8 +343,7 @@ msgstr ""
 msgid "About Us"
 msgstr ""
 
-#: app/scripts/common/js/codetable.js:145
-#: app/scripts/common/js/codetable.js:93
+#: app/scripts/common/js/codetable.js:145 app/scripts/common/js/codetable.js:93
 msgid "Absent from DCC"
 msgstr ""
 
@@ -317,19 +352,24 @@ msgstr ""
 msgid "Access"
 msgstr ""
 
-#: app/scripts/static/views/info.html:12
-#: app/scripts/static/views/info.html:31
+#: app/scripts/static/views/info.html:12 app/scripts/static/views/info.html:31
 msgid "Access Raw Data"
 msgstr ""
 
 #: app/scripts/static/views/info.html:54
 msgid ""
-"Access to the ICGC sequencing datasets held at the EGA is granted by applying through \n"
-"                <a href=\"http://icgc.org/daco \">ICGC's Data Access and Compliance Office (DACO)</a>."
+"Access to the ICGC sequencing datasets held at the EGA is granted by "
+"applying through \n"
+"                <a href=\"http://icgc.org/daco \">ICGC's Data Access and "
+"Compliance Office (DACO)</a>."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:153
-msgid "Acknowledgement: The authors wish to thank Joshua Stuart, Jennifer Jennings, Brian O’Connor, George Mihaiescu, Christina Yung and Fruzsina Molnar-Gabor for insights, comments and other assistance during the preparation of this perspective."
+msgid ""
+"Acknowledgement: The authors wish to thank Joshua Stuart, Jennifer Jennings, "
+"Brian O’Connor, George Mihaiescu, Christina Yung and Fruzsina Molnar-Gabor "
+"for insights, comments and other assistance during the preparation of this "
+"perspective."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.ack.html:8
@@ -359,8 +399,7 @@ msgstr ""
 
 #: app/scripts/advanced/js/advanced.js:242
 #: app/scripts/advanced/views/advanced.html:1
-#: app/scripts/common/js/services.js:199
-#: app/scripts/ui/views/open_in.html:3
+#: app/scripts/common/js/services.js:199 app/scripts/ui/views/open_in.html:3
 msgid "Advanced Search"
 msgstr ""
 
@@ -447,7 +486,9 @@ msgid "All Rights reserved."
 msgstr ""
 
 #: app/scripts/static/views/info.html:62
-msgid "All controlled-access ICGC datasets held at EGA are associated with the <a href=\"http://icgc.org/daco\">ICGC DACO</a>'s EGA DAC accession #:"
+msgid ""
+"All controlled-access ICGC datasets held at EGA are associated with the <a "
+"href=\"http://icgc.org/daco\">ICGC DACO</a>'s EGA DAC accession #:"
 msgstr ""
 
 #: app/scripts/repository/views/vcfiobio.html:82
@@ -464,7 +505,11 @@ msgid "Alt. ID"
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:8
-msgid "Although its access is currently restricted to a small number of beta-testers, OICR plans to scale up the hardware infrastructure,increase the number of ICGC datasets available, and open the cloud to a broader community of researchers by the end of 2016."
+msgid ""
+"Although its access is currently restricted to a small number of beta-"
+"testers, OICR plans to scale up the hardware infrastructure,increase the "
+"number of ICGC datasets available, and open the cloud to a broader community "
+"of researchers by the end of 2016."
 msgstr ""
 
 #: app/scripts/static/views/team.html:67
@@ -484,11 +529,15 @@ msgid "Amino acid change"
 msgstr ""
 
 #: app/scripts/projects/views/project.html:179
-msgid "An approved <a target=\"_blank\" href=\"http://icgc.org/daco\"><i class=\"icon-external-link\"></i>data access request</a> is required."
+msgid ""
+"An approved <a target=\"_blank\" href=\"http://icgc.org/daco\"><i class="
+"\"icon-external-link\"></i>data access request</a> is required."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:13
-msgid "An up-to-date summary of the repository's data content is provided on the right."
+msgid ""
+"An up-to-date summary of the repository's data content is provided on the "
+"right."
 msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:84
@@ -501,7 +550,9 @@ msgid "Analysis"
 msgstr ""
 
 #: app/scripts/analysis/views/analysis.analysis.html:85
-msgid "Analysis <strong>{{analysisId}}</strong> cannot be found on the server. It may no longer be valid with respect to current portal data."
+msgid ""
+"Analysis <strong>{{analysisId}}</strong> cannot be found on the server. It "
+"may no longer be valid with respect to current portal data."
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.file.html:126
@@ -576,19 +627,27 @@ msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:123
 msgid ""
-"As is the case for similar \"community resource projects\", users of data generated and distributed by the PCAWG \n"
-"        project are asked to respect the desire of the PCAWG Consortium to publish reports on the generation and \n"
+"As is the case for similar \"community resource projects\", users of data "
+"generated and distributed by the PCAWG \n"
+"        project are asked to respect the desire of the PCAWG Consortium to "
+"publish reports on the generation and \n"
 "        analysis of their data."
 msgstr ""
 
 #: app/scripts/static/views/info.html:95
-msgid "As part of the effort to enable cross cancer projects functional analysis, we perform standardized gene consequences annotation, using Sequence Ontology's controlled vocabulary regarding mutation-induced changes"
+msgid ""
+"As part of the effort to enable cross cancer projects functional analysis, "
+"we perform standardized gene consequences annotation, using Sequence "
+"Ontology's controlled vocabulary regarding mutation-induced changes"
 msgstr ""
 
 #: app/scripts/repositories/views/home.html:28
 msgid ""
-"Authorized users can now access the ICGC BAM, VCF and other types of files through the \n"
-"      <a href=\"/repositories\">Repository search tool</a> on the Portal and retrieve manifest files that allow for bulk file downloads from the cloud repositories."
+"Authorized users can now access the ICGC BAM, VCF and other types of files "
+"through the \n"
+"      <a href=\"/repositories\">Repository search tool</a> on the Portal and "
+"retrieve manifest files that allow for bulk file downloads from the cloud "
+"repositories."
 msgstr ""
 
 #: app/scripts/genomemaps/views/header.html:14
@@ -626,7 +685,9 @@ msgid "Average age:"
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.html:250
-msgid "BAM & VCF Stats (available only for BAM and VCF Files in AWS and Collaboratory)"
+msgid ""
+"BAM & VCF Stats (available only for BAM and VCF Files in AWS and "
+"Collaboratory)"
 msgstr ""
 
 #: app/scripts/donors/views/donor.specimen.html:142
@@ -664,7 +725,10 @@ msgid "Beacon"
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:130
-msgid "Beacon is a project of the <a target=\"_blank\" href=\"http://genomicsandhealth.org/\"><i class=\"icon-external-link\"></i>Global Alliance for Genomics &amp; Health</a>."
+msgid ""
+"Beacon is a project of the <a target=\"_blank\" href=\"http://"
+"genomicsandhealth.org/\"><i class=\"icon-external-link\"></i>Global Alliance "
+"for Genomics &amp; Health</a>."
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.observation.popup.html:25
@@ -676,7 +740,9 @@ msgid "Both Pairs Mapped"
 msgstr ""
 
 #: app/scripts/releases/views/home.html:102
-msgid "Brain cancer donors with frameshift mutations and having methylation data available"
+msgid ""
+"Brain cancer donors with frameshift mutations and having methylation data "
+"available"
 msgstr ""
 
 #: app/scripts/donorlist/views/upload.html:44
@@ -686,9 +752,15 @@ msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:63
 msgid ""
-"Building upon previous work which examined cancer coding regions (Cancer Genome Atlas Research Network, The Cancer Genome Atlas\n"
-"           Pan-Cancer analysis project, <span style=\"dispaly:inline-block; text-indent:0\"><a href=\"http://www.nature.com/ng/journal/v45/n10/full/ng.2764.html\" target=\"_blank\"><i class=\"icon-external-link\"></i>Nat. Genet. 2013 45:1113</a></span>),\n"
-"           this project is exploring the nature and consequences of somatic and germline variations in both coding and non-coding regions, with specific emphasis on cis-regulatory sites,\n"
+"Building upon previous work which examined cancer coding regions (Cancer "
+"Genome Atlas Research Network, The Cancer Genome Atlas\n"
+"           Pan-Cancer analysis project, <span style=\"dispaly:inline-block; "
+"text-indent:0\"><a href=\"http://www.nature.com/ng/journal/v45/n10/full/"
+"ng.2764.html\" target=\"_blank\"><i class=\"icon-external-link\"></i>Nat. "
+"Genet. 2013 45:1113</a></span>),\n"
+"           this project is exploring the nature and consequences of somatic "
+"and germline variations in both coding and non-coding regions, with specific "
+"emphasis on cis-regulatory sites,\n"
 "           non-coding RNAs, and large-scale structural alterations."
 msgstr ""
 
@@ -697,7 +769,9 @@ msgid "Bundle ID"
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:134
-msgid "CGHub special request: Independent experiment to re-evaluate putative variants."
+msgid ""
+"CGHub special request: Independent experiment to re-evaluate putative "
+"variants."
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:153
@@ -724,8 +798,7 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:16
-#: app/scripts/genes/views/gene.html:206
+#: app/scripts/genes/views/gene.html:16 app/scripts/genes/views/gene.html:206
 #: app/scripts/genesets/views/geneset.html:195
 #: app/scripts/genesets/views/geneset.html:32
 #: app/scripts/mutations/views/mutation.html:13
@@ -741,8 +814,7 @@ msgstr ""
 msgid "Cancer Genomics Hub"
 msgstr ""
 
-#: app/scripts/common/js/services.js:195
-#: app/scripts/projects/js/projects.js:74
+#: app/scripts/common/js/services.js:195 app/scripts/projects/js/projects.js:74
 #: app/scripts/projects/views/projects.html:1
 msgid "Cancer Projects"
 msgstr ""
@@ -764,7 +836,11 @@ msgid "Cancer projects"
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:109
-msgid "Capture of other non-coding RNA types, including post-translation modification types such as snRNA (small nuclear RNA) or snoRNA (small nucleolar RNA), or expression regulation types such as siRNA (small interfering RNA) or piRNA/piwi/RNA (piwi-interacting RNA)."
+msgid ""
+"Capture of other non-coding RNA types, including post-translation "
+"modification types such as snRNA (small nuclear RNA) or snoRNA (small "
+"nucleolar RNA), or expression regulation types such as siRNA (small "
+"interfering RNA) or piRNA/piwi/RNA (piwi-interacting RNA)."
 msgstr ""
 
 #: app/scripts/common/js/consequence.js:64
@@ -798,11 +874,14 @@ msgid "Click here to let us know."
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.file.html:183
-msgid "Click on <strong><i class=\"icon-download\"></i>Manifest</strong> and use the manifest to download the data file."
+msgid ""
+"Click on <strong><i class=\"icon-download\"></i>Manifest</strong> and use "
+"the manifest to download the data file."
 msgstr ""
 
 #: app/scripts/sets/views/sets.result.html:18
-msgid "Click on the areas of the Venn diagram to include them in your result set."
+msgid ""
+"Click on the areas of the Venn diagram to include them in your result set."
 msgstr ""
 
 #: app/scripts/share/views/share.popup.html:19
@@ -813,8 +892,7 @@ msgstr ""
 msgid "Click to open in Pathwayviewer"
 msgstr ""
 
-#: app/scripts/common/js/datatype.js:28
-#: app/scripts/common/js/datatype.js:29
+#: app/scripts/common/js/datatype.js:28 app/scripts/common/js/datatype.js:29
 #: app/scripts/donors/views/donor.html:159
 #: app/scripts/donors/views/donor.html:26
 #: app/scripts/donors/views/donor.html:97
@@ -885,7 +963,9 @@ msgid "Colocalizes With"
 msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:211
-msgid "Compare high impact mutations in brain cancers across GBM-US, LGG-US, and PCBA-DE."
+msgid ""
+"Compare high impact mutations in brain cancers across GBM-US, LGG-US, and "
+"PCBA-DE."
 msgstr ""
 
 #: app/scripts/common/js/services.js:223
@@ -936,8 +1016,7 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:95
 #: app/scripts/donors/views/donor.html:289
 #: app/scripts/donors/views/donor.html:363
-#: app/scripts/genes/views/gene.html:389
-#: app/scripts/genes/views/gene.html:438
+#: app/scripts/genes/views/gene.html:389 app/scripts/genes/views/gene.html:438
 #: app/scripts/genesets/views/geneset.html:494
 #: app/scripts/genesets/views/geneset.html:542
 #: app/scripts/mutations/views/mutation.html:12
@@ -952,7 +1031,9 @@ msgstr ""
 #: app/scripts/genes/views/gene.html:389
 #: app/scripts/genesets/views/geneset.html:494
 #: app/scripts/projects/views/project.html:505
-msgid "Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively."
+msgid ""
+"Consequences caused by the mutation, annotated using SnpEff with Sequence "
+"Ontology terms. High, Low impact AA change is in RED or GREEN respectively."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:84
@@ -973,7 +1054,9 @@ msgid "Contact Us"
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:44
-msgid "Content is maintained in collaboration with the ICGC Data Coordination Center (DCC)."
+msgid ""
+"Content is maintained in collaboration with the ICGC Data Coordination "
+"Center (DCC)."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:50
@@ -1034,7 +1117,8 @@ msgid "Credits"
 msgstr ""
 
 #: app/scripts/stackedareachart/js/directive.js:73
-msgid "Cumulative Count of Project Donors with Molecular Data in DCC by Release"
+msgid ""
+"Cumulative Count of Project Donors with Molecular Data in DCC by Release"
 msgstr ""
 
 #: app/scripts/oncogrid/js/directive.js:190
@@ -1055,8 +1139,10 @@ msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:50
 msgid ""
-"Currently supporting the BWA alignment workflow, this system makes it easy for users to load their data into AWS S3, \n"
-"    launch many VMs simultaneously to analyze data in parallel, and write the resulting alignments back to S3."
+"Currently supporting the BWA alignment workflow, this system makes it easy "
+"for users to load their data into AWS S3, \n"
+"    launch many VMs simultaneously to analyze data in parallel, and write "
+"the resulting alignments back to S3."
 msgstr ""
 
 #: app/scripts/auth/views/login.html:9
@@ -1236,7 +1322,9 @@ msgid "Diagnosis ICD-10 code"
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:138
-msgid "Direct sequencing of RNA immunoprecipitates (includes CLIP-Seq, HITS-CLIP and PAR-CLIP)."
+msgid ""
+"Direct sequencing of RNA immunoprecipitates (includes CLIP-Seq, HITS-CLIP "
+"and PAR-CLIP)."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:140
@@ -1270,20 +1358,29 @@ msgid "Disease status at last followup"
 msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:232
-msgid "Display OncoGrid diagram to visualize genetic alteration occurrences affecting a set of donors."
+msgid ""
+"Display OncoGrid diagram to visualize genetic alteration occurrences "
+"affecting a set of donors."
 msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:209
-msgid "Display Venn diagram and find out intersection or union, etc. of your sets of the same type."
+msgid ""
+"Display Venn diagram and find out intersection or union, etc. of your sets "
+"of the same type."
 msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:227
-msgid "Display survival analysis and compare phenotypes across brain, breast, and colorectal cancer donors."
+msgid ""
+"Display survival analysis and compare phenotypes across brain, breast, and "
+"colorectal cancer donors."
 msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:225
 #: app/scripts/analysis/js/analysis.js:239
-msgid "Display the survival analysis of your donor sets and compare some characteristics such as gender, vital status and age at diagnosis between your donor sets."
+msgid ""
+"Display the survival analysis of your donor sets and compare some "
+"characteristics such as gender, vital status and age at diagnosis between "
+"your donor sets."
 msgstr ""
 
 #: app/scripts/common/js/consequence.js:44
@@ -1455,8 +1552,7 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:96
 #: app/scripts/compounds/views/compound.html:184
-#: app/scripts/genes/views/gene.html:242
-#: app/scripts/genes/views/gene.html:370
+#: app/scripts/genes/views/gene.html:242 app/scripts/genes/views/gene.html:370
 #: app/scripts/genesets/views/geneset.html:371
 #: app/scripts/genesets/views/geneset.html:476
 #: app/scripts/genesets/views/geneset.html:543
@@ -1501,7 +1597,8 @@ msgid "Download Donor Data"
 msgstr ""
 
 #: app/scripts/downloader/views/request.html:19
-msgid "Download Donor Data section is currently unavailable due to maintenance."
+msgid ""
+"Download Donor Data section is currently unavailable due to maintenance."
 msgstr ""
 
 #: app/scripts/projects/views/project.html:152
@@ -1541,9 +1638,14 @@ msgstr ""
 #: app/scripts/static/views/info.html:143
 msgid ""
 "During the beta period, please refer to the \n"
-"                <a href=\"http://legacy-portal.dcc.icgc.org/pages/docs/icgc_dcc_data_submission_bulletin.pdf\" target=\"_blank\"><i class=\"icon-file\"></i>ICGC Data Submission Bulletin</a>, and\n"
-"                <a href=\"http://legacy-portal.dcc.icgc.org/pages/docs/dcc_submission_system_sop-beta.pdf\" target=\"_blank\"><i class=\"icon-file\"></i>submission system software documentation</a> for instructions\n"
-"                and important notes to assist you in using this system to release your project's data through the DCC data portal."
+"                <a href=\"http://legacy-portal.dcc.icgc.org/pages/docs/"
+"icgc_dcc_data_submission_bulletin.pdf\" target=\"_blank\"><i class=\"icon-"
+"file\"></i>ICGC Data Submission Bulletin</a>, and\n"
+"                <a href=\"http://legacy-portal.dcc.icgc.org/pages/docs/"
+"dcc_submission_system_sop-beta.pdf\" target=\"_blank\"><i class=\"icon-file"
+"\"></i>submission system software documentation</a> for instructions\n"
+"                and important notes to assist you in using this system to "
+"release your project's data through the DCC data portal."
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:168
@@ -1551,15 +1653,21 @@ msgid "EBI QuickGO"
 msgstr ""
 
 #: app/scripts/projectmutationviewer/js/directive.js:40
-msgid "Each dot represents the number of somatic mutations per megabase in a given donor's exome."
+msgid ""
+"Each dot represents the number of somatic mutations per megabase in a given "
+"donor's exome."
 msgstr ""
 
 #: app/scripts/static/views/info.html:114
-msgid "Each mutation entry in the collection is assigned a stable identifier for persisted referencing portal wide and across releases."
+msgid ""
+"Each mutation entry in the collection is assigned a stable identifier for "
+"persisted referencing portal wide and across releases."
 msgstr ""
 
 #: app/scripts/pathwayviewer/views/pathways.html:44
-msgid "Enriched gene set with FDR &le; <strong data-ng-bind=\"analysis.getData().params.fdr\"></strong>"
+msgid ""
+"Enriched gene set with FDR &le; <strong data-ng-bind=\"analysis.getData()."
+"params.fdr\"></strong>"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:14
@@ -1742,7 +1850,11 @@ msgid "Failed"
 msgstr ""
 
 #: app/scripts/analysis/views/analysis.sets.html:3
-msgid "Failed retrieving some saved sets. Please refresh this page to retry. If problem persists, <a href=\"\" data-ng-click=\"SavedSetController.removeInvalidSets()\"><i class=\"icon icon-trash\"></i>DELETE THE SETS</a> that are in \"processing\" state."
+msgid ""
+"Failed retrieving some saved sets. Please refresh this page to retry. If "
+"problem persists, <a href=\"\" data-ng-click=\"SavedSetController."
+"removeInvalidSets()\"><i class=\"icon icon-trash\"></i>DELETE THE SETS</a> "
+"that are in \"processing\" state."
 msgstr ""
 
 #: app/scripts/common/js/services.js:248
@@ -1785,8 +1897,7 @@ msgstr ""
 msgid "Fetching targeted genes..."
 msgstr ""
 
-#: app/scripts/common/js/codetable.js:83
-#: app/scripts/common/js/services.js:219
+#: app/scripts/common/js/codetable.js:83 app/scripts/common/js/services.js:219
 #: app/scripts/repository/views/repository.external.html:37
 msgid "File"
 msgstr ""
@@ -1851,7 +1962,9 @@ msgid "Filter pathways"
 msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:219
-msgid "Find out statistically significantly over-represented groups of gene sets (e.g. Reactome pathways) when comparing with your gene set."
+msgid ""
+"Find out statistically significantly over-represented groups of gene sets (e."
+"g. Reactome pathways) when comparing with your gene set."
 msgstr ""
 
 #: app/scripts/donors/views/donor.supplemental.html:102
@@ -1877,38 +1990,54 @@ msgstr ""
 #: app/scripts/software/views/software.html:79
 msgid ""
 "For Docker images, please visit our \n"
-"                <a href=\"https://hub.docker.com/r/icgc/icgc-storage-client/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Docker Hub repository</a>."
+"                <a href=\"https://hub.docker.com/r/icgc/icgc-storage-client/"
+"\" target=\"_blank\"><i class=\"icon-external-link\"></i>Docker Hub "
+"repository</a>."
 msgstr ""
 
 #: app/scripts/software/views/software.html:129
-msgid "For Docker images, please visit our <a href=\"https://hub.docker.com/r/icgc/icgc-get/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Docker Hub repository</a>."
+msgid ""
+"For Docker images, please visit our <a href=\"https://hub.docker.com/r/icgc/"
+"icgc-get/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Docker Hub "
+"repository</a>."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:118
-msgid "For an example, try this <a ng-click=\"exampleQuery('false');\" href=\"\"><i class=\"icon-search\"></i>query</a>."
+msgid ""
+"For an example, try this <a ng-click=\"exampleQuery('false');\" href=\"\"><i "
+"class=\"icon-search\"></i>query</a>."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:123
-msgid "For an example, try this <a ng-click=\"exampleQuery('null');\" href=\"\"><i class=\"icon-search\"></i>query</a>."
+msgid ""
+"For an example, try this <a ng-click=\"exampleQuery('null');\" href=\"\"><i "
+"class=\"icon-search\"></i>query</a>."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:113
-msgid "For an example, try this <a ng-click=\"exampleQuery('true');\" href=\"\"><i class=\"icon-search\"></i>query</a>."
+msgid ""
+"For an example, try this <a ng-click=\"exampleQuery('true');\" href=\"\"><i "
+"class=\"icon-search\"></i>query</a>."
 msgstr ""
 
 #: app/scripts/software/views/software.html:29
-msgid "For feature requests and reporting bugs, please contact <a href=\"mailto:dcc-support@icgc.org\"><i class=\"icon-mail\"></i>dcc-support@icgc.org</a>."
+msgid ""
+"For feature requests and reporting bugs, please contact <a href=\"mailto:dcc-"
+"support@icgc.org\"><i class=\"icon-mail\"></i>dcc-support@icgc.org</a>."
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.html:102
 msgid ""
-"For more complex queries, use <a href=\"\" ng-click=\"ExternalRepoController.viewInSearch (ExternalRepoController.summary.fileCount)\">\n"
+"For more complex queries, use <a href=\"\" ng-click=\"ExternalRepoController."
+"viewInSearch (ExternalRepoController.summary.fileCount)\">\n"
 "          {{:: ExternalRepoController.advancedSearchInfo.title}}</a> and\n"
 "          click on \"View in {{:: ExternalRepoController.dataRepoTitle }}\""
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:128
-msgid "For more information about each dataset, please visit our <a href=\"/projects\">Cancer Projects page</a>."
+msgid ""
+"For more information about each dataset, please visit our <a href=\"/projects"
+"\">Cancer Projects page</a>."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:11
@@ -1922,15 +2051,24 @@ msgstr ""
 #: app/scripts/software/views/software.html:95
 msgid ""
 "For system requirements and usage information, please see the\n"
-"                <a href=\"http://docs.icgc.org/cloud/icgc-get/\"><i class=\"icon-external-link\"></i>User Guide</a>."
+"                <a href=\"http://docs.icgc.org/cloud/icgc-get/\"><i class="
+"\"icon-external-link\"></i>User Guide</a>."
 msgstr ""
 
 #: app/scripts/static/views/info.html:47
-msgid "For the ICGC member projects which are part of the U.S <a href=\"http://cancergenome.nih.gov/\">TCGA</a> project raw data will be hosted either at the <a href=\"http://tcga-data.nci.nih.gov/\">TCGA DCC</a> or the <a href=\"https://cghub.ucsc.edu/ \">Cancer Genomics Hub (CGHub)</a>."
+msgid ""
+"For the ICGC member projects which are part of the U.S <a href=\"http://"
+"cancergenome.nih.gov/\">TCGA</a> project raw data will be hosted either at "
+"the <a href=\"http://tcga-data.nci.nih.gov/\">TCGA DCC</a> or the <a href="
+"\"https://cghub.ucsc.edu/ \">Cancer Genomics Hub (CGHub)</a>."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.ack.html:10
-msgid "For the July 9 Nature Commentary titled \"Create a cloud commons,\" the authors wish to  thank Joshua Stuart, Jennifer Jennings, Brian O’Connor, George Mihaiescu, Christina Yung and Fruzsina Molnar-Gabor for insights, comments and other assistance during the preparation of this article."
+msgid ""
+"For the July 9 Nature Commentary titled \"Create a cloud commons,\" the "
+"authors wish to  thank Joshua Stuart, Jennifer Jennings, Brian O’Connor, "
+"George Mihaiescu, Christina Yung and Fruzsina Molnar-Gabor for insights, "
+"comments and other assistance during the preparation of this article."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:136
@@ -1961,7 +2099,9 @@ msgid "From a key server:"
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:15
-msgid "From this page, you can create your own personal API tokens for use in scripts and on the command line."
+msgid ""
+"From this page, you can create your own personal API tokens for use in "
+"scripts and on the command line."
 msgstr ""
 
 #: app/scripts/genomemaps/views/header.html:16
@@ -2084,7 +2224,8 @@ msgid "Generate"
 msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:234
-msgid "Generate an OncoGrid using top 75 donors and genes for PCAWG liver projects."
+msgid ""
+"Generate an OncoGrid using top 75 donors and genes for PCAWG liver projects."
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:32
@@ -2120,13 +2261,11 @@ msgstr ""
 #: app/scripts/browser/views/browser.html:2
 #: app/scripts/common/views/footer.html:10
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:68
-#: app/scripts/ui/views/open_in.html:6
-#: app/scripts/ui/views/open_in.html:9
+#: app/scripts/ui/views/open_in.html:6 app/scripts/ui/views/open_in.html:9
 msgid "Genome Viewer"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:26
-#: app/scripts/genes/views/gene.html:338
+#: app/scripts/genes/views/gene.html:26 app/scripts/genes/views/gene.html:338
 #: app/scripts/mutations/views/mutation.html:16
 #: app/scripts/mutations/views/mutation.html:254
 msgid "Genomic Context"
@@ -2156,7 +2295,9 @@ msgid "Germline cancer genome"
 msgstr ""
 
 #: app/scripts/pathwayviewer/views/pathways.html:48
-msgid "Go back to <a href=\"/analysis/view/enrichment/{{analysis.getData().id}}\">Enrichment Analysis Results</a>"
+msgid ""
+"Go back to <a href=\"/analysis/view/enrichment/{{analysis.getData()."
+"id}}\">Enrichment Analysis Results</a>"
 msgstr ""
 
 #: app/scripts/ui/js/table.js:197
@@ -2181,9 +2322,12 @@ msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:128
 msgid ""
-"Hence, scientific works with a primary focus on pan-cancer (across entity) analysis \n"
-"        that made use of the WGS pan cancer community resource will be under publication embargo until the WGS \n"
-"        pan-cancer consortium publishes its main paper (anticipated June 2016)."
+"Hence, scientific works with a primary focus on pan-cancer (across entity) "
+"analysis \n"
+"        that made use of the WGS pan cancer community resource will be under "
+"publication embargo until the WGS \n"
+"        pan-cancer consortium publishes its main paper (anticipated June "
+"2016)."
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:130
@@ -2203,7 +2347,9 @@ msgid "Homo sapiens GRCh37"
 msgstr ""
 
 #: app/scripts/projectmutationviewer/js/directive.js:43
-msgid "Horizontal red lines provide the median number of somatic and exomic mutations within each cancer project."
+msgid ""
+"Horizontal red lines provide the median number of somatic and exomic "
+"mutations within each cancer project."
 msgstr ""
 
 #: app/scripts/static/views/faq.html:28
@@ -2236,7 +2382,8 @@ msgid ""
 "        <a href=\"{{:: ProjectCtrl.urlToExternalRepository() }}\">\n"
 "        {{:: ProjectCtrl.dataRepoTitle }} browser\n"
 "        </a>\n"
-"        to see the list of data files hosted in {{:: ProjectCtrl.dataRepoTitle }} for this project."
+"        to see the list of data files hosted in {{:: ProjectCtrl."
+"dataRepoTitle }} for this project."
 msgstr ""
 
 #: app/scripts/donors/views/donor.html:12
@@ -2245,12 +2392,14 @@ msgid ""
 "    <a href=\"{{:: DonorCtrl.urlToExternalRepository() }}\">\n"
 "      {{:: DonorCtrl.dataRepoTitle }} browser\n"
 "    </a>\n"
-"     to see the list of data files hosted in {{:: DonorCtrl.dataRepoTitle }} for this donor."
+"     to see the list of data files hosted in {{:: DonorCtrl.dataRepoTitle }} "
+"for this donor."
 msgstr ""
 
 #: app/scripts/software/views/software.html:110
 #: app/scripts/software/views/software.html:58
-msgid "However, if you wish to use an old version you may choose from the following:"
+msgid ""
+"However, if you wish to use an old version you may choose from the following:"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:93
@@ -2284,8 +2433,10 @@ msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:2
 msgid ""
-"ICGC and Amazon have partnered to offer low-cost and scalable computing solutions for analysing ICGC data \n"
-"    on <a href=\"https://aws.amazon.com/ec2/\" target=\"_blank\"><i class=\"icon-external-link\"></i>AWS EC2</a>."
+"ICGC and Amazon have partnered to offer low-cost and scalable computing "
+"solutions for analysing ICGC data \n"
+"    on <a href=\"https://aws.amazon.com/ec2/\" target=\"_blank\"><i class="
+"\"icon-external-link\"></i>AWS EC2</a>."
 msgstr ""
 
 #: app/scripts/releases/views/home.html:118
@@ -2303,8 +2454,10 @@ msgstr ""
 
 #: app/scripts/static/views/info.html:36
 msgid ""
-"ICGC member projects are required by ICGC policies to submit their raw sequencing reads,\n"
-"                and other primary data, to controlled access public repositories."
+"ICGC member projects are required by ICGC policies to submit their raw "
+"sequencing reads,\n"
+"                and other primary data, to controlled access public "
+"repositories."
 msgstr ""
 
 #: app/scripts/genomemaps/js/viewer.js:325
@@ -2334,19 +2487,30 @@ msgid "In Preparation"
 msgstr ""
 
 #: app/scripts/static/views/info.html:107
-msgid "In order to assess how often a particular simple somatic mutation (SSM) occurs in cancer patients, we establishes specific criteria to determine whether SSMs reported from different donors are considered to be the same."
+msgid ""
+"In order to assess how often a particular simple somatic mutation (SSM) "
+"occurs in cancer patients, we establishes specific criteria to determine "
+"whether SSMs reported from different donors are considered to be the same."
 msgstr ""
 
 #: app/scripts/software/views/software.html:141
-msgid "In order to ensure safe downloads and binary integrity, all software releases are signed using GPG. The following sections detail how to verify our published software."
+msgid ""
+"In order to ensure safe downloads and binary integrity, all software "
+"releases are signed using GPG. The following sections detail how to verify "
+"our published software."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:71
-msgid "In order to facilitate the comparison among diverse tumor types, all tumor and matched normal genomes have been subjected to a uniform set of alignment and variant calling algorithms, and must pass a rigorous set of qualilty control tests."
+msgid ""
+"In order to facilitate the comparison among diverse tumor types, all tumor "
+"and matched normal genomes have been subjected to a uniform set of alignment "
+"and variant calling algorithms, and must pass a rigorous set of qualilty "
+"control tests."
 msgstr ""
 
 #: app/scripts/stackedareachart/js/directive.js:109
-msgid "Individual Count of Project Donors with Molecular Data in DCC by Release"
+msgid ""
+"Individual Count of Project Donors with Molecular Data in DCC by Release"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:124
@@ -2383,7 +2547,9 @@ msgid "Information"
 msgstr ""
 
 #: app/scripts/static/views/info.html:117
-msgid "Information for linking these non-redundant SSMs to the reported ones is also kept, enabling mutation counts across donors."
+msgid ""
+"Information for linking these non-redundant SSMs to the reported ones is "
+"also kept, enabling mutation counts across donors."
 msgstr ""
 
 #: app/scripts/common/js/consequence.js:45
@@ -2421,7 +2587,8 @@ msgstr ""
 #: app/scripts/static/views/info.html:174
 msgid ""
 "Instructions on how to use the VM can be found \n"
-"                <a href=\"http://legacy-portal.dcc.icgc.org/pages/docs/VirtualBoxforDCCv1.10.pdf\" target=\"_blank\">\n"
+"                <a href=\"http://legacy-portal.dcc.icgc.org/pages/docs/"
+"VirtualBoxforDCCv1.10.pdf\" target=\"_blank\">\n"
 "                    <i class=\"icon-file\"></i>here\n"
 "                </a>."
 msgstr ""
@@ -2487,12 +2654,16 @@ msgid "Is there an API for the site?"
 msgstr ""
 
 #: app/scripts/static/views/info.html:165
-msgid "It is not therefore suitable for validating entire datasets but rather meant for testing small subsets of data before submission to DCC."
+msgid ""
+"It is not therefore suitable for validating entire datasets but rather meant "
+"for testing small subsets of data before submission to DCC."
 msgstr ""
 
 #: app/scripts/software/views/software.html:108
 #: app/scripts/software/views/software.html:56
-msgid "It is strongly recommended to use the latest release to take advantage of newest features and bug fixes."
+msgid ""
+"It is strongly recommended to use the latest release to take advantage of "
+"newest features and bug fixes."
 msgstr ""
 
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:159
@@ -2537,10 +2708,8 @@ msgstr ""
 msgid "Lead Country of the Cancer Project"
 msgstr ""
 
-#: app/scripts/static/views/team.html:12
-#: app/scripts/static/views/team.html:21
-#: app/scripts/static/views/team.html:44
-#: app/scripts/static/views/team.html:5
+#: app/scripts/static/views/team.html:12 app/scripts/static/views/team.html:21
+#: app/scripts/static/views/team.html:44 app/scripts/static/views/team.html:5
 msgid "Leader"
 msgstr ""
 
@@ -2698,11 +2867,12 @@ msgid "Metadata"
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:133
-msgid "Methodology papers may be published prior to this embargo, with agreement from the full scientific working group."
+msgid ""
+"Methodology papers may be published prior to this embargo, with agreement "
+"from the full scientific working group."
 msgstr ""
 
-#: app/scripts/static/views/info.html:17
-#: app/scripts/static/views/info.html:70
+#: app/scripts/static/views/info.html:17 app/scripts/static/views/info.html:70
 msgid "Methods"
 msgstr ""
 
@@ -2711,7 +2881,9 @@ msgid "Methyl CpG Binding Domain Sequencing."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:124
-msgid "MethylC-seq. Sequencing following treatment of DNA with bisulfite to convert cytosine residues to uracil depending on methylation status."
+msgid ""
+"MethylC-seq. Sequencing following treatment of DNA with bisulfite to convert "
+"cytosine residues to uracil depending on methylation status."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:130
@@ -2723,7 +2895,9 @@ msgid "Methylation-Sensitive Restriction Enzyme Sequencing."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:107
-msgid "Micro RNA sequencing strategy designed to capture post-transcriptional RNA elements and include non-coding functional elements."
+msgid ""
+"Micro RNA sequencing strategy designed to capture post-transcriptional RNA "
+"elements and include non-coding functional elements."
 msgstr ""
 
 #: app/scripts/common/js/consequence.js:29
@@ -2768,7 +2942,9 @@ msgid "Most Frequently Mutated Genes"
 msgstr ""
 
 #: app/scripts/releases/views/home.html:97
-msgid "Most frequently mutated genes by high impact mutations in stage III malignant lymphoma"
+msgid ""
+"Most frequently mutated genes by high impact mutations in stage III "
+"malignant lymphoma"
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:65
@@ -2805,8 +2981,7 @@ msgid "Mutation ID"
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:24
-#: app/scripts/donors/views/donor.html:38
-#: app/scripts/genes/views/gene.html:49
+#: app/scripts/donors/views/donor.html:38 app/scripts/genes/views/gene.html:49
 #: app/scripts/genesets/views/geneset.html:67
 #: app/scripts/projects/views/project.html:48
 msgid "Mutation Impact"
@@ -2836,8 +3011,7 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.mutations.html:42
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:2
 #: app/scripts/browser/views/browser.html:13
-#: app/scripts/donors/views/donor.html:27
-#: app/scripts/genes/views/gene.html:295
+#: app/scripts/donors/views/donor.html:27 app/scripts/genes/views/gene.html:295
 #: app/scripts/genes/views/gene.html:31
 #: app/scripts/genesets/views/geneset.html:314
 #: app/scripts/genesets/views/geneset.html:419
@@ -2870,8 +3044,7 @@ msgstr ""
 #: app/scripts/compounds/views/compound.html:39
 #: app/scripts/enrichment/views/enrichment.result.html:110
 #: app/scripts/genelist/views/upload.html:18
-#: app/scripts/genes/views/gene.html:487
-#: app/scripts/genes/views/gene.html:66
+#: app/scripts/genes/views/gene.html:487 app/scripts/genes/views/gene.html:66
 #: app/scripts/genesets/views/geneset.html:367
 #: app/scripts/genesets/views/geneset.html:413
 #: app/scripts/genesets/views/geneset.html:85
@@ -2893,7 +3066,9 @@ msgid "Negatively regulates"
 msgstr ""
 
 #: app/scripts/releases/views/home.html:26
-msgid "New features will be regularly added by the <a href=\"/team\">DCC development team</a>."
+msgid ""
+"New features will be regularly added by the <a href=\"/team\">DCC "
+"development team</a>."
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:103
@@ -3015,7 +3190,8 @@ msgid "No data found."
 msgstr ""
 
 #: app/scripts/mutations/views/mutation.html:237
-msgid "No protein coding transcript is affected by this mutation in CDS region."
+msgid ""
+"No protein coding transcript is affected by this mutation in CDS region."
 msgstr ""
 
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:205
@@ -3094,15 +3270,21 @@ msgid "Null"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:34
-msgid "Number of Donors affected by Mutation<br>Filtered by Current Search Criteria / unfiltered # donors the mutation is observed."
+msgid ""
+"Number of Donors affected by Mutation<br>Filtered by Current Search "
+"Criteria / unfiltered # donors the mutation is observed."
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:46
-msgid "Number of Donors where Gene contains SSM<br>Filtered by Current Search Criteria / unfiltered # donors the gene is mutated."
+msgid ""
+"Number of Donors where Gene contains SSM<br>Filtered by Current Search "
+"Criteria / unfiltered # donors the gene is mutated."
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:183
-msgid "Number of Donors where a Gene involved in the Gene Set can be targeted by the compound"
+msgid ""
+"Number of Donors where a Gene involved in the Gene Set can be targeted by "
+"the compound"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:248
@@ -3156,7 +3338,8 @@ msgid "Number of SSM<br>Filtered by Current Search Criteria"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:39
-msgid "Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria"
+msgid ""
+"Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria"
 msgstr ""
 
 #: app/scripts/projectmutationviewer/views/projectmutationviewer.html:3
@@ -3185,7 +3368,8 @@ msgid "Number of donors filtered by genes in overlap"
 msgstr ""
 
 #: app/scripts/mutations/views/mutation.html:216
-msgid "Number of donors from the current project containing the current mutation"
+msgid ""
+"Number of donors from the current project containing the current mutation"
 msgstr ""
 
 #: app/scripts/projects/views/project.html:435
@@ -3202,7 +3386,9 @@ msgstr ""
 
 #: app/scripts/genes/views/gene.html:291
 #: app/scripts/genesets/views/geneset.html:310
-msgid "Number of donors with the current gene containing simple somatic mutations in the current project"
+msgid ""
+"Number of donors with the current gene containing simple somatic mutations "
+"in the current project"
 msgstr ""
 
 #: app/scripts/common/js/services.js:255
@@ -3214,7 +3400,9 @@ msgid "Number of genes involved in this gene set."
 msgstr ""
 
 #: app/scripts/common/js/services.js:246
-msgid "Number of genes resulting from original query with upper limit. <br>Input genes for this enrichment analysis result."
+msgid ""
+"Number of genes resulting from original query with upper limit. <br>Input "
+"genes for this enrichment analysis result."
 msgstr ""
 
 #: app/scripts/common/js/services.js:253
@@ -3261,7 +3449,8 @@ msgstr ""
 #: app/scripts/enrichment/views/enrichment.result.html:81
 msgid ""
 "Open In \n"
-"                                <a href=\"/pathways/{{item.id}}\" title=\"{{'Click to open in Pathwayviewer' | translate}}\">\n"
+"                                <a href=\"/pathways/{{item.id}}\" title="
+"\"{{'Click to open in Pathwayviewer' | translate}}\">\n"
 "                                Pathway Viewer\n"
 "                                </a>"
 msgstr ""
@@ -3274,7 +3463,8 @@ msgstr ""
 #: app/scripts/compounds/views/compound.html:231
 msgid ""
 "Open in\n"
-"                                <a href=\"http://zinc15.docking.org/substances/{{compound.id}}/trials/subsets/cancer/\" target=\"_blank\">\n"
+"                                <a href=\"http://zinc15.docking.org/"
+"substances/{{compound.id}}/trials/subsets/cancer/\" target=\"_blank\">\n"
 "                                    <i class=\"icon-external-link\"></i>\n"
 "                                    Zinc\n"
 "                                </a>"
@@ -3283,11 +3473,13 @@ msgstr ""
 #: app/scripts/compounds/views/compound.html:141
 msgid ""
 "Open in\n"
-"                              <a href=\"/search/g?filters={{CompoundCtrl.getFilter()}}\">\n"
+"                              <a href=\"/search/g?filters={{CompoundCtrl."
+"getFilter()}}\">\n"
 "                                  Advanced Search\n"
 "                              </a>\n"
 "                                |\n"
-"                              <a href=\"/browser/g?filters={{CompoundCtrl.getFilter()}}\">\n"
+"                              <a href=\"/browser/g?filters={{CompoundCtrl."
+"getFilter()}}\">\n"
 "                                  Genome Viewer\n"
 "                              </a>"
 msgstr ""
@@ -3326,15 +3518,23 @@ msgid "Other therapy response"
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:23
-msgid "Our <a href=\"http://docs.icgc.org/cloud/guide/\" target=\"_blank\"><i class=\"icon-external-link\"></i>user guide</a> provides step-by-step instructions on how to access and analyse ICGC data on the Collaboratory."
+msgid ""
+"Our <a href=\"http://docs.icgc.org/cloud/guide/\" target=\"_blank\"><i class="
+"\"icon-external-link\"></i>user guide</a> provides step-by-step instructions "
+"on how to access and analyse ICGC data on the Collaboratory."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:14
-msgid "Our <a href=\"http://docs.icgc.org/cloud/guide/\"><i class=\"icon-external-link\"></i>user guide</a> provides step-by-step instructions on how to access and analyse ICGC data on AWS."
+msgid ""
+"Our <a href=\"http://docs.icgc.org/cloud/guide/\"><i class=\"icon-external-"
+"link\"></i>user guide</a> provides step-by-step instructions on how to "
+"access and analyse ICGC data on AWS."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:45
-msgid "Our user guide provides step-by-step instructions on how to access and analyse ICGC data on the Collaboratory."
+msgid ""
+"Our user guide provides step-by-step instructions on how to access and "
+"analyse ICGC data on the Collaboratory."
 msgstr ""
 
 #: app/scripts/repository/views/bamiobio.html:100
@@ -3342,7 +3542,8 @@ msgid "Outliers"
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:54
-msgid "Over time, the full range of PanCancer workflows will be made available."
+msgid ""
+"Over time, the full range of PanCancer workflows will be made available."
 msgstr ""
 
 #: app/scripts/phenotype/views/phenotype.result.html:181
@@ -3387,8 +3588,7 @@ msgid "PCAWG Workflows"
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:17
-#: app/scripts/donors/views/donor.html:31
-#: app/scripts/genes/views/gene.html:42
+#: app/scripts/donors/views/donor.html:31 app/scripts/genes/views/gene.html:42
 #: app/scripts/genesets/views/geneset.html:59
 #: app/scripts/projects/views/project.html:41
 msgid "Page Filters"
@@ -3414,7 +3614,9 @@ msgid "Pathway Viewer"
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:85
-msgid "Patterns of structural variations, signatures, genomic correlations, retrotransposons and mobile elements"
+msgid ""
+"Patterns of structural variations, signatures, genomic correlations, "
+"retrotransposons and mobile elements"
 msgstr ""
 
 #: app/scripts/donors/views/donor.specimen.html:109
@@ -3451,7 +3653,10 @@ msgid "Perform enrichment analysis on top 50 genes in Cancer Gene Census."
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:8
-msgid "Personal access tokens function like ordinary OAuth access tokens, similar to those offered by <a href=\"https://github.com/settings/tokens\" target=\"_blank\"><i class=\"icon-external-link\"></i>GitHub.com</a>."
+msgid ""
+"Personal access tokens function like ordinary OAuth access tokens, similar "
+"to those offered by <a href=\"https://github.com/settings/tokens\" target="
+"\"_blank\"><i class=\"icon-external-link\"></i>GitHub.com</a>."
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:280
@@ -3472,28 +3677,42 @@ msgid "Please change your donor or gene set and run the analysis again."
 msgstr ""
 
 #: app/scripts/static/views/info.html:152
-msgid "Please contact <a href=\"mailto:dcc-support@icgc.org\"><i class=\"icon-mail\"></i>ICGC Data Coordination Centre</a> if you have any questions or comments about the data submission process."
+msgid ""
+"Please contact <a href=\"mailto:dcc-support@icgc.org\"><i class=\"icon-mail"
+"\"></i>ICGC Data Coordination Centre</a> if you have any questions or "
+"comments about the data submission process."
 msgstr ""
 
 #: app/scripts/downloader/views/request.html:23
 #: app/scripts/repository/views/repository.icgc.html:20
-msgid "Please contact <a href=\"mailto:dcc-support@icgc.org\">support</a> if you require assistance."
+msgid ""
+"Please contact <a href=\"mailto:dcc-support@icgc.org\">support</a> if you "
+"require assistance."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:10
-msgid "Please enter your search criteria below and then click 'Search' to see the result."
+msgid ""
+"Please enter your search criteria below and then click 'Search' to see the "
+"result."
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:27
-msgid "Please note that access tokens are associated with your user credentials so you must <span style=\"text-decoration: underline\">never</span> share your personal tokens with anyone."
+msgid ""
+"Please note that access tokens are associated with your user credentials so "
+"you must <span style=\"text-decoration: underline\">never</span> share your "
+"personal tokens with anyone."
 msgstr ""
 
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:206
-msgid "Please note that the analysis is filtering on high impact mutations only."
+msgid ""
+"Please note that the analysis is filtering on high impact mutations only."
 msgstr ""
 
 #: app/scripts/static/views/info.html:162
-msgid "Please note that, as opposed to the DCC online submission system which is running on a computer cluster, this VM can be deployed only on a single server."
+msgid ""
+"Please note that, as opposed to the DCC online submission system which is "
+"running on a computer cluster, this VM can be deployed only on a single "
+"server."
 msgstr ""
 
 #: app/scripts/sets/views/sets.result.html:14
@@ -3502,27 +3721,38 @@ msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:28
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:33
-msgid "Please see the <a href=\"/pcawg#embargo\">PCAWG publication and embargo policy</a> for the embargo terms."
+msgid ""
+"Please see the <a href=\"/pcawg#embargo\">PCAWG publication and embargo "
+"policy</a> for the embargo terms."
 msgstr ""
 
 #: app/scripts/analysis/views/analysis.html:42
 msgid ""
-"Please see the <a href=\"http://docs.icgc.org/portal/analysis/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Data Analysis</a>\n"
+"Please see the <a href=\"http://docs.icgc.org/portal/analysis/\" target="
+"\"_blank\"><i class=\"icon-external-link\"></i>Data Analysis</a>\n"
 "            documentation resource for a general overview of this feature."
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.html:315
 msgid ""
-"Please see the <a href=\"http://docs.icgc.org/portal/repositories\" target=\"_blank\">\n"
-"               <i class=\"icon-external-link\"></i>Repository documentation</a> resource for a general overview of this feature."
+"Please see the <a href=\"http://docs.icgc.org/portal/repositories\" target="
+"\"_blank\">\n"
+"               <i class=\"icon-external-link\"></i>Repository documentation</"
+"a> resource for a general overview of this feature."
 msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.result.html:19
-msgid "Please see the <a href=\"https://docs.icgc.org/methods#enrichmentanalysis\" target=\"_blank\"><i class=\"icon-external-link\"></i>Enrichment Analysis</a> documentation resource for a general overview of this feature."
+msgid ""
+"Please see the <a href=\"https://docs.icgc.org/methods#enrichmentanalysis\" "
+"target=\"_blank\"><i class=\"icon-external-link\"></i>Enrichment Analysis</"
+"a> documentation resource for a general overview of this feature."
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.file.html:186
-msgid "Please see the <a style=\"white-space: nowrap;\" href=\"http://docs.icgc.org/portal/repositories\" target=\"_blank\"><i class=\"icon-external-link\"></i>documentation</a> to learn more."
+msgid ""
+"Please see the <a style=\"white-space: nowrap;\" href=\"http://docs.icgc.org/"
+"portal/repositories\" target=\"_blank\"><i class=\"icon-external-link\"></"
+"i>documentation</a> to learn more."
 msgstr ""
 
 #. ${setName} is a noun
@@ -3533,7 +3763,8 @@ msgstr ""
 #: app/scripts/pancancer/views/pancancer.html:136
 msgid ""
 "Please write to \n"
-"        <a href=\"mailto:jennifer.jennings@oicr.on.ca\"><i class=\"icon-mail\"></i>jennifer.jennings@oicr.on.ca</a> for \n"
+"        <a href=\"mailto:jennifer.jennings@oicr.on.ca\"><i class=\"icon-mail"
+"\"></i>jennifer.jennings@oicr.on.ca</a> for \n"
 "        further information."
 msgstr ""
 
@@ -3562,15 +3793,16 @@ msgid "Powered by <a href=\"http://iobio.io/\">iobio</a>"
 msgstr ""
 
 #: app/scripts/genomemaps/js/viewer.js:519
-msgid "Powered by <a target=\"_blank\" href=\"http://www.genomemaps.org/\">Genome Maps</a>"
+msgid ""
+"Powered by <a target=\"_blank\" href=\"http://www.genomemaps.org/\">Genome "
+"Maps</a>"
 msgstr ""
 
 #: app/scripts/downloader/views/request.html:71
 msgid "Preparing..."
 msgstr ""
 
-#: app/scripts/common/js/codetable.js:144
-#: app/scripts/common/js/codetable.js:92
+#: app/scripts/common/js/codetable.js:144 app/scripts/common/js/codetable.js:92
 msgid "Present in DCC"
 msgstr ""
 
@@ -3585,8 +3817,7 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.donors.html:10
 #: app/scripts/advanced/views/advanced.donors.html:185
 #: app/scripts/advanced/views/advanced.facets.donors.html:7
-#: app/scripts/common/js/codetable.js:64
-#: app/scripts/donors/views/donor.html:69
+#: app/scripts/common/js/codetable.js:64 app/scripts/donors/views/donor.html:69
 #: app/scripts/keyword/views/results.html:217
 #: app/scripts/projects/views/project.html:78
 #: app/scripts/projects/views/projects.details.html:173
@@ -3626,10 +3857,8 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.facets.donors.html:13
 #: app/scripts/advanced/views/advanced.mutations.observations.html:25
 #: app/scripts/advanced/views/advanced.mutations.observations.html:91
-#: app/scripts/common/js/codetable.js:62
-#: app/scripts/common/js/codetable.js:63
-#: app/scripts/common/js/codetable.js:88
-#: app/scripts/genes/views/gene.html:237
+#: app/scripts/common/js/codetable.js:62 app/scripts/common/js/codetable.js:63
+#: app/scripts/common/js/codetable.js:88 app/scripts/genes/views/gene.html:237
 #: app/scripts/genes/views/gene.html:286
 #: app/scripts/genesets/views/geneset.html:244
 #: app/scripts/genesets/views/geneset.html:305
@@ -3672,8 +3901,7 @@ msgstr ""
 msgid "Proper Pairs"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:21
-#: app/scripts/genes/views/gene.html:325
+#: app/scripts/genes/views/gene.html:21 app/scripts/genes/views/gene.html:325
 #: app/scripts/mutations/views/mutation.html:15
 #: app/scripts/mutations/views/mutation.html:240
 msgid "Protein"
@@ -3712,7 +3940,10 @@ msgid "Publications"
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:132
-msgid "Quantitatively determine fitness of bacterial genes based on how many times a purposely seeded transposon gets inserted into each gene of a colony after some time."
+msgid ""
+"Quantitatively determine fitness of bacterial genes based on how many times "
+"a purposely seeded transposon gets inserted into each gene of a colony after "
+"some time."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:8
@@ -3725,7 +3956,9 @@ msgid "Quick Search"
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:112
-msgid "Random sequencing of a whole chromosome or other replicon isolated from a genome."
+msgid ""
+"Random sequencing of a whole chromosome or other replicon isolated from a "
+"genome."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:103
@@ -3733,7 +3966,9 @@ msgid "Random sequencing of exonic regions selected from the genome."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:105
-msgid "Random sequencing of whole transcriptome, also known as Whole Transcriptome Shotgun Sequencing, or WTSS"
+msgid ""
+"Random sequencing of whole transcriptome, also known as Whole Transcriptome "
+"Shotgun Sequencing, or WTSS"
 msgstr ""
 
 #: app/scripts/common/js/consequence.js:38
@@ -3754,10 +3989,14 @@ msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:6
 msgid ""
-"Raw read data, genome alignments, and associated metadata produced by the <a href=\"/pcawg\">ICGC PanCancer Analysis of Whole \n"
-"    Genomes (PCAWG) study</a> in addition to data submitted by ICGC projects to the \n"
-"    <a href=\"https://www.ebi.ac.uk/ega/\" target=\"_blank\"><i class=\"icon-external-link\"></i>European Genome Archive (EGA)</a> \n"
-"    is periodically gathered, curated and incrementally uploaded to Amazon S3 for the benefit of the cancer \n"
+"Raw read data, genome alignments, and associated metadata produced by the <a "
+"href=\"/pcawg\">ICGC PanCancer Analysis of Whole \n"
+"    Genomes (PCAWG) study</a> in addition to data submitted by ICGC projects "
+"to the \n"
+"    <a href=\"https://www.ebi.ac.uk/ega/\" target=\"_blank\"><i class=\"icon-"
+"external-link\"></i>European Genome Archive (EGA)</a> \n"
+"    is periodically gathered, curated and incrementally uploaded to Amazon "
+"S3 for the benefit of the cancer \n"
 "    research community."
 msgstr ""
 
@@ -3798,14 +4037,17 @@ msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:129
 msgid ""
-"Read the <a target=\"_blank\" href=\"/docs/#!/beacon/query_get_0\">ICGC API documentation</a> for programmatic access to this\n"
+"Read the <a target=\"_blank\" href=\"/docs/#!/beacon/query_get_0\">ICGC API "
+"documentation</a> for programmatic access to this\n"
 "        Beacon."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:20
 msgid ""
-"Read-level data is in the controlled tier, and you will need to obtain approval from the \n"
-"    <a href=\"https://icgc.org/daco\" target=\"_blank\"><i class=\"icon-external-link\"></i>ICGC Data Access Compliance Office (DACO)</a> \n"
+"Read-level data is in the controlled tier, and you will need to obtain "
+"approval from the \n"
+"    <a href=\"https://icgc.org/daco\" target=\"_blank\"><i class=\"icon-"
+"external-link\"></i>ICGC Data Access Compliance Office (DACO)</a> \n"
 "    in order to obtain the decryption keys necessary to access this data."
 msgstr ""
 
@@ -3918,8 +4160,7 @@ msgid "Results"
 msgstr ""
 
 #. ${query} would be a search query/keyword
-#: app/scripts/keyword/js/keyword.js:137
-#: app/scripts/keyword/js/keyword.js:83
+#: app/scripts/keyword/js/keyword.js:137 app/scripts/keyword/js/keyword.js:83
 msgid "Results for ${query}"
 msgstr ""
 
@@ -3933,11 +4174,15 @@ msgid "Returned when a matching mutation is found at the queried position."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:117
-msgid "Returned when a mutation is found at that position but does not match the mutated allele(s)."
+msgid ""
+"Returned when a mutation is found at that position but does not match the "
+"mutated allele(s)."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:122
-msgid "Returned when no mutation is found at the queried position in the selected dataset(s)."
+msgid ""
+"Returned when no mutation is found at the queried position in the selected "
+"dataset(s)."
 msgstr ""
 
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:238
@@ -4053,7 +4298,9 @@ msgid "Search Respository"
 msgstr ""
 
 #: app/scripts/downloader/views/request.html:29
-msgid "Search criteria results in <strong>{{totalDonor | number}}</strong> donors. Select data types to download:"
+msgid ""
+"Search criteria results in <strong>{{totalDonor | number}}</strong> donors. "
+"Select data types to download:"
 msgstr ""
 
 #: app/scripts/keyword/views/results.html:25
@@ -4102,7 +4349,9 @@ msgid "Select 2 or 3 sets of the same type, then click on Run."
 msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.upload.html:37
-msgid "Select <abbr data-tooltip=\"{{'False Discovery Rate' | translate}}\">FDR</abbr> q-value threshold: (0.005 to 0.5 inclusive)"
+msgid ""
+"Select <abbr data-tooltip=\"{{'False Discovery Rate' | translate}}\">FDR</"
+"abbr> q-value threshold: (0.005 to 0.5 inclusive)"
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:50
@@ -4118,11 +4367,15 @@ msgid "Select number of genes to be analyzed: ({{geneLimit}} maximum)"
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:34
-msgid "Select the desired set of scopes below and click \"Generate\". You may also enter a description to remind yourself what the token is for."
+msgid ""
+"Select the desired set of scopes below and click \"Generate\". You may also "
+"enter a description to remind yourself what the token is for."
 msgstr ""
 
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:155
-msgid "Select the gene set you want to analyze, then click on Run. <small>(Maximum 10,000 genes)</small>"
+msgid ""
+"Select the gene set you want to analyze, then click on Run. <small>(Maximum "
+"10,000 genes)</small>"
 msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.upload.html:25
@@ -4171,11 +4424,15 @@ msgid "Sequencing intended to finish (close) gaps in existing coverage."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:122
-msgid "Sequencing of hypersensitive sites, or segments of open chromatin that are more readily cleaved by DNaseI."
+msgid ""
+"Sequencing of hypersensitive sites, or segments of open chromatin that are "
+"more readily cleaved by DNaseI."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:116
-msgid "Sequencing of overlapping or distinct PCR or RT-PCR products. For example, metagenomic community profiling using SSU rRNA."
+msgid ""
+"Sequencing of overlapping or distinct PCR or RT-PCR products. For example, "
+"metagenomic community profiling using SSU rRNA."
 msgstr ""
 
 #: app/scripts/common/js/datatype.js:40
@@ -4201,7 +4458,9 @@ msgid "Set Operations"
 msgstr ""
 
 #: app/scripts/sets/views/sets.result.html:127
-msgid "Set operations has an upper limit of managing {{unionMaxLimit | number }} items."
+msgid ""
+"Set operations has an upper limit of managing {{unionMaxLimit | number }} "
+"items."
 msgstr ""
 
 #: app/scripts/donors/views/donor.supplemental.html:10
@@ -4254,85 +4513,110 @@ msgstr ""
 msgid "Show top:"
 msgstr ""
 
-#: app/scripts/ui/js/table.js:55
-#: app/scripts/ui/js/table.js:76
+#: app/scripts/ui/js/table.js:55 app/scripts/ui/js/table.js:76
 msgid "Showing"
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:159
-msgid "Showing <strong data-ng-bind=\"CompoundCtrl.getTargetedCompoundGenesResultPerPage()\"></strong> of <strong data-ng-bind=\"CompoundCtrl.getTargetedGeneCount()\"></strong> genes"
+msgid ""
+"Showing <strong data-ng-bind=\"CompoundCtrl."
+"getTargetedCompoundGenesResultPerPage()\"></strong> of <strong data-ng-bind="
+"\"CompoundCtrl.getTargetedGeneCount()\"></strong> genes"
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:243
-msgid "Showing <strong data-ng-bind=\"compound.trials.length\"></strong> Clinical Trials"
+msgid ""
+"Showing <strong data-ng-bind=\"compound.trials.length\"></strong> Clinical "
+"Trials"
 msgstr ""
 
 #: app/scripts/projects/views/projects.details.html:9
-msgid "Showing <strong id=\"projects-project-count\">{{ ProjectsCtrl.projects.hits.length }}</strong> projects"
+msgid ""
+"Showing <strong id=\"projects-project-count\">{{ ProjectsCtrl.projects.hits."
+"length }}</strong> projects"
 msgstr ""
 
 #: app/scripts/donors/views/donor.html:277
 msgid ""
 "Showing <strong>{{ DonorMutationsCtrl.mutations.hits.length }}</strong> of\n"
-"            <strong>{{ DonorMutationsCtrl.mutations.pagination.total | numberPT }}</strong> mutations"
+"            <strong>{{ DonorMutationsCtrl.mutations.pagination.total | "
+"numberPT }}</strong> mutations"
 msgstr ""
 
 #: app/scripts/donors/views/donor.specimen.html:129
-msgid "Showing <strong>{{ DonorSpecimenCtrl.specimen.samples.length }}</strong> samples"
+msgid ""
+"Showing <strong>{{ DonorSpecimenCtrl.specimen.samples.length }}</strong> "
+"samples"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:478
-msgid "Showing <strong>{{ GeneCompoundsCtrl.compounds.length }}</strong> compounds"
+msgid ""
+"Showing <strong>{{ GeneCompoundsCtrl.compounds.length }}</strong> compounds"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:373
-msgid "Showing <strong>{{ GeneMutationsCtrl.mutations.hits.length }}</strong> of <strong>{{GeneMutationsCtrl.mutations.pagination.total | number }}</strong> mutations"
+msgid ""
+"Showing <strong>{{ GeneMutationsCtrl.mutations.hits.length }}</strong> of "
+"<strong>{{GeneMutationsCtrl.mutations.pagination.total | number }}</strong> "
+"mutations"
 msgstr ""
 
 #: app/scripts/mutations/views/mutation.html:69
-msgid "Showing <strong>{{ MutationCtrl.mutation.consequences.length }}</strong> consequences"
+msgid ""
+"Showing <strong>{{ MutationCtrl.mutation.consequences.length }}</strong> "
+"consequences"
 msgstr ""
 
 #: app/scripts/browser/views/browser.html:49
 msgid ""
-"Showing <strong>{{ genes.data.hits.length | number }}</strong> of <strong>{{ genes.data.pagination.total\n"
+"Showing <strong>{{ genes.data.hits.length | number }}</strong> of "
+"<strong>{{ genes.data.pagination.total\n"
 "                  | number }}</strong>"
 msgstr ""
 
 #: app/scripts/browser/views/browser.html:85
 msgid ""
-"Showing <strong>{{ mutations.data.hits.length | number }}</strong> of <strong>{{\n"
+"Showing <strong>{{ mutations.data.hits.length | number }}</strong> of "
+"<strong>{{\n"
 "                  mutations.data.pagination.total | number }}</strong>"
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.file.html:272
-msgid "Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{:: info.donors.length}}</strong> donors"
+msgid ""
+"Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{:: "
+"info.donors.length}}</strong> donors"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:231
-msgid "Showing <strong>{{GeneCtrl.gene.projects.length | number}}</strong> projects"
+msgid ""
+"Showing <strong>{{GeneCtrl.gene.projects.length | number}}</strong> projects"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:238
-msgid "Showing <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong> projects"
+msgid ""
+"Showing <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong> "
+"projects"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:589
 msgid ""
-"Showing <strong>{{GeneSetDonorsCtrl.donors.hits.length}}</strong> of <strong>{{GeneSetDonorsCtrl.donors.pagination.total\n"
+"Showing <strong>{{GeneSetDonorsCtrl.donors.hits.length}}</strong> of "
+"<strong>{{GeneSetDonorsCtrl.donors.pagination.total\n"
 "            | number}}</strong> donors"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:359
 msgid ""
 "Showing <strong>{{GeneSetGenesCtrl.genes.hits.length | number}}</strong> of\n"
-"            <strong>{{GeneSetGenesCtrl.genes.pagination.total | number}}</strong> genes"
+"            <strong>{{GeneSetGenesCtrl.genes.pagination.total | number}}</"
+"strong> genes"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:480
 msgid ""
 "Showing <strong>{{GeneSetMutationsCtrl.mutations.hits.length}}</strong> of\n"
-"            <strong>{{GeneSetMutationsCtrl.mutations.pagination.total | number}}</strong> mutations"
+"            <strong>{{GeneSetMutationsCtrl.mutations.pagination.total | "
+"number}}</strong> mutations"
 msgstr ""
 
 #: app/scripts/mutations/views/mutation.html:169
@@ -4342,24 +4626,29 @@ msgstr ""
 #: app/scripts/projects/views/project.html:629
 msgid ""
 "Showing <strong>{{ProjectDonorsCtrl.donors.hits.length}}</strong> of \n"
-"                <strong>{{ProjectDonorsCtrl.donors.pagination.total | number}}</strong> donors"
+"                <strong>{{ProjectDonorsCtrl.donors.pagination.total | "
+"number}}</strong> donors"
 msgstr ""
 
 #: app/scripts/projects/views/project.html:344
 msgid ""
 "Showing <strong>{{ProjectGeneCtrl.genes.hits.length | number}}</strong> of\n"
-"                <strong>{{ProjectGeneCtrl.genes.pagination.total | number}}</strong> genes"
+"                <strong>{{ProjectGeneCtrl.genes.pagination.total | number}}</"
+"strong> genes"
 msgstr ""
 
 #: app/scripts/projects/views/project.html:488
 msgid ""
 "Showing <strong>{{ProjectMutationsCtrl.mutations.hits.length}}</strong> of\n"
-"                <strong>{{ProjectMutationsCtrl.mutations.pagination.total | number}}</strong> mutations"
+"                <strong>{{ProjectMutationsCtrl.mutations.pagination.total | "
+"number}}</strong> mutations"
 msgstr ""
 
 #. {{params.provider}} comes out to be either ICGC, Google or Yahoo
 #: app/scripts/auth/views/login.popup.html:47
-msgid "Sign in using <strong style=\"text-transform: capitalize\">{{params.provider}}</strong> as your OpenID provider"
+msgid ""
+"Sign in using <strong style=\"text-transform: capitalize\">{{params."
+"provider}}</strong> as your OpenID provider"
 msgstr ""
 
 #: app/scripts/auth/views/login.popup.html:44
@@ -4398,7 +4687,13 @@ msgid "Simple Somatic Mutations (SSM)"
 msgstr ""
 
 #: app/scripts/static/views/info.html:100
-msgid "Simple somatic mutation data submitted by member projects are reannotated using the variant annotation tool SnpEff (v3.3c, <a href=\"http://snpeff.sourceforge.net/\">http://snpeff.sourceforge.net/</a>) recommended by the ICGC Mutation Consequences and Pathways (MUCOPA) Working Subgroup (Nature Methods, 2013, PMID:<a href=\"http://www.ncbi.nlm.nih.gov/pubmed/?term=23900255 \">23900255</a>)."
+msgid ""
+"Simple somatic mutation data submitted by member projects are reannotated "
+"using the variant annotation tool SnpEff (v3.3c, <a href=\"http://snpeff."
+"sourceforge.net/\">http://snpeff.sourceforge.net/</a>) recommended by the "
+"ICGC Mutation Consequences and Pathways (MUCOPA) Working Subgroup (Nature "
+"Methods, 2013, PMID:<a href=\"http://www.ncbi.nlm.nih.gov/pubmed/?"
+"term=23900255 \">23900255</a>)."
 msgstr ""
 
 #: app/scripts/static/views/info.html:105
@@ -4418,8 +4713,7 @@ msgid "Singletons"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:71
-#: app/scripts/genes/views/gene.html:238
-#: app/scripts/genes/views/gene.html:287
+#: app/scripts/genes/views/gene.html:238 app/scripts/genes/views/gene.html:287
 #: app/scripts/genesets/views/geneset.html:245
 #: app/scripts/genesets/views/geneset.html:306
 #: app/scripts/genesets/views/geneset.html:597
@@ -4559,7 +4853,9 @@ msgid "Status"
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:150
-msgid "Stein, D. L. et al., <strong>Data analysis: Create a cloud commons.,</strong> Nature News, July 08, 2015"
+msgid ""
+"Stein, D. L. et al., <strong>Data analysis: Create a cloud commons.,</"
+"strong> Nature News, July 08, 2015"
 msgstr ""
 
 #: app/scripts/common/js/consequence.js:32
@@ -4593,8 +4889,7 @@ msgstr ""
 msgid "Structural Germline Variants"
 msgstr ""
 
-#: app/scripts/common/js/datatype.js:33
-#: app/scripts/common/js/pcawg.js:34
+#: app/scripts/common/js/datatype.js:33 app/scripts/common/js/pcawg.js:34
 msgid "Structural Somatic Mutations"
 msgstr ""
 
@@ -4653,8 +4948,7 @@ msgstr ""
 msgid "Submitter ID"
 msgstr ""
 
-#: app/scripts/static/views/info.html:124
-#: app/scripts/static/views/info.html:22
+#: app/scripts/static/views/info.html:124 app/scripts/static/views/info.html:22
 msgid "Submitter Tools"
 msgstr ""
 
@@ -4673,8 +4967,7 @@ msgstr ""
 #: app/scripts/compounds/views/compound.html:12
 #: app/scripts/compounds/views/compound.html:35
 #: app/scripts/donors/views/donor.html:25
-#: app/scripts/donors/views/donor.html:48
-#: app/scripts/genes/views/gene.html:11
+#: app/scripts/donors/views/donor.html:48 app/scripts/genes/views/gene.html:11
 #: app/scripts/genes/views/gene.html:59
 #: app/scripts/genesets/views/geneset.html:27
 #: app/scripts/genesets/views/geneset.html:77
@@ -4788,11 +5081,20 @@ msgid "Terms and Conditions"
 msgstr ""
 
 #: app/scripts/repositories/views/home.html:85
-msgid "The <a href=\"/icgc-in-the-cloud/collaboratory\">Cancer Genome Collaboratory</a> is an academic compute cloud resource built by the Ontario Institute for Cancer Research and hosted at the Compute Canada facilities. This infrastructure is still under intensive development and is currently storing only a small subset of the ICGC data for beta testing."
+msgid ""
+"The <a href=\"/icgc-in-the-cloud/collaboratory\">Cancer Genome "
+"Collaboratory</a> is an academic compute cloud resource built by the Ontario "
+"Institute for Cancer Research and hosted at the Compute Canada facilities. "
+"This infrastructure is still under intensive development and is currently "
+"storing only a small subset of the ICGC data for beta testing."
 msgstr ""
 
 #: app/scripts/releases/views/home.html:34
-msgid "The <a href=\"/pcawg\">Pancancer Analysis of Whole Genomes</a> (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from the International Cancer Genome Consortium."
+msgid ""
+"The <a href=\"/pcawg\">Pancancer Analysis of Whole Genomes</a> (PCAWG) study "
+"is an international collaboration to identify common patterns of mutation in "
+"more than 2,800 cancer whole genomes from the International Cancer Genome "
+"Consortium."
 msgstr ""
 
 #: app/scripts/static/views/team.html:96
@@ -4800,17 +5102,25 @@ msgid "The <a href=\"http://iobio.io/\" target=\"_blank\">iobio Team</a>"
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:2
-msgid "The <a href=\"http://www.cancercollaboratory.org\" target=\"_blank\"><i class=\"icon-external-link\"></i>Cancer Genome Collaboratory</a> (or simply the Collaboratory) is an academic research cloud being built by the Ontario Institute for Cancer Research (OICR)."
+msgid ""
+"The <a href=\"http://www.cancercollaboratory.org\" target=\"_blank\"><i "
+"class=\"icon-external-link\"></i>Cancer Genome Collaboratory</a> (or simply "
+"the Collaboratory) is an academic research cloud being built by the Ontario "
+"Institute for Cancer Research (OICR)."
 msgstr ""
 
 #: app/scripts/static/views/team.html:89
-msgid "The <a href=\"http://www.reactome.org/pages/about/reactome-team/\" target=\"_blank\">Reactome Team</a>"
+msgid ""
+"The <a href=\"http://www.reactome.org/pages/about/reactome-team/\" target="
+"\"_blank\">Reactome Team</a>"
 msgstr ""
 
 #: app/scripts/releases/views/home.html:20
 msgid ""
-"The <a target=\"_blank\" href=\"http://icgc.org\"><i class=\"icon-external-link\"></i>ICGC</a> Data Portal provides tools for visualizing, querying\n"
-"            and downloading the data released quarterly by the consortium's member projects."
+"The <a target=\"_blank\" href=\"http://icgc.org\"><i class=\"icon-external-"
+"link\"></i>ICGC</a> Data Portal provides tools for visualizing, querying\n"
+"            and downloading the data released quarterly by the consortium's "
+"member projects."
 msgstr ""
 
 #: app/scripts/projects/views/project.html:168
@@ -4823,34 +5133,50 @@ msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:40
 msgid ""
-"The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the <a href=\"/pcawg\">ICGG PanCancer Analysis of\n"
+"The Collaboratory currently contains a growing repository of ICGC alignment "
+"and variant data sourced from the <a href=\"/pcawg\">ICGG PanCancer Analysis "
+"of\n"
 "    Whole Genomes</a> project (PCAWG)."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:19
-msgid "The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the ICGG PanCancer Analysis of Whole Genomes project (PCAWG)."
+msgid ""
+"The Collaboratory currently contains a growing repository of ICGC alignment "
+"and variant data sourced from the ICGG PanCancer Analysis of Whole Genomes "
+"project (PCAWG)."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:5
-msgid "The Collaboratory hosts ICGC BAM files, compute capabilities, and Docker-based analysis tools for use by its research community."
+msgid ""
+"The Collaboratory hosts ICGC BAM files, compute capabilities, and Docker-"
+"based analysis tools for use by its research community."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:65
-msgid "The Collaboratory hosts an OpenStack cloud with nearly 1150 cores and over 3.2 PB of raw storage available for use by researchers."
+msgid ""
+"The Collaboratory hosts an OpenStack cloud with nearly 1150 cores and over "
+"3.2 PB of raw storage available for use by researchers."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:74
 msgid ""
-"The Collaboratory offers multiple ways for researchers to share their tools including VM sharing through the\n"
-"    OpenStack Console and the <a href=\"http://www.dockstore.org/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Dockstore</a>."
+"The Collaboratory offers multiple ways for researchers to share their tools "
+"including VM sharing through the\n"
+"    OpenStack Console and the <a href=\"http://www.dockstore.org/\" target="
+"\"_blank\"><i class=\"icon-external-link\"></i>Dockstore</a>."
 msgstr ""
 
 #: app/scripts/repositories/views/home.html:25
-msgid "The Data Coordination Center has developed a unified interface for searching and accessing data across all supported clouds."
+msgid ""
+"The Data Coordination Center has developed a unified interface for searching "
+"and accessing data across all supported clouds."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:107
-msgid "The ICGC Beacon searches for mutated alleles observed in somatic mutations only. The Beacon is designed to accept a query and responds with one of the three results described below."
+msgid ""
+"The ICGC Beacon searches for mutated alleles observed in somatic mutations "
+"only. The Beacon is designed to accept a query and responds with one of the "
+"three results described below."
 msgstr ""
 
 #: app/scripts/static/views/team.html:1
@@ -4858,43 +5184,64 @@ msgid "The ICGC DCC Team"
 msgstr ""
 
 #: app/scripts/static/views/info.html:134
-msgid "The ICGC DCC now supports data submissions through a web-based submission portal:"
+msgid ""
+"The ICGC DCC now supports data submissions through a web-based submission "
+"portal:"
 msgstr ""
 
 #: app/scripts/static/views/info.html:159
-msgid "The ICGC DCC offers a standalone virtual machine that allows you to locally validate ICGC submissions before uploading complete datasets to the online web-based data submission system."
+msgid ""
+"The ICGC DCC offers a standalone virtual machine that allows you to locally "
+"validate ICGC submissions before uploading complete datasets to the online "
+"web-based data submission system."
 msgstr ""
 
 #: app/scripts/static/views/info.html:74
-msgid "The ICGC Data Portal uses gene models produced by Ensembl (<a href=\"http://www.ensembl.org\">http://www.ensembl.org</a>)."
+msgid ""
+"The ICGC Data Portal uses gene models produced by Ensembl (<a href=\"http://"
+"www.ensembl.org\">http://www.ensembl.org</a>)."
 msgstr ""
 
 #: app/scripts/repositories/views/home.html:14
-msgid "The ICGC has joined forces with commercial and academic compute cloud partners to remove many of the barriers that prevent researchers from using the ICGC's vast genomic database."
+msgid ""
+"The ICGC has joined forces with commercial and academic compute cloud "
+"partners to remove many of the barriers that prevent researchers from using "
+"the ICGC's vast genomic database."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:42
 msgid ""
-"The PCAWG project has created standardized, whole genome workflows for alignment using BWA-Mem and variant calling using best practice processes from the \n"
-"    <a href=\"https://www.sanger.ac.uk/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Sanger Institute</a>, the <a href=\"https://www.broadinstitute.org/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Broad Institute</a>, \n"
-"    and <a href=\"https://www.dkfz.de/\" target=\"_blank\"><i class=\"icon-external-link\"></i>DKFZ</a> / <a href=\"http://www.embl.de/\" target=\"_blank\"><i class=\"icon-external-link\"></i>EMBL</a>."
+"The PCAWG project has created standardized, whole genome workflows for "
+"alignment using BWA-Mem and variant calling using best practice processes "
+"from the \n"
+"    <a href=\"https://www.sanger.ac.uk/\" target=\"_blank\"><i class=\"icon-"
+"external-link\"></i>Sanger Institute</a>, the <a href=\"https://www."
+"broadinstitute.org/\" target=\"_blank\"><i class=\"icon-external-link\"></"
+"i>Broad Institute</a>, \n"
+"    and <a href=\"https://www.dkfz.de/\" target=\"_blank\"><i class=\"icon-"
+"external-link\"></i>DKFZ</a> / <a href=\"http://www.embl.de/\" target="
+"\"_blank\"><i class=\"icon-external-link\"></i>EMBL</a>."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:110
 msgid ""
-"The PanCancer Analysis of Whole Genomes (PCAWG) project is committed to the principle of rapid distribution \n"
-"        of primary data, alignments files, and secondary analysis data (such as mutation calls) to all members of \n"
-"        the research community that have applied for (and have become approved for) data access."
+"The PanCancer Analysis of Whole Genomes (PCAWG) project is committed to the "
+"principle of rapid distribution \n"
+"        of primary data, alignments files, and secondary analysis data (such "
+"as mutation calls) to all members of \n"
+"        the research community that have applied for (and have become "
+"approved for) data access."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:59
 msgid ""
-"The Pancancer Analysis of Whole Genomes (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from\n"
+"The Pancancer Analysis of Whole Genomes (PCAWG) study is an international "
+"collaboration to identify common patterns of mutation in more than 2,800 "
+"cancer whole genomes from\n"
 "           the International Cancer Genome Consortium."
 msgstr ""
 
-#: app/scripts/app/js/app.js:579
-#: app/scripts/common/views/footer.html:24
+#: app/scripts/app/js/app.js:579 app/scripts/common/views/footer.html:24
 msgid "The Team"
 msgstr ""
 
@@ -4905,57 +5252,80 @@ msgstr ""
 #: app/scripts/static/views/info.html:79
 msgid ""
 "The canonical gene data (release 69) is available from Ensembl FTP site at \n"
-"                <a href=\"ftp://ftp.ensembl.org/pub/release-69/mysql/homo_sapiens_core_69_37\">\n"
-"                ftp://ftp.ensembl.org/pub/release-69/mysql/homo_sapiens_core_69_37</a>."
+"                <a href=\"ftp://ftp.ensembl.org/pub/release-69/mysql/"
+"homo_sapiens_core_69_37\">\n"
+"                ftp://ftp.ensembl.org/pub/release-69/mysql/"
+"homo_sapiens_core_69_37</a>."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:119
 msgid ""
-"The community resource for the PCAWG project comprises newly generated files produced by this \n"
-"        collaboration (unified alignments, mutation calls and any secondary analysis data)."
+"The community resource for the PCAWG project comprises newly generated files "
+"produced by this \n"
+"        collaboration (unified alignments, mutation calls and any secondary "
+"analysis data)."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:22
-msgid "The content is maintained in collaboration with the ICGC Data Coordination Center (DCC)."
+msgid ""
+"The content is maintained in collaboration with the ICGC Data Coordination "
+"Center (DCC)."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:29
-msgid "The data produced by the PCAWG project, including somatic mutations, is subject to a publication ebargo."
+msgid ""
+"The data produced by the PCAWG project, including somatic mutations, is "
+"subject to a publication ebargo."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:27
-msgid "The data produced by the PCAWG project, including somatic mutations, is subject to a publication embargo."
+msgid ""
+"The data produced by the PCAWG project, including somatic mutations, is "
+"subject to a publication embargo."
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:80
-msgid "The following are your <strong>{{activeTokens.length}}</strong> active token(s)."
+msgid ""
+"The following are your <strong>{{activeTokens.length}}</strong> active "
+"token(s)."
 msgstr ""
 
 #: app/scripts/repositories/views/home.html:17
-msgid "The large size of the ICGC datasets means that they can take months to download and analysing them requires computing power that many research groups do not have."
+msgid ""
+"The large size of the ICGC datasets means that they can take months to "
+"download and analysing them requires computing power that many research "
+"groups do not have."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:78
 msgid ""
-"The latter is a developing service that offers <a href=\"https://www.docker.com/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Docker</a>\n"
-"    container sharing based on the  <a href=\"https://github.com/ga4gh/compliance\" target=\"_blank\"><i class=\"icon-external-link\"></i>GA4GH-compliant</a>\n"
+"The latter is a developing service that offers <a href=\"https://www.docker."
+"com/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Docker</a>\n"
+"    container sharing based on the  <a href=\"https://github.com/ga4gh/"
+"compliance\" target=\"_blank\"><i class=\"icon-external-link\"></i>GA4GH-"
+"compliant</a>\n"
 "    tool descriptor."
 msgstr ""
 
 #: app/scripts/static/views/info.html:40
 msgid ""
-"The official ICGC DCC-supported repository for <a href=\"http://www.ebi.ac.uk/ega/dacs/EGAC00001000010\">ICGC sequencing reads</a>\n"
-"                is the European Bioinformatics Institute's (EBI) <a href=\"http://www.ebi.ac.uk/ega\">European Genome-phenome Archive (EGA)</a>."
+"The official ICGC DCC-supported repository for <a href=\"http://www.ebi.ac."
+"uk/ega/dacs/EGAC00001000010\">ICGC sequencing reads</a>\n"
+"                is the European Bioinformatics Institute's (EBI) <a href="
+"\"http://www.ebi.ac.uk/ega\">European Genome-phenome Archive (EGA)</a>."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:115
 msgid ""
-"The primary data contributed to the project will fall under any publication/embargo policy of the contributing \n"
+"The primary data contributed to the project will fall under any publication/"
+"embargo policy of the contributing \n"
 "        institute or consortia."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:74
-msgid "The research activities are coordinated by a series of working groups comprising more than 700 scientists and covering the following themes:"
+msgid ""
+"The research activities are coordinated by a series of working groups "
+"comprising more than 700 scientists and covering the following themes:"
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:82
@@ -4963,15 +5333,24 @@ msgid "The result of your Beacon query was"
 msgstr ""
 
 #: app/scripts/static/views/info.html:138
-msgid "The submission system is currently accepting files using ICGC DCC data specification, which is available <a href=\"http://legacy-portal.dcc.icgc.org/pages/docs/dictionaries/latest\" target=\"_blank\"><i class=\"icon-external-link\"></i>here</a> as an HTML document."
+msgid ""
+"The submission system is currently accepting files using ICGC DCC data "
+"specification, which is available <a href=\"http://legacy-portal.dcc.icgc."
+"org/pages/docs/dictionaries/latest\" target=\"_blank\"><i class=\"icon-"
+"external-link\"></i>here</a> as an HTML document."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:47
-msgid "These are made available to the research community via a \"launcher\" AMI that allows users to analyze their data using the same workflows."
+msgid ""
+"These are made available to the research community via a \"launcher\" AMI "
+"that allows users to analyze their data using the same workflows."
 msgstr ""
 
 #: app/scripts/repositories/views/home.html:20
-msgid "These partnerships will allow scientists to access and analyze ICGC datasets through multiple cloud computing platforms, enhancing collaboration and accelerating the development of new tools and treatments for cancer patients."
+msgid ""
+"These partnerships will allow scientists to access and analyze ICGC datasets "
+"through multiple cloud computing platforms, enhancing collaboration and "
+"accelerating the development of new tools and treatments for cancer patients."
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:11
@@ -4979,7 +5358,11 @@ msgid "They can be used instead of a password to access ICGC resources."
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:133
-msgid "This Beacon is based off of the v0.2 Specification which is still in progress and is subject to change without notice. Please contact <a href=\"mailto:theglobalalliance@genomicsandhealth.org\">theglobalalliance@genomicsandhealth.org</a> for additonal information."
+msgid ""
+"This Beacon is based off of the v0.2 Specification which is still in "
+"progress and is subject to change without notice. Please contact <a href="
+"\"mailto:theglobalalliance@genomicsandhealth.org"
+"\">theglobalalliance@genomicsandhealth.org</a> for additonal information."
 msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.result.html:15
@@ -4989,93 +5372,138 @@ msgid "This analysis is deprecated."
 msgstr ""
 
 #: app/scripts/sets/views/sets.result.html:13
-msgid "This analysis was created against an old version of the data and may no longer be valid."
+msgid ""
+"This analysis was created against an old version of the data and may no "
+"longer be valid."
 msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.result.html:16
 #: app/scripts/phenotype/views/phenotype.result.html:11
-msgid "This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again."
+msgid ""
+"This analysis was created against an old version of the data and may no "
+"longer be valid. Please remove or recreate it again."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:17
-msgid "This data and associated search and access tools is managed by the ICGC Data Coordination Center (DCC)."
+msgid ""
+"This data and associated search and access tools is managed by the ICGC Data "
+"Coordination Center (DCC)."
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:18
-msgid "This feature is required when using the <a href=\"/software\" target=\"_blank\">Storage Client</a> or programatically <a href=\"http://docs.icgc.org/portal/api\" target=\"_blank\"><i class=\"icon-external-link\"></i>downloading controlled access data</a> from the Data Portal."
+msgid ""
+"This feature is required when using the <a href=\"/software\" target=\"_blank"
+"\">Storage Client</a> or programatically <a href=\"http://docs.icgc.org/"
+"portal/api\" target=\"_blank\"><i class=\"icon-external-link\"></"
+"i>downloading controlled access data</a> from the Data Portal."
 msgstr ""
 
 #: app/scripts/static/views/info.html:88
-msgid "This file is then transformed into a document-oriented data store for integration with other data types, such as, somatic mutations."
+msgid ""
+"This file is then transformed into a document-oriented data store for "
+"integration with other data types, such as, somatic mutations."
 msgstr ""
 
 #: app/scripts/software/views/software.html:26
-msgid "This is the official DCC software page which publishes various tools for working with ICGC data."
+msgid ""
+"This is the official DCC software page which publishes various tools for "
+"working with ICGC data."
 msgstr ""
 
 #: app/scripts/software/views/software.html:132
-msgid "This provides the necessary operating environment for ICGC get, and will be automatically downloaded by the tool if the docker daemon is running on your computer."
+msgid ""
+"This provides the necessary operating environment for ICGC get, and will be "
+"automatically downloaded by the tool if the docker daemon is running on your "
+"computer."
 msgstr ""
 
 #: app/scripts/static/views/info.html:128
-msgid "This section provides instructions for ICGC projects on releasing data through the ICGC DCC and public repositories"
+msgid ""
+"This section provides instructions for ICGC projects on releasing data "
+"through the ICGC DCC and public repositories"
 msgstr ""
 
 #: app/scripts/static/views/info.html:97
-msgid "This type of annotation provides a list of predicted gene effects, such as a non-conservative amino acid substitution, but does not attempt to prioritize the changes by their functional impact."
+msgid ""
+"This type of annotation provides a list of predicted gene effects, such as a "
+"non-conservative amino acid substitution, but does not attempt to prioritize "
+"the changes by their functional impact."
 msgstr ""
 
 #: app/scripts/auth/views/logout.popup.html:10
 msgid ""
-"This will log you out of the portal, but <strong>not from your OpenID account.</strong>\n"
-"        To prevent unauthorized access, please also logout from your account on your\n"
+"This will log you out of the portal, but <strong>not from your OpenID "
+"account.</strong>\n"
+"        To prevent unauthorized access, please also logout from your account "
+"on your\n"
 "        OpenID provider's site."
 msgstr ""
 
 #: app/scripts/releases/views/home.html:24
-msgid "To access ICGC controlled tier data, please read these <a href=\"http://docs.icgc.org/portal/access/\" target=\"_blank\"><i class=\"icon-external-link\"></i>instructions.</a>"
+msgid ""
+"To access ICGC controlled tier data, please read these <a href=\"http://docs."
+"icgc.org/portal/access/\" target=\"_blank\"><i class=\"icon-external-link"
+"\"></i>instructions.</a>"
 msgstr ""
 
 #: app/scripts/downloader/views/request.html:10
 msgid ""
 "To browse and download unfiltered data, please visit the\n"
-"         <a href=\"{{:: dataReleasesRouteInfo.href }}\" data-ng-click=\"modal=false\">\n"
-"            <i class=\"icon-database\"></i><strong>{{:: dataReleasesRouteInfo.title }}</strong></a> section."
+"         <a href=\"{{:: dataReleasesRouteInfo.href }}\" data-ng-click="
+"\"modal=false\">\n"
+"            <i class=\"icon-database\"></i><strong>{{:: "
+"dataReleasesRouteInfo.title }}</strong></a> section."
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:42
-msgid "To generate tokens for cloud based environments you will require <a href=\"http://docs.icgc.org/portal/access\"><i class=\"icon-external-link\"></i>DACO cloud access</a>."
+msgid ""
+"To generate tokens for cloud based environments you will require <a href="
+"\"http://docs.icgc.org/portal/access\"><i class=\"icon-external-link\"></"
+"i>DACO cloud access</a>."
 msgstr ""
 
 #: app/scripts/software/views/software.html:92
-msgid "To interact with all ICGC data repositories, you can use the icgc-get software."
+msgid ""
+"To interact with all ICGC data repositories, you can use the icgc-get "
+"software."
 msgstr ""
 
 #: app/scripts/software/views/software.html:43
 msgid ""
-"To interact with cloud repositories such as <a href=\"/icgc-in-the-cloud/aws/\">AWS</a> and \n"
-"                <a href=\"/icgc-in-the-cloud/collaboratory/\">Collaboratory</a>, you will require the Storage Client sofware. For system requirements and usage information, \n"
-"                please see the <a href=\"http://docs.icgc.org/cloud/guide/\"><i class=\"icon-external-link\"></i>User Guide</a>."
+"To interact with cloud repositories such as <a href=\"/icgc-in-the-cloud/aws/"
+"\">AWS</a> and \n"
+"                <a href=\"/icgc-in-the-cloud/collaboratory/\">Collaboratory</"
+"a>, you will require the Storage Client sofware. For system requirements and "
+"usage information, \n"
+"                please see the <a href=\"http://docs.icgc.org/cloud/guide/"
+"\"><i class=\"icon-external-link\"></i>User Guide</a>."
 msgstr ""
 
 #: app/scripts/static/views/info.html:168
 msgid ""
 "To use this virtual machine, please download the VirtualBox package from\n"
-"                <a href=\"https://daw9opvs2y3v5.cloudfront.net/public/icgc-dcc-validator-1.10.ova\" target=\"_blank\">\n"
+"                <a href=\"https://daw9opvs2y3v5.cloudfront.net/public/icgc-"
+"dcc-validator-1.10.ova\" target=\"_blank\">\n"
 "                    <i class=\"icon-download\"></i>here\n"
 "                </a>."
 msgstr ""
 
 #: app/scripts/software/views/software.html:32
-msgid "To verify the contents of the download, please see <a data-scrollto=\"\" href=\"#verifying-downloads\">Verifying Downloads</a>."
+msgid ""
+"To verify the contents of the download, please see <a data-scrollto=\"\" "
+"href=\"#verifying-downloads\">Verifying Downloads</a>."
 msgstr ""
 
 #: app/scripts/software/views/software.html:144
-msgid "To verify the signatures you will need our public key used for software releases:"
+msgid ""
+"To verify the signatures you will need our public key used for software "
+"releases:"
 msgstr ""
 
 #: app/scripts/software/views/software.html:151
-msgid "To verify the signed software you will need to ensure you have downloaded our public key and imported it:"
+msgid ""
+"To verify the signed software you will need to ensure you have downloaded "
+"our public key and imported it:"
 msgstr ""
 
 #: app/scripts/donors/views/donor.supplemental.html:55
@@ -5108,7 +5536,9 @@ msgid "Token Manager"
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:12
-msgid "Tokens allow you to associate <em>scopes</em> which limit access to that needed for the target environment."
+msgid ""
+"Tokens allow you to associate <em>scopes</em> which limit access to that "
+"needed for the target environment."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:45
@@ -5120,11 +5550,15 @@ msgid "Tools"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:227
-msgid "Top 10 projects with donors containing mutated genes in the gene set sorted by proportion of affected donors"
+msgid ""
+"Top 10 projects with donors containing mutated genes in the gene set sorted "
+"by proportion of affected donors"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:233
-msgid "Top 10 projects with donors containing mutated genes in the gene set sorted by proportion of mutated genes"
+msgid ""
+"Top 10 projects with donors containing mutated genes in the gene set sorted "
+"by proportion of mutated genes"
 msgstr ""
 
 #: app/scripts/projects/views/projects.summary.html:29
@@ -5132,7 +5566,10 @@ msgid "Top 20 Mutated Genes with High Functional Impact SSMs"
 msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.result.html:92
-msgid "Top <strong>{{item.params.maxGeneSetCount | number}}</strong> gene sets out of <strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched gene sets with FDR &le; <strong>{{item.params.fdr}}</strong>"
+msgid ""
+"Top <strong>{{item.params.maxGeneSetCount | number}}</strong> gene sets out "
+"of <strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> "
+"enriched gene sets with FDR &le; <strong>{{item.params.fdr}}</strong>"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:226
@@ -5259,8 +5696,7 @@ msgstr ""
 msgid "Tumour Stage at Diagnosis"
 msgstr ""
 
-#: app/scripts/donors/views/donor.html:77
-#: app/scripts/genes/views/gene.html:240
+#: app/scripts/donors/views/donor.html:77 app/scripts/genes/views/gene.html:240
 #: app/scripts/genes/views/gene.html:289
 #: app/scripts/genesets/views/geneset.html:247
 #: app/scripts/genesets/views/geneset.html:308
@@ -5270,10 +5706,8 @@ msgstr ""
 msgid "Tumour Subtype"
 msgstr ""
 
-#: app/scripts/common/js/codetable.js:78
-#: app/scripts/donors/views/donor.html:73
-#: app/scripts/genes/views/gene.html:239
-#: app/scripts/genes/views/gene.html:288
+#: app/scripts/common/js/codetable.js:78 app/scripts/donors/views/donor.html:73
+#: app/scripts/genes/views/gene.html:239 app/scripts/genes/views/gene.html:288
 #: app/scripts/genesets/views/geneset.html:246
 #: app/scripts/genesets/views/geneset.html:307
 #: app/scripts/keyword/views/results.html:222
@@ -5313,8 +5747,7 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:94
 #: app/scripts/compounds/views/compound.html:181
 #: app/scripts/compounds/views/compound.html:327
-#: app/scripts/genes/views/gene.html:387
-#: app/scripts/genes/views/gene.html:437
+#: app/scripts/genes/views/gene.html:387 app/scripts/genes/views/gene.html:437
 #: app/scripts/genes/views/gene.html:77
 #: app/scripts/genesets/views/geneset.html:369
 #: app/scripts/genesets/views/geneset.html:415
@@ -5387,22 +5820,33 @@ msgid "User Guide"
 msgstr ""
 
 #: app/scripts/repositories/views/home.html:32
-msgid "User authentication and authorization is achieved through the standard ICGC DACO controlled access mechanism ensuring safe access to these datasets."
+msgid ""
+"User authentication and authorization is achieved through the standard ICGC "
+"DACO controlled access mechanism ensuring safe access to these datasets."
 msgstr ""
 
 #: app/scripts/software/views/software.html:51
-msgid "Users are encouraged to use the latest version of our software to keep current with bug fixes, enhancements and new features. Click on the following to download the latest client package:"
+msgid ""
+"Users are encouraged to use the latest version of our software to keep "
+"current with bug fixes, enhancements and new features. Click on the "
+"following to download the latest client package:"
 msgstr ""
 
 #: app/scripts/software/views/software.html:102
-msgid "Users are encouraged to use the latest version of our software to keep current with bug fixes, enhancements and new features. Click on the following to download the latest client version:"
+msgid ""
+"Users are encouraged to use the latest version of our software to keep "
+"current with bug fixes, enhancements and new features. Click on the "
+"following to download the latest client version:"
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:68
 msgid ""
-"Users can launch and access Linux virtual machines running common distributions such as\n"
-"    <a href=\"http://www.ubuntu.com/\" target=\"_blank\"><i class=\"icon-external-link\"></i>Ubuntu</a> or\n"
-"    <a href=\"https://www.centos.org/\" target=\"_blank\"><i class=\"icon-external-link\"></i>CentOS</a> through the OpenStack console."
+"Users can launch and access Linux virtual machines running common "
+"distributions such as\n"
+"    <a href=\"http://www.ubuntu.com/\" target=\"_blank\"><i class=\"icon-"
+"external-link\"></i>Ubuntu</a> or\n"
+"    <a href=\"https://www.centos.org/\" target=\"_blank\"><i class=\"icon-"
+"external-link\"></i>CentOS</a> through the OpenStack console."
 msgstr ""
 
 #: app/scripts/static/views/info.html:133
@@ -5504,12 +5948,18 @@ msgstr ""
 
 #: app/scripts/static/views/info.html:84
 msgid ""
-"We use a further-processed gene model file provided by <a href=\"http://snpeff.sourceforge.net/\">snpEff</a> which is available for download from <a href=\"http://sourceforge.net/projects/snpeff/files/databases/v3_3/snpEff_v3_3_GRCh37.69.zip/download\">\n"
-"                http://sourceforge.net/projects/snpeff/files/databases/v3_3/snpEff_v3_3_GRCh37.69.zip/download</a>."
+"We use a further-processed gene model file provided by <a href=\"http://"
+"snpeff.sourceforge.net/\">snpEff</a> which is available for download from <a "
+"href=\"http://sourceforge.net/projects/snpeff/files/databases/v3_3/"
+"snpEff_v3_3_GRCh37.69.zip/download\">\n"
+"                http://sourceforge.net/projects/snpeff/files/databases/v3_3/"
+"snpEff_v3_3_GRCh37.69.zip/download</a>."
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.ack.html:13
-msgid "We wish also to acknowledge Richard Daly, CEO of DNAnexus, for providing historical information on the subscriber base to this service."
+msgid ""
+"We wish also to acknowledge Richard Daly, CEO of DNAnexus, for providing "
+"historical information on the subscriber base to this service."
 msgstr ""
 
 #: app/scripts/releases/js/releases.js:44
@@ -5545,11 +5995,16 @@ msgid "What studies are available in the DCC Portal?"
 msgstr ""
 
 #: app/scripts/static/views/info.html:110
-msgid "When all of these fields from two reported SSMs: chromosome, chromosome start, chromosome end, mutation type, DNA change, genome assembly version are identical, they are merged into one mutation entity."
+msgid ""
+"When all of these fields from two reported SSMs: chromosome, chromosome "
+"start, chromosome end, mutation type, DNA change, genome assembly version "
+"are identical, they are merged into one mutation entity."
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.submit.html:19
-msgid "When choosing \"Download\", a manifest containing unique files from all repositories will be generated."
+msgid ""
+"When choosing \"Download\", a manifest containing unique files from all "
+"repositories will be generated."
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:102
@@ -5569,7 +6024,9 @@ msgid "Whole Transcriptomes"
 msgstr ""
 
 #: app/scripts/static/views/info.html:113
-msgid "With this, we build a non-redundant collection of all simple somatic mutations."
+msgid ""
+"With this, we build a non-redundant collection of all simple somatic "
+"mutations."
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.aws.content.html:59
@@ -5582,7 +6039,8 @@ msgid ""
 "            <span class=\"action-toolbar\">\n"
 "                <span class=\"action-item\">\n"
 "                    <i class=\"icon-floppy\"></i>\n"
-"                    <a href=\"\" data-ng-click=\"SavedSetController.addCustomGeneSet()\">Upload your own gene set.</a>\n"
+"                    <a href=\"\" data-ng-click=\"SavedSetController."
+"addCustomGeneSet()\">Upload your own gene set.</a>\n"
 "                </span>\n"
 "            </span>"
 msgstr ""
@@ -5593,20 +6051,30 @@ msgstr ""
 
 #: app/scripts/analysis/views/analysis.sets.html:6
 msgid ""
-"You can create and save new <strong>donor</strong>, <strong>gene</strong>, or <strong>mutation</strong> sets of interest from\n"
-"        <span class=\"action-toolbar\"><span class=\"action-item\"><i class=\"icon-search\"></i><a href=\"/search\">Advanced Search.</a></span></span>"
+"You can create and save new <strong>donor</strong>, <strong>gene</strong>, "
+"or <strong>mutation</strong> sets of interest from\n"
+"        <span class=\"action-toolbar\"><span class=\"action-item\"><i class="
+"\"icon-search\"></i><a href=\"/search\">Advanced Search.</a></span></span>"
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:130
-msgid "You can read more about Beacons at <a target=\"_blank\" href=\"http://ga4gh.org/#/beacon\"><i class=\"icon-external-link\"></i>GA4GH's Beacon Project</a> and see the latest details on their <a target=\"_blank\" href=\"https://github.com/ga4gh/beacon-team\"><i class=\"icon-external-link\"></i>GitHub page</a>."
+msgid ""
+"You can read more about Beacons at <a target=\"_blank\" href=\"http://ga4gh."
+"org/#/beacon\"><i class=\"icon-external-link\"></i>GA4GH's Beacon Project</"
+"a> and see the latest details on their <a target=\"_blank\" href=\"https://"
+"github.com/ga4gh/beacon-team\"><i class=\"icon-external-link\"></i>GitHub "
+"page</a>."
 msgstr ""
 
 #: app/scripts/sets/views/sets.upload.external.html:20
-msgid "You can save up to the top {{params.setLimit | number}} {{params.setType}}s"
+msgid ""
+"You can save up to the top {{params.setLimit | number}} {{params.setType}}s"
 msgstr ""
 
 #: app/scripts/sets/views/sets.upload.html:21
-msgid "You can save up to the top {{params.setSizeLimit | number}} {{params.setType}}s"
+msgid ""
+"You can save up to the top {{params.setSizeLimit | number}} {{params."
+"setType}}s"
 msgstr ""
 
 #: app/scripts/analysis/views/analysis.sets.html:20
@@ -5633,7 +6101,9 @@ msgid "You may drag to reorder the list to affect the generated manifest."
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:83
-msgid "You may revoke a token if it is no longer needed or you believe it has been compromised."
+msgid ""
+"You may revoke a token if it is no longer needed or you believe it has been "
+"compromised."
 msgstr ""
 
 #: app/scripts/repository/js/directives.js:132
@@ -5645,11 +6115,15 @@ msgid "Your Browser is not supported, some features may be broken or missing."
 msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.result.html:70
-msgid "Your input genes are not annotated in any of the gene sets involved in the selected Universe."
+msgid ""
+"Your input genes are not annotated in any of the gene sets involved in the "
+"selected Universe."
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:37
-msgid "Your new token will be shown in the next section. Note that there is currently a limit of one token per unique set of scopes."
+msgid ""
+"Your new token will be shown in the next section. Note that there is "
+"currently a limit of one token per unique set of scopes."
 msgstr ""
 
 #: app/scripts/phenotype/views/phenotype.result.html:18
@@ -5723,11 +6197,15 @@ msgid "e.g. 29885594"
 msgstr ""
 
 #: app/scripts/keyword/views/results.html:9
-msgid "e.g. BRAF, KRAS G12D, DO35100, MU7870, FI998, apoptosis, Cancer Gene Census, GO:0016049"
+msgid ""
+"e.g. BRAF, KRAS G12D, DO35100, MU7870, FI998, apoptosis, Cancer Gene Census, "
+"GO:0016049"
 msgstr ""
 
 #: app/scripts/releases/views/home.html:6
-msgid "e.g. BRAF, KRAS G12D, DO35100, MU7870, FI998, apoptosis, Cancer Gene Census, imatinib, GO:0016049"
+msgid ""
+"e.g. BRAF, KRAS G12D, DO35100, MU7870, FI998, apoptosis, Cancer Gene Census, "
+"imatinib, GO:0016049"
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:63
@@ -5947,7 +6425,9 @@ msgid "variants sampled"
 msgstr ""
 
 #: app/scripts/donorlist/views/upload.html:85
-msgid "{{ validIdCount() }} submitted donor identifier(s) mapped to {{ numberOfUiRows }} ICGC Donor ID(s)"
+msgid ""
+"{{ validIdCount() }} submitted donor identifier(s) mapped to "
+"{{ numberOfUiRows }} ICGC Donor ID(s)"
 msgstr ""
 
 #: app/scripts/sets/views/sets.upload.external.html:36
@@ -5956,7 +6436,9 @@ msgid "{{256 - params.setDescription.length}} chars left"
 msgstr ""
 
 #: app/scripts/repository/views/repository.icgc.html:17
-msgid "{{:: ICGCRepoController.dataReleasesTitle }} section is currently unavailable due to maintenance."
+msgid ""
+"{{:: ICGCRepoController.dataReleasesTitle }} section is currently "
+"unavailable due to maintenance."
 msgstr ""
 
 #: app/scripts/downloader/views/request.html:59
@@ -5974,20 +6456,27 @@ msgstr ""
 
 #. Please change 'genes' and 'gene' to appropreate translation
 #: app/scripts/analysis/views/analysis.analysis.html:24
-msgid "{{item.universe | universe}} - {{item.maxGeneCount | number}} {{item.maxGeneCount !== 1? \"genes\": \"gene\" }}"
+msgid ""
+"{{item.universe | universe}} - {{item.maxGeneCount | number}} {{item."
+"maxGeneCount !== 1? \"genes\": \"gene\" }}"
 msgstr ""
 
 #. {{out.invalidIds.length}} will be a number
 #: app/scripts/donorlist/views/upload.html:69
-msgid "{{out.invalidIds.length}} submitted donor identifier(s) not recognized in the system"
+msgid ""
+"{{out.invalidIds.length}} submitted donor identifier(s) not recognized in "
+"the system"
 msgstr ""
 
 #: app/scripts/genelist/views/upload.html:83
-msgid "{{out.invalidIds.length}} submitted gene(s) not recognized in the system"
+msgid ""
+"{{out.invalidIds.length}} submitted gene(s) not recognized in the system"
 msgstr ""
 
 #: app/scripts/genelist/views/upload.html:98
-msgid "{{out.totalInput}} submitted gene identifier(s) mapped to {{out.totalMatch}} Ensembl ID"
+msgid ""
+"{{out.totalInput}} submitted gene identifier(s) mapped to {{out.totalMatch}} "
+"Ensembl ID"
 msgstr ""
 
 #. N samples from N donors
