@@ -17,6 +17,7 @@
 
 .t_sh {
   @include clearfix();
+  word-break: break-word;
 }
 
 .t_sh__hidden {
