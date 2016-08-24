@@ -5,6 +5,7 @@ Change log for the DCC Data Portal
 4.3.6
 --
   - Added icgc-get modal for file manifests page, currently behind a feature flag
+
 4.3.5
 --
   -  Added exception mapper for 503 errors
