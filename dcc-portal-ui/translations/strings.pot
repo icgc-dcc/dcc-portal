@@ -112,8 +112,8 @@ msgstr ""
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:354
 #: app/scripts/analysis/views/analysis.sets.html:50
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:21
-#: app/scripts/sets/views/sets.result.html:30
-#: app/scripts/sets/views/sets.result.html:55
+#: app/scripts/sets/views/sets.result.html:31
+#: app/scripts/sets/views/sets.result.html:56
 msgid "# Items"
 msgstr ""
 
@@ -150,9 +150,9 @@ msgstr ""
 msgid "${openIDUrl} is not a known provider"
 msgstr ""
 
-#. ${setName} is a noun
-#: app/scripts/sets/js/services.js:585
-msgid "${setName} Saved"
+#. ${savedSet} is a noun
+#: app/scripts/sets/js/services.js:586
+msgid "${savedSet} Saved"
 msgstr ""
 
 #: app/scripts/phenotype/views/phenotype.result.html:280
@@ -417,7 +417,7 @@ msgstr ""
 msgid "Alcohol history intensity"
 msgstr ""
 
-#: app/scripts/sets/views/sets.result.html:28
+#: app/scripts/sets/views/sets.result.html:29
 msgid "Alias"
 msgstr ""
 
@@ -801,7 +801,7 @@ msgstr ""
 msgid "Click on <strong><i class=\"icon-download\"></i>Manifest</strong> and use the manifest to download the data file."
 msgstr ""
 
-#: app/scripts/sets/views/sets.result.html:18
+#: app/scripts/sets/views/sets.result.html:19
 msgid "Click on the areas of the Venn diagram to include them in your result set."
 msgstr ""
 
@@ -1495,8 +1495,8 @@ msgstr ""
 #: app/scripts/donors/views/donor.html:149
 #: app/scripts/downloader/views/request.html:3
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:35
-#: app/scripts/sets/views/sets.result.html:116
-#: app/scripts/sets/views/sets.result.html:89
+#: app/scripts/sets/views/sets.result.html:117
+#: app/scripts/sets/views/sets.result.html:90
 msgid "Download Donor Data"
 msgstr ""
 
@@ -1681,7 +1681,7 @@ msgstr ""
 msgid "Expires in"
 msgstr ""
 
-#: app/scripts/sets/views/sets.result.html:110
+#: app/scripts/sets/views/sets.result.html:111
 msgid "Export"
 msgstr ""
 
@@ -1695,7 +1695,7 @@ msgstr ""
 #: app/scripts/analysis/views/analysis.sets.html:74
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:32
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:52
-#: app/scripts/sets/views/sets.result.html:83
+#: app/scripts/sets/views/sets.result.html:84
 msgid "Export as TSV"
 msgstr ""
 
@@ -2501,7 +2501,7 @@ msgstr ""
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:305
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:351
 #: app/scripts/analysis/views/analysis.sets.html:47
-#: app/scripts/sets/views/sets.result.html:31
+#: app/scripts/sets/views/sets.result.html:32
 msgid "Item Type"
 msgstr ""
 
@@ -3496,7 +3496,7 @@ msgstr ""
 msgid "Please note that, as opposed to the DCC online submission system which is running on a computer cluster, this VM can be deployed only on a single server."
 msgstr ""
 
-#: app/scripts/sets/views/sets.result.html:14
+#: app/scripts/sets/views/sets.result.html:15
 msgid "Please remove or recreate it again."
 msgstr ""
 
@@ -3525,8 +3525,7 @@ msgstr ""
 msgid "Please see the <a style=\"white-space: nowrap;\" href=\"http://docs.icgc.org/portal/repositories\" target=\"_blank\"><i class=\"icon-external-link\"></i>documentation</a> to learn more."
 msgstr ""
 
-#. ${setName} is a noun
-#: app/scripts/sets/js/services.js:580
+#: app/scripts/sets/js/services.js:581
 msgid "Please wait"
 msgstr ""
 
@@ -4014,8 +4013,8 @@ msgstr ""
 msgid "Save Mutation Set"
 msgstr ""
 
-#: app/scripts/sets/views/sets.result.html:107
-#: app/scripts/sets/views/sets.result.html:80
+#: app/scripts/sets/views/sets.result.html:108
+#: app/scripts/sets/views/sets.result.html:81
 msgid "Save as new set"
 msgstr ""
 
@@ -4033,9 +4032,9 @@ msgstr ""
 msgid "Saved Sets"
 msgstr ""
 
-#. ${setName} is a noun
+#. ${savedSet} is a noun
 #: app/scripts/sets/js/services.js:579
-msgid "Saving ${setName}"
+msgid "Saving ${savedSet}"
 msgstr ""
 
 #: app/scripts/tokens/views/token.manager.html:95
@@ -4191,16 +4190,17 @@ msgid "Set"
 msgstr ""
 
 #: app/scripts/phenotype/views/phenotype.result.html:23
-#: app/scripts/sets/views/sets.result.html:29
+#: app/scripts/sets/views/sets.result.html:30
 msgid "Set Name"
 msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:208
-#: app/scripts/sets/views/sets.result.html:54
+#: app/scripts/sets/views/sets.result.html:2
+#: app/scripts/sets/views/sets.result.html:55
 msgid "Set Operations"
 msgstr ""
 
-#: app/scripts/sets/views/sets.result.html:127
+#: app/scripts/sets/views/sets.result.html:128
 msgid "Set operations has an upper limit of managing {{unionMaxLimit | number }} items."
 msgstr ""
 
@@ -4893,7 +4893,7 @@ msgid ""
 "           the International Cancer Genome Consortium."
 msgstr ""
 
-#: app/scripts/app/js/app.js:579
+#: app/scripts/app/js/app.js:583
 #: app/scripts/common/views/footer.html:24
 msgid "The Team"
 msgstr ""
@@ -4984,11 +4984,11 @@ msgstr ""
 
 #: app/scripts/enrichment/views/enrichment.result.html:15
 #: app/scripts/phenotype/views/phenotype.result.html:10
-#: app/scripts/sets/views/sets.result.html:12
+#: app/scripts/sets/views/sets.result.html:13
 msgid "This analysis is deprecated."
 msgstr ""
 
-#: app/scripts/sets/views/sets.result.html:13
+#: app/scripts/sets/views/sets.result.html:14
 msgid "This analysis was created against an old version of the data and may no longer be valid."
 msgstr ""
 
@@ -5347,7 +5347,7 @@ msgstr ""
 msgid "UniProtKB/Swiss-Prot"
 msgstr ""
 
-#: app/scripts/sets/views/sets.result.html:97
+#: app/scripts/sets/views/sets.result.html:98
 msgid "Union of selected sets"
 msgstr ""
 
@@ -5469,8 +5469,7 @@ msgstr ""
 msgid "View in"
 msgstr ""
 
-#. ${setName} is a noun
-#: app/scripts/sets/js/services.js:586
+#: app/scripts/sets/js/services.js:588
 msgid "View in <a href=\"/analysis/sets\">Data Analysis</a>"
 msgstr ""
 

@@ -81,7 +81,6 @@
 
       /// ${query} would be a search query/keyword
       Page.setTitle(_.template(gettextCatalog.getString('Results for ${query}'))({query : $scope.query}));
-      // Page.setTitle(gettextCatalog.getString('Results for ') + $scope.query);
       Page.setPage('q');
 
       $scope.clear = function () {
@@ -135,7 +134,6 @@
 
           /// ${query} would be a search query/keyword
           Page.setTitle(_.template(gettextCatalog.getString('Results for ${query}'))({query : $scope.query}));
-          // Page.setTitle(gettextCatalog.getString('Results for') + ' ' + $scope.query);
           getResults();
         } else {
           $scope.results = null;
