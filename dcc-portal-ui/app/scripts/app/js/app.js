@@ -679,14 +679,13 @@
 
     // Order matters, this is in most important to least important (For enrichment analysis)
     GENE_SET_ROOTS: [
-      {type: 'pathway', id: null, name: 'Reactome Pathways', universe: 'REACTOME_PATHWAYS'},
-      {type: 'go_term', id: 'GO:0003674', name: 'GO Molecular Function', universe: 'GO_MOLECULAR_FUNCTION'},
-      {type: 'go_term', id: 'GO:0008150', name: 'GO Biological Process', universe: 'GO_BIOLOGICAL_PROCESS'},
-      {type: 'go_term', id: 'GO:0005575', name: 'GO Cellular Component', universe: 'GO_CELLULAR_COMPONENT'},
-      {type: 'curated_set', id: 'GS1', name: 'Cancer Gene Census', universe: null}
+      {type: 'pathway', id: null, name: gettext('Reactome Pathways'), universe: 'REACTOME_PATHWAYS'},
+      {type: 'go_term', id: 'GO:0003674', name: gettext('GO Molecular Function'), universe: 'GO_MOLECULAR_FUNCTION'},
+      {type: 'go_term', id: 'GO:0008150', name: gettext('GO Biological Process'), universe: 'GO_BIOLOGICAL_PROCESS'},
+      {type: 'go_term', id: 'GO:0005575', name: gettext('GO Cellular Component'), universe: 'GO_CELLULAR_COMPONENT'},
+      {type: 'curated_set', id: 'GS1', name: gettext('Cancer Gene Census'), universe: null}
     ]
   });
-
 
   module.controller('AppCtrl', function ($scope, Page) {
     var _ctrl = this;
@@ -703,4 +702,9 @@
     });
 
   });
+
+  function gettext(string){
+    return string;
+  }
+
 })();

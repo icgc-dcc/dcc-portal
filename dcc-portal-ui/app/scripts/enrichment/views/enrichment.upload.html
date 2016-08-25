@@ -26,7 +26,7 @@
                    <div data-ng-repeat="item in Extensions.GENE_SET_ROOTS"
                         data-ng-if="['go_term', 'pathway'].indexOf(item.type) >= 0">
                         <span data-ng-click="params.universe = item.universe">
-                            <i class="{{params.universe === item.universe? 'icon-dot-circled' : 'icon-circle-empty'}}"></i> {{item.name}}</span>
+                            <i class="{{params.universe === item.universe? 'icon-dot-circled' : 'icon-circle-empty'}}"></i> {{item.name | translate}}</span>
                         </span>
                    </div>
                </div>

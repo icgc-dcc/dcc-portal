@@ -18,25 +18,25 @@ msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:34
 #: app/scripts/phenotype/views/phenotype.result.html:24
+#: app/scripts/phenotype/views/phenotype.result.html:245
 #: app/scripts/phenotype/views/phenotype.result.html:247
 #: app/scripts/phenotype/views/phenotype.result.html:249
-#: app/scripts/phenotype/views/phenotype.result.html:251
+#: app/scripts/phenotype/views/phenotype.result.html:308
 #: app/scripts/phenotype/views/phenotype.result.html:310
 #: app/scripts/phenotype/views/phenotype.result.html:312
-#: app/scripts/phenotype/views/phenotype.result.html:314
+#: app/scripts/phenotype/views/phenotype.result.html:371
 #: app/scripts/phenotype/views/phenotype.result.html:373
 #: app/scripts/phenotype/views/phenotype.result.html:375
-#: app/scripts/phenotype/views/phenotype.result.html:377
+#: app/scripts/phenotype/views/phenotype.result.html:421
 #: app/scripts/phenotype/views/phenotype.result.html:423
 #: app/scripts/phenotype/views/phenotype.result.html:425
-#: app/scripts/phenotype/views/phenotype.result.html:427
+#: app/scripts/phenotype/views/phenotype.result.html:451
 #: app/scripts/phenotype/views/phenotype.result.html:453
 #: app/scripts/phenotype/views/phenotype.result.html:455
-#: app/scripts/phenotype/views/phenotype.result.html:457
+#: app/scripts/phenotype/views/phenotype.result.html:481
 #: app/scripts/phenotype/views/phenotype.result.html:483
 #: app/scripts/phenotype/views/phenotype.result.html:485
-#: app/scripts/phenotype/views/phenotype.result.html:487
-#: app/scripts/phenotype/views/phenotype.result.html:80
+#: app/scripts/phenotype/views/phenotype.result.html:78
 #: app/scripts/projectmutationviewer/js/directive.js:64
 #: app/scripts/repositories/views/repos/repos.html:43
 #: app/scripts/repository/views/repository.external.submit.html:45
@@ -167,9 +167,9 @@ msgstr ""
 msgid "${savedSet} Saved"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:280
-#: app/scripts/phenotype/views/phenotype.result.html:343
-#: app/scripts/phenotype/views/phenotype.result.html:406
+#: app/scripts/phenotype/views/phenotype.result.html:278
+#: app/scripts/phenotype/views/phenotype.result.html:341
+#: app/scripts/phenotype/views/phenotype.result.html:404
 msgid "% Donors"
 msgstr ""
 
@@ -432,7 +432,7 @@ msgstr ""
 msgid "Age at Diagnosis (years)"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:350
+#: app/scripts/phenotype/views/phenotype.result.html:348
 msgid "Age at diagnosis comparison"
 msgstr ""
 
@@ -444,7 +444,8 @@ msgstr ""
 msgid "Age at last followup"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:482
+#: app/scripts/phenotype/views/phenotype.result.html:370
+#: app/scripts/phenotype/views/phenotype.result.html:480
 msgid "Age group"
 msgstr ""
 
@@ -678,9 +679,9 @@ msgstr ""
 msgid "Available data as of"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:360
-#: app/scripts/phenotype/views/phenotype.result.html:364
-#: app/scripts/phenotype/views/phenotype.result.html:368
+#: app/scripts/phenotype/views/phenotype.result.html:358
+#: app/scripts/phenotype/views/phenotype.result.html:362
+#: app/scripts/phenotype/views/phenotype.result.html:366
 msgid "Average age:"
 msgstr ""
 
@@ -739,10 +740,18 @@ msgstr ""
 msgid "Both Pairs Mapped"
 msgstr ""
 
+#: app/scripts/analysis/js/analysisLauncher.js:225
+msgid "Brain Cancer"
+msgstr ""
+
 #: app/scripts/releases/views/home.html:102
 msgid ""
 "Brain cancer donors with frameshift mutations and having methylation data "
 "available"
+msgstr ""
+
+#: app/scripts/analysis/js/analysisLauncher.js:234
+msgid "Breast Cancer"
 msgstr ""
 
 #: app/scripts/donorlist/views/upload.html:44
@@ -804,6 +813,10 @@ msgstr ""
 #: app/scripts/mutations/views/mutation.html:13
 #: app/scripts/mutations/views/mutation.html:144
 msgid "Cancer Distribution"
+msgstr ""
+
+#: app/scripts/app/js/app.js:686
+msgid "Cancer Gene Census"
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:89
@@ -962,6 +975,10 @@ msgstr ""
 msgid "Colocalizes With"
 msgstr ""
 
+#: app/scripts/analysis/js/analysisLauncher.js:243
+msgid "Colorectal Cancer"
+msgstr ""
+
 #: app/scripts/analysis/js/analysis.js:211
 msgid ""
 "Compare high impact mutations in brain cancers across GBM-US, LGG-US, and "
@@ -1114,6 +1131,13 @@ msgstr ""
 
 #: app/scripts/static/views/team.html:101
 msgid "Credits"
+msgstr ""
+
+#: app/scripts/phenotype/views/phenotype.result.html:71
+msgid ""
+"Criteria to include donor from your sets in the survival analysis: <br> - "
+"donor does not overlap between your selected donor sets <br> - donor has "
+"complete data for the purpose of the analysis (event and time-to-event) <br>"
 msgstr ""
 
 #: app/scripts/stackedareachart/js/directive.js:73
@@ -1335,11 +1359,11 @@ msgstr ""
 msgid "Disease"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:188
+#: app/scripts/phenotype/views/phenotype.result.html:186
 msgid "Disease Free Survival"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:119
+#: app/scripts/phenotype/views/phenotype.result.html:117
 msgid "Disease Free Survival Analysis"
 msgstr ""
 
@@ -1488,16 +1512,19 @@ msgstr ""
 msgid "Donor Treatment Type Other"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:234
-#: app/scripts/phenotype/views/phenotype.result.html:238
-#: app/scripts/phenotype/views/phenotype.result.html:242
-#: app/scripts/phenotype/views/phenotype.result.html:297
-#: app/scripts/phenotype/views/phenotype.result.html:301
-#: app/scripts/phenotype/views/phenotype.result.html:305
-#: app/scripts/phenotype/views/phenotype.result.html:359
-#: app/scripts/phenotype/views/phenotype.result.html:363
-#: app/scripts/phenotype/views/phenotype.result.html:367
 #: app/scripts/phenotype/views/phenotype.result.html:64
+msgid "Donor count"
+msgstr ""
+
+#: app/scripts/phenotype/views/phenotype.result.html:232
+#: app/scripts/phenotype/views/phenotype.result.html:236
+#: app/scripts/phenotype/views/phenotype.result.html:240
+#: app/scripts/phenotype/views/phenotype.result.html:295
+#: app/scripts/phenotype/views/phenotype.result.html:299
+#: app/scripts/phenotype/views/phenotype.result.html:303
+#: app/scripts/phenotype/views/phenotype.result.html:357
+#: app/scripts/phenotype/views/phenotype.result.html:361
+#: app/scripts/phenotype/views/phenotype.result.html:365
 msgid "Donor count:"
 msgstr ""
 
@@ -1572,7 +1599,7 @@ msgstr ""
 msgid "Donors by Project"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:74
+#: app/scripts/phenotype/views/phenotype.result.html:72
 msgid "Donors included in Analysis"
 msgstr ""
 
@@ -2128,6 +2155,18 @@ msgstr ""
 msgid "GO"
 msgstr ""
 
+#: app/scripts/app/js/app.js:684
+msgid "GO Biological Process"
+msgstr ""
+
+#: app/scripts/app/js/app.js:685
+msgid "GO Cellular Component"
+msgstr ""
+
+#: app/scripts/app/js/app.js:683
+msgid "GO Molecular Function"
+msgstr ""
+
 #: app/scripts/genes/views/gene.html:110
 msgid "GO Terms"
 msgstr ""
@@ -2147,13 +2186,13 @@ msgstr ""
 #: app/scripts/donors/views/donor.html:191
 #: app/scripts/genesets/views/geneset.html:598
 #: app/scripts/genesets/views/geneset.html:668
-#: app/scripts/phenotype/views/phenotype.result.html:422
+#: app/scripts/phenotype/views/phenotype.result.html:420
 #: app/scripts/projects/views/project.html:640
 #: app/scripts/projects/views/project.html:710
 msgid "Gender"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:223
+#: app/scripts/phenotype/views/phenotype.result.html:221
 msgid "Gender comparison"
 msgstr ""
 
@@ -3484,7 +3523,7 @@ msgid ""
 "                              </a>"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:164
+#: app/scripts/phenotype/views/phenotype.result.html:162
 msgid "Open in new tab."
 msgstr ""
 
@@ -3546,11 +3585,11 @@ msgid ""
 "Over time, the full range of PanCancer workflows will be made available."
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:181
+#: app/scripts/phenotype/views/phenotype.result.html:179
 msgid "Overall Survival"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:91
+#: app/scripts/phenotype/views/phenotype.result.html:89
 msgid "Overall Survival Analysis"
 msgstr ""
 
@@ -4008,7 +4047,7 @@ msgstr ""
 msgid "Reactome Pathway"
 msgstr ""
 
-#: app/scripts/facets/views/pathwaytags.html:48
+#: app/scripts/app/js/app.js:682 app/scripts/facets/views/pathwaytags.html:48
 #: app/scripts/facets/views/pathwaytags.html:50
 #: app/scripts/facets/views/pathwaytags.html:63
 #: app/scripts/facets/views/pathwaytags.html:64
@@ -4159,7 +4198,7 @@ msgid "Results"
 msgstr ""
 
 #. ${query} would be a search query/keyword
-#: app/scripts/keyword/js/keyword.js:137 app/scripts/keyword/js/keyword.js:83
+#: app/scripts/keyword/js/keyword.js:136 app/scripts/keyword/js/keyword.js:83
 msgid "Results for ${query}"
 msgstr ""
 
@@ -4848,8 +4887,12 @@ msgstr ""
 
 #: app/scripts/compounds/views/compound.html:287
 #: app/scripts/compounds/views/compound.html:359
-#: app/scripts/phenotype/views/phenotype.result.html:452
+#: app/scripts/phenotype/views/phenotype.result.html:450
 msgid "Status"
+msgstr ""
+
+#: app/scripts/phenotype/views/phenotype.result.html:307
+msgid "Status<translate></translate>"
 msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:150
@@ -5941,7 +5984,7 @@ msgstr ""
 msgid "Vital status"
 msgstr ""
 
-#: app/scripts/phenotype/views/phenotype.result.html:287
+#: app/scripts/phenotype/views/phenotype.result.html:285
 msgid "Vital status comparison"
 msgstr ""
 
