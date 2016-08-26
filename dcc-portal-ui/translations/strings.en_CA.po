@@ -6025,7 +6025,7 @@ msgstr ""
 #: app/scripts/analysis/views/analysis.sets.html:80
 #: app/scripts/sets/views/sets.result.html:119
 #: app/scripts/sets/views/sets.result.html:92
-msgid "View in [[ dataRepoTitle ]]"
+msgid "View in [[:: dataRepoTitle ]]"
 msgstr ""
 
 #: app/scripts/static/views/info.html:157
@@ -6191,7 +6191,7 @@ msgid ""
 msgstr ""
 
 #: app/scripts/analysis/views/analysis.analysis.html:5
-msgid "You have no saved analyses."
+msgid "You have no saved analysis."
 msgstr ""
 
 #: app/scripts/repository/js/directives.js:991

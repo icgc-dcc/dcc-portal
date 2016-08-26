@@ -15,6 +15,8 @@ details.
 
 ### Setup
 
+- Initial setup for angular-gettext has been done for Portal. You can just run `bower install` command from the root directory of **dcc-portal-ui** and it will install needed module to start developing. Below information is just for knowledge. 
+
 - Install the angular-gettext plugin
 
 	```
@@ -69,7 +71,7 @@ gettextCatalog as a dependency.
 Strings can be extracted using different build tools like Grunt, Gulp and webpack. However, Grunt
 is the only one officially supported by the angular-gettext community. The build tool will extract
 the strings in a `.pot` file: a standard gettext template that lists all the strings that should be
-translated
+translated. Grunt plugin is already configured for the portal. You will only need to run extract task `grunt extractText` and compile task `grunt compileText` once you have the desired translation. Below information is just for your knowledge. 
 
 - Install the Grunt plugin [grunt-angular-gettext](https://www.npmjs.com/package/grunt-angular-gettext)
 
@@ -103,7 +105,7 @@ Please look at the [Translation](#translation) section for more details.
 ### Compiling translations
 
 Once the strings are converted and save in a `.po` file and use the same Grunt plugin to 
-compile it in a JavaScript file.
+compile it in a JavaScript file. You will only need to run compile task as the configuration for it has already been done in Portal. Run the task from command line `grunt compileText`
 
 - Create a new `nggettext_compile` task in the Gruntfile. Point to the location where 
 the compiled JavaScript should be saved.
