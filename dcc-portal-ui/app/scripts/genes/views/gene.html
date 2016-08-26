@@ -238,9 +238,9 @@
                 <th><translate>Site</translate></th>
                 <th><translate>Tumour Type</translate></th>
                 <th><translate>Tumour Subtype</translate></th>
-                <th><abbr data-tooltip="Number of Donors where {{ GeneCtrl.gene.symbol }} contains SSM">#
-                    <translate>Donors affected</translate></abbr> <i class="icon-sort-down"></i></th>
-                <th><abbr data-tooltip="Number of SSM observed in {{ GeneCtrl.gene.symbol }}"
+                <th><abbr data-tooltip="{{'Number of Donors where [[ geneSymbol ]] contains SSM' | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}">
+                    <translate># Donors affected</translate></abbr> <i class="icon-sort-down"></i></th>
+                <th><abbr data-tooltip="{{'Number of SSM observed in [[ geneSymbol ]]'  | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}"
                           data-tooltip-placement="left"><translate># Mutations</translate></abbr></th>
             </tr>
             </thead>

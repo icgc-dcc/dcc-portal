@@ -371,4 +371,12 @@
     };
   });
 
+  module.filter('subDelimiters', function($interpolate){
+    return function(string, context){
+       string = string.replace(/\[\[/g, '{{').replace(/\]\]/g, '}}');
+      var interpolateFn = $interpolate(string);
+      return interpolateFn(context);
+    };
+  });
+
 })();

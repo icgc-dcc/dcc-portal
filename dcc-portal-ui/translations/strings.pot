@@ -39,6 +39,7 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:29
 #: app/scripts/donors/views/donor.html:291
 #: app/scripts/enrichment/views/enrichment.result.html:113
+#: app/scripts/genes/views/gene.html:242
 #: app/scripts/genes/views/gene.html:393
 #: app/scripts/genesets/views/geneset.html:249
 #: app/scripts/genesets/views/geneset.html:498
@@ -682,6 +683,14 @@ msgstr ""
 
 #: app/scripts/releases/views/home.html:102
 msgid "Brain cancer donors with frameshift mutations and having methylation data available"
+msgstr ""
+
+#: app/scripts/donors/views/donor.html:295
+msgid "Breakdown of Affected Donors in [[ projectId ]]<br># Donors affected / # SSM tested donors"
+msgstr ""
+
+#: app/scripts/mutations/views/mutation.html:179
+msgid "Breakdown of Donors affected by [[ mutationId ]] <br># Donors where [[ mutationId ]] observed / # SSM tested Donors"
 msgstr ""
 
 #: app/scripts/analysis/js/analysisLauncher.js:234
@@ -1348,10 +1357,11 @@ msgstr ""
 msgid "Does the site use a 0- or 1-based coordinate system?"
 msgstr ""
 
+#. N Donors across N projects
 #: app/scripts/advanced/views/advanced.facets.donors.html:5
 #: app/scripts/facets/views/current.html:21
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:27
-#: app/scripts/projects/js/projects.js:210
+#: app/scripts/projects/js/projects.js:212
 #: app/scripts/repository/views/repository.external.file.html:19
 #: app/scripts/repository/views/repository.external.html:233
 #: app/scripts/repository/views/repository.external.html:81
@@ -1479,7 +1489,6 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:96
 #: app/scripts/compounds/views/compound.html:184
-#: app/scripts/genes/views/gene.html:242
 #: app/scripts/genes/views/gene.html:370
 #: app/scripts/genesets/views/geneset.html:371
 #: app/scripts/genesets/views/geneset.html:476
@@ -1721,6 +1730,11 @@ msgstr ""
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:52
 #: app/scripts/sets/views/sets.result.html:84
 msgid "Export as TSV"
+msgstr ""
+
+#: app/scripts/phenotype/views/phenotype.result.html:121
+#: app/scripts/phenotype/views/phenotype.result.html:93
+msgid "Export data for [[ survivalGraph ]] survival analysis as TSV"
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.html:221
@@ -2043,6 +2057,7 @@ msgstr ""
 #: app/scripts/donors/views/donor.html:191
 #: app/scripts/genesets/views/geneset.html:598
 #: app/scripts/genesets/views/geneset.html:668
+#: app/scripts/phenotype/views/phenotype.result.html:244
 #: app/scripts/phenotype/views/phenotype.result.html:420
 #: app/scripts/projects/views/project.html:640
 #: app/scripts/projects/views/project.html:710
@@ -2728,6 +2743,10 @@ msgstr ""
 msgid "Matched Sample ID"
 msgstr ""
 
+#: app/scripts/projectmutationviewer/js/directive.js:63
+msgid "Median"
+msgstr ""
+
 #: app/scripts/repository/views/repository.external.file.html:233
 #: app/scripts/repository/views/repository.external.file.html:237
 msgid "Metadata"
@@ -2805,6 +2824,10 @@ msgstr ""
 
 #: app/scripts/releases/views/home.html:97
 msgid "Most frequently mutated genes by high impact mutations in stage III malignant lymphoma"
+msgstr ""
+
+#: app/scripts/beacon/views/beacon.html:40
+msgid "Must be less than Chromosome [[char]] 's length: [[length]]"
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:65
@@ -3137,6 +3160,10 @@ msgstr ""
 msgid "Number of Donors where Gene contains SSM<br>Filtered by Current Search Criteria / unfiltered # donors the gene is mutated."
 msgstr ""
 
+#: app/scripts/genes/views/gene.html:241
+msgid "Number of Donors where [[ geneSymbol ]] contains SSM"
+msgstr ""
+
 #: app/scripts/compounds/views/compound.html:183
 msgid "Number of Donors where a Gene involved in the Gene Set can be targeted by the compound"
 msgstr ""
@@ -3144,6 +3171,10 @@ msgstr ""
 #: app/scripts/genesets/views/geneset.html:248
 #: app/scripts/genesets/views/geneset.html:370
 msgid "Number of Donors where a Gene involved in the Gene Set contains SSM"
+msgstr ""
+
+#: app/scripts/genesets/views/geneset.html:252
+msgid "Number of Genes affected by [[ geneId ]]"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:608
@@ -3171,6 +3202,14 @@ msgstr ""
 #: app/scripts/genesets/views/geneset.html:373
 #: app/scripts/projects/views/project.html:359
 msgid "Number of SSM in the Gene"
+msgstr ""
+
+#: app/scripts/genesets/views/geneset.html:250
+msgid "Number of SSM observed in [[ geneId ]]"
+msgstr ""
+
+#: app/scripts/genes/views/gene.html:243
+msgid "Number of SSM observed in [[ geneSymbol ]]"
 msgstr ""
 
 #: app/scripts/projects/views/project.html:576
@@ -3656,6 +3695,7 @@ msgstr ""
 msgid "Processing ..."
 msgstr ""
 
+#. N Donors across N projects
 #: app/scripts/advanced/views/advanced.donors.html:70
 #: app/scripts/advanced/views/advanced.donors.html:8
 #: app/scripts/advanced/views/advanced.facets.donors.html:13
@@ -3671,7 +3711,7 @@ msgstr ""
 #: app/scripts/keyword/views/results.html:176
 #: app/scripts/mutations/views/mutation.html:175
 #: app/scripts/mutations/views/mutation.html:212
-#: app/scripts/projects/js/projects.js:214
+#: app/scripts/projects/js/projects.js:217
 #: app/scripts/projects/views/projects.html:9
 #: app/scripts/repository/views/repository.external.html:237
 #: app/scripts/repository/views/repository.external.html:86
@@ -3985,6 +4025,10 @@ msgstr ""
 
 #: app/scripts/common/js/codetable.js:37
 msgid "Running"
+msgstr ""
+
+#: app/scripts/mutations/views/mutation.html:91
+msgid "SO term: [[ consequenceType ]]"
 msgstr ""
 
 #: app/scripts/mutations/views/mutation.html:77
@@ -5139,6 +5183,12 @@ msgstr ""
 msgid "Toggle heatmap view"
 msgstr ""
 
+#: app/scripts/facets/views/donorfacet.html:15
+#: app/scripts/facets/views/genetags.html:13
+#: app/scripts/facets/views/tags.html:21
+msgid "Toggle this facet to IS [[ toggle ]]"
+msgstr ""
+
 #: app/scripts/tokens/views/token.manager.html:93
 msgid "Token Id"
 msgstr ""
@@ -5522,6 +5572,12 @@ msgstr ""
 msgid "View in Reactome Pathway Browser"
 msgstr ""
 
+#: app/scripts/analysis/views/analysis.sets.html:80
+#: app/scripts/sets/views/sets.result.html:119
+#: app/scripts/sets/views/sets.result.html:92
+msgid "View in [[ dataRepoTitle ]]"
+msgstr ""
+
 #: app/scripts/static/views/info.html:157
 msgid "Virtual machine for local data validation"
 msgstr ""
@@ -5706,6 +5762,11 @@ msgstr ""
 
 #: app/scripts/compounds/views/compound.html:73
 msgid "Zinc ID"
+msgstr ""
+
+#. N Donors across N projects
+#: app/scripts/projects/js/projects.js:217
+msgid "across"
 msgstr ""
 
 #. 'N' affects 'N' distinct donors across 'N' cancer projects

@@ -37,7 +37,7 @@
                     <input search-on-enter tabindex="3" data-ng-class="{'invalid': invalidParams.isPosition}"
                            placeholder="{{'e.g. 29885594' | translate}}" type="text" integer-validator data-ng-model="params.position"
                            data-ng-change="checkParams();">
-                           <i data-tooltip="Must be less than Chromosome {{params.chr}}'s length: {{lengths[params.chr]}}"
+                           <i data-tooltip="{{ 'Must be less than Chromosome [[char]] \'s length: [[length]] ' | translate | subDelimiters:{char: params.chr, length: lengths[params.chr]} }}"
                               data-tooltip-placement="right" class="invalid-icon icon-attention"
                               data-ng-if="invalidParams.isPosition"></i>
                 </td>

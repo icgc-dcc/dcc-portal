@@ -77,7 +77,7 @@
                                 <i data-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="SavedSetController.downloadDonorData(item.id)"></i>
                             </span>
                             <a data-ng-if="item.type==='donor' || item.type==='file'" class="t_tools__tool"
-                              data-tooltip="View in {{:: SavedSetController.dataRepoTitle }}" href="{{item.repoLink}}">
+                              data-tooltip="{{'View in [[ dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: SavedSetController.dataRepoTitle} }}" href="{{item.repoLink}}">
                               <i class="icon-download-cloud"></i>
                             </a>
                             <span data-tooltip="{{'Share Saved Set' | translate}}">

@@ -12,7 +12,7 @@
                 data-ng-if="type !== 'file-donor'"
                 data-ng-class="{'is': !isNot, 'is-not': isNot}"
                 data-ng-click="isNot ? isFacet(facet) : notFacet(facet)"
-                data-tooltip="Toggle this facet to IS {{ isNot ? 'NOT' : '' }}"
+                data-tooltip="{{ 'Toggle this facet to IS [[ toggle ]]' | translate | subDelimiters:{toggle: isNot ? 'NOT' : ''} }}"
             >
                 <div class="include">IS</div>
                 <div class="nub"></div>

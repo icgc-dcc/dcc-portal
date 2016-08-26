@@ -247,9 +247,9 @@
                 <th><translate>Tumour Subtype</translate></th>
                 <th><abbr data-tooltip="{{'Number of Donors where a Gene involved in the Gene Set contains SSM' | translate}}">
                     <translate># Donors affected</translate></abbr> <i class="icon-sort-down"></i></th>
-                <th><abbr data-tooltip="Number of SSM observed in {{ GeneSetCtrl.geneSet.id }}"
+                <th><abbr data-tooltip="{{'Number of SSM observed in [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
                           data-tooltip-placement="left"><translate># Mutations</translate></abbr></th>
-                <th><abbr data-tooltip="Number of Genes affected by {{ GeneSetCtrl.geneSet.id }}"
+                <th><abbr data-tooltip="{{'Number of Genes affected by [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
                           data-tooltip-placement="left"><translate># Genes</translate></abbr></th>
             </tr>
             </thead>

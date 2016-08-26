@@ -207,12 +207,15 @@
       var toHumanReadable = function (n, singular) {
         return '' + formatNumber (n) + ' ' + pluralizer (n, singular);
       };
+
+      /// N Donors across N projects
       var subtitle = toHumanReadable (_ctrl.totalDonors, gettextCatalog.getString('Donor'));
       var projects = _.get (_ctrl, 'projects.hits', undefined);
 
+      /// N Donors across N projects
       return subtitle + (_.isArray (projects) ?
-        ' across ' + toHumanReadable (projects.length, gettextCatalog.getString('Project')) : '');
-    };
+          ' ' + gettextCatalog.getString('across') + ' ' + toHumanReadable (projects.length, gettextCatalog.getString('Project')) : '');
+     };
 
     _ctrl.hasDonutData = function () {
       var donutData = _ctrl.donut;

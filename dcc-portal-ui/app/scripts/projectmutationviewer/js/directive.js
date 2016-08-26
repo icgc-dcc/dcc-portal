@@ -60,7 +60,7 @@
               var numberFilterFn = $filter('number');
 
               return '<strong>' + data.name + ' [' + data.id + ']</strong><br />' +
-                'Median: ' + numberFilterFn(data.medium) + '<br />' +
+                gettextCatalog.getString('Median') + ': ' + numberFilterFn(data.medium) + '<br />' +
                 gettextCatalog.getString('# Donors') + ': ' + data.donorCount + '<br />' +
                 gettextCatalog.getString('# Mutations') + ': ' + numberFilterFn(data.mutationCount);
             }

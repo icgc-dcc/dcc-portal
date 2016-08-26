@@ -292,7 +292,7 @@
             </tr>
             <tr>
                 <th class="text-center">
-                    <abbr data-tooltip="Breakdown of Affected Donors in {{ DonorCtrl.donor.projectId }}<br># Donors affected / # SSM tested donors">
+                    <abbr data-tooltip="{{'Breakdown of Affected Donors in [[ projectId ]]<br># Donors affected / # SSM tested donors' | translate | subDelimiters:{projectId: DonorCtrl.donor.projectId} }}">
                         {{ DonorCtrl.donor.projectId }}
                     </abbr> <i class="icon-caret-down"></i></th>
                 <th class="text-center">

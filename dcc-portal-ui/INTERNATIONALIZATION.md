@@ -155,6 +155,66 @@ as shown below. `msgid` in this case would not change as it is the key for the t
 - Deletion of strings or text would need to be done of templates side. Once the strings/texts are removed run the extract Grunt task. This task would update the `.pot` file. You can
 then use one of the services to update the `.po` file. Which would remove the strings/texts from `.po` file as well. For the english version `.po` file can be updated manually by deleting the entries.
 
+### Work arounds
+
+- The tool fails certain times when it encounters '&' in the strings. The work around for that is below
+
+	```
+	<span translate>Login &amp; Play</span> <!-- translates correctly -->
+	<span translate>Login & Play</span> <!-- fail -->
+	<span>{{ 'Login & Play' | translate }}</span> <!-- translates correctly -->
+	<span>{{ 'Login &amp; Play' | translate }}</span> <!-- fail -->
+	```
+
+- The other work around we have is with `&nbsp;` on `repository.external.html` page. The headings on pie chart breaks into a new line if the string has ' ' in it. So `Experimental Strategy` would break into a new line. However, `Experimental&nbsp;Strategy` would be ok. Passing the string with `&nbsp;` to the translate filter would not work. To overcome this issue a new filter was introduced. The string to the Pie chart heading was passed something like this.
+
+	```
+	{{'Experimental Strategy' | translate | addEntity}}
+	```
+First we are annoting the string using translate filter. Since the string doesn't have `&nbsp;`, the transalte filter would work as expected. The second addEntity filter then adds the non-breaking space entity into the string and therefore not breaking the Pie chart heading.
+
+	```
+	module.filter('addEntity', function(){
+	  return function(string){
+       return string.split(' ').join('\u00A0');
+     };
+  	});
+	```
+- Angular constants would not be able to use angular-gettext plugin to extract the string. Therefore a function was created which would help the Grunt plugin extracting texts from Angular constants.
+
+	```
+	function gettext(string){
+     return string;
+   }
+	```
+Function returns the string itself. So it shouldn't cause any issue with development. Once you annote the strings in constants with this function, the extract Grunt task would pickit up and append it to the `.pot` file. You could then use angular-gettext translate filter to obtain actuall translation of the string.
+
+	```
+	{{item.name | translate}}
+	```
+- Some times we are binding angular scope data inside HTML attribures. Tooltip is good example of it. it's impossible to translate the following without translating strings in JS, we have implemented a work around for it:
+
+	```
+	<i class="icon-download-cloud" data-tooltip="View in {{dataRepoTitle}}' />
+	```
+The work around for this is to wrap the scope variable with different delimiters  and pass a filter that in turns replaces them with the default delimiters.
+	
+	```
+	<i class="icon-download-cloud" 
+	  data-tooltip="{{ 'View in [[dataRepoTitle]]' | translate | subDelimiters:{dataRepoTitle: dataRepoTitle} }}' />
+	```
+The `subDelimiters` filter replaces `[[` with default delimiters `{{` and returns interpolated string. 
+	
+	```
+	module.filter('subDelimiters', function($interpolate){
+     return function(string, context){
+       string = string.replace(/\[\[/g, '{{').replace(/\]\]/g, '}}');
+       var interpolateFn = $interpolate(string);
+       return interpolateFn(context);
+     };
+  });
+  ```
+
 ## Translation
 
 There are different types of services available to translate the strings. Some of them

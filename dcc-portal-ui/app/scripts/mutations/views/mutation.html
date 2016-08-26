@@ -88,7 +88,7 @@
                 <td>
                     <span class="t_impact_{{consequence.functionalImpact | lowercase }}">{{consequence.aaMutation}}</span>
                 </td>
-                <td><abbr data-tooltip="SO term: {{consequence.type}}">{{consequence.type | trans}}</abbr>
+                <td><abbr data-tooltip="{{'SO term: [[ consequenceType ]]' | translate | subDelimiters:{consequenceType: consequence.type} }}">{{consequence.type | trans}}</abbr>
                 </td>
                 <td>{{consequence.cdsMutation}}</td>
                 <td>
@@ -176,7 +176,7 @@
                 <th><translate>Site</translate></th>
                 <th><translate>Tumour Type</translate></th>
                 <th><translate>Tumour Subtype</translate></th>
-                <th><abbr data-tooltip="Breakdown of Donors affected by {{ MutationCtrl.mutation.id }}<br># Donors where {{ MutationCtrl.mutation.id }} observed / # SSM tested Donors"
+                <th><abbr data-tooltip="{{'Breakdown of Donors affected by [[ mutationId ]] <br># Donors where [[ mutationId ]] observed / # SSM tested Donors' | translate | subDelimiters:{mutationId: MutationCtrl.mutation.id} }}"
                         data-tooltip-placement="left"><translate># Donors affected</translate></abbr> <i class="icon-sort-down"></i></th>
             </tr>
             </thead>

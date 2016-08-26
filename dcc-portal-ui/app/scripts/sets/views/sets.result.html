@@ -89,7 +89,7 @@
                                 class="icon-download" 
                                 data-tooltip="{{'Download Donor Data' | translate}}" 
                                 data-ng-click="downloadDerivedSet(item)"></i>
-                              <i class="icon-download-cloud" data-tooltip="View in {{:: dataRepoTitle}}" data-ng-click="viewInExternal(item)"></i>
+                              <i class="icon-download-cloud" data-tooltip="{{'View in [[ dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: dataRepoTitle} }}" data-ng-click="viewInExternal(item)"></i>
                             </span>
                         </span>
                     </td>
@@ -116,7 +116,7 @@
                                 class="icon-download" 
                                 data-tooltip="{{'Download Donor Data' | translate}}" 
                                 data-ng-click="downloadDerivedSet()"></i>
-                              <i class="icon-download-cloud" data-tooltip="View in {{:: dataRepoTitle}}" data-ng-click="viewInExternal()"></i>
+                              <i class="icon-download-cloud" data-tooltip="{{'View in [[ dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: dataRepoTitle} }}" data-ng-click="viewInExternal()"></i>
                             </span>
                         </span>
                         <br>
