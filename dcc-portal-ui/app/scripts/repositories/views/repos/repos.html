@@ -18,7 +18,7 @@
 
                 <stacked height="250"
                     data-title="{{'Donor Distribution by Primary Site' | translate}}"
-                    data-subtitle="{{repositoryCtrl.getRepoSummaryData().projectCount}} projects and {{repositoryCtrl.getRepoSummaryData().primarySiteCount}} primary sites"
+                    data-subtitle="{{ '[[projectCount]] projects and [[siteCount]] primary sites'| translate | subDelimiters:{projectCount: repositoryCtrl.getRepoSummaryData().projectCount, siteCount: repositoryCtrl.getRepoSummaryData().primarySiteCount} }}"
                     data-y-label="{{'Donors' | translate}}"
                     data-alternate-brightness="true"
                     data-items="repositoryCtrl.getPrimarySites()"
