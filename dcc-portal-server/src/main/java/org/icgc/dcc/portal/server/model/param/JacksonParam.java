@@ -29,7 +29,7 @@ public abstract class JacksonParam<T> extends AbstractParam<T> {
 
   @Override
   protected T parse(String input) throws Exception {
-    return MAPPER.reader(resolveModelClass()).readValue(input);
+    return MAPPER.readerFor(resolveModelClass()).readValue(input);
   }
 
   @SuppressWarnings("unchecked")

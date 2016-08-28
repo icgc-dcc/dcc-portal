@@ -31,8 +31,8 @@ import org.icgc.dcc.portal.server.config.ServerProperties.HazelcastProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.ICGCProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.MailProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.OAuthProperties;
-import org.icgc.dcc.portal.server.config.ServerProperties.WebProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.SoftwareProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.WebProperties;
 import org.icgc.dcc.portal.server.model.Settings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -50,7 +50,7 @@ public class ServerConfig {
   /**
    * Properties.
    */
-  
+
   @Bean
   @ConfigurationProperties
   public ServerProperties properties() {
@@ -166,4 +166,5 @@ public class ServerConfig {
   public SoftwareProperties softProperties() {
     return properties().getSoftware();
   }
+
 }

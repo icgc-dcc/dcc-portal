@@ -178,6 +178,7 @@ public class ServerProperties {
     @JsonProperty
     String repoIndexName = "icgc-repository";
 
+    @Valid
     @JsonProperty
     List<ElasticSearchNodeAddress> nodeAddresses = newArrayList();
 
@@ -190,8 +191,8 @@ public class ServerProperties {
       @JsonProperty
       String host = "localhost";
 
-      @Min(value = 1, message = "Property 'elastic.nodeAddresses[].port' must be greater than or equal to {value} but was '${validatedValue}'")
-      @Max(value = 65535, message = "'Property 'elastic.nodeAddresses[].port' must be less than than or equal to {value} but was '${validatedValue}'")
+      @Min(value = 1, message = "Must be greater than or equal to {value} but was '${validatedValue}'")
+      @Max(value = 65535, message = "'Must be less than than or equal to {value} but was '${validatedValue}'")
       @JsonProperty
       int port = 9300;
 
@@ -277,7 +278,7 @@ public class ServerProperties {
     String smtpServer = "";
     int smtpPort = 25;
 
-    @Email(message = "Property 'mail.senderEmail' must be a valid email address but was '${validatedValue}")
+    @Email(message = "Must be a valid email address but was '${validatedValue}")
     String senderEmail = "no-reply@oicr.on.ca";
 
     String senderName = "DCC Portal";
@@ -289,11 +290,11 @@ public class ServerProperties {
   public static class ReleaseProperties {
 
     @JsonProperty
-    @NotEmpty(message = "Property 'release.releaseDate' must not be empty")
+    @NotEmpty
     String releaseDate;
 
     @JsonProperty
-    @Min(value = 1, message = "Property 'release.dataVersion' must be greater than or equal to {value} but was '${validatedValue}'")
+    @Min(value = 1, message = "Must be greater than or equal to {value} but was '${validatedValue}'")
     int dataVersion;
   }
 
@@ -312,8 +313,8 @@ public class ServerProperties {
   public static class WebProperties {
 
     @JsonProperty
-    @URL(message = "Property 'web.baseUrl' must be a valid URL but was '${validatedValue}'")
-    @NotEmpty(message = "Property 'web.baseUrl' must not be empty")
+    @URL(message = "Must be a valid URL but was '${validatedValue}'")
+    @NotEmpty
     String baseUrl;
 
   }
@@ -321,12 +322,12 @@ public class ServerProperties {
   @Data
   public static class OAuthProperties {
 
-    @URL(message = "Property 'oauth.serviceUrl' must be a valid URL but was '${validatedValue}'")
-    @NotEmpty(message = "Property 'oauth.serviceUrl' must not be empty")
+    @URL(message = "Must be a valid URL but was '${validatedValue}'")
+    @NotEmpty
     @JsonProperty
     String serviceUrl;
 
-    @NotEmpty(message = "Property 'oauth.clientId' must not be empty")
+    @NotEmpty
     @JsonProperty
     String clientId;
 
