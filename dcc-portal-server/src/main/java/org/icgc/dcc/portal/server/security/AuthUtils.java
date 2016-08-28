@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.util;
+package org.icgc.dcc.portal.server.security;
 
 import static java.util.Collections.emptyList;
 import static lombok.AccessLevel.PRIVATE;
@@ -31,7 +31,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
-import org.icgc.dcc.portal.server.service.AuthenticationException;
 import org.icgc.dcc.portal.server.service.ForbiddenAccessException;
 
 /**

@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.auth;
+package org.icgc.dcc.portal.server.security.jersey;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
@@ -29,6 +29,7 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 
 import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.model.User;
 
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.core.HttpContext;
@@ -49,7 +50,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RequiredArgsConstructor
-class UserAuthInjectable<T> extends AbstractHttpContextInjectable<T> {
+class UserAuthInjectable extends AbstractHttpContextInjectable<User> {
 
   /**
    * Constants.
@@ -61,7 +62,7 @@ class UserAuthInjectable<T> extends AbstractHttpContextInjectable<T> {
    */
   @Getter
   @NonNull
-  private final Authenticator<UserCredentials, T> authenticator;
+  private final UserAuthenticator authenticator;
 
   /**
    * The authentication realm
@@ -76,7 +77,7 @@ class UserAuthInjectable<T> extends AbstractHttpContextInjectable<T> {
   private final boolean required;
 
   @Override
-  public T getValue(HttpContext httpContext) {
+  public User getValue(HttpContext httpContext) {
     // First try session
     val sessionToken = resolveSessionToken(httpContext);
     if (sessionToken != null) {
@@ -144,7 +145,7 @@ class UserAuthInjectable<T> extends AbstractHttpContextInjectable<T> {
     return token;
   }
 
-  private T handleAuthentication(Optional<UUID> sessionToken, Optional<String> accessToken) {
+  private User handleAuthentication(Optional<UUID> sessionToken, Optional<String> accessToken) {
     val credentials = new UserCredentials(sessionToken, accessToken);
 
     try {
@@ -152,7 +153,7 @@ class UserAuthInjectable<T> extends AbstractHttpContextInjectable<T> {
       if (result.isPresent()) {
         return result.get();
       }
-    } catch (AuthenticationException e) {
+    } catch (Exception e) {
       log.warn("Problem authenticating '" + credentials + "':", e);
     }
 

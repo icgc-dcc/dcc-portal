@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.server.jersey.mapper;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.status;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-import static org.icgc.dcc.portal.server.util.AuthUtils.deleteCookie;
+import static org.icgc.dcc.portal.server.security.AuthUtils.deleteCookie;
 
 import java.util.Collection;
 
@@ -37,7 +37,7 @@ import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 import org.icgc.dcc.portal.server.model.Error;
 import org.icgc.dcc.portal.server.resource.security.AuthResource;
 import org.icgc.dcc.portal.server.resource.security.OpenIDResource;
-import org.icgc.dcc.portal.server.service.AuthenticationException;
+import org.icgc.dcc.portal.server.security.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
