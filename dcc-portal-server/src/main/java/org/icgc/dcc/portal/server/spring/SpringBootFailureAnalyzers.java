@@ -38,7 +38,7 @@ import lombok.val;
 @NoArgsConstructor(access = PRIVATE)
 class SpringBootFailureAnalyzers {
 
-  static class UnsatisfiedDependencyAnalyzer extends AbstractFailureAnalyzer<UnsatisfiedDependencyException> {
+  static class UnsatisfiedDependencyFailureAnalyzer extends AbstractFailureAnalyzer<UnsatisfiedDependencyException> {
 
     @Override
     protected FailureAnalysis analyze(Throwable rootFailure, UnsatisfiedDependencyException cause) {
