@@ -18,25 +18,27 @@
 package org.icgc.dcc.portal.server.config;
 
 import static com.google.common.base.Objects.firstNonNull;
-import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.icgc.dcc.portal.server.config.ServerProperties.ElasticSearchProperties.SNIFF_MODE_KEY;
 import static org.icgc.dcc.portal.server.util.VersionUtils.getApiVersion;
 import static org.icgc.dcc.portal.server.util.VersionUtils.getApplicationVersion;
 import static org.icgc.dcc.portal.server.util.VersionUtils.getCommitId;
 
+import java.net.InetAddress;
 import java.util.Map;
-import java.util.Set;
 
+import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.ClusterState;
-import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.index.Index;
+import org.elasticsearch.indices.IndexMissingException;
 import org.icgc.dcc.portal.server.config.ServerProperties.ElasticSearchProperties;
 import org.icgc.dcc.portal.server.model.Versions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +61,15 @@ public class SearchConfig {
   @Autowired
   private ElasticSearchProperties elastic;
 
+  @SneakyThrows
   @Bean(destroyMethod = "close")
   public Client client() {
-    // TransportClient is thread-safe so @Singleton is appropriate
+    // TransportClient is thread-safe
     val client = createTransportClient(elastic.getClient());
     for (val nodeAddress : elastic.getNodeAddresses()) {
+      log.info("Configuring ES node address: {}", nodeAddress);
+      InetAddress.getByName(nodeAddress.getHost()).isReachable((int) SECONDS.toMillis(5));
+
       client.addTransportAddress(new InetSocketTransportAddress(
           nodeAddress.getHost(),
           nodeAddress.getPort()));
@@ -100,7 +106,6 @@ public class SearchConfig {
   }
 
   private String resolveIndexName(String indexName) {
-
     // Get cluster state
     ClusterState clusterState = client().admin().cluster()
         .prepareState()
@@ -110,11 +115,11 @@ public class SearchConfig {
 
     val aliases = clusterState.getMetaData().aliases().get(indexName);
     if (aliases != null) {
-      Set<String> indexNames = newHashSet(aliases.keys().toArray(String.class));
-      checkState(indexNames.size() == 1, "Expected alias to point to a single index but instead it points to '%s'",
-          indexNames);
+      val indexNames = newHashSet(aliases.keys().toArray(String.class));
+      if (indexNames.size() != 1) throw new ElasticsearchException(
+          String.format("Expected alias to point to a single index but instead it points to '%s'", indexNames));
 
-      String realIndexName = getFirst(indexNames, null);
+      val realIndexName = getFirst(indexNames, null);
       log.warn("Redirecting configured index alias of '{}' with real index name '{}'", indexName, realIndexName);
       indexName = realIndexName;
     }
@@ -126,15 +131,15 @@ public class SearchConfig {
   @SuppressWarnings("unchecked")
   private Map<String, String> indexMetadata(String indexName) {
     // Get cluster state
-    ClusterState clusterState = client().admin().cluster()
+    val clusterState = client().admin().cluster()
         .prepareState()
         .setIndices(indexName)
         .execute()
         .actionGet()
         .getState();
 
-    IndexMetaData indexMetaData = clusterState.getMetaData().index(indexName);
-    checkState(indexMetaData != null, "Index meta data is null. Ensure that index '%s' exists.", indexName);
+    val indexMetaData = clusterState.getMetaData().index(indexName);
+    if (indexMetaData == null) throw new IndexMissingException(new Index(indexName));
 
     // Get the first mappings. This is arbitrary since they all contain the same metadata
     MappingMetaData mappingMetaData = indexMetaData.getMappings().values().iterator().next().value;

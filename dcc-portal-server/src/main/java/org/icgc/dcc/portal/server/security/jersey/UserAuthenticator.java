@@ -15,10 +15,10 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.auth;
+package org.icgc.dcc.portal.server.security.jersey;
 
-import org.icgc.dcc.portal.server.auth.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.model.User;
+import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
-public class UserAuthenticator implements Authenticator<UserCredentials, User> {
+public class UserAuthenticator {
 
   /**
    * Constants.
@@ -51,8 +51,7 @@ public class UserAuthenticator implements Authenticator<UserCredentials, User> {
   @NonNull
   private final OAuthClient oauthClient;
 
-  @Override
-  public Optional<User> authenticate(UserCredentials credentials) throws AuthenticationException {
+  public Optional<User> authenticate(UserCredentials credentials) {
     if (credentials.isWebSession()) {
       val sessionToken = credentials.getSessionToken().get();
       log.debug("Looking up user by session token '{}'...", sessionToken);

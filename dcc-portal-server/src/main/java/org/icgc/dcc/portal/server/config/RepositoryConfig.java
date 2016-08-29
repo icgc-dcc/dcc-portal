@@ -1,5 +1,5 @@
 /*
- * Copyright 2013(c) The Ontario Institute for Cancer Research. All rights reserved.
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
  *
  * This program and the accompanying materials are made available under the terms of the GNU Public
  * License v3.0. You should have received a copy of the GNU General Public License along with this
@@ -14,7 +14,6 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.icgc.dcc.portal.server.config;
 
 import javax.sql.DataSource;
