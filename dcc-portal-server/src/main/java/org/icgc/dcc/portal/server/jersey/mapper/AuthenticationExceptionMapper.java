@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.server.jersey.mapper;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.status;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-import static org.icgc.dcc.portal.server.util.AuthUtils.deleteCookie;
+import static org.icgc.dcc.portal.server.security.AuthUtils.deleteCookie;
 
 import java.util.Collection;
 
@@ -33,11 +33,11 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
 import org.icgc.dcc.portal.server.model.Error;
 import org.icgc.dcc.portal.server.resource.security.AuthResource;
 import org.icgc.dcc.portal.server.resource.security.OpenIDResource;
-import org.icgc.dcc.portal.server.service.AuthenticationException;
+import org.icgc.dcc.portal.server.security.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
@@ -71,7 +71,7 @@ public class AuthenticationExceptionMapper implements ExceptionMapper<Authentica
   private static Response createUnauthenticatedResponse(AuthenticationException e, HttpHeaders headers) {
     val response = status(STATUS)
         .type(APPLICATION_JSON_TYPE)
-        .cookie(deleteCookie(CrowdProperties.SESSION_TOKEN_NAME))
+        .cookie(deleteCookie(AuthProperties.SESSION_TOKEN_NAME))
         .entity(errorResponse(e));
 
     // dcc cookie is always deleted at a failed authentication because it's managed by the portal

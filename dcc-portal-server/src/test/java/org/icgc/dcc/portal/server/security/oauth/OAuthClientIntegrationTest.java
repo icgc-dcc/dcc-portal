@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.auth.oauth;
+package org.icgc.dcc.portal.server.security.oauth;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +28,7 @@ import org.icgc.dcc.common.core.util.Splitters;
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.OAuthProperties;
 import org.icgc.dcc.portal.server.model.AccessToken;
+import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.service.BadRequestException;
 import org.junit.Before;
 import org.junit.Test;

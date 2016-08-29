@@ -1,4 +1,4 @@
-package org.icgc.dcc.portal.server.auth.openid;
+package org.icgc.dcc.portal.server.security.openid;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
@@ -8,7 +8,8 @@ import static org.mockito.Mockito.when;
 
 import java.net.URL;
 
-import org.icgc.dcc.portal.server.service.AuthService;
+import org.icgc.dcc.portal.server.security.AuthService;
+import org.icgc.dcc.portal.server.security.openid.OpenIDAuthService;
 import org.icgc.dcc.portal.server.service.SessionService;
 import org.junit.Before;
 import org.junit.Test;

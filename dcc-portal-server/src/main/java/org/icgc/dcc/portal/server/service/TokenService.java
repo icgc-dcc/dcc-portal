@@ -22,17 +22,17 @@ import static com.google.common.collect.Sets.difference;
 import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
-import static org.icgc.dcc.portal.server.util.AuthUtils.throwForbiddenException;
+import static org.icgc.dcc.portal.server.security.AuthUtils.throwForbiddenException;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.icgc.dcc.common.core.util.Splitters;
-import org.icgc.dcc.portal.server.auth.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes.AccessTokenScope;
+import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.model.Tokens;
 import org.icgc.dcc.portal.server.model.User;
 import org.springframework.beans.factory.annotation.Autowired;

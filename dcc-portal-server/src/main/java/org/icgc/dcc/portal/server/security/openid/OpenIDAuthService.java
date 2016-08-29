@@ -1,9 +1,9 @@
-package org.icgc.dcc.portal.server.auth.openid;
+package org.icgc.dcc.portal.server.security.openid;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Collections.emptyList;
-import static org.icgc.dcc.portal.server.util.AuthUtils.stringToUuid;
-import static org.icgc.dcc.portal.server.util.AuthUtils.throwRedirectException;
+import static org.icgc.dcc.portal.server.security.AuthUtils.stringToUuid;
+import static org.icgc.dcc.portal.server.security.AuthUtils.throwRedirectException;
 
 import java.net.URI;
 import java.util.List;
@@ -20,8 +20,8 @@ import org.icgc.dcc.common.client.api.daco.DACOClient.UserType;
 import org.icgc.dcc.common.core.util.Scheme;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.resource.security.OpenIDResource;
-import org.icgc.dcc.portal.server.service.AuthService;
-import org.icgc.dcc.portal.server.service.AuthenticationException;
+import org.icgc.dcc.portal.server.security.AuthService;
+import org.icgc.dcc.portal.server.security.AuthenticationException;
 import org.icgc.dcc.portal.server.service.SessionService;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;

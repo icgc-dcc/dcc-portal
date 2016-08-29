@@ -15,17 +15,12 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.icgc.dcc.portal.server.service;
+package org.icgc.dcc.portal.server.security;
 
 import static org.icgc.dcc.common.client.api.daco.DACOClient.UserType.CUD;
 import static org.icgc.dcc.common.client.api.daco.DACOClient.UserType.OPENID;
 
 import java.util.Optional;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.common.client.api.ICGCEntityNotFoundException;
 import org.icgc.dcc.common.client.api.ICGCException;
@@ -36,6 +31,11 @@ import org.icgc.dcc.common.client.api.daco.DACOClient.UserType;
 import org.icgc.dcc.portal.server.config.ServerProperties.ICGCProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Provides authentication services against the Central User Directory (CUD) and utilities to check if the user is a
@@ -48,12 +48,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class AuthService {
 
+  /**
+   * Configuration.
+   */
+  @NonNull
+  private ICGCProperties icgcConfig;
+
+  /**
+   * Dependencies.
+   */
   @NonNull
   private CUDClient cudClient;
   @NonNull
   private DACOClient dacoClient;
-  @NonNull
-  private ICGCProperties icgcConfig;
 
   public Optional<org.icgc.dcc.common.client.api.daco.User> getDacoUser(@NonNull UserType userType,
       @NonNull String userId) {
@@ -65,7 +72,7 @@ public class AuthService {
   }
 
   /**
-   * Checks Central User Directory(CUD) if <tt>username</tt> has DACO access.
+   * Checks Central User Directory (CUD) if <tt>username</tt> has DACO access.
    * 
    * @throws ICGCException and its sub-classes
    */
@@ -78,7 +85,7 @@ public class AuthService {
   }
 
   /**
-   * Checks Central User Directory(CUD) if <tt>username</tt> has DACO cloud access.
+   * Checks Central User Directory (CUD) if <tt>username</tt> has DACO cloud access.
    * 
    * @throws ICGCException and its sub-classes
    */
@@ -91,7 +98,7 @@ public class AuthService {
   }
 
   /**
-   * Logins <tt>username</tt> to Central User Directory(CUD).
+   * Logins <tt>username</tt> to Central User Directory (CUD).
    * 
    * @throws ICGCException and its sub-classes
    */
@@ -104,7 +111,7 @@ public class AuthService {
   }
 
   /**
-   * Get user info from Central User Directory(CUD).
+   * Get user info from Central User Directory (CUD).
    * 
    * @throws ICGCException and its sub-classes
    */

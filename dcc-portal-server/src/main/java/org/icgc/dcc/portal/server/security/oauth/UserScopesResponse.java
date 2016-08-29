@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,30 +15,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.auth;
+package org.icgc.dcc.portal.server.security.oauth;
 
-/**
- * An exception thrown to indicate that an {@link Authenticator} is <b>unable</b> to check the validity of the given
- * credentials.
- *
- * <p>
- * <b>DO NOT USE THIS TO INDICATE THAT THE CREDENTIALS ARE INVALID.</b>
- * </p>
- */
-public class AuthenticationException extends Exception {
+import java.util.Set;
 
-  private static final long serialVersionUID = -5053567474138953905L;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-  public AuthenticationException(String message) {
-    super(message);
-  }
+import lombok.Value;
 
-  public AuthenticationException(String message, Throwable cause) {
-    super(message, cause);
-  }
+@Value
+public class UserScopesResponse {
 
-  public AuthenticationException(Throwable cause) {
-    super(cause);
+  Set<String> scopes;
+
+  @JsonCreator
+  public UserScopesResponse(@JsonProperty("scopes") Set<String> scopes) {
+    this.scopes = scopes;
   }
 
 }

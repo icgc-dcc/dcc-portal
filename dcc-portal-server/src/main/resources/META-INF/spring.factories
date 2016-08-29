@@ -1,0 +1,6 @@
+# Failure Analyzers
+org.springframework.boot.diagnostics.FailureAnalyzer=\
+org.icgc.dcc.portal.server.spring.SpringBootFailureAnalyzers.ElasticsearchFailureAnalyzer,\
+org.icgc.dcc.portal.server.spring.SpringBootFailureAnalyzers.JdbcFailureAnalyzer,\
+org.icgc.dcc.portal.server.spring.SpringBootFailureAnalyzers.UnknownHostFailureAnalyzer,\
+org.icgc.dcc.portal.server.spring.SpringBootFailureAnalyzers.UnsatisfiedDependencyFailureAnalyzer

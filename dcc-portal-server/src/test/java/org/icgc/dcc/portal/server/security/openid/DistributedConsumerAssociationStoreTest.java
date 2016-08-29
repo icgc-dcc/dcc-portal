@@ -15,10 +15,10 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.auth.openid;
+package org.icgc.dcc.portal.server.security.openid;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.portal.server.auth.openid.DistributedConsumerAssociationStore.ASSOCIATIONS_CACHE_NAME;
+import static org.icgc.dcc.portal.server.security.openid.DistributedConsumerAssociationStore.ASSOCIATIONS_CACHE_NAME;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,6 +28,7 @@ import java.util.List;
 
 import lombok.val;
 
+import org.icgc.dcc.portal.server.security.openid.DistributedConsumerAssociationStore;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
