@@ -381,8 +381,8 @@
 
   // This is a workaroud required for Internationalization of 'Experimental&nbsp;Strategy'
   module.filter('replace', function(){
-    return function(string, oldValue, newValue){
-      return string.replace(oldValue, newValue);
+    return function(string, pattern, replacement){
+      return string.replace(new RegExp(pattern, 'g'), replacement);
     };
   });
 
