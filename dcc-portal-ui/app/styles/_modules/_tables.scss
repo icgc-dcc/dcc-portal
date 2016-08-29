@@ -140,3 +140,9 @@ $table-th-fixed-width: 200px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.table-text-wrap{
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: normal;
+}

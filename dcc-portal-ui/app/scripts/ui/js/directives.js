@@ -118,8 +118,10 @@ angular.module('app.ui.hidetext', []).directive('hideText', function () {
     restrict: 'E',
     replace: true,
     transclude: true,
-    scope: {},
-    template: '<div class="t_sh">' +
+    scope: {
+      class: '@'
+    },
+    template: '<div class="t_sh {{class}}">' +
               '{{ text }}' +
               '<div ng-if="text.length>=limit" class="t_sh__toggle">' +
               '<a ng-click="toggle()" href="" class="t_tools__tool">' +
