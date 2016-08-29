@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
 import org.icgc.dcc.portal.server.service.ForbiddenAccessException;
 
 /**
@@ -55,7 +55,7 @@ public final class AuthUtils {
         cookieName,
         FAILED_AUTH_COOKIE_VALUE,
         COOKIE_PATH,
-        (cookieName.equals(CrowdProperties.SESSION_TOKEN_NAME)) ? DEFAULT_DOMAIN : ICGC_DOMAIN,
+        (cookieName.equals(AuthProperties.SESSION_TOKEN_NAME)) ? DEFAULT_DOMAIN : ICGC_DOMAIN,
         COOKIE_COMMENT,
         FAILED_AUTH_COOKIE_AGE,
         SECURE);

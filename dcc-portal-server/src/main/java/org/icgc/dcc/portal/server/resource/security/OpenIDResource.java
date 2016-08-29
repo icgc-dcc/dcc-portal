@@ -34,7 +34,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
-import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.security.openid.OpenIDAuthService;
@@ -144,7 +144,7 @@ public class OpenIDResource extends Resource {
   private static NewCookie setSessionCookie(User user) {
     val sessionToken = user.getSessionToken().toString();
 
-    return createSessionCookie(CrowdProperties.SESSION_TOKEN_NAME, sessionToken);
+    return createSessionCookie(AuthProperties.SESSION_TOKEN_NAME, sessionToken);
   }
 
 }

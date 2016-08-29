@@ -28,7 +28,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 
-import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
 import org.icgc.dcc.portal.server.model.User;
 
 import com.google.common.net.HttpHeaders;
@@ -107,8 +107,8 @@ class UserAuthInjectable extends AbstractHttpContextInjectable<User> {
     UUID token = null;
 
     try {
-      if (cookies.containsKey(CrowdProperties.SESSION_TOKEN_NAME)) {
-        token = UUID.fromString(cookies.get(CrowdProperties.SESSION_TOKEN_NAME).getValue());
+      if (cookies.containsKey(AuthProperties.SESSION_TOKEN_NAME)) {
+        token = UUID.fromString(cookies.get(AuthProperties.SESSION_TOKEN_NAME).getValue());
       }
     } catch (IllegalArgumentException e) {
       log.debug("Invalid session token passed in request");

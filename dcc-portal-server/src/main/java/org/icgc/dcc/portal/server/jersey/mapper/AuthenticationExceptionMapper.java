@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
 import org.icgc.dcc.portal.server.model.Error;
 import org.icgc.dcc.portal.server.resource.security.AuthResource;
 import org.icgc.dcc.portal.server.resource.security.OpenIDResource;
@@ -71,7 +71,7 @@ public class AuthenticationExceptionMapper implements ExceptionMapper<Authentica
   private static Response createUnauthenticatedResponse(AuthenticationException e, HttpHeaders headers) {
     val response = status(STATUS)
         .type(APPLICATION_JSON_TYPE)
-        .cookie(deleteCookie(CrowdProperties.SESSION_TOKEN_NAME))
+        .cookie(deleteCookie(AuthProperties.SESSION_TOKEN_NAME))
         .entity(errorResponse(e));
 
     // dcc cookie is always deleted at a failed authentication because it's managed by the portal

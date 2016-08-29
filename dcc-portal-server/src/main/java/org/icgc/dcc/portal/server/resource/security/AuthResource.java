@@ -24,6 +24,7 @@ import static javax.ws.rs.core.HttpHeaders.SET_COOKIE;
 import static javax.ws.rs.core.Response.status;
 import static javax.ws.rs.core.Response.Status.NOT_MODIFIED;
 import static javax.ws.rs.core.Response.Status.OK;
+import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.portal.server.security.AuthUtils.createSessionCookie;
 import static org.icgc.dcc.portal.server.security.AuthUtils.deleteCookie;
 import static org.icgc.dcc.portal.server.security.AuthUtils.stringToUuid;
@@ -104,7 +105,7 @@ public class AuthResource extends Resource {
   /**
    * State.
    */
-  @Getter(lazy = true)
+  @Getter(lazy = true, value = PRIVATE)
   private final Collection<String> cookiesToDelete = initCookiesToDelete();
 
   /**
@@ -113,20 +114,24 @@ public class AuthResource extends Resource {
   @GET
   @Path("/verify")
   public Response verify(@Context HttpHeaders requestHeaders) {
+    // First check to see if logins are enabled
     if (!properties.isEnabled()) {
       throwAuthenticationException("Login disabled");
     }
 
+    // Resolve tokens from cookies
     val cookies = requestHeaders.getCookies();
-    val sessionToken = getCookieValue(cookies.get(CrowdProperties.SESSION_TOKEN_NAME));
+    val sessionToken = getCookieValue(cookies.get(AuthProperties.SESSION_TOKEN_NAME));
     val cudToken = getCookieValue(cookies.get(CrowdProperties.CUD_TOKEN_NAME));
     val cmsToken = getCookieValue(cookies.get(cmsService.getSessionName()));
-    log.info("Received an authorization request. Session token: '{}'. CUD token: '{}'", sessionToken, cudToken);
+    log.info("Received an authorization request. Session token: '{}'. CUD token: '{}', CMS token: {}",
+        sessionToken, cudToken, cmsToken);
 
-    // Already logged in and knows credentials
+    // Already logged in and credentials available
     if (sessionToken != null) {
       log.info("[{}] Looking for already authenticated user in the cache", sessionToken);
       val user = getAuthenticatedUser(sessionToken);
+
       val verifiedResponse = verifiedResponse(user);
       log.info("[{}] Finished authorization for user '{}'. DACO access: '{}'",
           new Object[] { sessionToken, user.getOpenIDIdentifier(), user.getDaco() });
@@ -157,12 +162,55 @@ public class AuthResource extends Resource {
     return null;
   }
 
-  private static UserType resolveUserType(String cudToken, String cmsToken) {
-    return isNullOrEmpty(cudToken) ? UserType.OPENID : UserType.CUD;
+  /**
+   * This is only used by command-line utilities whose principal is not tied to OpenID, but rather CUD authentication.
+   * It is not used by the UI.
+   */
+  @POST
+  @Path("/login")
+  public Response login(Map<String, String> creds) {
+    checkRequest((creds == null || creds.isEmpty() || !creds.containsKey(USERNAME_KEY)), "Null or empty argument");
+    val username = creds.get(USERNAME_KEY);
+    log.info("Logging into CUD as {}", username);
+
+    log.info("[{}] Checking if the user has been already authenticated.", username);
+    val userOptional = sessionService.getUserByEmail(username);
+    if (userOptional.isPresent()) {
+      log.info("[{}] The user is already authenticated.", username);
+
+      return verifiedResponse(userOptional.get());
+    }
+
+    // Login user.
+    try {
+      log.info("[{}] The user is not authenticated yet. Authenticating...", username);
+      authService.loginUser(username, creds.get(PASSWORD_KEY));
+    } catch (ICGCException e) {
+      throwAuthenticationException("Username and password are incorrect",
+          String.format("[%s] Failed to login the user. Exception %s", username, e.getMessage()));
+    }
+
+    return verifiedResponse(createUser(username, null, UserType.CUD));
   }
 
-  private static String getCookieValue(javax.ws.rs.core.Cookie cookie) {
-    return cookie == null ? null : cookie.getValue();
+  @POST
+  @Path("/logout")
+  public Response logout(@Context HttpServletRequest request) {
+    val sessionToken = getSessionToken(request);
+    log.info("[{}] Terminating session", sessionToken);
+
+    if (sessionToken != null) {
+      val userOptional = sessionService.getUserBySessionToken(sessionToken);
+
+      if (userOptional.isPresent()) {
+        sessionService.removeUser(userOptional.get());
+      }
+      log.info("[{}] Successfully terminated session", sessionToken);
+
+      return createLogoutResponse(OK, "");
+    }
+
+    return createLogoutResponse(NOT_MODIFIED, "Did not find a user to log out");
   }
 
   private SimpleImmutableEntry<String, org.icgc.dcc.common.client.api.cud.User> resolveIcgcUser(String cudToken,
@@ -248,55 +296,38 @@ public class AuthResource extends Resource {
     return user;
   }
 
-  /**
-   * This is only used by command-line utilities whose principal is not tied to OpenID, but rather CUD authentication.
-   * It is not used by the UI.
-   */
-  @POST
-  @Path("/login")
-  public Response login(Map<String, String> creds) {
-    checkRequest((creds == null || creds.isEmpty() || !creds.containsKey(USERNAME_KEY)), "Null or empty argument");
-    val username = creds.get(USERNAME_KEY);
-    log.info("Logging into CUD as {}", username);
+  private Response createLogoutResponse(Status status, String message) {
+    val dccCookie = deleteCookie(AuthProperties.SESSION_TOKEN_NAME);
+    val crowdCookie = deleteCookie(CrowdProperties.CUD_TOKEN_NAME);
+    val cmsCookie = deleteCookie(cmsService.getSessionName());
 
-    log.info("[{}] Checking if the user has been already authenticated.", username);
-    val userOptional = sessionService.getUserByEmail(username);
-    if (userOptional.isPresent()) {
-      log.info("[{}] The user is already authenticated.", username);
-
-      return verifiedResponse(userOptional.get());
-    }
-
-    // Login user.
-    try {
-      log.info("[{}] The user is not authenticated yet. Authenticating...", username);
-      authService.loginUser(username, creds.get(PASSWORD_KEY));
-    } catch (ICGCException e) {
-      throwAuthenticationException("Username and password are incorrect",
-          String.format("[%s] Failed to login the user. Exception %s", username, e.getMessage()));
-    }
-
-    return verifiedResponse(createUser(username, null, UserType.CUD));
+    return status(status)
+        .header(SET_COOKIE, dccCookie.toString())
+        .header(SET_COOKIE, crowdCookie.toString())
+        .header(SET_COOKIE, cmsCookie.toString())
+        .entity(new org.icgc.dcc.portal.server.model.Error(status, message)) // Not really an error
+        .build();
   }
 
-  @POST
-  @Path("/logout")
-  public Response logout(@Context HttpServletRequest request) {
-    val sessionToken = getSessionToken(request);
-    log.info("[{}] Terminating session", sessionToken);
-
-    if (sessionToken != null) {
-      val userOptional = sessionService.getUserBySessionToken(sessionToken);
-
-      if (userOptional.isPresent()) {
-        sessionService.removeUser(userOptional.get());
-      }
-      log.info("[{}] Successfully terminated session", sessionToken);
-
-      return createLogoutResponse(OK, "");
+  private Collection<String> initCookiesToDelete() {
+    val result = ImmutableList.<String> builder();
+    result.add(CrowdProperties.CUD_TOKEN_NAME);
+    if (cmsService == null) {
+      log.warn(
+          "Can't properly define all cookies to be deleted on a failed authentication request. CmsService is not initialized");
+    } else {
+      result.add(cmsService.getSessionName());
     }
 
-    return createLogoutResponse(NOT_MODIFIED, "Did not find a user to log out");
+    return result.build();
+  }
+
+  private static UserType resolveUserType(String cudToken, String cmsToken) {
+    return isNullOrEmpty(cudToken) ? UserType.OPENID : UserType.CUD;
+  }
+
+  private static String getCookieValue(javax.ws.rs.core.Cookie cookie) {
+    return cookie == null ? null : cookie.getValue();
   }
 
   /**
@@ -315,12 +346,12 @@ public class AuthResource extends Resource {
   }
 
   private static boolean isSessionTokenCookie(Cookie cookie) {
-    return cookie.getName().equals(CrowdProperties.SESSION_TOKEN_NAME);
+    return cookie.getName().equals(AuthProperties.SESSION_TOKEN_NAME);
   }
 
   private static Response verifiedResponse(User user) {
     log.debug("Creating successful verified response for user: {}", user);
-    val cookie = createSessionCookie(CrowdProperties.SESSION_TOKEN_NAME, user.getSessionToken().toString());
+    val cookie = createSessionCookie(AuthProperties.SESSION_TOKEN_NAME, user.getSessionToken().toString());
 
     return Response.ok(ImmutableMap.of(
         TOKEN_KEY, user.getSessionToken(),
@@ -329,32 +360,6 @@ public class AuthResource extends Resource {
         CLOUD_ACCESS_KEY, user.getCloudAccess()))
         .header(SET_COOKIE, cookie.toString())
         .build();
-  }
-
-  private Response createLogoutResponse(Status status, String message) {
-    val dccCookie = deleteCookie(CrowdProperties.SESSION_TOKEN_NAME);
-    val crowdCookie = deleteCookie(CrowdProperties.CUD_TOKEN_NAME);
-    val cmsCookie = deleteCookie(cmsService.getSessionName());
-
-    return status(status)
-        .header(SET_COOKIE, dccCookie.toString())
-        .header(SET_COOKIE, crowdCookie.toString())
-        .header(SET_COOKIE, cmsCookie.toString())
-        .entity(new org.icgc.dcc.portal.server.model.Error(status, message))
-        .build();
-  }
-
-  private Collection<String> initCookiesToDelete() {
-    val result = ImmutableList.<String> builder();
-    result.add(CrowdProperties.CUD_TOKEN_NAME);
-    if (cmsService == null) {
-      log.warn(
-          "Can't properly define all cookies to be deleted on a failed authentication request. CmsService is not initialized");
-    } else {
-      result.add(cmsService.getSessionName());
-    }
-
-    return result.build();
   }
 
 }
