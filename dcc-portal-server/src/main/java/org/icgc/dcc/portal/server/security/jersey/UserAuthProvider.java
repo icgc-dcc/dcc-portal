@@ -15,9 +15,8 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.auth;
+package org.icgc.dcc.portal.server.security.jersey;
 
-import org.icgc.dcc.portal.server.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sun.jersey.api.model.Parameter;
@@ -36,12 +35,12 @@ import lombok.NonNull;
 public class UserAuthProvider implements InjectableProvider<Auth, Parameter> {
 
   @NonNull
-  private final Authenticator<UserCredentials, User> authenticator;
+  private final UserAuthenticator authenticator;
   @NonNull
   private final String realm;
 
   @Autowired
-  public UserAuthProvider(Authenticator<UserCredentials, User> authenticator, String realm) {
+  public UserAuthProvider(UserAuthenticator authenticator, String realm) {
     this.authenticator = authenticator;
     this.realm = realm;
   }
@@ -53,7 +52,7 @@ public class UserAuthProvider implements InjectableProvider<Auth, Parameter> {
 
   @Override
   public Injectable<?> getInjectable(ComponentContext context, Auth auth, Parameter param) {
-    return new UserAuthInjectable<User>(authenticator, realm, auth.required());
+    return new UserAuthInjectable(authenticator, realm, auth.required());
   }
 
 }

@@ -129,10 +129,10 @@
       return _.map(donors, function (d) {
         return {
           'id': d.id,
-          'age': (d.ageAtDiagnosis === undefined ? 0 : d.ageAtDiagnosis),
+          'age': (d.ageAtDiagnosis === undefined ? -777 : d.ageAtDiagnosis),
           'sex': (d.gender === undefined ? 'unknown' : d.gender),
           'vitalStatus': (d.vitalStatus === undefined ? false : (d.vitalStatus === 'alive' ? true : false)),
-          'survivalTime': (d.survivalTime === undefined ? 0 : d.survivalTime),
+          'survivalTime': (d.survivalTime === undefined ? -777 : d.survivalTime),
           'pcawg': _.has(d, 'studies') && d.studies.indexOf('PCAWG') >= 0,
           'cnsmExists': d.cnsmExists,
           'stsmExists': d.stsmExists,

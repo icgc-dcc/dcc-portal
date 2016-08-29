@@ -25,6 +25,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sun.jersey.api.client.ClientResponse;
 
+import lombok.val;
+
 public class ResourceTests {
 
   public static final LinkedHashMap<String, Long> COUNT_MAP_REQUEST = Maps.newLinkedHashMap();
@@ -95,7 +97,9 @@ public class ResourceTests {
   }
 
   public static final <T> void assertEntityEquals(ClientResponse response, T expected) throws IOException {
-    assertThat(MAPPER.readTree(response.getEntity(String.class))).isEqualTo(MAPPER.valueToTree(expected));
+    val actual = MAPPER.writeValueAsString(MAPPER.readTree(response.getEntity(String.class)));
+    val value = MAPPER.writeValueAsString(MAPPER.valueToTree(expected));
+    assertThat(actual).isEqualTo(value);
   }
 
 }

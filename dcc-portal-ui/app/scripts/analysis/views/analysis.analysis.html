@@ -2,7 +2,7 @@
     <div class="sidepanel" data-ng-controller="AnalysisListController as ListController">
 
         <div class="select-list" data-ng-if="ListController.analysisList.length === 0">
-        <translate>You have no saved analysis.</translate>
+            <span class="select-list-no-item"><translate>You have no saved analysis.</translate></span>
         </div>
 
         <div class="select-list" data-ng-if="ListController.analysisList.length > 0">
