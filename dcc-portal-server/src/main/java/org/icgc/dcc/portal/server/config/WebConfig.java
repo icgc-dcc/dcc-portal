@@ -65,6 +65,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/app/");
     registry.addResourceHandler("/docs/**").addResourceLocations("classpath:/swagger-ui/");
     registry.addResourceHandler("/**").addResourceLocations("classpath:/app/");
   }
@@ -73,7 +74,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public void addViewControllers(ViewControllerRegistry registry) {
     registry.addViewController("/").setViewName("forward:/index.html");
     registry.addViewController("/docs").setViewName("forward:/docs/index.html");
-    registry.addViewController("/{path:[^.]*}").setViewName("forward:/index.html");
+    registry.addViewController("/**/{path:[^.]+}").setViewName("forward:/index.html");
   }
 
   @Bean
