@@ -1,33 +1,38 @@
 <div class="modal-content">
    <div class="modal-header clearfix">
-      <h3 class="pull-left">Download Donor Data</h3>
-      <button class="pull-right t_button" data-ng-click="cancel();"><i
-                                                                       class="icon-cancel"></i>
+      <h3 class="pull-left"><translate>Download Donor Data</translate></h3>
+      <button class="pull-right t_button" data-ng-click="cancel();">
+        <i class="icon-cancel"></i>
       </button>
    </div>
    <div class="modal-body light" style="max-height:none">
       <div class="alert alert-info" style="margin:0 0.1rem 1rem 0.1rem">
-         To browse and download unfiltered data, please visit the
+         <translate has-markup>To browse and download unfiltered data, please visit the
          <a href="{{:: dataReleasesRouteInfo.href }}" data-ng-click="modal=false">
-            <i class="icon-database"></i><strong>{{:: dataReleasesRouteInfo.title }}</strong></a> section.
+            <i class="icon-database"></i><strong>{{:: dataReleasesRouteInfo.title }}</strong></a> section.</translate>
       </div>
       <div data-ng-if="params.processing">
-         <i class="icon-spinner icon-spin"></i> Calculating download sizes...
+         <i class="icon-spinner icon-spin"></i> <translate>Calculating download sizes...</translate>
       </div>
 
       <div class="alert alert-warning" data-ng-if="params.downloadEnabled === false" style="margin:0rem;">
-        Download Donor Data section is currently unavailable due to maintenance.<br>
-        Please contact <a href="mailto:dcc-support@icgc.org">support</a> if you require assistance.
+        <translate>
+          Download Donor Data section is currently unavailable due to maintenance.
+        </translate>
+        <br>
+        <translate has-markup>
+          Please contact <a href="mailto:dcc-support@icgc.org">support</a> if you require assistance.
+        </translate>
       </div>
 
       <div data-ng-if="!params.processing && params.downloadEnabled">
-         <span>Search criteria results in <strong>{{totalDonor | number}}</strong> donors. Select data types to download:</span>
+         <span><translate has-markup>Search criteria results in <strong>{{totalDonor | number}}</strong> donors. Select data types to download:</translate></span>
          <table class="table table-info">
             <thead>
                <tr>
-                  <th>Data Type</th>
-                  <th class="text-right">File Size (Estimated)</th>
-                  <th class="text-right">Select</th>
+                  <th><translate>Data Type</translate></th>
+                  <th class="text-right"><translate>File Size (Estimated)</translate></th>
+                  <th class="text-right"><translate>Select</translate></th>
                </tr>
             </thead>
             <tbody>
@@ -50,8 +55,8 @@
                </tr>
                <tr>
                   <td colspan="3">
-                     <span class="pull-left"><strong>Total file size {{overallSize | bytes}}</strong></span>
-                     <span class="pull-right"><strong>{{dlFile}} files selected ({{dlTotal | bytes}})</strong></span>
+                     <span class="pull-left"><strong><translate has-markup>Total file size</translate> {{overallSize | bytes}}</strong></span>
+                     <span class="pull-right"><strong><translate has-markup>{{dlFile}} files selected ({{dlTotal | bytes}})</translate></strong></span>
                   </td>
                </tr>
             </tbody>
@@ -59,11 +64,11 @@
       </div>
    </div>
    <div class="modal-footer">
-      <button class="t_button" data-ng-click="cancel()">Cancel</button>
+      <button class="t_button" data-ng-click="cancel()"><translate>Cancel</translate></button>
       <button class="t_button" data-ng-click="download();"
               data-ng-disabled="dlTotal==0 || isSendingRequest()">
-         <span data-ng-if="! isSendingRequest()"><i class="icon-download"></i>Download</span>
-         <span data-ng-if="isSendingRequest()"><i class="icon-spinner icon-spin"></i>Preparing...</span>
+         <span data-ng-if="! isSendingRequest()"><i class="icon-download"></i><translate>Download</translate></span>
+         <span data-ng-if="isSendingRequest()"><i class="icon-spinner icon-spin"></i><translate>Preparing...</translate></span>
       </button>
    </div>
 </div>

@@ -21,7 +21,7 @@
 
   var module = angular.module('icgc.visualization.projectmutationviewer', []);
 
-  module.directive('projectMutationDistribution', function ($location, $filter, $window) {
+  module.directive('projectMutationDistribution', function ($location, $filter, $window, gettextCatalog) {
     return {
       restrict: 'E',
       replace: 'true',
@@ -37,9 +37,11 @@
 
         $scope.showPlot = false;
 
-        $scope.helpText = 'Each dot represents the number of somatic mutations per megabase in ' +
-          'a given donor\'s exome. Donors are grouped by cancer projects. <br>Horizontal red lines ' +
-          'provide the median number of somatic and exomic mutations within each cancer project.';
+        $scope.helpText = gettextCatalog.getString('Each dot represents the number of somatic mutations per' +
+          ' megabase in a given donor\'s exome.') + 
+          gettextCatalog.getString(' Donors are grouped by cancer projects.') + '<br>' +
+          gettextCatalog.getString(' Horizontal red lines ' +
+          'provide the median number of somatic and exomic mutations within each cancer project.');
 
         $scope.defaultGraphHeight = 230;
 
@@ -58,9 +60,9 @@
               var numberFilterFn = $filter('number');
 
               return '<strong>' + data.name + ' [' + data.id + ']</strong><br />' +
-                'Median: ' + numberFilterFn(data.medium) + '<br />' +
-                '# Donors: ' + data.donorCount + '<br />' +
-                '# Mutations: ' + numberFilterFn(data.mutationCount);
+                gettextCatalog.getString('Median') + ': ' + numberFilterFn(data.medium) + '<br />' +
+                gettextCatalog.getString('# Donors') + ': ' + data.donorCount + '<br />' +
+                gettextCatalog.getString('# Mutations') + ': ' + numberFilterFn(data.mutationCount);
             }
 
             var position = {

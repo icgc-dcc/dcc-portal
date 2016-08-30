@@ -1,18 +1,18 @@
-<span style="font-size:1.2rem; margin-right: 2rem">Homo sapiens GRCh37</span>
+<span style="font-size:1.2rem; margin-right: 2rem"><translate>Homo sapiens GRCh37</translate></span>
 <span data-ng-if="options.panels">
     <button class="t_button" ng-class="{'t_button__active': panels.karyotype}"
-            ng-click="togglePanel('karyotype')">Karyotype
+            ng-click="togglePanel('karyotype')"><translate>Karyotype</translate>
     </button>
     <button class="t_button" ng-class="{'t_button__active': panels.chromosome}"
-            ng-click="togglePanel('chromosome')">Chromosome
+            ng-click="togglePanel('chromosome')"><translate>Chromosome</translate>
     </button>
     <button class="t_button" ng-class="{'t_button__active': panels.overviewTrackList}"
-            ng-click="togglePanel('overviewTrackList')">Region Overview
+            ng-click="togglePanel('overviewTrackList')"><translate>Region Overview</translate>
     </button>
 </span>
 <span data-ng-if="options.autofit">
-    <button data-tooltip="Auto Fit Panel Height" class="t_button" ng-click="autoFit()"><i
+    <button data-tooltip="{{'Auto Fit Panel Height' | translate}}" class="t_button" ng-click="autoFit()"><i
             class="icon-resize-vertical"></i></button>
-    <button data-tooltip="Full Screen" class="t_button" ng-click="fullScreen()">
+    <button data-tooltip="{{'Full Screen' | translate}}" class="t_button" ng-click="fullScreen()">
       <i id="gv-fullscreen-ctrl" class="icon-resize-full"></i></button>
 </span>

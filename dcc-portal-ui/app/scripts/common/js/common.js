@@ -371,4 +371,19 @@
     };
   });
 
+  module.filter('subDelimiters', function($interpolate){
+    return function(string, context){
+       string = string.replace(/\[\[/g, '{{').replace(/\]\]/g, '}}');
+      var interpolateFn = $interpolate(string);
+      return interpolateFn(context);
+    };
+  });
+
+  // This is a workaroud required for Internationalization of 'Experimental&nbsp;Strategy'
+  module.filter('replace', function(){
+    return function(string, pattern, replacement){
+      return string.replace(new RegExp(pattern, 'g'), replacement);
+    };
+  });
+
 })();

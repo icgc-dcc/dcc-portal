@@ -1,6 +1,6 @@
 <div class="modal-content download-manifests light">
     <div class="modal-header clearfix">
-      <h3 class="pull-left">Download manifests</h3>
+      <h3 class="pull-left"><translate>Download manifests</translate></h3>
       <button class="pull-right t_button" data-ng-click="cancel()"><i
               class="icon-cancel"></i>
       </button>
@@ -10,27 +10,41 @@
       <div class="modal-info-wrapper">
         <img class="modal-info-figure" src="/styles/images/checklist.svg" />
         <div class="modal-info">
-          <p>A manifest is a text file passed to download clients in order to download selected files of interest. Each repository's manifest file can be individually downloaded.
+          <p>
+            <translate>
+              A manifest is a text file passed to download clients in order to download selected files of interest. Each repository's manifest file can be individually downloaded.
+            </translate>
           </p>
-          <p ng-if="repos.length > 1">When choosing "Download", a manifest containing unique files from all repositories will be generated. Some files may be stored in multiple repositories. Duplicates from repositories lower in the list will not be included. You may drag to reorder the list to affect the generated manifest.
+          <p ng-if="repos.length > 1">
+            <translate>When choosing "Download", a manifest containing unique files from all repositories will be generated.</translate>
+            <translate>Some files may be stored in multiple repositories.</translate>
+            <translate>Duplicates from repositories lower in the list will not be included.</translate>
+            <translate>You may drag to reorder the list to affect the generated manifest.</translate>
           </p>
           <p>
-            See the <a href="http://docs.icgc.org/cloud/guide/#manifest-command" target="_blank" class="light">User Guide<i class="icon-external-link"></i></a> for more information on manifest files
-            <span ng-if="repos.length === 1 && repos[0].hasManifest">and manifest IDs</span>.
+            <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">See the</translate>
+            <a href="http://docs.icgc.org/cloud/guide/#manifest-command" target="_blank" class="light">
+              <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">User Guide</translate>
+              <i class="icon-external-link"></i>
+            </a>
+            <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">for more information on manifest files</translate>
+            <span ng-if="repos.length === 1 && repos[0].hasManifest">
+              <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">and manifest IDs</translate>
+            </span>.
           </p>
           <p>
-          The available repositories below are restricted by your search filter:
+            <translate>The available repositories below are restricted by your search filter:</translate>
           </p>
         </div>
       </div>
 
        <table class="table table-info">
          <thead>
-           <th class="text-center" colspan="2" ng-if="repos.length > 1">Priority</th>
-           <th style="width: 40%;">Repository</th>
-           <th class="text-right"># Donors</th>
-           <th class="text-right"># Files</th>
-           <th class="text-right">Total file size</th>
+           <th class="text-center" colspan="2" ng-if="repos.length > 1"><translate>Priority</translate></th>
+           <th style="width: 40%;"><translate>Repository</translate></th>
+           <th class="text-right"><translate># Donors</translate></th>
+           <th class="text-right"><translate># Files</translate></th>
+           <th class="text-right"><translate>Total file size</translate></th>
          </thead>
 
          <tbody dnd-list="repos">
@@ -97,7 +111,7 @@
 
                   <div class="row" data-ng-if="repoData.shortUrl">
                     <div class="col-sm-3">
-                      Manifest URL
+                      <translate>Manifest URL</translate>
                     </div>
                     <div class="col-sm-9 text-left">
                       <input
@@ -113,8 +127,8 @@
                           data-copy-data="repoData.shortUrl"
                           data-show-copy-tips="true"
                           data-prompt-on-copy="false"
-                          data-on-copy-success-message="Copied!"
-                          data-on-hover-message="Copy to clipboard"
+                          data-on-copy-success-message="{{'Copied!' | translate}}"
+                          data-on-hover-message="{{'Copy to clipboard' | translate}}"
                         >
                           <span class="icon-clippy"></span>
                       </span>
@@ -123,7 +137,7 @@
 
                   <div class="row" data-ng-if-start="repoData.manifestID">
                     <div class="col-sm-3">
-                      Manifest ID
+                      <translate>Manifest ID</translate>
                     </div>
                     <div class="col-md-5 text-left">
                       
@@ -142,8 +156,8 @@
                                 data-copy-data="repoData.manifestID"
                                 data-show-copy-tips="true"
                                 data-prompt-on-copy="false"
-                                data-on-copy-success-message="Copied!"
-                                data-on-hover-message="Copy to clipboard"
+                                data-on-copy-success-message="{{'Copied!' | translate}}"
+                                data-on-hover-message="{{'Copy to clipboard' | translate}}"
                                 >
                                 <i class="icon-clippy"></i>
                             </button>
@@ -156,7 +170,7 @@
 
                   <div class="row" data-ng-if-end>
                     <div class="col-sm-3">
-                      Usage example
+                      <translate>Usage example</translate>
                     </div>
                     <div class="col-sm-9 text-left">
                       <code class="inline-code">
@@ -186,8 +200,8 @@
     </div>
 
     <div class="modal-footer">
-      <button class="t_button" data-ng-click="cancel();">Cancel</button>
-      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i>Download</button>
+      <button class="t_button" data-ng-click="cancel();"><translate>Cancel</translate></button>
+      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i><translate>Download</translate></button>
       <button
         class="t_button"
         data-ng-repeat="repoData in repos"
@@ -195,7 +209,7 @@
         data-ng-disabled="repoData.manifestID || repoData.isGeneratingManifestID"
         data-ng-click="(!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
       >
-        Manifest ID
+        <translate>Manifest ID</translate>
       </button>
     </div>
 </div>

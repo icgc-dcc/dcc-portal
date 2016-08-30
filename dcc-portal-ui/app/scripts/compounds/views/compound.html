@@ -9,19 +9,19 @@
         <aside data-ui-scrollfix="79" class="t_sidenav">
             <section>
                 <ul class="t_subnav__items">
-                    <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary">Summary</a></li>
-                    <li data-spy="genes" class="t_subnav__items__item"><a data-scrollto href="#genes">Targeted Genes</a></li>
-                    <li data-spy="trials" class="t_subnav__items__item"><a data-scrollto href="#trials">Clinical Trials</a></li>
+                    <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
+                    <li data-spy="genes" class="t_subnav__items__item"><a data-scrollto href="#genes"><translate>Targeted Genes</translate></a></li>
+                    <li data-spy="trials" class="t_subnav__items__item"><a data-scrollto href="#trials"><translate>Clinical Trials</translate></a></li>
                     <li><br></li>
                     <li class="t_subnav__items__item" data-ng-if="CompoundCtrl.getMutationImpactFacets() && CompoundCtrl.getMutationImpactFacets().functionalImpact.total > 0">
-                        <span>Page Filters</span>
+                        <span><translate>Page Filters</translate></span>
                     </li>
                     <li class="t_subnav__items__box" data-ng-if="CompoundCtrl.getMutationImpactFacets() && CompoundCtrl.getMutationImpactFacets().functionalImpact.total > 0">
                         <ul class="t_facets">
                             <terms data-type="mutation"
                                    data-facet-name="functionalImpact"
                                    data-hide-count="true"
-                                   data-label="Mutation Impact"
+                                   data-label="{{'Mutation Impact' | translate}}"
                                    data-facet=" CompoundCtrl.getMutationImpactFacets().functionalImpact"></terms>
                         </ul>
                     </li>
@@ -32,15 +32,15 @@
             <section id="summary">
                 <div class="wide">
 
-                    <h3>Summary</h3>
+                    <h3><translate>Summary</translate></h3>
                     <table class="table table-info">
                         <tbody>
                             <tr>
-                                <th>Name</th>
+                                <th><translate>Name</translate></th>
                                 <td data-ng-bind=":: compound.name"></td>
                             </tr>
                             <tr>
-                                <th>Synonyms</th>
+                                <th><translate>Synonyms</translate></th>
                                 <td>
                                     <hide-text data-text="{{compound.synonyms.join(', ')}}">
                                     </hide-text>
@@ -51,11 +51,11 @@
                                 <td data-ng-bind=":: compound.inchiKey"></td>
                             </tr>
                             <tr>
-                                <th>Compound Class</th>
+                                <th><translate>Compound Class</translate></th>
                                 <td data-ng-bind=":: compound.drugClass | formatCompoundClass"></td>
                             </tr>
                             <tr>
-                                <th>Clinical Trials</th>
+                                <th><translate>Clinical Trials</translate></th>
                                 <td>
                                     <a data-scrollto href="#trials" data-ng-bind=":: compound.cancerTrialCount"></a>
                                 </td>
@@ -66,11 +66,11 @@
 
                     </div>
                     <div class="narrow omega">
-                        <h3>External References</h3>
+                        <h3><translate>External References</translate></h3>
                         <table class="table table-info">
                             <tbody>
                                 <tr>
-                                    <th>Zinc ID</th>
+                                    <th><translate>Zinc ID</translate></th>
                                     <td>
                                         <a href="http://zinc15.docking.org/substances/{{compound.id}}" target="_blank">
                                             <span class="icon-external-link"></span> <span data-ng-bind="compound.id"></span>
@@ -99,14 +99,14 @@
                         </table>
                     </div>
                     <div class="wide">
-                        <h3>ATC Codes</h3>
-                        <div data-ng-if="compound.atcCodes.length == 0">No ATC Codes Found.</div>
+                        <h3><translate>ATC Codes</translate></h3>
+                        <div data-ng-if="compound.atcCodes.length == 0"><translate>No ATC Codes Found.</translate></div>
                         <table class="table table-info" data-ng-if="compound.atcCodes.length">
                             <tbody>
                                 <tr>
-                                    <th>Code</th>
-                                    <th>ATC Level 4 Code</th>
-                                    <th>ATC Level 4 Description</th>
+                                    <th><translate>Code</translate></th>
+                                    <th><translate>ATC Level 4 Code</translate></th>
+                                    <th><translate>ATC Level 4 Description</translate></th>
 
                                 </tr>
                                 <tr data-ng-repeat="atcCodes in :: compound.atcCodes">
@@ -123,7 +123,7 @@
                         </table>
                     </div>
                 <div class="narrow omega" data-ng-if="compound.imageURL">
-                    <h3>Molecule</h3>
+                    <h3><translate>Molecule</translate></h3>
                     <div style="border: solid 1px #ccc; text-align: center; ">
                        <a href="{{compound.imageURL}}" class="no-style" target="_blank">
                            <img src="{{compound.imageURL}}" data-ng-if="compound.imageURL" style="max-width: 100%" />
@@ -135,11 +135,11 @@
             <section id="genes">
                 <div class="full">
                     <h3>
-                        Targeted Genes
+                        <translate>Targeted Genes</translate>
 
                         <span class="open-in pull-right" data-ng-if="CompoundCtrl.getTargetedCompoundGenes() && CompoundCtrl.getTargetedCompoundGenes().length > 0">
-                            Open in
-
+                            <translate has-markup>
+                              Open in
                               <a href="/search/g?filters={{CompoundCtrl.getFilter()}}">
                                   Advanced Search
                               </a>
@@ -147,7 +147,7 @@
                               <a href="/browser/g?filters={{CompoundCtrl.getFilter()}}">
                                   Genome Viewer
                               </a>
-
+                            </translate>
                         </span>
                     </h3>
 
@@ -156,35 +156,35 @@
                     <div class="t_table_top">
 
                         <span data-ng-if="CompoundCtrl.getTargetedCompoundGenes() && CompoundCtrl.getTargetedCompoundGenes().length > 0">
-                            Showing <strong data-ng-bind="CompoundCtrl.getTargetedCompoundGenesResultPerPage()"></strong> of <strong data-ng-bind="CompoundCtrl.getTargetedGeneCount()"></strong> genes
+                            <translate has-markup>Showing <strong data-ng-bind="CompoundCtrl.getTargetedCompoundGenesResultPerPage()"></strong> of <strong data-ng-bind="CompoundCtrl.getTargetedGeneCount()"></strong> genes</translate>
                             <span class="t_tools" data-toolbar="" data-dl="compound_mutated_genes">
-                            <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="Export Table as TSV" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
+                            <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
                         </span>
                         <span data-ng-if="CompoundCtrl.getTargetedCompoundGenes() &&  CompoundCtrl.getTargetedCompoundGenes().length === 0">
-                            No targeted genes found.
+                            <translate>No targeted genes found.</translate>
                         </span>
                     </div>
                     <h3 data-ng-if="! CompoundCtrl.getTargetedCompoundGenes()">
-                        <i class="icon-spinner icon-spin"></i> Fetching targeted genes...
+                        <i class="icon-spinner icon-spin"></i> <translate>Fetching targeted genes...</translate>
                     </h3>
                     <table class="table table-info" data-ng-if="CompoundCtrl.getTargetedCompoundGenes().length > 0">
                         <tbody>
                             <tr>
-                                <th>Symbol</th>
-                                <th>Name</th>
+                                <th><translate>Symbol</translate></th>
+                                <th><translate>Name</translate></th>
                                 <th>
-                                    <abbr data-tooltip="Gene location on the genome, chr:start-end">
-                                        Location
+                                    <abbr data-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}">
+                                        <translate>Location</translate>
                                     </abbr>
                                 </th>
-                                <th>Type</th>
+                                <th><translate>Type</translate></th>
                                 <th>
-                                    <abbr data-tooltip="Number of Donors where a Gene involved in the Gene Set can be targeted by the compound">#
-                                        Donors affected</abbr><i class="icon-sort-down"></i>
+                                    <abbr data-tooltip="{{'Number of Donors where a Gene involved in the Gene Set can be targeted by the compound' | translate}}">#
+                                        <translate>Donors affected</translate></abbr><i class="icon-sort-down"></i>
                                 </th>
                                 <th>
-                                    <abbr data-tooltip="Number of Mutations of gene observed" data-tooltip-placement="left"># Mutations</abbr>
+                                    <abbr data-tooltip="{{'Number of Mutations of gene observed' | translate}}" data-tooltip-placement="left"><translate># Mutations</translate></abbr>
                                 </th>
                             </tr>
                             <tr data-ng-repeat="gene in CompoundCtrl.getTargetedCompoundGenes() | limitTo: CompoundCtrl.getTargetedCompoundGenesResultPerPage()">
@@ -225,64 +225,66 @@
             <section id="trials" data-ng-init="sortField = 'code'; sortDescending = false;">
                 <div class="full">
                     <h3>
-                        Clinical Trials
+                        <translate>Clinical Trials</translate>
 
                         <span class="pull-right open-in" data-ng-if="compound.trials.length > 0">
-                            Open in
-                              <a href="http://zinc15.docking.org/substances/{{compound.id}}/trials/subsets/cancer/" target="_blank">
-                                  <i class="icon-external-link"></i>
-                                  Zinc
-                              </a>
+                            <translate has-markup>
+                                Open in
+                                <a href="http://zinc15.docking.org/substances/{{compound.id}}/trials/subsets/cancer/" target="_blank">
+                                    <i class="icon-external-link"></i>
+                                    Zinc
+                                </a>
+                            </translate>
 
                         </span>
                     </h3>
                     <div class="t_table_top">
                         <span data-ng-if="compound.trials.length > 0">
-                            Showing <strong data-ng-bind="compound.trials.length"></strong> Clinical Trials
+                            <translate has-markup>Showing <strong data-ng-bind="compound.trials.length"></strong> Clinical Trials</translate>
                             <span class="t_tools" data-toolbar="" data-dl="compound_trials">
-                            <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="Export Table as TSV" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
+                            <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
                         </span>
                         <span data-ng-if="compound.trials.length === 0">
-                            No trials found.
+                            <translate>No trials found.</translate>
                         </span>
                     </div>
                     <table class="table table-info" data-ng-if="compound.trials.length > 0">
                         <thead>
                             <tr>
                                 <th data-ng-click="sortField = 'code'; sortDescending = ! sortDescending" class="sortable">
-                                    Code
+                                    <translate>Code</translate>
                                     <i data-ng-if="sortField !== 'code'" class="icon-sort"></i>
                                     <i data-ng-if="sortField === 'code'"
                                        data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
                                     </i>
                                 </th>
                                 <th data-ng-click="sortField = 'description'; sortDescending = ! sortDescending" class="sortable">
-                                    Description
+                                    <translate>Description</translate>
                                     <i data-ng-if="sortField !== 'description'" class="icon-sort"></i>
                                     <i data-ng-if="sortField === 'description'"
                                        data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
                                     </i>
                                 </th>
                                 <th>
-                                    Conditions
+                                    <translate>Conditions</translate>
                                 </th>
                                 <th data-ng-click="sortField = 'startDate'; sortDescending = ! sortDescending" class="sortable">
-                                    Start Date
+                                    <translate>Start Date</translate>
                                     <i data-ng-if="sortField !== 'startDate'" class="icon-sort" ></i>
                                     <i data-ng-if="sortField === 'startDate'"
                                        data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
                                     </i>
                                 </th>
                                 <th data-ng-click="sortField = 'phaseName'; sortDescending = ! sortDescending" class="sortable">
-                                    Phase
+                                    <translate>Phase</translate>
                                     <i data-ng-if="sortField !== 'phaseName'" class="icon-sort"></i>
                                     <i data-ng-if="sortField === 'phaseName'"
                                        data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
                                     </i>
                                 </th>
                                 <th data-ng-click="sortField = 'statusName'; sortDescending = ! sortDescending" class="sortable">
-                                    Status
+                                    <translate>Status</translate>
                                     <i data-ng-if="sortField !== 'statusName'" class="icon-sort"></i>
                                     <i data-ng-if="sortField === 'statusName'"
                                        data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
@@ -319,13 +321,13 @@
                 <table class="hidden" id="compound_mutated_genes">
                     <thead>
                         <tr>
-                            <th>Symbol</th>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Type</th>
-                            <th>Number of donors affected</th>
-                            <th>Percentage of affected donors</th>
-                            <th>Number of Mutations</th>
+                            <th><translate>Symbol</translate></th>
+                            <th><translate>Name</translate></th>
+                            <th><translate>Location</translate></th>
+                            <th><translate>Type</translate></th>
+                            <th><translate>Number of donors affected</translate></th>
+                            <th><translate>Percentage of affected donors</translate></th>
+                            <th><translate>Number of Mutations</translate></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -349,12 +351,12 @@
                 <table class="hidden" data-ng-if="compound.trials.length > 0" id="compound_trials">
                     <thead>
                         <tr>
-                            <th>Code</th>
-                            <th>Description</th>
-                            <th>Conditions</th>
-                            <th>Start Date</th>
-                            <th>Phase</th>
-                            <th>Status</th>
+                            <th><translate>Code</translate></th>
+                            <th><translate>Description</translate></th>
+                            <th><translate>Conditions</translate></th>
+                            <th><translate>Start Date</translate></th>
+                            <th><translate>Phase</translate></th>
+                            <th><translate>Status</translate></th>
                         </tr>
                     </thead>
                     <tbody>

@@ -44,7 +44,7 @@ angular.module('icgc.ui.table.size').controller('tableSizeController', function 
   };
 });
 
-angular.module('icgc.ui.table.size').directive('tableSize', function () {
+angular.module('icgc.ui.table.size').directive('tableSize', function (gettextCatalog) {
   return {
     restrict: 'A',
     scope: {
@@ -52,8 +52,9 @@ angular.module('icgc.ui.table.size').directive('tableSize', function () {
       currentSize: '@'
     },
     replace: true,
-    template: '<span>Showing <select data-ng-options="size for size in sizes"' +
-              ' data-ng-model="selectedSize" data-ng-change="changeSize()"></select> rows</span>',
+    template: '<span>' + gettextCatalog.getString('Showing') + ' <select data-ng-options="size for size in sizes"' +
+      ' data-ng-model="selectedSize" data-ng-change="changeSize()"></select> '+ 
+      gettextCatalog.getString('rows') + '</span>',
     controller: 'tableSizeController'
   };
 });
@@ -63,7 +64,7 @@ angular.module('icgc.ui.table.size').directive('tableSize', function () {
  * ********************************* */
 angular.module('icgc.ui.table.counts', []);
 
-angular.module('icgc.ui.table.counts').directive('tableCounts', function () {
+angular.module('icgc.ui.table.counts').directive('tableCounts', function (gettextCatalog) {
   return {
     restrict: 'A',
     scope: {
@@ -72,11 +73,11 @@ angular.module('icgc.ui.table.counts').directive('tableCounts', function () {
     },
     replace: true,
     template: '<span>' +
-              'Showing <strong>{{page.from | number}}</strong> - ' +
+              gettextCatalog.getString('Showing') + ' <strong>{{page.from | number}}</strong> - ' +
               '<strong data-ng-if="page.count==page.size">' +
               '{{page.from + page.size - 1 | number}}</strong> ' +
               '<strong data-ng-if="page.count < page.size">{{page.total | number}}</strong> ' +
-              'of <strong>{{page.total | number}}</strong> {{label}}' +
+              gettextCatalog.getString('of') +' <strong>{{page.total | number}}</strong> {{label}}' +
               '</span>'
   };
 })
@@ -106,7 +107,7 @@ angular.module('icgc.ui.table.pagination', [])
     maxSize: 5
   })
 
-  .directive('paginationControls', function (paginationConfig, LocationService, $filter) {
+  .directive('paginationControls', function (paginationConfig, LocationService, $filter, gettextCatalog) {
     return {
       restrict: 'E',
       scope: {
@@ -193,7 +194,7 @@ angular.module('icgc.ui.table.pagination', [])
             scope.pages.unshift(firstPage);
 
             var numberOfPages = scope.data.pagination.pages;
-            var tooltip = 'Go to last page (#' + formatNumber (numberOfPages) + ')';
+            var tooltip = gettextCatalog.getString('Go to last page') + ' (#' + formatNumber (numberOfPages) + ')';
             lastPage = makePage (numberOfPages, lastText, false, scope.noNext(), tooltip);
             scope.pages.push(lastPage);
           }

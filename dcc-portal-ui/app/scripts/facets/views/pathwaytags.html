@@ -45,9 +45,9 @@
              <li class="t_facets__facet__terms__inactive__term"
                  data-ng-if="hasPathwayTypePredicate === false"
                  data-ng-click="addGeneSetType('hasPathway')">
-                 <span class="t_facets__facet__terms__inactive__term__label" data-tooltip="Reactome Pathways" data-tooltip-placement="overflow">
+                 <span class="t_facets__facet__terms__inactive__term__label" data-tooltip="{{'Reactome Pathways' | translate}}" data-tooltip-placement="overflow">
                      <i class="icon-check-empty"></i>
-                     Reactome Pathways
+                     <translate>Reactome Pathways</translate>
                  </span>
                   <span class="t_facets__facet__terms__active__term__count">
                      {{ allPathwayCounts | number}}
@@ -60,8 +60,8 @@
                  data-ng-click="removeGeneSetType('hasPathway')"
                  data-ng-mouseover="toggleRemove=true"
                  data-ng-mouseleave="toggleRemove=false">
-                  <span class="t_facets__facet__terms__active__term__label__text" data-tooltip="Reactome Pathways" data-tooltip-placement="overflow">
-                      <i class="{{ toggleRemove === true? 'icon-cancel':'icon-ok'}}"></i> Reactome Pathways
+                  <span class="t_facets__facet__terms__active__term__label__text" data-tooltip="{{'Reactome Pathways' | translate}}" data-tooltip-placement="overflow">
+                      <i class="{{ toggleRemove === true? 'icon-cancel':'icon-ok'}}"></i> <translate>Reactome Pathways</translate>
                   </span>
                   <span class="t_facets__facet__terms__active__term__count">
                      {{ allPathwayCounts | number}}

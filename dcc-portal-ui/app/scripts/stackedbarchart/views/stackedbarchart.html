@@ -3,7 +3,7 @@
 
   <div ng-show="showPlot" class="stackedsubtitle text-center">{{ subtitle }}</div>
   <div ng-show="! showPlot && ! isLoadingData" class="text-center" style="line-height: {{ lineHeight }}px;">
-    <strong>No data found for the selected
+    <strong><translate>No data found for the selected</translate>
       <ng-pluralize count="selectedProjectCount" when="{'0': 'project', 'one': 'project', 'other': 'projects'}"></ng-pluralize>.
     </strong>
   </div>

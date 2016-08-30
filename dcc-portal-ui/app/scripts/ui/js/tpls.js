@@ -28,7 +28,7 @@ angular.module('app.ui.tpls', [
 
 
 
-angular.module('template/lists', []).run(function ($templateCache) {
+angular.module('template/lists', []).run(function ($templateCache, gettextCatalog) {
 
   $templateCache.put('template/mutationTranscriptList.html',
     '<a target="_blank" ' +
@@ -52,7 +52,7 @@ angular.module('template/lists', []).run(function ($templateCache) {
   $templateCache.put ( 'template/reactomePathway.html',
     '<span><a href="http://www.reactome.org/PathwayBrowser/#DIAGRAM={{item.diagramId}}&ID={{item.geneSetId}}"' +
     ' target="_blank">' +
-    '<i class="icon-external-link"></i> View in Reactome Pathway Browser</a>' +
+    '<i class="icon-external-link"></i> ' + gettextCatalog.getString('View in Reactome Pathway Browser') + '</a>' +
     '</span><pathway-tree tree="[item.root]"></pathway-tree><br>'
   );
 });

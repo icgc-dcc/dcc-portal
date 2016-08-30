@@ -136,7 +136,8 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
 
 });
 
-angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (GMService, $location, gvConstants) {
+angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (GMService, 
+  $location, gvConstants, gettextCatalog) {
   return {
     restrict: 'A',
     template: '<div id="genome-viewer" style="border:1px solid #d3d3d3;border-top-width: 0px;"></div>',
@@ -321,19 +322,25 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
             return f.id;
           },
           tooltipTitle: function (f) {
-              return '<span class="gmtitle">ICGC mutation' + ' - ' + f.id + '</span>';
+              return '<span class="gmtitle">' + gettextCatalog.getString('ICGC mutation') + ' - ' + f.id + '</span>';
           },
           tooltipText: function (f) {
             var consequences = GMService.tooltipConsequences(f.consequences), fi;
             fi = (f.functionalImpact && _.contains(f.functionalImpact, 'High')) ? 'High' : 'Low';
-            return '<span class="gmkeys">mutation:&nbsp;</span>' + f.mutation + '<br>' +
-              '<span class="gmkeys">reference allele:&nbsp;</span>' + f.refGenAllele + '<br>' +
-              '<span class="gmkeys">mutation type:&nbsp;</span>' + f.mutationType + '<br>' +
-              '<span class="gmkeys">project info:</span><br>' + f.projectInfo.join('<br>') + '<br>' +
-              '<span class="gmkeys">consequences:<br></span>' + consequences + '<br>' +
-              '<span class="gmkeys">source:&nbsp;</span>ICGC<br>' +
-              '<span class="gmkeys">start-end:&nbsp;</span>' + f.start + '-' + f.end + '<br>' +
-              '<span class="gmkeys">functional impact:&nbsp;</span>' + fi;
+            return '<span class="gmkeys">' + gettextCatalog.getString('mutation') + ':&nbsp;</span>' + 
+            f.mutation + '<br>' +
+              '<span class="gmkeys">' + gettextCatalog.getString('reference allele') + ':&nbsp;</span>' + 
+              f.refGenAllele + '<br>' +
+              '<span class="gmkeys">' + gettextCatalog.getString('mutation type') + ':&nbsp;</span>' + 
+              f.mutationType + '<br>' +
+              '<span class="gmkeys">' + gettextCatalog.getString('project info') + ':</span><br>' + 
+              f.projectInfo.join('<br>') + '<br>' +
+              '<span class="gmkeys">' + gettextCatalog.getString('consequences') + ':<br></span>' + 
+              consequences + '<br>' +
+              '<span class="gmkeys">' + gettextCatalog.getString('source') + ':&nbsp;</span>ICGC<br>' +
+              '<span class="gmkeys">' + gettextCatalog.getString('start-end') + ':&nbsp;</span>' + 
+              f.start + '-' + f.end + '<br>' +
+              '<span class="gmkeys">' + gettextCatalog.getString('functional impact') + ':&nbsp;</span>' + fi;
           },
           color: function (feat) {
             switch (feat.mutationType) {
@@ -460,7 +467,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
 });
 
 angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMService, $location,
-  LocationService, gvConstants) {
+  LocationService, gvConstants, gettextCatalog) {
   return {
     restrict: 'E',
     replace: true,
@@ -509,8 +516,8 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
               collapsed: false,
               collapsible: false
             },
-            version: 'Powered by ' +
-            '<a target="_blank" href="http://www.genomemaps.org/">Genome Maps</a>'
+            version: gettextCatalog.getString('Powered by' +
+              ' <a target="_blank" href="http://www.genomemaps.org/">Genome Maps</a>')
           });
         window.gv = genomeViewer;
 
@@ -671,20 +678,26 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
               return f.id;
             },
             tooltipTitle: function (f) {
-              return '<span class="gmtitle">ICGC mutation' + ' - ' + f.id + '</span>';
+              return '<span class="gmtitle">' + gettextCatalog.getString('ICGC mutation') + ' - ' + f.id + '</span>';
             },
             tooltipText: function (f) {
               var consequences = GMService.tooltipConsequences(f.consequences), fi;
               fi = (f.functionalImpact && _.contains(f.functionalImpact, 'High')) ? 'High' : 'Low';
 
-              return '<span class="gmkeys">mutation:&nbsp;</span>' + f.mutation + '<br>' +
-                     '<span class="gmkeys">reference allele:&nbsp;</span>' + f.refGenAllele + '<br>' +
-                     '<span class="gmkeys">mutation type:&nbsp;</span>' + f.mutationType + '<br>' +
-                     '<span class="gmkeys">project info:</span><br>' + f.projectInfo.join('<br>') + '<br>' +
-                     '<span class="gmkeys">consequences:<br></span>' + consequences + '<br>' +
-                     '<span class="gmkeys">source:&nbsp;</span>ICGC<br>' +
-                     '<span class="gmkeys">start-end:&nbsp;</span>' + f.start + '-' + f.end + '<br>' +
-                     '<span class="gmkeys">functional impact:&nbsp;</span>' + fi;
+              return '<span class="gmkeys">' + gettextCatalog.getString('mutation:') + '&nbsp;</span>' + 
+                f.mutation + '<br>' +
+                '<span class="gmkeys">' + gettextCatalog.getString('reference allele:') + '&nbsp;</span>' + 
+                f.refGenAllele + '<br>' +
+                '<span class="gmkeys">' + gettextCatalog.getString('mutation type:') + '&nbsp;</span>' + 
+                f.mutationType + '<br>'+
+                '<span class="gmkeys">' + gettextCatalog.getString('project info:') + '</span><br>' + 
+                f.projectInfo.join('<br>')+ '<br>' +
+                '<span class="gmkeys">' + gettextCatalog.getString('consequences:') + '<br></span>' + 
+                consequences + '<br>' +
+                '<span class="gmkeys">' + gettextCatalog.getString('source:') + '&nbsp;</span>ICGC<br>' +
+                '<span class="gmkeys">' + gettextCatalog.getString('start-end:') + '&nbsp;</span>' + 
+                f.start + '-' + f.end + '<br>' +
+                '<span class="gmkeys">' + gettextCatalog.getString('functional impact:') + '&nbsp;</span>' + fi;
             },
             color: function (feat) {
               switch (feat.mutationType) {

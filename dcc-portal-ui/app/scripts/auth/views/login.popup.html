@@ -1,6 +1,6 @@
 <div class="modal-content">
     <div class="modal-header clearfix">
-        <h3 class="pull-left">Login</h3>
+        <h3 class="pull-left"><translate>Login</translate></h3>
         <button class="pull-right t_button" data-ng-click="closeLoginPopup()"><i
                 class="icon-cancel"></i>
         </button>
@@ -8,17 +8,17 @@
     <div class="modal-body" style="max-height:none;padding-bottom:0">
 
         <div data-ng-hide="error" class="alert-info">
-            Sign in using your ICGC DACO-approved account for controlled data
+            <translate>Sign in using your ICGC DACO-approved account for controlled data</translate>
         </div>
         <div data-ng-show="error">
             <div class="alert-error">
                 {{params.error}}
             </div>
             <div class="alert">
-                Problems logging in? <a href="mailto:dcc-support@icgc.org?Subject=Problem%20Logging%20In"><i
-                    class="icon-mail"></i> Contact us</a> or
-                <a href="http://icgc.org/daco/"><i class="icon-pilcrow"></i> Apply for access to controlled
-                    data.</a>
+                <translate>Problems logging in?</translate> 
+                <a href="mailto:dcc-support@icgc.org?Subject=Problem%20Logging%20In"><i
+                    class="icon-mail"></i> <translate>Contact Us</translate></a> <translate>or</translate>
+                <a href="http://icgc.org/daco/"><i class="icon-pilcrow"></i> <translate>Apply for access to controlled data.</translate></a>
             </div>
         </div>
         <ul class="open-id-providers">
@@ -41,26 +41,27 @@
         <!--<input type="password" id="cudPassword" style="width:50%" data-ng-model="cudPassword">-->
         <!--</p>-->
 
-        <p data-ng-show="params.provider=='icgc'">Sign in using your <strong>ICGC</strong> account.</p>
+        <p data-ng-show="params.provider=='icgc'"><translate has-markup>Sign in using your <strong>ICGC</strong> account.</translate></p>
 
-        <p data-ng-show="params.provider=='google'||params.provider=='yahoo'">Sign in using <strong
-                style="text-transform: capitalize">{{params.provider}}</strong> as your OpenID provider</p>
+        <p data-ng-show="params.provider=='google'||params.provider=='yahoo'">
+            <translate has-markup translate-comment="{{params.provider}} comes out to be either ICGC, Google or Yahoo">Sign in using <strong style="text-transform: capitalize">{{params.provider}}</strong> as your OpenID provider</translate>
+        </p>
 
         <p data-ng-show="params.provider=='openid'">
-            <label for="openIDUrl">Enter your <strong>OpenID</strong> url</label><br>
+            <label for="openIDUrl"><translate has-markup>Enter your <strong>OpenID</strong> url</translate></label><br>
             <input id="openIDUrl" style="width:50%" data-ng-model="openIDUrl"></p>
 
         <p data-ng-show="params.provider=='verisign'">
-            <label for="verisignUsername">Enter your <strong>Verisign</strong> username</label><br>
+            <label for="verisignUsername"><translate has-markup>Enter your <strong>Verisign</strong> username</translate></label><br>
             https://<input data-ng-model="verisignUsername" id="verisignUsername">.pip.verisignlabs.com/
         </p>
     </div>
     <div class="modal-footer">
-        <button class="t_button" data-ng-click="closeLoginPopup();reset()">Cancel</button>
+        <button class="t_button" data-ng-click="closeLoginPopup();reset()"><translate>Cancel</translate></button>
         <button class="t_button" data-ng-click="tryLogin()"
                 data-ng-disabled="params.provider=='openid'&&!openIDUrl||params.provider=='verisign'&&!verisignUsername||connecting">
-            <span ng-hide="connecting"><i class="icon-login"></i>Login</span>
-            <span ng-show="connecting"><i class="icon-spin icon-spinner"></i>Connecting...</span>
+            <span ng-hide="connecting"><i class="icon-login"></i><translate>Login</translate></span>
+            <span ng-show="connecting"><i class="icon-spin icon-spinner"></i><translate>Connecting...</translate></span>
         </button>
     </div>
 </div>

@@ -18,51 +18,51 @@
         <div class="half">
             <table class="table table-info">
                 <tr>
-                    <th>Submitted Specimen Id</th>
+                    <th><translate>Submitted Specimen ID</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.submittedId }}</td>
                 </tr>
                 <tr>
-                    <th>Specimen Type</th>
+                    <th><translate>Specimen Type</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.type }}</td>
                 </tr>
                 <tr>
-                    <th>Specimen Type Other</th>
+                    <th><translate>Specimen Type Other</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.typeOther }}</td>
                 </tr>
                 <tr>
-                    <th>Tumour Confirmed</th>
+                    <th><translate>Tumour Confirmed</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.tumourConfirmed }}</td>
                 </tr>
                 <tr>
-                    <th>Specimen Interval (days)</th>
+                    <th><translate>Specimen Interval (days)</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.interval | numberPT }}</td>
                 </tr>
                 <tr>
-                    <th>Donor Treatment Type</th>
+                    <th><translate>Donor Treatment Type</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.donorTreatmentType }}</td>
                 </tr>
                 <tr>
-                    <th>Donor Treatment Type Other</th>
+                    <th><translate>Donor Treatment Type Other</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.donorTreatmentTypeOther }}</td>
                 </tr>
                 <tr>
-                    <th>Specimen Processing</th>
+                    <th><translate>Specimen Processing</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.processing }}</td>
                 </tr>
                 <tr>
-                    <th>Specimen Processing Other</th>
+                    <th><translate>Specimen Processing Other</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.processingOther }}</td>
                 </tr>
                 <tr>
-                    <th>Specimen Storage</th>
+                    <th><translate>Specimen Storage</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.storage }}</td>
                 </tr>
                 <tr>
-                    <th>Specimen Storage Other</th>
+                    <th><translate>Specimen Storage Other</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.storageOther }}</td>
                 </tr>
                 <tr>
-                    <th>Specimen Available</th>
+                    <th><translate>Specimen Available</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.available }}</td>
                 </tr>
             </table>
@@ -70,76 +70,76 @@
         <div class="half omega">
             <table class="table table-info">
                 <tr>
-                    <th>Specimen Biobank</th>
+                    <th><translate>Specimen Biobank</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.biobank }}</td>
                 </tr>
                 <tr>
-                    <th>Specimen Biobank ID</th>
+                    <th><translate>Specimen Biobank ID</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.biobankId }}</td>
                 </tr>
                 <tr>
-                    <th>Tumour Grade</th>
+                    <th><translate>Tumour Grade</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.tumourGrade }}</td>
                 </tr>
                 <tr>
-                    <th>Tumour Grading System</th>
+                    <th><translate>Tumour Grading System</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.tumourGradingSystem }}</td>
                 </tr>
                 <tr>
-                    <th>Tumour Grade Supplemental</th>
+                    <th><translate>Tumour Grade Supplemental</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.tumourGradeSupplemental }}</td>
                 </tr>
                 <tr>
-                    <th>Tumour Stage</th>
+                    <th><translate>Tumour Stage</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.tumourStage }}</td>
                 </tr>
                 <tr>
-                    <th>Tumour Stage System</th>
+                    <th><translate>Tumour Stage System</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.tumourStageSystem }}</td>
                 </tr>
                 <tr>
-                    <th>Tumour Stage Supplemental</th>
+                    <th><translate>Tumour Stage Supplemental</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.tumourStageSupplemental }}</td>
                 </tr>
                 <tr>
-                    <th>Tumour Histological Type</th>
+                    <th><translate>Tumour Histological Type</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.tumourHistologicalType }}</td>
                 </tr>
                 <tr>
-                    <th>Percentage Cellularity</th>
+                    <th><translate>Percentage Cellularity</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.percentCellularity }}</td>
                 </tr>
                 <tr>
-                    <th>Level of Cellularity</th>
+                    <th><translate>Level of Cellularity</translate></th>
                     <td>{{ DonorSpecimenCtrl.specimen.levelOfCellularity }}</td>
                 </tr>
             </table>
             <p><a data-ng-if="DonorSpecimenCtrl.specimen.digitalImageOfStainedSection | startsWith:'http'"
                   data-ng-href="{{ DonorSpecimenCtrl.specimen.digitalImageOfStainedSection }}"
                   target="_blank">
-                <i style="cursor: pointer" class="icon-picture"></i>Image Of Stained Section
+                <i style="cursor: pointer" class="icon-picture"></i><translate>Image Of Stained Section</translate>
             </a></p>
         </div>
     </div>
     <div class="clearfix">
-        <h3 data-ng-if="DonorSpecimenCtrl.specimen.samples.length == 0">No Samples Found.</h3>
+        <h3 data-ng-if="DonorSpecimenCtrl.specimen.samples.length == 0"><translate>No Samples Found.</translate></h3>
 
         <div data-ng-if="DonorSpecimenCtrl.specimen.samples.length > 0">
             <span class="t_table_top">
-                Showing <strong>{{ DonorSpecimenCtrl.specimen.samples.length }}</strong> samples
+                <translate has-markup>Showing <strong>{{ DonorSpecimenCtrl.specimen.samples.length }}</strong> samples</translate>
                 <span data-toolbar
                       data-dl="{{DonorCtrl.donor.id}}_specimen"></span>
             </span>
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Sample ID</th>
-                    <th>Submitted Sample ID</th>
-                    <th>Study</th>
-                    <th>Interval<br>(days)</th>
-                    <th>Analyses</th>
-                    <th>Sequence Repo</th>
-                    <th>BAM File</th>
+                    <th><translate>Sample ID</translate></th>
+                    <th><translate>Submitted Sample ID</translate></th>
+                    <th><translate>Study</translate></th>
+                    <th><translate>Interval<br>(days)</translate></th>
+                    <th><translate>Analysis</translate></th>
+                    <th><translate>Sequence Repo</translate></th>
+                    <th><translate>BAM File</translate></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -189,13 +189,13 @@
             <table class="hidden" id="{{DonorCtrl.donor.id}}_specimen">
                 <thead>
                 <tr>
-                    <th>Sample ID</th>
-                    <th>Submitted Sample ID</th>
-                    <th>Study</th>
-                    <th>Interval (days)</th>
-                    <th>Analyses</th>
-                    <th>Sequence Repo</th>
-                    <th>BAM File Access</th>
+                    <th><translate>Sample ID</translate></th>
+                    <th><translate>Submitted Sample ID</translate></th>
+                    <th><translate>Study</translate></th>
+                    <th><translate>Interval (days)</translate></th>
+                    <th><translate>Analysis</translate></th>
+                    <th><translate>Sequence Repo</translate></th>
+                    <th><translate>BAM File Access</translate></th>
                 </tr>
                 </thead>
                 <tbody>

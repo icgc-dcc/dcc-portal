@@ -47,7 +47,6 @@ module.exports = function (grunt) {
   // load all grunt tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
   require('time-grunt')(grunt);
-
   var configProvider = require('./grunt/grunt-config-provider')(grunt);
 
   // configurable paths
@@ -377,6 +376,7 @@ module.exports = function (grunt) {
             src: [
               '*.{ico,png,txt}',
               '.htaccess',
+              'sitemap.xml',
               'bower_components/**',
 
               // 'vendor/scripts/angularjs/*',
@@ -488,6 +488,20 @@ module.exports = function (grunt) {
           src: ['*.js']
         }]
       }
+    },
+    nggettext_extract: {
+      pot: {
+        files: {
+          'translations/strings.pot' : ['<%= yeoman.app %>/scripts/**/*.html','<%= yeoman.app %>/scripts/**/*.js'],
+        }
+      },
+    },
+    nggettext_compile: {
+      all: {
+        files: {
+          '<%= yeoman.app %>/scripts/translations/js/translations.js': ['translations/*.po']
+        }
+      },
     }
   });
 
@@ -549,4 +563,8 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.registerTask('extractText', ['nggettext_extract',]);
+  grunt.registerTask('compileText', ['nggettext_compile',]);
+  
 };
