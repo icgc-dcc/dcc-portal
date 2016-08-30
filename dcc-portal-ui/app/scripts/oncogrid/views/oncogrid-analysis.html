@@ -1,6 +1,6 @@
 <div class="og-grid-align">
   <h3>
-    OncoGrid
+    <translate>OncoGrid</translate>
     <span style="font-size:1rem" class="pull-right">
       <share-button></share-button>
     </span>
@@ -12,46 +12,46 @@
 <div data-ng-if="item && item.state !== 'ANALYZING'">
   <div data-ng-controller="OncogridController as OncoCtrl">
     <div class="wide og-grid-align">
-      <div>Your selected sets</div>
+      <div><translate>Your selected sets</translate></div>
       <table class="table">
         <thead>
           <tr>
-            <th>Type</th>
-            <th>Set</th>
-            <th class="text-right"># Items</th>
+            <th><translate>Type</translate></th>
+            <th><translate>Set</translate></th>
+            <th class="text-right"><translate># Items</translate></th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Donor</td>
+            <td><translate>Donor</translate></td>
             <td>{{item.donorSetName}}</td>
             <td class="text-right"><a href="{{donorLink}}">{{item.donorCount}}</a></td>
             <td style="font-size:1.25rem;">                            
               <span class="t_tools__tool">
-                <i class="icon-file" data-tooltip="Export as TSV" data-ng-click="exportSet(item.donorSet)"></i>
+                <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.donorSet)"></i>
               </span>
               <span class="t_tools__tool">
-                <i data-tooltip="Download Donor Data" class="icon-download" data-ng-click="OncoCtrl.downloadDonorData(item.donorSet)"></i>
+                <i data-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="OncoCtrl.downloadDonorData(item.donorSet)"></i>
               </span>
               <a class="t_tools__tool"
-                data-tooltip="View in Data Repositores" href="{{repoLink}}">
+                data-tooltip="{{'View in Data Repositores' | translate}}" href="{{repoLink}}">
                 <i class="icon-download-cloud"></i>
               </a>
-              <span data-tooltip="Share Saved Set">
+              <span data-tooltip="{{'Share Saved Set' | translate}}">
                 <share-icon data-custom-popup-disclaimer="" data-share-params="donorShare" class="t_tools__tool"></share-icon>
               </span>
             </td>
           </tr>
           <tr>
-            <td>Gene</td>
+            <td><translate>Gene</translate></td>
             <td>{{item.geneSetName}}</td>
             <td class="text-right"><a href="{{geneLink}}">{{item.geneCount}}</a></td>
             <td style="font-size:1.25rem;">                            
               <span class="t_tools__tool">
-                <i class="icon-file" data-tooltip="Export as TSV" data-ng-click="exportSet(item.geneSet)"></i>
+                <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.geneSet)"></i>
               </span>
-              <span data-tooltip="Share Saved Set">
+              <span data-tooltip="{{'Share Saved Set' | translate}}">
                 <share-icon data-custom-popup-disclaimer="" data-share-params="geneShare" class="t_tools__tool"></share-icon>
               </span>
             </td>
@@ -62,10 +62,10 @@
 
     <div class="wide og-grid-align">
       <span class="action-toolbar">
-        Resulting Number of Mutation Occurrences: <a href="{{obsLink}}">{{obsCount}}</a>
+        <translate>Resulting Number of Mutation Occurrences:</translate> <a href="{{obsLink}}">{{obsCount}}</a>
       </span>
       <span class="action-toolbar pull-right">
-        <i class="icon-chart"></i><a href="{{gvLink}}">Genome Viewer</a>
+        <i class="icon-chart"></i><a href="{{gvLink}}"><translate>Genome Viewer</translate></a>
       </span>
     </div>
     
@@ -82,7 +82,7 @@
             <tr>
               <td>
                 <button id="reload-button" 
-                  data-tooltip="Reload grid" 
+                  data-tooltip="{{'Reload grid' | translate}}" 
                   class="btn btn-default btn-onco" 
                   data-ng-click="OncoCtrl.reloadGrid()">
                   <i class="icon-undo"></i>
@@ -90,7 +90,7 @@
               </td>
               <td>
                 <button id="cluster-button" 
-                  data-tooltip="Cluster data" 
+                  data-tooltip="{{'Cluster data' | translate}}" 
                   class="btn btn-default btn-onco" 
                   data-ng-click="OncoCtrl.clusterData()">
                   <i class="icon-sort-alt-down"></i>
@@ -100,7 +100,7 @@
               <td>
                 <button 
                   id="heat-button" 
-                  data-tooltip="Toggle heatmap view" 
+                  data-tooltip="{{'Toggle heatmap view' | translate}}" 
                   class="btn btn-default btn-onco" 
                   data-ng-click="OncoCtrl.heatMap()">
                   <i class="icon-fire"></i>
@@ -109,7 +109,7 @@
 
               <td>
                 <button id="grid-button" 
-                  data-tooltip="Toggle grid lines" 
+                  data-tooltip="{{'Toggle grid lines' | translate}}" 
                   class="btn btn-default btn-onco" 
                   data-ng-click="OncoCtrl.gridLines()">
                   <i class="icon-grid"></i>
@@ -118,7 +118,7 @@
 
               <td>
                 <button id="crosshair-button" 
-                  data-tooltip="Toggle crosshair" 
+                  data-tooltip="{{'Toggle crosshair' | translate}}" 
                   class="btn btn-default btn-onco" 
                   data-ng-click="OncoCtrl.crosshair()">
                   <i class="icon-target"></i>
@@ -127,7 +127,7 @@
 
               <td>
                 <button id="fullscreen-button" 
-                  data-tooltip="Fullscreen" 
+                  data-tooltip="{{'Fullscreen' | translate}}" 
                   class="btn btn-default btn-onco" 
                   data-ng-click="OncoCtrl.requestFullScreen()">
                   <i id="og-fullscreen-button" class="icon-resize-full"></i>
@@ -139,7 +139,7 @@
               <td id="og-crosshair-message" 
                 colspan="6" 
                 style="display:none;">
-                Click and drag to select a region on the OncoGrid to zoom in. 
+                <translate>Click and drag to select a region on the OncoGrid to zoom in.</translate>
               </td>
             </tr>
           </table>
@@ -151,36 +151,36 @@
               <td>
                 <div>
                   <div class="onco-legend-square" style="background:#ff9b6c"></div>
-                  <small>missense variant</small>
+                  <small><translate>missense variant</translate></small>
                 </div>
 
                 <div>
                   <div class="onco-legend-square" style="background:#57dba4"></div>
-                  <small>frameshift variant</small>
+                  <small><translate>frameshift variant</translate></small>
                 </div>
               </td>
               
               <td>
                 <div>
                   <div class="onco-legend-square" style="background:#ff2323"></div>
-                  <small>start lost</small>
+                  <small><translate>start lost</translate></small>
                 </div>
 
                 <div>
                   <div class="onco-legend-square" style="background:#d3ec00"></div>
-                  <small>stop lost</small>
+                  <small><translate>stop lost</translate></small>
                 </div>
               </td>
 
               <td>
                 <div>
                   <div class="onco-legend-square" style="background:#5abaff"></div>
-                  <small>initiator codon variant</small>
+                  <small><translate>initiator codon variant</translate></small>
                 </div>
 
                 <div>
                   <div class="onco-legend-square" style="background:#af57db"></div>
-                  <small>stop gained</small>
+                  <small><translate>stop gained</translate></small>
                 </div>
               </td>
             </tr>
@@ -188,33 +188,33 @@
 
           <table id="og-heatmap-legend" class="onco-table" style="display: none;">
             <tr>
-              <td>Less</td>
+              <td><translate>Less</translate></td>
               <td>
                 <div class="onco-legend-square" style="background:#D33682; opacity: 0.25;"></div>
                 <div class="onco-legend-square" style="background:#D33682; opacity: 0.50;"></div>
                 <div class="onco-legend-square" style="background:#D33682; opacity: 0.75;"></div>
                 <div class="onco-legend-square" style="background:#D33682; opacity: 1;"></div>
               </td>
-              <td>More Mutations</td>
+              <td><translate>More Mutations</translate></td>
             </tr>
           </table>
         </div>
       </div>
       <div id="oncogrid-div" class="og-pointer-mode"></div>
       <div id="oncogrid-no-data" class="alert-error" style="display:none;">
-        No result found. <br>
-        Please note that the analysis is filtering on high impact mutations only. <br>
-        Please change your donor or gene set and run the analysis again.
+        <translate>No result found.</translate> <br>
+        <translate>Please note that the analysis is filtering on high impact mutations only.</translate> <br>
+        <translate>Please change your donor or gene set and run the analysis again.</translate>
       </div>
     </div>
   </div>
   <div class="oncogrid-suggestions">
     <a class="cta" href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">
-      <h4 class="cta-title">Have Feedback?</h4>
+      <h4 class="cta-title"><translate>Have Feedback?</translate></h4>
       <div class="cta-detail">
-        Do you have feedback and want to help us improve this feature?
+        <translate>Do you have feedback and want to help us improve this feature?</translate>
         <br/>
-        Click here to let us know. 
+        <translate>Click here to let us know.</translate>
       </div>
     </a>
   </div>

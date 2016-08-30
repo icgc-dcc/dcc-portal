@@ -3,13 +3,13 @@
     <div style="font-size:1.25rem">
         <span class="action-toolbar" data-ng-show="NAC.analysisType !== null">
           <span class="action-item">
-            <i class="icon-beaker"></i><a href="" data-ng-click="NAC.analysisType = null">Analysis</a>
+            <i class="icon-beaker"></i><a href="" data-ng-click="NAC.analysisType = null"><translate>Analysis</translate></a>
           </span>                  
         </span>
         <span data-ng-show="NAC.analysisType !== null">&gt;</span>
         <span data-ng-show="NAC.analysisType !== null">
-          Select {{NAC.analysisType === 'enrichment'?'set':'sets'}} for 
-          <strong>{{NAC.analysisName(NAC.analysisType)}}</strong>
+          <translate>Select {{NAC.analysisType === 'enrichment'?'set':'sets'}} for 
+          <strong>{{NAC.analysisName(NAC.analysisType)}}</strong></translate>
         </span>
     </div>
 
@@ -33,7 +33,7 @@
                     <div class="tile-extra-container" data-ng-click="NAC.demoEnrichment()">
                         <div class="tile-extra">
                            <h3 class="demo-title">
-                              Demo
+                              <translate>Demo</translate>
                            </h3>
                            <div class="demo-description">
                               {{NAC.analysisDemoDescription('enrichment')}}
@@ -57,7 +57,7 @@
                     <div class="tile-extra-container" data-ng-click="NAC.demoPhenotype()">
                         <div class="tile-extra">
                            <h3 class="demo-title">
-                              Demo
+                              <translate>Demo</translate>
                            </h3>
                            <div class="demo-description">
                               {{NAC.analysisDemoDescription('phenotype')}}
@@ -79,7 +79,7 @@
                     <div class="tile-extra-container" data-ng-click="NAC.demoSetOperation()">
                         <div class="tile-extra">
                            <h3 class="demo-title">
-                              Demo
+                              <translate>Demo</translate>
                            </h3>
                            <div class="demo-description">
                               {{NAC.analysisDemoDescription('set')}}
@@ -101,7 +101,7 @@
                     <div class="tile-extra-container" data-ng-click="NAC.demoOncogrid()">
                         <div class="tile-extra">
                            <h3 class="demo-title">
-                              Demo
+                              <translate>Demo</translate>
                            </h3>
                            <div class="demo-description">
                               {{NAC.analysisDemoDescription('oncogrid')}}
@@ -116,9 +116,9 @@
                 <a class="cta" href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">
                      <h3 class="cta-title">More?</h3>
                      <div class="cta-detail">
-                        Do you have a specific type of analysis you want to see?
+                        <translate>Do you have a specific type of analysis you want to see?</translate>
                         <br/>
-                        Leave feedback and let us know.
+                        <translate>Leave feedback and let us know.</translate>
                      </div>
                 </a>
             </div>
@@ -141,7 +141,7 @@
         <!-- enrichment -->
         <div data-ng-if="NAC.analysisType === 'enrichment'">
             <div><em>{{NAC.analysisDescription('enrichment')}}</em></div>
-            <div>Demo: <a href="" data-ng-click="NAC.demoEnrichment()">{{NAC.analysisDemoDescription('enrichment')}}</a></div>
+            <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoEnrichment()">{{NAC.analysisDemoDescription('enrichment')}}</a></div>
             <br>
 
             <!--
@@ -152,18 +152,18 @@
             -->
 
             <div> 
-                <div>Select the gene set you want to analyze, then click on Run. <small>(Maximum 10,000 genes)</small></div>
+                <div><translate has-markup>Select the gene set you want to analyze, then click on Run. <small>(Maximum 10,000 genes)</small></translate></div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
-                        <th>Item Type</th>
-                        <th>Name</th>
-                        <th>Note</th>
-                        <th class="text-right"># Items</th>
+                        <th><translate>Item Type</translate></th>
+                        <th><translate>Name</translate></th>
+                        <th><translate>Note</translate></th>
+                        <th class="text-right"><translate># Items</translate></th>
                     </thead>
                     <tbody>
                         <tr data-ng-if="NAC.allSets.length === 0">
-                            <td colspan="5" class="text-center"><strong>No saved sets</strong></td>
+                            <td colspan="5" class="text-center"><strong><translate>No saved sets</translate></strong></td>
                         </tr>
                         <tr data-ng-repeat="item in NAC.allSets" style="color:{{NAC.isInFilter(item)?'':'#CCC'}}"> 
                             <td class="text-center" style="width:2rem">
@@ -193,7 +193,7 @@
         <!-- phenotype -->
         <div data-ng-if="NAC.analysisType === 'phenotype'">
             <div><em>{{NAC.analysisDescription('phenotype')}}</em></div>
-            <div>Demo: <a href="" data-ng-click="NAC.demoPhenotype()">{{NAC.analysisDemoDescription('phenotype')}}</a></div>
+            <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoPhenotype()">{{NAC.analysisDemoDescription('phenotype')}}</a></div>
             <br>
 
             <!--
@@ -204,18 +204,18 @@
             -->
 
             <div> 
-                <div>Select 2 or 3 donor sets, then click on Run.</div>
+                <div><translate>Select 2 or 3 donor sets, then click on Run.</translate></div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
-                        <th>Item Type</th>
-                        <th>Name</th>
-                        <th>Note</th>
-                        <th class="text-right"># Items</th>
+                        <th><translate>Item Type</translate></th>
+                        <th><translate>Name</translate></th>
+                        <th><translate>Note</translate></th>
+                        <th class="text-right"><translate># Items</translate></th>
                     </thead>
                     <tbody>
                         <tr data-ng-if="NAC.allSets.length === 0">
-                            <td colspan="5" class="text-center"><strong>No saved sets</strong></td>
+                            <td colspan="5" class="text-center"><strong><translate>No saved sets</translate></strong></td>
                         </tr>
                         <tr data-ng-repeat="item in NAC.allSets" style="color:{{NAC.isInFilter(item)?'':'#CCC'}}"> 
                             <td class="text-center" style="width:1rem">
@@ -235,7 +235,7 @@
                 <br>
                 <button class="t_button" 
                     data-ng-disabled="NAC.selectedIds.length < 2 || NAC.selectedIds.length > 3  || NAC.isLaunchingAnalysis()"
-                    data-ng-click="NAC.launchPhenotype(NAC.selectedIds)">Run</button>
+                    data-ng-click="NAC.launchPhenotype(NAC.selectedIds)"><translate>Run</translate></button>
             </div>
         </div>
 
@@ -254,18 +254,18 @@
             -->
 
             <div> 
-                <div>Select 2 or 3 sets of the same type, then click on Run.</div>
+                <div><translate>Select 2 or 3 sets of the same type, then click on Run.</translate></div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
-                        <th>Item Type</th>
-                        <th>Name</th>
-                        <th>Note</th>
-                        <th class="text-right"># Items</th>
+                        <th><translate>Item Type</translate></th>
+                        <th><translate>Name</translate></th>
+                        <th><translate>Note</translate></th>
+                        <th class="text-right"><translate># Items</translate></th>
                     </thead>
                     <tbody>
                         <tr data-ng-if="NAC.allSets.length === 0">
-                            <td colspan="5" class="text-center"><strong>No saved sets</strong></td>
+                            <td colspan="5" class="text-center"><strong><translate>No saved sets</translate></strong></td>
                         </tr>
                         <tr data-ng-repeat="item in NAC.allSets" style="color:{{NAC.isInFilter(item)?'':'#CCC'}}"> 
                             <td class="text-center" style="width:2rem"> 
@@ -287,29 +287,29 @@
                     data-ng-disabled="NAC.selectedIds.length < 2 || NAC.selectedIds.length > 3 || NAC.isLaunchingAnalysis()"
                     data-ng-click="NAC.launchSet(NAC.filteredSetType, NAC.selectedIds)">
                     <span data-ng-if="NAC.isLaunchingAnalysis()"><i class="icon-spinner icon-spin"></i></span>
-                    Run
+                    <translate>Run</translate>
                 </button>
             </div>
         </div>
 
         <!-- OncoGrid -->
         <div data-ng-if="NAC.analysisType === 'oncogrid'">
-            <div><em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(100 donors maximum)</small>, then click on Run.</em></div>
-            <div>Demo: <a href="" data-ng-click="NAC.demoOncogrid()">{{NAC.analysisDemoDescription('oncogrid')}}</a></div>
+            <div><translate has-markup><em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(100 donors maximum)</small>, then click on Run.</em></translate></div>
+            <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoOncogrid()">{{NAC.analysisDemoDescription('oncogrid')}}</a></div>
             
             <div> 
-                <div>Select 1 Gene set and 1 Donor set, then click on Run.</div>
+                <div><translate>Select 1 Gene set and 1 Donor set, then click on Run.</translate></div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
-                        <th>Item Type</th>
-                        <th>Name</th>
-                        <th>Note</th>
-                        <th class="text-right"># Items</th>
+                        <th><translate>Item Type</translate></th>
+                        <th><translate>Name</translate></th>
+                        <th><translate>Note</translate></th>
+                        <th class="text-right"><translate># Items</translate></th>
                     </thead>
                     <tbody>
                         <tr data-ng-if="NAC.allSets.length === 0">
-                            <td colspan="5" class="text-center"><strong>No saved sets</strong></td>
+                            <td colspan="5" class="text-center"><strong><translate>No saved sets</translate></strong></td>
                         </tr>
                         <tr data-ng-repeat="item in NAC.allSets" style="color:{{NAC.validForOnco(item)?'':'#CCC'}}"> 
                             <td class="text-center" style="width:2rem"> 
@@ -331,7 +331,7 @@
                     data-ng-disabled="NAC.selectedIds.length < 2 || NAC.selectedIds.length > 2 || NAC.isLaunchingAnalysis() || !NAC.isValidOncoSelection()"
                     data-ng-click="NAC.launchOncogridAnalysis(NAC.selectedIds)">
                     <span data-ng-if="NAC.isLaunchingAnalysis()"><i class="icon-spinner icon-spin"></i></span>
-                    Run
+                    <translate>Run</translate>
                 </button>
             </div>
             
@@ -340,22 +340,22 @@
         <!-- survival -->
         <div data-ng-if="NAC.analysisType === 'survival'">
             <div><em>{{NAC.analysisDescription('survival')}}</em></div>
-            <div>Demo: <a href="">{{NAC.analysisDemoDescription('survival')}}</a></div>
+            <div><translate>Demo</translate>: <a href="">{{NAC.analysisDemoDescription('survival')}}</a></div>
             <br>
 
             <div> 
-                <div>Select donor sets, then click on Run.</div>
+                <div><translate>Select donor sets, then click on Run.</translate></div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
-                        <th>Item Type</th>
-                        <th>Name</th>
-                        <th>Note</th>
-                        <th class="text-right"># Items</th>
+                        <th><translate>Item Type</translate></th>
+                        <th><translate>Name</translate></th>
+                        <th><translate>Note</translate></th>
+                        <th class="text-right"><translate># Items</translate></th>
                     </thead>
                     <tbody>
                         <tr data-ng-if="NAC.allSets.length === 0">
-                            <td colspan="5" class="text-center"><strong>No saved sets</strong></td>
+                            <td colspan="5" class="text-center"><strong><translate>No saved sets</translate></strong></td>
                         </tr>
                         <tr
                             data-ng-repeat="item in NAC.allSets"
@@ -386,7 +386,7 @@
                 <br>
                 <button
                     class="t_button" 
-                    data-ng-click="NAC.launchSurvival(NAC.selectedIds)">Run</button>
+                    data-ng-click="NAC.launchSurvival(NAC.selectedIds)"><translate>Run</translate></button>
             </div>
         </div>
 

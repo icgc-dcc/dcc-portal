@@ -1,6 +1,9 @@
 <div>
   <div class="modal-header clearfix anchor" data-ng-if="onModal">
-    <h3 class="pull-left"><span class="t_badge t_badge__file"></span><b>{{bamName}} </b>BAM Stats</h3>
+    <h3 class="pull-left">
+      <span class="t_badge t_badge__file"></span><b>{{bamName}} </b>
+      <translate>BAM Stats</translate>
+    </h3>
     <button class="pull-right t_button" data-ng-click="cancel()"><i class="icon-cancel"></i>
     </button>
     <span class="bam-file-name light"><a href="/repositories/files/{{bamName}}">{{bamFileName}}</a></span>
@@ -9,19 +12,22 @@
     <div id="showData">
       <section id="top">
         <div id="depth-distribution" class="panel">
-          <div class="title">Read Coverage</div>
-          <div class="hint">(drag to select region)</div>
+          <div class="title"><translate>Read Coverage</translate></div>
+          <div class="hint"><translate>(drag to select region)</translate></div>
           <div id="read-depth-container">
-            <div id="readDepthLoadingMsg">Initializing data <img src="styles/images/loading_dots.gif" /></div>
+            <div id="readDepthLoadingMsg">
+              <translate>Initializing data</translate>
+              <img src="styles/images/loading_dots.gif" />
+            </div>
           </div>
           <div id='seq-list'>
             <span ng-repeat='chr in chromosomes track by chr.id' class='seq-buttons' data-ng-class="{selected: chr.selected}" data-ng-click='highlightSelectedSeq(chr.id)' data-id='{{chr.id}}' data-ng-init='!$first || highlightSelectedSeq(chr.id)'>{{chr.id}}</span>
           </div>
-          <div id='ref-label'>Reference(s)</div>
+          <div id='ref-label'><translate>Reference(s)</translate></div>
           <!-- <ul id="sequences"></ul> -->
         </div>
         <div id="total-reads" class="panel">
-          <div class="title">Reads Sampled</div>
+          <div class="title"><translate>Reads Sampled</translate></div>
           <div id="value" data-ng-bind="readsSampled.value">0</div>
           <div id="base">
             <span id="number" data-ng-bind="readsSampled.units"></span>
@@ -31,58 +37,82 @@
       </section>
       <section id="middle">
         <div id="percents">
-          <div id="mapped_reads" class="percent panel">Mapped Reads
-            <div class="samplingLoader">Sampling <img src="styles/images/loading_dots.gif" /></div>
+          <div id="mapped_reads" class="percent panel">
+            <translate>Mapped Reads</translate>
+            <div class="samplingLoader">
+              <translate>Sampling</translate>
+              <img src="styles/images/loading_dots.gif" />
+            </div>
             <svg viewBox="0 0 225 149" preserveAspectRatio="xMidYMid"></svg>
           </div>
-          <div id="forward_strands" class="percent panel">Forward Strand
-            <div class="samplingLoader">Sampling <img src="styles/images/loading_dots.gif" /></div>
+          <div id="forward_strands" class="percent panel">
+            <translate>Forward Strand</translate>
+            <div class="samplingLoader">
+              <translate>Sampling</translate>
+              <img src="styles/images/loading_dots.gif" />
+            </div>
             <svg viewBox="0 0 225 149" preserveAspectRatio="xMidYMid"></svg>
           </div>
-          <div id="proper_pairs" class="percent panel">Proper Pairs
-            <div class="samplingLoader">Sampling <img src="styles/images/loading_dots.gif" /></div>
+          <div id="proper_pairs" class="percent panel">
+            <translate>Proper Pairs</translate>
+            <div class="samplingLoader">
+              <translate>Sampling</translate>
+              <img src="styles/images/loading_dots.gif" />
+            </div>
             <svg viewBox="0 0 225 149" preserveAspectRatio="xMidYMid"></svg>
           </div>
-          <div id="singletons" class="percent panel">Singletons
-            <div class="samplingLoader">Sampling <img src="styles/images/loading_dots.gif" /></div>
+          <div id="singletons" class="percent panel">
+            <translate>Singletons</translate>
+            <div class="samplingLoader">
+              <translate>Sampling</translate>
+              <img src="styles/images/loading_dots.gif" />
+            </div>
             <svg viewBox="0 0 225 149" preserveAspectRatio="xMidYMid"></svg>
           </div>
-          <div id="both_mates_mapped" class="percent panel">Both Pairs Mapped
-            <div class="samplingLoader">Sampling <img src="styles/images/loading_dots.gif" /></div>
+          <div id="both_mates_mapped" class="percent panel">
+            <translate>Both Pairs Mapped</translate>
+            <div class="samplingLoader">
+              <translate>Sampling</translate>
+              <img src="styles/images/loading_dots.gif" />
+            </div>
             <svg viewBox="0 0 225 149" preserveAspectRatio="xMidYMid"></svg>
           </div>
-          <div id="duplicates" class="percent panel">Duplicates
-            <div class="samplingLoader">Sampling <img src="styles/images/loading_dots.gif" /></div>
+          <div id="duplicates" class="percent panel">
+            <translate>Duplicates</translate>
+            <div class="samplingLoader">
+              <translate>Sampling</translate>
+              <img src="styles/images/loading_dots.gif" />
+            </div>
             <svg viewBox="0 0 225 149" preserveAspectRatio="xMidYMid"></svg>
           </div>
         </div>
         <div id="distributions">
           <div id="read-coverage-distribution" class="distribution panel">
-            <div id="read-coverage">Read Coverage Distribution</div>
-            <div class="samplingLoader">Sampling <img src="styles/images/loading_dots.gif" /></div>
+            <div id="read-coverage"><translate>Read Coverage Distribution</translate></div>
+            <div class="samplingLoader"><translate>Sampling</translate> <img src="styles/images/loading_dots.gif" /></div>
             <svg id="read-coverage-distribution-chart" class="focus" preserveAspectRatio="none"></svg>
           </div>
           <div id="length-distribution" class="distribution panel">
             <div>
-              <div class="chart-chooser"><span class="selected length-chart" data-outlier="false" data-id="frag_hist" data-ng-click="toggleChart($event, 'lengthChart')">Insert Length</span> | <span class="length-chart" data-id="length_hist" data-outlier="true" data-ng-click="toggleChart($event, 'lengthChart')">Read Length</span></div>
+              <div class="chart-chooser"><span class="selected length-chart" data-outlier="false" data-id="frag_hist" data-ng-click="toggleChart($event, 'lengthChart')"><translate>Insert Length</translate></span> | <span class="length-chart" data-id="length_hist" data-outlier="true" data-ng-click="toggleChart($event, 'lengthChart')"><translate>Read Length</translate></span></div>
             </div>
             <label class="checkbox" for="checkbox2" data-ng-class="{'icon-ok': showOutliers, 'icon-check-empty': !showOutliers}" data-ng-click="toggleOutliers()">
-              <input type="checkbox" value="" class="outlier" data-toggle="checkbox"> Outliers
+              <input type="checkbox" value="" class="outlier" data-toggle="checkbox"> <translate>Outliers</translate>
             </label>
-            <div class="samplingLoader">Sampling <img src="styles/images/loading_dots.gif" /></div>
+            <div class="samplingLoader"><translate>Sampling</translate> <img src="styles/images/loading_dots.gif" /></div>
             <svg id="length-distribution-chart" class="focus" preserveAspectRatio="none"></svg>
           </div>
           <div id="mapping-quality-distribution" class="distribution panel">
             <div>
-              <div class="chart-chooser"><span data-id="mapq_hist" class="selected quality-chart" data-ng-click="toggleChart($event, 'qualityChart')">Mapping Quality</span> | <span class="quality-chart" data-id="baseq_hist" data-ng-click="toggleChart($event, 'qualityChart')">Base Quality</span></div>
+              <div class="chart-chooser"><span data-id="mapq_hist" class="selected quality-chart" data-ng-click="toggleChart($event, 'qualityChart')"><translate>Mapping Quality</translate></span> | <span class="quality-chart" data-id="baseq_hist" data-ng-click="toggleChart($event, 'qualityChart')"><translate>Base Quality</translate></span></div>
             </div>
-            <div class="samplingLoader">Sampling <img src="styles/images/loading_dots.gif" /></div>
+            <div class="samplingLoader"><translate>Sampling</translate> <img src="styles/images/loading_dots.gif" /></div>
             <svg id="mapping-quality-distribution-chart" class="focus" preserveAspectRatio="none"></svg>
           </div>
         </div>
       </section>
       <div class=powered-by>
-        <p>Powered by <a href="http://iobio.io/">iobio</a></p>
+        <p><translate has-markup>Powered by <a href="http://iobio.io/">iobio</a></translate></p>
       </div>
     </div>
   </div>

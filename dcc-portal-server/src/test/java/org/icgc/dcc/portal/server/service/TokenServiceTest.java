@@ -28,10 +28,10 @@ import static org.mockito.Mockito.when;
 
 import java.util.Set;
 
-import org.icgc.dcc.portal.server.auth.oauth.OAuthClient;
-import org.icgc.dcc.portal.server.auth.oauth.UserScopesResponse;
 import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes.AccessTokenScope;
+import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
+import org.icgc.dcc.portal.server.security.oauth.UserScopesResponse;
 import org.icgc.dcc.portal.server.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;

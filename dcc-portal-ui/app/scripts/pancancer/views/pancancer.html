@@ -1,14 +1,14 @@
 <h1>
     <img src="styles/images/PCAWG-icon.png" style="height:3.5rem; margin-left:2rem; vertical-align:bottom"></img>
-    <span style="display:inline-block">PCAWG - Pancancer Analysis of Whole Genomes</span>
+    <span style="display:inline-block"><translate>PCAWG - Pancancer Analysis of Whole Genomes</translate></span>
 </h1>
 <section class="no-border no-vert-padding">
    <div class="half pull-right" style="margin-bottom:1.5rem; margin-top:1rem; margin-left:2rem; margin-right: 2rem">
 
       <stacked height="250"
-         data-title="Donor Distribution by Primary Site"
-         data-subtitle="{{summary.projectCount}} projects and {{summary.primarySiteCount}} primary sites"
-         data-y-label="Donors"
+         data-title="{{'Donor Distribution by Primary Site' | translate}}"
+         data-subtitle="{{ '[[projectCount]] projects and [[siteCount]] primary sites' | translate | subDelimiters:{projectCount: summary.projectCount, siteCount: summary.primarySiteCount} }}"
+         data-y-label="{{'Donors' | translate}}"
          data-alternate-brightness="true"
          data-items="primarySites"
          data-is-loading="false">
@@ -16,10 +16,12 @@
 
       <section class="well" style="padding-top:0.5rem; padding-bottom:0.5rem">
           <div class="third text-center">
-              <i class="icon-team" style="font-size:1.25rem"></i><strong>{{summary.donorCount | number}}</strong> Donors
+              <i class="icon-team" style="font-size:1.25rem"></i>
+              <strong>{{summary.donorCount | number}}</strong> <translate>Donors</translate>
           </div>
           <div class="third text-center">
-              <i class="icon-file" style="font-size:1.25rem"></i><strong>{{summary.fileCount | number}}</strong> Files
+              <i class="icon-file" style="font-size:1.25rem"></i>
+              <strong>{{summary.fileCount | number}}</strong> <translate>Files</translate>
           </div>
           <div class="third omega text-center">
               <i class="icon-database" style="font-size:1.25rem"></i><strong>{{summary.totalFileSize | bytes}}</strong>
@@ -28,11 +30,11 @@
 
       <table class="table table-info">
           <thead>
-              <th>Data Type</th>
-              <th># Donors</th>
-              <th># Files</th>
-              <th>Format</th>
-              <th>Size</th>
+              <th><translate>Data Type</translate></th>
+              <th><translate># Donors</translate></th>
+              <th><translate># Files</translate></th>
+              <th><translate>Format</translate></th>
+              <th><translate>Size</translate></th>
           </thead>
           <tbody>
               <tr data-ng-repeat="type in pcawgDatatypes">
@@ -48,39 +50,49 @@
       </table>
 
       <span>
-          Available data as of <a href="{{ dataRepoUrl }}?filters={{filters}}">{{indexDate | date}}</a>
+          <translate>Available data as of</translate> <a href="{{ dataRepoUrl }}?filters={{filters}}">{{indexDate | date}}</a>
       </span>
    </div>
 
 
    <p class="indent">
-       The Pancancer Analysis of Whole Genomes (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from
-       the International Cancer Genome Consortium. Building upon previous work which examined cancer coding regions (Cancer Genome Atlas Research Network, The Cancer Genome Atlas
-       Pan-Cancer analysis project, <span style="dispaly:inline-block; text-indent:0"><a href="http://www.nature.com/ng/journal/v45/n10/full/ng.2764.html" target="_blank"><i class="icon-external-link"></i>Nat. Genet. 2013 45:1113</a></span>),
-       this project is exploring the nature and consequences of somatic and germline variations in both coding and non-coding regions, with specific emphasis on cis-regulatory sites,
-       non-coding RNAs, and large-scale structural alterations.
+       <translate>
+           The Pancancer Analysis of Whole Genomes (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from
+           the International Cancer Genome Consortium.
+       </translate>
+       <translate>
+           Building upon previous work which examined cancer coding regions (Cancer Genome Atlas Research Network, The Cancer Genome Atlas
+           Pan-Cancer analysis project, <span style="dispaly:inline-block; text-indent:0"><a href="http://www.nature.com/ng/journal/v45/n10/full/ng.2764.html" target="_blank"><i class="icon-external-link"></i>Nat. Genet. 2013 45:1113</a></span>),
+           this project is exploring the nature and consequences of somatic and germline variations in both coding and non-coding regions, with specific emphasis on cis-regulatory sites,
+           non-coding RNAs, and large-scale structural alterations.
+       </translate>
    </p>
    <p class="indent">
-       In order to facilitate the comparison among diverse tumor types, all tumor and matched normal genomes have been subjected to a uniform set of alignment and variant calling algorithms, and must pass a rigorous set of qualilty control tests. The research activities are coordinated by a series of working groups comprising more than 700 scientists and covering the following themes:
+       <translate>
+           In order to facilitate the comparison among diverse tumor types, all tumor and matched normal genomes have been subjected to a uniform set of alignment and variant calling algorithms, and must pass a rigorous set of qualilty control tests.
+       </translate>
+       <translate>
+           The research activities are coordinated by a series of working groups comprising more than 700 scientists and covering the following themes:
+       </translate>
    </p>
    <p>
        <ol>
-           <li>Novel somatic mutation calling methods</li>
-           <li>Analysis of mutations in regulatory regions</li>
-           <li>Integration of the transcriptome and genome</li>
-           <li>Integration of the epigenome and genome</li>
-           <li>Consequences of somatic mutations on pathway and network activity</li>
-           <li>Patterns of structural variations, signatures, genomic correlations, retrotransposons and mobile elements</li>
-           <li>Mutation signatures and processes</li>
-           <li>Germline cancer genome</li>
-           <li>Inferring driver mutations and identifying cancer genes and pathways</li>
-           <li>Translating cancer genomes to the clinic</li>
-           <li>Evolution and heterogeneity</li>
-           <li>Portals, visualization and software infrastructure</li>
-           <li>Molecular subtypes and classification</li>
-           <li>Analysis of mutations in non-coding RNA</li>
-           <li>Mitochondrial</li>
-           <li>Pathogens</li>
+           <li><translate>Novel somatic mutation calling methods</translate></li>
+           <li><translate>Analysis of mutations in regulatory regions</translate></li>
+           <li><translate>Integration of the transcriptome and genome</translate></li>
+           <li><translate>Integration of the epigenome and genome</translate></li>
+           <li><translate>Consequences of somatic mutations on pathway and network activity</translate></li>
+           <li><translate>Patterns of structural variations, signatures, genomic correlations, retrotransposons and mobile elements</translate></li>
+           <li><translate>Mutation signatures and processes</translate></li>
+           <li><translate>Germline cancer genome</translate></li>
+           <li><translate>Inferring driver mutations and identifying cancer genes and pathways</translate></li>
+           <li><translate>Translating cancer genomes to the clinic</translate></li>
+           <li><translate>Evolution and heterogeneity</translate></li>
+           <li><translate>Portals, visualization and software infrastructure</translate></li>
+           <li><translate>Molecular subtypes and classification</translate></li>
+           <li><translate>Analysis of mutations in non-coding RNA</translate></li>
+           <li><translate>Mitochondrial</translate></li>
+           <li><translate>Pathogens</translate></li>
        </ol>
 
        <!--
@@ -93,35 +105,52 @@
    </p>
 </section>
 <section id="embargo" class="no-border no-vert-padding">
-  <h3>Publication and Embargo Policy</h3>
+  <h3><translate>Publication and Embargo Policy</translate></h3>
   <p class="indent">
-    The PanCancer Analysis of Whole Genomes (PCAWG) project is committed to the principle of rapid distribution 
-    of primary data, alignments files, and secondary analysis data (such as mutation calls) to all members of 
-    the research community that have applied for (and have become approved for) data access. The primary data 
-    contributed to the project will fall under any publication/embargo policy of the contributing institute or 
-    consortia. The community resource for the PCAWG project comprises newly generated files produced by this 
-    collaboration (unified alignments, mutation calls and any secondary analysis data). As is the case for 
-    similar &ldquo;community resource projects&rdquo;, users of data generated and distributed by the PCAWG 
-    project are asked to respect the desire of the PCAWG Consortium to publish reports on the generation and 
-    analysis of their data. Hence, scientific works with a primary focus on pan-cancer (across entity) analysis 
-    that made use of the WGS pan cancer community resource will be under publication embargo until the WGS 
-    pan-cancer consortium publishes its main paper (anticipated June 2016). Methodology papers may be published 
-    prior to this embargo, with agreement from the full scientific working group. Please write to 
-    <a href="mailto:jennifer.jennings@oicr.on.ca"><i class="icon-mail"></i>jennifer.jennings@oicr.on.ca</a> for 
-    further information.
+    <translate>
+        The PanCancer Analysis of Whole Genomes (PCAWG) project is committed to the principle of rapid distribution 
+        of primary data, alignments files, and secondary analysis data (such as mutation calls) to all members of 
+        the research community that have applied for (and have become approved for) data access.
+    </translate>
+    <translate>
+        The primary data contributed to the project will fall under any publication/embargo policy of the contributing 
+        institute or consortia.
+    </translate>
+    <translate>
+        The community resource for the PCAWG project comprises newly generated files produced by this 
+        collaboration (unified alignments, mutation calls and any secondary analysis data).
+    </translate>
+    <translate>
+        As is the case for similar "community resource projects", users of data generated and distributed by the PCAWG 
+        project are asked to respect the desire of the PCAWG Consortium to publish reports on the generation and 
+        analysis of their data.
+    </translate>
+    <translate>
+        Hence, scientific works with a primary focus on pan-cancer (across entity) analysis 
+        that made use of the WGS pan cancer community resource will be under publication embargo until the WGS 
+        pan-cancer consortium publishes its main paper (anticipated June 2016).
+    </translate>
+    <translate>
+        Methodology papers may be published prior to this embargo, with agreement from the full scientific working group.
+    </translate>
+    <translate has-markup>
+        Please write to 
+        <a href="mailto:jennifer.jennings@oicr.on.ca"><i class="icon-mail"></i>jennifer.jennings@oicr.on.ca</a> for 
+        further information.
+    </translate>
   </p>
 </section>
 <section class="no-border no-vert-padding">
    <p>
-       <h3>Publications</h3>
+       <h3><translate>Publications</translate></h3>
        <ul>
            <li>
                <div>
                    <a href="http://www.nature.com/news/data-analysis-create-a-cloud-commons-1.17916" target="_blank">
-                       Stein, D. L. et al., <strong>Data analysis: Create a cloud commons.,</strong> Nature News, July 08, 2015
+                       <translate has-markup>Stein, D. L. et al., <strong>Data analysis: Create a cloud commons.,</strong> Nature News, July 08, 2015</translate>
                    </a>
                    <br>
-                   Acknowledgement: The authors wish to thank Joshua Stuart, Jennifer Jennings, Brian O’Connor, George Mihaiescu, Christina Yung and Fruzsina Molnar-Gabor for insights, comments and other assistance during the preparation of this perspective.
+                   <translate>Acknowledgement: The authors wish to thank Joshua Stuart, Jennifer Jennings, Brian O’Connor, George Mihaiescu, Christina Yung and Fruzsina Molnar-Gabor for insights, comments and other assistance during the preparation of this perspective.</translate>
                </div>
 
            </li>

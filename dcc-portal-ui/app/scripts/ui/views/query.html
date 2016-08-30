@@ -1,5 +1,5 @@
 <span>
-    <span data-ng-if="!uiFilters">All</span>
+    <span data-ng-if="!uiFilters"><translate>All</translate></span>
     <span data-ng-repeat="(typeName, type) in uiFilters">
         <span data-ng-repeat="(facet, terms) in type track by facet">
 
@@ -7,7 +7,7 @@
                 <span data-ng-switch-when="id">{{typeName | readable}}</span>
                 <span data-ng-switch-when="pathwayId">Pathway</span>
                 <span data-ng-switch-when="goTermId">GO</span>
-                <span data-ng-switch-when="curatedSetId">Curated Gene Set</span>
+                <span data-ng-switch-when="curatedSetId"><translate>Curated Gene Set</translate></span>
                 <span data-ng-switch-when="location">{{typeName | readable}} location</span>
                 <span data-ng-switch-default="">{{facet | trans}}</span>
             </span>

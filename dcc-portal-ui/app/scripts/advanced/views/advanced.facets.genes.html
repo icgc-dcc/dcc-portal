@@ -2,20 +2,20 @@
     <i class="icon-spinner icon-spin icon-4x"></i>
 </h3>
 <ul data-ng-show="AdvancedCtrl.Gene.genes" class="t_facets">
-    <li data-tags-facet data-label="Gene" data-facet-name="id" data-placeholder="e.g. KRAS, ENSG00000133703"
+    <li data-tags-facet data-label="{{'Gene' | translate}}" data-facet-name="id" data-placeholder="{{'e.g. KRAS, ENSG00000133703' | translate}}"
         data-type="gene">
     </li>
 
     <terms data-type="gene" data-facet-name="type" data-facet="AdvancedCtrl.Gene.genes.facets.type"
-           data-capitalize="true" data-label="Type"></terms>
+           data-capitalize="true" data-label="{{'Type' | translate}}"></terms>
 
     <li data-tags-facet
         data-type="pathway"
         data-facet-name="pathwayId"
         data-proxy-type="gene"
         data-proxy-facet-name="pathwayId"
-        data-label="Pathway"
-        data-placeholder="e.g. TNF Signaling, R-HSA-983168">
+        data-label="{{'Pathway' | translate}}'"
+        data-placeholder="{{'e.g. TNF Signaling, R-HSA-983168' | translate}}">
     </li>
 
     <li data-tags-facet
@@ -32,8 +32,8 @@
         data-facet-name="goTermId"
         data-proxy-type="gene"
         data-proxy-facet-name="goTermId"
-        data-label="Gene Ontology (GO)"
-        data-placeholder="e.g. cell growth, GO:0016049">
+        data-label="{{'Gene Ontology (GO)' | translate}}"
+        data-placeholder="{{'e.g. cell growth, GO:0016049' | translate}}">
     </li>
 
     <li data-tags-facet
@@ -41,9 +41,9 @@
         data-facet-name="curatedSetId"
         data-proxy-type="gene"
         data-proxy-facet-name="curatedSetId"
-        data-label="Curated Gene Set">
+        data-label="{{'Curated Gene Set' | translate}}">
     </li>
 
-    <li data-location-facet data-type="gene" data-facet-name="location" data-label="Location"
-        data-placeholder="Enter gene location" data-example="e.g. chr12:43566-3457633"></li>
+    <li data-location-facet data-type="gene" data-facet-name="location" data-label="{{'Location' | translate}}"
+        data-placeholder="{{'Enter gene location' | translate}}" data-example="{{'e.g. chr12:43566-3457633' | translate}}"></li>
 </ul>

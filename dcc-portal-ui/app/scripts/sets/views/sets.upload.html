@@ -1,7 +1,7 @@
 <div class="modal-content">
     <!-- header -->
     <div class="modal-header clearfix">
-        <h3 class="pull-left">Save {{params.setType | readable }} Set</h3>
+        <h3 class="pull-left"><translate>Save {{params.setType | readable }} Set</translate></h3>
 
         <button class="pull-right t_button" data-ng-click="cancel()"><i class="icon-cancel"></i>
         </button>
@@ -11,38 +11,44 @@
     <div class="modal-body" >
         <div data-ng-if="!params.isLoading"> 
             <div data-ng-if="params.setLimit">
-                <div>Save top: </div>
+                <div><translate>Save top:</translate> </div>
                 <input type="text" maxlength="9" size="9"
                     data-select-on-click
                     integer-validator
                     data-ng-model="params.setSize" data-ng-change="validateInput()">
                 <br>
-                <small>You can save up to the top {{params.setSizeLimit | number}} {{params.setType}}s</small>
+                <small>
+                    <translate>
+                        You can save up to the top {{params.setSizeLimit | number}} {{params.setType}}s
+                    </translate>
+                </small>
             </div>
 
 
             <div>
-                <div>Name:</div>
+                <div><translate>Name</translate>:</div>
                 <input type="text" data-ng-model="params.setName" maxlength="32" data-select-on-click data-ng-change="validateInput()"></input>
             </div>
 
             <div>
-                <div>Note:</div>
+                <div><translate>Note:</translate></div>
                 <textarea cols="50" rows="3"
                     data-ng-model="params.setDescription"
                     data-ng-change="validateInput()"
                     placeholder="(Optional)" maxlength="256" data-select-on-click></textarea>
-                <small>{{256 - params.setDescription.length}} chars left</small>
+                <small><translate>{{256 - params.setDescription.length}} chars left</translate></small>
             </div>
         </div>
         
-        <div data-ng-if="params.isLoading"><i class="icon-spinner icon-spin"></i> Loading...</div>
+        <div data-ng-if="params.isLoading"><i class="icon-spinner icon-spin"></i> <translate>Loading...</translate></div>
     </div>
     
     <!-- footer -->
     <div class="modal-footer">
-        <button class="t_button" data-ng-click="cancel()">Cancel</button>
-        <button class="t_button" data-ng-disabled="!isValid" data-ng-click="submitNewSet();">Save</button>
+        <button class="t_button" data-ng-click="cancel()"><translate>Cancel</translate></button>
+        <button class="t_button" data-ng-disabled="!isValid" data-ng-click="submitNewSet();">
+            <translate>Save</translate>
+        </button>
     </div>
 </div>
 

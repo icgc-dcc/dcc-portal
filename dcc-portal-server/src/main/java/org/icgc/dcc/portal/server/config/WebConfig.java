@@ -36,15 +36,13 @@ import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.spring.SpringComponentProviderFactory;
 import org.icgc.dcc.portal.server.swagger.PrimitiveModelResolver;
 import org.icgc.dcc.portal.server.util.VersionUtils;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
@@ -58,24 +56,25 @@ import com.yammer.metrics.jersey.InstrumentedResourceMethodDispatchAdapter;
 import io.swagger.converter.ModelConverters;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
-import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@EnableWebMvc
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-  @Bean
-  public FilterRegistrationBean urlRewrite() {
-    val urlRewrite = new FilterRegistrationBean();
-    urlRewrite.setOrder(0);
-    urlRewrite.setFilter(new UrlRewriteFilter());
-    urlRewrite.addInitParameter("confPath", "urlrewrite.xml");
-    urlRewrite.addInitParameter("statusEnabled", "false");
+  @Override
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/app/");
+    registry.addResourceHandler("/docs/**").addResourceLocations("classpath:/swagger-ui/");
+    registry.addResourceHandler("/**").addResourceLocations("classpath:/app/");
+  }
 
-    return urlRewrite;
+  @Override
+  public void addViewControllers(ViewControllerRegistry registry) {
+    registry.addViewController("/").setViewName("forward:/index.html");
+    registry.addViewController("/docs").setViewName("forward:/docs/index.html");
+    registry.addViewController("/**/{path:[^.]+}").setViewName("forward:/index.html");
   }
 
   @Bean
@@ -139,14 +138,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
             CachingFilter.class.getName()));
 
     return config;
-  }
-
-  @Override
-  @SneakyThrows
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/").addResourceLocations("classpath:/app/index.html");
-    registry.addResourceHandler("/**").addResourceLocations("classpath:/app/");
-    registry.addResourceHandler("/docs/**").addResourceLocations("classpath:/swagger-ui/");
   }
 
   @PostConstruct

@@ -8,7 +8,7 @@
 
         <span data-ng-click="ctrl.collapsed=!ctrl.collapsed" data-ng-if="type === 'file'"" class="t_facets__facet__title__label">
             <i data-ng-class="{'icon-caret-down':!ctrl.collapsed, 'icon-caret-right':ctrl.collapsed}"></i>
-            <abbr data-tooltip="File ID, Object ID, Submitter Bundle ID, File Set ID, Manifest ID" tooltip-placement="right">{{label}}</abbr>
+            <abbr data-tooltip="{{'File ID, Object ID, Submitter Bundle ID, File Set ID, Manifest ID' | translate}}" tooltip-placement="right">{{label}}</abbr>
         </span>
         
         <span data-ng-if="actives.length > 0 || (shouldDisplayEntitySetId() && activeEntityIds.length > 0)"
@@ -18,7 +18,7 @@
                 data-ng-if="type !== 'file-donor' && type !== 'file'"
                 data-ng-class="{'is': !isNot, 'is-not': isNot}"
                 data-ng-click="isNot ? isFacet(facet) : notFacet(facet)"
-                data-tooltip="Toggle this facet to IS {{ isNot ? 'NOT' : '' }}"
+                data-tooltip="{{ 'Toggle this facet to IS [[ toggle ]]' | translate | subDelimiters:{toggle: isNot ? 'NOT' : ''} }}"
             >
                 <div class="include">IS</div>
                 <div class="nub"></div>

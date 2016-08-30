@@ -17,7 +17,6 @@
 
 package org.icgc.dcc.portal.server.service;
 
-import static com.google.common.base.Throwables.propagate;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
 import java.util.Collections;
@@ -62,9 +61,7 @@ public class OccurrenceService {
 
       log.info("[init] Finished initializing donor mutations cache in {}", watch);
     } catch (Exception e) {
-      log.error("[init] Error initializing donor mutations cache: ", e);
-
-      propagate(e);
+      log.error("[init] Error initializing donor mutations cache: {}", e.getMessage());
     }
   }
 

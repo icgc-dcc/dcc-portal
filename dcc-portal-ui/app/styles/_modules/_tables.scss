@@ -97,6 +97,15 @@ $table-th-fixed-width: 200px;
       white-space: normal;
       word-break:break-all;
     }
+
+    &.table-condensed{
+
+      td{
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: normal;
+      }
+    }
   }
 
   &.table-download {
@@ -139,4 +148,10 @@ $table-th-fixed-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.table-text-wrap{
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: normal;
 }

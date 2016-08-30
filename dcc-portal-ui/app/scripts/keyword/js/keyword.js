@@ -66,7 +66,7 @@
   var module = angular.module('icgc.keyword.controllers', ['icgc.keyword.models', 'icgc.common.text.utils']);
 
   module.controller('KeywordController',
-    function ($scope, Page, LocationService, debounce, Keyword, RouteInfoService, Abridger) {
+    function ($scope, Page, LocationService, debounce, Keyword, RouteInfoService, Abridger, gettextCatalog) {
       var pageSize;
 
       $scope.from = 1;
@@ -79,7 +79,8 @@
       $scope.dataRepoFileUrl = RouteInfoService.get ('dataRepositoryFile').href;
       $scope.compoundEntityUrl = RouteInfoService.get ('drugCompound').href;
 
-      Page.setTitle('Results for ' + $scope.query);
+      /// ${query} would be a search query/keyword
+      Page.setTitle(_.template(gettextCatalog.getString('Results for ${query}'))({query : $scope.query}));
       Page.setPage('q');
 
       $scope.clear = function () {
@@ -130,7 +131,9 @@
 
         if ($scope.query && $scope.query.length >= 2) {
           LocationService.setParam('q', $scope.query);
-          Page.setTitle('Results for ' + $scope.query);
+
+          /// ${query} would be a search query/keyword
+          Page.setTitle(_.template(gettextCatalog.getString('Results for ${query}'))({query : $scope.query}));
           getResults();
         } else {
           $scope.results = null;

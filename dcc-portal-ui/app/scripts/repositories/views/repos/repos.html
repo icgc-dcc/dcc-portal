@@ -2,13 +2,13 @@
     <h1 class="repo-header" data-ng-if="repoContextID == 'aws-virginia'">
         <img src="/scripts/repositories/images/home/aws_logo.svg" width="260" class="logo" alt="ICGC AWS Logo" />
         <span>
-            ICGC on the Amazon Cloud
+            <translate>ICGC on the Amazon Cloud</translate>
         </span>
     </h1>
     <h1 class="repo-header" data-ng-if="repoContextID == 'collaboratory'">
         <img src="/scripts/repositories/images/home/collab_logo.png" class="logo" alt="Collaboratory Logo" />
         <span>
-        The Cancer Genome Collaboratory
+        <translate>The Cancer Genome Collaboratory</translate>
         </span>
     </h1>
     <section class="cloud-repository-content">
@@ -17,9 +17,9 @@
             <div data-ng-show="repositoryCtrl.hasSummaryData()" class="bar-chart-container">
 
                 <stacked height="250"
-                    data-title="Donor Distribution by Primary Site"
-                    data-subtitle="{{repositoryCtrl.getRepoSummaryData().projectCount}} projects and {{repositoryCtrl.getRepoSummaryData().primarySiteCount}} primary sites"
-                    data-y-label="Donors"
+                    data-title="{{'Donor Distribution by Primary Site' | translate}}"
+                    data-subtitle="{{ '[[projectCount]] projects and [[siteCount]] primary sites'| translate | subDelimiters:{projectCount: repositoryCtrl.getRepoSummaryData().projectCount, siteCount: repositoryCtrl.getRepoSummaryData().primarySiteCount} }}"
+                    data-y-label="{{'Donors' | translate}}"
                     data-alternate-brightness="true"
                     data-items="repositoryCtrl.getPrimarySites()"
                     data-is-loading="false">
@@ -27,10 +27,10 @@
             
                <section class="well icons-container">
                     <div class="third text-center">
-                        <i class="icon-team"></i><strong data-ng-bind="repositoryCtrl.getRepoSummaryData().donorCount | number"></strong> Donors
+                        <i class="icon-team"></i><strong data-ng-bind="repositoryCtrl.getRepoSummaryData().donorCount | number"></strong> <translate>Donors</translate>
                     </div>
                     <div class="third text-center">
-                        <i class="icon-file"></i><strong data-ng-bind="repositoryCtrl.getRepoSummaryData().fileCount | number"></strong> Files
+                        <i class="icon-file"></i><strong data-ng-bind="repositoryCtrl.getRepoSummaryData().fileCount | number"></strong> <translate>Files</translate>
                     </div>
                     <div class="third omega text-center">
                         <i class="icon-database"></i><strong data-ng-bind="repositoryCtrl.getRepoSummaryData().totalFileSize | bytes"></strong>
@@ -39,11 +39,11 @@
             
                 <table class="table table-info">
                     <thead>
-                        <th>Data Type</th>
-                        <th># Donors</th>
-                        <th># Files</th>
-                        <th>Format</th>
-                        <th>Size</th>
+                        <th><translate>Data Type</translate></th>
+                        <th><translate># Donors</translate></th>
+                        <th><translate># Files</translate></th>
+                        <th><translate>Format</translate></th>
+                        <th><translate>Size</translate></th>
                     </thead>
                     <tbody>
                         <tr data-ng-repeat="type in repositoryCtrl.getRepoDataTypes()">
@@ -59,7 +59,7 @@
                 </table>
             
                 <span>
-                    Available data as of <a href="/repositories?filters={{repositoryCtrl.getFilterQueryStr()}}" data-ng-bind="repositoryCtrl.getRepoCreationDate() | date"></a>
+                    <translate>Available data as of</translate> <a href="/repositories?filters={{repositoryCtrl.getFilterQueryStr()}}" data-ng-bind="repositoryCtrl.getRepoCreationDate() | date"></a>
                 </span>
             </div>
             <!-- -->     

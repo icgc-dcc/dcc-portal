@@ -1,13 +1,14 @@
 <div class="modal-content">
   <div class="modal-header clearfix">
-    <h3 class="pull-left">Share Link</h3>
+    <h3 class="pull-left"><translate>Share Link</translate></h3>
     <button class="pull-right t_button" data-ng-click="cancel()"><i
       class="icon-cancel"></i>
     </button>
   </div>
   <div class="modal-body" style="max-height:none;padding-bottom:0">
     <br>
-    <input id="shortURLInput" placeholder="Loading..." class="input-block-level" type="text" value={{shortUrl}} />
+    <input id="shortURLInput" 
+      placeholder="{{'Loading...' | translate}}" class="input-block-level" type="text" value={{shortUrl}} />
 
     <span
        class="clip-icon"
@@ -15,14 +16,14 @@
        data-copy-data="shortUrl"
        data-show-copy-tips="true"
        data-prompt-on-copy="false"
-       data-on-hover-message="Click to copy"
-       data-on-copy-success-message="Share Link copied!"
+       data-on-hover-message="{{'Click to copy' | translate}}"
+       data-on-copy-success-message="{{'Share Link copied!' | translate}}"
        data-on-copy-focus-on="#shortURLInput">
        <span class="icon-clippy"></span>
     </span>
 
     <p data-ng-if="! customPopupDisclaimer">
-      <small>You can also copy the link from your browser's address bar.</small>
+      <small><translate>You can also copy the link from your browser's address bar.</translate></small>
     </p>
     <p data-ng-if="customPopupDisclaimer ">
       <span data-ng-if="customPopupDisclaimer === true">&nbsp;</span>
@@ -31,7 +32,7 @@
     </p>
   </div>
   <div class="modal-footer">
-    <button class="t_button" data-ng-click="cancel()">Close</button>
+    <button class="t_button" data-ng-click="cancel()"><translate>Close</translate></button>
   </div>
 </div>
 

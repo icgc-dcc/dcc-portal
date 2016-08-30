@@ -178,3 +178,4 @@ features:
   
 # Banner
 spring.main.banner-mode: log
+spring.mvc.favicon.enabled: false

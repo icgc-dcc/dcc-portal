@@ -174,7 +174,7 @@ public abstract class BaseElasticSearchTest {
     @SneakyThrows
     public String toJson() {
       // Normalize to non-pretty printed in memory representation
-      ObjectReader reader = new ObjectMapper().reader(JsonNode.class);
+      ObjectReader reader = new ObjectMapper().readerFor(JsonNode.class);
       MappingIterator<JsonNode> iterator = reader.readValues(file);
 
       StringBuilder builder = new StringBuilder();
