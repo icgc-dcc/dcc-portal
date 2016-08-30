@@ -35,6 +35,7 @@ import org.icgc.dcc.portal.server.jersey.filter.VersionFilter;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.spring.SpringComponentProviderFactory;
 import org.icgc.dcc.portal.server.swagger.PrimitiveModelResolver;
+import org.icgc.dcc.portal.server.util.TuckeyFilter;
 import org.icgc.dcc.portal.server.util.VersionUtils;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -44,7 +45,6 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
@@ -71,8 +71,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public FilterRegistrationBean urlRewrite() {
     val urlRewrite = new FilterRegistrationBean();
     urlRewrite.setOrder(0);
-    urlRewrite.setFilter(new UrlRewriteFilter());
-    urlRewrite.addInitParameter("confPath", "urlrewrite.xml");
+    urlRewrite.setFilter(new TuckeyFilter());
+    urlRewrite.addInitParameter("confPath", "/urlrewrite.xml");
     urlRewrite.addInitParameter("statusEnabled", "false");
 
     return urlRewrite;
