@@ -1,4 +1,5 @@
-<h3>Enrichment Analysis
+<h3>
+    <translate>Enrichment Analysis</translate>
     <span style="font-size:1rem" class="pull-right" data-ng-if="!isDeprecated && callingContext != 'pathways'">
         <share-button></share-button>
     </span>
@@ -10,27 +11,29 @@
 <div data-ng-if="item && item.state !== 'ANALYZING'">
     <div>
         <div data-ng-if="isDeprecated" class="alert-error">
-           <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
+           <i class="icon-attention"></i>
+           <translate>This analysis is deprecated.</translate>
+           <translate>This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.</translate>
         </div>
         <span>
-            <small>Please see the <a href="https://docs.icgc.org/methods#enrichmentanalysis" target="_blank"><i class="icon-external-link"></i>Enrichment Analysis</a> documentation resource for a general overview of this feature.</small>
+            <small><translate has-markup>Please see the <a href="https://docs.icgc.org/methods#enrichmentanalysis" target="_blank"><i class="icon-external-link"></i>Enrichment Analysis</a> documentation resource for a general overview of this feature.</translate></small>
         </span>
     </div>
     <br>
     <div data-disable-events="isDeprecated">
-        <span data-ng-if="callingContext != 'pathways'">Overview</span> 
+        <span data-ng-if="callingContext != 'pathways'"><translate>Overview</translate></span> 
         <div data-ng-if="callingContext == 'pathways'" class="pathway-analysis-header">
-         <p class="summary-header">Enrichment Analysis Input</p>
+         <p class="summary-header"><translate>Enrichment Analysis Input</translate></p>
         </div>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Universe</th>
-                    <th class="text-right"># Gene sets in Universe</th>
-                    <th class="text-right"># Gene sets in overlap</th>
-                    <th class="text-right"># Genes in Universe</th>
-                    <th class="text-right" data-tooltip="{{TooltipText.ENRICHMENT.OVERVIEW_GENES_OVERLAP}}"><abbr># Genes in overlap</abbr></th>
-                    <th class="text-right" data-tooltip="{{TooltipText.ENRICHMENT.INPUT_GENES}}"><abbr># Input genes</abbr></th>
+                    <th><translate>Universe</translate></th>
+                    <th class="text-right"><translate># Gene sets in Universe</translate></th>
+                    <th class="text-right"><translate># Gene sets in overlap</translate></th>
+                    <th class="text-right"><translate># Genes in Universe</translate></th>
+                    <th class="text-right" data-tooltip="{{TooltipText.ENRICHMENT.OVERVIEW_GENES_OVERLAP}}"><abbr><translate># Genes in overlap</translate></abbr></th>
+                    <th class="text-right" data-tooltip="{{TooltipText.ENRICHMENT.INPUT_GENES}}"><abbr><translate># Input genes</translate></abbr></th>
                 </tr>
             </thead>
             <tbody>
@@ -54,7 +57,7 @@
             </tbody>
         </table>
         <br />
-        <span>Original Query:</span>
+        <span><translate>Original Query:</translate></span>
         <div>
             <a href="/search/g?filters={{encode(item.query.filters)}}&genes={{sortParams}}">
                 <query-display data-filters="item.query.filters"></query-display>
@@ -64,10 +67,10 @@
         <div data-ng-if="callingContext != 'pathways'">
             <span>
                 <span class="alert-error" data-ng-if="item.overview.overlapGeneCount === 0 && item.results.length === 0">
-                    Your input genes are not annotated in any of the gene sets involved in the selected Universe.
+                    <translate>Your input genes are not annotated in any of the gene sets involved in the selected Universe.</translate>
                 </span>
                 <span class="alert-error" data-ng-if="item.overview.overlapGeneCount > 0 && item.results.length === 0">
-                    0 enriched gene set with FDR &le; {{item.params.fdr}}. You may increase the FDR q-value threshold and launch Enrichment Analysis again.
+                    <translate>0 enriched gene set with FDR &le; {{item.params.fdr}}. You may increase the FDR q-value threshold and launch Enrichment Analysis again.</translate>
                 </span>
     
                  <p>
@@ -75,25 +78,27 @@
                       data-ng-if="item.results.length > 0 && callingContext != 'pathways' && item.params.universe == 'REACTOME_PATHWAYS'">
                       <span class="action-item">
                         <i class="icon-spread"></i>
-                          
-                            Open In <a href="/pathways/{{item.id}}"
-                            title="Click to open in Pathwayviewer">Pathway Viewer
-                          </a>
+                            <translate>
+                                Open In 
+                                <a href="/pathways/{{item.id}}" title="{{'Click to open in Pathwayviewer' | translate}}">
+                                Pathway Viewer
+                                </a>
+                            </translate>
                         </span>
                   </span>
                 </p>
                 <br />
                 <span data-ng-if="item.params.maxGeneSetCount < item.overview.overlapFdrGeneSetCount && item.results.length > 0">
-                    Top <strong>{{item.params.maxGeneSetCount | number}}</strong> gene sets out of <strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched gene sets with FDR &le; <strong>{{item.params.fdr}}</strong>
+                    <translate has-markup>Top <strong>{{item.params.maxGeneSetCount | number}}</strong> gene sets out of <strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched gene sets with FDR &le; <strong>{{item.params.fdr}}</strong></translate>
                 </span>
                 <span data-ng-if="item.params.maxGeneSetCount >= item.overview.overlapFdrGeneSetCount && item.results.length > 0">
-                    <strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched gene sets with <abbr data-tooltip="{{TooltipText.ENRICHMENT.FDR}}">FDR</abbr> &le; <strong>{{item.params.fdr}}</strong>
+                    <translate has-markup><strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched gene sets with <abbr data-tooltip="{{TooltipText.ENRICHMENT.FDR}}">FDR</abbr> &le; <strong>{{item.params.fdr}}</strong></translate>
                 </span>            
           
                 <span class="t_tools" data-ng-if="item.results.length > 0">
                     <span class="t_tools__tool"
                         data-tooltip-placement="left"
-                        data-tooltip="Export Table as TSV"
+                        data-tooltip="{{'Export Table as TSV' | translate}}"
                         data-ng-click="exportEnrichment(item.id)"><i class="icon-file"></i></span>
                 </span>
             </span>
@@ -102,22 +107,22 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES}}"><abbr># Genes</abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES_OVERLAP}}"><abbr># Genes in overlap</abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_DONORS}}"><abbr># Donors affected</abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_MUTATIONS}}"><abbr># Mutations</abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_EXPECTED}}"><abbr>Expected</abbr></th>
+                        <th><translate>Name</translate></th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES}}"><abbr><translate># Genes</translate></abbr></th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES_OVERLAP}}"><abbr><translate># Genes in overlap</translate></abbr></th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_DONORS}}"><abbr><translate># Donors affected</translate></abbr></th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_MUTATIONS}}"><abbr><translate># Mutations</translate></abbr></th>
+                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_EXPECTED}}"><abbr><translate>Expected</translate></abbr></th>
                         <th style="cursor: pointer"
                             data-ng-click="predicate='pvalue'; reverse=!reverse">
-                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_PVALUE}}">P-Value</abbr>
+                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_PVALUE}}"><translate>P-Value</translate></abbr>
                             <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='pvalue'" class="icon-sort"></i>
                             <i data-ng-if="predicate=='pvalue'&& !reverse" class="icon-sort-up"></i>
                             <i data-ng-if="predicate=='pvalue'&& reverse" class="icon-sort-down"></i>
                         </th>
                         <th style="cursor: pointer"
                             data-ng-click="predicate='adjustedPValue'; reverse=!reverse">
-                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}">Adjusted P-Value</abbr>
+                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}"><translate>Adjusted P-Value</translate></abbr>
                             <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='adjustedPValue'" class="icon-sort"></i>
                             <i data-ng-if="predicate=='adjustedPValue'&&!reverse" class="icon-sort-up"></i>
                             <i data-ng-if="predicate=='adjustedPValue'&&reverse" class="icon-sort-down"></i>

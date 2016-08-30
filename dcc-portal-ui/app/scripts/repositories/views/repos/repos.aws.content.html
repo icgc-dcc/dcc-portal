@@ -1,41 +1,62 @@
 <p class="indent">
-  ICGC and Amazon have partnered to offer low-cost and scalable computing solutions for analysing ICGC data 
-  on <a href="https://aws.amazon.com/ec2/" target="_blank"><i class="icon-external-link"></i>AWS EC2</a>. 
-  Raw read data, genome alignments, and associated metadata produced by the <a href="/pcawg">ICGC PanCancer Analysis of Whole 
-  Genomes (PCAWG) study</a> in addition to data submitted by ICGC projects to the 
-  <a href="https://www.ebi.ac.uk/ega/" target="_blank"><i class="icon-external-link"></i>European Genome Archive (EGA)</a> 
-  is periodically gathered, curated and incrementally uploaded to Amazon S3 for the benefit of the cancer 
-  research community. An up-to-date summary of the repository's data content is provided on the right. Our 
-  <a href="http://docs.icgc.org/cloud/guide/"><i class="icon-external-link"></i>user guide</a> provides step-by-step instructions on how to access and analyse ICGC data on AWS. This data and
-  associated search and access tools is managed by the ICGC Data Coordination Center (DCC). Read-level data 
-  is in the controlled tier, and you will need to obtain approval from the <a href="https://icgc.org/daco" target="_blank"><i class="icon-external-link"></i>ICGC Data Access Compliance Office 
-  (DACO)</a> in order to obtain the decryption keys necessary to access this data.
+  <translate has-markup>
+    ICGC and Amazon have partnered to offer low-cost and scalable computing solutions for analysing ICGC data 
+    on <a href="https://aws.amazon.com/ec2/" target="_blank"><i class="icon-external-link"></i>AWS EC2</a>.
+  </translate>
+  <translate has-markup>
+    Raw read data, genome alignments, and associated metadata produced by the <a href="/pcawg">ICGC PanCancer Analysis of Whole 
+    Genomes (PCAWG) study</a> in addition to data submitted by ICGC projects to the 
+    <a href="https://www.ebi.ac.uk/ega/" target="_blank"><i class="icon-external-link"></i>European Genome Archive (EGA)</a> 
+    is periodically gathered, curated and incrementally uploaded to Amazon S3 for the benefit of the cancer 
+    research community.
+  </translate>
+  <translate>An up-to-date summary of the repository's data content is provided on the right.</translate>
+  <translate has-markup>
+    Our <a href="http://docs.icgc.org/cloud/guide/"><i class="icon-external-link"></i>user guide</a> provides step-by-step instructions on how to access and analyse ICGC data on AWS.
+  </translate>
+  <translate>
+    This data and associated search and access tools is managed by the ICGC Data Coordination Center (DCC).
+  </translate>
+  <translate has-markup>
+    Read-level data is in the controlled tier, and you will need to obtain approval from the 
+    <a href="https://icgc.org/daco" target="_blank"><i class="icon-external-link"></i>ICGC Data Access Compliance Office (DACO)</a> 
+    in order to obtain the decryption keys necessary to access this data.
+  </translate>
 </p>  
 <p style="text-indent: initial;">
-  <strong>The data produced by the PCAWG project, including somatic mutations, is subject to a publication embargo.</strong> 
-  Please see the <a href="/pcawg#embargo">PCAWG publication and embargo policy</a> for the embargo terms.
+  <strong><translate>The data produced by the PCAWG project, including somatic mutations, is subject to a publication embargo.</translate></strong> 
+  <translate has-markup>Please see the <a href="/pcawg#embargo">PCAWG publication and embargo policy</a> for the embargo terms.</translate>
     
     
     
 </p>
 
 <div class="repo-controls-container">
-        <a class="t_button btn" data-ng-show="repositoryCtrl.hasSummaryData()" data-ng-href="/repositories?filters={{repositoryCtrl.getFilterQueryStr()}}"><i class="icon-search"></i> Search Respository</a>
-        <a class="t_button btn" data-ng-href="http://docs.icgc.org/cloud/guide/"><i class="icon-book-open"></i>User Guide</a>
+        <a class="t_button btn" data-ng-show="repositoryCtrl.hasSummaryData()" data-ng-href="/repositories?filters={{repositoryCtrl.getFilterQueryStr()}}"><i class="icon-search"></i> <translate>Search Respository</translate></a>
+        <a class="t_button btn" data-ng-href="http://docs.icgc.org/cloud/guide/"><i class="icon-book-open"></i><translate>User Guide</translate></a>
         <!-- a class="t_button btn" data-ng-href="/icgc-in-the-cloud/repositories/{{repoContextID}}/guide"><i class="icon-book-open"></i>User Guide</a -->
 </div>
 
-<h3>PCAWG Workflows</h3>
+<h3><translate>PCAWG Workflows</translate></h3>
 <div class="confine-column">
-The PCAWG project has created standardized, whole genome workflows for alignment using BWA-Mem and variant calling using best practice processes from the 
-<a href="https://www.sanger.ac.uk/" target="_blank"><i class="icon-external-link"></i>Sanger Institute</a>, the <a href="https://www.broadinstitute.org/" target="_blank"><i class="icon-external-link"></i>Broad Institute</a>, 
-and <a href="https://www.dkfz.de/" target="_blank"><i class="icon-external-link"></i>DKFZ</a> / <a href="http://www.embl.de/" target="_blank"><i class="icon-external-link"></i>EMBL</a>. These are made available to the research community via a &quot;launcher&quot; AMI that allows users to analyze 
-their data using the same workflows. Currently supporting the BWA alignment workflow, this system makes it easy for users to load their data into AWS S3, 
-launch many VMs simultaneously to analyze data in parallel, and write the resulting alignments back to S3.  Over time, the full range of PanCancer workflows 
-will be made available.
+  <translate>
+    The PCAWG project has created standardized, whole genome workflows for alignment using BWA-Mem and variant calling using best practice processes from the 
+    <a href="https://www.sanger.ac.uk/" target="_blank"><i class="icon-external-link"></i>Sanger Institute</a>, the <a href="https://www.broadinstitute.org/" target="_blank"><i class="icon-external-link"></i>Broad Institute</a>, 
+    and <a href="https://www.dkfz.de/" target="_blank"><i class="icon-external-link"></i>DKFZ</a> / <a href="http://www.embl.de/" target="_blank"><i class="icon-external-link"></i>EMBL</a>.
+  </translate>
+  <translate>
+    These are made available to the research community via a "launcher" AMI that allows users to analyze their data using the same workflows.
+  </translate>
+  <translate>
+    Currently supporting the BWA alignment workflow, this system makes it easy for users to load their data into AWS S3, 
+    launch many VMs simultaneously to analyze data in parallel, and write the resulting alignments back to S3.
+  </translate>
+  <translate>
+    Over time, the full range of PanCancer workflows will be made available.
+  </translate>
 
-<div class="repo-controls-container" style="margin-top: 1rem;">
-   <a class="t_button btn" data-ng-href="https://github.com/ICGC-TCGA-PanCancer/cli/wiki" target="_blank"><i class="icon-book-open"></i>Workflow Launcher Quick Start</a>
-</div>
+  <div class="repo-controls-container" style="margin-top: 1rem;">
+    <a class="t_button btn" data-ng-href="https://github.com/ICGC-TCGA-PanCancer/cli/wiki" target="_blank"><i class="icon-book-open"></i><translate>Workflow Launcher Quick Start</translate></a>
+  </div>
 
 </div>

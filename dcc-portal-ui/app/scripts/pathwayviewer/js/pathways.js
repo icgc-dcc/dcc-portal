@@ -58,9 +58,9 @@
   
   module.controller('PathwaysController', function ($scope, $q, Page, EnrichmentData, Restangular,
                                                     GeneSetService, GeneSetHierarchy, GeneSets,
-                                                    GeneSetVerificationService, TooltipText,
-                                                    LocationService, EnrichmentService, SetService,
-                                                    PathwaysConstants, RestangularNoCache, PathwayDataService) {
+                                                    TooltipText, EnrichmentService, SetService, 
+                                                    PathwaysConstants, RestangularNoCache, PathwayDataService, 
+                                                    gettextCatalog) {
 
 
     var _selectedPathway = null;
@@ -113,7 +113,7 @@
     function _init() {
       Page.stopWork();
       Page.setPage('entity');
-      Page.setTitle('Enrichment Analysis Pathway Viewer');
+      Page.setTitle(gettextCatalog.getString('Enrichment Analysis Pathway Viewer'));
 
       $scope.TooltipText = TooltipText;
 

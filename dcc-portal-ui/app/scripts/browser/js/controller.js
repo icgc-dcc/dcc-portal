@@ -21,8 +21,8 @@
   var module = angular.module('icgc.browser.controllers', []);
 
   module.controller('BrowserController',
-    function ($scope, $state, Page, Genes, Mutations, GMService, Restangular, LocationService) {
-      Page.setTitle('Genome Viewer');
+    function ($scope, $state, Page, Genes, Mutations, GMService, Restangular, LocationService, gettextCatalog) {
+      Page.setTitle(gettextCatalog.getString('Genome Viewer'));
       Page.setPage('browser');
 
       var pageSize = 20, done = false;

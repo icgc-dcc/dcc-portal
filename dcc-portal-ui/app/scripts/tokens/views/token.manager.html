@@ -1,32 +1,56 @@
 <div class="modal-content token-manager">
    <div class="modal-header clearfix">
-      <h3 class="pull-left"><i class="icon-key"></i>Token Manager</h3>
+      <h3 class="pull-left"><i class="icon-key"></i><translate>Token Manager</translate></h3>
    </div>
    <div class="modal-body light">
-      <h4>Overview </h4>
+      <h4><translate>Overview</translate> </h4>
       <p>
-         Personal access tokens function like ordinary OAuth access tokens, similar to those offered by <a href="https://github.com/settings/tokens" target="_blank"><i class="icon-external-link"></i>GitHub.com</a>. They can be used instead of a password to access ICGC resources. Tokens allow you to associate <em>scopes</em> which limit access to that needed for the target environment.
-         From this page, you can create your own personal API tokens for use in scripts and on the command line. This feature is required when using the <a href="/software" target="_blank">Storage Client</a> or programatically <a href="http://docs.icgc.org/portal/api" target="_blank"><i class="icon-external-link"></i>downloading controlled access data</a> from the Data Portal.
+        <translate has-markup>
+          Personal access tokens function like ordinary OAuth access tokens, similar to those offered by <a href="https://github.com/settings/tokens" target="_blank"><i class="icon-external-link"></i>GitHub.com</a>.
+        </translate>
+        <translate>They can be used instead of a password to access ICGC resources.</translate>
+        <translate has-markup>
+          Tokens allow you to associate <em>scopes</em> which limit access to that needed for the target environment.
+        </translate>
+        <translate>
+          From this page, you can create your own personal API tokens for use in scripts and on the command line.
+        </translate>
+        <translate has-markup>
+          This feature is required when using the <a href="/software" target="_blank">Storage Client</a> or programatically <a href="http://docs.icgc.org/portal/api" target="_blank"><i class="icon-external-link"></i>downloading controlled access data</a> from the Data Portal.
+        </translate>
       </p>
       <div data-ng-if="activeTokens && activeTokens.length > 0" class="alert-w-icon alert-info" style="margin: 0rem auto 1.5rem auto;">
          <div class="alert-icon-container">
             <i class="icon-lock"></i>
          </div>
          <p class="alert-icon-body">
-            Please note that access tokens are associated with your user credentials so you must <span style="text-decoration: underline">never</span> share your personal tokens with anyone.
+            <translate has-markup>
+              Please note that access tokens are associated with your user credentials so you must <span style="text-decoration: underline">never</span> share your personal tokens with anyone.
+            </translate>
          </p>
       </div>
-      <h4>Generate new tokens</h4>
+      <h4><translate>Generate new tokens</translate></h4>
       <p>
-         Select the desired set of scopes below and click "Generate". You may also enter a description to remind yourself what the token is for. Your new token will be shown in the next section. Note that there is currently a limit of one token per unique set of scopes.
+        <translate>
+          Select the desired set of scopes below and click "Generate". You may also enter a description to remind yourself what the token is for.
+        </translate>
+        <translate>
+          Your new token will be shown in the next section. Note that there is currently a limit of one token per unique set of scopes.
+        </translate>
       </p>
-      <div data-ng-if="!cloudAccess" class="alert alert-info" role="alert">To generate tokens for cloud based environments you will require <a href="http://docs.icgc.org/portal/access"><i class="icon-external-link"></i>DACO cloud access</a>.</div>
+      <div data-ng-if="!cloudAccess" class="alert alert-info" role="alert">
+        <translate has-markup>
+          To generate tokens for cloud based environments you will require <a href="http://docs.icgc.org/portal/access"><i class="icon-external-link"></i>DACO cloud access</a>.
+        </translate>
+      </div>
 
       <table class="token-form">
          <tr>
             <td style="width: 70%">
-               <div>Select Required Scopes</div>
-               <div data-ng-if="!availableScopes" class="loading"><i class="icon-spinner icon-spin"></i> Loading available scopes...</div>
+               <div><translate>Select Required Scopes</translate></div>
+               <div data-ng-if="!availableScopes" class="loading">
+                 <i class="icon-spinner icon-spin"></i> 
+                 <translate>Loading available scopes...</translate></div>
                <ul data-ng-if="availableScopes" class="token-scopes">
                   <li data-ng-repeat="scope in availableScopes">
                      <span data-ng-click="toggleScope(scope)">
@@ -40,27 +64,36 @@
                </ul>
             </td>
             <td>
-               <div>Enter a Description</div>
-               <textarea rows="2" data-ng-model="tokenDescription" maxlength="200" placeholder="What is this token for?"></textarea>
+               <div><translate>Enter a Description</translate></div>
+               <textarea rows="2" 
+                data-ng-model="tokenDescription" maxlength="200" 
+                placeholder="{{'What is this token for?' | translate}}"></textarea>
             </td>
          </tr>
          <tr>
-            <td colspan="2"><button class="t_button" data-ng-click="createToken()" data-ng-disabled="selected.length === 0">Generate</button></td>
+            <td colspan="2"><button class="t_button" data-ng-click="createToken()" data-ng-disabled="selected.length === 0"><translate>Generate</translate></button></td>
          </tr>
       </table>
 
-      <h4>Manage Active Tokens</h4>
+      <h4><translate>Manage Active Tokens</translate></h4>
       <p>
-         The following are your <strong>{{activeTokens.length}}</strong> active token(s). You may revoke a token if it is no longer needed or you believe it has been compromised.
+        <translate has-markup>
+          The following are your <strong>{{activeTokens.length}}</strong> active token(s).
+        </translate>
+        <translate>
+          You may revoke a token if it is no longer needed or you believe it has been compromised.
+        </translate>
       </p>
       <div>
-         <div data-ng-if="!activeTokens" class="loading"><i class="icon-spinner icon-spin"></i> Loading tokens...</div>
+         <div data-ng-if="!activeTokens" class="loading"><i class="icon-spinner icon-spin"></i> 
+           <translate>Loading tokens...</translate>
+         </div>
          <table data-ng-if="activeTokens" class="table table-info">
             <thead>
-               <th>Token Id</th>
-               <th>Description</th>
-               <th>Scopes</th>
-               <th>Expires in</th>
+               <th><translate>Token Id</translate></th>
+               <th><translate>Description</translate></th>
+               <th><translate>Scopes</translate></th>
+               <th><translate>Expires in</translate></th>
                <th>&nbsp;</th>
             </thead>
             <tbody>
@@ -68,7 +101,7 @@
                   <td colspan="5" class="text-center"><i class="icon-spin icon-spinner" style="font-size:3rem"></i></td>
                </tr>
                <tr data-ng-if="activeTokens.length === 0 && processing===false">
-                  <td colspan="5">No active tokens</td>
+                  <td colspan="5"><translate>No active tokens</translate></td>
                </tr>
                <tr data-ng-repeat="token in activeTokens | orderBy:'expiresIn':true" data-ng-if="processing===false">
                   <td class="token-cell">
@@ -89,7 +122,7 @@
                   <td>
                      <span data-ng-repeat="scope in token.scope" class="badge token-badge" style="font-weight: normal">{{scope}}</span>
                   </td>
-                  <td>{{ (token.expiresIn / (60*60*24)) | number:2 }} days</td>
+                  <td>{{ (token.expiresIn / (60*60*24)) | number:2 }} <translate>days</translate></td>
                   <td style="text-align: center">
                      <span class="t_tools__tool">
                         <i class="icon-trash" data-ng-click="deleteToken(token.id)"></i>
@@ -101,6 +134,6 @@
       </div>
    </div>
    <div class="modal-footer">
-      <button class="t_button" data-ng-click="cancel()">Close</button>
+      <button class="t_button" data-ng-click="cancel()"><translate>Close</translate></button>
    </div>
 </div>

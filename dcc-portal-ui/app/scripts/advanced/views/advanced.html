@@ -1,20 +1,20 @@
-<h1 data-ui-scrollfix=79><span class="t_badge t_badge_icon t_badge__advanced"><i class="icon-search"></i></span>Advanced Search</h1>
+<h1 data-ui-scrollfix=79><span class="t_badge t_badge_icon t_badge__advanced"><i class="icon-search"></i></span><translate>Advanced Search</translate></h1>
 <aside class="t_sidebar">
     <div class="t_tabs">
         <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="AdvancedCtrl.state.setFacetTab('donor')"
              data-ng-class="{active: AdvancedCtrl.state.isFacetTab('donor')}">
             <span data-ng-if="donors.state == 'syncing'"><i class="icon-spinner icon-spin"></i></span>
-            <span data-ng-if="donors.state != 'syncing'">Donors</span>
+            <span data-ng-if="donors.state != 'syncing'"><translate>Donors</translate></span>
         </div>
         <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="AdvancedCtrl.state.setFacetTab('gene')"
              data-ng-class="{active: AdvancedCtrl.state.isFacetTab('gene')}">
             <span data-ng-if="genes.state == 'syncing'"><i class="icon-spinner icon-spin"></i></span>
-            <span data-ng-if="genes.state != 'syncing'">Genes</span>
+            <span data-ng-if="genes.state != 'syncing'"><translate>Genes</translate></span>
         </div>
         <div class="t_tabs__tab t_tabs__tab__mutation" data-ng-click="AdvancedCtrl.state.setFacetTab('mutation')"
              data-ng-class="{active: AdvancedCtrl.state.isFacetTab('mutation')}">
             <span data-ng-if="mutations.state == 'syncing'"><i class="icon-spinner icon-spin"></i></span>
-            <span data-ng-if="mutations.state != 'syncing'">Mutations</span>
+            <span data-ng-if="mutations.state != 'syncing'"><translate>Mutations</translate></span>
         </div>
     </div>
     <div style="position: relative; margin-right: -2rem">
@@ -43,21 +43,21 @@
     <div class="t_tabs t_tabs__isolated">
         <div class="t_tabs__tab t_tabs__tab__donor"
              data-ng-class="{active: AdvancedCtrl.state.isTab('donor')}" data-nested data-href="search">
-            Donors<br>
+            <translate>Donors</translate><br>
             <small data-ng-hide="AdvancedCtrl.Donor.isLoading" id="adv-donor-count">{{AdvancedCtrl.Donor.donors.pagination.total | number}}
             </small>
             <small data-ng-show="AdvancedCtrl.Donor.isLoading"><i class="icon-spinner icon-spin"></i></small>
         </div>
         <div class="t_tabs__tab t_tabs__tab__gene"
              data-ng-class="{active: AdvancedCtrl.state.isTab('gene')}" data-nested data-href="search/g">
-            Genes<br>
+            <translate>Genes</translate><br>
             <small data-ng-hide="AdvancedCtrl.Gene.isLoading" id="adv-gene-count">{{AdvancedCtrl.Gene.genes.pagination.total | number}}
             </small>
             <small data-ng-show="AdvancedCtrl.Gene.isLoading"><i class="icon-spinner icon-spin"></i></small>
         </div>
         <div class="t_tabs__tab t_tabs__tab__mutation"
              data-ng-class="{active: AdvancedCtrl.state.isTab('mutation')}" data-nested data-href="search/m">
-            Mutations<br>
+            <translate>Mutations</translate><br>
             <small data-ng-hide="AdvancedCtrl.Mutation.isLoading" id="adv-mutation-count">{{AdvancedCtrl.Mutation.mutations.pagination.total | number}}
             </small>
             <small data-ng-show="AdvancedCtrl.Mutation.isLoading"><i class="icon-spinner icon-spin"></i></small>

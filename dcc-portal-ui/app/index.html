@@ -78,37 +78,51 @@
         <header>
             <h1 style="font-size: 4rem">
                 <img style="height: 5rem; margin-bottom: -1rem" src="styles/images/icgc-logo.png">
-                <span id="icgc">ICGC</span> Data Portal</h1>
+                <translate has-markup><span id="icgc">ICGC</span> Data Portal</translate>
+            </h1>
         </header>
         <div class="content">
             <h1><span class="t_badge t_badge_icon" style="background: #dc322f"><i class="icon-attention"></i></span>
-                Javascript is required to view the ICGC Data Portal.</h1>
-            <section><h2>Please enable Javascript and reload the page.</h2></section>
+                <translate>Javascript is required to view the ICGC Data Portal.</translate></h1>
+            <section><h2><translate>Please enable Javascript and reload the page.</translate></h2></section>
         </div>
         <div class="push"></div>
     </div>
     <footer>
         <ul>
             <li class="heading">DCC</li>
-            <li><a href="/team">The Team</a></li>
-            <li><a href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">Contact Us</a></li>
+            <li><a href="/team"><translate>The Team</translate></a></li>
+            <li>
+                <a href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">
+                    <translate>Contact Us</translate>
+                </a>
+            </li>
             <li><a href="https://twitter.com/icgc_dcc">Twitter</a></li>
         </ul>
         <ul>
             <li class="heading">ICGC</li>
-            <li><a href="https://icgc.org" target="_blank">ICGC Home</a></li>
-            <li><a href="https://www.icgc.org/daco" target="_blank">Data Access</a></li>
+            <li><a href="https://icgc.org" target="_blank"><translate>ICGC Home</translate></a></li>
+            <li><a href="https://www.icgc.org/daco" target="_blank"><translate>Data Access</translate></a></li>
             <li><a href="https://www.icgc.org/icgc/goals-structure-policies-guidelines/e3-publication-policy"
-                   target="_blank">Publication Policy</a></li>
-            <li><a href="https://www.icgc.org/privacy-policy" target="_blank">Privacy Policy</a></li>
-            <li><a href="https://www.icgc.org/terms-and-conditions" target="_blank">Terms and Conditions</a></li>
+                   target="_blank"><translate>Publication Policy</translate></a></li>
+            <li>
+                <a href="https://www.icgc.org/privacy-policy" target="_blank">
+                    <translate>Privacy Policy</translate>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.icgc.org/terms-and-conditions" target="_blank">
+                    <translate>Terms and Conditions</translate>
+                </a>
+            </li>
         </ul>
         <div class="logo omega"><a href="http://oicr.on.ca/" target="_blank"><img
                 src="styles/images/OICR2logo.png"></a></div>
         <div style="clear:both"></div>
         <div>
-            <small> &copy; 2015 <a href="https://icgc.org">International Cancer Genome Consortium.</a> All Rights
-                reserved.
+            <small> &copy; 2015 
+                <a href="https://icgc.org"><translate>International Cancer Genome Consortium.</translate></a> 
+                <translate>All Rights reserved.</translate>
             </small>
         </div>
     </footer>
@@ -176,6 +190,7 @@
 <script src="bower_components/angularjs-toaster/toaster.js"></script>
 <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
 <script src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+<script src="bower_components/angular-gettext/dist/angular-gettext.min.js"></script>
 <!-- endbuild -->
 
 <!-- ********************************************************* -->
@@ -378,6 +393,7 @@
 <script src="scripts/beacon/js/beacon.js"></script>
 <script src="scripts/tokens/js/tokens.js"></script>
 <script src="scripts/pancancer/js/pancancer.js"></script>
+<script src="scripts/translations/js/translations.js"></script>
 <!-- endbuild -->
 
 <!-- --------------------------------------------------------- -->

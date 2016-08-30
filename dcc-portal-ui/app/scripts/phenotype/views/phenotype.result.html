@@ -1,24 +1,27 @@
-<h3 style="margin-bottom:0">Survival Analysis / Phenotype Comparison
+<h3 style="margin-bottom:0">
+    <translate>Survival Analysis / Phenotype Comparison</translate>
     <span style="font-size:1rem" class="pull-right" data-ng-if="!isDeprecated">
         <share-button></share-button>
     </span>
 </h3>
 
 <div data-ng-if="isDeprecated" class="alert-error">
-    <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
+    <i class="icon-attention"></i>
+    <translate>This analysis is deprecated.</translate>
+    <translate>This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.</translate>
 </div>
 
 <i class="icon-spin icon-spinner" ng-class="{'ng-hide': survivalAnalysisDataSets.overall.length}"></i>
 
 <div data-ng-if="survivalAnalysisDataSets.overall.length" data-disable-events="isDeprecated">
 
-    <div>Your selected donor sets</div>
+    <div><translate>Your selected donor sets</translate></div>
     <div class="wide">
         <table class="table">
             <thead>
                 <tr>
-                    <th>Set name</th>
-                    <th class="text-right"># Donors</th>
+                    <th><translate>Set Name</translate></th>
+                    <th class="text-right"><translate># Donors</translate></th>
                 </tr>
             </thead>
             <tbody>
@@ -33,7 +36,7 @@
     <br>
 
     <div class="survival-analysis-wrapper">
-        <strong>Survival analysis</strong>
+        <strong><translate>Survival analysis</translate></strong>
 
         <div class="container-fluid">
             <div class="row">
@@ -58,24 +61,21 @@
                                 <sub>( S{{($index + 1)}} )</sub>
                             </div>
                             <small>
-                                Donor count: {{setMap[setIds[$index]].count | number}}
+                                <translate>Donor count</translate>: {{setMap[setIds[$index]].count | number}}
                             </small>
                         </div>
                     </tr>
                 </tr>
                 <tr>
                     <th>
-                        <abbr data-tooltip="
-                                    Criteria to include donor from your sets in the survival analysis: <br>
-                                    - donor does not overlap between your selected donor sets <br>
-                                    - donor has complete data for the purpose of the analysis (event and time-to-event) <br>
-                                ">Donors included in Analysis</abbr>
+                        <abbr data-tooltip="{{'Criteria to include donor from your sets in the survival analysis: <br> - donor does not overlap between your selected donor sets <br> - donor has complete data for the purpose of the analysis (event and time-to-event) <br>' | translate}}">
+                            <translate>Donors included in Analysis</translate></abbr>
                     </th>
                     <th
                         data-ng-repeat-start="donorSetId in setIds"
                         class="text-right"
                     >
-                        # Donors
+                        <translate># Donors</translate>
                     </th>
                     <th
                         class="text-right"
@@ -86,11 +86,11 @@
             <tbody>
                 <tr>
                     <td>
-                        Overall Survival Analysis
+                        <translate>Overall Survival Analysis</translate>
                         <i
                             class="icon-file t_tools t_tools__tool pull-right"
                             ng-click="exportDonors('overall', survivalAnalysisDataSets.overall)"
-                            data-tooltip="Export data for {{ activeSurvivalGraph === 'overall' ? 'overall' : 'disease free' }} survival analysis as TSV"
+                            data-tooltip="{{ 'Export data for [[ survivalGraph ]] survival analysis as TSV' | translate | subDelimiters:{survivalGraph : activeSurvivalGraph === 'overall' ? 'overall' : 'disease free'} }}"
                             data-tooltip-placement="left"
                         ></i>
                     </td>
@@ -114,11 +114,11 @@
                 </tr>
                 <tr>
                     <td>
-                        Disease Free Survival Analysis
+                        <translate>Disease Free Survival Analysis</translate>
                         <i
                             class="icon-file t_tools t_tools__tool pull-right"
                             ng-click="exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
-                            data-tooltip="Export data for {{ activeSurvivalGraph === 'overall' ? 'overall' : 'disease free' }} survival analysis as TSV"
+                            data-tooltip="{{'Export data for [[ survivalGraph ]] survival analysis as TSV' | translate | subDelimiters:{survivalGraph : activeSurvivalGraph === 'overall' ? 'overall' : 'disease free'} }}"
                             data-tooltip-placement="left"
                         ></i>
                     </td>
@@ -159,7 +159,8 @@
                         target="_blank"
                     >
                         <small>
-                            Open in new tab. <i class="icon-external-link"></i>
+                            <translate>Open in new tab.</translate>
+                            <i class="icon-external-link"></i>
                         </small>
                     </a>
                     </div>
@@ -175,14 +176,14 @@
                     active: activeSurvivalGraph === 'overall'
                 }"
                 ng-click="activeSurvivalGraph = 'overall'"
-            >Overall Survival</div>
+            ><translate>Overall Survival</translate></div>
             <div
                 class="t_tabs__tab"
                 ng-class="{
                     active: activeSurvivalGraph === 'diseaseFree'
                 }"
                 ng-click="activeSurvivalGraph = 'diseaseFree'"
-            >Disease Free Survival</div>
+            ><translate>Disease Free Survival</translate></div>
         </div>
 
         <div class="survival-graphs">
@@ -217,7 +218,7 @@
 
     <br>
     <div data-ng-class="{wide : setIds.length === 2}"> 
-        <strong>Gender comparison</strong>
+        <strong><translate>Gender comparison</translate></strong>
         <span data-toolbar data-dl="phenotype-gender"></span>
     </div>
 
@@ -228,24 +229,24 @@
                     <th colspan="1"></th>
                     <th class="multi-line-heading" colspan="2">
                         <span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span><br>
-                        <small>Donor count: {{setMap[setIds[0]].count | number}}</small>
+                        <small><translate>Donor count:</translate> {{setMap[setIds[0]].count | number}}</small>
                     </th>
                     <th class="multi-line-heading" colspan="2">
                         <span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span><br>
-                        <small>Donor count: {{setMap[setIds[1]].count | number}}</small>
+                        <small><translate>Donor count:</translate> {{setMap[setIds[1]].count | number}}</small>
                     </th>
                     <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]">
                         <span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span><br>
-                        <small>Donor count: {{setMap[setIds[2]].count | number}}</small>
+                        <small><translate>Donor count:</translate> {{setMap[setIds[2]].count | number}}</small>
                     </th>
                 </tr>
                 <tr class="subhead">
-                    <th>Gender</th>
-                    <th class="text-right"># Donors</th>
+                    <th><translate>Gender</translate></th>
+                    <th class="text-right"><translate># Donors</translate></th>
                     <th class="text-right">%</th>
-                    <th class="text-right"># Donors</th>
+                    <th class="text-right"><translate># Donors</translate></th>
                     <th class="text-right">%</th>
-                    <th class="text-right" data-ng-if="setIds[2]"># Donors</th>
+                    <th class="text-right" data-ng-if="setIds[2]"><translate># Donors</translate></th>
                     <th class="text-right" data-ng-if="setIds[2]">%</th>
                 </tr>
             </thead>
@@ -274,14 +275,14 @@
     <br>
     <div class="clearfix"></div>
     <div class="half">
-        <grouped-bar data-items="gender.uiGraph" ylabel="% Donors" height="200" format="percentage" data-colours="seriesColours"></grouped-bar>
+        <grouped-bar data-items="gender.uiGraph" ylabel="{{'% Donors' | translate}}" height="200" format="percentage" data-colours="seriesColours"></grouped-bar>
     </div>
     <div class="clearfix"></div>
 
 
     <br>
     <div data-ng-class="{wide: setIds.length === 2}">
-        <strong>Vital status comparison</strong>
+        <strong><translate>Vital status comparison</translate></strong>
         <span data-toolbar data-dl="phenotype-vital-status"></span>
     </div>
     <div data-ng-class="{wide: setIds.length === 2}"> 
@@ -291,24 +292,24 @@
                     <th colspan="1"></th>
                     <th class="multi-line-heading" colspan="2">
                         <span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span><br>
-                        <small>Donor count: {{setMap[setIds[0]].count | number}}</small>
+                        <small><translate>Donor count:</translate> {{setMap[setIds[0]].count | number}}</small>
                     </th>
                     <th class="multi-line-heading" colspan="2">
                         <span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span><br>
-                        <small>Donor count: {{setMap[setIds[1]].count | number}}</small>
+                        <small><translate>Donor count:</translate> {{setMap[setIds[1]].count | number}}</small>
                     </th>
                     <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]">
                         <span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span><br>
-                        <small>Donor count: {{setMap[setIds[2]].count | number}}</small>
+                        <small><translate>Donor count:</translate> {{setMap[setIds[2]].count | number}}</small>
                     </th>
                 </tr>
                 <tr class="subhead">
-                    <th>Status</th>
-                    <th class="text-right"># Donors</th>
+                    <th><translate>Status<translate></th>
+                    <th class="text-right"><translate># Donors</translate></th>
                     <th class="text-right">%</th>
-                    <th class="text-right"># Donors</th>
+                    <th class="text-right"><translate># Donors</translate></th>
                     <th class="text-right">%</th>
-                    <th class="text-right" data-ng-if="setIds[2]"># Donors</th>
+                    <th class="text-right" data-ng-if="setIds[2]"><translate># Donors</translate></th>
                     <th class="text-right" data-ng-if="setIds[2]">%</th>
                 </tr>
             </thead>
@@ -337,14 +338,14 @@
     <br>
     <div class="clearfix"></div>
     <div class="half">
-        <grouped-bar data-items="vital.uiGraph" ylabel="% Donors" format="percentage" height="200" data-colours="seriesColours"></grouped-bar>
+        <grouped-bar data-items="vital.uiGraph" ylabel="{{'% Donors' | translate}}" format="percentage" height="200" data-colours="seriesColours"></grouped-bar>
     </div>
     <div class="clearfix"></div>
 
 
     <br>
     <div data-ng-class="{wide: setIds.length === 2}">
-        <strong>Age at diagnosis comparison</strong>
+        <strong><translate>Age at diagnosis comparison</translate></strong>
         <span data-toolbar data-dl="phenotype-age"></span>
     </div>
     <div data-ng-class="{wide: setIds.length === 2}"> 
@@ -353,25 +354,25 @@
                 <tr>
                     <th colspan="1"></th>
                     <th class="multi-line-heading" colspan="2"><span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span>
-                        <br><small>Donor count: {{setMap[setIds[0]].count | number}}</small>
-                        <br><small>Average age: {{meanAge[0] | number:2}}</small>
+                        <br><small><translate>Donor count:</translate> {{setMap[setIds[0]].count | number}}</small>
+                        <br><small><translate>Average age:</translate> {{meanAge[0] | number:2}}</small>
                     </th>
                     <th class="multi-line-heading" colspan="2"><span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span>
-                        <br><small>Donor count: {{setMap[setIds[1]].count | number}}</small>
-                        <br><small>Average age: {{meanAge[1] | number:2}}</small>
+                        <br><small><translate>Donor count:</translate> {{setMap[setIds[1]].count | number}}</small>
+                        <br><small><translate>Average age:</translate> {{meanAge[1] | number:2}}</small>
                     </th>
                     <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]"><span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span>
-                        <br><small>Donor count: {{setMap[setIds[2]].count | number}}</small>
-                        <br><small>Average age: {{meanAge[2] | number:2}}</small>
+                        <br><small><translate>Donor count:</translate> {{setMap[setIds[2]].count | number}}</small>
+                        <br><small><translate>Average age:</translate> {{meanAge[2] | number:2}}</small>
                     </th>
                 </tr>
                 <tr class="subhead">
-                    <th>Age group</th>
-                    <th class="text-right"># Donors</th>
+                    <th><translate>Age group</translate></th>
+                    <th class="text-right"><translate># Donors</translate></th>
                     <th class="text-right">%</th>
-                    <th class="text-right"># Donors</th>
+                    <th class="text-right"><translate># Donors</translate></th>
                     <th class="text-right">%</th>
-                    <th class="text-right" data-ng-if="setIds[2]"># Donors</th>
+                    <th class="text-right" data-ng-if="setIds[2]"><translate># Donors</translate></th>
                     <th class="text-right" data-ng-if="setIds[2]">%</th>
                 </tr>
             </thead>
@@ -400,7 +401,7 @@
     <br>
     <div class="clearfix"></div>
     <div data-ng-class="{wide: setIds.length === 2}"> 
-        <grouped-bar data-items="age.uiGraph" ylabel="% Donors" height="250" format="percentage" data-colours="seriesColours"></grouped-bar>
+        <grouped-bar data-items="age.uiGraph" ylabel="{{'% Donors' | translate}}" height="250" format="percentage" data-colours="seriesColours"></grouped-bar>
     </div>
     <div class="clearfix"></div>
 
@@ -416,12 +417,12 @@
             <td data-ng-if="setIds[2]">{{setMap[setIds[2]].name}} ({{setMap[setIds[2]].count}} donors)</td>
         </tr>
         <tr>
-            <td>Gender</td>
-            <td># Donors</td>
+            <td><translate>Gender</translate></td>
+            <td><translate># Donors</translate></td>
             <td>%</td>
-            <td># Donors</td>
+            <td><translate># Donors</translate></td>
             <td>%</td>
-            <td data-ng-if="setIds[2]"># Donors</td>
+            <td data-ng-if="setIds[2]"><translate># Donors</translate></td>
             <td data-ng-if="setIds[2]">%</td>
         </tr>
         <tr data-ng-repeat="row in gender.uiTable">
@@ -446,12 +447,12 @@
             <td data-ng-if="setIds[2]">{{setMap[setIds[2]].name}} ({{setMap[setIds[2]].count}} donors)</td>
         </tr>
         <tr>
-            <td>Status</td>
-            <td># Donors</td>
+            <td><translate>Status</translate></td>
+            <td><translate># Donors</translate></td>
             <td>%</td>
-            <td># Donors</td>
+            <td><translate># Donors</translate></td>
             <td>%</td>
-            <td data-ng-if="setIds[2]"># Donors</td>
+            <td data-ng-if="setIds[2]"><translate># Donors</translate></td>
             <td data-ng-if="setIds[2]">%</td>
         </tr>
         <tr data-ng-repeat="row in vital.uiTable">
@@ -476,12 +477,12 @@
             <td data-ng-if="setIds[2]">{{setMap[setIds[2]].name}} ({{setMap[setIds[2]].count}} donors, {{meanAge[2]|number:2}} average age)</td>
         </tr>
         <tr>
-            <td>Age group</td>
-            <td># Donors</td>
+            <td><translate>Age group</translate></td>
+            <td><translate># Donors</translate></td>
             <td>%</td>
-            <td># Donors</td>
+            <td><translate># Donors</translate></td>
             <td>%</td>
-            <td data-ng-if="setIds[2]"># Donors</td>
+            <td data-ng-if="setIds[2]"><translate># Donors</translate></td>
             <td data-ng-if="setIds[2]">%</td>
         </tr>
         <tr data-ng-repeat="row in age.uiTable">

@@ -99,7 +99,7 @@
    */
   module.service('SetService',
     function ($window, $location, $q, $timeout, Restangular, RestangularNoCache, API,
-              localStorageService, toaster, Extensions, Page, FilterService, RouteInfoService) {
+              localStorageService, toaster, Extensions, Page, FilterService, RouteInfoService, gettextCatalog) {
 
     var LIST_ENTITY = 'entity';
     var dataRepoUrl = RouteInfoService.get ('dataRepositories').href;
@@ -575,12 +575,17 @@
     };
 
     _service.savingToaster = function(setName){
-      return toaster.pop('warning', 'Saving ' + setName,'Please wait', 0, 'trustedHtml');
+      /// ${savedSet} is a noun
+      return toaster.pop('warning', _.template(gettextCatalog.getString('Saving ${savedSet}'))({savedSet: setName}), 
+      /// 
+        gettextCatalog.getString('Please wait'), 0, 'trustedHtml');
     };
 
     _service.saveSuccessToaster = function(setName){
-      return toaster.pop('success', setName + ' Saved',
-             'View in <a href="/analysis/sets">Data Analysis</a>', 4000, 'trustedHtml');
+      /// ${savedSet} is a noun
+      return toaster.pop('success', _.template(gettextCatalog.getString('${savedSet} Saved'))({savedSet : setName}),
+      /// 
+        gettextCatalog.getString('View in <a href="/analysis/sets">Data Analysis</a>'), 4000, 'trustedHtml');
     };
 
     // Initialize

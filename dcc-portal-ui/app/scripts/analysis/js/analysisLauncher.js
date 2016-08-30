@@ -28,7 +28,7 @@
    * - phenotype analysis
    */
   module.controller('NewAnalysisController',
-    function($scope, $modal, $location, $timeout, Page, AnalysisService, Restangular, SetService, Extensions, $q) {
+    function($scope, $modal, $location, $timeout, Page, AnalysisService, Restangular, SetService, Extensions, $q, gettextCatalog) {
 
     var _this = this,
         _isLaunchingAnalysis = false;
@@ -222,7 +222,7 @@
         },
         isTransient: true,
         type: type,
-        name: 'Brain Cancer'
+        name: gettextCatalog.getString('Brain Cancer')
       };
 
       p2 = {
@@ -231,7 +231,7 @@
         },
         isTransient: true,
         type: type,
-        name: 'Breast Cancer'
+        name: gettextCatalog.getString('Breast Cancer')
       };
 
       p3 = {
@@ -240,7 +240,7 @@
         },
         isTransient: true,
         type: type,
-        name: 'Colorectal Cancer'
+        name: gettextCatalog.getString('Colorectal Cancer')
       };
 
       var demoSetIds = [];

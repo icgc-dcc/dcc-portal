@@ -1,30 +1,33 @@
 <div data-ng-if="! AdvancedCtrl.Mutation.mutations || ! AdvancedCtrl.Mutation.hitsLoaded || AdvancedCtrl.Mutation.isLoading" class="loading loading-text"><h3><i
-        class="icon-spinner icon-spin"></i> Loading
-    Mutations...</h3></div>
-<div data-ng-if="AdvancedCtrl.Mutation.mutations.hits.length == 0 && AdvancedCtrl.Mutation.hitsLoaded && ! AdvancedCtrl.Mutation.isLoading" class="empty loading-text"><h3>No Mutations
-    Found.</h3></div>
+        class="icon-spinner icon-spin"></i> 
+        <translate>Loading Mutations...</translate></h3></div>
+<div data-ng-if="AdvancedCtrl.Mutation.mutations.hits.length == 0 && AdvancedCtrl.Mutation.hitsLoaded && ! AdvancedCtrl.Mutation.isLoading" class="empty loading-text">
+    <h3>
+        <translate>No Mutations Found.</translate>
+    </h3>
+</div>
 <div data-ng-show="AdvancedCtrl.Mutation.mutations.hits.length && AdvancedCtrl.Mutation.hitsLoaded && ! AdvancedCtrl.Mutation.isLoading">
     <section>
         <div class="graphs">
             <div class="span">
-                <pie items='AdvancedCtrl.Mutation.pieConsequences' heading="Consequence Type" label="Mutations"
+                <pie items='AdvancedCtrl.Mutation.pieConsequences' heading="{{'Consequence Type' | translate}}" label="{{'Mutations' | translate}}"
                      type="pie"
                      width="225"
                      height="150"></pie>
             </div>
             <div class="span">
-                <pie items='AdvancedCtrl.Mutation.piePlatform' heading="Platform" label="Mutations" type="pie"
+                <pie items='AdvancedCtrl.Mutation.piePlatform' heading="{{'Platform' | translate}}" label="{{'Mutations' | translate}}" type="pie"
                      width="225"
                      height="150"></pie>
             </div>
             <div class="span">
-                <pie items='AdvancedCtrl.Mutation.pieVerificationStatus' heading="Verification Status" label="Mutations"
+                <pie items='AdvancedCtrl.Mutation.pieVerificationStatus' heading="{{'Verification Status' | translate}}" label="{{'Mutations' | translate}}"
                      type="pie"
                      width="225"
                      height="150"></pie>
             </div>
             <div class="span">
-                <pie items='AdvancedCtrl.Mutation.pieType' heading="Type" label="Mutations" type="pie" width="225"
+                <pie items='AdvancedCtrl.Mutation.pieType' heading="{{'Type' | translate}}" label="{{'Mutations' | translate}}" type="pie" width="225"
                      height="150"></pie>
             </div>
         </div>
@@ -36,7 +39,7 @@
              data-href="search/m"
              data-ng-click="AdvancedCtrl.state.setSubTab('mutation')"
              data-ng-class="{active: AdvancedCtrl.state.isSubTab('mutation')}">
-            Mutations<br>
+            <translate>Mutations</translate><br>
             <small data-ng-hide="AdvancedCtrl.Mutation.isLoading">{{AdvancedCtrl.Mutation.mutations.pagination.total |
                 number}}
             </small>
@@ -47,7 +50,7 @@
              data-href="search/m/o"
              data-ng-click="AdvancedCtrl.state.setSubTab('occurrence')"
              data-ng-class="{active: AdvancedCtrl.state.isSubTab('occurrence')}">
-            Mutation Occurrences<br>
+            <translate>Mutation Occurrences</translate><br>
             <small data-ng-hide="AdvancedCtrl.Mutation.isLoading">{{AdvancedCtrl.Mutation.occurrences.pagination.total |
                 number}}
             </small>

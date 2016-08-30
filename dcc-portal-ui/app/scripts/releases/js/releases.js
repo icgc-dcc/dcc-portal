@@ -39,9 +39,9 @@
 
   var module = angular.module('icgc.releases.controllers', ['icgc.releases.models']);
 
-  module.controller('ReleaseCtrl', function (Page, HighchartsService, Releases, Projects, Settings) {
+  module.controller('ReleaseCtrl', function (Page, HighchartsService, Releases, Projects, Settings, gettextCatalog) {
     var _ctrl = this;
-    Page.setTitle('Welcome');
+    Page.setTitle(gettextCatalog.getString('Welcome'));
     Page.setPage('home');
 
     _ctrl.routeToProjectPageWithLiveDonorStateFilter = function () {

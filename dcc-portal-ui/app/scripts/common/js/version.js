@@ -19,14 +19,13 @@
 
 angular.module('icgc.common.version', []);
 
-angular.module('icgc.common.version').factory('VersionService', function ($rootScope, $timeout) {
+angular.module('icgc.common.version').factory('VersionService', function ($rootScope, $timeout, gettextCatalog) {
   function browserCheck() {
     if (window.attachEvent && !window.addEventListener) {
-      $rootScope.$broadcast('notify', '<i class="icon-attention"></i>Your Browser is not supported, some features ' +
-                                      'may be broken or missing. <strong><a target="_blank" ' +
-                                      'style="color: #fff;text-decoration: underline;" ' +
-                                      'href="http://browser-update.org/en/update.html"> Learn how to update your ' +
-                                      'browser</a></strong>',
+      $rootScope.$broadcast('notify', '<i class="icon-attention"></i>' + 
+        gettextCatalog.getString('Your Browser is not supported, some features may be broken or missing.') + 
+        ' <strong><a target="_blank" style="color: #fff;text-decoration: underline;" href="http://browser-update.org/en/update.html">' +
+        gettextCatalog.getString('Learn how to update your browser') + '</a></strong>',
         true);
     }
   }
@@ -35,8 +34,8 @@ angular.module('icgc.common.version').factory('VersionService', function ($rootS
 
   return {
     outOfDate: function () {
-      $rootScope.$broadcast('notify', '<i class="icon-attention"></i>A new version of the application has been ' +
-                                      'released. Please refresh your browser before continuing.');
+      $rootScope.$broadcast('notify', '<i class="icon-attention"></i>' + 
+        gettextCatalog.getString('A new version of the application has been released. Please refresh your browser before continuing.'));
     }
   };
 });

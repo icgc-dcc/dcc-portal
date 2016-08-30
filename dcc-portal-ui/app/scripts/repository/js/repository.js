@@ -398,9 +398,10 @@
    * Controller for File Entity page
    */
   module.controller('ExternalFileInfoController',
-    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature, SetService) {
+    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature, SetService, 
+      gettextCatalog) {
 
-    Page.setTitle('Repository File');
+    Page.setTitle(gettextCatalog.getString('Repository File'));
     Page.setPage('externalFileEntity');
 
     var slash = '/';
