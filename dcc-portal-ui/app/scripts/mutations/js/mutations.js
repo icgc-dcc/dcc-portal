@@ -49,6 +49,12 @@
     _ctrl.mutation = mutation;
     _ctrl.mutation.uiProteinTranscript = [];
 
+    _ctrl.shouldLimitDisplayProjects = true;
+    _ctrl.defaultProjectsLimit = 5;
+
+     _ctrl.shouldLimitDisplayConsequences = true;
+    _ctrl.defaultConsequencesLimit = 5;
+
     projects = {};
     _ctrl.projects = [];
 

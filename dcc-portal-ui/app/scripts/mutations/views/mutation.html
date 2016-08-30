@@ -68,6 +68,10 @@
         <span class="t_table_top">
             <translate has-markup>Showing <strong>{{ MutationCtrl.mutation.consequences.length }}</strong> consequences</translate>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_consequence"></span>
+            <table-filter
+                data-ng-if="MutationCtrl.mutation.consequences.length > MutationCtrl.defaultConsequencesLimit"
+                data-placeholder="{{'Type to filter Consequences' | translate}}"
+                data-filter-model="MutationCtrl.tableFilter.consequences"></table-filter>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -81,7 +85,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="consequence in MutationCtrl.mutation.consequences">
+            <tr data-ng-repeat="consequence in (MutationCtrl.shouldLimitDisplayConsequences ? 
+                (MutationCtrl.mutation.consequences | filter: MutationCtrl.tableFilter.consequences).slice(0, MutationCtrl.defaultConsequencesLimit) : 
+                (MutationCtrl.mutation.consequences | filter: MutationCtrl.tableFilter.consequences))">
                 <td>
                     <a data-ng-href="/genes/{{consequence.geneAffectedId}}">{{ consequence.geneAffectedSymbol }}</a>
                 </td>
@@ -103,6 +109,12 @@
             </tr>
             </tbody>
         </table>
+
+        <row-limit data-data="MutationCtrl.mutation.consequences"
+            data-filter="MutationCtrl.tableFilter.consequences"
+            data-show-limit="MutationCtrl.shouldLimitDisplayConsequences"
+            data-default-limit="MutationCtrl.defaultConsequencesLimit"></row-limit>
+
         <table class="hidden" id="{{MutationCtrl.mutation.id}}_consequence">
             <thead>
             <tr>
@@ -166,8 +178,12 @@
         </div>
 
         <span class="t_table_top">
-            <translate has-markup>Showing <strong>{{MutationCtrl.projects.length}}</strong> projects</translate>
+            <translate has-markup>Showing <strong>{{(MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects).length}}</strong> projects</translate>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_distribution"></span>
+            <table-filter
+                data-ng-if="MutationCtrl.projects.length > MutationCtrl.defaultProjectsLimit"
+                data-placeholder="{{'Type to filter Projects' | translate}}"
+                data-filter-model="MutationCtrl.tableFilter.projects"></table-filter>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -181,7 +197,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="project in MutationCtrl.projects | orderBy:'-percentAffected'">
+            <tr data-ng-repeat="project in (MutationCtrl.shouldLimitDisplayProjects ? 
+                (MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects | orderBy:'-percentAffected').slice(0, MutationCtrl.defaultProjectsLimit) : 
+                (MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects | orderBy:'-percentAffected')) track by project.id">
                 <td><a data-tooltip="{{ project.name }}" data-ng-href="/projects/{{project.id}}">
                     {{project.id}}
                 </a></td>
@@ -204,6 +222,11 @@
             </tr>
             </tbody>
         </table>
+
+        <row-limit data-data="MutationCtrl.projects"
+            data-filter="MutationCtrl.tableFilter.projects"
+            data-show-limit="MutationCtrl.shouldLimitDisplayProjects"
+            data-default-limit="MutationCtrl.defaultProjectsLimit"></row-limit>
 
 
         <table class="hidden" id="{{MutationCtrl.mutation.id}}_distribution">

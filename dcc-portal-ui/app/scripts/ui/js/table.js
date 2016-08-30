@@ -21,7 +21,13 @@ angular.module('icgc.ui.table', [
   'icgc.ui.table.size',
   'icgc.ui.table.counts',
   'icgc.ui.table.sortable',
-  'icgc.ui.table.pagination'
+  'icgc.ui.table.pagination',
+  'icgc.ui.table.filter',
+  'icgc.ui.table.row'
+]);
+
+angular.module('icgc.ui.table.row',[
+  'icgc.ui.table.row.limitation'
 ]);
 
 /* ************************************
@@ -302,7 +308,47 @@ angular.module('icgc.ui.table.sortable', []).directive('sortable', function ($lo
   };
 });
 
+angular.module('icgc.ui.table.filter', [])
+  .directive('tableFilter', function(){
+    return {
+      restrict: 'E',
+      scope: {
+        placeholder: '@',
+        filterModel: '=',
+        class: '@'
+      },
+      replace: true,
+      template: '<span class="t_suggest t_suggest__header table-filter {{:: class}}">' +
+        '<input type="text" class="t_suggest__input form-control" placeholder="{{:: placeholder}}"' + 
+        ' data-ng-model="filterModel">' + 
+        '<i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search">' +
+        '</i></span>'
+    };
+  });
 
+angular.module('icgc.ui.table.row.limitation', [])
+  .directive('rowLimit', function(gettextCatalog){
+    return {
+      restrict: 'E',
+      scope: {
+        data: '=',
+        filter : '=',
+        showLimit: '=',
+        defaultLimit : '='
+      },
+      replace: true,
+      template: '<div class="t_sh__toggle"'+
+        'data-ng-show="(data | filter: filter).length > defaultLimit">' +
+        '<a class="t_tools__tool" data-ng-click="showLimit = !showLimit" href="">' +
+        '<span>'+
+          '<i class="{{ !showLimit ? \'icon-caret-up\' : \'icon-caret-down\' }}"></i>'+
+            '{{ !showLimit ? "' + gettextCatalog.getString('less') + '" :' +
+              '((data | filter: filter).length - defaultLimit) + " ' +  gettextCatalog.getString('more')  + '"}}' +
+        '</span>' +
+        '</a>' +
+        '</div>'
+    };
+  });
 
 
 /* ************************************

@@ -265,18 +265,22 @@
       </span>
     </h3>
 
-    <div
-      class="t_table_top"
-      ng-if="info.donors.length > fileCtrlr.defaultDonorLimit && fileCtrlr.shouldLimitDisplayedDonors"
-    >
-      <translate has-markup>
-        Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{:: info.donors.length}}</strong> donors
-      </translate>
+    <div class="t_table_top">
+      <span ng-if="(info.donors | filter: fileCtrlr.tableFilter.donors).length > fileCtrlr.defaultDonorLimit && fileCtrlr.shouldLimitDisplayedDonors">
+        <translate has-markup>
+          Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{(info.donors | filter: fileCtrlr.tableFilter.donors).length}}</strong> donors
+        </translate>
+      </span>
+      <table-filter
+        data-ng-if="fileCtrlr.tableFilter.donors.length > fileCtrlr.defaultDonorLimit"
+        data-placeholder="{{'Type to filter Donors' | translate}}"
+        data-filter-model="fileCtrlr.tableFilter.donors"
+        data-class="no-icon"></table-filter>
     </div>
 
     <table
       class="table table-info fixed-width"
-      ng-repeat="donorInfo in (fileCtrlr.shouldLimitDisplayedDonors ? info.donors.slice(0, fileCtrlr.defaultDonorLimit) : info.donors)"
+      ng-repeat="donorInfo in (fileCtrlr.shouldLimitDisplayedDonors ? (info.donors | filter: fileCtrlr.tableFilter.donors).slice(0, fileCtrlr.defaultDonorLimit) : (info.donors | filter: fileCtrlr.tableFilter.donors))"
     >
       <tr>
         <th><translate>Project ID</translate></th>
@@ -333,7 +337,7 @@
 
     <div
       class="t_sh__toggle"
-      data-ng-show="info.donors.length > fileCtrlr.defaultDonorLimit"
+      data-ng-show="(info.donors | filter: fileCtrlr.tableFilter.donors).length > fileCtrlr.defaultDonorLimit"
     >
         <a
           class="t_tools__tool"
@@ -342,7 +346,7 @@
         >
           <span>
              <i class="{{ !fileCtrlr.shouldLimitDisplayedDonors? 'icon-caret-up' : 'icon-caret-down' }}"></i>
-             {{ !fileCtrlr.shouldLimitDisplayedDonors ? "less" : (info.donors.length - fileCtrlr.defaultDonorLimit) + " more" }}
+             {{ !fileCtrlr.shouldLimitDisplayedDonors ? "less" : ((info.donors | filter: fileCtrlr.tableFilter.donors).length - fileCtrlr.defaultDonorLimit) + " more" }}
           </span>
         </a>
     </div>

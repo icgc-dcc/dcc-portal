@@ -534,6 +534,9 @@
         _projectId = $stateParams.id || null,
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
+      
+    _ctrl.shouldLimitDisplayedGenes = true;
+    _ctrl.defaultGenesLimit = 5;
     
     var loadState = new LoadState({scope: $scope});
 
@@ -632,6 +635,9 @@
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
 
+    _ctrl.shouldLimitDisplayedMutations = true;
+    _ctrl.defaultMutationsLimit = 5;
+
     var loadState = new LoadState({ scope: $scope });
 
     function success(mutations) {
@@ -717,6 +723,9 @@
         _projectId = $stateParams.id || null,
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
+
+    _ctrl.shouldLimitDisplayedDonors = true;
+    _ctrl.defaultDonorsLimit = 5;
 
     var loadState = new LoadState({ scope: $scope });
 

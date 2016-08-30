@@ -155,3 +155,14 @@ $table-th-fixed-width: 200px;
   word-wrap: break-word;
   word-break: normal;
 }
+
+.table-filter {
+  margin: -14px 24.5px 14px auto !important;
+  width: 30% !important;
+
+  &.no-icon{
+    margin: -14px 0px 14px auto !important;
+    width: 40% !important;
+  }
+
+}

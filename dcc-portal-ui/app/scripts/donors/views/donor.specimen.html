@@ -129,6 +129,10 @@
                 <translate has-markup>Showing <strong>{{ DonorSpecimenCtrl.specimen.samples.length }}</strong> samples</translate>
                 <span data-toolbar
                       data-dl="{{DonorCtrl.donor.id}}_specimen"></span>
+                <table-filter
+                    data-ng-if="DonorSpecimenCtrl.specimen.samples.length > DonorSpecimenCtrl.defaultSpecimenSamplesLimit"
+                    data-placeholder="{{'Type to filter Specimen samples' | translate}}"
+                    data-filter-model="DonorSpecimenCtrl.tableFilter.specimenSamples"></table-filter>
             </span>
             <table class="table">
                 <thead>
@@ -143,7 +147,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="sample in DonorSpecimenCtrl.specimen.samples">
+                <tr data-ng-repeat="sample in (DonorSpecimenCtrl.shouldLimitDisplaySpecimenSamples ? 
+                    (DonorSpecimenCtrl.specimen.samples | filter: DonorSpecimenCtrl.tableFilter.specimenSamples).slice(0, DonorSpecimenCtrl.defaultSpecimenSamplesLimit) : 
+                    (DonorSpecimenCtrl.specimen.samples | filter: DonorSpecimenCtrl.tableFilter.specimenSamples)) track by sample.id">
                     <td>{{ sample.id }}</td>
                     <td>{{ sample.analyzedId }}</td>
                     <td>
@@ -186,6 +192,12 @@
                 </tr>
                 </tbody>
             </table>
+
+            <row-limit data-data="DonorSpecimenCtrl.specimen.samples"
+                data-filter="DonorSpecimenCtrl.tableFilter.specimenSamples"
+                data-show-limit="DonorSpecimenCtrl.shouldLimitDisplaySpecimenSamples"
+                data-default-limit="DonorSpecimenCtrl.defaultSpecimenSamplesLimit"></row-limit>
+
             <table class="hidden" id="{{DonorCtrl.donor.id}}_specimen">
                 <thead>
                 <tr>

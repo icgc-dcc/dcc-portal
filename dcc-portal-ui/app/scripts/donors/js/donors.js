@@ -147,6 +147,9 @@
 
     var _ctrl = this, donor;
 
+    _ctrl.shouldLimitDisplayDonors = true;
+    _ctrl.defaultDonorsLimit = 5;
+    
     function success(mutations) {
       if (mutations.hasOwnProperty('hits')) {
         var projectCachePromise = ProjectCache.getData();
@@ -238,6 +241,8 @@
         donorId = $stateParams.id || null;
 
     _ctrl.PCAWG = PCAWG;
+    _ctrl.shouldLimitDisplaySpecimenSamples = true;
+    _ctrl.defaultSpecimenSamplesLimit = 5;
 
     _ctrl.isPCAWG = function(specimen) {
 

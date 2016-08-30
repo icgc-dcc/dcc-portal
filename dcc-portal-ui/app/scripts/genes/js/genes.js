@@ -109,6 +109,8 @@
     Page.setPage('entity');
 
     _ctrl.ExternalLinks = ExternalLinks;
+    _ctrl.shouldLimitDisplayProjects = true;
+    _ctrl.defaultProjectsLimit = 5;
 
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 
@@ -246,6 +248,9 @@
   module.controller('GeneMutationsCtrl',
     function ($scope, HighchartsService, LocationService, Genes, Projects, Donors, ProjectCache) {
       var _ctrl = this;
+
+      _ctrl.shouldLimitDisplayMutations = true;
+      _ctrl.defaultMutationsLimit = 5;
 
       function success(mutations) {
         if (mutations.hasOwnProperty('hits')) {

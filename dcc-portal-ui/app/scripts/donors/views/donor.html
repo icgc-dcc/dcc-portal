@@ -277,6 +277,10 @@
             <translate has-markup>Showing <strong>{{ DonorMutationsCtrl.mutations.hits.length }}</strong> of
             <strong>{{ DonorMutationsCtrl.mutations.pagination.total | numberPT }}</strong> mutations</translate>
             <span data-toolbar data-dl="{{DonorCtrl.donor.id}}_mutations"></span>
+            <table-filter
+                data-ng-if="DonorMutationsCtrl.mutations.hits.length > DonorMutationsCtrl.defaultDonorsLimit"
+                data-placeholder="{{'Type to filter Mutations' | translate}}"
+                data-filter-model="DonorMutationsCtrl.tableFilter.donorMutations"></table-filter>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -301,7 +305,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="mutation in DonorMutationsCtrl.mutations.hits">
+            <tr data-ng-repeat="mutation in (DonorMutationsCtrl.shouldLimitDisplayDonors ? 
+                (DonorMutationsCtrl.mutations.hits | filter: DonorMutationsCtrl.tableFilter.donorMutations).slice(0, DonorMutationsCtrl.defaultDonorsLimit) :
+                (DonorMutationsCtrl.mutations.hits | filter: DonorMutationsCtrl.tableFilter.donorMutations)) track by mutation.id">
                 <td>
                     <a href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a>
                 </td>
@@ -353,6 +359,11 @@
             </tr>
             </tbody>
         </table>
+
+        <row-limit data-data="DonorMutationsCtrl.mutations.hits"
+                data-filter="DonorMutationsCtrl.tableFilter.donorMutations"
+                data-show-limit="DonorMutationsCtrl.shouldLimitDisplayDonors"
+                data-default-limit="DonorMutationsCtrl.defaultDonorsLimit"></row-limit>
 
         <table class="hidden" id="{{DonorCtrl.donor.id}}_mutations">
             <thead>

@@ -346,6 +346,10 @@
                 <strong>{{ProjectGeneCtrl.genes.pagination.total | number}}</strong> genes
             </translate>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_genes"></span>
+            <table-filter
+                data-ng-if="ProjectGeneCtrl.genes.hits.length > ProjectGeneCtrl.defaultGenesLimit"
+                data-placeholder="{{'Type to filter Mutated Genes' | translate}}"
+                data-filter-model="ProjectGeneCtrl.tableFilter.mutatedGenes"></table-filter>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -370,7 +374,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="gene in ProjectGeneCtrl.genes.hits">
+            <tr data-ng-repeat="gene in (ProjectGeneCtrl.shouldLimitDisplayedGenes ? 
+                (ProjectGeneCtrl.genes.hits | filter: ProjectGeneCtrl.tableFilter.mutatedGenes).slice(0, ProjectGeneCtrl.defaultGenesLimit) : 
+                (ProjectGeneCtrl.genes.hits | filter: ProjectGeneCtrl.tableFilter.mutatedGenes)) track by gene.id">
                 <td><a data-ui-sref="gene({id:gene.id})">{{gene.symbol}}</a></td>
                 <td>{{gene.name}}</td>
                 <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
@@ -424,6 +430,10 @@
             </tr>
             </tbody>
         </table>
+        <row-limit data-data="ProjectGeneCtrl.genes.hits"
+            data-filter="ProjectGeneCtrl.tableFilter.mutatedGenes"
+            data-show-limit="ProjectGeneCtrl.shouldLimitDisplayedGenes"
+            data-default-limit="ProjectGeneCtrl.defaultGenesLimit"></row-limit>
 
         <table class="hidden" id="{{ProjectCtrl.project.id}}_genes">
             <thead>
@@ -490,6 +500,10 @@
                 <strong>{{ProjectMutationsCtrl.mutations.pagination.total | number}}</strong> mutations
             </translate>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_mutations"></span>
+            <table-filter
+                data-ng-if="ProjectMutationsCtrl.mutations.hits.length > ProjectMutationsCtrl.defaultMutationsLimit"
+                data-placeholder="{{'Type to filter Mutations' | translate}}"
+                data-filter-model="ProjectMutationsCtrl.tableFilter.mutations"></table-filter>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -516,7 +530,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="mutation in ProjectMutationsCtrl.mutations.hits">
+            <tr data-ng-repeat="mutation in (ProjectMutationsCtrl.shouldLimitDisplayedMutations ? 
+            (ProjectMutationsCtrl.mutations.hits | filter: ProjectMutationsCtrl.tableFilter.mutations).slice(0, ProjectMutationsCtrl.defaultMutationsLimit) : 
+            (ProjectMutationsCtrl.mutations.hits | filter: ProjectMutationsCtrl.tableFilter.mutations)) track by mutation.id">
                 <td><a data-ui-sref="mutation({id:mutation.id})">{{mutation.id}}</a></td>
                 <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
                 <td><abbr data-tooltip="{{ mutation.type | define }}">{{mutation.type}}</abbr></td>
@@ -564,6 +580,11 @@
             </tr>
             </tbody>
         </table>
+
+        <row-limit data-data="ProjectMutationsCtrl.mutations.hits"
+            data-filter="ProjectMutationsCtrl.tableFilter.mutations"
+            data-show-limit="ProjectMutationsCtrl.shouldLimitDisplayedMutations"
+            data-default-limit="ProjectMutationsCtrl.defaultMutationsLimit"></row-limit>
 
         <table class="hidden" id="{{ProjectCtrl.project.id}}_mutations">
             <thead>
@@ -631,6 +652,10 @@
                 <strong>{{ProjectDonorsCtrl.donors.pagination.total | number}}</strong> donors
             </translate>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_donors"></span>
+            <table-filter
+                data-ng-if="ProjectDonorsCtrl.donors.hits.length > ProjectDonorsCtrl.defaultDonorsLimit"
+                data-placeholder="{{'Type to filter affected genes' | translate}}"
+                data-filter-model="ProjectDonorsCtrl.tableFilter.affectedDonors"></table-filter>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -665,7 +690,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="donor in ProjectDonorsCtrl.donors.hits">
+            <tr data-ng-repeat="donor in (ProjectDonorsCtrl.shouldLimitDisplayedDonors ? 
+            (ProjectDonorsCtrl.donors.hits | filter: ProjectDonorsCtrl.tableFilter.affectedDonors).slice(0, ProjectDonorsCtrl.defaultDonorsLimit) :
+            (ProjectDonorsCtrl.donors.hits | filter: ProjectDonorsCtrl.tableFilter.affectedDonors)) track by donor.id">
                 <td><a data-ui-sref="donor({id:donor.id})">{{donor.id}}</a></td>
                 <td>{{donor.primarySite}}</td>
                 <td>{{donor.gender}}</td>
@@ -701,6 +728,11 @@
             </tr>
             </tbody>
         </table>
+
+        <row-limit data-data="ProjectDonorsCtrl.donors.hits"
+            data-filter="ProjectDonorsCtrl.tableFilter.affectedDonors"
+            data-show-limit="ProjectDonorsCtrl.shouldLimitDisplayedDonors"
+            data-default-limit="ProjectDonorsCtrl.defaultDonorsLimit"></row-limit>
 
         <table class="hidden" id="{{ProjectCtrl.project.id}}_donors">
             <thead>
