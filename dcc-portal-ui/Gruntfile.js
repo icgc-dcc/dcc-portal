@@ -377,6 +377,7 @@ module.exports = function (grunt) {
             src: [
               '*.{ico,png,txt}',
               '.htaccess',
+              'sitemap.xml',
               'bower_components/**',
 
               // 'vendor/scripts/angularjs/*',
