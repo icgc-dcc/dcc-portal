@@ -1,3 +1,4 @@
+# Portal Security
 ## Overview
 
 This document describes Authentication/Authorization process in ICGC DCC Portal.
