@@ -52,6 +52,7 @@
     "grunt-peg": "1.5.0",
     "grunt-postcss": "0.8.0",
     "grunt-usemin": "3.0.0",
+    "grunt-angular-gettext": "2.2.3",
     "hostile": "1.0.2",
     "http-proxy": "0.10.0",
     "jasmine-core": "2.4.1",

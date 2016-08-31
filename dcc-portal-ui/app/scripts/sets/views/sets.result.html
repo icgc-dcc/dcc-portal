@@ -1,4 +1,5 @@
-<h3>Set Operations
+<h3>
+    <translate>Set Operations</translate>
     <span style="font-size:1rem" class="pull-right" data-ng-if="!isDeprecated">
         <share-button></share-button>
     </span>
@@ -8,11 +9,14 @@
     <h1 class="text-center"><i class="icon-spinner icon-spin" style="font-size:5rem"></i></h1>
 </div>
 <div data-ng-if="isDeprecated" class="alert-error">
-    <i class="icon-attention"></i>This analysis is deprecated. This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.
+    <i class="icon-attention"></i>
+    <translate>This analysis is deprecated.</translate> 
+    <translate>This analysis was created against an old version of the data and may no longer be valid.</translate>
+    <translate>Please remove or recreate it again.</translate>
 </div>
 <div data-ng-if="item && item.state === 'FINISHED'" data-disable-events="isDeprecated">
 
-    <div>Click on the areas of the Venn diagram to include them in your result set.</div>
+    <div><translate>Click on the areas of the Venn diagram to include them in your result set.</translate></div>
 
     <set-upload data-set-modal="dialog.setModal" data-set-union="dialog.setUnion" data-set-type="dialog.setType"></set-upload>
 
@@ -22,10 +26,10 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Alias</th>
-                    <th>Set Name</th>
-                    <th class="text-right"># Items</th>
-                    <th>Item Type</th>
+                    <th><translate>Alias</translate></th>
+                    <th><translate>Set Name</translate></th>
+                    <th class="text-right"><translate># Items</translate></th>
+                    <th><translate>Item Type</translate></th>
                 </tr>
             </thead>
             <tbody>
@@ -48,8 +52,8 @@
                     <th data-ng-click="checked=!checked; checked? selectAll() : selectNone()" class="text-center">
                         <i class="{{checked? 'icon-check':'icon-check-empty'}}"></i>
                     </th>
-                    <th>Set Operations</th>
-                    <th class="text-right"># Items</th>
+                    <th><translate>Set Operations</translate></th>
+                    <th class="text-right"><translate># Items</translate></th>
                     <th></th>
                 </tr>
             </thead>
@@ -73,18 +77,25 @@
                     <td>
                         <span style="float:left; font-size:1.25rem">
                             <span class="t_tools__tool" data-ng-if="item.count > 0">
-                                <i class="icon-floppy" data-tooltip="Save as new set" data-ng-click="calculateUnion(item); saveDerivedSet()"></i>
-                                <i class="icon-file" data-tooltip="Export as TSV" data-ng-click="export(item)"></i>
+                                <i class="icon-floppy" 
+                                  data-tooltip="{{'Save as new set' | translate}}" 
+                                  data-ng-click="calculateUnion(item); saveDerivedSet()"></i>
+                                <i class="icon-file" 
+                                  data-tooltip="{{'Export as TSV' | translate}}" 
+                                  data-ng-click="export(item)"></i>
                             </span>
                             <span class="t_tools__tool" data-ng-if="item.count > 0 && (setType === 'donor' || setType === 'file')">
-                              <i data-ng-if="downloadsEnabled && setType === 'donor'" class="icon-download" data-tooltip="Download Donor Data" data-ng-click="downloadDerivedSet(item)"></i>
-                              <i class="icon-download-cloud" data-tooltip="View in {{:: dataRepoTitle}}" data-ng-click="viewInExternal(item)"></i>
+                              <i data-ng-if="downloadsEnabled && setType === 'donor'" 
+                                class="icon-download" 
+                                data-tooltip="{{'Download Donor Data' | translate}}" 
+                                data-ng-click="downloadDerivedSet(item)"></i>
+                              <i class="icon-download-cloud" data-tooltip="{{'View in [[:: dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: dataRepoTitle} }}" data-ng-click="viewInExternal(item)"></i>
                             </span>
                         </span>
                     </td>
                 </tr>
                 <tr style="border-top: 1px solid #888; border-bottom: 1px solid #888">
-                    <td colspan="2"><strong>Union of selected sets</strong></td>
+                    <td colspan="2"><strong><translate>Union of selected sets</translate></strong></td>
                     <td class="text-right">
                         <a data-ng-if="selectedTotalCount > 0 && selectedTotalCount <= unionMaxLimit" data-ng-click="redirect()" href=""><strong>{{selectedTotalCount | number}}</strong></a>
                         <span data-ng-if="selectedTotalCount===0">0</span>
@@ -93,12 +104,19 @@
                     <td>
                         <span style="float:left; font-size:1.25rem" data-ng-show="selectedTotalCount > 0 && selectedTotalCount <= unionMaxLimit">
                             <span class="t_tools__tool">
-                                <i class="icon-floppy" data-tooltip="Save as new set" data-ng-click="calculateUnion(); saveDerivedSet()"></i>
-                                <i class="icon-file" data-tooltip="Export" data-ng-click="export()"></i>
+                                <i class="icon-floppy" 
+                                  data-tooltip="{{'Save as new set' | translate}}" 
+                                  data-ng-click="calculateUnion(); saveDerivedSet()"></i>
+                                <i class="icon-file" 
+                                  data-tooltip="{{'Export' | translate}}" 
+                                  data-ng-click="export()"></i>
                             </span>
                             <span class="t_tools__tool" data-ng-if="setType === 'donor' || setType === 'file'">
-                              <i data-ng-if="downloadsEnabled && setType === 'donor'" class="icon-download" data-tooltip="Download Donor Data" data-ng-click="downloadDerivedSet()"></i>
-                              <i class="icon-download-cloud" data-tooltip="View in {{:: dataRepoTitle}}" data-ng-click="viewInExternal()"></i>
+                              <i data-ng-if="downloadsEnabled && setType === 'donor'" 
+                                class="icon-download" 
+                                data-tooltip="{{'Download Donor Data' | translate}}" 
+                                data-ng-click="downloadDerivedSet()"></i>
+                              <i class="icon-download-cloud" data-tooltip="{{'View in [[:: dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: dataRepoTitle} }}" data-ng-click="viewInExternal()"></i>
                             </span>
                         </span>
                         <br>
@@ -106,6 +124,8 @@
                 </tr>
             </tbody>
         </table>
-        <small>Set operations has an upper limit of managing {{unionMaxLimit | number }} items.</small>
+        <small>
+            <translate>Set operations has an upper limit of managing {{unionMaxLimit | number }} items.</translate>
+        </small>
     </div>
 </div>

@@ -10,7 +10,7 @@
                 data-ng-if="type !== 'file-donor'"
                 data-ng-class="{'is': !isNot, 'is-not': isNot}"
                 data-ng-click="isNot ? isFacet(facet) : notFacet(facet)"
-                data-tooltip="Toggle this facet to IS {{ isNot ? 'NOT' : '' }}"
+                data-tooltip="{{ 'Toggle this facet to IS [[ toggle ]]' | translate | subDelimiters:{toggle: isNot ? 'NOT' : ''} }}"
             >
                 <div class="include">IS</div>
                 <div class="nub"></div>
@@ -71,7 +71,7 @@
         <ul class="t_facets__facet__terms__active">
             <li class="text-right" data-ng-hide="collapsed">
                 <button type="button" class="t_button pull-right" data-ng-click="addGeneSet()">
-                    <i class="icon-search"></i> Upload Gene Set
+                    <i class="icon-search"></i> <translate>Upload Gene Set</translate>
                 </button>
                 <br><br>
             </li>

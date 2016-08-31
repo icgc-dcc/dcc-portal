@@ -211,6 +211,7 @@
     'LocalStorageModule',
     'toaster',
     'dndLists',
+    'gettext',
 
 
     // 3rd party
@@ -478,10 +479,13 @@
       }]);
 
     })
-    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager) {
+    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog) {
+      
+      // Setting the initial language to English CA.
+      gettextCatalog.setCurrentLanguage('en_CA');
 
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound']);
-
+    
       // Add UI Router Debug if there is a fatal state change error
       $rootScope.$on('$stateChangeError', function () {
         console.error('State Change Error Occurred. Error occurred with arguments: ', arguments);
@@ -575,8 +579,8 @@
       'team', {
         url: '/team',
         templateUrl: '/scripts/static/views/team.html',
-        controller: ['Page', function (Page) {
-          Page.setTitle('The Team');
+        controller: ['Page', function (Page, gettextCatalog) {
+          Page.setTitle(gettextCatalog.getString('The Team'));
           Page.setPage('entity');
         }]
       });
@@ -586,7 +590,7 @@
 
       $injector.invoke(['Notify', 'Page', function(Notify, Page) {
         Page.setPage('error');
-        Notify.setMessage('Cannot find: ' + $location.url());
+        Notify.setMessage('Cannot find:' + ' ' + $location.url());
         Notify.showErrors();
       }]);
     });
@@ -675,14 +679,13 @@
 
     // Order matters, this is in most important to least important (For enrichment analysis)
     GENE_SET_ROOTS: [
-      {type: 'pathway', id: null, name: 'Reactome Pathways', universe: 'REACTOME_PATHWAYS'},
-      {type: 'go_term', id: 'GO:0003674', name: 'GO Molecular Function', universe: 'GO_MOLECULAR_FUNCTION'},
-      {type: 'go_term', id: 'GO:0008150', name: 'GO Biological Process', universe: 'GO_BIOLOGICAL_PROCESS'},
-      {type: 'go_term', id: 'GO:0005575', name: 'GO Cellular Component', universe: 'GO_CELLULAR_COMPONENT'},
-      {type: 'curated_set', id: 'GS1', name: 'Cancer Gene Census', universe: null}
+      {type: 'pathway', id: null, name: gettext('Reactome Pathways'), universe: 'REACTOME_PATHWAYS'},
+      {type: 'go_term', id: 'GO:0003674', name: gettext('GO Molecular Function'), universe: 'GO_MOLECULAR_FUNCTION'},
+      {type: 'go_term', id: 'GO:0008150', name: gettext('GO Biological Process'), universe: 'GO_BIOLOGICAL_PROCESS'},
+      {type: 'go_term', id: 'GO:0005575', name: gettext('GO Cellular Component'), universe: 'GO_CELLULAR_COMPONENT'},
+      {type: 'curated_set', id: 'GS1', name: gettext('Cancer Gene Census'), universe: null}
     ]
   });
-
 
   module.controller('AppCtrl', function ($scope, Page) {
     var _ctrl = this;
@@ -699,4 +702,9 @@
     });
 
   });
+
+  function gettext(string){
+    return string;
+  }
+
 })();

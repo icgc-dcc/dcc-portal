@@ -1,46 +1,95 @@
 <p style="margin-top: 1rem;">
-  The <a href="http://www.cancercollaboratory.org" target="_blank"><i class="icon-external-link"></i>Cancer Genome Collaboratory</a> (or simply the Collaboratory) is an academic research cloud being built by the Ontario Institute for Cancer Research (OICR). The Collaboratory hosts ICGC BAM files, compute capabilities, and Docker-based analysis tools for use by its research community. Although its access is currently restricted to a small number of beta-testers, OICR plans to scale up the hardware infrastructure,increase the number of ICGC datasets available, and open the cloud to a broader community of researchers by the end of 2016.
-    For more information, please contact <a href="mailto:help@cancercollaboratory.org" class="link">
- <i class="icon-mail"></i>help@cancercollaboratory.org</a>.
+  <translate>
+    The <a href="http://www.cancercollaboratory.org" target="_blank"><i class="icon-external-link"></i>Cancer Genome Collaboratory</a> (or simply the Collaboratory) is an academic research cloud being built by the Ontario Institute for Cancer Research (OICR).
+  </translate>
+  <translate>
+    The Collaboratory hosts ICGC BAM files, compute capabilities, and Docker-based analysis tools for use by its research community.
+  </translate>
+  <translate>
+    Although its access is currently restricted to a small number of beta-testers, OICR plans to scale up the hardware infrastructure,increase the number of ICGC datasets available, and open the cloud to a broader community of researchers by the end of 2016.
+  </translate>
+  <translate has-markup>
+    For more information, please contact 
+    <a href="mailto:help@cancercollaboratory.org" class="link">
+      <i class="icon-mail"></i>help@cancercollaboratory.org
+    </a>.
+  </translate>
 </p>
 <p>
-  The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the ICGG PanCancer Analysis of
-    Whole Genomes project (PCAWG). The content is maintained in collaboration with the ICGC Data Coordination Center (DCC).
+  <translate>
+    The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the ICGG PanCancer Analysis of Whole Genomes project (PCAWG).
+  </translate>
+  <translate>The content is maintained in collaboration with the ICGC Data Coordination Center (DCC).</translate>
+  <translate>
     Our <a href="http://docs.icgc.org/cloud/guide/" target="_blank"><i class="icon-external-link"></i>user guide</a> provides step-by-step instructions on how to access and analyse ICGC data on the Collaboratory.
+  </translate>
 </p>
 <p style="text-indent: initial;">
- <strong>The data produced by the PCAWG project, including somatic mutations, is subject to a publication embargo.</strong>
-    Please see <a href="/pcawg#embargo">PCAWG publication and embargo policy</a> for the embargo terms.
+  <strong>
+    <translate>
+      The data produced by the PCAWG project, including somatic mutations, is subject to a publication ebargo.
+    </translate>
+  </strong>
+  <translate has-markup>
+    Please see the <a href="/pcawg#embargo">PCAWG publication and embargo policy</a> for the embargo terms.
+  </translate>
 </p>
 
-<h3>Data Repository</h3>
+<h3><translate>Data Repository</translate></h3>
 <p>
-  The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the <a href="/pcawg">ICGG PanCancer Analysis of
-    Whole Genomes</a> project (PCAWG).  Content is maintained in collaboration with the ICGC Data Coordination Center (DCC).  Our user guide provides
-    step-by-step instructions on how to access and analyse ICGC data on the Collaboratory.
+  <translate>
+    The Collaboratory currently contains a growing repository of ICGC alignment and variant data sourced from the <a href="/pcawg">ICGG PanCancer Analysis of
+    Whole Genomes</a> project (PCAWG).
+  </translate>
+  <translate>Content is maintained in collaboration with the ICGC Data Coordination Center (DCC).</translate>
+  <translate>
+    Our user guide provides step-by-step instructions on how to access and analyse ICGC data on the Collaboratory.
+  </translate>
 </p> 
 
 <div class="repo-controls-container">
-        <a class="t_button btn" data-ng-show="repositoryCtrl.hasSummaryData()" data-ng-href="/repositories?filters={{repositoryCtrl.getFilterQueryStr()}}"><i class="icon-search"></i> Search Respository</a>
-        <a class="t_button btn" data-ng-href="http://docs.icgc.org/cloud/guide/"><i class="icon-book-open"></i>User Guide</a>
+  <a class="t_button btn" 
+    data-ng-show="repositoryCtrl.hasSummaryData()" 
+    data-ng-href="/repositories?filters={{repositoryCtrl.getFilterQueryStr()}}">
+    <i class="icon-search"></i>
+    <translate>Search Respository</translate>
+  </a>
+  <a class="t_button btn" data-ng-href="http://docs.icgc.org/cloud/guide/">
+    <i class="icon-book-open"></i>
+      <translate>User Guide</translate>
+    </a>
 </div>
 
-<h3>Cloud Infrastructure</h3>
+<h3><translate>Cloud Infrastructure</translate></h3>
 <div class="indent">
+  <translate>
     The Collaboratory hosts an OpenStack cloud with nearly 1150 cores and over 3.2 PB of raw storage available for use by researchers.
+  </translate>
+  <translate has-markup>
     Users can launch and access Linux virtual machines running common distributions such as
     <a href="http://www.ubuntu.com/" target="_blank"><i class="icon-external-link"></i>Ubuntu</a> or
     <a href="https://www.centos.org/" target="_blank"><i class="icon-external-link"></i>CentOS</a> through the OpenStack console.
-    
-  The Collaboratory offers multiple ways for researchers to share their tools including VM sharing through the
+  </translate>
+
+  <translate has-markup>
+    The Collaboratory offers multiple ways for researchers to share their tools including VM sharing through the
     OpenStack Console and the <a href="http://www.dockstore.org/" target="_blank"><i class="icon-external-link"></i>Dockstore</a>.
+  </translate>
+  <translate>
     The latter is a developing service that offers <a href="https://www.docker.com/" target="_blank"><i class="icon-external-link"></i>Docker</a>
     container sharing based on the  <a href="https://github.com/ga4gh/compliance" target="_blank"><i class="icon-external-link"></i>GA4GH-compliant</a>
     tool descriptor.
+  </translate>
  </p> 
   
 </div>
 <div class="repo-controls-container">
-  <a class="t_button btn"  href="https://cancercollaboratory.org/" target="_blank"><i class="icon-box"></i>Cancer Genome Collaboratory</a>
-  <a class="t_button btn" href="http://www.dockstore.org/" target="_blank"><i class="icon-download"></i> Dockstore</a>
+  <a class="t_button btn"  href="https://cancercollaboratory.org/" target="_blank">
+    <i class="icon-box"></i>
+    <translate>Cancer Genome Collaboratory</translate>
+  </a>
+  <a class="t_button btn" href="http://www.dockstore.org/" target="_blank">
+    <i class="icon-download"></i>
+    <translate>Dockstore</translate>
+  </a>
 </div>

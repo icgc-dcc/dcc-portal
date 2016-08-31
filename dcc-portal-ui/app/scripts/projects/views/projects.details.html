@@ -2,11 +2,13 @@
 <span data-ng-init="predicate='totalLiveDonorCount'"></span>
 <span data-ng-init="reverse=true"></span>
 
-<div ng-if="ProjectsCtrl.projects.hits.length < 1" class="empty loading-text"><h3>No Projects Found.</h3></div>
+<div ng-if="ProjectsCtrl.projects.hits.length < 1" class="empty loading-text"><h3><translate>No Projects Found.</translate></h3></div>
 
 <div ng-if="ProjectsCtrl.projects.hits.length > 0">
 <div class="t_table_top" style="padding:0;margin: 0">
-    Showing <strong id="projects-project-count">{{ ProjectsCtrl.projects.hits.length }}</strong> projects
+    <translate>
+        Showing <strong id="projects-project-count">{{ ProjectsCtrl.projects.hits.length }}</strong> projects
+    </translate>
     <span data-toolbar data-dl="projects"></span>
 </div>
 
@@ -15,37 +17,37 @@
 <thead>
 <tr>
     <th rowspan="2" style="cursor: pointer" data-ng-click="predicate='id'; reverse=!reverse">
-        Code
+        <translate>Code</translate>
         <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='id'" class="icon-sort"></i>
         <i data-ng-if="predicate==='id'" class="{{reverse? 'icon-sort-down' : 'icon-sort-up'}}"></i>
     </th>
     <th rowspan="2" style="cursor: pointer" data-ng-click="predicate='name'; reverse=!reverse">
-        Name
+        <translate>Name</translate>
         <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='name'" class="icon-sort"></i>
         <i data-ng-if="predicate==='name'" class="{{reverse? 'icon-sort-down' : 'icon-sort-up'}}"></i>
     </th>
     <th rowspan="2" style="cursor: pointer" data-ng-click="predicate='primarySite'; reverse=!reverse">
-        Site
+        <translate>Site</translate>
         <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='primarySite'" class="icon-sort"></i>
         <i data-ng-if="predicate==='primarySite'" class="{{reverse? 'icon-sort-down' : 'icon-sort-up'}}"></i>
     </th>
     <th rowspan="2" style="cursor: pointer" data-ng-click="predicate='primaryCountries'; reverse=!reverse">
-        <abbr data-tooltip="Lead Country of the Cancer Project">Country</abbr>
+        <abbr data-tooltip="{{'Lead Country of the Cancer Project' | translate}}"><translate>Country</translate></abbr>
         <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='primaryCountries'" class="icon-sort"></i>
         <i data-ng-if="predicate==='primaryCountries'" class="{{reverse? 'icon-sort-down' : 'icon-sort-up'}}"></i>
     </th>
-    <th colspan="2" class="text-center">Donors</th>
-    <th colspan="11" class="text-center">Available Data Types</th>
+    <th colspan="2" class="text-center"><translate>Donors</translate></th>
+    <th colspan="11" class="text-center"><translate>Available Data Types:</translate></th>
 </tr>
 <tr>
     <th rowspan="2" style="cursor: pointer" data-ng-click="predicate='totalLiveDonorCount'; reverse=!reverse">
-        <abbr data-tooltip="Total Number of Donors with Molecular Data in DCC">DCC</abbr>
+        <abbr data-tooltip="{{'Total Number of Donors with Molecular Data in DCC' | translate}}"><translate>DCC</translate></abbr>
         <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='totalLiveDonorCount'"
            class="icon-sort"></i>
         <i data-ng-if="predicate==='totalLiveDonorCount'" class="{{reverse? 'icon-sort-down' : 'icon-sort-up'}}"></i>
     </th>
     <th rowspan="2" style="cursor: pointer" data-ng-click="predicate='totalDonorCount'; reverse=!reverse">
-        <abbr data-tooltip="Total Number of all Donors">All</abbr>
+        <abbr data-tooltip="{{'Total Number of all Donors' | translate}}"><translate>All</translate></abbr>
         <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='totalDonorCount'"
            class="icon-sort"></i>
         <i data-ng-if="predicate==='totalDonorCount'" class="{{reverse? 'icon-sort-down' : 'icon-sort-up'}}"></i>
@@ -150,7 +152,7 @@
   </tr>
 
   <tr>
-    <td colspan="4"><strong>Total</strong></td>
+    <td colspan="4"><strong><translate>Total</translate></strong></td>
 
     <td class="text-right" ng-repeat="data in ProjectsCtrl.totals">
       <linkable-number-cell
@@ -166,12 +168,12 @@
 <table id="projects" class="hidden" data-ng-if="ProjectsCtrl.Page.isExporting()">
     <thead>
     <tr>
-        <th>Project Code</th>
-        <th>Project Name</th>
-        <th>Primary Site</th>
-        <th>Country</th>
-        <th>Donors (DCC)</th>
-        <th>Donors (All)</th>
+        <th><translate>Project Code</translate></th>
+        <th><translate>Project Name</translate></th>
+        <th><translate>Primary Site</translate></th>
+        <th><translate>Country</translate></th>
+        <th><translate>Donors (DCC)</translate></th>
+        <th><translate>Donors (All)</translate></th>
         <th>SSM</th>
         <th>CNSM</th>
         <th>STSM</th>

@@ -20,7 +20,7 @@
 
   var module = angular.module('icgc.repository.directives', ['cfp.loadingBar']);
 
-  module.directive('bamstats', function($timeout, cfpLoadingBar) {
+  module.directive('bamstats', function($timeout, cfpLoadingBar, gettextCatalog) {
     return {
       replace: true,
       restrict: 'AE',
@@ -129,7 +129,7 @@
 
         scope.sampleMore = function() {
           if (sampleMultiplier >= sampleMultiplierLimit) {
-            window.alert('You\'ve reached the sampling limit');
+            window.alert(gettextCatalog.getString('You\'ve reached the sampling limit'));
             return;
           }
           sampleMultiplier += 1;
@@ -411,7 +411,7 @@
     };
   });
 
-  module.directive('vcfstats', function() {
+  module.directive('vcfstats', function(gettextCatalog) {
     return {
       replace: true,
       restrict: 'AE',
@@ -713,9 +713,10 @@
         }
 
         function onAllReferencesSelected() {
-          d3.select('#reference_selected').text('All References');
+          d3.select('#reference_selected').text(gettextCatalog.getString('All References'));
           d3.select('#region_selected').text('');
-          d3.select('#variant-density-panel').select('.hint').text('(click bottom chart to select a reference)');
+          d3.select('#variant-density-panel').select('.hint')
+            .text(gettextCatalog.getString('(click bottom chart to select a reference)'));
 
           loadGenomeVariantDensityData();
           loadStats(chromosomeIndex);
@@ -914,9 +915,10 @@
         }
 
         function onReferenceSelected(ref, i) {
-          d3.select('#reference_selected').text('Reference ' + ref.name);
+          d3.select('#reference_selected').text(gettextCatalog.getString('Reference') + ' ' + ref.name);
           d3.select('#region_selected').text('0 - ' + d3.format(',')(ref.value));
-          d3.select('#variant-density-panel').select('.hint').text('(drag bottom chart to select a region)');
+          d3.select('#variant-density-panel').select('.hint')
+            .text(gettextCatalog.getString('(drag bottom chart to select a region)'));
 
           loadVariantDensityData(ref, i);
           loadStats(chromosomeIndex);
@@ -986,7 +988,7 @@
 
         scope.increaseSampling = function() {
           if (statsOptions.samplingMultiplier >= samplingMultiplierLimit) {
-            window.alert('You have reached the sampling limit');
+            window.alert(gettextCatalog.getString('You have reached the sampling limit'));
             return;
           }
           statsOptions.samplingMultiplier += 1;

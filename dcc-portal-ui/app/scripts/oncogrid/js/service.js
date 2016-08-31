@@ -20,7 +20,7 @@
 
   var module = angular.module('icgc.oncogrid.services', []);
 
-  module.service('OncogridService', function (Donors, Genes, Occurrences, Consequence, $q, $filter) {
+  module.service('OncogridService', function (Donors, Genes, Occurrences, Consequence, $q, $filter, gettextCatalog) {
 
     var _srv = this;
 
@@ -129,10 +129,10 @@
       return _.map(donors, function (d) {
         return {
           'id': d.id,
-          'age': (d.ageAtDiagnosis === undefined ? 0 : d.ageAtDiagnosis),
+          'age': (d.ageAtDiagnosis === undefined ? -777 : d.ageAtDiagnosis),
           'sex': (d.gender === undefined ? 'unknown' : d.gender),
           'vitalStatus': (d.vitalStatus === undefined ? false : (d.vitalStatus === 'alive' ? true : false)),
-          'survivalTime': (d.survivalTime === undefined ? 0 : d.survivalTime),
+          'survivalTime': (d.survivalTime === undefined ? -777 : d.survivalTime),
           'pcawg': _.has(d, 'studies') && d.studies.indexOf('PCAWG') >= 0,
           'cnsmExists': d.cnsmExists,
           'stsmExists': d.stsmExists,
@@ -192,7 +192,7 @@
     };
 
     _srv.icgcLegend = function(max) {
-      var value = '<b># of Donors Affected:</b> </br>' + 
+      var value = '<b>' + gettextCatalog.getString('# of Donors Affected') + ':</b> </br>' + 
               '0 <div class="onco-track-legend onco-total-donor-legend" style="opacity:0.1"></div>' + 
               '<div class="onco-track-legend onco-total-donor-legend" style="opacity:0.4"></div>' + 
               '<div class="onco-track-legend onco-total-donor-legend" style="opacity:0.7"></div>' +
@@ -203,56 +203,58 @@
     };
 
     _srv.geneSetLegend = function() {
-      var value = '<b> Gene Sets: </b> <br>' + 
-              '<div class="onco-track-legend onco-cgc-legend"></div> Gene belongs to Cancer Gene Census';
+      var value = '<b> ' + gettextCatalog.getString('Gene Sets') + ': </b> <br>' + 
+              '<div class="onco-track-legend onco-cgc-legend"></div> '+
+              gettextCatalog.getString('Gene belongs to Cancer Gene Census');
   
       return value;
     };
 
     _srv.clinicalLegend = function(maxSurvival) {
-      var value =  '<b>Clinical Data:</b> <br>' +
-      '<b>Age at Diagnosis (years): </b> ' + 
+      var value =  '<b>' + gettextCatalog.getString('Clinical Data') + ':</b> <br>' +
+      '<b>' + gettextCatalog.getString('Age at Diagnosis (years)') + ': </b> ' + 
         '0 <div class="onco-track-legend onco-age-legend" style="opacity:0.05"></div>' +
         '<div class="onco-track-legend onco-age-legend" style="opacity:0.4"></div>' + 
         '<div class="onco-track-legend onco-age-legend" style="opacity:0.7"></div>' + 
         '<div class="onco-track-legend onco-age-legend" style="opacity:1"></div> 100+ <br>' + 
-      '<b>Vital Status:</b> ' +
-        'Deceased: <div class="onco-track-legend onco-deceased-legend"></div> ' + 
-        'Alive: <div class="onco-track-legend onco-alive-legend"></div><br>' + 
-      '<b>Survival Time (days):</b> ' +
+      '<b>' + gettextCatalog.getString('Vital Status') + ':</b> ' +
+        gettextCatalog.getString('Deceased') + ': <div class="onco-track-legend onco-deceased-legend"></div> ' + 
+        gettextCatalog.getString('Alive') + ': <div class="onco-track-legend onco-alive-legend"></div><br>' + 
+      '<b>' + gettextCatalog.getString('Survival Time (days)') + ':</b> ' +
         '0 <div class="onco-track-legend onco-survival-legend" style="opacity:0.05"></div>' +
         '<div class="onco-track-legend onco-survival-legend" style="opacity:0.4"></div>' + 
         '<div class="onco-track-legend onco-survival-legend" style="opacity:0.7"></div>' + 
         '<div class="onco-track-legend onco-survival-legend" style="opacity:1"></div>' + 
         maxSurvival + '<br>' + 
-      '<b>Sex:</b> ' + 'Male <div class="onco-track-legend onco-male-legend"></div> ' + 
-        'Female <div class="onco-track-legend onco-female-legend"></div><br>';
+      '<b>' + gettextCatalog.getString('Sex') + ':</b> ' + gettextCatalog.getString('Male') + 
+      ' <div class="onco-track-legend onco-male-legend"></div> ' + 
+        gettextCatalog.getString('Female') + ' <div class="onco-track-legend onco-female-legend"></div><br>';
 
       return value;
     };
 
     _srv.dataTypeLegend = function() {
-      var value = '<b>Available Data Types:</b><br>' +
+      var value = '<b>' + gettextCatalog.getString('Available Data Types') + ':</b><br>' +
         '<div class="onco-track-legend onco-cnsm-legend"></div> ' +
-          'Copy Number Somatic Mutations (CNSM) <br>' +
+          gettextCatalog.getString('Copy Number Somatic Mutations (CNSM)') + ' <br>' +
         '<div class="onco-track-legend onco-stsm-legend"></div> ' +
-          'Structural Somatic Mutations (StSM) <br>' +
+          gettextCatalog.getString('Structural Somatic Mutations (StSM)') + ' <br>' +
         '<div class="onco-track-legend onco-sgv-legend"></div> ' +
-          'Simple Germline Variants (SGV) <br>' +
+          gettextCatalog.getString('Simple Germline Variants (SGV)') + ' <br>' +
         '<div class="onco-track-legend onco-metha-legend"></div> ' +
-          'Array-based DNA Methylation (METH-A) <br>' +
+          gettextCatalog.getString('Array-based DNA Methylation (METH-A)') + ' <br>' +
         '<div class="onco-track-legend onco-meths-legend"></div> ' +
-          'Sequence-based DNA Methylation (METH-S) <br>' +
+          gettextCatalog.getString('Sequence-based DNA Methylation (METH-S)') + ' <br>' +
         '<div class="onco-track-legend onco-expa-legend"></div> ' +
-          'Array-based Gene Expression (EXP-A) <br>' +
+          gettextCatalog.getString('Array-based Gene Expression (EXP-A)') + ' <br>' +
         '<div class="onco-track-legend onco-exps-legend"></div> ' +
-          'Sequence-based Gene Expression (EXP-S) <br>' +
+          gettextCatalog.getString('Sequence-based Gene Expression (EXP-S)') + ' <br>' +
         '<div class="onco-track-legend onco-pexp-legend"></div> ' +
-          'Protein Expression (PEXP) <br>' +
+          gettextCatalog.getString('Protein Expression (PEXP)') + ' <br>' +
         '<div class="onco-track-legend onco-mirna-legend"></div> ' +
-          'Sequence-based miRNA Expression (miRNA) <br>' +
+          gettextCatalog.getString('Sequence-based miRNA Expression (miRNA)') + ' <br>' +
         '<div class="onco-track-legend onco-jcn-legend"></div> ' +
-          'Exon Junctions (JCN) <br>';
+          gettextCatalog.getString('Exon Junctions (JCN)') + ' <br>';
                   
       return value;
     };
@@ -260,7 +262,7 @@
     _srv.studyLegend = function() {
       var value = '<b>Studies:</b> <br>' + 
         '<div class="onco-track-legend onco-pcawg-legend" style="opacity:1"></div>' +
-        'Donor in PCAWG Study';
+        gettextCatalog.getString('Donor in PCAWG Study');
 
       return value;
     };

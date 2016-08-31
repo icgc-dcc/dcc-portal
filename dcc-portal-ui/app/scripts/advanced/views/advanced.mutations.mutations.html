@@ -1,16 +1,17 @@
-<h3>Mutations
+<h3>
+    <translate>Mutations</translate>
     <span class="action-toolbar pull-right">
         <span class="action-item">
-            <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('mutation', AdvancedCtrl.Mutation.mutations.pagination.total)">Save Mutation Set</a>
+            <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('mutation', AdvancedCtrl.Mutation.mutations.pagination.total)"><translate>Save Mutation Set</translate></a>
         </span>
         <span class="action-item">
-            <i class="icon-chart"></i><a href="/browser/m?filters={{AdvancedCtrl.Location.filters()}}">Genome Viewer</a></span>
+            <i class="icon-chart"></i><a href="/browser/m?filters={{AdvancedCtrl.Location.filters()}}"><translate>Genome Viewer</translate></a></span>
         </span>
     </span>
 </h3>
 
 <div class="t_table_top">
-    <span data-table-counts data-label="mutations" data-page="AdvancedCtrl.Mutation.mutations.pagination"></span>
+    <span data-table-counts data-label="{{'mutations' | translate}}" data-page="AdvancedCtrl.Mutation.mutations.pagination"></span>
     <span data-toolbar data-dl="mutations"></span>
 </div>
 <table class="table table-bordered table-striped table-condensed">
@@ -18,23 +19,23 @@
     <tr>
         <th rowspan="2" data-sortable data-type="mutations" data-field="id">ID</th>
         <th rowspan="2">
-            <abbr data-tooltip="Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}">
-                DNA Change</abbr>
+            <abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+                <translate>DNA change</translate></abbr>
         </th>
-        <th rowspan="2" data-sortable data-type="mutations" data-field="type">Type</th>
+        <th rowspan="2" data-sortable data-type="mutations" data-field="type"><translate>Type</translate></th>
         <th rowspan="2">
-            <abbr data-tooltip="Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.">Consequences</abbr>
+            <abbr data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
         </th>
-        <th class="text-center" colspan="2"># Donors affected</th>
+        <th class="text-center" colspan="2"><translate># Donors affected</translate></th>
     </tr>
     <tr>
         <th data-sortable data-type="mutations" data-field="affectedDonorCountFiltered" data-active="true"
             data-reversed="true" class="text-center">
-            <abbr data-tooltip="Number of Donors affected by Mutation<br>Filtered by Current Search Criteria / unfiltered # donors the mutation is observed.">Total</abbr>
+            <abbr data-tooltip="{{'Number of Donors affected by Mutation<br>Filtered by Current Search Criteria / unfiltered # donors the mutation is observed.' | translate}}"><translate>Total</translate></abbr>
         </th>
         <th class="text-center">
-            <abbr data-tooltip="# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project."
-                  data-tooltip-placement="left">Across all Projects</abbr>
+            <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+                  data-tooltip-placement="left"><translate>Across all Projects</translate></abbr>
         </th>
     </tr>
     </thead>
@@ -88,12 +89,12 @@
 <table class="hidden" id="mutations" data-ng-if="AdvancedCtrl.Page.isExporting()">
     <thead>
     <tr>
-        <th>Mutation ID</th>
-        <th>Genomic DNA Change</th>
-        <th>Type</th>
-        <th>Consequences</th>
-        <th>Donors Affected</th>
-        <th>Projects Mutation Observed</th>
+        <th><translate>Mutation ID</translate></th>
+        <th><translate>Genomic DNA Change</translate></th>
+        <th><translate>Type</translate></th>
+        <th><translate>Consequences</translate></th>
+        <th><translate>Donors affected</translate></th>
+        <th><translate>Projects Mutation Observed</translate></th>
     </tr>
     </thead>
     <tbody>

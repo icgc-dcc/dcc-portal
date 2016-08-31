@@ -1,5 +1,6 @@
 <div>
-  <div class="text-center graph_title">Number of Somatic Mutations in Donor's Exomes Across Cancer Projects
+  <div class="text-center graph_title">
+    <translate>Number of Somatic Mutations in Donor's Exomes Across Cancer Projects</translate>
 
     <span ng-show="showPlot" class="pull-right">
       <a href="">
@@ -9,7 +10,8 @@
   </div>
 
   <div ng-show="! showPlot" class="text-center" style="line-height: {{ defaultGraphHeight }}px;">
-    <strong>No data found for the selected
+    <strong>
+      <translate>No data found for the selected</translate>
       <ng-pluralize count="selectedProjectCount" when="{'0': 'project', 'one': 'project', 'other': 'projects'}"></ng-pluralize>.
     </strong>
   </div>
@@ -18,7 +20,8 @@
     <div class="canvas"></div>
 
     <div class="text-right">
-      <small>Design inspired from Nature:
+      <small>
+        <translate>Design inspired from Nature:</translate>
         <a href="http://www.nature.com/nature/journal/v499/n7457/full/nature12213.html" target="_blank">doi:10.1038/nature12213</a>
       </small>
     </div>

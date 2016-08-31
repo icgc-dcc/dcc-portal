@@ -1,7 +1,7 @@
 <div class="modal-content">
     <!-- header -->
     <div class="modal-header clearfix">
-        <h3 class="pull-left">Perform Enrichment Analysis</h3>
+        <h3 class="pull-left"><translate>Perform Enrichment Analysis</translate></h3>
         <button class="pull-right t_button" data-ng-click="cancel()"><i class="icon-cancel"></i>
         </button>
     </div>
@@ -11,7 +11,7 @@
        <ol>
            <li data-ng-if="!filters">
                <div>
-                   <div>Select number of genes to be analyzed: ({{geneLimit}} maximum) </div>
+                   <div><translate>Select number of genes to be analyzed: ({{geneLimit}} maximum) </translate></div>
                    <input type="text" size="6" 
                        data-ng-model="params.maxGeneCount"
                        integer-validator
@@ -22,11 +22,11 @@
            </li>
            <li> 
                <div>
-                   <div>Select universe:</div>
+                   <div><translate>Select universe:</translate></div>
                    <div data-ng-repeat="item in Extensions.GENE_SET_ROOTS"
                         data-ng-if="['go_term', 'pathway'].indexOf(item.type) >= 0">
                         <span data-ng-click="params.universe = item.universe">
-                            <i class="{{params.universe === item.universe? 'icon-dot-circled' : 'icon-circle-empty'}}"></i> {{item.name}}</span>
+                            <i class="{{params.universe === item.universe? 'icon-dot-circled' : 'icon-circle-empty'}}"></i> {{item.name | translate}}</span>
                         </span>
                    </div>
                </div>
@@ -34,7 +34,7 @@
            </li>
            <li>
                <div>
-                   <div>Select <abbr data-tooltip="False Discovery Rate">FDR</abbr> q-value threshold: (0.005 to 0.5 inclusive)</div>
+                   <div><translate has-markup>Select <abbr data-tooltip="{{'False Discovery Rate' | translate}}">FDR</abbr> q-value threshold: (0.005 to 0.5 inclusive)</translate></div>
                    <input type="text" size="5" 
                        data-ng-model="params.fdr"
                        data-ng-change="checkInput()">
@@ -42,23 +42,23 @@
            </li>
        </ol>
        <div>
-           <span>Show top: </span>
+           <span><translate>Show top:</translate> </span>
            <span>
                <select data-ng-model="params.maxGeneSetCount" 
                    data-ng-change="checkInput()"
                    data-ng-options="item for item in [10, 20, 50, 100]"></select>
            </span>
-           <span> gene sets</span>
+           <span> <translate>gene sets</translate></span>
        </div>
     </div>
 
     <!-- footer -->
     <div class="modal-footer">
-        <button class="t_button" data-ng-click="cancel(); reset();">Cancel</button>
+        <button class="t_button" data-ng-click="cancel(); reset();"><translate>Cancel</translate></button>
         <button class="t_button" data-ng-click="newGeneSetEnrichment()"
             data-ng-disabled="! hasValidParams || isLaunchingEnrichmentUpload()">
             <span data-ng-if="isLaunchingEnrichmentUpload()"><i class="icon-spinner icon-spin"></i></span>
-            Submit</button>
+            <translate>Submit</translate></button>
     </div>
 </div>
 

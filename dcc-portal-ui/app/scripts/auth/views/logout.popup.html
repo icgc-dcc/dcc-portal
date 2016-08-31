@@ -1,21 +1,21 @@
 <div class="modal-content">
     <div class="modal-header clearfix">
-        <h3 class="pull-left">Logout</h3>
+        <h3 class="pull-left"><translate>Logout</translate></h3>
         <button class="pull-right t_button" data-ng-click="closeLogoutPopup()"><i
                 class="icon-cancel"></i>
         </button>
     </div>
     <div class="modal-body" style="max-height:none;padding-bottom:0">
         <br>
-        This will log you out of the portal, but <strong>not from your OpenID account.</strong>
+        <translate has-markup>This will log you out of the portal, but <strong>not from your OpenID account.</strong>
         To prevent unauthorized access, please also logout from your account on your
-        OpenID provider's site.
+        OpenID provider's site.</translate>
         <br>
     </div>
     <div class="modal-footer">
-        <button class="t_button" data-ng-click="closeLogoutPopup()">Cancel</button>
+        <button class="t_button" data-ng-click="closeLogoutPopup()"><translate>Cancel</translate></button>
         <button class="t_button" data-ng-click="logout()">
-            <span ng-hide="connecting"><i class="icon-logout"></i>Logout</span>
+            <span ng-hide="connecting"><i class="icon-logout"></i><translate>Logout</translate></span>
         </button>
     </div>
 </div>

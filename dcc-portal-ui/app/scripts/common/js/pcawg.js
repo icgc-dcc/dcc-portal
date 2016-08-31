@@ -24,14 +24,14 @@
   // just PCAWG alone it is also used in the general Repositories Data file
   // service. I am leaving (MMoncada) this alone right now because other
   // code in the application depends on this service.
-  module.service('PCAWG', function() {
+  module.service('PCAWG', function(gettextCatalog) {
 
     var data = [
-      {id: 'DNA-Seq', shortLabel: 'Whole Genomes'},
-      {id: 'RNA-Seq', shortLabel: 'Whole Transcriptomes'},
-      {id: 'SSM', shortLabel: 'Simple Somatic Mutations'},
-      {id: 'CNSM', shortLabel: 'Copy Number Somatic Mutations'},
-      {id: 'StSM', shortLabel: 'Structural Somatic Mutations'}
+      {id: 'DNA-Seq', shortLabel: gettextCatalog.getString('Whole Genomes')},
+      {id: 'RNA-Seq', shortLabel: gettextCatalog.getString('Whole Transcriptomes')},
+      {id: 'SSM', shortLabel: gettextCatalog.getString('Simple Somatic Mutations')},
+      {id: 'CNSM', shortLabel: gettextCatalog.getString('Copy Number Somatic Mutations')},
+      {id: 'StSM', shortLabel: gettextCatalog.getString('Structural Somatic Mutations')}
     ];
 
     var shortLabelMap = {};

@@ -1,4 +1,4 @@
-<h1 data-ui-scrollfix=79><span class="t_badge t_badge_icon t_badge__projects"><i class="icon-list"></i></span>Cancer Projects</h1>
+<h1 data-ui-scrollfix=79><span class="t_badge t_badge_icon t_badge__projects"><i class="icon-list"></i></span><translate>Cancer Projects</translate></h1>
 <aside class="t_sidebar">
     <div style="margin-right: -2rem; position: relative">
         <div data-ng-if="ProjectsCtrl.loading" class="loadingOverlay"></div>
@@ -6,19 +6,19 @@
             <i class="icon-spinner icon-spin"></i>
         </div>
         <ul data-ng-show="ProjectsCtrl.projects.facets" class="t_facets">
-            <li data-tags-facet data-label="Project" data-facet-name="id" data-placeholder="e.g. PACA-CA, Brain, TCGA"
+            <li data-tags-facet data-label="{{'Project' | translate}}" data-facet-name="id" data-placeholder="{{'e.g. PACA-CA, Brain, TCGA' | translate}}"
                 data-type="project"></li>
-            <terms data-type="project" data-facet-name="primarySite" data-label="Primary Site"
+            <terms data-type="project" data-facet-name="primarySite" data-label="{{'Primary Site' | translate}}"
                    data-facet="ProjectsCtrl.projects.facets.primarySite"></terms>
             <terms data-type="project"
                 data-facet-name="primaryCountries"
-                data-label="Country"
+                data-label="{{'Country' | translate}}"
                 data-facet="ProjectsCtrl.projects.facets.primaryCountries" />
             <div data-disable-events="ProjectsCtrl.state.isTab('history')" >
-              <terms data-type="project" data-facet-name="availableDataTypes" data-defined="true" data-label="Available Data Type"
+              <terms data-type="project" data-facet-name="availableDataTypes" data-defined="true" data-label="{{'Available Data Type' | translate}}"
                      data-facet="ProjectsCtrl.projects.facets.availableDataTypes"></terms>
             </div>
-            <terms data-type="project" data-facet-name="tumourType" data-defined="true" data-label="Tumour Type"
+            <terms data-type="project" data-facet-name="tumourType" data-defined="true" data-label="{{'Tumour Type' | translate}}"
                      data-facet="ProjectsCtrl.projects.facets.tumourType"></terms>
         </ul>
     </div>
@@ -33,21 +33,21 @@
              data-ng-click="ProjectsCtrl.state.setTab('summary')"
              data-ng-class="{active: ProjectsCtrl.state.isTab('summary')}"
               data-href="projects/summary">
-            Summary
+            <translate>Summary</translate>
         </div>
         <div class="t_tabs__tab t_tabs__tab__table"
              data-nested
              data-ng-click="ProjectsCtrl.state.setTab('details')"
              data-ng-class="{active: ProjectsCtrl.state.isTab('details')}"
              data-href="projects/details" >
-            Details
+            <translate>Details</translate>
         </div>
       <div class="t_tabs__tab t_tabs__tab__history"
              data-nested
              data-ng-click="ProjectsCtrl.state.setTab('history')"
              data-ng-class="{active: ProjectsCtrl.state.isTab('history')}"
              data-href="projects/history" >
-            History
+            <translate>History</translate>
         </div>
     </div>
 

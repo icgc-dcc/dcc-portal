@@ -168,21 +168,28 @@
         .attr ('y', function (d) {return y (d.y0);})
         .attr ('height', 0)
         .on('mouseover', function(d) {
+          var rect = d3.select(this);
 
-          svg.append('rect')
-            .classed('chart-focus', true)
-            .attr('x', x(d.key))
-            .attr('y', y(d.y1))
-            .attr('width', x.rangeBand())
-            .attr('height', function() { return y(d.y0) - y(d.y1); })
-            .attr('fill', 'none')
-            .attr('stroke', '#283e5d')
+          bar.selectAll('.stack')
+            .transition()
+            .attr({opacity: 0.5});
+
+          rect.transition()
+            .attr({opacity: 1});
+
+          rect.attr('stroke', '#283e5d')
             .attr('stroke-width', 2);
 
           config.tooltipShowFunc(this,d);
         })
         .on('mouseout', function() {
-          svg.selectAll('.chart-focus').remove();
+          var rect = d3.select(this);
+
+          bar.selectAll('.stack')
+            .transition()
+            .attr({opacity: 1});
+
+          rect.attr('stroke', 'none');
 
           config.tooltipHideFunc();
         })
