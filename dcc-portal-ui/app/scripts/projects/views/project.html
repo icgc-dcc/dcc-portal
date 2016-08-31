@@ -347,7 +347,6 @@
             </translate>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_genes"></span>
             <table-filter
-                data-ng-if="ProjectGeneCtrl.genes.hits.length > ProjectGeneCtrl.defaultGenesLimit"
                 data-placeholder="{{'Type to filter Mutated Genes' | translate}}"
                 data-filter-model="ProjectGeneCtrl.tableFilter.mutatedGenes"></table-filter>
         </div>
@@ -501,7 +500,6 @@
             </translate>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_mutations"></span>
             <table-filter
-                data-ng-if="ProjectMutationsCtrl.mutations.hits.length > ProjectMutationsCtrl.defaultMutationsLimit"
                 data-placeholder="{{'Type to filter Mutations' | translate}}"
                 data-filter-model="ProjectMutationsCtrl.tableFilter.mutations"></table-filter>
         </div>
@@ -653,7 +651,6 @@
             </translate>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_donors"></span>
             <table-filter
-                data-ng-if="ProjectDonorsCtrl.donors.hits.length > ProjectDonorsCtrl.defaultDonorsLimit"
                 data-placeholder="{{'Type to filter affected genes' | translate}}"
                 data-filter-model="ProjectDonorsCtrl.tableFilter.affectedDonors"></table-filter>
         </div>

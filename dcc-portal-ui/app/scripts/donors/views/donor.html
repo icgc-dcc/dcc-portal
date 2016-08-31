@@ -278,7 +278,6 @@
             <strong>{{ DonorMutationsCtrl.mutations.pagination.total | numberPT }}</strong> mutations</translate>
             <span data-toolbar data-dl="{{DonorCtrl.donor.id}}_mutations"></span>
             <table-filter
-                data-ng-if="DonorMutationsCtrl.mutations.hits.length > DonorMutationsCtrl.defaultDonorsLimit"
                 data-placeholder="{{'Type to filter Mutations' | translate}}"
                 data-filter-model="DonorMutationsCtrl.tableFilter.donorMutations"></table-filter>
         </div>

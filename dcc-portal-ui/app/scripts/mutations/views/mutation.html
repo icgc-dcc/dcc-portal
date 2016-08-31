@@ -69,7 +69,6 @@
             <translate has-markup>Showing <strong>{{ MutationCtrl.mutation.consequences.length }}</strong> consequences</translate>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_consequence"></span>
             <table-filter
-                data-ng-if="MutationCtrl.mutation.consequences.length > MutationCtrl.defaultConsequencesLimit"
                 data-placeholder="{{'Type to filter Consequences' | translate}}"
                 data-filter-model="MutationCtrl.tableFilter.consequences"></table-filter>
         </span>
@@ -181,7 +180,6 @@
             <translate has-markup>Showing <strong>{{(MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects).length}}</strong> projects</translate>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_distribution"></span>
             <table-filter
-                data-ng-if="MutationCtrl.projects.length > MutationCtrl.defaultProjectsLimit"
                 data-placeholder="{{'Type to filter Projects' | translate}}"
                 data-filter-model="MutationCtrl.tableFilter.projects"></table-filter>
         </span>

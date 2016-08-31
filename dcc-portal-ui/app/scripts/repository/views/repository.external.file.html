@@ -272,7 +272,6 @@
         </translate>
       </span>
       <table-filter
-        data-ng-if="fileCtrlr.tableFilter.donors.length > fileCtrlr.defaultDonorLimit"
         data-placeholder="{{'Type to filter Donors' | translate}}"
         data-filter-model="fileCtrlr.tableFilter.donors"
         data-class="no-icon"></table-filter>
@@ -280,7 +279,9 @@
 
     <table
       class="table table-info fixed-width"
-      ng-repeat="donorInfo in (fileCtrlr.shouldLimitDisplayedDonors ? (info.donors | filter: fileCtrlr.tableFilter.donors).slice(0, fileCtrlr.defaultDonorLimit) : (info.donors | filter: fileCtrlr.tableFilter.donors))"
+      ng-repeat="donorInfo in (fileCtrlr.shouldLimitDisplayedDonors ? 
+      (info.donors | filter: fileCtrlr.tableFilter.donors).slice(0, fileCtrlr.defaultDonorLimit) : 
+      (info.donors | filter: fileCtrlr.tableFilter.donors))"
     >
       <tr>
         <th><translate>Project ID</translate></th>
@@ -335,21 +336,10 @@
       </tr>
     </table>
 
-    <div
-      class="t_sh__toggle"
-      data-ng-show="(info.donors | filter: fileCtrlr.tableFilter.donors).length > fileCtrlr.defaultDonorLimit"
-    >
-        <a
-          class="t_tools__tool"
-          data-ng-click="fileCtrlr.shouldLimitDisplayedDonors = !fileCtrlr.shouldLimitDisplayedDonors"
-          href=""
-        >
-          <span>
-             <i class="{{ !fileCtrlr.shouldLimitDisplayedDonors? 'icon-caret-up' : 'icon-caret-down' }}"></i>
-             {{ !fileCtrlr.shouldLimitDisplayedDonors ? "less" : ((info.donors | filter: fileCtrlr.tableFilter.donors).length - fileCtrlr.defaultDonorLimit) + " more" }}
-          </span>
-        </a>
-    </div>
+    <row-limit data-data="info.donors"
+            data-filter="fileCtrlr.tableFilter.donors"
+            data-show-limit="fileCtrlr.shouldLimitDisplayedDonors"
+            data-default-limit="fileCtrlr.defaultDonorLimit"></row-limit>
 
   </div>
 </section>

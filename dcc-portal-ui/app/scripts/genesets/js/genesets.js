@@ -53,6 +53,9 @@
       var _ctrl = this, 
       geneSetFilter = {}; // Build adv query based on type
 
+      _ctrl.shouldLimitDisplayedProjects = true;
+      _ctrl.defaultProjectsLimit = 5;
+
       Page.setTitle(geneSet.id);
       Page.setPage('entity');
 
@@ -221,6 +224,9 @@
   module.controller('GeneSetGenesCtrl', function ($scope, $timeout, LocationService, Genes, GeneSets, FiltersUtil) {
     var _ctrl = this, _geneSet = '', mergedGeneSetFilter = {};
 
+    _ctrl.shouldLimitDisplayedMutatedDonors = true;
+    _ctrl.defaultMutatedDonorsLimit = 5;
+
     function success(genes) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(_geneSet.type);
 
@@ -272,6 +278,9 @@
     function ($scope, $timeout, Mutations, GeneSets, Projects, LocationService, Donors, FiltersUtil, ProjectCache) {
 
     var _ctrl = this, geneSet;
+
+    _ctrl.shouldLimitDisplayedMutations = true;
+    _ctrl.defaultMutationsLimit = 5;
 
     function success(mutations) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(geneSet.type);
@@ -355,6 +364,8 @@
   module.controller('GeneSetDonorsCtrl', function ($scope, LocationService, Donors, GeneSets, FiltersUtil) {
     var _ctrl = this, _geneSet, mergedGeneSetFilter;
 
+    _ctrl.shouldLimitAffectedDonors = true;
+    _ctrl.defaultAffectedDonorsLimit = 5;
 
     function success(donors) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(_geneSet.type);

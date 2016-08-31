@@ -53,6 +53,9 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
         _targetedCompoundIds = [],
         _mutationalImpactFacets = null;
 
+    _ctrl.shouldLimitTargetedGenes = true;
+    _ctrl.defaultTargetedGenesLimit = 5;
+
 
     function getMutationImpactFacets() {
       var promise = compoundManager.getMutationImpactFacets();
