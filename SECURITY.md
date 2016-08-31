@@ -1,9 +1,9 @@
 # Portal Security
 ## Overview
 
-This document describes Authentication/Authorization process in ICGC DCC Portal.
+This document describes the Authentication/Authorization(A/A) process in ICGC DCC Portal.
 
-DCC Portal has authentication/authorization services to protect controlled analysis data.
+DCC Portal has A/A services to protect controlled analysis data.
 
 Before accessing controlled data from the International Cancer Genome Consortium (ICGC) users must get authorization from the Data Access Compliance Office ([DACO](https://icgc.org/daco)). Approved users can access the controlled data [of ICGC data releases](https://dcc.icgc.org/releases).
 
@@ -16,6 +16,12 @@ ICGC.org and Google accounts are authorized with the ICGC authenticator which pr
 DCC Portal serves data over HTTPS. In order to serve over HTTPS a valid CA SSL certificate is required. Furthermore, the certificate must be on a DNS subdomain of icgc.org for SSO login to function properly. In order for data synchronization and authentication to function properly, the target environment must be able to access the ICGC DCC Portal and OICR servers (e.g. CUD API).
 
 HTTPS cookies are used to carry user authentication information between requests. The cookies are valid for the whole icgc.org domain. This means when a user navigates in the icgc.org domain and its subdomains the authentication cookies available to all the system and they may authorize access to their resources based on the ICGC cookies.
+
+#### Terminology
+
+ - DACO - Data Access Compliance Office.
+ - CUD - Central User Directory
+ - CMS - Content Management System
 
 ## Actors
 
@@ -37,7 +43,7 @@ Portal API uses cookies(more details below) from a requests and maps them either
 
 Users should define the following configuration parameters in the `application.yml`
 
-```
+```yaml
 # ICGC Client configuration
 icgc:
 
@@ -94,7 +100,7 @@ List and describe the various cookies used by the system (there are 3 I think), 
 
 ## Flows
 
-#### ICGC login
+#### ICGC Login
 ![icgc](dcc-portal-server/docs/images/security/icgc_login.png)
 
  1. `User` hits the 'login with ICGC' button. 
@@ -110,7 +116,7 @@ List and describe the various cookies used by the system (there are 3 I think), 
  11. `Portal API` creates local representation of the user, which contain DACO authorization information, Collaboratory cloud access information, username and a random session identifier; stores the representation in the Hazelcast storage which is shared among all the portal instances; sets `dcc_portal_token` cookie which contain DCC portal session which was just created and send the response back to the `Browser`.
  12. `Browser` refreshes and displays user's authentication/authorization information to the `User`.
 
-#### Google login
+#### Google Login
 ![google](dcc-portal-server/docs/images/security/google_login.png)
 
  1. `User` hits the 'login with Google' button. 
@@ -128,7 +134,7 @@ List and describe the various cookies used by the system (there are 3 I think), 
  11. `Portal API` creates local representation of the user, which contain DACO authorization information, Collaboratory cloud access information, username and a random session identifier; stores the representation in the Hazelcast storage which is shared among all the portal instances; sets `dcc_portal_token` cookie which contain DCC portal session which was just created and send the response back to the `Browser`.
  12. `Browser` refreshes and displays user's authentication/authorization information to the `User`.
 
-#### Yahoo login
+#### Yahoo Login
 ![yahoo](dcc-portal-server/docs/images/security/yahoo_login.png)
 
  1. `User` hits the 'login with Yahoo' button. 
