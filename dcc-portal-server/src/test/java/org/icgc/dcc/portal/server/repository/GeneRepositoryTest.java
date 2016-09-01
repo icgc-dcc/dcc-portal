@@ -31,9 +31,9 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.test.TestIndex;
-import org.icgc.dcc.portal.server.model.Query;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -139,7 +139,9 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     SearchResponse responseNot = geneRepository.findAllCentric(queryNot);
     SearchHits hitsNot = responseNot.getHits();
 
-    assertThat(hitsNot.getTotalHits()).isEqualTo(2);
+    // Every single gene contains at least one ovary or pancreas donor, hence we get no results back.
+    // This behavior is new after: DCC-5113
+    assertThat(hitsNot.getTotalHits()).isEqualTo(0);
   }
 
   @Test

@@ -53,7 +53,7 @@
             <tr data-ng-repeat="r in results.hits" data-ng-switch="r.type" class="t_quick__hit type-{{r.type}}">
                 <td class="t_quick__hit__type">
                     <span class="{{ badgeStyleClass (r.type) }}" />
-                    <div class="t_badge__label">{{r.type}}</div>
+                    <div class="t_badge__label">{{r.type | trans}}</div>
                 </td>
 
                 <td class="t_quick__hit__text" data-ng-switch-when="compound">

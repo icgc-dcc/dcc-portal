@@ -65,7 +65,7 @@ public class Jql2PqlConverterTest {
         .fields(ImmutableList.of("id", "age"))
         .filters(new FiltersParam("{donor:{id:{not:1}}}").get())
         .build();
-    assertResponse(query, "select(id,age),ne(donor.id,1)");
+    assertResponse(query, "select(id,age),not(eq(donor.id,1))");
   }
 
   @Test
@@ -145,7 +145,7 @@ public class Jql2PqlConverterTest {
         .fields(ImmutableList.of("id", "age"))
         .filters(new FiltersParam("{donor:{id:{not:1}}}").get())
         .build();
-    assertCountQueryResponse(query, "count(),ne(donor.id,1)");
+    assertCountQueryResponse(query, "count(),not(eq(donor.id,1))");
   }
 
   @Test
@@ -165,7 +165,7 @@ public class Jql2PqlConverterTest {
         .filters(new FiltersParam("{donor:{id:{not:1}}}").get())
         .includes(singletonList("facets"))
         .build();
-    assertCountQueryResponse(query, "count(),facets(*),ne(donor.id,1)");
+    assertCountQueryResponse(query, "count(),facets(*),not(eq(donor.id,1))");
   }
 
   private void assertResponse(Query query, String exectedResult) {

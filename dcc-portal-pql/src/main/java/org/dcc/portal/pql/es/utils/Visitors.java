@@ -22,11 +22,11 @@ import static lombok.AccessLevel.PRIVATE;
 import static org.dcc.portal.pql.meta.Type.DIAGRAM;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.DRUG_CENTRIC;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.OBSERVATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.PROJECT;
-import static org.dcc.portal.pql.meta.Type.FILE;
 
 import java.util.Map;
 
@@ -53,6 +53,7 @@ import org.dcc.portal.pql.es.visitor.score.NonNestedFieldsVisitor;
 import org.dcc.portal.pql.es.visitor.score.ScoreQueryVisitor;
 import org.dcc.portal.pql.es.visitor.special.EntitySetVisitor;
 import org.dcc.portal.pql.es.visitor.special.FieldsToSourceVisitor;
+import org.dcc.portal.pql.es.visitor.special.FixNotQueryVisitor;
 import org.dcc.portal.pql.es.visitor.special.GeneSetFilterVisitor;
 import org.dcc.portal.pql.es.visitor.special.LocationFilterVisitor;
 import org.dcc.portal.pql.es.visitor.special.ScoreSortVisitor;
@@ -104,6 +105,8 @@ public final class Visitors {
   private static final GeneSetFilterVisitor GENE_SET_FILTER_VISITOR = new GeneSetFilterVisitor();
   private static final LocationFilterVisitor LOCATION_FILTER_VISITOR = new LocationFilterVisitor();
   private static final ScoreSortVisitor SCORE_SORT_VISITOR = new ScoreSortVisitor();
+
+  private static final FixNotQueryVisitor FIX_NOT_QUERY_VISITOR = new FixNotQueryVisitor();
 
   private static final EntitySetVisitor ENTITY_SET_VISITOR = new EntitySetVisitor();
   private static final FieldsToSourceVisitor FIELDS_TO_SOURCE_VISITOR = new FieldsToSourceVisitor();
@@ -161,6 +164,10 @@ public final class Visitors {
 
   public static FieldsToSourceVisitor createFieldsToSourceVisitor() {
     return FIELDS_TO_SOURCE_VISITOR;
+  }
+
+  public static FixNotQueryVisitor createFixNotQueryVisitor() {
+    return FIX_NOT_QUERY_VISITOR;
   }
 
   public static EntitySetVisitor createEntitySetVisitor() {

@@ -20,8 +20,6 @@ package org.dcc.portal.pql.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.dcc.portal.pql.exception.SemanticException;
 import org.dcc.portal.pql.utils.BaseElasticsearchTest;
@@ -36,6 +34,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Contains 3 mutations: MU1, MU2, MU3
@@ -136,7 +137,7 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
 
   @Test
   public void neTest_nested() {
-    val result = executeQuery("ne(functionalImpact, 'Low')");
+    val result = executeQuery("not(nested(transcript, eq(functionalImpact, 'Low')))");
     assertTotalHitsCount(result, 2);
     containsOnlyIds(result, "MU2", "MU3");
   }

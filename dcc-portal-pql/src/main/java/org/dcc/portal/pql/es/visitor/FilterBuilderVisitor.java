@@ -155,7 +155,7 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   @Override
   public FilterBuilder visitNot(@NonNull NotNode node, @NonNull Optional<QueryContext> context) {
     val childrenCount = node.childrenCount();
-    checkState(childrenCount == 1, "NotNode can have only one child. Found {}", childrenCount);
+    checkState(childrenCount == 1, "NotNode can have only one child. Found %s", childrenCount);
 
     return notFilter(node.getFirstChild().accept(this, context));
   }
