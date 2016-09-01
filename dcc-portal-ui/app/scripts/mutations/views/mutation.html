@@ -85,7 +85,7 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="consequence in (MutationCtrl.shouldLimitDisplayConsequences ? 
-                (MutationCtrl.mutation.consequences | filter: MutationCtrl.tableFilter.consequences).slice(0, MutationCtrl.defaultConsequencesLimit) : 
+                (MutationCtrl.mutation.consequences | filter: MutationCtrl.tableFilter.consequences | limitTo: MutationCtrl.defaultConsequencesLimit) : 
                 (MutationCtrl.mutation.consequences | filter: MutationCtrl.tableFilter.consequences))">
                 <td>
                     <a data-ng-href="/genes/{{consequence.geneAffectedId}}">{{ consequence.geneAffectedSymbol }}</a>
@@ -196,7 +196,7 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="project in (MutationCtrl.shouldLimitDisplayProjects ? 
-                (MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects | orderBy:'-percentAffected').slice(0, MutationCtrl.defaultProjectsLimit) : 
+                (MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects | orderBy:'-percentAffected' | limitTo: MutationCtrl.defaultProjectsLimit) : 
                 (MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects | orderBy:'-percentAffected')) track by project.id">
                 <td><a data-tooltip="{{ project.name }}" data-ng-href="/projects/{{project.id}}">
                     {{project.id}}

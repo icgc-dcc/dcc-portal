@@ -536,7 +536,7 @@
         FilterService = LocationService.getFilterService();
       
     _ctrl.shouldLimitDisplayedGenes = true;
-    _ctrl.defaultGenesLimit = 5;
+    _ctrl.defaultGenesLimit = 10;
     
     var loadState = new LoadState({scope: $scope});
 
@@ -636,7 +636,7 @@
         FilterService = LocationService.getFilterService();
 
     _ctrl.shouldLimitDisplayedMutations = true;
-    _ctrl.defaultMutationsLimit = 5;
+    _ctrl.defaultMutationsLimit = 10;
 
     var loadState = new LoadState({ scope: $scope });
 
@@ -725,7 +725,7 @@
         FilterService = LocationService.getFilterService();
 
     _ctrl.shouldLimitDisplayedDonors = true;
-    _ctrl.defaultDonorsLimit = 5;
+    _ctrl.defaultDonorsLimit = 10;
 
     var loadState = new LoadState({ scope: $scope });
 

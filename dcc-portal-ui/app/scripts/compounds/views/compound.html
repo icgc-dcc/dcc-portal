@@ -191,8 +191,8 @@
                                 </th>
                             </tr>
                             <tr data-ng-repeat="gene in (CompoundCtrl.shouldLimitTargetedGenes ? 
-                                (CompoundCtrl.getTargetedCompoundGenes() | limitTo: CompoundCtrl.getTargetedCompoundGenesResultPerPage() | filter: CompoundCtrl.tableFilter.targetedGenes).slice(0, CompoundCtrl.defaultTargetedGenesLimit) : 
-                                (CompoundCtrl.getTargetedCompoundGenes() | limitTo: CompoundCtrl.getTargetedCompoundGenesResultPerPage() | filter: CompoundCtrl.tableFilter.targetedGenes)) track by gene.id">
+                                (CompoundCtrl.getTargetedCompoundGenes() | filter: CompoundCtrl.tableFilter.targetedGenes | limitTo: CompoundCtrl.getTargetedCompoundGenesResultPerPage())) : 
+                                (CompoundCtrl.getTargetedCompoundGenes() | filter: CompoundCtrl.tableFilter.targetedGenes | limitTo: CompoundCtrl.getTargetedCompoundGenesResultPerPage())) track by gene.id">
                                 <td><a href="/genes/{{gene.id}}" data-ng-bind="gene.symbol"></a></td>
                                 <td data-ng-bind="gene.name"></td>
                                 <td data-ng-bind-template="chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}"></td>

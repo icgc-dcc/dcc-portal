@@ -54,7 +54,7 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
         _mutationalImpactFacets = null;
 
     _ctrl.shouldLimitTargetedGenes = true;
-    _ctrl.defaultTargetedGenesLimit = 5;
+    _ctrl.defaultTargetedGenesLimit = 10;
 
 
     function getMutationImpactFacets() {

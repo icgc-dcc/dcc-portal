@@ -147,7 +147,7 @@
                 </thead>
                 <tbody>
                 <tr data-ng-repeat="sample in (DonorSpecimenCtrl.shouldLimitDisplaySpecimenSamples ? 
-                    (DonorSpecimenCtrl.specimen.samples | filter: DonorSpecimenCtrl.tableFilter.specimenSamples).slice(0, DonorSpecimenCtrl.defaultSpecimenSamplesLimit) : 
+                    (DonorSpecimenCtrl.specimen.samples | filter: DonorSpecimenCtrl.tableFilter.specimenSamples | limitTo: DonorSpecimenCtrl.defaultSpecimenSamplesLimit) : 
                     (DonorSpecimenCtrl.specimen.samples | filter: DonorSpecimenCtrl.tableFilter.specimenSamples)) track by sample.id">
                     <td>{{ sample.id }}</td>
                     <td>{{ sample.analyzedId }}</td>

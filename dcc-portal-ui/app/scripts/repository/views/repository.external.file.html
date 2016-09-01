@@ -265,23 +265,17 @@
       </span>
     </h3>
 
-    <div class="t_table_top">
-      <span ng-if="(info.donors | filter: fileCtrlr.tableFilter.donors).length > fileCtrlr.defaultDonorLimit && fileCtrlr.shouldLimitDisplayedDonors">
-        <translate has-markup>
-          Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{(info.donors | filter: fileCtrlr.tableFilter.donors).length}}</strong> donors
-        </translate>
-      </span>
-      <table-filter
-        data-placeholder="{{'Type to filter Donors' | translate}}"
-        data-filter-model="fileCtrlr.tableFilter.donors"
-        data-class="no-icon"></table-filter>
+    <div class="t_table_top" ng-if="info.donors.length > fileCtrlr.defaultDonorLimit && fileCtrlr.shouldLimitDisplayedDonors">
+      <translate has-markup>
+        Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{(info.donors}}</strong> donors
+      </translate>
     </div>
 
     <table
       class="table table-info fixed-width"
       ng-repeat="donorInfo in (fileCtrlr.shouldLimitDisplayedDonors ? 
-      (info.donors | filter: fileCtrlr.tableFilter.donors).slice(0, fileCtrlr.defaultDonorLimit) : 
-      (info.donors | filter: fileCtrlr.tableFilter.donors))"
+      (info.donors | limitTo: fileCtrlr.defaultDonorLimit) : 
+      (info.donors))"
     >
       <tr>
         <th><translate>Project ID</translate></th>
@@ -337,7 +331,6 @@
     </table>
 
     <row-limit data-data="info.donors"
-            data-filter="fileCtrlr.tableFilter.donors"
             data-show-limit="fileCtrlr.shouldLimitDisplayedDonors"
             data-default-limit="fileCtrlr.defaultDonorLimit"></row-limit>
 

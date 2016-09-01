@@ -258,7 +258,7 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="project in (GeneSetCtrl.shouldLimitDisplayedProjects ? 
-            (GeneSetCtrl.geneSet.projects | filter: GeneSetCtrl.tableFilter.projects | orderBy:'uiAffectedDonorPercentage':true).slice(0, GeneSetCtrl.defaultProjectsLimit) : 
+            (GeneSetCtrl.geneSet.projects | filter: GeneSetCtrl.tableFilter.projects | orderBy:'uiAffectedDonorPercentage':true | limitTo: GeneSetCtrl.defaultProjectsLimit) : 
             (GeneSetCtrl.geneSet.projects | filter: GeneSetCtrl.tableFilter.projects | orderBy:'uiAffectedDonorPercentage':true)) track by project.id">
                 <td><a data-tooltip="{{ project.name }}" data-ng-href="/projects/{{ project.id }}">
                     {{ project.id }}
@@ -369,9 +369,6 @@
             <translate has-markup>Showing <strong>{{GeneSetGenesCtrl.genes.hits.length | number}}</strong> of
             <strong>{{GeneSetGenesCtrl.genes.pagination.total | number}}</strong> genes</translate>
             <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_genes"></span>
-            <table-filter
-                data-placeholder="{{'Type to filter Mutated Genes' | translate}}"
-                data-filter-model="GeneSetGenesCtrl.tableFilter.mutatedGenes"></table-filter>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -389,8 +386,8 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="gene in (GeneSetGenesCtrl.shouldLimitDisplayedMutatedDonors ? 
-            (GeneSetGenesCtrl.genes.hits | filter: GeneSetGenesCtrl.tableFilter.mutatedGenes).slice(0, GeneSetGenesCtrl.defaultMutatedDonorsLimit) : 
-            (GeneSetGenesCtrl.genes.hits | filter: GeneSetGenesCtrl.tableFilter.mutatedGenes)) track by gene.id">
+            (GeneSetGenesCtrl.genes.hits | limitTo: GeneSetGenesCtrl.defaultMutatedDonorsLimit) : 
+            (GeneSetGenesCtrl.genes.hits)) track by gene.id">
                 <td><a data-ui-sref="gene({id:gene.id})">{{gene.symbol}}</a></td>
                 <td>{{gene.name}}</td>
                 <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
@@ -422,7 +419,6 @@
         </table>
 
         <row-limit data-data="GeneSetGenesCtrl.genes.hits"
-            data-filter="GeneSetGenesCtrl.tableFilter.mutatedGenes"
             data-show-limit="GeneSetGenesCtrl.shouldLimitDisplayedMutatedDonors"
             data-default-limit="GeneSetGenesCtrl.defaultMutatedDonorsLimit"></row-limit>
 
@@ -500,9 +496,6 @@
             <translate has-markup>Showing <strong>{{GeneSetMutationsCtrl.mutations.hits.length}}</strong> of
             <strong>{{GeneSetMutationsCtrl.mutations.pagination.total | number}}</strong> mutations</translate>
             <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_mutations"></span>
-            <table-filter
-                data-placeholder="{{'Type to filter Mutated Genes' | translate}}"
-                data-filter-model="GeneSetMutationsCtrl.tableFilter.mutations"></table-filter>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -524,8 +517,8 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="mutation in (GeneSetMutationsCtrl.shouldLimitDisplayedMutations ? 
-            (GeneSetMutationsCtrl.mutations.hits | filter: GeneSetMutationsCtrl.tableFilter.mutations).slice(0, GeneSetMutationsCtrl.defaultMutationsLimit) : 
-            (GeneSetMutationsCtrl.mutations.hits | filter: GeneSetMutationsCtrl.tableFilter.mutations)) track by mutation.id">
+            (GeneSetMutationsCtrl.mutations.hits | limitTo: GeneSetMutationsCtrl.defaultMutationsLimit) : 
+            (GeneSetMutationsCtrl.mutations.hits)) track by mutation.id">
                 <td><a data-ui-sref="mutation({id:mutation.id})">{{mutation.id}}</a></td>
                 <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
                 <td><abbr data-tooltip="{{ mutation.type | define }}">{{mutation.type}}</abbr></td>
@@ -559,7 +552,6 @@
         </table>
 
         <row-limit data-data="GeneSetMutationsCtrl.mutations.hits"
-            data-filter="GeneSetMutationsCtrl.tableFilter.mutations"
             data-show-limit="GeneSetMutationsCtrl.shouldLimitDisplayedMutations"
             data-default-limit="GeneSetMutationsCtrl.defaultMutationsLimit"></row-limit>
 
@@ -619,9 +611,6 @@
             <translate has-markup>Showing <strong>{{GeneSetDonorsCtrl.donors.hits.length}}</strong> of <strong>{{GeneSetDonorsCtrl.donors.pagination.total
             | number}}</strong> donors</translate>
             <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_donors"></span>
-            <table-filter
-                data-placeholder="{{'Type to filter Mutated Genes' | translate}}"
-                data-filter-model="GeneSetDonorsCtrl.tableFilter.affectedDonors"></table-filter>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -658,7 +647,7 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="donor in (GeneSetDonorsCtrl.shouldLimitAffectedDonors ? 
-                (GeneSetDonorsCtrl.donors.hits | filter: GeneSetDonorsCtrl.tableFilter.affectedDonors).slice(0, GeneSetDonorsCtrl.defaultAffectedDonorsLimit) : 
+                (GeneSetDonorsCtrl.donors.hits | filter: GeneSetDonorsCtrl.tableFilter.affectedDonors | limitTo: GeneSetDonorsCtrl.defaultAffectedDonorsLimit) : 
                 (GeneSetDonorsCtrl.donors.hits | filter: GeneSetDonorsCtrl.tableFilter.affectedDonors)) track by donor.id">
                 <td><a data-ui-sref="donor({id:donor.id})">{{donor.id}}</a></td>
                 <td>{{donor.primarySite}}</td>
@@ -696,7 +685,6 @@
         </table>
 
         <row-limit data-data="GeneSetDonorsCtrl.donors.hits"
-            data-filter="GeneSetDonorsCtrl.tableFilter.affectedDonors"
             data-show-limit="GeneSetDonorsCtrl.shouldLimitAffectedDonors"
             data-default-limit="GeneSetDonorsCtrl.defaultAffectedDonorsLimit"></row-limit>
 

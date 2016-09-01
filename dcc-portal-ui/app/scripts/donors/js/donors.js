@@ -148,7 +148,7 @@
     var _ctrl = this, donor;
 
     _ctrl.shouldLimitDisplayDonors = true;
-    _ctrl.defaultDonorsLimit = 5;
+    _ctrl.defaultDonorsLimit = 10;
     
     function success(mutations) {
       if (mutations.hasOwnProperty('hits')) {
@@ -242,7 +242,7 @@
 
     _ctrl.PCAWG = PCAWG;
     _ctrl.shouldLimitDisplaySpecimenSamples = true;
-    _ctrl.defaultSpecimenSamplesLimit = 5;
+    _ctrl.defaultSpecimenSamplesLimit = 10;
 
     _ctrl.isPCAWG = function(specimen) {
 

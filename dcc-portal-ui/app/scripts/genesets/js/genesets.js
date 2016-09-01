@@ -54,7 +54,7 @@
       geneSetFilter = {}; // Build adv query based on type
 
       _ctrl.shouldLimitDisplayedProjects = true;
-      _ctrl.defaultProjectsLimit = 5;
+      _ctrl.defaultProjectsLimit = 10;
 
       Page.setTitle(geneSet.id);
       Page.setPage('entity');
@@ -225,7 +225,7 @@
     var _ctrl = this, _geneSet = '', mergedGeneSetFilter = {};
 
     _ctrl.shouldLimitDisplayedMutatedDonors = true;
-    _ctrl.defaultMutatedDonorsLimit = 5;
+    _ctrl.defaultMutatedDonorsLimit = 10;
 
     function success(genes) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(_geneSet.type);
@@ -280,7 +280,7 @@
     var _ctrl = this, geneSet;
 
     _ctrl.shouldLimitDisplayedMutations = true;
-    _ctrl.defaultMutationsLimit = 5;
+    _ctrl.defaultMutationsLimit = 10;
 
     function success(mutations) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(geneSet.type);
@@ -365,7 +365,7 @@
     var _ctrl = this, _geneSet, mergedGeneSetFilter;
 
     _ctrl.shouldLimitAffectedDonors = true;
-    _ctrl.defaultAffectedDonorsLimit = 5;
+    _ctrl.defaultAffectedDonorsLimit = 10;
 
     function success(donors) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(_geneSet.type);

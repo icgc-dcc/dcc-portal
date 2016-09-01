@@ -50,10 +50,10 @@
     _ctrl.mutation.uiProteinTranscript = [];
 
     _ctrl.shouldLimitDisplayProjects = true;
-    _ctrl.defaultProjectsLimit = 5;
+    _ctrl.defaultProjectsLimit = 10;
 
      _ctrl.shouldLimitDisplayConsequences = true;
-    _ctrl.defaultConsequencesLimit = 5;
+    _ctrl.defaultConsequencesLimit = 10;
 
     projects = {};
     _ctrl.projects = [];

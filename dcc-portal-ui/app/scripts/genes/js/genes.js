@@ -110,7 +110,7 @@
 
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
-    _ctrl.defaultProjectsLimit = 5;
+    _ctrl.defaultProjectsLimit = 10;
 
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 
@@ -250,7 +250,7 @@
       var _ctrl = this;
 
       _ctrl.shouldLimitDisplayMutations = true;
-      _ctrl.defaultMutationsLimit = 5;
+      _ctrl.defaultMutationsLimit = 10;
 
       function success(mutations) {
         if (mutations.hasOwnProperty('hits')) {

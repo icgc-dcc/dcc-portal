@@ -419,7 +419,7 @@
     this.isEmptyString = isEmptyString;
     this.defaultString = defaultString;
     this.shouldLimitDisplayedDonors = true;
-    this.defaultDonorLimit = 5;
+    this.defaultDonorLimit = 10;
 
     function convertToString (input) {
       return _.isString (input) ? input : (input || '').toString();
