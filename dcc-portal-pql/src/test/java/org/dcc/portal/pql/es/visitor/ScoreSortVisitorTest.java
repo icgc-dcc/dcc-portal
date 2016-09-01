@@ -22,14 +22,14 @@ import static org.dcc.portal.pql.utils.Tests.createEsAst;
 
 import java.util.Optional;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.dcc.portal.pql.es.ast.SortNode;
 import org.dcc.portal.pql.es.model.Order;
 import org.dcc.portal.pql.es.utils.Nodes;
 import org.dcc.portal.pql.es.visitor.special.ScoreSortVisitor;
 import org.junit.Test;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ScoreSortVisitorTest {
@@ -39,6 +39,7 @@ public class ScoreSortVisitorTest {
   @Test
   public void containsScore() {
     val root = createEsAst("select(id), sort(id, +_score)");
+    log.debug("Before visitor: {}", root);
     val result = root.accept(visitor, Optional.empty());
     log.debug("After visitor: {}", result);
 

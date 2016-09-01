@@ -23,10 +23,6 @@ import static org.dcc.portal.pql.es.utils.Visitors.createNonNestedFieldsVisitor;
 
 import java.util.Optional;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.NestedNode;
 import org.dcc.portal.pql.es.ast.NestedNode.ScoreMode;
@@ -34,12 +30,17 @@ import org.dcc.portal.pql.es.ast.RootNode;
 import org.dcc.portal.pql.es.ast.filter.BoolNode;
 import org.dcc.portal.pql.es.ast.filter.FilterNode;
 import org.dcc.portal.pql.es.ast.filter.MustBoolNode;
+import org.dcc.portal.pql.es.ast.filter.NotNode;
 import org.dcc.portal.pql.es.ast.query.FunctionScoreNode;
 import org.dcc.portal.pql.es.ast.query.QueryNode;
 import org.dcc.portal.pql.es.utils.Nodes;
 import org.dcc.portal.pql.es.visitor.NodeVisitor;
 import org.dcc.portal.pql.meta.TypeModel;
 import org.dcc.portal.pql.query.QueryContext;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Adds score queries. When initialized accepts an initialized {@link NestedNode} which is different for MutationCentic
@@ -82,6 +83,11 @@ public abstract class ScoreQueryVisitor extends NodeVisitor<ExpressionNode, Quer
     log.debug("Adding scores to QueryNode: \n{}", queryNode);
     val filterNodeOpt = Nodes.getOptionalChild(queryNode, FilterNode.class);
     checkState(filterNodeOpt.isPresent(), "Malformed QueryNode \n%s", queryNode);
+
+    // Do not generate scores for NOT nodes.
+    if (filterNodeOpt.get().hasChildren() && filterNodeOpt.get().getFirstChild() instanceof NotNode) {
+      return queryNode;
+    }
 
     // Remove all the chilren from the query node (FilterNode only). Add filters with non-nested fields
     // as well a fields nested under the nestingPath
