@@ -23,10 +23,10 @@ import static org.icgc.dcc.portal.server.service.SessionService.DISCOVERY_INFO_C
 import java.util.Map;
 import java.util.UUID;
 
-import org.icgc.dcc.portal.server.auth.openid.DistributedConsumerAssociationStore;
-import org.icgc.dcc.portal.server.auth.openid.DistributedNonceVerifier;
 import org.icgc.dcc.portal.server.config.ServerProperties.HazelcastProperties;
 import org.icgc.dcc.portal.server.model.User;
+import org.icgc.dcc.portal.server.security.openid.DistributedConsumerAssociationStore;
+import org.icgc.dcc.portal.server.security.openid.DistributedNonceVerifier;
 import org.icgc.dcc.portal.server.service.SessionService;
 import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.consumer.InMemoryConsumerAssociationStore;

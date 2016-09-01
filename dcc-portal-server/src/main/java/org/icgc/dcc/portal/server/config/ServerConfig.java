@@ -20,8 +20,6 @@ package org.icgc.dcc.portal.server.config;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.client.Client;
 import org.icgc.dcc.common.core.mail.Mailer;
-import org.icgc.dcc.portal.server.auth.UserAuthProvider;
-import org.icgc.dcc.portal.server.auth.UserAuthenticator;
 import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.CacheProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
@@ -31,9 +29,11 @@ import org.icgc.dcc.portal.server.config.ServerProperties.HazelcastProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.ICGCProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.MailProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.OAuthProperties;
-import org.icgc.dcc.portal.server.config.ServerProperties.WebProperties;
 import org.icgc.dcc.portal.server.config.ServerProperties.SoftwareProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.WebProperties;
 import org.icgc.dcc.portal.server.model.Settings;
+import org.icgc.dcc.portal.server.security.jersey.UserAuthProvider;
+import org.icgc.dcc.portal.server.security.jersey.UserAuthenticator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -50,7 +50,7 @@ public class ServerConfig {
   /**
    * Properties.
    */
-  
+
   @Bean
   @ConfigurationProperties
   public ServerProperties properties() {
@@ -166,4 +166,5 @@ public class ServerConfig {
   public SoftwareProperties softProperties() {
     return properties().getSoftware();
   }
+
 }

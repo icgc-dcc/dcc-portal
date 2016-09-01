@@ -15,10 +15,10 @@
                           data-ng-click="removeFacet(typeName, facet)"
                           data-ng-switch="facet">
                         <span data-ng-switch-when="id">{{typeName | readable}}</span>
-                        <span data-ng-switch-when="pathwayId">Pathway</span>
-                        <span data-ng-switch-when="goTermId">GO</span>
-                        <span data-ng-switch-when="curatedSetId">Curated Gene Set</span>
-                        <span data-ng-switch-when="donorId">Donor</span>
+                        <span data-ng-switch-when="pathwayId"><translate>Pathway</translate></span>
+                        <span data-ng-switch-when="goTermId"><translate>GO</translate></span>
+                        <span data-ng-switch-when="curatedSetId"><translate>Curated Gene Set</translate></span>
+                        <span data-ng-switch-when="donorId"><translate>Donor</translate></span>
                         <span data-ng-switch-when="location">{{typeName | readable }} Location</span>
                         <span data-ng-switch-default="">{{facet | trans}}</span>
                     </span>

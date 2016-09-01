@@ -6,21 +6,21 @@
 <aside data-ui-scrollfix=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
-            <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary">Summary</a>
+            <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a>
             </li>
             <li data-spy="transcripts" class="t_subnav__items__item"><a data-scrollto
-                                                                        href="#transcripts">Consequences</a></li>
-            <li data-spy="donors" class="t_subnav__items__item"><a data-scrollto href="#donors">Cancer Distribution</a>
+                                                                        href="#transcripts"><translate>Consequences</translate></a></li>
+            <li data-spy="donors" class="t_subnav__items__item"><a data-scrollto href="#donors"><translate>Cancer Distribution</translate></a>
             </li>
-            <li data-spy="protein" class="t_subnav__items__item"><a data-scrollto href="#protein">Protein</a></li>
-            <li data-spy="genomic" class="t_subnav__items__item"><a data-scrollto href="#genomic">Genomic Context</a>
+            <li data-spy="protein" class="t_subnav__items__item"><a data-scrollto href="#protein"><translate>Protein</translate></a></li>
+            <li data-spy="genomic" class="t_subnav__items__item"><a data-scrollto href="#genomic"><translate>Genomic Context</translate></a>
             </li>
         </ul>
     </section>
 </aside>
 <article>
 <section id="summary">
-    <h3>Summary</h3>
+    <h3><translate>Summary</translate></h3>
 
     <div class="wide">
         <table class="table table-info">
@@ -29,26 +29,26 @@
                 <td>{{ MutationCtrl.mutation.id }}</td>
             </tr>
             <tr>
-                <th>DNA Change</th>
+                <th><translate>DNA change</translate></th>
                 <td style="word-break: break-all">
                     chr{{MutationCtrl.mutation.chromosome}}:g.{{MutationCtrl.mutation.start}}{{MutationCtrl.mutation.mutation}}
                 </td>
             </tr>
             <tr>
-                <th>Type</th>
+                <th><translate>Type</translate></th>
                 <td><abbr data-tooltip="{{ MutationCtrl.mutation.type | define }}">
                     {{ MutationCtrl.mutation.type}}</abbr></td>
             </tr>
             <tr>
-                <th>Reference genome assembly</th>
+                <th><translate>Reference genome assembly</translate></th>
                 <td>{{ MutationCtrl.mutation.assemblyVersion }}</td>
             </tr>
             <tr>
-                <th>Allele in the reference assembly</th>
+                <th><translate>Allele in the reference assembly</translate></th>
                 <td>{{ MutationCtrl.mutation.referenceGenomeAllele }}</td>
             </tr>
             <tr>
-                <th>Functional Impact</th>
+                <th><translate>Functional Impact</translate></th>
                 <td>
                     {{MutationCtrl.mutation.functionalImpact[0]}}
                 </td>
@@ -58,25 +58,26 @@
 </section>
 <section id="transcripts"
          data-ng-class="{'loading': !MutationCtrl.mutation.transcripts, 'empty': MutationCtrl.mutation.transcripts.length == 0}">
-    <h3 data-ng-if="MutationCtrl.mutation.transcripts.length == 0">No Consequences Found.</h3>
+    <h3 data-ng-if="MutationCtrl.mutation.transcripts.length == 0"><translate>No Consequences Found.</translate></h3>
 
     <div data-ng-if="MutationCtrl.mutation.transcripts.length > 0">
-        <h3>Consequences
+        <h3>
+            <translate>Consequences</translate>
             <span data-open-in-list='/g?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}'></span>
         </h3>
         <span class="t_table_top">
-            Showing <strong>{{ MutationCtrl.mutation.consequences.length }}</strong> consequences
+            <translate has-markup>Showing <strong>{{ MutationCtrl.mutation.consequences.length }}</strong> consequences</translate>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_consequence"></span>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
             <tr>
-                <th>Gene</th>
-                <th>AA Change</th>
-                <th><abbr data-tooltip="SO term: consequence_type">Consequence</abbr></th>
-                <th>Coding DNA Change</th>
-                <th>Strand</th>
-                <th>Transcript(s)</th>
+                <th><translate>Gene</translate></th>
+                <th><translate>AA Change</translate></th>
+                <th><abbr data-tooltip="{{'SO term: consequence_type' | translate}}"><translate>Consequence</translate></abbr></th>
+                <th><translate>Coding DNA Change</translate></th>
+                <th><translate>Strand</translate></th>
+                <th><translate>Transcript(s)</translate></th>
             </tr>
             </thead>
             <tbody>
@@ -87,7 +88,7 @@
                 <td>
                     <span class="t_impact_{{consequence.functionalImpact | lowercase }}">{{consequence.aaMutation}}</span>
                 </td>
-                <td><abbr data-tooltip="SO term: {{consequence.type}}">{{consequence.type | trans}}</abbr>
+                <td><abbr data-tooltip="{{'SO term: [[ consequenceType ]]' | translate | subDelimiters:{consequenceType: consequence.type} }}">{{consequence.type | trans}}</abbr>
                 </td>
                 <td>{{consequence.cdsMutation}}</td>
                 <td>
@@ -105,12 +106,12 @@
         <table class="hidden" id="{{MutationCtrl.mutation.id}}_consequence">
             <thead>
             <tr>
-                <th>Gene</th>
-                <th>AA Change</th>
-                <th>Consequence</th>
-                <th>Coding DNA Change</th>
-                <th>Strand</th>
-                <th>Transcripts</th>
+                <th><translate>Gene</translate></th>
+                <th><translate>AA Change</translate></th>
+                <th><translate>Consequence</translate></th>
+                <th><translate>Coding DNA Change</translate></th>
+                <th><translate>Strand</translate></th>
+                <th><translate>Transcript(s)</translate></th>
             </tr>
             </thead>
             <tbody>
@@ -134,45 +135,49 @@
 </section>
 <section id="donors"
          data-ng-class="{'loading': !MutationCtrl.projects, 'empty': MutationCtrl.projects.length == 0}">
-    <h3 data-ng-if="MutationCtrl.projects.length == 0">No Cancer Projects affected by this Mutation</h3>
+    <h3 data-ng-if="MutationCtrl.projects.length == 0">
+        <translate>No Cancer Projects affected by this Mutation</translate>
+    </h3>
 
     <div data-ng-if="MutationCtrl.projects.length > 0">
-        <h3>Cancer Distribution
+        <h3>
+            <translate>Cancer Distribution</translate>
             <span data-open-in-list='?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}'
                   data-type="donor"></span>
         </h3>
         <h4>
-            <strong>{{MutationCtrl.mutation.id}}</strong> affects
-            <a data-ng-href='/search?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}'><strong>
-            {{MutationCtrl.mutation.affectedDonorCountTotal | number}}
-            </strong></a>
-            distinct donors across
-            <a
-                    data-ng-href='/projects?filters={"project":{"id":{"is":["{{(MutationCtrl.projects|pluck:"id").join("\",\"")}}"]}}}'>
-            <strong>{{MutationCtrl.mutation.affectedProjectCount | number}}</strong></a>
-            cancer projects
+            <strong>{{MutationCtrl.mutation.id}}</strong> 
+            <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">affects</translate>
+            <a data-ng-href='/search?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}'>
+                <strong>{{MutationCtrl.mutation.affectedDonorCountTotal | number}}</strong>
+            </a>
+            <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">distinct donors across</translate>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(MutationCtrl.projects|pluck:"id").join("\",\"")}}"]}}}'>
+                <strong>{{MutationCtrl.mutation.affectedProjectCount | number}}</strong>
+            </a>
+            <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">cancer projects</translate>
         </h4>
 
         <div data-ng-if="MutationCtrl.bar.hasData" class="clearfix">
             <bar class="wide" height=220 items="MutationCtrl.bar"
                  title=""
-                 ylabel="% Donors Affected"
+                 ylabel="{{'% Donors Affected' | translate}}"
                  format="percentage"></bar>
         </div>
 
         <span class="t_table_top">
-            Showing <strong>{{MutationCtrl.projects.length}}</strong> projects
+            <translate has-markup>Showing <strong>{{MutationCtrl.projects.length}}</strong> projects</translate>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_distribution"></span>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
             <tr>
-                <th>Project</th>
-                <th>Site</th>
-                <th>Tumour Type</th>
-                <th>Tumour Subtype</th>
-                <th><abbr data-tooltip="Breakdown of Donors affected by {{ MutationCtrl.mutation.id }}<br># Donors where {{ MutationCtrl.mutation.id }} observed / # SSM tested Donors"
-                        data-tooltip-placement="left"># Donors affected</abbr> <i class="icon-sort-down"></i></th>
+                <th><translate>Project</translate></th>
+                <th><translate>Site</translate></th>
+                <th><translate>Tumour Type</translate></th>
+                <th><translate>Tumour Subtype</translate></th>
+                <th><abbr data-tooltip="{{'Breakdown of Donors affected by [[ mutationId ]] <br># Donors where [[ mutationId ]] observed / # SSM tested Donors' | translate | subDelimiters:{mutationId: MutationCtrl.mutation.id} }}"
+                        data-tooltip-placement="left"><translate># Donors affected</translate></abbr> <i class="icon-sort-down"></i></th>
             </tr>
             </thead>
             <tbody>
@@ -204,13 +209,13 @@
         <table class="hidden" id="{{MutationCtrl.mutation.id}}_distribution">
             <thead>
             <tr>
-                <th>Project</th>
-                <th>Site</th>
-                <th>Tumour Type</th>
-                <th>Tumour Subtype</th>
-                <th>Number of donors from the current project containing the current mutation</th>
-                <th>Number of SSM-tested donors in the current project</th>
-                <th>Percentage of donors with the current mutation</th>
+                <th><translate>Project</translate></th>
+                <th><translate>Site</translate></th>
+                <th><translate>Tumour Type</translate></th>
+                <th><translate>Tumour Subtype</translate></th>
+                <th><translate>Number of donors from the current project containing the current mutation</translate></th>
+                <th><translate>Number of SSM-tested donors in the current project</translate></th>
+                <th><translate>Percentage of donors with the current mutation</translate></th>
             </tr>
             </thead>
             <tbody>
@@ -229,13 +234,13 @@
 </section>
 <section id="protein">
     <div data-ng-if="!MutationCtrl.mutation.uiProteinTranscript.length" class="empty">
-        <h3>No protein coding transcript is affected by this mutation in CDS region.</h3>
+        <h3><translate>No protein coding transcript is affected by this mutation in CDS region.</translate></h3>
     </div>
     <div data-ng-if="MutationCtrl.mutation.uiProteinTranscript.length">
-        <h3>Protein</h3>
+        <h3><translate>Protein</translate></h3>
 
         <form data-ng-init="transcript = MutationCtrl.mutation.uiProteinTranscript[0]">
-            <strong>Transcript: </strong>
+            <strong><translate>Transcript:</translate> </strong>
             <select data-ng-model="transcript"
                     data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)'  for t in MutationCtrl.mutation.uiProteinTranscript"></select>
             <proteinstructure transcript="transcript" highlight-marker="MutationCtrl.mutation.id"
@@ -245,7 +250,8 @@
     </div>
 </section>
 <section id="genomic">
-    <h3>Genomic Context
+    <h3>
+        <translate>Genomic Context</translate>
         <span data-open-in-list='/m?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}'
               data-type="viewer"></span>
     </h3>

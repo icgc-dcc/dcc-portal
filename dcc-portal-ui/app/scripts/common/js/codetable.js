@@ -23,31 +23,31 @@
   /**
    * Binds misc. code/value lookup
    */
-  module.service('CodeTable', function() {
+  module.service('CodeTable', function(gettextCatalog) {
 
     var translateLookup = {
       // Mutation type
-      'single base substitution': 'Substitution',
-      'insertion of <=200bp': 'Insertion',
-      'deletion of <=200bp': 'Deletion',
+      'single base substitution': gettextCatalog.getString('Substitution'),
+      'insertion of <=200bp': gettextCatalog.getString('Insertion'),
+      'deletion of <=200bp': gettextCatalog.getString('Deletion'),
       'multiple base substitution (>=2bp and <=200bp)': 'MSub',
 
       // OOZIE worflow status
-      'NOT_FOUND': 'Not Found',
-      'RUNNING': 'Running',
-      'SUCCEEDED': 'Succeeded',
-      'FAILED': 'Failed',
-      'KILLED': 'Cancelled',
-      'PREP': 'In Preparation',
-      'FINISHING': 'Cleaning Up', // This is an artificial state
+      'NOT_FOUND': gettextCatalog.getString('Not Found'),
+      'RUNNING': gettextCatalog.getString('Running'),
+      'SUCCEEDED': gettextCatalog.getString('Succeeded'),
+      'FAILED': gettextCatalog.getString('Failed'),
+      'KILLED': gettextCatalog.getString('Cancelled'),
+      'PREP': gettextCatalog.getString('In Preparation'),
+      'FINISHING': gettextCatalog.getString('Cleaning Up'), // This is an artificial state
 
       // Functional Impact prediction categories
-      'TOLERATED': 'Tolerated',
-      'DAMAGING': 'Damaging',
+      'TOLERATED': gettextCatalog.getString('Tolerated'),
+      'DAMAGING': gettextCatalog.getString('Damaging'),
 
       // GO Ontology
-      'colocalizes_with': 'Colocalizes With',
-      'contributes_to': 'Contributes To',
+      'colocalizes_with': gettextCatalog.getString('Colocalizes With'),
+      'contributes_to': gettextCatalog.getString('Contributes To'),
 
       // Biotype
       'lincRNA': 'lincRNA',
@@ -59,38 +59,38 @@
       'Mt_rRNA': 'Mt rRNA',
 
       // Facet Titles
-      'id': 'Project',
-      'projectId': 'Project',
-      'primarySite': 'Primary Site',
-      'primaryCountries': 'Country',
-      'tumourStageAtDiagnosis': 'Tumour Stage',
-      'vitalStatus': 'Vital Status',
-      'diseaseStatusLastFollowup': 'Disease Status',
-      'relapseType': 'Relapse Type',
-      'ageAtDiagnosisGroup': 'Age at Diagnosis',
-      'availableDataTypes': 'Available Data Type',
-      'analysisTypes': 'Donor Analysis Type',
-      'list': 'Gene sets',
-      'verificationStatus': 'Verification Status',
-      'consequenceType': 'Consequence Type',
-      'functionalImpact': 'Functional Impact',
-      'sequencingStrategy': 'Analysis Type',
-      'tumourType': 'Tumour Type',
-      'specimenType': 'Specimen Type',
+      'id': gettextCatalog.getString('Project'),
+      'projectId': gettextCatalog.getString('Project'),
+      'primarySite': gettextCatalog.getString('Primary Site'),
+      'primaryCountries': gettextCatalog.getString('Country'),
+      'tumourStageAtDiagnosis': gettextCatalog.getString('Tumour Stage'),
+      'vitalStatus': gettextCatalog.getString('Vital Status'),
+      'diseaseStatusLastFollowup': gettextCatalog.getString('Disease Status'),
+      'relapseType': gettextCatalog.getString('Relapse Type'),
+      'ageAtDiagnosisGroup': gettextCatalog.getString('Age at Diagnosis'),
+      'availableDataTypes': gettextCatalog.getString('Available Data Type'),
+      'analysisTypes': gettextCatalog.getString('Donor Analysis Type'),
+      'list': gettextCatalog.getString('Gene sets'),
+      'verificationStatus': gettextCatalog.getString('Verification Status'),
+      'consequenceType': gettextCatalog.getString('Consequence Type'),
+      'functionalImpact': gettextCatalog.getString('Functional Impact'),
+      'sequencingStrategy': gettextCatalog.getString('Analysis Type'),
+      'tumourType': gettextCatalog.getString('Tumour Type'),
+      'specimenType': gettextCatalog.getString('Specimen Type'),
 
-      'studies': 'Study',
-      'repoName': 'Repository',
-      'fileName': 'File',
-      'study': 'Only Files in Study',
-      'fileFormat': 'File Format',
-      'dataType': 'Data Type',
-      'donorStudy': 'Only Donors in Study',
-      'projectCode': 'Project',
+      'studies': gettextCatalog.getString('Study'),
+      'repoName': gettextCatalog.getString('Repository'),
+      'fileName': gettextCatalog.getString('File'),
+      'study': gettextCatalog.getString('Only Files in Study'),
+      'fileFormat': gettextCatalog.getString('File Format'),
+      'dataType': gettextCatalog.getString('Data Type'),
+      'donorStudy': gettextCatalog.getString('Only Donors in Study'),
+      'projectCode': gettextCatalog.getString('Project'),
 
       // Donor states
-      'state': 'Donor Molecular Data',
-      'live': 'Present in DCC',
-      'pending': 'Absent from DCC',
+      'state': gettextCatalog.getString('Donor Molecular Data'),
+      'live': gettextCatalog.getString('Present in DCC'),
+      'pending': gettextCatalog.getString('Absent from DCC'),
 
       // Experimental Strategies
       'miRNA-Seq': 'miRNA-Seq'
@@ -98,48 +98,51 @@
 
     var tooltipLookup = {
       // Sequencing analysis types (Sequencing strategy)
-      'WGS': 'Whole Genome Sequencing - random sequencing of the whole genome.',
-      'WGA': 'Whole Genome Amplification followed by random sequencing.',
-      'WXS': 'Random sequencing of exonic regions selected from the genome.',
-      'DNA-Seq': 'DNA sequencing using next-generation sequencing (NGS)',
-      'RNA-Seq': 'Random sequencing of whole transcriptome, also known as Whole Transcriptome Shotgun Sequencing, ' +
-                 'or WTSS',
-      'miRNA-Seq': 'Micro RNA sequencing strategy designed to capture post-transcriptional RNA elements and ' +
-                   'include non-coding functional elements.',
-      'ncRNA-Seq': 'Capture of other non-coding RNA types, including post-translation modification types such as ' +
-                   'snRNA (small nuclear RNA) or snoRNA (small nucleolar RNA), or expression regulation types such ' +
-                   'as siRNA (small interfering RNA) or piRNA/piwi/RNA (piwi-interacting RNA).',
-      'WCS': 'Random sequencing of a whole chromosome or other replicon isolated from a genome.',
-      'CLONE': 'Genomic clone based (hierarchical) sequencing.',
-      'POOLCLONE': 'Shotgun of pooled clones (usually BACs and Fosmids).',
-      'AMPLICON': 'Sequencing of overlapping or distinct PCR or RT-PCR products. For example, metagenomic ' +
-                  'community profiling using SSU rRNA.',
-      'CLONEEND': 'Clone end (5\', 3\', or both) sequencing.',
-      'FINISHING': 'Sequencing intended to finish (close) gaps in existing coverage.',
-      'ChIP-Seq': 'chromatin immunoprecipitation.',
-      'MNase-Seq': 'following MNase digestion.',
-      'DNase-Hypersensitivity': 'Sequencing of hypersensitive sites, or segments of open chromatin that are more ' +
-                                'readily cleaved by DNaseI.',
-      'Bisulfite-Seq': 'MethylC-seq. Sequencing following treatment of DNA with bisulfite to convert cytosine ' +
-                       'residues to uracil depending on methylation status.',
-      'EST': 'Single pass sequencing of cDNA templates',
-      'FL-cDNA': 'Full-length sequencing of cDNA templates',
-      'CTS': 'Concatenated Tag Sequencing',
-      'MRE-Seq': 'Methylation-Sensitive Restriction Enzyme Sequencing.',
-      'MeDIP-Seq': 'Methylated DNA Immunoprecipitation Sequencing.',
-      'MBD-Seq': 'Methyl CpG Binding Domain Sequencing.',
-      'Tn-Seq': 'Quantitatively determine fitness of bacterial genes based on how many times a purposely seeded ' +
-                'transposon gets inserted into each gene of a colony after some time.',
-      'VALIDATION': 'CGHub special request: Independent experiment to re-evaluate putative variants.',
-      'FAIRE-seq': 'Formaldehyde Assisted Isolation of Regulatory Elements',
-      'SELEX': 'Systematic Evolution of Ligands by EXponential enrichment',
-      'RIP-Seq': 'Direct sequencing of RNA immunoprecipitates (includes CLIP-Seq, HITS-CLIP and PAR-CLIP).',
-      'ChIA-PET': 'Direct sequencing of proximity-ligated chromatin immunoprecipitates.',
-      'OTHER': 'Library strategy not listed.',
+      'WGS': gettextCatalog.getString('Whole Genome Sequencing - random sequencing of the whole genome.'),
+      'WGA': gettextCatalog.getString('Whole Genome Amplification followed by random sequencing.'),
+      'WXS': gettextCatalog.getString('Random sequencing of exonic regions selected from the genome.'),
+      'DNA-Seq': gettextCatalog.getString('DNA sequencing using next-generation sequencing (NGS)'),
+      'RNA-Seq': gettextCatalog.getString('Random sequencing of whole transcriptome, also known as' +
+        ' Whole Transcriptome Shotgun Sequencing, or WTSS'),
+      'miRNA-Seq': gettextCatalog.getString('Micro RNA sequencing strategy designed to capture ' +
+        'post-transcriptional RNA elements and include non-coding functional elements.'),
+      'ncRNA-Seq': gettextCatalog.getString('Capture of other non-coding RNA types, including post-translation' + 
+        ' modification types such as snRNA (small nuclear RNA) or snoRNA (small nucleolar RNA), or expression' +
+        ' regulation types such as siRNA (small interfering RNA) or piRNA/piwi/RNA (piwi-interacting RNA).'),
+      'WCS': gettextCatalog.getString('Random sequencing of a whole chromosome or other replicon isolated' + 
+        ' from a genome.'),
+      'CLONE': gettextCatalog.getString('Genomic clone based (hierarchical) sequencing.'),
+      'POOLCLONE': gettextCatalog.getString('Shotgun of pooled clones (usually BACs and Fosmids).'),
+      'AMPLICON': gettextCatalog.getString('Sequencing of overlapping or distinct PCR or RT-PCR products.' +
+                  ' For example, metagenomic community profiling using SSU rRNA.'),
+      'CLONEEND': gettextCatalog.getString('Clone end (5\', 3\', or both) sequencing.'),
+      'FINISHING': gettextCatalog.getString('Sequencing intended to finish (close) gaps in existing coverage.'),
+      'ChIP-Seq': gettextCatalog.getString('chromatin immunoprecipitation.'),
+      'MNase-Seq': gettextCatalog.getString('following MNase digestion.'),
+      'DNase-Hypersensitivity': gettextCatalog.getString('Sequencing of hypersensitive sites,' + 
+        ' or segments of open chromatin that are more readily cleaved by DNaseI.'),
+      'Bisulfite-Seq': gettextCatalog.getString('MethylC-seq. Sequencing following treatment of DNA with bisulfite' +
+        ' to convert cytosine residues to uracil depending on methylation status.'),
+      'EST': gettextCatalog.getString('Single pass sequencing of cDNA templates'),
+      'FL-cDNA': gettextCatalog.getString('Full-length sequencing of cDNA templates'),
+      'CTS': gettextCatalog.getString('Concatenated Tag Sequencing'),
+      'MRE-Seq': gettextCatalog.getString('Methylation-Sensitive Restriction Enzyme Sequencing.'),
+      'MeDIP-Seq': gettextCatalog.getString('Methylated DNA Immunoprecipitation Sequencing.'),
+      'MBD-Seq': gettextCatalog.getString('Methyl CpG Binding Domain Sequencing.'),
+      'Tn-Seq': gettextCatalog.getString('Quantitatively determine fitness of bacterial genes based on' + 
+        ' how many times a purposely seeded transposon gets inserted into each gene of a colony after some time.'),
+      'VALIDATION': gettextCatalog.getString('CGHub special request: Independent experiment to re-evaluate' + 
+        ' putative variants.'),
+      'FAIRE-seq': gettextCatalog.getString('Formaldehyde Assisted Isolation of Regulatory Elements'),
+      'SELEX': gettextCatalog.getString('Systematic Evolution of Ligands by EXponential enrichment'),
+      'RIP-Seq': gettextCatalog.getString('Direct sequencing of RNA immunoprecipitates (includes CLIP-Seq,' +
+        ' HITS-CLIP and PAR-CLIP).'),
+      'ChIA-PET': gettextCatalog.getString('Direct sequencing of proximity-ligated chromatin immunoprecipitates.'),
+      'OTHER': gettextCatalog.getString('Library strategy not listed.'),
 
       // Donor states
-      'live': 'Present in DCC',
-      'pending': 'Absent from DCC'
+      'live': gettextCatalog.getString('Present in DCC'),
+      'pending': gettextCatalog.getString('Absent from DCC')
     };
 
     this.translate = function(id) {

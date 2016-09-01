@@ -20,7 +20,7 @@ package org.icgc.dcc.portal.server.resource.security;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static javax.ws.rs.core.HttpHeaders.SET_COOKIE;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import static org.icgc.dcc.portal.server.util.AuthUtils.createSessionCookie;
+import static org.icgc.dcc.portal.server.security.AuthUtils.createSessionCookie;
 
 import java.net.URI;
 
@@ -34,10 +34,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
-import org.icgc.dcc.portal.server.auth.openid.OpenIDAuthService;
-import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.resource.Resource;
+import org.icgc.dcc.portal.server.security.openid.OpenIDAuthService;
 import org.icgc.dcc.portal.server.service.BadRequestException;
 import org.openid4java.message.ParameterList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,7 +144,7 @@ public class OpenIDResource extends Resource {
   private static NewCookie setSessionCookie(User user) {
     val sessionToken = user.getSessionToken().toString();
 
-    return createSessionCookie(CrowdProperties.SESSION_TOKEN_NAME, sessionToken);
+    return createSessionCookie(AuthProperties.SESSION_TOKEN_NAME, sessionToken);
   }
 
 }

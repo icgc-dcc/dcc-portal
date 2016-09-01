@@ -41,8 +41,10 @@
 
   var DATASET_ALL = 'All Projects';
 
-  module.controller('BeaconCtrl', function($scope, LocationService, $location,$timeout, Page, Restangular, Chromosome) {
-    Page.setTitle('Beacon');
+  module.controller('BeaconCtrl', function($scope, LocationService, $location,$timeout, Page, Restangular, 
+    Chromosome, gettextCatalog) {
+      
+    Page.setTitle(gettextCatalog.getString('Beacon'));
     Page.setPage('beacon');
 
     var lengths = Chromosome.get();

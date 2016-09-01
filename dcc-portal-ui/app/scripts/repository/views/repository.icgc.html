@@ -14,8 +14,12 @@
     </div>
 
     <section class="alert alert-warning" data-ng-if="ICGCRepoController.downloadEnabled === false">
-    {{:: ICGCRepoController.dataReleasesTitle }} section is currently unavailable due to maintenance.<br>
-    Please contact <a href="mailto:dcc-support@icgc.org">support</a> if you require assistance.
+        <translate>
+            {{:: ICGCRepoController.dataReleasesTitle }} section is currently unavailable due to maintenance.
+        </translate>><br>
+        <translate>
+            Please contact <a href="mailto:dcc-support@icgc.org">support</a> if you require assistance.
+        </translate>
     </section>
 
     <div class="wide" data-ng-if="ICGCRepoController.downloadEnabled === true">
@@ -23,7 +27,7 @@
         <span data-ng-init="reverse=false"></span>
 
         <section class="loading" data-ng-if="! ICGCRepoController.files">
-            <h3><i class="icon-spin icon-spinner"></i>Loading...</h3>
+            <h3><i class="icon-spin icon-spinner"></i><translate>Loading...</translate></h3>
         </section>
 
         <div data-ng-if="ICGCRepoController.files" ng-init="releaseUrl = ICGCRepoController.dataReleasesUrl;">
@@ -41,9 +45,9 @@
             <table class="table" style="font-size: 1.1rem">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th class="text-right">File Size</th>
-                    <th class="text-right">Date</th>
+                    <th><translate>Name</translate></th>
+                    <th class="text-right"><translate>File Size</translate></th>
+                    <th class="text-right"><translate>Date</translate></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -84,7 +88,7 @@
         <p>
             <span>
                 <a href="http://docs.icgc.org/portal/repositories/#having-trouble-downloading-a-file-from-dcc-repository" target="_blank">
-                    <i class="icon-external-link"></i> Having trouble downloading?
+                    <i class="icon-external-link"></i> <translate>Having trouble downloading?</translate>
                 </a>
             </span>
         <p/>

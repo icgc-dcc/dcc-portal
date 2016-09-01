@@ -97,18 +97,18 @@ angular.module('icgc.repositories.controllers', [])
          'collaboratory': 'collaboratory',
          'aws': 'aws-virginia'
     })
-   .controller('RepositoriesHomeController', function($scope, Page) {
+   .controller('RepositoriesHomeController', function($scope, Page, gettextCatalog) {
       Page.stopWork();
       Page.setPage('entity');
-      Page.setTitle('ICGC in the Cloud');
+      Page.setTitle(gettextCatalog.getString('ICGC in the Cloud'));
    })
-   .controller('RepositoriesGuideController', function($scope, Page) {
+   .controller('RepositoriesGuideController', function($scope, Page, gettextCatalog) {
       Page.stopWork();
       Page.setPage('entity');
-      Page.setTitle('User Guide');
+      Page.setTitle(gettextCatalog.getString('User Guide'));
    })
   .controller('RepositoriesController', function ($scope, Page, repoAliasMapConstants,
-                                                  RepositoriesService, $stateParams) {
+                                                  RepositoriesService, $stateParams, gettextCatalog) {
      var _ctrl = this,
        _repoAlias = $stateParams.repoAlias.toLowerCase(),
        _repoContext = _.get(repoAliasMapConstants, _repoAlias, null),
@@ -158,7 +158,11 @@ angular.module('icgc.repositories.controllers', [])
       function _init() {
          Page.stopWork();
          Page.setPage('entity');
-         Page.setTitle('ICGC in the Cloud - ' + _capitalizeWords(_repoContext) +  ' Repository');
+         /// ${repoContext} would be a noun
+         Page.setTitle(_.template(gettextCatalog.getString('ICGC in the Cloud - ${repoContext} Repository'))
+          ({repoContext : _capitalizeWords(_repoContext)}));
+        //  Page.setTitle(gettextCatalog.getString('ICGC in the Cloud')+ ' - ' + 
+        //  _capitalizeWords(_repoContext) + ' ' + gettextCatalog.getString('Repository'));
 
 
          // In this case we are querying by the repo name which is indexed.

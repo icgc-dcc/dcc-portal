@@ -23,23 +23,23 @@
   /**
    * Binds ICGC data types
    */
-  module.service('DataType', function() {
+  module.service('DataType', function(gettextCatalog) {
     var data = [
-      {id: 'donor', shortLabel: 'Clinical', label: 'Clinical Data'},
-      {id: 'clinical', shortLabel: 'Clinical', label: 'Clinical Data'},
-      {id: 'ssm', shortLabel: 'SSM', label: 'Simple Somatic Mutation'},
-      {id: 'sgv', shortLabel: 'SGV', label: 'Simple Germline Variation'},
-      {id: 'cnsm', shortLabel: 'CNSM', label: 'Copy Number Somatic Mutation'},
-      {id: 'stsm', shortLabel: 'STSM', label: 'Structural Somatic Mutations'},
-      {id: 'exp_array', shortLabel: 'EXP-A', label: 'Array-based Gene Expression'},
-      {id: 'exp_seq', shortLabel: 'EXP-S', label: 'Sequencing-based Gene Expression'},
-      {id: 'pexp', shortLabel: 'PEXP', label: 'Protein Expression'},
-      {id: 'mirna_seq', shortLabel: 'miRNA-S', label: 'Sequence-based miRNA Expression'},
-      {id: 'jcn', shortLabel: 'JCN', label: 'Exon Junctions'},
-      {id: 'meth_array', shortLabel: 'METH-A', label: 'Array-based DNA Methylation'},
-      {id: 'meth_seq', shortLabel: 'METH-S', label: 'Sequencing-based DNA Methylation'},
-      {id: 'aligned reads', shortLabel:'Aligned Reads', label:'Aligned Sequencing Reads'},
-      {id: 'stgv' , shortLabel: 'StGV', label:'Structural Germline Variants'}
+      {id: 'donor', shortLabel: 'Clinical', label: gettextCatalog.getString('Clinical Data')},
+      {id: 'clinical', shortLabel: 'Clinical', label: gettextCatalog.getString('Clinical Data')},
+      {id: 'ssm', shortLabel: 'SSM', label: gettextCatalog.getString('Simple Somatic Mutation')},
+      {id: 'sgv', shortLabel: 'SGV', label: gettextCatalog.getString('Simple Germline Variation')},
+      {id: 'cnsm', shortLabel: 'CNSM', label: gettextCatalog.getString('Copy Number Somatic Mutation')},
+      {id: 'stsm', shortLabel: 'STSM', label: gettextCatalog.getString('Structural Somatic Mutations')},
+      {id: 'exp_array', shortLabel: 'EXP-A', label: gettextCatalog.getString('Array-based Gene Expression')},
+      {id: 'exp_seq', shortLabel: 'EXP-S', label: gettextCatalog.getString('Sequencing-based Gene Expression')},
+      {id: 'pexp', shortLabel: 'PEXP', label: gettextCatalog.getString('Protein Expression')},
+      {id: 'mirna_seq', shortLabel: 'miRNA-S', label: gettextCatalog.getString('Sequence-based miRNA Expression')},
+      {id: 'jcn', shortLabel: 'JCN', label: gettextCatalog.getString('Exon Junctions')},
+      {id: 'meth_array', shortLabel: 'METH-A', label: gettextCatalog.getString('Array-based DNA Methylation')},
+      {id: 'meth_seq', shortLabel: 'METH-S', label: gettextCatalog.getString('Sequencing-based DNA Methylation')},
+      {id: 'aligned reads', shortLabel:'Aligned Reads', label: gettextCatalog.getString('Aligned Sequencing Reads')},
+      {id: 'stgv' , shortLabel: 'StGV', label: gettextCatalog.getString('Structural Germline Variants')}
     ];
 
     var shortLabelMap = {}, labelMap = {};

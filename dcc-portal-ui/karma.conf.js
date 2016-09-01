@@ -26,6 +26,7 @@ module.exports = function(config){
       'app/bower_components/angularjs-toaster/toaster.js',
       'app/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js',
       'app/bower_components/zeroclipboard/dist/ZeroClipboard.js',
+      'app/bower_components/angular-gettext/dist/angular-gettext.min.js',
       'app/bower_components/highcharts/highcharts.js',
       'app/bower_components/highcharts/modules/no-data-to-display.src.js',
       'app/bower_components/d3/d3.min.js',

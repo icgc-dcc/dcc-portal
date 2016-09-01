@@ -28,7 +28,7 @@
   var module = angular.module('icgc.oncogrid.directives', []);
 
   module.directive('oncogridAnalysis', function (Donors, Genes, Occurrences, Consequence,
-    $q, $filter, OncogridService, SetService, $timeout, LocationService) {
+    $q, $filter, OncogridService, SetService, $timeout, LocationService, gettextCatalog) {
     return {
       restrict: 'E',
       scope: {
@@ -141,12 +141,13 @@
           };
 
           var donorTracks = [
-            { 'name': 'Age at Diagnosis', 'fieldName': 'age', 'type': 'int', 'sort': sortInt, 'group': 'Clinical'},
-            { 'name': 'Vital Status', 
+            { 'name': gettextCatalog.getString('Age at Diagnosis'), 
+              'fieldName': 'age', 'type': 'int', 'sort': sortInt, 'group': 'Clinical'},
+            { 'name': gettextCatalog.getString('Vital Status'), 
               'fieldName': 'vitalStatus', 'type': 'vital', 'sort': sortByString, 'group': 'Clinical' },
-                        { 'name': 'Survival Time', 
+            { 'name': gettextCatalog.getString('Survival Time'), 
               'fieldName': 'survivalTime', 'type': 'survival', 'sort': sortInt, 'group': 'Clinical'},
-            { 'name': 'Sex', 'fieldName': 'sex', 'type': 'sex', 'sort': sortByString, 'group': 'Clinical' },
+            { 'name': gettextCatalog.getString('Sex'), 'fieldName': 'sex', 'type': 'sex', 'sort': sortByString, 'group': 'Clinical' },
             { 'name': 'CNSM', 'fieldName': 'cnsmExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
             { 'name': 'STSM', 'fieldName': 'stsmExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
             { 'name': 'SGV', 'fieldName': 'sgvExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
@@ -184,9 +185,9 @@
           };
 
           var geneTracks = [
-            { 'name': '# Donors affected ',
+            { 'name': gettextCatalog.getString('# Donors affected '),
                'fieldName': 'totalDonors', 'type': 'int', 'sort': sortInt, 'group': 'ICGC' },
-            { 'name': 'Curated Gene Census ',
+            { 'name': gettextCatalog.getString('Curated Gene Census '),
                'fieldName': 'cgc', 'type': 'bool', 'sort': sortBool, 'group': 'Gene Sets'}
           ];
 

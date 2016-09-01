@@ -1,6 +1,5 @@
 package org.icgc.dcc.portal.server.service;
 
-import static com.google.common.base.Throwables.propagate;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -90,8 +89,7 @@ public class GeneService {
 
       log.info("[init] Finished initializing EnsemblId-to-GeneSymbol lookup table in {}", watch);
     } catch (Exception e) {
-      log.error("[init] Error intializing EnsemblId-to-GeneSymbol lookup table.", e);
-      propagate(e);
+      log.error("[init] Error intializing EnsemblId-to-GeneSymbol lookup table: {}", e.getMessage());
     }
   }
 
