@@ -382,7 +382,7 @@
         </div>
         <span class="t_table_top">
             <translate has-markup>
-                Showing <strong>{{ GeneMutationsCtrl.mutations.hits.length }}</strong> of <strong>{{GeneMutationsCtrl.mutations.pagination.total | number }}</strong> mutations
+                <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneMutationsCtrl.mutations.pagination"></span>
             </translate>
             <span data-toolbar data-dl="{{GeneCtrl.gene.id}}_mutations"></span>
         </span>
@@ -406,9 +406,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="mutation in (GeneMutationsCtrl.shouldLimitDisplayMutations ? 
-                (GeneMutationsCtrl.mutations.hits | limitTo: GeneMutationsCtrl.defaultMutationsLimit) :
-                (GeneMutationsCtrl.mutations.hits)) track by mutation.id">
+            <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits track by mutation.id">
                 <td><a data-ng-href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a></td>
                 <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
                 <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
@@ -442,9 +440,7 @@
             </tbody>
         </table>
 
-        <row-limit data-data="GeneMutationsCtrl.mutations.hits"
-            data-show-limit="GeneMutationsCtrl.shouldLimitDisplayMutations"
-            data-default-limit="GeneMutationsCtrl.defaultMutationsLimit"></row-limit>
+        <pagination-controls data-type="mutations" data-data="GeneMutationsCtrl.mutations"></pagination-controls>
 
         <table class="hidden" id="{{GeneCtrl.gene.id}}_mutations">
             <thead>

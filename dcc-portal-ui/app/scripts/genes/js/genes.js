@@ -249,9 +249,6 @@
     function ($scope, HighchartsService, LocationService, Genes, Projects, Donors, ProjectCache) {
       var _ctrl = this;
 
-      _ctrl.shouldLimitDisplayMutations = true;
-      _ctrl.defaultMutationsLimit = 10;
-
       function success(mutations) {
         if (mutations.hasOwnProperty('hits')) {
           var projectCachePromise = ProjectCache.getData();
@@ -302,8 +299,28 @@
       }
 
       function refresh() {
+
+        var params = {},
+          mutationsParams = LocationService.getJsonParam('mutations');
+        
+        // Default
+        params.from = 1;
+        params.size = 10;
+
+        if(mutationsParams.from || mutationsParams.size){
+          params.from = mutationsParams.from;
+          params.size = mutationsParams.size;
+        }
+
+        if(mutationsParams.sort){
+          params.sort = mutationsParams.sort;
+          params.order = mutationsParams.order;
+        }
+
         Genes.one().getMutations({
           include: 'consequences',
+          from: params.from,
+          size: params.size,
           filters: LocationService.filters()
         }).then(success);
       }
