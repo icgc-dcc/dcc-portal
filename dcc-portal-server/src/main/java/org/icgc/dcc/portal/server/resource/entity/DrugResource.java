@@ -46,9 +46,9 @@ import static org.icgc.dcc.portal.server.resource.Resources.MULTIPLE_IDS;
 import static org.icgc.dcc.portal.server.resource.Resources.RETURNS_LIST;
 import static org.icgc.dcc.portal.server.resource.Resources.S;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -112,7 +112,7 @@ public class DrugResource extends Resource {
   @GET
   @Timed
   @ApiOperation(value = "Find most frequently mutated genes targeted by a drug", response = List.class)
-  public List<SimpleImmutableEntry<String, Long>> topMutatedGenes(
+  public List<Map<String, Object>> topMutatedGenes(
       @ApiParam(value = "Drug ID", required = true) @PathParam("drugId") String drugId,
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
       @ApiParam(value = API_SIZE_VALUE, allowableValues = API_SIZE_ALLOW) @QueryParam(API_SIZE_PARAM) @DefaultValue(DEFAULT_SIZE) IntParam size,

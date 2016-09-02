@@ -410,11 +410,11 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
 
             for (var i = 0; i < geneCount; i++) {
               var mutationData = mutationCountData[i],
-                geneId = _.get(mutationData, 'key', false);
+                geneId = _.get(mutationData, 'geneId', false);
 
               if (geneId) {
                 _compoundTargetedGeneIds.push(geneId);
-                mutationGeneValueMap[geneId] = +mutationData.value;
+                mutationGeneValueMap[geneId] = +mutationData.mutationCount;
               }
             }
 
