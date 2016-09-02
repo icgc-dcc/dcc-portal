@@ -203,6 +203,7 @@ public class IndexModel {
           .put("type", "specimen_type")
           .put("typeOther", "specimen_type_other")
           .put("uri", "specimen_uri")
+          .put("interval", "specimen_interval")
           .put("tumourConfirmed", "tumour_confirmed")
           .put("tumourGrade", "tumour_grade")
           .put("tumourGradeSupplemental", "tumour_grade_supplemental")
@@ -210,7 +211,7 @@ public class IndexModel {
           .put("tumourStage", "tumour_stage")
           .put("tumourStageSupplemental", "tumour_stage_supplemental")
           .put("tumourStageSystem", "tumour_stage_system")
-          .put("percentCellularity", "percent_cellularity")
+          .put("percentCellularity", "percentage_cellularity")
           .put("levelOfCellularity", "level_of_cellularity")
           .build();
 
@@ -530,7 +531,7 @@ public class IndexModel {
     GENE_SET_TYPE_GO("go_term"),
     GENE_SET_TYPE_PATHWAY("pathway"),
     GENE_SET_TYPE_CURATED("curated_set");
-    
+
     private final String type;
   }
 

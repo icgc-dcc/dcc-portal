@@ -22,15 +22,15 @@ import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import java.util.List;
 import java.util.Map;
 
-import lombok.Value;
-import lombok.val;
-
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Value;
+import lombok.val;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -67,6 +67,8 @@ public class Specimen {
   String typeOther;
   @ApiModelProperty(value = "URI", required = true)
   String uri;
+  @ApiModelProperty(value = "Specimen Interval (days)", required = true)
+  Integer interval;
   @ApiModelProperty(value = "Tumour Confirmed", required = true)
   Boolean tumourConfirmed;
   @ApiModelProperty(value = "Tumour Grade", required = true)
@@ -83,7 +85,7 @@ public class Specimen {
   String tumourStageSystem;
 
   @ApiModelProperty(value = "Percent cellularity", required = true)
-  String percentCellularity;
+  Integer percentCellularity;
 
   @ApiModelProperty(value = "Level of cellularity", required = true)
   String levelOfCellularity;
@@ -93,6 +95,8 @@ public class Specimen {
 
   @SuppressWarnings("unchecked")
   public Specimen(Map<String, Object> fieldMap) {
+
+    // TODO: See if we can remove the dependency on the old IndexModel's FIELDS_MAPPING.
     val fields = FIELDS_MAPPING.get(Kind.SPECIMEN);
     id = (String) fieldMap.get(fields.get("id"));
     submittedId = (String) fieldMap.get(fields.get("submittedId"));
@@ -109,6 +113,7 @@ public class Specimen {
     type = (String) fieldMap.get(fields.get("type"));
     typeOther = (String) fieldMap.get(fields.get("typeOther"));
     uri = (String) fieldMap.get(fields.get("uri"));
+    interval = (Integer) fieldMap.get(fields.get("interval"));
     tumourConfirmed = getTruthy((String) fieldMap.get(fields.get("tumourConfirmed")));
     tumourGrade = (String) fieldMap.get(fields.get("tumourGrade"));
     tumourGradeSupplemental = (String) fieldMap.get(fields.get("tumourGradeSupplemental"));
@@ -116,7 +121,7 @@ public class Specimen {
     tumourStage = (String) fieldMap.get(fields.get("tumourStage"));
     tumourStageSupplemental = (String) fieldMap.get(fields.get("tumourStageSupplemental"));
     tumourStageSystem = (String) fieldMap.get(fields.get("tumourStageSystem"));
-    percentCellularity = (String) fieldMap.get(fields.get("percentCellularity"));
+    percentCellularity = (Integer) fieldMap.get(fields.get("percentCellularity"));
     levelOfCellularity = (String) fieldMap.get(fields.get("levelOfCellularity"));
 
     samples = buildSamples((List<Object>) fieldMap.get("sample"));

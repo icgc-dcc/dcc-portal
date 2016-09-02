@@ -22,6 +22,7 @@ import static org.dcc.portal.pql.es.utils.Visitors.createAggregationsResolverVis
 import static org.dcc.portal.pql.es.utils.Visitors.createEmptyNodesCleanerVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.createEntitySetVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.createFieldsToSourceVisitor;
+import static org.dcc.portal.pql.es.utils.Visitors.createFixNotQueryVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.createGeneSetFilterVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.createLocationFilterVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.createMissingAggregationVisitor;
@@ -33,19 +34,19 @@ import static org.dcc.portal.pql.es.utils.Visitors.createScoreSortVisitor;
 import static org.dcc.portal.pql.meta.IndexModel.getDiagramTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getDonorCentricTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getDrugTypeModel;
+import static org.dcc.portal.pql.meta.IndexModel.getFileTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getGeneCentricTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getMutationCentricTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getObservationCentricTypeModel;
 import static org.dcc.portal.pql.meta.IndexModel.getProjectTypeModel;
-import static org.dcc.portal.pql.meta.IndexModel.getFileTypeModel;
 import static org.dcc.portal.pql.meta.Type.DIAGRAM;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.DRUG_CENTRIC;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.OBSERVATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.PROJECT;
-import static org.dcc.portal.pql.meta.Type.FILE;
 
 import java.util.Map;
 import java.util.Optional;
@@ -93,6 +94,7 @@ public class EsAstTransformer {
 
     esAst = resolveFacets(esAst, context.getTypeModel());
     esAst = score(esAst, context);
+    esAst = fixNotQuery(esAst, context);
     esAst = optimize(esAst);
     log.debug("ES AST after the transformations: {}", esAst);
 
@@ -104,6 +106,12 @@ public class EsAstTransformer {
     log.debug("{} Adding scores to the query...", tag);
     val result = esAst.accept(Visitors.createScoreQueryVisitor(context.getType()), Optional.of(context));
     log.debug("{} Added scores to the query. Resulting AST: {}", tag, result);
+
+    return result;
+  }
+
+  public ExpressionNode fixNotQuery(@NonNull ExpressionNode esAst, @NonNull QueryContext context) {
+    val result = esAst.accept(createFixNotQueryVisitor(), Optional.of(context));
 
     return result;
   }
