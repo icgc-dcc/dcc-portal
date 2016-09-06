@@ -94,6 +94,7 @@
       });
     }
 
+    $scope.compoundIdToNameMap = {};
     function resolveActiveCompoundIds (filters) {
       var activeCompoundIds;
       if (_.has(filters, 'gene.drug.not')) {
@@ -106,7 +107,6 @@
         return;
       }
 
-      $scope.compoundIdToNameMap = {};
       _.forEach(activeCompoundIds, function (compoundId) {
         CompoundsService.getCompoundByZincId(compoundId).then(function(compound) {
           $scope.compoundIdToNameMap[compoundId] = compound.name;
@@ -158,7 +158,8 @@
     function resolveActiveIds (filters) {
       if (_.has(filters, 'gene.id')) {
         resolveActiveGeneIds (filters);
-      } else if (_.has(filters, 'gene.drug')) {
+      } 
+      if (_.has(filters, 'gene.drug')) {
         resolveActiveCompoundIds(filters);
       }
     }
