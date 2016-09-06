@@ -7,6 +7,8 @@ Change log for the DCC Data Portal
 - Bug fix for missing data in sample/specimen table when in a Donor Entity Page.
 - Bug fix for exporting Files table to a file. 
 - OncoGrid shows "Not Verified" for donors with missing diagnosis. 
+- i18n implementation for Portal
+- Bug fixes for alignment and text wrap issues
 
 4.3.6
 --
