@@ -4,7 +4,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: \n"
 
-#: app/scripts/genes/views/gene.html:525
+#: app/scripts/genes/views/gene.html:516
 msgid "# Clinical Trials"
 msgstr ""
 
@@ -37,30 +37,30 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:37
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:29
-#: app/scripts/donors/views/donor.html:295
+#: app/scripts/donors/views/donor.html:290
 #: app/scripts/enrichment/views/enrichment.result.html:113
-#: app/scripts/genes/views/gene.html:246
-#: app/scripts/genes/views/gene.html:409
-#: app/scripts/genesets/views/geneset.html:249
-#: app/scripts/genesets/views/geneset.html:498
-#: app/scripts/mutations/views/mutation.html:196
+#: app/scripts/genes/views/gene.html:245
+#: app/scripts/genes/views/gene.html:405
+#: app/scripts/genesets/views/geneset.html:252
+#: app/scripts/genesets/views/geneset.html:513
+#: app/scripts/mutations/views/mutation.html:197
 #: app/scripts/oncogrid/js/directive.js:188
 #: app/scripts/pathwayviewer/views/pathways.html:58
-#: app/scripts/projects/views/project.html:361
-#: app/scripts/projects/views/project.html:521
+#: app/scripts/projects/views/project.html:355
+#: app/scripts/projects/views/project.html:505
 msgid "# Donors affected"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:50
-#: app/scripts/projects/views/project.html:372
+#: app/scripts/projects/views/project.html:366
 msgid "# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project."
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:37
-#: app/scripts/donors/views/donor.html:303
-#: app/scripts/genes/views/gene.html:408
-#: app/scripts/genesets/views/geneset.html:497
-#: app/scripts/projects/views/project.html:528
+#: app/scripts/donors/views/donor.html:298
+#: app/scripts/genes/views/gene.html:404
+#: app/scripts/genesets/views/geneset.html:512
+#: app/scripts/projects/views/project.html:512
 msgid "# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project."
 msgstr ""
 
@@ -80,10 +80,10 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:87
 #: app/scripts/enrichment/views/enrichment.result.html:111
-#: app/scripts/genesets/views/geneset.html:253
-#: app/scripts/genesets/views/geneset.html:609
+#: app/scripts/genesets/views/geneset.html:256
+#: app/scripts/genesets/views/geneset.html:626
 #: app/scripts/pathwayviewer/views/pathways.html:56
-#: app/scripts/projects/views/project.html:675
+#: app/scripts/projects/views/project.html:648
 msgid "# Genes"
 msgstr ""
 
@@ -120,16 +120,16 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:83
 #: app/scripts/advanced/views/advanced.genes.html:40
-#: app/scripts/compounds/views/compound.html:187
+#: app/scripts/compounds/views/compound.html:194
 #: app/scripts/enrichment/views/enrichment.result.html:114
-#: app/scripts/genes/views/gene.html:248
-#: app/scripts/genesets/views/geneset.html:251
-#: app/scripts/genesets/views/geneset.html:373
-#: app/scripts/genesets/views/geneset.html:606
+#: app/scripts/genes/views/gene.html:247
+#: app/scripts/genesets/views/geneset.html:254
+#: app/scripts/genesets/views/geneset.html:386
+#: app/scripts/genesets/views/geneset.html:623
 #: app/scripts/pathwayviewer/views/pathways.html:59
 #: app/scripts/projectmutationviewer/js/directive.js:65
-#: app/scripts/projects/views/project.html:363
-#: app/scripts/projects/views/project.html:673
+#: app/scripts/projects/views/project.html:357
+#: app/scripts/projects/views/project.html:646
 msgid "# Mutations"
 msgstr ""
 
@@ -162,14 +162,14 @@ msgstr ""
 msgid "% Donors"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:176
+#: app/scripts/mutations/views/mutation.html:178
 msgid "% Donors Affected"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:227
 #: app/scripts/genesets/views/geneset.html:228
-#: app/scripts/genesets/views/geneset.html:355
-#: app/scripts/projects/views/project.html:340
+#: app/scripts/genesets/views/geneset.html:369
+#: app/scripts/projects/views/project.html:341
 msgid "% of Donors Affected"
 msgstr ""
 
@@ -269,8 +269,8 @@ msgstr ""
 msgid "A new version of the application has been released. Please refresh your browser before continuing."
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:122
-#: app/scripts/mutations/views/mutation.html:80
+#: app/scripts/mutations/views/mutation.html:123
+#: app/scripts/mutations/views/mutation.html:79
 msgid "AA Change"
 msgstr ""
 
@@ -292,7 +292,7 @@ msgid "ATC Level 4 Code"
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:109
-#: app/scripts/genes/views/gene.html:515
+#: app/scripts/genes/views/gene.html:506
 msgid "ATC Level 4 Description"
 msgstr ""
 
@@ -338,14 +338,14 @@ msgstr ""
 msgid "Acknowledgements"
 msgstr ""
 
-#: app/scripts/projects/views/project.html:529
+#: app/scripts/projects/views/project.html:513
 msgid "Across all Project"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:51
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:38
-#: app/scripts/donors/views/donor.html:304
-#: app/scripts/projects/views/project.html:373
+#: app/scripts/donors/views/donor.html:299
+#: app/scripts/projects/views/project.html:367
 msgid "Across all Projects"
 msgstr ""
 
@@ -372,8 +372,8 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.donors.html:22
 #: app/scripts/advanced/views/advanced.donors.html:74
 #: app/scripts/donors/views/donor.supplemental.html:11
-#: app/scripts/genesets/views/geneset.html:599
-#: app/scripts/projects/views/project.html:666
+#: app/scripts/genesets/views/geneset.html:616
+#: app/scripts/projects/views/project.html:639
 msgid "Age"
 msgstr ""
 
@@ -382,11 +382,11 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.facets.donors.html:34
 #: app/scripts/common/js/codetable.js:70
 #: app/scripts/donors/views/donor.html:167
-#: app/scripts/genesets/views/geneset.html:599
-#: app/scripts/genesets/views/geneset.html:669
+#: app/scripts/genesets/views/geneset.html:616
+#: app/scripts/genesets/views/geneset.html:688
 #: app/scripts/oncogrid/js/directive.js:144
-#: app/scripts/projects/views/project.html:666
-#: app/scripts/projects/views/project.html:743
+#: app/scripts/projects/views/project.html:639
+#: app/scripts/projects/views/project.html:711
 msgid "Age at Diagnosis"
 msgstr ""
 
@@ -495,10 +495,10 @@ msgstr ""
 
 #: app/scripts/analysis/js/analysis.js:84
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:6
-#: app/scripts/donors/views/donor.specimen.html:144
+#: app/scripts/donors/views/donor.specimen.html:143
 #: app/scripts/donors/views/donor.specimen.html:208
-#: app/scripts/genesets/views/geneset.html:604
-#: app/scripts/projects/views/project.html:671
+#: app/scripts/genesets/views/geneset.html:621
+#: app/scripts/projects/views/project.html:644
 msgid "Analysis"
 msgstr ""
 
@@ -609,9 +609,9 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:81
 #: app/scripts/donors/views/donor.html:91
-#: app/scripts/genesets/views/geneset.html:605
+#: app/scripts/genesets/views/geneset.html:622
 #: app/scripts/projects/views/project.html:188
-#: app/scripts/projects/views/project.html:672
+#: app/scripts/projects/views/project.html:645
 #: app/scripts/projects/views/projects.details.html:40
 msgid "Available Data Types:"
 msgstr ""
@@ -631,7 +631,7 @@ msgstr ""
 msgid "BAM & VCF Stats (available only for BAM and VCF Files in AWS and Collaboratory)"
 msgstr ""
 
-#: app/scripts/donors/views/donor.specimen.html:146
+#: app/scripts/donors/views/donor.specimen.html:145
 msgid "BAM File"
 msgstr ""
 
@@ -641,7 +641,7 @@ msgstr ""
 
 #: app/scripts/repository/views/bamiobio.html:5
 #: app/scripts/repository/views/repository.external.file.html:22
-#: app/scripts/repository/views/repository.external.file.html:357
+#: app/scripts/repository/views/repository.external.file.html:340
 msgid "BAM Stats"
 msgstr ""
 
@@ -685,11 +685,11 @@ msgstr ""
 msgid "Brain cancer donors with frameshift mutations and having methylation data available"
 msgstr ""
 
-#: app/scripts/donors/views/donor.html:299
+#: app/scripts/donors/views/donor.html:294
 msgid "Breakdown of Affected Donors in [[ projectId ]]<br># Donors affected / # SSM tested donors"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:195
+#: app/scripts/mutations/views/mutation.html:196
 msgid "Breakdown of Donors affected by [[ mutationId ]] <br># Donors where [[ mutationId ]] observed / # SSM tested Donors"
 msgstr ""
 
@@ -747,11 +747,11 @@ msgstr ""
 #: app/scripts/genesets/views/geneset.html:195
 #: app/scripts/genesets/views/geneset.html:32
 #: app/scripts/mutations/views/mutation.html:13
-#: app/scripts/mutations/views/mutation.html:156
+#: app/scripts/mutations/views/mutation.html:158
 msgid "Cancer Distribution"
 msgstr ""
 
-#: app/scripts/app/js/app.js:686
+#: app/scripts/app/js/app.js:688
 msgid "Cancer Gene Census"
 msgstr ""
 
@@ -846,7 +846,7 @@ msgid "Clinical Data"
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:14
-#: app/scripts/compounds/views/compound.html:228
+#: app/scripts/compounds/views/compound.html:244
 #: app/scripts/compounds/views/compound.html:58
 msgid "Clinical Trials"
 msgstr ""
@@ -882,15 +882,15 @@ msgid "Cluster data"
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:107
-#: app/scripts/compounds/views/compound.html:256
-#: app/scripts/compounds/views/compound.html:354
+#: app/scripts/compounds/views/compound.html:275
+#: app/scripts/compounds/views/compound.html:383
 #: app/scripts/projects/views/project.html:67
 #: app/scripts/projects/views/projects.details.html:20
 msgid "Code"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:124
-#: app/scripts/mutations/views/mutation.html:82
+#: app/scripts/mutations/views/mutation.html:125
+#: app/scripts/mutations/views/mutation.html:81
 msgid "Coding DNA Change"
 msgstr ""
 
@@ -919,7 +919,7 @@ msgid "Compound"
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:54
-#: app/scripts/genes/views/gene.html:518
+#: app/scripts/genes/views/gene.html:509
 #: app/scripts/keyword/views/results.html:68
 msgid "Compound Class"
 msgstr ""
@@ -930,7 +930,7 @@ msgid "Compounds"
 msgstr ""
 
 #. ${compoundName} compound name
-#: app/scripts/compounds/js/compounds.js:86
+#: app/scripts/compounds/js/compounds.js:93
 msgid "Compounds - ${compoundName}"
 msgstr ""
 
@@ -938,8 +938,8 @@ msgstr ""
 msgid "Concatenated Tag Sequencing"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:270
-#: app/scripts/compounds/views/compound.html:356
+#: app/scripts/compounds/views/compound.html:289
+#: app/scripts/compounds/views/compound.html:385
 msgid "Conditions"
 msgstr ""
 
@@ -947,8 +947,8 @@ msgstr ""
 msgid "Connecting..."
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:123
-#: app/scripts/mutations/views/mutation.html:81
+#: app/scripts/mutations/views/mutation.html:124
+#: app/scripts/mutations/views/mutation.html:80
 msgid "Consequence"
 msgstr ""
 
@@ -960,24 +960,24 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:27
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:95
-#: app/scripts/donors/views/donor.html:293
-#: app/scripts/donors/views/donor.html:374
-#: app/scripts/genes/views/gene.html:405
-#: app/scripts/genes/views/gene.html:461
-#: app/scripts/genesets/views/geneset.html:494
-#: app/scripts/genesets/views/geneset.html:542
+#: app/scripts/donors/views/donor.html:288
+#: app/scripts/donors/views/donor.html:364
+#: app/scripts/genes/views/gene.html:401
+#: app/scripts/genes/views/gene.html:452
+#: app/scripts/genesets/views/geneset.html:509
+#: app/scripts/genesets/views/geneset.html:559
 #: app/scripts/mutations/views/mutation.html:12
 #: app/scripts/mutations/views/mutation.html:65
-#: app/scripts/projects/views/project.html:519
-#: app/scripts/projects/views/project.html:595
+#: app/scripts/projects/views/project.html:503
+#: app/scripts/projects/views/project.html:574
 msgid "Consequences"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:27
-#: app/scripts/donors/views/donor.html:293
-#: app/scripts/genes/views/gene.html:405
-#: app/scripts/genesets/views/geneset.html:494
-#: app/scripts/projects/views/project.html:519
+#: app/scripts/donors/views/donor.html:288
+#: app/scripts/genes/views/gene.html:401
+#: app/scripts/genesets/views/geneset.html:509
+#: app/scripts/projects/views/project.html:503
 msgid "Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively."
 msgstr ""
 
@@ -1120,11 +1120,11 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:23
 #: app/scripts/advanced/views/advanced.mutations.observations.html:26
 #: app/scripts/advanced/views/advanced.mutations.observations.html:92
-#: app/scripts/donors/views/donor.html:290
-#: app/scripts/genes/views/gene.html:400
-#: app/scripts/genesets/views/geneset.html:490
+#: app/scripts/donors/views/donor.html:285
+#: app/scripts/genes/views/gene.html:396
+#: app/scripts/genesets/views/geneset.html:505
 #: app/scripts/mutations/views/mutation.html:32
-#: app/scripts/projects/views/project.html:514
+#: app/scripts/projects/views/project.html:498
 msgid "DNA change"
 msgstr ""
 
@@ -1165,7 +1165,7 @@ msgstr ""
 msgid "Data Repository"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:451
+#: app/scripts/genesets/views/geneset.html:466
 msgid "Data Source:"
 msgstr ""
 
@@ -1245,8 +1245,8 @@ msgstr ""
 msgid "Demo"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:263
-#: app/scripts/compounds/views/compound.html:355
+#: app/scripts/compounds/views/compound.html:282
+#: app/scripts/compounds/views/compound.html:384
 #: app/scripts/genes/views/gene.html:91
 #: app/scripts/genesets/views/geneset.html:99
 #: app/scripts/tokens/views/token.manager.html:94
@@ -1395,9 +1395,9 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.donors.html:183
 #: app/scripts/advanced/views/advanced.mutations.observations.html:23
 #: app/scripts/advanced/views/advanced.mutations.observations.html:90
-#: app/scripts/genesets/views/geneset.html:666
-#: app/scripts/projects/views/project.html:740
-#: app/scripts/repository/views/repository.external.file.html:303
+#: app/scripts/genesets/views/geneset.html:685
+#: app/scripts/projects/views/project.html:708
+#: app/scripts/repository/views/repository.external.file.html:298
 msgid "Donor ID"
 msgstr ""
 
@@ -1410,7 +1410,7 @@ msgstr ""
 msgid "Donor Postresection Therapy"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:309
+#: app/scripts/repository/views/repository.external.file.html:304
 msgid "Donor Submitter IDs"
 msgstr ""
 
@@ -1442,7 +1442,7 @@ msgstr ""
 msgid "Donor in PCAWG Study"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:297
+#: app/scripts/repository/views/repository.external.file.html:292
 msgid "Donor in Study"
 msgstr ""
 
@@ -1488,16 +1488,16 @@ msgid "Donors Affected"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:96
-#: app/scripts/compounds/views/compound.html:184
-#: app/scripts/genes/views/gene.html:382
-#: app/scripts/genesets/views/geneset.html:371
-#: app/scripts/genesets/views/geneset.html:476
-#: app/scripts/genesets/views/geneset.html:543
-#: app/scripts/projects/views/project.html:494
+#: app/scripts/compounds/views/compound.html:191
+#: app/scripts/genes/views/gene.html:384
+#: app/scripts/genesets/views/geneset.html:384
+#: app/scripts/genesets/views/geneset.html:492
+#: app/scripts/genesets/views/geneset.html:560
+#: app/scripts/projects/views/project.html:485
 msgid "Donors affected"
 msgstr ""
 
-#: app/scripts/projects/views/project.html:448
+#: app/scripts/projects/views/project.html:438
 msgid "Donors affected by Gene in all projects"
 msgstr ""
 
@@ -1505,7 +1505,7 @@ msgstr ""
 msgid "Donors are grouped by cancer projects."
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:462
+#: app/scripts/genes/views/gene.html:453
 msgid "Donors by Project"
 msgstr ""
 
@@ -1558,7 +1558,7 @@ msgstr ""
 msgid "Downstream"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:445
+#: app/scripts/genesets/views/geneset.html:460
 #: app/scripts/pathwayviewer/views/pathways.html:111
 msgid "Drag and scroll to explore the pathway. Double click to reset the view."
 msgstr ""
@@ -1685,9 +1685,9 @@ msgstr ""
 msgid "Experiment Details"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:672
+#: app/scripts/genesets/views/geneset.html:691
 #: app/scripts/projects/views/project.html:136
-#: app/scripts/projects/views/project.html:746
+#: app/scripts/projects/views/project.html:714
 msgid "Experimental Analysis"
 msgstr ""
 
@@ -1705,8 +1705,8 @@ msgstr ""
 msgid "Experimental Strategy"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:604
-#: app/scripts/projects/views/project.html:671
+#: app/scripts/genesets/views/geneset.html:621
+#: app/scripts/projects/views/project.html:644
 msgid "Experimental analysis performed"
 msgstr ""
 
@@ -1718,8 +1718,8 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:161
-#: app/scripts/compounds/views/compound.html:245
+#: app/scripts/compounds/views/compound.html:165
+#: app/scripts/compounds/views/compound.html:261
 #: app/scripts/enrichment/views/enrichment.result.html:101
 #: app/scripts/ui/views/toolbar.html:4
 msgid "Export Table as TSV"
@@ -1796,30 +1796,30 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:490
+#: app/scripts/genes/views/gene.html:481
 msgid "Fetching Compounds..."
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:200
 #: app/scripts/genesets/views/geneset.html:189
-#: app/scripts/genesets/views/geneset.html:569
-#: app/scripts/projects/views/project.html:630
+#: app/scripts/genesets/views/geneset.html:587
+#: app/scripts/projects/views/project.html:610
 msgid "Fetching Donors..."
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:338
-#: app/scripts/projects/views/project.html:323
+#: app/scripts/genesets/views/geneset.html:352
+#: app/scripts/projects/views/project.html:324
 msgid "Fetching Mutated Genes..."
 msgstr ""
 
 #: app/scripts/donors/views/donor.html:263
-#: app/scripts/genes/views/gene.html:367
-#: app/scripts/genesets/views/geneset.html:461
-#: app/scripts/projects/views/project.html:478
+#: app/scripts/genes/views/gene.html:369
+#: app/scripts/genesets/views/geneset.html:477
+#: app/scripts/projects/views/project.html:469
 msgid "Fetching Mutations..."
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:169
+#: app/scripts/compounds/views/compound.html:176
 msgid "Fetching targeted genes..."
 msgstr ""
 
@@ -2026,15 +2026,15 @@ msgstr ""
 msgid "GO"
 msgstr ""
 
-#: app/scripts/app/js/app.js:684
+#: app/scripts/app/js/app.js:686
 msgid "GO Biological Process"
 msgstr ""
 
-#: app/scripts/app/js/app.js:685
+#: app/scripts/app/js/app.js:687
 msgid "GO Cellular Component"
 msgstr ""
 
-#: app/scripts/app/js/app.js:683
+#: app/scripts/app/js/app.js:685
 msgid "GO Molecular Function"
 msgstr ""
 
@@ -2055,12 +2055,12 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.donors.html:72
 #: app/scripts/advanced/views/advanced.facets.donors.html:19
 #: app/scripts/donors/views/donor.html:191
-#: app/scripts/genesets/views/geneset.html:598
-#: app/scripts/genesets/views/geneset.html:668
+#: app/scripts/genesets/views/geneset.html:615
+#: app/scripts/genesets/views/geneset.html:687
 #: app/scripts/phenotype/views/phenotype.result.html:244
 #: app/scripts/phenotype/views/phenotype.result.html:420
-#: app/scripts/projects/views/project.html:665
-#: app/scripts/projects/views/project.html:742
+#: app/scripts/projects/views/project.html:638
+#: app/scripts/projects/views/project.html:710
 msgid "Gender"
 msgstr ""
 
@@ -2070,8 +2070,8 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.facets.genes.html:5
 #: app/scripts/common/js/consequence.js:61
-#: app/scripts/mutations/views/mutation.html:121
-#: app/scripts/mutations/views/mutation.html:79
+#: app/scripts/mutations/views/mutation.html:122
+#: app/scripts/mutations/views/mutation.html:78
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:47
 #: app/scripts/pathwayviewer/views/viewer.html:29
 #: app/scripts/pathwayviewer/views/viewer.html:65
@@ -2116,9 +2116,9 @@ msgid "Gene consequence annotation"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:35
-#: app/scripts/compounds/views/compound.html:177
-#: app/scripts/genesets/views/geneset.html:368
-#: app/scripts/projects/views/project.html:359
+#: app/scripts/compounds/views/compound.html:184
+#: app/scripts/genesets/views/geneset.html:381
+#: app/scripts/projects/views/project.html:353
 msgid "Gene location on the genome, chr:start-end"
 msgstr ""
 
@@ -2146,13 +2146,13 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.html:12
 #: app/scripts/advanced/views/advanced.html:53
 #: app/scripts/browser/views/browser.html:8
-#: app/scripts/genesets/views/geneset.html:315
+#: app/scripts/genesets/views/geneset.html:328
 #: app/scripts/genesets/views/geneset.html:37
 msgid "Genes"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:585
-#: app/scripts/projects/views/project.html:646
+#: app/scripts/genesets/views/geneset.html:603
+#: app/scripts/projects/views/project.html:626
 msgid "Genes affected"
 msgstr ""
 
@@ -2177,24 +2177,25 @@ msgid "Genome Viewer"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:26
-#: app/scripts/genes/views/gene.html:350
+#: app/scripts/genes/views/gene.html:352
 #: app/scripts/mutations/views/mutation.html:16
-#: app/scripts/mutations/views/mutation.html:277
+#: app/scripts/mutations/views/mutation.html:281
 msgid "Genomic Context"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:93
-#: app/scripts/donors/views/donor.html:372
-#: app/scripts/genes/views/gene.html:459
-#: app/scripts/genesets/views/geneset.html:540
-#: app/scripts/projects/views/project.html:593
+#: app/scripts/donors/views/donor.html:362
+#: app/scripts/genes/views/gene.html:450
+#: app/scripts/genesets/views/geneset.html:557
+#: app/scripts/projects/views/project.html:572
 msgid "Genomic DNA Change"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:22
-#: app/scripts/donors/views/donor.html:289
-#: app/scripts/genes/views/gene.html:399
-#: app/scripts/projects/views/project.html:513
+#: app/scripts/donors/views/donor.html:284
+#: app/scripts/genes/views/gene.html:395
+#: app/scripts/genesets/views/geneset.html:504
+#: app/scripts/projects/views/project.html:497
 msgid "Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}"
 msgstr ""
 
@@ -2368,7 +2369,7 @@ msgid "ICGC on the Amazon Cloud"
 msgstr ""
 
 #: app/scripts/pathwayviewer/views/pathways.html:54
-#: app/scripts/projects/views/project.html:663
+#: app/scripts/projects/views/project.html:636
 msgid "ID"
 msgstr ""
 
@@ -2509,7 +2510,7 @@ msgstr ""
 msgid "Interval of last followup (days)"
 msgstr ""
 
-#: app/scripts/donors/views/donor.specimen.html:143
+#: app/scripts/donors/views/donor.specimen.html:142
 msgid "Interval<br>(days)"
 msgstr ""
 
@@ -2658,13 +2659,13 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.facets.mutations.html:32
 #: app/scripts/advanced/views/advanced.genes.html:114
 #: app/scripts/advanced/views/advanced.genes.html:35
-#: app/scripts/compounds/views/compound.html:178
-#: app/scripts/compounds/views/compound.html:326
+#: app/scripts/compounds/views/compound.html:185
+#: app/scripts/compounds/views/compound.html:355
 #: app/scripts/genes/views/gene.html:81
-#: app/scripts/genesets/views/geneset.html:368
-#: app/scripts/genesets/views/geneset.html:414
-#: app/scripts/projects/views/project.html:359
-#: app/scripts/projects/views/project.html:443
+#: app/scripts/genesets/views/geneset.html:381
+#: app/scripts/genesets/views/geneset.html:429
+#: app/scripts/projects/views/project.html:353
+#: app/scripts/projects/views/project.html:433
 msgid "Location"
 msgstr ""
 
@@ -2730,7 +2731,7 @@ msgstr ""
 msgid "Mapping Quality"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:333
+#: app/scripts/repository/views/repository.external.file.html:328
 msgid "Matched Control Sample ID"
 msgstr ""
 
@@ -2805,20 +2806,20 @@ msgstr ""
 msgid "More Mutations"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:578
-#: app/scripts/projects/views/project.html:639
+#: app/scripts/genesets/views/geneset.html:596
+#: app/scripts/projects/views/project.html:619
 msgid "Most Affected Donors"
 msgstr ""
 
 #: app/scripts/donors/views/donor.html:269
-#: app/scripts/genes/views/gene.html:376
-#: app/scripts/genesets/views/geneset.html:469
-#: app/scripts/projects/views/project.html:487
+#: app/scripts/genes/views/gene.html:378
+#: app/scripts/genesets/views/geneset.html:485
+#: app/scripts/projects/views/project.html:478
 msgid "Most Frequent Mutations"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:347
-#: app/scripts/projects/views/project.html:332
+#: app/scripts/genesets/views/geneset.html:361
+#: app/scripts/projects/views/project.html:333
 msgid "Most Frequently Mutated Genes"
 msgstr ""
 
@@ -2843,9 +2844,9 @@ msgid "Mutated Allele(s)"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:202
-#: app/scripts/genesets/views/geneset.html:685
+#: app/scripts/genesets/views/geneset.html:704
 #: app/scripts/projects/views/project.html:33
-#: app/scripts/projects/views/project.html:759
+#: app/scripts/projects/views/project.html:727
 #: app/scripts/releases/views/home.html:76
 msgid "Mutated Genes"
 msgstr ""
@@ -2855,10 +2856,10 @@ msgid "Mutation"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:92
-#: app/scripts/donors/views/donor.html:371
-#: app/scripts/genes/views/gene.html:458
-#: app/scripts/genesets/views/geneset.html:539
-#: app/scripts/projects/views/project.html:592
+#: app/scripts/donors/views/donor.html:361
+#: app/scripts/genes/views/gene.html:449
+#: app/scripts/genesets/views/geneset.html:556
+#: app/scripts/projects/views/project.html:571
 #: app/scripts/proteinstructureviewer/js/directives.js:191
 msgid "Mutation ID"
 msgstr ""
@@ -2876,7 +2877,7 @@ msgstr ""
 msgid "Mutation Occurrences"
 msgstr ""
 
-#: app/scripts/donors/views/donor.html:373
+#: app/scripts/donors/views/donor.html:363
 msgid "Mutation Type"
 msgstr ""
 
@@ -2896,15 +2897,15 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:2
 #: app/scripts/browser/views/browser.html:13
 #: app/scripts/donors/views/donor.html:27
-#: app/scripts/genes/views/gene.html:307
+#: app/scripts/genes/views/gene.html:309
 #: app/scripts/genes/views/gene.html:31
-#: app/scripts/genesets/views/geneset.html:314
-#: app/scripts/genesets/views/geneset.html:419
+#: app/scripts/genesets/views/geneset.html:327
+#: app/scripts/genesets/views/geneset.html:434
 #: app/scripts/genesets/views/geneset.html:48
-#: app/scripts/genesets/views/geneset.html:684
+#: app/scripts/genesets/views/geneset.html:703
 #: app/scripts/projects/views/project.html:34
-#: app/scripts/projects/views/project.html:449
-#: app/scripts/projects/views/project.html:758
+#: app/scripts/projects/views/project.html:439
+#: app/scripts/projects/views/project.html:726
 msgid "Mutations"
 msgstr ""
 
@@ -2924,20 +2925,20 @@ msgstr ""
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:306
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:352
 #: app/scripts/analysis/views/analysis.sets.html:48
-#: app/scripts/compounds/views/compound.html:175
-#: app/scripts/compounds/views/compound.html:325
+#: app/scripts/compounds/views/compound.html:182
+#: app/scripts/compounds/views/compound.html:354
 #: app/scripts/compounds/views/compound.html:39
 #: app/scripts/enrichment/views/enrichment.result.html:110
 #: app/scripts/genelist/views/upload.html:18
-#: app/scripts/genes/views/gene.html:510
+#: app/scripts/genes/views/gene.html:501
 #: app/scripts/genes/views/gene.html:66
-#: app/scripts/genesets/views/geneset.html:367
-#: app/scripts/genesets/views/geneset.html:413
+#: app/scripts/genesets/views/geneset.html:380
+#: app/scripts/genesets/views/geneset.html:428
 #: app/scripts/genesets/views/geneset.html:85
 #: app/scripts/keyword/views/results.html:151
 #: app/scripts/pathwayviewer/views/pathways.html:55
-#: app/scripts/projects/views/project.html:358
-#: app/scripts/projects/views/project.html:442
+#: app/scripts/projects/views/project.html:352
+#: app/scripts/projects/views/project.html:432
 #: app/scripts/projects/views/project.html:71
 #: app/scripts/projects/views/projects.details.html:25
 #: app/scripts/repository/views/repository.external.file.html:194
@@ -2959,12 +2960,12 @@ msgstr ""
 msgid "No ATC Codes Found."
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:573
-#: app/scripts/projects/views/project.html:634
+#: app/scripts/genesets/views/geneset.html:591
+#: app/scripts/projects/views/project.html:614
 msgid "No Affected Donors Found."
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:151
+#: app/scripts/mutations/views/mutation.html:153
 msgid "No Cancer Projects affected by this Mutation"
 msgstr ""
 
@@ -2997,12 +2998,12 @@ msgstr ""
 msgid "No Genomic Context available"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:354
+#: app/scripts/genes/views/gene.html:356
 msgid "No Genomic Context available."
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:342
-#: app/scripts/projects/views/project.html:327
+#: app/scripts/genesets/views/geneset.html:356
+#: app/scripts/projects/views/project.html:328
 msgid "No Mutated Genes Found."
 msgstr ""
 
@@ -3010,15 +3011,15 @@ msgstr ""
 msgid "No Mutation Occurrences Found."
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:332
+#: app/scripts/genes/views/gene.html:334
 #: app/scripts/proteinstructureviewer/js/directives.js:250
 msgid "No Mutation occurs in coding region of this Gene."
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.html:6
-#: app/scripts/genes/views/gene.html:371
-#: app/scripts/genesets/views/geneset.html:465
-#: app/scripts/projects/views/project.html:482
+#: app/scripts/genes/views/gene.html:373
+#: app/scripts/genesets/views/geneset.html:481
+#: app/scripts/projects/views/project.html:473
 msgid "No Mutations Found."
 msgstr ""
 
@@ -3026,7 +3027,7 @@ msgstr ""
 msgid "No Mutations Reported."
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:454
+#: app/scripts/genesets/views/geneset.html:469
 #: app/scripts/pathwayviewer/views/pathways.html:122
 msgid "No Pathway Diagram Found."
 msgstr ""
@@ -3035,7 +3036,7 @@ msgstr ""
 msgid "No Projects Found."
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:328
+#: app/scripts/genes/views/gene.html:330
 msgid "No Protein Coding Transcript Found."
 msgstr ""
 
@@ -3043,11 +3044,11 @@ msgstr ""
 msgid "No Samples Found."
 msgstr ""
 
-#: app/scripts/donors/views/donor.html:406
+#: app/scripts/donors/views/donor.html:396
 msgid "No Specimen Found."
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:494
+#: app/scripts/genes/views/gene.html:485
 msgid "No Target Compounds Found."
 msgstr ""
 
@@ -3073,7 +3074,7 @@ msgstr ""
 msgid "No data found."
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:260
+#: app/scripts/mutations/views/mutation.html:264
 msgid "No protein coding transcript is affected by this mutation in CDS region."
 msgstr ""
 
@@ -3105,11 +3106,11 @@ msgstr ""
 msgid "No submitted gene recognized in the system"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:165
+#: app/scripts/compounds/views/compound.html:172
 msgid "No targeted genes found."
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:249
+#: app/scripts/compounds/views/compound.html:268
 msgid "No trials found."
 msgstr ""
 
@@ -3160,25 +3161,25 @@ msgstr ""
 msgid "Number of Donors where Gene contains SSM<br>Filtered by Current Search Criteria / unfiltered # donors the gene is mutated."
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:245
+#: app/scripts/genes/views/gene.html:244
 msgid "Number of Donors where [[ geneSymbol ]] contains SSM"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:183
+#: app/scripts/compounds/views/compound.html:190
 msgid "Number of Donors where a Gene involved in the Gene Set can be targeted by the compound"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:248
-#: app/scripts/genesets/views/geneset.html:370
+#: app/scripts/genesets/views/geneset.html:251
+#: app/scripts/genesets/views/geneset.html:383
 msgid "Number of Donors where a Gene involved in the Gene Set contains SSM"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:252
+#: app/scripts/genesets/views/geneset.html:255
 msgid "Number of Genes affected by [[ geneId ]]"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:608
-#: app/scripts/projects/views/project.html:675
+#: app/scripts/genesets/views/geneset.html:625
+#: app/scripts/projects/views/project.html:648
 msgid "Number of Genes with SSM"
 msgstr ""
 
@@ -3186,43 +3187,43 @@ msgstr ""
 msgid "Number of Genes with SSM<br>Filtered by Current Search Criteria"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:330
+#: app/scripts/compounds/views/compound.html:359
 msgid "Number of Mutations"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:187
+#: app/scripts/compounds/views/compound.html:194
 msgid "Number of Mutations of gene observed"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:606
-#: app/scripts/projects/views/project.html:673
+#: app/scripts/genesets/views/geneset.html:623
+#: app/scripts/projects/views/project.html:646
 msgid "Number of SSM"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:373
-#: app/scripts/projects/views/project.html:363
+#: app/scripts/genesets/views/geneset.html:386
+#: app/scripts/projects/views/project.html:357
 msgid "Number of SSM in the Gene"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:250
+#: app/scripts/genesets/views/geneset.html:253
 msgid "Number of SSM observed in [[ geneId ]]"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:247
+#: app/scripts/genes/views/gene.html:246
 msgid "Number of SSM observed in [[ geneSymbol ]]"
 msgstr ""
 
-#: app/scripts/projects/views/project.html:597
+#: app/scripts/projects/views/project.html:576
 msgid "Number of SSM-tested donors from the current project"
 msgstr ""
 
-#: app/scripts/donors/views/donor.html:376
+#: app/scripts/donors/views/donor.html:366
 msgid "Number of SSM-tested donors from the same project as this donor"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:305
-#: app/scripts/genesets/views/geneset.html:312
-#: app/scripts/mutations/views/mutation.html:240
+#: app/scripts/genes/views/gene.html:307
+#: app/scripts/genesets/views/geneset.html:325
+#: app/scripts/mutations/views/mutation.html:244
 msgid "Number of SSM-tested donors in the current project"
 msgstr ""
 
@@ -3238,11 +3239,11 @@ msgstr ""
 msgid "Number of Somatic Mutations in Donor's Exomes Across Cancer Projects"
 msgstr ""
 
-#: app/scripts/projects/views/project.html:596
+#: app/scripts/projects/views/project.html:575
 msgid "Number of affected donors from the current project"
 msgstr ""
 
-#: app/scripts/donors/views/donor.html:375
+#: app/scripts/donors/views/donor.html:365
 msgid "Number of affected donors from the same project as this donor"
 msgstr ""
 
@@ -3250,8 +3251,8 @@ msgstr ""
 msgid "Number of donors"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:328
-#: app/scripts/genesets/views/geneset.html:416
+#: app/scripts/compounds/views/compound.html:357
+#: app/scripts/genesets/views/geneset.html:431
 msgid "Number of donors affected"
 msgstr ""
 
@@ -3259,11 +3260,11 @@ msgstr ""
 msgid "Number of donors filtered by genes in overlap"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:239
+#: app/scripts/mutations/views/mutation.html:243
 msgid "Number of donors from the current project containing the current mutation"
 msgstr ""
 
-#: app/scripts/projects/views/project.html:445
+#: app/scripts/projects/views/project.html:435
 msgid "Number of donors from the current project with the current gene mutated"
 msgstr ""
 
@@ -3275,8 +3276,8 @@ msgstr ""
 msgid "Number of donors with molecular data in DCC"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:303
-#: app/scripts/genesets/views/geneset.html:310
+#: app/scripts/genes/views/gene.html:305
+#: app/scripts/genesets/views/geneset.html:323
 msgid "Number of donors with the current gene containing simple somatic mutations in the current project"
 msgstr ""
 
@@ -3346,7 +3347,7 @@ msgstr ""
 msgid "Open in"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:231
+#: app/scripts/compounds/views/compound.html:247
 msgid ""
 "Open in\n"
 "                                <a href=\"http://zinc15.docking.org/substances/{{compound.id}}/trials/subsets/cancer/\" target=\"_blank\">\n"
@@ -3384,7 +3385,7 @@ msgstr ""
 msgid "Other Analysis Algorithm"
 msgstr ""
 
-#: app/scripts/projects/views/project.html:599
+#: app/scripts/projects/views/project.html:578
 msgid "Other Projects Mutation Observed"
 msgstr ""
 
@@ -3483,7 +3484,7 @@ msgid "Pathway"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:43
-#: app/scripts/genesets/views/geneset.html:440
+#: app/scripts/genesets/views/geneset.html:455
 #: app/scripts/pathwayviewer/views/pathways.html:3
 msgid "Pathway Viewer"
 msgstr ""
@@ -3496,20 +3497,20 @@ msgstr ""
 msgid "Percentage Cellularity"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:329
-#: app/scripts/donors/views/donor.html:377
-#: app/scripts/genesets/views/geneset.html:418
-#: app/scripts/projects/views/project.html:447
-#: app/scripts/projects/views/project.html:598
+#: app/scripts/compounds/views/compound.html:358
+#: app/scripts/donors/views/donor.html:367
+#: app/scripts/genesets/views/geneset.html:433
+#: app/scripts/projects/views/project.html:437
+#: app/scripts/projects/views/project.html:577
 msgid "Percentage of affected donors"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:306
-#: app/scripts/genesets/views/geneset.html:313
+#: app/scripts/genes/views/gene.html:308
+#: app/scripts/genesets/views/geneset.html:326
 msgid "Percentage of donors with the current gene"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:241
+#: app/scripts/mutations/views/mutation.html:245
 msgid "Percentage of donors with the current mutation"
 msgstr ""
 
@@ -3529,8 +3530,8 @@ msgstr ""
 msgid "Personal access tokens function like ordinary OAuth access tokens, similar to those offered by <a href=\"https://github.com/settings/tokens\" target=\"_blank\"><i class=\"icon-external-link\"></i>GitHub.com</a>."
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:280
-#: app/scripts/compounds/views/compound.html:358
+#: app/scripts/compounds/views/compound.html:299
+#: app/scripts/compounds/views/compound.html:387
 msgid "Phase"
 msgstr ""
 
@@ -3665,7 +3666,7 @@ msgstr ""
 #: app/scripts/projects/views/project.html:78
 #: app/scripts/projects/views/projects.details.html:173
 #: app/scripts/projects/views/projects.html:11
-#: app/scripts/repository/views/repository.external.file.html:293
+#: app/scripts/repository/views/repository.external.file.html:288
 #: app/scripts/repository/views/repository.external.html:195
 #: app/scripts/repository/views/repository.external.html:90
 msgid "Primary Site"
@@ -3704,13 +3705,13 @@ msgstr ""
 #: app/scripts/common/js/codetable.js:62
 #: app/scripts/common/js/codetable.js:63
 #: app/scripts/common/js/codetable.js:88
-#: app/scripts/genes/views/gene.html:241
-#: app/scripts/genes/views/gene.html:298
-#: app/scripts/genesets/views/geneset.html:244
-#: app/scripts/genesets/views/geneset.html:305
+#: app/scripts/genes/views/gene.html:240
+#: app/scripts/genes/views/gene.html:300
+#: app/scripts/genesets/views/geneset.html:247
+#: app/scripts/genesets/views/geneset.html:318
 #: app/scripts/keyword/views/results.html:176
-#: app/scripts/mutations/views/mutation.html:191
-#: app/scripts/mutations/views/mutation.html:235
+#: app/scripts/mutations/views/mutation.html:192
+#: app/scripts/mutations/views/mutation.html:239
 #: app/scripts/projects/js/projects.js:217
 #: app/scripts/projects/views/projects.html:9
 #: app/scripts/repository/views/repository.external.html:237
@@ -3725,7 +3726,7 @@ msgid "Project Code"
 msgstr ""
 
 #: app/scripts/keyword/views/results.html:142
-#: app/scripts/repository/views/repository.external.file.html:286
+#: app/scripts/repository/views/repository.external.file.html:281
 msgid "Project ID"
 msgstr ""
 
@@ -3735,7 +3736,7 @@ msgid "Project Name"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:117
-#: app/scripts/donors/views/donor.html:378
+#: app/scripts/donors/views/donor.html:368
 msgid "Projects"
 msgstr ""
 
@@ -3748,9 +3749,9 @@ msgid "Proper Pairs"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:21
-#: app/scripts/genes/views/gene.html:337
+#: app/scripts/genes/views/gene.html:339
 #: app/scripts/mutations/views/mutation.html:15
-#: app/scripts/mutations/views/mutation.html:263
+#: app/scripts/mutations/views/mutation.html:267
 msgid "Protein"
 msgstr ""
 
@@ -3836,7 +3837,7 @@ msgid ""
 "    research community."
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:451
+#: app/scripts/genesets/views/geneset.html:466
 msgid "Reactome"
 msgstr ""
 
@@ -3845,7 +3846,7 @@ msgstr ""
 msgid "Reactome Pathway"
 msgstr ""
 
-#: app/scripts/app/js/app.js:682
+#: app/scripts/app/js/app.js:684
 #: app/scripts/facets/views/pathwaytags.html:48
 #: app/scripts/facets/views/pathwaytags.html:50
 #: app/scripts/facets/views/pathwaytags.html:63
@@ -3999,7 +4000,7 @@ msgstr ""
 msgid "Results for ${query}"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:443
+#: app/scripts/genesets/views/geneset.html:458
 #: app/scripts/pathwayviewer/views/pathways.html:108
 msgid "Retrieving Pathway Data..."
 msgstr ""
@@ -4027,26 +4028,26 @@ msgstr ""
 msgid "Running"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:97
+#: app/scripts/mutations/views/mutation.html:96
 msgid "SO term: [[ consequenceType ]]"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:81
+#: app/scripts/mutations/views/mutation.html:80
 msgid "SO term: consequence_type"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.observations.html:30
 #: app/scripts/advanced/views/advanced.mutations.observations.html:93
-#: app/scripts/donors/views/donor.specimen.html:140
+#: app/scripts/donors/views/donor.specimen.html:139
 #: app/scripts/donors/views/donor.specimen.html:204
 msgid "Sample ID"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:325
+#: app/scripts/repository/views/repository.external.file.html:320
 msgid "Sample IDs"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:329
+#: app/scripts/repository/views/repository.external.file.html:324
 msgid "Sample Submitter IDs"
 msgstr ""
 
@@ -4215,7 +4216,7 @@ msgid ""
 "          <strong>{{NAC.analysisName(NAC.analysisType)}}</strong>"
 msgstr ""
 
-#: app/scripts/donors/views/donor.specimen.html:145
+#: app/scripts/donors/views/donor.specimen.html:144
 #: app/scripts/donors/views/donor.specimen.html:209
 msgid "Sequence Repo"
 msgstr ""
@@ -4341,10 +4342,13 @@ msgid "Showing"
 msgstr ""
 
 #: app/scripts/compounds/views/compound.html:159
-msgid "Showing <strong data-ng-bind=\"CompoundCtrl.getTargetedCompoundGenesResultPerPage()\"></strong> of <strong data-ng-bind=\"CompoundCtrl.getTargetedGeneCount()\"></strong> genes"
+msgid ""
+"Showing \n"
+"                                <strong data-ng-bind=\"CompoundCtrl.getTargetedGeneCount()\"></strong> \n"
+"                                genes"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:243
+#: app/scripts/compounds/views/compound.html:259
 msgid "Showing <strong data-ng-bind=\"compound.trials.length\"></strong> Clinical Trials"
 msgstr ""
 
@@ -4352,22 +4356,12 @@ msgstr ""
 msgid "Showing <strong id=\"projects-project-count\">{{ ProjectsCtrl.projects.hits.length }}</strong> projects"
 msgstr ""
 
-#: app/scripts/donors/views/donor.html:277
-msgid ""
-"Showing <strong>{{ DonorMutationsCtrl.mutations.hits.length }}</strong> of\n"
-"            <strong>{{ DonorMutationsCtrl.mutations.pagination.total | numberPT }}</strong> mutations"
-msgstr ""
-
 #: app/scripts/donors/views/donor.specimen.html:129
 msgid "Showing <strong>{{ DonorSpecimenCtrl.specimen.samples.length }}</strong> samples"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:501
+#: app/scripts/genes/views/gene.html:492
 msgid "Showing <strong>{{ GeneCompoundsCtrl.compounds.length }}</strong> compounds"
-msgstr ""
-
-#: app/scripts/genes/views/gene.html:385
-msgid "Showing <strong>{{ GeneMutationsCtrl.mutations.hits.length }}</strong> of <strong>{{GeneMutationsCtrl.mutations.pagination.total | number }}</strong> mutations"
 msgstr ""
 
 #: app/scripts/mutations/views/mutation.html:69
@@ -4386,56 +4380,20 @@ msgid ""
 "                  mutations.data.pagination.total | number }}</strong>"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:181
+#: app/scripts/genesets/views/geneset.html:238
+msgid "Showing <strong>{{(GeneSetCtrl.geneSet.projects| filter: GeneSetCtrl.tableFilter.projects).length | number}}</strong> projects"
+msgstr ""
+
+#: app/scripts/mutations/views/mutation.html:183
 msgid "Showing <strong>{{(MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects).length}}</strong> projects"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:270
-msgid "Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{(info.donors | filter: fileCtrlr.tableFilter.donors).length}}</strong> donors"
+#: app/scripts/repository/views/repository.external.file.html:269
+msgid "Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{(info.donors}}</strong> donors"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:231
-msgid "Showing <strong>{{GeneCtrl.gene.projects.length | number}}</strong> projects"
-msgstr ""
-
-#: app/scripts/genesets/views/geneset.html:238
-msgid "Showing <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong> projects"
-msgstr ""
-
-#: app/scripts/genesets/views/geneset.html:589
-msgid ""
-"Showing <strong>{{GeneSetDonorsCtrl.donors.hits.length}}</strong> of <strong>{{GeneSetDonorsCtrl.donors.pagination.total\n"
-"            | number}}</strong> donors"
-msgstr ""
-
-#: app/scripts/genesets/views/geneset.html:359
-msgid ""
-"Showing <strong>{{GeneSetGenesCtrl.genes.hits.length | number}}</strong> of\n"
-"            <strong>{{GeneSetGenesCtrl.genes.pagination.total | number}}</strong> genes"
-msgstr ""
-
-#: app/scripts/genesets/views/geneset.html:480
-msgid ""
-"Showing <strong>{{GeneSetMutationsCtrl.mutations.hits.length}}</strong> of\n"
-"            <strong>{{GeneSetMutationsCtrl.mutations.pagination.total | number}}</strong> mutations"
-msgstr ""
-
-#: app/scripts/projects/views/project.html:650
-msgid ""
-"Showing <strong>{{ProjectDonorsCtrl.donors.hits.length}}</strong> of \n"
-"                <strong>{{ProjectDonorsCtrl.donors.pagination.total | number}}</strong> donors"
-msgstr ""
-
-#: app/scripts/projects/views/project.html:344
-msgid ""
-"Showing <strong>{{ProjectGeneCtrl.genes.hits.length | number}}</strong> of\n"
-"                <strong>{{ProjectGeneCtrl.genes.pagination.total | number}}</strong> genes"
-msgstr ""
-
-#: app/scripts/projects/views/project.html:498
-msgid ""
-"Showing <strong>{{ProjectMutationsCtrl.mutations.hits.length}}</strong> of\n"
-"                <strong>{{ProjectMutationsCtrl.mutations.pagination.total | number}}</strong> mutations"
+msgid "Showing <strong>{{GeneCtrl.gene.projects.hits.length | number}}</strong> projects"
 msgstr ""
 
 #. {{params.provider}} comes out to be either ICGC, Google or Yahoo
@@ -4499,16 +4457,16 @@ msgid "Singletons"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:71
-#: app/scripts/genes/views/gene.html:242
-#: app/scripts/genes/views/gene.html:299
-#: app/scripts/genesets/views/geneset.html:245
-#: app/scripts/genesets/views/geneset.html:306
-#: app/scripts/genesets/views/geneset.html:597
-#: app/scripts/genesets/views/geneset.html:667
-#: app/scripts/mutations/views/mutation.html:192
-#: app/scripts/mutations/views/mutation.html:236
-#: app/scripts/projects/views/project.html:664
-#: app/scripts/projects/views/project.html:741
+#: app/scripts/genes/views/gene.html:241
+#: app/scripts/genes/views/gene.html:301
+#: app/scripts/genesets/views/geneset.html:248
+#: app/scripts/genesets/views/geneset.html:319
+#: app/scripts/genesets/views/geneset.html:614
+#: app/scripts/genesets/views/geneset.html:686
+#: app/scripts/mutations/views/mutation.html:193
+#: app/scripts/mutations/views/mutation.html:240
+#: app/scripts/projects/views/project.html:637
+#: app/scripts/projects/views/project.html:709
 #: app/scripts/projects/views/projects.details.html:30
 msgid "Site"
 msgstr ""
@@ -4543,7 +4501,7 @@ msgid "Some files may be stored in multiple repositories."
 msgstr ""
 
 #: app/scripts/donors/views/donor.html:28
-#: app/scripts/donors/views/donor.html:409
+#: app/scripts/donors/views/donor.html:399
 #: app/scripts/keyword/views/results.html:187
 msgid "Specimen"
 msgstr ""
@@ -4560,7 +4518,7 @@ msgstr ""
 msgid "Specimen Biobank ID"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:313
+#: app/scripts/repository/views/repository.external.file.html:308
 msgid "Specimen IDs"
 msgstr ""
 
@@ -4584,7 +4542,7 @@ msgstr ""
 msgid "Specimen Storage Other"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:317
+#: app/scripts/repository/views/repository.external.file.html:312
 msgid "Specimen Submitter IDs"
 msgstr ""
 
@@ -4598,7 +4556,7 @@ msgstr ""
 msgid "Specimen Type Other"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:321
+#: app/scripts/repository/views/repository.external.file.html:316
 msgid "Specimen Types"
 msgstr ""
 
@@ -4615,13 +4573,13 @@ msgid "Splice Region"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:77
-#: app/scripts/genesets/views/geneset.html:600
-#: app/scripts/projects/views/project.html:667
+#: app/scripts/genesets/views/geneset.html:617
+#: app/scripts/projects/views/project.html:640
 msgid "Stage"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:273
-#: app/scripts/compounds/views/compound.html:357
+#: app/scripts/compounds/views/compound.html:292
+#: app/scripts/compounds/views/compound.html:386
 msgid "Start Date"
 msgstr ""
 
@@ -4633,8 +4591,8 @@ msgstr ""
 msgid "Start Lost"
 msgstr ""
 
-#: app/scripts/compounds/views/compound.html:287
-#: app/scripts/compounds/views/compound.html:359
+#: app/scripts/compounds/views/compound.html:306
+#: app/scripts/compounds/views/compound.html:388
 #: app/scripts/phenotype/views/phenotype.result.html:450
 msgid "Status"
 msgstr ""
@@ -4665,8 +4623,8 @@ msgid "Storage Client"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:85
-#: app/scripts/mutations/views/mutation.html:125
-#: app/scripts/mutations/views/mutation.html:83
+#: app/scripts/mutations/views/mutation.html:126
+#: app/scripts/mutations/views/mutation.html:82
 msgid "Strand"
 msgstr ""
 
@@ -4691,7 +4649,7 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.facets.donors.html:15
 #: app/scripts/common/js/codetable.js:81
-#: app/scripts/donors/views/donor.specimen.html:142
+#: app/scripts/donors/views/donor.specimen.html:141
 #: app/scripts/donors/views/donor.specimen.html:206
 #: app/scripts/repository/views/repository.external.html:239
 msgid "Study"
@@ -4720,7 +4678,7 @@ msgid "Submitted Matched Sample ID"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.observation.popup.html:14
-#: app/scripts/donors/views/donor.specimen.html:141
+#: app/scripts/donors/views/donor.specimen.html:140
 #: app/scripts/donors/views/donor.specimen.html:205
 msgid "Submitted Sample ID"
 msgstr ""
@@ -4791,15 +4749,15 @@ msgid "Survival Time"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:189
-#: app/scripts/genesets/views/geneset.html:671
+#: app/scripts/genesets/views/geneset.html:690
 #: app/scripts/oncogrid/js/service.js:223
-#: app/scripts/projects/views/project.html:745
+#: app/scripts/projects/views/project.html:713
 msgid "Survival Time (days)"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:79
-#: app/scripts/genesets/views/geneset.html:602
-#: app/scripts/projects/views/project.html:669
+#: app/scripts/genesets/views/geneset.html:619
+#: app/scripts/projects/views/project.html:642
 msgid "Survival Time in days"
 msgstr ""
 
@@ -4812,22 +4770,22 @@ msgid "Survival time (days)"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:79
-#: app/scripts/genesets/views/geneset.html:602
-#: app/scripts/projects/views/project.html:669
+#: app/scripts/genesets/views/geneset.html:619
+#: app/scripts/projects/views/project.html:642
 msgid "Survival<br>(days)"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:112
 #: app/scripts/advanced/views/advanced.genes.html:31
-#: app/scripts/compounds/views/compound.html:174
-#: app/scripts/compounds/views/compound.html:324
+#: app/scripts/compounds/views/compound.html:181
+#: app/scripts/compounds/views/compound.html:353
 #: app/scripts/genelist/views/upload.html:112
 #: app/scripts/genelist/views/upload.html:116
 #: app/scripts/genes/views/gene.html:62
-#: app/scripts/genesets/views/geneset.html:366
-#: app/scripts/genesets/views/geneset.html:412
-#: app/scripts/projects/views/project.html:357
-#: app/scripts/projects/views/project.html:441
+#: app/scripts/genesets/views/geneset.html:379
+#: app/scripts/genesets/views/geneset.html:427
+#: app/scripts/projects/views/project.html:351
+#: app/scripts/projects/views/project.html:431
 msgid "Symbol"
 msgstr ""
 
@@ -4864,7 +4822,7 @@ msgstr ""
 msgid "Targeted Genes"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:498
+#: app/scripts/genes/views/gene.html:489
 msgid "Targeting Compounds"
 msgstr ""
 
@@ -4978,7 +4936,7 @@ msgid ""
 "           the International Cancer Genome Consortium."
 msgstr ""
 
-#: app/scripts/app/js/app.js:583
+#: app/scripts/app/js/app.js:585
 #: app/scripts/common/views/footer.html:24
 msgid "The Team"
 msgstr ""
@@ -5183,12 +5141,6 @@ msgstr ""
 msgid "Toggle heatmap view"
 msgstr ""
 
-#: app/scripts/facets/views/donorfacet.html:15
-#: app/scripts/facets/views/genetags.html:13
-#: app/scripts/facets/views/tags.html:21
-msgid "Toggle this facet to IS [[ toggle ]]"
-msgstr ""
-
 #: app/scripts/tokens/views/token.manager.html:93
 msgid "Token Id"
 msgstr ""
@@ -5261,11 +5213,11 @@ msgstr ""
 msgid "Total file size"
 msgstr ""
 
-#: app/scripts/genesets/views/geneset.html:417
+#: app/scripts/genesets/views/geneset.html:432
 msgid "Total number of SSM-tested donors from the current gene set"
 msgstr ""
 
-#: app/scripts/projects/views/project.html:446
+#: app/scripts/projects/views/project.html:436
 msgid "Total number of SSM-tested donors from the current project"
 msgstr ""
 
@@ -5281,13 +5233,13 @@ msgstr ""
 msgid "Transcript"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:126
-#: app/scripts/mutations/views/mutation.html:84
+#: app/scripts/mutations/views/mutation.html:127
+#: app/scripts/mutations/views/mutation.html:83
 msgid "Transcript(s)"
 msgstr ""
 
-#: app/scripts/genes/views/gene.html:340
-#: app/scripts/mutations/views/mutation.html:266
+#: app/scripts/genes/views/gene.html:342
+#: app/scripts/mutations/views/mutation.html:270
 msgid "Transcript:"
 msgstr ""
 
@@ -5304,8 +5256,8 @@ msgid "Trial Descriptions"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:188
-#: app/scripts/genesets/views/geneset.html:670
-#: app/scripts/projects/views/project.html:744
+#: app/scripts/genesets/views/geneset.html:689
+#: app/scripts/projects/views/project.html:712
 msgid "Tumor Stage at Diagnosis"
 msgstr ""
 
@@ -5345,31 +5297,31 @@ msgid "Tumour Stage System"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.donors.html:77
-#: app/scripts/genesets/views/geneset.html:600
-#: app/scripts/projects/views/project.html:667
+#: app/scripts/genesets/views/geneset.html:617
+#: app/scripts/projects/views/project.html:640
 msgid "Tumour Stage at Diagnosis"
 msgstr ""
 
 #: app/scripts/donors/views/donor.html:77
-#: app/scripts/genes/views/gene.html:244
-#: app/scripts/genes/views/gene.html:301
-#: app/scripts/genesets/views/geneset.html:247
-#: app/scripts/genesets/views/geneset.html:308
-#: app/scripts/mutations/views/mutation.html:194
-#: app/scripts/mutations/views/mutation.html:238
+#: app/scripts/genes/views/gene.html:243
+#: app/scripts/genes/views/gene.html:303
+#: app/scripts/genesets/views/geneset.html:250
+#: app/scripts/genesets/views/geneset.html:321
+#: app/scripts/mutations/views/mutation.html:195
+#: app/scripts/mutations/views/mutation.html:242
 #: app/scripts/projects/views/project.html:86
 msgid "Tumour Subtype"
 msgstr ""
 
 #: app/scripts/common/js/codetable.js:78
 #: app/scripts/donors/views/donor.html:73
-#: app/scripts/genes/views/gene.html:243
-#: app/scripts/genes/views/gene.html:300
-#: app/scripts/genesets/views/geneset.html:246
-#: app/scripts/genesets/views/geneset.html:307
+#: app/scripts/genes/views/gene.html:242
+#: app/scripts/genes/views/gene.html:302
+#: app/scripts/genesets/views/geneset.html:249
+#: app/scripts/genesets/views/geneset.html:320
 #: app/scripts/keyword/views/results.html:222
-#: app/scripts/mutations/views/mutation.html:193
-#: app/scripts/mutations/views/mutation.html:237
+#: app/scripts/mutations/views/mutation.html:194
+#: app/scripts/mutations/views/mutation.html:241
 #: app/scripts/projects/views/project.html:82
 #: app/scripts/projects/views/projects.html:21
 msgid "Tumour Type"
@@ -5402,21 +5354,21 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.mutations.html:30
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:25
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:94
-#: app/scripts/compounds/views/compound.html:181
-#: app/scripts/compounds/views/compound.html:327
-#: app/scripts/genes/views/gene.html:403
-#: app/scripts/genes/views/gene.html:460
+#: app/scripts/compounds/views/compound.html:188
+#: app/scripts/compounds/views/compound.html:356
+#: app/scripts/genes/views/gene.html:399
+#: app/scripts/genes/views/gene.html:451
 #: app/scripts/genes/views/gene.html:77
-#: app/scripts/genesets/views/geneset.html:369
-#: app/scripts/genesets/views/geneset.html:415
-#: app/scripts/genesets/views/geneset.html:492
-#: app/scripts/genesets/views/geneset.html:541
+#: app/scripts/genesets/views/geneset.html:382
+#: app/scripts/genesets/views/geneset.html:430
+#: app/scripts/genesets/views/geneset.html:507
+#: app/scripts/genesets/views/geneset.html:558
 #: app/scripts/mutations/views/mutation.html:38
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:19
-#: app/scripts/projects/views/project.html:360
-#: app/scripts/projects/views/project.html:444
-#: app/scripts/projects/views/project.html:517
-#: app/scripts/projects/views/project.html:594
+#: app/scripts/projects/views/project.html:354
+#: app/scripts/projects/views/project.html:434
+#: app/scripts/projects/views/project.html:501
+#: app/scripts/projects/views/project.html:573
 #: app/scripts/repository/views/repository.external.file.html:196
 msgid "Type"
 msgstr ""
@@ -5430,35 +5382,26 @@ msgstr ""
 msgid "Type or copy-and-paste a list of genes"
 msgstr ""
 
-#: app/scripts/mutations/views/mutation.html:73
+#: app/scripts/compounds/views/compound.html:264
+msgid "Type to filter Clinical Trials"
+msgstr ""
+
+#: app/scripts/mutations/views/mutation.html:72
 msgid "Type to filter Consequences"
 msgstr ""
 
-#: app/scripts/repository/views/repository.external.file.html:276
-msgid "Type to filter Donors"
-msgstr ""
-
-#: app/scripts/projects/views/project.html:351
-msgid "Type to filter Mutated Genes"
-msgstr ""
-
-#: app/scripts/donors/views/donor.html:282
-#: app/scripts/genes/views/gene.html:391
-#: app/scripts/projects/views/project.html:505
-msgid "Type to filter Mutations"
-msgstr ""
-
-#: app/scripts/genes/views/gene.html:235
-#: app/scripts/mutations/views/mutation.html:185
+#: app/scripts/genes/views/gene.html:234
+#: app/scripts/genesets/views/geneset.html:241
+#: app/scripts/mutations/views/mutation.html:186
 msgid "Type to filter Projects"
 msgstr ""
 
-#: app/scripts/donors/views/donor.specimen.html:134
+#: app/scripts/donors/views/donor.specimen.html:133
 msgid "Type to filter Specimen samples"
 msgstr ""
 
-#: app/scripts/projects/views/project.html:657
-msgid "Type to filter affected genes"
+#: app/scripts/compounds/views/compound.html:168
+msgid "Type to filter Targeted Genes"
 msgstr ""
 
 #: app/scripts/genelist/views/upload.html:113
@@ -5482,11 +5425,11 @@ msgid "Unknown - Not possible to infer relation"
 msgstr ""
 
 #: app/scripts/donorlist/views/upload.html:5
-#: app/scripts/facets/views/donorfacet.html:55
+#: app/scripts/facets/views/donorfacet.html:42
 msgid "Upload Donor Set"
 msgstr ""
 
-#: app/scripts/facets/views/genetags.html:74
+#: app/scripts/facets/views/genetags.html:62
 #: app/scripts/genelist/views/upload.html:4
 msgid "Upload Gene Set"
 msgstr ""
@@ -5532,7 +5475,7 @@ msgid "Using the ICGC DCC Data Submission System (Beta)"
 msgstr ""
 
 #: app/scripts/repository/views/repository.external.file.html:25
-#: app/scripts/repository/views/repository.external.file.html:361
+#: app/scripts/repository/views/repository.external.file.html:344
 #: app/scripts/repository/views/vcfiobio.html:5
 msgid "VCF Stats"
 msgstr ""
@@ -5599,7 +5542,7 @@ msgstr ""
 msgid "View in Data Repositores"
 msgstr ""
 
-#: app/scripts/ui/js/tpls.js:55
+#: app/scripts/ui/js/tpls.js:56
 msgid "View in Reactome Pathway Browser"
 msgstr ""
 
@@ -5806,7 +5749,7 @@ msgid "across"
 msgstr ""
 
 #. 'N' affects 'N' distinct donors across 'N' cancer projects
-#: app/scripts/mutations/views/mutation.html:162
+#: app/scripts/mutations/views/mutation.html:164
 msgid "affects"
 msgstr ""
 
@@ -5818,7 +5761,7 @@ msgstr ""
 #. 'N' affects 'N' distinct donors across 'N' cancer projects
 #. 'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects
 #: app/scripts/genesets/views/geneset.html:222
-#: app/scripts/mutations/views/mutation.html:170
+#: app/scripts/mutations/views/mutation.html:172
 msgid "cancer projects"
 msgstr ""
 
@@ -5839,13 +5782,15 @@ msgid "days"
 msgstr ""
 
 #. 'N' affects 'N' distinct donors across 'N' cancer projects
-#: app/scripts/mutations/views/mutation.html:166
+#: app/scripts/mutations/views/mutation.html:168
 msgid "distinct donors across"
 msgstr ""
 
 #. N samples from N donors
 #: app/scripts/advanced/views/advanced.donors.html:62
+#: app/scripts/genesets/views/geneset.html:607
 #: app/scripts/projects/views/project.html:145
+#: app/scripts/projects/views/project.html:630
 msgid "donors"
 msgstr ""
 
@@ -5948,6 +5893,8 @@ msgid "gene sets"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:23
+#: app/scripts/genesets/views/geneset.html:373
+#: app/scripts/projects/views/project.html:345
 msgid "genes"
 msgstr ""
 
@@ -5961,8 +5908,8 @@ msgstr ""
 msgid "icgc-get"
 msgstr ""
 
-#: app/scripts/projects/views/project.html:369
-#: app/scripts/projects/views/project.html:526
+#: app/scripts/projects/views/project.html:363
+#: app/scripts/projects/views/project.html:510
 msgid "in"
 msgstr ""
 
@@ -5970,7 +5917,7 @@ msgstr ""
 msgid "initiator codon variant"
 msgstr ""
 
-#: app/scripts/ui/js/table.js:345
+#: app/scripts/ui/js/table.js:363
 msgid "less"
 msgstr ""
 
@@ -5978,7 +5925,7 @@ msgstr ""
 msgid "missense variant"
 msgstr ""
 
-#: app/scripts/ui/js/table.js:346
+#: app/scripts/ui/js/table.js:364
 msgid "more"
 msgstr ""
 
@@ -6003,6 +5950,10 @@ msgid "mutation:"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:14
+#: app/scripts/donors/views/donor.html:277
+#: app/scripts/genes/views/gene.html:387
+#: app/scripts/genesets/views/geneset.html:496
+#: app/scripts/projects/views/project.html:489
 msgid "mutations"
 msgstr ""
 
