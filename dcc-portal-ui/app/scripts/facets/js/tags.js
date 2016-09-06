@@ -22,7 +22,7 @@
 
   module.controller('tagsFacetCtrl',
     function ($scope, $modal, Facets, FilterService, LocationService, HighchartsService, FiltersUtil,
-      Extensions, GeneSets, Genes, GeneSetNameLookupService, SetService, GeneSymbols) {
+      Extensions, GeneSets, Genes, GeneSetNameLookupService, SetService, GeneSymbols, CompoundsService) {
 
     $scope.Extensions = Extensions;
 
@@ -102,7 +102,17 @@
       return other.concat(fileDonor);
     }
 
+    function resolveActiveCompoundNames (activeCompoundIds) {
+      $scope.compoundIdToNameMap = {};
+      _.forEach(activeCompoundIds, function (compoundId) {
+        CompoundsService.getCompoundByZincId(compoundId).then(function(compound) {
+          $scope.compoundIdToNameMap[compoundId] = compound.name;
+        });
+      });
+    }
+
     function setup() {
+      /*jshint maxcomplexity:false */
       var type = $scope.proxyType || $scope.type,
           facet = $scope.proxyFacetName || $scope.facetName,
           filters = FilterService.filters(),
@@ -115,12 +125,12 @@
         type: type,
         facet: facet
       });
-      
+
       setActiveClass();
 
       // There are only 'active' entity ids
       $scope.activeEntityIds = activeEntityHelper(type);
-
+      
       // Fetch display names for entity lists
       $scope.entityIdMap = {};
 
@@ -178,6 +188,8 @@
             $scope.pathwayIdCounts = result;
           });
         }
+      } else if ($scope.type === 'compound' && asContext) {
+        resolveActiveCompoundNames($scope.actives);
       } else if ($scope.type === 'curated_set' && asContext) {
         $scope.predefinedCurated = _.filter(Extensions.GENE_SET_ROOTS, function(set) {
           return set.type === 'curated_set';
