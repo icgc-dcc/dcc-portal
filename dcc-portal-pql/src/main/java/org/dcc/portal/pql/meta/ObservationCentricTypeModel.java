@@ -131,7 +131,7 @@ public class ObservationCentricTypeModel extends TypeModel {
         nestedArrayOfObjects("consequence", "consequences", object(
             string("consequence_type", "mutation.consequenceType"),
             string("functional_impact_prediction_summary", "mutation.functionalImpact"))),
-        string("drug", "gene.drug")
+        arrayOfStrings("drug", "gene.drug")
     ));
   }
 
