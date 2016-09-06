@@ -122,7 +122,6 @@
     }
 
     $scope.resolveDisplayName = function (termObject) {
-      console.log(termObject);
       if (termObject.controlFacet === 'drug') {
         return _.get($scope.compoundIdToNameMap, termObject.term, termObject.term);
       }
