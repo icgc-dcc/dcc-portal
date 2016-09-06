@@ -244,6 +244,24 @@ angular.module('icgc.ui.table.pagination', [])
         };
       }
     };
+  })
+  .directive('paginationClientSide', function(){
+    return {
+      restrict: 'E',
+      scope: {
+        data: '=',
+        filter: '=',
+        defaultLimit: '=',
+        rowSizes: '=',
+        currentPage: '='
+      },
+      templateUrl: 'template/pagination-cs.html',
+      replace: true,
+      bindToController: true,
+      controllerAs: 'csPaginationController',
+      controller: function(){
+      }
+    };
   });
 
 

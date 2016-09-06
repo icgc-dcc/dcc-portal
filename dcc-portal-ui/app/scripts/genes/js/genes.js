@@ -120,6 +120,11 @@
     _ctrl.totalDonors = 0;
     _ctrl.gene.hasGVChromosome = GMService.isValidChromosome(_ctrl.gene.chromosome);
 
+    // Defaults for client side pagination 
+    _ctrl.currentProjectsPage = 1;
+    _ctrl.defaultProjectsRowLimit = 10;
+    _ctrl.rowSizes = [10, 25, 50];
+
     _ctrl.hasNoExternal = function(dbId) {
       return _.get(_ctrl.gene, ['externalDbIds', dbId], []).length === 0;
     };
@@ -199,7 +204,7 @@
           _ctrl.totalDonors = projectDonors.Total;
         });
 
-        _ctrl.gene.projects = projects.hits;
+        _ctrl.gene.projects = projects;
       });
 
       var params = {
@@ -310,11 +315,6 @@
         if(mutationsParams.from || mutationsParams.size){
           params.from = mutationsParams.from;
           params.size = mutationsParams.size;
-        }
-
-        if(mutationsParams.sort){
-          params.sort = mutationsParams.sort;
-          params.order = mutationsParams.order;
         }
 
         Genes.one().getMutations({

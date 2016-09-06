@@ -49,11 +49,12 @@
     _ctrl.mutation = mutation;
     _ctrl.mutation.uiProteinTranscript = [];
 
-    _ctrl.shouldLimitDisplayProjects = true;
-    _ctrl.defaultProjectsLimit = 10;
-
-     _ctrl.shouldLimitDisplayConsequences = true;
-    _ctrl.defaultConsequencesLimit = 10;
+    // Defaults for client side pagination 
+    _ctrl.currentProjectsPage = 1;
+    _ctrl.defaultProjectsRowLimit = 10;
+    _ctrl.currentConsequencesPage = 1;
+    _ctrl.defaultConsequencesRowLimit = 10;
+    _ctrl.rowSizes = [10, 25, 50];
 
     projects = {};
     _ctrl.projects = [];

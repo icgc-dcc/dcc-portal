@@ -257,9 +257,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="project in (GeneSetCtrl.shouldLimitDisplayedProjects ? 
-            (GeneSetCtrl.geneSet.projects | filter: GeneSetCtrl.tableFilter.projects | orderBy:'uiAffectedDonorPercentage':true | limitTo: GeneSetCtrl.defaultProjectsLimit) : 
-            (GeneSetCtrl.geneSet.projects | filter: GeneSetCtrl.tableFilter.projects | orderBy:'uiAffectedDonorPercentage':true)) track by project.id">
+            <tr data-ng-repeat="project in (GeneSetCtrl.geneSet.projects |
+                filter: GeneSetCtrl.tableFilter.projects | 
+                orderBy:'uiAffectedDonorPercentage':true | 
+                limitTo: GeneSetCtrl.defaultCancerRowLimit : ((GeneSetCtrl.currentCancerPage-1)*GeneSetCtrl.defaultCancerRowLimit)) track by project.id">
                 <td><a data-tooltip="{{ project.name }}" data-ng-href="/projects/{{ project.id }}">
                     {{ project.id }}
                 </a></td>
@@ -304,10 +305,12 @@
             </tbody>
         </table>
 
-        <row-limit data-data="GeneSetCtrl.geneSet.projects"
+        <pagination-client-side 
+            data-data="GeneSetCtrl.geneSet.projects"
             data-filter="GeneSetCtrl.tableFilter.projects"
-            data-show-limit="GeneSetCtrl.shouldLimitDisplayedProjects"
-            data-default-limit="GeneSetCtrl.defaultProjectsLimit"></row-limit>
+            data-default-limit="GeneSetCtrl.defaultCancerRowLimit"
+            data-row-sizes="GeneSetCtrl.rowSizes"
+            data-current-page="GeneSetCtrl.currentCancerPage"></pagination-client-side>
 
         <table class="hidden" id="{{GeneSetCtrl.geneSet.id}}_distribution">
             <thead>
@@ -341,9 +344,10 @@
         </table>
     </div>
 </section>
-<section id="genes"
-         data-ng-controller="GeneSetGenesCtrl as GeneSetGenesCtrl"
-         data-ng-class="{'loading': !GeneSetGenesCtrl.genes.hits, 'empty': GeneSetGenesCtrl.genes.hits.length == 0}">
+<section id="genes" 
+    data-ng-controller="GeneSetGenesCtrl as GeneSetGenesCtrl"
+    data-ng-class="{'loading': !GeneSetGenesCtrl.genes.hits, 'empty': GeneSetGenesCtrl.genes.hits.length == 0}"
+    fix-scroll>
     <h3 data-ng-if="!GeneSetGenesCtrl.genes.hits">
         <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutated Genes...</translate>
     </h3>
@@ -366,8 +370,7 @@
             </bar>
         </div>
         <div class="t_table_top">
-            <translate has-markup>Showing <strong>{{GeneSetGenesCtrl.genes.hits.length | number}}</strong> of
-            <strong>{{GeneSetGenesCtrl.genes.pagination.total | number}}</strong> genes</translate>
+            <span data-table-counts data-label="{{'genes' | translate}}" data-page="GeneSetGenesCtrl.genes.pagination"></span>
             <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_genes"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
@@ -385,9 +388,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="gene in (GeneSetGenesCtrl.shouldLimitDisplayedMutatedDonors ? 
-            (GeneSetGenesCtrl.genes.hits | limitTo: GeneSetGenesCtrl.defaultMutatedDonorsLimit) : 
-            (GeneSetGenesCtrl.genes.hits)) track by gene.id">
+            <tr data-ng-repeat="gene in GeneSetGenesCtrl.genes.hits track by gene.id">
                 <td><a data-ui-sref="gene({id:gene.id})">{{gene.symbol}}</a></td>
                 <td>{{gene.name}}</td>
                 <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
@@ -418,9 +419,7 @@
             </tbody>
         </table>
 
-        <row-limit data-data="GeneSetGenesCtrl.genes.hits"
-            data-show-limit="GeneSetGenesCtrl.shouldLimitDisplayedMutatedDonors"
-            data-default-limit="GeneSetGenesCtrl.defaultMutatedDonorsLimit"></row-limit>
+        <pagination-controls data-type="genesets" data-data="GeneSetGenesCtrl.genes"></pagination-controls>
 
         <table class="hidden" id="{{GeneSetCtrl.geneSet.id}}_genes">
             <thead>
@@ -471,8 +470,9 @@
     </h3>
 </section>
 <section id="mutations"
-         data-ng-controller="GeneSetMutationsCtrl as GeneSetMutationsCtrl"
-         data-ng-class="{'loading': !GeneSetMutationsCtrl.mutations.hits, 'empty': GeneSetMutationsCtrl.mutations.hits.length == 0}">
+    data-ng-controller="GeneSetMutationsCtrl as GeneSetMutationsCtrl"
+    data-ng-class="{'loading': !GeneSetMutationsCtrl.mutations.hits, 'empty': GeneSetMutationsCtrl.mutations.hits.length == 0}"
+    fix-scroll>
     <h3 data-ng-if="!GeneSetMutationsCtrl.mutations.hits">
         <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
     </h3>
@@ -493,8 +493,7 @@
         </div>
 
         <div class="t_table_top">
-            <translate has-markup>Showing <strong>{{GeneSetMutationsCtrl.mutations.hits.length}}</strong> of
-            <strong>{{GeneSetMutationsCtrl.mutations.pagination.total | number}}</strong> mutations</translate>
+            <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneSetMutationsCtrl.mutations.pagination"></span>
             <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_mutations"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
@@ -516,9 +515,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="mutation in (GeneSetMutationsCtrl.shouldLimitDisplayedMutations ? 
-            (GeneSetMutationsCtrl.mutations.hits | limitTo: GeneSetMutationsCtrl.defaultMutationsLimit) : 
-            (GeneSetMutationsCtrl.mutations.hits)) track by mutation.id">
+            <tr data-ng-repeat="mutation in GeneSetMutationsCtrl.mutations.hits track by mutation.id">
                 <td><a data-ui-sref="mutation({id:mutation.id})">{{mutation.id}}</a></td>
                 <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
                 <td><abbr data-tooltip="{{ mutation.type | define }}">{{mutation.type}}</abbr></td>
@@ -551,9 +548,7 @@
             </tbody>
         </table>
 
-        <row-limit data-data="GeneSetMutationsCtrl.mutations.hits"
-            data-show-limit="GeneSetMutationsCtrl.shouldLimitDisplayedMutations"
-            data-default-limit="GeneSetMutationsCtrl.defaultMutationsLimit"></row-limit>
+        <pagination-controls data-type="mutationset" data-data="GeneSetMutationsCtrl.mutations"></pagination-controls>
 
         <table class="hidden" id="{{GeneSetCtrl.geneSet.id}}_mutations">
             <thead>
@@ -585,8 +580,9 @@
     </div>
 </section>
 <section id="donors"
-         data-ng-controller="GeneSetDonorsCtrl as GeneSetDonorsCtrl"
-         data-ng-class="{'loading': !GeneSetDonorsCtrl.donors.hits, 'empty': GeneSetDonorsCtrl.donors.hits.length == 0}">
+    data-ng-controller="GeneSetDonorsCtrl as GeneSetDonorsCtrl"
+    data-ng-class="{'loading': !GeneSetDonorsCtrl.donors.hits, 'empty': GeneSetDonorsCtrl.donors.hits.length == 0}"
+    fix-scroll>
     <h3 data-ng-if="!GeneSetDonorsCtrl.donors.hits">
         <i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate>
     </h3>
@@ -608,8 +604,7 @@
         </div>
 
         <div class="t_table_top">
-            <translate has-markup>Showing <strong>{{GeneSetDonorsCtrl.donors.hits.length}}</strong> of <strong>{{GeneSetDonorsCtrl.donors.pagination.total
-            | number}}</strong> donors</translate>
+            <span data-table-counts data-label="{{'donors' | translate}}" data-page="GeneSetDonorsCtrl.donors.pagination"></span>
             <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_donors"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
@@ -646,9 +641,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="donor in (GeneSetDonorsCtrl.shouldLimitAffectedDonors ? 
-                (GeneSetDonorsCtrl.donors.hits | filter: GeneSetDonorsCtrl.tableFilter.affectedDonors | limitTo: GeneSetDonorsCtrl.defaultAffectedDonorsLimit) : 
-                (GeneSetDonorsCtrl.donors.hits | filter: GeneSetDonorsCtrl.tableFilter.affectedDonors)) track by donor.id">
+            <tr data-ng-repeat="donor in GeneSetDonorsCtrl.donors.hits track by donor.id">
                 <td><a data-ui-sref="donor({id:donor.id})">{{donor.id}}</a></td>
                 <td>{{donor.primarySite}}</td>
                 <td>{{donor.gender}}</td>
@@ -684,9 +677,7 @@
             </tbody>
         </table>
 
-        <row-limit data-data="GeneSetDonorsCtrl.donors.hits"
-            data-show-limit="GeneSetDonorsCtrl.shouldLimitAffectedDonors"
-            data-default-limit="GeneSetDonorsCtrl.defaultAffectedDonorsLimit"></row-limit>
+        <pagination-controls data-type="affectedDonors" data-data="GeneSetDonorsCtrl.donors"></pagination-controls>
 
         <table class="hidden" id="{{GeneSetCtrl.geneSet.id}}_donors">
             <thead>

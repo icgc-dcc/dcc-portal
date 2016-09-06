@@ -274,8 +274,7 @@
         </h3>
 
         <div class="t_table_top">
-            <translate has-markup>Showing <strong>{{ DonorMutationsCtrl.mutations.hits.length }}</strong> of
-            <strong>{{ DonorMutationsCtrl.mutations.pagination.total | numberPT }}</strong> mutations</translate>
+            <span data-table-counts data-label="{{'mutations' | translate}}" data-page="DonorMutationsCtrl.mutations.pagination"></span>
             <span data-toolbar data-dl="{{DonorCtrl.donor.id}}_mutations"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
@@ -301,9 +300,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="mutation in (DonorMutationsCtrl.shouldLimitDisplayDonors ? 
-                (DonorMutationsCtrl.mutations.hits | limitTo: DonorMutationsCtrl.defaultDonorsLimit) :
-                (DonorMutationsCtrl.mutations.hits)) track by mutation.id">
+            <tr data-ng-repeat="mutation in DonorMutationsCtrl.mutations.hits track by mutation.id">
                 <td>
                     <a href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a>
                 </td>
@@ -356,9 +353,7 @@
             </tbody>
         </table>
 
-        <row-limit data-data="DonorMutationsCtrl.mutations.hits"
-                data-show-limit="DonorMutationsCtrl.shouldLimitDisplayDonors"
-                data-default-limit="DonorMutationsCtrl.defaultDonorsLimit"></row-limit>
+        <pagination-controls data-type="mutations" data-data="DonorMutationsCtrl.mutations"></pagination-controls>
 
         <table class="hidden" id="{{DonorCtrl.donor.id}}_mutations">
             <thead>

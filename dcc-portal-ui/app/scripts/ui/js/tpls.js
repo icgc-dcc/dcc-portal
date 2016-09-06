@@ -21,6 +21,7 @@ angular.module('app.ui.tpls', [
   'template/tsize.html',
   'template/sortable.html',
   'template/pagination.html',
+  'template/pagination-cs.html',
   'template/dialog/message.html',
   'template/tooltip.html',
   'template/lists'
@@ -92,6 +93,29 @@ angular.module('template/pagination.html', []).run(function ($templateCache) {
     '<a ng-click="selectPage(page.number)" tooltip="{{:: page.tooltip }}">{{page.text}}</a></li>' +
     '</ul></div>' +
     '</span></div></div>'
+  );
+});
+
+angular.module('template/pagination-cs.html', []).run(function ($templateCache) {
+  $templateCache.put('template/pagination-cs.html',
+    '<div style="margin-top: 1rem">'+
+    '  <div data-ng-if="(csPaginationController.data | filter: csPaginationController.filter).length > 10">' +
+    '    <span>' +
+    '      Showing ' + 
+    '      <select data-ng-model="csPaginationController.defaultLimit" ' +
+    '         data-ng-options="size for size in csPaginationController.rowSizes"></select> ' +
+    '      rows' +
+    '    </span>' +
+    '    <span class="pull-right">' +
+    '      <pagination data-total-items="(csPaginationController.data | filter: csPaginationController.filter).length"'+
+    '        data-items-per-page="csPaginationController.defaultLimit"'+
+    '        data-ng-model="csPaginationController.currentPage"'+
+    '        data-class="pagination-sm pagination-cs"'+
+    '        data-max-size="5"'+
+    '        data-rotate="true"></pagination>'+
+    '    </span>'+
+    '  </div>'+
+    '</div>'
   );
 });
 

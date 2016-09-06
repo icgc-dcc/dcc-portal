@@ -146,9 +146,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="sample in (DonorSpecimenCtrl.shouldLimitDisplaySpecimenSamples ? 
-                    (DonorSpecimenCtrl.specimen.samples | filter: DonorSpecimenCtrl.tableFilter.specimenSamples | limitTo: DonorSpecimenCtrl.defaultSpecimenSamplesLimit) : 
-                    (DonorSpecimenCtrl.specimen.samples | filter: DonorSpecimenCtrl.tableFilter.specimenSamples)) track by sample.id">
+                <tr data-ng-repeat="sample in (DonorSpecimenCtrl.specimen.samples | 
+                    filter: DonorSpecimenCtrl.tableFilter.specimenSamples |
+                     limitTo: DonorSpecimenCtrl.defaultSpecimenRowLimit : ((DonorSpecimenCtrl.currentSpecimenPage-1)*DonorSpecimenCtrl.defaultSpecimenRowLimit)) track by sample.id">
                     <td>{{ sample.id }}</td>
                     <td>{{ sample.analyzedId }}</td>
                     <td>
@@ -192,10 +192,11 @@
                 </tbody>
             </table>
 
-            <row-limit data-data="DonorSpecimenCtrl.specimen.samples"
+            <pagination-client-side data-data="DonorSpecimenCtrl.specimen.samples"
                 data-filter="DonorSpecimenCtrl.tableFilter.specimenSamples"
-                data-show-limit="DonorSpecimenCtrl.shouldLimitDisplaySpecimenSamples"
-                data-default-limit="DonorSpecimenCtrl.defaultSpecimenSamplesLimit"></row-limit>
+                data-default-limit="DonorSpecimenCtrl.defaultSpecimenRowLimit"
+                data-row-sizes="DonorSpecimenCtrl.rowSizes"
+                data-current-page="DonorSpecimenCtrl.currentSpecimenPage"></pagination-client-side>
 
             <table class="hidden" id="{{DonorCtrl.donor.id}}_specimen">
                 <thead>

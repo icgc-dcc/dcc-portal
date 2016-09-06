@@ -146,9 +146,6 @@
     function($scope, Restangular, Donors, Projects, LocationService, ProjectCache) {
 
     var _ctrl = this, donor;
-
-    _ctrl.shouldLimitDisplayDonors = true;
-    _ctrl.defaultDonorsLimit = 10;
     
     function success(mutations) {
       if (mutations.hasOwnProperty('hits')) {
@@ -202,6 +199,9 @@
     }
 
     function refresh() {
+      
+      var params = LocationService.getPaginationParam('mutations');
+
       Donors.one().get({include: 'specimen'}).then(function (d) {
         donor = d;
 
@@ -212,6 +212,8 @@
         filters.donor.projectId = { is: [ donor.projectId ]};
 
         Restangular.one('ui').one('search').one('donor-mutations').get({
+          from: params.from,
+          size: params.size,
           filters: filters,
           donorId: d.id,
           include: 'consequences'
@@ -241,8 +243,11 @@
         donorId = $stateParams.id || null;
 
     _ctrl.PCAWG = PCAWG;
-    _ctrl.shouldLimitDisplaySpecimenSamples = true;
-    _ctrl.defaultSpecimenSamplesLimit = 10;
+
+    // Defaults for client side pagination 
+    _ctrl.currentSpecimenPage = 1;
+    _ctrl.defaultSpecimenRowLimit = 10;
+    _ctrl.rowSizes = [10, 25, 50];
 
     _ctrl.isPCAWG = function(specimen) {
 

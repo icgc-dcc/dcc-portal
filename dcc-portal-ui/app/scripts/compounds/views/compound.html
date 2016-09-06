@@ -156,7 +156,11 @@
                     <div class="t_table_top">
 
                         <span data-ng-if="CompoundCtrl.getTargetedCompoundGenes() && CompoundCtrl.getTargetedCompoundGenes().length > 0">
-                            <translate has-markup>Showing <strong data-ng-bind="CompoundCtrl.getTargetedCompoundGenesResultPerPage()"></strong> of <strong data-ng-bind="CompoundCtrl.getTargetedGeneCount()"></strong> genes</translate>
+                            <translate has-markup>
+                                Showing 
+                                <strong data-ng-bind="CompoundCtrl.getTargetedGeneCount()"></strong> 
+                                genes
+                            </translate>
                             <span class="t_tools" data-toolbar="" data-dl="compound_mutated_genes">
                                 <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
@@ -190,9 +194,9 @@
                                     <abbr data-tooltip="{{'Number of Mutations of gene observed' | translate}}" data-tooltip-placement="left"><translate># Mutations</translate></abbr>
                                 </th>
                             </tr>
-                            <tr data-ng-repeat="gene in (CompoundCtrl.shouldLimitTargetedGenes ? 
-                                (CompoundCtrl.getTargetedCompoundGenes() | filter: CompoundCtrl.tableFilter.targetedGenes | limitTo: defaultTargetedGenesLimit) : 
-                                (CompoundCtrl.getTargetedCompoundGenes() | filter: CompoundCtrl.tableFilter.targetedGenes)) track by gene.id">
+                            <tr data-ng-repeat="gene in (CompoundCtrl.getTargetedCompoundGenes() |
+                                filter: CompoundCtrl.tableFilter.targetedGenes |
+                                limitTo: CompoundCtrl.defaultGenesRowLimit : ((CompoundCtrl.currentGenesPage-1)*CompoundCtrl.defaultGenesRowLimit)) track by gene.id">
                                 <td><a href="/genes/{{gene.id}}" data-ng-bind="gene.symbol"></a></td>
                                 <td data-ng-bind="gene.name"></td>
                                 <td data-ng-bind-template="chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}"></td>
@@ -226,10 +230,11 @@
                         </tbody>
                     </table>
 
-                    <row-limit data-data="CompoundCtrl.getTargetedCompoundGenes()"
+                    <pagination-client-side data-data="CompoundCtrl.getTargetedCompoundGenes()"
                         data-filter="CompoundCtrl.tableFilter.targetedGenes"
-                        data-show-limit="CompoundCtrl.shouldLimitTargetedGenes"
-                        data-default-limit="CompoundCtrl.defaultTargetedGenesLimit"></row-limit>
+                        data-default-limit="CompoundCtrl.defaultGenesRowLimit"
+                        data-row-sizes="CompoundCtrl.rowSizes"
+                        data-current-page="CompoundCtrl.currentGenesPage"></pagination-client-side>
 
                 </div>
             </section>
@@ -255,6 +260,9 @@
                             <span class="t_tools" data-toolbar="" data-dl="compound_trials">
                             <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
+                            <table-filter
+                                data-placeholder="{{'Type to filter Clinical Trials' | translate}}"
+                                data-filter-model="CompoundCtrl.tableFilter.clinicalTrials"></table-filter>
                         </span>
                         <span data-ng-if="compound.trials.length === 0">
                             <translate>No trials found.</translate>
@@ -304,7 +312,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr data-ng-repeat="trial in compound.trials | orderBy:sortField:sortDescending">
+                            <tr data-ng-repeat="trial in (compound.trials |
+                                filter: CompoundCtrl.tableFilter.clinicalTrials |
+                                orderBy:sortField:sortDescending |
+                                limitTo: CompoundCtrl.defaultClinicalTrialsRowLimit : ((CompoundCtrl.currentClinicalTrailsPage-1)*CompoundCtrl.defaultClinicalTrialsRowLimit))">
                                 <td>
                                     <a style="white-space: nowrap" target="_blank" href="https://www.clinicaltrials.gov/ct2/show/{{trial.code}}">
                                         <i class="icon-external-link"></i> <span data-ng-bind="trial.code"></span>
@@ -328,6 +339,13 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <pagination-client-side data-data="compound.trials"
+                        data-filter="CompoundCtrl.tableFilter.clinicalTrials"
+                        data-default-limit="CompoundCtrl.defaultClinicalTrialsRowLimit"
+                        data-row-sizes="CompoundCtrl.rowSizes"
+                        data-current-page="CompoundCtrl.currentClinicalTrailsPage"></pagination-client-side>
+
                 </div>
                 <table class="hidden" id="compound_mutated_genes">
                     <thead>

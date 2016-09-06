@@ -535,9 +535,6 @@
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
       
-    _ctrl.shouldLimitDisplayedGenes = true;
-    _ctrl.defaultGenesLimit = 10;
-    
     var loadState = new LoadState({scope: $scope});
 
     function success(genes) {
@@ -608,8 +605,14 @@
 
     function refresh() {
 
+      var params = LocationService.getPaginationParam('genes');
+        
       loadState.loadWhile(
-        Projects.one(_projectId).getGenes({filters: LocationService.filters()}).then(success)
+        Projects.one(_projectId).getGenes({
+          from: params.from,
+          size: params.size,
+          filters: LocationService.filters()
+        }).then(success)
       );
     }
 
@@ -623,6 +626,11 @@
         refresh();
       });
 
+      $scope.$on('$locationChangeSuccess', function (event, dest) {
+        if (dest.indexOf('/projects/' + project.id) !== -1) {
+          refresh();
+        }
+      });
 
     refresh();
   });
@@ -634,9 +642,6 @@
         _projectId = $stateParams.id || null,
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
-
-    _ctrl.shouldLimitDisplayedMutations = true;
-    _ctrl.defaultMutationsLimit = 10;
 
     var loadState = new LoadState({ scope: $scope });
 
@@ -700,8 +705,16 @@
     }
 
     function refresh() {
+
+      var params = LocationService.getPaginationParam('mutations');
+
       loadState.loadWhile(
-        project.getMutations({include: 'consequences', filters: LocationService.filters()}).then(success)
+        project.getMutations({
+          from: params.from,
+          size: params.size,
+          include: 'consequences', 
+          filters: LocationService.filters()
+        }).then(success)
       );
     }
 
@@ -714,6 +727,12 @@
       refresh();
     });
 
+    $scope.$on('$locationChangeSuccess', function (event, dest) {
+      if (dest.indexOf('/projects/' + project.id) !== -1) {
+        refresh();
+      }
+    });
+
     refresh();
   });
 
@@ -723,9 +742,6 @@
         _projectId = $stateParams.id || null,
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
-
-    _ctrl.shouldLimitDisplayedDonors = true;
-    _ctrl.defaultDonorsLimit = 10;
 
     var loadState = new LoadState({ scope: $scope });
 
@@ -752,8 +768,15 @@
     }
 
     function refresh() {
+
+      var params = LocationService.getPaginationParam('donors');
+
       loadState.loadWhile(
-        Projects.one(_projectId).getDonors({ filters: LocationService.filters()}).then(success)
+        Projects.one(_projectId).getDonors({
+          from: params.from,
+          size: params.size,
+          filters: LocationService.filters()
+        }).then(success)
       );
     }
 
@@ -764,6 +787,12 @@
       }
 
       refresh();
+    });
+
+    $scope.$on('$locationChangeSuccess', function (event, dest) {
+      if (dest.indexOf('/projects/' + project.id) !== -1) {
+        refresh();
+      }
     });
 
     refresh();

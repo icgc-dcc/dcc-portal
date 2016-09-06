@@ -53,8 +53,10 @@
       var _ctrl = this, 
       geneSetFilter = {}; // Build adv query based on type
 
-      _ctrl.shouldLimitDisplayedProjects = true;
-      _ctrl.defaultProjectsLimit = 10;
+      // Defaults for client side pagination 
+      _ctrl.currentCancerPage = 1;
+      _ctrl.defaultCancerRowLimit = 10;
+      _ctrl.rowSizes = [10, 25, 50];
 
       Page.setTitle(geneSet.id);
       Page.setPage('entity');
@@ -224,9 +226,6 @@
   module.controller('GeneSetGenesCtrl', function ($scope, $timeout, LocationService, Genes, GeneSets, FiltersUtil) {
     var _ctrl = this, _geneSet = '', mergedGeneSetFilter = {};
 
-    _ctrl.shouldLimitDisplayedMutatedDonors = true;
-    _ctrl.defaultMutatedDonorsLimit = 10;
-
     function success(genes) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(_geneSet.type);
 
@@ -255,11 +254,15 @@
     }
 
     function refresh() {
-      $scope.fixScroll();
+
+      var params = LocationService.getPaginationParam('genesets');
+        
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});
         Genes.getList({
+          from: params.from,
+          size: params.size,
           filters: mergedGeneSetFilter
         }).then(success);
       });
@@ -278,9 +281,6 @@
     function ($scope, $timeout, Mutations, GeneSets, Projects, LocationService, Donors, FiltersUtil, ProjectCache) {
 
     var _ctrl = this, geneSet;
-
-    _ctrl.shouldLimitDisplayedMutations = true;
-    _ctrl.defaultMutationsLimit = 10;
 
     function success(mutations) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(geneSet.type);
@@ -339,12 +339,16 @@
     }
 
     function refresh() {
-      $scope.fixScroll();
+
+      var params = LocationService.getPaginationParam('mutationset');
+
       GeneSets.one().get().then(function (p) {
         geneSet = p;
 
         Mutations.getList({
           include: 'consequences',
+          from: params.from,
+          size: params.size,
           filters: LocationService.mergeIntoFilters({
             gene: {geneSetId: {is: [geneSet.id]}}
           })
@@ -363,9 +367,6 @@
 
   module.controller('GeneSetDonorsCtrl', function ($scope, LocationService, Donors, GeneSets, FiltersUtil) {
     var _ctrl = this, _geneSet, mergedGeneSetFilter;
-
-    _ctrl.shouldLimitAffectedDonors = true;
-    _ctrl.defaultAffectedDonorsLimit = 10;
 
     function success(donors) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(_geneSet.type);
@@ -394,11 +395,17 @@
     }
 
     function refresh() {
-      $scope.fixScroll();
+
+      var params = LocationService.getPaginationParam('affectedDonors');
+
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});
-        Donors.getList({filters: mergedGeneSetFilter}).then(success);
+        Donors.getList({
+          from: params.from,
+          size: params.size,
+          filters: mergedGeneSetFilter
+        }).then(success);
       });
     }
 

@@ -84,9 +84,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="consequence in (MutationCtrl.shouldLimitDisplayConsequences ? 
-                (MutationCtrl.mutation.consequences | filter: MutationCtrl.tableFilter.consequences | limitTo: MutationCtrl.defaultConsequencesLimit) : 
-                (MutationCtrl.mutation.consequences | filter: MutationCtrl.tableFilter.consequences))">
+            <tr data-ng-repeat="consequence in (MutationCtrl.mutation.consequences |
+                filter: MutationCtrl.tableFilter.consequences |
+                limitTo: MutationCtrl.defaultConsequencesRowLimit : ((MutationCtrl.currentProjectsPage-1) * MutationCtrl.defaultConsequencesRowLimit))">
                 <td>
                     <a data-ng-href="/genes/{{consequence.geneAffectedId}}">{{ consequence.geneAffectedSymbol }}</a>
                 </td>
@@ -109,10 +109,12 @@
             </tbody>
         </table>
 
-        <row-limit data-data="MutationCtrl.mutation.consequences"
+        <pagination-client-side 
+            data-data="MutationCtrl.mutation.consequences"
             data-filter="MutationCtrl.tableFilter.consequences"
-            data-show-limit="MutationCtrl.shouldLimitDisplayConsequences"
-            data-default-limit="MutationCtrl.defaultConsequencesLimit"></row-limit>
+            data-default-limit="MutationCtrl.defaultConsequencesRowLimit"
+            data-row-sizes="MutationCtrl.rowSizes"
+            data-current-page="MutationCtrl.currentConsequencesPage"></pagination-client-side>
 
         <table class="hidden" id="{{MutationCtrl.mutation.id}}_consequence">
             <thead>
@@ -145,7 +147,8 @@
     </div>
 </section>
 <section id="donors"
-         data-ng-class="{'loading': !MutationCtrl.projects, 'empty': MutationCtrl.projects.length == 0}">
+    data-ng-class="{'loading': !MutationCtrl.projects, 'empty': MutationCtrl.projects.length == 0}"
+    fix-scroll>
     <h3 data-ng-if="MutationCtrl.projects.length == 0">
         <translate>No Cancer Projects affected by this Mutation</translate>
     </h3>
@@ -195,9 +198,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="project in (MutationCtrl.shouldLimitDisplayProjects ? 
-                (MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects | orderBy:'-percentAffected' | limitTo: MutationCtrl.defaultProjectsLimit) : 
-                (MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects | orderBy:'-percentAffected')) track by project.id">
+            <tr data-ng-repeat="project in (MutationCtrl.projects | 
+                filter: MutationCtrl.tableFilter.projects |
+                orderBy:'-percentAffected' |
+                limitTo: MutationCtrl.defaultProjectsRowLimit : ((MutationCtrl.currentProjectsPage-1) * MutationCtrl.defaultProjectsRowLimit)) track by project.id">
                 <td><a data-tooltip="{{ project.name }}" data-ng-href="/projects/{{project.id}}">
                     {{project.id}}
                 </a></td>
@@ -221,10 +225,12 @@
             </tbody>
         </table>
 
-        <row-limit data-data="MutationCtrl.projects"
+        <pagination-client-side 
+            data-data="MutationCtrl.projects"
             data-filter="MutationCtrl.tableFilter.projects"
-            data-show-limit="MutationCtrl.shouldLimitDisplayProjects"
-            data-default-limit="MutationCtrl.defaultProjectsLimit"></row-limit>
+            data-default-limit="MutationCtrl.defaultProjectsRowLimit"
+            data-row-sizes="MutationCtrl.rowSizes"
+            data-current-page="MutationCtrl.currentProjectsPage"></pagination-client-side>
 
 
         <table class="hidden" id="{{MutationCtrl.mutation.id}}_distribution">

@@ -53,8 +53,12 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
         _targetedCompoundIds = [],
         _mutationalImpactFacets = null;
 
-    _ctrl.shouldLimitTargetedGenes = true;
-    _ctrl.defaultTargetedGenesLimit = 10;
+    // Defaults for client side pagination 
+    _ctrl.currentGenesPage = 1;
+    _ctrl.defaultGenesRowLimit = 10;
+    _ctrl.currentClinicalTrailsPage = 1;
+    _ctrl.defaultClinicalTrialsRowLimit = 10;
+    _ctrl.rowSizes = [10, 25, 50];
 
 
     function getMutationImpactFacets() {
