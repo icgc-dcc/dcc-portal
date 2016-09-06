@@ -2,6 +2,14 @@ ICGC DCC - Portal - Change Log
 ===
 
 Change log for the DCC Data Portal
+4.3.8
+--
+- Bug fix for missing data in sample/specimen table when in a Donor Entity Page.
+- Bug fix for exporting Files table to a file. 
+- OncoGrid shows "Not Verified" for donors with missing diagnosis. 
+- i18n implementation for Portal
+- Bug fixes for alignment and text wrap issues
+
 4.3.6
 --
   - Added icgc-get modal for file manifests page, currently behind a feature flag
