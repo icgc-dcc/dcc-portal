@@ -237,7 +237,8 @@
         <span class="t_table_top">
             <translate has-markup>Showing <strong>{{(GeneSetCtrl.geneSet.projects| filter: GeneSetCtrl.tableFilter.projects).length | number}}</strong> projects</translate>
             <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_distribution"></span>
-             <table-filter data-filter-model="GeneSetCtrl.tableFilter.projects"></table-filter>
+             <table-filter data-class="small-filter" 
+                data-filter-model="GeneSetCtrl.tableFilter.projects"></table-filter>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>

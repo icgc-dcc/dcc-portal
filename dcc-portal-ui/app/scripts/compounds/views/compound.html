@@ -164,7 +164,8 @@
                             <span class="t_tools" data-toolbar="" data-dl="compound_mutated_genes">
                                 <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
-                            <table-filter data-filter-model="CompoundCtrl.tableFilter.targetedGenes"></table-filter>
+                            <table-filter data-class="small-filter"
+                                data-filter-model="CompoundCtrl.tableFilter.targetedGenes"></table-filter>
                         </span>
                         <span data-ng-if="CompoundCtrl.getTargetedCompoundGenes() &&  CompoundCtrl.getTargetedCompoundGenes().length === 0">
                             <translate>No targeted genes found.</translate>
@@ -258,7 +259,8 @@
                             <span class="t_tools" data-toolbar="" data-dl="compound_trials">
                             <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
-                            <table-filter data-filter-model="CompoundCtrl.tableFilter.clinicalTrials"></table-filter>
+                            <table-filter data-class="small-filter"
+                                data-filter-model="CompoundCtrl.tableFilter.clinicalTrials"></table-filter>
                         </span>
                         <span data-ng-if="compound.trials.length === 0">
                             <translate>No trials found.</translate>

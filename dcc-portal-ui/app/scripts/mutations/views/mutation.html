@@ -68,7 +68,8 @@
         <span class="t_table_top">
             <translate has-markup>Showing <strong>{{ MutationCtrl.mutation.consequences.length }}</strong> consequences</translate>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_consequence"></span>
-            <table-filter data-filter-model="MutationCtrl.tableFilter.consequences"></table-filter>
+            <table-filter data-class="small-filter"
+                data-filter-model="MutationCtrl.tableFilter.consequences"></table-filter>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -180,7 +181,8 @@
         <span class="t_table_top">
             <translate has-markup>Showing <strong>{{(MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects).length}}</strong> projects</translate>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_distribution"></span>
-            <table-filter data-filter-model="MutationCtrl.tableFilter.projects"></table-filter>
+            <table-filter data-class="small-filter"
+                data-filter-model="MutationCtrl.tableFilter.projects"></table-filter>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>

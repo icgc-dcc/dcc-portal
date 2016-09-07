@@ -161,6 +161,10 @@ $table-th-fixed-width: 200px;
   width: 25% !important;
   height: 33px;
 
+  &.small-filter{
+    width: 20% !important;
+  }
+
   input{
     height: 100% !important;
     font-size: 1.1rem;
@@ -197,4 +201,12 @@ $table-th-fixed-width: 200px;
     height: 33px;
   }
 
+}
+
+.pagination-cs{
+  li.active{
+    a{
+      color:$white !important;
+    }
+  }
 }
