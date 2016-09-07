@@ -403,7 +403,14 @@
 </section>
 
 <section id="files" 
-    data-ng-controller="DonorFilesCtrl as DonorFilesCtrl">
+    data-ng-controller="DonorFilesCtrl as DonorFilesCtrl"
+    data-ng-class="{'loading': !DonorFilesCtrl.files.hits, 'empty': DonorFilesCtrl.files.hits.length == 0}"
+    fix-scroll>
+
+    <h3 data-ng-if="!DonorFilesCtrl.files.hits">
+        <i class="icon-spinner icon-spin"></i>
+        <translate>Fetching Files...</translate>
+    </h3>
 
     <h3 data-ng-if="DonorFilesCtrl.files.hits.length == 0"><translate>No File Found.</translate></h3>
 

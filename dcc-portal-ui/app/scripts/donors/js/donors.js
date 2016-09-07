@@ -262,10 +262,63 @@
     _ctrl.setActive();
   });
 
-module.controller('DonorFilesCtrl', function ($scope, $stateParams, LocationService, ExternalRepoService) {
+module.controller('DonorFilesCtrl', function ($scope, $stateParams, RouteInfoService, LocationService, 
+  ExternalRepoService, FilterService) {
 
     var _ctrl = this,
-      donorId = $stateParams.id || null;
+      donorId = $stateParams.id || null,
+      commaAndSpace = ', ';
+
+    _ctrl.dataRepoFileUrl = RouteInfoService.get('dataRepositoryFile').href;
+
+    function tooltipList (objects, property, oneItemHandler) {
+      var uniqueItems = _(objects)
+        .map (property)
+        .unique();
+
+      if (uniqueItems.size() < 2) {
+        return _.isFunction (oneItemHandler) ? oneItemHandler() :
+          '' + oneItemHandler;
+      }
+      return uniqueItems.map (function (s) {
+          return '<li>' + s;
+        })
+        .join ('</li>');
+    }
+
+    function uniquelyConcat (fileCopies, property) {
+      return _(fileCopies)
+        .map (property)
+        .unique()
+        .join(commaAndSpace);
+    }
+
+    _ctrl.fileFormats = function (fileCopies) {
+      return uniquelyConcat (fileCopies, 'fileFormat');
+    };
+
+    _ctrl.fileNames = function (fileCopies) {
+      return tooltipList (fileCopies, 'fileName', function () {
+          return _.get (fileCopies, '[0].fileName', '');
+        });
+    };
+
+    _ctrl.repoNames = function (fileCopies) {
+      return uniquelyConcat(fileCopies, 'repoName');
+    };
+
+    _ctrl.repoNamesInTooltip = function (fileCopies) {
+      return tooltipList(fileCopies, 'repoName', '');
+    };
+
+    _ctrl.fileAverageSize = function (fileCopies) {
+      var count = _.size (fileCopies);
+      return (count > 0) ? _.sum (fileCopies, 'fileSize') / count : 0;
+    };
+
+    _ctrl.export = function() {
+      ExternalRepoService.export(FilterService.filters());
+    };
 
     _ctrl.getFiles = function (){
       var promise, 
@@ -273,11 +326,12 @@ module.controller('DonorFilesCtrl', function ($scope, $stateParams, LocationServ
         filesParam = LocationService.getJsonParam ('files');
 
       // Default
-      params.size = 25;
+      params.from = 1;
+      params.size = 10;
       
       if (filesParam.from || filesParam.size) {
         params.from = filesParam.from;
-        params.size = filesParam.size || 25;
+        params.size = filesParam.size;
       }
 
       if (filesParam.sort) {
@@ -285,7 +339,7 @@ module.controller('DonorFilesCtrl', function ($scope, $stateParams, LocationServ
         params.order = filesParam.order;
       }
 
-      params.filters = '{"file":{"donorId":{"is":["' + donorId + '"]}}}';
+      params.filters = {'file': {'donorId': { 'is': donorId}}};
 
       promise = ExternalRepoService.getList (params);
       promise.then (function (data) { 
