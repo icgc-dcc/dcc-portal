@@ -262,6 +262,51 @@
     _ctrl.setActive();
   });
 
+module.controller('DonorFilesCtrl', function ($scope, $stateParams, LocationService, ExternalRepoService) {
+
+    var _ctrl = this,
+      donorId = $stateParams.id || null;
+
+    _ctrl.getFiles = function (){
+      var promise, 
+        params = {},
+        filesParam = LocationService.getJsonParam ('files');
+
+      // Default
+      params.size = 25;
+      
+      if (filesParam.from || filesParam.size) {
+        params.from = filesParam.from;
+        params.size = filesParam.size || 25;
+      }
+
+      if (filesParam.sort) {
+        params.sort = filesParam.sort;
+        params.order = filesParam.order;
+      }
+
+      params.filters = '{"file":{"donorId":{"is":["' + donorId + '"]}}}';
+
+      promise = ExternalRepoService.getList (params);
+      promise.then (function (data) { 
+        _ctrl.files = data;
+      });
+    };
+
+    _ctrl.getFiles();
+
+    // Pagination watcher, gets destroyed with scope.
+    $scope.$watch(function() {
+        return JSON.stringify(LocationService.search('files'));
+      },
+      function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          _ctrl.getFiles();
+      }
+    });
+
+  });
+
 })();
 
 (function () {
