@@ -265,17 +265,18 @@
       </span>
     </h3>
 
-    <div class="t_table_top" ng-if="info.donors.length > fileCtrlr.defaultDonorLimit && fileCtrlr.shouldLimitDisplayedDonors">
+    <div class="t_table_top">
       <translate has-markup>
-        Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{:: info.donors.length}}</strong> donors
+        Showing <strong>{{:: info.donors.length}}</strong> donor{{info.donors.length > 1 ? 's' : ''}}
       </translate>
+      <table-filter data-filter-model="fileCtrlr.tableFilter.donors"></table-filter>
     </div>
 
     <table
       class="table table-info fixed-width"
-      ng-repeat="donorInfo in (fileCtrlr.shouldLimitDisplayedDonors ? 
-      (info.donors | limitTo: fileCtrlr.defaultDonorLimit) : 
-      (info.donors))"
+      ng-repeat="donorInfo in (info.donors |
+        filter: fileCtrlr.tableFilter.donors |
+        limitTo: fileCtrlr.defaultDonorsRowLimit : ((fileCtrlr.currentDonorsPage-1) * fileCtrlr.defaultDonorsRowLimit))"
     >
       <tr>
         <th><translate>Project ID</translate></th>
@@ -330,9 +331,12 @@
       </tr>
     </table>
 
-    <row-limit data-data="info.donors"
-            data-show-limit="fileCtrlr.shouldLimitDisplayedDonors"
-            data-default-limit="fileCtrlr.defaultDonorLimit"></row-limit>
+    <pagination-client-side 
+      data-data="info.donors"
+      data-filter="fileCtrlr.tableFilter.donors"
+      data-default-limit="fileCtrlr.defaultDonorsRowLimit"
+      data-row-sizes="fileCtrlr.rowSizes"
+      data-current-page="fileCtrlr.currentDonorsPage"></pagination-client-side>
 
   </div>
 </section>

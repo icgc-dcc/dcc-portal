@@ -418,8 +418,11 @@
     this.stringOrDefault = stringOrDefault;
     this.isEmptyString = isEmptyString;
     this.defaultString = defaultString;
-    this.shouldLimitDisplayedDonors = true;
-    this.defaultDonorLimit = 10;
+    
+    // Defaults for client side pagination 
+    this.currentDonorsPage = 1;
+    this.defaultDonorsRowLimit = 10;
+    this.rowSizes = [10, 25, 50];
 
     function convertToString (input) {
       return _.isString (input) ? input : (input || '').toString();

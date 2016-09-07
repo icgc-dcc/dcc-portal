@@ -305,17 +305,7 @@
 
       function refresh() {
 
-        var params = {},
-          mutationsParams = LocationService.getJsonParam('mutations');
-        
-        // Default
-        params.from = 1;
-        params.size = 10;
-
-        if(mutationsParams.from || mutationsParams.size){
-          params.from = mutationsParams.from;
-          params.size = mutationsParams.size;
-        }
+        var params = LocationService.getPaginationParam('mutations');
 
         Genes.one().getMutations({
           include: 'consequences',

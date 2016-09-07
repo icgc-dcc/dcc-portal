@@ -237,9 +237,7 @@
         <span class="t_table_top">
             <translate has-markup>Showing <strong>{{(GeneSetCtrl.geneSet.projects| filter: GeneSetCtrl.tableFilter.projects).length | number}}</strong> projects</translate>
             <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_distribution"></span>
-             <table-filter
-                data-placeholder="{{'Type to filter Projects' | translate}}"
-                data-filter-model="GeneSetCtrl.tableFilter.projects"></table-filter>
+             <table-filter data-filter-model="GeneSetCtrl.tableFilter.projects"></table-filter>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -260,7 +258,7 @@
             <tr data-ng-repeat="project in (GeneSetCtrl.geneSet.projects |
                 filter: GeneSetCtrl.tableFilter.projects | 
                 orderBy:'uiAffectedDonorPercentage':true | 
-                limitTo: GeneSetCtrl.defaultCancerRowLimit : ((GeneSetCtrl.currentCancerPage-1)*GeneSetCtrl.defaultCancerRowLimit)) track by project.id">
+                limitTo: GeneSetCtrl.defaultCancerRowLimit : ((GeneSetCtrl.currentCancerPage-1) * GeneSetCtrl.defaultCancerRowLimit)) track by project.id">
                 <td><a data-tooltip="{{ project.name }}" data-ng-href="/projects/{{ project.id }}">
                     {{ project.id }}
                 </a></td>

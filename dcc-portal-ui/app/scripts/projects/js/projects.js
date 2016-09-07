@@ -534,7 +534,7 @@
         _projectId = $stateParams.id || null,
         project = Projects.one(_projectId),
         FilterService = LocationService.getFilterService();
-      
+
     var loadState = new LoadState({scope: $scope});
 
     function success(genes) {

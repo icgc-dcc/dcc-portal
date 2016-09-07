@@ -327,20 +327,22 @@ angular.module('icgc.ui.table.sortable', []).directive('sortable', function ($lo
 });
 
 angular.module('icgc.ui.table.filter', [])
-  .directive('tableFilter', function(){
+  .directive('tableFilter', function(gettextCatalog){
     return {
       restrict: 'E',
       scope: {
-        placeholder: '@',
         filterModel: '=',
         class: '@'
       },
-      replace: true,
       template: '<span class="t_suggest t_suggest__header table-filter {{:: class}}">' +
-        '<input type="text" class="t_suggest__input form-control" placeholder="{{:: placeholder}}"' + 
-        ' data-ng-model="filterModel">' + 
+        '<input type="text" class="t_suggest__input form-control" placeholder="' + gettextCatalog.getString('Table filter') + 
+        '" data-ng-model="filterModel" />' + 
         '<i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search">' +
-        '</i></span>'
+        '</i>'+
+        '<i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel ng-hide"' + 
+        ' data-ng-click="filterModel = \'\'" data-ng-show="filterModel"></i>' +
+        '</span>',
+      replace: true
     };
   });
 
