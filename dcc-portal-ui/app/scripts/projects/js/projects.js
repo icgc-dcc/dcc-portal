@@ -413,7 +413,7 @@
   });
 
   module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page, PubMed, project,
-    Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState) {
+    Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState, SetService, Restangular) {
     var _ctrl = this;
 
     Page.setTitle(project.id);
@@ -437,7 +437,6 @@
 
     _ctrl.hasExp = !_.isEmpty(project.experimentalAnalysisPerformedSampleCounts);
     _ctrl.isPCAWG = PCAWG.isPCAWGStudy;
-
 
     _ctrl.project = project;
     _ctrl.ExternalLinks = ExternalLinks;
@@ -472,6 +471,68 @@
 
     _ctrl.downloadSample = function () {
       $window.location.href = API.BASE_URL + '/projects/' + project.id + '/samples';
+    };
+
+    function createSets() {
+      var filter = {
+        donor: {
+          projectId: {
+            is: [project.id]
+          }
+        },
+        mutation: {
+          functionalImpact: {
+            is: ['High']
+          }
+        }
+      };
+
+      var donorParams = {
+        filters: filter,
+        size: 75,
+        isTransient: true,
+        name: project.id + ': Top 75 Donors w/ High Impact',
+        sortBy: 'ssmAffectedGenes',
+        sortOrder: 'DESCENDING',
+      };
+
+      var geneParams = {
+        filters: filter,
+        size: 75,
+        isTransient: true,
+        name: project.id + ': Top 75 Genes w/ High Impact',
+        sortBy: 'affectedDonorCountFiltered',
+        sortOrder: 'DESCENDING',
+      };
+
+      return {
+        donorSet: SetService.createEntitySet('donor', donorParams),
+        geneSet: SetService.createEntitySet('gene', geneParams)
+      };
+    }
+
+    function createOncoGrid(sets) {
+      var payload = {
+        donorSet: sets.donorSet,
+        geneSet: sets.geneSet
+      };
+      
+      return Restangular
+        .one('analysis')
+        .post('oncogrid', payload, {}, { 'Content-Type': 'application/json' })
+        .then(function (data) {
+          if (!data.id) {
+            throw new Error('Received invalid response from analysis creation');
+          }
+          $location.path('analysis/view/oncogrid/' + data.id);
+        });
+    }
+
+    _ctrl.openOncogrid = function() {
+      var sets = createSets();
+      $q.all(sets).then(function(response) {
+        createOncoGrid({donorSet: response.donorSet.id, geneSet: response.geneSet.id});
+      });
     };
 
     function refresh() {

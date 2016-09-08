@@ -309,10 +309,18 @@
             </td>
         </tr>
     </table>
-    <span class="open-in"><translate>Open in</translate></span>
-    <a href="{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}">
-      <i class="icon-database"></i>{{:: ProjectCtrl.dataReleasesTitle }}
-    </a>
+    <div>
+        <span class="open-in"><translate>Open in</translate></span>
+        <a href="{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}">
+        <i class="icon-database"></i>{{:: ProjectCtrl.dataReleasesTitle }}
+        </a>
+    </div>
+    <div>
+        <span class="open-in"><translate>Open in</translate></span>
+        <a href="#" data-ng-click="ProjectCtrl.openOncogrid()">
+            <i class="icon-grid"></i>OncoGrid with top 75 High Impact Donor and Genes
+        </a>
+    </div>
 </div>
 </section>
 <section id="genes"
