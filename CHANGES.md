@@ -4,6 +4,7 @@ ICGC DCC - Portal - Change Log
 Change log for the DCC Data Portal
 4.3.8
 --
+- Upgraded to Spring Boot `1.4.0-RELEASE` and added custom `FailureAnalyzer`s for Elasticsearch, etc.
 - Bug fix for missing data in sample/specimen table when in a Donor Entity Page.
 - Bug fix for exporting Files table to a file. 
 - OncoGrid shows "Not Verified" for donors with missing diagnosis. 
