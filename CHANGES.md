@@ -10,6 +10,10 @@ Change log for the DCC Data Portal
 - i18n implementation for Portal
 - Bug fixes for alignment and text wrap issues
 
+4.3.7
+--
+- Removed software page and moved to [docs](http://docs.icgc.org/software/binaries/).
+
 4.3.6
 --
   - Added icgc-get modal for file manifests page, currently behind a feature flag
