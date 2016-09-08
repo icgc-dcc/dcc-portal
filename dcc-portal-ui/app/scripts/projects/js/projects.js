@@ -489,7 +489,7 @@
 
       var donorParams = {
         filters: filter,
-        size: 75,
+        size: 2000,
         isTransient: true,
         name: project.id + ': Top 75 Donors w/ High Impact',
         sortBy: 'ssmAffectedGenes',
@@ -498,7 +498,7 @@
 
       var geneParams = {
         filters: filter,
-        size: 75,
+        size: 50,
         isTransient: true,
         name: project.id + ': Top 75 Genes w/ High Impact',
         sortBy: 'affectedDonorCountFiltered',

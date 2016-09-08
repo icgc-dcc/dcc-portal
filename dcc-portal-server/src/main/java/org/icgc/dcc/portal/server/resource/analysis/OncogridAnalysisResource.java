@@ -15,33 +15,27 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.resource;
-
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.util.UUID;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-
-import org.icgc.dcc.portal.server.model.OncogridAnalysis;
-import org.icgc.dcc.portal.server.model.OncogridAnalysisRequest;
-import org.icgc.dcc.portal.server.service.OncogridAnalysisService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+package org.icgc.dcc.portal.server.resource.analysis;
 
 import io.swagger.annotations.ApiParam;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.icgc.dcc.portal.server.model.OncogridAnalysis;
+import org.icgc.dcc.portal.server.model.OncogridAnalysisRequest;
+import org.icgc.dcc.portal.server.resource.Resource;
+import org.icgc.dcc.portal.server.service.OncogridAnalysisService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.ws.rs.*;
+import java.util.UUID;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Component
 @Path("/v1/analysis/oncogrid")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class OncogridAnalaysisResource extends Resource {
+public class OncogridAnalysisResource extends Resource {
 
   @NonNull
   private final OncogridAnalysisService service;
