@@ -1,7 +1,6 @@
 package org.icgc.dcc.portal.server.service;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.util.Comparator.comparing;
 import static java.util.stream.IntStream.range;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
@@ -11,7 +10,6 @@ import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -40,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired }) )
+@RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class MutationService {
 
   private static final AggregationToFacetConverter AGGS_TO_FACETS_CONVERTER = AggregationToFacetConverter.getInstance();
@@ -110,7 +109,7 @@ public class MutationService {
     return getCounts(queries, sr);
   }
 
-  public List<SimpleImmutableEntry<String, Long>> counts(@NonNull List<String> geneIds,
+  public List<Map<String, Object>> counts(@NonNull List<String> geneIds,
       LinkedHashMap<String, Query> queries,
       int maxSize,
       boolean sortDescendingly) {
@@ -119,14 +118,14 @@ public class MutationService {
         .distinct()
         .collect(toImmutableList());
 
-    final Comparator<SimpleImmutableEntry<String, Long>> comparator = comparing(SimpleImmutableEntry::getValue);
+    final Comparator<Map<String, Object>> comparator =
+        (a, b) -> ((Long) a.get("mutationCount")).compareTo((Long) b.get("mutationCount"));
     final MultiSearchResponse.Item[] responseItems = mutationRepository.counts(queries).getResponses();
 
     return range(0, responseItems.length).boxed()
         .map(i -> {
           final long count = getTotalHitCount(responseItems[i].getResponse());
-
-          return new SimpleImmutableEntry<String, Long>(genes.get(i), count);
+          return ImmutableMap.<String, Object> of("geneId", genes.get(i), "mutationCount", count);
         })
         .sorted(sortDescendingly ? comparator.reversed() : comparator)
         .limit(maxSize)

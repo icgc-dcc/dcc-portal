@@ -68,10 +68,10 @@ import org.icgc.dcc.portal.server.model.File;
 import org.icgc.dcc.portal.server.model.Files;
 import org.icgc.dcc.portal.server.model.Keyword;
 import org.icgc.dcc.portal.server.model.Keywords;
-import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.TermFacet;
+import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.repository.FileRepository;
 import org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys;
@@ -270,27 +270,23 @@ public class FileService {
   }
 
   @SneakyThrows
-  private void exportFiles(OutputStream output, SearchResponse prepResponse, String[] keys) {
+  private void exportFiles(OutputStream output, SearchResponse response, String[] keys) {
     @Cleanup
     val writer = new CsvMapWriter(new BufferedWriter(new OutputStreamWriter(output, UTF_8)), TAB_PREFERENCE);
     writer.writeHeader(toArray(DATA_TABLE_EXPORT_MAP.values(), String.class));
 
-    String scrollId = prepResponse.getScrollId();
-
+    String scrollId = response.getScrollId();
     while (true) {
-      val response = fileRepository.prepareSearchScroll(scrollId);
-
       if (!hasHits(response)) {
         break;
       }
-
       for (val hit : response.getHits()) {
         writer.write(toRowValueMap(hit), keys);
       }
 
       scrollId = response.getScrollId();
+      response = fileRepository.prepareSearchScroll(scrollId);
     }
-
   }
 
   private static String combineUniqueItemsToString(SearchHitField hitField, Function<Set<Object>, String> combiner) {
