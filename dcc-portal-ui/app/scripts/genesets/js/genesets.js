@@ -255,7 +255,7 @@
 
     function refresh() {
 
-      var params = LocationService.getPaginationParam('genesets');
+      var params = LocationService.getPaginationParams('genesets');
         
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
@@ -340,7 +340,7 @@
 
     function refresh() {
 
-      var params = LocationService.getPaginationParam('mutationset');
+      var params = LocationService.getPaginationParams('mutationset');
 
       GeneSets.one().get().then(function (p) {
         geneSet = p;
@@ -396,7 +396,7 @@
 
     function refresh() {
 
-      var params = LocationService.getPaginationParam('affectedDonors');
+      var params = LocationService.getPaginationParams('affectedDonors');
 
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;

@@ -605,7 +605,7 @@
 
     function refresh() {
 
-      var params = LocationService.getPaginationParam('genes');
+      var params = LocationService.getPaginationParams('genes');
         
       loadState.loadWhile(
         Projects.one(_projectId).getGenes({
@@ -706,7 +706,7 @@
 
     function refresh() {
 
-      var params = LocationService.getPaginationParam('mutations');
+      var params = LocationService.getPaginationParams('mutations');
 
       loadState.loadWhile(
         project.getMutations({
@@ -769,7 +769,7 @@
 
     function refresh() {
 
-      var params = LocationService.getPaginationParam('donors');
+      var params = LocationService.getPaginationParams('donors');
 
       loadState.loadWhile(
         Projects.one(_projectId).getDonors({

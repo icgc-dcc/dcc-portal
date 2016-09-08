@@ -305,7 +305,7 @@
 
       function refresh() {
 
-        var params = LocationService.getPaginationParam('mutations');
+        var params = LocationService.getPaginationParams('mutations');
 
         Genes.one().getMutations({
           include: 'consequences',
@@ -327,6 +327,11 @@
   module.controller ('GeneCompoundsCtrl', function ($stateParams, CompoundsService, RouteInfoService) {
     var geneId = $stateParams.id;
     var _this = this;
+
+    // Defaults for client side pagination 
+    _this.currentCompoundsPage = 1;
+    _this.defaultCompoundsRowLimit = 10;
+    _this.rowSizes = [10, 25, 50];
 
     this.compoundUrl = RouteInfoService.get ('drugCompound').href;
     this.concatAtcDescriptions = function (compound) {

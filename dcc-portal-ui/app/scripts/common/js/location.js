@@ -138,25 +138,8 @@
         delete s[param];
         $location.search(s);
       },
-      getPaginationParam: function(dataType){
-        var params = {},
-          jsonParam = this.getJsonParam(dataType);
-
-        // Default
-        params.from = 1;
-        params.size = 10;
-
-        if(jsonParam.from || jsonParam.size){
-          params.from = jsonParam.from;
-          params.size = jsonParam.size;
-        }
-
-        if (jsonParam.sort) {
-          params.sort = jsonParam.sort;
-          params.order = jsonParam.order;
-        }
-
-        return params;
+      getPaginationParams: function(dataType){
+        return _.defaults({}, this.getJsonParam(dataType), {from: 1, size: 10});
       },
       goToPath: function(path, search, hash) {
         var searchParams = search || {},

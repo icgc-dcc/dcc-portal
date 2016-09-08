@@ -200,7 +200,7 @@
 
     function refresh() {
       
-      var params = LocationService.getPaginationParam('mutations');
+      var params = LocationService.getPaginationParams('mutations');
 
       Donors.one().get({include: 'specimen'}).then(function (d) {
         donor = d;

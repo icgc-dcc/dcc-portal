@@ -289,7 +289,7 @@
         <pagination-client-side 
             data-data="GeneCtrl.gene.projects.hits"
             data-filter="GeneCtrl.tableFilter.projects"
-            data-default-limit="GeneCtrl.defaultProjectsRowLimit"
+            data-row-limit="GeneCtrl.defaultProjectsRowLimit"
             data-row-sizes="GeneCtrl.rowSizes"
             data-current-page="GeneCtrl.currentProjectsPage"></pagination-client-side>
         
@@ -490,6 +490,8 @@
     <span class="t_table_top">
       <translate>Showing <strong>{{ GeneCompoundsCtrl.compounds.length }}</strong> compounds</translate>
     </span>
+    <table-filter data-class="small-filter"
+        data-filter-model="GeneCompoundsCtrl.tableFilter.compounds"></table-filter>
     <span ng-init="sortField = 'name'; sortDescendingly = false;" />
 
     <table class="table table-bordered table-striped table-condensed">
@@ -521,14 +523,24 @@
         </thead>
 
         <tbody>
-        <tr ng-repeat="compound in GeneCompoundsCtrl.compounds | orderBy:sortField:sortDescendingly">
-            <td><a href="{{ GeneCompoundsCtrl.compoundUrl }}{{ compound.zincId }}">{{ compound.name }} (<span>{{ compound.zincId }}</span>)</a></td>
-            <td>{{ GeneCompoundsCtrl.concatAtcDescriptions (compound) }}</td>
-            <td>{{ compound.drugClass | formatCompoundClass }}</td>
-            <td class="text-right"><a href="/compound/{{compound.zincId}}#trials">{{ compound.cancerTrialCount | number }}</a></td>
-        </tr>
+            <tr ng-repeat="compound in (GeneCompoundsCtrl.compounds |
+                filter: GeneCompoundsCtrl.tableFilter.compounds |
+                orderBy:sortField:sortDescendingly |
+                limitTo: GeneCompoundsCtrl.defaultCompoundsRowLimit : ((GeneCompoundsCtrl.currentCompoundsPage-1) * GeneCtrl.defaultCompoundsRowLimit))">
+                <td><a href="{{ GeneCompoundsCtrl.compoundUrl }}{{ compound.zincId }}">{{ compound.name }} (<span>{{ compound.zincId }}</span>)</a></td>
+                <td>{{ GeneCompoundsCtrl.concatAtcDescriptions (compound) }}</td>
+                <td>{{ compound.drugClass | formatCompoundClass }}</td>
+                <td class="text-right"><a href="/compound/{{compound.zincId}}#trials">{{ compound.cancerTrialCount | number }}</a></td>
+            </tr>
         </tbody>
     </table>
+
+    <pagination-client-side 
+        data-data="GeneCompoundsCtrl.compounds"
+        data-filter="GeneCompoundsCtrl.tableFilter.compounds"
+        data-row-limit="GeneCompoundsCtrl.defaultCompoundsRowLimit"
+        data-row-sizes="GeneCompoundsCtrl.rowSizes"
+        data-current-page="GeneCompoundsCtrl.currentCompoundsPage"></pagination-client-side>
 
   </div>
 
