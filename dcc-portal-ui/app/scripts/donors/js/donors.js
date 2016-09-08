@@ -266,8 +266,9 @@ module.controller('DonorFilesCtrl', function ($scope, $stateParams, RouteInfoSer
   ExternalRepoService, FilterService) {
 
     var _ctrl = this,
-      donorId = $stateParams.id || null,
-      commaAndSpace = ', ';
+      commaAndSpace = ', ';    
+
+    _ctrl.donorId = $stateParams.id || null;
 
     _ctrl.dataRepoFileUrl = RouteInfoService.get('dataRepositoryFile').href;
 
@@ -339,7 +340,7 @@ module.controller('DonorFilesCtrl', function ($scope, $stateParams, RouteInfoSer
         params.order = filesParam.order;
       }
 
-      params.filters = {'file': {'donorId': { 'is': donorId}}};
+      params.filters = {'file': {'donorId': { 'is': _ctrl.donorId}}};
 
       promise = ExternalRepoService.getList (params);
       promise.then (function (data) { 
