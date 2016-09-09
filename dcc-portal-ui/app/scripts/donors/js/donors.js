@@ -263,14 +263,79 @@
   });
 
 module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $stateParams, 
-  RouteInfoService, LocationService, ExternalRepoService, FilterService) {
+  RouteInfoService, LocationService, ExternalRepoService, FilterService, Facets) {
 
     var _ctrl = this,
       commaAndSpace = ', ';    
 
     _ctrl.donorId = $stateParams.id || null;
+     _ctrl.summary = {};
+     _ctrl.facetCharts = {};
+     _ctrl.cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
 
     _ctrl.dataRepoFileUrl = RouteInfoService.get('dataRepositoryFile').href;
+
+    _ctrl.repoChartConfigOverrides = {
+      chart: {
+          type: 'column',
+          marginTop: 20,
+          marginBottom: 20,
+          backgroundColor: 'transparent',
+          spacingTop: 1,
+          spacingRight: 20,
+          spacingBottom: 20,
+          spacingLeft: 10
+      },
+      xAxis: {
+        labels: {
+          rotation: 0,
+          align: 'left',
+          x: -5,
+          y: 12,
+          formatter: function () {
+            var isCloudRepo = _.includes(_ctrl.cloudRepos, this.value);
+            return isCloudRepo ? '\ue844' : '';
+          }
+        },
+        gridLineColor: 'transparent',
+        minorGridLineWidth: 0
+      },
+      yAxis: {
+        gridLineColor: 'transparent',
+        endOnTick: false,
+        maxPadding: 0.01,
+        labels: {
+          formatter: function () {
+            return this.value / 1000 + 'k';
+          }
+        },
+        lineWidth: 1,
+        title: {
+          align: 'high',
+          offset: 0,
+          margin: -20,
+          y: -10,
+          rotation: 0,
+          text: '# of Files'
+        }
+      },
+      plotOptions: {
+        series: {
+          minPointLength: 2,
+          pointPadding: 0,
+          maxPointWidth: 100,
+          borderRadiusTopLeft: 2,
+          borderRadiusTopRight: 2,
+          cursor: 'default',
+          stickyTracking: false,
+          point: {
+            events: {
+              mouseOut: $scope.$emit.bind($scope, 'tooltip::hide')
+            }
+          }
+        }
+      }
+    };
 
     function tooltipList (objects, property, oneItemHandler) {
       var uniqueItems = _(objects)
@@ -389,6 +454,50 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
       }
     };
 
+    _ctrl.removeCityFromRepoName = function(repoName) {
+      if (_.contains(repoName, 'CGHub')) {
+        return 'CGHub';
+      }
+
+      if (_.contains (repoName, 'TCGA DCC')) {
+        return 'TCGA DCC';
+      }
+
+      return repoName;
+    };
+
+    _ctrl.fixRepoNameInTableData = function(data) {
+      _.forEach (data, function(row) {
+        _.forEach (row.fileCopies, function(fileCopy) {
+          fileCopy.repoName = _ctrl.removeCityFromRepoName(fileCopy.repoName);
+        });
+      });
+    };
+
+    _ctrl.processRepoData = function(data) {
+      var filteredRepoNames = _.get(LocationService.filters(), 'file.repoName.is', []);
+      var selectedColor = [253, 179, 97 ];
+      var unselectedColor = [22, 147, 192];
+      var minAlpha = 0.3;
+
+      var transformedItems = data.s.map(function (item, i, array) {
+        var isSelected = _.includes(filteredRepoNames, data.x[i]);
+        var baseColor = isSelected ? selectedColor : unselectedColor;
+        var alpha = array.length ?
+          1 - (1 - minAlpha) / array.length * i :
+          0;
+        var rgba = 'rgba(' + baseColor.concat(alpha).join(',') + ')';
+        return _.extend({}, item, {
+          color: rgba,
+          fillOpacity: 0.5
+        });
+      });
+
+      return _.extend({}, data, {
+        s: transformedItems
+      });
+    };
+
     _ctrl.getFiles = function (){
       var promise, 
         params = {},
@@ -408,12 +517,20 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
         params.order = filesParam.order;
       }
 
-      params.filters = {'file': {'donorId': { 'is': _ctrl.donorId}}};
+      params.filters = FilterService.mergeIntoFilters({'donor': {'id': { 'is': _ctrl.donorId}}});
+      params.include = 'facets';
 
+      // Get files
       promise = ExternalRepoService.getList (params);
-      promise.then (function (data) { 
+      promise.then (function (data) {
+        // Remove city names from repository names for CGHub and TCGA DCC.
+        _ctrl.fixRepoNameInTableData(data.hits);
         _ctrl.files = data;
+
+        _ctrl.facetCharts = ExternalRepoService.createFacetCharts(data.termFacets);
+        _ctrl.facetCharts.repositories = _ctrl.processRepoData(_ctrl.facetCharts.repositories);
       });
+
     };
 
     _ctrl.getFiles();

@@ -1,3 +1,40 @@
+<section class="graphs-container" style="margin-top:3rem;">
+  <div class="graphs">
+    <bar
+      config-overrides="DonorFilesCtrl.repoChartConfigOverrides"
+      items="DonorFilesCtrl.facetCharts.repositories"
+      heading="{{'Repository' | translate}}"
+      ylabel="{{'Files' | translate}}"
+      type="bar"
+      width="390"
+      height="150"
+      group-percent="3">
+    </bar>
+
+    <pie items='DonorFilesCtrl.facetCharts.primarySite'
+      config-overrides="DonorFilesCtrl.repoChartConfigOverrides"
+      heading="{{'Primary Site' | translate | replace: ' ':'&nbsp;'}}"
+      label="{{'Files' | translate}}"
+      type="pie" width="160"
+      group-percent="3"
+      height="150"></pie>
+    <pie items='DonorFilesCtrl.facetCharts.dataType'
+      config-overrides="DonorFilesCtrl.repoChartConfigOverrides"
+      heading="{{'Data Type' | translate}}"
+      label="{{'Files' | translate}}"
+      type="pie" width="160"
+      group-percent="3"
+      height="150"></pie>
+    <pie items='DonorFilesCtrl.facetCharts.experimentalStrategy'
+      config-overrides="DonorFilesCtrl.repoChartConfigOverrides"
+      heading="{{'Experimental Strategy' | translate | replace: ' ':'&nbsp;'}}"
+      label="{{'Files' | translate}}"
+      type="pie" width="160"
+      group-percent="3" 
+      height="150"></pie>
+  </div>
+</section>
+<div class="clearfix"></div>
 <div class="files-wrapper">
   <div class="t_table_top">
     <span data-table-counts data-label="{{'files' | translate}}" data-page="DonorFilesCtrl.files.pagination"></span>
@@ -47,7 +84,7 @@
           {{row.dataCategorization.dataType}}
         </td>
         <td>
-          {{row.dataCategorization.experimentalStrategy}}                      
+          {{row.dataCategorization.experimentalStrategy}}
         </td>
         <td>
           {{DonorFilesCtrl.fileFormats(row.fileCopies)}}

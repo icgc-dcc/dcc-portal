@@ -26,7 +26,7 @@
             <li data-spy="clinical" class="t_subnav__items__item"><a data-scrollto href="#clinical"><translate>Clinical Data</translate></a></li>
             <li data-spy="mutations" class="t_subnav__items__item" data-ng-if="DonorCtrl.donor.state==='live'"><a data-scrollto href="#mutations"><translate>Mutations</translate></a></li>
             <li data-spy="specimen" class="t_subnav__items__item"><a data-scrollto href="#specimen"><translate>Specimen</translate></a></li>
-            <li data-spy="files" class="t_subnav__items__item"><a data-scrollto href="#files"><translate>Files</translate></a></li>
+            <li data-spy="files-section" class="t_subnav__items__item"><a data-scrollto href="#files-section"><translate>Files</translate></a></li>
             <li><br></li>
             <li class="t_subnav__items__item" data-ng-if="DonorCtrl.mutationFacets.functionalImpact.total > 0">
                 <span><translate>Page Filters</translate></span>
@@ -402,7 +402,7 @@
     </div>
 </section>
 
-<section id="files" 
+<section id="files-section"
     data-ng-controller="DonorFilesCtrl as DonorFilesCtrl"
     data-ng-class="{'loading': !DonorFilesCtrl.files.hits, 'empty': DonorFilesCtrl.files.hits.length == 0}"
     fix-scroll>
@@ -415,7 +415,17 @@
     <h3 data-ng-if="DonorFilesCtrl.files.hits.length == 0"><translate>No File Found.</translate></h3>
 
     <div data-ng-if="DonorFilesCtrl.files.hits.length > 0">
-        <h3><translate>Files</translate></h3>
+        <h3>
+            <translate>Files</translate>
+            <span class="pull-right action-toolbar">
+                <span class="action-item">
+                    <i class="icon-download-cloud"></i>
+                    <a href='/repositories?filters={"donor":{"id":{"is":["{{DonorFilesCtrl.donorId}}"]}}}'>
+                        <translate>View in Data Repositories</translate>
+                    </a>
+                </span>
+            </span>
+        </h3>
         <div data-ng-include="'scripts/donors/views/donor.files.html'"></div>
     </div>
 </section>
