@@ -1,7 +1,13 @@
 <div class="files-wrapper">
   <div class="t_table_top">
     <span data-table-counts data-label="{{'files' | translate}}" data-page="DonorFilesCtrl.files.pagination"></span>
-    <span data-toolbar data-dl="{{DonorFilesCtrl.donorId}}_files"></span>
+    <span class="t_tools">
+      <span class="t_tools__tool">
+        <i class="icon-file pull-right"
+          data-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
+          data-ng-click="DonorFilesCtrl.export()"></i>
+      </span>
+    </span>
   </div>
   <table class="table table-selectable">
     <thead>
@@ -14,6 +20,13 @@
         data-field="experimentalStrategy"><translate>Strategy</translate></th>
       <th><translate>Format</translate></th>
       <th><translate>Size</translate></th>
+      <th style="text-align:center">
+        <abbr>
+          <i class="icon-chart-bar" 
+            tooltip="{{'BAM & VCF Stats (available only for BAM and VCF Files in AWS and Collaboratory)' | translate}}" tooltip-placement="left">
+          </i>
+        </abbr>
+      </th>
     </thead>
     <tbody>
       <tr data-ng-repeat="row in DonorFilesCtrl.files.hits">
@@ -36,48 +49,24 @@
         <td>
           {{row.dataCategorization.experimentalStrategy}}                      
         </td>
-       <td>
-        {{DonorFilesCtrl.fileFormats(row.fileCopies)}}
-       </td>
-       <td class="text-right" style="white-space:nowrap">
-        {{DonorFilesCtrl.fileAverageSize(row.fileCopies) | bytes}}
-       </td>
-      </tr>
-    </tbody>
-  </table>
-  <table class="hidden" id="{{DonorFilesCtrl.donorId}}_files">
-    <thead>
-      <th><translate>File ID</translate></th>
-      <th><translate>Repository</translate></th>
-      <th><translate>Study</translate></th>
-      <th><translate>Data Type</translate></th>
-      <th><translate>Strategy</translate></th>
-      <th><translate>Format</translate></th>
-      <th><translate>Size</translate></th>
-    </thead>
-    <tbody>
-      <tr data-ng-repeat="row in DonorFilesCtrl.files.hits">
         <td>
-          {{row.id}}
+          {{DonorFilesCtrl.fileFormats(row.fileCopies)}}
         </td>
-        <td>
-          {{DonorFilesCtrl.repoNames(row.fileCopies)}}
+        <td class="text-right" style="white-space:nowrap">
+          {{DonorFilesCtrl.fileAverageSize(row.fileCopies) | bytes}}
         </td>
-        <td>
-          {{row.study[0]}}
+        <td class="text-center" valign="middle" style="min-width: 1.6rem;">
+          <i class="icon-chart-bar iobio-popup"
+            tooltip="BAM statistics" 
+            data-ng-if="DonorFilesCtrl.fileFormats(row.fileCopies) == 'BAM' && DonorFilesCtrl.awsOrCollab(row.fileCopies)" 
+            data-ng-click="DonorFilesCtrl.showIobioModal(row.objectId, row.id, DonorFilesCtrl.getAwsOrCollabFileName(row.fileCopies))">
+          </i>
+          <i class="icon-chart-bar iobio-popup" 
+            tooltip="VCF statistics" 
+            data-ng-if="DonorFilesCtrl.fileFormats(row.fileCopies) == 'VCF' && DonorFilesCtrl.awsOrCollab(row.fileCopies)" 
+            data-ng-click="DonorFilesCtrl.showVcfIobioModal(row.objectId, row.id, DonorFilesCtrl.getAwsOrCollabFileName(row.fileCopies))">
+          </i>
         </td>
-        <td>
-          {{row.dataCategorization.dataType}}
-        </td>
-        <td>
-          {{row.dataCategorization.experimentalStrategy}}                      
-        </td>
-       <td>
-        {{DonorFilesCtrl.fileFormats(row.fileCopies)}}
-       </td>
-       <td>
-        {{DonorFilesCtrl.fileAverageSize(row.fileCopies) | bytes}}
-       </td>
       </tr>
     </tbody>
   </table>

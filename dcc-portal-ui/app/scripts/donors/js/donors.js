@@ -262,8 +262,8 @@
     _ctrl.setActive();
   });
 
-module.controller('DonorFilesCtrl', function ($scope, $stateParams, RouteInfoService, LocationService, 
-  ExternalRepoService, FilterService) {
+module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $stateParams, 
+  RouteInfoService, LocationService, ExternalRepoService, FilterService) {
 
     var _ctrl = this,
       commaAndSpace = ', ';    
@@ -318,7 +318,75 @@ module.controller('DonorFilesCtrl', function ($scope, $stateParams, RouteInfoSer
     };
 
     _ctrl.export = function() {
-      ExternalRepoService.export(FilterService.filters());
+      var params = {'donor': {'id': { 'is': _ctrl.donorId}}};
+      ExternalRepoService.export(FilterService.filters(params));
+    };
+
+    _ctrl.showIobioModal = function(objectId, objectName, name) {
+      var fileObjectId = objectId;
+      var fileObjectName = objectName;
+      var fileName = name;
+      $modal.open ({
+        controller: 'ExternalIobioController',
+        template: '<section id="bam-statistics" class="bam-statistics-modal">'+
+          '<bamstats bam-id="bamId" on-modal=true bam-name="bamName" bam-file-name="bamFileName" data-ng-if="bamId">'+
+          '</bamstats></section>',
+        windowClass: 'iobio-modal',
+        resolve: {
+          params: function() {
+            return {
+              fileObjectId: fileObjectId,
+              fileObjectName: fileObjectName,
+              fileName: fileName
+            };
+          }
+        }
+      }).opened.then(function() {
+        setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
+
+      });
+    };
+
+    _ctrl.showVcfIobioModal = function(objectId, objectName, name) {
+      var fileObjectId = objectId;
+      var fileObjectName = objectName;
+      var fileName = name;
+      $modal.open ({
+        controller: 'ExternalVcfIobioController',
+        template: '<section id="vcf-statistics" class="vcf-statistics-modal">'+
+          '<vcfstats vcf-id="vcfId" on-modal=true vcf-name="vcfName" vcf-file-name="vcfFileName" data-ng-if="vcfId">'+
+          '</vcfstats></section>',
+        windowClass: 'iobio-modal',
+        resolve: {
+          params: function() {
+            return {
+              fileObjectId: fileObjectId,
+              fileObjectName: fileObjectName,
+              fileName: fileName
+            };
+          }
+        }
+      }).opened.then(function() {
+        setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
+      });
+    };
+
+     _ctrl.awsOrCollab = function(fileCopies) {
+       return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
+         _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
+    };
+
+    _ctrl.getAwsOrCollabFileName = function(fileCopies) {
+      try {
+        var fCopies = _.filter(fileCopies, function(fCopy) {
+          return fCopy.repoCode === 'aws-virginia' || fCopy.repoCode === 'collaboratory';
+        });
+
+        return _.pluck(fCopies, 'fileName')[0];
+      } catch (err) {
+        console.log(err);
+        return 'Could Not Retrieve File Name';
+      }
     };
 
     _ctrl.getFiles = function (){
