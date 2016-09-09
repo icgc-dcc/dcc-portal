@@ -321,6 +321,18 @@ public class FiltersConverterTest {
   }
 
   @Test
+  public void hasCompoundTest_donor() {
+    val result = converter.convertFilters(createFilters("{gene:{hasCompound:true}}"), DONOR_CENTRIC);
+    assertThat(result).isEqualTo("nested(gene,exists(gene.drugId))");
+  }
+
+  @Test
+  public void hasCompoundTest_mutation() {
+    val result = converter.convertFilters(createFilters("{gene:{hasCompound:true}}"), MUTATION_CENTRIC);
+    assertThat(result).isEqualTo("nested(transcript,exists(gene.drugId))");
+  }
+
+  @Test
   public void goTermAndFilterTest_mutation() {
     val filters = createFilters("{mutation:{id:{is:['M1','M2']}},gene:{goTermId:{is:['321']}}}");
     val result = converter.convertFilters(filters, Type.MUTATION_CENTRIC);

@@ -100,6 +100,7 @@ public class FiltersConverter {
   private static final List<String> SPECIAL_FIELDS_NESTING = ImmutableList.of(
       "gene.goTermId",
       "gene.hasPathway",
+      "gene.hasCompound",
       GENE_SET_ID,
       ENTITY_SET_ID,
       "mutation.location",
