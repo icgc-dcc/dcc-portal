@@ -16,6 +16,7 @@
                           data-ng-switch="facet">
                         <span data-ng-switch-when="id">{{typeName | readable}}</span>
                         <span data-ng-switch-when="pathwayId"><translate>Pathway</translate></span>
+                        <span data-ng-switch-when="drug"><translate>Compound</translate></span>
                         <span data-ng-switch-when="goTermId"><translate>GO</translate></span>
                         <span data-ng-switch-when="curatedSetId"><translate>Curated Gene Set</translate></span>
                         <span data-ng-switch-when="donorId"><translate>Donor</translate></span>
@@ -32,7 +33,7 @@
                                   data-ng-style="hoverStyle"
                                   data-ng-click="removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
                                   data-tooltip="{{ termObj.term | geneSetNameLookup | define:termObj.controlFacet }}">
-                                  {{ resolveGeneSymbols (termObj.controlType, termObj.term) | trans:termObj.controlFacet }}
+                                  {{ resolveDisplayName (termObj) | trans:termObj.controlFacet }}
                             </span>
                             <span data-ng-if="!$last" class="t_current__or">,&nbsp;</span>
                         </li>
@@ -47,7 +48,7 @@
                                   data-ng-style="hoverStyle"
                                   data-ng-click="removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
                                   data-tooltip="{{ termObj.term | geneSetNameLookup | define:termObj.controlFacet }}">
-                                  {{ resolveGeneSymbols (termObj.controlType, termObj.term) | trans:termObj.controlFacet }}
+                                  {{ resolveDisplayName (termObj) | trans:termObj.controlFacet }}
                             </span>
                             <span data-ng-if="!$last" class="t_current__or">,&nbsp;</span>
                         </li>

@@ -25,28 +25,28 @@
       <table class="table pathway-gene-table" data-ng-if="annotatedGenesList.length>0">
         <tr>
           <th class="pathway-gene-header-label pathway-gene-header">
-            <a href="" data-ng-click="sortField = 'symbol'; sortDescendingly = !sortDescendingly">
+            <span data-ng-click="sortField = 'symbol'; sortDescendingly = !sortDescendingly" style="cursor: pointer">
               <translate>Gene</translate>
               <span data-ng-if="sortField === 'symbol' && !sortDescendingly" class="icon-sort-down"></span>
               <span data-ng-if="sortField === 'symbol' && sortDescendingly" class="icon-sort-up"></span>
               <span data-ng-if="sortField !== 'symbol'" class="icon-sort" style="color:hsl(0,0%,80%)"></span>
-            </a>
+            </span>
           </th>
           <th class="pathway-gene-header-label pathway-gene-header">
-            <a href="" data-ng-click="sortField = 'value'; sortDescendingly = !sortDescendingly">
+            <span data-ng-click="sortField = 'value'; sortDescendingly = !sortDescendingly" style="cursor: pointer">
               <translate># ICGC Mutations</translate>
               <span data-ng-if="sortField === 'value' && !sortDescendingly" class="icon-sort-down"></span>
               <span data-ng-if="sortField === 'value' && sortDescendingly" class="icon-sort-up"></span>
               <span data-ng-if="sortField !== 'value'" class="icon-sort" style="color:hsl(0,0%,80%)"></span>
-            </a>
+            </span>
           </th>
           <th class="pathway-gene-header-label pathway-gene-header">
-            <a href="" data-ng-click="sortField = 'drugs.length'; sortDescendingly = !sortDescendingly">
+            <span data-ng-click="sortField = 'drugs.length'; sortDescendingly = !sortDescendingly" style="cursor: pointer">
               <translate># Targeting Compounds</translate>
               <span data-ng-if="sortField === 'drugs.length' && !sortDescendingly" class="icon-sort-down"></span>
               <span data-ng-if="sortField === 'drugs.length' && sortDescendingly" class="icon-sort-up"></span>
               <span data-ng-if="sortField !== 'drugs.length'" class="icon-sort" style="color:hsl(0,0%,80%)"></span>
-            </a>
+            </span>
           </th>
         </tr>
         <tr data-ng-repeat="gene in annotatedGenesList | orderBy:sortField:sortDescendingly" data-ng-class="{'gene-overlap-result': overlappingGenesMap[gene.id]}">
