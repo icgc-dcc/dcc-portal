@@ -63,6 +63,7 @@
       angular.forEach (queryFilters, function (typeFilters, typeKey) {
         display[typeKey] = {};
         angular.forEach(typeFilters, function(facetFilters, facetKey) {
+          /*jshint maxcomplexity:false */
           var uiFacetKey = facetKey;
 
           // FIXME: no logic to handle "all" clause
