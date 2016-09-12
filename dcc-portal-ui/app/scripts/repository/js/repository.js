@@ -202,9 +202,11 @@
 
     var filters = _.extend({},
       FilterService.filters(),
-      _.isEmpty(params.selectedFiles) ? {
+      !_.isEmpty(params.selectedFiles) ? {
         file: {
-          id: params.selectedFiles
+          id: {
+            is: params.selectedFiles
+          }
         }
       } : {}
     );
