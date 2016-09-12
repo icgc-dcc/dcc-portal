@@ -76,9 +76,15 @@
           }
 
           // Remap gene ontologies
-          if (uiFacetKey === 'hasPathway') {
-            var uiTerm = 'Reactome Pathways';
-            uiFacetKey = 'pathwayId';
+          if (uiFacetKey === 'hasPathway' || uiFacetKey === 'hasCompound') {
+            var uiTerm;
+            if (uiFacetKey === 'hasPathway') {
+              uiTerm = 'Reactome Pathways';
+              uiFacetKey = 'pathwayId';
+            } else if (uiFacetKey === 'hasCompound') {
+              uiTerm = 'ZINC Compounds';
+              uiFacetKey = 'drug';
+            }
 
             if (_.has(facetFilters, 'not')) { 
               if (! display[typeKey].hasOwnProperty(uiFacetKey)) {
