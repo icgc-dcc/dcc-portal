@@ -272,7 +272,9 @@
             </tbody>
         </table>
     </div>
-    <br>
+    <div class="wide">
+        <div><translate>P-Value:</translate> {{ gender.pvalue.toPrecision(3) }} ; <translate>Significance at P < 0.05</translate></div>
+    </div>
     <div class="clearfix"></div>
     <div class="half">
         <grouped-bar data-items="gender.uiGraph" ylabel="{{'% Donors' | translate}}" height="200" format="percentage" data-colours="seriesColours"></grouped-bar>
@@ -335,7 +337,10 @@
             </tbody>
         </table>
     </div>
-    <br>
+    <div class="wide">
+        <div><translate>P-Value:</translate> {{ vital.pvalue.toPrecision(3) }} ; <translate>Significance at P < 0.05</translate></div>
+    </div>
+
     <div class="clearfix"></div>
     <div class="half">
         <grouped-bar data-items="vital.uiGraph" ylabel="{{'% Donors' | translate}}" format="percentage" height="200" data-colours="seriesColours"></grouped-bar>
