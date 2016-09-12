@@ -311,25 +311,32 @@ public class FiltersConverterTest {
   @Test
   public void compoundTest() {
     val result = converter.convertFilters(createFilters("{gene:{hasCompound:false}}"), GENE_CENTRIC);
-    assertThat(result).isEqualTo("missing(gene.drugId)");
+    assertThat(result).isEqualTo("missing(gene.compoundId)");
   }
 
   @Test
   public void hasCompoundTest() {
     val result = converter.convertFilters(createFilters("{gene:{hasCompound:true}}"), GENE_CENTRIC);
-    assertThat(result).isEqualTo("exists(gene.drugId)");
+    assertThat(result).isEqualTo("exists(gene.compoundId)");
   }
 
   @Test
   public void hasCompoundTest_donor() {
     val result = converter.convertFilters(createFilters("{gene:{hasCompound:true}}"), DONOR_CENTRIC);
-    assertThat(result).isEqualTo("nested(gene,exists(gene.drugId))");
+    assertThat(result).isEqualTo("nested(gene,exists(gene.compoundId))");
   }
 
   @Test
   public void hasCompoundTest_mutation() {
     val result = converter.convertFilters(createFilters("{gene:{hasCompound:true}}"), MUTATION_CENTRIC);
-    assertThat(result).isEqualTo("nested(transcript,exists(gene.drugId))");
+    assertThat(result).isEqualTo("nested(transcript,exists(gene.compoundId))");
+  }
+
+  @Test
+  public void hasCompoundTestAndFilter() {
+    val result =
+        converter.convertFilters(createFilters("{gene:{compoundId:{is:['123']},hasCompound:true}}"), GENE_CENTRIC);
+    assertThat(result).isEqualTo("or(in(gene.compoundId,'123'),exists(gene.compoundId))");
   }
 
   @Test

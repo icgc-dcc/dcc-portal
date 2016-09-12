@@ -215,7 +215,7 @@ public class DonorCentricTypeModel extends TypeModel {
         string("symbol", "gene.symbol"),
         arrayOfStrings("pathway", ImmutableSet.of("gene.pathways", "gene.pathwayId")),
         arrayOfStrings("curated_set", "gene.curatedSetId"),
-        arrayOfStrings("drug", ImmutableSet.of("gene.drug", "gene.drugId")),
+        arrayOfStrings("drug", "gene.compoundId"),
         object("go_term", "gene.GoTerm",
             arrayOfStrings("biological_process"),
             arrayOfStrings("cellular_component"),

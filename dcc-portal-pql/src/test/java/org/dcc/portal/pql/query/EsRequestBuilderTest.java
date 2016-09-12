@@ -436,13 +436,13 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
 
   @Test
   public void hasCompoundTest() {
-    val result = executeQuery("exists(gene.drugId)");
+    val result = executeQuery("exists(gene.compoundId)");
     containsOnlyIds(result, "MU1");
   }
 
   @Test
   public void missingCompoundTest() {
-    val result = executeQuery("missing(gene.drugId)");
+    val result = executeQuery("missing(gene.compoundId)");
     containsOnlyIds(result, "MU2", "MU3");
   }
 

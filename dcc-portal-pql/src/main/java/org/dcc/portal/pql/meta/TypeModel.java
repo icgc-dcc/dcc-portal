@@ -63,7 +63,7 @@ public abstract class TypeModel {
   public static final String GENE_SET_ID = "gene.geneSetId";
   public static final String GENE_GO_TERM_ID = "gene.goTermId";
   public static final String GENE_CURATED_SET_ID = "gene.curatedSetId";
-  public static final String GENE_DRUG_ID = "gene.drugId";
+  public static final String GENE_DRUG_ID = "gene.compoundId";
 
   public static final String GENE_LOCATION = "gene.location";
   public static final String MUTATION_LOCATION = "mutation.location";

@@ -120,7 +120,7 @@ public class ObservationCentricTypeModel extends TypeModel {
         identifiableString("_gene_id", "gene.id"),
         string("biotype", "gene.type"),
         arrayOfStrings("pathway", "gene.pathwayId"),
-        arrayOfStrings("drug", ImmutableSet.of("gene.drug", "gene.drugId")),
+        arrayOfStrings("drug", "gene.compoundId"),
         string("chromosome", "gene.chromosome"),
         long_("start", "gene.start"),
         long_("end", "gene.end"),

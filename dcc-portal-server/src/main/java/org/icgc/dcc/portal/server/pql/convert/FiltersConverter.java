@@ -412,16 +412,17 @@ public class FiltersConverter {
     for (val jqlField : fields) {
       val fieldName = jqlField.getName();
 
-      if (fieldName.equals("pathwayId")) {
+      if ("pathwayId".equals(fieldName) || "compoundId".equals(fieldName)) {
         pathwayIdFields.add(jqlField);
-      } else if (fieldName.equals("hasPathway")) {
+      } else if ("hasPathway".equals(fieldName) || "hasCompound".equals(fieldName)) {
         hasPathwayFields.add(jqlField);
       } else {
         remainingFields.add(jqlField);
       }
     }
 
-    // Special handling when pathwayId and hasPathway are both present; if not, process normally
+    // Special handling when pathwayId and hasPathway or (compoundId and hasCompound) are both present; if not, process
+    // normally
     String pathwayRelatedFilter = null;
 
     if (pathwayIdFields.isEmpty() || hasPathwayFields.isEmpty()) {

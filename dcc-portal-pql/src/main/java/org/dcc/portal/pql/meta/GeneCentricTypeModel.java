@@ -101,7 +101,7 @@ public class GeneCentricTypeModel extends TypeModel {
         .add(arrayOfObjects("project", "projects", object()))
         .add(arrayOfStrings("pathway", ImmutableSet.of("pathways", "pathwayId", "gene.pathwayId")))
         .add(arrayOfStrings("curated_set", ImmutableSet.of("curatedSetId", "gene.curatedSetId")))
-        .add(arrayOfStrings("drug", ImmutableSet.of("drug", "gene.drugId")))
+        .add(arrayOfStrings("drug", "gene.compoundId"))
         .add(arrayOfObjects("transcripts", "transcripts", object()))
         .add(object("go_term", GENE_GO_TERM,
             arrayOfStrings("biological_process"),
