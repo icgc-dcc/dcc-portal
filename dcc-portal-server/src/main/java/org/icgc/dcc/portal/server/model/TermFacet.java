@@ -17,26 +17,28 @@
 
 package org.icgc.dcc.portal.server.model;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.ImmutableList;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
-
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.search.facet.terms.TermsFacet;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.common.collect.ImmutableList;
+import java.util.List;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 @Value
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 public class TermFacet {
 
   private static final String FACET_TYPE = "terms";
   private static final long DEFAULT_COUNT = 0L;
 
   String type;
+  @JsonInclude(ALWAYS)
   Long missing;
   Long total;
   Long other;
