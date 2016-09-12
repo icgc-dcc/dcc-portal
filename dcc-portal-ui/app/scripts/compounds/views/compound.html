@@ -300,9 +300,9 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <hide-text text="{{ trial.description }}"></hide-text>
+                                    <hide-text text="{{ trial.description }}" data-class="table-text-wrap"></hide-text>
                                 </td>
-                                <td>
+                                <td class="text-wrap">
                                     <ul>
                                         <hide-list data-items="trial.conditions"
                                                    data-display-limit="2"
@@ -313,7 +313,7 @@
                                 </td>
                                 <td data-ng-bind="trial.startDate" style="width:6rem; white-space: nowrap;"></td>
                                 <td data-ng-bind="trial.phaseName"></td>
-                                <td data-ng-bind="trial.statusName"></td>
+                                <td class="text-wrap" data-ng-bind="trial.statusName"></td>
                             </tr>
                         </tbody>
                     </table>

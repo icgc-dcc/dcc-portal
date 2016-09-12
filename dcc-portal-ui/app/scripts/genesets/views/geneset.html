@@ -101,7 +101,7 @@
                 --
                 </td>
                 <td data-ng-if="GeneSetCtrl.geneSet.description !== '???'">
-                    <hide-text text="{{ GeneSetCtrl.geneSet.description}}"></hide-text>
+                    <hide-text text="{{ GeneSetCtrl.geneSet.description}}" data-class="table-text-wrap"></hide-text>
                 </td>
             </tr>
             <tr data-ng-if="GeneSetCtrl.geneSet.type==='go_term'">
@@ -486,7 +486,7 @@
             <tr>
                 <th>ID</th>
                 <th>
-                    <abbr data-tooltip="{{Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor} | translate}}">
+                    <abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
                         <translate>DNA change</translate></abbr>
                 </th>
                 <th><translate>Type</translate></th>
