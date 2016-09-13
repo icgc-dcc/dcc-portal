@@ -198,6 +198,12 @@
         });
       }
 
+      if (type === 'gene' && facet === 'drug') {
+        Facets.removeFacet({
+          type: type,
+          facet: 'hasCompound'
+        });
+      }
     };
 
     /**
