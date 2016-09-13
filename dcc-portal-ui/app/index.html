@@ -131,10 +131,15 @@
 
 <notify></notify>
 <toaster-container></toaster-container>
-<div data-ng-if="!AppCtrl.appLoaded || AppCtrl.Page.working() || AppCtrl.Page.getError()" id="loading-screen">
-    <div data-ng-if="(!AppCtrl.appLoaded || AppCtrl.Page.working()) && ! AppCtrl.Page.getError()">
-        <i class="icon-spin icon-spinner"></i>
-        <img style="height: 3rem;" src="styles/images/icgc-logo.png">
+<div
+    data-ng-if="!AppCtrl.appLoaded || AppCtrl.Page.working() || AppCtrl.Page.getError()"
+    id="loading-screen"
+>
+    <div data-ng-if="(!AppCtrl.appLoaded || AppCtrl.Page.working()) && ! AppCtrl.Page.getError()" >
+        <img src="styles/images/icgc-logo.png">
+        <svg class="elegant-spinner" viewBox="0 0 50 50">
+            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="3"></circle>
+        </svg>
     </div>
 </div>
 <div class="wrap light ng-cloak">
