@@ -42,7 +42,7 @@
 
   var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
 
-  var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
+  var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto', 'PDC - Chicago'];
 
   /**
    * ICGC static repository controller
