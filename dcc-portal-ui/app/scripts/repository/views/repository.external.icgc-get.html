@@ -1,7 +1,7 @@
 <div class="modal-content icgc-get light">
   <div class="modal-header clearfix">
     <h3 class="pull-left">
-      Manifest ID
+      icgc-get
     </h3>
     <button class="pull-right t_button" data-ng-click="vm.close()">
       <i class="icon-cancel"></i>
@@ -10,44 +10,10 @@
   <div class="modal-body">
     <div class="modal-info-wrapper flex-column">
       <div>
-        icgc-get is a universal download client for accessing ICGC data residing in various data
-repositories. 
+        icgc-get is a universal download client for accessing ICGC data residing in various data repositories.
         <br>
-        See the <a href="http://docs.icgc.org/cloud/icgc-get/" target="_blank">User Guide<i class="icon-external-link"></i></a> for usage instructions.
+        To download your current file selection, simply copy the icgc-get manifest ID below and execute the following command: 
       </div>
-      <br>
-      <div>
-        <span>Manifest ID:</span>
-        <div class="input-group clipboard-group" ng-if="vm.manifestId">
-          <input
-            class="manifest-id form-control input-sm code text-center"
-            onClick="this.select()"
-            size="38"
-            type="text"
-            value="{{vm.manifestId}}"
-          >
-          <span class="input-group-btn">
-            <button class="btn btn-default btn-sm" type="button"
-                data-copy-to-clip
-                data-copy-data="vm.manifestId"
-                data-show-copy-tips="true"
-                data-prompt-on-copy="false"
-                data-on-copy-success-message="Copied!"
-                data-on-hover-message="Copy to clipboard"
-                >
-                <i class="icon-clippy"></i>
-            </button>
-          </span>
-        </div>
-        <i
-          class="icon-spin icon-spinner"
-          ng-class="{ 'hidden': !vm.loadState.isLoading }"
-        ></i>
-      </div>
-      <br>
-      <span>
-        Usage example:
-      </span>
       <code class="inline-code" ng-class="{ 'text-center': vm.loadState.isLoading }">
         <span ng-if="vm.manifestId">./icgc-get download -m {{vm.manifestId}}</span>
         <i
@@ -55,6 +21,30 @@ repositories.
           ng-class="{ 'hidden': !vm.loadState.isLoading }"
         ></i>
       </code>
+      <br>
+      <div>
+        See the <a href="http://docs.icgc.org/cloud/icgc-get/" target="_blank">User Guide<i class="icon-external-link"></i></a> for more advanced options.
+      </div>
+      <div>
+        Your file selection icgc-get manifest ID is:
+        <span ng-if="vm.manifestId">
+          <span class="mono">{{vm.manifestId}}</span>
+          <span
+            data-copy-to-clip
+            data-copy-data="vm.manifestId"
+            data-show-copy-tips="true"
+            data-prompt-on-copy="false"
+            data-on-copy-success-message="Copied!"
+            data-on-hover-message="Copy to clipboard"
+          >
+            <i class="icon-clippy"></i>
+          </span>
+        </span>
+        <i
+          class="icon-spin icon-spinner"
+          ng-class="{ 'hidden': !vm.loadState.isLoading }"
+        ></i>
+      </div>
     </div>
   </div>
 
