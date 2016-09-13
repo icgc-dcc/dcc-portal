@@ -17,10 +17,11 @@
  */
 package org.icgc.dcc.portal.server.service;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.collect.Sets.difference;
 import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
+import static org.icgc.dcc.common.core.util.Separators.EMPTY_STRING;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.security.AuthUtils.throwForbiddenException;
 
@@ -28,24 +29,24 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 import org.icgc.dcc.common.core.util.Splitters;
 import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes.AccessTokenScope;
-import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.model.Tokens;
 import org.icgc.dcc.portal.server.model.User;
+import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * OAuth access tokens management service.
@@ -55,6 +56,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TokenService {
 
+  private static final String DEFAULT_SCOPE_DESCRIPTION = EMPTY_STRING;
   private static final Map<String, String> SCOPE_DESCRIPTIONS = ImmutableMap.<String, String> builder()
       .put("portal.download", "Allows secure downloads from the Data Portal")
       .put("aws.upload", "Allows uploads to AWS S3")
@@ -104,8 +106,7 @@ public class TokenService {
     val scopesResult = ImmutableSet.<AccessTokenScope> builder();
 
     for (val scope : userScopes.getScopes()) {
-      val scopeDescription = SCOPE_DESCRIPTIONS.get(scope);
-      checkArgument(scopeDescription != null, "Unrecognized user scope: '%s'", scope);
+      val scopeDescription = firstNonNull(SCOPE_DESCRIPTIONS.get(scope), DEFAULT_SCOPE_DESCRIPTION);
       scopesResult.add(new AccessTokenScope(scope, scopeDescription));
     }
 
