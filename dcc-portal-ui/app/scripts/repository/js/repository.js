@@ -301,7 +301,7 @@
         repos[repoName].fileSize = findRepoData(facets.repositorySizes.terms, repoName);
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
         repos[repoName].fileCount = term.count;
-        repos[repoName].hasManifest = _.includes(['AWS - Virginia', 'Collaboratory - Toronto'], repoName);
+        repos[repoName].hasManifest = _.includes(cloudRepos, repoName);
         repos[repoName].isCloud = _.includes(cloudRepos, repoName);
       });
 
@@ -813,17 +813,7 @@
     };
 
     _ctrl.repoIconClass = function (repoName) {
-      var repoCode = ExternalRepoService.getRepoCodeFromName (repoName);
-
-      if (! _.isString (repoCode)) {
-        return '';
-      }
-
-      if (_.startsWith (repoCode, 'aws-') || repoCode === 'collaboratory') {
-        return 'icon-cloud';
-      }
-
-      return '';
+      return _.includes(cloudRepos, repoName) ? 'icon-cloud' : '';
     };
 
     /**
