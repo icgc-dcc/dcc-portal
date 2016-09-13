@@ -205,7 +205,7 @@
      * like facets but are structured in different ways
      */
     $scope.removeTerm = function (type, facet, term) {
-      if (type === 'gene' && facet === 'hasPathway') {
+      if (type === 'gene' && (facet === 'hasPathway' || facet === 'hasCompound')) {
         Facets.removeFacet({
           type: type,
           facet: facet
