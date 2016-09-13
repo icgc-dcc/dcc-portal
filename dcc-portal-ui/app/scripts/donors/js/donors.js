@@ -263,7 +263,7 @@
   });
 
 module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $stateParams, 
-  RouteInfoService, LocationService, ExternalRepoService, FilterService, Facets) {
+  RouteInfoService, LocationService, ExternalRepoService, FilterService) {
 
     var _ctrl = this,
       commaAndSpace = ', ';    
