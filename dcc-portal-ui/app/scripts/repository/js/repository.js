@@ -305,12 +305,12 @@
         repos[repoName].isCloud = _.includes(cloudRepos, repoName);
       });
 
-      $scope.repos = _.values(repos);
+      $scope.repos = _(repos).values().sortBy('fileSize').value().reverse();
       $scope.selectedRepos = Object.keys(repos);
 
       var manifestSummaryQuery = {
         query: p,
-        repoNames: _.map(repos, 'repoName')
+        repoNames: _.map($scope.repos, 'repoName')
       };
 
       return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
