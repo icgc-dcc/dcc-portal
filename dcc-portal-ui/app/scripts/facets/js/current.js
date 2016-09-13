@@ -97,10 +97,10 @@
     $scope.compoundIdToNameMap = {};
     function resolveActiveCompoundIds (filters) {
       var activeCompoundIds;
-      if (_.has(filters, 'gene.drug.not')) {
-        activeCompoundIds = getActiveIds(filters, 'drug', 'not');
-      } else if (_.has(filters, 'gene.drug.is')) {
-        activeCompoundIds = getActiveIds(filters, 'drug', 'is');
+      if (_.has(filters, 'gene.compoundId.not')) {
+        activeCompoundIds = getActiveIds(filters, 'compoundId', 'not');
+      } else if (_.has(filters, 'gene.compoundId.is')) {
+        activeCompoundIds = getActiveIds(filters, 'compoundId', 'is');
       }
       
       if (_.isEmpty (activeCompoundIds)) {
@@ -122,7 +122,7 @@
     }
 
     $scope.resolveDisplayName = function (termObject) {
-      if (termObject.controlFacet === 'drug') {
+      if (termObject.controlFacet === 'compoundId') {
         return _.get($scope.compoundIdToNameMap, termObject.term, termObject.term);
       }
       return $scope.resolveGeneSymbols(termObject.controlType, termObject.term);
@@ -159,7 +159,7 @@
       if (_.has(filters, 'gene.id')) {
         resolveActiveGeneIds (filters);
       } 
-      if (_.has(filters, 'gene.drug')) {
+      if (_.has(filters, 'gene.compoundId')) {
         resolveActiveCompoundIds(filters);
       }
     }
@@ -198,7 +198,7 @@
         });
       }
 
-      if (type === 'gene' && facet === 'drug') {
+      if (type === 'gene' && facet === 'compoundId') {
         Facets.removeFacet({
           type: type,
           facet: 'hasCompound'

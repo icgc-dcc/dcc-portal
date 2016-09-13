@@ -84,7 +84,7 @@
               uiFacetKey = 'pathwayId';
             } else if (uiFacetKey === 'hasCompound') {
               uiTerm = 'ZINC Compounds';
-              uiFacetKey = 'drug';
+              uiFacetKey = 'compoundId';
             }
 
             if (_.has(facetFilters, 'not')) { 

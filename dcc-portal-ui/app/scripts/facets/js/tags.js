@@ -201,7 +201,7 @@
         }
 
         var compoundTypeFilters = {};
-        if (filters.hasOwnProperty('gene') && filters.gene.hasOwnProperty('drug')) {
+        if (filters.hasOwnProperty('gene') && filters.gene.hasOwnProperty('compoundId')) {
           compoundTypeFilters = FilterService.filters();
         } else {
           compoundTypeFilters = FilterService.mergeIntoFilters({'gene':{'hasCompound':true}});
