@@ -16,25 +16,25 @@
             </translate>
           </p>
           <p ng-if="repos.length > 1">
-            <translate>When choosing "Download", a manifest containing unique files from all repositories will be generated.</translate>
-            <translate>Some files may be stored in multiple repositories.</translate>
-            <translate>Duplicates from repositories lower in the list will not be included.</translate>
-            <translate>You may drag to reorder the list to affect the generated manifest.</translate>
+            <translate>
+              Some files may be stored in multiple repositories. When check-box "Remove duplicate files" is checked, duplicates from repositories lower in the list will not be included and a manifest containing unique files from all repositories will be generated. You may drag rows to reorder the list to affect the generated manifest.
+            </translate>
           </p>
           <p>
-            <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">See the</translate>
+            <translate translate-comment="See the User Guide for more information on manifest files">See the</translate>
             <a href="http://docs.icgc.org/cloud/guide/#manifest-command" target="_blank" class="light">
-              <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">User Guide</translate>
+              <translate translate-comment="See the User Guide for more information on manifest files">User Guide</translate>
               <i class="icon-external-link"></i>
             </a>
-            <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">for more information on manifest files</translate>
-            <span ng-if="repos.length === 1 && repos[0].hasManifest">
-              <translate translate-comment="See the User Guide for more information on manifest files and manifest IDs">and manifest IDs</translate>
-            </span>.
+            <translate translate-comment="See the User Guide for more information on manifest files">for more information on manifest files</translate>
           </p>
           <p>
             <translate>The available repositories below are restricted by your search filter:</translate>
           </p>
+          <label class="no-select text-right">
+            <input ng-model="shouldDeduplicate" type="checkbox"/>
+            <translate>Remove duplicate files</translate>
+          </label>
         </div>
       </div>
 
@@ -64,36 +64,45 @@
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
              </td>
-             <td class="text-right">
-                <number-tween
-                  ng-if="summary[repoData.repoName].donorCount !== undefined"
-                  value="summary[repoData.repoName].donorCount"
+            <td
+              class="text-right"
+            >
+              <number-tween
+                ng-if="getRepoFieldValue(repoData.repoName, 'donorCount') !== undefined"
+                value="getRepoFieldValue(repoData.repoName, 'donorCount')"
+                formatter="$filter('number')"
+                on-tween-start="handleNumberTweenStart"
+                on-tween-end="handleNumberTweenEnd"
+              ></number-tween>
+              <i ng-if="getRepoFieldValue(repoData.repoName, 'donorCount') === undefined" class="icon-spinner icon-spin no-animate"></i>
+            </td>
+
+             <td
+              class="text-right"
+            >
+               <number-tween
+                  ng-if="getRepoFieldValue(repoData.repoName, 'fileCount') !== undefined"
+                  value="getRepoFieldValue(repoData.repoName, 'fileCount')"
                   formatter="$filter('number')"
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
-                <i ng-style="{'display': summary[repoData.repoName].donorCount === undefined ? '' : 'none'}" class="icon-spinner icon-spin"></i>
+                <i ng-if="getRepoFieldValue(repoData.repoName, 'fileCount') === undefined" class="icon-spinner icon-spin no-animate"></i>
             </td>
-             <td class="text-right">
+
+            <td
+              class="text-right"
+            >
                <number-tween
-                  ng-if="summary[repoData.repoName].fileCount !== undefined"
-                  value="summary[repoData.repoName].fileCount"
-                  formatter="$filter('number')"
-                  on-tween-start="handleNumberTweenStart"
-                  on-tween-end="handleNumberTweenEnd"
-                ></number-tween>
-                <i ng-style="{'display': summary[repoData.repoName].fileCount === undefined ? '' : 'none'}" class="icon-spinner icon-spin"></i>
-            </td>
-             <td class="text-right">
-               <number-tween
-                  ng-if="summary[repoData.repoName].fileSize !== undefined"
-                  value="summary[repoData.repoName].fileSize"
+                  ng-if="getRepoFieldValue(repoData.repoName, 'fileSize') !== undefined"
+                  value="getRepoFieldValue(repoData.repoName, 'fileSize')"
                   formatter="$filter('bytes')"
                   on-tween-start="handleNumberTweenStart"
                   on-tween-end="handleNumberTweenEnd"
                 ></number-tween>
-                <i ng-style="{'display': summary[repoData.repoName].fileSize === undefined ? '' : 'none'}" class="icon-spinner icon-spin"></i>
+                <i ng-if="getRepoFieldValue(repoData.repoName, 'fileSize') === undefined" class="icon-spinner icon-spin no-animate"></i>
             </td>
+
            </tr>
 
             <tr class="extras" data-ng-repeat-end data-ng-if="
@@ -192,8 +201,8 @@
          <tfoot ng-show="repos.length > 1">
            <tr class="totals" style="font-weight: bold;">
              <td colspan="4" class="text-right">Totals:</td>
-             <td class="text-right">{{ summary | _:'map':'fileCount' | _:'compact' | _:'sum' | number }}</td>
-             <td class="text-right">{{ summary | _:'map':'fileSize' | _:'compact' | _:'sum' | bytes }}</td>
+             <td class="text-right">{{ shouldDeduplicate ? summary : repos | _:'map':'fileCount' | _:'compact' | _:'sum' | number }}</td>
+             <td class="text-right">{{ shouldDeduplicate ? summary : repos | _:'map':'fileSize' | _:'compact' | _:'sum' | bytes }}</td>
            </tr>
          </tfoot>
        </table>

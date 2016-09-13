@@ -243,6 +243,13 @@
 
     $scope.filters = FilterService.filters;
     $scope.$filter = $filter;
+    $scope.shouldDeduplicate = true;
+    $scope.summary = {};
+
+    $scope.getRepoFieldValue = function (repoName, fieldName) {
+      var repoData = $scope.shouldDeduplicate ? $scope.summary[repoName] : _.findWhere($scope.repos, { repoName: repoName });
+      return repoData && repoData[fieldName];
+    };
 
     $scope.handleNumberTweenStart = function (tween) {
       jQuery(tween.elem).closest('td').addClass('tweening');
@@ -353,7 +360,7 @@
           repoCodes: _.map($scope.repos, 'repoCode'),
           filters: filters,
           format: 'tarball',
-          unique: true
+          unique: $scope.shouldDeduplicate,
         });
 
         var newTab = $window.open(manifestUrl);
