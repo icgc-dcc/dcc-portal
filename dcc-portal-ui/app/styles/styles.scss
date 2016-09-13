@@ -478,3 +478,11 @@ a.no-style {
     line-height: inherit;
   }
 }
+
+.no-animate {
+   transition: none !important;
+}
+
+.no-select {
+  user-select: none;
+}
