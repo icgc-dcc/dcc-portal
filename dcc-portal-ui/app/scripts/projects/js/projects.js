@@ -491,7 +491,7 @@
         filters: filter,
         size: 2000,
         isTransient: true,
-        name: project.id + ': Top 75 Donors w/ High Impact',
+        name: project.id + ': All donors',
         sortBy: 'ssmAffectedGenes',
         sortOrder: 'DESCENDING',
       };
@@ -500,7 +500,7 @@
         filters: filter,
         size: 50,
         isTransient: true,
-        name: project.id + ': Top 75 Genes w/ High Impact',
+        name: project.id + ': Top 50 genes w/ high impact',
         sortBy: 'affectedDonorCountFiltered',
         sortOrder: 'DESCENDING',
       };
