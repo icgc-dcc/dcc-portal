@@ -1,6 +1,6 @@
 <div class="modal-content download-manifests light">
     <div class="modal-header clearfix">
-      <h3 class="pull-left"><translate>Download manifests</translate></h3>
+      <h3 class="pull-left"><translate>Generate manifest(s)</translate></h3>
       <button class="pull-right t_button" data-ng-click="cancel()"><i
               class="icon-cancel"></i>
       </button>
@@ -17,7 +17,7 @@
           </p>
           <p ng-if="repos.length > 1">
             <translate>
-              Some files may be stored in multiple repositories. When check-box "Remove duplicate files" is checked, duplicates from repositories lower in the list will not be included and a manifest containing unique files from all repositories will be generated. You may drag rows to reorder the list to affect the generated manifest.
+              Some files may be stored in multiple repositories. When "Remove duplicate files" is checked, duplicates from repositories lower in the list will not be included, and a manifest containing unique files from all repositories will be generated. You may drag rows to reorder the list to affect the generated manifest.
             </translate>
           </p>
           <p>
@@ -210,7 +210,7 @@
 
     <div class="modal-footer">
       <button class="t_button" data-ng-click="cancel();"><translate>Cancel</translate></button>
-      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i><translate>Download</translate></button>
+      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i><translate>Generate</translate></button>
       <button
         class="t_button"
         data-ng-repeat="repoData in repos"
