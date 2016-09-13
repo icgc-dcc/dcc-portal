@@ -127,9 +127,9 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
     document.addEventListener('fullscreenchange', _fullscreenHandler);
 
     $scope.$on('$destroy', function() {
-      document.removeEventListener('webkitfullscreenchange');
-      document.removeEventListener('mozfullscreenchange');
-      document.removeEventListener('fullscreenchange');
+      document.removeEventListener('webkitfullscreenchange', _fullscreenHandler);
+      document.removeEventListener('mozfullscreenchange', _fullscreenHandler);
+      document.removeEventListener('fullscreenchange', _fullscreenHandler);
     });
 
   };
