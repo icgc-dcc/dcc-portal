@@ -92,7 +92,8 @@
         padding-right: 1em;
       }
       th:first-child:not(.text-right):not(.text-center),
-      th:first-child:not(.text-right):not(.text-center) {
+      th:first-child:not(.text-right):not(.text-center),
+      td:first-child:not(.text-right):not(.text-center) {
         padding-left: 1em;
       }
       tr {
@@ -132,7 +133,7 @@
 
       tbody {
         td {
-          transition: all 0.3s $inOutSine;
+          transition: background-color 0.3s $inOutSine, color 0.3s $inOutSine;
           background-color: transparent;
           &.tweening {
             background-color: rgba(237, 248, 255, 0.8);
