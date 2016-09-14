@@ -21,7 +21,8 @@
   var module = angular.module ('icgc.facets.current', []);
 
   module.controller('currentCtrl',
-    function ($scope, Facets, LocationService, FilterService, FiltersUtil, Extensions, SetService, Page, GeneSymbols) {
+    function ($scope, Facets, LocationService, FilterService, FiltersUtil, Extensions, SetService, Page, GeneSymbols, 
+              CompoundsService) {
 
     $scope.Page = Page;
     $scope.Facets = Facets;
@@ -58,7 +59,6 @@
       var filter = _.first (filters);
 
       return (_.get(filter, 'controlTerm', '').startsWith(Extensions.ENTITY_PREFIX));
-    
     };
     
     $scope.isNot = function(terms) {
@@ -79,15 +79,9 @@
     function resolveActiveGeneIds (filters) {
       var activeGeneIds;
       if (_.has(filters, 'gene.id.not')) {
-          activeGeneIds = _(_.get (filters, 'gene.id.not', []))
-          .filter ({controlFacet: 'id', controlType: 'gene'})
-          .map ('term')
-          .value();
+        activeGeneIds = getActiveIds(filters, 'id', 'not');
       } else if (_.has(filters, 'gene.id.is')) {
-        activeGeneIds = _(_.get (filters, 'gene.id.is', []))
-          .filter ({controlFacet: 'id', controlType: 'gene'})
-          .map ('term')
-          .value();
+        activeGeneIds = getActiveIds(filters, 'id', 'is');
       }
       
       if (_.isEmpty (activeGeneIds)) {
@@ -99,6 +93,40 @@
         $scope.ensemblIdGeneSymbolMap = ensemblIdGeneSymbolMap.plain();
       });
     }
+
+    $scope.compoundIdToNameMap = {};
+    function resolveActiveCompoundIds (filters) {
+      var activeCompoundIds;
+      if (_.has(filters, 'gene.compoundId.not')) {
+        activeCompoundIds = getActiveIds(filters, 'compoundId', 'not');
+      } else if (_.has(filters, 'gene.compoundId.is')) {
+        activeCompoundIds = getActiveIds(filters, 'compoundId', 'is');
+      }
+      
+      if (_.isEmpty (activeCompoundIds)) {
+        return;
+      }
+
+      _.forEach(activeCompoundIds, function (compoundId) {
+        CompoundsService.getCompoundByZincId(compoundId).then(function(compound) {
+          $scope.compoundIdToNameMap[compoundId] = compound.name;
+        });
+      });
+    }
+
+    function getActiveIds(filters, facet, preposition) {
+      return _(_.get (filters, 'gene.' + facet + '.' + preposition, []))
+        .filter ({controlFacet: facet, controlType: 'gene'})
+        .map ('term')
+        .value();
+    }
+
+    $scope.resolveDisplayName = function (termObject) {
+      if (termObject.controlFacet === 'compoundId') {
+        return _.get($scope.compoundIdToNameMap, termObject.term, termObject.term);
+      }
+      return $scope.resolveGeneSymbols(termObject.controlType, termObject.term);
+    };
 
     $scope.resolveGeneSymbols = function (type, term) {
       if ('gene' !== type) {
@@ -116,15 +144,24 @@
         SetService.getMetaData(ids).then(function(results) {
           $scope.filters = FiltersUtil.buildUIFilters (currentFilters,
             SetService.lookupTable (results.plain()));
-          resolveActiveGeneIds ($scope.filters);
+            resolveActiveIds($scope.filters);
         });
       } else {
         $scope.filters = FiltersUtil.buildUIFilters(currentFilters, {});
-        resolveActiveGeneIds ($scope.filters);
+        resolveActiveIds($scope.filters);
       }
 
       // If we have filters then show the filter query directive
       $scope.isActive = ! _.isEmpty(currentFilters);
+    }
+
+    function resolveActiveIds (filters) {
+      if (_.has(filters, 'gene.id')) {
+        resolveActiveGeneIds (filters);
+      } 
+      if (_.has(filters, 'gene.compoundId')) {
+        resolveActiveCompoundIds(filters);
+      }
     }
 
     /**
@@ -161,6 +198,12 @@
         });
       }
 
+      if (type === 'gene' && facet === 'compoundId') {
+        Facets.removeFacet({
+          type: type,
+          facet: 'hasCompound'
+        });
+      }
     };
 
     /**
@@ -168,7 +211,7 @@
      * like facets but are structured in different ways
      */
     $scope.removeTerm = function (type, facet, term) {
-      if (type === 'gene' && facet === 'hasPathway') {
+      if (type === 'gene' && (facet === 'hasPathway' || facet === 'hasCompound')) {
         Facets.removeFacet({
           type: type,
           facet: facet

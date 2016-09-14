@@ -4,29 +4,29 @@
             <i data-ng-class="{'icon-caret-down':!collapsed, 'icon-caret-right':collapsed}"></i>
             {{label}}
         </span>
-        <span data-ng-if="actives.length || hasPathwayTypePredicate" class="t_facets__facet__terms__inactive__reset t_tools">
+        <span data-ng-if="actives.length || hasCompoundTypePredicate" class="t_facets__facet__terms__inactive__reset t_tools">
             <a data-ng-click="removeFacet()" class="t_tools__tool " href=""><i class="icon-undo"></i></a>
         </span>
     </li>
     <li>
         <ul class="t_facets__facet__terms__active">
-            <li class="t_facets__facet__terms__active__term__label"
+            <li class="t_facets__facet__terms__active__term__label {{activeClass}}"
                 data-active-term
                 data-item="item"
                 data-ng-repeat="item in actives"
                 data-ng-click="removeTerm(item)"
                 data-ng-mouseenter="mouseOver($event)"
                 data-ng-mouseleave="mouseLeave($event)">
-
+                
                 <span class="t_facets__facet__terms__active__term__label__text">
                     <i class="icon-ok"></i>
-                    <span data-tooltip="{{ item | geneSetNameLookup }}"
-                          data-tooltip-placement="top">{{item}}</span>
+                    <span data-tooltip="{{ item }}"
+                          data-tooltip-placement="top">{{compoundIdToNameMap[item] || item}}
+                    </span>
                 </span>
                 <span class="t_facets__facet__terms__inactive__term__count">
-                    {{pathwayIdCounts[item] | number}}
+                    {{compoundIdToGeneCount[item] | number}}
                 </span>
-
             </li>
         </ul>
     </li>
@@ -39,36 +39,33 @@
         <i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel"
            data-ng-click="query='';quick()" data-ng-show='query && !isBusy'></i>
     </li>
-
     <li>
         <ul class="t_facets__facet__terms__active" data-ng-hide="collapsed">
              <li class="t_facets__facet__terms__inactive__term"
-                 data-ng-if="hasPathwayTypePredicate === false"
-                 data-ng-click="addGeneSetType('hasPathway')">
-                 <span class="t_facets__facet__terms__inactive__term__label" data-tooltip="{{'Reactome Pathways' | translate}}" data-tooltip-placement="overflow">
+                 data-ng-if="hasCompoundTypePredicate === false"
+                 data-ng-click="addGeneSetType('hasCompound')">
+                 <span class="t_facets__facet__terms__inactive__term__label" data-tooltip="ZINC Compounds" data-tooltip-placement="overflow">
                      <i class="icon-check-empty"></i>
-                     <translate>Reactome Pathways</translate>
+                     ZINC Compounds
                  </span>
                   <span class="t_facets__facet__terms__active__term__count">
-                     {{ allPathwayCounts | number}}
+                     {{ allCompoundCounts | number}}
                   </span>
              </li>
          </ul>
          <ul class="t_facets__facet__terms__active">
              <li class="t_facets__facet__terms__active__term__label"
-                 data-ng-if="hasPathwayTypePredicate === true"
-                 data-ng-click="removeGeneSetType('hasPathway')"
+                 data-ng-if="hasCompoundTypePredicate === true";
+                 data-ng-click="removeGeneSetType('hasCompound')"
                  data-ng-mouseover="toggleRemove=true"
                  data-ng-mouseleave="toggleRemove=false">
-                  <span class="t_facets__facet__terms__active__term__label__text" data-tooltip="{{'Reactome Pathways' | translate}}" data-tooltip-placement="overflow">
-                      <i class="{{ toggleRemove === true? 'icon-cancel':'icon-ok'}}"></i> <translate>Reactome Pathways</translate>
+                  <span class="t_facets__facet__terms__active__term__label__text" data-tooltip="ZINC Compounds" data-tooltip-placement="overflow">
+                      <i class="{{ toggleRemove === true? 'icon-cancel':'icon-ok'}}"></i> ZINC Compounds
                   </span>
                   <span class="t_facets__facet__terms__active__term__count">
-                     {{ allPathwayCounts | number}}
+                     {{ allCompoundCounts | number}}
                   </span>
              </li>
         </ul>
     </li>
-
-
 </ul>

@@ -28,6 +28,8 @@ import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 import java.util.List;
 import java.util.Map;
 
+import lombok.val;
+
 import org.dcc.portal.pql.meta.field.ArrayFieldModel;
 import org.dcc.portal.pql.meta.field.FieldModel;
 import org.dcc.portal.pql.meta.field.ObjectFieldModel;
@@ -35,8 +37,6 @@ import org.dcc.portal.pql.meta.field.ObjectFieldModel;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
-import lombok.val;
 
 public class GeneCentricTypeModel extends TypeModel {
 
@@ -101,6 +101,7 @@ public class GeneCentricTypeModel extends TypeModel {
         .add(arrayOfObjects("project", "projects", object()))
         .add(arrayOfStrings("pathway", ImmutableSet.of("pathways", "pathwayId", "gene.pathwayId")))
         .add(arrayOfStrings("curated_set", ImmutableSet.of("curatedSetId", "gene.curatedSetId")))
+        .add(arrayOfStrings("drug", "gene.compoundId"))
         .add(arrayOfObjects("transcripts", "transcripts", object()))
         .add(object("go_term", GENE_GO_TERM,
             arrayOfStrings("biological_process"),

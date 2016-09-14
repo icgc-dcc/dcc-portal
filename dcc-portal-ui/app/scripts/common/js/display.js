@@ -63,6 +63,7 @@
       angular.forEach (queryFilters, function (typeFilters, typeKey) {
         display[typeKey] = {};
         angular.forEach(typeFilters, function(facetFilters, facetKey) {
+          /*jshint maxcomplexity:false */
           var uiFacetKey = facetKey;
 
           // FIXME: no logic to handle "all" clause
@@ -76,9 +77,15 @@
           }
 
           // Remap gene ontologies
-          if (uiFacetKey === 'hasPathway') {
-            var uiTerm = 'Reactome Pathways';
-            uiFacetKey = 'pathwayId';
+          if (uiFacetKey === 'hasPathway' || uiFacetKey === 'hasCompound') {
+            var uiTerm;
+            if (uiFacetKey === 'hasPathway') {
+              uiTerm = 'Reactome Pathways';
+              uiFacetKey = 'pathwayId';
+            } else if (uiFacetKey === 'hasCompound') {
+              uiTerm = 'ZINC Compounds';
+              uiFacetKey = 'compoundId';
+            }
 
             if (_.has(facetFilters, 'not')) { 
               if (! display[typeKey].hasOwnProperty(uiFacetKey)) {

@@ -29,6 +29,8 @@ import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 import java.util.List;
 import java.util.Map;
 
+import lombok.val;
+
 import org.dcc.portal.pql.meta.field.ArrayFieldModel;
 import org.dcc.portal.pql.meta.field.FieldModel;
 import org.dcc.portal.pql.meta.field.ObjectFieldModel;
@@ -36,8 +38,6 @@ import org.dcc.portal.pql.meta.field.ObjectFieldModel;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
-import lombok.val;
 
 public class DonorCentricTypeModel extends TypeModel {
 
@@ -215,6 +215,7 @@ public class DonorCentricTypeModel extends TypeModel {
         string("symbol", "gene.symbol"),
         arrayOfStrings("pathway", ImmutableSet.of("gene.pathways", "gene.pathwayId")),
         arrayOfStrings("curated_set", "gene.curatedSetId"),
+        arrayOfStrings("drug", "gene.compoundId"),
         object("go_term", "gene.GoTerm",
             arrayOfStrings("biological_process"),
             arrayOfStrings("cellular_component"),

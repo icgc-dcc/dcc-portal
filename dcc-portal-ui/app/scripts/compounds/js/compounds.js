@@ -612,4 +612,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
         filters: {gene:{id:{is:['ES:' + entitySetId]}}}
       });
     };
+    _srv.getCompoundByZincId = function (zincId) {
+      return Restangular.one('drugs').one(zincId).get();
+    };
   });
