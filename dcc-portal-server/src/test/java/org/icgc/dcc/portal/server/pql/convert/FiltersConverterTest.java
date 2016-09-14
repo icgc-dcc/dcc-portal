@@ -140,7 +140,7 @@ public class FiltersConverterTest {
     val filters = createFilters(jql);
     val pql = converter.convertFilters(filters, GENE_CENTRIC);
     assertThat(pql).isEqualTo(
-        "or(exists(gene.pathwayId),in(gene.pathwayId,'REACT_13797'))");
+        "or(in(gene.pathwayId,'REACT_13797'),exists(gene.pathwayId))");
   }
 
   @Test
@@ -336,22 +336,22 @@ public class FiltersConverterTest {
   public void hasCompoundAndFilterTest() {
     val result =
         converter.convertFilters(createFilters("{gene:{compoundId:{is:['123']},hasCompound:true}}"), GENE_CENTRIC);
-    assertThat(result).isEqualTo("or(exists(gene.compoundId),in(gene.compoundId,'123'))");
+    assertThat(result).isEqualTo("or(in(gene.compoundId,'123'),exists(gene.compoundId))");
   }
 
   @Test
   public void hasCompoundAndPathwayIdTest() {
     val result =
         converter.convertFilters(createFilters("{gene:{pathwayId:{is:['123']},hasCompound:true}}"), GENE_CENTRIC);
-    assertThat(result).isEqualTo("in(gene.pathwayId,'123'),exists(gene.compoundId)");
+    assertThat(result).isEqualTo("exists(gene.compoundId),in(gene.pathwayId,'123')");
   }
 
   @Test
   public void compoundAndPathwayTest() {
     val result = converter.convertFilters(createFilters("{gene:{compoundId:{is:['ZINC01']},hasCompound:true,"
         + "pathwayId:{is:['123']},hasPathway:false}}"), GENE_CENTRIC);
-    assertThat(result).isEqualTo("or(missing(gene.pathwayId),in(gene.pathwayId,'123')),"
-        + "or(exists(gene.compoundId),in(gene.compoundId,'ZINC01'))");
+    assertThat(result).isEqualTo("or(in(gene.compoundId,'ZINC01'),exists(gene.compoundId)),"
+        + "or(in(gene.pathwayId,'123'),missing(gene.pathwayId))");
   }
 
   @Test

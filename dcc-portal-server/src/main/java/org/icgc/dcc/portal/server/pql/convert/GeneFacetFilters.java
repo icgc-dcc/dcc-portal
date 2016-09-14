@@ -17,10 +17,11 @@
  */
 package org.icgc.dcc.portal.server.pql.convert;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.List;
+import java.util.Map.Entry;
 
 import lombok.NonNull;
 
@@ -80,9 +81,13 @@ public class GeneFacetFilters {
     return !fields.isEmpty();
   }
 
-  public Collection<Collection<JqlField>> getFieldsByFamily() {
-    return fields.rowMap().values().stream()
-        .map(Map::values)
+  public List<List<JqlField>> getFieldsByFamily() {
+    return fields.rowMap().entrySet().stream()
+        .sorted((left, right) -> left.getKey().compareTo(right.getKey()))
+        .map(Entry::getValue)
+        .map(values -> newArrayList(values.values()).stream()
+            .sorted((left, right) -> left.getOperation().compareTo(right.getOperation()))
+            .collect(toImmutableList()))
         .collect(toImmutableList());
   }
 
