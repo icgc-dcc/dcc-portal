@@ -243,7 +243,7 @@
 
     $scope.filters = FilterService.filters;
     $scope.$filter = $filter;
-    $scope.shouldDeduplicate = true;
+    $scope.shouldDeduplicate = false;
     $scope.summary = {};
 
     $scope.getRepoFieldValue = function (repoName, fieldName) {
