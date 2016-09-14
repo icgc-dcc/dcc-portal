@@ -40,7 +40,7 @@
 
        <table class="table table-info">
          <thead>
-           <th class="text-center" colspan="2" ng-if="repos.length > 1"><translate>Priority</translate></th>
+           <th ng-if="shouldDeduplicate" class="text-center no-animate" colspan="2" ng-if="repos.length > 1"><translate>Priority</translate></th>
            <th style="width: 40%;"><translate>Repository</translate></th>
            <th class="text-right"><translate># Donors</translate></th>
            <th class="text-right"><translate># Files</translate></th>
@@ -57,9 +57,10 @@
               dnd-draggable="repoData"
               dnd-dragstart="closeDropdowns()"
               dnd-effect-allowed="move"
+              dnd-disable-if="!shouldDeduplicate"
             >
-             <td class="handle text-right" ng-if="repos.length > 1">&nbsp;::: </td>
-             <td class="text-left" ng-if="repos.length > 1">{{$index + 1}}</td>
+             <td class="handle text-right no-animate" ng-if="shouldDeduplicate && repos.length > 1">&nbsp;::: </td>
+             <td class="text-left no-animate" ng-if="shouldDeduplicate && repos.length > 1">{{$index + 1}}</td>
              <td>
                 <i ng-if="repoData.isCloud" class="icon-cloud"></i>
                 {{ repoData.repoName }}
@@ -200,7 +201,7 @@
          </tbody>
          <tfoot ng-show="repos.length > 1">
            <tr class="totals" style="font-weight: bold;">
-             <td colspan="4" class="text-right">Totals:</td>
+             <td colspan="{{shouldDeduplicate ? '4' : '2'}}" class="text-right">Totals:</td>
              <td class="text-right">{{ shouldDeduplicate ? summary : repos | _:'map':'fileCount' | _:'compact' | _:'sum' | number }}</td>
              <td class="text-right">{{ shouldDeduplicate ? summary : repos | _:'map':'fileSize' | _:'compact' | _:'sum' | bytes }}</td>
            </tr>
