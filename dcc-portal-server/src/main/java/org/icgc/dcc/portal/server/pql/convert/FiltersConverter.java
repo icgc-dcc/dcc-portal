@@ -33,6 +33,7 @@ import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.PROJECT;
 import static org.dcc.portal.pql.meta.TypeModel.GENE_SET_ID;
 import static org.dcc.portal.pql.util.Converters.stringValue;
+import static org.icgc.dcc.common.core.util.Separators.EMPTY_STRING;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.pql.convert.model.Operation.ALL;
 import static org.icgc.dcc.portal.server.pql.convert.model.Operation.HAS;
@@ -49,6 +50,10 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.math3.util.Pair;
 import org.dcc.portal.pql.meta.Type;
 import org.dcc.portal.pql.meta.TypeModel;
@@ -57,6 +62,7 @@ import org.icgc.dcc.portal.server.pql.convert.model.JqlArrayValue;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlField;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlFilters;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlValue;
+import org.icgc.dcc.portal.server.pql.convert.model.Operation;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ArrayListMultimap;
@@ -64,10 +70,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FiltersConverter {
@@ -112,6 +114,15 @@ public class FiltersConverter {
       "platform",
       "sequencingStrategy",
       "verificationStatus");
+
+  /**
+   * @see GeneFacetFilters
+   */
+  private static final Collection<String> GENE_FACET_FIELDS = ImmutableList.of(
+      "hasPathway",
+      "hasCompound",
+      "pathwayId",
+      "compoundId");
 
   @NonNull
   public String convertFilters(JqlFilters filters, Type indexType) {
@@ -404,18 +415,20 @@ public class FiltersConverter {
   }
 
   private static String createTypeFilter(Collection<JqlField> fields, Type indexType) {
-    val pathwayIdFields = Lists.<JqlField> newArrayList();
-    val hasPathwayFields = Lists.<JqlField> newArrayList();
+    val geneFacetFilters = new GeneFacetFilters();
     val remainingFields = Lists.<JqlField> newArrayList();
 
     // Separates fields into different categories.
     for (val jqlField : fields) {
       val fieldName = jqlField.getName();
-
-      if ("pathwayId".equals(fieldName) || "compoundId".equals(fieldName)) {
-        pathwayIdFields.add(jqlField);
-      } else if ("hasPathway".equals(fieldName) || "hasCompound".equals(fieldName)) {
-        hasPathwayFields.add(jqlField);
+      if (isGeneFacetField(fieldName)) {
+        val fieldFamily = getGeneFacetFieldFamily(fieldName);
+        val hasField = jqlField.getOperation() == Operation.HAS;
+        if (hasField) {
+          geneFacetFilters.addHasField(fieldFamily, jqlField);
+        } else {
+          geneFacetFilters.addIdField(fieldFamily, jqlField);
+        }
       } else {
         remainingFields.add(jqlField);
       }
@@ -423,17 +436,30 @@ public class FiltersConverter {
 
     // Special handling when pathwayId and hasPathway or (compoundId and hasCompound) are both present; if not, process
     // normally
-    String pathwayRelatedFilter = null;
-
-    if (pathwayIdFields.isEmpty() || hasPathwayFields.isEmpty()) {
-      remainingFields.addAll(pathwayIdFields);
-      remainingFields.addAll(hasPathwayFields);
-    } else {
-      pathwayIdFields.addAll(hasPathwayFields);
-      pathwayRelatedFilter = orFilterHelper(toPqlFilter(pathwayIdFields, indexType));
+    String typeFilter = EMPTY_STRING;
+    val fieldsByFamily = geneFacetFilters.getFieldsByFamily();
+    for (val familyFields : fieldsByFamily) {
+      if (familyFields.size() > 1) {
+        val familyFilter = orFilterHelper(toPqlFilter(familyFields, indexType));
+        typeFilter = typeFilter.equals(EMPTY_STRING) ? familyFilter : typeFilter + "," + familyFilter;
+      } else {
+        remainingFields.addAll(familyFields);
+      }
     }
 
-    return joinFilters(remainingFields, pathwayRelatedFilter, indexType);
+    return joinFilters(remainingFields, typeFilter.equals(EMPTY_STRING) ? null : typeFilter, indexType);
+  }
+
+  private static boolean isGeneFacetField(String fieldName) {
+    return GENE_FACET_FIELDS.stream()
+        .anyMatch(geneFacetField -> geneFacetField.equals(fieldName));
+  }
+
+  private static String getGeneFacetFieldFamily(String fieldName) {
+    return fieldName
+        .replaceAll("^has", EMPTY_STRING)
+        .replaceAll("Id$", EMPTY_STRING)
+        .toLowerCase();
   }
 
   private static String orFilterHelper(String filter) {
