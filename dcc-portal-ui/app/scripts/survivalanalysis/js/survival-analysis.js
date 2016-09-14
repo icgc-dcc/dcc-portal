@@ -345,7 +345,8 @@
       tipLabels: '<',
       censoredStatuses: '<',
       palette: '<',
-      title: '<'
+      title: '<',
+      pvalue: '<'
     },
     controller: survivalAnalysisController,
     controllerAs: 'ctrl'
@@ -374,7 +375,9 @@
 
     return {
       overall: processGraphData('overall'),
-      diseaseFree: processGraphData('diseaseFree')
+      overallStats: responses.survivalData.overallStats,
+      diseaseFree: processGraphData('diseaseFree'),
+      diseaseFreeStats: responses.survivalData.diseaseFreeStats,
     };
   }
 

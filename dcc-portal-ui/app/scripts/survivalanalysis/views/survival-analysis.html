@@ -47,6 +47,10 @@
 
   <i class="icon-spin icon-spinner absolute-center" ng-class="{'ng-hide': ctrl.dataSets.length}"></i>
 
+
+  <div class="pull-right">
+    Log-Rank Test P-Value: {{ ctrl.pvalue.toPrecision(3) }}
+  </div>
   <div class="survival-graph">
     
   </div>
