@@ -7,7 +7,7 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.9\n"
 "Last-Translator: Vincent Ferretti <vincent.ferretti@oicr.on.ca>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Language: fr_CA\n"
@@ -352,8 +352,7 @@ msgstr "A propos"
 msgid "About Us"
 msgstr "A propos de nous"
 
-#: app/scripts/common/js/codetable.js:145
-#: app/scripts/common/js/codetable.js:93
+#: app/scripts/common/js/codetable.js:145 app/scripts/common/js/codetable.js:93
 msgid "Absent from DCC"
 msgstr ""
 
@@ -851,8 +850,7 @@ msgstr ""
 msgid "Cancer Genomics Hub"
 msgstr ""
 
-#: app/scripts/common/js/services.js:195
-#: app/scripts/projects/js/projects.js:74
+#: app/scripts/common/js/services.js:195 app/scripts/projects/js/projects.js:74
 #: app/scripts/projects/views/projects.html:1
 msgid "Cancer Projects"
 msgstr "Projets"
@@ -3097,8 +3095,8 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.mutations.html:42
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:2
 #: app/scripts/browser/views/browser.html:13
-#: app/scripts/donors/views/donor.html:27
-#: app/scripts/genes/views/gene.html:295 app/scripts/genes/views/gene.html:31
+#: app/scripts/donors/views/donor.html:27 app/scripts/genes/views/gene.html:295
+#: app/scripts/genes/views/gene.html:31
 #: app/scripts/genesets/views/geneset.html:314
 #: app/scripts/genesets/views/geneset.html:419
 #: app/scripts/genesets/views/geneset.html:48
@@ -3905,8 +3903,7 @@ msgstr ""
 msgid "Preparing..."
 msgstr ""
 
-#: app/scripts/common/js/codetable.js:144
-#: app/scripts/common/js/codetable.js:92
+#: app/scripts/common/js/codetable.js:144 app/scripts/common/js/codetable.js:92
 msgid "Present in DCC"
 msgstr ""
 
@@ -3921,8 +3918,7 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.donors.html:10
 #: app/scripts/advanced/views/advanced.donors.html:185
 #: app/scripts/advanced/views/advanced.facets.donors.html:7
-#: app/scripts/common/js/codetable.js:64
-#: app/scripts/donors/views/donor.html:69
+#: app/scripts/common/js/codetable.js:64 app/scripts/donors/views/donor.html:69
 #: app/scripts/keyword/views/results.html:217
 #: app/scripts/projects/views/project.html:78
 #: app/scripts/projects/views/projects.details.html:173
@@ -5063,8 +5059,7 @@ msgstr ""
 msgid "Submitter ID"
 msgstr ""
 
-#: app/scripts/static/views/info.html:124
-#: app/scripts/static/views/info.html:22
+#: app/scripts/static/views/info.html:124 app/scripts/static/views/info.html:22
 msgid "Submitter Tools"
 msgstr ""
 
@@ -5212,6 +5207,10 @@ msgid ""
 "more than 2,800 cancer whole genomes from the International Cancer Genome "
 "Consortium."
 msgstr ""
+"L'étude <a href=\"/pcawg\">Pancancer Analysis of Whole Genome</a> (PCAWG) "
+"est une collaboration internationale visant à identifier et caractériser des "
+"patrons communs de mutations dans plus de 2800 génomes entiers séquencés par "
+"l’ICGC."
 
 #: app/scripts/static/views/team.html:96
 msgid "The <a href=\"http://iobio.io/\" target=\"_blank\">iobio Team</a>"
@@ -5362,7 +5361,7 @@ msgid ""
 msgstr ""
 "L'étude Pancancer Analysis of Whole Genome (PCAWG) est une collaboration "
 "internationale visant à identifier et caractériser des patrons communs de "
-"mutations dans plus de 2800 génomes entiers séquencés par le ICGC."
+"mutations dans plus de 2800 génomes entiers séquencés par l’ICGC."
 
 #: app/scripts/app/js/app.js:583 app/scripts/common/views/footer.html:24
 msgid "The Team"
@@ -5828,8 +5827,8 @@ msgstr ""
 msgid "Tumour Stage at Diagnosis"
 msgstr ""
 
-#: app/scripts/donors/views/donor.html:77
-#: app/scripts/genes/views/gene.html:240 app/scripts/genes/views/gene.html:289
+#: app/scripts/donors/views/donor.html:77 app/scripts/genes/views/gene.html:240
+#: app/scripts/genes/views/gene.html:289
 #: app/scripts/genesets/views/geneset.html:247
 #: app/scripts/genesets/views/geneset.html:308
 #: app/scripts/mutations/views/mutation.html:178
@@ -5838,8 +5837,7 @@ msgstr ""
 msgid "Tumour Subtype"
 msgstr ""
 
-#: app/scripts/common/js/codetable.js:78
-#: app/scripts/donors/views/donor.html:73
+#: app/scripts/common/js/codetable.js:78 app/scripts/donors/views/donor.html:73
 #: app/scripts/genes/views/gene.html:239 app/scripts/genes/views/gene.html:288
 #: app/scripts/genesets/views/geneset.html:246
 #: app/scripts/genesets/views/geneset.html:307
