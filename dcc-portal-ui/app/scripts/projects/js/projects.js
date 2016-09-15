@@ -479,19 +479,14 @@
           projectId: {
             is: [project.id]
           }
-        },
-        mutation: {
-          functionalImpact: {
-            is: ['High']
-          }
         }
       };
 
       var donorParams = {
         filters: filter,
-        size: 2000,
+        size: 3000,
         isTransient: true,
-        name: project.id + ': All donors',
+        name: project.id +  ' Donors',
         sortBy: 'ssmAffectedGenes',
         sortOrder: 'DESCENDING',
       };
@@ -500,7 +495,7 @@
         filters: filter,
         size: 50,
         isTransient: true,
-        name: project.id + ': Top 50 genes w/ high impact',
+        name: 'Top 50 ' + project.id + 'Mutated Genes',
         sortBy: 'affectedDonorCountFiltered',
         sortOrder: 'DESCENDING',
       };
