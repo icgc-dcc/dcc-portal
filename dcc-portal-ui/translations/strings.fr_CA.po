@@ -60,25 +60,23 @@ msgstr "# Donneurs affectés"
 
 #: app/scripts/advanced/views/advanced.genes.html:50
 #: app/scripts/projects/views/project.html:368
-#, fuzzy
 msgid ""
 "# Donors where gene contains SSM filtered by current criteria / # SSM tested "
 "donors portal wide. Expand to see breakdown by project."
 msgstr ""
-"# donneurs avec gènes mutés (MSS) filtrés selon les critères sélectionnés / "
-"# total de donneurs avec MSS. Ouvrir pour obtenir la distribution par projet"
+"# donneurs avec gènes mutés (MSS) filtré selon les critères sélectionnés / # "
+"total de donneurs avec MSS. Ouvrir pour obtenir la distribution par projet"
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:37
 #: app/scripts/donors/views/donor.html:299
 #: app/scripts/genes/views/gene.html:392
 #: app/scripts/genesets/views/geneset.html:497
 #: app/scripts/projects/views/project.html:514
-#, fuzzy
 msgid ""
 "# Donors where mutation is observed filtered by current criteria / # SSM "
 "tested donors portal wide. Expand to see breakdown by project."
 msgstr ""
-"# donneurs avec cette mutation filtrés selon les critères sélectionnés / # "
+"# donneurs avec cette mutation filtré selon les critères sélectionnés / # "
 "total de donneurs avec MSS. Ouvrir pour obtenir la distribution par projet"
 
 #: app/scripts/pancancer/views/pancancer.html:35
@@ -3444,7 +3442,7 @@ msgid ""
 "Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria"
 msgstr ""
 "Nombres de Mutations Somatiques Simples<br>Filtré par les critères de "
-"recherche actuel"
+"recherche"
 
 #: app/scripts/projectmutationviewer/views/projectmutationviewer.html:3
 msgid "Number of Somatic Mutations in Donor's Exomes Across Cancer Projects"
