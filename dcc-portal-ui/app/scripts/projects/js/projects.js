@@ -495,7 +495,7 @@
         filters: filter,
         size: 50,
         isTransient: true,
-        name: 'Top 50 ' + project.id + 'Mutated Genes',
+        name: 'Top 50 ' + project.id + ' Mutated Genes',
         sortBy: 'affectedDonorCountFiltered',
         sortOrder: 'DESCENDING',
       };
