@@ -218,19 +218,21 @@
       var p1, p2, type = 'donor';
       p1 = {
         filters: {
-          donor:{ primarySite: { is: ['Brain'] } }
+          donor:{ primarySite: { is: ['Pancreas'] } },
+          gene: { id: { is: ['ENSG00000133703'] } }
         },
         isTransient: true,
         type: type,
-        name: gettextCatalog.getString('Brain Cancer')
+        name: gettextCatalog.getString('Pancreatic - KRAS mutated ')
       };
       p2 = {
         filters: {
-          donor:{ primarySite: { is: ['Colorectal'] } }
+          donor:{ primarySite: { is: ['Pancreas'] } },
+          gene: { id: { not: ['ENSG00000133703'] } }
         },
         isTransient: true,
         type: type,
-        name: gettextCatalog.getString('Colorectal Cancer')
+        name: gettextCatalog.getString('Pancreatic - KRAS not mutated ')
       };
 
       var demoSetIds = [];

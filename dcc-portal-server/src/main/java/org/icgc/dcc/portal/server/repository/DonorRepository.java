@@ -63,7 +63,6 @@ import static com.google.common.collect.Maps.toMap;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
 import static java.util.Collections.singletonMap;
-import static lombok.AccessLevel.PUBLIC;
 import static org.dcc.portal.pql.ast.function.FunctionBuilders.facets;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
@@ -135,7 +134,7 @@ public class DonorRepository implements Repository {
           PhenotypeFacetNames.GENDER, "donor_sex",
           PhenotypeFacetNames.VITAL_STATUS, "donor_vital_status");
 
-  @Getter(lazy = true, value = PUBLIC)
+  @Getter(lazy = true)
   private final Map<String, Map<String, Integer>> baselineTermsAggsOfPhenotype = loadBaselineTermsAggsOfPhenotype();
 
   private static final int SCAN_BATCH_SIZE = 1000;
@@ -230,10 +229,10 @@ public class DonorRepository implements Repository {
   }
 
   public EntitySetTermFacet buildEntitySetTermAggs(final UUID entitySetId, final Terms termsFacet,
-                                                   final Map<String, Aggregation> aggsMap,
-                                                   final Long total,
-                                                   final Long missing,
-                                                   final Optional<SimpleImmutableEntry<String, String>> statsFacetConfigMap) {
+           final Map<String, Aggregation> aggsMap,
+           final Long total,
+           final Long missing,
+           final Optional<SimpleImmutableEntry<String, String>> statsFacetConfigMap) {
     val termFacetList = buildTermAggList(termsFacet, getBaselineTermsAggsOfPhenotype());
 
     val mean = wantsStatistics(statsFacetConfigMap) ? getMeanFromTermsStatsAggs(

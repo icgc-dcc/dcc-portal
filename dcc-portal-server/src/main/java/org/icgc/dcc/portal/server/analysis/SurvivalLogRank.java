@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.Interval;
+import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.DonorValue;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -45,7 +46,7 @@ public class SurvivalLogRank {
 
   private int largestTime;
 
-  private TreeMap<Integer, DataUnit> dataMap;
+  private TreeMap<Integer, Sample> sampleGroups;
 
   public SurvivalLogRank(List<List<Interval>> results) {
     numSets = results.size();
@@ -63,8 +64,8 @@ public class SurvivalLogRank {
     }
 
     log.debug("Totals: {}", setTotals);
-    constructMap(results);
-    log.debug("TreeMap Size: {}", dataMap.size());
+    constructSampleGroups(results);
+    log.debug("TreeMap Size: {}", sampleGroups.size());
   }
 
   /**
@@ -76,7 +77,7 @@ public class SurvivalLogRank {
     arraycopy(setTotals, 0, alive, 0, numSets);
     double[] expectedSums = new double[numSets];
 
-    for (val entry: dataMap.entrySet()) {
+    for (val entry: sampleGroups.entrySet()) {
       if (entry.getKey() > largestTime) break;
 
       int[] died = entry.getValue().died;
@@ -106,8 +107,8 @@ public class SurvivalLogRank {
    * Constructs a map of time -> ([died columns], [censored columns])
    * @param results intervals of the kaplan meier survival plot.
    */
-  private void constructMap(List<List<Interval>> results) {
-    dataMap = new TreeMap<Integer, DataUnit>();
+  private void constructSampleGroups(List<List<Interval>> results) {
+    sampleGroups = new TreeMap<Integer, Sample>();
 
     for (int i = 0; i < numSets; i++) {
       val resultDonors = results.get(i).stream()
@@ -118,21 +119,25 @@ public class SurvivalLogRank {
       for (val donor : resultDonors) {
         val time = donor.getTime();
 
-        DataUnit dataUnit = dataMap.get(time);
-        if (dataUnit == null) {
-          dataUnit = new DataUnit(numSets);
+        Sample sample = sampleGroups.get(time);
+        if (sample == null) {
+          sample = new Sample(numSets);
         }
 
-        if (donor.getStatus().equals("alive") || SurvivalAnalyzer.DISEASE_FREE.contains(donor.getStatus())) {
-          dataUnit.censured[i]++;
+        if (isCensured(donor)) {
+          sample.censured[i]++;
         } else {
           if (time > largestTime) largestTime = time;
-          dataUnit.died[i]++;
+          sample.died[i]++;
         }
-        dataMap.put(time, dataUnit);
+        sampleGroups.put(time, sample);
       }
     }
 
+  }
+
+  private boolean isCensured(DonorValue donor) {
+    return donor.getStatus().equals("alive") || SurvivalAnalyzer.DISEASE_FREE.contains(donor.getStatus());
   }
 
   @Value
@@ -142,9 +147,9 @@ public class SurvivalLogRank {
     public double pValue;
   }
 
-  private class DataUnit {
+  private class Sample {
 
-    public DataUnit(int sets) {
+    public Sample(int sets) {
       died = new int[sets];
       censured = new int[sets];
     }

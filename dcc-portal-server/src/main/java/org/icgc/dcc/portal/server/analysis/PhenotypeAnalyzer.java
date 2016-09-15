@@ -49,7 +49,7 @@ import static org.icgc.dcc.portal.server.repository.DonorRepository.FACETS_FOR_P
 public final class PhenotypeAnalyzer {
 
   @NonNull
-  private final DonorRepository esRepository;
+  private final DonorRepository donorRepository;
   @NonNull
   private final EntitySetRepository entitySetRepository;
 
@@ -58,7 +58,7 @@ public final class PhenotypeAnalyzer {
     // Here we eliminate duplicates and impose ordering (needed for reading the response items).
     val setIds = ImmutableSet.copyOf(entitySetIds).asList();
 
-    val multiResponse = esRepository.performPhenotypeAnalysisMultiSearch(setIds);
+    val multiResponse = donorRepository.performPhenotypeAnalysisMultiSearch(setIds);
     val responseItems = multiResponse.getResponses();
     val responseItemCount = responseItems.length;
     checkState(responseItemCount == setIds.size(),
@@ -102,7 +102,7 @@ public final class PhenotypeAnalyzer {
         }
 
         results.get(facetName).add(
-                esRepository.buildEntitySetTermAggs(
+                donorRepository.buildEntitySetTermAggs(
                         entitySetId, (Terms) aggs, aggsMap, total, missing, facetKv.getValue()));
       }
     }
@@ -142,18 +142,14 @@ public final class PhenotypeAnalyzer {
     for (int i = 0; i < data.size(); i++) {
       val terms = data.get(i).getTerms();
       for (val term : terms) {
-        if (term.getTerm().equals("female") || term.getTerm().equals("alive")) {
-          dataTable[0][i] = term.getCount();
-        } else {
-          dataTable[1][i] = term.getCount();
-        }
+        val cohort = term.getTerm().equals("female") || term.getTerm().equals("alive") ? 0 : 1;
+        dataTable[cohort][i] = term.getCount();
       }
     }
 
     val test = new ChiSquareTest();
-    val chiSquared = test.chiSquare(dataTable);
     val pValue = test.chiSquareTest(dataTable);
-    log.info("P-Value result: {}", pValue);
+    log.debug("P-Value result: {}", pValue);
     return pValue;
   }
 

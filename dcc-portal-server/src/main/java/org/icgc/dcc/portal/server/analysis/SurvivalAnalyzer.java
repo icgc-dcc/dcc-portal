@@ -97,11 +97,12 @@ public class SurvivalAnalyzer {
     }
 
     analysis.setIntersection(intersection);
+    val results = analysis.getResults();
 
-    val overall = analysis.getResults().stream().map(Result::getOverall).collect(toImmutableList());
+    val overall = results.stream().map(Result::getOverall).collect(toImmutableList());
     analysis.setOverallStats(new SurvivalLogRank(overall).runLogRankTest());
 
-    val diseaseFree = analysis.getResults().stream().map(Result::getDiseaseFree).collect(toImmutableList());
+    val diseaseFree = results.stream().map(Result::getDiseaseFree).collect(toImmutableList());
     analysis.setDiseaseFreeStats(new SurvivalLogRank(diseaseFree).runLogRankTest());
 
     return analysis;
