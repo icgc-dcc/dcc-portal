@@ -126,7 +126,7 @@ public class SurvivalLogRank {
         if (donor.getStatus().equals("alive") || SurvivalAnalyzer.DISEASE_FREE.contains(donor.getStatus())) {
           dataUnit.censured[i]++;
         } else {
-          largestTime = time;
+          if (time > largestTime) largestTime = time;
           dataUnit.died[i]++;
         }
         dataMap.put(time, dataUnit);
