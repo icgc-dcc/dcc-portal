@@ -555,6 +555,7 @@ module.exports = function (grunt) {
     'uglify',
     'filerev',
     'usemin',
+    'nggettext_compile',
     'clean:cleanTempBuildFiles'
   ]);
 
