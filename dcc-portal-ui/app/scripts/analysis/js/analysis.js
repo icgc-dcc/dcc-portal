@@ -224,8 +224,8 @@
         name: gettextCatalog.getString('Survival Analysis / Phenotype Comparison'),
         description: gettextCatalog.getString('Display the survival analysis of your donor sets and compare some' +
         ' characteristics such as gender, vital status and age at diagnosis between your donor sets.'),
-        demoDescription: gettextCatalog.getString('Display survival analysis and compare phenotypes across brain,' + 
-        ' breast, and colorectal cancer donors.')
+        demoDescription: gettextCatalog.getString('Display survival analysis and compare phenotypes across brain' + 
+        ' and colorectal cancer donors.')
       },
       oncogrid: {
         name: gettextCatalog.getString('OncoGrid'),

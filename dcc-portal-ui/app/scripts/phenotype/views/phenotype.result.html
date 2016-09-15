@@ -219,12 +219,12 @@
 
 
     <br>
-    <div data-ng-class="{wide : setIds.length === 2}"> 
+    <div data-ng-class="wide"> 
         <strong><translate>Gender comparison</translate></strong>
         <span data-toolbar data-dl="phenotype-gender"></span>
     </div>
 
-    <div data-ng-class="{wide : setIds.length === 2}"> 
+    <div data-ng-class="wide"> 
         <table class="table"> 
             <thead>
                 <tr>
@@ -274,22 +274,26 @@
             </tbody>
         </table>
     </div>
-    <div class="wide">
-        <div><translate>P-Value:</translate> {{ gender.pvalue.toPrecision(3) }} ; <translate>Significance at P < 0.05</translate></div>
+    <div class="pull-right">
+        <span><translate>P-Value</translate> 
+            <span ng-if="gender.pvalue!==0">=</span> 
+            <span ng-if="gender.pvalue===0">≈</span> 
+            {{ gender.pvalue.toExponential(2) }}
+        </span>
     </div>
     <div class="clearfix"></div>
-    <div class="half">
+    <div class="wide">
         <grouped-bar data-items="gender.uiGraph" ylabel="{{'% Donors' | translate}}" height="200" format="percentage" data-colours="seriesColours"></grouped-bar>
     </div>
     <div class="clearfix"></div>
 
 
     <br>
-    <div data-ng-class="{wide: setIds.length === 2}">
+    <div data-ng-class="wide">
         <strong><translate>Vital status comparison</translate></strong>
         <span data-toolbar data-dl="phenotype-vital-status"></span>
     </div>
-    <div data-ng-class="{wide: setIds.length === 2}"> 
+    <div data-ng-class="wide"> 
         <table class="table"> 
             <thead>
                 <tr>
@@ -339,23 +343,27 @@
             </tbody>
         </table>
     </div>
-    <div class="wide">
-        <div><translate>P-Value:</translate> {{ vital.pvalue.toPrecision(3) }} ; <translate>Significance at P < 0.05</translate></div>
+    <div class="pull-right">
+        <span><translate>P-Value</translate> 
+            <span ng-if="vital.pvalue!==0">=</span> 
+            <span ng-if="vital.pvalue===0">≈</span> 
+            {{ vital.pvalue.toExponential(2) }}
+        </span>
     </div>
 
     <div class="clearfix"></div>
-    <div class="half">
+    <div class="wide">
         <grouped-bar data-items="vital.uiGraph" ylabel="{{'% Donors' | translate}}" format="percentage" height="200" data-colours="seriesColours"></grouped-bar>
     </div>
     <div class="clearfix"></div>
 
 
     <br>
-    <div data-ng-class="{wide: setIds.length === 2}">
+    <div data-ng-class="wide">
         <strong><translate>Age at diagnosis comparison</translate></strong>
         <span data-toolbar data-dl="phenotype-age"></span>
     </div>
-    <div data-ng-class="{wide: setIds.length === 2}"> 
+    <div data-ng-class="wide"> 
         <table class="table"> 
             <thead>
                 <tr>
@@ -407,7 +415,7 @@
     </div>
     <br>
     <div class="clearfix"></div>
-    <div data-ng-class="{wide: setIds.length === 2}"> 
+    <div data-ng-class="wide"> 
         <grouped-bar data-items="age.uiGraph" ylabel="{{'% Donors' | translate}}" height="250" format="percentage" data-colours="seriesColours"></grouped-bar>
     </div>
     <div class="clearfix"></div>

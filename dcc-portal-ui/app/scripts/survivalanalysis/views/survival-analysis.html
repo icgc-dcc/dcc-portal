@@ -49,7 +49,8 @@
 
 
   <div class="pull-right">
-    Log-Rank Test P-Value: {{ ctrl.pvalue.toPrecision(3) }}
+    <span ng-if="ctrl.pvalue !== undefined && ctrl.pvalue!==0">Log-Rank Test P-Value = {{ ctrl.pvalue.toExponential(2) }}</span>
+    <span ng-if="ctrl.pvalue === 0">Log-Rank Test P-Value ≈ {{ ctrl.pvalue.toExponential(2) }}</span>
   </div>
   <div class="survival-graph">
     

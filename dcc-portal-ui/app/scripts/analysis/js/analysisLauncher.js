@@ -215,7 +215,7 @@
     }
 
     _this.demoPhenotype = function() {
-      var p1, p2, p3, type = 'donor';
+      var p1, p2, type = 'donor';
       p1 = {
         filters: {
           donor:{ primarySite: { is: ['Brain'] } }
@@ -224,17 +224,7 @@
         type: type,
         name: gettextCatalog.getString('Brain Cancer')
       };
-
       p2 = {
-        filters: {
-          donor:{ primarySite: { is: ['Breast'] } }
-        },
-        isTransient: true,
-        type: type,
-        name: gettextCatalog.getString('Breast Cancer')
-      };
-
-      p3 = {
         filters: {
           donor:{ primarySite: { is: ['Colorectal'] } }
         },
@@ -245,19 +235,15 @@
 
       var demoSetIds = [];
       Page.startWork();
-      SetService.addSet(type, p1).then(function(r1) {
+      SetService.addSet(type, p1).then(function (r1) {
         demoSetIds.push(r1.id);
-        SetService.addSet(type, p2).then(function(r2) {
+        SetService.addSet(type, p2).then(function (r2) {
           demoSetIds.push(r2.id);
-          SetService.addSet(type, p3).then(function(r3) {
-            demoSetIds.push(r3.id);
-
-            function proxyLaunch() {
-              Page.stopWork();
-              _this.launchPhenotype(demoSetIds);
-            }
-            wait(demoSetIds, 7, proxyLaunch);
-          });
+          function proxyLaunch() {
+            Page.stopWork();
+            _this.launchPhenotype(demoSetIds);
+          }
+          wait(demoSetIds, 7, proxyLaunch);
         });
       });
 

@@ -67,6 +67,10 @@ public class SurvivalLogRank {
     log.debug("TreeMap Size: {}", dataMap.size());
   }
 
+  /**
+   * Runs the log rank test and returns an object containing the computed info
+   * @return Returns {ChiSquared, Degrees of Freedom, P-Value}
+   */
   public SurvivalStats runLogRankTest() {
     int[] alive = new int[numSets];
     arraycopy(setTotals, 0, alive, 0, numSets);
@@ -98,6 +102,10 @@ public class SurvivalLogRank {
     return new SurvivalStats(chiSquared, degreesFreedom, pValue);
   }
 
+  /**
+   * Constructs a map of time -> ([died columns], [censored columns])
+   * @param results intervals of the kaplan meier survival plot.
+   */
   private void constructMap(List<List<Interval>> results) {
     dataMap = new TreeMap<Integer, DataUnit>();
 

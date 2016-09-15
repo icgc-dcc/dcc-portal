@@ -204,7 +204,7 @@
             -->
 
             <div> 
-                <div><translate>Select 2 or 3 donor sets, then click on Run.</translate></div>
+                <div><translate>Select 2 donor sets, then click on Run.</translate></div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
@@ -234,7 +234,7 @@
                 </table>
                 <br>
                 <button class="t_button" 
-                    data-ng-disabled="NAC.selectedIds.length < 2 || NAC.selectedIds.length > 3  || NAC.isLaunchingAnalysis()"
+                    data-ng-disabled="NAC.selectedIds.length !== 2 || NAC.isLaunchingAnalysis()"
                     data-ng-click="NAC.launchPhenotype(NAC.selectedIds)"><translate>Run</translate></button>
             </div>
         </div>
