@@ -5209,8 +5209,8 @@ msgid ""
 msgstr ""
 "L'étude <a href=\"/pcawg\">Pancancer Analysis of Whole Genome</a> (PCAWG) "
 "est une collaboration internationale visant à identifier et caractériser des "
-"patrons communs de mutations dans plus de 2800 génomes entiers séquencés par "
-"l’ICGC."
+"modèles communs de mutations dans plus de 2 800 génomes entiers séquencés "
+"par l’ICGC."
 
 #: app/scripts/static/views/team.html:96
 msgid "The <a href=\"http://iobio.io/\" target=\"_blank\">iobio Team</a>"
@@ -5360,8 +5360,8 @@ msgid ""
 "           the International Cancer Genome Consortium."
 msgstr ""
 "L'étude Pancancer Analysis of Whole Genome (PCAWG) est une collaboration "
-"internationale visant à identifier et caractériser des patrons communs de "
-"mutations dans plus de 2800 génomes entiers séquencés par l’ICGC."
+"internationale visant à identifier et caractériser des modèles communs de "
+"mutations dans plus de 2 800 génomes entiers séquencés par l’ICGC."
 
 #: app/scripts/app/js/app.js:583 app/scripts/common/views/footer.html:24
 msgid "The Team"
