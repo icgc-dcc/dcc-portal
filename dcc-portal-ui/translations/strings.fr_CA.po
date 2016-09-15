@@ -1780,7 +1780,7 @@ msgstr ""
 
 #: app/scripts/releases/views/home.html:88
 msgid "Example Queries"
-msgstr ""
+msgstr "Exemples de recherche avancée"
 
 #: app/scripts/common/js/consequence.js:57
 msgid "Exon"
@@ -4031,7 +4031,7 @@ msgstr ""
 
 #: app/scripts/common/views/footer.html:32
 msgid "Publication Policy"
-msgstr "Politique de publication"
+msgstr ""
 
 #: app/scripts/pancancer/views/pancancer.html:108
 msgid "Publication and Embargo Policy"
@@ -5020,7 +5020,7 @@ msgstr ""
 
 #: app/scripts/common/views/footer.html:18
 msgid "Submission"
-msgstr "Soumission"
+msgstr ""
 
 #: app/scripts/donorlist/views/upload.html:133
 #: app/scripts/enrichment/views/enrichment.upload.html:61
@@ -5189,7 +5189,7 @@ msgstr ""
 
 #: app/scripts/common/views/footer.html:34
 msgid "Terms and Conditions"
-msgstr "Termes et Conditions"
+msgstr ""
 
 #: app/scripts/repositories/views/home.html:85
 msgid ""
@@ -5365,7 +5365,7 @@ msgstr ""
 
 #: app/scripts/app/js/app.js:583 app/scripts/common/views/footer.html:24
 msgid "The Team"
-msgstr "L'équipe"
+msgstr ""
 
 #: app/scripts/repository/views/repository.external.submit.html:36
 msgid "The available repositories below are restricted by your search filter:"
@@ -5567,7 +5567,7 @@ msgid ""
 "icgc.org/portal/access/\" target=\"_blank\"><i class=\"icon-external-link"
 "\"></i>instructions.</a>"
 msgstr ""
-"Pour accéder aux données protégées d’ICGC, veuillez lire ces <a href="
+"Pour accéder aux données controllées d’ICGC, veuillez lire ces <a href="
 "\"http://docs.icgc.org/portal/access/\" target=\"_blank\"><i class=\"icon-"
 "external-link\"></i>instructions.</a>"
 
@@ -5867,7 +5867,7 @@ msgstr "Tutoriel"
 
 #: app/scripts/common/views/footer.html:26
 msgid "Twitter"
-msgstr "Twitter"
+msgstr ""
 
 #: app/scripts/advanced/views/advanced.facets.genes.html:10
 #: app/scripts/advanced/views/advanced.facets.mutations.html:17
@@ -5948,7 +5948,7 @@ msgstr ""
 #: app/scripts/repositories/views/repos/repos.collaboratory.content.html:59
 #: app/scripts/repository/views/repository.external.submit.html:27
 msgid "User Guide"
-msgstr "Guide de l'utilisateur"
+msgstr ""
 
 #: app/scripts/repositories/views/home.html:32
 msgid ""
