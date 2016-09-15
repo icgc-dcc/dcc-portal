@@ -17,28 +17,22 @@
  */
 package org.dcc.portal.pql.es.visitor.aggs;
 
-import static org.dcc.portal.pql.es.utils.VisitorHelpers.checkOptional;
-import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
+import com.google.common.collect.ImmutableList;
+import lombok.NonNull;
+import lombok.val;
+import org.dcc.portal.pql.es.ast.ExpressionNode;
+import org.dcc.portal.pql.es.ast.RootNode;
+import org.dcc.portal.pql.es.ast.aggs.*;
+import org.dcc.portal.pql.es.utils.Nodes;
+import org.dcc.portal.pql.es.visitor.NodeVisitor;
+import org.dcc.portal.pql.meta.Type;
+import org.dcc.portal.pql.meta.TypeModel;
 
 import java.util.Collection;
 import java.util.Optional;
 
-import lombok.NonNull;
-import lombok.val;
-
-import org.dcc.portal.pql.es.ast.ExpressionNode;
-import org.dcc.portal.pql.es.ast.RootNode;
-import org.dcc.portal.pql.es.ast.aggs.AggregationsNode;
-import org.dcc.portal.pql.es.ast.aggs.FilterAggregationNode;
-import org.dcc.portal.pql.es.ast.aggs.MissingAggregationNode;
-import org.dcc.portal.pql.es.ast.aggs.NestedAggregationNode;
-import org.dcc.portal.pql.es.ast.aggs.ReverseNestedAggregationNode;
-import org.dcc.portal.pql.es.ast.aggs.TermsAggregationNode;
-import org.dcc.portal.pql.es.utils.Nodes;
-import org.dcc.portal.pql.es.visitor.NodeVisitor;
-import org.dcc.portal.pql.meta.TypeModel;
-
-import com.google.common.collect.ImmutableList;
+import static org.dcc.portal.pql.es.utils.VisitorHelpers.checkOptional;
+import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 
 public class NestedAggregationVisitor extends NodeVisitor<ExpressionNode, TypeModel> {
 
@@ -47,13 +41,18 @@ public class NestedAggregationVisitor extends NodeVisitor<ExpressionNode, TypeMo
       "ssm_occurrence.observation.platform",
       "ssm_occurrence.observation.verification_status",
       "transcript.functional_impact_prediction_summary",
-      "ssm_occurrence.observation.sequencing_strategy");
+      "ssm_occurrence.observation.sequencing_strategy",
+      "file_copies.file_format",
+      "donors.project_code",
+      "donors.primary_site",
+      "donors.specimen_type",
+      "donors.study");
 
   @Override
   public ExpressionNode visitRoot(@NonNull RootNode node, @NonNull Optional<TypeModel> context) {
     checkOptional(context);
     val indexType = context.get().getType();
-    if (indexType != MUTATION_CENTRIC) {
+    if (indexType != MUTATION_CENTRIC && indexType != Type.FILE) {
       return node;
     }
 
