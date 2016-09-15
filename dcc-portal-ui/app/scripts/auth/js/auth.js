@@ -154,6 +154,13 @@
       $scope.params.cudPassword = null;
       $scope.params.showCollaboratoryToken = PortalFeature.get('AUTH_TOKEN');
 
+      $scope.language = 'en_CA';
+
+      $scope.changeLanguage = function (language){
+        $scope.language = language;
+        gettextCatalog.setCurrentLanguage(language);
+      }
+
       function shouldRefreshLocation() {
         var shouldRefresh = false,
             urlPath = $location.path().toLowerCase();
