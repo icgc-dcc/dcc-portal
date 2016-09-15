@@ -102,7 +102,7 @@
   var module = angular.module('icgc.genes.controllers', ['icgc.genes.models']);
 
   module.controller('GeneCtrl', function ($scope, HighchartsService, Page, Projects, Mutations,
-    LocationService, Donors, Genes, GMService, Restangular, ExternalLinks, gene) {
+    LocationService, Donors, Genes, GMService, Restangular, ExternalLinks, gene, $filter) {
 
     var _ctrl = this;
     Page.setTitle(gene.id);
@@ -202,9 +202,10 @@
             yValue: 'uiAffectedDonorPercentage'
           });
           _ctrl.totalDonors = projectDonors.Total;
+        }).then(function(){
+           _ctrl.gene.projects = projects;
+           _ctrl.gene.uiProjects = getUiProjectsJSON(projects);
         });
-
-        _ctrl.gene.projects = projects;
       });
 
       var params = {
@@ -217,7 +218,6 @@
         _ctrl.mutationFacets = d.facets;
       });
     }
-
 
     if (_ctrl.gene.hasOwnProperty('transcripts')) {
       var geneTranscriptPromie = Genes.one(_ctrl.gene.id).handler.one('affected-transcripts').get({});
@@ -241,6 +241,24 @@
       });
     }
 
+    // Creating a new Object for table filters
+    function getUiProjectsJSON(projects){
+      return projects.hits.map(function(project){
+        return _.extend({},{
+          uiId: project.id,
+          uiName: project.name,
+          uiFilteredDonorCount: $filter('number')(project.filteredDonorCount),
+          uiPrimarySite: project.primarySite,
+          uiTumourType: project.tumourType,
+          uiTumourSubtype: project.tumourSubtype,
+          uiAffectedDonorPercentage: $filter('number')(project.uiAffectedDonorPercentage*100, 2),
+          uiAdvQuery: project.advQuery,
+          uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
+          uiMutationCount: $filter('number')(project.mutationCount)
+        });
+      });
+    }
+    
     $scope.$on('$locationChangeSuccess', function (event, dest) {
       if (dest.indexOf('genes') !== -1) {
         refresh();
@@ -324,7 +342,8 @@
       refresh();
     });
 
-  module.controller ('GeneCompoundsCtrl', function ($stateParams, CompoundsService, RouteInfoService) {
+  module.controller ('GeneCompoundsCtrl', function ($stateParams, CompoundsService, 
+    RouteInfoService, $filter) {
     var geneId = $stateParams.id;
     var _this = this;
 
@@ -343,10 +362,25 @@
       var compounds = data.plain();
 
       _this.compounds = compounds;
+      _this.uiCompounds = getUiCompoundsJSON(_this.compounds);
 
     }, function (error) {
       console.log ('Error getting compounds related to the geneId', error);
     });
+
+    function getUiCompoundsJSON(compounds){
+      return compounds.map(function(compound){
+        return _.extend({},{
+          uiZincId: compound.zincId,
+          uiName: compound.name,
+          uiFullName: compound.name + ' (' + compound.zincId + ')',
+          uiDescription: _this.concatAtcDescriptions(compound),
+          uiDrugClass: $filter('formatCompoundClass')(compound.drugClass),
+          uiCancerTrials: $filter('number')(compound.cancerTrialCount)
+        });
+      });
+    }
+
   });
 
 })();

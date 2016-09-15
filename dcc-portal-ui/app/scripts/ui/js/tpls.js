@@ -33,10 +33,10 @@ angular.module('template/lists', []).run(function ($templateCache, gettextCatalo
   $templateCache.put('template/mutationTranscriptList.html',
     '<a target="_blank" ' +
     'data-ng-href="http://feb2014.archive.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t={{item.id}}">' +
-    '<i class="icon-external-link"></i>{{item.name}}</a>');
+    '<i class="icon-external-link"></i><span data-ng-bind-html="item.name | highlight: highlightFilter"></span></a>');
 
 
-  $templateCache.put('template/compoundList.html', '<span data-ng-bind="item.name"></span>');
+  $templateCache.put('template/compoundList.html', '<span data-ng-bind-html="item.name | highlight: highlightFilter"></span>');
   // Display a list of gene set annotations
   // { name: xyz, id: xyz, qualifiers:[ xyz, xyz] }
   $templateCache.put('template/geneGeneSetList.html',

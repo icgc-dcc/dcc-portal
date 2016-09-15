@@ -415,6 +415,8 @@
     refresh();
 
     this.fileInfo = fileInfo;
+    this.uiDonorInfo = getUiDonorInfoJSON(fileInfo.donors);
+    console.log(this.uiDonorInfo);
     this.stringOrDefault = stringOrDefault;
     this.isEmptyString = isEmptyString;
     this.defaultString = defaultString;
@@ -478,9 +480,9 @@
     };
 
     // Public functions
-    this.projectName = function (projectCode) {
+    function projectName (projectCode) {
       return _.get (projectMap, projectCode, '');
-    };
+    }
 
     this.buildUrl = function (baseUrl, dataPath, entityId) {
       // Removes any opening and closing slash in all parts then concatenates.
@@ -542,11 +544,11 @@
       ExternalRepoService.downloadSelected ([fileId], [repo]);
     };
 
-    this.noNullConcat = function (values) {
+    function noNullConcat (values) {
       var flattened = _.flatten(values);
       var result = isEmptyArray (flattened) ? '' : _.filter (flattened, _.negate (isEmptyString)).join (commaAndSpace);
       return stringOrDefault (result);
-    };
+    }
 
     this.shouldShowMetaData = function (repoType) {
       /* JJ: Quality is too low: || isEGA (repoType) */
@@ -569,6 +571,30 @@
        return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
          _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
     };
+
+    function getUiDonorInfoJSON(donors){
+      return donors.map(function(donor){
+        return _.extend({}, {
+          uiProjectCode: donor.projectCode,
+          uiStringProjectCode: stringOrDefault(donor.projectCode),
+          uiProjectName: projectName(donor.projectCode),
+          uiPrimarySite: stringOrDefault(donor.primarySite),
+          uiStudy: donor.study,
+          uiDonorId: donor.donorId,
+          uiStringDonorId: stringOrDefault(donor.donorId),
+          uiSubmitterId: noNullConcat
+            ([donor.otherIdentifiers.tcgaParticipantBarcode, donor.submittedDonorId]),
+          uiSpecimentId: noNullConcat(donor.specimenId),
+          uiSpecimentSubmitterId: noNullConcat
+            ([donor.otherIdentifiers.tcgaSampleBarcode, donor.submittedSpecimenId]),
+          uiSpecimenType: noNullConcat(donor.specimenType),
+          uiSampleId: noNullConcat(donor.sampleId),
+          uiSampleSubmitterId: noNullConcat
+            ([donor.otherIdentifiers.tcgaAliquotBarcode, donor.submittedSampleId]),
+          uiMatchedSampleId: stringOrDefault(donor.matchedControlSampleId)
+        });
+      });
+    }
 
   });
 

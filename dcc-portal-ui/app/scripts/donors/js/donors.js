@@ -238,11 +238,12 @@
     refresh();
   });
 
-  module.controller('DonorSpecimenCtrl', function (Donors, PCAWG, $stateParams) {
+  module.controller('DonorSpecimenCtrl', function (Donors, PCAWG, $stateParams, $filter) {
     var _ctrl = this,
         donorId = $stateParams.id || null;
 
     _ctrl.PCAWG = PCAWG;
+    _ctrl.uiSpecimenSamples = [];
 
     // Defaults for client side pagination 
     _ctrl.currentSpecimenPage = 1;
@@ -266,8 +267,24 @@
             return s.id === _ctrl.active;
           });
         }
+      }).then(function(){
+        _ctrl.uiSpecimenSamples = getUiSpecimenJSON(_ctrl.specimen.samples);
       });
     };
+
+    function getUiSpecimenJSON(samples){
+      return samples.map(function(sample){
+        return _.extend({}, {
+          uiId: sample.id,
+          uiAnalyzedId: sample.analyzedId,
+          uiStudy: sample.study,
+          uiAnalyzedInterval: sample.analyzedInterval,
+          uiAnalyzedIntervalFiltered: $filter('numberPT')(sample.analyzedInterval),
+          uiAvailableRawSequenceData: sample.availableRawSequenceData,
+          uiUniqueRawSequenceData: $filter('unique')(sample.availableRawSequenceData)
+        });
+      });
+    }
 
     _ctrl.setActive();
   });

@@ -274,65 +274,68 @@
 
     <table
       class="table table-info fixed-width"
-      ng-repeat="donorInfo in (info.donors |
+      ng-repeat="donorInfo in (fileCtrlr.uiDonorInfo |
         filter: fileCtrlr.tableFilter.donors |
         limitTo: fileCtrlr.defaultDonorsRowLimit : ((fileCtrlr.currentDonorsPage-1) * fileCtrlr.defaultDonorsRowLimit))"
     >
       <tr>
         <th><translate>Project ID</translate></th>
-        <td ng-init="projCode = donorInfo.projectCode">
-            <a href="/projects/{{ projCode }}" tooltip="{{:: fileCtrlr.projectName (projCode) }}"
-              ng-bind="fileCtrlr.stringOrDefault (projCode)" />
+        <td>
+            <a href="/projects/{{ donorInfo.uiProjectCode }}" tooltip="{{:: donorInfo.uiProjectName }}"
+              ng-bind="donorInfo.uiStringProjectCode" />
         </td>
       </tr>
       <tr>
         <th><translate>Primary Site</translate></th>
-        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.primarySite)" />
+        <td ng-bind-html="donorInfo.uiPrimarySite | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr>
         <th><translate>Donor in Study</translate></th>
         <td>
-          <study-badge study="{{ donorInfo.study }}" text="None">
+          <study-badge study="{{ donorInfo.uiStudy }}" 
+            text="None"
+            data-highlight-filter="fileCtrlr.tableFilter.donors">
         </td>
       </tr>
       <tr>
         <th><translate>Donor ID</translate></th>
-        <td ng-init="donorId = donorInfo.donorId">
-            <a href="/donors/{{ donorId }}" ng-bind="fileCtrlr.stringOrDefault (donorId)" />
+        <td>
+            <a href="/donors/{{ donorInfo.uiDonorId }}" 
+              ng-bind-html="donorInfo.uiStringDonorId | highlight: fileCtrlr.tableFilter.donors" />
         </td>
       </tr>
       <tr>
         <th><translate>Donor Submitter IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaParticipantBarcode, donorInfo.submittedDonorId])" />
+        <td ng-bind-html="donorInfo.uiSubmitterId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Specimen IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat (donorInfo.specimenId)" />
+        <td ng-bind-html="donorInfo.uiSpecimentId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Specimen Submitter IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaSampleBarcode, donorInfo.submittedSpecimenId])" />
+        <td ng-bind-html="donorInfo.uiSpecimentSubmitterId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Specimen Types</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat (donorInfo.specimenType)" />
+        <td ng-bind-html="donorInfo.uiSpecimenType | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Sample IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat (donorInfo.sampleId)" />
+        <td ng-bind-html="donorInfo.uiSampleId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Sample Submitter IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaAliquotBarcode, donorInfo.submittedSampleId])" />
+        <td ng-bind-html="donorInfo.uiSampleSubmitterId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Matched Control Sample ID</translate></th>
-        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.matchedControlSampleId)" />
+        <td ng-bind-html="donorInfo.uiMatchedSampleId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
     </table>
 
     <pagination-client-side 
-      data-data="info.donors"
+      data-data="fileCtrlr.uiDonorInfo"
       data-filter="fileCtrlr.tableFilter.donors"
       data-row-limit="fileCtrlr.defaultDonorsRowLimit"
       data-row-sizes="fileCtrlr.rowSizes"

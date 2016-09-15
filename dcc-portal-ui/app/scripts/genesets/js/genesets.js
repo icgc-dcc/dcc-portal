@@ -47,7 +47,7 @@
   /*jshint -W072 */
   module.controller('GeneSetCtrl',
     function ($scope, $timeout, $state, LocationService, HighchartsService, Page, GeneSetHierarchy, GeneSetService,
-      GeneSetVerificationService, FiltersUtil, ExternalLinks, geneSet, PathwaysConstants, PathwayDataService) {
+      GeneSetVerificationService, FiltersUtil, ExternalLinks, geneSet, PathwaysConstants, PathwayDataService, $filter) {
 
 
       var _ctrl = this, 
@@ -129,6 +129,8 @@
                 donor: {projectId:{is:[proj.id]}, availableDataTypes:{is:['ssm']}}
               });
             });
+          }).then(function(){
+            _ctrl.geneSet.uiProjects = getUiProjectsJSON(projects.hits);
           });
         });
 
@@ -206,11 +208,37 @@
         // Assign projects to controller so it can be rendered in the view
         geneSetProjectPromise.then(function(projects) {
           _ctrl.geneSet.projects = projects.hits || [];
+        }).then(function(){
+          _ctrl.geneSet.uiProjects = getUiProjectsJSON(_ctrl.geneSet.projects);
         });
 
         GeneSetService.getMutationImpactFacet(mergedGeneSetFilter).then(function(d) {
           _ctrl.mutationFacets = d.facets;
         });   
+      }
+
+      function getUiProjectsJSON(projects){
+        return projects.map(function(project){
+          return _.extend({}, {
+            uiId: project.id,
+            uiName: project.name,
+            uiPrimarySite: project.primarySite,
+            uiTumourType: project.tumourType,
+            uiTumourSubtype: project.tumourSubtype,
+            uiAffectedDonorPercentage: $filter('number')
+              (project.uiAffectedDonorPercentage*100, 2),
+            uiAdvQuery: project.advQuery,
+            uiAffectedDonorCount: $filter('number')(project.affectedDonorCount),
+            uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
+            uiMutationCount: $filter('number')(project.mutationCount),
+            uiGeneCount: $filter('number')(project.geneCount),
+            uiGeneSetCount: _ctrl.geneSet.geneCount,
+            uiQueryType: _ctrl.geneSet.queryType,
+            uiGeneSetId: _ctrl.geneSet.id,
+            uiAffectedGenePercentage: $filter('number')
+              (project.uiAffectedGenePercentage*100, 2)
+          });
+        });
       }
 
       $scope.$on('$locationChangeSuccess', function (event, dest) {

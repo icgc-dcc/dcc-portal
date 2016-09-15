@@ -256,49 +256,49 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="project in (GeneSetCtrl.geneSet.projects |
+            <tr data-ng-repeat="project in (GeneSetCtrl.geneSet.uiProjects |
                 filter: GeneSetCtrl.tableFilter.projects | 
-                orderBy:'uiAffectedDonorPercentage':true | 
-                limitTo: GeneSetCtrl.defaultCancerRowLimit : ((GeneSetCtrl.currentCancerPage-1) * GeneSetCtrl.defaultCancerRowLimit)) track by project.id">
-                <td><a data-tooltip="{{ project.name }}" data-ng-href="/projects/{{ project.id }}">
-                    {{ project.id }}
+                orderBy:'uiAffectedDonorPercentage/100':true | 
+                limitTo: GeneSetCtrl.defaultCancerRowLimit : ((GeneSetCtrl.currentCancerPage-1) * GeneSetCtrl.defaultCancerRowLimit)) track by project.uiId">
+                <td><a data-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">
+                    <span data-ng-bind-html="project.uiId | highlight: GeneSetCtrl.tableFilter.projects"></span>
                 </a></td>
-                <td>{{ project.primarySite }}</td>
-                <td>{{ project.tumourType }}</td>
-                <td>{{ project.tumourSubtype }}</td>
+                <td><span data-ng-bind-html="project.uiPrimarySite | highlight: GeneSetCtrl.tableFilter.projects"></span></td>
+                <td><span data-ng-bind-html="project.uiTumourType | highlight: GeneSetCtrl.tableFilter.projects"></span></td>
+                <td><span data-ng-bind-html="project.uiTumourSubtype | highlight: GeneSetCtrl.tableFilter.projects"></span></td>
                 <td class="text-right" style="position: relative; display: block">
-                    <span data-ng-style="{width:project.uiAffectedDonorPercentage*100+'%'}"
+                    <span data-ng-style="{width:project.uiAffectedDonorPercentage+'%'}"
                           class="t_facets__facet__terms__active__term__bar"></span>
                     <span style="position: relative">
-                    <a data-ng-href='/search?filters={{project.advQuery}}'>
-                        {{ project.affectedDonorCount | number }}
+                    <a data-ng-href='/search?filters={{project.uiAdvQuery}}'>
+                        <span data-ng-bind-html="project.uiAffectedDonorCount | highlight: GeneSetCtrl.tableFilter.projects"></span>
                     </a>
                     /
-                    <a data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{ project.id }}"]},"availableDataTypes":{"is":["ssm"]}}}'>
-                        {{ project.ssmTestedDonorCount | number }}
+                    <a data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{ project.uiId }}"]},"availableDataTypes":{"is":["ssm"]}}}'>
+                        <span data-ng-bind-html="project.uiSSMTestedDonorCount | highlight: GeneSetCtrl.tableFilter.projects"></span>
                     </a>
-                    <em>({{ project.uiAffectedDonorPercentage*100 | number:2 }}%)</em>
+                    <em data-ng-bind-html="'('+project.uiAffectedDonorPercentage + '%)' | highlight: GeneSetCtrl.tableFilter.projects"></em>
                     </span>
                 </td>
                 <td class="text-right">
-                    <span data-ng-if="project.mutationCount==null"><i class="icon-spinner icon-spin"></i></span>
-                    <span data-ng-if="project.mutationCount === 0">--</span>
-                    <a data-ng-if="project.mutationCount > 0"
-                       data-ng-href='/search/m?filters={{project.advQuery}}'>
-                        {{ project.mutationCount | number }}
+                    <span data-ng-if="project.uiMutationCount==null"><i class="icon-spinner icon-spin"></i></span>
+                    <span data-ng-if="project.uiMutationCount === '0'">--</span>
+                    <a data-ng-if="project.uiMutationCount > '0'"
+                       data-ng-href='/search/m?filters={{project.uiAdvQuery}}'
+                       data-ng-bind-html="project.uiMutationCount | highlight: GeneSetCtrl.tableFilter.projects">                        
                     </a>
                 </td>
                 <td class="text-right">
-                    <span data-ng-if="project.geneCount==null"><i class="icon-spinner icon-spin"></i></span>
-                    <span data-ng-if="project.geneCount === 0">--</span>
-                    <a data-ng-if="project.geneCount > 0"
-                       data-ng-href='/search/g?filters={{project.advQuery}}'>
-                        {{ project.geneCount | number }}
+                    <span data-ng-if="project.uiGeneCount==null"><i class="icon-spinner icon-spin"></i></span>
+                    <span data-ng-if="project.uiGeneCount ==='0'">--</span>
+                    <a data-ng-if="project.uiGeneCount > '0'"
+                       data-ng-href='/search/g?filters={{project.uiAdvQuery}}'
+                       data-ng-bind-html="project.uiGeneCount | highlight: GeneSetCtrl.tableFilter.projects">
                     </a> /
-                    <a data-ng-href='/search/g?filters={"gene":{"{{GeneSetCtrl.geneSet.queryType}}":{"is":["{{GeneSetCtrl.geneSet.id}}"]}}}'>
-                        {{GeneSetCtrl.geneSet.geneCount}}
+                    <a data-ng-href='/search/g?filters={"gene":{"{{project.uiQueryType}}":{"is":["{{project.uiGeneSetId}}"]}}}'
+                        data-ng-bind-html="project.uiGeneSetCount | highlight: GeneSetCtrl.tableFilter.projects">
                     </a>
-                    <em>({{ project.uiAffectedGenePercentage*100 | number:2 }}%)</em>
+                    <em data-ng-bind-html="'(' + project.uiAffectedGenePercentage + '%)' | highlight: GeneSetCtrl.tableFilter.projects"></em>
                 </td>
             </tr>
             </tbody>

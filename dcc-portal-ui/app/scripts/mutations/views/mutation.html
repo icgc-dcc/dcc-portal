@@ -83,25 +83,32 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="consequence in (MutationCtrl.mutation.consequences |
+            <tr data-ng-repeat="consequence in (MutationCtrl.uiConsequences |
                 filter: MutationCtrl.tableFilter.consequences |
                 limitTo: MutationCtrl.defaultConsequencesRowLimit : ((MutationCtrl.currentProjectsPage-1) * MutationCtrl.defaultConsequencesRowLimit))">
                 <td>
-                    <a data-ng-href="/genes/{{consequence.geneAffectedId}}">{{ consequence.geneAffectedSymbol }}</a>
+                    <a data-ng-href="/genes/{{consequence.uiGeneAffectedId}}"
+                        data-ng-bind-html="consequence.uiAffectedSymbol | highlight: MutationCtrl.tableFilter.consequences"></a>
                 </td>
                 <td>
-                    <span class="t_impact_{{consequence.functionalImpact | lowercase }}">{{consequence.aaMutation}}</span>
+                    <span class="t_impact_{{consequence.uiFunctionalImpact | lowercase }}"
+                        data-ng-bind-html="consequence.uiAAMutation | highlight: MutationCtrl.tableFilter.consequences"></span>
                 </td>
-                <td><abbr data-tooltip="{{'SO term: [[ consequenceType ]]' | translate | subDelimiters:{consequenceType: consequence.type} }}">{{consequence.type | trans}}</abbr>
-                </td>
-                <td>{{consequence.cdsMutation}}</td>
-                <td>
-                    <i data-ng-class="{'icon-plus':consequence.geneStrand==1,'icon-minus':consequence.geneStrand==-1}"></i>
-                    <span data-ng-if="!consequence.geneStrand">N/A</span>
+                <td><abbr data-tooltip="{{'SO term: [[ consequenceType ]]' | translate | subDelimiters:{consequenceType: consequence.uiType} }}">
+                    <span data-ng-bind-html="consequence.uiTypeFiltered | highlight: MutationCtrl.tableFilter.consequences"></span></abbr>
                 </td>
                 <td>
-                    <hide-list data-ng-if="consequence.geneAffectedId" data-items="consequence.transcriptsAffected" data-limit="1"
-                        data-template-name="template/mutationTranscriptList.html">
+                    <span data-ng-bind-html="consequence.uiCDSMutation | highlight: MutationCtrl.tableFilter.consequences"></span>
+                </td>
+                <td>
+                    <i data-ng-class="{'icon-plus':consequence.uiGeneStrand==1,'icon-minus':consequence.uiGeneStrand==-1}"></i>
+                    <span data-ng-if="!consequence.uiGeneStrand">N/A</span>
+                </td>
+                <td>
+                    <hide-list data-ng-if="consequence.uiGeneAffectedId" 
+                        data-items="consequence.uiTranscriptsAffected" data-limit="1"
+                        data-template-name="template/mutationTranscriptList.html"
+                        data-highlight-filter="MutationCtrl.tableFilter.consequences">
                     </hide-list>
                 </td>
             </tr>
@@ -196,27 +203,37 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="project in (MutationCtrl.projects | 
+            <tr data-ng-repeat="project in (MutationCtrl.uiProjects | 
                 filter: MutationCtrl.tableFilter.projects |
-                orderBy:'-percentAffected' |
-                limitTo: MutationCtrl.defaultProjectsRowLimit : ((MutationCtrl.currentProjectsPage-1) * MutationCtrl.defaultProjectsRowLimit)) track by project.id">
-                <td><a data-tooltip="{{ project.name }}" data-ng-href="/projects/{{project.id}}">
-                    {{project.id}}
+                orderBy:'uiPercentAffected/100':true |
+                limitTo: MutationCtrl.defaultProjectsRowLimit : ((MutationCtrl.currentProjectsPage-1) * MutationCtrl.defaultProjectsRowLimit)) track by project.uiId">
+                <td><a data-tooltip="{{ project.uiName }}" 
+                    data-ng-href="/projects/{{project.uiId}}"
+                    data-ng-bind-html="project.uiId | highlight: MutationCtrl.tableFilter.projects">
                 </a></td>
-                <td>{{project.primarySite}}</td>
-                <td>{{project.tumourType}}</td>
-                <td>{{project.tumourSubtype}}</td>
+                <td>
+                    <span data-ng-bind-html="project.uiPrimarySite | highlight: MutationCtrl.tableFilter.projects"></span>
+                </td>
+                <td>
+                    <span data-ng-bind-html="project.uiTumourType | highlight: MutationCtrl.tableFilter.projects"></span>
+                </td>
+                <td>
+                    <span data-ng-bind-html="project.uiTumourSubtype | highlight: MutationCtrl.tableFilter.projects"></span>
+                </td>
                 <td class="text-right" style="display:block; position: relative">
-                    <span data-ng-style="{width:project.percentAffected * 100+'%'}"
+                    <span data-ng-style="{width:project.uiPercentAffected+'%'}"
                           class="t_facets__facet__terms__active__term__bar"></span>
                     <span style="position: relative">
-                    <a
-                            data-ng-href='/search?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}},"donor":{"projectId":{"is":["{{project.id}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
-                    {{project.affectedDonorCount | number}}</a>
+                    <a 
+                        data-ng-href='/search?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}},"donor":{"projectId":{"is":["{{project.uiId}}"]},"availableDataTypes":{"is":["ssm"]}}}'
+                        data-ng-bind-html="project.uiAffectedDonorCount | highlight: MutationCtrl.tableFilter.projects">
+                    </a>
                     /
-                        <a data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{project.id}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
-                        {{project.ssmTestedDonorCount | number}}</a>
-                    <em>({{project.percentAffected*100 | number:2}}%)</em>
+                    <a 
+                        data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{project.id}}"]},"availableDataTypes":{"is":["ssm"]}}}'
+                        data-ng-bind-html="project.uiSSMTestedDonorCount | highlight: MutationCtrl.tableFilter.projects">
+                    </a>
+                    <em data-ng-bind-html="'('+project.uiPercentAffected+'%)' | highlight: MutationCtrl.tableFilter.projects"></em>
                         </span>
                 </td>
             </tr>
@@ -224,7 +241,7 @@
         </table>
 
         <pagination-client-side 
-            data-data="MutationCtrl.projects"
+            data-data="MutationCtrl.uiProjects"
             data-filter="MutationCtrl.tableFilter.projects"
             data-row-limit="MutationCtrl.defaultProjectsRowLimit"
             data-row-sizes="MutationCtrl.rowSizes"
