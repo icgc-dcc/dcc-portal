@@ -6100,7 +6100,7 @@ msgstr ""
 
 #: app/scripts/releases/js/releases.js:44
 msgid "Welcome"
-msgstr ""
+msgstr "Bienvenue"
 
 #: app/scripts/static/views/faq.html:10
 msgid "What data types are available for bulk download in the DCC Portal?"
