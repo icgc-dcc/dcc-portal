@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.analysis;
 
 
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.assertj.core.data.Offset;
 import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.Interval;
@@ -26,6 +27,7 @@ import org.junit.Test;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class SurvivalLogRankTest {
 
   /**
@@ -64,6 +66,7 @@ public class SurvivalLogRankTest {
     val logRankTest = new SurvivalLogRank(results);
     val stats = logRankTest.runLogRankTest();
 
+    log.debug("ChiSquared: {}", stats.getChiSquared());
     assertThat(stats.getChiSquared()).isCloseTo(15.23, Offset.offset(0.01));
     assertThat(stats.getPValue()).isLessThan(0.001);
   }

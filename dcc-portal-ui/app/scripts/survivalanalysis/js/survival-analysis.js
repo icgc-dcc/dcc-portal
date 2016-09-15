@@ -372,12 +372,15 @@
         };
       });
     };
-
+    var overallStats = isNaN(responses.survivalData.overallStats.pvalue) ? 
+      undefined : responses.survivalData.overallStats;
+    var diseaseFreeStats = isNaN(responses.survivalData.diseaseFreeStats.pvalue) ? 
+      undefined : responses.survivalData.diseaseFreeStats;
     return {
       overall: processGraphData('overall'),
-      overallStats: responses.survivalData.overallStats,
+      overallStats: overallStats, 
       diseaseFree: processGraphData('diseaseFree'),
-      diseaseFreeStats: responses.survivalData.diseaseFreeStats,
+      diseaseFreeStats: diseaseFreeStats
     };
   }
 
