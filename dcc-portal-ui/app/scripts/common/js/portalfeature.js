@@ -89,7 +89,7 @@
 
        var _enabledFeatures = {
           AUTH_TOKEN: true,
-          ICGC_GET: false
+          ICGC_GET: true,
        };
 
       this.hasFeature = function(featureID) {

@@ -77,7 +77,7 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
 
       // If we are linked to the page and we have a hash, wait for render to finish and scroll to position. 
       $timeout(function () {
-        if (typeof current !== 'undefined' && current!== null && current !== '#summary') {
+        if (current && current !== '#summary') {
           jQuery('body,html').stop(true, true);
           var offset = jQuery(current).offset();
           var to = offset.top - 40;
@@ -656,5 +656,8 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
         size: 10000, //TODO: Use paging to retrieve drugs instead of hard coding size limit
         filters: {gene:{id:{is:['ES:' + entitySetId]}}}
       });
+    };
+    _srv.getCompoundByZincId = function (zincId) {
+      return Restangular.one('drugs').one(zincId).get();
     };
   });

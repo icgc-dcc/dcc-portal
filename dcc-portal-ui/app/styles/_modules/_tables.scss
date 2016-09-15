@@ -96,6 +96,10 @@ $table-th-fixed-width: 200px;
     td {
       white-space: normal;
       word-break:break-all;
+
+      &.text-wrap {
+        word-break: normal;
+      }
     }
 
     &.table-condensed{

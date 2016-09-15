@@ -101,7 +101,7 @@
                 --
                 </td>
                 <td data-ng-if="GeneSetCtrl.geneSet.description !== '???'">
-                    <hide-text text="{{ GeneSetCtrl.geneSet.description}}"></hide-text>
+                    <hide-text text="{{ GeneSetCtrl.geneSet.description}}" data-class="table-text-wrap"></hide-text>
                 </td>
             </tr>
             <tr data-ng-if="GeneSetCtrl.geneSet.type==='go_term'">
@@ -305,7 +305,7 @@
         </table>
 
         <pagination-client-side 
-            data-data="GeneSetCtrl.geneSet.projects"
+            data-data="GeneSetCtrl.geneSet.uiProjects"
             data-filter="GeneSetCtrl.tableFilter.projects"
             data-row-limit="GeneSetCtrl.defaultCancerRowLimit"
             data-row-sizes="GeneSetCtrl.rowSizes"

@@ -290,13 +290,17 @@
       window.addEventListener('resize', update);
       update();
 
+      this.getStateStack = function () {
+        return stateStack;
+      };
+
       this.canUndo = function () {
         return stateStack.length > 1;
       };
 
       this.handleClickReset = function () {
         updateState(stateStack[0]);
-        stateStack = [];
+        stateStack = [stateStack[0]];
       };
 
       this.handleClickUndo = function () {

@@ -43,7 +43,7 @@
                 </tr>
                 <tr>
                     <th><translate>Donor Treatment Type Other</translate></th>
-                    <td>{{ DonorSpecimenCtrl.specimen.treatmentTypeOther }}</td>
+                    <td class="text-wrap">{{ DonorSpecimenCtrl.specimen.treatmentTypeOther }}</td>
                 </tr>
                 <tr>
                     <th><translate>Specimen Processing</translate></th>
@@ -51,7 +51,7 @@
                 </tr>
                 <tr>
                     <th><translate>Specimen Processing Other</translate></th>
-                    <td>{{ DonorSpecimenCtrl.specimen.processingOther }}</td>
+                    <td class="text-wrap">{{ DonorSpecimenCtrl.specimen.processingOther }}</td>
                 </tr>
                 <tr>
                     <th><translate>Specimen Storage</translate></th>
@@ -198,7 +198,7 @@
                 </tbody>
             </table>
 
-            <pagination-client-side data-data="DonorSpecimenCtrl.specimen.samples"
+            <pagination-client-side data-data="DonorSpecimenCtrl.uiSpecimenSamples"
                 data-filter="DonorSpecimenCtrl.tableFilter.specimenSamples"
                 data-row-limit="DonorSpecimenCtrl.defaultSpecimenRowLimit"
                 data-row-sizes="DonorSpecimenCtrl.rowSizes"

@@ -29,6 +29,8 @@ import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 import java.util.List;
 import java.util.Map;
 
+import lombok.val;
+
 import org.dcc.portal.pql.meta.field.ArrayFieldModel;
 import org.dcc.portal.pql.meta.field.FieldModel;
 import org.dcc.portal.pql.meta.field.ObjectFieldModel;
@@ -36,8 +38,6 @@ import org.dcc.portal.pql.meta.field.ObjectFieldModel;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
-import lombok.val;
 
 public class ObservationCentricTypeModel extends TypeModel {
 
@@ -120,6 +120,7 @@ public class ObservationCentricTypeModel extends TypeModel {
         identifiableString("_gene_id", "gene.id"),
         string("biotype", "gene.type"),
         arrayOfStrings("pathway", "gene.pathwayId"),
+        arrayOfStrings("drug", "gene.compoundId"),
         string("chromosome", "gene.chromosome"),
         long_("start", "gene.start"),
         long_("end", "gene.end"),
@@ -130,7 +131,8 @@ public class ObservationCentricTypeModel extends TypeModel {
             arrayOfStrings("molecular_function")),
         nestedArrayOfObjects("consequence", "consequences", object(
             string("consequence_type", "mutation.consequenceType"),
-            string("functional_impact_prediction_summary", "mutation.functionalImpact")))));
+            string("functional_impact_prediction_summary", "mutation.functionalImpact")))
+        ));
   }
 
   private static ObjectFieldModel defineProject() {

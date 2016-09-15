@@ -75,8 +75,8 @@ public class MutationCentricTypeModel extends TypeModel {
       // "functionalImpactNested",
       "mutation.location",
       "sequencingStrategy"
-  // "sequencingStrategyNested"
-  );
+      // "sequencingStrategyNested"
+      );
 
   public MutationCentricTypeModel() {
     super(defineFields(), defineInternalAliases(), PUBLIC_FIELDS, INCLUDE_FIELDS);
@@ -146,6 +146,7 @@ public class MutationCentricTypeModel extends TypeModel {
                 string("symbol", "gene.symbol"),
                 arrayOfStrings("pathway", "gene.pathwayId"),
                 arrayOfStrings("curated_set", "gene.curatedSetId"),
+                arrayOfStrings("drug", "gene.compoundId"),
                 object("go_term", "gene.GoTerm",
                     arrayOfStrings("biological_process"),
                     arrayOfStrings("cellular_component"),

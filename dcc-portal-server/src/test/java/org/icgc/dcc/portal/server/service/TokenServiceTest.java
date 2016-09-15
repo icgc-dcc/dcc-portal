@@ -28,11 +28,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.Set;
 
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes.AccessTokenScope;
+import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.security.oauth.UserScopesResponse;
-import org.icgc.dcc.portal.server.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -40,9 +43,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableSet;
-
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RunWith(MockitoJUnitRunner.class)
@@ -105,10 +105,12 @@ public class TokenServiceTest {
         .collect(toImmutableSet());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void userScopesTest_unrecognizedScope() {
     when(client.getUserScopes(USER_ID)).thenReturn(createUserScopesInternal(singleton("fake")));
-    tokenService.getUserScopes(createUser(USER_ID, TRUE));
+    val result = tokenService.getUserScopes(createUser(USER_ID, TRUE));
+    val resultScopes = convertScopes(result.getScopes());
+    assertThat(resultScopes).containsExactly("fake");
   }
 
   private static UserScopesResponse createUserScopesInternal(Set<String> scopes) {
