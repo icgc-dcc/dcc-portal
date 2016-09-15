@@ -94,7 +94,7 @@ msgstr "# Ensembles de gènes dans l'univers"
 
 #: app/scripts/enrichment/views/enrichment.result.html:33
 msgid "# Gene sets in overlap"
-msgstr ""
+msgstr "# Ensembles de gènes commun"
 
 #: app/scripts/advanced/views/advanced.donors.html:87
 #: app/scripts/enrichment/views/enrichment.result.html:111
@@ -113,7 +113,7 @@ msgstr "# Gènes dans l'univers"
 #: app/scripts/enrichment/views/enrichment.result.html:35
 #: app/scripts/pathwayviewer/views/pathways.html:57
 msgid "# Genes in overlap"
-msgstr ""
+msgstr "# Gènes commun"
 
 #: app/scripts/pathwayviewer/js/renderer-utils.js:237
 #: app/scripts/pathwayviewer/views/viewer.html:37
@@ -122,7 +122,7 @@ msgstr "# Mutations ICGC"
 
 #: app/scripts/enrichment/views/enrichment.result.html:36
 msgid "# Input genes"
-msgstr "# gènes intrants"
+msgstr "# gènes fournis"
 
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:162
 #: app/scripts/analysis/views/analysis.analysis.launcher.html:214
@@ -134,7 +134,7 @@ msgstr "# gènes intrants"
 #: app/scripts/sets/views/sets.result.html:31
 #: app/scripts/sets/views/sets.result.html:56
 msgid "# Items"
-msgstr "# Items"
+msgstr "# Éléments"
 
 #: app/scripts/advanced/views/advanced.donors.html:83
 #: app/scripts/advanced/views/advanced.genes.html:40
@@ -1261,7 +1261,7 @@ msgstr ""
 
 #: app/scripts/releases/views/home.html:38
 msgid "Data Release"
-msgstr "Version"
+msgstr "Version de données"
 
 #: app/scripts/common/js/services.js:211
 msgid "Data Repositories"
@@ -1497,7 +1497,7 @@ msgstr ""
 #: app/scripts/projects/views/projects.summary.html:18
 #: app/scripts/projects/views/projects.summary.html:6
 msgid "Donor Distribution"
-msgstr ""
+msgstr "Distribution des donneurs"
 
 #: app/scripts/pancancer/views/pancancer.html:9
 #: app/scripts/releases/views/home.html:41
@@ -1923,7 +1923,7 @@ msgstr ""
 
 #: app/scripts/releases/views/home.html:27
 msgid "Feedback is welcome."
-msgstr "Vos commentaires sont appréciés"
+msgstr "Vos commentaires sont appréciés."
 
 #: app/scripts/oncogrid/js/service.js:231
 msgid "Female"
@@ -2514,7 +2514,7 @@ msgstr ""
 #: app/scripts/releases/views/home.html:118
 msgid "ICGC data is now available on commercial and academic compute cloud."
 msgstr ""
-"Les données de ICGC sont maintenant disponibles sur des ressources "
+"Les données d’ICGC sont maintenant disponibles sur des ressources "
 "infonuagiques privées et académiques"
 
 #: app/scripts/repositories/js/repositories.js:103
@@ -3024,8 +3024,8 @@ msgid ""
 "Most frequently mutated genes by high impact mutations in stage III "
 "malignant lymphoma"
 msgstr ""
-"Gènes les plus fréquemment mutés par des mutations à impact élevés dans les "
-"lymphomes malins de stage III"
+"Gènes les plus fréquemment mutés par des mutations à impact élevé dans les "
+"lymphomes malins de stade III"
 
 #: app/scripts/beacon/views/beacon.html:40
 msgid "Must be less than Chromosome [[char]] 's length: [[length]]"
@@ -3443,6 +3443,8 @@ msgstr ""
 msgid ""
 "Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria"
 msgstr ""
+"Nombres de Mutations Somatiques Simples<br>Filtré par les critères de "
+"recherche actuel"
 
 #: app/scripts/projectmutationviewer/views/projectmutationviewer.html:3
 msgid "Number of Somatic Mutations in Donor's Exomes Across Cancer Projects"
@@ -3927,7 +3929,7 @@ msgstr ""
 #: app/scripts/repository/views/repository.external.html:195
 #: app/scripts/repository/views/repository.external.html:90
 msgid "Primary Site"
-msgstr ""
+msgstr "Siège primaire"
 
 #: app/scripts/donors/views/donor.html:227
 msgid "Prior Malignancy"
@@ -4135,7 +4137,7 @@ msgstr ""
 #: app/scripts/repositories/views/home.html:62
 #: app/scripts/repositories/views/home.html:88
 msgid "Read more..."
-msgstr ""
+msgstr "En savoir plus…"
 
 #: app/scripts/beacon/views/beacon.html:129
 msgid ""
@@ -4782,16 +4784,16 @@ msgstr ""
 
 #: app/scripts/common/js/datatype.js:30
 msgid "Simple Somatic Mutation"
-msgstr "Mutation somatique ponctuelle"
+msgstr "Mutation somatique simple"
 
 #: app/scripts/common/js/pcawg.js:32
 msgid "Simple Somatic Mutations"
-msgstr "Mutations somatiques ponctuelles"
+msgstr "Mutations somatiques simples"
 
 #: app/scripts/donors/views/donor.html:101
 #: app/scripts/projects/views/project.html:202
 msgid "Simple Somatic Mutations (SSM)"
-msgstr ""
+msgstr "Mutation Somatique Simple (MSS)"
 
 #: app/scripts/static/views/info.html:100
 msgid ""
@@ -4809,7 +4811,7 @@ msgstr ""
 
 #: app/scripts/releases/views/home.html:70
 msgid "Simple somatic mutations"
-msgstr ""
+msgstr "Mutations somatiques simples"
 
 #: app/scripts/common/js/codetable.js:126
 msgid "Single pass sequencing of cDNA templates"
@@ -4938,7 +4940,7 @@ msgstr ""
 #: app/scripts/genesets/views/geneset.html:600
 #: app/scripts/projects/views/project.html:642
 msgid "Stage"
-msgstr ""
+msgstr "Stade"
 
 #: app/scripts/compounds/views/compound.html:273
 #: app/scripts/compounds/views/compound.html:357
@@ -5239,7 +5241,7 @@ msgid ""
 msgstr ""
 "Le portail de données <a target=\"_blank\" href=\"http://icgc.org\"><i class="
 "\"icon-external-link\"></i>ICGC</a> permet de visualiser, rechercher et "
-"télécharger les données soumises périodiquement au Centre de Coordination "
+"télécharger les données soumises trimestriellement au Centre de Coordination "
 "des Données (CCD) par les projets membres du consortium."
 
 #: app/scripts/projects/views/project.html:168
@@ -5567,7 +5569,7 @@ msgid ""
 "icgc.org/portal/access/\" target=\"_blank\"><i class=\"icon-external-link"
 "\"></i>instructions.</a>"
 msgstr ""
-"Pour accéder aux données protégées de ICGC, veuillez lire ces <a href="
+"Pour accéder aux données protégées d’ICGC, veuillez lire ces <a href="
 "\"http://docs.icgc.org/portal/access/\" target=\"_blank\"><i class=\"icon-"
 "external-link\"></i>instructions.</a>"
 
@@ -5784,7 +5786,7 @@ msgstr ""
 #: app/scripts/genesets/views/geneset.html:670
 #: app/scripts/projects/views/project.html:712
 msgid "Tumor Stage at Diagnosis"
-msgstr ""
+msgstr "Stade de la Tumeur lors du Diagnostique"
 
 #: app/scripts/donors/views/donor.specimen.html:33
 msgid "Tumour Confirmed"
@@ -5811,7 +5813,7 @@ msgstr ""
 #: app/scripts/common/js/codetable.js:66
 #: app/scripts/donors/views/donor.specimen.html:93
 msgid "Tumour Stage"
-msgstr ""
+msgstr "Stade de la Tumeur"
 
 #: app/scripts/donors/views/donor.specimen.html:101
 msgid "Tumour Stage Supplemental"
@@ -5825,7 +5827,7 @@ msgstr ""
 #: app/scripts/genesets/views/geneset.html:600
 #: app/scripts/projects/views/project.html:642
 msgid "Tumour Stage at Diagnosis"
-msgstr ""
+msgstr "Stade de la Tumeur lors du Diagnostique"
 
 #: app/scripts/donors/views/donor.html:77 app/scripts/genes/views/gene.html:240
 #: app/scripts/genes/views/gene.html:289
@@ -6281,7 +6283,7 @@ msgstr ""
 #: app/scripts/pancancer/views/pancancer.html:10
 #: app/scripts/repositories/views/repos/repos.html:21
 msgid "[[projectCount]] projects and [[siteCount]] primary sites"
-msgstr ""
+msgstr "[[projectCount]] projets et [[siteCount]] sièges primaires"
 
 #. N Donors across N projects
 #: app/scripts/projects/js/projects.js:217
