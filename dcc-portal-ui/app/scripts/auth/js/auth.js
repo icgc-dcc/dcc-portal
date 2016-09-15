@@ -159,7 +159,7 @@
       $scope.changeLanguage = function (language){
         $scope.language = language;
         gettextCatalog.setCurrentLanguage(language);
-      }
+      };
 
       function shouldRefreshLocation() {
         var shouldRefresh = false,
