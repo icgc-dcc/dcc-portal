@@ -15,7 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function ($) {
+(function ($, OncoGrid) {
     'use strict';
 
     var module = angular.module('icgc.oncogrid.controllers', []);
@@ -113,4 +113,4 @@
         };
 
     });
-})(jQuery);
+})(jQuery, OncoGrid);

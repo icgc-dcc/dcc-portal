@@ -22,7 +22,7 @@
 
 })();
 
-(function ($, OncoGrid) {
+(function ($) {
   'use strict';
 
   var module = angular.module('icgc.oncogrid.directives', []);
@@ -315,8 +315,6 @@
           }
         });
 
-        console.log($scope.OncoCtrl, "****************************");
-
         $scope.fullScreenHandler = function () {
           if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
             setTimeout(function () {
@@ -353,4 +351,4 @@
     };
   });
 
-})(jQuery, OncoGrid);
+})(jQuery);
