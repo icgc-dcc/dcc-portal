@@ -45,7 +45,7 @@
         <ul>
             <li data-ng-repeat="item in predefinedGO"
                 data-ng-if="actives.indexOf(item.id) >= 0"
-                data-ng-click="removeTerm({'type':type, 'facetName': facetName, 'id':item.id})"
+                data-ng-click="removeTerm(item.id)"
                 class="t_facets__facet__terms__active__term__label {{activeClass}}"
                 data-ng-mouseover="toggleRemove=true"
                 data-ng-mouseleave="toggleRemove=false">
