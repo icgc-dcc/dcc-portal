@@ -2,6 +2,23 @@ ICGC DCC - Portal - Change Log
 ===
 
 Change log for the DCC Data Portal
+
+4.3.10
+--
+- Added ability to filter by compounds in Advanced Search
+- Added p-value calculations for Survival Analysis
+- Added ability to launch OncoGrid from Project page
+- Added ability in manifest dialog to include duplicates
+- Added support for `icgc-get` in Repository Browser
+- Changed Survival Analysis button to perform reset instead of undo
+- Fixed hidden close button in pathway viewer legend
+- Fixed text-wrapping issues
+- Fixed token manager to not error on unknown scopes
+
+4.3.9
+--
+- Fixed regression from Spring Boot upgrade: now ensures "_missing" count is present in response json, even when `null`
+
 4.3.8
 --
 - Upgraded to Spring Boot `1.4.0-RELEASE` and added custom `FailureAnalyzer`s for Elasticsearch, etc.

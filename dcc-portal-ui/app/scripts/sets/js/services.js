@@ -156,7 +156,7 @@
       var filters = {};
     	var type = 'file';
       filters[type] = {};
-      filters[type][Extensions.ENTITY] = {is: [set.id]};
+      filters[type] = {donorId: {is: [Extensions.ENTITY_PREFIX + set.id]}};
 
       return dataRepoUrl + '?filters=' + angular.toJson(filters);
     };

@@ -102,13 +102,11 @@
       return other.concat(fileDonor);
     }
 
-    function resolveActiveCompoundNamesAndGeneCount (activeCompoundIds) {
+    function resolveActiveCompoundNames(activeCompoundIds) {
       $scope.compoundIdToNameMap = {};
-      $scope.compoundIdToGeneCount = {};
       _.forEach(activeCompoundIds, function (compoundId) {
         CompoundsService.getCompoundByZincId(compoundId).then(function(compound) {
           $scope.compoundIdToNameMap[compoundId] = compound.name;
-          $scope.compoundIdToGeneCount[compoundId] = compound.genes.length;
         });
       });
     }
@@ -192,7 +190,7 @@
         }
       } else if ($scope.type === 'compound' && asContext) {
         activeIds = $scope.actives;
-        resolveActiveCompoundNamesAndGeneCount(activeIds);
+        resolveActiveCompoundNames(activeIds);
         
         if (filters.hasOwnProperty('gene') && filters.gene.hasOwnProperty('hasCompound')) {
           $scope.hasCompoundTypePredicate = true;
@@ -209,6 +207,20 @@
         Genes.handler.one('count').get({filters:compoundTypeFilters}).then(function (result) {
           $scope.allCompoundCounts = result || 0;
         });
+
+        if (activeIds && activeIds.length > 0) {
+          $scope.compoundIdCounts = {};
+          _.forEach(activeIds, function(activeId) {
+            var activeIdFilter = FilterService.filters();
+            delete activeIdFilter.gene.hasCompound;
+            delete activeIdFilter.gene.compoundId;
+            _.merge(activeIdFilter, {'gene':{'compoundId':{'is': [activeId]}}});
+
+            Genes.handler.one('count').get({filters:activeIdFilter}).then(function (result) {
+              $scope.compoundIdCounts[activeId] = result || 0; 
+            });
+          });
+        }
       } else if ($scope.type === 'curated_set' && asContext) {
         $scope.predefinedCurated = _.filter(Extensions.GENE_SET_ROOTS, function(set) {
           return set.type === 'curated_set';

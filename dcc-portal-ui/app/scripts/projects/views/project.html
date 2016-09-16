@@ -309,10 +309,12 @@
             </td>
         </tr>
     </table>
-    <span class="open-in"><translate>Open in</translate></span>
-    <a href="{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}">
-      <i class="icon-database"></i>{{:: ProjectCtrl.dataReleasesTitle }}
-    </a>
+    <div>
+        <span class="open-in"><translate>Open in</translate></span>
+        <a href="{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}">
+        <i class="icon-database"></i>{{:: ProjectCtrl.dataReleasesTitle }}
+        </a>
+    </div>
 </div>
 </section>
 <section id="genes"
@@ -331,6 +333,12 @@
         <h3>
             <translate>Most Frequently Mutated Genes</translate>
             <span data-open-in-list='/g?filters={{ProjectGeneCtrl.genes.advQuery}}'></span>
+            <br>
+            <span class="pull-right open-in">
+                <a href="#" data-ng-click="ProjectCtrl.openOncogrid()">
+                    <i class="icon-grid"></i><translate>OncoGrid</translate>
+                </a>
+            </span>
         </h3>
 
         <div class="clearfix">
@@ -345,7 +353,8 @@
                 Showing <strong>{{ProjectGeneCtrl.genes.hits.length | number}}</strong> of
                 <strong>{{ProjectGeneCtrl.genes.pagination.total | number}}</strong> genes
             </translate>
-            <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_genes"></span>
+            <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_genes">
+            </span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>

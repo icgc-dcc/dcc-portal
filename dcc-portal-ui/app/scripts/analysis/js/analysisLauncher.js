@@ -86,7 +86,7 @@
     };
 
     _this.validForOnco = function(set) {
-      return set.count <= 100;
+      return (set.type === 'gene' && set.count <= 100) || (set.type === 'donor' && set.count <= 3000);
     };
 
     _this.applyFilter = function(type) {
@@ -215,49 +215,37 @@
     }
 
     _this.demoPhenotype = function() {
-      var p1, p2, p3, type = 'donor';
+      var p1, p2, type = 'donor';
       p1 = {
         filters: {
-          donor:{ primarySite: { is: ['Brain'] } }
+          donor:{ primarySite: { is: ['Pancreas'] } },
+          gene: { id: { is: ['ENSG00000133703'] } }
         },
         isTransient: true,
         type: type,
-        name: gettextCatalog.getString('Brain Cancer')
+        name: gettextCatalog.getString('Pancreatic - KRAS mutated ')
       };
-
       p2 = {
         filters: {
-          donor:{ primarySite: { is: ['Breast'] } }
+          donor:{ primarySite: { is: ['Pancreas'] } },
+          gene: { id: { not: ['ENSG00000133703'] } }
         },
         isTransient: true,
         type: type,
-        name: gettextCatalog.getString('Breast Cancer')
-      };
-
-      p3 = {
-        filters: {
-          donor:{ primarySite: { is: ['Colorectal'] } }
-        },
-        isTransient: true,
-        type: type,
-        name: gettextCatalog.getString('Colorectal Cancer')
+        name: gettextCatalog.getString('Pancreatic - KRAS not mutated ')
       };
 
       var demoSetIds = [];
       Page.startWork();
-      SetService.addSet(type, p1).then(function(r1) {
+      SetService.addSet(type, p1).then(function (r1) {
         demoSetIds.push(r1.id);
-        SetService.addSet(type, p2).then(function(r2) {
+        SetService.addSet(type, p2).then(function (r2) {
           demoSetIds.push(r2.id);
-          SetService.addSet(type, p3).then(function(r3) {
-            demoSetIds.push(r3.id);
-
-            function proxyLaunch() {
-              Page.stopWork();
-              _this.launchPhenotype(demoSetIds);
-            }
-            wait(demoSetIds, 7, proxyLaunch);
-          });
+          function proxyLaunch() {
+            Page.stopWork();
+            _this.launchPhenotype(demoSetIds);
+          }
+          wait(demoSetIds, 7, proxyLaunch);
         });
       });
 

@@ -17,55 +17,13 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static com.google.common.base.Functions.constant;
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Iterables.transform;
-import static com.google.common.collect.Lists.transform;
-import static com.google.common.collect.Maps.toMap;
-import static com.google.common.collect.Sets.newHashSet;
-import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
-import static java.util.Collections.singletonMap;
-import static lombok.AccessLevel.PRIVATE;
-import static org.dcc.portal.pql.ast.function.FunctionBuilders.facets;
-import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
-import static org.dcc.portal.pql.query.PqlParser.parse;
-import static org.elasticsearch.action.search.SearchType.COUNT;
-import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
-import static org.elasticsearch.action.search.SearchType.SCAN;
-import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
-import static org.elasticsearch.index.query.FilterBuilders.matchAllFilter;
-import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
-import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
-import static org.elasticsearch.search.aggregations.AggregationBuilders.missing;
-import static org.elasticsearch.search.aggregations.AggregationBuilders.stats;
-import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
-import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
-import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
-import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
-import static org.icgc.dcc.portal.server.model.SearchFieldMapper.searchFieldMapper;
-import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.createTermsLookupFilter;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.isRepositoryDonor;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.setFetchSourceOfGetRequest;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
-import static org.icgc.dcc.portal.server.util.SearchResponses.hasHits;
-
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.MultiSearchRequestBuilder;
@@ -80,14 +38,11 @@ import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.stats.Stats;
 import org.icgc.dcc.portal.server.model.EntitySetTermFacet;
 import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
-import org.icgc.dcc.portal.server.model.PhenotypeResult;
+import org.icgc.dcc.portal.server.model.IndexModel.*;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Statistics;
 import org.icgc.dcc.portal.server.model.TermFacet.Term;
@@ -96,15 +51,35 @@ import org.icgc.dcc.portal.server.repository.TermsLookupRepository.TermLookupTyp
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.*;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static com.google.common.base.Functions.constant;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Lists.transform;
+import static com.google.common.collect.Maps.toMap;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
+import static java.util.Collections.singletonMap;
+import static org.dcc.portal.pql.ast.function.FunctionBuilders.facets;
+import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
+import static org.dcc.portal.pql.query.PqlParser.parse;
+import static org.elasticsearch.action.search.SearchType.*;
+import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
+import static org.elasticsearch.index.query.FilterBuilders.matchAllFilter;
+import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.*;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.portal.server.model.IndexModel.*;
+import static org.icgc.dcc.portal.server.model.SearchFieldMapper.searchFieldMapper;
+import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.createTermsLookupFilter;
+import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.isRepositoryDonor;
+import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.setFetchSourceOfGetRequest;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
+import static org.icgc.dcc.portal.server.util.SearchResponses.hasHits;
 
 @Slf4j
 @Component
@@ -145,7 +120,7 @@ public class DonorRepository implements Repository {
    * analyses. Set the value to EMPTY_PAIR to indicate no stats is needed for the main facet. *NOTE: Categorical terms
    * such as gender or vitalStatus can't have stats facets and, if you do that, your elasticsearch query will fail.
    */
-  private static final ImmutableMap<String, Optional<SimpleImmutableEntry<String, String>>> FACETS_FOR_PHENOTYPE =
+  public static final ImmutableMap<String, Optional<SimpleImmutableEntry<String, String>>> FACETS_FOR_PHENOTYPE =
       ImmutableMap.of(
           PhenotypeFacetNames.GENDER, EMPTY_PAIR,
           PhenotypeFacetNames.VITAL_STATUS, EMPTY_PAIR,
@@ -159,7 +134,7 @@ public class DonorRepository implements Repository {
           PhenotypeFacetNames.GENDER, "donor_sex",
           PhenotypeFacetNames.VITAL_STATUS, "donor_vital_status");
 
-  @Getter(lazy = true, value = PRIVATE)
+  @Getter(lazy = true)
   private final Map<String, Map<String, Integer>> baselineTermsAggsOfPhenotype = loadBaselineTermsAggsOfPhenotype();
 
   private static final int SCAN_BATCH_SIZE = 1000;
@@ -226,74 +201,42 @@ public class DonorRepository implements Repository {
     return response;
   }
 
-  public List<PhenotypeResult> getPhenotypeAnalysisResult(@NonNull final Collection<UUID> entitySetIds) {
-    // Here we eliminate duplicates and impose ordering (needed for reading the response items).
-    val setIds = ImmutableSet.copyOf(entitySetIds).asList();
+  public MultiSearchResponse performPhenotypeAnalysisMultiSearch(@NonNull final List<UUID> setIds) {
+    val multiSearch = client.prepareMultiSearch();
+    val matchAll = matchAllQuery();
 
-    val multiResponse = performPhenotypeAnalysisMultiSearch(setIds);
-    val responseItems = multiResponse.getResponses();
-    val responseItemCount = responseItems.length;
-    checkState(responseItemCount == setIds.size(),
-        "The number of queries does not match the number of responses in a multi-search.");
+    for (val setId : setIds) {
+      val search = getPhenotypeAnalysisSearchBuilder();
+      search.setQuery(filteredQuery(matchAll, getDonorSetIdFilterBuilder(setId)));
 
-    val facetKeyValuePairs = FACETS_FOR_PHENOTYPE.entrySet();
+      // Adding terms_stats facets
+      FACETS_FOR_PHENOTYPE.values().stream()
+              .filter(v -> wantsStatistics(v))
+              .map(Optional::get)
+              .forEach(statsFacetNameFieldPair -> {
+                final String actualFieldName = DONORS_FIELDS_MAPPING_FOR_PHENOTYPE.get(statsFacetNameFieldPair.getValue());
+                search.addAggregation(buildTermsStatsAggsBuilder(statsFacetNameFieldPair.getKey(), actualFieldName));
+              });
 
-    // Building a map with facet name as the key and a list builder as the value.
-    val results = facetKeyValuePairs.stream().collect(
-        Collectors.toMap(entry -> entry.getKey(), notUsed -> new ImmutableList.Builder<EntitySetTermFacet>()));
-
-    // Here we enumerate the response collection by entity-set UUIDs (the same grouping as in the multi-search).
-    for (int i = 0; i < responseItemCount; i++) {
-      val aggregations = responseItems[i].getResponse().getAggregations();
-
-      if (null == aggregations) continue;
-
-      val aggsMap = aggregations.asMap();
-      val entitySetId = setIds.get(i);
-
-      val entitySetCount = entitySetRepository.find(entitySetId).getCount();
-
-      // We go through the main Results map for each facet and build the inner list by populating it with instances of
-      // EntitySetTermFacet.
-      for (val facetKv : facetKeyValuePairs) {
-        val facetName = facetKv.getKey();
-        Aggregation aggs = aggsMap.get(facetName);
-
-        Long total = 0L;
-        Long missing = 0L;
-        // We want to include the number of missing donor documents in our final missing count
-        if (aggs instanceof Terms) {
-          val termsAggs = (Terms) aggs;
-
-          total = termsAggs.getBuckets()
-              .stream()
-              .mapToLong(Bucket::getDocCount)
-              .sum();
-
-          missing = entitySetCount - total;
-        }
-
-        results.get(facetName).add(
-            buildEntitySetTermAggs(entitySetId, (Terms) aggs, aggsMap, total, missing, facetKv.getValue()));
-      }
-
+      log.debug("Sub-search for DonorSet ID [{}] is: '{}'", setId, search);
+      multiSearch.add(search);
     }
 
-    val finalResult = transform(results.entrySet(),
-        entry -> new PhenotypeResult(entry.getKey(), entry.getValue().build()));
+    val multiResponse = multiSearch.execute().actionGet();
+    log.debug("MultiResponse is: '{}'.", multiResponse);
 
-    return ImmutableList.copyOf(finalResult);
+    return multiResponse;
   }
 
-  private EntitySetTermFacet buildEntitySetTermAggs(final UUID entitySetId, final Terms termsFacet,
-      final Map<String, Aggregation> aggsMap,
-      final Long total,
-      final Long missing,
-      final Optional<SimpleImmutableEntry<String, String>> statsFacetConfigMap) {
+  public EntitySetTermFacet buildEntitySetTermAggs(final UUID entitySetId, final Terms termsFacet,
+           final Map<String, Aggregation> aggsMap,
+           final Long total,
+           final Long missing,
+           final Optional<SimpleImmutableEntry<String, String>> statsFacetConfigMap) {
     val termFacetList = buildTermAggList(termsFacet, getBaselineTermsAggsOfPhenotype());
 
     val mean = wantsStatistics(statsFacetConfigMap) ? getMeanFromTermsStatsAggs(
-        aggsMap.get(statsFacetConfigMap.get().getKey())) : null;
+            aggsMap.get(statsFacetConfigMap.get().getKey())) : null;
     val summary = new Statistics(total, missing, mean);
 
     return new EntitySetTermFacet(entitySetId, termFacetList, summary);
@@ -314,7 +257,7 @@ public class DonorRepository implements Repository {
     for (val agg : aggs.asList()) {
       if (agg instanceof Terms) {
         val entries = ((Terms) agg).getBuckets();
-        val terms = transform(entries, entry -> entry.getKey());
+        val terms = (List<String>) transform(entries, entry -> entry.getKey());
 
         // Map all term values to zero
         results.put(agg.getName(), toMap(terms, constant(0)));
@@ -348,8 +291,9 @@ public class DonorRepository implements Repository {
       results.putAll(difference);
     }
 
-    val termFacetList = transform(results.build().entrySet(),
-        entry -> new Term(entry.getKey(), (long) entry.getValue()));
+    val termFacetList = results.build().entrySet().stream()
+            .map(entry -> new Term(entry.getKey(), (long) entry.getValue()))
+            .collect(toImmutableList());
 
     return ImmutableList.copyOf(termFacetList);
   }
@@ -367,33 +311,6 @@ public class DonorRepository implements Repository {
       return 0.0;
     }
 
-  }
-
-  private MultiSearchResponse performPhenotypeAnalysisMultiSearch(@NonNull final List<UUID> setIds) {
-    val multiSearch = client.prepareMultiSearch();
-    val matchAll = matchAllQuery();
-
-    for (val setId : setIds) {
-      val search = getPhenotypeAnalysisSearchBuilder();
-      search.setQuery(filteredQuery(matchAll, getDonorSetIdFilterBuilder(setId)));
-
-      // Adding terms_stats facets
-      FACETS_FOR_PHENOTYPE.values().stream()
-          .filter(v -> wantsStatistics(v))
-          .map(Optional::get)
-          .forEach(statsFacetNameFieldPair -> {
-            final String actualFieldName = DONORS_FIELDS_MAPPING_FOR_PHENOTYPE.get(statsFacetNameFieldPair.getValue());
-            search.addAggregation(buildTermsStatsAggsBuilder(statsFacetNameFieldPair.getKey(), actualFieldName));
-          });
-
-      log.debug("Sub-search for DonorSet ID [{}] is: '{}'", setId, search);
-      multiSearch.add(search);
-    }
-
-    val multiResponse = multiSearch.execute().actionGet();
-    log.debug("MultiResponse is: '{}'.", multiResponse);
-
-    return multiResponse;
   }
 
   private static TermsBuilder buildTermsStatsAggsBuilder(final String aggName, final String aggField) {
@@ -573,7 +490,7 @@ public class DonorRepository implements Repository {
    * a boolean.
    * 
    * @param ids A List of ids that can identify a donor
-   * @param False - donor-text, True - file-donor-text
+   * @param isForExternalFile False - donor-text, True - file-donor-text
    * @return Returns the SearchResponse object from the query.
    */
   public SearchResponse validateIdentifiers(@NonNull List<String> ids, boolean isForExternalFile) {

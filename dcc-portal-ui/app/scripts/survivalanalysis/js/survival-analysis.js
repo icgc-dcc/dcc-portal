@@ -290,13 +290,17 @@
       window.addEventListener('resize', update);
       update();
 
+      this.getStateStack = function () {
+        return stateStack;
+      };
+
       this.canUndo = function () {
         return stateStack.length > 1;
       };
 
       this.handleClickReset = function () {
         updateState(stateStack[0]);
-        stateStack = [];
+        stateStack = [stateStack[0]];
       };
 
       this.handleClickUndo = function () {
@@ -345,7 +349,8 @@
       tipLabels: '<',
       censoredStatuses: '<',
       palette: '<',
-      title: '<'
+      title: '<',
+      pvalue: '<'
     },
     controller: survivalAnalysisController,
     controllerAs: 'ctrl'
@@ -371,10 +376,15 @@
         };
       });
     };
-
+    var overallStats = isNaN(responses.survivalData.overallStats.pvalue) ? 
+      undefined : responses.survivalData.overallStats;
+    var diseaseFreeStats = isNaN(responses.survivalData.diseaseFreeStats.pvalue) ? 
+      undefined : responses.survivalData.diseaseFreeStats;
     return {
       overall: processGraphData('overall'),
-      diseaseFree: processGraphData('diseaseFree')
+      overallStats: overallStats, 
+      diseaseFree: processGraphData('diseaseFree'),
+      diseaseFreeStats: diseaseFreeStats
     };
   }
 
