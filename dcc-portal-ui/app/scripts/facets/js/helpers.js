@@ -56,12 +56,10 @@
 
       var filters = FilterService.filters();
       ensurePath(filters, params);
+      var operation = isNot(params) ? 'not' : 'is';
 
-      if (isNot(params)) {
-        filters[params.type][params.facet].not = angular.isArray(params.terms) ? params.terms : [params.terms];
-      } else {
-        filters[params.type][params.facet].is = angular.isArray(params.terms) ? params.terms : [params.terms];
-      }
+      filters[params.type][params.facet][operation] = angular.isArray(params.terms) ? params.terms : [params.terms];
+
       FilterService.filters(filters);
     }
 
@@ -74,19 +72,14 @@
       }
 
       var filters = FilterService.filters();
+      var operation = isNot(params) ? 'not' : 'is';
 
       ensurePath(filters, params);
+      var facetFilter = filters[params.type][params.facet];
 
-      if (isNot(params)) {
-        if (filters[params.type][params.facet].not.indexOf(params.term) === -1) {
-          filters[params.type][params.facet].not.push(params.term);
-          _broadcastFacetStatusChange(params.term, true);
-        }
-      } else {
-        if (filters[params.type][params.facet].is.indexOf(params.term) === -1) {
-          filters[params.type][params.facet].is.push(params.term);
-          _broadcastFacetStatusChange(params.term, true);
-        }
+      if (!_.includes(facetFilter[operation], params.term)) {
+        facetFilter[operation].push(params.term);
+        _broadcastFacetStatusChange(params.term, true);
       }
 
       FilterService.filters(filters);
@@ -153,25 +146,14 @@
       });
 
       var filters = FilterService.filters();
-      var index;
-      if (isNot(params)) {
-        index = filters[params.type][params.facet].not.indexOf(params.term);
-        filters[params.type][params.facet].not.splice(index, 1);
-        if (!filters[params.type][params.facet].not.length) {
-          removeFacet(params);
-        } else {
-          _broadcastFacetStatusChange(params.facet, false);
-          FilterService.filters(filters);
-        }
+      var operation = isNot(params) ? 'not' : 'is';
+      var facetFilter = filters[params.type][params.facet];
+      facetFilter[operation] = _.without(facetFilter[operation], params.term);
+      if (!facetFilter[operation].length) {
+        removeFacet(params);
       } else {
-        index = filters[params.type][params.facet].is.indexOf(params.term);
-        filters[params.type][params.facet].is.splice(index, 1);
-        if (!filters[params.type][params.facet].is.length) {
-          removeFacet(params);
-        } else {
-          _broadcastFacetStatusChange(params.facet, false);
-          FilterService.filters(filters);
-        }
+        _broadcastFacetStatusChange(params.facet, false);
+        FilterService.filters(filters);
       }
     }
 
