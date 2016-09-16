@@ -24,13 +24,15 @@
 
   angular.module (moduleNamespace, [controllersNamespace]);
   angular.module (controllersNamespace, [])
-    .controller (controllerName, ['RouteInfoService', function (RouteInfoService) {
+    .controller (controllerName, ['RouteInfoService', '$scope', '$rootScope', function (RouteInfoService, $scope, $rootScope) {
+    
+    var _ctrl = this;
+
     function styleClass (name) {
       return 't_nav__items__item__' + name;
     }
 
-    var items = _.map (['home', 'projects', 'advancedSearch', 'dataAnalysis', 'dataReleases', 'dataRepositories'],
-      RouteInfoService.get);
+    _ctrl.items = getMapping();
     var itemAttributes = [{
         icon: 'icon-home',
         styleClass: styleClass ('home')
@@ -55,13 +57,30 @@
      * my poor man's implementation. Once we upgrade lodash, all this can be reduced to one line:
      * var menuItems = _.zipWith (items, itemAttributes, _.assign);
      */
-    var menuItems = _.map (_.zip (items, itemAttributes), function (itemPair) {
-      return _.reduce (itemPair, function (result, item) {
-        return _.assign (result, item);
-      }, {});
+    var menuItems = getMenuItems();
+
+    _ctrl.menuItems = menuItems;
+
+    function getMapping(){
+      return _.map (['home', 'projects', 'advancedSearch', 'dataAnalysis', 'dataReleases', 'dataRepositories'],
+      RouteInfoService.get);
+    }
+
+    function getMenuItems(){
+      return _.map (_.zip (_ctrl.items, itemAttributes), function (itemPair) {
+        return _.reduce (itemPair, function (result, item) {
+          return _.assign (result, item);
+        }, {});
+      });
+    }
+
+    $scope.$watch(function(){
+      return $rootScope.language;
+    }, function(){
+      _ctrl.items = getMapping();
+      _ctrl.menuItems = getMenuItems();
     });
 
-    this.menuItems = menuItems;
   }]);
 
 })();

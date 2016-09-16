@@ -9,12 +9,12 @@
 <nav class="t_nav t_nav__pages">
   <ul class="t_nav__items">
     <li ng-repeat="item in controller.menuItems"
-      class="t_nav__items__item {{:: item.styleClass }}">
-      <a href="{{:: item.href }}" tooltip="{{:: item.title }}">
+      class="t_nav__items__item {{item.styleClass }}">
+      <a href="{{item.href }}" tooltip="{{item.title }}">
         <span class="t_nav__items__item__icon">
-          <i class="{{:: item.icon }}" />
+          <i class="{{item.icon }}" />
         </span>
-        <span class="t_nav__items__item__title" ng-bind=":: item.title" />
+        <span class="t_nav__items__item__title" ng-bind="item.title" />
       </a>
     </li>
   </ul>
