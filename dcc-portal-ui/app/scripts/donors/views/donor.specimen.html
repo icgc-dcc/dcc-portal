@@ -129,7 +129,8 @@
                 <translate has-markup>Showing <strong>{{ (DonorSpecimenCtrl.specimen.samples | filter: DonorSpecimenCtrl.tableFilter.specimenSamples).length }}</strong> samples</translate>
                 <span data-toolbar
                       data-dl="{{DonorCtrl.donor.id}}_specimen"></span>
-                <table-filter data-filter-model="DonorSpecimenCtrl.tableFilter.specimenSamples"></table-filter>
+                <table-filter data-filter-model="DonorSpecimenCtrl.tableFilter.specimenSamples"
+                    data-current-page="DonorSpecimenCtrl.currentSpecimenPage"></table-filter>
             </span>
             <table class="table">
                 <thead>

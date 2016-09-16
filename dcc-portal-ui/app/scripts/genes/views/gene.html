@@ -231,7 +231,8 @@
             <translate>Showing <strong>{{(GeneCtrl.gene.projects.hits | filter: GeneCtrl.tableFilter.projects).length | number}}</strong> projects</translate>
             <span data-toolbar data-dl="{{GeneCtrl.gene.id}}_distribution"></span>
             <table-filter data-class="small-filter"
-                data-filter-model="GeneCtrl.tableFilter.projects"></table-filter>
+                data-filter-model="GeneCtrl.tableFilter.projects"
+                data-current-page="GeneCtrl.currentProjectsPage"></table-filter>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -492,7 +493,8 @@
       <translate>Showing <strong>{{ (GeneCompoundsCtrl.compounds | filter: GeneCompoundsCtrl.tableFilter.compounds).length }}</strong> compounds</translate>
     </span>
     <table-filter data-class="small-filter"
-        data-filter-model="GeneCompoundsCtrl.tableFilter.compounds"></table-filter>
+        data-filter-model="GeneCompoundsCtrl.tableFilter.compounds"
+        data-current-page="GeneCompoundsCtrl.currentCompoundsPage"></table-filter>
     <span ng-init="sortField = 'name'; sortDescendingly = false;" />
 
     <table class="table table-bordered table-striped table-condensed">

@@ -54,6 +54,7 @@
       geneSetFilter = {}; // Build adv query based on type
 
       // Defaults for client side pagination 
+      _ctrl.tableFilter = {};
       _ctrl.currentCancerPage = 1;
       _ctrl.defaultCancerRowLimit = 10;
       _ctrl.rowSizes = [10, 25, 50];
@@ -246,6 +247,14 @@
           refresh();
         }
       });
+
+      // $scope.$watch(function(){
+      //   return _ctrl.tableFilter.projects;
+      // }, function(newVal){
+      //   if(newVal){
+      //     _ctrl.currentCancerPage = 1;
+      //   }
+      // });
 
       refresh();
     });

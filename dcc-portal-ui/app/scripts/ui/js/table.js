@@ -324,11 +324,12 @@ angular.module('icgc.ui.table.filter', [])
       restrict: 'E',
       scope: {
         filterModel: '=',
+        currentPage: '=',
         class: '@'
       },
       template: '<span class="t_suggest t_suggest__header table-filter {{class}}">' +
         '<input type="text" class="t_suggest__input form-control" placeholder="' + gettextCatalog.getString('Table filter') + 
-        '" data-ng-model="filterModel" />' + 
+        '" data-ng-change="currentPage = 1;" data-ng-model="filterModel" />' + 
         '<i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search">' +
         '</i>'+
         '<i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel ng-hide"' + 

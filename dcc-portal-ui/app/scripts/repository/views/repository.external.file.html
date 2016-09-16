@@ -269,7 +269,8 @@
       <translate has-markup>
         Showing <strong>{{:: info.donors.length}}</strong> donor{{info.donors.length > 1 ? 's' : ''}}
       </translate>
-      <table-filter data-filter-model="fileCtrlr.tableFilter.donors"></table-filter>
+      <table-filter data-filter-model="fileCtrlr.tableFilter.donors"
+      data-current-page="fileCtrlr.currentDonorsPage"></table-filter>
     </div>
 
     <table
