@@ -17,24 +17,23 @@
  */
 package org.icgc.dcc.portal.server.service;
 
-import static com.google.common.base.Preconditions.checkState;
-import static lombok.AccessLevel.PRIVATE;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.icgc.dcc.portal.server.analysis.PhenotypeAnalyzer;
+import org.icgc.dcc.portal.server.config.ServerProperties;
+import org.icgc.dcc.portal.server.model.PhenotypeAnalysis;
+import org.icgc.dcc.portal.server.repository.PhenotypeAnalysisRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
-import org.icgc.dcc.portal.server.config.ServerProperties;
-import org.icgc.dcc.portal.server.model.PhenotypeAnalysis;
-import org.icgc.dcc.portal.server.repository.DonorRepository;
-import org.icgc.dcc.portal.server.repository.PhenotypeAnalysisRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import static com.google.common.base.Preconditions.checkState;
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * A service to create and retrieve results of phenotype analysis.
@@ -47,7 +46,7 @@ public class PhenotypeAnalysisService {
   @NonNull
   private final PhenotypeAnalysisRepository sqlRepository;
   @NonNull
-  private final DonorRepository esRepository;
+  private final PhenotypeAnalyzer analyzer;
   @NonNull
   private final ServerProperties properties;
 
@@ -72,7 +71,7 @@ public class PhenotypeAnalysisService {
       throw new NotFoundException(analysisId.toString(), "phenotype analysis");
     }
 
-    val results = esRepository.getPhenotypeAnalysisResult(analysis.getEntitySetIds());
+    val results = analyzer.getPhenotypeAnalysisResult(analysis.getEntitySetIds());
     analysis.setResults(results);
 
     return analysis;

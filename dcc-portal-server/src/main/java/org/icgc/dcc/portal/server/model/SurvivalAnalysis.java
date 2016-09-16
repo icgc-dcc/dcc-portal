@@ -17,24 +17,19 @@
  */
 package org.icgc.dcc.portal.server.model;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import lombok.*;
+import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.Interval;
+import org.icgc.dcc.portal.server.analysis.SurvivalLogRank;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.Interval;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.swagger.annotations.ApiModel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 /**
  * Represents the result set of a survival plot analysis.
@@ -56,6 +51,9 @@ public class SurvivalAnalysis implements Identifiable<UUID> {
 
   private boolean intersection = false;
   private List<Result> results;
+
+  private SurvivalLogRank.SurvivalStats overallStats = null;
+  private SurvivalLogRank.SurvivalStats diseaseFreeStats = null;
 
   private final static class JsonPropertyName {
 
