@@ -5,14 +5,15 @@ Change log for the DCC Data Portal
 
 4.3.10
 --
+- Added ability to filter by compounds in Advanced Search
+- Added p-value calculations for Survival Analysis
+- Added ability to launch OncoGrid from Project page
+- Added ability in manifest dialog to include duplicates
+- Added support for `icgc-get` in Repository Browser
+- Changed Survival Analysis button to perform reset instead of undo
+- Fixed hidden close button in pathway viewer legend
 - Fixed text-wrapping issues
 - Fixed token manager to not error on unknown scopes
-- Manifest / `icgc-get` dialog enhancements
-- Survival analysis button changed to perform reset instead of undo
-- Added ability to filter by compounds in Advanced Search
-- Fixed hidden close button in pathway viewer ledgend
-- Added p-value calculations for survival analysis
-- Added ability to launch OncoGrid from Project page
 
 4.3.9
 --
