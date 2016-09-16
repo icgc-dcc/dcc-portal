@@ -353,20 +353,16 @@
     };
 
     $scope.download = function() {
-      if (_.isEmpty($scope.selectedFiles)) {
-        var filters = FilterService.filters();
+      var filters = FilterService.filters();
 
-        var manifestUrl = $scope.getRepoManifestUrl({
-          repoCodes: _.map($scope.repos, 'repoCode'),
-          filters: filters,
-          format: 'tarball',
-          unique: $scope.shouldDeduplicate,
-        });
+      var manifestUrl = $scope.getRepoManifestUrl({
+        repoCodes: _.map($scope.repos, 'repoCode'),
+        filters: _.extend({}, filters, {file:{id:{is:$scope.selectedFiles}}}),
+        format: 'tarball',
+        unique: $scope.shouldDeduplicate,
+      });
 
-        window.location.href = manifestUrl;
-      } else {
-        ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
-      }
+      window.location.href = manifestUrl;
       $scope.cancel();
     };
 
