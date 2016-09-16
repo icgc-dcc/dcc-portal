@@ -17,30 +17,26 @@
  */
 package org.icgc.dcc.portal.server.analysis;
 
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
-import static org.icgc.dcc.portal.server.model.BaseEntitySet.Type.DONOR;
-
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.Predicate;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import lombok.*;
 import org.elasticsearch.search.SearchHit;
+import org.icgc.dcc.portal.server.model.SurvivalAnalysis.Result;
 import org.icgc.dcc.portal.server.model.SurvivalAnalysis;
 import org.icgc.dcc.portal.server.model.UnionUnit;
 import org.icgc.dcc.portal.server.repository.EntitySetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
 
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
+import static org.icgc.dcc.portal.server.model.BaseEntitySet.Type.DONOR;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -56,7 +52,7 @@ public class SurvivalAnalyzer {
           .add("donor_vital_status")
           .addAll(OVERALL_SORT)
           .build();
-  private final static List<String> DISEASE_FREE = ImmutableList.of(
+  public final static List<String> DISEASE_FREE = ImmutableList.of(
       "complete remission", "partial remission", "stable", "no evidence of disease");
   private final static List<String> DISEASE_FREE_SORT = ImmutableList.of("donor_interval_of_last_followup");
   private final static List<String> DISEASE_FREE_FIELDS = ImmutableList.<String> builder()
@@ -101,6 +97,14 @@ public class SurvivalAnalyzer {
     }
 
     analysis.setIntersection(intersection);
+    val results = analysis.getResults();
+
+    val overall = results.stream().map(Result::getOverall).collect(toImmutableList());
+    analysis.setOverallStats(new SurvivalLogRank(overall).runLogRankTest());
+
+    val diseaseFree = results.stream().map(Result::getDiseaseFree).collect(toImmutableList());
+    analysis.setDiseaseFreeStats(new SurvivalLogRank(diseaseFree).runLogRankTest());
+
     return analysis;
   }
 
@@ -278,7 +282,7 @@ public class SurvivalAnalyzer {
   }
 
   @Value
-  private static class DonorValue {
+  protected static class DonorValue {
 
     String id;
     String status;

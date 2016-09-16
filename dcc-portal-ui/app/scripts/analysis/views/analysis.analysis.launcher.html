@@ -204,7 +204,7 @@
             -->
 
             <div> 
-                <div><translate>Select 2 or 3 donor sets, then click on Run.</translate></div>
+                <div><translate>Select 2 donor sets, then click on Run.</translate></div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
@@ -234,7 +234,7 @@
                 </table>
                 <br>
                 <button class="t_button" 
-                    data-ng-disabled="NAC.selectedIds.length < 2 || NAC.selectedIds.length > 3  || NAC.isLaunchingAnalysis()"
+                    data-ng-disabled="NAC.selectedIds.length !== 2 || NAC.isLaunchingAnalysis()"
                     data-ng-click="NAC.launchPhenotype(NAC.selectedIds)"><translate>Run</translate></button>
             </div>
         </div>
@@ -294,7 +294,7 @@
 
         <!-- OncoGrid -->
         <div data-ng-if="NAC.analysisType === 'oncogrid'">
-            <div><translate has-markup><em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(100 donors maximum)</small>, then click on Run.</em></translate></div>
+            <div><translate has-markup><em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(3000 donors maximum)</small>, then click on Run.</em></translate></div>
             <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoOncogrid()">{{NAC.analysisDemoDescription('oncogrid')}}</a></div>
             
             <div> 

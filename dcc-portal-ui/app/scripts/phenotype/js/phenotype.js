@@ -340,7 +340,8 @@
         uiGraph: {
           categories: terms.map(function(term) { return ValueTranslator.translate(term); }),
           series: uiSeries
-        }
+        },
+        pvalue: analysis.pvalue
       };
     };
 

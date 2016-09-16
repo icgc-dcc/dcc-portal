@@ -17,11 +17,10 @@
  */
 package org.icgc.dcc.portal.server.model;
 
-import java.util.List;
-
+import io.swagger.annotations.ApiModel;
 import lombok.Value;
 
-import io.swagger.annotations.ApiModel;
+import java.util.List;
 
 /**
  * Represents a result set of phenotype analysis
@@ -32,5 +31,6 @@ public class PhenotypeResult {
 
   String name;
   List<EntitySetTermFacet> data;
+  double pValue;
 
 }

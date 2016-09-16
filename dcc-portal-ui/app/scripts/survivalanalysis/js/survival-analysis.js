@@ -349,7 +349,8 @@
       tipLabels: '<',
       censoredStatuses: '<',
       palette: '<',
-      title: '<'
+      title: '<',
+      pvalue: '<'
     },
     controller: survivalAnalysisController,
     controllerAs: 'ctrl'
@@ -375,10 +376,15 @@
         };
       });
     };
-
+    var overallStats = isNaN(responses.survivalData.overallStats.pvalue) ? 
+      undefined : responses.survivalData.overallStats;
+    var diseaseFreeStats = isNaN(responses.survivalData.diseaseFreeStats.pvalue) ? 
+      undefined : responses.survivalData.diseaseFreeStats;
     return {
       overall: processGraphData('overall'),
-      diseaseFree: processGraphData('diseaseFree')
+      overallStats: overallStats, 
+      diseaseFree: processGraphData('diseaseFree'),
+      diseaseFreeStats: diseaseFreeStats
     };
   }
 
