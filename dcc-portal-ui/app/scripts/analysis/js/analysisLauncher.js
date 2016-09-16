@@ -85,8 +85,23 @@
       });
     };
 
+    function clearOncoSelections() {
+     if (_this.selectedIds.indexOf(_this.selectedForOnco.donor) < 0) {
+        _this.selectedForOnco.donor = null;
+      }
+      if (_this.selectedIds.indexOf(_this.selectedForOnco.gene) < 0) {
+        _this.selectedForOnco.gene = null;
+      }
+    }
+
     _this.validForOnco = function(set) {
-      return (set.type === 'gene' && set.count <= 100) || (set.type === 'donor' && set.count <= 3000);
+      clearOncoSelections();
+
+      var selected = _this.selectedIds.indexOf(set.id) >= 0;
+      var numSelected = _this.selectedIds.length < 2;
+      var correctType = (set.type === 'gene' && set.count <= 100 && _this.selectedForOnco.gene === null) ||
+        (set.type === 'donor' && set.count <= 3000 && _this.selectedForOnco.donor === null);
+      return selected || (numSelected && correctType);
     };
 
     _this.applyFilter = function(type) {
@@ -123,6 +138,7 @@
     };
     
     _this.isValidOncoSelection = function() {
+      clearOncoSelections();
       return _this.selectedForOnco.donor !== null && _this.selectedForOnco.gene !== null;
     };
 

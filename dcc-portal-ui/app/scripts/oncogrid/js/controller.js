@@ -15,7 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function ($) {
+(function ($, OncoGrid) {
     'use strict';
 
     var module = angular.module('icgc.oncogrid.controllers', []);
@@ -28,6 +28,15 @@
             _this.downloadEnabled = settings.downloadEnabled || false;
         });
 
+        _this.getGrid = function() {
+            return _this.grid;
+        };
+
+        _this.initGrid = function(params) {
+            _this.grid = new OncoGrid(params);
+            _this.grid.render();
+        };
+
         _this.downloadDonorData = function(id) {
             $modal.open({
                 templateUrl: '/scripts/downloader/views/request.html',
@@ -39,7 +48,7 @@
         };
 
         _this.clusterData = function () {
-            $scope.grid.cluster();
+            _this.grid.cluster();
         };
 
         // Export the subset(s), materialize the set along the way
@@ -48,16 +57,17 @@
         };
 
         _this.reloadGrid = function () {
-            $scope.grid.destroy();
+            _this.grid.destroy();
             $scope.cleanActives();
             $('#grid-button').addClass('active');
-            $scope.grid = new OncoGrid(_.cloneDeep($scope.params));
-            $scope.grid.render();
-            $scope.grid.removeDonors(function(d){return d.score === 0;});
-            $scope.grid.removeGenes(function(d){return d.score === 0;});
-                
+            _this.initGrid(_.cloneDeep($scope.params));
             if ($scope.crosshairMode) {
                 _this.crosshair();
+            }
+            if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement) {
+                setTimeout(function () {
+                    _this.grid.resize(screen.width - 400, screen.height - 400, true);
+                }, 0);
             }
         };
 
@@ -66,12 +76,12 @@
             $('#og-variant-legend').toggle();
             $('#og-heatmap-legend').toggle();
 
-            $scope.grid.toggleHeatmap();
+            _this.grid.toggleHeatmap();
         };
 
         _this.gridLines = function () {
             $('#grid-button').toggleClass('active');
-            $scope.grid.toggleGridLines();
+            _this.grid.toggleGridLines();
         };
 
         _this.crosshair = function () {
@@ -80,7 +90,7 @@
             $('#crosshair-button').toggleClass('active');
             var gridDriv = $('#oncogrid-div');
             gridDriv.toggleClass('og-pointer-mode'); gridDriv.toggleClass('og-crosshair-mode');
-            $scope.grid.toggleCrosshair();
+            _this.grid.toggleCrosshair();
         };
 
         function exitFullScreen() {
@@ -103,4 +113,4 @@
         };
 
     });
-})(jQuery);
+})(jQuery, OncoGrid);

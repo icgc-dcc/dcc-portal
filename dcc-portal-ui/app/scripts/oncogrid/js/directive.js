@@ -22,7 +22,7 @@
 
 })();
 
-(function ($, OncoGrid) {
+(function ($) {
   'use strict';
 
   var module = angular.module('icgc.oncogrid.directives', []);
@@ -34,6 +34,8 @@
       scope: {
         item: '='
       },
+      controller: 'OncogridController',
+      controllerAs: 'OncoCtrl',
       templateUrl: '/scripts/oncogrid/views/oncogrid-analysis.html',
       link: function ($scope) {
         var donorSearch = '/search?filters=';
@@ -272,8 +274,7 @@
             margin: { top: 30, right: 50, bottom: 200, left: 80 }
           };
 
-          $scope.grid = new OncoGrid(_.cloneDeep($scope.params));
-          $scope.grid.render();
+          $scope.OncoCtrl.initGrid(_.cloneDeep($scope.params));
         };
 
         $scope.cleanActives = function () {
@@ -291,9 +292,9 @@
 
         $scope.$watch('item', function (n) {
           if (n) {
-            if (typeof $scope.grid !== 'undefined' && $scope.grid !== null) {
+            if (typeof $scope.OncoCtrl.grid !== 'undefined' && $scope.OncoCtrl.grid !== null) {
               $scope.cleanActives();
-              $scope.grid.destroy();
+              $scope.OncoCtrl.grid.destroy();
             }
             $('#oncogrid-spinner').toggle(true);
             createLinks();
@@ -316,10 +317,14 @@
 
         $scope.fullScreenHandler = function () {
           if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
-            $scope.grid.resize(680, 150, false);
+            setTimeout(function () {
+                $scope.OncoCtrl.getGrid().resize(680, 150, false);
+            }, 0);
           } else {
-            // TODO: Maybe come up with a better way to deal with fullscreen spacing. 
-            $scope.grid.resize(screen.width - 400, screen.height - 400, true);
+            // TODO: Maybe come up with a better way to deal with fullscreen spacing.
+            setTimeout(function () { 
+              $scope.OncoCtrl.getGrid().resize(screen.width - 400, screen.height - 400, true);
+            }, 0);
           }
           var fButton = $('#og-fullscreen-button');
           fButton.toggleClass('icon-resize-full');
@@ -333,8 +338,8 @@
         }
 
         $scope.$on('$destroy', function () {
-          if (typeof $scope.grid !== 'undefined') {
-            $scope.grid.destroy();
+          if (typeof $scope.OncoCtrl.grid !== 'undefined') {
+            $scope.OncoCtrl.grid.destroy();
           }
 
           document.removeEventListener('webkitfullscreenchange', $scope.fullScreenHandler);
@@ -346,4 +351,4 @@
     };
   });
 
-})(jQuery, OncoGrid);
+})(jQuery);
