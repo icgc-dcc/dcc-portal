@@ -329,7 +329,7 @@
                 <br>
                 <button class="t_button" 
                     data-ng-disabled="NAC.selectedIds.length < 2 || NAC.selectedIds.length > 2 || NAC.isLaunchingAnalysis() || !NAC.isValidOncoSelection()"
-                    data-ng-click="NAC.launchOncogridAnalysis(NAC.selectedIds)">
+                    data-ng-click="NAC.launchOncogridAnalysis({donor: NAC.selectedForOnco.donor, gene: NAC.selectedForOnco.gene})">
                     <span data-ng-if="NAC.isLaunchingAnalysis()"><i class="icon-spinner icon-spin"></i></span>
                     <translate>Run</translate>
                 </button>
