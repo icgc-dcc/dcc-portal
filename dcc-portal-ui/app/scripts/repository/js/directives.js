@@ -488,7 +488,7 @@
 
 
         function init() {
-          d3.selectAll('svg').style('visibility', 'hidden');
+          d3.selectAll('.vcf-iobio svg').style('visibility', 'hidden');
           d3.selectAll('.svg-alt').style('visibility', 'hidden');
           d3.selectAll('.samplingLoader').style('display', 'block');
 
