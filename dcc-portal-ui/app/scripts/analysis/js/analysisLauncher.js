@@ -86,7 +86,7 @@
     };
 
     _this.validForOnco = function(set) {
-      return set.count <= 100;
+      return (set.type === 'gene' && set.count <= 100) || (set.type === 'donor' && set.count <= 3000);
     };
 
     _this.applyFilter = function(type) {
