@@ -295,15 +295,19 @@ public class ManifestResource extends Resource {
 
   @SneakyThrows
   private void render(Manifest manifest, MediaType mediaType, boolean attachment) {
-    // This customization is required to commit the response code and headers eagerly. Typically one would use {@link
-    // StreamingOutput} but this commits headers on the first write. Since it takes a long time to issue the first write
-    // for a manifest containing a large number of files, this causes considerable delays for a user agent to display
-    // the download dialog.
+    // Using {@link HttpServletResponse} is required to commit the response code and headers eagerly. Typically one
+    // would use {@link StreamingOutput} but this commits headers on the first write. Since it takes a long time to
+    // issue the first write for a manifest containing a large number of files, this causes considerable delays for a
+    // user agent to display the download dialog.
     response.setStatus(OK.getStatusCode());
     response.setContentType(mediaType.toString());
     response.addHeader(CACHE_CONTROL, noCache().toString());
     if (attachment) response.addHeader(CONTENT_DISPOSITION, attachmentContent(manifest).toString());
 
+    // Calling this method automatically commits the response, meaning the status code and headers will be written.
+    response.flushBuffer();
+
+    // Write the manifests
     val context = new ManifestContext(manifest, response.getOutputStream());
     manifestService.generateManifests(context);
   }
