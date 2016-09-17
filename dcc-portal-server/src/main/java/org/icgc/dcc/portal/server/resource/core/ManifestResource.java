@@ -30,6 +30,9 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
 import static javax.ws.rs.core.Response.Status.OK;
+import static org.icgc.dcc.portal.server.manifest.model.ManifestFormat.FILES;
+import static org.icgc.dcc.portal.server.manifest.model.ManifestFormat.JSON;
+import static org.icgc.dcc.portal.server.manifest.model.ManifestFormat.TARBALL;
 import static org.icgc.dcc.portal.server.util.MediaTypes.GZIP_TYPE;
 
 import java.util.Arrays;
@@ -264,14 +267,13 @@ public class ManifestResource extends Resource {
 
   private void renderManifest(Manifest manifest) {
     val format = manifest.getFormat();
-    switch (format) {
-    case TARBALL:
+    if (format == TARBALL) {
       renderTarball(manifest);
-    case FILES:
+    } else if (format == FILES) {
       renderFiles(manifest);
-    case JSON:
+    } else if (format == JSON) {
       renderJson(manifest);
-    default:
+    } else {
       checkFormat(format.getKey());
     }
   }

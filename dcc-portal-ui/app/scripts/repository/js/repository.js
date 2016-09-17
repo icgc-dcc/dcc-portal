@@ -128,7 +128,7 @@
       },function (error) {
         if(error.status === 503){
           _ctrl.downloadEnabled = false;
-        }        
+        }
       });
     }
 
@@ -198,7 +198,7 @@
     $modalInstance
   ) {
     var vm = this;
-    var loadState = new LoadState(); 
+    var loadState = new LoadState();
 
     var filters = _.extend({},
       FilterService.filters(),
@@ -222,7 +222,7 @@
       .then(function (manifestId) {
         vm.manifestId = manifestId;
       });
-    
+
     loadState.loadWhile(requestManifestId);
 
     _.extend(this, {
@@ -328,7 +328,7 @@
       return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
         function (summary) {
           $scope.summary = summary;
-        }); 
+        });
     };
 
     $scope.getRepoManifestUrl = ExternalRepoService.getRepoManifestUrl;
@@ -353,16 +353,23 @@
     };
 
     $scope.download = function() {
-      var filters = FilterService.filters();
+      if (_.isEmpty($scope.selectedFiles)) {
+        var filters = FilterService.filters();
 
-      var manifestUrl = $scope.getRepoManifestUrl({
-        repoCodes: _.map($scope.repos, 'repoCode'),
-        filters: _.extend({}, filters, {file:{id:{is:$scope.selectedFiles}}}),
-        format: 'tarball',
-        unique: $scope.shouldDeduplicate,
-      });
+        var manifestUrl = $scope.getRepoManifestUrl({
+          repoCodes: _.map($scope.repos, 'repoCode'),
+          filters: filters,
+          format: 'tarball',
+          unique: $scope.shouldDeduplicate,
+        });
 
-      window.location.href = manifestUrl;
+        window.location.href = manifestUrl;
+      } else {
+        ExternalRepoService.downloadSelected(
+                $scope.selectedFiles, 
+        		$scope.shouldDeduplicate ? _.map($scope.repos, 'repoCode') : $scope.selectedRepos, 
+        		$scope.shouldDeduplicate);
+      }
       $scope.cancel();
     };
 
@@ -403,7 +410,7 @@
    * Controller for File Entity page
    */
   module.controller('ExternalFileInfoController',
-    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature, SetService, 
+    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature, SetService,
       gettextCatalog) {
 
     Page.setTitle(gettextCatalog.getString('Repository File'));
@@ -541,7 +548,7 @@
     this.equalsIgnoringCase = equalsIgnoringCase;
 
     this.downloadManifest = function (fileId, repo) {
-      ExternalRepoService.downloadSelected ([fileId], [repo]);
+      ExternalRepoService.downloadSelected ([fileId], [repo], true);
     };
 
     this.noNullConcat = function (values) {
