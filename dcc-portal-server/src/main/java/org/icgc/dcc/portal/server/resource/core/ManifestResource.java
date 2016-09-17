@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.resource.core;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.net.HttpHeaders.CACHE_CONTROL;
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
 import static com.sun.jersey.multipart.Boundary.BOUNDARY_PARAMETER;
 import static com.sun.jersey.multipart.MultiPartMediaTypes.MULTIPART_MIXED;
@@ -25,11 +26,11 @@ import static com.sun.jersey.multipart.MultiPartMediaTypes.MULTIPART_MIXED_TYPE;
 import static java.util.Collections.singletonMap;
 import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
-import static javax.ws.rs.core.Response.ok;
-import static org.icgc.dcc.portal.server.util.MediaTypes.GZIP;
+import static javax.ws.rs.core.Response.Status.OK;
+import static org.icgc.dcc.portal.server.util.MediaTypes.GZIP_TYPE;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -46,9 +48,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 
 import org.icgc.dcc.portal.server.manifest.ManifestContext;
 import org.icgc.dcc.portal.server.manifest.ManifestService;
@@ -69,17 +70,18 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Resource responsible for serving and storing representations of native download manifests.
+ */
 @Slf4j
 @Component
 @Path("/v1/manifests")
 @Api(tags = "manifests")
 @SwaggerDefinition(tags = @Tag(name = "manifests", description = "Resources about manifests"))
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class ManifestResource extends Resource {
 
   /**
@@ -126,13 +128,19 @@ public class ManifestResource extends Resource {
   /**
    * Dependencies.
    */
-  @NonNull
-  private final ManifestService manifestService;
+  @Autowired
+  private ManifestService manifestService;
+
+  /**
+   * State.
+   */
+  @Context
+  private HttpServletResponse response;
 
   @GET
   @Timed
   @ApiOperation(value = "Generate manifest(s) on the fly as specified by the supplied parameters.", notes = "Does not store the result")
-  public Response generateManifest(
+  public void generateManifest(
       // Input
       @ApiParam(value = REPOS_DESC, allowMultiple = true) @QueryParam(REPOS_PARAM) @DefaultValue("") ListParam repoParam,
       @ApiParam(value = FILTERS_DESC) @QueryParam(FILTERS_PARAM) @DefaultValue(FILTERS_DEFAULT) FiltersParam filtersParam,
@@ -145,7 +153,7 @@ public class ManifestResource extends Resource {
     val manifest = createManifest(repoParam, filtersParam, unique, format, fieldsParam, multipart);
 
     log.debug("Rendering manifest: {}", manifest);
-    return renderManifest(manifest);
+    renderManifest(manifest);
   }
 
   @POST
@@ -174,7 +182,7 @@ public class ManifestResource extends Resource {
   @GET
   @Path("/{" + MANIFEST_ID_PARAM + "}")
   @ApiOperation(value = "Retrieves a manifest by its ID, overriding output specification as indicated", notes = "Everything but the `filter` may be overriden")
-  public Response getManifest(
+  public void getManifest(
       // Input
       @ApiParam(value = MANIFEST_ID_DESC, required = true) @PathParam(MANIFEST_ID_PARAM) UUID manifestId,
 
@@ -219,7 +227,7 @@ public class ManifestResource extends Resource {
     validateManifest(manifest);
 
     log.debug("Rendering manifest: {}", manifest);
-    return renderManifest(manifest);
+    renderManifest(manifest);
   }
 
   private Manifest createManifest(
@@ -243,6 +251,7 @@ public class ManifestResource extends Resource {
         .setMultipart(multipart);
 
     validateManifest(manifest);
+
     return manifest;
   }
 
@@ -253,58 +262,50 @@ public class ManifestResource extends Resource {
         "If `multipart` is specified then format must be `files`");
   }
 
-  private Response renderManifest(Manifest manifest) {
-    switch (manifest.getFormat()) {
+  private void renderManifest(Manifest manifest) {
+    val format = manifest.getFormat();
+    switch (format) {
     case TARBALL:
-      return tarball(manifest);
+      renderTarball(manifest);
     case FILES:
-      return files(manifest);
+      renderFiles(manifest);
     case JSON:
-      return json(manifest);
+      renderJson(manifest);
     default:
-      throw new IllegalStateException();
+      checkFormat(format.getKey());
     }
   }
 
-  private Response tarball(Manifest manifest) {
-    return ok(entityStream(manifest), GZIP)
-        .header(CONTENT_DISPOSITION, attachmentContent(manifest))
-        .cacheControl(noCache())
-        .build();
+  @SneakyThrows
+  private void renderTarball(Manifest manifest) {
+    render(manifest, GZIP_TYPE, true);
   }
 
-  private Response files(Manifest manifest) {
+  private void renderFiles(Manifest manifest) {
     if (manifest.isMultipart()) {
-      val mediaType = multipartMixed(manifest.getTimestamp());
-      return ok(entityStream(manifest), mediaType)
-          .cacheControl(noCache())
-          .build();
+      render(manifest, multipartMixed(manifest.getTimestamp()), false);
     } else {
-      return ok(entityStream(manifest), TEXT_PLAIN_TYPE)
-          .header(CONTENT_DISPOSITION, attachmentContent(manifest))
-          .cacheControl(noCache())
-          .build();
+      render(manifest, TEXT_PLAIN_TYPE, true);
     }
   }
 
-  private Response json(Manifest manifest) {
-    return ok(entityStream(manifest), APPLICATION_JSON).build();
+  private void renderJson(Manifest manifest) {
+    render(manifest, APPLICATION_JSON_TYPE, false);
   }
 
-  private StreamingOutput entityStream(Manifest manifest) {
-    // Stream output
-    return output -> manifestService.generateManifests(new ManifestContext(manifest, output));
-  }
+  @SneakyThrows
+  private void render(Manifest manifest, MediaType mediaType, boolean attachment) {
+    // This customization is required to commit the response code and headers eagerly. Typically one would use {@link
+    // StreamingOutput} but this commits headers on the first write. Since it takes a long time to issue the first write
+    // for a manifest containing a large number of files, this causes considerable delays for a user agent to display
+    // the download dialog.
+    response.setStatus(OK.getStatusCode());
+    response.setContentType(mediaType.toString());
+    response.addHeader(CACHE_CONTROL, noCache().toString());
+    if (attachment) response.addHeader(CONTENT_DISPOSITION, attachmentContent(manifest).toString());
 
-  private static List<ManifestField> parseFields(ListParam fieldsParam) {
-    return fieldsParam.get().stream().map(ManifestField::fromString).collect(toList());
-  }
-
-  private static void checkFormat(String format) {
-    checkRequest(isNullOrEmpty(format),
-        "`format` is required");
-    checkRequest(!isValidEnum(ManifestFormat.class, format.toUpperCase()),
-        "`format` is not a valid value in: %s", Arrays.toString(ManifestFormat.values()).toLowerCase());
+    val context = new ManifestContext(manifest, response.getOutputStream());
+    manifestService.generateManifests(context);
   }
 
   private ContentDisposition attachmentContent(Manifest manifest) {
@@ -321,6 +322,17 @@ public class ManifestResource extends Resource {
     return new MediaType(
         MULTIPART_MIXED_TYPE.getType(), MULTIPART_MIXED_TYPE.getSubtype(),
         singletonMap(BOUNDARY_PARAMETER, "boundary_" + timestamp));
+  }
+
+  private static List<ManifestField> parseFields(ListParam fieldsParam) {
+    return fieldsParam.get().stream().map(ManifestField::fromString).collect(toList());
+  }
+
+  private static void checkFormat(String format) {
+    checkRequest(isNullOrEmpty(format),
+        "`format` is required");
+    checkRequest(!isValidEnum(ManifestFormat.class, format.toUpperCase()),
+        "`format` is not a valid value in: %s", Arrays.toString(ManifestFormat.values()).toLowerCase());
   }
 
 }

@@ -164,7 +164,7 @@ public class ManifestService {
     // Get requested file copies
     val watch = Stopwatch.createStarted();
 
-    log.info("Finding manifest files...");
+    log.info("Finding files to include in manifest...");
     val searchResult = findFiles(context.getQuery());
     log.info("Read manifest files in {}", watch);
 
@@ -185,7 +185,7 @@ public class ManifestService {
       throw e;
     }
 
-    log.info("Finsished creating manifest in {}", watch);
+    log.info("Finished creating manifest in {}", watch);
   }
 
   public void generateManifestArchive(SearchResponse searchResult, ManifestContext context) throws IOException {
