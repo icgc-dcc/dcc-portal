@@ -181,7 +181,7 @@
     };
     
     _this.launchOncogridAnalysis = function (setIds) {
-      console.log('Launching OncoGrid with: ' + setIds);
+      console.log('Launching OncoGrid with: ', setIds);
       
       if (_isLaunchingAnalysis) {
         return;
@@ -190,8 +190,8 @@
       _isLaunchingAnalysis = true;
       
       var payload = {
-        donorSet: _this.selectedForOnco.donor,
-        geneSet: _this.selectedForOnco.gene
+        donorSet: setIds.donor,
+        geneSet: setIds.gene
       };
       
       return Restangular
@@ -418,7 +418,7 @@
 
           function proxyLaunch() {
             Page.stopWork();
-            _this.launchOncogridAnalysis([r1.id, r2.id]);
+            _this.launchOncogridAnalysis({donor: r1.id, gene: r2.id});
           }
           wait([r1.id, r2.id], 7, proxyLaunch);
       });
