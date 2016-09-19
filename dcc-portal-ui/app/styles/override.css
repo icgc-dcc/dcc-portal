@@ -91,35 +91,35 @@ textarea {
    color: rgb(220, 50, 47) !important;
 }
 
-.markdown_container td,
-.markdown_container th {
+.markdown-wrapper td,
+.markdown-wrapper th {
    border: 1px solid rgb(230, 230, 230);
    text-align: left;
    padding: .2rem .4rem;
    line-height: 1rem;
 }
 
-.markdown_container p,
+.markdown-wrapper p,
 .release_notice p{
    margin-top: 0.5rem;
    margin-bottom: 1.0rem;
 }
 
-.markdown_container h1,
+.markdown-wrapper h1,
 .release_notice h1 {
    margin-top: 0.5rem;
    margin-bottom: 0.5rem;
    font-size: 2rem;
 }
 
-.markdown_container h2,
+.markdown-wrapper h2,
 .release_notice h2 {
    margin-top: 0.5rem;
    margin-bottom: 0.5rem;
    font-size: 1.75rem;
 }
 
-.markdown_container h3,
+.markdown-wrapper h3,
 .release_notice h3 {
    margin-top: 0.5rem;
    margin-bottom: 0.5rem;

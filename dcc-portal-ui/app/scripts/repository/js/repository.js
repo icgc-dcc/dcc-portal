@@ -126,15 +126,17 @@
 
             // Workaround for links in README file on Releases page
 
-            angular.element('.markdown_wrapper').delegate('a', 'click', function(){
+            angular.element('.markdown-container').delegate('a', 'click', function(){
               var _elem = jQuery(this),
                 _href = _elem.attr('href');
               
               if(_href.indexOf('@') !== -1){
-                _elem.attr('href', 'mailto:' + _href);
+                window.location.href = 'mailto:' + _href;
+                return false;
               }
               else if(_href.indexOf('http') === -1) {
-                _elem.attr('href', 'http://' + _href);
+                window.location.href = 'http://' + _href;
+                return false;
               }
             });
           });
