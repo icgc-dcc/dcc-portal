@@ -130,7 +130,7 @@
               if(_href.indexOf('@') !== -1){
                 _elem.attr('href', 'mailto:' + _href);
               }
-              else if(_href.indexOf('http') == -1) {
+              else if(_href.indexOf('http') === -1) {
                 _elem.attr('href', 'http://' + _href);
               }
             });
