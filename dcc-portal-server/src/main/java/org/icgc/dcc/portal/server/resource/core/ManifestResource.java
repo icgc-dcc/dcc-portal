@@ -35,6 +35,7 @@ import static org.icgc.dcc.portal.server.manifest.model.ManifestFormat.JSON;
 import static org.icgc.dcc.portal.server.manifest.model.ManifestFormat.TARBALL;
 import static org.icgc.dcc.portal.server.util.MediaTypes.GZIP_TYPE;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -309,9 +310,14 @@ public class ManifestResource extends Resource {
     // Calling this method automatically commits the response, meaning the status code and headers will be written.
     response.flushBuffer();
 
-    // Write the manifests
-    val context = new ManifestContext(manifest, response.getOutputStream());
-    manifestService.generateManifests(context);
+    try {
+      // Write the manifests
+      val context = new ManifestContext(manifest, response.getOutputStream());
+      manifestService.generateManifests(context);
+    } catch (IOException e) {
+      // This can happen when a user aborts the connection while streaming
+      log.warn("Error generating manifests: {}", e.getMessage());
+    }
   }
 
   private ContentDisposition attachmentContent(Manifest manifest) {

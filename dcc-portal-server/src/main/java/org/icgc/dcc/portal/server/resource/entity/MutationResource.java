@@ -17,63 +17,13 @@
  */
 package org.icgc.dcc.portal.server.resource.entity;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.icgc.dcc.portal.server.resource.Resources.AFFECTED_BY_THE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FACETS_ONLY_DESCRIPTION;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FACETS_ONLY_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_INCLUDE_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_INCLUDE_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_MUTATION_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_MUTATION_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_ALLOW;
-import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_PROJECT_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_PROJECT_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_ALLOW;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_FIELD;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.DONOR;
-import static org.icgc.dcc.portal.server.resource.Resources.FIND_BY_ID;
-import static org.icgc.dcc.portal.server.resource.Resources.FIND_BY_ID_ERROR;
-import static org.icgc.dcc.portal.server.resource.Resources.FOR_THE;
-import static org.icgc.dcc.portal.server.resource.Resources.GENE;
-import static org.icgc.dcc.portal.server.resource.Resources.GROUPED_BY;
-import static org.icgc.dcc.portal.server.resource.Resources.MULTIPLE_IDS;
-import static org.icgc.dcc.portal.server.resource.Resources.MUTATION;
-import static org.icgc.dcc.portal.server.resource.Resources.NOT_FOUND;
-import static org.icgc.dcc.portal.server.resource.Resources.PROJECT;
-import static org.icgc.dcc.portal.server.resource.Resources.RETURNS_COUNT;
-import static org.icgc.dcc.portal.server.resource.Resources.RETURNS_LIST;
-import static org.icgc.dcc.portal.server.resource.Resources.S;
-import static org.icgc.dcc.portal.server.resource.Resources.TOTAL;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-
-import org.icgc.dcc.portal.server.model.Donors;
-import org.icgc.dcc.portal.server.model.Genes;
-import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.Mutation;
-import org.icgc.dcc.portal.server.model.Mutations;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.yammer.metrics.annotation.Timed;
+import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.model.param.IdsParam;
 import org.icgc.dcc.portal.server.model.param.IntParam;
@@ -85,17 +35,13 @@ import org.icgc.dcc.portal.server.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.yammer.metrics.annotation.Timed;
+import javax.ws.rs.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.icgc.dcc.portal.server.resource.Resources.*;
 
 @Component
 @Slf4j
@@ -135,7 +81,7 @@ public class MutationResource extends Resource {
       @ApiParam(value = API_FACETS_ONLY_DESCRIPTION) @QueryParam(API_FACETS_ONLY_PARAM) @DefaultValue("false") boolean facetsOnly) {
     val filters = filtersParam.get();
 
-    log.info(FIND_ALL_TEMPLATE, new Object[] { size, MUTATION, from, sort, order, filters });
+    log.debug(FIND_ALL_TEMPLATE, new Object[] { size, MUTATION, from, sort, order, filters });
 
     val query = query(fields, include, filters, from, size, sort, order);
 
@@ -150,7 +96,7 @@ public class MutationResource extends Resource {
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
-    log.info(COUNT_TEMPLATE, GENE, filters);
+    log.debug(COUNT_TEMPLATE, GENE, filters);
 
     return mutationService.count(query().filters(filters).build());
   }
@@ -258,7 +204,7 @@ public class MutationResource extends Resource {
 
     removeMutationEntitySet(filters);
 
-    log.info(NESTED_FIND_TEMPLATE, GENE, mutations);
+    log.debug(NESTED_FIND_TEMPLATE, GENE, mutations);
 
     filters = mergeFilters(filters, MUTATION_FILTER_TEMPLATE, JsonUtils.join(mutations));
 
@@ -277,7 +223,7 @@ public class MutationResource extends Resource {
 
     removeMutationEntitySet(filters);
 
-    log.info(NESTED_COUNT_TEMPLATE, GENE, mutationId);
+    log.debug(NESTED_COUNT_TEMPLATE, GENE, mutationId);
 
     filters = mergeFilters(filters, MUTATION_FILTER_TEMPLATE, mutationId);
 
