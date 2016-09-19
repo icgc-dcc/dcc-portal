@@ -123,6 +123,9 @@
           Restangular.one('download').get( {'fn':f.name}).then(function(data) {
             f.textContent = data;
           }).then(function(){
+
+            // Workaround for links in README file on Releases page
+
             angular.element('.markdown_wrapper').delegate('a', 'click', function(){
               var _elem = jQuery(this),
                 _href = _elem.attr('href');
