@@ -17,70 +17,15 @@
  */
 package org.icgc.dcc.portal.server.resource.entity;
 
-import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
-import static com.sun.jersey.core.header.ContentDisposition.type;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.icgc.dcc.portal.server.resource.Resources.AFFECTED_BY_THE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_DONOR_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_DONOR_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_INCLUDE_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_INCLUDE_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_MUTATION_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_MUTATION_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_ALLOW;
-import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_PROJECT_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_PROJECT_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_ALLOW;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_FIELD;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.DONOR;
-import static org.icgc.dcc.portal.server.resource.Resources.FIND_BY_ID;
-import static org.icgc.dcc.portal.server.resource.Resources.FIND_BY_ID_ERROR;
-import static org.icgc.dcc.portal.server.resource.Resources.FOR_THE;
-import static org.icgc.dcc.portal.server.resource.Resources.GENE;
-import static org.icgc.dcc.portal.server.resource.Resources.GROUPED_BY;
-import static org.icgc.dcc.portal.server.resource.Resources.MULTIPLE_IDS;
-import static org.icgc.dcc.portal.server.resource.Resources.MUTATION;
-import static org.icgc.dcc.portal.server.resource.Resources.NOT_FOUND;
-import static org.icgc.dcc.portal.server.resource.Resources.PROJECT;
-import static org.icgc.dcc.portal.server.resource.Resources.RETURNS_COUNT;
-import static org.icgc.dcc.portal.server.resource.Resources.RETURNS_LIST;
-import static org.icgc.dcc.portal.server.resource.Resources.S;
-import static org.icgc.dcc.portal.server.resource.Resources.TOTAL;
-import static org.icgc.dcc.portal.server.util.JsonUtils.MAPPER;
-import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
-
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
-
-import org.icgc.dcc.portal.server.model.Donors;
-import org.icgc.dcc.portal.server.model.Genes;
-import org.icgc.dcc.portal.server.model.Mutations;
-import org.icgc.dcc.portal.server.model.Project;
-import org.icgc.dcc.portal.server.model.Projects;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.io.Resources;
+import com.yammer.metrics.annotation.Timed;
+import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.model.param.IdsParam;
 import org.icgc.dcc.portal.server.model.param.IntParam;
@@ -93,19 +38,20 @@ import org.icgc.dcc.portal.server.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.io.Resources;
-import com.yammer.metrics.annotation.Timed;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
+import static com.sun.jersey.core.header.ContentDisposition.type;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.icgc.dcc.portal.server.resource.Resources.*;
+import static org.icgc.dcc.portal.server.util.JsonUtils.MAPPER;
+import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
 
 @Component
 @Slf4j
@@ -147,7 +93,7 @@ public class ProjectResource extends Resource {
       @ApiParam(value = API_ORDER_VALUE, allowableValues = API_ORDER_ALLOW) @QueryParam(API_ORDER_PARAM) @DefaultValue(DEFAULT_ORDER) String order) {
     ObjectNode filters = filtersParam.get();
 
-    log.info(FIND_ALL_TEMPLATE, new Object[] { size, PROJECT, from, sort, order, filters });
+    log.debug(FIND_ALL_TEMPLATE, new Object[] { size, PROJECT, from, sort, order, filters });
 
     return projectService.findAll(query().fields(fields).filters(filters).includes(include)
         .from(from.get()).size(size.get()).sort(sort).order(order).build());
@@ -162,7 +108,7 @@ public class ProjectResource extends Resource {
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
-    log.info(COUNT_TEMPLATE, PROJECT, filters);
+    log.debug(COUNT_TEMPLATE, PROJECT, filters);
 
     return projectService.count(query().filters(filters).build());
   }
@@ -176,7 +122,7 @@ public class ProjectResource extends Resource {
       @ApiParam(value = API_PROJECT_VALUE, required = true) @PathParam(API_PROJECT_PARAM) String projectId,
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,
       @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include) {
-    log.info(FIND_ONE_TEMPLATE, projectId);
+    log.debug(FIND_ONE_TEMPLATE, projectId);
 
     return projectService.findOne(projectId, query().fields(fields).includes(include).build());
   }
@@ -198,7 +144,7 @@ public class ProjectResource extends Resource {
     ObjectNode filters = filtersParam.get();
     List<String> projects = projectIds.get();
 
-    log.info(NESTED_FIND_TEMPLATE, DONOR, projects);
+    log.debug(NESTED_FIND_TEMPLATE, DONOR, projects);
 
     filters = mergeFilters(filters, PROJECT_FILTER_TEMPLATE, JsonUtils.join(projects));
 
@@ -372,7 +318,7 @@ public class ProjectResource extends Resource {
     ObjectNode filters = filtersParam.get();
     List<String> projects = projectIds.get();
 
-    log.info(NESTED_FIND_TEMPLATE, GENE, projects);
+    log.debug(NESTED_FIND_TEMPLATE, GENE, projects);
 
     filters = mergeFilters(filters, PROJECT_FILTER_TEMPLATE, JsonUtils.join(projects));
 
@@ -390,7 +336,7 @@ public class ProjectResource extends Resource {
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
-    log.info(NESTED_COUNT_TEMPLATE, GENE, projectId);
+    log.debug(NESTED_COUNT_TEMPLATE, GENE, projectId);
 
     filters = mergeFilters(filters, PROJECT_FILTER_TEMPLATE, projectId);
 

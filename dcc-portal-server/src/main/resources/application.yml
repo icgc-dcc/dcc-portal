@@ -179,3 +179,7 @@ features:
 # Banner
 spring.main.banner-mode: log
 spring.mvc.favicon.enabled: false
+
+# Locale (DCC-5255)
+spring.mvc.locale: en_CA
+spring.mvc.locale-resolver: fixed
