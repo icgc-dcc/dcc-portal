@@ -122,6 +122,23 @@
         _ctrl.textFiles.forEach(function(f) {
           Restangular.one('download').get( {'fn':f.name}).then(function(data) {
             f.textContent = data;
+          }).then(function(){
+
+            // Workaround for links in README file on Releases page
+
+            angular.element('.markdown-container').delegate('a', 'click', function(){
+              var _elem = jQuery(this),
+                _href = _elem.attr('href');
+              
+              if(_href.indexOf('@') !== -1){
+                window.location.href = 'mailto:' + _href;
+                return false;
+              }
+              else if(_href.indexOf('http') === -1) {
+                window.location.href = 'http://' + _href;
+                return false;
+              }
+            });
           });
         });
 
