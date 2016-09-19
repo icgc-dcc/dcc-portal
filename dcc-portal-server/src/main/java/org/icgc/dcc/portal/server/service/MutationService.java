@@ -1,20 +1,13 @@
 package org.icgc.dcc.portal.server.service;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.util.stream.IntStream.range;
-import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-import static org.dcc.portal.pql.query.PqlParser.parse;
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
-import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
-import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
-import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
-
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.Mutation;
@@ -27,15 +20,18 @@ import org.icgc.dcc.portal.server.repository.MutationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.stream.IntStream.range;
+import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
+import static org.dcc.portal.pql.query.PqlParser.parse;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
+import static org.icgc.dcc.portal.server.util.SearchResponses.*;
 
 @Slf4j
 @Service
@@ -57,7 +53,7 @@ public class MutationService {
     val pql =
         facetsOnly ? QUERY_CONVERTER.convertCount(query, MUTATION_CENTRIC) : QUERY_CONVERTER.convert(query,
             MUTATION_CENTRIC);
-    log.info("PQL of findAllCentric is: {}", pql);
+    log.debug("PQL of findAllCentric is: {}", pql);
 
     val pqlAst = parse(pql);
     val response = mutationRepository.findAllCentric(pqlAst);

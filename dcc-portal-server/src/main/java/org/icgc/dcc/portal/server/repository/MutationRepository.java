@@ -17,19 +17,10 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static java.lang.String.format;
-import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-import static org.elasticsearch.action.search.SearchType.COUNT;
-import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.EMPTY_SOURCE_FIELDS;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.resolveSourceFields;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.Lists;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.MultiSearchResponse;
@@ -47,11 +38,18 @@ import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.Lists;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static java.lang.String.format;
+import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
+import static org.elasticsearch.action.search.SearchType.COUNT;
+import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
+import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.EMPTY_SOURCE_FIELDS;
+import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.resolveSourceFields;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
 @Slf4j
 @Component
@@ -122,7 +120,7 @@ public class MutationRepository implements Repository {
 
   @Override
   public long count(Query query) {
-    log.info("Count Query {}", query.getFilters());
+    log.debug("Count Query {}", query.getFilters());
     val pql = converter.convertCount(query, MUTATION_CENTRIC);
     val search = queryEngine.execute(pql, MUTATION_CENTRIC);
     return search.getRequestBuilder().execute().actionGet().getHits().getTotalHits();
