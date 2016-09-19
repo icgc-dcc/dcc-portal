@@ -1,5 +1,32 @@
 package org.icgc.dcc.portal.server.service;
 
+import com.google.common.collect.*;
+import lombok.Cleanup;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.dcc.portal.pql.meta.DonorCentricTypeModel.Fields;
+import org.elasticsearch.action.search.MultiSearchResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.icgc.dcc.portal.server.model.*;
+import org.icgc.dcc.portal.server.model.IndexModel.Kind;
+import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
+import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
+import org.icgc.dcc.portal.server.repository.DonorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.supercsv.io.CsvMapWriter;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.util.*;
+
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
@@ -14,50 +41,6 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createR
 import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.StreamingOutput;
-
-import org.dcc.portal.pql.meta.DonorCentricTypeModel.Fields;
-import org.elasticsearch.action.search.MultiSearchResponse;
-import org.elasticsearch.action.search.SearchResponse;
-import org.icgc.dcc.portal.server.model.Donor;
-import org.icgc.dcc.portal.server.model.Donors;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.Pagination;
-import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.TermFacet;
-import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
-import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
-import org.icgc.dcc.portal.server.repository.DonorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.supercsv.io.CsvMapWriter;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
-
-import lombok.Cleanup;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -95,7 +78,7 @@ public class DonorService {
    * Matches donors based on the ids provided.
    * 
    * @param ids List of ids as strings
-   * @param False - donor-text, True - file-donor-text
+   * @param isForExternalfile False - donor-text, True - file-donor-text
    * @return A Map keyed on search fields from file-donor-text or donor-text with values being a multimap containing the
    * matched field as the key and the matched donor as the value.
    */
@@ -140,7 +123,7 @@ public class DonorService {
   public Donors findAllCentric(Query query, boolean facetsOnly) {
     val pql =
         facetsOnly ? QUERY_CONVERTER.convertCount(query, DONOR_CENTRIC) : QUERY_CONVERTER.convert(query, DONOR_CENTRIC);
-    log.info("PQL of findAllCentric is: {}", pql);
+    log.debug("PQL of findAllCentric is: {}", pql);
 
     val pqlAst = parse(pql);
 
