@@ -101,6 +101,7 @@ public class Query {
   }
 
   public SortOrder getOrder() {
+    if (order == null) return null;
     return SortOrder.valueOf(order.toUpperCase());
   }
 

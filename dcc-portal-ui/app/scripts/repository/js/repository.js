@@ -128,7 +128,7 @@
       },function (error) {
         if(error.status === 503){
           _ctrl.downloadEnabled = false;
-        }        
+        }
       });
     }
 
@@ -198,7 +198,7 @@
     $modalInstance
   ) {
     var vm = this;
-    var loadState = new LoadState(); 
+    var loadState = new LoadState();
 
     var filters = _.extend({},
       FilterService.filters(),
@@ -222,7 +222,7 @@
       .then(function (manifestId) {
         vm.manifestId = manifestId;
       });
-    
+
     loadState.loadWhile(requestManifestId);
 
     _.extend(this, {
@@ -234,7 +234,7 @@
 
   module.controller('ExternalFileDownloadController',
     function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params, Restangular, $filter, gettextCatalog) {
+      Extensions, params, Restangular, $filter) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
@@ -328,7 +328,7 @@
       return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
         function (summary) {
           $scope.summary = summary;
-        }); 
+        });
     };
 
     $scope.getRepoManifestUrl = ExternalRepoService.getRepoManifestUrl;
@@ -363,11 +363,12 @@
           unique: $scope.shouldDeduplicate,
         });
 
-        var newTab = $window.open(manifestUrl);
-        var waitMessage = gettextCatalog.getString('Please wait while your file is being generated...');
-        newTab.document.body.innerHTML = '<html> <head> <title>Please wait for download | ICGC Data Portal</title> </head> <body > <style> body {display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: Open Sans, sans-serif; background: #f7f7f7; color: #787878; } .spinner {-webkit-animation: rotate 2s linear infinite; animation: rotate 2s linear infinite; z-index: 2; width: 50px; height: 50px; margin-top: -56px; } .spinner .path {stroke: #d6d6d6; stroke-linecap: round; -webkit-animation: dash 1.5s ease-in-out infinite; animation: dash 1.5s ease-in-out infinite; } @-webkit-keyframes rotate {100% {-webkit-transform: rotate(360deg); transform: rotate(360deg); } } @keyframes rotate {100% {-webkit-transform: rotate(360deg); transform: rotate(360deg); } } @-webkit-keyframes dash {0% {stroke-dasharray: 1, 150; stroke-dashoffset: 0; } 50% {stroke-dasharray: 90, 150; stroke-dashoffset: -35; } 100% {stroke-dasharray: 90, 150; stroke-dashoffset: -124; } } @keyframes dash {0% {stroke-dasharray: 1, 150; stroke-dashoffset: 0; } 50% {stroke-dasharray: 90, 150; stroke-dashoffset: -35; } 100% {stroke-dasharray: 90, 150; stroke-dashoffset: -124; } }</style> <link href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700,700italic" rel="stylesheet" type="text/css"> <span>' + waitMessage + '</span> <h1 id="brand" class="animated fadeInDownEnter" style="font-size: 25px; font-weight: 300; margin-top: 40px; "> <img src="https://dcc.icgc.org/styles/images/icgc-logo.png" style="width: 30px; "> </h1><svg class="spinner" viewBox="0 0 50 50"> <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="3"></circle> </svg> </body> </html>'; // jshint ignore:line
+        window.location.href = manifestUrl;
       } else {
-        ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
+        ExternalRepoService.downloadSelected(
+                $scope.selectedFiles, 
+        		$scope.shouldDeduplicate ? _.map($scope.repos, 'repoCode') : $scope.selectedRepos, 
+        		$scope.shouldDeduplicate);
       }
       $scope.cancel();
     };
@@ -409,7 +410,7 @@
    * Controller for File Entity page
    */
   module.controller('ExternalFileInfoController',
-    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature, SetService, 
+    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature, SetService,
       gettextCatalog) {
 
     Page.setTitle(gettextCatalog.getString('Repository File'));
@@ -552,7 +553,7 @@
     this.equalsIgnoringCase = equalsIgnoringCase;
 
     this.downloadManifest = function (fileId, repo) {
-      ExternalRepoService.downloadSelected ([fileId], [repo]);
+      ExternalRepoService.downloadSelected ([fileId], [repo], true);
     };
 
     function noNullConcat (values) {

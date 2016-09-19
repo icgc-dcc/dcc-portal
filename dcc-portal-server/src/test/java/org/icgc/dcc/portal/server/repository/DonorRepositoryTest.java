@@ -17,15 +17,17 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import lombok.val;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
+
+import java.util.Map;
+import java.util.UUID;
+
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet.State;
@@ -33,7 +35,6 @@ import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
-import org.icgc.dcc.portal.server.repository.TermsLookupRepository.TermLookupType;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,13 +44,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Map;
-import java.util.UUID;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
+import lombok.val;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonorRepositoryTest extends BaseElasticSearchTest {
@@ -274,19 +273,6 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
   @Override
   protected Object cast(Object object) {
     return object;
-  }
-
-  private void setUpTermsLookup(final UUID id1, final UUID id2) {
-    val termsLookupRepository =
-        new TermsLookupRepository(es.client(), TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName(),
-            new ServerProperties());
-    val lookupType = TermLookupType.DONOR_IDS;
-
-    val donorSet1 = newArrayList("DO1", "DO3", "DO5", "DO7", "DO9");
-    termsLookupRepository.createTermsLookup(lookupType, id1, donorSet1);
-
-    val donorSet2 = newArrayList("DO2", "DO4", "DO5", "DO6", "DO8");
-    termsLookupRepository.createTermsLookup(lookupType, id2, donorSet2);
   }
 
 }
