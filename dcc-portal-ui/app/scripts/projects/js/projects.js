@@ -390,23 +390,10 @@
     };
 
     $scope.$on('$locationChangeSuccess', function (event, dest) {
-
-      function hasPath(p) {
-        return dest.indexOf(p) >= 0;
+      if (dest.match(new RegExp('^' + window.location.protocol + '//' + window.location.host + '/projects'))) {
+        // NOTE: need to defer this call till next tick due to this running before filters are updated
+        setTimeout(refresh);
       }
-
-      // Sub tabs
-      if (hasPath('/projects/details') || hasPath('/projects/summary') || hasPath('/projects/history') ) {
-        refresh();
-        return;
-      }
-
-      // Main
-      if (dest.indexOf('projects') !== -1 && dest.indexOf('projects/') === -1) {
-        refresh();
-        return;
-      }
-
     });
 
     refresh();
