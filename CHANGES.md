@@ -3,6 +3,14 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.3.11
+--
+- Fixes regression for launching Survival Analysis demo. 
+- Don’t open manifest downloads in new tab, always download tarball
+- Now using HttpServletResponse to render manifests in order to eagerly commit status code and content disposition for user agents
+- Fixed issues with manifest generation when unique selected and using individually selected files
+- Fixed other UI issues related to manifest generation
+
 4.3.10
 --
 - Added ability to filter by compounds in Advanced Search
