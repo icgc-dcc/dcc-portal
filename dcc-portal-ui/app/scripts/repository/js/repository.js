@@ -603,7 +603,7 @@
    */
   module.controller ('ExternalRepoController', function ($scope, $window, $modal, LocationService, Page,
     ExternalRepoService, SetService, ProjectCache, CodeTable, RouteInfoService, $rootScope, PortalFeature,
-    FacetConstants, Facets) {
+    FacetConstants, Facets, LoadState) {
 
     var dataRepoTitle = RouteInfoService.get ('dataRepositories').title,
         FilterService = LocationService.getFilterService();
@@ -1064,8 +1064,11 @@
       });
     }
 
+    var loadState = new LoadState();
+    _ctrl.loadState = loadState;
+
     function refresh() {
-      var promise, params = {};
+      var params = {};
       var filesParam = LocationService.getJsonParam ('files');
 
       // Default
@@ -1085,8 +1088,7 @@
       params.filters = FilterService.filters();
 
       // Get files that match query
-      promise = ExternalRepoService.getList (params);
-      promise.then (function (data) {
+      var listRequest = ExternalRepoService.getList (params).then (function (data) {
         // Vincent asked to remove city names from repository names for CGHub and TCGA DCC.
         fixRepoNameInTableData (data.hits);
         _ctrl.files = data;
@@ -1098,19 +1100,20 @@
       });
 
       // Get summary
-      ExternalRepoService.getSummary (params).then (function (summary) {
+      var summaryRequest = ExternalRepoService.getSummary (params).then (function (summary) {
         _ctrl.summary = summary;
       });
 
       // Get index creation time
-      ExternalRepoService.getMetaData().then (function (metadata) {
+      var metaDataRequeset = ExternalRepoService.getMetaData().then (function (metadata) {
         _ctrl.repoCreationTime = metadata.creation_date || '';
       });
 
-      ProjectCache.getData().then (function (cache) {
+      var cacheReqeust = ProjectCache.getData().then (function (cache) {
         projectMap = ensureObject (cache);
       });
 
+      loadState.loadWhile([listRequest, summaryRequest, metaDataRequeset, cacheReqeust]);
     }
 
     refresh();
