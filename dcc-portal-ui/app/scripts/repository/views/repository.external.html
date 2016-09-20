@@ -112,6 +112,11 @@
 
 <article style="position: relative;">
     <current></current>
+    <div data-ng-if="ExternalRepoController.loadState.isLoading" class="loading loading-text no-animate">
+      <h3><i class="icon-spinner icon-spin"></i>
+        <translate>Loading Files...</translate>
+      </h3>
+    </div>
     <section style="padding-top:0">
         <div>
            <!--
@@ -122,11 +127,6 @@
                <br>
                -->
             </p>
-        </div>
-        <div data-ng-if="ExternalRepoController.loadState.isLoading" class="loading loading-text no-animate">
-          <h3><i class="icon-spinner icon-spin"></i>
-            <translate>Loading Files...</translate>
-          </h3>
         </div>
         <div class="empty loading-text" data-ng-if="!ExternalRepoController.loadState.isLoading && ExternalRepoController.files.hits.length === 0">
             <h3><translate>No Files Found</translate></h3>
