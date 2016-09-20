@@ -262,20 +262,20 @@
     _ctrl.setActive();
   });
 
-module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $stateParams, 
-  RouteInfoService, LocationService, ExternalRepoService, FilterService) {
+module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state, $stateParams, 
+  $location, RouteInfoService, LocationService, ExternalRepoService, FilterService) {
 
     var _ctrl = this,
-      commaAndSpace = ', ';    
+      commaAndSpace = ', ';
 
     _ctrl.donorId = $stateParams.id || null;
-     _ctrl.summary = {};
-     _ctrl.facetCharts = {};
-     _ctrl.cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
+    _ctrl.summary = {};
+    _ctrl.facetCharts = {};
+    _ctrl.cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
 
     _ctrl.dataRepoFileUrl = RouteInfoService.get('dataRepositoryFile').href;
 
-    _ctrl.repoChartConfigOverrides = {
+    _ctrl.barChartConfigOverrides = {
       chart: {
           type: 'column',
           marginTop: 20,
@@ -326,15 +326,39 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
           maxPointWidth: 100,
           borderRadiusTopLeft: 2,
           borderRadiusTopRight: 2,
-          cursor: 'default',
+          cursor: 'pointer',
           stickyTracking: false,
           point: {
             events: {
+              click: function () {
+                var params = {};
+                params.file = {};
+                params.file.repoName = {'is': [this.category]};
+                params.file.donorId = {'is': [_ctrl.donorId]};
+
+                $state.go('dataRepositories', {filters:  angular.toJson(params)});
+              },
               mouseOut: $scope.$emit.bind($scope, 'tooltip::hide')
             }
           }
         }
       }
+    };
+
+    _ctrl.pieChartConfigOverrides = {
+      plotOptions: {
+        pie: {
+          events: {
+            click: function (e) {
+              var params = {};
+              params.file = {};
+              params.file[e.point.facet] = {'is': [e.point.term] };
+              params.file.donorId = {'is': [_ctrl.donorId]};
+              $state.go('dataRepositories', {filters:  angular.toJson(params)});
+            }
+          },
+        }
+      },
     };
 
     function tooltipList (objects, property, oneItemHandler) {
@@ -385,73 +409,6 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     _ctrl.export = function() {
       var params = {'donor': {'id': { 'is': _ctrl.donorId}}};
       ExternalRepoService.export(FilterService.filters(params));
-    };
-
-    _ctrl.showIobioModal = function(objectId, objectName, name) {
-      var fileObjectId = objectId;
-      var fileObjectName = objectName;
-      var fileName = name;
-      $modal.open ({
-        controller: 'ExternalIobioController',
-        template: '<section id="bam-statistics" class="bam-statistics-modal">'+
-          '<bamstats bam-id="bamId" on-modal=true bam-name="bamName" bam-file-name="bamFileName" data-ng-if="bamId">'+
-          '</bamstats></section>',
-        windowClass: 'iobio-modal',
-        resolve: {
-          params: function() {
-            return {
-              fileObjectId: fileObjectId,
-              fileObjectName: fileObjectName,
-              fileName: fileName
-            };
-          }
-        }
-      }).opened.then(function() {
-        setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
-
-      });
-    };
-
-    _ctrl.showVcfIobioModal = function(objectId, objectName, name) {
-      var fileObjectId = objectId;
-      var fileObjectName = objectName;
-      var fileName = name;
-      $modal.open ({
-        controller: 'ExternalVcfIobioController',
-        template: '<section id="vcf-statistics" class="vcf-statistics-modal">'+
-          '<vcfstats vcf-id="vcfId" on-modal=true vcf-name="vcfName" vcf-file-name="vcfFileName" data-ng-if="vcfId">'+
-          '</vcfstats></section>',
-        windowClass: 'iobio-modal',
-        resolve: {
-          params: function() {
-            return {
-              fileObjectId: fileObjectId,
-              fileObjectName: fileObjectName,
-              fileName: fileName
-            };
-          }
-        }
-      }).opened.then(function() {
-        setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
-      });
-    };
-
-     _ctrl.awsOrCollab = function(fileCopies) {
-       return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
-         _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
-    };
-
-    _ctrl.getAwsOrCollabFileName = function(fileCopies) {
-      try {
-        var fCopies = _.filter(fileCopies, function(fCopy) {
-          return fCopy.repoCode === 'aws-virginia' || fCopy.repoCode === 'collaboratory';
-        });
-
-        return _.pluck(fCopies, 'fileName')[0];
-      } catch (err) {
-        console.log(err);
-        return 'Could Not Retrieve File Name';
-      }
     };
 
     _ctrl.removeCityFromRepoName = function(repoName) {

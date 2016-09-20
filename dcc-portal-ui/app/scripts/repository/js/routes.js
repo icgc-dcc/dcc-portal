@@ -31,7 +31,7 @@
     });
 
     $stateProvider.state ('dataRepositories', {
-      url: '/repositories',
+      url: '/repositories?filters',
       templateUrl: '/scripts/repository/views/repository.external.html',
       controller: 'ExternalRepoController as ExternalRepoController'
     });

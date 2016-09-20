@@ -1,7 +1,7 @@
 <section class="graphs-container" style="margin-top:3rem;">
   <div class="graphs">
     <bar
-      config-overrides="DonorFilesCtrl.repoChartConfigOverrides"
+      config-overrides="DonorFilesCtrl.barChartConfigOverrides"
       items="DonorFilesCtrl.facetCharts.repositories"
       heading="{{'Repository' | translate}}"
       ylabel="{{'Files' | translate}}"
@@ -12,21 +12,21 @@
     </bar>
 
     <pie items='DonorFilesCtrl.facetCharts.primarySite'
-      config-overrides="DonorFilesCtrl.repoChartConfigOverrides"
+      config-overrides="DonorFilesCtrl.pieChartConfigOverrides"
       heading="{{'Primary Site' | translate | replace: ' ':'&nbsp;'}}"
       label="{{'Files' | translate}}"
       type="pie" width="160"
       group-percent="3"
       height="150"></pie>
     <pie items='DonorFilesCtrl.facetCharts.dataType'
-      config-overrides="DonorFilesCtrl.repoChartConfigOverrides"
+      config-overrides="DonorFilesCtrl.pieChartConfigOverrides"
       heading="{{'Data Type' | translate}}"
       label="{{'Files' | translate}}"
       type="pie" width="160"
       group-percent="3"
       height="150"></pie>
     <pie items='DonorFilesCtrl.facetCharts.experimentalStrategy'
-      config-overrides="DonorFilesCtrl.repoChartConfigOverrides"
+      config-overrides="DonorFilesCtrl.pieChartConfigOverrides"
       heading="{{'Experimental Strategy' | translate | replace: ' ':'&nbsp;'}}"
       label="{{'Files' | translate}}"
       type="pie" width="160"
@@ -93,16 +93,9 @@
           {{DonorFilesCtrl.fileAverageSize(row.fileCopies) | bytes}}
         </td>
         <td class="text-center" valign="middle" style="min-width: 1.6rem;">
-          <i class="icon-chart-bar iobio-popup"
-            tooltip="BAM statistics" 
-            data-ng-if="DonorFilesCtrl.fileFormats(row.fileCopies) == 'BAM' && DonorFilesCtrl.awsOrCollab(row.fileCopies)" 
-            data-ng-click="DonorFilesCtrl.showIobioModal(row.objectId, row.id, DonorFilesCtrl.getAwsOrCollabFileName(row.fileCopies))">
-          </i>
-          <i class="icon-chart-bar iobio-popup" 
-            tooltip="VCF statistics" 
-            data-ng-if="DonorFilesCtrl.fileFormats(row.fileCopies) == 'VCF' && DonorFilesCtrl.awsOrCollab(row.fileCopies)" 
-            data-ng-click="DonorFilesCtrl.showVcfIobioModal(row.objectId, row.id, DonorFilesCtrl.getAwsOrCollabFileName(row.fileCopies))">
-          </i>
+          <iobio-statistics data-file-copies="row.fileCopies"
+            data-object-id="row.objectId"
+            data-row-id="row.id"></iobio-statistics>
         </td>
       </tr>
     </tbody>
