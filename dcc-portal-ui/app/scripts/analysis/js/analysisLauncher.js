@@ -85,8 +85,23 @@
       });
     };
 
+    function clearOncoSelections() {
+     if (_this.selectedIds.indexOf(_this.selectedForOnco.donor) < 0) {
+        _this.selectedForOnco.donor = null;
+      }
+      if (_this.selectedIds.indexOf(_this.selectedForOnco.gene) < 0) {
+        _this.selectedForOnco.gene = null;
+      }
+    }
+
     _this.validForOnco = function(set) {
-      return set.count <= 100;
+      clearOncoSelections();
+
+      var selected = _this.selectedIds.indexOf(set.id) >= 0;
+      var numSelected = _this.selectedIds.length < 2;
+      var correctType = (set.type === 'gene' && set.count <= 100 && _this.selectedForOnco.gene === null) ||
+        (set.type === 'donor' && set.count <= 3000 && _this.selectedForOnco.donor === null);
+      return selected || (numSelected && correctType);
     };
 
     _this.applyFilter = function(type) {
@@ -123,6 +138,7 @@
     };
     
     _this.isValidOncoSelection = function() {
+      clearOncoSelections();
       return _this.selectedForOnco.donor !== null && _this.selectedForOnco.gene !== null;
     };
 
@@ -165,7 +181,7 @@
     };
     
     _this.launchOncogridAnalysis = function (setIds) {
-      console.log('Launching OncoGrid with: ' + setIds);
+      console.log('Launching OncoGrid with: ', setIds);
       
       if (_isLaunchingAnalysis) {
         return;
@@ -174,8 +190,8 @@
       _isLaunchingAnalysis = true;
       
       var payload = {
-        donorSet: _this.selectedForOnco.donor,
-        geneSet: _this.selectedForOnco.gene
+        donorSet: setIds.donor,
+        geneSet: setIds.gene
       };
       
       return Restangular
@@ -215,49 +231,37 @@
     }
 
     _this.demoPhenotype = function() {
-      var p1, p2, p3, type = 'donor';
+      var p1, p2, type = 'donor';
       p1 = {
         filters: {
-          donor:{ primarySite: { is: ['Brain'] } }
+          donor:{ primarySite: { is: ['Pancreas'] } },
+          gene: { id: { is: ['ENSG00000133703'] } }
         },
         isTransient: true,
         type: type,
-        name: gettextCatalog.getString('Brain Cancer')
+        name: gettextCatalog.getString('Pancreatic - KRAS mutated ')
       };
-
       p2 = {
         filters: {
-          donor:{ primarySite: { is: ['Breast'] } }
+          donor:{ primarySite: { is: ['Pancreas'] } },
+          gene: { id: { not: ['ENSG00000133703'] } }
         },
         isTransient: true,
         type: type,
-        name: gettextCatalog.getString('Breast Cancer')
-      };
-
-      p3 = {
-        filters: {
-          donor:{ primarySite: { is: ['Colorectal'] } }
-        },
-        isTransient: true,
-        type: type,
-        name: gettextCatalog.getString('Colorectal Cancer')
+        name: gettextCatalog.getString('Pancreatic - KRAS not mutated ')
       };
 
       var demoSetIds = [];
       Page.startWork();
-      SetService.addSet(type, p1).then(function(r1) {
+      SetService.addSet(type, p1).then(function (r1) {
         demoSetIds.push(r1.id);
-        SetService.addSet(type, p2).then(function(r2) {
+        SetService.addSet(type, p2).then(function (r2) {
           demoSetIds.push(r2.id);
-          SetService.addSet(type, p3).then(function(r3) {
-            demoSetIds.push(r3.id);
-
-            function proxyLaunch() {
-              Page.stopWork();
-              _this.launchPhenotype(demoSetIds);
-            }
-            wait(demoSetIds, 7, proxyLaunch);
-          });
+          function proxyLaunch() {
+            Page.stopWork();
+            _this.launchPhenotype(demoSetIds);
+          }
+          wait(demoSetIds, 7, proxyLaunch);
         });
       });
 
@@ -414,7 +418,7 @@
 
           function proxyLaunch() {
             Page.stopWork();
-            _this.launchOncogridAnalysis([r1.id, r2.id]);
+            _this.launchOncogridAnalysis({donor: r1.id, gene: r2.id});
           }
           wait([r1.id, r2.id], 7, proxyLaunch);
       });

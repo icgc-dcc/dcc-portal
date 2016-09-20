@@ -191,7 +191,8 @@ public class OAuthClient {
   }
 
   private static void validateResponse(ClientResponse response) {
-    checkState(response.getClientResponseStatus() == OK);
+    checkState(response.getClientResponseStatus() == OK, "Expected a valid response. Got: %s",
+        response.getClientResponseStatus());
   }
 
   private static ClientConfig getClientConfig(OAuthProperties config) {

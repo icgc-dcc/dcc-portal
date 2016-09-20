@@ -29,6 +29,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 import org.dcc.portal.pql.exception.SemanticException;
 import org.dcc.portal.pql.meta.field.FieldModel;
 import org.dcc.portal.pql.meta.visitor.CreateAliasVisitor;
@@ -38,10 +42,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class TypeModel {
@@ -57,11 +57,13 @@ public abstract class TypeModel {
   public static final String HAS_PATHWAY = "hasPathway";
   public static final String HAS_GO_TERM = "hasGoTerm";
   public static final String HAS_CURATED_SET = "hasCuratedSet";
+  public static final String HAS_COMPOUND = "hasCompound";
 
   public static final String GENE_PATHWAY_ID = "gene.pathwayId";
   public static final String GENE_SET_ID = "gene.geneSetId";
   public static final String GENE_GO_TERM_ID = "gene.goTermId";
   public static final String GENE_CURATED_SET_ID = "gene.curatedSetId";
+  public static final String GENE_DRUG_ID = "gene.compoundId";
 
   public static final String GENE_LOCATION = "gene.location";
   public static final String MUTATION_LOCATION = "mutation.location";
@@ -86,9 +88,11 @@ public abstract class TypeModel {
       GENE_PATHWAY_ID,
       GENE_SET_ID,
       GENE_GO_TERM_ID,
+      GENE_DRUG_ID,
       HAS_PATHWAY,
       HAS_GO_TERM,
       HAS_CURATED_SET,
+      HAS_COMPOUND,
       GENE_CURATED_SET_ID,
       GENE_LOCATION,
       MUTATION_LOCATION);
@@ -110,7 +114,8 @@ public abstract class TypeModel {
   private final Map<String, String> hasFieldsMapping = ImmutableMap.of(
       HAS_PATHWAY, GENE_PATHWAY_ID,
       HAS_CURATED_SET, GENE_CURATED_SET_ID,
-      HAS_GO_TERM, GENE_GO_TERM_ID);
+      HAS_GO_TERM, GENE_GO_TERM_ID,
+      HAS_COMPOUND, GENE_DRUG_ID);
 
   private static final Splitter FIELD_SEPARATOR_SPLITTER = Splitter.on(FIELD_SEPARATOR);
 

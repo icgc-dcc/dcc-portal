@@ -25,10 +25,12 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
+import static org.icgc.dcc.common.core.util.Formats.formatCount;
 import static org.icgc.dcc.common.core.util.Joiners.COMMA;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.common.core.util.function.Predicates.distinctByKey;
 import static org.icgc.dcc.portal.server.model.EntitySetDefinition.SortOrder.DESCENDING;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -161,23 +163,23 @@ public class ManifestService {
   }
 
   public void generateManifests(@NonNull ManifestContext context) throws IOException {
-    // Get requested file copies
     val watch = Stopwatch.createStarted();
 
-    log.info("Finding manifest files...");
-    val searchResult = findFiles(context.getQuery());
-    log.info("Read manifest files in {}", watch);
+    // Get requested file copies
+    log.info("Finding files to include in manifest using query: {} ...", context.getQuery());
+    val searchResponse = findFiles(context.getQuery());
+    log.info("Found {} manifest files in {}", formatCount(getTotalHitCount(searchResponse)), watch);
 
     try {
       switch (context.getManifest().getFormat()) {
       case TARBALL:
-        generateManifestArchive(searchResult, context);
+        generateManifestArchive(searchResponse, context);
         break;
       case FILES:
-        generateManifestFiles(searchResult, context);
+        generateManifestFiles(searchResponse, context);
         break;
       case JSON:
-        generateManifestJSON(searchResult, context);
+        generateManifestJSON(searchResponse, context);
         break;
       }
     } catch (Exception e) {
@@ -185,17 +187,17 @@ public class ManifestService {
       throw e;
     }
 
-    log.info("Finsished creating manifest in {}", watch);
+    log.info("Finished creating manifest in {}", watch);
   }
 
-  public void generateManifestArchive(SearchResponse searchResult, ManifestContext context) throws IOException {
+  public void generateManifestArchive(SearchResponse searchResponse, ManifestContext context) throws IOException {
     @Cleanup
     val archive = new ManifestArchive(context.getOutput());
     val timestamp = context.getManifest().getTimestamp();
 
     // Write a manifest for each repository in turn
     log.info("Writing manifest archive...");
-    eachRepository(context, searchResult, (repo, bundles) -> {
+    eachRepository(context, searchResponse, (repo, bundles) -> {
       ByteArrayOutputStream fileContents = new ByteArrayOutputStream(BUFFER_SIZE);
       writeManifest(repo, timestamp, bundles, fileContents);
 
@@ -204,13 +206,13 @@ public class ManifestService {
     });
   }
 
-  private void generateManifestFiles(SearchResponse searchResult, ManifestContext context) throws IOException {
+  private void generateManifestFiles(SearchResponse searchResponse, ManifestContext context) throws IOException {
     val timestamp = context.getManifest().getTimestamp();
     if (context.getManifest().isMultipart()) {
       val boundary = "boundary_" + timestamp;
       val output = new MultiPartOutputStream(boundary, context.getOutput());
 
-      eachRepository(context, searchResult, (repo, bundles) -> {
+      eachRepository(context, searchResponse, (repo, bundles) -> {
         String fileName = formatFileName(repo, timestamp);
         String fileType = DefaultMediaTypePredictor.getInstance().getMediaTypeFromFileName(fileName).toString();
         output.startPart(fileType, new String[] { "ContentDisposition: " +
@@ -219,13 +221,13 @@ public class ManifestService {
       });
     } else {
       val output = context.getOutput();
-      eachRepository(context, searchResult, (repo, bundles) -> {
+      eachRepository(context, searchResponse, (repo, bundles) -> {
         writeManifest(repo, timestamp, bundles, output);
       });
     }
   }
 
-  private void generateManifestJSON(SearchResponse searchResult, ManifestContext context) throws IOException {
+  private void generateManifestJSON(SearchResponse searchResponse, ManifestContext context) throws IOException {
     val output = context.getOutput();
     val manifest = context.getManifest();
     val generator = DEFAULT.getFactory().createGenerator(output);
@@ -250,7 +252,7 @@ public class ManifestService {
     generator.writeFieldName("entries");
 
     generator.writeStartArray();
-    eachRepository(context, searchResult, (repo, bundles) -> {
+    eachRepository(context, searchResponse, (repo, bundles) -> {
       generator.writeStartObject();
       generator.writeStringField("repo", repo.getCode());
 
@@ -291,11 +293,11 @@ public class ManifestService {
     generator.flush();
   }
 
-  private void eachRepository(ManifestContext context, SearchResponse searchResult, BundlesCallback callback)
+  private void eachRepository(ManifestContext context, SearchResponse searchResponse, BundlesCallback callback)
       throws IOException {
     // Map and filter
     Stream<ManifestFile> files = new ManifestMapper(repositories.findAll())
-        .map(searchResult)
+        .map(searchResponse)
         .filter(file -> context.isActive(file.getRepoCode()));
 
     if (context.getManifest().isUnique()) {

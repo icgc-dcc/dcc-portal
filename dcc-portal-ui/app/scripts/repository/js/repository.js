@@ -42,7 +42,7 @@
 
   var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
 
-  var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
+  var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto', 'PDC - Chicago'];
 
   /**
    * ICGC static repository controller
@@ -122,13 +122,30 @@
         _ctrl.textFiles.forEach(function(f) {
           Restangular.one('download').get( {'fn':f.name}).then(function(data) {
             f.textContent = data;
+          }).then(function(){
+
+            // Workaround for links in README file on Releases page
+
+            angular.element('.markdown-container').delegate('a', 'click', function(){
+              var _elem = jQuery(this),
+                _href = _elem.attr('href');
+              
+              if(_href.indexOf('@') !== -1){
+                window.location.href = 'mailto:' + _href;
+                return false;
+              }
+              else if(_href.indexOf('http') === -1) {
+                window.location.href = 'http://' + _href;
+                return false;
+              }
+            });
           });
         });
 
       },function (error) {
         if(error.status === 503){
           _ctrl.downloadEnabled = false;
-        }        
+        }
       });
     }
 
@@ -198,7 +215,7 @@
     $modalInstance
   ) {
     var vm = this;
-    var loadState = new LoadState(); 
+    var loadState = new LoadState();
 
     var filters = _.extend({},
       FilterService.filters(),
@@ -222,7 +239,7 @@
       .then(function (manifestId) {
         vm.manifestId = manifestId;
       });
-    
+
     loadState.loadWhile(requestManifestId);
 
     _.extend(this, {
@@ -243,6 +260,13 @@
 
     $scope.filters = FilterService.filters;
     $scope.$filter = $filter;
+    $scope.shouldDeduplicate = false;
+    $scope.summary = {};
+
+    $scope.getRepoFieldValue = function (repoName, fieldName) {
+      var repoData = $scope.shouldDeduplicate ? $scope.summary[repoName] : _.findWhere($scope.repos, { repoName: repoName });
+      return repoData && repoData[fieldName];
+    };
 
     $scope.handleNumberTweenStart = function (tween) {
       jQuery(tween.elem).closest('td').addClass('tweening');
@@ -294,16 +318,16 @@
         repos[repoName].fileSize = findRepoData(facets.repositorySizes.terms, repoName);
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
         repos[repoName].fileCount = term.count;
-        repos[repoName].hasManifest = _.includes(['AWS - Virginia', 'Collaboratory - Toronto'], repoName);
+        repos[repoName].hasManifest = _.includes(cloudRepos, repoName);
         repos[repoName].isCloud = _.includes(cloudRepos, repoName);
       });
 
-      $scope.repos = _.values(repos);
+      $scope.repos = _(repos).values().sortBy('fileSize').value().reverse();
       $scope.selectedRepos = Object.keys(repos);
 
       var manifestSummaryQuery = {
         query: p,
-        repoNames: _.map(repos, 'repoName')
+        repoNames: _.map($scope.repos, 'repoName')
       };
 
       return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
@@ -321,7 +345,7 @@
       return ExternalRepoService.getManifestSummary(manifestSummaryQuery).then(
         function (summary) {
           $scope.summary = summary;
-        }); 
+        });
     };
 
     $scope.getRepoManifestUrl = ExternalRepoService.getRepoManifestUrl;
@@ -353,12 +377,15 @@
           repoCodes: _.map($scope.repos, 'repoCode'),
           filters: filters,
           format: 'tarball',
-          unique: true
+          unique: $scope.shouldDeduplicate,
         });
 
-        $window.open(manifestUrl);
+        window.location.href = manifestUrl;
       } else {
-        ExternalRepoService.downloadSelected($scope.selectedFiles, $scope.selectedRepos);
+        ExternalRepoService.downloadSelected(
+                $scope.selectedFiles, 
+        		$scope.shouldDeduplicate ? _.map($scope.repos, 'repoCode') : $scope.selectedRepos, 
+        		$scope.shouldDeduplicate);
       }
       $scope.cancel();
     };
@@ -400,7 +427,7 @@
    * Controller for File Entity page
    */
   module.controller('ExternalFileInfoController',
-    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature, SetService, 
+    function (Page, ExternalRepoService, CodeTable, ProjectCache, PCAWG, fileInfo, PortalFeature, SetService,
       gettextCatalog) {
 
     Page.setTitle(gettextCatalog.getString('Repository File'));
@@ -538,7 +565,7 @@
     this.equalsIgnoringCase = equalsIgnoringCase;
 
     this.downloadManifest = function (fileId, repo) {
-      ExternalRepoService.downloadSelected ([fileId], [repo]);
+      ExternalRepoService.downloadSelected ([fileId], [repo], true);
     };
 
     this.noNullConcat = function (values) {
@@ -804,17 +831,7 @@
     };
 
     _ctrl.repoIconClass = function (repoName) {
-      var repoCode = ExternalRepoService.getRepoCodeFromName (repoName);
-
-      if (! _.isString (repoCode)) {
-        return '';
-      }
-
-      if (_.startsWith (repoCode, 'aws-') || repoCode === 'collaboratory') {
-        return 'icon-cloud';
-      }
-
-      return '';
+      return _.includes(cloudRepos, repoName) ? 'icon-cloud' : '';
     };
 
     /**
