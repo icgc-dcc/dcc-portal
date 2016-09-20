@@ -228,7 +228,13 @@
                  format="percentage"></bar>
         </div>
         <span class="t_table_top">
-            <translate>Showing <strong>{{(GeneCtrl.gene.projects.hits | filter: GeneCtrl.tableFilter.projects).length | number}}</strong> projects</translate>
+            <data-table-row-counts
+                data-data="GeneCtrl.gene.uiProjects"
+                data-filter="GeneCtrl.tableFilter.projects"
+                data-label="{{'projects' | translate}}"
+                data-current-page="GeneCtrl.currentProjectsPage"
+                data-row-limit="GeneCtrl.defaultProjectsRowLimit">
+            </data-table-row-counts>
             <span data-toolbar data-dl="{{GeneCtrl.gene.id}}_distribution"></span>
             <table-filter data-class="small-filter"
                 data-filter-model="GeneCtrl.tableFilter.projects"
@@ -490,29 +496,36 @@
     <h3><translate>Targeting Compounds</translate></h3>
 
     <span class="t_table_top">
-      <translate>Showing <strong>{{ (GeneCompoundsCtrl.compounds | filter: GeneCompoundsCtrl.tableFilter.compounds).length }}</strong> compounds</translate>
+        <data-table-row-counts
+            data-data="GeneCompoundsCtrl.uiCompounds"
+            data-filter="GeneCompoundsCtrl.tableFilter.compounds"
+            data-label="{{'compounds' | translate}}"
+            data-current-page="GeneCompoundsCtrl.currentCompoundsPage"
+            data-row-limit="GeneCompoundsCtrl.defaultCompoundsRowLimit">
+        </data-table-row-counts>
     </span>
+    
     <table-filter data-class="small-filter"
         data-filter-model="GeneCompoundsCtrl.tableFilter.compounds"
         data-current-page="GeneCompoundsCtrl.currentCompoundsPage"></table-filter>
-    <span ng-init="sortField = 'name'; sortDescendingly = false;" />
+    <span ng-init="sortField = 'uiFullName'; sortDescendingly = false;" />
 
     <table class="table table-bordered table-striped table-condensed">
         <thead>
         <tr>
             <th style="cursor: pointer"
-              ng-click="sortField = 'name'; sortDescendingly = ! sortDescendingly">
+              ng-click="sortField = 'uiFullName'; sortDescendingly = ! sortDescendingly">
               <translate>Name</translate>
-              <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'name'" class="icon-sort" />
-              <i ng-if="sortField === 'name'"
+              <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'uiFullName'" class="icon-sort" />
+              <i ng-if="sortField === 'uiFullName'"
                 class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
             </th>
             <th><translate>ATC Level 4 Description</translate></th>
             <th style="cursor: pointer"
-                ng-click="sortField = 'drugClass'; sortDescendingly = ! sortDescendingly">
+                ng-click="sortField = 'uiDrugClass'; sortDescendingly = ! sortDescendingly">
                 <translate>Compound Class</translate>
-                <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'drugClass'" class="icon-sort" />
-                <i ng-if="sortField === 'drugClass'"
+                <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'uiDrugClass'" class="icon-sort" />
+                <i ng-if="sortField === 'uiDrugClass'"
                    class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
             </th>
             <th style="cursor: pointer"
@@ -524,12 +537,11 @@
             </th>
         </tr>
         </thead>
-
         <tbody>
             <tr ng-repeat="compound in (GeneCompoundsCtrl.uiCompounds |
                 filter: GeneCompoundsCtrl.tableFilter.compounds |
                 orderBy:sortField:sortDescendingly |
-                limitTo: GeneCompoundsCtrl.defaultCompoundsRowLimit : ((GeneCompoundsCtrl.currentCompoundsPage-1) * GeneCtrl.defaultCompoundsRowLimit))">
+                limitTo: GeneCompoundsCtrl.defaultCompoundsRowLimit : ((GeneCompoundsCtrl.currentCompoundsPage-1) * GeneCompoundsCtrl.defaultCompoundsRowLimit))">
                 <td>
                     <a href="{{ GeneCompoundsCtrl.compoundUrl }}{{ compound.uiZincId }}">
                         <span

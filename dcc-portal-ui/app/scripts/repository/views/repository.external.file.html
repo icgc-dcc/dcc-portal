@@ -266,9 +266,13 @@
     </h3>
 
     <div class="t_table_top">
-      <translate has-markup>
-        Showing <strong>{{:: info.donors.length}}</strong> donor{{info.donors.length > 1 ? 's' : ''}}
-      </translate>
+      <data-table-row-counts
+        data-data="fileCtrlr.uiDonorInfo"
+        data-filter="fileCtrlr.tableFilter.donors"
+        data-label="{{'donors' | translate}}"
+        data-current-page="fileCtrlr.currentDonorsPage"
+        data-row-limit="fileCtrlr.defaultDonorsRowLimit">
+      </data-table-row-counts>
       <table-filter data-filter-model="fileCtrlr.tableFilter.donors"
       data-current-page="fileCtrlr.currentDonorsPage"></table-filter>
     </div>

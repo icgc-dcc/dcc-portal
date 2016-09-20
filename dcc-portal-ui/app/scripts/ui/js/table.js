@@ -70,7 +70,9 @@ angular.module('icgc.ui.table.size').directive('tableSize', function (gettextCat
  * ********************************* */
 angular.module('icgc.ui.table.counts', []);
 
-angular.module('icgc.ui.table.counts').directive('tableCounts', function (gettextCatalog) {
+angular.module('icgc.ui.table.counts')
+// This is server side pagination table row count
+.directive('tableCounts', function (gettextCatalog) {
   return {
     restrict: 'A',
     scope: {
@@ -98,6 +100,31 @@ angular.module('icgc.ui.table.counts').directive('tableCounts', function (gettex
     replace: true,
     template: '<span><a ng-if="theNumber > 0" ui-sref="{{:: sref }}">{{:: theNumber | number }}</a>' +
       '<span ng-if="theNumber === 0">{{:: zeroText }}</span></span>'
+  };
+})
+// This is client side pagination table row counts
+.directive('tableRowCounts', function(gettextCatalog){
+  return {
+    restrict: 'E',
+    scope: {
+      data: '=',
+      filter: '=',
+      currentPage: '=',
+      rowLimit: '=',
+      label: '@'
+    },
+    template: gettextCatalog.getString('Showing') + 
+      '<span data-ng-if="(data | filter: filter).length > rowLimit">' + 
+      '  <strong>{{ ((currentPage-1) * rowLimit) + 1 }}</strong> - ' +
+      '  <strong data-ng-if="(currentPage * rowLimit) <= (data | filter: filter).length">'+
+      '    {{ currentPage * rowLimit }}</strong> ' +
+      '  </strong>'+
+      '  <strong data-ng-if="(currentPage * rowLimit) > (data | filter: filter).length">' +
+      '    {{(data | filter: filter).length}}'+
+      '  </strong> ' +
+      gettextCatalog.getString('of') + 
+      '</span>' +
+      '<strong> {{(data | filter: filter).length}}</strong> {{label}}'
   };
 });
 

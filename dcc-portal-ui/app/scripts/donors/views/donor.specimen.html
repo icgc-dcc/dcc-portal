@@ -126,7 +126,13 @@
 
         <div data-ng-if="DonorSpecimenCtrl.specimen.samples.length > 0">
             <span class="t_table_top">
-                <translate has-markup>Showing <strong>{{ (DonorSpecimenCtrl.specimen.samples | filter: DonorSpecimenCtrl.tableFilter.specimenSamples).length }}</strong> samples</translate>
+                <data-table-row-counts
+                    data-data="DonorSpecimenCtrl.uiSpecimenSamples"
+                    data-filter="DonorSpecimenCtrl.tableFilter.specimenSamples"
+                    data-label="{{'samples' | translate}}"
+                    data-current-page="DonorSpecimenCtrl.currentSpecimenPage"
+                    data-row-limit="DonorSpecimenCtrl.defaultSpecimenRowLimit">
+                </data-table-row-counts>
                 <span data-toolbar
                       data-dl="{{DonorCtrl.donor.id}}_specimen"></span>
                 <table-filter data-filter-model="DonorSpecimenCtrl.tableFilter.specimenSamples"

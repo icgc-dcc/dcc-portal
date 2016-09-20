@@ -212,8 +212,8 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
     // Watch to get affected donor count total once genes promise finishes loading
     $scope.$watch(function(){
       return compoundManager.getAffectedDonorCountTotal();
-    }, function(newVal){
-      _targetGenes = getUiTargetedCompoundGenesJSON(newVal);
+    }, function(){
+      _targetGenes = getUiTargetedCompoundGenesJSON(_targetedCompoundGenes);
     });
 
   });

@@ -235,7 +235,13 @@
                  format="percentage"></bar>
         </div>
         <span class="t_table_top">
-            <translate has-markup>Showing <strong>{{(GeneSetCtrl.geneSet.projects| filter: GeneSetCtrl.tableFilter.projects).length | number}}</strong> projects</translate>
+            <data-table-row-counts
+                data-data="GeneSetCtrl.geneSet.uiProjects"
+                data-filter="GeneSetCtrl.tableFilter.projects"
+                data-label="{{'projects' | translate}}"
+                data-current-page="GeneSetCtrl.currentCancerPage"
+                data-row-limit="GeneSetCtrl.defaultCancerRowLimit">
+            </data-table-row-counts>
             <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_distribution"></span>
              <table-filter data-class="small-filter" 
                 data-filter-model="GeneSetCtrl.tableFilter.projects"

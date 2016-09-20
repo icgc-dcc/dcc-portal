@@ -66,7 +66,13 @@
             <span data-open-in-list='/g?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}'></span>
         </h3>
         <span class="t_table_top">
-            <translate has-markup>Showing <strong>{{ MutationCtrl.mutation.consequences.length }}</strong> consequences</translate>
+            <data-table-row-counts
+                data-data="MutationCtrl.uiConsequences"
+                data-filter="MutationCtrl.tableFilter.consequences"
+                data-label="{{'Consequences' | translate}}"
+                data-current-page="MutationCtrl.currentConsequencesPage"
+                data-row-limit="MutationCtrl.defaultConsequencesRowLimit">
+            </data-table-row-counts>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_consequence"></span>
             <table-filter data-class="small-filter"
                 data-filter-model="MutationCtrl.tableFilter.consequences"
@@ -86,7 +92,7 @@
             <tbody>
             <tr data-ng-repeat="consequence in (MutationCtrl.uiConsequences |
                 filter: MutationCtrl.tableFilter.consequences |
-                limitTo: MutationCtrl.defaultConsequencesRowLimit : ((MutationCtrl.currentProjectsPage-1) * MutationCtrl.defaultConsequencesRowLimit))">
+                limitTo: MutationCtrl.defaultConsequencesRowLimit : ((MutationCtrl.currentConsequencesPage-1) * MutationCtrl.defaultConsequencesRowLimit))">
                 <td>
                     <a data-ng-href="/genes/{{consequence.uiGeneAffectedId}}"
                         data-ng-bind-html="consequence.uiAffectedSymbol | highlight: MutationCtrl.tableFilter.consequences"></a>
@@ -187,7 +193,13 @@
         </div>
 
         <span class="t_table_top">
-            <translate has-markup>Showing <strong>{{(MutationCtrl.projects | filter: MutationCtrl.tableFilter.projects).length}}</strong> projects</translate>
+            <data-table-row-counts
+                data-data="MutationCtrl.uiProjects"
+                data-filter="MutationCtrl.tableFilter.projects"
+                data-label="{{'projects' | translate}}"
+                data-current-page="MutationCtrl.currentProjectsPage"
+                data-row-limit="MutationCtrl.defaultProjectsRowLimit">
+            </data-table-row-counts>
             <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_distribution"></span>
             <table-filter data-class="small-filter"
                 data-filter-model="MutationCtrl.tableFilter.projects"

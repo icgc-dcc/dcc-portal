@@ -376,6 +376,7 @@
           uiFullName: compound.name + ' (' + compound.zincId + ')',
           uiDescription: _this.concatAtcDescriptions(compound),
           uiDrugClass: $filter('formatCompoundClass')(compound.drugClass),
+          cancerTrialCount: compound.cancerTrialCount,
           uiCancerTrials: $filter('number')(compound.cancerTrialCount)
         });
       });
