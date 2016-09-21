@@ -34,12 +34,11 @@
 
   module.controller('SetUploadController',
     function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
-               setType, setLimit, setUnion, selectedIds) {
+               setType, setLimit, setUnion, selectedIds, FilterService) {
 
     $scope.setLimit = setLimit;
     $scope.isValid = false;
-
-
+    
     // Input data parameters
     $scope.params = {};
     $scope.params.setName = '';
@@ -151,12 +150,35 @@
       $scope.isValid = true;
     };
 
+    function getSetName(){
+      var filters = FilterService.filters();
+      var name = '';
+
+      if(!_.isEmpty(filters) && _.isObject(filters)){
+        console.log(filters);
+        _.each(filters, function(filter){
+          _.each(filter, function(facets){
+            _.each(facets, function(facet){
+              name += facet + ' / ';
+            });
+          });
+        });
+      }else {
+        name = 'All ' + capitalizeFirstLetter(setType) + 's';
+      }
+      // Remove last ' / ' from the string
+      return name.slice(0, -3);
+    }
+
+    function capitalizeFirstLetter(string){
+      return (!!string) ? string.charAt(0).toUpperCase() + string.substr(1).toLowerCase() : '';
+    }
 
     // Start. Get limit restrictions from the server side
     Settings.get().then(function(settings) {
       $scope.params.setSize = Math.min($scope.setLimit || 0, settings.maxNumberOfHits);
       $scope.params.setSizeLimit = $scope.params.setSize;
-      $scope.params.setName = 'My ' + setType + ' set';
+      $scope.params.setName = getSetName();
       $timeout(function () {
         $scope.params.isLoading = false;
         $scope.validateInput();
