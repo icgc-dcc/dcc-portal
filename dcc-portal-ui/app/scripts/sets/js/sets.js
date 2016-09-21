@@ -41,7 +41,7 @@
     
     // Input data parameters
     $scope.params = {};
-    $scope.params.setName = '';
+    $scope.params.setName = getSetName();
     $scope.params.setDescription = '';
     $scope.params.setType = setType;
     $scope.params.setLimit  = setLimit;
@@ -155,13 +155,12 @@
       var name = '';
 
       if(!_.isEmpty(filters) && _.isObject(filters)){
-        console.log(filters);
         _.each(filters, function(filter){
           _.each(filter, function(facets){
             _.each(facets, function(facet){
               _.each(facet, function(value, index){
                 name += $filter('trans')(value);
-                
+
                 if(index < facet.length-1){
                   name += ',';
                 }
@@ -170,11 +169,12 @@
             });
           });
         });
+        // Remove last ' / ' from the string
+        name = name.slice(0, -3);
       }else {
         name = 'All ' + capitalizeFirstLetter(setType) + 's';
       }
-      // Remove last ' / ' from the string
-      return name.slice(0, -3);
+      return name;
     }
 
     function capitalizeFirstLetter(string){
