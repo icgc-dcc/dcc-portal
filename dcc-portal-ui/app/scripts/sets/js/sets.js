@@ -34,7 +34,7 @@
 
   module.controller('SetUploadController',
     function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
-               setType, setLimit, setUnion, selectedIds, FilterService) {
+               setType, setLimit, setUnion, selectedIds, FilterService, $filter) {
 
     $scope.setLimit = setLimit;
     $scope.isValid = false;
@@ -159,7 +159,14 @@
         _.each(filters, function(filter){
           _.each(filter, function(facets){
             _.each(facets, function(facet){
-              name += facet + ' / ';
+              _.each(facet, function(value, index){
+                name += $filter('trans')(value);
+                
+                if(index < facet.length-1){
+                  name += ',';
+                }
+              });
+              name += ' / ';
             });
           });
         });
