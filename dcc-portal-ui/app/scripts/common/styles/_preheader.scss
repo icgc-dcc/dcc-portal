@@ -55,6 +55,14 @@ $navbarButtonSeparatorColour: #ccc;
                color: lighten($navbarLinkColor, 10);
             }
          }
+
+        &.language-dropdown{
+          display: none;
+
+          &.active{
+            display: inline-block;
+          }
+        }
       }
    }
 }

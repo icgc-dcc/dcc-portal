@@ -185,55 +185,58 @@
 
   module.factory ('RouteInfoService', function ($state, $log, gettextCatalog) {
     var href = $state.href;
-    var routeInfo = {
-      home: {
-        href: href ('home'),
-        title: gettextCatalog.getString('Home')
-      },
-      projects: {
-        href: href ('projects'),
-        title: gettextCatalog.getString('Cancer Projects')
-      },
-      advancedSearch: {
-        href: href ('advanced'),
-        title: gettextCatalog.getString('Advanced Search')
-      },
-      dataAnalysis: {
-        href: href ('analysis'), // DCC-4594 default is launch analysis
-        title: gettextCatalog.getString('Data Analysis')
-      },
-      dataReleases: {
-        href: href ('dataReleases'),
-        title: gettextCatalog.getString('DCC Data Releases')
-      },
-      dataRepositories: {
-        href: href ('dataRepositories'),
-        title: gettextCatalog.getString('Data Repositories')
-      },
-      pcawg: {
-        href: href ('pancancer'),
-        title: gettextCatalog.getString('PCAWG')
-      },
-      dataRepositoryFile: {
-        href: href ('dataRepositoryFile'),
-        title: gettextCatalog.getString('File')
-      },
-      drugCompound: {
-        href: href ('compound'),
-        title: gettextCatalog.getString('Compound')
-      }
-    };
 
     return {
       get: function (name) {
-        if (! _.has (routeInfo, name)) {
+        if (! _.has (getRouteInfo(), name)) {
           $log.error ('No route info is defined for %s.', name);
           return {};
         }
 
-        return _.get (routeInfo, name, {});
+        return _.get (getRouteInfo(), name, {});
       }
     };
+
+    function getRouteInfo(){
+      return {
+        home: {
+          href: href ('home'),
+          title: gettextCatalog.getString('Home')
+        },
+        projects: {
+          href: href ('projects'),
+          title: gettextCatalog.getString('Cancer Projects')
+        },
+        advancedSearch: {
+          href: href ('advanced'),
+          title: gettextCatalog.getString('Advanced Search')
+        },
+        dataAnalysis: {
+          href: href ('analysis'), // DCC-4594 default is launch analysis
+          title: gettextCatalog.getString('Data Analysis')
+        },
+        dataReleases: {
+          href: href ('dataReleases'),
+          title: gettextCatalog.getString('DCC Data Releases')
+        },
+        dataRepositories: {
+          href: href ('dataRepositories'),
+          title: gettextCatalog.getString('Data Repositories')
+        },
+        pcawg: {
+          href: href ('pancancer'),
+          title: gettextCatalog.getString('PCAWG')
+        },
+        dataRepositoryFile: {
+          href: href ('dataRepositoryFile'),
+          title: gettextCatalog.getString('File')
+        },
+        drugCompound: {
+          href: href ('compound'),
+          title: gettextCatalog.getString('Compound')
+        }
+      };
+    }
   });
 
   /**

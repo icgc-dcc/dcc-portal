@@ -482,7 +482,8 @@
     .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog) {
       
       // Setting the initial language to English CA.
-      gettextCatalog.setCurrentLanguage('en_CA');
+      $rootScope.language = 'en_CA';
+      gettextCatalog.setCurrentLanguage($rootScope.language);
 
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound']);
     

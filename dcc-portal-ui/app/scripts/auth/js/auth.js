@@ -143,7 +143,7 @@
 
   angular.module('icgc.auth.controllers').controller('authController',
     function ($window, $scope, $location, $modal, Auth, CUD, OpenID, $state, $stateParams, 
-      PortalFeature, gettextCatalog) {
+      PortalFeature, gettextCatalog, $rootScope) {
 
       $scope.params = {};
       $scope.params.provider = 'google';
@@ -153,6 +153,12 @@
       $scope.params.cudUsername = null;
       $scope.params.cudPassword = null;
       $scope.params.showCollaboratoryToken = PortalFeature.get('AUTH_TOKEN');
+      
+      $scope.changeLanguage = function (language){
+        $rootScope.language = language;
+        gettextCatalog.setCurrentLanguage($rootScope.language);
+        $state.reload();
+      };
 
       function shouldRefreshLocation() {
         var shouldRefresh = false,

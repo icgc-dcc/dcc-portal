@@ -1,4 +1,16 @@
 <div class="login-nav-bar">
+    <ul class="toolbar pull-right">
+        <li class="tool-item language-dropdown" data-ng-class="{active: language=='fr_CA'}">
+            <a data-ng-click="changeLanguage('en_CA')" href="">
+              <translate>English</translate>
+            </a>
+        </li>
+        <li class="tool-item language-dropdown" data-ng-class="{active: language=='en_CA'}">
+          <a data-ng-click="changeLanguage('fr_CA')" href="">
+              <translate>French</translate>
+           </a>
+        </li>
+    </ul>
    <span data-ng-show="params.user.verifying">
      <i class="icon-spinner icon-spin"></i> <translate>Verifying...</translate>
    </span>
