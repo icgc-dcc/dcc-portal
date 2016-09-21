@@ -474,7 +474,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
         params.order = filesParam.order;
       }
 
-      params.filters = FilterService.mergeIntoFilters({'donor': {'id': { 'is': _ctrl.donorId}}});
+      params.filters = {'donor': {'id': { 'is': _ctrl.donorId}}};
       params.include = 'facets';
 
       // Get files
@@ -484,8 +484,10 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
         _ctrl.fixRepoNameInTableData(data.hits);
         _ctrl.files = data;
 
-        _ctrl.facetCharts = ExternalRepoService.createFacetCharts(data.termFacets);
-        _ctrl.facetCharts.repositories = _ctrl.processRepoData(_ctrl.facetCharts.repositories);
+        if(angular.isDefined(data.termFacets.repoName.terms)){
+          _ctrl.facetCharts = ExternalRepoService.createFacetCharts(data.termFacets);
+          _ctrl.facetCharts.repositories = _ctrl.processRepoData(_ctrl.facetCharts.repositories);
+        }
       });
 
     };
