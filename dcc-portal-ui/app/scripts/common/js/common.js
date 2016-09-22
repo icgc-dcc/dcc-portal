@@ -170,6 +170,9 @@
     params = params || {};
     var selfLoadState = { isLoading: !!params.isLoading };
     var contributingLoadStates = _.compact([selfLoadState].concat(params.contributingLoadStates));
+    var isPromise = function (input) {
+      return _.isFunction(input.then);
+    };
 
     var loadState = {
       get isLoading() {
@@ -188,10 +191,14 @@
       removeContributingLoadState: function (loadState) {
         contributingLoadStates = _.without(contributingLoadStates, loadState);
       },
-      loadWhile: function (promise) {
-        invariant(_.isFunction(promise.then), 'loadWhileAsync requires a promise');
+      loadWhile: function (work) {
+        invariant(isPromise(work) || _.isArray(work) && _.every(work, isPromise),
+          'loadWhileAsync requires a promise or an array of promises');
+        var promise = _.isArray(work) ? Promise.all(work) : work;
         loadState.startLoad();
-        return promise.finally(loadState.endLoad);
+        return promise
+          .catch(loadState.endLoad)
+          .then(loadState.endLoad);
       },
       startLoad: function () {
         selfLoadState.isLoading = true;

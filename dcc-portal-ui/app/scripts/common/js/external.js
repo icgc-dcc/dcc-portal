@@ -93,7 +93,7 @@
       return 'http://www.ncbi.nlm.nih.gov/geo/';
     };
     this.projectEGA = function() {
-      return 'https://www.ebi.ac.uk/ega/';
+      return 'https://ega-archive.org/';
     };
     this.projectCGHub = function(diseasesCode) {
       return 'https://browser.cghub.ucsc.edu/search/?disease_abbr=' + diseasesCode;

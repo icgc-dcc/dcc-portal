@@ -31,7 +31,7 @@
           <p>
             <translate>The available repositories below are restricted by your search filter:</translate>
           </p>
-          <label class="no-select text-right">
+          <label class="no-select text-right" ng-show="repos.length > 1">
             <input ng-model="shouldDeduplicate" type="checkbox"/>
             <translate>Remove duplicate files</translate>
           </label>
