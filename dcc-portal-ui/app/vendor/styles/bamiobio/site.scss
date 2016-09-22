@@ -476,7 +476,7 @@
   }
 }
 
-.iobio-modal .modal-dialog {
+.bam-iobio-modal .modal-dialog {
   height: 90%;
   width: 80%;
   -webkit-transition: width 300ms ease-in-out, height 300ms ease-in-out;
@@ -485,7 +485,7 @@
   transition: width 300ms ease-in-out, height 300ms ease-in-out;
 }
 
-.modal-open .iobio-modal {
+.modal-open .bam-iobio-modal {
   overflow-y: hidden;
   .modal-dialog {
     .modal-content {
