@@ -33,6 +33,10 @@
         max-height: calc(100vh - 180px);
         overflow-y: auto;
 
+        #loadingData{
+            display: block;
+        }
+
         #noData{
           display: none;
           text-align: center;

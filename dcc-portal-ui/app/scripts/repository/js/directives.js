@@ -672,10 +672,12 @@
         function checkReferences(refData) {
           if(refData.length > 0){
             onReferencesLoaded(refData);
-            d3.select('#showData').transition().style('visibility','visible');
-            d3.select('#noData').transition().style('display','none');
+
+            d3.select('#loadingData').transition().style('display','none');
+            d3.select('#showData').transition().style('visibility', 'visible');
           } else {
-            d3.select('#showData').transition().style('display','none');
+            d3.select('#loadingData').transition().style('display','none');
+            d3.select('#showData').transition().style('display','none').style('visibility', 'hidden');
             d3.select('#noData').transition().style('display','block');
           }
           
