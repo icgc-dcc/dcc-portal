@@ -152,33 +152,35 @@
 
     function getSetName(){
       var filters = FilterService.filters();
-      var name = '';
+      var name = '', type = '';
 
       if(!_.isEmpty(filters) && _.isObject(filters)){
         _.each(filters, function(filter){
-          _.each(filter, function(facets){
+          _.each(filter, function(facets, key){
+            type = key;
             _.each(facets, function(facet){
               _.each(facet, function(value, index){
-                name += $filter('trans')(value);
+
+                if(value.indexOf('ES:') > -1){
+                  name +=  _.capitalize(setType) + ' Set (' + value.slice(3, value.length);
+                }else {
+                  name += $filter('trans')(value, type);
+                }
 
                 if(index < facet.length-1){
-                  name += ',';
+                  name += ' / ';
                 }
               });
-              name += ' / ';
+              name += ' , ';
             });
           });
         });
         // Remove last ' / ' from the string
         name = name.slice(0, -3);
       }else {
-        name = 'All ' + capitalizeFirstLetter(setType) + 's';
+        name = 'All ' + _.capitalize(setType) + 's';
       }
-      return name;
-    }
-
-    function capitalizeFirstLetter(string){
-      return (!!string) ? string.charAt(0).toUpperCase() + string.substr(1).toLowerCase() : '';
+      return name.length > 61 ? name.slice(0, 61-name.length).concat('...') : name ;
     }
 
     // Start. Get limit restrictions from the server side
