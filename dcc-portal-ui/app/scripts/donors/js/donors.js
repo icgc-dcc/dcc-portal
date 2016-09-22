@@ -146,7 +146,7 @@
     function($scope, Restangular, Donors, Projects, LocationService, ProjectCache) {
 
     var _ctrl = this, donor;
-
+    
     function success(mutations) {
       if (mutations.hasOwnProperty('hits')) {
         var projectCachePromise = ProjectCache.getData();
@@ -199,6 +199,9 @@
     }
 
     function refresh() {
+      
+      var params = LocationService.getPaginationParams('mutations');
+
       Donors.one().get({include: 'specimen'}).then(function (d) {
         donor = d;
 
@@ -209,6 +212,8 @@
         filters.donor.projectId = { is: [ donor.projectId ]};
 
         Restangular.one('ui').one('search').one('donor-mutations').get({
+          from: params.from,
+          size: params.size,
           filters: filters,
           donorId: d.id,
           include: 'consequences'
@@ -233,11 +238,17 @@
     refresh();
   });
 
-  module.controller('DonorSpecimenCtrl', function (Donors, PCAWG, $stateParams) {
+  module.controller('DonorSpecimenCtrl', function (Donors, PCAWG, $stateParams, $filter) {
     var _ctrl = this,
         donorId = $stateParams.id || null;
 
     _ctrl.PCAWG = PCAWG;
+    _ctrl.uiSpecimenSamples = [];
+
+    // Defaults for client side pagination 
+    _ctrl.currentSpecimenPage = 1;
+    _ctrl.defaultSpecimenRowLimit = 10;
+    _ctrl.rowSizes = [10, 25, 50];
 
     _ctrl.isPCAWG = function(specimen) {
 
@@ -256,8 +267,24 @@
             return s.id === _ctrl.active;
           });
         }
+      }).then(function(){
+        _ctrl.uiSpecimenSamples = getUiSpecimenJSON(_ctrl.specimen.samples);
       });
     };
+
+    function getUiSpecimenJSON(samples){
+      return samples.map(function(sample){
+        return _.extend({}, {
+          uiId: sample.id,
+          uiAnalyzedId: sample.analyzedId,
+          uiStudy: sample.study,
+          uiAnalyzedInterval: sample.analyzedInterval,
+          uiAnalyzedIntervalFiltered: $filter('numberPT')(sample.analyzedInterval),
+          uiAvailableRawSequenceData: sample.availableRawSequenceData,
+          uiUniqueRawSequenceData: $filter('unique')(sample.availableRawSequenceData)
+        });
+      });
+    }
 
     _ctrl.setActive();
   });

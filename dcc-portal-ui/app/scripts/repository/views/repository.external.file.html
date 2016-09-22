@@ -265,87 +265,86 @@
       </span>
     </h3>
 
-    <div
-      class="t_table_top"
-      ng-if="info.donors.length > fileCtrlr.defaultDonorLimit && fileCtrlr.shouldLimitDisplayedDonors"
-    >
-      <translate has-markup>
-        Showing <strong>{{:: fileCtrlr.defaultDonorLimit}}</strong> of <strong>{{:: info.donors.length}}</strong> donors
-      </translate>
+    <div class="t_table_top">
+      <data-table-row-counts
+        data-data="fileCtrlr.uiDonorInfo"
+        data-filter="fileCtrlr.tableFilter.donors"
+        data-label="{{'donors' | translate}}"
+        data-current-page="fileCtrlr.currentDonorsPage"
+        data-row-limit="fileCtrlr.defaultDonorsRowLimit">
+      </data-table-row-counts>
+      <table-filter data-filter-model="fileCtrlr.tableFilter.donors"
+      data-current-page="fileCtrlr.currentDonorsPage"></table-filter>
     </div>
 
     <table
       class="table table-info fixed-width"
-      ng-repeat="donorInfo in (fileCtrlr.shouldLimitDisplayedDonors ? info.donors.slice(0, fileCtrlr.defaultDonorLimit) : info.donors)"
+      ng-repeat="donorInfo in (fileCtrlr.uiDonorInfo |
+        filter: fileCtrlr.tableFilter.donors |
+        limitTo: fileCtrlr.defaultDonorsRowLimit : ((fileCtrlr.currentDonorsPage-1) * fileCtrlr.defaultDonorsRowLimit))"
     >
       <tr>
         <th><translate>Project ID</translate></th>
-        <td ng-init="projCode = donorInfo.projectCode">
-            <a href="/projects/{{ projCode }}" tooltip="{{:: fileCtrlr.projectName (projCode) }}"
-              ng-bind="fileCtrlr.stringOrDefault (projCode)" />
+        <td>
+            <a href="/projects/{{ donorInfo.uiProjectCode }}" tooltip="{{:: donorInfo.uiProjectName }}"
+              ng-bind="donorInfo.uiStringProjectCode" />
         </td>
       </tr>
       <tr>
         <th><translate>Primary Site</translate></th>
-        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.primarySite)" />
+        <td ng-bind-html="donorInfo.uiPrimarySite | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr>
         <th><translate>Donor in Study</translate></th>
         <td>
-          <study-badge study="{{ donorInfo.study }}" text="None">
+          <study-badge study="{{ donorInfo.uiStudy }}" 
+            text="None"
+            data-highlight-filter="fileCtrlr.tableFilter.donors">
         </td>
       </tr>
       <tr>
         <th><translate>Donor ID</translate></th>
-        <td ng-init="donorId = donorInfo.donorId">
-            <a href="/donors/{{ donorId }}" ng-bind="fileCtrlr.stringOrDefault (donorId)" />
+        <td>
+            <a href="/donors/{{ donorInfo.uiDonorId }}" 
+              ng-bind-html="donorInfo.uiStringDonorId | highlight: fileCtrlr.tableFilter.donors" />
         </td>
       </tr>
       <tr>
         <th><translate>Donor Submitter IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaParticipantBarcode, donorInfo.submittedDonorId])" />
+        <td ng-bind-html="donorInfo.uiSubmitterId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Specimen IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat (donorInfo.specimenId)" />
+        <td ng-bind-html="donorInfo.uiSpecimentId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Specimen Submitter IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaSampleBarcode, donorInfo.submittedSpecimenId])" />
+        <td ng-bind-html="donorInfo.uiSpecimentSubmitterId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Specimen Types</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat (donorInfo.specimenType)" />
+        <td ng-bind-html="donorInfo.uiSpecimenType | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Sample IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat (donorInfo.sampleId)" />
+        <td ng-bind-html="donorInfo.uiSampleId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Sample Submitter IDs</translate></th>
-        <td ng-bind="fileCtrlr.noNullConcat ([donorInfo.otherIdentifiers.tcgaAliquotBarcode, donorInfo.submittedSampleId])" />
+        <td ng-bind-html="donorInfo.uiSampleSubmitterId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
       <tr data-ng-if="categorization.dataType !== 'Clinical Data' && categorization.dataType !== 'Biospecimen Data'">
         <th><translate>Matched Control Sample ID</translate></th>
-        <td ng-bind="fileCtrlr.stringOrDefault (donorInfo.matchedControlSampleId)" />
+        <td ng-bind-html="donorInfo.uiMatchedSampleId | highlight: fileCtrlr.tableFilter.donors" />
       </tr>
     </table>
 
-    <div
-      class="t_sh__toggle"
-      data-ng-show="info.donors.length > fileCtrlr.defaultDonorLimit"
-    >
-        <a
-          class="t_tools__tool"
-          data-ng-click="fileCtrlr.shouldLimitDisplayedDonors = !fileCtrlr.shouldLimitDisplayedDonors"
-          href=""
-        >
-          <span>
-             <i class="{{ !fileCtrlr.shouldLimitDisplayedDonors? 'icon-caret-up' : 'icon-caret-down' }}"></i>
-             {{ !fileCtrlr.shouldLimitDisplayedDonors ? "less" : (info.donors.length - fileCtrlr.defaultDonorLimit) + " more" }}
-          </span>
-        </a>
-    </div>
+    <pagination-client-side 
+      data-data="fileCtrlr.uiDonorInfo"
+      data-filter="fileCtrlr.tableFilter.donors"
+      data-row-limit="fileCtrlr.defaultDonorsRowLimit"
+      data-row-sizes="fileCtrlr.rowSizes"
+      data-current-page="fileCtrlr.currentDonorsPage"></pagination-client-side>
 
   </div>
 </section>

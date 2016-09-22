@@ -119,10 +119,11 @@ angular.module('app.ui.hidetext', []).directive('hideText', function () {
     replace: true,
     transclude: true,
     scope: {
-      class: '@'
+      class: '@',
+      highlightFilter: '='
     },
     template: '<div class="t_sh {{class}}">' +
-              '{{ text }}' +
+              '<span data-ng-bind-html="text | highlight: highlightFilter"></span>' +
               '<div ng-if="text.length>=limit" class="t_sh__toggle">' +
               '<a ng-click="toggle()" href="" class="t_tools__tool">' +
               '<span ng-if="!expanded"><i class="icon-caret-down"></i> more</span>' +

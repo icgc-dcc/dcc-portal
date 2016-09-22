@@ -47,11 +47,17 @@
   /*jshint -W072 */
   module.controller('GeneSetCtrl',
     function ($scope, $timeout, $state, LocationService, HighchartsService, Page, GeneSetHierarchy, GeneSetService,
-      GeneSetVerificationService, FiltersUtil, ExternalLinks, geneSet, PathwaysConstants, PathwayDataService) {
+      GeneSetVerificationService, FiltersUtil, ExternalLinks, geneSet, PathwaysConstants, PathwayDataService, $filter) {
 
 
       var _ctrl = this, 
       geneSetFilter = {}; // Build adv query based on type
+
+      // Defaults for client side pagination 
+      _ctrl.tableFilter = {};
+      _ctrl.currentCancerPage = 1;
+      _ctrl.defaultCancerRowLimit = 10;
+      _ctrl.rowSizes = [10, 25, 50];
 
       Page.setTitle(geneSet.id);
       Page.setPage('entity');
@@ -124,6 +130,8 @@
                 donor: {projectId:{is:[proj.id]}, availableDataTypes:{is:['ssm']}}
               });
             });
+          }).then(function(){
+            _ctrl.geneSet.uiProjects = getUiProjectsJSON(projects.hits);
           });
         });
 
@@ -201,6 +209,8 @@
         // Assign projects to controller so it can be rendered in the view
         geneSetProjectPromise.then(function(projects) {
           _ctrl.geneSet.projects = projects.hits || [];
+        }).then(function(){
+          _ctrl.geneSet.uiProjects = getUiProjectsJSON(_ctrl.geneSet.projects);
         });
 
         GeneSetService.getMutationImpactFacet(mergedGeneSetFilter).then(function(d) {
@@ -208,11 +218,43 @@
         });   
       }
 
+      function getUiProjectsJSON(projects){
+        return projects.map(function(project){
+          return _.extend({}, {
+            uiId: project.id,
+            uiName: project.name,
+            uiPrimarySite: project.primarySite,
+            uiTumourType: project.tumourType,
+            uiTumourSubtype: project.tumourSubtype,
+            uiAffectedDonorPercentage: $filter('number')
+              (project.uiAffectedDonorPercentage*100, 2),
+            uiAdvQuery: project.advQuery,
+            uiAffectedDonorCount: $filter('number')(project.affectedDonorCount),
+            uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
+            uiMutationCount: $filter('number')(project.mutationCount),
+            uiGeneCount: $filter('number')(project.geneCount),
+            uiGeneSetCount: _ctrl.geneSet.geneCount,
+            uiQueryType: _ctrl.geneSet.queryType,
+            uiGeneSetId: _ctrl.geneSet.id,
+            uiAffectedGenePercentage: $filter('number')
+              (project.uiAffectedGenePercentage*100, 2)
+          });
+        });
+      }
+
       $scope.$on('$locationChangeSuccess', function (event, dest) {
         if (dest.indexOf('genesets') !== -1) {
           refresh();
         }
       });
+
+      // $scope.$watch(function(){
+      //   return _ctrl.tableFilter.projects;
+      // }, function(newVal){
+      //   if(newVal){
+      //     _ctrl.currentCancerPage = 1;
+      //   }
+      // });
 
       refresh();
     });
@@ -249,11 +291,15 @@
     }
 
     function refresh() {
-      $scope.fixScroll();
+
+      var params = LocationService.getPaginationParams('genesets');
+        
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});
         Genes.getList({
+          from: params.from,
+          size: params.size,
           filters: mergedGeneSetFilter
         }).then(success);
       });
@@ -330,12 +376,16 @@
     }
 
     function refresh() {
-      $scope.fixScroll();
+
+      var params = LocationService.getPaginationParams('mutationset');
+
       GeneSets.one().get().then(function (p) {
         geneSet = p;
 
         Mutations.getList({
           include: 'consequences',
+          from: params.from,
+          size: params.size,
           filters: LocationService.mergeIntoFilters({
             gene: {geneSetId: {is: [geneSet.id]}}
           })
@@ -354,7 +404,6 @@
 
   module.controller('GeneSetDonorsCtrl', function ($scope, LocationService, Donors, GeneSets, FiltersUtil) {
     var _ctrl = this, _geneSet, mergedGeneSetFilter;
-
 
     function success(donors) {
       var geneSetQueryType = FiltersUtil.getGeneSetQueryType(_geneSet.type);
@@ -383,11 +432,17 @@
     }
 
     function refresh() {
-      $scope.fixScroll();
+
+      var params = LocationService.getPaginationParams('affectedDonors');
+
       GeneSets.one().get().then(function (geneSet) {
         _geneSet = geneSet;
         mergedGeneSetFilter = LocationService.mergeIntoFilters({gene: {geneSetId: {is: [geneSet.id]}}});
-        Donors.getList({filters: mergedGeneSetFilter}).then(success);
+        Donors.getList({
+          from: params.from,
+          size: params.size,
+          filters: mergedGeneSetFilter
+        }).then(success);
       });
     }
 
