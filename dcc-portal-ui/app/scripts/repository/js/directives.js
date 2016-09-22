@@ -672,7 +672,7 @@
         function checkReferences(refData) {
           if(refData.length > 0){
             onReferencesLoaded(refData);
-            d3.select('#showData').transition().style('display','block');
+            d3.select('#showData').transition().style('visibility','visible');
             d3.select('#noData').transition().style('display','none');
           } else {
             d3.select('#showData').transition().style('display','none');

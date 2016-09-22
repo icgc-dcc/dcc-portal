@@ -34,12 +34,31 @@
         overflow-y: auto;
 
         #noData{
+          display: none;
           text-align: center;
           font-size: 26px;
           color: #2687BE;
           padding: 1rem;
         }
+
+        #showData{
+          visibility: hidden;
+        }
       }
+    }
+  }
+}
+
+.vcf-iobio{
+  .modal-body{
+    padding-left:0px;
+
+    #noData{
+      font-size: 2em;
+      line-height: 1.25em;
+      color: #666;
+      padding: 1rem;
+      padding-left: 0;
     }
   }
 }
