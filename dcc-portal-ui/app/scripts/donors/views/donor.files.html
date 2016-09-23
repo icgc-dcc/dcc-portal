@@ -1,0 +1,104 @@
+<section class="graphs-container" style="margin-top:3rem;">
+  <div class="graphs">
+    <bar
+      config-overrides="DonorFilesCtrl.barChartConfigOverrides"
+      items="DonorFilesCtrl.facetCharts.repositories"
+      heading="{{'Repository' | translate}}"
+      ylabel="{{'Files' | translate}}"
+      type="bar"
+      width="390"
+      height="150"
+      group-percent="3">
+    </bar>
+
+    <pie items='DonorFilesCtrl.facetCharts.fileFormat'
+      config-overrides="DonorFilesCtrl.pieChartConfigOverrides"
+      heading="{{'File Format' | translate | replace: ' ':'&nbsp;'}}"
+      label="{{'Files' | translate}}"
+      type="pie" width="160"
+      group-percent="3"
+      height="150"></pie>
+    <pie items='DonorFilesCtrl.facetCharts.dataType'
+      config-overrides="DonorFilesCtrl.pieChartConfigOverrides"
+      heading="{{'Data Type' | translate}}"
+      label="{{'Files' | translate}}"
+      type="pie" width="160"
+      group-percent="3"
+      height="150"></pie>
+    <pie items='DonorFilesCtrl.facetCharts.experimentalStrategy'
+      config-overrides="DonorFilesCtrl.pieChartConfigOverrides"
+      heading="{{'Experimental Strategy' | translate | replace: ' ':'&nbsp;'}}"
+      label="{{'Files' | translate}}"
+      type="pie" width="160"
+      group-percent="3" 
+      height="150"></pie>
+  </div>
+</section>
+<div class="clearfix"></div>
+<div class="files-wrapper">
+  <div class="t_table_top">
+    <span data-table-counts data-label="{{'files' | translate}}" data-page="DonorFilesCtrl.files.pagination"></span>
+    <span class="t_tools">
+      <span class="t_tools__tool">
+        <i class="icon-file pull-right"
+          data-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
+          data-ng-click="DonorFilesCtrl.export()"></i>
+      </span>
+    </span>
+  </div>
+  <table class="table table-selectable">
+    <thead>
+      <th data-sortable data-type="files" data-field="id"
+        data-active="true" data-reversed="true"><translate>File ID</translate></th>
+      <th><translate>Repository</translate></th>
+      <th><translate>Study</translate></th>
+      <th data-sortable data-type="files" data-field="dataType"><translate>Data Type</translate></th>
+      <th data-sortable data-type="files"
+        data-field="experimentalStrategy"><translate>Strategy</translate></th>
+      <th><translate>Format</translate></th>
+      <th><translate>Size</translate></th>
+      <th style="text-align:center">
+        <abbr>
+          <i class="icon-chart-bar" 
+            tooltip="{{'BAM & VCF Stats (available only for BAM and VCF Files in AWS and Collaboratory)' | translate}}" tooltip-placement="left">
+          </i>
+        </abbr>
+      </th>
+    </thead>
+    <tbody>
+      <tr data-ng-repeat="row in DonorFilesCtrl.files.hits">
+        <td style="white-space:nowrap;max-width: 8rem;">
+          <i class="{{ row.access === 'open' ? 'icon-lock-open' : 'icon-lock' }}" />
+          <a href="{{:: DonorFilesCtrl.dataRepoFileUrl}}{{row.id}}"
+            tooltip="{{DonorFilesCtrl.fileNames(row.fileCopies)}}">
+            {{row.id}}
+          </a>
+        </td>
+        <td tooltip="{{ DonorFilesCtrl.repoNamesInTooltip(row.fileCopies)}}">
+          {{DonorFilesCtrl.repoNames(row.fileCopies)}}
+        </td>
+        <td>
+          <study-badge study="{{row.study[0]}}" text="{{row.study[0]}}">
+        </td>
+        <td>
+          {{row.dataCategorization.dataType}}
+        </td>
+        <td>
+          {{row.dataCategorization.experimentalStrategy}}
+        </td>
+        <td>
+          {{DonorFilesCtrl.fileFormats(row.fileCopies)}}
+        </td>
+        <td class="text-right" style="white-space:nowrap">
+          {{DonorFilesCtrl.fileAverageSize(row.fileCopies) | bytes}}
+        </td>
+        <td class="text-center" valign="middle" style="min-width: 1.6rem;">
+          <iobio-statistics data-file-copies="row.fileCopies"
+            data-object-id="row.objectId"
+            data-row-id="row.id"></iobio-statistics>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls data-type="files" data-data="DonorFilesCtrl.files"></pagination-controls>
+</div>
