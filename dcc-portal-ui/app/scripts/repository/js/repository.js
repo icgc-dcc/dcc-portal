@@ -445,7 +445,6 @@
 
     this.fileInfo = fileInfo;
     this.uiDonorInfo = getUiDonorInfoJSON(fileInfo.donors);
-    console.log(this.uiDonorInfo);
     this.stringOrDefault = stringOrDefault;
     this.isEmptyString = isEmptyString;
     this.defaultString = defaultString;

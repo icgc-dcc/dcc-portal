@@ -39,10 +39,11 @@
 
         #noData{
           display: none;
-          text-align: center;
-          font-size: 26px;
-          color: #2687BE;
           padding: 1rem;
+
+          a{
+            text-decoration: none;
+          }
         }
 
         #showData{
@@ -64,14 +65,15 @@
     #showData{
       visibility: hidden;
     }
-    
+
     #noData{
       display: none;
-      font-size: 2em;
-      line-height: 1.25em;
-      color: #666;
       padding: 1rem;
       padding-left: 0;
+
+      .alert{
+          margin-left: 0;
+      }
     }
   }
 }
