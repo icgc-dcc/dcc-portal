@@ -256,6 +256,7 @@
     'icgc.pathways',
     'icgc.historyManager',
     'icgc.survival',
+    'icgc.404',
 
     // old
     'app.ui',
