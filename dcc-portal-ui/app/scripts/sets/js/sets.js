@@ -34,15 +34,14 @@
 
   module.controller('SetUploadController',
     function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
-               setType, setLimit, setUnion, selectedIds) {
+               setType, setLimit, setUnion, selectedIds, FilterService, $filter) {
 
     $scope.setLimit = setLimit;
     $scope.isValid = false;
-
-
+    
     // Input data parameters
     $scope.params = {};
-    $scope.params.setName = '';
+    $scope.params.setName = getSetName();
     $scope.params.setDescription = '';
     $scope.params.setType = setType;
     $scope.params.setLimit  = setLimit;
@@ -151,12 +150,46 @@
       $scope.isValid = true;
     };
 
+    function getSetName(){
+      var filters = FilterService.filters();
+      var name = '', type = '';
+
+      if(!_.isEmpty(filters) && _.isObject(filters)){
+        _.each(filters, function(filter){
+          _.each(filter, function(facets, key){
+            type = key;
+            _.each(facets, function(facet){
+              _.each(facet, function(value, index){
+
+                if(value.indexOf('ES:') > -1){
+                  name +=  _.capitalize(setType) + ' Set (' + value.slice(3, value.length);
+                }else if(value === '_missing'){
+                  name += 'No ' + $filter('trans')(type) + ' Data';
+                }else {
+                  name += $filter('trans')(value, type);
+                }
+
+                if(index < facet.length-1){
+                  name += ' / ';
+                }
+              });
+              name += ', ';
+            });
+          });
+        });
+        // Remove last ', ' from the string
+        name = name.slice(0, -2);
+      }else {
+        name = 'All ' + _.capitalize(setType) + 's';
+      }
+      return name.length > 61 ? name.slice(0, 61-name.length).concat('...') : name ;
+    }
 
     // Start. Get limit restrictions from the server side
     Settings.get().then(function(settings) {
       $scope.params.setSize = Math.min($scope.setLimit || 0, settings.maxNumberOfHits);
       $scope.params.setSizeLimit = $scope.params.setSize;
-      $scope.params.setName = 'My ' + setType + ' set';
+      $scope.params.setName = getSetName();
       $timeout(function () {
         $scope.params.isLoading = false;
         $scope.validateInput();

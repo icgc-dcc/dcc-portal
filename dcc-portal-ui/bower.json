@@ -35,7 +35,7 @@
     "restangular": "1.4.0",
     "angular-ui-router": "0.2.15",
     "ngInfiniteScroll": "1.2.0",
-    "angular-bootstrap": "0.12.1",
+    "angular-bootstrap": "0.13.4",
     "angular-local-storage": "0.1.5",
     "angularytics": "0.3.0",
     "angular-ui-utils": "bower-scrollfix",
@@ -54,7 +54,8 @@
     "zeroclipboard": "2.2.0",
     "bootstrap": "3.3.6",
     "angular-drag-and-drop-lists": "^1.4.0",
-    "angular-gettext":"2.3.4"
+    "angular-gettext": "2.3.4",
+    "es6-promise": "^3.3.1"
   },
   "devDependencies": {
     "angular-scenario": "1.4.11"

@@ -146,7 +146,7 @@
     function($scope, Restangular, Donors, Projects, LocationService, ProjectCache) {
 
     var _ctrl = this, donor;
-
+    
     function success(mutations) {
       if (mutations.hasOwnProperty('hits')) {
         var projectCachePromise = ProjectCache.getData();
@@ -199,6 +199,9 @@
     }
 
     function refresh() {
+      
+      var params = LocationService.getPaginationParams('mutations');
+
       Donors.one().get({include: 'specimen'}).then(function (d) {
         donor = d;
 
@@ -209,6 +212,8 @@
         filters.donor.projectId = { is: [ donor.projectId ]};
 
         Restangular.one('ui').one('search').one('donor-mutations').get({
+          from: params.from,
+          size: params.size,
           filters: filters,
           donorId: d.id,
           include: 'consequences'
@@ -233,11 +238,17 @@
     refresh();
   });
 
-  module.controller('DonorSpecimenCtrl', function (Donors, PCAWG, $stateParams) {
+  module.controller('DonorSpecimenCtrl', function (Donors, PCAWG, $stateParams, $filter) {
     var _ctrl = this,
         donorId = $stateParams.id || null;
 
     _ctrl.PCAWG = PCAWG;
+    _ctrl.uiSpecimenSamples = [];
+
+    // Defaults for client side pagination 
+    _ctrl.currentSpecimenPage = 1;
+    _ctrl.defaultSpecimenRowLimit = 10;
+    _ctrl.rowSizes = [10, 25, 50];
 
     _ctrl.isPCAWG = function(specimen) {
 
@@ -256,10 +267,270 @@
             return s.id === _ctrl.active;
           });
         }
+      }).then(function(){
+        _ctrl.uiSpecimenSamples = getUiSpecimenJSON(_ctrl.specimen.samples);
       });
     };
 
+    function getUiSpecimenJSON(samples){
+      return samples.map(function(sample){
+        return _.extend({}, {
+          uiId: sample.id,
+          uiAnalyzedId: sample.analyzedId,
+          uiStudy: sample.study,
+          uiAnalyzedInterval: sample.analyzedInterval,
+          uiAnalyzedIntervalFiltered: $filter('numberPT')(sample.analyzedInterval),
+          uiAvailableRawSequenceData: sample.availableRawSequenceData,
+          uiUniqueRawSequenceData: $filter('unique')(sample.availableRawSequenceData)
+        });
+      });
+    }
+
     _ctrl.setActive();
+  });
+
+module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state, $stateParams, 
+  $location, RouteInfoService, LocationService, ExternalRepoService, FilterService) {
+
+    var _ctrl = this,
+      commaAndSpace = ', ';
+
+    _ctrl.donorId = $stateParams.id || null;
+    _ctrl.summary = {};
+    _ctrl.facetCharts = {};
+    _ctrl.cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto'];
+
+    _ctrl.dataRepoFileUrl = RouteInfoService.get('dataRepositoryFile').href;
+
+    _ctrl.barChartConfigOverrides = {
+      chart: {
+          type: 'column',
+          marginTop: 20,
+          marginBottom: 20,
+          backgroundColor: 'transparent',
+          spacingTop: 1,
+          spacingRight: 20,
+          spacingBottom: 20,
+          spacingLeft: 10
+      },
+      xAxis: {
+        labels: {
+          rotation: 0,
+          align: 'left',
+          x: -5,
+          y: 12,
+          formatter: function () {
+            var isCloudRepo = _.includes(_ctrl.cloudRepos, this.value);
+            return isCloudRepo ? '\ue844' : '';
+          }
+        },
+        gridLineColor: 'transparent',
+        minorGridLineWidth: 0
+      },
+      yAxis: {
+        gridLineColor: 'transparent',
+        endOnTick: false,
+        maxPadding: 0.01,
+        labels: {
+          formatter: function () {
+            return this.value / 1000 + 'k';
+          }
+        },
+        lineWidth: 1,
+        title: {
+          align: 'high',
+          offset: 0,
+          margin: -20,
+          y: -10,
+          rotation: 0,
+          text: '# of Files'
+        }
+      },
+      plotOptions: {
+        series: {
+          minPointLength: 2,
+          pointPadding: 0,
+          maxPointWidth: 100,
+          borderRadiusTopLeft: 2,
+          borderRadiusTopRight: 2,
+          cursor: 'pointer',
+          stickyTracking: false,
+          point: {
+            events: {
+              click: function () {
+                var params = {};
+                params.file = {};
+                params.file.repoName = {'is': [this.category]};
+                params.file.donorId = {'is': [_ctrl.donorId]};
+
+                $state.go('dataRepositories', {filters:  angular.toJson(params)});
+              },
+              mouseOut: $scope.$emit.bind($scope, 'tooltip::hide')
+            }
+          }
+        }
+      }
+    };
+
+    _ctrl.pieChartConfigOverrides = {
+      plotOptions: {
+        pie: {
+          events: {
+            click: function (e) {
+              var params = {};
+              params.file = {};
+              params.file[e.point.facet] = {'is': [e.point.term] };
+              params.file.donorId = {'is': [_ctrl.donorId]};
+              $state.go('dataRepositories', {filters:  angular.toJson(params)});
+            }
+          },
+        }
+      },
+    };
+
+    function tooltipList (objects, property, oneItemHandler) {
+      var uniqueItems = _(objects)
+        .map (property)
+        .unique();
+
+      if (uniqueItems.size() < 2) {
+        return _.isFunction (oneItemHandler) ? oneItemHandler() :
+          '' + oneItemHandler;
+      }
+      return uniqueItems.map (function (s) {
+          return '<li>' + s;
+        })
+        .join ('</li>');
+    }
+
+    function uniquelyConcat (fileCopies, property) {
+      return _(fileCopies)
+        .map (property)
+        .unique()
+        .join(commaAndSpace);
+    }
+
+    _ctrl.fileFormats = function (fileCopies) {
+      return uniquelyConcat (fileCopies, 'fileFormat');
+    };
+
+    _ctrl.fileNames = function (fileCopies) {
+      return tooltipList (fileCopies, 'fileName', function () {
+          return _.get (fileCopies, '[0].fileName', '');
+        });
+    };
+
+    _ctrl.repoNames = function (fileCopies) {
+      return uniquelyConcat(fileCopies, 'repoName');
+    };
+
+    _ctrl.repoNamesInTooltip = function (fileCopies) {
+      return tooltipList(fileCopies, 'repoName', '');
+    };
+
+    _ctrl.fileAverageSize = function (fileCopies) {
+      var count = _.size (fileCopies);
+      return (count > 0) ? _.sum (fileCopies, 'fileSize') / count : 0;
+    };
+
+    _ctrl.export = function() {
+      var params = {'donor': {'id': { 'is': _ctrl.donorId}}};
+      ExternalRepoService.export(FilterService.filters(params));
+    };
+
+    _ctrl.removeCityFromRepoName = function(repoName) {
+      if (_.contains(repoName, 'CGHub')) {
+        return 'CGHub';
+      }
+
+      if (_.contains (repoName, 'TCGA DCC')) {
+        return 'TCGA DCC';
+      }
+
+      return repoName;
+    };
+
+    _ctrl.fixRepoNameInTableData = function(data) {
+      _.forEach (data, function(row) {
+        _.forEach (row.fileCopies, function(fileCopy) {
+          fileCopy.repoName = _ctrl.removeCityFromRepoName(fileCopy.repoName);
+        });
+      });
+    };
+
+    _ctrl.processRepoData = function(data) {
+      var filteredRepoNames = _.get(LocationService.filters(), 'file.repoName.is', []);
+      var selectedColor = [253, 179, 97 ];
+      var unselectedColor = [22, 147, 192];
+      var minAlpha = 0.3;
+
+      var transformedItems = data.s.map(function (item, i, array) {
+        var isSelected = _.includes(filteredRepoNames, data.x[i]);
+        var baseColor = isSelected ? selectedColor : unselectedColor;
+        var alpha = array.length ?
+          1 - (1 - minAlpha) / array.length * i :
+          0;
+        var rgba = 'rgba(' + baseColor.concat(alpha).join(',') + ')';
+        return _.extend({}, item, {
+          color: rgba,
+          fillOpacity: 0.5
+        });
+      });
+
+      return _.extend({}, data, {
+        s: transformedItems
+      });
+    };
+
+    _ctrl.getFiles = function (){
+      var promise, 
+        params = {},
+        filesParam = LocationService.getJsonParam ('files');
+
+      // Default
+      params.from = 1;
+      params.size = 10;
+      
+      if (filesParam.from || filesParam.size) {
+        params.from = filesParam.from;
+        params.size = filesParam.size;
+      }
+
+      if (filesParam.sort) {
+        params.sort = filesParam.sort;
+        params.order = filesParam.order;
+      }
+
+      params.filters = {'donor': {'id': { 'is': _ctrl.donorId}}};
+      params.include = 'facets';
+
+      // Get files
+      promise = ExternalRepoService.getList (params);
+      promise.then (function (data) {
+        // Remove city names from repository names for CGHub and TCGA DCC.
+        _ctrl.fixRepoNameInTableData(data.hits);
+        _ctrl.files = data;
+
+        if(angular.isDefined(data.termFacets.repoName.terms)){
+          _ctrl.facetCharts = ExternalRepoService.createFacetCharts(data.termFacets);
+          _ctrl.facetCharts.repositories = _ctrl.processRepoData(_ctrl.facetCharts.repositories);
+        }
+      });
+
+    };
+
+    _ctrl.getFiles();
+
+    // Pagination watcher, gets destroyed with scope.
+    $scope.$watch(function() {
+        return JSON.stringify(LocationService.search('files'));
+      },
+      function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          _ctrl.getFiles();
+      }
+    });
+
   });
 
 })();

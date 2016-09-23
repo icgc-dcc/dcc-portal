@@ -1,0 +1,10 @@
+<i class="icon-chart-bar iobio-popup"
+  tooltip="BAM statistics" 
+  data-ng-if="$ctrl.fileFormats($ctrl.fileCopies) == 'BAM' && $ctrl.awsOrCollab($ctrl.fileCopies)" 
+  data-ng-click="$ctrl.showIobioModal($ctrl.objectId, $ctrl.rowId, $ctrl.getAwsOrCollabFileName($ctrl.fileCopies))">
+</i>
+<i class="icon-chart-bar iobio-popup" 
+  tooltip="VCF statistics" 
+  data-ng-if="$ctrl.fileFormats($ctrl.fileCopies) == 'VCF' && $ctrl.awsOrCollab($ctrl.fileCopies)" 
+  data-ng-click="$ctrl.showVcfIobioModal($ctrl.objectId, $ctrl.rowId, $ctrl.getAwsOrCollabFileName($ctrl.fileCopies))">
+</i>

@@ -318,9 +318,10 @@
 </div>
 </section>
 <section id="genes"
-         data-ng-if="ProjectCtrl.project.state == 'live'"
-         data-ng-controller="ProjectGeneCtrl as ProjectGeneCtrl"
-         data-ng-class="{'loading': !ProjectGeneCtrl.genes.hits, 'empty': ProjectGeneCtrl.genes.hits.length == 0}">
+    data-ng-if="ProjectCtrl.project.state == 'live'"
+    data-ng-controller="ProjectGeneCtrl as ProjectGeneCtrl"
+    data-ng-class="{'loading': !ProjectGeneCtrl.genes.hits, 'empty': ProjectGeneCtrl.genes.hits.length == 0}"
+    fix-scroll>
     <h3 data-ng-if="!ProjectGeneCtrl.genes.hits">
         <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutated Genes...</translate>
     </h3>
@@ -349,10 +350,7 @@
             </bar>
         </div>
         <div class="t_table_top">
-            <translate has-markup>
-                Showing <strong>{{ProjectGeneCtrl.genes.hits.length | number}}</strong> of
-                <strong>{{ProjectGeneCtrl.genes.pagination.total | number}}</strong> genes
-            </translate>
+            <span data-table-counts data-label="{{'genes' | translate}}" data-page="ProjectGeneCtrl.genes.pagination"></span>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_genes">
             </span>
         </div>
@@ -387,8 +385,8 @@
                 <td class="text-right" style="display:block; position: relative; white-space: nowrap">
 
                         <span
-                                data-ng-style="{width:gene.affectedDonorCountFiltered/ProjectCtrl.project.ssmTestedDonorCount * 100+'%'}"
-                                class="t_facets__facet__terms__active__term__bar"></span>
+                            data-ng-style="{width:gene.affectedDonorCountFiltered/ProjectCtrl.project.ssmTestedDonorCount * 100+'%'}"
+                            class="t_facets__facet__terms__active__term__bar"></span>
                     <span style="position: relative">
                         <a data-ng-href='/search?filters={{gene.advQuery}}'>
                             {{gene.affectedDonorCountFiltered | number}}
@@ -433,6 +431,8 @@
             </tr>
             </tbody>
         </table>
+        
+        <pagination-controls data-type="genes" data-data="ProjectGeneCtrl.genes"></pagination-controls>
 
         <table class="hidden" id="{{ProjectCtrl.project.id}}_genes">
             <thead>
@@ -470,9 +470,10 @@
     </div>
 </section>
 <section id="mutations"
-         data-ng-if="ProjectCtrl.project.state === 'live'"
-         data-ng-controller="ProjectMutationsCtrl as ProjectMutationsCtrl"
-         data-ng-class="{'loading': !ProjectMutationsCtrl.mutations.hits, 'empty': ProjectMutationsCtrl.mutations.hits.length == 0}">
+    data-ng-if="ProjectCtrl.project.state === 'live'"
+    data-ng-controller="ProjectMutationsCtrl as ProjectMutationsCtrl"
+    data-ng-class="{'loading': !ProjectMutationsCtrl.mutations.hits, 'empty': ProjectMutationsCtrl.mutations.hits.length == 0}"
+    fix-scroll>
     <h3 data-ng-if="!ProjectMutationsCtrl.mutations.hits">
         <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
     </h3>
@@ -494,10 +495,7 @@
         </div>
 
         <div class="t_table_top">
-            <translate>
-                Showing <strong>{{ProjectMutationsCtrl.mutations.hits.length}}</strong> of
-                <strong>{{ProjectMutationsCtrl.mutations.pagination.total | number}}</strong> mutations
-            </translate>
+            <span data-table-counts data-label="{{'mutations' | translate}}" data-page="ProjectMutationsCtrl.mutations.pagination"></span>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_mutations"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
@@ -525,7 +523,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="mutation in ProjectMutationsCtrl.mutations.hits">
+            <tr data-ng-repeat="mutation in ProjectMutationsCtrl.mutations.hits track by mutation.id">
                 <td><a data-ui-sref="mutation({id:mutation.id})">{{mutation.id}}</a></td>
                 <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
                 <td><abbr data-tooltip="{{ mutation.type | define }}">{{mutation.type}}</abbr></td>
@@ -574,6 +572,8 @@
             </tbody>
         </table>
 
+        <pagination-controls data-type="mutations" data-data="ProjectMutationsCtrl.mutations"></pagination-controls>
+
         <table class="hidden" id="{{ProjectCtrl.project.id}}_mutations">
             <thead>
             <tr>
@@ -611,9 +611,10 @@
 </section>
 
 <section id="donors"
-         data-ng-if="ProjectCtrl.project.state === 'live'"
-         data-ng-controller="ProjectDonorsCtrl as ProjectDonorsCtrl"
-         data-ng-class="{'loading': !ProjectDonorsCtrl.donors.hits, 'empty': ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0}">
+    data-ng-if="ProjectCtrl.project.state === 'live'"
+    data-ng-controller="ProjectDonorsCtrl as ProjectDonorsCtrl"
+    data-ng-class="{'loading': !ProjectDonorsCtrl.donors.hits, 'empty': ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0}"
+    fix-scroll>
     <h3 data-ng-if="!ProjectDonorsCtrl.donors.hits && ProjectCtrl.project.ssmTestedDonorCount > 0">
         <i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate>
     </h3>
@@ -635,10 +636,7 @@
         </div>
 
         <div class="t_table_top">
-            <translate>
-                Showing <strong>{{ProjectDonorsCtrl.donors.hits.length}}</strong> of 
-                <strong>{{ProjectDonorsCtrl.donors.pagination.total | number}}</strong> donors
-            </translate>
+            <span data-table-counts data-label="{{'donors' | translate}}" data-page="ProjectDonorsCtrl.donors.pagination"></span>
             <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_donors"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
@@ -674,7 +672,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="donor in ProjectDonorsCtrl.donors.hits">
+            <tr data-ng-repeat="donor in ProjectDonorsCtrl.donors.hits track by donor.id">
                 <td><a data-ui-sref="donor({id:donor.id})">{{donor.id}}</a></td>
                 <td>{{donor.primarySite}}</td>
                 <td>{{donor.gender}}</td>
@@ -710,6 +708,8 @@
             </tr>
             </tbody>
         </table>
+
+        <pagination-controls data-type="donors" data-data="ProjectDonorsCtrl.donors"></pagination-controls>
 
         <table class="hidden" id="{{ProjectCtrl.project.id}}_donors">
             <thead>

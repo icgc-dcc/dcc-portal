@@ -258,7 +258,8 @@
         primarySite: _createFacetPieChart(facets, 'primarySite'),
         dataType: _createFacetPieChart(facets, 'dataType'),
         software: _createFacetPieChart(facets, 'software'),
-        experimentalStrategy: _createFacetPieChart(facets, 'experimentalStrategy')
+        experimentalStrategy: _createFacetPieChart(facets, 'experimentalStrategy'),
+        fileFormat: _createFacetPieChart(facets, 'fileFormat')
       };
     };
 

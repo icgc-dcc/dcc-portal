@@ -1,0 +1,18 @@
+<div style="margin-top: 1rem">
+  <div data-ng-if="($ctrl.data | filter: $ctrl.filter).length > 10">
+    <span>
+      Showing
+      <select data-ng-model="$ctrl.rowLimit"
+        data-ng-options="size for size in $ctrl.rowSizes"></select>
+      rows
+    </span>
+    <span class="pull-right">
+      <pagination data-total-items="($ctrl.data | filter: $ctrl.filter).length"
+        data-items-per-page="$ctrl.rowLimit"
+        data-ng-model="$ctrl.currentPage"
+        data-class="pagination-sm pagination-client-side"
+        data-max-size="5"
+        data-rotate="true"></pagination>
+    </span>
+  </div>
+</div>
