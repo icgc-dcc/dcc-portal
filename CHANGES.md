@@ -3,6 +3,23 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.3.13
+--
+- Table filters added to entity pages
+- VCF IOBIO statistics show user friendly message when file not available
+- 'Files' section added to Donors entity page
+- Dynamically setting name for saving a entity set
+- 'Loading Files..' spinner added to repositories page
+- Bug fixes
+
+4.3.12
+--
+- Fixes regression for launching Oncogrid demo.
+- Always download manifest as tarball
+- Using HttpServletResponse to render manifests
+- Detailed logging for manifest query/response
+- Bug fixes
+
 4.3.11
 --
 - Fixes regression for launching Survival Analysis demo. 
