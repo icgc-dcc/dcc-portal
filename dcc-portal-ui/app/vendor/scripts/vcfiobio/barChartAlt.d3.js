@@ -39,7 +39,7 @@
  *    SOFTWARE.
  */
 
-barChartAltD3 = function module() {
+var barChartAltD3 = function module() {
   var width = 400,
     height = 300;
 

@@ -15,7 +15,7 @@
   "freeze": true,
   "undef": true,
   "unused": true,
-  "strict": true,
+  "strict": false,
   "trailing": true,
   "maxparams": 16,
   "maxdepth": 5,

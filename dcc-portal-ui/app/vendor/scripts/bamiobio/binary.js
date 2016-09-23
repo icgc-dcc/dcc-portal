@@ -797,10 +797,10 @@ var util = {
         }
       }
     }
-    if (global.addEventListener) {
-      global.addEventListener('message', handleMessage, true);
-    } else if (global.attachEvent) {
-      global.attachEvent('onmessage', handleMessage);
+    if (window.addEventListener) {
+      window.addEventListener('message', handleMessage, true);
+    } else if (window.attachEvent) {
+      window.attachEvent('onmessage', handleMessage);
     }
     return setZeroTimeoutPostMessage;
   }(this))
@@ -1329,4 +1329,4 @@ BinaryClient.prototype.close = BinaryClient.prototype.destroy = function(code, m
 
 exports.BinaryClient = BinaryClient;
 
-})(this);
+})(window);

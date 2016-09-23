@@ -39,7 +39,7 @@
  *    SOFTWARE.
  */
 
-groupedBarD3 = function module() {
+var groupedBarD3 = function module() {
 
   var margin = { left: 30, right: 30, top: 10, bottom: 30 };
 

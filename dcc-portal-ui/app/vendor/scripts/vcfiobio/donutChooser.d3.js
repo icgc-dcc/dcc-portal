@@ -39,7 +39,7 @@
  *    SOFTWARE.
  */
 
-donutChooserD3 = function module() {
+var donutChooserD3 = function module() {
   var dispatch = d3.dispatch("clickslice", "clickall");
 
   var name = function(d) { return d.name };
