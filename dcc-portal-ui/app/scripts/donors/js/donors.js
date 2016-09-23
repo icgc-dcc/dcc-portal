@@ -321,7 +321,7 @@
     };
   });
 
-  module.service('Donor', function (Restangular) {
+  module.service('Donor', function (Restangular, $state) {
     var _this = this;
     this.handler = {};
 
@@ -335,7 +335,11 @@
     this.get = function (params) {
       var defaults = {};
 
-      return this.handler.get(angular.extend(defaults, params));
+      return this.handler.get(angular.extend(defaults, params)).then(function(){
+        console.log('success');
+      }, function(){
+        $state.go('404');
+      });
     };
 
     this.getMutations = function (params) {
