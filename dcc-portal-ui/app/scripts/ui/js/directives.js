@@ -874,7 +874,7 @@ angular.module('icgc.ui.iobio', [])
             template: '<section id="bam-statistics" class="bam-statistics-modal">'+
               '<bamstats bam-id="bamId" on-modal=true bam-name="bamName" bam-file-name="bamFileName" data-ng-if="bamId">'+
               '</bamstats></section>',
-            windowClass: 'iobio-modal',
+            windowClass: 'bam-iobio-modal',
             resolve: {
               params: function() {
                 return {
@@ -899,7 +899,7 @@ angular.module('icgc.ui.iobio', [])
             template: '<section id="vcf-statistics" class="vcf-statistics-modal">'+
               '<vcfstats vcf-id="vcfId" on-modal=true vcf-name="vcfName" vcf-file-name="vcfFileName" data-ng-if="vcfId">'+
               '</vcfstats></section>',
-            windowClass: 'iobio-modal',
+            windowClass: 'vcf-iobio-modal',
             resolve: {
               params: function() {
                 return {

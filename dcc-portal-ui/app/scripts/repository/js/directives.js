@@ -486,7 +486,6 @@
         var	samplingMultiplierLimit = 4;
         var colorListVarType = ['#2171b5', '#eff3ff', '#bdd7e7', '#6baed6'];
 
-
         function init() {
           d3.selectAll('.vcf-iobio svg').style('visibility', 'hidden');
           d3.selectAll('.svg-alt').style('visibility', 'hidden');
@@ -667,8 +666,20 @@
           vcfiobio.openVcfUrl(url);
           d3.select('#vcf_file').text(url);
           d3.select('#selectData').style('visibility', 'hidden').style('display', 'none');
-          d3.select('#showData').style('visibility', 'visible');
-          vcfiobio.loadRemoteIndex(url, onReferencesLoaded);
+          vcfiobio.loadRemoteIndex(url, checkReferences);
+        }
+
+        function checkReferences(refData) {
+          if(refData.length > 0){
+            onReferencesLoaded(refData);
+            d3.select('#loadingData').transition().style('display','none');
+            d3.select('#showData').transition().style('visibility', 'visible');
+          } else {
+            d3.select('#loadingData').transition().style('display','none');
+            d3.select('#showData').transition().style('display','none').style('visibility', 'hidden');
+            d3.select('#noData').transition().style('display','block');
+          }
+          
         }
 
         function onReferencesLoaded(refData) {

@@ -445,7 +445,6 @@
 
     this.fileInfo = fileInfo;
     this.uiDonorInfo = getUiDonorInfoJSON(fileInfo.donors);
-    console.log(this.uiDonorInfo);
     this.stringOrDefault = stringOrDefault;
     this.isEmptyString = isEmptyString;
     this.defaultString = defaultString;
@@ -961,7 +960,7 @@
         }
       });
     };
-
+    
     _ctrl.isSelected = function (row) {
       return _.contains (_ctrl.selectedFiles, row.id);
     };
