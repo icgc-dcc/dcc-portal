@@ -163,6 +163,8 @@
 
                 if(value.indexOf('ES:') > -1){
                   name +=  _.capitalize(setType) + ' Set (' + value.slice(3, value.length);
+                }else if(value === '_missing'){
+                  name += 'No ' + $filter('trans')(type) + ' Data';
                 }else {
                   name += $filter('trans')(value, type);
                 }
@@ -171,12 +173,12 @@
                   name += ' / ';
                 }
               });
-              name += ' , ';
+              name += ', ';
             });
           });
         });
-        // Remove last ' / ' from the string
-        name = name.slice(0, -3);
+        // Remove last ', ' from the string
+        name = name.slice(0, -2);
       }else {
         name = 'All ' + _.capitalize(setType) + 's';
       }
