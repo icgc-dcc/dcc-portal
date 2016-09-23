@@ -64,7 +64,8 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
     scope: {
       items: '=',
       groupPercent: '@',
-      shouldShowNoDataMessage: '@'
+      shouldShowNoDataMessage: '@',
+      configOverrides: '&'
     },
     template: '<span style="margin: 0 auto">not working</span>',
     link: function ($scope, $element, $attrs) {
@@ -227,7 +228,11 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
           ]
         };
 
-      jQuery.extend(true, chartsDefaults, highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage));
+      jQuery.extend(
+        true, 
+        chartsDefaults, 
+        highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage),
+        $scope.configOverrides());
 
       $scope.$watch('items', function (newValue) {
         // if (!newValue || angular.equals(newValue, oldValue)) {

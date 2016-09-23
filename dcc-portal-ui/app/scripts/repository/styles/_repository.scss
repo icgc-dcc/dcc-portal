@@ -1,4 +1,4 @@
-#repository-page {
+#repository-page, #files-section {
   .graphs-container {
     position: relative;
     padding: 0;
@@ -212,5 +212,13 @@
       }
 
     }
+  }
+}
+
+#files-section{
+  .graphs-container {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
   }
 }
