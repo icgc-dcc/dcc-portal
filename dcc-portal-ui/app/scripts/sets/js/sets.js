@@ -34,7 +34,7 @@
 
   module.controller('SetUploadController',
     function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
-               setType, setLimit, setUnion, selectedIds, FilterService, $filter) {
+      setType, setLimit, setUnion, selectedIds, FiltersUtil, FilterService, $filter, CompoundsService) {
 
     $scope.setLimit = setLimit;
     $scope.isValid = false;
@@ -151,22 +151,36 @@
     };
 
     function getSetName(){
-      var filters = FilterService.filters();
-      var name = '', type = '';
+      var filters = FiltersUtil.buildUIFilters(FilterService.filters(), {});
+      var name = '';
 
+      // if (ids.length > 0) {
+      //   SetService.getMetaData(ids).then(function(results) {
+      //     filters = FiltersUtil.buildUIFilters (currentFilters,
+      //       SetService.lookupTable (results.plain()));
+      //   });
+      // } else {
+      //   filters = FiltersUtil.buildUIFilters(currentFilters, {});
+      // }
+      
       if(!_.isEmpty(filters) && _.isObject(filters)){
         _.each(filters, function(filter){
-          _.each(filter, function(facets, key){
-            type = key;
+          _.each(filter, function(facets){
             _.each(facets, function(facet){
               _.each(facet, function(value, index){
 
-                if(value.indexOf('ES:') > -1){
-                  name +=  _.capitalize(setType) + ' Set (' + value.slice(3, value.length);
-                }else if(value === '_missing'){
-                  name += 'No ' + $filter('trans')(type) + ' Data';
-                }else {
-                  name += $filter('trans')(value, type);
+                if(value.controlTerm){
+                  if(value.controlFacet === 'compoundId'){
+                    CompoundsService.getCompoundByZincId(value.controlTerm).then(function(compound) {
+                      name += compound.name;
+                    });
+                  } else if(value.controlFacet === 'id' && value.controlTerm.indexOf('ES:') > -1){
+                    name +=  'Uploaded ' + value.controlType + ' set';
+                  } else {
+                    name += $filter('trans')( value.controlTerm, value.controlFacet);
+                  }
+                } else if(!value.controlTerm){
+                  name += $filter('trans')( value.term , value.controlFacet);
                 }
 
                 if(index < facet.length-1){
@@ -182,6 +196,7 @@
       }else {
         name = 'All ' + _.capitalize(setType) + 's';
       }
+      console.log(name);
       return name.length > 61 ? name.slice(0, 61-name.length).concat('...') : name ;
     }
 
