@@ -17923,7 +17923,7 @@ Edge.prototype = {
 //    this.on(this.handlers);
 //}
 
-GraphLayout = {
+var GraphLayout = {
     _init: function () {
         for (var i in this.verticesList) {
             var vertex = this.verticesList[i];
@@ -18479,7 +18479,7 @@ GraphLayout = {
 
 
 }
-Point = function (x, y, z) {
+var Point = function (x, y, z) {
 
     this.x = x || 0;
     this.y = y || 0;
@@ -21739,7 +21739,9 @@ function IndexedDBStore(args) {
     // must be the last instruction in order to overwrite default attributes
     _.extend(this, args);
 
-    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    if (!window.indexedDB) {
+        window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    }
 //    this.db = null;
     this.version = iDBVersion;
 
@@ -22170,7 +22172,7 @@ IndexedDBStore.prototype = {
     }
 };
 
-IndexedDBTest = function () {
+var IndexedDBTest = function () {
     var idb = new IndexedDBStore({cacheId: "test"});
     idb.put("os-a", "key-a", "value-a");
     idb.put("os-b", "key-b", "value-b");

@@ -107,6 +107,6 @@
     "lodash": "3.10.1",
     "lodash-aliases": "1.2.0",
     "showdown": "1.4.3",
-    "urijs": "1.18.1"
+    "urijs": "1.16.1"
   }
 }

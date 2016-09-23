@@ -23,7 +23,7 @@ require('angular-gettext/dist/angular-gettext.min.js');
 
 
 // Other App Dependencies
-require('highcharts/highcharts.js');
+window.Highcharts = require('highcharts/highcharts.js');
 require('highcharts/modules/no-data-to-display.src.js');
 require('d3/d3.min.js');
 require('Blob/Blob.js');
