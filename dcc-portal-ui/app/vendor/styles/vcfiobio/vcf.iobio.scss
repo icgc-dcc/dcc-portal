@@ -12,6 +12,72 @@
   }
 }
 
+.vcf-iobio-modal .modal-dialog {
+  width: 80%;
+  -webkit-transition: width 300ms ease-in-out, height 300ms ease-in-out;
+  -moz-transition: width 300ms ease-in-out, height 300ms ease-in-out;
+  -o-transition: width 300ms ease-in-out, height 300ms ease-in-out;
+  transition: width 300ms ease-in-out, height 300ms ease-in-out;
+}
+
+.modal-open .vcf-iobio-modal {
+  overflow-y: hidden;
+  .modal-dialog {
+    .modal-content {
+      width: 100%;
+      position: absolute;
+      margin: auto;
+      overflow: hidden;
+      .modal-body {
+        min-height: 50%;
+        max-height: calc(100vh - 180px);
+        overflow-y: auto;
+
+        #loadingData{
+            display: block;
+        }
+
+        #noData{
+          display: none;
+          padding: 1rem;
+
+          a{
+            text-decoration: none;
+          }
+        }
+
+        #showData{
+          visibility: hidden;
+        }
+      }
+    }
+  }
+}
+
+.vcf-iobio{
+  .modal-body{
+    padding-left:0px;
+
+     #loadingData{
+      display: block;
+    }
+    
+    #showData{
+      visibility: hidden;
+    }
+
+    #noData{
+      display: none;
+      padding: 1rem;
+      padding-left: 0;
+
+      .alert{
+          margin-left: 0;
+      }
+    }
+  }
+}
+
 #vcf-statistics {
   
   #sample-more-button {

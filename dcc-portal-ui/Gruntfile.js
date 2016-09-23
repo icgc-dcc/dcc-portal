@@ -535,8 +535,12 @@ module.exports = function (grunt) {
     'karma'
   ]);
 
+  grunt.registerTask('extractText', ['nggettext_extract',]);
+  grunt.registerTask('compileText', ['nggettext_compile',]);
+
   grunt.registerTask('build', [
     'ICGC-setBuildEnv:production',
+    'compileText',
     'clean:dist',
     'compass:dist', // run in case files were changed outside of grunt server (dev environment)
     'postcss',
@@ -548,8 +552,6 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'concat',
     'copy:dist',
-    //'jsdoc2md',
-//    'cdnify',
     'ngAnnotate',
     'cssmin',
     'uglify',
@@ -563,8 +565,5 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
-
-  grunt.registerTask('extractText', ['nggettext_extract',]);
-  grunt.registerTask('compileText', ['nggettext_compile',]);
   
 };

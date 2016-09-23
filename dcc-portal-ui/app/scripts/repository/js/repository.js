@@ -444,11 +444,15 @@
     refresh();
 
     this.fileInfo = fileInfo;
+    this.uiDonorInfo = getUiDonorInfoJSON(fileInfo.donors);
     this.stringOrDefault = stringOrDefault;
     this.isEmptyString = isEmptyString;
     this.defaultString = defaultString;
-    this.shouldLimitDisplayedDonors = true;
-    this.defaultDonorLimit = 5;
+    
+    // Defaults for client side pagination 
+    this.currentDonorsPage = 1;
+    this.defaultDonorsRowLimit = 10;
+    this.rowSizes = [10, 25, 50];
 
     function convertToString (input) {
       return _.isString (input) ? input : (input || '').toString();
@@ -504,9 +508,9 @@
     };
 
     // Public functions
-    this.projectName = function (projectCode) {
+    function projectName (projectCode) {
       return _.get (projectMap, projectCode, '');
-    };
+    }
 
     this.buildUrl = function (baseUrl, dataPath, entityId) {
       // Removes any opening and closing slash in all parts then concatenates.
@@ -568,11 +572,11 @@
       ExternalRepoService.downloadSelected ([fileId], [repo], true);
     };
 
-    this.noNullConcat = function (values) {
+    function noNullConcat (values) {
       var flattened = _.flatten(values);
       var result = isEmptyArray (flattened) ? '' : _.filter (flattened, _.negate (isEmptyString)).join (commaAndSpace);
       return stringOrDefault (result);
-    };
+    }
 
     this.shouldShowMetaData = function (repoType) {
       /* JJ: Quality is too low: || isEGA (repoType) */
@@ -595,6 +599,30 @@
        return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
          _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
     };
+
+    function getUiDonorInfoJSON(donors){
+      return donors.map(function(donor){
+        return _.extend({}, {
+          uiProjectCode: donor.projectCode,
+          uiStringProjectCode: stringOrDefault(donor.projectCode),
+          uiProjectName: projectName(donor.projectCode),
+          uiPrimarySite: stringOrDefault(donor.primarySite),
+          uiStudy: donor.study,
+          uiDonorId: donor.donorId,
+          uiStringDonorId: stringOrDefault(donor.donorId),
+          uiSubmitterId: noNullConcat
+            ([donor.otherIdentifiers.tcgaParticipantBarcode, donor.submittedDonorId]),
+          uiSpecimentId: noNullConcat(donor.specimenId),
+          uiSpecimentSubmitterId: noNullConcat
+            ([donor.otherIdentifiers.tcgaSampleBarcode, donor.submittedSpecimenId]),
+          uiSpecimenType: noNullConcat(donor.specimenType),
+          uiSampleId: noNullConcat(donor.sampleId),
+          uiSampleSubmitterId: noNullConcat
+            ([donor.otherIdentifiers.tcgaAliquotBarcode, donor.submittedSampleId]),
+          uiMatchedSampleId: stringOrDefault(donor.matchedControlSampleId)
+        });
+      });
+    }
 
   });
 
@@ -799,19 +827,6 @@
          _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
     };
 
-    _ctrl.getAwsOrCollabFileName = function(fileCopies) {
-      try {
-        var fCopies = _.filter(fileCopies, function(fCopy) {
-          return fCopy.repoCode === 'aws-virginia' || fCopy.repoCode === 'collaboratory';
-        });
-
-        return _.pluck(fCopies, 'fileName')[0];
-      } catch (err) {
-        console.log(err);
-        return 'Could Not Retrieve File Name';
-      }
-    };
-
     _ctrl.fileAverageSize = function (fileCopies) {
       var count = _.size (fileCopies);
       return (count > 0) ? _.sum (fileCopies, 'fileSize') / count : 0;
@@ -945,56 +960,7 @@
         }
       });
     };
-
-    _ctrl.showIobioModal = function(objectId, objectName, name) {
-      var fileObjectId = objectId;
-      var fileObjectName = objectName;
-      var fileName = name;
-      $modal.open ({
-        controller: 'ExternalIobioController',
-        template: '<section id="bam-statistics" class="bam-statistics-modal">'+
-          '<bamstats bam-id="bamId" on-modal=true bam-name="bamName" bam-file-name="bamFileName" data-ng-if="bamId">'+
-          '</bamstats></section>',
-        windowClass: 'iobio-modal',
-        resolve: {
-          params: function() {
-            return {
-              fileObjectId: fileObjectId,
-              fileObjectName: fileObjectName,
-              fileName: fileName
-            };
-          }
-        }
-      }).opened.then(function() {
-        setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
-
-      });
-    };
-
-    _ctrl.showVcfIobioModal = function(objectId, objectName, name) {
-      var fileObjectId = objectId;
-      var fileObjectName = objectName;
-      var fileName = name;
-      $modal.open ({
-        controller: 'ExternalVcfIobioController',
-        template: '<section id="vcf-statistics" class="vcf-statistics-modal">'+
-          '<vcfstats vcf-id="vcfId" on-modal=true vcf-name="vcfName" vcf-file-name="vcfFileName" data-ng-if="vcfId">'+
-          '</vcfstats></section>',
-        windowClass: 'iobio-modal',
-        resolve: {
-          params: function() {
-            return {
-              fileObjectId: fileObjectId,
-              fileObjectName: fileObjectName,
-              fileName: fileName
-            };
-          }
-        }
-      }).opened.then(function() {
-        setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
-      });
-    };
-
+    
     _ctrl.isSelected = function (row) {
       return _.contains (_ctrl.selectedFiles, row.id);
     };

@@ -39,7 +39,7 @@
 
   var module = angular.module('icgc.mutations.controllers', ['icgc.mutations.models']);
 
-  module.controller('MutationCtrl', function (HighchartsService, Page, Genes, mutation) {
+  module.controller('MutationCtrl', function (HighchartsService, Page, Genes, mutation, $filter) {
     var _ctrl = this, projects;
     Page.setTitle(mutation.id);
     Page.setPage('entity');
@@ -49,8 +49,16 @@
     _ctrl.mutation = mutation;
     _ctrl.mutation.uiProteinTranscript = [];
 
+    // Defaults for client side pagination 
+    _ctrl.currentProjectsPage = 1;
+    _ctrl.defaultProjectsRowLimit = 10;
+    _ctrl.currentConsequencesPage = 1;
+    _ctrl.defaultConsequencesRowLimit = 10;
+    _ctrl.rowSizes = [10, 25, 50];
+
     projects = {};
     _ctrl.projects = [];
+    _ctrl.uiConsequences = getUiConsequencesJSON(_ctrl.mutation.consequences);
 
     if (_ctrl.mutation.hasOwnProperty('occurrences')) {
       _ctrl.mutation.occurrences.forEach(function (occurrence) {
@@ -70,7 +78,25 @@
         _ctrl.projects.push(project);
       }
     }
+    
+    _ctrl.uiProjects = getUiProjects(_ctrl.projects);
 
+    function getUiProjects(projects) {
+      return projects.map(function(project){
+        return _.extend({}, {
+          uiId: project.id,
+          uiName: project.name,
+          uiPrimarySite: project.primarySite,
+          uiTumourType: project.tumourType,
+          uiTumourSubtype: project.tumourSubtype,
+          uiPercentAffected: $filter('number')(project.percentAffected*100,2),
+          uiAffectedDonorCount: $filter('number')(project.affectedDonorCount),
+          uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount)
+        });
+      });
+    }
+
+    console.log(_ctrl.uiProjects);
 
     if (_ctrl.mutation.hasOwnProperty('consequences') && _ctrl.mutation.consequences.length) {
       var affectedGeneIds = _.filter(_.pluck(_ctrl.mutation.consequences, 'geneAffectedId'), function (d) {
@@ -122,6 +148,22 @@
       xAxis: 'id',
       yValue: 'percentAffected'
     });
+
+    function getUiConsequencesJSON(consequences){
+      return consequences.map(function(consequence){
+        return _.extend({}, {
+          uiGeneAffectedId: consequence.geneAffectedId,
+          uiAffectedSymbol: consequence.geneAffectedSymbol,
+          uiFunctionalImpact: consequence.functionalImpact,
+          uiAAMutation: consequence.aaMutation,
+          uiType: consequence.type,
+          uiTypeFiltered: $filter('trans')(consequence.type),
+          uiCDSMutation: consequence.cdsMutation,
+          uiGeneStrand: consequence.geneStrand,
+          uiTranscriptsAffected: consequence.transcriptsAffected
+        });
+      });
+    }
   });
 })();
 

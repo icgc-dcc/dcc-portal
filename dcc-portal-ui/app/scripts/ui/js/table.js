@@ -21,7 +21,13 @@ angular.module('icgc.ui.table', [
   'icgc.ui.table.size',
   'icgc.ui.table.counts',
   'icgc.ui.table.sortable',
-  'icgc.ui.table.pagination'
+  'icgc.ui.table.pagination',
+  'icgc.ui.table.filter',
+  'icgc.ui.table.row'
+]);
+
+angular.module('icgc.ui.table.row',[
+  'icgc.ui.table.row.limitation'
 ]);
 
 /* ************************************
@@ -64,7 +70,9 @@ angular.module('icgc.ui.table.size').directive('tableSize', function (gettextCat
  * ********************************* */
 angular.module('icgc.ui.table.counts', []);
 
-angular.module('icgc.ui.table.counts').directive('tableCounts', function (gettextCatalog) {
+angular.module('icgc.ui.table.counts')
+// This is server side pagination table row count
+.directive('tableCounts', function (gettextCatalog) {
   return {
     restrict: 'A',
     scope: {
@@ -92,6 +100,31 @@ angular.module('icgc.ui.table.counts').directive('tableCounts', function (gettex
     replace: true,
     template: '<span><a ng-if="theNumber > 0" ui-sref="{{:: sref }}">{{:: theNumber | number }}</a>' +
       '<span ng-if="theNumber === 0">{{:: zeroText }}</span></span>'
+  };
+})
+// This is client side pagination table row counts
+.directive('tableRowCounts', function(gettextCatalog){
+  return {
+    restrict: 'E',
+    scope: {
+      data: '=',
+      filter: '=',
+      currentPage: '=',
+      rowLimit: '=',
+      label: '@'
+    },
+    template: gettextCatalog.getString('Showing') + 
+      '<span data-ng-if="(data | filter: filter).length > rowLimit">' + 
+      '  <strong>{{ ((currentPage-1) * rowLimit) + 1 }}</strong> - ' +
+      '  <strong data-ng-if="(currentPage * rowLimit) <= (data | filter: filter).length">'+
+      '    {{ currentPage * rowLimit }}</strong> ' +
+      '  </strong>'+
+      '  <strong data-ng-if="(currentPage * rowLimit) > (data | filter: filter).length">' +
+      '    {{(data | filter: filter).length}}'+
+      '  </strong> ' +
+      gettextCatalog.getString('of') + 
+      '</span>' +
+      '<strong> {{(data | filter: filter).length}}</strong> {{label}}'
   };
 });
 
@@ -238,6 +271,16 @@ angular.module('icgc.ui.table.pagination', [])
         };
       }
     };
+  })
+  .component('paginationClientSide', {
+    templateUrl: '/scripts/ui/views/pagination-client-side.html',
+    bindings: {
+      data: '=',
+      filter: '=',
+      rowLimit: '=',
+      rowSizes: '=',
+      currentPage: '='
+    }
   });
 
 
@@ -302,7 +345,50 @@ angular.module('icgc.ui.table.sortable', []).directive('sortable', function ($lo
   };
 });
 
+angular.module('icgc.ui.table.filter', [])
+  .directive('tableFilter', function(gettextCatalog){
+    return {
+      restrict: 'E',
+      scope: {
+        filterModel: '=',
+        currentPage: '=',
+        class: '@'
+      },
+      template: '<span class="t_suggest t_suggest__header table-filter {{class}}">' +
+        '<input type="text" class="t_suggest__input form-control" placeholder="' + gettextCatalog.getString('Table filter') + 
+        '" data-ng-change="currentPage = 1;" data-ng-model="filterModel" />' + 
+        '<i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search">' +
+        '</i>'+
+        '<i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel ng-hide"' + 
+        ' data-ng-click="filterModel = \'\'" data-ng-show="filterModel"></i>' +
+        '</span>',
+      replace: true
+    };
+  });
 
+angular.module('icgc.ui.table.row.limitation', [])
+  .directive('rowLimit', function(gettextCatalog){
+    return {
+      restrict: 'E',
+      scope: {
+        data: '=',
+        filter : '=',
+        showLimit: '=',
+        defaultLimit : '='
+      },
+      replace: true,
+      template: '<div class="t_sh__toggle"'+
+        'data-ng-show="(data | filter: filter).length > defaultLimit">' +
+        '<a class="t_tools__tool" data-ng-click="showLimit = !showLimit" href="">' +
+        '<span>'+
+          '<i class="{{ !showLimit ? \'icon-caret-up\' : \'icon-caret-down\' }}"></i>'+
+            '{{ !showLimit ? "' + gettextCatalog.getString('less') + '" :' +
+              '((data | filter: filter).length - defaultLimit) + " ' +  gettextCatalog.getString('more')  + '"}}' +
+        '</span>' +
+        '</a>' +
+        '</div>'
+    };
+  });
 
 
 /* ************************************

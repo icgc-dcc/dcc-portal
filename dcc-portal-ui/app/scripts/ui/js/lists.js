@@ -97,7 +97,8 @@ angular.module('icgc.ui.lists').directive('hideList', function () {
     scope: {
       items: '=',
       templateName: '@',
-      displayLimit: '@'
+      displayLimit: '@',
+      highlightFilter: '='
     },
     template: '<ul class="t_sh">' +
               '<li data-ng-if="items.length == 0">--</li>' +

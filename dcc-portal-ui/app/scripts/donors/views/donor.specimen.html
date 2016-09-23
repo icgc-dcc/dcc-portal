@@ -1,9 +1,10 @@
 <aside>
     <ul class="nav nav-pills nav-stacked" data-ng-repeat="s in DonorCtrl.donor.specimen">
         <li data-ng-class="{active:s.id==DonorSpecimenCtrl.specimen.id}">
-            <a href="" data-ng-click="DonorSpecimenCtrl.setActive(s.id)"
-               data-ng-style="s.id===DonorSpecimenCtrl.specimen.id?{color:'#FFFFFF'}:{}" style="line-height:1.25rem">
-                {{ s.id }}<br>
+            <a href="" 
+                data-ng-click="DonorSpecimenCtrl.tableFilter.specimenSamples=''; DonorSpecimenCtrl.currentSpecimenPage=1; DonorSpecimenCtrl.setActive(s.id);"
+                data-ng-style="s.id===DonorSpecimenCtrl.specimen.id?{color:'#FFFFFF'}:{}" style="line-height:1.25rem">
+                    {{ s.id }}<br>
                 <small>{{ s.type }}</small>
             </a></li>
     </ul>
@@ -126,9 +127,17 @@
 
         <div data-ng-if="DonorSpecimenCtrl.specimen.samples.length > 0">
             <span class="t_table_top">
-                <translate has-markup>Showing <strong>{{ DonorSpecimenCtrl.specimen.samples.length }}</strong> samples</translate>
+                <data-table-row-counts
+                    data-data="DonorSpecimenCtrl.uiSpecimenSamples"
+                    data-filter="DonorSpecimenCtrl.tableFilter.specimenSamples"
+                    data-label="{{'samples' | translate}}"
+                    data-current-page="DonorSpecimenCtrl.currentSpecimenPage"
+                    data-row-limit="DonorSpecimenCtrl.defaultSpecimenRowLimit">
+                </data-table-row-counts>
                 <span data-toolbar
                       data-dl="{{DonorCtrl.donor.id}}_specimen"></span>
+                <table-filter data-filter-model="DonorSpecimenCtrl.tableFilter.specimenSamples"
+                    data-current-page="DonorSpecimenCtrl.currentSpecimenPage"></table-filter>
             </span>
             <table class="table">
                 <thead>
@@ -143,49 +152,66 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="sample in DonorSpecimenCtrl.specimen.samples">
-                    <td>{{ sample.id }}</td>
-                    <td>{{ sample.analyzedId }}</td>
+                <tr data-ng-repeat="sample in (DonorSpecimenCtrl.uiSpecimenSamples | 
+                    filter: DonorSpecimenCtrl.tableFilter.specimenSamples |
+                     limitTo: DonorSpecimenCtrl.defaultSpecimenRowLimit : ((DonorSpecimenCtrl.currentSpecimenPage-1)*DonorSpecimenCtrl.defaultSpecimenRowLimit)) track by sample.uiId">
                     <td>
-                        <pcawg-badge data-ng-if="DonorSpecimenCtrl.PCAWG.isPCAWGStudy(sample.study)"></pcawg-badge>
-                        <span data-ng-if="!DonorSpecimenCtrl.PCAWG.isPCAWGStudy(sample.study)">{{sample.study? sample.study: '--'}}</td>
+                        <span data-ng-bind-html="sample.uiId | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
                     </td>
                     <td>
-                        <span data-ng-if="sample.analyzedInterval">{{ sample.analyzedInterval | numberPT }}</span>
-                        <span data-ng-if="!sample.analyzedInterval">--</span>
+                        <span data-ng-bind-html="sample.uiAnalyzedId | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
+                    </td>
+                    <td>
+                        <pcawg-badge data-ng-if="DonorSpecimenCtrl.PCAWG.isPCAWGStudy(sample.uiStudy)"></pcawg-badge>
+                        <span data-ng-if="!DonorSpecimenCtrl.PCAWG.isPCAWGStudy(sample.uiStudy)"
+                            data-ng-bind-html="sample.uiStudy ? (sample.uiStudy  | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples) : '--'">
+                        </span>
+                    </td>
+                    </td>
+                    <td>
+                        <span data-ng-if="sample.uiAnalyzedInterval"
+                            data-ng-bind-html="sample.uiAnalyzedIntervalFiltered | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
+                        <span data-ng-if="!sample.uiAnalyzedInterval">--</span>
                     </td>
                     <td>
                         <ul>
-                            <li data-ng-repeat="item in sample.availableRawSequenceData | unique">
+                            <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
                             <abbr data-tooltip="{{ item.libraryStrategy | define }}">
-                                    {{ item.libraryStrategy }}
+                                    <span data-ng-bind-html="item.libraryStrategy | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
                                 </abbr>
                             </li>
                         </ul>
-                        <span data-ng-if="sample.availableRawSequenceData.length == 0">--</span>
+                        <span data-ng-if="sample.uiAvailableRawSequenceData.length == 0">--</span>
                     </td>
                     <td>
                         <ul>
-                            <li data-ng-repeat="item in sample.availableRawSequenceData | unique">
-                            {{ item.repository }}
+                            <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
+                                <span data-ng-bind-html="item.repository | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
                             </li>
                         </ul>
-                        <span data-ng-if="sample.availableRawSequenceData.length == 0">--</span>
+                        <span data-ng-if="sample.uiAvailableRawSequenceData.length == 0">--</span>
                     </td>
                     <td>
                         <ul>
-                            <li data-ng-repeat="item in sample.availableRawSequenceData | unique">
+                            <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
                             <i data-ng-if="item.id" style="cursor: pointer" class="icon-file-alt"
                                    data-tooltip-placement="left"
                                    data-tooltip="{{ item.id }}"></i>
                                 <span data-ng-if="!item.id">--</span>
                             </li>
                         </ul>
-                        <span data-ng-if="sample.availableRawSequenceData.length == 0">--</span>
+                        <span data-ng-if="sample.uiAvailableRawSequenceData.length == 0">--</span>
                     </td>
                 </tr>
                 </tbody>
             </table>
+
+            <pagination-client-side data-data="DonorSpecimenCtrl.uiSpecimenSamples"
+                data-filter="DonorSpecimenCtrl.tableFilter.specimenSamples"
+                data-row-limit="DonorSpecimenCtrl.defaultSpecimenRowLimit"
+                data-row-sizes="DonorSpecimenCtrl.rowSizes"
+                data-current-page="DonorSpecimenCtrl.currentSpecimenPage"></pagination-client-side>
+
             <table class="hidden" id="{{DonorCtrl.donor.id}}_specimen">
                 <thead>
                 <tr>

@@ -43,15 +43,23 @@ angular.module('icgc.compounds', ['icgc.compounds.controllers', 'icgc.compounds.
 angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
   .controller('CompoundCtrl', function ($scope, compoundManager, CompoundsService, Page,
                                         FilterService, CompoundsServiceConstants,
-                                        $location, $timeout, gettextCatalog) {
+                                        $location, $timeout, gettextCatalog, $filter) {
 
     var _ctrl = this,
         _compound = null,
-        _targetedCompoundGenes = null,
+        _targetedCompoundGenes = [],
         _targetedCompoundGenesResultPerPage = 10,
+        _targetGenes = [],
         _targetCompoundResultPage = 0,
         _targetedCompoundIds = [],
         _mutationalImpactFacets = null;
+
+    // Defaults for client side pagination 
+    _ctrl.currentGenesPage = 1;
+    _ctrl.defaultGenesRowLimit = 10;
+    _ctrl.currentClinicalTrailsPage = 1;
+    _ctrl.defaultClinicalTrialsRowLimit = 10;
+    _ctrl.rowSizes = [10, 25, 50];
 
 
     function getMutationImpactFacets() {
@@ -90,8 +98,7 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
 
     function _initTargetedCompoundGenes(targetGenes) {
       _targetedCompoundGenes = targetGenes;
-      _targetedCompoundIds.length = 0;
-      _targetedCompoundIds = _targetedCompoundIds.concat(compoundManager.getTargetedCompoundGeneIds());
+      _targetGenes = getUiTargetedCompoundGenesJSON(_targetedCompoundGenes);
     }
 
     function _initCompound() {
@@ -123,6 +130,26 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
         .finally(function() {
           Page.stopWork();
         });
+    }
+
+    // Creating a new Object for table filters
+    function getUiTargetedCompoundGenesJSON(genes){
+      return genes.map(function (gene) {
+        return _.extend({}, {
+          uiId: gene.id,
+          uiName: gene.name,
+          uiSymbol: gene.symbol,
+          uiLocation: 'chr' + gene.chromosome + ':' + gene.start +'-' + gene.end,
+          uiType: $filter('trans')(gene.type),
+          uiAffectedDonorCountFilter: gene.affectedDonorCountFilter,
+          uiAffectedDonorCountFiltered: $filter('number')(gene.affectedDonorCountFiltered),
+          uiAffectedDonorCountTotal: $filter('number')(_ctrl.getAffectedDonorCountTotal()),
+          uiAffectedDonorCountTotalPercentage: $filter('number')
+            ((gene.affectedDonorCountFiltered/_ctrl.getAffectedDonorCountTotal() * 100), 2) + '%',
+          uiMutationCountTotal: $filter('number')(gene.mutationCountTotal),
+          uiMutationCountFilter : gene.mutationCountFilter
+        });
+      });
     }
 
     _init();
@@ -158,7 +185,7 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
     };
 
     _ctrl.getTargetedCompoundGenes = function() {
-      return _targetedCompoundGenes;
+      return _targetGenes;
     };
 
     _ctrl.getTargetedGeneCount = function() {
@@ -181,6 +208,13 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
     _ctrl.getCompound = function() {
       return _compound;
     };
+
+    // Watch to get affected donor count total once genes promise finishes loading
+    $scope.$watch(function(){
+      return compoundManager.getAffectedDonorCountTotal();
+    }, function(){
+      _targetGenes = getUiTargetedCompoundGenesJSON(_targetedCompoundGenes);
+    });
 
   });
 
@@ -212,7 +246,8 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
               return id !== null && id.length > 0;
             }),
           _drugGenesLength = _genes.length,
-          _trials = _arrayOrEmptyArray(compound.trials);
+          _trials = _arrayOrEmptyArray(compound.trials),
+          _uiTrials = getUiTrialsJSON(compound.trials);
 
 
       return {
@@ -227,7 +262,8 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
         atcCodes: _atcCodes,
         genes: _genes,
         drugGenesLength: _drugGenesLength,
-        trials: _trials
+        trials: _trials,
+        uiTrials: _uiTrials
       };
     }
 
@@ -258,12 +294,21 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
 
     }
 
+    // Creating a new Object for table filters
+    function getUiTrialsJSON(trials){
+      return _arrayOrEmptyArray(trials.map(function (trial) {
+        return _.extend({}, {
+          uiCode: trial.code,
+          uiDescription: trial.description,
+          uiConditions: trial.conditions,
+          uiStartDate: trial.startDate,
+          uiPhaseName: trial.phaseName,
+          uiStatusName: trial.statusName
+        });
+      }));
+    }
+
     var _srv = this;
-
-
-
-
-
 
     function CompoundManager(compoundId) {
       var _self = this,

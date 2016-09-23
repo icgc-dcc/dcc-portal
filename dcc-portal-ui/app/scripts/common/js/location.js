@@ -138,6 +138,9 @@
         delete s[param];
         $location.search(s);
       },
+      getPaginationParams: function(dataType){
+        return _.defaults({}, this.getJsonParam(dataType), {from: 1, size: 10});
+      },
       goToPath: function(path, search, hash) {
         var searchParams = search || {},
             hashParam = hash || '';
