@@ -31,9 +31,7 @@ import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.UUID;
@@ -42,6 +40,8 @@ import java.util.stream.Collectors;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
@@ -56,7 +56,7 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
     this.testIndex = TestIndex.RELEASE;
 
     val set = new EntitySet(UUID.randomUUID(), State.FINISHED, 200L, "test", "test", BaseEntitySet.Type.DONOR, 1);
-    Mockito.when(entitySetRepository.find(Matchers.any())).thenReturn(set);
+    when(entitySetRepository.find(any())).thenReturn(set);
 
     es.execute(createIndexMappings(Type.DONOR, Type.DONOR_CENTRIC)
             .withData(bulkFile(getClass()))

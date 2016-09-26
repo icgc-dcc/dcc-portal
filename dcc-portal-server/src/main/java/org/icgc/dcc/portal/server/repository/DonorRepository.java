@@ -201,7 +201,7 @@ public class DonorRepository implements Repository {
     return response;
   }
 
-  public MultiSearchResponse entitySetMultiSearch(@NonNull final List<UUID> setIds) {
+  public MultiSearchResponse calculatePhenotypeStats(@NonNull final List<UUID> setIds) {
     val multiSearch = client.prepareMultiSearch();
     val matchAll = matchAllQuery();
 

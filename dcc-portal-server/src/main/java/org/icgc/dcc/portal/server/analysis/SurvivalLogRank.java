@@ -48,26 +48,26 @@ public class SurvivalLogRank {
 
   private int largestTime;
 
-  private SortedMap<Integer, Sample> sampleGroups;
+  private SortedMap<Integer, Sample> samples;
 
-  SurvivalLogRank(@NonNull List<List<Interval>> results) {
-    numSets = results.size();
+  SurvivalLogRank(@NonNull List<List<Interval>> survivalResults) {
+    numSets = survivalResults.size();
     setTotals = new int[numSets];
     totalObserved = new int[numSets];
 
     for (int i = 0; i < numSets; i++) {
-      setTotals[i] = results.get(i).stream()
+      setTotals[i] = survivalResults.get(i).stream()
               .mapToInt(r -> r.getDonors().size())
               .sum();
 
-      totalObserved[i] = results.get(i).stream()
+      totalObserved[i] = survivalResults.get(i).stream()
               .mapToInt(Interval::getDied)
               .sum();
     }
 
     log.debug("Totals: {}", setTotals);
-    constructSampleGroups(results);
-    log.debug("TreeMap Size: {}", sampleGroups.size());
+    constructSampleGroups(survivalResults);
+    log.debug("TreeMap Size: {}", samples.size());
   }
 
   /**
@@ -80,7 +80,7 @@ public class SurvivalLogRank {
     arraycopy(setTotals, 0, alive, 0, numSets);
     double[] expectedSums = new double[numSets];
 
-    for (val entry: sampleGroups.entrySet()) {
+    for (val entry: samples.entrySet()) {
       if (entry.getKey() > largestTime) break;
 
       int[] died = entry.getValue().died;
@@ -112,7 +112,7 @@ public class SurvivalLogRank {
    * @param results intervals of the kaplan meier survival plot.
    */
   private void constructSampleGroups(List<List<Interval>> results) {
-    sampleGroups = new TreeMap<>();
+    samples = new TreeMap<>();
 
     for (int i = 0; i < numSets; i++) {
       val resultDonors = results.get(i).stream()
@@ -123,7 +123,7 @@ public class SurvivalLogRank {
       for (val donor : resultDonors) {
         val time = donor.getTime();
 
-        Sample sample = sampleGroups.get(time);
+        Sample sample = samples.get(time);
         if (sample == null) {
           sample = new Sample(numSets);
         }
@@ -134,7 +134,7 @@ public class SurvivalLogRank {
           if (time > largestTime) largestTime = time;
           sample.died[i]++;
         }
-        sampleGroups.put(time, sample);
+        samples.put(time, sample);
       }
     }
 
@@ -156,9 +156,9 @@ public class SurvivalLogRank {
    */
   private static class Sample {
 
-    Sample(int sets) {
-      died = new int[sets];
-      censured = new int[sets];
+    Sample(int setCount) {
+      died = new int[setCount];
+      censured = new int[setCount];
     }
 
     int[] died;
