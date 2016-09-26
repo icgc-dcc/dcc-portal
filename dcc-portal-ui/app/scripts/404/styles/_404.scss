@@ -1,0 +1,44 @@
+.page-not-found-container {
+  padding: 2rem;
+  
+  .message-404 {
+
+    &:after{
+      display: block;
+      margin-top: 2rem;
+      height: 2px;
+      border-bottom: 1px solid #e6e6e6;
+      margin-left: -4rem;
+      margin-right: -4rem;
+      content: '';
+
+    }
+
+    .header-badge {
+      background-color: #CC334A;
+      padding: 0.90rem 1.0rem 1.2rem 1.6rem; 
+      width: 4rem;
+      height: 4rem;
+      font-size: 2rem;
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      margin-right: 1rem;
+      vertical-align: text-top;
+
+      i{
+        color:#fff;
+      }
+    }
+
+    .message{
+      color: #CC334A;
+      font-weight: 500;
+    }
+  }
+
+  p {
+    font-size: 1.2rem;
+    min-height: 30rem;
+  }
+}

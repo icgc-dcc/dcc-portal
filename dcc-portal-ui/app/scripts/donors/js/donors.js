@@ -26,8 +26,12 @@
       templateUrl: 'scripts/donors/views/donor.html',
       controller: 'DonorCtrl as DonorCtrl',
       resolve: {
-        donor: ['$stateParams', 'Donors', function ($stateParams, Donors) {
-          return Donors.one($stateParams.id).get({include: 'specimen'});
+        donor: ['$stateParams', '$state', 'Donors', function ($stateParams, $state, Donors) {
+          return Donors.one($stateParams.id).get({include: 'specimen'}).then(function(donor){
+            return donor;
+          }, function(){
+            $state.go('404', {info: '/donors/' + $stateParams.id});
+          });
         }]
       }
     });
@@ -592,7 +596,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     };
   });
 
-  module.service('Donor', function (Restangular, $state) {
+  module.service('Donor', function (Restangular) {
     var _this = this;
     this.handler = {};
 
@@ -606,11 +610,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     this.get = function (params) {
       var defaults = {};
 
-      return this.handler.get(angular.extend(defaults, params)).then(function(){
-        console.log('success');
-      }, function(){
-        $state.go('404');
-      });
+      return this.handler.get(angular.extend(defaults, params));
     };
 
     this.getMutations = function (params) {

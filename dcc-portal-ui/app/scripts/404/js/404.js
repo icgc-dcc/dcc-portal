@@ -22,13 +22,23 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
     $stateProvider.state('404', {
       url: '/404',
       templateUrl: '/scripts/404/views/404.html',
-      controller: '404Controller as 404Controller'
+      controller: '404Controller as ctrlr',
+      params: {
+        info: null
+      }
     });
   });
 
 (function(){
   angular.module('icgc.404.controllers', [])
-    .controller('404Controller', function(){
-      console.log('Activated!');
+    .controller('404Controller', function($stateParams, Page){
+      var _ctrl = this;
+      _ctrl.info = '';
+
+      Page.setTitle('404');
+
+      if($stateParams.info){
+        _ctrl.info = $stateParams.info;
+      }
     });
 })();

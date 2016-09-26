@@ -1,1 +1,23 @@
-<p>This is 404</p>
+<div class="wrapper">
+  <div class="container">
+      <div class="page-not-found-container">
+        <h1 class="message-404">
+          <span class="header-badge custom-badge">
+            <i class="fa fa-exclamation-triangle"></i>
+          </span>
+          <span data-ng-if="ctrlr.info">
+            <span class="message">{{ ctrlr.info }}</span> not found!
+          </span>
+          <span data-ng-if="!ctrlr.info">
+            Sorry the Page Cannot be Found!
+          </span>
+        </h1>
+        <p>
+          Sorry, we couldn't find the page you were looking for. If you believe this is an error please contact us at 
+          <a href="mailto:dcc-support@icgc.org?subject=ICGC%20DCC%20{{ctrlr.info}}%20Not%20Found">
+            <i class="fa fa-envelope"></i> dcc-support@icgc.org
+          </a>.
+      </p>
+    </div>
+  </div>
+</div>
