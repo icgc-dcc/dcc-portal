@@ -41,8 +41,14 @@
       templateUrl: '/scripts/repository/views/repository.external.file.html',
       controller: 'ExternalFileInfoController as fileCtrlr',
       resolve: {
-        fileInfo: ['$stateParams', 'ExternalRepoService', function ($stateParams, ExternalRepoService) {
-          return ExternalRepoService.getFileInfo ($stateParams.id);
+        fileInfo: ['$stateParams', '$state', 'ExternalRepoService', 'Notify', 
+        function ($stateParams, $state, ExternalRepoService,  Notify) {
+          return ExternalRepoService.getFileInfo($stateParams.id).then(function(file){
+            return file;
+          }, function(){
+            Notify.hide();
+            $state.go('404', {page: 'files', id: $stateParams.id});
+          });
         }]
       }
     });

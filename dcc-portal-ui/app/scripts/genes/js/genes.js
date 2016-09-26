@@ -26,9 +26,13 @@
       templateUrl: 'scripts/genes/views/gene.html',
       controller: 'GeneCtrl as GeneCtrl',
       resolve: {
-        gene: ['$stateParams', 'Genes', function ($stateParams, Genes) {
+        gene: ['$stateParams', '$state', 'Genes', 'Notify', 
+        function ($stateParams, $state, Genes, Notify) {
           return Genes.one($stateParams.id).get({include: ['projects', 'transcripts']}).then(function(gene) {
             return gene;
+          }, function(){
+            Notify.hide();
+            $state.go('404', {page: 'genes', id: $stateParams.id});
           });
         }]
       }

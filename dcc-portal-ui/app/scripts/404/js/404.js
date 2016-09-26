@@ -20,12 +20,9 @@
 angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
   .config(function($stateProvider){
     $stateProvider.state('404', {
-      url: '/404',
+      url: '/404?page&id',
       templateUrl: '/scripts/404/views/404.html',
-      controller: '404Controller as ctrlr',
-      params: {
-        info: null
-      }
+      controller: '404Controller as ctrlr'
     });
   });
 
@@ -36,9 +33,14 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
       _ctrl.info = '';
 
       Page.setTitle('404');
+      Page.setPage('error');
 
-      if($stateParams.info){
-        _ctrl.info = $stateParams.info;
+      if($stateParams.page && $stateParams.id){
+        _ctrl.info = {page: $stateParams.page, id: $stateParams.id};
       }
+      
+      _ctrl.emailSubject = _ctrl.info ? 
+        'ICGC DCC /' + _ctrl.info.page  + '/' + _ctrl.info.id +' Page Not Found' : 
+        'ICGC DCC Page Not Found' ;
     });
 })();

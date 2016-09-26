@@ -225,7 +225,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
     }
   })
   .service('CompoundsService', function($rootScope, $q, Gene, Mutations, Page, FilterService, $location,
-                                        Restangular, CompoundsServiceConstants, Extensions) {
+                                        Restangular, CompoundsServiceConstants, Extensions, $state, Notify) {
 
     function _arrayOrEmptyArray(arr) {
       return angular.isArray(arr) ?  arr : [];
@@ -360,6 +360,9 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
           .then(function(compound) {
             _compoundEntity = _compoundEntityFactory(compound.plain());
             defer.resolve(_self);
+          }, function(){
+            Notify.hide();
+            $state.go('404', {page: 'compound', id: compoundId});
           });
 
         return deferPromise;

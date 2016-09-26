@@ -52,8 +52,14 @@
       templateUrl: 'scripts/projects/views/project.html',
       controller: 'ProjectCtrl as ProjectCtrl',
       resolve: {
-        project: ['$stateParams', 'Projects', function ($stateParams, Projects) {
-          return Projects.one($stateParams.id).get();
+        project: ['$stateParams', '$state', 'Projects', 'Notify', 
+        function ($stateParams, $state, Projects, Notify) {
+          return Projects.one($stateParams.id).get().then(function(project){
+            return project;
+          }, function(){
+            Notify.hide();
+            $state.go('404', {page: 'projects', id: $stateParams.id});
+          });
         }]
       }
     });

@@ -16,22 +16,20 @@
 
     .header-badge {
       background-color: #CC334A;
-      padding: 0.90rem 1.0rem 1.2rem 1.6rem; 
-      width: 4rem;
-      height: 4rem;
-      font-size: 2rem;
-      color: #fff;
-      border-radius: 50%;
-      text-align: center;
-      margin-right: 1rem;
-      vertical-align: text-top;
+      padding: .6rem .8rem .5rem .5rem;
+      margin: 0rem 1rem 0rem 0rem;
 
       i{
         color:#fff;
       }
     }
 
-    .message{
+    .page{
+      color: #CC334A;
+      font-weight: 250;
+    }
+
+    .id{
       color: #CC334A;
       font-weight: 500;
     }

@@ -28,10 +28,13 @@
       templateUrl: 'scripts/genesets/views/geneset.html',
       controller: 'GeneSetCtrl as GeneSetCtrl',
       resolve: {
-        geneSet: ['$stateParams', 'GeneSets', function ($stateParams, GeneSets) {
+        geneSet: ['$stateParams', '$state', 'GeneSets', 'Notify', 
+        function ($stateParams, $state, GeneSets, Notify) {
           return GeneSets.one($stateParams.id).get().then(function (geneSet) {
-
                 return geneSet;
+            }, function(){
+              Notify.hide();
+              $state.go('404', {page: 'genesets', id: $stateParams.id});
             });
           }]
         }
