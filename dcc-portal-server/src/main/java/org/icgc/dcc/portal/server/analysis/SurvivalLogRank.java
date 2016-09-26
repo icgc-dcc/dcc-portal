@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.portal.server.analysis;
 
+import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -25,6 +26,7 @@ import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.Interval;
 import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.DonorValue;
 
 import java.util.List;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static java.lang.System.arraycopy;
@@ -46,38 +48,39 @@ public class SurvivalLogRank {
 
   private int largestTime;
 
-  private TreeMap<Integer, Sample> sampleGroups;
+  private SortedMap<Integer, Sample> samples;
 
-  public SurvivalLogRank(List<List<Interval>> results) {
-    numSets = results.size();
+  SurvivalLogRank(@NonNull List<List<Interval>> survivalResults) {
+    numSets = survivalResults.size();
     setTotals = new int[numSets];
     totalObserved = new int[numSets];
 
     for (int i = 0; i < numSets; i++) {
-      setTotals[i] = results.get(i).stream()
+      setTotals[i] = survivalResults.get(i).stream()
               .mapToInt(r -> r.getDonors().size())
               .sum();
 
-      totalObserved[i] = results.get(i).stream()
-              .mapToInt(r -> r.getDied())
+      totalObserved[i] = survivalResults.get(i).stream()
+              .mapToInt(Interval::getDied)
               .sum();
     }
 
     log.debug("Totals: {}", setTotals);
-    constructSampleGroups(results);
-    log.debug("TreeMap Size: {}", sampleGroups.size());
+    constructSampleGroups(survivalResults);
+    log.debug("TreeMap Size: {}", samples.size());
   }
 
   /**
    * Runs the log rank test and returns an object containing the computed info
+   *
    * @return Returns {ChiSquared, Degrees of Freedom, P-Value}
    */
-  public SurvivalStats runLogRankTest() {
+  SurvivalStats runLogRankTest() {
     int[] alive = new int[numSets];
     arraycopy(setTotals, 0, alive, 0, numSets);
     double[] expectedSums = new double[numSets];
 
-    for (val entry: sampleGroups.entrySet()) {
+    for (val entry: samples.entrySet()) {
       if (entry.getKey() > largestTime) break;
 
       int[] died = entry.getValue().died;
@@ -105,21 +108,22 @@ public class SurvivalLogRank {
 
   /**
    * Constructs a map of time -> ([died columns], [censored columns])
+   *
    * @param results intervals of the kaplan meier survival plot.
    */
   private void constructSampleGroups(List<List<Interval>> results) {
-    sampleGroups = new TreeMap<Integer, Sample>();
+    samples = new TreeMap<>();
 
     for (int i = 0; i < numSets; i++) {
       val resultDonors = results.get(i).stream()
-              .map(r -> r.getDonors())
-              .flatMap(d -> d.stream())
+              .map(Interval::getDonors)
+              .flatMap(List::stream)
               .collect(toImmutableList());
 
       for (val donor : resultDonors) {
         val time = donor.getTime();
 
-        Sample sample = sampleGroups.get(time);
+        Sample sample = samples.get(time);
         if (sample == null) {
           sample = new Sample(numSets);
         }
@@ -130,7 +134,7 @@ public class SurvivalLogRank {
           if (time > largestTime) largestTime = time;
           sample.died[i]++;
         }
-        sampleGroups.put(time, sample);
+        samples.put(time, sample);
       }
     }
 
@@ -141,17 +145,20 @@ public class SurvivalLogRank {
   }
 
   @Value
-  public class SurvivalStats {
+  public static class SurvivalStats {
     public double chiSquared;
     public int degreesFreedom;
     public double pValue;
   }
 
-  private class Sample {
+  /**
+   * Represents the number of donors that died or became censored at a specific point in time.
+   */
+  private static class Sample {
 
-    public Sample(int sets) {
-      died = new int[sets];
-      censured = new int[sets];
+    Sample(int setCount) {
+      died = new int[setCount];
+      censured = new int[setCount];
     }
 
     int[] died;

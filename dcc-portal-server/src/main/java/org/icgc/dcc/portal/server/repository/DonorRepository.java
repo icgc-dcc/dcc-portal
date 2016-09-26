@@ -148,7 +148,7 @@ public class DonorRepository implements Repository {
   private final QueryEngine queryEngine;
 
   @Autowired
-  DonorRepository(Client client, IndexModel indexModel, QueryEngine queryEngine,
+  public DonorRepository(Client client, IndexModel indexModel, QueryEngine queryEngine,
       EntitySetRepository entitySetRepository) {
     this.index = indexModel.getIndex();
     this.repoIndexName = indexModel.getRepoIndex();
@@ -201,7 +201,7 @@ public class DonorRepository implements Repository {
     return response;
   }
 
-  public MultiSearchResponse performPhenotypeAnalysisMultiSearch(@NonNull final List<UUID> setIds) {
+  public MultiSearchResponse calculatePhenotypeStats(@NonNull final List<UUID> setIds) {
     val multiSearch = client.prepareMultiSearch();
     val matchAll = matchAllQuery();
 

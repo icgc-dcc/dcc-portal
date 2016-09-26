@@ -120,7 +120,7 @@ Folder | Purpose   | Example
 /scripts/venn23 | Venn diagram UI component used in analysis module. | N/A
 /scripts/visualization | Visualization module definition for the project mutation viewer, project stacked bar and area bar. | N/A
 /vendor/scripts/bamiobio| Customized iobio Module | N/A
-/vendor/scripts/genome-viewer | Customized genome viewer with ICGC Tracks and Data Adapters | N/A
+/vendor/scripts/genome-viewer | Customized genome viewer with ICGC Tracks and Data Adapters. Uses opencb's genome-maps [repo](https://github.com/opencb/genome-maps) [website](http://genomemaps.org/) | N/A
 
 
 ### Other Notable Areas in the UI ###
