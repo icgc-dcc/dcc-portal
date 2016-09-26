@@ -58,7 +58,7 @@ public final class PhenotypeAnalyzer {
     // Here we eliminate duplicates and impose ordering (needed for reading the response items).
     val setIds = ImmutableSet.copyOf(entitySetIds).asList();
 
-    val multiResponse = donorRepository.performPhenotypeAnalysisMultiSearch(setIds);
+    val multiResponse = donorRepository.calculatePhenotypeStats(setIds);
     val responseItems = multiResponse.getResponses();
     val responseItemCount = responseItems.length;
     checkState(responseItemCount == setIds.size(),
