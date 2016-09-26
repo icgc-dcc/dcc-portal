@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.portal.server.analysis;
 
+import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -25,6 +26,7 @@ import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.Interval;
 import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.DonorValue;
 
 import java.util.List;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static java.lang.System.arraycopy;
@@ -46,9 +48,9 @@ public class SurvivalLogRank {
 
   private int largestTime;
 
-  private TreeMap<Integer, Sample> sampleGroups;
+  private SortedMap<Integer, Sample> sampleGroups;
 
-  public SurvivalLogRank(List<List<Interval>> results) {
+  SurvivalLogRank(@NonNull List<List<Interval>> results) {
     numSets = results.size();
     setTotals = new int[numSets];
     totalObserved = new int[numSets];
@@ -59,7 +61,7 @@ public class SurvivalLogRank {
               .sum();
 
       totalObserved[i] = results.get(i).stream()
-              .mapToInt(r -> r.getDied())
+              .mapToInt(Interval::getDied)
               .sum();
     }
 
@@ -70,9 +72,10 @@ public class SurvivalLogRank {
 
   /**
    * Runs the log rank test and returns an object containing the computed info
+   *
    * @return Returns {ChiSquared, Degrees of Freedom, P-Value}
    */
-  public SurvivalStats runLogRankTest() {
+  SurvivalStats runLogRankTest() {
     int[] alive = new int[numSets];
     arraycopy(setTotals, 0, alive, 0, numSets);
     double[] expectedSums = new double[numSets];
@@ -105,15 +108,16 @@ public class SurvivalLogRank {
 
   /**
    * Constructs a map of time -> ([died columns], [censored columns])
+   *
    * @param results intervals of the kaplan meier survival plot.
    */
   private void constructSampleGroups(List<List<Interval>> results) {
-    sampleGroups = new TreeMap<Integer, Sample>();
+    sampleGroups = new TreeMap<>();
 
     for (int i = 0; i < numSets; i++) {
       val resultDonors = results.get(i).stream()
-              .map(r -> r.getDonors())
-              .flatMap(d -> d.stream())
+              .map(Interval::getDonors)
+              .flatMap(List::stream)
               .collect(toImmutableList());
 
       for (val donor : resultDonors) {
@@ -141,15 +145,18 @@ public class SurvivalLogRank {
   }
 
   @Value
-  public class SurvivalStats {
+  public static class SurvivalStats {
     public double chiSquared;
     public int degreesFreedom;
     public double pValue;
   }
 
-  private class Sample {
+  /**
+   * Represents the number of donors that died or became censored at a specific point in time.
+   */
+  private static class Sample {
 
-    public Sample(int sets) {
+    Sample(int sets) {
       died = new int[sets];
       censured = new int[sets];
     }
