@@ -173,8 +173,16 @@
         _.each(filters, function(filter){
           _.each(filter, function(facets){
             _.each(facets, function(facet){
-              _.each(facet, function(value, index){                
-                name += $filter('trans')( value.term, value.controlFacet);
+              _.each(facet, function(value, index){
+                
+                if(value.controlFacet === 'compoundId'){
+                  CompoundsService.getCompoundByZincId(value.controlTerm).then(function(compound) {
+                    name += compound.name;
+                  });
+                } else {
+                  name += $filter('trans')( value.term, value.controlFacet);
+                }
+
                 if(index < facet.length-1){
                   name += ' / ';
                 }
