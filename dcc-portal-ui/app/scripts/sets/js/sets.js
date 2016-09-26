@@ -34,14 +34,14 @@
 
   module.controller('SetUploadController',
     function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
-               setType, setLimit, setUnion, selectedIds, FilterService, $filter) {
+      setType, setLimit, setUnion, selectedIds, FiltersUtil, FilterService, $filter, CompoundsService) {
 
     $scope.setLimit = setLimit;
     $scope.isValid = false;
     
     // Input data parameters
     $scope.params = {};
-    $scope.params.setName = getSetName();
+    $scope.params.setName = '';
     $scope.params.setDescription = '';
     $scope.params.setType = setType;
     $scope.params.setLimit  = setLimit;
@@ -152,23 +152,29 @@
 
     function getSetName(){
       var filters = FilterService.filters();
-      var name = '', type = '';
+      var ids = LocationService.extractSetIds(filters);
+
+      if (ids.length > 0) {
+        SetService.getMetaData(ids).then(function(results) {
+          filters = FiltersUtil.buildUIFilters (filters,
+            SetService.lookupTable (results.plain()));
+           $scope.params.setName = updateSetName(filters);
+        });
+      } else {
+        filters = FiltersUtil.buildUIFilters(filters, {});
+        return updateSetName(filters);
+      }
+    }
+
+    function updateSetName(filters){
+      var name = '';
 
       if(!_.isEmpty(filters) && _.isObject(filters)){
         _.each(filters, function(filter){
-          _.each(filter, function(facets, key){
-            type = key;
+          _.each(filter, function(facets){
             _.each(facets, function(facet){
-              _.each(facet, function(value, index){
-
-                if(value.indexOf('ES:') > -1){
-                  name +=  _.capitalize(setType) + ' Set (' + value.slice(3, value.length);
-                }else if(value === '_missing'){
-                  name += 'No ' + $filter('trans')(type) + ' Data';
-                }else {
-                  name += $filter('trans')(value, type);
-                }
-
+              _.each(facet, function(value, index){                
+                name += $filter('trans')( value.term, value.controlFacet);
                 if(index < facet.length-1){
                   name += ' / ';
                 }
