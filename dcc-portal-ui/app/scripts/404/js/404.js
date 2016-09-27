@@ -20,7 +20,7 @@
 angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
   .config(function($stateProvider){
     $stateProvider.state('404', {
-      url: '/404?page&id',
+      url: '/404?page&id&url',
       templateUrl: '/scripts/404/views/404.html',
       controller: '404Controller as ctrlr'
     });
@@ -35,8 +35,8 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
       Page.setTitle('404');
       Page.setPage('error');
 
-      if($stateParams.page && $stateParams.id){
-        _ctrl.info = {page: $stateParams.page, id: $stateParams.id};
+      if($stateParams.page && $stateParams.id && $stateParams.url){
+        _ctrl.info = {page: $stateParams.page, id: $stateParams.id, url: $stateParams.url};
       }
       
       _ctrl.emailSubject = _ctrl.info ? 

@@ -26,15 +26,11 @@
       templateUrl: 'scripts/mutations/views/mutation.html',
       controller: 'MutationCtrl as MutationCtrl',
       resolve: {
-        mutation: ['$stateParams', '$state', 'Mutations', 'Notify', 
-          function ($stateParams, $state, Mutations, Notify) {
+        mutation: ['$stateParams', 'Mutations', 
+          function ($stateParams, Mutations) {
           return Mutations.one($stateParams.id).get({ include: ['occurrences', 'transcripts', 'consequences'] }).then(
             function(mutation){
               return mutation;
-            }, 
-            function(){
-              Notify.hide();
-              $state.go('404', {page: 'mutations', id: $stateParams.id});
             });
         }]
       }

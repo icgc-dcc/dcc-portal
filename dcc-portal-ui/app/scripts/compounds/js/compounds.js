@@ -27,8 +27,8 @@ angular.module('icgc.compounds', ['icgc.compounds.controllers', 'icgc.compounds.
       templateUrl: 'scripts/compounds/views/compound.html',
       controller: 'CompoundCtrl as CompoundCtrl',
       resolve: {
-        compoundManager: ['Page', '$stateParams', 'CompoundsService', 'gettextCatalog', function (Page, $stateParams, 
-          CompoundsService, gettextCatalog) {
+        compoundManager: ['Page', '$stateParams', 'CompoundsService', 'gettextCatalog', 
+        function (Page, $stateParams, CompoundsService, gettextCatalog) {
 
           Page.startWork();
           Page.setTitle(gettextCatalog.getString('Compounds'));
@@ -225,7 +225,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
     }
   })
   .service('CompoundsService', function($rootScope, $q, Gene, Mutations, Page, FilterService, $location,
-                                        Restangular, CompoundsServiceConstants, Extensions, $state, Notify) {
+                                        Restangular, CompoundsServiceConstants, Extensions, $state) {
 
     function _arrayOrEmptyArray(arr) {
       return angular.isArray(arr) ?  arr : [];
@@ -361,8 +361,8 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
             _compoundEntity = _compoundEntityFactory(compound.plain());
             defer.resolve(_self);
           }, function(){
-            Notify.hide();
-            $state.go('404', {page: 'compound', id: compoundId});
+            Page.stopWork();
+            $state.go('404', {page: 'compound', id: compoundId, url: '/compound/:id'}, {location: false});
           });
 
         return deferPromise;

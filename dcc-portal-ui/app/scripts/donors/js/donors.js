@@ -26,13 +26,10 @@
       templateUrl: 'scripts/donors/views/donor.html',
       controller: 'DonorCtrl as DonorCtrl',
       resolve: {
-        donor: ['$stateParams', '$state', 'Donors', 'Notify', 
-        function ($stateParams, $state, Donors, Notify) {
+        donor: ['$stateParams', 'Donors', 
+        function ($stateParams, Donors) {
           return Donors.one($stateParams.id).get({include: 'specimen'}).then(function(donor){
             return donor;
-          }, function(){
-            Notify.hide();
-            $state.go('404', {page: 'donors', id: $stateParams.id});
           });
         }]
       }
