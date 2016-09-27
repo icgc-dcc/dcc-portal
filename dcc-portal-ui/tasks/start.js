@@ -147,10 +147,6 @@ function runDevServer(port) {
   new WebpackDevServer(compiler, {
     historyApiFallback: {
       rewrites: [
-        {
-          from: /^\/releases\/.*$/,
-          to: '/'
-        }
       ]
     },
     hot: true,
@@ -159,13 +155,16 @@ function runDevServer(port) {
     watchOptions: {
       ignored: /node_modules/
     },
-    // proxy: {
-    //   '/ws/*': {
-    //     target: 'http://10.30.128.146:5380',
-    //     // target: 'https://submissions.dcc.icgc.org',
-    //     secure: false,
-    //   }
-    // },
+    proxy: {
+      '/api/*': {
+        target: 'http://localhost:8080',
+        secure: false,
+      },
+      '/(scripts|styles|vendor|bower_components)/**': {
+        target: 'http://localhost:9000/app',
+        secure: false,
+      },
+    },
   }).listen(port, (err, result) => {
     if (err) {
       return console.log(err);

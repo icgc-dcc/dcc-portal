@@ -209,7 +209,7 @@
     'angular-lodash',
     'angularytics',
     'angular-loading-bar',
-    'btford.markdown',
+    'hc.marked',
     'LocalStorageModule',
     'toaster',
     'dndLists',
@@ -548,7 +548,7 @@
 
   module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, $compileProvider,
                           AngularyticsProvider, $httpProvider, RestangularProvider,
-                          markdownConverterProvider, localStorageServiceProvider, API) {
+                          markedProvider, localStorageServiceProvider, API) {
 
     // Disables debugging information
     $compileProvider.debugInfoEnabled(false);
@@ -601,9 +601,7 @@
       return '/404?page=' + $location.url();
     });
 
-    markdownConverterProvider.config({
-      extensions: ['table']
-    });
+    markedProvider.setOptions({ gfm: true });
 
     localStorageServiceProvider.setPrefix('icgc');
   });

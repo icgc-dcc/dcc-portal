@@ -10,7 +10,7 @@
 <div>
 <section style="padding-top:0">
     <div data-ng-repeat="file in ICGCRepoController.textFiles | filter:{name:'notice.txt'}" class="alert alert-error">
-       <div btf-markdown="file.textContent" class="release_notice"></div>
+       <div marked="file.textContent" class="release_notice"></div>
     </div>
 
     <section class="alert alert-warning" data-ng-if="ICGCRepoController.downloadEnabled === false">
@@ -77,7 +77,7 @@
                    <div><a target="_self" href="{{ICGCRepoController.API.BASE_URL}}/download?fn={{file.name}}"><i class="icon-file"></i>{{file.baseName}}</a></div>
                    <hr>
                    <div class="markdown-wrapper" >
-                       <div btf-markdown="file.textContent" class="markdown-container"></div>
+                       <div marked="file.textContent" class="markdown-container"></div>
                    </div>
                </div>
            </div>

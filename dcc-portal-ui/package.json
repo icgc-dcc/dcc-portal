@@ -45,6 +45,8 @@
     "eslint": "3.5.0",
     "eslint-loader": "1.5.0",
     "eslint-plugin-flowtype": "2.19.0",
+    "exports-loader": "0.6.3",
+    "expose-loader": "0.7.1",
     "fontello-cli": "0.4.0",
     "grunt": "0.4.5",
     "grunt-angular-gettext": "2.2.3",
@@ -100,13 +102,16 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
+    "angular-marked": "1.2.2",
     "backbone": "1.0.0",
     "binaryjs": "0.1.8",
+    "binaryjs-client": "1.0.0",
     "class.js": "0.0.1",
     "jquery": "3.1.1",
     "lodash": "3.10.1",
     "lodash-aliases": "1.2.0",
-    "showdown": "1.4.3",
-    "urijs": "1.16.1"
+    "marked": "0.3.6",
+    "urijs": "1.16.1",
+    "x2js": "3.0.0"
   }
 }

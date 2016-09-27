@@ -480,7 +480,7 @@ var donutChooserD3 = function module() {
     return exports;
   }
 
-  exports.name = function(_) {
+  exports.nameFunction = function(_) {
     if (!arguments.length) return name;
     name = _;
     return exports;

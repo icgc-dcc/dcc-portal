@@ -41,9 +41,10 @@
     'icgc.common.pcawg',
 
     // Query langauge
-    'icgc.common.pql.translation',
-    'icgc.common.pql.queryobject',
-    'icgc.common.pql.utils'
+    // Note: currently unused in the application
+    // 'icgc.common.pql.translation',
+    // 'icgc.common.pql.queryobject',
+    // 'icgc.common.pql.utils'
   ]);
 
 

@@ -23,8 +23,6 @@
 
 'use strict';
 
-IcgcGeneTrack.prototype = new Track({});
-
 function IcgcGeneTrack(args) {
   Track.call(this, args);
   // Using Underscore 'extend' function to extend and add Backbone Events
@@ -42,6 +40,8 @@ function IcgcGeneTrack(args) {
   //set instantiation args, must be last
   _.extend(this, args);
 }
+
+IcgcGeneTrack.prototype = new Track({});
 
 IcgcGeneTrack.prototype.updateHeight = function () {
   //this._updateHeight();
