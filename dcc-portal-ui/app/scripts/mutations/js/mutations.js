@@ -96,6 +96,14 @@
       });
     }
 
+    if (mutation.functionalImpact.indexOf('High') > 0) {
+      mutation.displayedFunctionalImpact = 'High';
+    } else if (mutation.functionalImpact.indexOf('High') > 0) {
+      mutation.displayedFunctionalImpact = 'Low';
+    } else {
+      mutation.displayedFunctionalImpact = 'Unknown';
+    }
+
     console.log(_ctrl.uiProjects);
 
     if (_ctrl.mutation.hasOwnProperty('consequences') && _ctrl.mutation.consequences.length) {
