@@ -13,7 +13,6 @@ require('ngInfiniteScroll/build/ng-infinite-scroll.js');
 require('angular-local-storage/dist/angular-local-storage.js');
 require('angularytics/dist/angularytics.js');
 require('angular-ui-utils/scrollfix.js');
-// require('angular-markdown-directive/markdown.js');
 require('expose?marked!marked');
 require('angular-marked');
 
@@ -38,7 +37,6 @@ require('./ui/js/table2CSV.js');
 require('../vendor/scripts/invariant.js');
 
 // BAM iobio
-// require('../vendor/scripts/bamiobio/class.js');
 window.Class = require('!class.js')();
 require('expose?properRDP!imports?this=>window!exports?properRDP!../vendor/scripts/bamiobio/rdp.js');
 require('imports?this=>window!../vendor/scripts/bamiobio/queue.min.js');
@@ -61,26 +59,26 @@ require('expose?groupedBarD3!imports?this=>window&colorList=>undefined!exports?g
 require('expose?lineD3!imports?this=>window!exports?lineD3!../vendor/scripts/vcfiobio/line.d3.js');
 
 // Genome Viewer
-window.Backbone = require('backbone');
+require('expose?Backbone!backbone');
 // require('../vendor/scripts/backbone.min-1.0.js');
 require('script!../vendor/scripts/bootstrap-slider-2.0.0.js');
 require('script!../vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.js');
-window.URI = require('urijs');
-// require('../vendor/scripts/genome-viewer/vendor/uri.js/src/URI.min.js');
+require('expose?URI!urijs');
 
 // Genome Viewer Config and Initialization
-require('script!../vendor/scripts/genome-viewer/gv-config.js');
-require('script!../vendor/scripts/genome-viewer/genome-viewer.js');
+// require('script!../vendor/scripts/genome-viewer/gv-config.js');
+Object.assign(window, require('exports?CODON_CONFIG&GENE_BIOTYPE_COLORS&SNP_BIOTYPE_COLORS&SEQUENCE_COLORS&FEATURE_TYPES!../vendor/scripts/genome-viewer/gv-config.js'));
+Object.assign(window, require(process.env.GENOME_VIEWER_REQUIRE_STRING));
 
 // Highcharts Rounded Corners
 require('../vendor/scripts/highcharts-rounded-corners.js');
 
 // Custom ICGC Genome Viewer Components
-require('script!../vendor/scripts/genome-viewer/icgc-gene-adapter.js');
-require('script!../vendor/scripts/genome-viewer/icgc-gene-track.js');
-require('script!../vendor/scripts/genome-viewer/icgc-mutation-adapter.js');
-require('script!../vendor/scripts/genome-viewer/icgc-mutation-track.js');
-require('script!../vendor/scripts/genome-viewer/icgc-navigation-bar.js');
+require('expose?IcgcGeneAdapter!exports?IcgcGeneAdapter!../vendor/scripts/genome-viewer/icgc-gene-adapter.js');
+require('expose?IcgcGeneTrack!exports?IcgcGeneTrack!../vendor/scripts/genome-viewer/icgc-gene-track.js');
+require('expose?IcgcMutationAdapter!exports?IcgcMutationAdapter!../vendor/scripts/genome-viewer/icgc-mutation-adapter.js');
+require('expose?IcgcMutationTrack!exports?IcgcMutationTrack!../vendor/scripts/genome-viewer/icgc-mutation-track.js');
+require('expose?IcgcNavigationBar!exports?IcgcNavigationBar!../vendor/scripts/genome-viewer/icgc-navigation-bar.js');
 
 // OncoGrid
 require('script!../vendor/scripts/oncogrid/oncogrid-debug.js');
