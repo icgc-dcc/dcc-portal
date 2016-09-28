@@ -360,9 +360,11 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
           .then(function(compound) {
             _compoundEntity = _compoundEntityFactory(compound.plain());
             defer.resolve(_self);
-          }, function(){
-            Page.stopWork();
-            $state.go('404', {page: 'compound', id: compoundId, url: '/compound/:id'}, {location: false});
+          }, function(error){
+            if(error.status === 404){
+              Page.stopWork();
+              $state.go('404', {page: 'compound', id: compoundId, url: '/compound/:id'}, {location: false});
+            }
           });
 
         return deferPromise;

@@ -591,7 +591,7 @@
         }
       });
 
-    // If state doesn't exist, redirect to 404
+    // If invalid route is requested
     $urlRouterProvider.otherwise('/404');
 
     markdownConverterProvider.config({
