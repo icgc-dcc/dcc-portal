@@ -1,0 +1,32 @@
+<div class="wrapper">
+  <div class="container">
+    <div class="page-not-found-container">
+      <h1 class="message-404">
+        <span class="header-badge t_badge t_badge_icon t_badge__analysis">
+          <i class="fa fa-exclamation-triangle"></i>
+        </span>
+        <span data-ng-if="ctrlr.info">
+          <span class="page">{{ ctrlr.info.page === 'dataRepositoryFile' ? 'File' : ctrlr.info.page }}</span>
+          <span class="id">{{ ctrlr.info.id }}</span> not found!
+        </span>
+        <span data-ng-if="!ctrlr.info">
+          Sorry the Page Cannot be Found!
+        </span>
+      </h1>
+      <p data-ng-if="ctrlr.info">
+        Sorry, we couldn't find the page <strong>{{ ctrlr.info.url | replace : ':id' : ctrlr.info.id }}</strong>.<br/><br/>
+        If you believe this is an error please contact us at 
+        <a href="mailto:dcc-support@icgc.org?subject={{ ctrlr.emailSubject }}">
+          <i class="fa fa-envelope"></i> dcc-support@icgc.org
+        </a>.
+      </p>
+      <p data-ng-if="!ctrlr.info">
+        Sorry, we couldn't find the page <strong>{{ ctrlr.page }}</strong>.<br/><br/>
+        If you believe this is an error please contact us at 
+        <a href="mailto:dcc-support@icgc.org?subject={{ ctrlr.emailSubject }}">
+          <i class="fa fa-envelope"></i> dcc-support@icgc.org
+        </a>.
+      </p>
+    </div>
+  </div>
+</div>
