@@ -15,10 +15,6 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function () {
-  'use strict';
-
-
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Define global namespace for the icgc app to be used by third parties as well as in the console.
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -689,5 +685,3 @@
   function gettext(string){
     return string;
   }
-
-})();
