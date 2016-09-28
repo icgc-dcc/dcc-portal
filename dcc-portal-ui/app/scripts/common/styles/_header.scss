@@ -58,6 +58,23 @@ header {
       }*/
     }
   }
+
+  .header-country-flag{
+    span.flag{
+      position: absolute;
+      top:33%;
+    }
+  }
+}
+#home-page{
+  header{
+    .header-country-flag{
+      span.flag{
+        position: absolute;
+        top:15%;
+      }
+    }
+  }
 }
 /*
 @media screen and (min-width: 884px) and (max-width: 950px) {
@@ -121,8 +138,24 @@ header {
         min-width: 228px;
         display: block;
       }
+    }
 
+    .header-country-flag{
+      span.flag{
+        position: absolute;
+        top:11%;
+      }
+    }
+  }
 
+  #home-page{
+    header{
+      .header-country-flag{
+        span.flag{
+          position: absolute;
+          top:11%;
+        }
+      }
     }
   }
 }
@@ -179,7 +212,27 @@ header {
 
       }
     }
+
+    .header-country-flag{
+      span.flag{
+        position: absolute;
+        top:0%;
+      }
+    }
+
   }
+
+  #home-page{
+    header{
+      .header-country-flag{
+        span.flag{
+          position: absolute;
+          top:7%;
+        }
+      }
+    }
+  }
+
 }
 
 .t_nav {

@@ -4,6 +4,9 @@
     <img src="/styles/images/icgc-logo.png">
     <translate has-markup><span id="icgc">ICGC</span> Data Portal</translate>
   </a>
+  <a href="#" data-ng-if="controller.mirror.enabled" class="header-country-flag" >
+    <span class="flag flag-{{controller.mirror.countryCode}}" tooltip="{{controller.mirror.countryName | trans}}" tooltip-placement="right"></span>
+  </a>
 </h1>
 
 <nav class="t_nav t_nav__pages">
