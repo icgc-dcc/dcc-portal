@@ -67,6 +67,7 @@ public class UserAuthenticator {
 
       if (oauthClient.checkToken(accessToken, PORTAL_DOWNLOAD_SCOPE)) {
         val user = new User();
+
         user.setDaco(true);
 
         return Optional.of(user);
