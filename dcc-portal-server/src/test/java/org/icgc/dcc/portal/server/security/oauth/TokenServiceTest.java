@@ -15,7 +15,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.service;
+package org.icgc.dcc.portal.server.security.oauth;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -28,14 +28,10 @@ import static org.mockito.Mockito.when;
 
 import java.util.Set;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes.AccessTokenScope;
 import org.icgc.dcc.portal.server.model.User;
-import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
-import org.icgc.dcc.portal.server.security.oauth.UserScopesResponse;
+import org.icgc.dcc.portal.server.service.ForbiddenAccessException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -43,6 +39,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableSet;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RunWith(MockitoJUnitRunner.class)
@@ -119,6 +118,7 @@ public class TokenServiceTest {
 
   private static User createUser(String userId, Boolean hasDaco) {
     val user = new User(null, null);
+    user.setOpenIDIdentifier(USER_ID);
     user.setEmailAddress(USER_ID);
     user.setDaco(hasDaco);
 

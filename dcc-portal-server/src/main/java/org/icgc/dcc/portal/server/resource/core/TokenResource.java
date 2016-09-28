@@ -40,7 +40,7 @@ import org.icgc.dcc.portal.server.model.Tokens;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.security.jersey.Auth;
-import org.icgc.dcc.portal.server.service.TokenService;
+import org.icgc.dcc.portal.server.security.oauth.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

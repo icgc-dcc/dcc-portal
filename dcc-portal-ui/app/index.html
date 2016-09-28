@@ -452,28 +452,14 @@
 <!-- End Piwik Tracking Code -->
 
 <script type="text/javascript">
-    var $buoop = {
-        vs: {i: 8, f: 15, o: 10.6, s: 4, n: 9},
-        reminder: 0,
-        test: false,
-        text: '<i class="icon-attention"></i>Your Browser is not supported, some features may be broken or missing.' +
-              '<strong><a target="_blank" style="color: #fff;text-decoration: underline;" ' +
-              'href="http://browser-update.org/en/update.html"> Learn how to update your browser</a></strong>'
-    };
-    $buoop.ol = window.onload;
-    window.onload = function () {
-        try {
-            if ($buoop.ol) {
-                $buoop.ol();
-            }
-        } catch (e) {
-        }
-        var e = document.createElement("script");
-        e.setAttribute("type", "text/javascript");
-        var prot = ('https:' == document.location.protocol ? 'https://' : 'http://');
-        e.setAttribute("src", prot + "browser-update.org/update.js");
-        document.body.appendChild(e);
-    }
+var $buoop = {vs:{i:11,f:-4,o:-4,s:9,c:-4},c:4}; 
+function $buo_f(){ 
+ var e = document.createElement("script"); 
+ e.src = "//browser-update.org/update.min.js"; 
+ document.body.appendChild(e);
+};
+try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+catch(e){window.attachEvent("onload", $buo_f)}
 </script>
 </body>
 </html>
