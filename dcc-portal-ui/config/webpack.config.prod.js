@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var paths = require('./paths');
 
 module.exports = {
@@ -40,8 +41,13 @@ module.exports = {
       {
         test: /\.js$/,
         include: paths.appSrc,
+        loader: 'ng-annotate',
+      },
+      {
+        test: /\.js$/,
+        include: paths.appSrc,
         loader: 'babel',
-        query: require('./babel.prod')
+        query: require('./babel.prod'),
       },
       {
         test: /\.css$/,
@@ -84,6 +90,13 @@ module.exports = {
     useEslintrc: false
   },
   plugins: [
+    new CopyWebpackPlugin([
+      {from: 'app/styles/fonts', to: paths.appBuild + '/styles/fonts'},
+      {from: 'app/styles/images', to: paths.appBuild + '/styles/images'},
+
+      // TODO: this is only necessary due to templateUrls, we should compile templates
+      {from: 'app/scripts', to: paths.appBuild + '/scripts'},
+    ]),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,
@@ -120,6 +133,6 @@ module.exports = {
         screw_ie8: true
       }
     }),
-    new ExtractTextPlugin('static/css/[name].[contenthash:8].css')
+    new ExtractTextPlugin('static/css/[name].[contenthash:8].css'),
   ]
 };
