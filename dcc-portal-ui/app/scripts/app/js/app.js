@@ -598,7 +598,7 @@
 
     // If invalid route is requested
     $urlRouterProvider.otherwise(function ($injector, $location){
-      return('/404?page=' + $location.url());
+      return '/404?page=' + $location.url();
     });
 
     markdownConverterProvider.config({
