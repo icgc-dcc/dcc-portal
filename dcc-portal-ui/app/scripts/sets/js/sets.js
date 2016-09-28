@@ -189,6 +189,8 @@
             return GeneSymbols.resolve(termWrapper.term).then(function (ensemblIdGeneSymbolMap) {
               return _.get(ensemblIdGeneSymbolMap.plain(), termWrapper.term);
             });
+          } else if(termWrapper.term === '_missing'){
+            return Promise.resolve('No ' + $filter('trans')(termWrapper.facetName) + ' Data');
           } else {
             return Promise.resolve($filter('trans')(termWrapper.term, termWrapper.facetName));
           }
