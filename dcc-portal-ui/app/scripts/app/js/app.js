@@ -597,7 +597,9 @@
       });
 
     // If invalid route is requested
-    $urlRouterProvider.otherwise('/404');
+    $urlRouterProvider.otherwise(function ($injector, $location){
+      return('/404?page=' + $location.url());
+    });
 
     markdownConverterProvider.config({
       extensions: ['table']

@@ -38,6 +38,8 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
       if($stateParams.page && $stateParams.id && $stateParams.url){
         _ctrl.info = {page: $stateParams.page, id: $stateParams.id, url: $stateParams.url};
       }
+
+      _ctrl.page = $stateParams.page;
       
       _ctrl.emailSubject = _ctrl.info ? 
         'ICGC DCC /' + _ctrl.info.page  + '/' + _ctrl.info.id +' Page Not Found' : 
