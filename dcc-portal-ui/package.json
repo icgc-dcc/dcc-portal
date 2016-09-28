@@ -111,6 +111,7 @@
     "lodash": "3.10.1",
     "lodash-aliases": "1.2.0",
     "marked": "0.3.6",
+    "ng-annotate-loader": "0.2.0",
     "urijs": "1.16.1",
     "x2js": "3.0.0"
   }
