@@ -489,8 +489,13 @@
 
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound']);
       
-      $rootScope.$on('$stateChangeError', function(event, toState, toParams) {
-        $state.go('404', {page: toState.name, id: toParams.id, url: toState.url}, {location: false});
+      $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+        if(error.status === 404){
+          $state.go('404', {page: toState.name, id: toParams.id, url: toState.url}, {location: false});
+        } else {
+          console.error(error.message);
+          console.log(error.stack);
+        }
       });
 
       $rootScope.$on('$stateNotFound', function() {
