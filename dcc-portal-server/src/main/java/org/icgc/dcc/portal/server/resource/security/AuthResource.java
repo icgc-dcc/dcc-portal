@@ -144,18 +144,21 @@ public class AuthResource extends Resource {
       val tokenUserEntry = resolveIcgcUser(cudToken, cmsToken);
       val token = tokenUserEntry.getKey();
       val icgcUser = tokenUserEntry.getValue();
-      val userType = resolveUserType(cudToken, cmsToken);
 
-      val dccUser = createUser(icgcUser.getUserName(), token, userType);
+      val userType = resolveUserType(cudToken, cmsToken);
+      val userId = icgcUser.getUserName();
+      val userEmail = userType == UserType.CUD ? icgcUser.getEmail() : icgcUser.getUserName();
+
+      val dccUser = createUser(userType, userId, userEmail, token);
       val verifiedResponse = verifiedResponse(dccUser);
-      log.info("[{}] Finished authorization for user '{}'. DACO access: '{}'",
-          new Object[] { token, icgcUser.getUserName(), dccUser.getDaco() });
+      log.info("[{}] Finished authorization for user {} {}", token, userType.name(), dccUser);
 
       return verifiedResponse;
     }
 
     val userMessage = "Authorization failed due to missing token";
     val logMessage = "Couldn't authorize the user. No session token found.";
+
     throwAuthenticationException(userMessage, logMessage, getCookiesToDelete());
 
     // Will not come to this point because of throwAuthenticationException()
@@ -190,7 +193,7 @@ public class AuthResource extends Resource {
           String.format("[%s] Failed to login the user. Exception %s", username, e.getMessage()));
     }
 
-    return verifiedResponse(createUser(username, null, UserType.CUD));
+    return verifiedResponse(createUser(UserType.CUD, username, username, null));
   }
 
   @POST
@@ -263,21 +266,22 @@ public class AuthResource extends Resource {
    * 
    * @throws AuthenticationException
    */
-  private User createUser(String userName, String cudToken, UserType userType) {
+  private User createUser(UserType userType, String userId, String userEmail, String cudToken) {
     val sessionToken = randomUUID();
     val sessionTokenString = cudToken == null ? sessionToken.toString() : cudToken;
-    log.info("[{}] Creating and persisting user '{}' in the cache.", sessionTokenString, userName);
-    val user = new User(null, sessionToken);
-    user.setEmailAddress(userName);
+    log.info("[{}] Creating and persisting user '{}' in the cache.", sessionTokenString, userId);
+    val user = new User(userId, sessionToken);
+    user.setEmailAddress(userEmail);
     log.debug("[{}] Created user: {}", sessionTokenString, user);
 
     try {
       log.debug("[{}] Checking if the user has DACO and cloud access", sessionTokenString);
-      val dacoUserOpt = authService.getDacoUser(userType, userName);
+      val dacoUserOpt = authService.getDacoUser(userType, userId);
       if (dacoUserOpt.isPresent()) {
         val dacoUser = dacoUserOpt.get();
         log.info("[{}] Granted DACO access to the user", sessionTokenString);
         user.setDaco(true);
+        user.setOpenIDIdentifier(dacoUser.getOpenid());
 
         if (dacoUser.isCloudAccess()) {
           log.info("[{}] Granted DACO cloud access to the user", sessionTokenString);

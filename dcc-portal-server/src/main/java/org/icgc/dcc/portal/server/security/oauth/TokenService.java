@@ -15,12 +15,13 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.service;
+package org.icgc.dcc.portal.server.security.oauth;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.collect.Sets.difference;
 import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
+import static java.util.Collections.emptySet;
 import static org.icgc.dcc.common.core.util.Separators.EMPTY_STRING;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.security.AuthUtils.throwForbiddenException;
@@ -29,24 +30,24 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.common.core.util.Splitters;
 import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes.AccessTokenScope;
+import org.icgc.dcc.portal.server.service.BadRequestException;
 import org.icgc.dcc.portal.server.model.Tokens;
 import org.icgc.dcc.portal.server.model.User;
-import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * OAuth access tokens management service.
@@ -85,7 +86,7 @@ public class TokenService {
   }
 
   public Tokens list(@NonNull User user) {
-    return client.listTokens(user.getEmailAddress());
+    return client.listTokens(user.getOpenIDIdentifier());
   }
 
   public void delete(@NonNull String tokenId) {
@@ -102,7 +103,12 @@ public class TokenService {
   }
 
   public AccessTokenScopes getUserScopes(User user) {
-    val userScopes = client.getUserScopes(user.getEmailAddress());
+    if (user.getOpenIDIdentifier() == null) {
+      log.warn("User has no OpenID but trying to access tokens: {}", user);
+      return new AccessTokenScopes(emptySet());
+    }
+
+    val userScopes = client.getUserScopes(user.getOpenIDIdentifier());
     val scopesResult = ImmutableSet.<AccessTokenScope> builder();
 
     for (val scope : userScopes.getScopes()) {
