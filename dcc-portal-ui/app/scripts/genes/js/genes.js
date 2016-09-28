@@ -26,7 +26,8 @@
       templateUrl: 'scripts/genes/views/gene.html',
       controller: 'GeneCtrl as GeneCtrl',
       resolve: {
-        gene: ['$stateParams', 'Genes', function ($stateParams, Genes) {
+        gene: ['$stateParams', 'Genes', 
+        function ($stateParams, Genes) {
           return Genes.one($stateParams.id).get({include: ['projects', 'transcripts']}).then(function(gene) {
             return gene;
           });

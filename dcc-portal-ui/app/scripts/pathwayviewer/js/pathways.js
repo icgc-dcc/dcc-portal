@@ -30,14 +30,14 @@
     })
     .config(function ($stateProvider) {
       $stateProvider.state('pathways', {
-        url: '/pathways/:entityID',
+        url: '/pathways/:id',
         templateUrl: '/scripts/pathwayviewer/views/pathways.html',
         controller: 'PathwaysController',
         resolve: {
           EnrichmentData: ['$q', '$stateParams', 'Restangular',
             
             function ($q, $stateParams, Restangular) {
-              var entityID = $stateParams.entityID,
+              var entityID = $stateParams.id,
                 deferred = $q.defer();
               
               Restangular.one('analysis/enrichment', entityID).get()

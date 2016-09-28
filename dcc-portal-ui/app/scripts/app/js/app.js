@@ -258,6 +258,7 @@
     'icgc.pathways',
     'icgc.historyManager',
     'icgc.survival',
+    'icgc.404',
 
     // old
     'app.ui',
@@ -487,10 +488,18 @@
       gettextCatalog.setCurrentLanguage('en_CA');
 
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound']);
-    
-      // Add UI Router Debug if there is a fatal state change error
-      $rootScope.$on('$stateChangeError', function () {
-        console.error('State Change Error Occurred. Error occurred with arguments: ', arguments);
+      
+      $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+        if(error.status === 404){
+          $state.go('404', {page: toState.name, id: toParams.id, url: toState.url}, {location: false});
+        } else {
+          console.error(error.message);
+          console.log(error.stack);
+        }
+      });
+
+      $rootScope.$on('$stateNotFound', function() {
+        $state.go('404', {}, {location: false});
       });
 
       function _initProgressBarRunOnce() {
@@ -587,14 +596,9 @@
         }
       });
 
-    // All else redirect to home
-    $urlRouterProvider.otherwise(function($injector, $location) {
-
-      $injector.invoke(['Notify', 'Page', function(Notify, Page) {
-        Page.setPage('error');
-        Notify.setMessage('Cannot find:' + ' ' + $location.url());
-        Notify.showErrors();
-      }]);
+    // If invalid route is requested
+    $urlRouterProvider.otherwise(function ($injector, $location){
+      return '/404?page=' + $location.url();
     });
 
     markdownConverterProvider.config({
@@ -605,47 +609,19 @@
   });
 
   module.run(function ($http, $state, $timeout, $interval, $rootScope, $modalStack,
-    Restangular, Angularytics, Compatibility, Notify, Page) {
-
-    var ignoreNotFound = [
-      '/analysis/',
-      '/list',
-      '/ui/reactome'
-    ];
+    Restangular, Angularytics, Compatibility, Notify) {
 
     Restangular.setErrorInterceptor(function (response) {
 
       if (response.status !== 401 && response.status !== -1) {
-        console.error ('Response Error: ', toJson (response));
+        console.log('Response Error: ', toJson (response));
       }
 
       if (response.status === 500) {
         Notify.setMessage ('' + response.data.message || response.statusText);
         Notify.showErrors();
       } else if (response.status === 404) {
-
-        // Ignore 404's from specific end-points, they are handled locally
-        // FIXME: Is there a better way to handle this within restangular framework?
-        var ignore = false;
-        ignoreNotFound.forEach(function(endpoint) {
-          if (response.config && response.config.url.indexOf(endpoint) >= 0) {
-            ignore = true;
-          }
-        });
-        if (ignore === true) {
-          return true;
-        }
-
-        if (response.data.message) {
-          Page.setPage('error');
-          Notify.setMessage(response.data.message);
-          Notify.showErrors();
-        }
-      } else if (response.status === 400) {
-        if (response.data.message) {
-          Notify.setMessage('' + response.data.message);
-        }
-        Notify.showErrors();
+        console.log(response.data.message);
       }
     });
 

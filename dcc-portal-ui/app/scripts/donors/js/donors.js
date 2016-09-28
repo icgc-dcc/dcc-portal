@@ -26,8 +26,11 @@
       templateUrl: 'scripts/donors/views/donor.html',
       controller: 'DonorCtrl as DonorCtrl',
       resolve: {
-        donor: ['$stateParams', 'Donors', function ($stateParams, Donors) {
-          return Donors.one($stateParams.id).get({include: 'specimen'});
+        donor: ['$stateParams', 'Donors', 
+        function ($stateParams, Donors) {
+          return Donors.one($stateParams.id).get({include: 'specimen'}).then(function(donor){
+            return donor;
+          });
         }]
       }
     });
