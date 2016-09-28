@@ -34,14 +34,15 @@
 
   module.controller('SetUploadController',
     function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
-               setType, setLimit, setUnion, selectedIds, FilterService, $filter) {
+      setType, setLimit, setUnion, selectedIds, FiltersUtil, FilterService, $filter, 
+      CompoundsService, GeneSymbols) {
 
     $scope.setLimit = setLimit;
     $scope.isValid = false;
     
     // Input data parameters
     $scope.params = {};
-    $scope.params.setName = getSetName();
+    $scope.params.setName = '';
     $scope.params.setDescription = '';
     $scope.params.setType = setType;
     $scope.params.setLimit  = setLimit;
@@ -150,46 +151,80 @@
       $scope.isValid = true;
     };
 
-    function getSetName(){
-      var filters = FilterService.filters();
-      var name = '', type = '';
+    // Function to get UI friendly filter
+    function getSetFilters() {
+      var ids = LocationService.extractSetIds(FilterService.filters());
+      return ids.length ? SetService.getMetaData(ids).then(function (results) {
+            return FiltersUtil.buildUIFilters (FilterService.filters(), SetService.lookupTable(results.plain()));
+          }) : Promise.resolve(FiltersUtil.buildUIFilters(FilterService.filters(), {}));
+    }
 
-      if(!_.isEmpty(filters) && _.isObject(filters)){
-        _.each(filters, function(filter){
-          _.each(filter, function(facets, key){
-            type = key;
-            _.each(facets, function(facet){
-              _.each(facet, function(value, index){
-
-                if(value.indexOf('ES:') > -1){
-                  name +=  _.capitalize(setType) + ' Set (' + value.slice(3, value.length);
-                }else if(value === '_missing'){
-                  name += 'No ' + $filter('trans')(type) + ' Data';
-                }else {
-                  name += $filter('trans')(value, type);
-                }
-
-                if(index < facet.length-1){
-                  name += ' / ';
-                }
-              });
-              name += ', ';
-            });
-          });
-        });
-        // Remove last ', ' from the string
-        name = name.slice(0, -2);
-      }else {
-        name = 'All ' + _.capitalize(setType) + 's';
+    // Returns the promise to get the set name
+    function getSetName(filters) {
+      if (_.isEmpty(filters)) {
+        return Promise.resolve('All ' + _.capitalize(setType) + 's');
       }
-      return name.length > 61 ? name.slice(0, 61-name.length).concat('...') : name ;
+
+      // Going throught filters to create a custom Collection of filters
+      var promises = _(filters).map(function (filter, filterKey) {
+        return _.map(filter, function (facet, facetKey) {
+          return facet.is.map(function (value) {
+            return { term: value.term, facetName: value.controlFacet, facetGroup: filterKey + facetKey, operator: 'is' };
+          }).concat((facet.not || []).map(function (value) {
+            return { term: value.term, facetName: value.controlFacet, facetGroup: filterKey + facetKey, operator: 'not' };
+          }));
+        });
+      })
+      .flattenDeep()
+      .groupBy('facetGroup')
+      .map(function (facetTermWrappers) {
+        var partialNamesRequests = facetTermWrappers.map(function (termWrapper) {
+          // If filter is compound, need to return CompoundService promise that will get the name based on compound ID
+          if (termWrapper.facetName === 'compoundId') {
+            return CompoundsService.getCompoundByZincId(termWrapper.term).then(function (compound) {
+              return _.capitalize(compound.name);
+            });
+            // Following condition will get the Gene name based on ID
+          } else if (termWrapper.facetName === 'id' && termWrapper.term.indexOf('ENSG') > -1) {
+            return GeneSymbols.resolve(termWrapper.term).then(function (ensemblIdGeneSymbolMap) {
+              return _.get(ensemblIdGeneSymbolMap.plain(), termWrapper.term);
+            });
+          } else if(termWrapper.term === '_missing'){
+            return Promise.resolve('No ' + $filter('trans')(termWrapper.facetName) + ' Data');
+          } else {
+            return Promise.resolve($filter('trans')(termWrapper.term, termWrapper.facetName));
+          }
+        });
+
+        // Returning Promise Object
+        return Promise.all(partialNamesRequests).then(function (partialNames) {
+          return partialNames.join(' / ');
+        });
+      })
+      .value();
+
+      return Promise.all(promises)
+        .then(function (nameParts) {
+          var name = nameParts.join(', ');
+          return name.length > 61 ? name.slice(0, 61 - name.length).concat('...') : name;
+        });
+    }
+
+    function updateSetName(){
+      return getSetFilters()
+        .then(function (filters) {
+          return getSetName(filters);
+        })
+        .then(function (setName) {
+          $scope.params.setName = setName;
+        });
     }
 
     // Start. Get limit restrictions from the server side
     Settings.get().then(function(settings) {
       $scope.params.setSize = Math.min($scope.setLimit || 0, settings.maxNumberOfHits);
       $scope.params.setSizeLimit = $scope.params.setSize;
-      $scope.params.setName = getSetName();
+      updateSetName();
       $timeout(function () {
         $scope.params.isLoading = false;
         $scope.validateInput();
