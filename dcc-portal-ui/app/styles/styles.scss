@@ -17,6 +17,18 @@
  */
 
 //-----------------------------------------------------------------------------
+@import "bootstrap.scss";
+@import "icgc-icons.css";
+@import "../vendor/styles/slider.css";
+@import "../bower_components/angular-loading-bar/build/loading-bar.css";
+@import "../bower_components/angularjs-toaster/toaster.css";
+
+// Genome Browser
+@import "../vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.css";
+@import "../vendor/scripts/genome-viewer/vendor/fontawesome/css/font-awesome.min.css";
+
+@import "../vendor/styles/genomeviewer/css/style.css";
+
 // Base
 @import "_base/base";
 //-----------------------------------------------------------------------------
@@ -511,3 +523,6 @@ a.no-style {
     stroke-dashoffset: -124;
   }
 }
+
+@import "override.css";
+@import "flags.css";
