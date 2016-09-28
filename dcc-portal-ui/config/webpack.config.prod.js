@@ -1,26 +1,23 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var paths = require('./paths');
 
 module.exports = {
+  bail: true,
   devtool: 'source-map',
-  context: path.resolve(__dirname, '../app/scripts'),
   entry: {
     app: [
-      require.resolve('webpack-dev-server/client') + '?/',
-      require.resolve('webpack/hot/only-dev-server'),
       require.resolve('./polyfills'),
       path.join(paths.appSrc, 'scripts/index')
     ],
     vendor: path.join(paths.appSrc, 'scripts/vendor'),
   },
   output: {
-    // Next line is not used in dev but WebpackDevServer crashes without it:
     path: paths.appBuild,
-    pathinfo: true,
-    filename: 'static/js/[name].js',
+    filename: 'static/js/[name].[chunkhash:8].js',
+    chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     publicPath: '/'
   },
   resolve: {
@@ -36,19 +33,20 @@ module.exports = {
     //   {
     //     test: /\.js$/,
     //     loader: 'eslint',
-    //     include: paths.appSrc,
+    //     include: paths.appSrc
     //   }
     // ],
     loaders: [
       {
         test: /\.js$/,
         include: paths.appSrc,
-        loaders: ['babel?' + JSON.stringify(require('./babel.dev'))],
+        loader: 'babel',
+        query: require('./babel.prod')
       },
       {
         test: /\.css$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'style!css'
+        loader: ExtractTextPlugin.extract('style', 'css!sass')
       },
       {
         test: /\.scss$/,
@@ -65,7 +63,7 @@ module.exports = {
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'file',
         query: {
-          name: 'static/media/[name].[ext]'
+          name: 'static/media/[name].[hash:8].[ext]'
         }
       },
       {
@@ -74,12 +72,14 @@ module.exports = {
         loader: 'url',
         query: {
           limit: 10000,
-          name: 'static/media/[name].[ext]'
+          name: 'static/media/[name].[hash:8].[ext]'
         }
       }
     ]
   },
   eslint: {
+    // TODO: consider separate config for production,
+    // e.g. to enable no-console and no-debugger only in prod.
     configFile: path.join(__dirname, 'eslint.js'),
     useEslintrc: false
   },
@@ -88,14 +88,38 @@ module.exports = {
       inject: true,
       template: paths.appHtml,
       favicon: paths.appFavicon,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true
+      }
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"development"',
+      'process.env.NODE_ENV': '"production"',
       'process.env.GENOME_VIEWER_REQUIRE_STRING': JSON.stringify(require('./shims/genome-viewer')),
     }),
-    // Note: only CSS is currently hot reloaded
-    new webpack.HotModuleReplacementPlugin(),
-    new CaseSensitivePathsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        screw_ie8: true,
+        warnings: false
+      },
+      mangle: {
+        screw_ie8: true
+      },
+      output: {
+        comments: false,
+        screw_ie8: true
+      }
+    }),
+    new ExtractTextPlugin('static/css/[name].[contenthash:8].css')
   ]
 };

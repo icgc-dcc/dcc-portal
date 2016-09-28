@@ -1,3 +1,5 @@
+require('../styles/styles.scss');
+
 require('./app/js/app.js');
 require('./common/js/common.js');
 require('./common/js/services.js');

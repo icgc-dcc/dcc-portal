@@ -19,6 +19,10 @@
 // Basic Typography
 //
 
+%caps {
+  @include caps;
+}
+
 // -------------------------------------------------------------------------
 // Headings
 h1, h2, h3, h4, h5, h6 {
@@ -29,8 +33,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-
-  @extend .caps;
+  @extend %caps;
   ~ h1 {
 
   }
@@ -66,8 +69,7 @@ h3 {
 }
 
 h4 {
-  @extend .caps;
-
+  @extend %caps;
 }
 
 h5 {
