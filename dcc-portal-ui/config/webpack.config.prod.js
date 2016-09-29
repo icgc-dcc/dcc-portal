@@ -91,6 +91,7 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin([
+      {from: 'app/favicon.ico', to: paths.appBuild + '/favicon.ico'},
       {from: 'app/styles/fonts', to: paths.appBuild + '/styles/fonts'},
       {from: 'app/styles/images', to: paths.appBuild + '/styles/images'},
 
