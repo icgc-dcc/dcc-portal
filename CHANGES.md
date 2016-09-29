@@ -3,6 +3,18 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.3.15
+--
+- Added 404 page for entities and unknown pages
+- Added human readable saved set names
+
+4.3.14
+--
+- Fixed missing tokens / scopes when using ICGC.org logins
+- Updated Browser Update library configuration
+- Fixed bug with functional impact in summary on mutation page
+- Refactored Phenotype Analyzer based on PR feedback
+
 4.3.13
 --
 - Table filters added to entity pages
