@@ -110,17 +110,17 @@
 
           <!-- Prepare package -->
           <execution>
-            <id>grunt-build</id>
-            <phase>prepare-package</phase>
+            <id>npm-build</id>
+            <phase>compile</phase>
             <goals>
               <goal>exec</goal>
             </goals>
             <configuration>
-              <executable>grunt</executable>
+              <executable>npm</executable>
               <arguments>
+                <argument>run</argument>
                 <argument>build</argument>
               </arguments>
-              <workingDirectory>.</workingDirectory>
             </configuration>
           </execution>
         </executions>
