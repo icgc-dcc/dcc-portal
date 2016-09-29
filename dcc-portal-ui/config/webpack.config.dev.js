@@ -32,13 +32,13 @@ module.exports = {
     moduleTemplates: ['*-loader']
   },
   module: {
-    // preLoaders: [
-    //   {
-    //     test: /\.js$/,
-    //     loader: 'eslint',
-    //     include: paths.appSrc,
-    //   }
-    // ],
+    preLoaders: [
+      {
+        test: /\.js$/,
+        loader: 'eslint',
+        include: paths.appSrc,
+      }
+    ],
     loaders: [
       {
         test: /\.js$/,
