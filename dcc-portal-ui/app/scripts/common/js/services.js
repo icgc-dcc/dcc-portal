@@ -268,7 +268,7 @@
       var _lookup = {};
 
       var _retrieve = function ( id ) {
-        return _lookup [id];
+        return _lookup[id];
       };
       var _echoOrDefault = function ( value, defaultValue ) {
         return ( value ) ?
@@ -280,7 +280,7 @@
 
       this.put = function ( id, name ) {
         if ( id && name ) {
-          _lookup [id + ''] = name + '';
+          _lookup[id + ''] = name + '';
 
           $log.debug ( 'Updated lookup table is:' + JSON.stringify (_lookup) );
         }

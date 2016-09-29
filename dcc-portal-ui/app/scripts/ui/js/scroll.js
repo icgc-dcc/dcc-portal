@@ -104,7 +104,8 @@ angular.module('icgc.ui.scroll.scrollSpy', []).directive('scrollSpy', function (
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           spy = _ref[_i];
           spy.out();
-          if ((pos = spyElems[spy.id].offset().top) - $window.scrollY <= 65) {
+          pos = spyElems[spy.id].offset().top;
+          if (pos - $window.scrollY <= 65) {
             spy.pos = pos;
             if (!highlightSpy) {
               highlightSpy = spy;

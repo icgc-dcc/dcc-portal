@@ -33,8 +33,8 @@ angular.module('highcharts.directives', [])
         }
       }
     }
-  }).
-  service('highchartsService', function(highchartsConstants) {
+  })
+  .service('highchartsService', function(highchartsConstants) {
     var _service = this;
 
     _service.getCustomNoDataConfig = function(shouldShowNoDataMsg) {

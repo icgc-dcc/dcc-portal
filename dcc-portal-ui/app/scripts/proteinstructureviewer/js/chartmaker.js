@@ -103,6 +103,8 @@ ProteinStructureChart.prototype.packRanges = function (data, rangeKey) {
   var length = data.length;
   var binRights = [];
   var binCount = 0;
+
+  /* eslint-disable no-restricted-syntax, no-labels, no-extra-label */
   sortedSection: for (var i = 0; i < length; i++) {
     var next = sorted[i];
     var left = next.range[0];
@@ -117,6 +119,7 @@ ProteinStructureChart.prototype.packRanges = function (data, rangeKey) {
     binRights.push(next.range[1]);
     continue sortedSection;
   }
+  /* eslint-enable no-restricted-syntax, no-labels, no-extra-label */
 
   return binCount;
 };
