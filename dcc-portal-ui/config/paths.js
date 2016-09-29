@@ -1,10 +1,5 @@
 var path = require('path');
 
-
-// function resolveOwn(relativePath) {
-//   return path.resolve(__dirname, relativePath);
-// }
-
 function resolveApp(relativePath) {
   return path.resolve(relativePath);
 }
