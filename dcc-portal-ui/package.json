@@ -18,7 +18,8 @@
     "test-bower": "rm -rf app/bower_components/ && rm -rf ~/.cache/bower/ && bower install -V 2>&1 | tee test-bower-$(date +%Y%m%d%H%M%S).txt && cat app/bower_components/angular/bower.json | grep version",
     "--build": "webpack --verbose --colors --display-error-details --config tasks/webpackConfig.js",
     "build": "node ./tasks/build.js",
-    "start": "node ./tasks/start.js"
+    "start": "node ./tasks/start.js",
+    "lint": "eslint -c config/eslint.js --no-eslintrc app/vendor app"
   },
   "devDependencies": {
     "autoprefixer": "6.3.7",

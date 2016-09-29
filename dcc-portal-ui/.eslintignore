@@ -1,0 +1,4 @@
+app/vendor
+bower_components
+node_modules
+app/scripts/common/js/pql
