@@ -28,7 +28,7 @@
 
     var _ctrl = this;
 
-    _ctrl.mirror;
+    _ctrl.mirror = {};
 
     function styleClass (name) {
       return 't_nav__items__item__' + name;

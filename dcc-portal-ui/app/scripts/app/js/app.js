@@ -670,7 +670,7 @@
     _ctrl.appLoaded = true;
     _ctrl.Page = Page;
     _ctrl.authEnabled = false;
-    _ctrl.mirror;
+    _ctrl.mirror = {};
 
     // for document level clicks
     _ctrl.handleApplicationClick = function () {

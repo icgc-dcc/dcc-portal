@@ -57,24 +57,72 @@ header {
         margin-bottom: -0.3rem;
       }*/
     }
+    
   }
+  .header-country{
+      display: inline;
 
-  .header-country-flag{
-    span.flag{
-      position: absolute;
-      top:33%;
+      .mirror-portal-flag{
+        font-size: 1.5rem !important;
+        display: inline-block;
+        line-height: 1 !important;
+        vertical-align: top;
+        z-index: 2;
+      }
+
+      .mirror-portal-original{
+        opacity: 0;
+        display: inline-block;
+        font-size: 1.5rem !important;
+        line-height: 1 !important;
+        vertical-align: top;
+        z-index: 1;
+
+        .flag-icon-icgc{
+          background-image: url(/styles/images/icgc-logo.png);
+        }
+      }
+
+      span.flag-text{
+        display: none;
+      }
+
+      &:hover{
+        .mirror-portal-original{
+          animation:animatefromleft 0.4s;
+          opacity: 1;
+        }
+      }
     }
-  }
+  
 }
+
 #home-page{
   header{
-    .header-country-flag{
-      span.flag{
-        position: absolute;
-        top:15%;
+    .header-country{
+      span.flag-text{
+        font-size: 0.75rem;
+        font-weight: bold;
+        color: #aaa;
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .mirror-portal-flag{
+        vertical-align: initial;
+      }
+
+      .mirror-portal-original{
+        vertical-align: initial;
       }
     }
   }
+
+}
+
+@keyframes animatefromleft{
+  from{transform:translateX(-50px); opacity:0} 
+  to{transform:translateX(0px); opacity:1}
 }
 /*
 @media screen and (min-width: 884px) and (max-width: 950px) {
@@ -139,24 +187,6 @@ header {
         display: block;
       }
     }
-
-    .header-country-flag{
-      span.flag{
-        position: absolute;
-        top:11%;
-      }
-    }
-  }
-
-  #home-page{
-    header{
-      .header-country-flag{
-        span.flag{
-          position: absolute;
-          top:11%;
-        }
-      }
-    }
   }
 }
 
@@ -213,24 +243,6 @@ header {
       }
     }
 
-    .header-country-flag{
-      span.flag{
-        position: absolute;
-        top:0%;
-      }
-    }
-
-  }
-
-  #home-page{
-    header{
-      .header-country-flag{
-        span.flag{
-          position: absolute;
-          top:7%;
-        }
-      }
-    }
   }
 
 }
