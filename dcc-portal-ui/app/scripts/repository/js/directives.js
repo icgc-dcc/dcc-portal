@@ -287,6 +287,7 @@
                   if (curr.name === options.sequenceNames[0]) {
                     return curr;
                   }
+                  return false;
                 }, false).end;
               percentDone = Math.round((data.last_read_position / length) * 100) / 100;
             }
