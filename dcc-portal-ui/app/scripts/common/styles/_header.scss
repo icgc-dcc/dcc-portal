@@ -61,6 +61,7 @@ header {
   }
   .header-country{
       display: inline;
+      text-align: center;
 
       .mirror-portal-flag{
         font-size: 1.5rem !important;
@@ -78,20 +79,35 @@ header {
         vertical-align: top;
         z-index: 1;
 
+        span.flag-text{
+          opacity: 1;
+        }
+
         .flag-icon-icgc{
           background-image: url(/styles/images/icgc-logo.png);
         }
       }
 
       span.flag-text{
-        display: none;
+        opacity: 0;
+        font-size: 0.75rem;
+        font-weight: bold;
+        color: #aaa;
+        display: block;
+        text-transform: uppercase;
       }
 
       &:hover{
+        .mirror-portal-flag{
+           span.flag-text{
+            opacity: 1;
+          }
+        }
         .mirror-portal-original{
           animation:animatefromleft 0.4s;
           opacity: 1;
         }
+        
       }
     }
   
@@ -101,11 +117,7 @@ header {
   header{
     .header-country{
       span.flag-text{
-        font-size: 0.75rem;
-        font-weight: bold;
-        color: #aaa;
-        display: block;
-        text-transform: uppercase;
+        opacity: 1;
       }
 
       .mirror-portal-flag{
