@@ -101,7 +101,6 @@
     "modularscale-sass": "2.1.1",
     "ng-annotate-loader": "0.2.0",
     "node-sass": "3.10.0",
-    "normalize-scss": "5.0.3",
     "opn": "4.0.2",
     "promise": "7.1.1",
     "rimraf": "2.5.4",
@@ -129,6 +128,7 @@
     "lodash": "3.10.1",
     "marked": "0.3.6",
     "ng-annotate-loader": "0.2.0",
+    "normalize.css": "3.0.1",
     "urijs": "1.16.1",
     "x2js": "3.0.0"
   }
