@@ -92,7 +92,7 @@
     };
 
     $scope.submitNewExternalSet = function() {
-      var params = {}, sortParam;
+      var params = {};
 
       params.type = $scope.params.setType;
       params.name = $scope.params.setName;
@@ -107,8 +107,6 @@
           // Only used for files
           _.set (params.filters, 'file.id.is',  $scope.params.selectedIds);
         }
-        
-        sortParam = LocationService.getJsonParam($scope.setType + 's');
       }
 
       if (angular.isDefined($scope.params.setUnion)) {

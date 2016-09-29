@@ -964,6 +964,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           }
           var base =  node.base.slice();
 
+          // eslint-disable-next-line default-case
           switch (node.type) {
             case 'Input':
               base.push(reaction.base[0]);
