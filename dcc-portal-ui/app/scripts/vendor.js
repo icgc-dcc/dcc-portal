@@ -15,14 +15,12 @@ require('angularytics/dist/angularytics.js');
 require('angular-ui-utils/scrollfix.js');
 require('expose?marked!marked');
 require('angular-marked');
-
 require('angular-lodash/angular-lodash.js');
 require('angular-bootstrap/ui-bootstrap-tpls.min.js');
 require('angularjs-toaster/toaster.js');
 require('angular-drag-and-drop-lists/angular-drag-and-drop-lists.js');
 require('expose?ZeroClipboard!zeroclipboard/dist/ZeroClipboard.js');
 require('angular-gettext/dist/angular-gettext.min.js');
-
 
 // Other App Dependencies
 require('expose?Highcharts!highcharts/highcharts.js');
