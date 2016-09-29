@@ -68,7 +68,6 @@ header {
         display: inline-block;
         line-height: 1 !important;
         vertical-align: top;
-        z-index: 2;
       }
 
       .mirror-portal-original{
@@ -77,10 +76,9 @@ header {
         font-size: 1.5rem !important;
         line-height: 1 !important;
         vertical-align: top;
-        z-index: 1;
 
         span.flag-text{
-          opacity: 1;
+          color: #283e5d;
         }
 
         .flag-icon-icgc{
@@ -89,7 +87,6 @@ header {
       }
 
       span.flag-text{
-        opacity: 0;
         font-size: 0.75rem;
         font-weight: bold;
         color: #aaa;
@@ -98,16 +95,10 @@ header {
       }
 
       &:hover{
-        .mirror-portal-flag{
-           span.flag-text{
-            opacity: 1;
-          }
-        }
         .mirror-portal-original{
           animation:animatefromleft 0.4s;
           opacity: 1;
         }
-        
       }
     }
   
@@ -116,9 +107,6 @@ header {
 #home-page{
   header{
     .header-country{
-      span.flag-text{
-        opacity: 1;
-      }
 
       .mirror-portal-flag{
         vertical-align: initial;
