@@ -270,7 +270,7 @@
                         <span data-ng-style="{width:project.uiAffectedDonorPercentage+'%'}"
                           class="t_facets__facet__terms__active__term__bar"></span>
                         <span style="position: relative">
-                        <a data-ng-href='/search?filters={{project.advQuery}}'
+                        <a data-ng-href='/search?filters={{project.uiAdvQuery}}'
                             data-ng-bind-html="project.uiFilteredDonorCount | highlight: GeneCtrl.tableFilter.projects">
                         </a>
                         /
@@ -286,7 +286,7 @@
                     <span data-ng-if="project.uiMutationCount==null"><i class="icon-spinner icon-spin"></i></span>
                     <span data-ng-if="project.uiMutationCount === 0">--</span>
                     <a data-ng-if="project.uiMutationCount > '0'"
-                       data-ng-href='/search/m?filters={{project.advQuery}}'
+                       data-ng-href='/search/m?filters={{project.uiAdvQuery}}'
                        data-ng-bind-html="project.uiMutationCount | highlight: GeneCtrl.tableFilter.projects ">
                     </a>
                 </td>
