@@ -29,4 +29,5 @@
 @import "sidenav";
 @import "popover";
 @import "list";
-@import "flag-icon";
+$flag-icon-css-path: '~flag-icon-css/flags';
+@import "~flag-icon-css/sass/_flag-icon"
