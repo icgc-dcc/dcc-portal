@@ -65,7 +65,7 @@ module.exports = {
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'file',
         query: {
-          name: 'static/media/[name].[ext]'
+          name: 'static/media/[path][name].[ext]'
         }
       },
       {
