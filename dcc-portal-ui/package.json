@@ -20,6 +20,7 @@
     "--build": "webpack --verbose --colors --display-error-details --config tasks/webpackConfig.js",
     "build": "node ./tasks/build.js",
     "start": "node ./tasks/start.js",
+    "test": "karma start karma.conf.js",
     "lint": "eslint -c config/eslint.js --no-eslintrc app/vendor app"
   },
   "devDependencies": {
