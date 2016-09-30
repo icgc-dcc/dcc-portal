@@ -373,7 +373,7 @@ public class ServerProperties {
     String countryCode;
 
     @JsonProperty
-    String countryName;
+    String name;
 
     @JsonProperty
     String countryLocation;

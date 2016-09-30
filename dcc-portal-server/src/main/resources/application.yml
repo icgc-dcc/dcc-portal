@@ -188,5 +188,5 @@ spring.mvc.locale-resolver: fixed
 mirror:
   enabled: false
   countryCode: ""
-  countryName: ""
+  name: ""
   countryLocation: ""
