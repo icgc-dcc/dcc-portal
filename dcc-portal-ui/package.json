@@ -89,6 +89,7 @@
     "hostile": "1.0.2",
     "html-webpack-plugin": "2.22.0",
     "http-proxy": "0.10.0",
+    "imports-loader": "0.6.5",
     "jasmine-core": "2.4.1",
     "karma": "1.1.2",
     "karma-chrome-launcher": "1.0.1",
@@ -127,6 +128,8 @@
     "marked": "0.3.6",
     "ng-annotate-loader": "0.2.0",
     "normalize.css": "3.0.1",
+    "restangular": "1.5.2",
+    "singularitygs": "1.7.0",
     "urijs": "1.16.1",
     "x2js": "3.0.0"
   }
