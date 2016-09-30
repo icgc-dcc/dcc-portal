@@ -665,10 +665,12 @@
     ]
   });
 
-  module.controller('AppCtrl', function ($scope, Page) {
+  module.controller('AppCtrl', function ($scope, Page, Settings) {
     var _ctrl = this;
     _ctrl.appLoaded = true;
     _ctrl.Page = Page;
+    _ctrl.authEnabled = false;
+    _ctrl.mirror = {};
 
     // for document level clicks
     _ctrl.handleApplicationClick = function () {
@@ -677,6 +679,11 @@
 
     $scope.$on('$locationChangeStart', function () {
       $scope.$emit('tooltip::hide');
+    });
+
+    Settings.get().then(function(setting){
+       _ctrl.authEnabled = setting.authEnabled;
+       _ctrl.mirror = setting.mirror;
     });
 
   });

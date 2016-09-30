@@ -183,3 +183,10 @@ spring.mvc.favicon.enabled: false
 # Locale (DCC-5255)
 spring.mvc.locale: en_CA
 spring.mvc.locale-resolver: fixed
+
+# Mirror site (DCC-5301)
+mirror:
+  enabled: false
+  countryCode: ""
+  name: ""
+  countryLocation: ""

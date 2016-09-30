@@ -92,6 +92,10 @@ public class ServerProperties {
 
   @Valid
   @JsonProperty
+  MirrorProperties mirror = new MirrorProperties();
+
+  @Valid
+  @JsonProperty
   Map<String, Boolean> features = newHashMap();
 
   @Data
@@ -353,6 +357,26 @@ public class ServerProperties {
      */
     @JsonProperty
     boolean enabled = true;
+
+  }
+
+  @Data
+  public static class MirrorProperties {
+
+    /**
+     * Whether to enable mirror features.
+     */
+    @JsonProperty
+    boolean enabled;
+
+    @JsonProperty
+    String countryCode;
+
+    @JsonProperty
+    String name;
+
+    @JsonProperty
+    String countryLocation;
 
   }
 

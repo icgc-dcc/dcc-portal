@@ -57,7 +57,82 @@ header {
         margin-bottom: -0.3rem;
       }*/
     }
+    
   }
+  .header-country{
+      display: inline;
+      text-align: center;
+
+      .mirror-portal-flag{
+        font-size: 1.5rem !important;
+        display: inline-block;
+        line-height: 1 !important;
+        vertical-align: top;
+      }
+
+      .mirror-portal-original{
+        opacity: 0;
+        display: inline-block;
+        font-size: 1.5rem !important;
+        line-height: 1 !important;
+        vertical-align: top;
+
+        span.flag-text{
+          color: #283e5d;
+          font-weight: bold;
+        }
+
+        .flag-icon-icgc{
+          background-image: url(/styles/images/icgc-logo.png);
+        }
+      }
+
+      span.flag-text{
+        font-size: 0.55rem;
+        font-weight: normal;
+        color: #aaa;
+        display: block;
+        text-transform: uppercase;
+        margin-top:5px;
+      }
+
+      &:hover{
+        .mirror-portal-original{
+          animation:animatefromleft 0.4s;
+          opacity: 1;
+        }
+      }
+    }
+  
+}
+
+#home-page{
+  header{
+    .header-country{
+
+      .mirror-portal-flag{
+        vertical-align: initial;
+        
+        span.flag-text{
+          font-weight: normal;
+        }
+      }
+
+      .mirror-portal-original{
+        vertical-align: initial;
+      }
+
+      span.flag-text{
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+}
+
+@keyframes animatefromleft{
+  from{transform:translateX(-50px); opacity:0} 
+  to{transform:translateX(0px); opacity:1}
 }
 /*
 @media screen and (min-width: 884px) and (max-width: 950px) {
@@ -121,8 +196,6 @@ header {
         min-width: 228px;
         display: block;
       }
-
-
     }
   }
 }
@@ -179,7 +252,9 @@ header {
 
       }
     }
+
   }
+
 }
 
 .t_nav {
