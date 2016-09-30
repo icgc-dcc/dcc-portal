@@ -50,14 +50,9 @@ module.exports = {
         query: require('./babel.prod'),
       },
       {
-        test: /\.css$/,
-        include: [paths.appSrc, paths.appNodeModules],
-        loader: ExtractTextPlugin.extract('style', 'css!sass')
-      },
-      {
         test: /\.scss$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loaders: ['style', 'css?sourceMap', 'sass?sourceMap']
+        loader: ExtractTextPlugin.extract('style', 'css!sass'),
       },
       {
         test: /\.json$/,
