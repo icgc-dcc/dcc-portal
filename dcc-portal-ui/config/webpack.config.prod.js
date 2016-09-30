@@ -130,6 +130,7 @@ module.exports = {
         screw_ie8: true
       }
     }),
+    new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
     new ExtractTextPlugin('static/css/[name].[contenthash:8].css'),
   ]
 };
