@@ -103,7 +103,7 @@
     "whatwg-fetch": "1.0.0"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=4.4.0"
   },
   "dependencies": {
     "angular-marked": "1.2.2",
