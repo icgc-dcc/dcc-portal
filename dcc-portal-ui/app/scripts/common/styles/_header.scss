@@ -79,6 +79,7 @@ header {
 
         span.flag-text{
           color: #283e5d;
+          font-weight: bold;
         }
 
         .flag-icon-icgc{
@@ -87,11 +88,12 @@ header {
       }
 
       span.flag-text{
-        font-size: 0.75rem;
-        font-weight: bold;
+        font-size: 0.55rem;
+        font-weight: normal;
         color: #aaa;
         display: block;
         text-transform: uppercase;
+        margin-top:5px;
       }
 
       &:hover{
@@ -110,10 +112,18 @@ header {
 
       .mirror-portal-flag{
         vertical-align: initial;
+        
+        span.flag-text{
+          font-weight: normal;
+        }
       }
 
       .mirror-portal-original{
         vertical-align: initial;
+      }
+
+      span.flag-text{
+        font-size: 0.75rem;
       }
     }
   }
