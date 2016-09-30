@@ -94,6 +94,7 @@ module.exports = {
       {from: 'app/favicon.ico', to: paths.appBuild + '/favicon.ico'},
       {from: 'app/styles/fonts', to: paths.appBuild + '/styles/fonts'},
       {from: 'app/styles/images', to: paths.appBuild + '/styles/images'},
+      {from: 'app/styles/icgc-icons.css', to: paths.appBuild + '/styles/icgc-icons.css'},
 
       // TODO: this is only necessary due to templateUrls, we should compile templates
       {from: 'app/scripts', to: paths.appBuild + '/scripts'},
