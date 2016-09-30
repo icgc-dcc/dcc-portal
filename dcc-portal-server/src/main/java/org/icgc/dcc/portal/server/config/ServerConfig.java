@@ -94,6 +94,7 @@ public class ServerConfig {
     val auth = properties().getAuth();
     val setAnalysis = properties().getSetOperation();
     val features = properties().getFeatures();
+    val mirror = properties().getMirror();
 
     return Settings.builder()
         .ssoUrl(crowd.getSsoUrl())
@@ -104,6 +105,7 @@ public class ServerConfig {
         .authEnabled(auth.isEnabled())
         .maxNumberOfHits(setAnalysis.maxNumberOfHits)
         .maxMultiplier(setAnalysis.maxMultiplier)
+        .mirror(mirror)
         .featureFlags(features)
         .build();
   }

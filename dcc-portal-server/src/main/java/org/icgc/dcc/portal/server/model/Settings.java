@@ -19,6 +19,8 @@ package org.icgc.dcc.portal.server.model;
 
 import java.util.Map;
 
+import org.icgc.dcc.portal.server.config.ServerProperties.MirrorProperties;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -53,6 +55,11 @@ public class Settings {
    */
   int maxNumberOfHits;
   int maxMultiplier;
+
+  /**
+   * Mirror setting for enabling/disabling mirror features.
+   */
+  MirrorProperties mirror;
 
   /**
    * Feature Flags for enabling/disabling features.

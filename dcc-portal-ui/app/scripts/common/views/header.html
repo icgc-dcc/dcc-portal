@@ -4,6 +4,22 @@
     <img src="/styles/images/icgc-logo.png">
     <translate has-markup><span id="icgc">ICGC</span> Data Portal</translate>
   </a>
+  <div class="header-country" data-ng-if="controller.mirror.enabled">
+    <a href="#" class="mirror-portal-flag">
+      <span class="flag-icon flag-icon-{{controller.mirror.countryCode}}"></span>
+      <span class="flag-text">
+        {{controller.mirror.name | trans}}<br/>
+        Mirror
+      </span>
+    </a>
+    <a href="//dcc.icgc.org" class="mirror-portal-original">
+      <span class="flag-icon flag-icon-icgc"></span>
+      <span class="flag-text">
+        Official<br/>
+        Portal
+      </span>
+    </a>
+  </div>  
 </h1>
 
 <nav class="t_nav t_nav__pages">
@@ -25,11 +41,9 @@
         <li data-ng-if="['q','home'].indexOf(page) === -1"
             class="t_nav__items__item  t_nav__items__item__search">
             <form class="t_suggest t_suggest__header">
-                <input
-                        class="t_suggest__input"
-                        placeholder="{{'Quick Search' | translate}}"
-                        data-suggest
-                        />
+                <input class="t_suggest__input"
+                  placeholder="{{'Quick Search' | translate}}"
+                  data-suggest/>
                 <i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search"></i>
                 <i class="t_suggest__embedded t_suggest__embedded__right icon-spin icon-spinner"
                    data-ng-show='isBusy'></i>

@@ -24,7 +24,12 @@
 
   angular.module (moduleNamespace, [controllersNamespace]);
   angular.module (controllersNamespace, [])
-    .controller (controllerName, ['RouteInfoService', function (RouteInfoService) {
+    .controller (controllerName, ['RouteInfoService', 'Settings', function (RouteInfoService, Settings) {
+
+    var _ctrl = this;
+
+    _ctrl.mirror = {};
+
     function styleClass (name) {
       return 't_nav__items__item__' + name;
     }
@@ -61,7 +66,11 @@
       }, {});
     });
 
-    this.menuItems = menuItems;
+    Settings.get().then(function(setting){
+      _ctrl.mirror = setting.mirror;
+    });
+
+    _ctrl.menuItems = menuItems;
   }]);
 
 })();
