@@ -240,15 +240,20 @@
                 data-filter-model="GeneCtrl.tableFilter.projects"
                 data-current-page="GeneCtrl.currentProjectsPage"></table-filter>
         </span>
-        <table class="table table-bordered table-striped table-condensed">
+        <table class="table table-bordered table-striped table-condensed"
+            data-ng-init="sortProjectsDescendingly = true;">
             <thead>
             <tr>
                 <th><translate>Project</translate></th>
                 <th><translate>Site</translate></th>
                 <th><translate>Tumour Type</translate></th>
                 <th><translate>Tumour Subtype</translate></th>
-                <th><abbr data-tooltip="{{'Number of Donors where [[ geneSymbol ]] contains SSM' | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}">
-                    <translate># Donors affected</translate></abbr> <i class="icon-sort-down"></i></th>
+                <th style="cursor: pointer"
+                    data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
+                    <abbr data-tooltip="{{'Number of Donors where [[ geneSymbol ]] contains SSM' | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}">
+                    <translate># Donors affected</translate></abbr>
+                    <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+                </th>
                 <th><abbr data-tooltip="{{'Number of SSM observed in [[ geneSymbol ]]'  | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}"
                           data-tooltip-placement="left"><translate># Mutations</translate></abbr></th>
             </tr>
@@ -256,7 +261,7 @@
             <tbody>
             <tr data-ng-repeat="project in (GeneCtrl.gene.uiProjects | 
                 filter: GeneCtrl.tableFilter.projects | 
-                orderBy:'uiAffectedDonorPercentage/100':true | 
+                orderBy:'uiAffectedDonorPercentage/100':sortProjectsDescendingly | 
                 limitTo: GeneCtrl.defaultProjectsRowLimit : ((GeneCtrl.currentProjectsPage-1) * GeneCtrl.defaultProjectsRowLimit)) track by project.uiId"
                 data-ng-if="project.uiFilteredDonorCount > 0">
                 <td><a data-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">

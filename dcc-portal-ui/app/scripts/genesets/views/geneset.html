@@ -247,15 +247,21 @@
                 data-filter-model="GeneSetCtrl.tableFilter.projects"
                 data-current-page="GeneSetCtrl.currentCancerPage"></table-filter>
         </span>
-        <table class="table table-bordered table-striped table-condensed">
+        <table class="table table-bordered table-striped table-condensed"
+            data-ng-init="sortProjectsDescendingly = true;">
             <thead>
             <tr>
                 <th><translate>Project</translate></th>
                 <th><translate>Site</translate></th>
                 <th><translate>Tumour Type</translate></th>
                 <th><translate>Tumour Subtype</translate></th>
-                <th><abbr data-tooltip="{{'Number of Donors where a Gene involved in the Gene Set contains SSM' | translate}}">
-                    <translate># Donors affected</translate></abbr> <i class="icon-sort-down"></i></th>
+                <th style="cursor: pointer" 
+                    data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
+                    <abbr data-tooltip="{{'Number of Donors where a Gene involved in the Gene Set contains SSM' | translate}}">
+                    <translate># Donors affected</translate>
+                    <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+                </abbr>
+                </th>
                 <th><abbr data-tooltip="{{'Number of SSM observed in [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
                           data-tooltip-placement="left"><translate># Mutations</translate></abbr></th>
                 <th><abbr data-tooltip="{{'Number of Genes affected by [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
@@ -265,7 +271,7 @@
             <tbody>
             <tr data-ng-repeat="project in (GeneSetCtrl.geneSet.uiProjects |
                 filter: GeneSetCtrl.tableFilter.projects | 
-                orderBy:'uiAffectedDonorPercentage/100':true | 
+                orderBy:'uiAffectedDonorPercentage/100':sortProjectsDescendingly | 
                 limitTo: GeneSetCtrl.defaultCancerRowLimit : ((GeneSetCtrl.currentCancerPage-1) * GeneSetCtrl.defaultCancerRowLimit)) track by project.uiId">
                 <td><a data-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">
                     <span data-ng-bind-html="project.uiId | highlight: GeneSetCtrl.tableFilter.projects"></span>
