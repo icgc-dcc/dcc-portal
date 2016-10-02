@@ -3,30 +3,30 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
-4.3.17
+[4.3.17](https://github.com/icgc-dcc/dcc-portal/compare/4.3.16...4.3.17)
 --
 - Fixed API setting of Functional Impact on the consequence if provided
 - Fixed ability to deselect Cancer Gene Census in Advanced Search
 - Fixed sorting of Cancer Distribution table columns
 
-4.3.16
+[4.3.16](https://github.com/icgc-dcc/dcc-portal/compare/4.3.15...4.3.16)
 --
 - Added support for mirroring customization
 - Fixed missing filter on table links in Gene Page to Advanced Search
 
-4.3.15
+[4.3.15](https://github.com/icgc-dcc/dcc-portal/compare/4.3.14...4.3.15)
 --
 - Added 404 page for entities and unknown pages
 - Added human readable saved set names
 
-4.3.14
+[4.3.14](https://github.com/icgc-dcc/dcc-portal/compare/4.3.13...4.3.14)
 --
 - Fixed missing tokens / scopes when using ICGC.org logins
 - Updated Browser Update library configuration
 - Fixed bug with functional impact in summary on mutation page
 - Refactored Phenotype Analyzer based on PR feedback
 
-4.3.13
+[4.3.13](https://github.com/icgc-dcc/dcc-portal/compare/4.3.12...4.3.13)
 --
 - Table filters added to entity pages
 - VCF IOBIO statistics show user friendly message when file not available
@@ -35,7 +35,7 @@ Change log for the DCC Data Portal
 - 'Loading Files..' spinner added to repositories page
 - Bug fixes
 
-4.3.12
+[4.3.12](https://github.com/icgc-dcc/dcc-portal/compare/4.3.11...4.3.12)
 --
 - Fixes regression for launching Oncogrid demo.
 - Always download manifest as tarball
@@ -43,7 +43,7 @@ Change log for the DCC Data Portal
 - Detailed logging for manifest query/response
 - Bug fixes
 
-4.3.11
+[4.3.11](https://github.com/icgc-dcc/dcc-portal/compare/4.3.10...4.3.11)
 --
 - Fixes regression for launching Survival Analysis demo. 
 - Don’t open manifest downloads in new tab, always download tarball
@@ -51,7 +51,7 @@ Change log for the DCC Data Portal
 - Fixed issues with manifest generation when unique selected and using individually selected files
 - Fixed other UI issues related to manifest generation
 
-4.3.10
+[4.3.10](https://github.com/icgc-dcc/dcc-portal/compare/4.3.9...4.3.10)
 --
 - Added ability to filter by compounds in Advanced Search
 - Added p-value calculations for Survival Analysis
@@ -63,11 +63,11 @@ Change log for the DCC Data Portal
 - Fixed text-wrapping issues
 - Fixed token manager to not error on unknown scopes
 
-4.3.9
+[4.3.9](https://github.com/icgc-dcc/dcc-portal/compare/4.3.8...4.3.9)
 --
 - Fixed regression from Spring Boot upgrade: now ensures "_missing" count is present in response json, even when `null`
 
-4.3.8
+[4.3.8](https://github.com/icgc-dcc/dcc-portal/compare/4.3.7...4.3.8)
 --
 - Upgraded to Spring Boot `1.4.0-RELEASE` and added custom `FailureAnalyzer`s for Elasticsearch, etc.
 - Bug fix for missing data in sample/specimen table when in a Donor Entity Page.
@@ -76,16 +76,16 @@ Change log for the DCC Data Portal
 - i18n implementation for Portal
 - Bug fixes for alignment and text wrap issues
 
-4.3.7
+[4.3.7](https://github.com/icgc-dcc/dcc-portal/compare/4.3.6...4.3.7)
 --
 - Removed software page and moved to [docs](http://docs.icgc.org/software/binaries/).
 
-4.3.6
+[4.3.6](https://github.com/icgc-dcc/dcc-portal/compare/4.3.5...4.3.6)
 --
   - Added icgc-get modal for file manifests page, currently behind a feature flag
   - OncoGrid shows spinner while loading
 
-4.3.5
+[4.3.5](https://github.com/icgc-dcc/dcc-portal/compare/4.3.4...4.3.5)
 --
   -  Made information table in pathway viewer sortable
   -  Added mutation annotations to nodes, information table, and legend in pathway viewer
@@ -105,12 +105,12 @@ Change log for the DCC Data Portal
   - Updates to OncoGrid rendering so that it does not block sidebar animations in analysis page
   - Bug fix for File Repository summary numbers. Increased maximum number of term buckets to 300,000
 
-4.3.4
+[4.3.4](https://github.com/icgc-dcc/dcc-portal/compare/4.3.3...4.3.4)
 --
   - Removed Publication section from Cancer projects
   - Cleanup of unused feature flags and associated logic
 
-4.3.3
+[4.3.3](https://github.com/icgc-dcc/dcc-portal/compare/4.3.2...4.3.3)
 --
   - Added .settings to `dcc-portal-server`
   - Add option to use prod API for UI dev
@@ -122,18 +122,18 @@ Change log for the DCC Data Portal
   - Layout and feature updates for manifest download modal
   - Changed bower dependency on `angularjs` to `angular`, fixes intermittent build errors.
   
-4.3.2
+[4.3.2](https://github.com/icgc-dcc/dcc-portal/compare/4.3.1...4.3.2)
 --
   - Migration of files from `dcc-portal-api` to `dcc-portal-server`
   - URL encoding fixes
   - Enhanced command line running using `mvn spring-boot:run`
   - Simplified classpath resolution of static files
 
-4.3.1
+[4.3.1](https://github.com/icgc-dcc/dcc-portal/compare/4.3.0...4.3.1)
 --
   - Hox fix for `OncoGridResource` not extending from `Resource`
 
-4.3.0
+[4.3.0](https://github.com/icgc-dcc/dcc-portal/compare/4.2.12...4.3.0)
 --
   - Migration to Spring Boot
 
