@@ -3,6 +3,17 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal
 
+4.3.17
+--
+- Fixed API setting of Functional Impact on the consequence if provided
+- Fixed ability to deselect Cancer Gene Census in Advanced Search
+- Fixed sorting of Cancer Distribution table columns
+
+4.3.16
+--
+- Added support for mirroring customization
+- Fixed missing filter on table links in Gene Page to Advanced Search
+
 4.3.15
 --
 - Added 404 page for entities and unknown pages
