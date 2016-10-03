@@ -21,7 +21,7 @@
   var module = angular.module('icgc.facets.terms', ['icgc.facets.helpers']);
 
   module.controller('termsCtrl', 
-    function ($scope, $filter, Facets, HighchartsService, ProjectCache, ValueTranslator, LocationService) { 
+    function ($scope, $filter, Facets, HighchartsService, ProjectCache, ValueTranslator, LocationService) {
 
     // Translation on UI is slow, do in here
     function addTranslations (terms, facetName, missingText) {
