@@ -27,7 +27,7 @@ require('expose?Highcharts!highcharts');
 require('highcharts/modules/no-data-to-display.src.js');
 require('d3/d3.min.js');
 require('Blob/Blob.js');
-require('FileSaver/FileSaver.min.js');
+require('expose?saveAs!exports?saveAs!FileSaver/FileSaver.min.js');
 require('expose?X2JS!x2js');
 require('bootstrap');
 
