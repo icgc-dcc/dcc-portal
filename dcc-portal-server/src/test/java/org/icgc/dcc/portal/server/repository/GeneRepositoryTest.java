@@ -65,7 +65,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     this.testIndex = TestIndex.RELEASE;
     es.execute(createIndexMappings(Type.GENE, Type.GENE_CENTRIC).withData(bulkFile(getClass())));
     geneRepository =
-        new GeneRepository(es.client(), testIndex.getModel(), new QueryEngine(es.client(), testIndex.getName()));
+        new GeneRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()), TestIndex.RELEASE.getName());
   }
 
   @Test

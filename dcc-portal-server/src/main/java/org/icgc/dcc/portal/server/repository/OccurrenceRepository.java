@@ -66,12 +66,12 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.search.SearchHitField;
 import org.icgc.dcc.common.core.model.ConsequenceType;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Joiner;
@@ -119,8 +119,8 @@ public class OccurrenceRepository {
   private final QueryEngine queryEngine;
 
   @Autowired
-  public OccurrenceRepository(Client client, IndexModel indexModel) {
-    this.index = indexModel.getIndex();
+  public OccurrenceRepository(Client client, @Value("#{indexName}") String index) {
+    this.index = index;
     this.client = client;
     this.queryEngine = new QueryEngine(client, index);
   }

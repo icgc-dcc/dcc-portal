@@ -17,13 +17,62 @@
  */
 package org.icgc.dcc.portal.server.resource.entity;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.yammer.metrics.annotation.Timed;
-import io.swagger.annotations.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.icgc.dcc.portal.server.model.*;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.icgc.dcc.portal.server.resource.Resources.AFFECTED_BY_THE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_FACETS_ONLY_DESCRIPTION;
+import static org.icgc.dcc.portal.server.resource.Resources.API_FACETS_ONLY_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_INCLUDE_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_INCLUDE_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_MUTATION_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_MUTATION_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_ALLOW;
+import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_PROJECT_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_PROJECT_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_ALLOW;
+import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_FIELD;
+import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.DONOR;
+import static org.icgc.dcc.portal.server.resource.Resources.FIND_BY_ID;
+import static org.icgc.dcc.portal.server.resource.Resources.FIND_BY_ID_ERROR;
+import static org.icgc.dcc.portal.server.resource.Resources.FOR_THE;
+import static org.icgc.dcc.portal.server.resource.Resources.GENE;
+import static org.icgc.dcc.portal.server.resource.Resources.GROUPED_BY;
+import static org.icgc.dcc.portal.server.resource.Resources.MULTIPLE_IDS;
+import static org.icgc.dcc.portal.server.resource.Resources.MUTATION;
+import static org.icgc.dcc.portal.server.resource.Resources.NOT_FOUND;
+import static org.icgc.dcc.portal.server.resource.Resources.PROJECT;
+import static org.icgc.dcc.portal.server.resource.Resources.RETURNS_COUNT;
+import static org.icgc.dcc.portal.server.resource.Resources.RETURNS_LIST;
+import static org.icgc.dcc.portal.server.resource.Resources.S;
+import static org.icgc.dcc.portal.server.resource.Resources.TOTAL;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+
+import org.icgc.dcc.portal.server.model.Donors;
+import org.icgc.dcc.portal.server.model.Genes;
+import org.icgc.dcc.portal.server.model.Mutation;
+import org.icgc.dcc.portal.server.model.Mutations;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.model.param.IdsParam;
 import org.icgc.dcc.portal.server.model.param.IntParam;
@@ -35,13 +84,17 @@ import org.icgc.dcc.portal.server.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.*;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.yammer.metrics.annotation.Timed;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.icgc.dcc.portal.server.resource.Resources.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -60,13 +113,6 @@ public class MutationResource extends Resource {
   private final GeneService geneService;
   private final DonorService donorService;
 
-  // When the query is keyed by gene id, it makes little sense to use entity set.
-  private void removeMutationEntitySet(ObjectNode filters) {
-    if (filters.path("mutation").path(IndexModel.API_ENTITY_SET_ID_FIELD_NAME).isMissingNode() == false) {
-      ((ObjectNode) filters.get("mutation")).remove(IndexModel.API_ENTITY_SET_ID_FIELD_NAME);
-    }
-  }
-
   @GET
   @Timed
   @ApiOperation(value = RETURNS_LIST + MUTATION + S, response = Mutation.class)
@@ -82,9 +128,7 @@ public class MutationResource extends Resource {
     val filters = filtersParam.get();
 
     log.debug(FIND_ALL_TEMPLATE, new Object[] { size, MUTATION, from, sort, order, filters });
-
     val query = query(fields, include, filters, from, size, sort, order);
-
     return mutationService.findAllCentric(query, facetsOnly);
   }
 
@@ -97,7 +141,6 @@ public class MutationResource extends Resource {
     ObjectNode filters = filtersParam.get();
 
     log.debug(COUNT_TEMPLATE, GENE, filters);
-
     return mutationService.count(query().filters(filters).build());
   }
 
@@ -131,12 +174,8 @@ public class MutationResource extends Resource {
       @ApiParam(value = API_ORDER_VALUE, allowableValues = API_ORDER_ALLOW) @QueryParam(API_ORDER_PARAM) @DefaultValue(DEFAULT_ORDER) String order) {
     ObjectNode filters = filtersParam.get();
 
-    removeMutationEntitySet(filters);
-
     log.info(NESTED_FIND_TEMPLATE, DONOR, mutationIds.get());
-
     filters = mergeFilters(filters, MUTATION_FILTER_TEMPLATE, JsonUtils.join(mutationIds.get()));
-
     return donorService.findAllCentric(query().filters(filters).fields(fields).includes(include)
         .from(from.get()).size(size.get()).sort(sort).order(order).build());
   }
@@ -150,12 +189,8 @@ public class MutationResource extends Resource {
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
-    removeMutationEntitySet(filters);
-
     log.info(NESTED_COUNT_TEMPLATE, DONOR, mutationId);
-
     filters = mergeFilters(filters, MUTATION_FILTER_TEMPLATE, mutationId);
-
     return donorService.count(query().filters(filters).build());
   }
 
@@ -170,10 +205,7 @@ public class MutationResource extends Resource {
     ObjectNode filters = filtersParam.get();
     List<String> mutations = mutationIds.get();
 
-    removeMutationEntitySet(filters);
-
     log.info(NESTED_COUNT_TEMPLATE, DONOR, mutations);
-
     val queries = queries(filters, MUTATION_FILTER_TEMPLATE, mutations);
     val counts = donorService.counts(queries);
 
@@ -202,12 +234,8 @@ public class MutationResource extends Resource {
     ObjectNode filters = filtersParam.get();
     List<String> mutations = mutationIds.get();
 
-    removeMutationEntitySet(filters);
-
     log.debug(NESTED_FIND_TEMPLATE, GENE, mutations);
-
     filters = mergeFilters(filters, MUTATION_FILTER_TEMPLATE, JsonUtils.join(mutations));
-
     return geneService.findAllCentric(query().filters(filters).fields(fields).includes(include)
         .from(from.get()).size(size.get()).sort(sort).order(order).build());
   }
@@ -221,12 +249,8 @@ public class MutationResource extends Resource {
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
-    removeMutationEntitySet(filters);
-
     log.debug(NESTED_COUNT_TEMPLATE, GENE, mutationId);
-
     filters = mergeFilters(filters, MUTATION_FILTER_TEMPLATE, mutationId);
-
     return geneService.count(query().filters(filters).build());
   }
 
@@ -241,10 +265,7 @@ public class MutationResource extends Resource {
     ObjectNode filters = filtersParam.get();
     List<String> mutations = mutationIds.get();
 
-    removeMutationEntitySet(filters);
-
     log.info(NESTED_COUNT_TEMPLATE, GENE, mutations);
-
     val queries = queries(filters, MUTATION_FILTER_TEMPLATE, mutations);
     val counts = geneService.counts(queries);
 
@@ -266,12 +287,8 @@ public class MutationResource extends Resource {
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
-    removeMutationEntitySet(filters);
-
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { DONOR, mutationId, geneId });
-
     filters = mergeFilters(filters, GENE_MUTATION_FILTER_TEMPLATE, geneId, mutationId);
-
     return donorService.count(query().filters(filters).build());
   }
 
@@ -288,10 +305,7 @@ public class MutationResource extends Resource {
     List<String> mutations = mutationIds.get();
     List<String> genes = geneIds.get();
 
-    removeMutationEntitySet(filters);
-
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { DONOR, mutations, genes });
-
     val queries = queries(filters, GENE_MUTATION_FILTER_TEMPLATE, genes, mutations);
     val counts = donorService.nestedCounts(queries);
 
@@ -315,10 +329,7 @@ public class MutationResource extends Resource {
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
     ObjectNode filters = filtersParam.get();
 
-    removeMutationEntitySet(filters);
-
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { DONOR, mutationId, projectId });
-
     val donors = new FiltersParam(String.format(PROJECT_MUTATION_FILTER_TEMPLATE, projectId, mutationId));
     JsonUtils.merge(filters, donors.get());
 
@@ -339,10 +350,7 @@ public class MutationResource extends Resource {
     List<String> projects = projectIds.get();
     List<String> mutations = mutationIds.get();
 
-    removeMutationEntitySet(filters);
-
     log.info(NESTED_NESTED_COUNT_TEMPLATE, new Object[] { DONOR, mutations, projects });
-
     val queries = queries(filters, PROJECT_MUTATION_FILTER_TEMPLATE, projects, mutations);
     val counts = donorService.nestedCounts(queries);
 

@@ -29,11 +29,11 @@ import java.util.Map;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.val;
@@ -51,8 +51,8 @@ public class ReleaseRepository {
   private final String index;
 
   @Autowired
-  ReleaseRepository(Client client, IndexModel indexModel) {
-    this.index = indexModel.getIndex();
+  ReleaseRepository(Client client, @Value("#{indexName}") String index) {
+    this.index = index;
     this.client = client;
   }
 

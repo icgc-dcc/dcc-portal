@@ -31,9 +31,9 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.test.TestIndex;
-import org.icgc.dcc.portal.server.model.Query;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,7 +66,7 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
         createIndexMappings(Type.MUTATION_CENTRIC)
             .withData(bulkFile(getClass())));
     mutationRepository =
-        new MutationRepository(es.client(), testIndex.getModel(), new QueryEngine(es.client(), testIndex.getName()));
+        new MutationRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()), testIndex.getName());
   }
 
   @Test

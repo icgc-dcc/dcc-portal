@@ -39,11 +39,11 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.TermFilterBuilder;
 import org.elasticsearch.index.query.TermsFilterBuilder;
 import org.icgc.dcc.portal.server.model.GeneSetType;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Optional;
@@ -79,8 +79,8 @@ public class GeneSetRepository {
   private final String index;
 
   @Autowired
-  public GeneSetRepository(@NonNull Client client, @NonNull IndexModel indexModel) {
-    this.index = indexModel.getIndex();
+  public GeneSetRepository(@NonNull Client client, @Value("#{indexName}") String index) {
+    this.index = index;
     this.client = client;
   }
 

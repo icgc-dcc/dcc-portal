@@ -54,13 +54,13 @@ import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Universe;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -100,8 +100,8 @@ public class GeneRepository implements Repository {
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
 
   @Autowired
-  GeneRepository(Client client, IndexModel indexModel, QueryEngine queryEngine) {
-    this.index = indexModel.getIndex();
+  GeneRepository(Client client, QueryEngine queryEngine, @Value("#{indexName}") String index) {
+    this.index = index;
     this.client = client;
     this.queryEngine = queryEngine;
   }

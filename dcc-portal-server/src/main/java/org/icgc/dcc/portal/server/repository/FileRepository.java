@@ -46,7 +46,6 @@ import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
-import static org.icgc.dcc.portal.server.model.IndexModel.MISSING;
 import static org.icgc.dcc.portal.server.model.SearchFieldMapper.searchFieldMapper;
 import static org.icgc.dcc.portal.server.model.TermFacet.repoTermFacet;
 import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.createTermsLookupFilter;
@@ -124,6 +123,7 @@ public class FileRepository {
   /**
    * Constants
    */
+  private static final String MISSING = "_missing";
   private static final Set<String> FILE_DONOR_FIELDS = newHashSet(
       "specimen_id", "sample_id", "submitted_specimen_id", "submitted_sample_id",
       "id", "submitted_donor_id",

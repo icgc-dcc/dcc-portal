@@ -29,8 +29,8 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
-import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +59,8 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
         .withData(MANIFEST_TEST_DATA));
 
     projectRepository =
-        new ProjectRepository(es.client(), testIndex.getModel(), new QueryEngine(es.client(), testIndex.getName()));
+        new ProjectRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()),
+            TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName());
   }
 
   @Test

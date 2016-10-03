@@ -79,8 +79,8 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
         // This is needed because the DonorRepository now does a 'secondary' search on icgc-repository index.
         .withData(MANIFEST_TEST_DATA));
     donorRepository =
-        new DonorRepository(es.client(), testIndex.getModel(), new QueryEngine(es.client(), testIndex.getName()),
-            entitySetRepository);
+        new DonorRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()),
+            entitySetRepository, TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName());
   }
 
   @Test

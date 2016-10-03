@@ -20,7 +20,6 @@ package org.icgc.dcc.portal.server.test;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static lombok.AccessLevel.PRIVATE;
 
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,12 +43,6 @@ public enum TestIndex {
   @Getter
   private final String name;
   private final String mappingsDir;
-
-  private static final IndexModel MODEL = new IndexModel(TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName());
-
-  public IndexModel getModel() {
-    return MODEL;
-  }
 
   @SneakyThrows
   public String getSettings() {

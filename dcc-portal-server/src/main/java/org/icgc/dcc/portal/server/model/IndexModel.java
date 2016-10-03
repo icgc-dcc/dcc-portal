@@ -4,12 +4,10 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 import static org.dcc.portal.pql.meta.IndexModel.getFileTypeModel;
-import static org.icgc.dcc.portal.server.pql.convert.FiltersConverter.ENTITY_SET_ID;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.dcc.portal.pql.meta.FileTypeModel;
 import org.dcc.portal.pql.meta.TypeModel;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -38,16 +35,6 @@ public class IndexModel {
   public static final int MAX_FACET_TERM_COUNT = 1024;
   public static final String IS = "is";
   public static final String ALL = "all";
-  public static final String NOT = "not";
-  public static final String MISSING = "_missing";
-
-  public static final Set<String> GENES_SORT_FIELD_NAMES = ImmutableSet.of("symbol", "name", "start", "type",
-      "affectedDonorCountFiltered");
-
-  /**
-   * Special cases for term lookups
-   */
-  public static final String API_ENTITY_SET_ID_FIELD_NAME = ENTITY_SET_ID;
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Getter
@@ -145,7 +132,6 @@ public class IndexModel {
   private static final ImmutableMap<String, String> FILE_FIELDS_MAPPING = ImmutableMap
       .<String, String> builder()
       .putAll(Maps.toMap(FILE_CLIENT_FIELD_ALIAS_MAPPING, alias -> REPO_FILE_TYPE_MODEL.getField(alias)))
-      .put(API_ENTITY_SET_ID_FIELD_NAME, API_ENTITY_SET_ID_FIELD_NAME)
       .build();
 
   private static final ImmutableMap<String, String> FAMILY_FIELDS_MAPPING =
@@ -364,7 +350,6 @@ public class IndexModel {
           .put("totalReadCount", "total_read_count")
           .put("variationCallingAlgorithm", "variation_calling_algorithm")
           .put("verificationStatus", "verification_status")
-          .put(API_ENTITY_SET_ID_FIELD_NAME, API_ENTITY_SET_ID_FIELD_NAME)
 
           .build();
 
@@ -483,15 +468,6 @@ public class IndexModel {
       .put(Kind.PROJECT, org.dcc.portal.pql.meta.IndexModel.getProjectTypeModel())
       .build();
 
-  /*
-   * private static final ImmutableMap<String, String> GO_SET_FIELDS_MAPPING = new ImmutableMap.Builder<String,
-   * String>() .put("ontology", "ontology") .put("altIds", "alt_ids") .put("synonyms", "synonyms") .put("inferredTree",
-   * "inferred_tree") .build();
-   * 
-   * private static final ImmutableMap<String, String> PATHWAY_SET_FIELDS_MAPPING = new ImmutableMap.Builder<String,
-   * String>() .put("hierarchy", "hierarchy") .build();
-   */
-
   public static final EnumMap<Kind, ImmutableMap<String, String>> FIELDS_MAPPING =
       new EnumMap<Kind, ImmutableMap<String, String>>(Kind.class);
 
@@ -521,53 +497,9 @@ public class IndexModel {
     FIELDS_MAPPING.put(Kind.FILE, FILE_FIELDS_MAPPING);
   }
 
-  /**
-   * Internal gene set types
-   */
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Getter
-  public static enum GeneSetType {
-    GENE_SET_TYPE_ALL("geneSetId"),
-    GENE_SET_TYPE_GO("go_term"),
-    GENE_SET_TYPE_PATHWAY("pathway"),
-    GENE_SET_TYPE_CURATED("curated_set");
-
-    private final String type;
-  }
-
-  /**
-   * Mapping query ID fields to internal types
-   */
-  public static final Map<String, String> GENE_SET_QUERY_ID_FIELDS = ImmutableMap.<String, String> builder()
-      .put(GeneSetType.GENE_SET_TYPE_ALL.getType(), "geneSetId")
-      .put(GeneSetType.GENE_SET_TYPE_CURATED.getType(), "curatedSetId")
-      .put(GeneSetType.GENE_SET_TYPE_PATHWAY.getType(), "pathwayId")
-      .put(GeneSetType.GENE_SET_TYPE_GO.getType(), "goTermId").build();
-
-  /**
-   * Mapping query type fields to internal type
-   */
-  public static final Map<String, String> GENE_SET_QUERY_TYPE_FIELDS = ImmutableMap.<String, String> of(
-      GeneSetType.GENE_SET_TYPE_CURATED.getType(), "hasCuratedSet",
-      GeneSetType.GENE_SET_TYPE_PATHWAY.getType(), "hasPathway",
-      GeneSetType.GENE_SET_TYPE_GO.getType(), "hasGoTerm");
-
-  private String index;
-  private String repoIndexName;
-
   @Autowired
-  public IndexModel(@Value("#{indexName}") String index, @Value("#{repoIndexName}") String repoIndexName) {
+  public IndexModel(@Value("#{repoIndexName}") String repoIndexName) {
     super();
-    this.index = index;
-    this.repoIndexName = repoIndexName;
-  }
-
-  public String getIndex() {
-    return this.index;
-  }
-
-  public String getRepoIndex() {
-    return this.repoIndexName;
   }
 
   public static String[] getFields(Query query, Kind kind) {

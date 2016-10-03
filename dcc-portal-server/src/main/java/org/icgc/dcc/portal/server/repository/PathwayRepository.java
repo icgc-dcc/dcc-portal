@@ -26,11 +26,11 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createR
 import java.util.Map;
 
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.val;
@@ -47,8 +47,8 @@ public class PathwayRepository {
   private final String index;
 
   @Autowired
-  PathwayRepository(Client client, IndexModel indexModel) {
-    this.index = indexModel.getIndex();
+  PathwayRepository(Client client, @Value("#{indexName}") String index) {
+    this.index = index;
     this.client = client;
   }
 

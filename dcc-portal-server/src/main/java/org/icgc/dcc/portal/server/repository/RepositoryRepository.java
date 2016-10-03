@@ -28,11 +28,11 @@ import java.util.stream.Stream;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.search.SearchHit;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
@@ -62,8 +62,8 @@ public class RepositoryRepository {
   private final String index;
 
   @Autowired
-  RepositoryRepository(@NonNull Client client, @NonNull IndexModel indexModel) {
-    this.index = indexModel.getRepoIndex();
+  RepositoryRepository(@NonNull Client client, @Value("#{repoIndexName}") String repoIndexName) {
+    this.index = repoIndexName;
     this.client = client;
   }
 

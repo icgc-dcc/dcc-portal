@@ -31,7 +31,6 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Query;
@@ -48,9 +47,6 @@ import com.google.common.collect.Maps;
 import lombok.val;
 
 public class BaseRepositoryIntegrationTest {
-
-  @Spy
-  final IndexModel indexModel = new IndexModel("dcc-release-load-prod-08d-49-icgc16-14", "test-repo-index");
 
   @Spy
   final TransportClient client = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost",
