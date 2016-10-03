@@ -80,6 +80,11 @@ body {
 
 .content {
   @include clearfix();
+
+  & > article {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 /*
