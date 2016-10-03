@@ -23,7 +23,7 @@ require('expose?ZeroClipboard!zeroclipboard/dist/ZeroClipboard.js');
 require('angular-gettext/dist/angular-gettext.min.js');
 
 // Other App Dependencies
-require('expose?Highcharts!highcharts/highcharts.js');
+require('expose?Highcharts!highcharts');
 require('highcharts/modules/no-data-to-display.src.js');
 require('d3/d3.min.js');
 require('Blob/Blob.js');
