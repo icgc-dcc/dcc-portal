@@ -141,6 +141,11 @@
       getPaginationParams: function(dataType){
         return _.defaults({}, this.getJsonParam(dataType), {from: 1, size: 10});
       },
+      goToFirstPageOfDataType: function(dataType) {
+        var s = $location.search();
+        s[dataType] = JSON.stringify(_.extend(JSON.parse(s[dataType] || '{}'), {from: 1}));
+        $location.search(s);
+      },
       goToPath: function(path, search, hash) {
         var searchParams = search || {},
             hashParam = hash || '';
