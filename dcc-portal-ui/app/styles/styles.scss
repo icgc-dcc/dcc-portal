@@ -24,7 +24,8 @@
 
 // Genome Browser
 @import "../vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.css";
-@import "../vendor/scripts/genome-viewer/vendor/fontawesome/css/font-awesome.min.css";
+$fa-font-path: '~font-awesome/fonts';
+@import '~font-awesome/scss/font-awesome.scss';
 
 @import "../vendor/styles/genomeviewer/css/style.css";
 
