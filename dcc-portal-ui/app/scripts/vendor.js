@@ -65,7 +65,7 @@ require('expose?URI!urijs');
 
 // Genome Viewer Config and Initialization
 // require('script!../vendor/scripts/genome-viewer/gv-config.js');
-Object.assign(window, require('exports?CODON_CONFIG&GENE_BIOTYPE_COLORS&SNP_BIOTYPE_COLORS&SEQUENCE_COLORS&FEATURE_TYPES!../vendor/scripts/genome-viewer/gv-config.js'));
+Object.assign(window, require('imports?key=>undefined!exports?CODON_CONFIG&GENE_BIOTYPE_COLORS&SNP_BIOTYPE_COLORS&SEQUENCE_COLORS&FEATURE_TYPES!../vendor/scripts/genome-viewer/gv-config.js'));
 Object.assign(window, require(process.env.GENOME_VIEWER_REQUIRE_STRING));
 
 // Highcharts Rounded Corners
