@@ -64,7 +64,6 @@
     "grunt-angular-gettext": "2.2.3",
     "grunt-google-cdn": "0.2.0",
     "grunt-jsdoc-to-markdown": "1.2.1",
-    "grunt-karma": "2.0.0",
     "grunt-notify": "0.4.5",
     "grunt-open": "0.2.0",
     "grunt-peg": "1.5.0",
