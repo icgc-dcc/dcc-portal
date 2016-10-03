@@ -8,7 +8,7 @@
     "url": "git://github.com:icgc-dcc/dcc-portal.git"
   },
   "scripts": {
-    "postinstall": "bower install",
+    "bower": "bower install",
     "sethost": "hostile set localhost local.dcc.icgc.org",
     "unsethost": "hostile remove local.dcc.icgc.org",
     "checkhost": "node tasks/checkDns.js",
@@ -41,6 +41,7 @@
     "babel-preset-react": "6.11.1",
     "babel-root-import": "4.1.0",
     "babel-runtime": "6.11.6",
+    "bower": "1.7.9",
     "bower-art-resolver": "2.0.5",
     "breakpoint-sass": "2.7.0",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
