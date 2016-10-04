@@ -81,7 +81,7 @@ body {
 .content {
   @include clearfix();
 
-  & > article {
+  .t_sidebar + article {
     position: relative;
     z-index: 1;
   }
