@@ -37,7 +37,7 @@
 
         if (_.contains (['projectId', 'projectCode'], facetName)) {
           ProjectCache.getData().then (function (cache) {
-            term.tooltip = cache [termName];
+            term.tooltip = cache[termName];
           });
         } else {
           term.tooltip = t.tooltip (termName, facetName);

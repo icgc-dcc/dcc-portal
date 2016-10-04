@@ -149,7 +149,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
       var genomeViewer, navigationBar, tracks = {};
       var availableSpecies;
         var regionObj = new Region({chromosome: 1, start: 1, end: 1}),
-        done = false;
+        done = false; 
 
 
 

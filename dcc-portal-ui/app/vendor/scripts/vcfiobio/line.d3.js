@@ -39,7 +39,7 @@
  *    SOFTWARE.
  */
 
-lineD3 = function module() {
+var lineD3 = function module() {
 
   var dispatch = d3.dispatch("d3brush", "d3rendered");
 

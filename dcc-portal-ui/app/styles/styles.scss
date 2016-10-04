@@ -17,6 +17,18 @@
  */
 
 //-----------------------------------------------------------------------------
+@import "bootstrap.scss";
+@import "../vendor/styles/slider.css";
+@import "../bower_components/angular-loading-bar/build/loading-bar.css";
+@import "../bower_components/angularjs-toaster/toaster.css";
+
+// Genome Browser
+@import "../vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.css";
+$fa-font-path: '~font-awesome/fonts';
+@import '~font-awesome/scss/font-awesome.scss';
+
+@import "../vendor/styles/genomeviewer/css/style.css";
+
 // Base
 @import "_base/base";
 //-----------------------------------------------------------------------------
@@ -26,8 +38,7 @@
 // General
 @import "_general/root";
 @import "_general/type";
-@import "_general/type";
-@import "bootstrap-overrides";
+@import "_bootstrap-overrides";
 //-----------------------------------------------------------------------------
 // Sections
 @import "../scripts/common/styles/preheader";
@@ -44,43 +55,43 @@
 
 // --
 
-@import "../../scripts/facets/styles/current";
-@import "../../scripts/facets/styles/facets";
+@import "../scripts/facets/styles/current";
+@import "../scripts/facets/styles/facets";
 
-@import "../../scripts/ui/styles/suggest";
-@import "../../scripts/ui/styles/tooltip";
-@import "../../scripts/ui/styles/copyclip";
-@import "../../scripts/ui/styles/trees";
+@import "../scripts/ui/styles/suggest";
+@import "../scripts/ui/styles/tooltip";
+@import "../scripts/ui/styles/copyclip";
+@import "../scripts/ui/styles/trees";
 
-@import "../../scripts/auth/styles/auth";
+@import "../scripts/auth/styles/auth";
 
-@import "../../scripts/visualization/styles/vis";
-@import "../../scripts/highcharts/styles/highcharts";
-@import "../../scripts/proteinstructureviewer/styles/protein";
-@import "../../scripts/genomemaps/styles/genomemaps";
-@import "../../scripts/phenotype/styles/phenotype.result.scss";
-@import "../../scripts/survivalanalysis/styles/survival-analysis.scss";
+@import "../scripts/visualization/styles/vis";
+@import "../scripts/highcharts/styles/highcharts";
+@import "../scripts/proteinstructureviewer/styles/protein";
+@import "../scripts/genomemaps/styles/genomemaps";
+@import "../scripts/phenotype/styles/phenotype.result.scss";
+@import "../scripts/survivalanalysis/styles/survival-analysis.scss";
 
 // --
 // Pages
-@import "../../scripts/oncogrid/styles/oncogrid";
-@import "../../scripts/pathwayviewer/styles/pathwayviewer";
+@import "../scripts/oncogrid/styles/oncogrid";
+@import "../scripts/pathwayviewer/styles/pathwayviewer";
 
-@import "../../scripts/repositories/styles/repositories";
-@import "../../scripts/repositories/styles/guide";
+@import "../scripts/repositories/styles/repositories";
+@import "../scripts/repositories/styles/guide";
 
-@import "../../scripts/repository/styles/repository";
+@import "../scripts/repository/styles/repository";
 
-@import "../../scripts/compounds/styles/compounds";
+@import "../scripts/compounds/styles/compounds";
 
-@import "../../scripts/tokens/styles/tokens";
+@import "../scripts/tokens/styles/tokens";
 
-@import "../../scripts/beacon/styles/beacon";
+@import "../scripts/beacon/styles/beacon";
 
 @import "../vendor/styles/bamiobio/bamiobio";
 @import "../vendor/styles/vcfiobio/vcfiobio";
 
-@import "../../scripts/404/styles/404";
+@import "../scripts/404/styles/404";
 
 // --
 
@@ -111,17 +122,8 @@ b, i {
 }
 
 .caps {
-  @include caps;
+  @extend %caps;
 }
-
-/*a {
-  #{$link} {
-    text-decoration: none;
-  }
-  #{$focus} {
-    text-decoration: underline;
-  }
-}*/
 
 //-----------------------------------------------------------------------------
 // Code Blocks
@@ -521,3 +523,6 @@ a.no-style {
     stroke-dashoffset: -124;
   }
 }
+
+@import "override.css";
+@import "flags.css";

@@ -1,0 +1,7 @@
+app/vendor
+bower_components
+node_modules
+app/scripts/common/js/pql
+app/scripts/common/pql/pqlparser.js
+app/scripts/ui/table2CSV.js
+app/scripts/translations/js/translations.js

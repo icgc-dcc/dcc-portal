@@ -39,7 +39,7 @@
  *    SOFTWARE.
  */
 
-donutChooserD3 = function module() {
+var donutChooserD3 = function module() {
   var dispatch = d3.dispatch("clickslice", "clickall");
 
   var name = function(d) { return d.name };
@@ -480,7 +480,7 @@ donutChooserD3 = function module() {
     return exports;
   }
 
-  exports.name = function(_) {
+  exports.nameFunction = function(_) {
     if (!arguments.length) return name;
     name = _;
     return exports;

@@ -159,8 +159,9 @@ angular.module('icgc.repositories.controllers', [])
          Page.stopWork();
          Page.setPage('entity');
          /// ${repoContext} would be a noun
-         Page.setTitle(_.template(gettextCatalog.getString('ICGC in the Cloud - ${repoContext} Repository'))
-          ({repoContext : _capitalizeWords(_repoContext)}));
+         Page.setTitle(_.template(gettextCatalog.getString('ICGC in the Cloud - ${repoContext} Repository'))({
+            repoContext : _capitalizeWords(_repoContext)
+         }));
         //  Page.setTitle(gettextCatalog.getString('ICGC in the Cloud')+ ' - ' + 
         //  _capitalizeWords(_repoContext) + ' ' + gettextCatalog.getString('Repository'));
 

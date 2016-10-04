@@ -30,7 +30,7 @@
 
       if ( selections ) {
         [ 'goTermId', 'pathwayId' ].forEach ( function (s) {
-          if ( selections [s] ) {
+          if ( selections[s] ) {
             GeneSetNameLookupService.batchFetch ( selections[ s ].is );
           }
         });

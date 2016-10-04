@@ -226,8 +226,7 @@
             uiPrimarySite: project.primarySite,
             uiTumourType: project.tumourType,
             uiTumourSubtype: project.tumourSubtype,
-            uiAffectedDonorPercentage: $filter('number')
-              (project.uiAffectedDonorPercentage*100, 2),
+            uiAffectedDonorPercentage: $filter('number')(project.uiAffectedDonorPercentage*100, 2),
             uiAdvQuery: project.advQuery,
             uiAffectedDonorCount: $filter('number')(project.affectedDonorCount),
             uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
@@ -236,8 +235,7 @@
             uiGeneSetCount: _ctrl.geneSet.geneCount,
             uiQueryType: _ctrl.geneSet.queryType,
             uiGeneSetId: _ctrl.geneSet.id,
-            uiAffectedGenePercentage: $filter('number')
-              (project.uiAffectedGenePercentage*100, 2)
+            uiAffectedGenePercentage: $filter('number')(project.uiAffectedGenePercentage*100, 2)
           });
         });
       }
