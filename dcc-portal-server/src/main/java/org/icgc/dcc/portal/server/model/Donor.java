@@ -9,15 +9,15 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getStri
 import java.util.List;
 import java.util.Map;
 
-import lombok.Value;
-import lombok.val;
-
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Value;
+import lombok.val;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -140,16 +140,16 @@ public class Donor {
     tumourSubtype = getString(fieldMap.get(fields.get("tumourSubtype")));
     ssmAffectedGenes = getLong(fieldMap.get(fields.get("ssmAffectedGenes")));
     ssmCount = getLong(fieldMap.get(fields.get("ssmCount")));
-    cnsmExists = getBoolean(fieldMap.get(fields.get("cnsmExists")));
-    stsmExists = getBoolean(fieldMap.get(fields.get("stsmExists")));
-    sgvExists = getBoolean(fieldMap.get(fields.get("sgvExists")));
-    methSeqExists = getBoolean(fieldMap.get(fields.get("methSeqExists")));
-    methArrayExists = getBoolean(fieldMap.get(fields.get("methArrayExists")));
-    expSeqExists = getBoolean(fieldMap.get(fields.get("expSeqExists")));
-    expArrayExists = getBoolean(fieldMap.get(fields.get("expArrayExists")));
-    pexpExists = getBoolean(fieldMap.get(fields.get("pexpExists")));
-    mirnaSeqExists = getBoolean(fieldMap.get(fields.get("mirnaSeqExists")));
-    jcnExists = getBoolean(fieldMap.get(fields.get("jcnExists")));
+    cnsmExists = getBoolean(fieldMap.get(fields.get("cnsmExists")), null);
+    stsmExists = getBoolean(fieldMap.get(fields.get("stsmExists")), null);
+    sgvExists = getBoolean(fieldMap.get(fields.get("sgvExists")), null);
+    methSeqExists = getBoolean(fieldMap.get(fields.get("methSeqExists")), null);
+    methArrayExists = getBoolean(fieldMap.get(fields.get("methArrayExists")), null);
+    expSeqExists = getBoolean(fieldMap.get(fields.get("expSeqExists")), null);
+    expArrayExists = getBoolean(fieldMap.get(fields.get("expArrayExists")), null);
+    pexpExists = getBoolean(fieldMap.get(fields.get("pexpExists")), null);
+    mirnaSeqExists = getBoolean(fieldMap.get(fields.get("mirnaSeqExists")), null);
+    jcnExists = getBoolean(fieldMap.get(fields.get("jcnExists")), null);
     ageAtDiagnosis = getLong(fieldMap.get(fields.get("ageAtDiagnosis")));
     ageAtDiagnosisGroup = getString(fieldMap.get(fields.get("ageAtDiagnosisGroup")));
     ageAtEnrollment = getLong(fieldMap.get(fields.get("ageAtEnrollment")));
