@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.elasticsearch.action.search.MultiSearchRequestBuilder;
 import org.elasticsearch.action.search.MultiSearchResponse;
@@ -326,10 +327,9 @@ public class BaseRepositoryIntegrationTest {
     val queries = generateNestedCountsQueries(ids, subIds, filterTemplate, sort);
     val sr = repo.nestedCounts(queries);
 
-    val idSet = queries.keySet();
-    val firstId = idSet.iterator().next();
-    val subIdSet = queries.get(firstId).keySet();
-    val idIter = idSet.iterator();
+    val entrySet = queries.entrySet();
+    val idIter = entrySet.stream().map(Entry::getKey).iterator();
+    val subIdSet = entrySet.iterator().next().getValue().keySet();
 
     Iterator<String> subIdIter = subIdSet.iterator();
     String id = idIter.next();

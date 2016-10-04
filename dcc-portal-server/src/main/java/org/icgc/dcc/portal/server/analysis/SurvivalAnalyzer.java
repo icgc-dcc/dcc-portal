@@ -17,26 +17,38 @@
  */
 package org.icgc.dcc.portal.server.analysis;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
-import lombok.*;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
+import static org.icgc.dcc.portal.server.model.BaseEntitySet.Type.DONOR;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 import org.elasticsearch.search.SearchHit;
-import org.icgc.dcc.portal.server.model.SurvivalAnalysis.Result;
 import org.icgc.dcc.portal.server.model.SurvivalAnalysis;
+import org.icgc.dcc.portal.server.model.SurvivalAnalysis.Result;
 import org.icgc.dcc.portal.server.model.UnionUnit;
 import org.icgc.dcc.portal.server.repository.EntitySetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
 
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
-import static org.icgc.dcc.portal.server.model.BaseEntitySet.Type.DONOR;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.val;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -47,18 +59,18 @@ public class SurvivalAnalyzer {
    */
   private final static List<String> OVERALL = ImmutableList.of("alive");
   private final static List<String> OVERALL_SORT =
-          ImmutableList.of("donor_survival_time", "donor_interval_of_last_followup");
-  private final static List<String> OVERALL_FIELDS = ImmutableList.<String>builder()
-          .add("donor_vital_status")
-          .addAll(OVERALL_SORT)
-          .build();
+      ImmutableList.of("donor_survival_time", "donor_interval_of_last_followup");
+  private final static List<String> OVERALL_FIELDS = ImmutableList.<String> builder()
+      .add("donor_vital_status")
+      .addAll(OVERALL_SORT)
+      .build();
   public final static List<String> DISEASE_FREE = ImmutableList.of(
       "complete remission", "partial remission", "stable", "no evidence of disease");
   private final static List<String> DISEASE_FREE_SORT = ImmutableList.of("donor_interval_of_last_followup");
   private final static List<String> DISEASE_FREE_FIELDS = ImmutableList.<String> builder()
-          .add("disease_status_last_followup")
-          .addAll(DISEASE_FREE_SORT)
-          .build();
+      .add("disease_status_last_followup")
+      .addAll(DISEASE_FREE_SORT)
+      .build();
 
   /**
    * Dependencies.
@@ -89,7 +101,7 @@ public class SurvivalAnalyzer {
       val diseaseFreeIntervals = runAnalysis(unionUnit, true, SurvivalAnalyzer::hasDiseaseStatusData);
 
       analysis.getResults().add(
-              analysis.new Result(setId, overallIntervals.getValue(), diseaseFreeIntervals.getValue()));
+          analysis.new Result(setId, overallIntervals.getValue(), diseaseFreeIntervals.getValue()));
 
       if (overallIntervals.getKey() != originalCount.intValue() && !intersection) {
         intersection = true;
@@ -109,9 +121,9 @@ public class SurvivalAnalyzer {
   }
 
   private Entry<Integer, List<Interval>> runAnalysis(UnionUnit unionunit, boolean diseaseFree,
-                                                     Predicate<SearchHit> filter) {
+      Predicate<SearchHit> filter) {
     val sort = diseaseFree ? DISEASE_FREE_SORT : OVERALL_SORT;
-    val fields = diseaseFree ? DISEASE_FREE_FIELDS: OVERALL_FIELDS;
+    val fields = diseaseFree ? DISEASE_FREE_FIELDS : OVERALL_FIELDS;
 
     val response = unionAnalyzer.computeExclusion(unionunit, DONOR, fields, sort);
     SearchHit[] hits = response.getHits().getHits();
@@ -124,11 +136,10 @@ public class SurvivalAnalyzer {
   private static List<Interval> compute(SearchHit[] donors, boolean diseaseFree) {
     val censuredTerms = diseaseFree ? DISEASE_FREE : OVERALL;
     val censuredField = diseaseFree ? DISEASE_FREE_FIELDS.get(0) : OVERALL_FIELDS.get(0);
-    val censuredTime = diseaseFree ? DISEASE_FREE_SORT.get(0) : DISEASE_FREE_SORT.get(0);
 
-    Arrays.asList(donors).sort( (a, b) -> {
+    Arrays.asList(donors).sort((a, b) -> {
       if (diseaseFree) {
-        return (a.field(censuredTime).<Integer>getValue()).compareTo(b.field(censuredTime).<Integer>getValue());
+        return getDiseaseTime(a).compareTo(getDiseaseTime(b));
       } else {
         return getOverallTime(a).compareTo(getOverallTime(b));
       }
@@ -139,7 +150,7 @@ public class SurvivalAnalyzer {
 
     for (int i = 0; i < donors.length; i++) {
       val donor = donors[i];
-      time[i] = diseaseFree ? donor.field(censuredTime).getValue() :  getOverallTime(donor);
+      time[i] = diseaseFree ? getDiseaseTime(donor) : getOverallTime(donor);
       censured[i] = censuredTerms.contains(donor.field(censuredField).<String> getValue());
     }
 
@@ -228,6 +239,11 @@ public class SurvivalAnalyzer {
     } else {
       return -1;
     }
+  }
+
+  private static Integer getDiseaseTime(SearchHit donor) {
+    val censuredTime = DISEASE_FREE_SORT.get(0);
+    return donor.field(censuredTime).getValue();
   }
 
   private static boolean hasDiseaseStatusData(SearchHit donor) {

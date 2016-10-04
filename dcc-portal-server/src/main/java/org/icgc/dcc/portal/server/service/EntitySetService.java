@@ -26,7 +26,6 @@ import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +56,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvListWriter;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.google.common.collect.ImmutableList;
 
 import lombok.Cleanup;
@@ -353,27 +351,6 @@ public class EntitySetService {
     maxMultiplier = setOpSettings.getMaxMultiplier();
     maxUnionCount = maxNumberOfHits * maxMultiplier;
     maxPreviewNumberOfHits = min(setOpSettings.getMaxPreviewNumberOfHits(), maxUnionCount);
-  }
-
-  @SneakyThrows
-  private static String toFilterParamForGeneSymbols(@NonNull final String symbolList) {
-    // Build the ObjectNode to represent this filterParam: { "gene": "symbol": {"is": ["s1", "s2", ...]}
-    val nodeFactory = new JsonNodeFactory(false);
-    val root = nodeFactory.objectNode();
-    val gene = nodeFactory.objectNode();
-    root.set("gene", gene);
-    val symbol = nodeFactory.objectNode();
-    gene.set("symbol", symbol);
-    val isNode = nodeFactory.arrayNode();
-    symbol.set("is", isNode);
-
-    final String[] symbols = symbolList.split(",");
-    for (val s : symbols) {
-      isNode.add(s);
-    }
-
-    val result = root.toString();
-    return URLEncoder.encode(result, UTF_8.name());
   }
 
 }
