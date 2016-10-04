@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.portal.server.analysis;
 
+import static java.util.Comparator.comparing;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.BaseEntitySet.Type.DONOR;
@@ -136,14 +137,7 @@ public class SurvivalAnalyzer {
   private static List<Interval> compute(SearchHit[] donors, boolean diseaseFree) {
     val censuredTerms = diseaseFree ? DISEASE_FREE : OVERALL;
     val censuredField = diseaseFree ? DISEASE_FREE_FIELDS.get(0) : OVERALL_FIELDS.get(0);
-
-    Arrays.asList(donors).sort((a, b) -> {
-      if (diseaseFree) {
-        return getDiseaseTime(a).compareTo(getDiseaseTime(b));
-      } else {
-        return getOverallTime(a).compareTo(getOverallTime(b));
-      }
-    });
+    Arrays.asList(donors).sort(comparing(x -> diseaseFree ? getDiseaseTime(x) : getOverallTime(x)));
 
     int[] time = new int[donors.length];
     boolean[] censured = new boolean[donors.length];
