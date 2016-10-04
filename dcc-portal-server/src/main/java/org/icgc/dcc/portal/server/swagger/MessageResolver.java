@@ -30,6 +30,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.PropertyPlaceholderHelper;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -147,7 +148,10 @@ public class MessageResolver {
 
   private static Properties readMessages() throws IOException {
     val file = new Properties();
-    file.load(MessageResolver.class.getResourceAsStream(MESSAGE_FILE));
+
+    @Cleanup
+    val stream = MessageResolver.class.getResourceAsStream(MESSAGE_FILE);
+    file.load(stream);
     return file;
   }
 
