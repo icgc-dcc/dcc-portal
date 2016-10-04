@@ -328,7 +328,7 @@ public class BaseRepositoryIntegrationTest {
 
     val idSet = queries.keySet();
     val firstId = idSet.iterator().next();
-    val subIdSet = (queries.get(firstId)).keySet();
+    val subIdSet = queries.get(firstId).keySet();
     val idIter = idSet.iterator();
 
     Iterator<String> subIdIter = subIdSet.iterator();

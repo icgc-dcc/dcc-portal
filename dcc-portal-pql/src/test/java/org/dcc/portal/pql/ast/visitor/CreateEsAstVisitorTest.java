@@ -43,8 +43,6 @@ import static org.dcc.portal.pql.utils.Tests.assertBoolAndGetShouldNode;
 
 import java.util.Optional;
 
-import lombok.val;
-
 import org.dcc.portal.pql.ast.PqlNode;
 import org.dcc.portal.pql.ast.builder.FilterBuilders;
 import org.dcc.portal.pql.ast.builder.PqlBuilders;
@@ -74,9 +72,10 @@ import org.dcc.portal.pql.es.model.Order;
 import org.dcc.portal.pql.meta.IndexModel;
 import org.junit.Test;
 
+import lombok.val;
+
 public class CreateEsAstVisitorTest {
 
-  CreatePqlAstVisitor createPqlvisitor = new CreatePqlAstVisitor();
   CreateEsAstVisitor visitor = new CreateEsAstVisitor();
 
   @Test

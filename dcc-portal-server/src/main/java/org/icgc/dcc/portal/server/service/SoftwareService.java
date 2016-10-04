@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -173,6 +174,7 @@ public class SoftwareService {
 
   }
 
+  @EqualsAndHashCode
   public class Version implements Comparable<Version> {
 
     @Getter
@@ -195,15 +197,8 @@ public class SoftwareService {
         if (thisPart < thatPart) return 1;
         if (thisPart > thatPart) return -1;
       }
-      return 0;
-    }
 
-    @Override
-    public boolean equals(Object that) {
-      if (this == that) return true;
-      if (that == null) return false;
-      if (this.getClass() != that.getClass()) return false;
-      return this.compareTo((Version) that) == 0;
+      return 0;
     }
 
   }

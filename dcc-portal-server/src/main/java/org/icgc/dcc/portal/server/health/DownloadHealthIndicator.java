@@ -17,17 +17,19 @@ public class DownloadHealthIndicator extends AbstractHealthIndicator {
   /**
    * Dependencies
    */
-  private final DownloadClient downloader;
+  private final DownloadClient client;
 
   @Override
   protected void doHealthCheck(Builder builder) throws Exception {
     log.info("Checking the health of Downloader...");
-    if (downloader == null) {
+    if (client == null) {
       builder.down().withDetail("message", "Service missing");
+      return;
     }
 
-    if (!downloader.isServiceAvailable()) {
+    if (!client.isServiceAvailable()) {
       builder.down().withDetail("message", "Service unavailable");
+      return;
     }
 
     builder.up().withDetail("message", "Service is available");

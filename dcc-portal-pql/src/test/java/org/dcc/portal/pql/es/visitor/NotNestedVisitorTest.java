@@ -20,8 +20,6 @@ package org.dcc.portal.pql.es.visitor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 
-import java.util.Optional;
-
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.NestedNode;
 import org.dcc.portal.pql.es.ast.filter.FilterNode;
@@ -40,9 +38,7 @@ import lombok.val;
 
 public class NotNestedVisitorTest extends BaseElasticsearchTest {
 
-  CreateQueryBuilderVisitor visitor = new CreateQueryBuilderVisitor();
   QueryContext context = new QueryContext("", Type.DONOR_CENTRIC);
-  Optional<QueryContext> contextOptional = Optional.of(context);
 
   private EsRequestBuilder esVisitor;
 
