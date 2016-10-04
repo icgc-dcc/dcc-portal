@@ -28,6 +28,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 
+import org.icgc.dcc.portal.server.controller.IndexController;
 import org.icgc.dcc.portal.server.jersey.filter.CachingFilter;
 import org.icgc.dcc.portal.server.jersey.filter.CrossOriginFilter;
 import org.icgc.dcc.portal.server.jersey.filter.DownloadFilter;
@@ -63,6 +64,9 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+  /**
+   * @see {@link IndexController} for dynamic {@code /index.html} generation.
+   */
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/app/");
