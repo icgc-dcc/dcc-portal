@@ -22,6 +22,8 @@
 
   module.controller('termsCtrl', 
     function ($scope, $filter, Facets, HighchartsService, ProjectCache, ValueTranslator, LocationService) {
+ 
+      $scope.resetPaginationOnChange = _.isUndefined($scope.resetPaginationOnChange) ? true : $scope.resetPaginationOnChange;  
 
     // Translation on UI is slow, do in here
     function addTranslations (terms, facetName, missingText) {
@@ -87,7 +89,7 @@
 
     function onChange() {
       if ($scope.resetPaginationOnChange) {
-        LocationService.goToFirstPageOfDataType($scope.type + 's');
+        LocationService.goToFirstPage($scope.type + 's');
       }
     }
 
