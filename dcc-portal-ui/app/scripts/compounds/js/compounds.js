@@ -135,7 +135,7 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
     // Creating a new Object for table filters
     function getUiTargetedCompoundGenesJSON(genes){
       return genes.map(function (gene) {
-        return _.extend({}, {
+        return _.extend({}, gene, {
           uiId: gene.id,
           uiName: gene.name,
           uiSymbol: gene.symbol,
