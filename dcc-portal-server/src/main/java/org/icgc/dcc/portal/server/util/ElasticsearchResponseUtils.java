@@ -32,10 +32,6 @@ import java.util.Optional;
 
 import javax.ws.rs.WebApplicationException;
 
-import lombok.NoArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.index.get.GetField;
 import org.elasticsearch.search.SearchHit;
@@ -46,6 +42,10 @@ import org.icgc.dcc.portal.server.model.Query;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Longs;
+
+import lombok.NoArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Provides methods to retrieve values from SearchHit
@@ -118,9 +118,7 @@ public final class ElasticsearchResponseUtils {
     return Longs.tryParse(value.toString());
   }
 
-  public static Boolean getBoolean(Object values) {
-    val defaultValue = false;
-
+  public static Boolean getBoolean(Object values, Boolean defaultValue) {
     if (values == null) {
       return defaultValue;
     }
@@ -131,8 +129,11 @@ public final class ElasticsearchResponseUtils {
 
     if (values instanceof Iterable<?>) {
       val iterable = (Iterable<?>) values;
-      return Iterables.isEmpty(iterable) ? defaultValue :
-          Boolean.TRUE.equals(Iterables.get(iterable, 0));
+      if (Iterables.isEmpty(iterable)) {
+        return defaultValue;
+      } else {
+        return Boolean.TRUE.equals(Iterables.get(iterable, 0));
+      }
     }
 
     return defaultValue;

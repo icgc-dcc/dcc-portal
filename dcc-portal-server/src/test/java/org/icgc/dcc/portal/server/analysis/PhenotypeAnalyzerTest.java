@@ -16,7 +16,15 @@
  */
 package org.icgc.dcc.portal.server.analysis;
 
-import lombok.val;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.dcc.portal.pql.query.QueryEngine;
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
@@ -34,14 +42,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+import lombok.val;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
@@ -59,12 +60,11 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
     when(entitySetRepository.find(any())).thenReturn(set);
 
     es.execute(createIndexMappings(Type.DONOR, Type.DONOR_CENTRIC)
-            .withData(bulkFile(getClass()))
-            // This is needed because the DonorRepository now does a 'secondary' search on icgc-repository index.
-            .withData(MANIFEST_TEST_DATA));
+        .withData(bulkFile(getClass()))
+        // This is needed because the DonorRepository now does a 'secondary' search on icgc-repository index.
+        .withData(MANIFEST_TEST_DATA));
     donorRepository =
-            new DonorRepository(es.client(), testIndex.getModel(), new QueryEngine(es.client(), testIndex.getName()),
-                    entitySetRepository);
+        new DonorRepository(es.client(), testIndex.getModel(), new QueryEngine(es.client(), testIndex.getName()));
 
     phenotypeAnalyzer = new PhenotypeAnalyzer(donorRepository, entitySetRepository);
   }
@@ -80,9 +80,9 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
     // Here we are only interested in results that contain stats, which is under "ageAtDiagnosisGroup", and we use
     // flatMap to flatten/unwrap the result to a simple list.
     val data = results.stream()
-            .filter(result -> result.getName().equals("ageAtDiagnosisGroup"))
-            .flatMap(result -> result.getData().stream())
-            .collect(Collectors.toList());
+        .filter(result -> result.getName().equals("ageAtDiagnosisGroup"))
+        .flatMap(result -> result.getData().stream())
+        .collect(Collectors.toList());
 
     assertThat(data.size()).isEqualTo(2);
 
@@ -103,8 +103,8 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
 
   private void setUpTermsLookup(final UUID id1, final UUID id2) {
     val termsLookupRepository =
-            new TermsLookupRepository(es.client(), TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName(),
-                    new ServerProperties());
+        new TermsLookupRepository(es.client(), TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName(),
+            new ServerProperties());
     val lookupType = TermsLookupRepository.TermLookupType.DONOR_IDS;
 
     val donorSet1 = newArrayList("DO1", "DO3", "DO5", "DO7", "DO9");
