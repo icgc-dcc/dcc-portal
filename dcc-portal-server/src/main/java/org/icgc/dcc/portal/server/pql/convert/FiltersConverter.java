@@ -434,18 +434,18 @@ public class FiltersConverter {
 
     // Special handling when pathwayId and hasPathway or (compoundId and hasCompound) are both present; if not, process
     // normally
-    String typeFilter = EMPTY_STRING;
+    val typeFilter = new ArrayList<String>();
     val fieldsByFamily = geneFacetFilters.getFieldsByFamily();
     for (val familyFields : fieldsByFamily) {
       if (familyFields.size() > 1) {
         val familyFilter = orFilterHelper(toPqlFilter(familyFields, indexType));
-        typeFilter = typeFilter.equals(EMPTY_STRING) ? familyFilter : typeFilter + "," + familyFilter;
+        typeFilter.add(familyFilter);
       } else {
         remainingFields.addAll(familyFields);
       }
     }
 
-    return joinFilters(remainingFields, typeFilter.equals(EMPTY_STRING) ? null : typeFilter, indexType);
+    return joinFilters(remainingFields, typeFilter.isEmpty() ? null : COMMA_JOINER.join(typeFilter), indexType);
   }
 
   private static boolean isGeneFacetField(String fieldName) {

@@ -520,9 +520,8 @@ public class FileRepository {
         })
         .collect(toImmutableList());
 
-    // Total does not have any meaning in this context because a donor can cross multiple repositories.
-    val total = -1L;
-    return repoTermFacet(total, 0, donorResult);
+    // Total (-1L) does not have any meaning in this context because a donor can cross multiple repositories.
+    return repoTermFacet(-1L, 0, donorResult);
   }
 
   private static String toRawFieldName(@NonNull String alias) {
