@@ -29,6 +29,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.PropertyPlaceholderHelper;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -119,6 +120,7 @@ public class MessageResolver {
     class Methods {
 
       @SneakyThrows
+      @SuppressFBWarnings
       public String values(String className) {
         Class<?> type = Class.forName(className);
         Object[] values = (Object[]) type.getMethod("values").invoke(null);
@@ -145,7 +147,11 @@ public class MessageResolver {
 
   private static Properties readMessages() throws IOException {
     val file = new Properties();
-    file.load(MessageResolver.class.getResourceAsStream(MESSAGE_FILE));
+
+    try (val stream = MessageResolver.class.getResourceAsStream(MESSAGE_FILE)) {
+      file.load(stream);
+    }
+
     return file;
   }
 

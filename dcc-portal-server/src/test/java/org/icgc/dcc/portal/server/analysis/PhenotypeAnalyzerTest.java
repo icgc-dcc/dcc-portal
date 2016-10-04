@@ -65,7 +65,7 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
         .withData(MANIFEST_TEST_DATA));
     donorRepository =
         new DonorRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()),
-            entitySetRepository, TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName());
+            TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName());
 
     phenotypeAnalyzer = new PhenotypeAnalyzer(donorRepository, entitySetRepository);
   }

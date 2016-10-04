@@ -2,6 +2,8 @@
 
 Parent project of the portal modules
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/29bb5857a70d4861b46cbcc94d569009)](https://www.codacy.com/app/icgc-dcc/dcc-portal?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=icgc-dcc/dcc-portal&amp;utm_campaign=Badge_Grade)
+
 ## Build
 
 To compile, test and package the system, execute the following from the root of the repository:

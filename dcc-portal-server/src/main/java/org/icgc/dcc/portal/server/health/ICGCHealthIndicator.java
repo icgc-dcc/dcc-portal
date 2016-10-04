@@ -50,10 +50,12 @@ public class ICGCHealthIndicator extends AbstractHealthIndicator {
     val token = authService.getAuthToken();
     if (isNullOrEmpty(token)) {
       builder.down().withDetail("message", "Token empty").build();
+      return;
     }
 
     if (!authService.hasDacoAccess(DACO_ENABLED_CUD_USER, CUD)) {
       builder.down().withDetail("message", "Invalid DACO account").build();
+      return;
     }
 
     builder.up().withDetail("message", "CUD and DACO valid").build();

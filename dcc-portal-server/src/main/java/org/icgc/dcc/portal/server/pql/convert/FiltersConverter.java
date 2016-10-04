@@ -42,17 +42,12 @@ import static org.icgc.dcc.portal.server.pql.convert.model.Operation.NOT;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.math3.util.Pair;
 import org.dcc.portal.pql.meta.Type;
@@ -70,6 +65,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FiltersConverter {
@@ -174,7 +173,6 @@ public class FiltersConverter {
 
   private Map<String, String> getGroupedFilters(ListMultimap<String, JqlField> fieldsGroupedByNestedPath,
       Type indexType, boolean isNotFilter) {
-    Map<String, String> groupedFilters = new HashMap<>();
     if (fieldsGroupedByNestedPath.isEmpty()) {
       return emptyMap();
     }
@@ -185,7 +183,7 @@ public class FiltersConverter {
     val groupedPaths = groupNestedPaths(sortedDescPaths, getTypeModel(indexType));
     log.debug("Groupped paths: {}", groupedPaths);
 
-    groupedFilters = transformEntries(groupedPaths.asMap(), (key, values) -> {
+    val groupedFilters = transformEntries(groupedPaths.asMap(), (key, values) -> {
       final String filter = createFilterByNestedPath(indexType, fieldsGroupedByNestedPath,
           newArrayList(newTreeSet(values).descendingSet()), isNotFilter);
 
@@ -436,18 +434,18 @@ public class FiltersConverter {
 
     // Special handling when pathwayId and hasPathway or (compoundId and hasCompound) are both present; if not, process
     // normally
-    String typeFilter = EMPTY_STRING;
+    val typeFilter = new ArrayList<String>();
     val fieldsByFamily = geneFacetFilters.getFieldsByFamily();
     for (val familyFields : fieldsByFamily) {
       if (familyFields.size() > 1) {
         val familyFilter = orFilterHelper(toPqlFilter(familyFields, indexType));
-        typeFilter = typeFilter.equals(EMPTY_STRING) ? familyFilter : typeFilter + "," + familyFilter;
+        typeFilter.add(familyFilter);
       } else {
         remainingFields.addAll(familyFields);
       }
     }
 
-    return joinFilters(remainingFields, typeFilter.equals(EMPTY_STRING) ? null : typeFilter, indexType);
+    return joinFilters(remainingFields, typeFilter.isEmpty() ? null : COMMA_JOINER.join(typeFilter), indexType);
   }
 
   private static boolean isGeneFacetField(String fieldName) {

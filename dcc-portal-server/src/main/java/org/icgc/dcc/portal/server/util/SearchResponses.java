@@ -22,6 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.elasticsearch.action.search.MultiSearchResponse;
@@ -50,10 +51,10 @@ public final class SearchResponses {
 
     return ids;
   }
-  
+
   /**
-   * Get ids from hits as a set. Useful for when queries can span across types and indices resulting in id collision
-   * and enforcing id uniqueness is desirable.
+   * Get ids from hits as a set. Useful for when queries can span across types and indices resulting in id collision and
+   * enforcing id uniqueness is desirable.
    * 
    * @param response SearchResponse from elasticsearch
    * @return ids in a HashSet
@@ -92,9 +93,9 @@ public final class SearchResponses {
       MultiSearchResponse sr) {
     val counts = Maps.<String, LinkedHashMap<String, Long>> newLinkedHashMap();
 
-    val idSet = queries.keySet();
-    val firstId = idSet.iterator().next();
-    val subIdSet = queries.get(firstId).keySet();
+    val entrySet = queries.entrySet();
+    val idSet = entrySet.stream().map(Entry::getKey);
+    val subIdSet = entrySet.iterator().next().getValue().keySet();
 
     val ids = idSet.iterator();
     Iterator<String> subIds = subIdSet.iterator();

@@ -106,9 +106,6 @@ public class DonorRepository implements Repository {
   private static final Type TYPE = Type.DONOR;
   private static final Kind KIND = Kind.DONOR;
 
-  @NonNull
-  private final EntitySetRepository entitySetRepository;
-
   // These are the raw field names from the 'donor-text' type in the main index.
   public static final Map<String, String> DONOR_ID_SEARCH_FIELDS = transformToTextSearchFieldMap(
       "id", "submittedId", "specimenIds", "sampleIds", "submittedSpecimenIds", "submittedSampleIds");
@@ -166,13 +163,12 @@ public class DonorRepository implements Repository {
   private final QueryEngine queryEngine;
 
   @Autowired
-  public DonorRepository(Client client, QueryEngine queryEngine, EntitySetRepository entitySetRepository,
+  public DonorRepository(Client client, QueryEngine queryEngine,
       @Value("#{indexName}") String index, @Value("#{repoIndexName}") String repoIndexName) {
     this.index = index;
     this.repoIndexName = repoIndexName;
     this.client = client;
     this.queryEngine = queryEngine;
-    this.entitySetRepository = entitySetRepository;
   }
 
   @Override

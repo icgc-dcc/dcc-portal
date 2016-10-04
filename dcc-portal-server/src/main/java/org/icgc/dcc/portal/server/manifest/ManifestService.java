@@ -210,6 +210,7 @@ public class ManifestService {
     val timestamp = context.getManifest().getTimestamp();
     if (context.getManifest().isMultipart()) {
       val boundary = "boundary_" + timestamp;
+      @Cleanup
       val output = new MultiPartOutputStream(boundary, context.getOutput());
 
       eachRepository(context, searchResponse, (repo, bundles) -> {

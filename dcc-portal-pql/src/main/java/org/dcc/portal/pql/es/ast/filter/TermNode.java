@@ -22,15 +22,15 @@ import static org.dcc.portal.pql.es.model.LookupInfo.EMPTY_LOOKUP;
 
 import java.util.Optional;
 
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
-
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.TerminalNode;
 import org.dcc.portal.pql.es.model.LookupInfo;
 import org.dcc.portal.pql.es.visitor.NodeVisitor;
+
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.val;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
@@ -45,11 +45,11 @@ public class TermNode extends ExpressionNode {
   @NonNull
   TerminalNode valueNode;
 
-  public TermNode(@NonNull TerminalNode name, @NonNull TerminalNode value) {
+  public TermNode(TerminalNode name, TerminalNode value) {
     this(name, value, EMPTY_LOOKUP);
   }
 
-  public TermNode(@NonNull String name, @NonNull Object value) {
+  public TermNode(String name, Object value) {
     this(name, value, EMPTY_LOOKUP);
   }
 

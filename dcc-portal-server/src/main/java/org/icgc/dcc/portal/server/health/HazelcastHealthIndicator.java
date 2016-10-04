@@ -42,11 +42,13 @@ public class HazelcastHealthIndicator extends AbstractHealthIndicator {
     log.info("Checking the health of Hazelcast...");
     if (hazelcastInstance == null) {
       builder.down().withDetail("message", "Service missing").build();
+      return;
     }
 
     val memberCount = hazelcastInstance.getCluster().getMembers().size();
     if (memberCount == 0) {
       builder.down().withDetail("message", "No members").build();
+      return;
     }
 
     builder.up().withDetail("message", String.format("%s members available", memberCount)).build();

@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.config;
 
 import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
@@ -68,7 +69,7 @@ public class SearchConfig {
     val client = createTransportClient(elastic.getClient());
     for (val nodeAddress : elastic.getNodeAddresses()) {
       log.info("Configuring ES node address: {}", nodeAddress);
-      InetAddress.getByName(nodeAddress.getHost()).isReachable((int) SECONDS.toMillis(5));
+      checkState(InetAddress.getByName(nodeAddress.getHost()).isReachable((int) SECONDS.toMillis(5)));
 
       client.addTransportAddress(new InetSocketTransportAddress(
           nodeAddress.getHost(),

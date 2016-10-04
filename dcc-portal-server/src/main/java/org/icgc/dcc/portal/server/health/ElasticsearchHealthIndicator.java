@@ -28,11 +28,13 @@ public class ElasticsearchHealthIndicator extends AbstractHealthIndicator {
     log.info("Checking the health of ElasticSearch...");
     if (client == null) {
       builder.down().withDetail("message", "Service missing").build();
+      return;
     }
 
     val status = getStatus();
     if (status == RED) {
       builder.down().withDetail("message", String.format("Cluster health status is %s", status.name())).build();
+      return;
     }
 
     builder.up().withDetail("message", String.format("Cluster health status is %s", status.name())).build();
