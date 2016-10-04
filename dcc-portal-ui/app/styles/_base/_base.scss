@@ -19,12 +19,22 @@
 //-----------------------------------------------------------------------------
 // Imports
 
-@import "compass";
-@import "normalize";
-//@import "variables";
-//@import "bootstrapimports";
-@import "singularitygs";
-@import "singularity-extras";
+@import "~compass-mixins";
+@import "~normalize-css/normalize.css";
+
+@import "~breakpoint-sass";
+@import "~singularitygs";
+// We don't seem to be using singularity-extras anywhere
+// @import "singularity-extras";
+
+// This is singularity's clearfix, which overrides compass's clearfix, which breaks the site
+@mixin clearfix() {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Other Settings

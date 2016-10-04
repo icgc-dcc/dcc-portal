@@ -1,5 +1,4 @@
 header {
-  //@include clearfix();
 
   .header-container {
     display: table;
@@ -14,19 +13,11 @@ header {
   position: relative;
 
   #brand {
-    //@include float-span(4);
     width: 27%;
     white-space: nowrap;
 
     display: table-cell;
     vertical-align: middle;
-
-    /*@include breakpoint($break-tablet) {
-      font-size: 1.8rem;
-      margin-top: .8rem;
-      line-height: 2.5rem;
-      margin-right: 0.2rem;
-    }*/
 
     #icgc {
       color: $blueDark;
@@ -52,10 +43,6 @@ header {
       height: 2.8rem;
       width: 2.8rem;
       vertical-align: top;
-
-      /*@include breakpoint($break-tablet) {
-        margin-bottom: -0.3rem;
-      }*/
     }
     
   }
@@ -134,29 +121,6 @@ header {
   from{transform:translateX(-50px); opacity:0} 
   to{transform:translateX(0px); opacity:1}
 }
-/*
-@media screen and (min-width: 884px) and (max-width: 950px) {
-  header {
-
-    .header-container {
-      display: block;
-
-      #brand {
-        width: 5%;
-      }
-
-      .t_nav__actions {
-        //width: 20%;
-      }
-
-      .t_nav__pages {
-        //width: 30%;
-        min-width: 228px;
-      }
-    }
-  }
-} */
-
 
 @media screen and (min-width: 721px) and (max-width: 950px) {
   header {
@@ -304,12 +268,6 @@ header {
     @include breakpoint($break-tablet) {
       border-radius: 3rem;
     }
-
-    /*-webkit-transition: color .2s, background .2s;
-    -moz-transition: color .5s, background .5s;
-    -o-transition: color .5s, background .5s;
-    -ms-transition: color .5s, background .5s;
-    transition: color .2s, background .2s;*/
   }
   a:hover {
     text-decoration: none;
@@ -433,16 +391,6 @@ header {
 
     @include breakpoint($break-laptop) {
       padding: .8rem 1rem .9rem;
-      //-webkit-transform: translate3d(0, 0, 0);
-      //-moz-transform: translate3d(0, 0, 0);
-      //-o-transform: translate3d(0, 0, 0);
-      //-ms-transform: translate3d(0, 0, 0);
-      //transform: translate3d(0, 0, 0);
-      //-webkit-transition: box-shadow .6s ease-in-out;
-      //-moz-transition: box-shadow .6s ease-in-out;
-      //-o-transition: box-shadow .6s ease-in-out;
-      //-ms-transition: box-shadow .6s ease-in-out;
-      //transition: box-shadow .6s ease-in-out;
     }
 
     @include breakpoint($break-widescreen) {
@@ -451,19 +399,6 @@ header {
   }
 
 }
-
-//.t_nav__items__item a:hover i,
-//.t_nav__items__item a:active i,
-//.t_nav__items__item a:focus i {
-//  @include breakpoint($break-tablet) {
-//    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
-//    -webkit-transition: box-shadow .4s ease-in-out;
-//    -moz-transition: box-shadow .4s ease-in-out;
-//    -o-transition: box-shadow .4s ease-in-out;
-//    -ms-transition: box-shadow .4s ease-in-out;
-//    transition: box-shadow .4s ease-in-out;
-//  }
-//}
 
 .t_nav__items__item__title {
   display: none;
@@ -487,9 +422,6 @@ header {
   header {
     text-align: center;
     padding: 0;
-    /*@include breakpoint($break-tablet) {
-      padding-bottom: 2rem;
-    }*/
 
     .header-container {
       display: block;
@@ -497,7 +429,6 @@ header {
 
     #brand {
       display: block;
-      //@include grid-span(12);
       width: 100%;
       margin: 0;
 
@@ -507,13 +438,6 @@ header {
           size: 4rem;
           weight: 300;
           family: $sans-stack;
-        /*@include breakpoint($break-tablet) {
-          line-height: 7rem;
-          font: {
-            size: 4rem;
-            weight: 300;
-            family: $sans-stack;
-          } */
         }
       }
 
@@ -522,17 +446,11 @@ header {
         margin-bottom: .9rem;
         width: 4rem;
         vertical-align: middle;
-        /*@include breakpoint($break-tablet) {
-          height: 4rem;
-          margin-bottom: -.6rem;
-          width: 4rem;
-        } */
       }
     }
   }
 
   .t_nav__pages {
-    //@include grid-span(12);
     margin: 0.5rem 0rem;
     display:block;
     width: 100%;

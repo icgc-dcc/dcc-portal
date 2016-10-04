@@ -94,7 +94,7 @@
 //  ...  same as above
 //
 //
-Vcfiobio = function() {
+var Vcfiobio = function() {
 
   var debug =  false;
 

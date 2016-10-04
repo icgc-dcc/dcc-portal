@@ -86,7 +86,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <!-- Delegate to UI build -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -95,7 +95,7 @@
           <!-- Compile -->
           <execution>
             <id>npm-install</id>
-            <phase>prepare-package</phase>
+            <phase>compile</phase>
             <goals>
               <goal>exec</goal>
             </goals>
@@ -107,25 +107,38 @@
               <workingDirectory>.</workingDirectory>
             </configuration>
           </execution>
-
-          <!-- Prepare package -->
           <execution>
-            <id>grunt-build</id>
-            <phase>prepare-package</phase>
+            <id>bower-install</id>
+            <phase>compile</phase>
             <goals>
               <goal>exec</goal>
             </goals>
             <configuration>
-              <executable>grunt</executable>
+              <executable>npm</executable>
               <arguments>
-                <argument>build</argument>
+                <argument>run</argument>
+                <argument>bower</argument>
               </arguments>
               <workingDirectory>.</workingDirectory>
             </configuration>
           </execution>
+          <execution>
+            <id>npm-build</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>npm</executable>
+              <arguments>
+                <argument>run</argument>
+                <argument>build</argument>
+              </arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
-      
+
       <!-- Package -->
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

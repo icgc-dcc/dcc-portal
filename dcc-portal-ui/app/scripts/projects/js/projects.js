@@ -163,7 +163,7 @@
 
       return _.transform (filter, function (result, value, key) {
         if (_.has (pathMapping, key)) {
-          result = _.set (result, pathMapping [key], value);
+          result = _.set(result, pathMapping[key], value);
         }
       });
     }

@@ -1,4 +1,4 @@
-CODON_CONFIG = {
+var CODON_CONFIG = {
     '': {text: '', color: 'transparent'},
     'R': {text: 'Arg', color: '#BBBFE0'},
     'H': {text: 'His', color: '#BBBFE0'},
@@ -29,7 +29,7 @@ CODON_CONFIG = {
     '*': {text: ' * ', color: '#DDDDDD'}
 };
 
-GENE_BIOTYPE_COLORS = {
+var GENE_BIOTYPE_COLORS = {
     "3prime_overlapping_ncrna": "Orange",
     "ambiguous_orf": "SlateBlue",
     "antisense": "SteelBlue",
@@ -67,7 +67,7 @@ GENE_BIOTYPE_COLORS = {
     "other": "#000000"
 };
 
-SNP_BIOTYPE_COLORS = {
+var SNP_BIOTYPE_COLORS = {
     "2KB_upstream_variant": "#a2b5cd",
     "5KB_upstream_variant": "#a2b5cd",
     "500B_downstream_variant": "#a2b5cd",
@@ -96,9 +96,9 @@ SNP_BIOTYPE_COLORS = {
     "other": "#000000"
 };
 
-SEQUENCE_COLORS = {A: "#009900", C: "#0000FF", G: "#857A00", T: "#aa0000", N: "#555555"};
+var SEQUENCE_COLORS = {A: "#009900", C: "#0000FF", G: "#857A00", T: "#aa0000", N: "#555555"};
 
-SAM_FLAGS = [
+var SAM_FLAGS = [
     ["read paired", 0x1],
     ["read mapped in proper pair", 0x2],
     ["read unmapped", 0x4],
@@ -112,7 +112,7 @@ SAM_FLAGS = [
     ["read is PCR or optical duplicate", 0x400]
 ];
 
-FEATURE_TYPES = {
+var FEATURE_TYPES = {
 
     //methods
     formatTitle: function (str) {

@@ -147,7 +147,11 @@ public class MessageResolver {
 
   private static Properties readMessages() throws IOException {
     val file = new Properties();
-    file.load(MessageResolver.class.getResourceAsStream(MESSAGE_FILE));
+
+    try (val stream = MessageResolver.class.getResourceAsStream(MESSAGE_FILE)) {
+      file.load(stream);
+    }
+
     return file;
   }
 

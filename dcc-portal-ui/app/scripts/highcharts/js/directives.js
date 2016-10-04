@@ -33,8 +33,8 @@ angular.module('highcharts.directives', [])
         }
       }
     }
-  }).
-  service('highchartsService', function(highchartsConstants) {
+  })
+  .service('highchartsService', function(highchartsConstants) {
     var _service = this;
 
     _service.getCustomNoDataConfig = function(shouldShowNoDataMsg) {
@@ -262,7 +262,7 @@ angular.module('highcharts.directives').directive('donut', function ($rootScope,
     },
     template: '<div id="container" style="margin: 0 auto">' + gettextCatalog.getString('not working') + '</div>',
     link: function ($scope, $element, $attrs) {
-      var c, renderChart, chartsDefaults, filter;
+      var c, renderChart, chartsDefaults;
       var projectLookup = {};
 
       renderChart = function (settings) {
@@ -305,8 +305,6 @@ angular.module('highcharts.directives').directive('donut', function ($rootScope,
             events: {
               click: function (e) {
                 if ($attrs.home) {
-                  filter = 'filters={"' + e.point.type + '":{"' + e.point.facet + '":{"is"' + '":["' + e.point.name +
-                           '"]}}}';
                   var type = e.point.type;
                   var facet = e.point.facet;
                   var name = e.point.name;
