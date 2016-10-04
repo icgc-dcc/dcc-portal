@@ -36,10 +36,10 @@ public class DiagramTypeModel extends TypeModel {
    */
   public static class Fields {
 
-    public static String PATHWAY_ID = "pathwayId";
-    public static String HIGHLIGHTS = "highlights";
-    public static String XML = "xml";
-    public static String PROTEIN_MAP = "protein_map";
+    public static final String PATHWAY_ID = "pathwayId";
+    public static final String HIGHLIGHTS = "highlights";
+    public static final String XML = "xml";
+    public static final String PROTEIN_MAP = "protein_map";
 
     // Main mapping
     private static final List<FieldModel> MAPPINGS = ImmutableList.<FieldModel> builder()
