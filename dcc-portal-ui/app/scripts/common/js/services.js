@@ -144,10 +144,10 @@
   });
 
   module.service('Settings', function (RestangularNoCache) {
-    _.extend(this, window.ICGC_SETTINGS);
     this.get = function () {
       return Promise.resolve(window.ICGC_SETTINGS);
     };
+    Object.freeze(window.ICGC_SETTINGS);
   });
 
   module.service('ProjectCache', function(Projects) {
