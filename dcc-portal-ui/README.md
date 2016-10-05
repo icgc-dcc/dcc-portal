@@ -416,9 +416,9 @@ you might run into with child scopes used in forms, subcontrollers, and directiv
 Before Pull Request
 ---
 
-Pass JSHint: `grunt jshint`
+Pass JSHint: `npm run lint`
 
-Pass Unit tests: `grunt test`
+Pass Unit tests: `npm test`
 
 
 Tips
