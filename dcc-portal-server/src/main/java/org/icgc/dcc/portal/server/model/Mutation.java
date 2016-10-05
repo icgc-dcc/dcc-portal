@@ -21,11 +21,10 @@ import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
-import lombok.Value;
-import lombok.val;
 
 import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 
@@ -34,8 +33,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Value;
+import lombok.val;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -71,11 +73,11 @@ public class Mutation {
   @ApiModelProperty(value = "List of Cancer Projects with a Donor affected by Mutation", required = true)
   List<String> affectedProjectIds;
   @ApiModelProperty(value = "Platform", required = true)
-  List<String> platform;
+  Collection<String> platform;
   @ApiModelProperty(value = "Consequence Type", required = true)
   List<String> consequenceType;
   @ApiModelProperty(value = "Verification Status", required = true)
-  List<String> verificationStatus;
+  Collection<String> verificationStatus;
   @ApiModelProperty(value = "Occurrences")
   List<EmbOccurrence> occurrences;
   @ApiModelProperty(value = "Transcripts")
@@ -102,9 +104,9 @@ public class Mutation {
     affectedDonorCountFiltered = getLong(fieldMap.get(fields.get("affectedDonorCountFiltered")));
     affectedProjectCount = getLong(fieldMap.get(fields.get("affectedProjectCount")));
     affectedProjectIds = (List<String>) fieldMap.get(fields.get("affectedProjectIds"));
-    platform = (List<String>) fieldMap.get(fields.get("platform"));
+    platform = new HashSet<String>((List<String>) fieldMap.get(fields.get("platform")));
     consequenceType = (List<String>) fieldMap.get(fields.get("consequenceType"));
-    verificationStatus = (List<String>) fieldMap.get(fields.get("verificationStatus"));
+    verificationStatus = new HashSet<String>((List<String>) fieldMap.get(fields.get("verificationStatus")));
     occurrences = buildOccurrences((List<Map<String, Object>>) fieldMap.get("ssm_occurrence"));
     transcripts = buildTranscripts((List<Map<String, Object>>) fieldMap.get("transcript"));
     consequences = buildConsequences((List<Map<String, Object>>) fieldMap.get("consequences"));
