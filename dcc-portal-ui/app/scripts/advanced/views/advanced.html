@@ -45,7 +45,7 @@
              data-ng-class="{active: AdvancedCtrl.state.isTab('donor')}" data-nested data-href="search">
             <translate>Donors</translate><br>
             <small data-ng-hide="AdvancedCtrl.Donor.isLoading" id="adv-donor-count">
-                {{AdvancedCtrl.Donor.donors.pagination.total ? AdvancedCtrl.Donor.donors.pagination.total : 0 | number}}
+                {{AdvancedCtrl.Donor.donors.pagination.total || 0 | number}}
             </small>
             <small data-ng-show="AdvancedCtrl.Donor.isLoading"><i class="icon-spinner icon-spin"></i></small>
         </div>
@@ -53,7 +53,7 @@
              data-ng-class="{active: AdvancedCtrl.state.isTab('gene')}" data-nested data-href="search/g">
             <translate>Genes</translate><br>
             <small data-ng-hide="AdvancedCtrl.Gene.isLoading" id="adv-gene-count">
-                {{AdvancedCtrl.Gene.genes.pagination.total ? AdvancedCtrl.Gene.genes.pagination.total : 0 | number}}
+                {{AdvancedCtrl.Gene.genes.pagination.total || 0 | number}}
             </small>
             <small data-ng-show="AdvancedCtrl.Gene.isLoading"><i class="icon-spinner icon-spin"></i></small>
         </div>
@@ -61,7 +61,7 @@
              data-ng-class="{active: AdvancedCtrl.state.isTab('mutation')}" data-nested data-href="search/m">
             <translate>Mutations</translate><br>
             <small data-ng-hide="AdvancedCtrl.Mutation.isLoading" id="adv-mutation-count">
-                {{AdvancedCtrl.Mutation.mutations.pagination.total ? AdvancedCtrl.Mutation.mutations.pagination.total : 0 | number}}
+                {{AdvancedCtrl.Mutation.mutations.pagination.total || 0 | number}}
             </small>
             <small data-ng-show="AdvancedCtrl.Mutation.isLoading"><i class="icon-spinner icon-spin"></i></small>
         </div>
