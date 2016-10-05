@@ -17,12 +17,12 @@
 
 package org.icgc.dcc.portal.server.model;
 
+import static org.assertj.core.util.Sets.newHashSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -118,7 +118,7 @@ public class Mutation {
       return null;
     }
 
-    return new HashSet<String>(list);
+    return newHashSet(list);
   }
 
   private List<EmbOccurrence> buildOccurrences(List<Map<String, Object>> occurrences) {
