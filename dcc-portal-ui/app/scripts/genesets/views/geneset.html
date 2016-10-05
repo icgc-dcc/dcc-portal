@@ -463,12 +463,12 @@
 </section>
 <section id="pathway" data-ng-if="GeneSetCtrl.geneSet.source === 'Reactome'"
          data-ng-class="{'loading': !GeneSetCtrl.geneSet.projects, 'empty': GeneSetCtrl.geneSet.projects.length == 0}">
-    <div data-ng-if="GeneSetCtrl.pathway">
+    <h3 data-ng-if="!GeneSetCtrl.pathway.xml">
+        <i class="icon-spinner icon-spin"></i>
+        <translate>Fetching Pathway Viewer...</translate>
+    </h3>
+    <div data-ng-if="GeneSetCtrl.pathway.xml">
         <h3><translate>Pathway Viewer</translate></h3>
-        <h3 class="spinner-container" data-ng-if="!GeneSetCtrl.pathway.xml">
-            <i class="icon-spinner icon-spin"></i>
-            <translate>Retrieving Pathway Data...</translate>
-        </h3>
         <h4 data-ng-if="GeneSetCtrl.pathway.xml"><translate>Drag and scroll to explore the pathway. Double click to reset the view.</translate></h4>
         <pathway-viewer data-items="GeneSetCtrl.pathway.xml"
                         data-zooms="GeneSetCtrl.pathway.zooms"
