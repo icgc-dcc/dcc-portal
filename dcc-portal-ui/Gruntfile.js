@@ -36,51 +36,8 @@ module.exports = function (grunt) {
     developIndexFile: 'develop/html/index.develop.html'
   };
 
-
-  try {
-    yeomanConfig.app = require('./bower.json').appPath || yeomanConfig.app;
-  }
-  catch (e) {
-  }
-
   grunt.initConfig({
-    'bower-install-simple': configProvider.setConfigForTask('bower-install-simple', function() {
-
-        /**
-        * Bower configuration
-        * See: https://www.npmjs.com/package/grunt-bower-install-simple
-        */
-
-        var config =  {options: { color: false } };
-
-        if (configProvider.isProductionBuild()) {
-          config.prod = { options: { production: true, interactive: false, forceLatest: false } };
-        }
-        else {
-          config.dev = { options: { production: false,  interactive: true, forceLatest: false } };
-        }
-
-        return config;
-    })
-    // Gets the default dev config object in this context because
-    // we have yet to set a default
-    .getConfigForTask('bower-install-simple'),
-    peg: {
-      pql: {
-        src: './app/scripts/common/js/pql/conf/pql.pegjs',
-        dest: './app/scripts/common/js/pql/pqlparser.js',
-        options: {
-          exportVar: 'PqlPegParser'
-        }
-      }
-    },
     yeoman: yeomanConfig,
-    jsdoc2md: {
-      oneOutputFile: {
-        src: '<%= yeoman.dist %>/scripts/scripts.js',
-        dest: '<%= yeoman.dist %>/docs/api/README.md'
-      }
-    },
     nggettext_extract: {
       pot: {
         files: {
