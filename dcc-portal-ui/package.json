@@ -21,9 +21,12 @@
     "build": "node ./tasks/build.js",
     "start": "node ./tasks/start.js",
     "test": "karma start karma.conf.js",
+    "extract-text": "angular-gettext-cli --files 'app/scripts/**/*.+(html|js)' --dest translations/strings.pot",
+    "compile-text": "angular-gettext-cli --compile --files 'translations/*.po' --dest 'app/scripts/translations/js/translations.js'",
     "lint": "eslint -c config/eslint.js --no-eslintrc app/vendor app"
   },
   "devDependencies": {
+    "angular-gettext-cli": "1.0.7",
     "autoprefixer": "6.3.7",
     "babel-core": "6.11.4",
     "babel-eslint": "6.1.2",
