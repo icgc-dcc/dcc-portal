@@ -462,7 +462,7 @@
     </div>
 </section>
 <section id="pathway" data-ng-if="GeneSetCtrl.geneSet.source === 'Reactome'"
-         data-ng-class="{'loading': !GeneSetCtrl.geneSet.projects, 'empty': GeneSetCtrl.geneSet.projects.length == 0}">
+         data-ng-class="{'loading': !GeneSetCtrl.pathway.xml, 'empty': GeneSetCtrl.pathway.xml}">
     <h3 data-ng-if="!GeneSetCtrl.pathway.xml">
         <i class="icon-spinner icon-spin"></i>
         <translate>Fetching Pathway Viewer...</translate>
