@@ -131,7 +131,7 @@ function openBrowser(port) {
       execSync(
         'osascript ' +
         path.resolve(__dirname, './utils/chrome.applescript') +
-        ' http://local.dcc.icgc.org/:' + port + '/'
+        ' http://local.dcc.icgc.org:' + port + '/'
       );
       return;
     } catch (err) {
