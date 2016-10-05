@@ -1,3 +1,5 @@
+/* eslint-disable quotes */
+
 module.exports = {
     "releaseDate": "April 25th, 2016",
     "dataVersion": 2,
