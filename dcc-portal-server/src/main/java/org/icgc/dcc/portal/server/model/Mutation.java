@@ -104,13 +104,21 @@ public class Mutation {
     affectedDonorCountFiltered = getLong(fieldMap.get(fields.get("affectedDonorCountFiltered")));
     affectedProjectCount = getLong(fieldMap.get(fields.get("affectedProjectCount")));
     affectedProjectIds = (List<String>) fieldMap.get(fields.get("affectedProjectIds"));
-    platform = new HashSet<String>((List<String>) fieldMap.get(fields.get("platform")));
+    platform = uniquePlatform((List<String>) fieldMap.get(fields.get("platform")));
     consequenceType = (List<String>) fieldMap.get(fields.get("consequenceType"));
-    verificationStatus = new HashSet<String>((List<String>) fieldMap.get(fields.get("verificationStatus")));
+    verificationStatus = uniquePlatform((List<String>) fieldMap.get(fields.get("verificationStatus")));
     occurrences = buildOccurrences((List<Map<String, Object>>) fieldMap.get("ssm_occurrence"));
     transcripts = buildTranscripts((List<Map<String, Object>>) fieldMap.get("transcript"));
     consequences = buildConsequences((List<Map<String, Object>>) fieldMap.get("consequences"));
     functionalImpact = (List<String>) fieldMap.get(fields.get("functionalImpact"));
+  }
+
+  private Collection<String> uniquePlatform(List<String> list) {
+    if (list == null) {
+      return null;
+    }
+
+    return new HashSet<String>(list);
   }
 
   private List<EmbOccurrence> buildOccurrences(List<Map<String, Object>> occurrences) {
