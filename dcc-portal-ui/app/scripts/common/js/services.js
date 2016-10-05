@@ -143,24 +143,9 @@
     };
   });
 
-
-  // Prevent the settings service from being requested several times
-  var _settingsPromise = null;
-
   module.service('Settings', function (RestangularNoCache) {
-
-    this.get = function () {
-
-      if (_settingsPromise) {
-        return _settingsPromise;
-      }
-
-      _settingsPromise = RestangularNoCache.one('settings').get();
-
-      _settingsPromise.then(function () { _settingsPromise = null; });
-
-      return _settingsPromise;
-    };
+    Object.freeze(window.ICGC_SETTINGS);
+    this.get = () => Promise.resolve(window.ICGC_SETTINGS);
   });
 
   module.service('ProjectCache', function(Projects) {

@@ -41,6 +41,18 @@ module.exports = {
     ],
     loaders: [
       {
+        test: /index.html$/,
+        loader: 'raw',
+      },
+      {
+        test: /index.html$/,
+        loader: 'string-replace',
+        query: {
+          search: '\<portal-settings\>\<\/portal-settings\>',
+          replace: `<script>window.ICGC_SETTINGS = ${JSON.stringify(require('./ICGC_SETTINGS.dev.js'))}</script>`,
+        }
+      },
+      {
         test: /\.js$/,
         include: paths.appSrc,
         loaders: ['babel?' + JSON.stringify(require('./babel.dev'))],
