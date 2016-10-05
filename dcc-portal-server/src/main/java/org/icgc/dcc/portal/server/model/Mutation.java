@@ -17,7 +17,7 @@
 
 package org.icgc.dcc.portal.server.model;
 
-import static org.assertj.core.util.Sets.newHashSet;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
@@ -113,14 +113,6 @@ public class Mutation {
     functionalImpact = (List<String>) fieldMap.get(fields.get("functionalImpact"));
   }
 
-  private Collection<String> unique(List<String> list) {
-    if (list == null) {
-      return null;
-    }
-
-    return newHashSet(list);
-  }
-
   private List<EmbOccurrence> buildOccurrences(List<Map<String, Object>> occurrences) {
     if (!hasOccurrences(occurrences)) return null;
     val lst = Lists.<EmbOccurrence> newArrayList();
@@ -185,6 +177,14 @@ public class Mutation {
     }
 
     return lst;
+  }
+
+  private static Collection<String> unique(List<String> list) {
+    if (list == null) {
+      return null;
+    }
+
+    return newHashSet(list);
   }
 
 }
