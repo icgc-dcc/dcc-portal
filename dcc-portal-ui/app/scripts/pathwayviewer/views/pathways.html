@@ -105,23 +105,24 @@
         <div data-ng-if="pathway">
             <h3 class="spinner-container" data-ng-if="!pathway.xml">
                 <i class="icon-spinner icon-spin"></i>
-                <translate>Retrieving Pathway Data...</translate>
+                <translate>Fetching Pathway Viewer...</translate>
             </h3>
-            <h4 data-ng-if="pathway.xml">
-                <translate>Drag and scroll to explore the pathway. Double click to reset the view.</translate>
-            </h4>
-            
-            <pathway-viewer data-items="pathway.xml"
-            				data-zooms="pathway.zooms"
-            				data-mutation-highlights="pathway.mutationHighlights"
-            				data-drug-highlights="pathway.drugHighlights"
-            				data-overlaps="pathway.overlaps">
-            </pathway-viewer>
+            <div data-ng-if="pathway.xml">
+                <h4>
+                    <translate>Drag and scroll to explore the pathway. Double click to reset the view.</translate>
+                </h4>                
+                <pathway-viewer data-items="pathway.xml"
+                                data-zooms="pathway.zooms"
+                                data-mutation-highlights="pathway.mutationHighlights"
+                                data-drug-highlights="pathway.drugHighlights"
+                                data-overlaps="pathway.overlaps">
+                </pathway-viewer>
+                <small><translate>Data Source: <a href="http://www.reactome.org/">Reactome</a></translate></small>
+            </div>
         </div>
         <h3 data-ng-if="!pathway">
             <translate>No Pathway Diagram Found.</translate>
         </h3>
-        <small><translate>Data Source: <a href="http://www.reactome.org/">Reactome</a></translate></small>
       </section>
     </article>
   </div>
