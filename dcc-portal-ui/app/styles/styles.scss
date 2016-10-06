@@ -327,6 +327,12 @@ h3:hover {
 
 .t_sidebar {
   position: relative;
+
+  .t_facets_container{
+    position: relative; 
+    margin-right: -11.5%; 
+    border-right: 1px solid #cccccc
+  }
 }
 
 .t_notify_popup, #buorg {
