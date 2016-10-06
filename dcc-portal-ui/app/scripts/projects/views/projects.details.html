@@ -143,10 +143,12 @@
     </td>
 
     <td class="text-right" ng-repeat="fieldKey in ProjectsCtrl.fieldKeys">
-      <linkable-number-cell
-        the-number="project [fieldKey]"
-        sref="toAdvancedSearch (fieldKey, [project.id])"
-        zero-text="--" />
+        <loading-block ng-if="!ProjectsCtrl.shouldRenderDeferredItems"></loading-block>
+        <linkable-number-cell
+            ng-if="ProjectsCtrl.shouldRenderDeferredItems"
+            the-number="project [fieldKey]"
+            sref="toAdvancedSearch (fieldKey, [project.id])"
+            zero-text="--" />
     </td>
 
   </tr>
@@ -155,10 +157,12 @@
     <td colspan="4"><strong><translate>Total</translate></strong></td>
 
     <td class="text-right" ng-repeat="data in ProjectsCtrl.totals">
-      <linkable-number-cell
-        the-number="data.total"
-        sref="data.sref"
-        zero-text="0" />
+        <loading-block ng-if="!ProjectsCtrl.shouldRenderDeferredItems"></loading-block>
+        <linkable-number-cell
+            ng-if="ProjectsCtrl.shouldRenderDeferredItems"
+            the-number="data.total"
+            sref="data.sref"
+            zero-text="0" />
     </td>
   </tr>
 

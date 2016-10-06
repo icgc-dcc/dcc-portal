@@ -71,7 +71,7 @@
 
   module.controller('ProjectsCtrl',
     function ($q, $scope, $state, $filter, ProjectState, Page, Projects, CodeTable,
-               HighchartsService, Donors, Restangular, LocationService, gettextCatalog) {
+               HighchartsService, Donors, Restangular, LocationService, gettextCatalog, $timeout) {
 
     var _ctrl = this;
     Page.setTitle(gettextCatalog.getString('Cancer Projects'));
@@ -79,12 +79,18 @@
 
     _ctrl.Page = Page;
     _ctrl.state = ProjectState;
+    _ctrl.shouldRenderDeferredItems = false;
 
     _ctrl.setTab = function (tab) {
         _ctrl.state.setTab(tab);
       };
     _ctrl.setTab($state.current.data.tab);
 
+
+    var deferredTimeout;
+    function allowRenderDeferredItems() {
+      _ctrl.shouldRenderDeferredItems = true;
+    }
 
     $scope.$watch(function () {
        var currentStateData = angular.isDefined($state.current.data) ? $state.current.data : null;
@@ -100,6 +106,17 @@
       function (currentTab) {
         if (currentTab !== null) {
           _ctrl.setTab(currentTab);
+        }
+
+        if ( currentTab === 'details') {
+          if (!window.requestIdleCallback) {
+            window.clearTimeout(deferredTimeout);
+            deferredTimeout = $timeout(allowRenderDeferredItems, 100);
+          } else {
+            window.requestIdleCallback(() => {
+              $scope.$apply(allowRenderDeferredItems);
+            });
+          }
         }
       });
 

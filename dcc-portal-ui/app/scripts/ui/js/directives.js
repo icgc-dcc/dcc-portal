@@ -34,7 +34,8 @@ angular.module('icgc.ui', [
   'icgc.ui.copyPaste',
   'icgc.ui.popover',
   'icgc.ui.numberTween',
-  'icgc.ui.iobio'
+  'icgc.ui.iobio',
+  'icgc.ui.loader'
 ]);
 
 
@@ -928,4 +929,13 @@ angular.module('icgc.ui.iobio', [])
         };
 
       }
+  });
+
+angular.module('icgc.ui.loader', [])
+  .component('loadingBlock', {
+    template: 
+    `<span class="loading-block">
+        {{ ['&#9724;&#9724;&#9724;','&#9724;&#9724;&#9724;', '&#9724;&#9724;', '&#9724;'] | _:'sample' }}
+      </span>`,
+      replace: true
   });
