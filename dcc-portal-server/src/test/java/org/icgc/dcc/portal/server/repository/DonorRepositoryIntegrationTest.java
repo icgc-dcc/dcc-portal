@@ -29,8 +29,6 @@ public class DonorRepositoryIntegrationTest extends BaseRepositoryIntegrationTes
 
   private static final String DEFAULT_SORT = "ssmAffectedGenes";
   private static final IndexType CENTRIC_TYPE = IndexType.DONOR_CENTRIC;
-  private static final EntityType KIND = EntityType.DONOR;
-
   @InjectMocks
   DonorRepository repository;
   @InjectMocks
@@ -38,12 +36,12 @@ public class DonorRepositoryIntegrationTest extends BaseRepositoryIntegrationTes
 
   @Test
   public void test_aggs() {
-    aggregations(repository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
+    aggregations(repository, DEFAULT_SORT, CENTRIC_TYPE, EntityType.DONOR);
   }
 
   @Test
   public void test_score() {
-    scores(repository, geneRepository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
+    scores(repository, geneRepository, DEFAULT_SORT, CENTRIC_TYPE, EntityType.DONOR);
   }
 
   @Test

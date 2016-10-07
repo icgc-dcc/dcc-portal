@@ -143,7 +143,7 @@ public class FiltersConverter {
       Predicate<JqlField> streamFilter) {
     val groupedByNestedPath = ArrayListMultimap.<String, JqlField> create();
 
-    for (val entry : filters.getKindValues().entrySet()) {
+    for (val entry : filters.getEntityValues().entrySet()) {
       val values = entry.getValue().stream()
           .filter(streamFilter)
           .map(this::removeNot)
@@ -196,10 +196,10 @@ public class FiltersConverter {
 
   private static JqlFilters cleanProjectFilters(JqlFilters filters) {
     val indexType = PROJECT.getId();
-    val kindValues = transformValues(filterKeys(filters.getKindValues(), key -> key.equals(indexType)),
+    val entityValues = transformValues(filterKeys(filters.getEntityValues(), key -> key.equals(indexType)),
         value -> filterValidProjectFilters(value));
 
-    return new JqlFilters(kindValues);
+    return new JqlFilters(entityValues);
   }
 
   private static List<JqlField> filterValidProjectFilters(List<JqlField> source) {

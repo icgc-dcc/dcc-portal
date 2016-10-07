@@ -58,8 +58,8 @@ public enum TestIndex {
   }
 
   @SneakyThrows
-  public String getMapping(IndexType typeName) {
-    val mappingFileName = typeName.getId() + ".mapping.json";
+  public String getMapping(IndexType indexType) {
+    val mappingFileName = indexType.getId() + ".mapping.json";
     val mappingFile = Resources.getResource(mappingsDir + "/" + mappingFileName);
     return Resources.toString(mappingFile, UTF_8);
   }

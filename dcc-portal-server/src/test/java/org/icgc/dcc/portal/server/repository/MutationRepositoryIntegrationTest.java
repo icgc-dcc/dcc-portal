@@ -28,7 +28,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class MutationRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
   private static final String DEFAULT_SORT = "affectedDonorCountFiltered";
-  private static final EntityType KIND = EntityType.MUTATION;
   private static final IndexType CENTRIC_TYPE = IndexType.MUTATION_CENTRIC;
 
   @InjectMocks
@@ -38,12 +37,12 @@ public class MutationRepositoryIntegrationTest extends BaseRepositoryIntegration
 
   @Test
   public void test_aggs() {
-    aggregations(repository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
+    aggregations(repository, DEFAULT_SORT, CENTRIC_TYPE, EntityType.MUTATION);
   }
 
   @Test
   public void test_score() {
-    scores(repository, donorRepository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
+    scores(repository, donorRepository, DEFAULT_SORT, CENTRIC_TYPE, EntityType.MUTATION);
   }
 
   @Test

@@ -32,6 +32,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public class JqlFilters {
 
   @NonNull
-  Map<String, List<JqlField>> kindValues;
+  Map<String, List<JqlField>> entityValues;
 
 }

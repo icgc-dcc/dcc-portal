@@ -80,10 +80,10 @@ import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.stats.Stats;
 import org.icgc.dcc.portal.server.model.EntitySetTermFacet;
 import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Statistics;
 import org.icgc.dcc.portal.server.model.TermFacet.Term;
-import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.server.repository.TermsLookupRepository.TermLookupType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,9 +102,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class DonorRepository implements Repository {
-
-  private static final IndexType TYPE = IndexType.DONOR;
-  private static final EntityType KIND = EntityType.DONOR;
 
   // These are the raw field names from the 'donor-text' type in the main index.
   public static final Map<String, String> DONOR_ID_SEARCH_FIELDS = transformToTextSearchFieldMap(
@@ -158,14 +155,14 @@ public class DonorRepository implements Repository {
   private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
 
   private final Client client;
-  private final String index;
+  private final String indexName;
   private final String repoIndexName;
   private final QueryEngine queryEngine;
 
   @Autowired
   public DonorRepository(Client client, QueryEngine queryEngine,
-      @Value("#{indexName}") String index, @Value("#{repoIndexName}") String repoIndexName) {
-    this.index = index;
+      @Value("#{indexName}") String indexName, @Value("#{repoIndexName}") String repoIndexName) {
+    this.indexName = indexName;
     this.repoIndexName = repoIndexName;
     this.client = client;
     this.queryEngine = queryEngine;
@@ -336,7 +333,7 @@ public class DonorRepository implements Repository {
     val type = IndexType.DONOR_CENTRIC;
     val fieldMap = DONORS_FIELDS_MAPPING_FOR_PHENOTYPE;
 
-    val searchBuilder = client.prepareSearch(index)
+    val searchBuilder = client.prepareSearch(indexName)
         .setTypes(type.getId())
         .setSearchType(QUERY_THEN_FETCH)
         .setFrom(0)
@@ -429,22 +426,22 @@ public class DonorRepository implements Repository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(index, TYPE.getId(), id)
-        .setFields(getFields(query, KIND));
-    setFetchSourceOfGetRequest(search, query, KIND);
+    val search = client.prepareGet(indexName, IndexType.DONOR.getId(), id)
+        .setFields(getFields(query, EntityType.DONOR));
+    setFetchSourceOfGetRequest(search, query, EntityType.DONOR);
 
     val response = search.execute().actionGet();
 
     if (response.isExists()) {
-      return createResponseMap(response, query, KIND);
+      return createResponseMap(response, query, EntityType.DONOR);
     }
 
     if (!isRepositoryDonor(client, id, repoIndexName)) {
       // We know this is guaranteed to throw a 404, since the 'id' was not found in the first query.
-      checkResponseState(id, response, KIND);
+      checkResponseState(id, response, EntityType.DONOR);
     }
 
-    return singletonMap(FIELDS_MAPPING.get(KIND).get("id"), id);
+    return singletonMap(FIELDS_MAPPING.get(EntityType.DONOR).get("id"), id);
   }
 
   /**
@@ -457,8 +454,8 @@ public class DonorRepository implements Repository {
     val donorFilters = FilterBuilders.boolFilter()
         .must(FilterBuilders.termFilter("_project_id", projectId));
 
-    val search = client.prepareSearch(index)
-        .setTypes(TYPE.getId())
+    val search = client.prepareSearch(indexName)
+        .setTypes(IndexType.DONOR.getId())
         .setSearchType(QUERY_THEN_FETCH)
         .setSize(6000)
         .setFetchSource("specimen", null)
@@ -510,10 +507,10 @@ public class DonorRepository implements Repository {
   public SearchResponse validateIdentifiers(@NonNull List<String> ids, boolean isForExternalFile) {
     val maxSize = 5000;
     val fields = isForExternalFile ? FILE_DONOR_ID_SEARCH_FIELDS : DONOR_ID_SEARCH_FIELDS;
-    val indexName = isForExternalFile ? repoIndexName : index;
+    val index = isForExternalFile ? repoIndexName : indexName;
     val indexType = isForExternalFile ? IndexType.FILE_DONOR_TEXT : IndexType.DONOR_TEXT;
 
-    val search = client.prepareSearch(indexName)
+    val search = client.prepareSearch(index)
         .setTypes(indexType.getId())
         .setSearchType(QUERY_THEN_FETCH)
         .setSize(maxSize);

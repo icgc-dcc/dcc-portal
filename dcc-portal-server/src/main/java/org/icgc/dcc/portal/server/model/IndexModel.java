@@ -22,6 +22,11 @@ import com.google.common.collect.Maps;
 
 import lombok.val;
 
+/**
+ * Abstract class the holds mappings of field names in our models to the raw elasticsearch fields. PQL only allows for
+ * searching on Centric types, this provides us with utility for using the elasticsearch api to write custom queries not
+ * supported by PQL.
+ */
 @Component
 public class IndexModel {
 
@@ -385,7 +390,7 @@ public class IndexModel {
           .put("geneCount", "gene_count")
           .build();
 
-  private static final ImmutableMap<EntityType, TypeModel> TYPE_MODEL_BY_KIND =
+  private static final ImmutableMap<EntityType, TypeModel> TYPE_MODEL_BY_ENTITY =
       ImmutableMap.<EntityType, TypeModel> builder()
           .put(EntityType.DONOR, org.dcc.portal.pql.meta.IndexModel.getDonorCentricTypeModel())
           .put(EntityType.MUTATION, org.dcc.portal.pql.meta.IndexModel.getMutationCentricTypeModel())
@@ -429,8 +434,8 @@ public class IndexModel {
     super();
   }
 
-  public static String[] getFields(Query query, EntityType kind) {
-    val typeFieldsMap = FIELDS_MAPPING.get(kind);
+  public static String[] getFields(Query query, EntityType entityType) {
+    val typeFieldsMap = FIELDS_MAPPING.get(entityType);
     val result = Lists.<String> newArrayList();
 
     if (query.hasFields()) {
@@ -442,17 +447,17 @@ public class IndexModel {
     } else {
       result.addAll(typeFieldsMap.values().asList());
     }
-    clearInvalidFields(result, kind);
+    clearInvalidFields(result, entityType);
     return result.toArray(new String[result.size()]);
   }
 
   /**
    * Remove fields that are objects in ES. They must be retrieved from source
    */
-  private static void clearInvalidFields(List<String> fields, EntityType kind) {
-    val typeFieldsMap = FIELDS_MAPPING.get(kind);
+  private static void clearInvalidFields(List<String> fields, EntityType entityType) {
+    val typeFieldsMap = FIELDS_MAPPING.get(entityType);
 
-    switch (kind) {
+    switch (entityType) {
     case GENE:
       fields.remove(typeFieldsMap.get("externalDbIds"));
       fields.remove(typeFieldsMap.get("pathways"));
@@ -475,9 +480,9 @@ public class IndexModel {
     }
   }
 
-  private static ImmutableMap<String, String> createFieldsMapping(EntityType kind) {
-    val typeModel = TYPE_MODEL_BY_KIND.get(kind);
-    checkState(typeModel != null, "TypeModel is not defined for kind '%s'", kind);
+  private static ImmutableMap<String, String> createFieldsMapping(EntityType entityType) {
+    val typeModel = TYPE_MODEL_BY_ENTITY.get(entityType);
+    checkState(typeModel != null, "TypeModel is not defined for entityType '%s'", entityType);
     val result = typeModel.getAliases().stream()
         .collect(toMap(k -> k, v -> typeModel.getField(v)));
 

@@ -111,8 +111,7 @@ public class SearchRepository {
       FieldNames.FILE_NAME, FieldNames.INCHIKEY, FieldNames.ID,
       FieldNames.CHEMBL, FieldNames.DRUG_BANK, FieldNames.ATC_CODES, FieldNames.ATC_LEVEL5_CODES);
 
-  private static final EntityType KIND = EntityType.KEYWORD;
-  private static final Set<String> FIELD_KEYS = FIELDS_MAPPING.get(KIND).keySet();
+  private static final Set<String> FIELD_KEYS = FIELDS_MAPPING.get(EntityType.KEYWORD).keySet();
   private static final float TIE_BREAKER = 0.7F;
   private static final List<String> SIMPLE_TERM_FILTER_TYPES = ImmutableList.of(
       Types.PATHWAY, Types.CURATED_SET, Types.GO_TERM);
@@ -186,7 +185,7 @@ public class SearchRepository {
         .setFrom(query.getFrom())
         .setSize(query.getSize())
         .setTypes(getSearchTypes(type))
-        .addFields(getFields(query, KIND))
+        .addFields(getFields(query, EntityType.KEYWORD))
         .setQuery(filteredQuery)
         .setPostFilter(getPostFilter(type));
 

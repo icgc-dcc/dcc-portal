@@ -40,8 +40,8 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,17 +58,15 @@ import lombok.extern.slf4j.Slf4j;
 public class MutationRepository implements Repository {
 
   private static final IndexType CENTRIC_TYPE = IndexType.MUTATION_CENTRIC;
-  private static final EntityType KIND = EntityType.MUTATION;
-
   private final QueryEngine queryEngine;
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
 
   private final Client client;
-  private final String index;
+  private final String indexName;
 
   @Autowired
-  MutationRepository(Client client, QueryEngine queryEngine, @Value("#{indexName}") String index) {
-    this.index = index;
+  MutationRepository(Client client, QueryEngine queryEngine, @Value("#{indexName}") String indexName) {
+    this.indexName = indexName;
     this.client = client;
     this.queryEngine = queryEngine;
   }
@@ -167,7 +165,7 @@ public class MutationRepository implements Repository {
   }
 
   public SearchRequestBuilder buildCountSearchFromQuery(QueryBuilder query, IndexType type) {
-    val search = client.prepareSearch(index).setTypes(type.getId()).setSearchType(COUNT);
+    val search = client.prepareSearch(indexName).setTypes(type.getId()).setSearchType(COUNT);
     search.setQuery(query);
 
     return search;
@@ -194,17 +192,17 @@ public class MutationRepository implements Repository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(index, CENTRIC_TYPE.getId(), id);
-    search.setFields(getFields(query, KIND));
-    String[] sourceFields = resolveSourceFields(query, KIND);
+    val search = client.prepareGet(indexName, CENTRIC_TYPE.getId(), id);
+    search.setFields(getFields(query, EntityType.MUTATION));
+    String[] sourceFields = resolveSourceFields(query, EntityType.MUTATION);
     if (sourceFields != EMPTY_SOURCE_FIELDS) {
-      search.setFetchSource(resolveSourceFields(query, KIND), EMPTY_SOURCE_FIELDS);
+      search.setFetchSource(resolveSourceFields(query, EntityType.MUTATION), EMPTY_SOURCE_FIELDS);
     }
 
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.MUTATION);
 
-    val map = createResponseMap(response, query, KIND);
+    val map = createResponseMap(response, query, EntityType.MUTATION);
     log.debug("{}", map);
 
     return map;

@@ -33,9 +33,9 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Query.QueryBuilder;
-import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.util.JsonUtils;
 import org.mockito.Spy;
@@ -168,7 +168,7 @@ public class BaseRepositoryIntegrationTest {
     return search.execute().actionGet();
   }
 
-  void scores(Repository repo, Repository countRepo, String sort, IndexType type, EntityType kind) {
+  void scores(Repository repo, Repository countRepo, String sort, IndexType type, EntityType entityType) {
     val fIter = FILTERS.iterator();
     val query = score(sort);
     val sr = setup(repo, query, type);
@@ -179,7 +179,7 @@ public class BaseRepositoryIntegrationTest {
       checkEmpty(response);
 
       val filter = fIter.next();
-      val queries = generateCountsQueries(filter, response, sort, kind);
+      val queries = generateCountsQueries(filter, response, sort, entityType);
 
       // Execute MultiSearch Request for all Ids
       val csr = countRepo.counts(queries);
@@ -199,11 +199,11 @@ public class BaseRepositoryIntegrationTest {
     }
   }
 
-  LinkedHashMap<String, Query> generateCountsQueries(String f, SearchResponse r, String sort, EntityType kind) {
+  LinkedHashMap<String, Query> generateCountsQueries(String f, SearchResponse r, String sort, EntityType entityType) {
     val queries = Maps.<String, Query> newLinkedHashMap();
 
     for (val hit : r.getHits().getHits()) { // SearchResponses
-      val updateNode = buildFilterNode("id", hit.getId(), kind.getId());
+      val updateNode = buildFilterNode("id", hit.getId(), entityType.getId());
       val filter = JsonUtils.merge(new FiltersParam(f).get(), updateNode);
       val query = query(sort).filters(filter).build();
 
@@ -213,7 +213,7 @@ public class BaseRepositoryIntegrationTest {
     return queries;
   }
 
-  void aggregations(Repository repo, String sort, IndexType type, EntityType kind) {
+  void aggregations(Repository repo, String sort, IndexType type, EntityType entityType) {
     val fIter = FILTERS.iterator();
     val query = query(sort).includes(Lists.newArrayList("facets"));
     val sr = setup(repo, query, type);
@@ -224,7 +224,7 @@ public class BaseRepositoryIntegrationTest {
       val filter = fIter.next();
       checkEmpty(response);
 
-      val queries = generateAggsQueries(filter, response, sort, kind);
+      val queries = generateAggsQueries(filter, response, sort, entityType);
 
       // Execute MultiSearch Request for all Entry values for Facet
       val csr = repo.nestedCounts(queries);
@@ -262,24 +262,24 @@ public class BaseRepositoryIntegrationTest {
   }
 
   LinkedHashMap<String, LinkedHashMap<String, Query>> generateAggsQueries(String f, SearchResponse r, String sort,
-      EntityType kind) {
+      EntityType entityType) {
     val queries = Maps.<String, LinkedHashMap<String, Query>> newLinkedHashMap();
 
     for (val agg : r.getAggregations()) { // EnrichmentSearchResponses
       val termsAggs = (Terms) agg;
 
       // Build map of Entry -> Query
-      val subQueries = generateEntryQueries(f, termsAggs, sort, kind);
+      val subQueries = generateEntryQueries(f, termsAggs, sort, entityType);
       queries.put(termsAggs.getName(), subQueries);
     }
     return queries;
   }
 
-  LinkedHashMap<String, Query> generateEntryQueries(String f, Terms termsAggs, String sort, EntityType kind) {
+  LinkedHashMap<String, Query> generateEntryQueries(String f, Terms termsAggs, String sort, EntityType entityType) {
     val queries = Maps.<String, Query> newLinkedHashMap();
 
     for (val entry : termsAggs.getBuckets()) { // Facet Values
-      val updateNode = buildFilterNode(termsAggs.getName(), entry.getKey(), kind.getId());
+      val updateNode = buildFilterNode(termsAggs.getName(), entry.getKey(), entityType.getId());
       val filter = JsonUtils.merge(new FiltersParam(f).get(), updateNode);
       val query = query(sort).filters(filter).build();
 

@@ -53,9 +53,9 @@ public class DrugRepository {
   private final QueryEngine queryEngine;
 
   @Autowired
-  public DrugRepository(Client client, QueryEngine queryEngine, @Value("#{indexName}") String index) {
+  public DrugRepository(Client client, QueryEngine queryEngine, @Value("#{indexName}") String indexName) {
     this.client = client;
-    this.indexName = index;
+    this.indexName = indexName;
     this.queryEngine = queryEngine;
   }
 

@@ -15,8 +15,8 @@ import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,20 +30,19 @@ import lombok.extern.slf4j.Slf4j;
 public class ProjectRepository {
 
   private static final String TYPE_ID = IndexType.PROJECT.getId();
-  private static final EntityType KIND = EntityType.PROJECT;
-  private static final Map<String, String> FIELD_MAP = FIELDS_MAPPING.get(KIND);
+  private static final Map<String, String> FIELD_MAP = FIELDS_MAPPING.get(EntityType.PROJECT);
 
   private final Client client;
-  private final String index;
+  private final String indexName;
   private final String repoIndexName;
 
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
   private final QueryEngine queryEngine;
 
   @Autowired
-  ProjectRepository(Client client, QueryEngine engine, @Value("#{indexName}") String index,
+  ProjectRepository(Client client, QueryEngine engine, @Value("#{indexName}") String indexName,
       @Value("#{repoIndexName}") String repoIndexName) {
-    this.index = index;
+    this.indexName = indexName;
     this.repoIndexName = repoIndexName;
     this.client = client;
     this.queryEngine = engine;
@@ -63,14 +62,14 @@ public class ProjectRepository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(index, TYPE_ID, id)
-        .setFields(getFields(query, KIND));
-    setFetchSourceOfGetRequest(search, query, KIND);
+    val search = client.prepareGet(indexName, TYPE_ID, id)
+        .setFields(getFields(query, EntityType.PROJECT));
+    setFetchSourceOfGetRequest(search, query, EntityType.PROJECT);
 
     val response = search.execute().actionGet();
 
     if (response.isExists()) {
-      val result = createResponseMap(response, query, KIND);
+      val result = createResponseMap(response, query, EntityType.PROJECT);
       log.debug("Found project: '{}'.", result);
 
       return result;
@@ -78,7 +77,7 @@ public class ProjectRepository {
 
     if (!isRepositoryDonorInProject(client, id, repoIndexName)) {
       // We know this is guaranteed to throw a 404, since the 'id' was not found in the first query.
-      checkResponseState(id, response, KIND);
+      checkResponseState(id, response, EntityType.PROJECT);
     }
 
     return singletonMap(FIELD_MAP.get("id"), id);

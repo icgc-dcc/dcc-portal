@@ -30,8 +30,8 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -43,29 +43,25 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ReleaseRepository {
 
-  private static final IndexType TYPE = IndexType.RELEASE;
-  private static final EntityType KIND = EntityType.RELEASE;
-
   private final Client client;
-
-  private final String index;
+  private final String indexName;
 
   @Autowired
-  ReleaseRepository(Client client, @Value("#{indexName}") String index) {
-    this.index = index;
+  ReleaseRepository(Client client, @Value("#{indexName}") String indexName) {
+    this.indexName = indexName;
     this.client = client;
   }
 
   public SearchResponse findAll(Query query) {
     val search = client
-        .prepareSearch(index)
-        .setTypes(TYPE.getId())
+        .prepareSearch(indexName)
+        .setTypes(IndexType.RELEASE.getId())
         .setSearchType(QUERY_THEN_FETCH)
         .setFrom(query.getFrom())
         .setSize(query.getSize())
-        .addSort(FIELDS_MAPPING.get(KIND).get(query.getSort()), query.getOrder());
+        .addSort(FIELDS_MAPPING.get(EntityType.RELEASE).get(query.getSort()), query.getOrder());
 
-    search.addFields(getFields(query, KIND));
+    search.addFields(getFields(query, EntityType.RELEASE));
 
     log.debug("{}", search);
     SearchResponse response = search.execute().actionGet();
@@ -75,20 +71,21 @@ public class ReleaseRepository {
   }
 
   public long count(Query query) {
-    SearchRequestBuilder search = client.prepareSearch(index).setTypes(TYPE.getId()).setSearchType(COUNT);
+    SearchRequestBuilder search =
+        client.prepareSearch(indexName).setTypes(IndexType.RELEASE.getId()).setSearchType(COUNT);
 
     log.debug("{}", search);
     return search.execute().actionGet().getHits().getTotalHits();
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(index, TYPE.getId(), id);
-    search.setFields(getFields(query, KIND));
+    val search = client.prepareGet(indexName, IndexType.RELEASE.getId(), id);
+    search.setFields(getFields(query, EntityType.RELEASE));
 
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.RELEASE);
 
-    val map = createResponseMap(response, query, KIND);
+    val map = createResponseMap(response, query, EntityType.RELEASE);
     log.debug("{}", map);
 
     return map;

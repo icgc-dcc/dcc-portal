@@ -55,8 +55,8 @@ import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Universe;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,9 +80,6 @@ public class GeneRepository implements Repository {
 
   private static final IndexType CENTRIC_TYPE = IndexType.GENE_CENTRIC;
   private static final String GENE_TEXT = IndexType.GENE_TEXT.getId();
-  private static final IndexType TYPE = IndexType.GENE;
-  private static final EntityType KIND = EntityType.GENE;
-
   private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
   private static final String GENE_SYMBOL_FIELD_NAME = "symbol";
   private static final String ENSEMBL_ID_FIELD_NAME = "id";
@@ -94,14 +91,14 @@ public class GeneRepository implements Repository {
           "uniprotkbSwissprot.search", "external_db_ids.uniprotkb_swissprot");
 
   private final Client client;
-  private final String index;
+  private final String indexName;
 
   private final QueryEngine queryEngine;
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
 
   @Autowired
-  GeneRepository(Client client, QueryEngine queryEngine, @Value("#{indexName}") String index) {
-    this.index = index;
+  GeneRepository(Client client, QueryEngine queryEngine, @Value("#{indexName}") String indexName) {
+    this.indexName = indexName;
     this.client = client;
     this.queryEngine = queryEngine;
   }
@@ -238,14 +235,14 @@ public class GeneRepository implements Repository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(index, TYPE.getId(), id);
+    val search = client.prepareGet(indexName, IndexType.GENE.getId(), id);
 
-    val sourceFields = prepareSourceFields(query, getFields(query, KIND));
+    val sourceFields = prepareSourceFields(query, getFields(query, EntityType.GENE));
     String[] excludeFields = null;
     search.setFetchSource(sourceFields, excludeFields);
 
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.GENE);
 
     val result = response.getSource();
     log.debug("{}", result);
@@ -254,7 +251,7 @@ public class GeneRepository implements Repository {
   }
 
   private String[] prepareSourceFields(Query query, String[] fields) {
-    val typeFieldsMap = FIELDS_MAPPING.get(KIND);
+    val typeFieldsMap = FIELDS_MAPPING.get(EntityType.GENE);
     val result = Lists.newArrayList(fields);
 
     if (!query.hasFields()) {
@@ -279,7 +276,7 @@ public class GeneRepository implements Repository {
   public SearchResponse validateIdentifiers(List<String> input) {
     val boolQuery = boolQuery();
 
-    val search = client.prepareSearch(index)
+    val search = client.prepareSearch(indexName)
         .setTypes("gene-text")
         .setSearchType(QUERY_THEN_FETCH)
         .setSize(5000);
@@ -361,7 +358,7 @@ public class GeneRepository implements Repository {
   @NonNull
   private SearchResponse searchGenes(String indexType, String logMessage,
       Consumer<SearchRequestBuilder> customizer) {
-    val request = client.prepareSearch(index).setTypes(indexType);
+    val request = client.prepareSearch(indexName).setTypes(indexType);
     customizer.accept(request);
 
     log.debug("{}; ES query is: '{}'", logMessage, request);

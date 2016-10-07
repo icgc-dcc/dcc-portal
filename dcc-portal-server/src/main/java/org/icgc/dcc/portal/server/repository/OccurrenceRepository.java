@@ -67,8 +67,8 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.search.SearchHitField;
 import org.icgc.dcc.common.core.model.ConsequenceType;
 import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,7 +88,6 @@ import lombok.extern.slf4j.Slf4j;
 public class OccurrenceRepository {
 
   private static final IndexType CENTRIC_TYPE = IndexType.OCCURRENCE_CENTRIC;
-  private static final EntityType KIND = EntityType.OCCURRENCE;
   private final static TimeValue KEEP_ALIVE = new TimeValue(10000);
 
   private static final Jql2PqlConverter PQL_CONVERTER = Jql2PqlConverter.getInstance();
@@ -115,14 +114,14 @@ public class OccurrenceRepository {
       PQL_ALIAS_CONSEQUENCE_PROJECT_ID, "project._project_id");
 
   private final Client client;
-  private final String index;
+  private final String indexName;
   private final QueryEngine queryEngine;
 
   @Autowired
-  public OccurrenceRepository(Client client, @Value("#{indexName}") String index) {
-    this.index = index;
+  public OccurrenceRepository(Client client, @Value("#{indexName}") String indexName) {
+    this.indexName = indexName;
     this.client = client;
-    this.queryEngine = new QueryEngine(client, index);
+    this.queryEngine = new QueryEngine(client, indexName);
   }
 
   SearchRequestBuilder buildFindAllRequest(Query query) {
@@ -160,13 +159,13 @@ public class OccurrenceRepository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(index, CENTRIC_TYPE.getId(), id);
-    search.setFields(getFields(query, KIND));
+    val search = client.prepareGet(indexName, CENTRIC_TYPE.getId(), id);
+    search.setFields(getFields(query, EntityType.OCCURRENCE));
 
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.OCCURRENCE);
 
-    val map = createResponseMap(response, query, KIND);
+    val map = createResponseMap(response, query, EntityType.OCCURRENCE);
     log.debug("{}", map);
 
     return map;

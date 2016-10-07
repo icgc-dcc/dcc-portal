@@ -42,11 +42,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class DiagramRepository {
 
-  /**
-   * Constants.
-   */
-  private static final IndexType TYPE = IndexType.DIAGRAM;
-  private static final EntityType KIND = EntityType.DIAGRAM;
   private static final Jql2PqlConverter CONVERTER = Jql2PqlConverter.getInstance();
 
   /**
@@ -75,12 +70,12 @@ public class DiagramRepository {
   }
 
   public Map<String, Object> findOne(@NonNull String id, @NonNull Query query) {
-    val search = client.prepareGet(indexName, TYPE.getId(), id);
+    val search = client.prepareGet(indexName, IndexType.DIAGRAM.getId(), id);
 
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.DIAGRAM);
 
-    val map = createResponseMap(response, query, KIND);
+    val map = createResponseMap(response, query, EntityType.DIAGRAM);
     log.debug("{}", map);
 
     return map;

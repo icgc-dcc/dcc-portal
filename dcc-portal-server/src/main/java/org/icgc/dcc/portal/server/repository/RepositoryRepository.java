@@ -47,11 +47,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class RepositoryRepository {
 
-  /**
-   * Constants.
-   */
-  private static final IndexType TYPE = IndexType.REPOSITORY;
-  private static final EntityType KIND = EntityType.REPOSITORY;
   private static final ObjectMapper MAPPER = DEFAULT.disable(FAIL_ON_UNKNOWN_PROPERTIES); // Just in case we add more
                                                                                           // fields upstream
 
@@ -69,18 +64,18 @@ public class RepositoryRepository {
 
   @Cacheable("repository")
   public Repository findOne(String id) {
-    val search = client.prepareGet(index, TYPE.getId(), id);
+    val search = client.prepareGet(index, IndexType.REPOSITORY.getId(), id);
 
     log.debug("{}", search);
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.REPOSITORY);
 
     return convertSource(response.getSourceAsString());
   }
 
   @Cacheable("repositories")
   public List<Repository> findAll() {
-    val search = client.prepareSearch(index).setTypes(TYPE.getId()).setSize(100).setSearchType(QUERY_THEN_FETCH);
+    val search = client.prepareSearch(index).setTypes(IndexType.REPOSITORY.getId()).setSize(100).setSearchType(QUERY_THEN_FETCH);
 
     log.debug("{}", search);
     val response = search.execute().actionGet();

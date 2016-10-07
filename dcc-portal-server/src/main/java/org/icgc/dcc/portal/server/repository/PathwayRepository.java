@@ -27,8 +27,8 @@ import java.util.Map;
 
 import org.elasticsearch.client.Client;
 import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -40,30 +40,27 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class PathwayRepository {
 
-  private static final IndexType TYPE = IndexType.PATHWAY;
-  private static final EntityType KIND = EntityType.PATHWAY;
-
   private final Client client;
-  private final String index;
+  private final String indexName;
 
   @Autowired
-  PathwayRepository(Client client, @Value("#{indexName}") String index) {
-    this.index = index;
+  PathwayRepository(Client client, @Value("#{indexName}") String indexName) {
+    this.indexName = indexName;
     this.client = client;
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(index, TYPE.getId(), id);
-    search.setFields(getFields(query, KIND));
-    String[] sourceFields = resolveSourceFields(query, KIND);
+    val search = client.prepareGet(indexName, IndexType.PATHWAY.getId(), id);
+    search.setFields(getFields(query, EntityType.PATHWAY));
+    String[] sourceFields = resolveSourceFields(query, EntityType.PATHWAY);
     if (sourceFields != EMPTY_SOURCE_FIELDS) {
-      search.setFetchSource(resolveSourceFields(query, KIND), EMPTY_SOURCE_FIELDS);
+      search.setFetchSource(resolveSourceFields(query, EntityType.PATHWAY), EMPTY_SOURCE_FIELDS);
     }
 
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.PATHWAY);
 
-    val map = createResponseMap(response, query, KIND);
+    val map = createResponseMap(response, query, EntityType.PATHWAY);
     log.debug("{}", map);
 
     return map;

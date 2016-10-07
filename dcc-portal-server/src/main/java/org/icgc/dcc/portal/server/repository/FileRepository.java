@@ -142,14 +142,13 @@ public class FileRepository {
   private static final SortNode FILE_INFO_SORT = sortBuilder()
       .sortAsc(Fields.REPO_TYPE).build();
 
-  private static final EntityType KIND = EntityType.FILE;
   private static final TypeModel TYPE_MODEL = IndexModel.getFileTypeModel();
   private static final String FILE_INDEX_TYPE = FILE.getId();
   private static final String FILE_DONOR_TEXT_INDEX_TYPE = IndexType.FILE_DONOR_TEXT.getId();
 
   private static final String DONOR_ID_RAW_FIELD_NAME = toRawFieldName(Fields.DONOR_ID);
   private static final Jql2PqlConverter PQL_CONVERTER = Jql2PqlConverter.getInstance();
-  private static final Map<String, String> JQL_FIELD_NAME_MAPPING = FIELDS_MAPPING.get(KIND);
+  private static final Map<String, String> JQL_FIELD_NAME_MAPPING = FIELDS_MAPPING.get(EntityType.FILE);
 
   private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
 
@@ -217,7 +216,7 @@ public class FileRepository {
     val search = client.prepareGet(repoIndexName, FILE_INDEX_TYPE, id);
     val response = search.execute().actionGet();
     // This check is important as it validates if there is any document at all in the GET response.
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.FILE);
 
     return response;
   }

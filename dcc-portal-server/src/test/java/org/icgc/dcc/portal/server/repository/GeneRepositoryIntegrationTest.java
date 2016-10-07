@@ -29,8 +29,6 @@ public class GeneRepositoryIntegrationTest extends BaseRepositoryIntegrationTest
 
   private static final String DEFAULT_SORT = "affectedDonorCountFiltered";
   private static final IndexType CENTRIC_TYPE = IndexType.GENE_CENTRIC;
-  private static final EntityType KIND = EntityType.GENE;
-
   @InjectMocks
   GeneRepository repository;
   @InjectMocks
@@ -38,12 +36,12 @@ public class GeneRepositoryIntegrationTest extends BaseRepositoryIntegrationTest
 
   @Test
   public void test_aggs() {
-    aggregations(repository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
+    aggregations(repository, DEFAULT_SORT, CENTRIC_TYPE, EntityType.GENE);
   }
 
   @Test
   public void test_score() {
-    scores(repository, donorRepository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
+    scores(repository, donorRepository, DEFAULT_SORT, CENTRIC_TYPE, EntityType.GENE);
   }
 
   @Test
