@@ -529,5 +529,13 @@ a.no-style {
   }
 }
 
+.loading-block{
+  letter-spacing: -0.4em; 
+  font-size: 15px; 
+  color: #ddd; 
+  display: inline-block; 
+  margin-right: 4px;
+}
+
 @import "override.scss";
 @import "flags.scss";
