@@ -1,6 +1,6 @@
 <h1 data-ui-scrollfix=79><span class="t_badge t_badge_icon t_badge__projects"><i class="icon-list"></i></span><translate>Cancer Projects</translate></h1>
 <aside class="t_sidebar">
-    <div style="margin-right: -2rem; position: relative">
+    <div class="t_facets_container">
         <div data-ng-if="ProjectsCtrl.loading" class="loadingOverlay"></div>
         <div data-ng-if="!ProjectsCtrl.projects.facets" class="loading loading-icon">
             <i class="icon-spinner icon-spin"></i>
@@ -23,7 +23,7 @@
         </ul>
     </div>
 </aside>
-<article>
+<article style="margin-right:1px;">
 <div data-ng-if="ProjectsCtrl.loading" class="loadingOverlay"></div>
 <div data-ng-show="ProjectsCtrl.projects">
 <current></current>

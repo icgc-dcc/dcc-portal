@@ -140,7 +140,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
   $location, gvConstants, gettextCatalog) {
   return {
     restrict: 'A',
-    template: '<div id="genome-viewer" style="border:1px solid #d3d3d3;border-top-width: 0px;"></div>',
+    template: '<div id="genome-viewer" style="border:1px solid #d3d3d3;border-left:none;border-top-width: 0px;"></div>',
     replace: true,
     controller: 'GenomeViewerController',
     link: function (scope, element, attrs, GenomeViewerController) {
