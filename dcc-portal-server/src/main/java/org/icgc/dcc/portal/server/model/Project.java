@@ -80,7 +80,7 @@ public class Project {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public Project(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.PROJECT);
+    val fields = FIELDS_MAPPING.get(EntityType.PROJECT);
     id = getString(fieldMap.get(fields.get("id")));
     primarySite = getString(fieldMap.get(fields.get("primarySite")));
     name = getString(fieldMap.get(fields.get("name")));

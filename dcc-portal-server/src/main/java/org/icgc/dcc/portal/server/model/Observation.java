@@ -56,7 +56,7 @@ public class Observation {
 
   @JsonCreator
   public Observation(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.OBSERVATION);
+    val fields = FIELDS_MAPPING.get(EntityType.OBSERVATION);
 
     matchedICGCSampleId = (String) fieldMap.get(fields.get("matchedICGCSampleId"));
     icgcSampleId = (String) fieldMap.get(fields.get("icgcSampleId"));

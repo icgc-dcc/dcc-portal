@@ -17,7 +17,7 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class MutationRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
   private static final String DEFAULT_SORT = "affectedDonorCountFiltered";
-  private static final Kind KIND = Kind.MUTATION;
+  private static final EntityType KIND = EntityType.MUTATION;
   private static final IndexType CENTRIC_TYPE = IndexType.MUTATION_CENTRIC;
 
   @InjectMocks

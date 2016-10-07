@@ -39,7 +39,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
@@ -58,7 +58,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MutationRepository implements Repository {
 
   private static final IndexType CENTRIC_TYPE = IndexType.MUTATION_CENTRIC;
-  private static final Kind KIND = Kind.MUTATION;
+  private static final EntityType KIND = EntityType.MUTATION;
 
   private final QueryEngine queryEngine;
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();

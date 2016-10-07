@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 
 import org.dcc.portal.pql.query.QueryEngine;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.test.TestIndex;
@@ -35,7 +35,7 @@ public class DiagramRepositoryTest extends BaseElasticSearchTest {
 
   DiagramRepository diagramRepository;
 
-  ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(Kind.DIAGRAM);
+  ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.DIAGRAM);
 
   @Before
   public void setUp() throws Exception {

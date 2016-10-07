@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.elasticsearch.action.search.MultiSearchResponse;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Mutation;
 import org.icgc.dcc.portal.server.model.Mutations;
 import org.icgc.dcc.portal.server.model.Pagination;
@@ -66,7 +66,7 @@ public class MutationService {
     val list = ImmutableList.<Mutation> builder();
 
     for (val hit : hits) {
-      val map = createResponseMap(hit, query, Kind.MUTATION);
+      val map = createResponseMap(hit, query, EntityType.MUTATION);
       if (includeScore) map.put("_score", hit.getScore());
       list.add(new Mutation(map));
     }
@@ -85,7 +85,7 @@ public class MutationService {
     val list = ImmutableList.<Mutation> builder();
 
     for (val hit : hits) {
-      val map = createResponseMap(hit, query, Kind.MUTATION);
+      val map = createResponseMap(hit, query, EntityType.MUTATION);
       map.put("_score", hit.getScore());
       list.add(new Mutation(map));
     }

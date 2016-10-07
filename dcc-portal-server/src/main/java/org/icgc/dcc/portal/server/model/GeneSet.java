@@ -75,7 +75,7 @@ public class GeneSet {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public GeneSet(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.GENE_SET);
+    val fields = FIELDS_MAPPING.get(EntityType.GENE_SET);
     id = getString(fieldMap.get(fields.get("id")));
     name = getString(fieldMap.get(fields.get("name")));
     source = getString(fieldMap.get(fields.get("source")));

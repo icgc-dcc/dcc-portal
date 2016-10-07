@@ -14,7 +14,7 @@ import java.util.Map;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProjectRepository {
 
   private static final String TYPE_ID = IndexType.PROJECT.getId();
-  private static final Kind KIND = Kind.PROJECT;
+  private static final EntityType KIND = EntityType.PROJECT;
   private static final Map<String, String> FIELD_MAP = FIELDS_MAPPING.get(KIND);
 
   private final Client client;

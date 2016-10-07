@@ -135,7 +135,7 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
     // Creating a new Object for table filters
     function getUiTargetedCompoundGenesJSON(genes){
       return genes.map(function (gene) {
-        return _.extend({}, {
+        return _.extend({}, gene, {
           uiId: gene.id,
           uiName: gene.name,
           uiSymbol: gene.symbol,
@@ -144,8 +144,7 @@ angular.module('icgc.compounds.controllers', ['icgc.compounds.services'])
           uiAffectedDonorCountFilter: gene.affectedDonorCountFilter,
           uiAffectedDonorCountFiltered: $filter('number')(gene.affectedDonorCountFiltered),
           uiAffectedDonorCountTotal: $filter('number')(_ctrl.getAffectedDonorCountTotal()),
-          uiAffectedDonorCountTotalPercentage: $filter('number')
-            ((gene.affectedDonorCountFiltered/_ctrl.getAffectedDonorCountTotal() * 100), 2) + '%',
+          uiAffectedDonorCountTotalPercentage: $filter('number')((gene.affectedDonorCountFiltered/_ctrl.getAffectedDonorCountTotal() * 100), 2) + '%',
           uiMutationCountTotal: $filter('number')(gene.mutationCountTotal),
           uiMutationCountFilter : gene.mutationCountFilter
         });

@@ -27,7 +27,7 @@ import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
@@ -48,7 +48,7 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
 
   ProjectRepository projectRepository;
 
-  ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(Kind.PROJECT);
+  ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.PROJECT);
 
   @Before
   public void setUp() throws Exception {

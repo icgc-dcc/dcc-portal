@@ -54,7 +54,7 @@ import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Universe;
@@ -81,7 +81,7 @@ public class GeneRepository implements Repository {
   private static final IndexType CENTRIC_TYPE = IndexType.GENE_CENTRIC;
   private static final String GENE_TEXT = IndexType.GENE_TEXT.getId();
   private static final IndexType TYPE = IndexType.GENE;
-  private static final Kind KIND = Kind.GENE;
+  private static final EntityType KIND = EntityType.GENE;
 
   private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
   private static final String GENE_SYMBOL_FIELD_NAME = "symbol";

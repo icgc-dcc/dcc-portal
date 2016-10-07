@@ -47,10 +47,11 @@ gettextCatalog as a dependency.
 
 ### Extracting Strings
 
-Strings can be extracted using different build tools like Grunt, Gulp and webpack. However, Grunt
-is the only one officially supported by the angular-gettext community. The build tool will extract
-the strings in a `.pot` file: a standard gettext template that lists all the strings that should be
-translated. Grunt plugin is already configured for the portal. You will only need to run extract task `grunt extractText` to get the annotated strings.
+Run the following command in the dcc-portal-ui directory:
+
+```
+npm run extract-text
+```
 
 ### Translating Strings
 
@@ -58,10 +59,13 @@ Please look at the [Translation](#translation) section for more details.
 
 ### Compiling translations
 
-Once the strings are converted and save in a `.po` file and use the same Grunt plugin to 
-compile it in a JavaScript file. You will only need to run compile task as the configuration for it has already been done in Portal. Run the task from command line `grunt compileText`
+Run the following command in the dcc-portal-ui directory:
 
-- The compilation task woild generate a JS file containing all the translated strings. This will be saved as `scripts/translations/js/translations.js`
+```
+npm run compile-text
+```
+
+- The compilation task would generate a JS file containing all the translated strings at `scripts/translations/js/translations.js`
 
 
 ### Applying the translation
@@ -78,7 +82,7 @@ language code. This code can be found in the `.po` file header.
 
 - Any text changes should be done on templates or .po files based on type of the change.
 
-- Addition of strings or text would need to be done on templates side. These strings can then be extracted using mentioned Grunt task. This task would update the `.pot` file. You can
+- Addition of strings or text would need to be done on templates side. These strings can then be extracted using the `extract-text` task. This task would update the `.pot` file. You can
 then use one of the services to update the `.po` file. For the english version `.po` file can be updated manually as it doesn't need any translated strings.
 
 - Any changes to strings or text can be done on `.po` file. Find the string/text you would like to change and update the `msgstr ""` with desired value. A spelling change can be done
@@ -91,7 +95,7 @@ as shown below. `msgid` in this case would not change as it is the key for the t
 		msgid "Analyses"
 		msgstr "Analysis"
 
-- Deletion of strings or text would need to be done of templates side. Once the strings/texts are removed run the extract Grunt task. This task would update the `.pot` file. You can
+- Deletion of strings or text would need to be done of templates side. Once the strings/texts are removed run the `extract-text` task. This task would update the `.pot` file. You can
 then use one of the services to update the `.po` file. Which would remove the strings/texts from `.po` file as well. For the english version `.po` file can be updated manually by deleting the entries.
 
 ### Work arounds
@@ -119,14 +123,14 @@ First we are annoting the string using translate filter. Since the string doesn'
      };
   	});
 	```
-- Angular constants would not be able to use angular-gettext plugin to extract the string. Therefore a function was created which would help the Grunt plugin extracting texts from Angular constants.
+- Angular constants would not be able to use angular-gettext plugin to extract the string. Therefore a function was created which would help the plugin extracting texts from Angular constants.
 
 	```
 	function gettext(string){
      return string;
    }
 	```
-Function returns the string itself. So it shouldn't cause any issue with development. Once you annote the strings in constants with this function, the extract Grunt task would pickit up and append it to the `.pot` file. You could then use angular-gettext translate filter to obtain actuall translation of the string.
+Function returns the string itself. So it shouldn't cause any issue with development. Once you annote the strings in constants with this function, the extract task would pick it up and append it to the `.pot` file. You could then use angular-gettext translate filter to obtain actuall translation of the string.
 
 	```
 	{{item.name | translate}}

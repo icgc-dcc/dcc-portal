@@ -128,7 +128,7 @@ public class Donor {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public Donor(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.DONOR);
+    val fields = FIELDS_MAPPING.get(EntityType.DONOR);
     id = getString(fieldMap.get(fields.get("id")));
     submittedDonorId = getString(fieldMap.get(fields.get("submittedDonorId")));
     projectId = getString(fieldMap.get(fields.get("projectId")));

@@ -53,7 +53,7 @@ import org.elasticsearch.index.query.IndicesFilterBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.TypeFilterBuilder;
 import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +111,7 @@ public class SearchRepository {
       FieldNames.FILE_NAME, FieldNames.INCHIKEY, FieldNames.ID,
       FieldNames.CHEMBL, FieldNames.DRUG_BANK, FieldNames.ATC_CODES, FieldNames.ATC_LEVEL5_CODES);
 
-  private static final Kind KIND = Kind.KEYWORD;
+  private static final EntityType KIND = EntityType.KEYWORD;
   private static final Set<String> FIELD_KEYS = FIELDS_MAPPING.get(KIND).keySet();
   private static final float TIE_BREAKER = 0.7F;
   private static final List<String> SIMPLE_TERM_FILTER_TYPES = ImmutableList.of(

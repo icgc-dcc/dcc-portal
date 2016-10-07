@@ -57,7 +57,7 @@ public class DonorService {
     val list = ImmutableList.<Donor> builder();
 
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, Kind.DONOR);
+      val fieldMap = createResponseMap(hit, query, EntityType.DONOR);
 
       if (includeScore) {
         fieldMap.put("_score", hit.getScore());

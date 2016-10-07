@@ -91,7 +91,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.SearchFieldMapper;
 import org.icgc.dcc.portal.server.model.TermFacet;
@@ -142,7 +142,7 @@ public class FileRepository {
   private static final SortNode FILE_INFO_SORT = sortBuilder()
       .sortAsc(Fields.REPO_TYPE).build();
 
-  private static final Kind KIND = Kind.FILE;
+  private static final EntityType KIND = EntityType.FILE;
   private static final TypeModel TYPE_MODEL = IndexModel.getFileTypeModel();
   private static final String FILE_INDEX_TYPE = FILE.getId();
   private static final String FILE_DONOR_TEXT_INDEX_TYPE = IndexType.FILE_DONOR_TEXT.getId();

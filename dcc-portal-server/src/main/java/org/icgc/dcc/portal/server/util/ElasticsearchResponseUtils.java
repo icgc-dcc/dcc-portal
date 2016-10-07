@@ -36,7 +36,7 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.index.get.GetField;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 
 import com.google.common.collect.Iterables;
@@ -168,21 +168,21 @@ public final class ElasticsearchResponseUtils {
     return result;
   }
 
-  public static Map<String, Object> createResponseMap(GetResponse response, Query query, Kind kind) {
+  public static Map<String, Object> createResponseMap(GetResponse response, Query query, EntityType kind) {
     val map = createMapFromGetFields(response.getFields());
     map.putAll(processSource(response.getSource(), query, kind));
 
     return map;
   }
 
-  public static Map<String, Object> createResponseMap(SearchHit response, Query query, Kind kind) {
+  public static Map<String, Object> createResponseMap(SearchHit response, Query query, EntityType kind) {
     val map = createMapFromSearchFields(response.getFields());
     map.putAll(processSource(response.getSource(), query, kind));
 
     return map;
   }
 
-  public static void checkResponseState(String id, GetResponse response, Kind kind) {
+  public static void checkResponseState(String id, GetResponse response, EntityType kind) {
     if (!response.isExists()) {
       val type = kind.getId().substring(0, 1).toUpperCase() + kind.getId().substring(1);
       log.info("{} {} not found.", type, id);
@@ -203,7 +203,7 @@ public final class ElasticsearchResponseUtils {
     throw new WebApplicationException(status(NOT_FOUND).entity(message).build());
   }
 
-  private static Map<String, Object> processSource(Map<String, Object> source, Query query, Kind kind) {
+  private static Map<String, Object> processSource(Map<String, Object> source, Query query, EntityType kind) {
     if (source == null) {
       return emptyMap();
     }
@@ -222,7 +222,7 @@ public final class ElasticsearchResponseUtils {
     return flatternMap(Optional.empty(), source, null, null);
   }
 
-  public static Map<String, Object> flatternMap(Map<String, Object> source, Query query, Kind kind) {
+  public static Map<String, Object> flatternMap(Map<String, Object> source, Query query, EntityType kind) {
     if (source == null) {
       return emptyMap();
     }
@@ -231,7 +231,7 @@ public final class ElasticsearchResponseUtils {
   }
 
   @SuppressWarnings("unchecked")
-  private static Map<String, Object> flatternMap(Optional<String> prefix, Map<String, Object> source, Kind kind,
+  private static Map<String, Object> flatternMap(Optional<String> prefix, Map<String, Object> source, EntityType kind,
       Query query) {
     val result = Maps.<String, Object> newHashMap();
 
@@ -251,7 +251,7 @@ public final class ElasticsearchResponseUtils {
    * Some fields are maps and the client expects them to be a map. This methods resolves those maps and prevents them
    * from been 'flattern' further
    */
-  private static boolean isSkip(String fieldName, Query query, Kind kind) {
+  private static boolean isSkip(String fieldName, Query query, EntityType kind) {
     if (kind == null || query == null) {
       return false;
     }

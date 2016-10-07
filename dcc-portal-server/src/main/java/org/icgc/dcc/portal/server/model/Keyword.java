@@ -36,7 +36,7 @@ import lombok.val;
 @ApiModel(value = "Keyword")
 public class Keyword {
 
-  private static final ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(Kind.KEYWORD);
+  private static final ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.KEYWORD);
 
   @ApiModelProperty(value = "ID", required = true)
   String id;

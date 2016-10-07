@@ -66,7 +66,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.search.SearchHitField;
 import org.icgc.dcc.common.core.model.ConsequenceType;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
@@ -88,20 +88,20 @@ import lombok.extern.slf4j.Slf4j;
 public class OccurrenceRepository {
 
   private static final IndexType CENTRIC_TYPE = IndexType.OCCURRENCE_CENTRIC;
-  private static final Kind KIND = Kind.OCCURRENCE;
+  private static final EntityType KIND = EntityType.OCCURRENCE;
   private final static TimeValue KEEP_ALIVE = new TimeValue(10000);
 
   private static final Jql2PqlConverter PQL_CONVERTER = Jql2PqlConverter.getInstance();
 
-  static final ImmutableMap<Kind, String> PREFIX_MAPPING = Maps.immutableEnumMap(ImmutableMap
-      .<Kind, String> builder()
-      .put(Kind.PROJECT, "project")
-      .put(Kind.DONOR, "donor")
-      .put(Kind.MUTATION, "ssm")
-      .put(Kind.CONSEQUENCE, "ssm.consequence")
-      .put(Kind.GENE, "ssm.consequence.gene")
-      .put(Kind.GENE_SET, "ssm.consequence.gene")
-      .put(Kind.OBSERVATION, "ssm.observation")
+  static final ImmutableMap<EntityType, String> PREFIX_MAPPING = Maps.immutableEnumMap(ImmutableMap
+      .<EntityType, String> builder()
+      .put(EntityType.PROJECT, "project")
+      .put(EntityType.DONOR, "donor")
+      .put(EntityType.MUTATION, "ssm")
+      .put(EntityType.CONSEQUENCE, "ssm.consequence")
+      .put(EntityType.GENE, "ssm.consequence.gene")
+      .put(EntityType.GENE_SET, "ssm.consequence.gene")
+      .put(EntityType.OBSERVATION, "ssm.observation")
       .build());
 
   private static final Joiner COMMA_JOINER = Joiner.on(COMMA).skipNulls();

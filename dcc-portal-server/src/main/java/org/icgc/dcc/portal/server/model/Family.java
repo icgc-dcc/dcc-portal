@@ -59,7 +59,7 @@ public class Family {
 
   @JsonCreator
   public Family(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.FAMILY);
+    val fields = FIELDS_MAPPING.get(EntityType.FAMILY);
 
     donorHasRelativeWithCancerHistory = getString(fieldMap.get(fields.get("donorHasRelativeWithCancerHistory")));
     relationshipType = getString(fieldMap.get(fields.get("relationshipType")));

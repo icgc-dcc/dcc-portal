@@ -79,7 +79,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.stats.Stats;
 import org.icgc.dcc.portal.server.model.EntitySetTermFacet;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Statistics;
 import org.icgc.dcc.portal.server.model.TermFacet.Term;
@@ -104,7 +104,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DonorRepository implements Repository {
 
   private static final IndexType TYPE = IndexType.DONOR;
-  private static final Kind KIND = Kind.DONOR;
+  private static final EntityType KIND = EntityType.DONOR;
 
   // These are the raw field names from the 'donor-text' type in the main index.
   public static final Map<String, String> DONOR_ID_SEARCH_FIELDS = transformToTextSearchFieldMap(

@@ -29,7 +29,7 @@ import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
@@ -58,7 +58,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
 
   GeneRepository geneRepository;
 
-  ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(Kind.GENE);
+  ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.GENE);
 
   @Before
   public void setUp() throws Exception {

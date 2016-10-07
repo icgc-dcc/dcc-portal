@@ -370,7 +370,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-ng-repeat="gene in CompoundCtrl.getTargetedCompoundGenes() | limitTo: CompoundCtrl.getTargetedCompoundGenesResultPerPage()">
+                        <tr data-ng-repeat="gene in CompoundCtrl.getTargetedCompoundGenes()">
                             <td><a href="/genes/{{gene.id}}" data-ng-bind="gene.symbol"></a></td>
                             <td data-ng-bind="gene.name"></td>
                             <td data-ng-bind-template="chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}"></td>

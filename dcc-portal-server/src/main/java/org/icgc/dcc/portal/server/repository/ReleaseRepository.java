@@ -29,7 +29,7 @@ import java.util.Map;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReleaseRepository {
 
   private static final IndexType TYPE = IndexType.RELEASE;
-  private static final Kind KIND = Kind.RELEASE;
+  private static final EntityType KIND = EntityType.RELEASE;
 
   private final Client client;
 

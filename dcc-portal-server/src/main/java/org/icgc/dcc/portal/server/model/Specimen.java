@@ -95,7 +95,7 @@ public class Specimen {
   public Specimen(Map<String, Object> fieldMap) {
 
     // TODO: See if we can remove the dependency on the old IndexModel's FIELDS_MAPPING.
-    val fields = FIELDS_MAPPING.get(Kind.SPECIMEN);
+    val fields = FIELDS_MAPPING.get(EntityType.SPECIMEN);
     id = (String) fieldMap.get(fields.get("id"));
     submittedId = (String) fieldMap.get(fields.get("submittedId"));
     available = getTruthy((String) fieldMap.get(fields.get("available")));

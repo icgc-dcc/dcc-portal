@@ -74,7 +74,7 @@ public class Therapy {
 
   @JsonCreator
   public Therapy(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.THERAPY);
+    val fields = FIELDS_MAPPING.get(EntityType.THERAPY);
 
     firstTherapyType = getString(fieldMap.get(fields.get("firstTherapyType")));
     firstTherapyTherapeuticIntent = getString(fieldMap.get(fields.get("firstTherapyTherapeuticIntent")));

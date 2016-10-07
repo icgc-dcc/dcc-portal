@@ -24,7 +24,7 @@ import org.elasticsearch.common.lang3.tuple.Pair;
 import org.elasticsearch.search.SearchHit;
 import org.icgc.dcc.portal.server.model.Gene;
 import org.icgc.dcc.portal.server.model.Genes;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
@@ -215,7 +215,7 @@ public class GeneService {
     val list = ImmutableList.<Gene> builder();
 
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, Kind.GENE);
+      val fieldMap = createResponseMap(hit, query, EntityType.GENE);
 
       if (includeScore) {
         fieldMap.put("_score", hit.getScore());
@@ -295,7 +295,7 @@ public class GeneService {
    * Convert result from gene-text to a gene model
    */
   private Gene geneText2Gene(SearchHit hit) {
-    val fieldMap = createResponseMap(hit, Query.builder().build(), Kind.GENE);
+    val fieldMap = createResponseMap(hit, Query.builder().build(), EntityType.GENE);
     Map<String, Object> geneMap = Maps.newHashMap();
     fieldMap.forEach((k, v) -> {
       geneMap.put(GENE_ID_SEARCH_FIELDS.get(k), v);

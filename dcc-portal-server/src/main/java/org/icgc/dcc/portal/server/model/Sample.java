@@ -49,7 +49,7 @@ public class Sample {
 
   @SuppressWarnings("unchecked")
   public Sample(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.SAMPLE);
+    val fields = FIELDS_MAPPING.get(EntityType.SAMPLE);
 
     id = (String) fieldMap.get(fields.get("id"));
     analyzedId = (String) fieldMap.get(fields.get("analyzedId"));

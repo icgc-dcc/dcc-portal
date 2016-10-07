@@ -32,7 +32,7 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Query.QueryBuilder;
 import org.icgc.dcc.portal.server.model.IndexType;
@@ -168,7 +168,7 @@ public class BaseRepositoryIntegrationTest {
     return search.execute().actionGet();
   }
 
-  void scores(Repository repo, Repository countRepo, String sort, IndexType type, Kind kind) {
+  void scores(Repository repo, Repository countRepo, String sort, IndexType type, EntityType kind) {
     val fIter = FILTERS.iterator();
     val query = score(sort);
     val sr = setup(repo, query, type);
@@ -199,7 +199,7 @@ public class BaseRepositoryIntegrationTest {
     }
   }
 
-  LinkedHashMap<String, Query> generateCountsQueries(String f, SearchResponse r, String sort, Kind kind) {
+  LinkedHashMap<String, Query> generateCountsQueries(String f, SearchResponse r, String sort, EntityType kind) {
     val queries = Maps.<String, Query> newLinkedHashMap();
 
     for (val hit : r.getHits().getHits()) { // SearchResponses
@@ -213,7 +213,7 @@ public class BaseRepositoryIntegrationTest {
     return queries;
   }
 
-  void aggregations(Repository repo, String sort, IndexType type, Kind kind) {
+  void aggregations(Repository repo, String sort, IndexType type, EntityType kind) {
     val fIter = FILTERS.iterator();
     val query = query(sort).includes(Lists.newArrayList("facets"));
     val sr = setup(repo, query, type);
@@ -262,7 +262,7 @@ public class BaseRepositoryIntegrationTest {
   }
 
   LinkedHashMap<String, LinkedHashMap<String, Query>> generateAggsQueries(String f, SearchResponse r, String sort,
-      Kind kind) {
+      EntityType kind) {
     val queries = Maps.<String, LinkedHashMap<String, Query>> newLinkedHashMap();
 
     for (val agg : r.getAggregations()) { // EnrichmentSearchResponses
@@ -275,7 +275,7 @@ public class BaseRepositoryIntegrationTest {
     return queries;
   }
 
-  LinkedHashMap<String, Query> generateEntryQueries(String f, Terms termsAggs, String sort, Kind kind) {
+  LinkedHashMap<String, Query> generateEntryQueries(String f, Terms termsAggs, String sort, EntityType kind) {
     val queries = Maps.<String, Query> newLinkedHashMap();
 
     for (val entry : termsAggs.getBuckets()) { // Facet Values

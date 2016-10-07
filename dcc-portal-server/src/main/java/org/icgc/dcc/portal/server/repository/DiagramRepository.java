@@ -26,7 +26,7 @@ import java.util.Map;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
@@ -46,7 +46,7 @@ public class DiagramRepository {
    * Constants.
    */
   private static final IndexType TYPE = IndexType.DIAGRAM;
-  private static final Kind KIND = Kind.DIAGRAM;
+  private static final EntityType KIND = EntityType.DIAGRAM;
   private static final Jql2PqlConverter CONVERTER = Jql2PqlConverter.getInstance();
 
   /**

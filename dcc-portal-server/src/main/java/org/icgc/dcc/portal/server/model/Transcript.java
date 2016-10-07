@@ -85,7 +85,7 @@ public class Transcript {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public Transcript(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.TRANSCRIPT);
+    val fields = FIELDS_MAPPING.get(EntityType.TRANSCRIPT);
     id = (String) fieldMap.get(fields.get("id"));
     name = (String) fieldMap.get(fields.get("name"));
     type = (String) fieldMap.get(fields.get("type"));

@@ -17,23 +17,25 @@
 
 package org.icgc.dcc.portal.server.model;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import lombok.Value;
-import lombok.val;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Value;
+import lombok.val;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -69,11 +71,11 @@ public class Mutation {
   @ApiModelProperty(value = "List of Cancer Projects with a Donor affected by Mutation", required = true)
   List<String> affectedProjectIds;
   @ApiModelProperty(value = "Platform", required = true)
-  List<String> platform;
+  Collection<String> platform;
   @ApiModelProperty(value = "Consequence Type", required = true)
   List<String> consequenceType;
   @ApiModelProperty(value = "Verification Status", required = true)
-  List<String> verificationStatus;
+  Collection<String> verificationStatus;
   @ApiModelProperty(value = "Occurrences")
   List<EmbOccurrence> occurrences;
   @ApiModelProperty(value = "Transcripts")
@@ -86,7 +88,7 @@ public class Mutation {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public Mutation(Map<String, Object> fieldMap) {
-    ImmutableMap<String, String> fields = FIELDS_MAPPING.get(Kind.MUTATION);
+    ImmutableMap<String, String> fields = FIELDS_MAPPING.get(EntityType.MUTATION);
     id = getString(fieldMap.get(fields.get("id")));
     type = getString(fieldMap.get(fields.get("type")));
     chromosome = getString(fieldMap.get(fields.get("chromosome")));
@@ -100,9 +102,9 @@ public class Mutation {
     affectedDonorCountFiltered = getLong(fieldMap.get(fields.get("affectedDonorCountFiltered")));
     affectedProjectCount = getLong(fieldMap.get(fields.get("affectedProjectCount")));
     affectedProjectIds = (List<String>) fieldMap.get(fields.get("affectedProjectIds"));
-    platform = (List<String>) fieldMap.get(fields.get("platform"));
+    platform = unique((List<String>) fieldMap.get(fields.get("platform")));
     consequenceType = (List<String>) fieldMap.get(fields.get("consequenceType"));
-    verificationStatus = (List<String>) fieldMap.get(fields.get("verificationStatus"));
+    verificationStatus = unique((List<String>) fieldMap.get(fields.get("verificationStatus")));
     occurrences = buildOccurrences((List<Map<String, Object>>) fieldMap.get("ssm_occurrence"));
     transcripts = buildTranscripts((List<Map<String, Object>>) fieldMap.get("transcript"));
     consequences = buildConsequences((List<Map<String, Object>>) fieldMap.get("consequences"));
@@ -173,6 +175,14 @@ public class Mutation {
     }
 
     return lst;
+  }
+
+  private static Collection<String> unique(List<String> list) {
+    if (list == null) {
+      return null;
+    }
+
+    return newHashSet(list);
   }
 
 }

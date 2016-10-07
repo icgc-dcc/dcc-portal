@@ -80,6 +80,11 @@ body {
 
 .content {
   @include clearfix();
+
+  .t_sidebar + article {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 /*

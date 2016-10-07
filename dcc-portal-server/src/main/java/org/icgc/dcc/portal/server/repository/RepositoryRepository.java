@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.search.SearchHit;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Repository;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class RepositoryRepository {
    * Constants.
    */
   private static final IndexType TYPE = IndexType.REPOSITORY;
-  private static final Kind KIND = Kind.REPOSITORY;
+  private static final EntityType KIND = EntityType.REPOSITORY;
   private static final ObjectMapper MAPPER = DEFAULT.disable(FAIL_ON_UNKNOWN_PROPERTIES); // Just in case we add more
                                                                                           // fields upstream
 

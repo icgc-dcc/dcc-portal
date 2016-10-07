@@ -26,7 +26,7 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createR
 import java.util.Map;
 
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PathwayRepository {
 
   private static final IndexType TYPE = IndexType.PATHWAY;
-  private static final Kind KIND = Kind.PATHWAY;
+  private static final EntityType KIND = EntityType.PATHWAY;
 
   private final Client client;
   private final String index;

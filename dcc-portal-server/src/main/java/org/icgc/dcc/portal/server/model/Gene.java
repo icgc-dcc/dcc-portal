@@ -84,7 +84,7 @@ public class Gene {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public Gene(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.GENE);
+    val fields = FIELDS_MAPPING.get(EntityType.GENE);
     id = getString(fieldMap.get(fields.get("id")));
     symbol = getString(fieldMap.get(fields.get("symbol")));
     name = getString(fieldMap.get(fields.get("name")));

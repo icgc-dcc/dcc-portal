@@ -66,7 +66,7 @@ public class Release {
   Long livePrimarySiteCount;
 
   public Release(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.RELEASE);
+    val fields = FIELDS_MAPPING.get(EntityType.RELEASE);
     id = (String) fieldMap.get(fields.get("id"));
     name = (String) fieldMap.get(fields.get("name"));
     releasedOn = (String) fieldMap.get(fields.get("releasedOn"));

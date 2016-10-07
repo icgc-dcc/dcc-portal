@@ -53,7 +53,7 @@ public class Exon {
   Long endPhase;
 
   public Exon(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.EXON);
+    val fields = FIELDS_MAPPING.get(EntityType.EXON);
     start = getLong(fieldMap.get(fields.get("start")));
     end = getLong(fieldMap.get(fields.get("end")));
     cdnaCodingStart = getLong(fieldMap.get(fields.get("cdnaCodingStart")));

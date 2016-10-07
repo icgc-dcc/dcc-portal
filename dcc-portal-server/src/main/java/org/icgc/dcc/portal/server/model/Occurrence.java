@@ -66,7 +66,7 @@ public class Occurrence {
 
   @JsonCreator
   public Occurrence(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.OCCURRENCE);
+    val fields = FIELDS_MAPPING.get(EntityType.OCCURRENCE);
     donorId = getString(fieldMap.get(fields.get("donorId")));
     mutationId = getString(fieldMap.get(fields.get("mutationId")));
     chromosome = getString(fieldMap.get(fields.get("chromosome")));
@@ -82,7 +82,7 @@ public class Occurrence {
 
   @SuppressWarnings("unchecked")
   private static List<Map<String, Object>> getObservations(Map<String, Object> fieldMap) {
-    val observationKey = FIELDS_MAPPING.get(Kind.OCCURRENCE).get("observation");
+    val observationKey = FIELDS_MAPPING.get(EntityType.OCCURRENCE).get("observation");
     if (!fieldMap.containsKey(observationKey)) {
       return emptyList();
     }

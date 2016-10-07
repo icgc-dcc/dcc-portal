@@ -29,7 +29,7 @@ public class RawSeqData {
   String rawDataAccession;
 
   public RawSeqData(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.SEQ_DATA);
+    val fields = FIELDS_MAPPING.get(EntityType.SEQ_DATA);
 
     id = (String) fieldMap.get(fields.get("id"));
     platform = (String) fieldMap.get(fields.get("platform"));

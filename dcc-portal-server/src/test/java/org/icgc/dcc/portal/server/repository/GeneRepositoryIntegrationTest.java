@@ -17,7 +17,7 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +29,7 @@ public class GeneRepositoryIntegrationTest extends BaseRepositoryIntegrationTest
 
   private static final String DEFAULT_SORT = "affectedDonorCountFiltered";
   private static final IndexType CENTRIC_TYPE = IndexType.GENE_CENTRIC;
-  private static final Kind KIND = Kind.GENE;
+  private static final EntityType KIND = EntityType.GENE;
 
   @InjectMocks
   GeneRepository repository;

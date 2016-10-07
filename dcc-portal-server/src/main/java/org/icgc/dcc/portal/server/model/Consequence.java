@@ -54,7 +54,7 @@ public class Consequence {
   String functionalImpact;
 
   public Consequence(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.CONSEQUENCE);
+    val fields = FIELDS_MAPPING.get(EntityType.CONSEQUENCE);
     geneAffectedId = (String) fieldMap.get(fields.get("geneAffectedId"));
     geneAffectedSymbol = (String) fieldMap.get(fields.get("geneAffectedSymbol"));
     geneStrand = getLong(fieldMap.get(fields.get("geneStrand")));

@@ -30,7 +30,7 @@ import com.google.common.collect.Lists;
 
 public class ProjectTest {
 
-  private static final ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(Kind.PROJECT);
+  private static final ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.PROJECT);
 
   private final ObjectMapper MAPPER = new ObjectMapper();
 

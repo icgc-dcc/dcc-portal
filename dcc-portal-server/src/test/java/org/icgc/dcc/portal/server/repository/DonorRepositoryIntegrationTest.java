@@ -17,7 +17,7 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +29,7 @@ public class DonorRepositoryIntegrationTest extends BaseRepositoryIntegrationTes
 
   private static final String DEFAULT_SORT = "ssmAffectedGenes";
   private static final IndexType CENTRIC_TYPE = IndexType.DONOR_CENTRIC;
-  private static final Kind KIND = Kind.DONOR;
+  private static final EntityType KIND = EntityType.DONOR;
 
   @InjectMocks
   DonorRepository repository;
