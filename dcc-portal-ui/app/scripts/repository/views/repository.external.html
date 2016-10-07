@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <div style="position: relative; margin-right: -2rem">
+  <div class="t_facets_container">
     <div class="t_tab_pane"
       ng-class="{ active: ExternalRepoController.isOnFilesTab() }"
       ng-show="ExternalRepoController.isOnFilesTab()">
@@ -110,7 +110,7 @@
   </div>
 </aside>
 
-<article style="position: relative;">
+<article style="position: relative; margin-right: 1px;">
     <current></current>
     <div data-ng-if="ExternalRepoController.loadState.isLoading" class="loading loading-text no-animate">
       <h3><i class="icon-spinner icon-spin"></i>

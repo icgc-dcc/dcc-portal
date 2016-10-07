@@ -327,6 +327,11 @@ h3:hover {
 
 .t_sidebar {
   position: relative;
+
+  .t_facets_container{
+    position: relative;
+    border-right: 1px solid #cccccc
+  }
 }
 
 .t_notify_popup, #buorg {
@@ -532,5 +537,5 @@ a.no-style {
   margin-right: 4px;
 }
 
-@import "override.css";
-@import "flags.css";
+@import "override.scss";
+@import "flags.scss";

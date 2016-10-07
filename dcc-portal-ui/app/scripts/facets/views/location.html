@@ -17,7 +17,7 @@
             </li>
         </ul>
     </li>
-    <li class="t_facets__facet__input" data-ng-hide="collapsed">
+    <li class="t_facets__facet__input clearfix" data-ng-hide="collapsed">
         <input class="t_input__block" name="location" autocomplete="off" data-ng-keydown="keydown($event)" type="text"
                data-ng-model="location"
                data-ng-class="{'invalid': state=='invalid', 'valid':state=='valid'}"
@@ -25,7 +25,7 @@
         <i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel"
            data-ng-click="location=''" data-ng-show='location'></i>
         {{ example }}
-        <button data-ng-disabled="state=='invalid'" type="button" class="t_button pull-right" data-ng-click="submit()">
+        <button data-ng-disabled="state=='invalid'" type="button" class="t_button pull-right t_facet_location_search" data-ng-click="submit()">
             <i class="icon-search"></i> <translate>Search</translate>
         </button>
     </li>

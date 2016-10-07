@@ -100,7 +100,7 @@ footer, .push {
 
 aside {
   @include clearfix();
-  @include grid-span(2, 1);
+  @include grid-span(2.2, 1);
 }
 
 article {
