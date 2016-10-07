@@ -3,7 +3,7 @@ package org.icgc.dcc.portal.server.service;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
 import org.elasticsearch.search.SearchHits;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Project;
 import org.icgc.dcc.portal.server.model.Projects;
@@ -42,7 +42,7 @@ public class ProjectService {
   private ImmutableList<Project> getProjectList(SearchHits hits, Query query) {
     val projectList = ImmutableList.<Project> builder();
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, Kind.PROJECT);
+      val fieldMap = createResponseMap(hit, query, EntityType.PROJECT);
       projectList.add(new Project(fieldMap));
     }
 

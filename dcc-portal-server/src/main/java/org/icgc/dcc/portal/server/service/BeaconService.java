@@ -35,7 +35,7 @@ import org.icgc.dcc.portal.server.model.Beacon;
 import org.icgc.dcc.portal.server.model.BeaconInfo;
 import org.icgc.dcc.portal.server.model.BeaconQuery;
 import org.icgc.dcc.portal.server.model.BeaconResponse;
-import org.icgc.dcc.portal.server.model.IndexModel;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.resource.tool.BeaconResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,7 +76,7 @@ public class BeaconService {
     String allele = alleleMutation.getMutation();
 
     val search = client.prepareSearch(index)
-        .setTypes(IndexModel.Type.MUTATION_CENTRIC.getId())
+        .setTypes(IndexType.MUTATION_CENTRIC.getId())
         .setSearchType(QUERY_THEN_FETCH);
 
     val boolQuery = QueryBuilders.boolQuery();

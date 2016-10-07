@@ -46,7 +46,6 @@ import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
-import static org.icgc.dcc.portal.server.model.IndexModel.MISSING;
 import static org.icgc.dcc.portal.server.model.SearchFieldMapper.searchFieldMapper;
 import static org.icgc.dcc.portal.server.model.TermFacet.repoTermFacet;
 import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.createTermsLookupFilter;
@@ -92,12 +91,12 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.SearchFieldMapper;
 import org.icgc.dcc.portal.server.model.TermFacet;
 import org.icgc.dcc.portal.server.model.TermFacet.Term;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
@@ -124,6 +123,7 @@ public class FileRepository {
   /**
    * Constants
    */
+  private static final String MISSING = "_missing";
   private static final Set<String> FILE_DONOR_FIELDS = newHashSet(
       "specimen_id", "sample_id", "submitted_specimen_id", "submitted_sample_id",
       "id", "submitted_donor_id",
@@ -142,14 +142,13 @@ public class FileRepository {
   private static final SortNode FILE_INFO_SORT = sortBuilder()
       .sortAsc(Fields.REPO_TYPE).build();
 
-  private static final Kind KIND = Kind.FILE;
   private static final TypeModel TYPE_MODEL = IndexModel.getFileTypeModel();
   private static final String FILE_INDEX_TYPE = FILE.getId();
-  private static final String FILE_DONOR_TEXT_INDEX_TYPE = Type.FILE_DONOR_TEXT.getId();
+  private static final String FILE_DONOR_TEXT_INDEX_TYPE = IndexType.FILE_DONOR_TEXT.getId();
 
   private static final String DONOR_ID_RAW_FIELD_NAME = toRawFieldName(Fields.DONOR_ID);
   private static final Jql2PqlConverter PQL_CONVERTER = Jql2PqlConverter.getInstance();
-  private static final Map<String, String> JQL_FIELD_NAME_MAPPING = FIELDS_MAPPING.get(KIND);
+  private static final Map<String, String> JQL_FIELD_NAME_MAPPING = FIELDS_MAPPING.get(EntityType.FILE);
 
   private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
 
@@ -217,7 +216,7 @@ public class FileRepository {
     val search = client.prepareGet(repoIndexName, FILE_INDEX_TYPE, id);
     val response = search.execute().actionGet();
     // This check is important as it validates if there is any document at all in the GET response.
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.FILE);
 
     return response;
   }

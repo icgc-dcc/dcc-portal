@@ -24,8 +24,6 @@ import java.util.Map;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -49,7 +47,7 @@ public class Domain {
   Long end;
 
   public Domain(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.DOMAIN);
+    val fields = FIELDS_MAPPING.get(EntityType.DOMAIN);
     interproId = (String) fieldMap.get(fields.get("interproId"));
     hitName = (String) fieldMap.get(fields.get("hitName"));
     description = (String) fieldMap.get(fields.get("description"));

@@ -23,7 +23,6 @@ import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Value;
 import lombok.val;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 
 import java.util.List;
 import java.util.Map;
@@ -86,7 +85,7 @@ public class Transcript {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public Transcript(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.TRANSCRIPT);
+    val fields = FIELDS_MAPPING.get(EntityType.TRANSCRIPT);
     id = (String) fieldMap.get(fields.get("id"));
     name = (String) fieldMap.get(fields.get("name"));
     type = (String) fieldMap.get(fields.get("type"));

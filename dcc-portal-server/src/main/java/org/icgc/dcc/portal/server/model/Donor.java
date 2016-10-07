@@ -9,8 +9,6 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getStri
 import java.util.List;
 import java.util.Map;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -130,7 +128,7 @@ public class Donor {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public Donor(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.DONOR);
+    val fields = FIELDS_MAPPING.get(EntityType.DONOR);
     id = getString(fieldMap.get(fields.get("id")));
     submittedDonorId = getString(fieldMap.get(fields.get("submittedDonorId")));
     projectId = getString(fieldMap.get(fields.get("projectId")));

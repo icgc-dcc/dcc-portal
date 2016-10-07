@@ -66,12 +66,12 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.search.SearchHitField;
 import org.icgc.dcc.common.core.model.ConsequenceType;
-import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Joiner;
@@ -87,21 +87,20 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class OccurrenceRepository {
 
-  private static final Type CENTRIC_TYPE = Type.OCCURRENCE_CENTRIC;
-  private static final Kind KIND = Kind.OCCURRENCE;
+  private static final IndexType CENTRIC_TYPE = IndexType.OCCURRENCE_CENTRIC;
   private final static TimeValue KEEP_ALIVE = new TimeValue(10000);
 
   private static final Jql2PqlConverter PQL_CONVERTER = Jql2PqlConverter.getInstance();
 
-  static final ImmutableMap<Kind, String> PREFIX_MAPPING = Maps.immutableEnumMap(ImmutableMap
-      .<Kind, String> builder()
-      .put(Kind.PROJECT, "project")
-      .put(Kind.DONOR, "donor")
-      .put(Kind.MUTATION, "ssm")
-      .put(Kind.CONSEQUENCE, "ssm.consequence")
-      .put(Kind.GENE, "ssm.consequence.gene")
-      .put(Kind.GENE_SET, "ssm.consequence.gene")
-      .put(Kind.OBSERVATION, "ssm.observation")
+  static final ImmutableMap<EntityType, String> PREFIX_MAPPING = Maps.immutableEnumMap(ImmutableMap
+      .<EntityType, String> builder()
+      .put(EntityType.PROJECT, "project")
+      .put(EntityType.DONOR, "donor")
+      .put(EntityType.MUTATION, "ssm")
+      .put(EntityType.CONSEQUENCE, "ssm.consequence")
+      .put(EntityType.GENE, "ssm.consequence.gene")
+      .put(EntityType.GENE_SET, "ssm.consequence.gene")
+      .put(EntityType.OBSERVATION, "ssm.observation")
       .build());
 
   private static final Joiner COMMA_JOINER = Joiner.on(COMMA).skipNulls();
@@ -115,14 +114,14 @@ public class OccurrenceRepository {
       PQL_ALIAS_CONSEQUENCE_PROJECT_ID, "project._project_id");
 
   private final Client client;
-  private final String index;
+  private final String indexName;
   private final QueryEngine queryEngine;
 
   @Autowired
-  public OccurrenceRepository(Client client, IndexModel indexModel) {
-    this.index = indexModel.getIndex();
+  public OccurrenceRepository(Client client, @Value("#{indexName}") String indexName) {
+    this.indexName = indexName;
     this.client = client;
-    this.queryEngine = new QueryEngine(client, index);
+    this.queryEngine = new QueryEngine(client, indexName);
   }
 
   SearchRequestBuilder buildFindAllRequest(Query query) {
@@ -160,13 +159,13 @@ public class OccurrenceRepository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(index, CENTRIC_TYPE.getId(), id);
-    search.setFields(getFields(query, KIND));
+    val search = client.prepareGet(indexName, CENTRIC_TYPE.getId(), id);
+    search.setFields(getFields(query, EntityType.OCCURRENCE));
 
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.OCCURRENCE);
 
-    val map = createResponseMap(response, query, KIND);
+    val map = createResponseMap(response, query, EntityType.OCCURRENCE);
     log.debug("{}", map);
 
     return map;

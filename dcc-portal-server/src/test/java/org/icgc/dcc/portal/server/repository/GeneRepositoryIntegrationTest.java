@@ -17,8 +17,8 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -28,9 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class GeneRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
   private static final String DEFAULT_SORT = "affectedDonorCountFiltered";
-  private static final Type CENTRIC_TYPE = Type.GENE_CENTRIC;
-  private static final Kind KIND = Kind.GENE;
-
+  private static final IndexType CENTRIC_TYPE = IndexType.GENE_CENTRIC;
   @InjectMocks
   GeneRepository repository;
   @InjectMocks
@@ -38,12 +36,12 @@ public class GeneRepositoryIntegrationTest extends BaseRepositoryIntegrationTest
 
   @Test
   public void test_aggs() {
-    aggregations(repository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
+    aggregations(repository, DEFAULT_SORT, CENTRIC_TYPE, EntityType.GENE);
   }
 
   @Test
   public void test_score() {
-    scores(repository, donorRepository, DEFAULT_SORT, CENTRIC_TYPE, KIND);
+    scores(repository, donorRepository, DEFAULT_SORT, CENTRIC_TYPE, EntityType.GENE);
   }
 
   @Test

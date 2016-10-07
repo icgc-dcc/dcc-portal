@@ -23,8 +23,6 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getStri
 import java.util.List;
 import java.util.Map;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.ImmutableMap;
 
@@ -38,7 +36,7 @@ import lombok.val;
 @ApiModel(value = "Keyword")
 public class Keyword {
 
-  private static final ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(Kind.KEYWORD);
+  private static final ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.KEYWORD);
 
   @ApiModelProperty(value = "ID", required = true)
   String id;

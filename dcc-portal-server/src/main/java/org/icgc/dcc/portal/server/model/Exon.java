@@ -24,8 +24,6 @@ import java.util.Map;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -55,7 +53,7 @@ public class Exon {
   Long endPhase;
 
   public Exon(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.EXON);
+    val fields = FIELDS_MAPPING.get(EntityType.EXON);
     start = getLong(fieldMap.get(fields.get("start")));
     end = getLong(fieldMap.get(fields.get("end")));
     cdnaCodingStart = getLong(fieldMap.get(fields.get("cdnaCodingStart")));

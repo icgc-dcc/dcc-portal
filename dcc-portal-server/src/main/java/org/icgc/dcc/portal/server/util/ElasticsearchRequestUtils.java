@@ -38,7 +38,7 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.UnionUnit;
 import org.icgc.dcc.portal.server.repository.TermsLookupRepository;
@@ -60,8 +60,8 @@ public class ElasticsearchRequestUtils {
 
   public static final String[] EMPTY_SOURCE_FIELDS = null;
 
-  public static String[] resolveSourceFields(Query query, Kind kind) {
-    val sourceFields = getSource(query, kind);
+  public static String[] resolveSourceFields(Query query, EntityType entityType) {
+    val sourceFields = getSource(query, entityType);
     if (sourceFields.isEmpty()) {
       return EMPTY_SOURCE_FIELDS;
     }
@@ -70,8 +70,9 @@ public class ElasticsearchRequestUtils {
   }
 
   @NonNull
-  public static GetRequestBuilder setFetchSourceOfGetRequest(GetRequestBuilder builder, Query query, Kind kind) {
-    String[] sourceFields = resolveSourceFields(query, kind);
+  public static GetRequestBuilder setFetchSourceOfGetRequest(GetRequestBuilder builder, Query query,
+      EntityType entityType) {
+    String[] sourceFields = resolveSourceFields(query, entityType);
 
     if (sourceFields != EMPTY_SOURCE_FIELDS) {
       builder.setFetchSource(sourceFields, EMPTY_SOURCE_FIELDS);
@@ -82,8 +83,8 @@ public class ElasticsearchRequestUtils {
 
   @NonNull
   public static SearchRequestBuilder setFetchSourceOfSearchRequest(SearchRequestBuilder builder, Query query,
-      Kind kind) {
-    String[] sourceFields = resolveSourceFields(query, kind);
+      EntityType entityType) {
+    String[] sourceFields = resolveSourceFields(query, entityType);
 
     if (sourceFields != EMPTY_SOURCE_FIELDS) {
       builder.setFetchSource(sourceFields, EMPTY_SOURCE_FIELDS);
@@ -172,33 +173,33 @@ public class ElasticsearchRequestUtils {
     return getTotalHitCount(response) > 0;
   }
 
-  private static List<String> getSource(Query query, Kind kind) {
-    switch (kind) {
+  private static List<String> getSource(Query query, EntityType entityType) {
+    switch (entityType) {
     case MUTATION:
       return prepareMutationIncludes(query);
     case DONOR:
       return prepareDonorIncludes(query);
     case GENE:
-      return prepareGeneIncludes(query, kind);
+      return prepareGeneIncludes(query, entityType);
     case PATHWAY:
       return preparePathwayIncludes(query);
     case PROJECT:
-      return prepareProjectIncludes(query, kind);
+      return prepareProjectIncludes(query, entityType);
     case OCCURRENCE:
-      return prepareOccurrenceIncludes(query, kind);
+      return prepareOccurrenceIncludes(query, entityType);
     case GENE_SET:
-      return prepareGeneSetIncludes(query, kind);
+      return prepareGeneSetIncludes(query, entityType);
     default:
       return emptyList();
     }
   }
 
-  private static List<String> prepareGeneSetIncludes(Query query, Kind kind) {
-    return resolveFields(query, kind, "hierarchy", "inferredTree", "synonyms", "altIds");
+  private static List<String> prepareGeneSetIncludes(Query query, EntityType entityType) {
+    return resolveFields(query, entityType, "hierarchy", "inferredTree", "synonyms", "altIds");
   }
 
-  private static List<String> prepareOccurrenceIncludes(Query query, Kind kind) {
-    return resolveFields(query, kind, "observation");
+  private static List<String> prepareOccurrenceIncludes(Query query, EntityType entityType) {
+    return resolveFields(query, entityType, "observation");
   }
 
   private static List<String> prepareMutationIncludes(Query query) {
@@ -229,12 +230,12 @@ public class ElasticsearchRequestUtils {
     return sourceFields;
   }
 
-  private static List<String> prepareGeneIncludes(Query query, Kind kind) {
+  private static List<String> prepareGeneIncludes(Query query, EntityType entityType) {
     val sourceFields = Lists.<String> newArrayList();
 
     // external_db_ids and pathways are objects. Fields support only leaf nodes, that's why they must be included in
     // source
-    sourceFields.addAll(resolveFields(query, kind, "externalDbIds", "pathways", "sets"));
+    sourceFields.addAll(resolveFields(query, entityType, "externalDbIds", "pathways", "sets"));
 
     if (query.hasInclude("transcripts")) {
       sourceFields.add("transcripts");
@@ -251,9 +252,9 @@ public class ElasticsearchRequestUtils {
     return sourceFields;
   }
 
-  private static List<String> resolveFields(Query query, Kind kind, String... fields) {
+  private static List<String> resolveFields(Query query, EntityType entityType, String... fields) {
     val result = Lists.<String> newArrayList();
-    val typeFieldsMap = FIELDS_MAPPING.get(kind);
+    val typeFieldsMap = FIELDS_MAPPING.get(entityType);
     val queryFields = query.getFields();
     for (val field : fields) {
       if (!query.hasFields() || queryFields.contains(field)) {
@@ -274,8 +275,8 @@ public class ElasticsearchRequestUtils {
     return sourceFields;
   }
 
-  private static List<String> prepareProjectIncludes(Query query, Kind kind) {
-    return resolveFields(query, kind, "experimentalAnalysisPerformedDonorCounts",
+  private static List<String> prepareProjectIncludes(Query query, EntityType entityType) {
+    return resolveFields(query, entityType, "experimentalAnalysisPerformedDonorCounts",
         "experimentalAnalysisPerformedSampleCounts");
   }
 

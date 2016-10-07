@@ -20,8 +20,7 @@ package org.icgc.dcc.portal.server.test;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static lombok.AccessLevel.PRIVATE;
 
-import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.IndexType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -45,12 +44,6 @@ public enum TestIndex {
   private final String name;
   private final String mappingsDir;
 
-  private static final IndexModel MODEL = new IndexModel(TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName());
-
-  public IndexModel getModel() {
-    return MODEL;
-  }
-
   @SneakyThrows
   public String getSettings() {
     val settingsFile = Resources.getResource(mappingsDir + "/" + "index.settings.json");
@@ -65,8 +58,8 @@ public enum TestIndex {
   }
 
   @SneakyThrows
-  public String getMapping(Type typeName) {
-    val mappingFileName = typeName.getId() + ".mapping.json";
+  public String getMapping(IndexType indexType) {
+    val mappingFileName = indexType.getId() + ".mapping.json";
     val mappingFile = Resources.getResource(mappingsDir + "/" + mappingFileName);
     return Resources.toString(mappingFile, UTF_8);
   }

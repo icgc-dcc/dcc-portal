@@ -38,12 +38,12 @@ import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.TermFilterBuilder;
 import org.elasticsearch.index.query.TermsFilterBuilder;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.GeneSetType;
-import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Optional;
@@ -72,15 +72,12 @@ public class GeneSetRepository {
       "altIds", "go_term.alt_ids",
       "synonyms", "go_term.synonyms");
 
-  private static final Type TYPE = Type.GENE_SET;
-  private static final Kind KIND = Kind.GENE_SET;
-
   private final Client client;
-  private final String index;
+  private final String indexName;
 
   @Autowired
-  public GeneSetRepository(@NonNull Client client, @NonNull IndexModel indexModel) {
-    this.index = indexModel.getIndex();
+  public GeneSetRepository(@NonNull Client client, @Value("#{indexName}") String indexName) {
+    this.indexName = indexName;
     this.client = client;
   }
 
@@ -131,8 +128,8 @@ public class GeneSetRepository {
       return -1;
     }
 
-    val result = client.prepareCount(index)
-        .setTypes(TYPE.getId())
+    val result = client.prepareCount(indexName)
+        .setTypes(IndexType.GENE_SET.getId())
         .setQuery(query)
         .execute()
         .actionGet()
@@ -162,17 +159,17 @@ public class GeneSetRepository {
 
   public Map<String, Object> findOne(String id, Iterable<String> fieldNames) {
     val query = Query.builder().fields(Lists.newArrayList(fieldNames)).build();
-    val search = client.prepareGet(index, TYPE.getId(), id);
-    search.setFields(getFields(query, KIND));
-    String[] sourceFields = resolveSourceFields(query, KIND);
+    val search = client.prepareGet(indexName, IndexType.GENE_SET.getId(), id);
+    search.setFields(getFields(query, EntityType.GENE_SET));
+    String[] sourceFields = resolveSourceFields(query, EntityType.GENE_SET);
     if (sourceFields != EMPTY_SOURCE_FIELDS) {
-      search.setFetchSource(resolveSourceFields(query, KIND), EMPTY_SOURCE_FIELDS);
+      search.setFetchSource(resolveSourceFields(query, EntityType.GENE_SET), EMPTY_SOURCE_FIELDS);
     }
 
     GetResponse response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.GENE_SET);
 
-    val map = createResponseMap(response, query, KIND);
+    val map = createResponseMap(response, query, EntityType.GENE_SET);
     log.debug("{}", map);
 
     return map;
@@ -181,8 +178,8 @@ public class GeneSetRepository {
   private SearchResponse findField(Iterable<String> ids, String fieldName) {
     val filters = new TermsFilterBuilder("_id", ids);
 
-    val search = client.prepareSearch(index)
-        .setTypes(TYPE.getId())
+    val search = client.prepareSearch(indexName)
+        .setTypes(IndexType.GENE_SET.getId())
         .setSearchType(QUERY_THEN_FETCH)
         .setFrom(0)
         .setSize(size(ids))

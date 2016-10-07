@@ -4,12 +4,10 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 import static org.dcc.portal.pql.meta.IndexModel.getFileTypeModel;
-import static org.icgc.dcc.portal.server.pql.convert.FiltersConverter.ENTITY_SET_ID;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.dcc.portal.pql.meta.FileTypeModel;
 import org.dcc.portal.pql.meta.TypeModel;
@@ -19,16 +17,16 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * Abstract class the holds mappings of field names in our models to the raw elasticsearch fields. PQL only allows for
+ * searching on Centric types, this provides us with utility for using the elasticsearch api to write custom queries not
+ * supported by PQL.
+ */
 @Component
 public class IndexModel {
 
@@ -38,114 +36,34 @@ public class IndexModel {
   public static final int MAX_FACET_TERM_COUNT = 1024;
   public static final String IS = "is";
   public static final String ALL = "all";
-  public static final String NOT = "not";
-  public static final String MISSING = "_missing";
-
-  public static final Set<String> GENES_SORT_FIELD_NAMES = ImmutableSet.of("symbol", "name", "start", "type",
-      "affectedDonorCountFiltered");
-
-  /**
-   * Special cases for term lookups
-   */
-  public static final String API_ENTITY_SET_ID_FIELD_NAME = ENTITY_SET_ID;
-
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Getter
-  public static enum Kind {
-    PROJECT("project"),
-    DONOR("donor"),
-    GENE("gene"),
-    MUTATION("mutation"),
-    PATHWAY("pathway"),
-
-    GENE_SET("geneSet"),
-    FILE("file"),
-    REPOSITORY("repository"),
-
-    CONSEQUENCE("consequence"),
-    TRANSCRIPT("transcript"),
-    OCCURRENCE("occurrence"),
-    EMB_OCCURRENCE("embOccurrence"),
-    OBSERVATION("observation"),
-    RELEASE("release"),
-    KEYWORD(""),
-    SPECIMEN(""),
-    SAMPLE(""),
-    SEQ_DATA(""),
-    DOMAIN(""),
-    EXON(""),
-    DIAGRAM("diagram"),
-    FAMILY(""),
-    EXPOSURE(""),
-    THERAPY("");
-
-    private final String id;
-  }
-
-  // Index document type
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Getter
-  public static enum Type {
-    PROJECT("project"),
-    DONOR("donor"),
-    GENE("gene"),
-    DRUG("drug"),
-    MUTATION("mutation"),
-    RELEASE("release"),
-    PATHWAY("pathway"),
-    GENE_SET("gene-set"),
-    DONOR_CENTRIC("donor-centric"),
-    GENE_CENTRIC("gene-centric"),
-    MUTATION_CENTRIC("mutation-centric"),
-    OCCURRENCE_CENTRIC("observation-centric"),
-    REPOSITORY("repository"),
-    FILE("file"),
-    FILE_CENTRIC("file-centric"),
-
-    DONOR_TEXT("donor-text"),
-    GENE_TEXT("gene-text"),
-    MUTATION_TEXT("mutation-text"),
-    PATHWAY_TEXT("pathway-text"),
-    GENESET_TEXT("gene-set-text"),
-    DIAGRAM("diagram"),
-    FILE_TEXT("file-text"),
-    FILE_DONOR_TEXT("donor-text"),
-    DRUG_TEXT("drug-text"),
-    PROJECT_TEXT("project-text");
-
-    @NonNull
-    private final String id;
-  }
 
   private static final TypeModel REPO_FILE_TYPE_MODEL = getFileTypeModel();
 
   // These names are used by the client
-  private static final List<String> FILE_CLIENT_FIELD_ALIAS_MAPPING = ImmutableList.<String> builder()
-      .add(FileTypeModel.Fields.ID)
-      .add(FileTypeModel.Fields.REPO_NAME)
-      .add(FileTypeModel.Fields.REPO_CODE)
-      .add(FileTypeModel.Fields.FILE_NAME)
-      .add(FileTypeModel.Fields.FILE_SIZE)
-      .add(FileTypeModel.Fields.PROJECT_CODE)
-      .add(FileTypeModel.Fields.PRIMARY_SITE)
-      .add(FileTypeModel.Fields.STUDY)
-      .add(FileTypeModel.Fields.DONOR_STUDY)
-      .add(FileTypeModel.Fields.DATA_TYPE)
-      .add(FileTypeModel.Fields.EXPERIMENTAL_STRATEGY)
-      .add(FileTypeModel.Fields.FILE_FORMAT)
-      .add(FileTypeModel.Fields.ACCESS)
-      .add(FileTypeModel.Fields.DONOR_ID)
-      .add(FileTypeModel.Fields.SUBMITTED_DONOR_ID)
-      .add(FileTypeModel.Fields.SPECIMEN_ID)
-      .add(FileTypeModel.Fields.SPECIMEN_TYPE)
-      .add(FileTypeModel.Fields.SAMPLE_ID)
-      .add(FileTypeModel.Fields.PROGRAM)
-      .add(FileTypeModel.Fields.ANALYSIS_SOFTWARE)
-      .build();
+  private static final List<String> FILE_CLIENT_FIELD_ALIAS_MAPPING = ImmutableList.of(
+      FileTypeModel.Fields.ID,
+      FileTypeModel.Fields.REPO_NAME,
+      FileTypeModel.Fields.REPO_CODE,
+      FileTypeModel.Fields.FILE_NAME,
+      FileTypeModel.Fields.FILE_SIZE,
+      FileTypeModel.Fields.PROJECT_CODE,
+      FileTypeModel.Fields.PRIMARY_SITE,
+      FileTypeModel.Fields.STUDY,
+      FileTypeModel.Fields.DONOR_STUDY,
+      FileTypeModel.Fields.DATA_TYPE,
+      FileTypeModel.Fields.EXPERIMENTAL_STRATEGY,
+      FileTypeModel.Fields.FILE_FORMAT,
+      FileTypeModel.Fields.ACCESS,
+      FileTypeModel.Fields.DONOR_ID,
+      FileTypeModel.Fields.SUBMITTED_DONOR_ID,
+      FileTypeModel.Fields.SPECIMEN_ID,
+      FileTypeModel.Fields.SPECIMEN_TYPE,
+      FileTypeModel.Fields.SAMPLE_ID,
+      FileTypeModel.Fields.PROGRAM,
+      FileTypeModel.Fields.ANALYSIS_SOFTWARE);
   private static final ImmutableMap<String, String> FILE_FIELDS_MAPPING = ImmutableMap
       .<String, String> builder()
       .putAll(Maps.toMap(FILE_CLIENT_FIELD_ALIAS_MAPPING, alias -> REPO_FILE_TYPE_MODEL.getField(alias)))
-      .put(API_ENTITY_SET_ID_FIELD_NAME, API_ENTITY_SET_ID_FIELD_NAME)
       .build();
 
   private static final ImmutableMap<String, String> FAMILY_FIELDS_MAPPING =
@@ -364,8 +282,6 @@ public class IndexModel {
           .put("totalReadCount", "total_read_count")
           .put("variationCallingAlgorithm", "variation_calling_algorithm")
           .put("verificationStatus", "verification_status")
-          .put(API_ENTITY_SET_ID_FIELD_NAME, API_ENTITY_SET_ID_FIELD_NAME)
-
           .build();
 
   private static final ImmutableMap<String, String> RELEASE_FIELDS_MAPPING =
@@ -399,7 +315,7 @@ public class IndexModel {
       "inchikey", "drug_class", "atc_codes_code", "atc_codes_description", "atc_level5_codes",
       "trials_description", "trials_conditions_name", "external_references_drugbank", "external_references_chembl")
       .stream().collect(
-          toMap(field -> Type.DRUG_TEXT.id + "." + field, identity()));
+          toMap(field -> IndexType.DRUG_TEXT.id + "." + field, identity()));
 
   private static final ImmutableMap<String, String> KEYWORD_FIELDS_MAPPING = ImmutableMap.<String, String> builder()
       // Common
@@ -474,104 +390,52 @@ public class IndexModel {
           .put("geneCount", "gene_count")
           .build();
 
-  private static final ImmutableMap<Kind, TypeModel> TYPE_MODEL_BY_KIND = ImmutableMap.<Kind, TypeModel> builder()
-      .put(Kind.DONOR, org.dcc.portal.pql.meta.IndexModel.getDonorCentricTypeModel())
-      .put(Kind.MUTATION, org.dcc.portal.pql.meta.IndexModel.getMutationCentricTypeModel())
-      .put(Kind.OCCURRENCE, org.dcc.portal.pql.meta.IndexModel.getObservationCentricTypeModel())
-      .put(Kind.GENE, org.dcc.portal.pql.meta.IndexModel.getGeneCentricTypeModel())
-      .put(Kind.GENE_SET, org.dcc.portal.pql.meta.IndexModel.getGeneSetTypeModel())
-      .put(Kind.PROJECT, org.dcc.portal.pql.meta.IndexModel.getProjectTypeModel())
-      .build();
+  private static final ImmutableMap<EntityType, TypeModel> TYPE_MODEL_BY_ENTITY =
+      ImmutableMap.<EntityType, TypeModel> builder()
+          .put(EntityType.DONOR, org.dcc.portal.pql.meta.IndexModel.getDonorCentricTypeModel())
+          .put(EntityType.MUTATION, org.dcc.portal.pql.meta.IndexModel.getMutationCentricTypeModel())
+          .put(EntityType.OCCURRENCE, org.dcc.portal.pql.meta.IndexModel.getObservationCentricTypeModel())
+          .put(EntityType.GENE, org.dcc.portal.pql.meta.IndexModel.getGeneCentricTypeModel())
+          .put(EntityType.GENE_SET, org.dcc.portal.pql.meta.IndexModel.getGeneSetTypeModel())
+          .put(EntityType.PROJECT, org.dcc.portal.pql.meta.IndexModel.getProjectTypeModel())
+          .build();
 
-  /*
-   * private static final ImmutableMap<String, String> GO_SET_FIELDS_MAPPING = new ImmutableMap.Builder<String,
-   * String>() .put("ontology", "ontology") .put("altIds", "alt_ids") .put("synonyms", "synonyms") .put("inferredTree",
-   * "inferred_tree") .build();
-   * 
-   * private static final ImmutableMap<String, String> PATHWAY_SET_FIELDS_MAPPING = new ImmutableMap.Builder<String,
-   * String>() .put("hierarchy", "hierarchy") .build();
-   */
-
-  public static final EnumMap<Kind, ImmutableMap<String, String>> FIELDS_MAPPING =
-      new EnumMap<Kind, ImmutableMap<String, String>>(Kind.class);
+  public static final EnumMap<EntityType, ImmutableMap<String, String>> FIELDS_MAPPING =
+      new EnumMap<EntityType, ImmutableMap<String, String>>(EntityType.class);
 
   static {
-    FIELDS_MAPPING.put(Kind.PROJECT, createFieldsMapping(Kind.PROJECT));
-    FIELDS_MAPPING.put(Kind.DONOR, createFieldsMapping(Kind.DONOR));
-    FIELDS_MAPPING.put(Kind.SPECIMEN, SPECIMEN_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.FAMILY, FAMILY_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.EXPOSURE, EXPOSURE_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.THERAPY, THERAPY_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.SAMPLE, SAMPLE_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.SEQ_DATA, RAWSEQDATA_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.GENE, createFieldsMapping(Kind.GENE));
-    FIELDS_MAPPING.put(Kind.MUTATION, createFieldsMapping(Kind.MUTATION));
-    FIELDS_MAPPING.put(Kind.TRANSCRIPT, TRANSCRIPT_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.CONSEQUENCE, CONSEQUENCE_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.DOMAIN, DOMAIN_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.EXON, EXON_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.EMB_OCCURRENCE, EMB_OCCURRENCE_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.OBSERVATION, OBSERVATION_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.OCCURRENCE, createFieldsMapping(Kind.OCCURRENCE));
-    FIELDS_MAPPING.put(Kind.RELEASE, RELEASE_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.KEYWORD, KEYWORD_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.PATHWAY, PATHWAY_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.GENE_SET, createFieldsMapping(Kind.GENE_SET));
-    FIELDS_MAPPING.put(Kind.DIAGRAM, DIAGRAM_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(Kind.FILE, FILE_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.PROJECT, createFieldsMapping(EntityType.PROJECT));
+    FIELDS_MAPPING.put(EntityType.DONOR, createFieldsMapping(EntityType.DONOR));
+    FIELDS_MAPPING.put(EntityType.SPECIMEN, SPECIMEN_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.FAMILY, FAMILY_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.EXPOSURE, EXPOSURE_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.THERAPY, THERAPY_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.SAMPLE, SAMPLE_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.SEQ_DATA, RAWSEQDATA_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.GENE, createFieldsMapping(EntityType.GENE));
+    FIELDS_MAPPING.put(EntityType.MUTATION, createFieldsMapping(EntityType.MUTATION));
+    FIELDS_MAPPING.put(EntityType.TRANSCRIPT, TRANSCRIPT_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.CONSEQUENCE, CONSEQUENCE_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.DOMAIN, DOMAIN_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.EXON, EXON_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.EMB_OCCURRENCE, EMB_OCCURRENCE_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.OBSERVATION, OBSERVATION_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.OCCURRENCE, createFieldsMapping(EntityType.OCCURRENCE));
+    FIELDS_MAPPING.put(EntityType.RELEASE, RELEASE_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.KEYWORD, KEYWORD_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.PATHWAY, PATHWAY_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.GENE_SET, createFieldsMapping(EntityType.GENE_SET));
+    FIELDS_MAPPING.put(EntityType.DIAGRAM, DIAGRAM_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.FILE, FILE_FIELDS_MAPPING);
   }
-
-  /**
-   * Internal gene set types
-   */
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Getter
-  public static enum GeneSetType {
-    GENE_SET_TYPE_ALL("geneSetId"),
-    GENE_SET_TYPE_GO("go_term"),
-    GENE_SET_TYPE_PATHWAY("pathway"),
-    GENE_SET_TYPE_CURATED("curated_set");
-
-    private final String type;
-  }
-
-  /**
-   * Mapping query ID fields to internal types
-   */
-  public static final Map<String, String> GENE_SET_QUERY_ID_FIELDS = ImmutableMap.<String, String> builder()
-      .put(GeneSetType.GENE_SET_TYPE_ALL.getType(), "geneSetId")
-      .put(GeneSetType.GENE_SET_TYPE_CURATED.getType(), "curatedSetId")
-      .put(GeneSetType.GENE_SET_TYPE_PATHWAY.getType(), "pathwayId")
-      .put(GeneSetType.GENE_SET_TYPE_GO.getType(), "goTermId").build();
-
-  /**
-   * Mapping query type fields to internal type
-   */
-  public static final Map<String, String> GENE_SET_QUERY_TYPE_FIELDS = ImmutableMap.<String, String> of(
-      GeneSetType.GENE_SET_TYPE_CURATED.getType(), "hasCuratedSet",
-      GeneSetType.GENE_SET_TYPE_PATHWAY.getType(), "hasPathway",
-      GeneSetType.GENE_SET_TYPE_GO.getType(), "hasGoTerm");
-
-  private String index;
-  private String repoIndexName;
 
   @Autowired
-  public IndexModel(@Value("#{indexName}") String index, @Value("#{repoIndexName}") String repoIndexName) {
+  public IndexModel(@Value("#{repoIndexName}") String repoIndexName) {
     super();
-    this.index = index;
-    this.repoIndexName = repoIndexName;
   }
 
-  public String getIndex() {
-    return this.index;
-  }
-
-  public String getRepoIndex() {
-    return this.repoIndexName;
-  }
-
-  public static String[] getFields(Query query, Kind kind) {
-    val typeFieldsMap = FIELDS_MAPPING.get(kind);
+  public static String[] getFields(Query query, EntityType entityType) {
+    val typeFieldsMap = FIELDS_MAPPING.get(entityType);
     val result = Lists.<String> newArrayList();
 
     if (query.hasFields()) {
@@ -583,17 +447,17 @@ public class IndexModel {
     } else {
       result.addAll(typeFieldsMap.values().asList());
     }
-    clearInvalidFields(result, kind);
+    clearInvalidFields(result, entityType);
     return result.toArray(new String[result.size()]);
   }
 
   /**
    * Remove fields that are objects in ES. They must be retrieved from source
    */
-  private static void clearInvalidFields(List<String> fields, Kind kind) {
-    val typeFieldsMap = FIELDS_MAPPING.get(kind);
+  private static void clearInvalidFields(List<String> fields, EntityType entityType) {
+    val typeFieldsMap = FIELDS_MAPPING.get(entityType);
 
-    switch (kind) {
+    switch (entityType) {
     case GENE:
       fields.remove(typeFieldsMap.get("externalDbIds"));
       fields.remove(typeFieldsMap.get("pathways"));
@@ -616,9 +480,9 @@ public class IndexModel {
     }
   }
 
-  private static ImmutableMap<String, String> createFieldsMapping(Kind kind) {
-    val typeModel = TYPE_MODEL_BY_KIND.get(kind);
-    checkState(typeModel != null, "TypeModel is not defined for kind '%s'", kind);
+  private static ImmutableMap<String, String> createFieldsMapping(EntityType entityType) {
+    val typeModel = TYPE_MODEL_BY_ENTITY.get(entityType);
+    checkState(typeModel != null, "TypeModel is not defined for entityType '%s'", entityType);
     val result = typeModel.getAliases().stream()
         .collect(toMap(k -> k, v -> typeModel.getField(v)));
 

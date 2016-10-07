@@ -10,7 +10,6 @@ import org.dcc.portal.pql.meta.DonorCentricTypeModel.Fields;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.icgc.dcc.portal.server.model.*;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.server.repository.DonorRepository;
@@ -58,7 +57,7 @@ public class DonorService {
     val list = ImmutableList.<Donor> builder();
 
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, Kind.DONOR);
+      val fieldMap = createResponseMap(hit, query, EntityType.DONOR);
 
       if (includeScore) {
         fieldMap.put("_score", hit.getScore());

@@ -26,8 +26,6 @@ import java.util.Map;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
@@ -58,7 +56,7 @@ public class Exposure {
 
   @JsonCreator
   public Exposure(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.EXPOSURE);
+    val fields = FIELDS_MAPPING.get(EntityType.EXPOSURE);
     exposureType = getString(fieldMap.get(fields.get("exposureType")));
     exposureIntesity = getLong(fieldMap.get(fields.get("exposureIntesity")));
     tobaccoSmokingHistoryIndicator = getString(fieldMap.get(fields.get("tobaccoSmokingHistoryIndicator")));

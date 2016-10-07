@@ -21,22 +21,18 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 import static org.dcc.portal.pql.util.Converters.isString;
-import static org.icgc.dcc.portal.server.model.IndexModel.Type.DONOR;
-import static org.icgc.dcc.portal.server.model.IndexModel.Type.DRUG;
-import static org.icgc.dcc.portal.server.model.IndexModel.Type.GENE;
-import static org.icgc.dcc.portal.server.model.IndexModel.Type.MUTATION;
-import static org.icgc.dcc.portal.server.model.IndexModel.Type.PROJECT;
-import static org.icgc.dcc.portal.server.model.IndexModel.Type.FILE;
+import static org.icgc.dcc.portal.server.model.IndexType.DONOR;
+import static org.icgc.dcc.portal.server.model.IndexType.DRUG;
+import static org.icgc.dcc.portal.server.model.IndexType.FILE;
+import static org.icgc.dcc.portal.server.model.IndexType.GENE;
+import static org.icgc.dcc.portal.server.model.IndexType.MUTATION;
+import static org.icgc.dcc.portal.server.model.IndexType.PROJECT;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.dcc.portal.pql.exception.SemanticException;
 import org.icgc.dcc.portal.server.pql.convert.model.JqlArrayValue;
@@ -53,6 +49,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class JqlFiltersDeserializer extends JsonDeserializer<JqlFilters> {

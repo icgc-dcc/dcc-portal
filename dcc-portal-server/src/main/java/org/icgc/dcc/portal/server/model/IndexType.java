@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,23 +15,48 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.pql.convert.model;
+package org.icgc.dcc.portal.server.model;
 
-import java.util.List;
-import java.util.Map;
-
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
 
-import org.icgc.dcc.portal.server.pql.convert.JqlFiltersDeserializer;
+/**
+ * Index document type
+ */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+public enum IndexType {
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+  PROJECT("project"),
+  DONOR("donor"),
+  GENE("gene"),
+  DRUG("drug"),
+  MUTATION("mutation"),
+  RELEASE("release"),
+  PATHWAY("pathway"),
+  GENE_SET("gene-set"),
+  DONOR_CENTRIC("donor-centric"),
+  GENE_CENTRIC("gene-centric"),
+  MUTATION_CENTRIC("mutation-centric"),
+  OCCURRENCE_CENTRIC("observation-centric"),
+  REPOSITORY("repository"),
+  FILE("file"),
+  FILE_CENTRIC("file-centric"),
 
-@Value
-@JsonDeserialize(using = JqlFiltersDeserializer.class)
-public class JqlFilters {
+  DONOR_TEXT("donor-text"),
+  GENE_TEXT("gene-text"),
+  MUTATION_TEXT("mutation-text"),
+  PATHWAY_TEXT("pathway-text"),
+  GENESET_TEXT("gene-set-text"),
+  DIAGRAM("diagram"),
+  FILE_TEXT("file-text"),
+  FILE_DONOR_TEXT("donor-text"),
+  DRUG_TEXT("drug-text"),
+  PROJECT_TEXT("project-text");
 
   @NonNull
-  Map<String, List<JqlField>> entityValues;
+  final String id;
 
 }

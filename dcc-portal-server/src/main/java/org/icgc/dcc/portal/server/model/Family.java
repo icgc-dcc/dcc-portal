@@ -26,8 +26,6 @@ import java.util.Map;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
@@ -61,7 +59,7 @@ public class Family {
 
   @JsonCreator
   public Family(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.FAMILY);
+    val fields = FIELDS_MAPPING.get(EntityType.FAMILY);
 
     donorHasRelativeWithCancerHistory = getString(fieldMap.get(fields.get("donorHasRelativeWithCancerHistory")));
     relationshipType = getString(fieldMap.get(fields.get("relationshipType")));

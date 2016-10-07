@@ -19,9 +19,9 @@ package org.icgc.dcc.portal.server.service;
 
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.icgc.dcc.portal.server.model.Keyword;
 import org.icgc.dcc.portal.server.model.Keywords;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.repository.SearchRepository;
@@ -50,7 +50,7 @@ public class SearchService {
     val results = ImmutableList.<Keyword> builder();
 
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, Kind.KEYWORD);
+      val fieldMap = createResponseMap(hit, query, EntityType.KEYWORD);
       val keyword = new Keyword(fieldMap);
 
       if (keyword.getType().equals(DONOR_TYPE)) {

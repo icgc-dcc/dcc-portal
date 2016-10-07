@@ -28,8 +28,8 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.NonNull;
@@ -53,9 +53,9 @@ public class DrugRepository {
   private final QueryEngine queryEngine;
 
   @Autowired
-  public DrugRepository(Client client, IndexModel indexModel, QueryEngine queryEngine) {
+  public DrugRepository(Client client, QueryEngine queryEngine, @Value("#{indexName}") String indexName) {
     this.client = client;
-    this.indexName = indexModel.getIndex();
+    this.indexName = indexName;
     this.queryEngine = queryEngine;
   }
 

@@ -40,7 +40,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.icgc.dcc.common.core.util.Joiners;
 import org.icgc.dcc.portal.server.model.DiagramProtein;
 import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.repository.DiagramRepository;
 import org.icgc.dcc.portal.server.repository.MutationRepository;
@@ -66,7 +66,7 @@ public class DiagramService {
   @NonNull
   private final MutationRepository mutationRepository;
 
-  private ImmutableMap<String, String> INDEX_MODEL = IndexModel.FIELDS_MAPPING.get(Kind.DIAGRAM);
+  private ImmutableMap<String, String> INDEX_MODEL = IndexModel.FIELDS_MAPPING.get(EntityType.DIAGRAM);
 
   private static final List<String> CONSEQUENCE_TYPES = ImmutableList.<String> builder().add(
       "frameshift_variant",

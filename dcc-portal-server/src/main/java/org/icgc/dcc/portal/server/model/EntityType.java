@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,23 +15,41 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.pql.convert.model;
+package org.icgc.dcc.portal.server.model;
 
-import java.util.List;
-import java.util.Map;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import lombok.NonNull;
-import lombok.Value;
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+public enum EntityType {
+  PROJECT("project"),
+  DONOR("donor"),
+  GENE("gene"),
+  MUTATION("mutation"),
+  PATHWAY("pathway"),
 
-import org.icgc.dcc.portal.server.pql.convert.JqlFiltersDeserializer;
+  GENE_SET("geneSet"),
+  FILE("file"),
+  REPOSITORY("repository"),
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+  CONSEQUENCE("consequence"),
+  TRANSCRIPT("transcript"),
+  OCCURRENCE("occurrence"),
+  EMB_OCCURRENCE("embOccurrence"),
+  OBSERVATION("observation"),
+  RELEASE("release"),
+  KEYWORD(""),
+  SPECIMEN(""),
+  SAMPLE(""),
+  SEQ_DATA(""),
+  DOMAIN(""),
+  EXON(""),
+  DIAGRAM("diagram"),
+  FAMILY(""),
+  EXPOSURE(""),
+  THERAPY("");
 
-@Value
-@JsonDeserialize(using = JqlFiltersDeserializer.class)
-public class JqlFilters {
-
-  @NonNull
-  Map<String, List<JqlField>> entityValues;
-
+  private final String id;
 }

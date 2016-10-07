@@ -28,11 +28,11 @@ import java.util.stream.Stream;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.search.SearchHit;
-import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Repository;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
@@ -47,11 +47,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class RepositoryRepository {
 
-  /**
-   * Constants.
-   */
-  private static final Type TYPE = Type.REPOSITORY;
-  private static final Kind KIND = Kind.REPOSITORY;
   private static final ObjectMapper MAPPER = DEFAULT.disable(FAIL_ON_UNKNOWN_PROPERTIES); // Just in case we add more
                                                                                           // fields upstream
 
@@ -62,25 +57,25 @@ public class RepositoryRepository {
   private final String index;
 
   @Autowired
-  RepositoryRepository(@NonNull Client client, @NonNull IndexModel indexModel) {
-    this.index = indexModel.getRepoIndex();
+  RepositoryRepository(@NonNull Client client, @Value("#{repoIndexName}") String repoIndexName) {
+    this.index = repoIndexName;
     this.client = client;
   }
 
   @Cacheable("repository")
   public Repository findOne(String id) {
-    val search = client.prepareGet(index, TYPE.getId(), id);
+    val search = client.prepareGet(index, IndexType.REPOSITORY.getId(), id);
 
     log.debug("{}", search);
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.REPOSITORY);
 
     return convertSource(response.getSourceAsString());
   }
 
   @Cacheable("repositories")
   public List<Repository> findAll() {
-    val search = client.prepareSearch(index).setTypes(TYPE.getId()).setSize(100).setSearchType(QUERY_THEN_FETCH);
+    val search = client.prepareSearch(index).setTypes(IndexType.REPOSITORY.getId()).setSize(100).setSearchType(QUERY_THEN_FETCH);
 
     log.debug("{}", search);
     val response = search.execute().actionGet();

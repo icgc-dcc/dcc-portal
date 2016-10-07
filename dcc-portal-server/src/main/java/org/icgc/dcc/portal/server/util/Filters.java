@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.portal.server.model.IndexModel.ALL;
 import static org.icgc.dcc.portal.server.model.IndexModel.IS;
-import static org.icgc.dcc.portal.server.model.IndexModel.Kind.GENE;
+import static org.icgc.dcc.portal.server.model.EntityType.GENE;
 import static org.icgc.dcc.portal.server.pql.convert.FiltersConverter.ENTITY_SET_PREFIX;
 import static org.icgc.dcc.portal.server.util.JsonUtils.MAPPER;
 

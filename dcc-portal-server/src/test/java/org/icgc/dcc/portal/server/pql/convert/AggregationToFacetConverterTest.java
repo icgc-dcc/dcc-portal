@@ -28,7 +28,7 @@ import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
@@ -48,7 +48,7 @@ public class AggregationToFacetConverterTest extends BaseElasticSearchTest {
   @Before
   public void setUp() {
     this.testIndex = TestIndex.RELEASE;
-    es.execute(createIndexMappings(Type.MUTATION_CENTRIC).withData(bulkFile(getClass())));
+    es.execute(createIndexMappings(IndexType.MUTATION_CENTRIC).withData(bulkFile(getClass())));
   }
 
   @Test
@@ -120,7 +120,7 @@ public class AggregationToFacetConverterTest extends BaseElasticSearchTest {
   private SearchResponse executeQuery(AggregationBuilder<?>... builder) {
     val request = es.client()
         .prepareSearch(testIndex.getName())
-        .setTypes(Type.MUTATION_CENTRIC.getId())
+        .setTypes(IndexType.MUTATION_CENTRIC.getId())
         .addAggregation(builder[0])
         .addAggregation(builder[1]);
     log.debug("Request - {}", request);

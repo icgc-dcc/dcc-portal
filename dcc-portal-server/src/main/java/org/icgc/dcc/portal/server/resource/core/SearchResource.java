@@ -30,8 +30,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.Keywords;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.model.param.IntParam;
@@ -61,7 +61,7 @@ public class SearchResource extends Resource {
 
   private static final Keywords EMPTY_RESULT = new Keywords(emptyList());
   private static final String DEFAULT_FILTERS = "{}";
-  private static final ImmutableMap<String, String> FIELD_MAPPING = FIELDS_MAPPING.get(IndexModel.Kind.KEYWORD);
+  private static final ImmutableMap<String, String> FIELD_MAPPING = FIELDS_MAPPING.get(EntityType.KEYWORD);
 
   protected static final String DEFAULT_SIZE = "10";
   protected static final String DEFAULT_FROM = "1";

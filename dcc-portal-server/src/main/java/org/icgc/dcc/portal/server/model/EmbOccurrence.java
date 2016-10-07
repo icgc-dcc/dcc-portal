@@ -26,8 +26,6 @@ import java.util.Map;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -114,7 +112,7 @@ public class EmbOccurrence {
 
   @SuppressWarnings("unchecked")
   public EmbOccurrence(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.EMB_OCCURRENCE);
+    val fields = FIELDS_MAPPING.get(EntityType.EMB_OCCURRENCE);
     mutationId = getString(fieldMap.get(fields.get("mutationId")));
     chromosome = getString(fieldMap.get(fields.get("chromosome")));
     start = getLong(fieldMap.get(fields.get("start")));
@@ -161,13 +159,13 @@ public class EmbOccurrence {
   }
 
   private static String getDonorId(Map<String, Object> donor) {
-    val fields = FIELDS_MAPPING.get(Kind.DONOR);
+    val fields = FIELDS_MAPPING.get(EntityType.DONOR);
 
     return getString(donor.get(fields.get("id")));
   }
 
   private static String getProjectId(Map<String, Object> project) {
-    val fields = FIELDS_MAPPING.get(Kind.PROJECT);
+    val fields = FIELDS_MAPPING.get(EntityType.PROJECT);
 
     return getString(project.get(fields.get("id")));
   }

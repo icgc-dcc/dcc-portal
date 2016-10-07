@@ -7,8 +7,6 @@ import java.util.Map;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,7 +29,7 @@ public class RawSeqData {
   String rawDataAccession;
 
   public RawSeqData(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.SEQ_DATA);
+    val fields = FIELDS_MAPPING.get(EntityType.SEQ_DATA);
 
     id = (String) fieldMap.get(fields.get("id"));
     platform = (String) fieldMap.get(fields.get("platform"));

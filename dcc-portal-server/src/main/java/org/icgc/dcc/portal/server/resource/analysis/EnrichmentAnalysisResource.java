@@ -24,7 +24,6 @@ import static java.lang.Integer.parseInt;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.ACCEPTED;
-import static org.icgc.dcc.portal.server.model.IndexModel.GENES_SORT_FIELD_NAMES;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ANALYSIS_ID_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ANALYSIS_ID_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_PARAM;
@@ -42,6 +41,7 @@ import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -64,6 +64,8 @@ import org.icgc.dcc.portal.server.service.EnrichmentAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.ImmutableSet;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -78,6 +80,12 @@ import lombok.extern.slf4j.Slf4j;
 @Path("/v1/analysis/enrichment")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EnrichmentAnalysisResource extends Resource {
+
+  /**
+   * Constants
+   */
+  private static final Set<String> GENES_SORT_FIELD_NAMES = ImmutableSet.of("symbol", "name", "start", "type",
+      "affectedDonorCountFiltered");
 
   /**
    * Dependencies

@@ -27,9 +27,9 @@ import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
@@ -54,18 +54,19 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
       "mutation:{platform:{is:\"Nimblegen Human Methylation 2.1M Whole-Genome sets\"}}";
 
   DonorRepository donorRepository;
-  ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(Kind.DONOR);
+  ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.DONOR);
 
   @Before
   public void setUp() throws Exception {
     this.testIndex = TestIndex.RELEASE;
 
-    es.execute(createIndexMappings(Type.DONOR, Type.DONOR_CENTRIC)
+    es.execute(createIndexMappings(IndexType.DONOR, IndexType.DONOR_CENTRIC)
         .withData(bulkFile(getClass()))
         // This is needed because the DonorRepository now does a 'secondary' search on icgc-repository index.
         .withData(MANIFEST_TEST_DATA));
     donorRepository =
-        new DonorRepository(es.client(), testIndex.getModel(), new QueryEngine(es.client(), testIndex.getName()));
+        new DonorRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()), TestIndex.RELEASE.getName(),
+            TestIndex.REPOSITORY.getName());
   }
 
   @Test

@@ -25,8 +25,6 @@ import java.util.Map;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiModel;
@@ -51,7 +49,7 @@ public class Sample {
 
   @SuppressWarnings("unchecked")
   public Sample(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.SAMPLE);
+    val fields = FIELDS_MAPPING.get(EntityType.SAMPLE);
 
     id = (String) fieldMap.get(fields.get("id"));
     analyzedId = (String) fieldMap.get(fields.get("analyzedId"));

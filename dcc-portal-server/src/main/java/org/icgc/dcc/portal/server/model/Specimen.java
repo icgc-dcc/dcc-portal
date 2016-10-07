@@ -22,8 +22,6 @@ import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import java.util.List;
 import java.util.Map;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
 
@@ -97,7 +95,7 @@ public class Specimen {
   public Specimen(Map<String, Object> fieldMap) {
 
     // TODO: See if we can remove the dependency on the old IndexModel's FIELDS_MAPPING.
-    val fields = FIELDS_MAPPING.get(Kind.SPECIMEN);
+    val fields = FIELDS_MAPPING.get(EntityType.SPECIMEN);
     id = (String) fieldMap.get(fields.get("id"));
     submittedId = (String) fieldMap.get(fields.get("submittedId"));
     available = getTruthy((String) fieldMap.get(fields.get("available")));

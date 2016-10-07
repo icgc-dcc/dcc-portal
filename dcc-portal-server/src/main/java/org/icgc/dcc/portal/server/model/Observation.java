@@ -24,8 +24,6 @@ import java.util.Map;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
@@ -58,7 +56,7 @@ public class Observation {
 
   @JsonCreator
   public Observation(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.OBSERVATION);
+    val fields = FIELDS_MAPPING.get(EntityType.OBSERVATION);
 
     matchedICGCSampleId = (String) fieldMap.get(fields.get("matchedICGCSampleId"));
     icgcSampleId = (String) fieldMap.get(fields.get("icgcSampleId"));

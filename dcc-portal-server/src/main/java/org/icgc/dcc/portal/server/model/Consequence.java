@@ -26,7 +26,6 @@ import lombok.Data;
 import lombok.val;
 
 import org.icgc.dcc.common.core.fi.CompositeImpactCategory;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
@@ -55,7 +54,7 @@ public class Consequence {
   String functionalImpact;
 
   public Consequence(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.CONSEQUENCE);
+    val fields = FIELDS_MAPPING.get(EntityType.CONSEQUENCE);
     geneAffectedId = (String) fieldMap.get(fields.get("geneAffectedId"));
     geneAffectedSymbol = (String) fieldMap.get(fields.get("geneAffectedSymbol"));
     geneStrand = getLong(fieldMap.get(fields.get("geneStrand")));

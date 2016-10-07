@@ -26,8 +26,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.ImmutableMap;
@@ -90,7 +88,7 @@ public class Mutation {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public Mutation(Map<String, Object> fieldMap) {
-    ImmutableMap<String, String> fields = FIELDS_MAPPING.get(Kind.MUTATION);
+    ImmutableMap<String, String> fields = FIELDS_MAPPING.get(EntityType.MUTATION);
     id = getString(fieldMap.get(fields.get("id")));
     type = getString(fieldMap.get(fields.get("type")));
     chromosome = getString(fieldMap.get(fields.get("chromosome")));

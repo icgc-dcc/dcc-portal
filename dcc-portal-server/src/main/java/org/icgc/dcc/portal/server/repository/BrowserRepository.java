@@ -35,7 +35,7 @@ import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -51,8 +51,8 @@ public class BrowserRepository {
   /**
    * Constants
    */
-  private static final String MUTATION = Type.MUTATION_CENTRIC.getId();
-  private static final String GENE = Type.GENE_CENTRIC.getId();
+  private static final String MUTATION = IndexType.MUTATION_CENTRIC.getId();
+  private static final String GENE = IndexType.GENE_CENTRIC.getId();
   private static final Integer MUTATION_SIZE = 100000;
   private static final Integer GENE_SIZE = 10000;
 

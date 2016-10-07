@@ -17,31 +17,6 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import com.google.common.collect.Lists;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.dcc.portal.pql.ast.StatementNode;
-import org.dcc.portal.pql.query.QueryEngine;
-import org.elasticsearch.action.search.MultiSearchResponse;
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.index.query.NestedQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
-import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import static java.lang.String.format;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.elasticsearch.action.search.SearchType.COUNT;
@@ -51,22 +26,47 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.resolveS
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.dcc.portal.pql.ast.StatementNode;
+import org.dcc.portal.pql.query.QueryEngine;
+import org.elasticsearch.action.search.MultiSearchResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.NestedQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.google.common.collect.Lists;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Component
 public class MutationRepository implements Repository {
 
-  private static final Type CENTRIC_TYPE = Type.MUTATION_CENTRIC;
-  private static final Kind KIND = Kind.MUTATION;
-
+  private static final IndexType CENTRIC_TYPE = IndexType.MUTATION_CENTRIC;
   private final QueryEngine queryEngine;
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
 
   private final Client client;
-  private final String index;
+  private final String indexName;
 
   @Autowired
-  MutationRepository(Client client, IndexModel indexModel, QueryEngine queryEngine) {
-    this.index = indexModel.getIndex();
+  MutationRepository(Client client, QueryEngine queryEngine, @Value("#{indexName}") String indexName) {
+    this.indexName = indexName;
     this.client = client;
     this.queryEngine = queryEngine;
   }
@@ -114,7 +114,7 @@ public class MutationRepository implements Repository {
   }
 
   @Override
-  public SearchRequestBuilder buildFindAllRequest(Query query, Type type) {
+  public SearchRequestBuilder buildFindAllRequest(Query query, IndexType type) {
     throw new UnsupportedOperationException("Not applicable");
   }
 
@@ -164,8 +164,8 @@ public class MutationRepository implements Repository {
     return search.execute().actionGet();
   }
 
-  public SearchRequestBuilder buildCountSearchFromQuery(QueryBuilder query, Type type) {
-    val search = client.prepareSearch(index).setTypes(type.getId()).setSearchType(COUNT);
+  public SearchRequestBuilder buildCountSearchFromQuery(QueryBuilder query, IndexType type) {
+    val search = client.prepareSearch(indexName).setTypes(type.getId()).setSearchType(COUNT);
     search.setQuery(query);
 
     return search;
@@ -192,17 +192,17 @@ public class MutationRepository implements Repository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(index, CENTRIC_TYPE.getId(), id);
-    search.setFields(getFields(query, KIND));
-    String[] sourceFields = resolveSourceFields(query, KIND);
+    val search = client.prepareGet(indexName, CENTRIC_TYPE.getId(), id);
+    search.setFields(getFields(query, EntityType.MUTATION));
+    String[] sourceFields = resolveSourceFields(query, EntityType.MUTATION);
     if (sourceFields != EMPTY_SOURCE_FIELDS) {
-      search.setFetchSource(resolveSourceFields(query, KIND), EMPTY_SOURCE_FIELDS);
+      search.setFetchSource(resolveSourceFields(query, EntityType.MUTATION), EMPTY_SOURCE_FIELDS);
     }
 
     val response = search.execute().actionGet();
-    checkResponseState(id, response, KIND);
+    checkResponseState(id, response, EntityType.MUTATION);
 
-    val map = createResponseMap(response, query, KIND);
+    val map = createResponseMap(response, query, EntityType.MUTATION);
     log.debug("{}", map);
 
     return map;

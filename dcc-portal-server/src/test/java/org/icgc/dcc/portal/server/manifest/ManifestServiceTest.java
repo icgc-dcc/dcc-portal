@@ -46,8 +46,8 @@ import org.apache.commons.io.IOUtils;
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.manifest.model.Manifest;
 import org.icgc.dcc.portal.server.manifest.model.ManifestFormat;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Repository;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
 import org.icgc.dcc.portal.server.repository.FileRepository;
@@ -137,7 +137,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
     when(repositories.findOne(eq(tcgaRepo.getCode()))).thenReturn(tcgaRepo);
 
     // This creates and populates the test index with fixture data.
-    es.execute(createIndexMapping(Type.FILE_CENTRIC)
+    es.execute(createIndexMapping(IndexType.FILE_CENTRIC)
         .withData(bulkFile(getClass())));
     service =
         new ManifestService(

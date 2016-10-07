@@ -27,8 +27,6 @@ import java.util.Map;
 import lombok.Value;
 import lombok.val;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
@@ -86,7 +84,7 @@ public class Gene {
   @SuppressWarnings("unchecked")
   @JsonCreator
   public Gene(Map<String, Object> fieldMap) {
-    val fields = FIELDS_MAPPING.get(Kind.GENE);
+    val fields = FIELDS_MAPPING.get(EntityType.GENE);
     id = getString(fieldMap.get(fields.get("id")));
     symbol = getString(fieldMap.get(fields.get("symbol")));
     name = getString(fieldMap.get(fields.get("name")));
