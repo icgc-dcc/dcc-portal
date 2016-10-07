@@ -33,9 +33,9 @@
             <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="genes" class="t_subnav__items__item"><a data-scrollto href="#genes"><translate>Mutated Genes</translate></a></li>
             <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="mutations" class="t_subnav__items__item"><a data-scrollto href="#mutations"><translate>Mutations</translate></a></li>
             <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="donors" class="t_subnav__items__item"><a data-scrollto href="#donors"><translate>Donors</translate></a></li>
-            <!--<li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="publications" class="t_subnav__items__item"><a data-scrollto
-                                                                         href="#publications">Publications</a>
-            </li>-->
+            <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="publications" class="t_subnav__items__item">
+                <a data-scrollto href="#publications">Publications</a>
+            </li>
             <li><br></li>
             <li class="t_subnav__items__item">
                 <span><translate>Page Filters</translate></span>
@@ -763,7 +763,7 @@
         </table>
     </div>
 </section>
-<!--<section id="publications"
+<section id="publications"
     data-ng-if="ProjectCtrl.project.state === 'live'"
     data-ng-class="{'empty': ProjectCtrl.project.uiPublicationList.length == 0}">
     <h3 data-ng-if="ProjectCtrl.project.uiPublicationList.length == 0">No Publications.</h3>
@@ -780,6 +780,6 @@
             </li>
         </ol>
     </div>
-</section>-->
+</section>
 </article>
 </div>
