@@ -976,7 +976,7 @@
     this.handler = Restangular.oneUrl('pubmed', 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi');
 
     function format(xml) {
-      var pub = {}, json = X2JS.xml_str2json(xml).eSummaryResult.DocSum;
+      var pub = {}, json = X2JS.xml2js(xml).eSummaryResult.DocSum;
 
       function get(field) {
         return _.find(json.Item, function (o) {
