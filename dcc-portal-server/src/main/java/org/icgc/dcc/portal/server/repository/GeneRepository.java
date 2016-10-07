@@ -54,9 +54,9 @@ import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Universe;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,9 +78,9 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class GeneRepository implements Repository {
 
-  private static final Type CENTRIC_TYPE = Type.GENE_CENTRIC;
-  private static final String GENE_TEXT = Type.GENE_TEXT.getId();
-  private static final Type TYPE = Type.GENE;
+  private static final IndexType CENTRIC_TYPE = IndexType.GENE_CENTRIC;
+  private static final String GENE_TEXT = IndexType.GENE_TEXT.getId();
+  private static final IndexType TYPE = IndexType.GENE;
   private static final Kind KIND = Kind.GENE;
 
   private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
@@ -189,7 +189,7 @@ public class GeneRepository implements Repository {
   }
 
   @Override
-  public SearchRequestBuilder buildFindAllRequest(Query query, Type type) {
+  public SearchRequestBuilder buildFindAllRequest(Query query, IndexType type) {
     throw new UnsupportedOperationException("Not applicable");
   }
 

@@ -79,11 +79,11 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.stats.Stats;
 import org.icgc.dcc.portal.server.model.EntitySetTermFacet;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Statistics;
 import org.icgc.dcc.portal.server.model.TermFacet.Term;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.server.repository.TermsLookupRepository.TermLookupType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +103,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class DonorRepository implements Repository {
 
-  private static final Type TYPE = Type.DONOR;
+  private static final IndexType TYPE = IndexType.DONOR;
   private static final Kind KIND = Kind.DONOR;
 
   // These are the raw field names from the 'donor-text' type in the main index.
@@ -333,7 +333,7 @@ public class DonorRepository implements Repository {
   }
 
   private SearchRequestBuilder getPhenotypeAnalysisSearchBuilder() {
-    val type = Type.DONOR_CENTRIC;
+    val type = IndexType.DONOR_CENTRIC;
     val fieldMap = DONORS_FIELDS_MAPPING_FOR_PHENOTYPE;
 
     val searchBuilder = client.prepareSearch(index)
@@ -377,7 +377,7 @@ public class DonorRepository implements Repository {
   }
 
   @Override
-  public SearchRequestBuilder buildFindAllRequest(Query query, Type type) {
+  public SearchRequestBuilder buildFindAllRequest(Query query, IndexType type) {
     throw new UnsupportedOperationException("No longer applicable");
   }
 
@@ -511,7 +511,7 @@ public class DonorRepository implements Repository {
     val maxSize = 5000;
     val fields = isForExternalFile ? FILE_DONOR_ID_SEARCH_FIELDS : DONOR_ID_SEARCH_FIELDS;
     val indexName = isForExternalFile ? repoIndexName : index;
-    val indexType = isForExternalFile ? Type.FILE_DONOR_TEXT : Type.DONOR_TEXT;
+    val indexType = isForExternalFile ? IndexType.FILE_DONOR_TEXT : IndexType.DONOR_TEXT;
 
     val search = client.prepareSearch(indexName)
         .setTypes(indexType.getId())

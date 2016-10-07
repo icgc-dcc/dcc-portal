@@ -17,7 +17,7 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -34,7 +34,7 @@ public class RepositoryTest extends BaseElasticSearchTest {
   public void setUp() throws Exception {
     this.testIndex = TestIndex.RELEASE;
     es.execute(
-        createIndexMappings(Type.GENE, Type.GENE_CENTRIC)
+        createIndexMappings(IndexType.GENE, IndexType.GENE_CENTRIC)
             .withData(bulkFile("GeneRepositoryTest.json")));
   }
 

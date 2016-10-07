@@ -36,7 +36,7 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.index.get.GetField;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
 
 import com.google.common.collect.Iterables;

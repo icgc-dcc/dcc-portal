@@ -3,7 +3,7 @@ package org.icgc.dcc.portal.server.service;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
 import org.elasticsearch.search.SearchHits;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Project;
 import org.icgc.dcc.portal.server.model.Projects;

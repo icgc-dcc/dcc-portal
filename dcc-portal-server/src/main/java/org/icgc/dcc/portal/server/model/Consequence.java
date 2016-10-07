@@ -26,7 +26,6 @@ import lombok.Data;
 import lombok.val;
 
 import org.icgc.dcc.common.core.fi.CompositeImpactCategory;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;

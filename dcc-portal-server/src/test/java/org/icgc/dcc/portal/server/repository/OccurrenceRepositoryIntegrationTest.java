@@ -21,8 +21,8 @@ import lombok.val;
 
 import org.elasticsearch.action.search.MultiSearchRequestBuilder;
 import org.elasticsearch.action.search.MultiSearchResponse;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Query.QueryBuilder;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,12 +33,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class OccurrenceRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
   private static final String DEFAULT_SORT = "donorId";
-  private static final Type CENTRIC_TYPE = Type.OCCURRENCE_CENTRIC;
+  private static final IndexType CENTRIC_TYPE = IndexType.OCCURRENCE_CENTRIC;
 
   @InjectMocks
   OccurrenceRepository repository;
 
-  MultiSearchResponse setup(OccurrenceRepository repo, QueryBuilder qb, Type type) {
+  MultiSearchResponse setup(OccurrenceRepository repo, QueryBuilder qb, IndexType type) {
     MultiSearchRequestBuilder search = client.prepareMultiSearch();
 
     for (val f : FILTERS) {

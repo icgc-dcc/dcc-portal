@@ -40,7 +40,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.icgc.dcc.common.core.util.Joiners;
 import org.icgc.dcc.portal.server.model.DiagramProtein;
 import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.repository.DiagramRepository;
 import org.icgc.dcc.portal.server.repository.MutationRepository;

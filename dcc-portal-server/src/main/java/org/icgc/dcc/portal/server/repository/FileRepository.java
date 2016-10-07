@@ -91,12 +91,12 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.SearchFieldMapper;
 import org.icgc.dcc.portal.server.model.TermFacet;
 import org.icgc.dcc.portal.server.model.TermFacet.Term;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
@@ -145,7 +145,7 @@ public class FileRepository {
   private static final Kind KIND = Kind.FILE;
   private static final TypeModel TYPE_MODEL = IndexModel.getFileTypeModel();
   private static final String FILE_INDEX_TYPE = FILE.getId();
-  private static final String FILE_DONOR_TEXT_INDEX_TYPE = Type.FILE_DONOR_TEXT.getId();
+  private static final String FILE_DONOR_TEXT_INDEX_TYPE = IndexType.FILE_DONOR_TEXT.getId();
 
   private static final String DONOR_ID_RAW_FIELD_NAME = toRawFieldName(Fields.DONOR_ID);
   private static final Jql2PqlConverter PQL_CONVERTER = Jql2PqlConverter.getInstance();

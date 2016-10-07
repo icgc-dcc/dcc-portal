@@ -20,10 +20,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Component
@@ -35,74 +31,6 @@ public class IndexModel {
   public static final int MAX_FACET_TERM_COUNT = 1024;
   public static final String IS = "is";
   public static final String ALL = "all";
-
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Getter
-  public static enum Kind {
-    PROJECT("project"),
-    DONOR("donor"),
-    GENE("gene"),
-    MUTATION("mutation"),
-    PATHWAY("pathway"),
-
-    GENE_SET("geneSet"),
-    FILE("file"),
-    REPOSITORY("repository"),
-
-    CONSEQUENCE("consequence"),
-    TRANSCRIPT("transcript"),
-    OCCURRENCE("occurrence"),
-    EMB_OCCURRENCE("embOccurrence"),
-    OBSERVATION("observation"),
-    RELEASE("release"),
-    KEYWORD(""),
-    SPECIMEN(""),
-    SAMPLE(""),
-    SEQ_DATA(""),
-    DOMAIN(""),
-    EXON(""),
-    DIAGRAM("diagram"),
-    FAMILY(""),
-    EXPOSURE(""),
-    THERAPY("");
-
-    private final String id;
-  }
-
-  // Index document type
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Getter
-  public static enum Type {
-    PROJECT("project"),
-    DONOR("donor"),
-    GENE("gene"),
-    DRUG("drug"),
-    MUTATION("mutation"),
-    RELEASE("release"),
-    PATHWAY("pathway"),
-    GENE_SET("gene-set"),
-    DONOR_CENTRIC("donor-centric"),
-    GENE_CENTRIC("gene-centric"),
-    MUTATION_CENTRIC("mutation-centric"),
-    OCCURRENCE_CENTRIC("observation-centric"),
-    REPOSITORY("repository"),
-    FILE("file"),
-    FILE_CENTRIC("file-centric"),
-
-    DONOR_TEXT("donor-text"),
-    GENE_TEXT("gene-text"),
-    MUTATION_TEXT("mutation-text"),
-    PATHWAY_TEXT("pathway-text"),
-    GENESET_TEXT("gene-set-text"),
-    DIAGRAM("diagram"),
-    FILE_TEXT("file-text"),
-    FILE_DONOR_TEXT("donor-text"),
-    DRUG_TEXT("drug-text"),
-    PROJECT_TEXT("project-text");
-
-    @NonNull
-    private final String id;
-  }
 
   private static final TypeModel REPO_FILE_TYPE_MODEL = getFileTypeModel();
 
@@ -384,7 +312,7 @@ public class IndexModel {
       "inchikey", "drug_class", "atc_codes_code", "atc_codes_description", "atc_level5_codes",
       "trials_description", "trials_conditions_name", "external_references_drugbank", "external_references_chembl")
       .stream().collect(
-          toMap(field -> Type.DRUG_TEXT.id + "." + field, identity()));
+          toMap(field -> IndexType.DRUG_TEXT.id + "." + field, identity()));
 
   private static final ImmutableMap<String, String> KEYWORD_FIELDS_MAPPING = ImmutableMap.<String, String> builder()
       // Common

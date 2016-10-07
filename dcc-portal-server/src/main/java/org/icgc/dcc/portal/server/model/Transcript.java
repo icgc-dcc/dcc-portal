@@ -23,7 +23,6 @@ import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Value;
 import lombok.val;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 
 import java.util.List;
 import java.util.Map;

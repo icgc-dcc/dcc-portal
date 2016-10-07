@@ -6,8 +6,8 @@ import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.NestedQueryBuilder;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 
 public interface Repository {
 
@@ -22,7 +22,7 @@ public interface Repository {
   MultiSearchResponse nestedCounts(LinkedHashMap<String, LinkedHashMap<String, Query>> queries);
 
   // Needed for tests
-  SearchRequestBuilder buildFindAllRequest(Query query, Type type);
+  SearchRequestBuilder buildFindAllRequest(Query query, IndexType type);
 
   NestedQueryBuilder buildQuery(Query query);
 }

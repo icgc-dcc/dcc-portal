@@ -53,9 +53,9 @@ import org.elasticsearch.index.query.IndicesFilterBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.TypeFilterBuilder;
 import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -117,18 +117,18 @@ public class SearchRepository {
   private static final List<String> SIMPLE_TERM_FILTER_TYPES = ImmutableList.of(
       Types.PATHWAY, Types.CURATED_SET, Types.GO_TERM);
 
-  private static final Map<String, Type> TYPE_MAPPINGS = ImmutableMap.<String, Type> builder()
-      .put(Types.GENE, Type.GENE_TEXT)
-      .put(Types.MUTATION, Type.MUTATION_TEXT)
-      .put(Types.DONOR, Type.DONOR_TEXT)
-      .put(Types.PROJECT, Type.PROJECT_TEXT)
-      .put(Types.PATHWAY, Type.GENESET_TEXT)
-      .put(Types.GENE_SET, Type.GENESET_TEXT)
-      .put(Types.GO_TERM, Type.GENESET_TEXT)
-      .put(Types.CURATED_SET, Type.GENESET_TEXT)
-      .put(Types.FILE, Type.FILE_TEXT)
-      .put(Types.FILE_DONOR, Type.FILE_DONOR_TEXT)
-      .put(Types.DRUG, Type.DRUG_TEXT)
+  private static final Map<String, IndexType> TYPE_MAPPINGS = ImmutableMap.<String, IndexType> builder()
+      .put(Types.GENE, IndexType.GENE_TEXT)
+      .put(Types.MUTATION, IndexType.MUTATION_TEXT)
+      .put(Types.DONOR, IndexType.DONOR_TEXT)
+      .put(Types.PROJECT, IndexType.PROJECT_TEXT)
+      .put(Types.PATHWAY, IndexType.GENESET_TEXT)
+      .put(Types.GENE_SET, IndexType.GENESET_TEXT)
+      .put(Types.GO_TERM, IndexType.GENESET_TEXT)
+      .put(Types.CURATED_SET, IndexType.GENESET_TEXT)
+      .put(Types.FILE, IndexType.FILE_TEXT)
+      .put(Types.FILE_DONOR, IndexType.FILE_DONOR_TEXT)
+      .put(Types.DRUG, IndexType.DRUG_TEXT)
       .build();
   private static final Map<String, String> TYPE_ID_MAPPINGS = transformValues(TYPE_MAPPINGS, type -> type.getId());
   private static final String MUTATION_PREFIX = TYPE_ID_MAPPINGS.get(Types.MUTATION);

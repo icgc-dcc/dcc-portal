@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The Ontario Institute for Cancer Research. All rights reserved.                             
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
  *                                                                                                               
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
  * You should have received a copy of the GNU General Public License along with                                  
@@ -15,53 +15,48 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.test;
+package org.icgc.dcc.portal.server.model;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static lombok.AccessLevel.PRIVATE;
-
-import org.icgc.dcc.portal.server.model.IndexType;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.io.Resources;
-
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.val;
 
 /**
- * Encapsulation of test configuration.
+ * Index document type
  */
-@RequiredArgsConstructor(access = PRIVATE)
-public enum TestIndex {
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+public enum IndexType {
 
-  RELEASE("test-icgc-release", "org/icgc/dcc/release/resources/mappings"),
-  REPOSITORY("test-icgc-repository", "org/icgc/dcc/repository/resources/mappings");
+  PROJECT("project"),
+  DONOR("donor"),
+  GENE("gene"),
+  DRUG("drug"),
+  MUTATION("mutation"),
+  RELEASE("release"),
+  PATHWAY("pathway"),
+  GENE_SET("gene-set"),
+  DONOR_CENTRIC("donor-centric"),
+  GENE_CENTRIC("gene-centric"),
+  MUTATION_CENTRIC("mutation-centric"),
+  OCCURRENCE_CENTRIC("observation-centric"),
+  REPOSITORY("repository"),
+  FILE("file"),
+  FILE_CENTRIC("file-centric"),
 
-  @Getter
-  private final String name;
-  private final String mappingsDir;
+  DONOR_TEXT("donor-text"),
+  GENE_TEXT("gene-text"),
+  MUTATION_TEXT("mutation-text"),
+  PATHWAY_TEXT("pathway-text"),
+  GENESET_TEXT("gene-set-text"),
+  DIAGRAM("diagram"),
+  FILE_TEXT("file-text"),
+  FILE_DONOR_TEXT("donor-text"),
+  DRUG_TEXT("drug-text"),
+  PROJECT_TEXT("project-text");
 
-  @SneakyThrows
-  public String getSettings() {
-    val settingsFile = Resources.getResource(mappingsDir + "/" + "index.settings.json");
-    val mapper = new ObjectMapper();
-    val settingsSource = (ObjectNode) mapper.readTree(settingsFile);
-
-    // Override production values that would introduce test timing delays / issues
-    return settingsSource
-        .put("index.number_of_shards", 1)
-        .put("index.number_of_replicas", 0)
-        .toString();
-  }
-
-  @SneakyThrows
-  public String getMapping(IndexType typeName) {
-    val mappingFileName = typeName.getId() + ".mapping.json";
-    val mappingFile = Resources.getResource(mappingsDir + "/" + mappingFileName);
-    return Resources.toString(mappingFile, UTF_8);
-  }
+  @NonNull
+  final String id;
 
 }

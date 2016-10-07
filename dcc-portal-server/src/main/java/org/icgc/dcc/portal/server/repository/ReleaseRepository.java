@@ -29,9 +29,9 @@ import java.util.Map;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ReleaseRepository {
 
-  private static final Type TYPE = Type.RELEASE;
+  private static final IndexType TYPE = IndexType.RELEASE;
   private static final Kind KIND = Kind.RELEASE;
 
   private final Client client;

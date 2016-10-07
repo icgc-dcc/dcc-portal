@@ -22,7 +22,6 @@ import static org.icgc.dcc.portal.server.test.JsonHelpers.jsonFixture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

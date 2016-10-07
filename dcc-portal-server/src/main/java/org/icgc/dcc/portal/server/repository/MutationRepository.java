@@ -39,9 +39,9 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,7 +57,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class MutationRepository implements Repository {
 
-  private static final Type CENTRIC_TYPE = Type.MUTATION_CENTRIC;
+  private static final IndexType CENTRIC_TYPE = IndexType.MUTATION_CENTRIC;
   private static final Kind KIND = Kind.MUTATION;
 
   private final QueryEngine queryEngine;
@@ -116,7 +116,7 @@ public class MutationRepository implements Repository {
   }
 
   @Override
-  public SearchRequestBuilder buildFindAllRequest(Query query, Type type) {
+  public SearchRequestBuilder buildFindAllRequest(Query query, IndexType type) {
     throw new UnsupportedOperationException("Not applicable");
   }
 
@@ -166,7 +166,7 @@ public class MutationRepository implements Repository {
     return search.execute().actionGet();
   }
 
-  public SearchRequestBuilder buildCountSearchFromQuery(QueryBuilder query, Type type) {
+  public SearchRequestBuilder buildCountSearchFromQuery(QueryBuilder query, IndexType type) {
     val search = client.prepareSearch(index).setTypes(type.getId()).setSearchType(COUNT);
     search.setQuery(query);
 

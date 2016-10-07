@@ -17,8 +17,8 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -28,7 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class DonorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
   private static final String DEFAULT_SORT = "ssmAffectedGenes";
-  private static final Type CENTRIC_TYPE = Type.DONOR_CENTRIC;
+  private static final IndexType CENTRIC_TYPE = IndexType.DONOR_CENTRIC;
   private static final Kind KIND = Kind.DONOR;
 
   @InjectMocks

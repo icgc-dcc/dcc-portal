@@ -26,7 +26,7 @@ import static org.icgc.dcc.portal.server.util.JsonUtils.parseFilters;
 import java.io.File;
 
 import org.elasticsearch.common.settings.ImmutableSettings;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.After;
 import org.junit.Before;
@@ -108,15 +108,15 @@ public abstract class BaseElasticSearchTest {
    * @param type - the index type to create
    * @return
    */
-  protected CreateIndex createIndexMapping(Type type) {
+  protected CreateIndex createIndexMapping(IndexType type) {
     return createIndexMappings(type);
   }
 
-  protected CreateIndex createIndexMappings(Type... types) {
+  protected CreateIndex createIndexMappings(IndexType... types) {
     CreateIndex request = createIndex(testIndex.getName())
         .withSettings(testIndex.getSettings());
 
-    for (Type type : types) {
+    for (IndexType type : types) {
       request = request.withMapping(type.getId(), testIndex.getMapping(type));
     }
 

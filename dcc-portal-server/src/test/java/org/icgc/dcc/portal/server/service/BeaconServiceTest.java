@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.icgc.dcc.portal.server.model.AlleleMutation;
 import org.icgc.dcc.portal.server.model.Beacon;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
@@ -35,7 +35,7 @@ public class BeaconServiceTest extends BaseElasticSearchTest {
   public void setUp() throws Exception {
     this.testIndex = TestIndex.RELEASE;
     es.execute(
-        createIndexMappings(Type.MUTATION_CENTRIC)
+        createIndexMappings(IndexType.MUTATION_CENTRIC)
             .withData(bulkFile("BeaconServiceTest.json")));
     service = new BeaconService(es.client(), testIndex.getName());
   }

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.elasticsearch.action.search.MultiSearchResponse;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Mutation;
 import org.icgc.dcc.portal.server.model.Mutations;
 import org.icgc.dcc.portal.server.model.Pagination;

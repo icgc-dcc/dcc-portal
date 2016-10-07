@@ -32,10 +32,10 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Query.QueryBuilder;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.util.JsonUtils;
 import org.mockito.Spy;
@@ -154,7 +154,7 @@ public class BaseRepositoryIntegrationTest {
     assertThat(count).as(aggName + ":" + entry.getKey()).isEqualTo(entry.getDocCount());
   }
 
-  MultiSearchResponse setup(Repository repo, QueryBuilder qb, Type type) {
+  MultiSearchResponse setup(Repository repo, QueryBuilder qb, IndexType type) {
     MultiSearchRequestBuilder search = client.prepareMultiSearch();
 
     for (val f : FILTERS) {
@@ -168,7 +168,7 @@ public class BaseRepositoryIntegrationTest {
     return search.execute().actionGet();
   }
 
-  void scores(Repository repo, Repository countRepo, String sort, Type type, Kind kind) {
+  void scores(Repository repo, Repository countRepo, String sort, IndexType type, Kind kind) {
     val fIter = FILTERS.iterator();
     val query = score(sort);
     val sr = setup(repo, query, type);
@@ -213,7 +213,7 @@ public class BaseRepositoryIntegrationTest {
     return queries;
   }
 
-  void aggregations(Repository repo, String sort, Type type, Kind kind) {
+  void aggregations(Repository repo, String sort, IndexType type, Kind kind) {
     val fIter = FILTERS.iterator();
     val query = query(sort).includes(Lists.newArrayList("facets"));
     val sr = setup(repo, query, type);

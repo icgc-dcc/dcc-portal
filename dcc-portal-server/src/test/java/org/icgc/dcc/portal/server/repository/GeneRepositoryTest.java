@@ -29,9 +29,9 @@ import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
@@ -63,7 +63,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
   @Before
   public void setUp() throws Exception {
     this.testIndex = TestIndex.RELEASE;
-    es.execute(createIndexMappings(Type.GENE, Type.GENE_CENTRIC).withData(bulkFile(getClass())));
+    es.execute(createIndexMappings(IndexType.GENE, IndexType.GENE_CENTRIC).withData(bulkFile(getClass())));
     geneRepository =
         new GeneRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()), TestIndex.RELEASE.getName());
   }

@@ -38,7 +38,7 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.UnionUnit;
 import org.icgc.dcc.portal.server.repository.TermsLookupRepository;

@@ -22,8 +22,6 @@ import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import java.util.List;
 import java.util.Map;
 
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
 

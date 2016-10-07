@@ -66,9 +66,9 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.search.SearchHitField;
 import org.icgc.dcc.common.core.model.ConsequenceType;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -87,7 +87,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class OccurrenceRepository {
 
-  private static final Type CENTRIC_TYPE = Type.OCCURRENCE_CENTRIC;
+  private static final IndexType CENTRIC_TYPE = IndexType.OCCURRENCE_CENTRIC;
   private static final Kind KIND = Kind.OCCURRENCE;
   private final static TimeValue KEEP_ALIVE = new TimeValue(10000);
 

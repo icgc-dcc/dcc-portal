@@ -30,7 +30,7 @@ import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet.State;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
 import org.icgc.dcc.portal.server.repository.DonorRepository;
 import org.icgc.dcc.portal.server.repository.EntitySetRepository;
@@ -59,7 +59,7 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
     val set = new EntitySet(UUID.randomUUID(), State.FINISHED, 200L, "test", "test", BaseEntitySet.Type.DONOR, 1);
     when(entitySetRepository.find(any())).thenReturn(set);
 
-    es.execute(createIndexMappings(Type.DONOR, Type.DONOR_CENTRIC)
+    es.execute(createIndexMappings(IndexType.DONOR, IndexType.DONOR_CENTRIC)
         .withData(bulkFile(getClass()))
         // This is needed because the DonorRepository now does a 'secondary' search on icgc-repository index.
         .withData(MANIFEST_TEST_DATA));

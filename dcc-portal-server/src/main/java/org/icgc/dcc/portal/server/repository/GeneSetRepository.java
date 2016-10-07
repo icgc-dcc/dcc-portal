@@ -39,9 +39,9 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.TermFilterBuilder;
 import org.elasticsearch.index.query.TermsFilterBuilder;
 import org.icgc.dcc.portal.server.model.GeneSetType;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -72,7 +72,7 @@ public class GeneSetRepository {
       "altIds", "go_term.alt_ids",
       "synonyms", "go_term.synonyms");
 
-  private static final Type TYPE = Type.GENE_SET;
+  private static final IndexType TYPE = IndexType.GENE_SET;
   private static final Kind KIND = Kind.GENE_SET;
 
   private final Client client;

@@ -27,9 +27,9 @@ import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.icgc.dcc.portal.server.model.IndexModel.Kind;
-import org.icgc.dcc.portal.server.model.IndexModel.Type;
+import org.icgc.dcc.portal.server.model.Kind;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
@@ -53,7 +53,7 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
   @Before
   public void setUp() throws Exception {
     this.testIndex = TestIndex.RELEASE;
-    es.execute(createIndexMapping(Type.PROJECT)
+    es.execute(createIndexMapping(IndexType.PROJECT)
         .withData(bulkFile(getClass()))
         // This is needed because the ProjectRepository now does a 'secondary' search on icgc-repository index.
         .withData(MANIFEST_TEST_DATA));
