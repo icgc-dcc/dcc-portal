@@ -49,13 +49,16 @@ public class IndexController {
    * Constants.
    */
   private static final String VARIABLE_NAME = "ICGC_SETTINGS";
-  private static final String INJECTION_TAG = "<portal-settings></portal-settings>";
+  private static final String SETTINGS_TAG = "<portal-settings></portal-settings>";
+  private static final String GA_TAG = "<ga-account>";
 
   /**
    * Dependencies
    */
   @Value("classpath:/app/index.html")
   private Resource index;
+  @Value("${web.gaAccount}")
+  private String gaAccount;
   @Autowired
   private Settings settings;
 
@@ -63,11 +66,13 @@ public class IndexController {
   @RequestMapping("/index.html")
   public ResponseEntity<String> index() {
     // Inject script into existing HTML content
-    val html = readIndex();
     val script = createScript();
-    val content = injectScript(html, script);
 
-    return ResponseEntity.ok(content);
+    String html = readIndex();
+    html = injectScript(html, script);
+    html = injectGAAccount(html, gaAccount);
+
+    return ResponseEntity.ok(html);
   }
 
   @SneakyThrows
@@ -81,8 +86,12 @@ public class IndexController {
     return "<script type=\"text/javascript\"> window." + VARIABLE_NAME + " = " + json + ";</script>";
   }
 
+  private String injectGAAccount(String html, String gaAccount) {
+    return html.replace(GA_TAG, gaAccount);
+  }
+
   private String injectScript(String html, String script) {
-    return html.replace(INJECTION_TAG, script);
+    return html.replace(SETTINGS_TAG, script);
   }
 
 }

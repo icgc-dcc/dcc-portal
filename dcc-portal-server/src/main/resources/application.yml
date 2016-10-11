@@ -124,6 +124,9 @@ download:
 web:
   # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs
   baseUrl: ""
+  
+  # Google Analytics account id
+  gaAccount: UA-43425408-1
 
 # ICGC Client configuration
 icgc:
@@ -175,14 +178,6 @@ features:
   AUTH_TOKEN: true
   ICGC_CLOUD: true
   SOFTWARE_PAGE: true
-  
-# Banner
-spring.main.banner-mode: log
-spring.mvc.favicon.enabled: false
-
-# Locale (DCC-5255)
-spring.mvc.locale: en_CA
-spring.mvc.locale-resolver: fixed
 
 # Mirror site (DCC-5301)
 mirror:
@@ -190,3 +185,11 @@ mirror:
   countryCode: ""
   name: ""
   countryLocation: ""
+
+# Banner
+spring.main.banner-mode: log
+spring.mvc.favicon.enabled: false
+
+# Locale (DCC-5255)
+spring.mvc.locale: en_CA
+spring.mvc.locale-resolver: fixed

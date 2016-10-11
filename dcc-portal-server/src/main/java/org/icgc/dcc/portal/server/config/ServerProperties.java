@@ -319,6 +319,9 @@ public class ServerProperties {
     @NotEmpty
     String baseUrl;
 
+    @JsonProperty
+    String gaAccount;
+
   }
 
   @Data
