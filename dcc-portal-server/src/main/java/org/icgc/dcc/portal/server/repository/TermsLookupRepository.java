@@ -179,12 +179,6 @@ public class TermsLookupRepository {
   }
 
   public void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
-      @NonNull final Iterable<String> values, @NonNull final Map<String, Object> additionalAttributes) {
-    additionalAttributes.put(TERMS_LOOKUP_PATH, values);
-    createTermsLookup(type, id, additionalAttributes);
-  }
-
-  public void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
       @NonNull final Iterable<String> values, final boolean trans) {
     val attributes = ImmutableMap.<String, Object> of(TERMS_LOOKUP_PATH, values, SubType.TRANSIENT.getName(), trans);
     createTermsLookup(type, id, attributes);
@@ -286,16 +280,6 @@ public class TermsLookupRepository {
     val response = donorSearchRequest(boolFilter);
 
     return getHitIdsSet(response).size();
-  }
-
-  public String getRepoName(@NonNull String setId) {
-    val response = client.prepareGet(TERMS_LOOKUP_INDEX_NAME, TermLookupType.FILE_IDS.getName(), setId)
-        .setFields("repo")
-        .execute()
-        .actionGet();
-
-    val field = response.getField("repo");
-    return field.getValue().toString();
   }
 
   private long getCountFrom(@NonNull final SearchResponse response, final long max) {
