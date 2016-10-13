@@ -98,6 +98,7 @@ public class DonorSetResource extends Resource {
       @ApiParam(value = "Validation") @QueryParam("validationOnly") @DefaultValue("false") boolean validationOnly,
       @ApiParam(value = "External Repository") @QueryParam("externalRepo") @DefaultValue("false") boolean externalRepo) {
 
+    checkRequest(donorIds == null, "DonorIds cannot be null.");
     val result = findDonorsByIdentifiers(donorIds, externalRepo);
     if (validationOnly) {
       return result;
