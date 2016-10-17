@@ -193,7 +193,6 @@
 
     // Fields needed for saving into custom gene set
     $scope.params.setName = '';
-    $scope.params.setDescription = '';
 
 
     $scope.params.savedSets = SetService.getAllGeneSets();
@@ -245,7 +244,6 @@
         var setParams = {};
         setParams.type = 'gene';
         setParams.name = $scope.params.setName;
-        setParams.description = $scope.params.setDescription;
         setParams.size = $scope.out.validIds.length;
         setParams.filters = {
           gene: {

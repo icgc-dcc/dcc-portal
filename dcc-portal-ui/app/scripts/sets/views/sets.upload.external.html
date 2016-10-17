@@ -27,15 +27,6 @@
             <input type="text" data-ng-model="params.setName" maxlength="64" data-select-on-click data-ng-change="validateInput()" style="width:100%;" autofocus></input>
         </div>
 
-        <div>
-            <div><translate>Note:</translate></div>
-            <textarea cols="50" rows="3"
-                data-ng-model="params.setDescription"
-                data-ng-change="validateInput()"
-                placeholder="(Optional)" maxlength="256" data-select-on-click></textarea>
-            <small><translate>{{256 - params.setDescription.length}} chars left</translate></small>
-        </div>
-
     </div>
 
     <!-- footer -->
