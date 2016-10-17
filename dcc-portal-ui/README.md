@@ -5,12 +5,9 @@ Requiments
 ---
 
 - Install [node.js](http://nodejs.org/download/ )
-- Install ruby
-- Install rubygems
 - Install global modules:
 
 	```
-	npm install -g grunt-cli@0.1.13
 	npm install -g bower@1.3.12
 	npm install -g bower-art-resolver
 	```
@@ -18,23 +15,11 @@ Requiments
 Setup
 ---
 
-- Install local modules
+- Install npm and bower dependencies
 
 	```
 	npm install
-	```
-	
-- Install client-side dependencies	
-	```
-	npm install -g bower
-	bower install
-	```
-	
-- Install ruby gems
-
-	```
-	sudo gem install bundler -v 1.5.3
-	bundle install
+    # bower dependencies are auto-installed via the postinstall hook script
 	```
 
 Run
@@ -44,10 +29,7 @@ Run
 
 - Start the [Portal Server](../dcc-portal-server/README.md)
 
-- View the site: [localhost:9000](http://localhost:9000/)
-
-- You can change some of the front end develop options (used `grunt server`) by modifying the `app/develop/scripts/config.js` file.
-
+- View the site: [localhost:9000](http://local.dcc.icgc.org:9000/)
 
 ## Basic Style Guide
 
@@ -154,14 +136,11 @@ its entirety or none at all.
         var _theMeaningOfLife = 42;
     ```
 
-### Keeping your Code Private + Code Commenting and Documentation
+### Code Commenting and Documentation
 
 * The bad example - contents of secrets.js
 
     ```javascript
-       // Without a function closure this becomes global (added to the window object in the browser!)
-       var _theMeaningOfLife = 42;
-
        // What does this method do?
        function meaningOfLife(meaningOfLifeVal) {
           // ... some implementation details
@@ -174,35 +153,15 @@ its entirety or none at all.
 * The good example - contents of secrets.js
 
     ```javascript
-       /**
-        * Anonymous executed function - use this comment style for multiline comments
-        * its also useful for documenting your functions - we use jsDoc syntax
-        * http://usejsdoc.org/about-getting-started.html
-        **/
-
-       (function() {
-            /**
-            * You should always include this little guy - it will tell your browser to be more
-            * watchful for common JS issues.
-            **/
-           'use strict';
-
-           // without a function closure this becomes global (added to the window object in the browser!)
-           var _theMeaningOfLife = 42;
-
-          /**
-           * Gets and sets the meaning of Life (this is a method description that is picked up by jsdocs).
-           * @param {string} meaningOfLifeVal - The new meaning of life.
-           * @returns {string} The current meaning of life.
-           */
-           function meaningOfLife(meaningOfLifeVal) {
-              // ...
-              return _theMeaningOfLife;
-           }
-
-           /* ... Some code ... */
-
-       })();
+        /**
+        * Gets and sets the meaning of Life (this is a method description that is picked up by jsdocs).
+        * @param {string} meaningOfLifeVal - The new meaning of life.
+        * @returns {string} The current meaning of life.
+        */
+        function meaningOfLife(meaningOfLifeVal) {
+            // ...
+            return _theMeaningOfLife;
+        }
     ```
 
 
