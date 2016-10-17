@@ -8,7 +8,7 @@
     "url": "git://github.com:icgc-dcc/dcc-portal.git"
   },
   "scripts": {
-    "bower": "bower install",
+    "postinstall": "bower install",
     "sethost": "hostile set localhost local.dcc.icgc.org",
     "unsethost": "hostile remove local.dcc.icgc.org",
     "checkhost": "node tasks/checkDns.js",
