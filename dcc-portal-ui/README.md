@@ -215,9 +215,6 @@ Angular makes the controller available via the **$scope** variable irregardless 
 * An example of a module called projects in a file called projects.js
 
     ```javascript
-    (function () {
-      'use strict';
-
       // Projects modules definition including dependencies
       angular.module('session', ['session.controllers', 'ui.router'])
           .constant('sessionConstants', {
@@ -236,8 +233,6 @@ Angular makes the controller available via the **$scope** variable irregardless 
           .run(function(someDependency1, someDependency1, ..., someDependencyN) {
             /* ... Run block implementation ... */
           });
-
-    })();
     ```
 
 
@@ -273,9 +268,6 @@ you can do it inline as long as it does not span more then 3 lines.
 * A Good Example
 
     ```javascript
-      (function() {
-        'use strict';
-
         angular.module('session.controllers', [])
            /**
             * This controller does ...
@@ -317,7 +309,6 @@ you can do it inline as long as it does not span more then 3 lines.
           .controller('FixedSessionCtrl', function(someService) {
             /* ... */
           });
-    })();
     ```
 
 * If you must use ```$scope``` in your controllers/directives ensure that you are at least encapsulating your
@@ -328,9 +319,6 @@ you might run into with child scopes used in forms, subcontrollers, and directiv
 * A Bad Example
 
     ```javascript
-        (function() {
-            'use strict';
-
             angular.module('sessions.controller')
               .controller(function($scope) {
                 var _controller = this;
@@ -341,14 +329,10 @@ you might run into with child scopes used in forms, subcontrollers, and directiv
 
                 /* ... */
               });
-        })();
     ```
 * A Good Example
 
     ```javascript
-        (function() {
-            'use strict';
-
             angular.module('users.controllers')
               .controller('UserCtrl', function($scope) {
 
@@ -363,7 +347,6 @@ you might run into with child scopes used in forms, subcontrollers, and directiv
 
                 /* ... */
               });
-        })();
     ```
 
 Before Pull Request
