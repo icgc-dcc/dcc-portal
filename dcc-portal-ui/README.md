@@ -5,12 +5,6 @@ Requiments
 ---
 
 - Install [node.js](http://nodejs.org/download/ )
-- Install global modules:
-
-	```
-	npm install -g bower@1.3.12
-	npm install -g bower-art-resolver
-	```
 
 Setup
 ---
