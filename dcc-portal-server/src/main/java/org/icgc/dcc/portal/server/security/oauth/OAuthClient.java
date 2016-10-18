@@ -23,6 +23,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.ImmutableSet.copyOf;
 import static com.google.common.collect.Sets.newTreeSet;
 import static com.sun.jersey.api.client.Client.create;
+import static com.sun.jersey.api.client.ClientResponse.Status.FORBIDDEN;
 import static com.sun.jersey.api.client.ClientResponse.Status.OK;
 import static com.sun.jersey.api.json.JSONConfiguration.FEATURE_POJO_MAPPING;
 import static com.sun.jersey.client.urlconnection.HTTPSProperties.PROPERTY_HTTPS_PROPERTIES;
@@ -45,6 +46,7 @@ import org.icgc.dcc.portal.server.config.ServerProperties.OAuthProperties;
 import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.model.Tokens;
 import org.icgc.dcc.portal.server.service.BadRequestException;
+import org.icgc.dcc.portal.server.service.ForbiddenAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -161,7 +163,8 @@ public class OAuthClient {
     }
 
     val checkResponse = response.getEntity(CheckTokenResponse.class);
-    return new AccessToken(token, checkResponse.getDesc(), checkResponse.getExp(), newTreeSet(checkResponse.getScope()));
+    return new AccessToken(token, checkResponse.getDesc(), checkResponse.getExp(),
+        newTreeSet(checkResponse.getScope()));
   }
 
   public UserScopesResponse getUserScopes(@NonNull String userId) {
@@ -191,6 +194,10 @@ public class OAuthClient {
   }
 
   private static void validateResponse(ClientResponse response) {
+    if (response.getClientResponseStatus() == FORBIDDEN) {
+      throw new ForbiddenAccessException("Invalid Token Scope", "auth");
+    }
+
     checkState(response.getClientResponseStatus() == OK, "Expected a valid response. Got: %s",
         response.getClientResponseStatus());
   }
