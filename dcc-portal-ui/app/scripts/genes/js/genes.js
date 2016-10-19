@@ -103,7 +103,7 @@
   var module = angular.module('icgc.genes.controllers', ['icgc.genes.models']);
 
   module.controller('GeneCtrl', function ($scope, HighchartsService, Page, Projects, Mutations,
-    LocationService, Donors, Genes, GMService, Restangular, ExternalLinks, gene, $filter) {
+    LocationService, Donors, Genes, GMService, Restangular, ExternalLinks, gene, $filter, $location) {
 
     var _ctrl = this;
     Page.setTitle(gene.id);
@@ -112,6 +112,23 @@
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
     _ctrl.defaultProjectsLimit = 10;
+
+    var sections = ['projects', 'protein', 'genomic', 'mutations', 'compounds'];
+    var selection = _.trim($location.hash(), '#');
+    var sectionsToCollapse = getSectionsToCollapse(sections, selection);
+    _ctrl.collapseSections = _.zipObject(sections,
+      _.map(sections, function(section) {
+        return _.includes(sectionsToCollapse, section);
+      })
+    );
+    
+    function getSectionsToCollapse(sections, selection) {
+      var indexOfSelection = _.indexOf(sections, selection);
+      if (indexOfSelection === -1) {
+        return [];
+      }
+      return _.slice(sections, 0, indexOfSelection);
+    }
 
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 

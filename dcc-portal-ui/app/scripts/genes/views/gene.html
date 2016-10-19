@@ -203,137 +203,141 @@
 
     <div data-ng-if="GeneCtrl.gene.projects.hits.length > 0">
         <h3>
-            <translate>Cancer Distribution</translate>
+            <span data-ng-click="GeneCtrl.collapseSections.projects=!GeneCtrl.collapseSections.projects">
+                <translate>Cancer Distribution</translate>
+                <i data-ng-class="{'icon-caret-down':!GeneCtrl.collapseSections.projects, 'icon-caret-right':GeneCtrl.collapseSections.projects}"></i>
+            </span>
             <span data-open-in-list='?filters={{GeneCtrl.gene.advQuery}}' data-type="donor"></span>
         </h3>
 
-        <h4 class="subhead">
-            <a data-ng-href='/search?filters={{GeneCtrl.gene.advQuery}}'>
-                <strong>{{GeneCtrl.totalDonors | number}}</strong>
-            </a>
-            <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">donors affected by</translate>
-            <a data-ng-href='/search/m?filters={{GeneCtrl.gene.advQuery}}'>
-                <strong>{{GeneCtrl.totalMutations | number}}</strong>
-            </a>
-            <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">mutations across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneCtrl.gene.projects.hits|pluck:"id").join("\",\"")}}"]}}}'>
-                <strong>{{GeneCtrl.gene.projects.hits.length | number}}</strong>
-            </a>
-            <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">projects</translate>
-        </h4>
+        <div data-ng-hide="GeneCtrl.collapseSections.projects">
+            <h4 class="subhead">
+                <a data-ng-href='/search?filters={{GeneCtrl.gene.advQuery}}'>
+                    <strong>{{GeneCtrl.totalDonors | number}}</strong>
+                </a>
+                <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">donors affected by</translate>
+                <a data-ng-href='/search/m?filters={{GeneCtrl.gene.advQuery}}'>
+                    <strong>{{GeneCtrl.totalMutations | number}}</strong>
+                </a>
+                <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">mutations across</translate>
+                <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneCtrl.gene.projects.hits|pluck:"id").join("\",\"")}}"]}}}'>
+                    <strong>{{GeneCtrl.gene.projects.hits.length | number}}</strong>
+                </a>
+                <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">projects</translate>
+            </h4>
 
-        <div data-ng-if="GeneCtrl.bar.hasData" class="clearfix">
-            <bar class="wide" height=200 items="GeneCtrl.bar" heading=""
-                 ylabel="{{'% of Donors Affected' | translate}}"
-                 format="percentage"></bar>
-        </div>
-        <span class="t_table_top">
-            <data-table-row-counts
-                data-data="GeneCtrl.gene.uiProjects"
-                data-filter="GeneCtrl.tableFilter.projects"
-                data-label="{{'projects' | translate}}"
-                data-current-page="GeneCtrl.currentProjectsPage"
-                data-row-limit="GeneCtrl.defaultProjectsRowLimit">
-            </data-table-row-counts>
-            <span data-toolbar data-dl="{{GeneCtrl.gene.id}}_distribution"></span>
-            <table-filter data-class="small-filter"
-                data-filter-model="GeneCtrl.tableFilter.projects"
-                data-current-page="GeneCtrl.currentProjectsPage"></table-filter>
-        </span>
-        <table class="table table-bordered table-striped table-condensed"
-            data-ng-init="sortProjectsDescendingly = true;">
-            <thead>
-            <tr>
-                <th><translate>Project</translate></th>
-                <th><translate>Site</translate></th>
-                <th><translate>Tumour Type</translate></th>
-                <th><translate>Tumour Subtype</translate></th>
-                <th style="cursor: pointer"
-                    data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
-                    <abbr data-tooltip="{{'Number of Donors where [[ geneSymbol ]] contains SSM' | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}">
-                    <translate># Donors affected</translate></abbr>
-                    <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
-                </th>
-                <th><abbr data-tooltip="{{'Number of SSM observed in [[ geneSymbol ]]'  | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}"
-                          data-tooltip-placement="left"><translate># Mutations</translate></abbr></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="project in (GeneCtrl.gene.uiProjects | 
-                filter: GeneCtrl.tableFilter.projects | 
-                orderBy:'uiAffectedDonorPercentage/100':sortProjectsDescendingly | 
-                limitTo: GeneCtrl.defaultProjectsRowLimit : ((GeneCtrl.currentProjectsPage-1) * GeneCtrl.defaultProjectsRowLimit)) track by project.uiId"
-                data-ng-if="project.uiFilteredDonorCount > 0">
-                <td><a data-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">
-                    <span data-ng-bind-html="project.uiId | highlight: GeneCtrl.tableFilter.projects"></span>
-                </a></td>
-                <td><span data-ng-bind-html="project.uiPrimarySite | highlight: GeneCtrl.tableFilter.projects"></span></td>
-                <td><span data-ng-bind-html="project.uiTumourType | highlight: GeneCtrl.tableFilter.projects"></span></td>
-                <td><span data-ng-bind-html="project.uiTumourSubtype | highlight: GeneCtrl.tableFilter.projects"></span></td>
-                <td class="text-right" style="position: relative; display: block">
+            <div data-ng-if="GeneCtrl.bar.hasData" class="clearfix">
+                <bar class="wide" height=200 items="GeneCtrl.bar" heading=""
+                    ylabel="{{'% of Donors Affected' | translate}}"
+                    format="percentage"></bar>
+            </div>
+            <span class="t_table_top">
+                <data-table-row-counts
+                    data-data="GeneCtrl.gene.uiProjects"
+                    data-filter="GeneCtrl.tableFilter.projects"
+                    data-label="{{'projects' | translate}}"
+                    data-current-page="GeneCtrl.currentProjectsPage"
+                    data-row-limit="GeneCtrl.defaultProjectsRowLimit">
+                </data-table-row-counts>
+                <span data-toolbar data-dl="{{GeneCtrl.gene.id}}_distribution"></span>
+                <table-filter data-class="small-filter"
+                    data-filter-model="GeneCtrl.tableFilter.projects"
+                    data-current-page="GeneCtrl.currentProjectsPage"></table-filter>
+            </span>
+            <table class="table table-bordered table-striped table-condensed"
+                data-ng-init="sortProjectsDescendingly = true;">
+                <thead>
+                <tr>
+                    <th><translate>Project</translate></th>
+                    <th><translate>Site</translate></th>
+                    <th><translate>Tumour Type</translate></th>
+                    <th><translate>Tumour Subtype</translate></th>
+                    <th style="cursor: pointer"
+                        data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
+                        <abbr data-tooltip="{{'Number of Donors where [[ geneSymbol ]] contains SSM' | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}">
+                        <translate># Donors affected</translate></abbr>
+                        <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+                    </th>
+                    <th><abbr data-tooltip="{{'Number of SSM observed in [[ geneSymbol ]]'  | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}"
+                            data-tooltip-placement="left"><translate># Mutations</translate></abbr></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="project in (GeneCtrl.gene.uiProjects | 
+                    filter: GeneCtrl.tableFilter.projects | 
+                    orderBy:'uiAffectedDonorPercentage/100':sortProjectsDescendingly | 
+                    limitTo: GeneCtrl.defaultProjectsRowLimit : ((GeneCtrl.currentProjectsPage-1) * GeneCtrl.defaultProjectsRowLimit)) track by project.uiId"
+                    data-ng-if="project.uiFilteredDonorCount > 0">
+                    <td><a data-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">
+                        <span data-ng-bind-html="project.uiId | highlight: GeneCtrl.tableFilter.projects"></span>
+                    </a></td>
+                    <td><span data-ng-bind-html="project.uiPrimarySite | highlight: GeneCtrl.tableFilter.projects"></span></td>
+                    <td><span data-ng-bind-html="project.uiTumourType | highlight: GeneCtrl.tableFilter.projects"></span></td>
+                    <td><span data-ng-bind-html="project.uiTumourSubtype | highlight: GeneCtrl.tableFilter.projects"></span></td>
+                    <td class="text-right" style="position: relative; display: block">
 
                         <span data-ng-style="{width:project.uiAffectedDonorPercentage+'%'}"
-                          class="t_facets__facet__terms__active__term__bar"></span>
+                            class="t_facets__facet__terms__active__term__bar"></span>
                         <span style="position: relative">
-                        <a data-ng-href='/search?filters={{project.uiAdvQuery}}'
-                            data-ng-bind-html="project.uiFilteredDonorCount | highlight: GeneCtrl.tableFilter.projects">
-                        </a>
-                        /
-                        <a 
-                            data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{ project.uiId }}"]},"availableDataTypes":{"is":["ssm"]}}}'
-                            data-ng-bind-html="project.uiSSMTestedDonorCount | highlight: GeneCtrl.tableFilter.projects">                        
-                        </a>
+                            <a data-ng-href='/search?filters={{project.uiAdvQuery}}'
+                                data-ng-bind-html="project.uiFilteredDonorCount | highlight: GeneCtrl.tableFilter.projects">
+                            </a>
+                            /
+                            <a data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{ project.uiId }}"]},"availableDataTypes":{"is":["ssm"]}}}'
+                                data-ng-bind-html="project.uiSSMTestedDonorCount | highlight: GeneCtrl.tableFilter.projects">
+                            </a>
                         <em data-ng-bind-html="'('+ project.uiAffectedDonorPercentage + '%)' | highlight: GeneCtrl.tableFilter.projects"></em>
                         </span>
 
-                </td>
-                <td class="text-right">
-                    <span data-ng-if="project.uiMutationCount==null"><i class="icon-spinner icon-spin"></i></span>
-                    <span data-ng-if="project.uiMutationCount === 0">--</span>
-                    <a data-ng-if="project.uiMutationCount > '0'"
-                       data-ng-href='/search/m?filters={{project.uiAdvQuery}}'
-                       data-ng-bind-html="project.uiMutationCount | highlight: GeneCtrl.tableFilter.projects ">
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                    </td>
+                    <td class="text-right">
+                        <span data-ng-if="project.uiMutationCount==null"><i class="icon-spinner icon-spin"></i></span>
+                        <span data-ng-if="project.uiMutationCount === 0">--</span>
+                        <a data-ng-if="project.uiMutationCount > '0'"
+                            data-ng-href='/search/m?filters={{project.uiAdvQuery}}'
+                            data-ng-bind-html="project.uiMutationCount | highlight: GeneCtrl.tableFilter.projects ">
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
-        <pagination-client-side 
-            data-data="GeneCtrl.gene.uiProjects"
-            data-filter="GeneCtrl.tableFilter.projects"
-            data-row-limit="GeneCtrl.defaultProjectsRowLimit"
-            data-row-sizes="GeneCtrl.rowSizes"
-            data-current-page="GeneCtrl.currentProjectsPage"></pagination-client-side>
+            <pagination-client-side 
+                data-data="GeneCtrl.gene.uiProjects"
+                data-filter="GeneCtrl.tableFilter.projects"
+                data-row-limit="GeneCtrl.defaultProjectsRowLimit"
+                data-row-sizes="GeneCtrl.rowSizes"
+                data-current-page="GeneCtrl.currentProjectsPage"></pagination-client-side>
         
-        <table class="hidden" id="{{GeneCtrl.gene.id}}_distribution">
-            <thead>
-            <tr>
-                <th><translate>Project</translate></th>
-                <th><translate>Site</translate></th>
-                <th><translate>Tumour Type</translate></th>
-                <th><translate>Tumour Subtype</translate></th>
-                <th>
-                    <translate>Number of donors with the current gene containing simple somatic mutations in the current project</translate>
-                </th>
-                <th><translate>Number of SSM-tested donors in the current project</translate></th>
-                <th><translate>Percentage of donors with the current gene</translate></th>
-                <th><translate>Mutations</translate></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="project in GeneCtrl.gene.projects.hits | orderBy:'summary.uiAffectedDonorPercentage':true">
-                <td>{{project.name}}</td>
-                <td>{{project.primarySite}}</td>
-                <td>{{project.tumourType}}</td>
-                <td>{{project.tumourSubtype}}</td>
-                <td>{{project.affectedDonorCount}}</td>
-                <td>{{project.ssmTestedDonorCount}}</td>
-                <td>{{project.uiAffectedDonorPercentage}}</td>
-                <td>{{project.mutationCount}}</td>
-            </tr>
-            </tbody>
-        </table>
+            <table class="hidden" id="{{GeneCtrl.gene.id}}_distribution">
+                <thead>
+                <tr>
+                    <th><translate>Project</translate></th>
+                    <th><translate>Site</translate></th>
+                    <th><translate>Tumour Type</translate></th>
+                    <th><translate>Tumour Subtype</translate></th>
+                    <th>
+                        <translate>Number of donors with the current gene containing simple somatic mutations in the current project</translate>
+                    </th>
+                    <th><translate>Number of SSM-tested donors in the current project</translate></th>
+                    <th><translate>Percentage of donors with the current gene</translate></th>
+                    <th><translate>Mutations</translate></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="project in GeneCtrl.gene.projects.hits | orderBy:'summary.uiAffectedDonorPercentage':true">
+                    <td>{{project.name}}</td>
+                    <td>{{project.primarySite}}</td>
+                    <td>{{project.tumourType}}</td>
+                    <td>{{project.tumourSubtype}}</td>
+                    <td>{{project.affectedDonorCount}}</td>
+                    <td>{{project.ssmTestedDonorCount}}</td>
+                    <td>{{project.uiAffectedDonorPercentage}}</td>
+                    <td>{{project.mutationCount}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 <section id="protein" class="dynamic-height">
@@ -348,31 +352,44 @@
     </div>
     <div data-ng-if="GeneCtrl.gene.uiProteinTranscript.length"
          data-ng-init="sorted = (GeneCtrl.gene.uiProteinTranscript | orderBy:'+name')">
-        <h3><translate>Protein</translate></h3>
-
-        <form data-ng-init="transcript = sorted[0]" data-ng-show="GeneCtrl.gene.uiProteinTranscript.length > 0">
-          <span><strong><translate>Transcript:</translate> </strong>
-            <select data-ng-model="transcript"
-                    data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)' for t in sorted"></select>
-            <proteinstructure transcript="transcript" data-value-height="200"></proteinstructure>
-          </span>
-        </form>
+        <h3>
+            <span data-ng-click="GeneCtrl.collapseSections.protein=!GeneCtrl.collapseSections.protein">
+                <translate>Protein</translate>
+                <i data-ng-class="{'icon-caret-down':!GeneCtrl.collapseSections.protein, 'icon-caret-right':GeneCtrl.collapseSections.protein}"></i>
+            </span>
+        </h3>
+        <div data-ng-hide="GeneCtrl.collapseSections.protein">
+            <form data-ng-init="transcript = sorted[0]" data-ng-show="GeneCtrl.gene.uiProteinTranscript.length > 0">
+                <span>
+                    <strong><translate>Transcript:</translate> </strong>
+                    <select data-ng-model="transcript"
+                        data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)' for t in sorted"></select>
+                    <proteinstructure transcript="transcript" data-value-height="200"></proteinstructure>
+                </span>
+            </form>
+        </div>
     </div>
 </section>
 <section id="genomic" class="gv_full_screen dynamic-height" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
-    <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome">
-        <translate>Genomic Context</translate>
-        <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
-    </h3>
     <h3 data-ng-if="!GeneCtrl.gene.hasGVChromosome">
         <translate>No Genomic Context available.</translate>
     </h3>
+    
+    <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome">
+        <span data-ng-click="GeneCtrl.collapseSections.genomic=!GeneCtrl.collapseSections.genomic">
+            <translate>Genomic Context</translate>
+            <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
+            <i data-ng-class="{'icon-caret-down':!GeneCtrl.collapseSections.genomic, 'icon-caret-right':GeneCtrl.collapseSections.genomic}"></i>
+        </span>
+    </h3>
 
-    <div data-ng-if="GeneCtrl.gene.hasGVChromosome" class="t_gv__navbar">
-       <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
-       <span class="pull-right gv-navbar-zoom"></span>
+    <div data-ng-hide="GeneCtrl.collapseSections.genomic">
+        <div data-ng-if="GeneCtrl.gene.hasGVChromosome" class="t_gv__navbar">
+            <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
+            <span class="pull-right gv-navbar-zoom"></span>
+        </div>
+        <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"></gvembed>
     </div>
-    <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"></gvembed>
 </section>
 <section id="mutations" class="dynamic-height"
          data-ng-controller="GeneMutationsCtrl as GeneMutationsCtrl"
@@ -387,101 +404,105 @@
 
     <div data-ng-if="GeneMutationsCtrl.mutations.hits.length > 0">
         <h3>
-            <translate>Most Frequent Mutations</translate>
-            <span data-open-in-list='/m?filters={{GeneCtrl.gene.advQuery}}'></span>
+            <span data-ng-click="GeneCtrl.collapseSections.mutations=!GeneCtrl.collapseSections.mutations">
+                <translate>Most Frequent Mutations</translate>
+                <i data-ng-class="{'icon-caret-down':!GeneCtrl.collapseSections.mutations, 'icon-caret-right':GeneCtrl.collapseSections.mutations}"></i>
+                <span data-open-in-list='/m?filters={{GeneCtrl.gene.advQuery}}'></span>
+            </span>
         </h3>
+        <div data-ng-hide="GeneCtrl.collapseSections.mutations">
+            <div data-ng-if="GeneMutationsCtrl.bar.hasData" class="clearfix">
+                <bar class="wide" height=200 items="GeneMutationsCtrl.bar" heading=""
+                     ylabel="{{'Donors affected' | translate}}"></bar>
+            </div>
+            <span class="t_table_top">
+                <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneMutationsCtrl.mutations.pagination"></span>
+                <span data-toolbar data-dl="{{GeneCtrl.gene.id}}_mutations"></span>
+            </span>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>
+                        <abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+                            <translate>DNA change</translate>
+                        </abbr>
+                    </th>
+                    <th><translate>Type</translate></th>
+                    <th><abbr
+                            data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
+                    </th>
+                    <th class="text-center">
+                        <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+                              data-tooltip-placement="left"><translate># Donors affected</translate></abbr></th>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits track by mutation.id">
+                    <td><a data-ng-href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a></td>
+                    <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
+                    <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
+                    <td style="max-width: 20rem; white-space: normal">
+                        <mutation-consequences data-ng-if="mutation.consequences"
+                                               items="mutation.consequences"></mutation-consequences>
 
-        <div data-ng-if="GeneMutationsCtrl.bar.hasData" class="clearfix">
-            <bar class="wide" height=200 items="GeneMutationsCtrl.bar" heading=""
-                 ylabel="{{'Donors affected' | translate}}"></bar>
+                    <td class="text-right" style="white-space: nowrap">
+                        <ul data-hide-sum-list="{{mutation.uiDonors}}"
+                            data-link='/search?filters={{mutation.advQuery}}'>
+                            <li data-ng-repeat="p in list | orderBy:'percentage':true"
+                                style="position: relative">
+                                <span data-ng-style="{width:p.percentage * 100+'%'}"
+                                    class="t_facets__facet__terms__active__term__bar"></span>
+                                <span style="position: relative">
+                                    <a data-tooltip-placement="left"
+                                        data-tooltip="{{ p.projectName }}"
+                                        href="/projects/{{p.term}}">{{p.term}}</a>
+                                    <a href='/search?filters={{p.advQuery}}'>
+                                        {{p.count | number}}
+                                    </a>/
+                                    <a href='/search?filters={"donor":{"projectId":{"is":["{{p.term}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
+                                        {{p.countTotal | number}}
+                                    </a>
+                                    <em>({{p.percentage * 100 | number:2}}%)</em>
+                                </span>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <pagination-controls data-type="mutations" data-data="GeneMutationsCtrl.mutations"></pagination-controls>
+
+            <table class="hidden" id="{{GeneCtrl.gene.id}}_mutations">
+                <thead>
+                <tr>
+                    <th><translate>Mutation ID</translate></th>
+                    <th><translate>Genomic DNA Change</translate></th>
+                    <th><translate>Type</translate></th>
+                    <th><translate>Consequences</translate></th>
+                    <th><translate>Donors by Project</translate></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits">
+                    <td>{{mutation.id}}</td>
+                    <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
+                    <td>{{mutation.type}}</td>
+                    <td>
+                        <mutation-consequences items="mutation.consequences"></mutation-consequences>
+                    </td>
+                    <td>
+                        <div data-ng-repeat="p in mutation.uiDonors | orderBy:'percentage':true">
+                            <div>{{p.term}}:{{p.count}}/{{p.countTotal}}</div>
+                            <div data-ng-if="!$last">|</div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-        <span class="t_table_top">
-            <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneMutationsCtrl.mutations.pagination"></span>
-            <span data-toolbar data-dl="{{GeneCtrl.gene.id}}_mutations"></span>
-        </span>
-        <table class="table table-bordered table-striped table-condensed">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>
-                    <abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
-                        <translate>DNA change</translate>
-                    </abbr>
-                </th>
-                <th><translate>Type</translate></th>
-                <th><abbr
-                        data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
-                </th>
-                <th class="text-center">
-                    <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
-                          data-tooltip-placement="left"><translate># Donors affected</translate></abbr></th>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits track by mutation.id">
-                <td><a data-ng-href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a></td>
-                <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
-                <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
-                <td style="max-width: 20rem; white-space: normal">
-                    <mutation-consequences data-ng-if="mutation.consequences"
-                                           items="mutation.consequences"></mutation-consequences>
-
-                <td class="text-right" style="white-space: nowrap">
-                    <ul data-hide-sum-list="{{mutation.uiDonors}}"
-                        data-link='/search?filters={{mutation.advQuery}}'>
-                        <li data-ng-repeat="p in list | orderBy:'percentage':true"
-                            style="position: relative">
-                            <span data-ng-style="{width:p.percentage * 100+'%'}"
-                                  class="t_facets__facet__terms__active__term__bar"></span>
-                            <span style="position: relative">
-                                <a data-tooltip-placement="left"
-                                   data-tooltip="{{ p.projectName }}"
-                                   href="/projects/{{p.term}}">{{p.term}}</a>
-                            <a href='/search?filters={{p.advQuery}}'>
-                                {{p.count | number}}
-                            </a>/
-                            <a href='/search?filters={"donor":{"projectId":{"is":["{{p.term}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
-                                {{p.countTotal | number}}
-                            </a>
-                            <em>({{p.percentage * 100 | number:2}}%)</em>
-                            </span>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <pagination-controls data-type="mutations" data-data="GeneMutationsCtrl.mutations"></pagination-controls>
-
-        <table class="hidden" id="{{GeneCtrl.gene.id}}_mutations">
-            <thead>
-            <tr>
-                <th><translate>Mutation ID</translate></th>
-                <th><translate>Genomic DNA Change</translate></th>
-                <th><translate>Type</translate></th>
-                <th><translate>Consequences</translate></th>
-                <th><translate>Donors by Project</translate></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits">
-                <td>{{mutation.id}}</td>
-                <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
-                <td>{{mutation.type}}</td>
-                <td>
-                    <mutation-consequences items="mutation.consequences"></mutation-consequences>
-                </td>
-                <td>
-                    <div data-ng-repeat="p in mutation.uiDonors | orderBy:'percentage':true">
-                        <div>{{p.term}}:{{p.count}}/{{p.countTotal}}</div>
-                        <div data-ng-if="!$last">|</div>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
     </div>
 </section>
 
