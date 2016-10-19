@@ -56,7 +56,7 @@
       link: function($scope, $element) {
 
         // From D3's cat20 scale
-        $scope.seriesColours = ['#6baed6', '#fd8d3c', '#74c476'];
+        $scope.seriesColours = ['#0e6402', '#c20127', '#00005d'];
 
         $scope.survivalAnalysisDataSets = undefined;
         $scope.activeSurvivalGraph = 'overall';
