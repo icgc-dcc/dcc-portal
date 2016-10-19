@@ -375,20 +375,22 @@
         <translate>No Genomic Context available.</translate>
     </h3>
     
-    <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome">
-        <span data-ng-click="GeneCtrl.collapseSections.genomic=!GeneCtrl.collapseSections.genomic">
-            <translate>Genomic Context</translate>
-            <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
-            <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.genomic, 'fa fa-angle-right':GeneCtrl.collapseSections.genomic}"></i>
-        </span>
-    </h3>
+    <div data-ng-if="GeneCtrl.gene.hasGVChromosome">
+        <h3>
+            <span data-ng-click="GeneCtrl.collapseSections.genomic=!GeneCtrl.collapseSections.genomic">
+                <translate>Genomic Context</translate>
+                <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.genomic, 'fa fa-angle-right':GeneCtrl.collapseSections.genomic}"></i>
+            </span>
+        </h3>
 
-    <div data-ng-hide="GeneCtrl.collapseSections.genomic">
-        <div data-ng-if="GeneCtrl.gene.hasGVChromosome" class="t_gv__navbar">
-            <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
-            <span class="pull-right gv-navbar-zoom"></span>
+        <div data-ng-hide="GeneCtrl.collapseSections.genomic">
+            <div data-ng-if="GeneCtrl.gene.hasGVChromosome" class="t_gv__navbar">
+                <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
+                <span class="pull-right gv-navbar-zoom"></span>
+            </div>
+            <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"></gvembed>
         </div>
-        <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"></gvembed>
     </div>
 </section>
 <section id="mutations" class="dynamic-height"
