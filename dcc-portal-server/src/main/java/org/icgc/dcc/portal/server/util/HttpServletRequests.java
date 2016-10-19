@@ -19,17 +19,18 @@ package org.icgc.dcc.portal.server.util;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.net.HttpHeaders.X_FORWARDED_FOR;
+import static java.lang.String.format;
 import static lombok.AccessLevel.PRIVATE;
 
 import java.net.InetAddress;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.base.Joiner;
+
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
-
-import com.google.common.base.Joiner;
 
 /**
  * HttpServletRequest-related helpers
@@ -52,6 +53,22 @@ public final class HttpServletRequests {
 
     return JOINER.join(intro, getLocalNetworkInfo(), getRemoteUserNetworkInfo(request),
         getProxyNetworkInfo(request));
+  }
+
+  public static String getHeadersFromRequest(@NonNull final HttpServletRequest request) {
+    val headers = new StringBuilder();
+
+    val headerNames = request.getHeaderNames();
+    while (headerNames.hasMoreElements()) {
+      val name = headerNames.nextElement();
+      val values = request.getHeaders(name);
+      while (values.hasMoreElements()) {
+        val value = values.nextElement();
+        headers.append(format("%s : %s ;\n", name, value));
+      }
+    }
+
+    return headers.toString();
   }
 
   private static String formatNetworkInfo(final String hostName, final String ipAddress) {
