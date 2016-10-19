@@ -12,22 +12,22 @@
                 </a>
             </li>
             <li data-spy="projects" class="t_subnav__items__item">
-                <a data-scrollto href="#projects">
+                <a data-scrollto href="#projects" data-ng-click="GeneCtrl.collapseSections.projects=false">
                     <translate>Cancer Distribution</translate>
                 </a>
             </li>
             <li data-spy="protein" class="t_subnav__items__item">
-                <a data-scrollto href="#protein">
+                <a data-scrollto href="#protein" data-ng-click="GeneCtrl.collapseSections.protein=false">
                     <translate>Protein</translate>
                 </a>
             </li>
             <li data-spy="genomic" class="t_subnav__items__item">
-                <a data-scrollto href="#genomic" >
+                <a data-scrollto href="#genomic" data-ng-click="GeneCtrl.collapseSections.genomic=false">
                     <translate>Genomic Context</translate>
                 </a>
             </li>
             <li data-spy="mutations" class="t_subnav__items__item">
-                <a data-scrollto href="#mutations" >
+                <a data-scrollto href="#mutations" data-ng-click="GeneCtrl.collapseSections.mutations=false">
                     <translate>Mutations</translate>
                 </a>
             </li>
@@ -196,7 +196,7 @@
     </div>
 </section>
 <section id="projects" class="dynamic-height"
-         data-ng-class="{'loading': !GeneCtrl.gene.projects.hits, 'empty': GeneCtrl.gene.fprojects.length == 0}">
+         data-ng-class="{'loading': !GeneCtrl.gene.projects.hits, 'empty': GeneCtrl.gene.projects.hits.length == 0}">
     <h3 data-ng-if="!GeneCtrl.gene.projects.hits"><i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate></h3>
 
     <h3 data-ng-if="GeneCtrl.gene.projects.hits.length == 0"><translate>No Donors Affected.</translate></h3>
@@ -205,7 +205,7 @@
         <h3>
             <span data-ng-click="GeneCtrl.collapseSections.projects=!GeneCtrl.collapseSections.projects">
                 <translate>Cancer Distribution</translate>
-                <i data-ng-class="{'icon-caret-down':!GeneCtrl.collapseSections.projects, 'icon-caret-right':GeneCtrl.collapseSections.projects}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.projects, 'fa fa-angle-right':GeneCtrl.collapseSections.projects}"></i>
             </span>
             <span data-open-in-list='?filters={{GeneCtrl.gene.advQuery}}' data-type="donor"></span>
         </h3>
@@ -355,7 +355,7 @@
         <h3>
             <span data-ng-click="GeneCtrl.collapseSections.protein=!GeneCtrl.collapseSections.protein">
                 <translate>Protein</translate>
-                <i data-ng-class="{'icon-caret-down':!GeneCtrl.collapseSections.protein, 'icon-caret-right':GeneCtrl.collapseSections.protein}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.protein, 'fa fa-angle-right':GeneCtrl.collapseSections.protein}"></i>
             </span>
         </h3>
         <div data-ng-hide="GeneCtrl.collapseSections.protein">
@@ -379,7 +379,7 @@
         <span data-ng-click="GeneCtrl.collapseSections.genomic=!GeneCtrl.collapseSections.genomic">
             <translate>Genomic Context</translate>
             <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
-            <i data-ng-class="{'icon-caret-down':!GeneCtrl.collapseSections.genomic, 'icon-caret-right':GeneCtrl.collapseSections.genomic}"></i>
+            <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.genomic, 'fa fa-angle-right':GeneCtrl.collapseSections.genomic}"></i>
         </span>
     </h3>
 
@@ -406,7 +406,7 @@
         <h3>
             <span data-ng-click="GeneCtrl.collapseSections.mutations=!GeneCtrl.collapseSections.mutations">
                 <translate>Most Frequent Mutations</translate>
-                <i data-ng-class="{'icon-caret-down':!GeneCtrl.collapseSections.mutations, 'icon-caret-right':GeneCtrl.collapseSections.mutations}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.mutations, 'fa fa-angle-right':GeneCtrl.collapseSections.mutations}"></i>
                 <span data-open-in-list='/m?filters={{GeneCtrl.gene.advQuery}}'></span>
             </span>
         </h3>
