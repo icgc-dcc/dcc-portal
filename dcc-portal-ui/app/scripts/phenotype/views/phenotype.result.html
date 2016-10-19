@@ -38,6 +38,56 @@
     <div class="survival-analysis-wrapper">
         <strong><translate>Survival analysis</translate></strong>
 
+        <br>
+        <div class="t_tabs t_tabs__isolated t_tabs--smaller t_tabs--no-accent">
+            <div
+                class="t_tabs__tab"
+                ng-class="{
+                    active: activeSurvivalGraph === 'overall'
+                }"
+                ng-click="activeSurvivalGraph = 'overall'"
+            ><translate>Overall Survival</translate></div>
+            <div
+                class="t_tabs__tab"
+                ng-class="{
+                    active: activeSurvivalGraph === 'diseaseFree'
+                }"
+                ng-click="activeSurvivalGraph = 'diseaseFree'"
+            ><translate>Disease Free Survival</translate></div>
+        </div>
+
+        <div class="survival-graphs">
+            <survival-analysis-graph
+                ng-class="{disabled: activeSurvivalGraph !== 'overall' && activeSurvivalGraph !== undefined}"
+                data-data-sets="survivalAnalysisDataSets.overall"
+                tip-labels="{
+                    survivalEstimate: 'Survival estimate',
+                    survivalTime: 'Time of death',
+                    censoredSurvivalTime: 'Interval of last follow-up',
+                }"
+                censored-statuses="['alive']"
+                palette="seriesColours"
+                title="'Overall Survival'"
+                pvalue="survivalAnalysisDataSets.overallStats.pvalue"
+            ></survival-analysis-graph>
+
+            <survival-analysis-graph
+                ng-class="{disabled: activeSurvivalGraph !== 'diseaseFree'}"
+                data-data-sets="survivalAnalysisDataSets.diseaseFree"
+                tip-labels="{
+                    survivalEstimate: 'Disease free estimate',
+                    survivalTime: 'Time of relapse / progression',
+                    censoredSurvivalTime: 'Interval from primary treatment to last follow-up',
+                }"
+                censored-statuses="['progression', 'relapse']"
+                palette="seriesColours"
+                title="'Disease Free Survival'"
+                pvalue="survivalAnalysisDataSets.diseaseFreeStats.pvalue"
+            ></survival-analysis-graph>
+        </div>
+    </div>
+    <br>
+
         <div class="container-fluid">
             <div class="row">
                 <div
@@ -166,56 +216,6 @@
                 </div>
             </div>
         </div>
-
-        <br>
-        <div class="t_tabs t_tabs__isolated t_tabs--smaller t_tabs--no-accent">
-            <div
-                class="t_tabs__tab"
-                ng-class="{
-                    active: activeSurvivalGraph === 'overall'
-                }"
-                ng-click="activeSurvivalGraph = 'overall'"
-            ><translate>Overall Survival</translate></div>
-            <div
-                class="t_tabs__tab"
-                ng-class="{
-                    active: activeSurvivalGraph === 'diseaseFree'
-                }"
-                ng-click="activeSurvivalGraph = 'diseaseFree'"
-            ><translate>Disease Free Survival</translate></div>
-        </div>
-
-        <div class="survival-graphs">
-            <survival-analysis-graph
-                ng-class="{disabled: activeSurvivalGraph !== 'overall' && activeSurvivalGraph !== undefined}"
-                data-data-sets="survivalAnalysisDataSets.overall"
-                tip-labels="{
-                    survivalEstimate: 'Survival estimate',
-                    survivalTime: 'Time of death',
-                    censoredSurvivalTime: 'Interval of last follow-up',
-                }"
-                censored-statuses="['alive']"
-                palette="seriesColours"
-                title="'Overall Survival'"
-                pvalue="survivalAnalysisDataSets.overallStats.pvalue"
-            ></survival-analysis-graph>
-
-            <survival-analysis-graph
-                ng-class="{disabled: activeSurvivalGraph !== 'diseaseFree'}"
-                data-data-sets="survivalAnalysisDataSets.diseaseFree"
-                tip-labels="{
-                    survivalEstimate: 'Disease free estimate',
-                    survivalTime: 'Time of relapse / progression',
-                    censoredSurvivalTime: 'Interval from primary treatment to last follow-up',
-                }"
-                censored-statuses="['progression', 'relapse']"
-                palette="seriesColours"
-                title="'Disease Free Survival'"
-                pvalue="survivalAnalysisDataSets.diseaseFreeStats.pvalue"
-            ></survival-analysis-graph>
-        </div>
-    </div>
-
 
     <br>
     <div data-ng-class="wide"> 
