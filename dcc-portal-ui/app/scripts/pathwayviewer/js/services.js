@@ -492,6 +492,8 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           d3.select(this).style('fill', d.oldColor);
         }).on('click',config.onClick);
 
+        console.log(config.onClick);
+
         // Render all other normal rectangular nodes after octagons
         svg.selectAll('.RenderableRect').data(rects).enter().append('rect').attr({
           'class': function (d) {return 'pathway-node RenderableRect ' + d.type + ' entity'+d.id;},

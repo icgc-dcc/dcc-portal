@@ -205,7 +205,7 @@
         <h3>
             <span data-ng-click="GeneCtrl.collapseSections.projects=!GeneCtrl.collapseSections.projects">
                 <translate>Cancer Distribution</translate>
-                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.projects, 'fa fa-angle-right':GeneCtrl.collapseSections.projects}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.projects, 'fa fa-angle-up':GeneCtrl.collapseSections.projects}"></i>
             </span>
             <span data-open-in-list='?filters={{GeneCtrl.gene.advQuery}}' data-type="donor"></span>
         </h3>
@@ -355,7 +355,7 @@
         <h3>
             <span data-ng-click="GeneCtrl.collapseSections.protein=!GeneCtrl.collapseSections.protein">
                 <translate>Protein</translate>
-                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.protein, 'fa fa-angle-right':GeneCtrl.collapseSections.protein}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.protein, 'fa fa-angle-up':GeneCtrl.collapseSections.protein}"></i>
             </span>
         </h3>
         <div data-ng-hide="GeneCtrl.collapseSections.protein">
@@ -380,7 +380,7 @@
             <span data-ng-click="GeneCtrl.collapseSections.genomic=!GeneCtrl.collapseSections.genomic">
                 <translate>Genomic Context</translate>
                 <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
-                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.genomic, 'fa fa-angle-right':GeneCtrl.collapseSections.genomic}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.genomic, 'fa fa-angle-up':GeneCtrl.collapseSections.genomic}"></i>
             </span>
         </h3>
 
@@ -408,7 +408,7 @@
         <h3>
             <span data-ng-click="GeneCtrl.collapseSections.mutations=!GeneCtrl.collapseSections.mutations">
                 <translate>Most Frequent Mutations</translate>
-                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.mutations, 'fa fa-angle-right':GeneCtrl.collapseSections.mutations}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.mutations, 'fa fa-angle-up':GeneCtrl.collapseSections.mutations}"></i>
                 <span data-open-in-list='/m?filters={{GeneCtrl.gene.advQuery}}'></span>
             </span>
         </h3>
