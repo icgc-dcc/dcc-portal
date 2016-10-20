@@ -37,6 +37,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -56,9 +57,13 @@ import org.icgc.dcc.portal.server.service.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -105,6 +110,30 @@ public class EntitySetResource extends Resource {
     }
 
     return entitySet;
+  }
+
+  /**
+   * Updates an entityset.
+   * 
+   * @param entitySetId path param holding the set id to update.
+   * @param setDefinition definition of the set with updated info.
+   * @return updated entityset.
+   */
+  @PUT
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}")
+  @Consumes(APPLICATION_JSON)
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
+  public EntitySet updateSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetUpdateRequest entitySetUpdate) {
+    val updatedSet = service.updateEntitySet(entitySetId, entitySetUpdate.getName());
+    if (updatedSet == null) {
+      log.warn("updateEntitySet returns empty. The entitySetId '{}' is most likely invalid.", updatedSet);
+      throw new NotFoundException(entitySetId.toString(), API_ENTITY_SET_ID_VALUE);
+    }
+
+    return updatedSet;
   }
 
   @GET
@@ -248,6 +277,19 @@ public class EntitySetResource extends Resource {
     return Response.status(CREATED)
         .entity(newSet)
         .build();
+  }
+
+  @Data
+  private static class EntitySetUpdateRequest {
+
+    @NonNull
+    private final String name;
+
+    @JsonCreator
+    public EntitySetUpdateRequest(@NonNull @JsonProperty("name") String name) {
+      this.name = name;
+    }
+
   }
 
 }

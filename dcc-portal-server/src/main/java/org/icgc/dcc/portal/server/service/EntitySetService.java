@@ -119,6 +119,20 @@ public class EntitySetService {
     return list;
   }
 
+  public EntitySet updateEntitySet(@NonNull final UUID entitySetId, @NonNull final String newName) {
+    val es = repository.find(entitySetId);
+    if (null == es) {
+      log.error("No list is found for id: '{}'.", entitySetId);
+      return null;
+    }
+
+    log.debug("Got entity list: '{}'.", es);
+    val updatedSet =
+        new EntitySet(es.getId(), es.getState(), es.getCount(), newName, es.getDescription(), es.getType(),
+            es.getVersion());
+    return repository.update(updatedSet, updatedSet.getVersion()) == 1 ? updatedSet : null;
+  }
+
   public EntitySet createEntitySet(@NonNull final EntitySetDefinition entitySetDefinition, boolean async) {
     val newEntitySet = createAndSaveNewListFrom(entitySetDefinition);
     if (async) {
