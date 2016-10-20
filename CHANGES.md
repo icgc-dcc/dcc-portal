@@ -1,7 +1,28 @@
 ICGC DCC - Portal - Change Log
 ===
 
-Change log for the DCC Data Portal
+Change log for the DCC Data Portal.
+
+[4.3.19](https://github.com/icgc-dcc/dcc-portal/compare/4.3.18...4.3.19)
+--
+- Remove “notes” from saved sets
+- Null check for cookies before attempting to get session token
+- More information in exception emails
+- Null check on donorIds for processing a donor set
+- Bubbles up a 403 from the auth server on bad token scope
+
+[4.3.18](https://github.com/icgc-dcc/dcc-portal/compare/4.3.17...4.3.18)
+--
+- Added support for injecting settings into <portal-settings></portal-settings> as window.ICGC_SETTINGS js object
+- Added support for externalizign Google Analytics account ID
+- Removed grunt
+- Oncogrid zoom selection fix for right to left
+- Showing loading blocks for Projects Details tab
+- Added back publications section
+- Refactoring of `IndexModel` to be leaner and more cohesive
+- Server FindBug fixes and improvements to code clarity
+- Fixed JS errors on tooltips
+- Migrated jQuery from Bower to NPM
 
 [4.3.17](https://github.com/icgc-dcc/dcc-portal/compare/4.3.16...4.3.17)
 --
