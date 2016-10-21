@@ -46,7 +46,6 @@
                 </th>
                 <th><translate>Item Type</translate></th>
                 <th><translate>Name</translate></th>
-                <th><translate>Note</translate></th>
                 <th class="text-right"><translate># Items</translate></th>
                 <th></th>
             </thead>
@@ -63,7 +62,6 @@
                     </td>
                     <td>{{item.type | readable}}</td>
                     <td>{{item.name}}</td>
-                    <td style="max-width: 30rem">{{item.description}}</td>
                     <td class="text-right" data-ng-if="item.state === 'FINISHED'">
                         <a data-ng-if="item.type !=='file'" href="{{item.advLink}}">{{item.count | number}}</a>
                         <span data-ng-if="item.type ==='file'">{{item.count | number}}</span>
