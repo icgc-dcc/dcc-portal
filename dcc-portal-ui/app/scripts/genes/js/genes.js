@@ -113,22 +113,29 @@
     _ctrl.shouldLimitDisplayProjects = true;
     _ctrl.defaultProjectsLimit = 10;
 
-    var sections = ['projects', 'protein', 'genomic', 'mutations', 'compounds'];
-    var selection = _.trim($location.hash(), '#');
-    var sectionsToCollapse = getSectionsToCollapse(sections, selection);
-    _ctrl.collapseSections = _.zipObject(sections,
-      _.map(sections, function(section) {
-        return _.includes(sectionsToCollapse, section);
-      })
-    );
-    
-    function getSectionsToCollapse(sections, selection) {
-      var indexOfSelection = _.indexOf(sections, selection);
-      if (indexOfSelection === -1) {
-        return [];
+    var targetSectionId = _.trim($location.hash(), '#');
+    _ctrl.sections = ['projects', 'protein', 'genomic', 'mutations', 'compounds'].reduce((acc, sectionId) => {
+      const isInitiallyVisible = targetSectionId ? targetSectionId === sectionId : true;
+      return {
+        ...acc,
+        [sectionId]: {
+          wasEverVisible: isInitiallyVisible,
+          isVisible: isInitiallyVisible,
+          toggle(isVisible) {
+            this.isVisible = _.isUndefined(isVisible) ? !this.isVisible : isVisible;
+            if (this.isVisible) {
+              this.wasEverVisible = true;
+            }
+          },
+          show() {
+            this.toggle(true)
+          },
+          hide() {
+            this.toggle(false)
+          }
+        }
       }
-      return _.slice(sections, 0, indexOfSelection);
-    }
+    }, {});
 
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 

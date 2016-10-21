@@ -12,22 +12,22 @@
                 </a>
             </li>
             <li data-spy="projects" class="t_subnav__items__item">
-                <a data-scrollto href="#projects" data-ng-click="GeneCtrl.collapseSections.projects=false">
+                <a data-scrollto href="#projects" data-ng-click="GeneCtrl.sections.projects.show()">
                     <translate>Cancer Distribution</translate>
                 </a>
             </li>
             <li data-spy="protein" class="t_subnav__items__item">
-                <a data-scrollto href="#protein" data-ng-click="GeneCtrl.collapseSections.protein=false">
+                <a data-scrollto href="#protein" data-ng-click="GeneCtrl.sections.protein.show()">
                     <translate>Protein</translate>
                 </a>
             </li>
             <li data-spy="genomic" class="t_subnav__items__item">
-                <a data-scrollto href="#genomic" data-ng-click="GeneCtrl.collapseSections.genomic=false">
+                <a data-scrollto href="#genomic" data-ng-click="GeneCtrl.sections.genomic.show()">
                     <translate>Genomic Context</translate>
                 </a>
             </li>
             <li data-spy="mutations" class="t_subnav__items__item">
-                <a data-scrollto href="#mutations" data-ng-click="GeneCtrl.collapseSections.mutations=false">
+                <a data-scrollto href="#mutations" data-ng-click="GeneCtrl.sections.mutations.show()">
                     <translate>Mutations</translate>
                 </a>
             </li>
@@ -202,15 +202,18 @@
     <h3 data-ng-if="GeneCtrl.gene.projects.hits.length == 0"><translate>No Donors Affected.</translate></h3>
 
     <div data-ng-if="GeneCtrl.gene.projects.hits.length > 0">
-        <h3>
-            <span data-ng-click="GeneCtrl.collapseSections.projects=!GeneCtrl.collapseSections.projects">
+        <h3 data-ng-click="GeneCtrl.sections.projects.toggle()">
+            <span>
                 <translate>Cancer Distribution</translate>
-                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.projects, 'fa fa-angle-up':GeneCtrl.collapseSections.projects}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.sections.projects.isVisible, 'fa fa-angle-up':GeneCtrl.sections.projects.isVisible}"></i>
             </span>
             <span data-open-in-list='?filters={{GeneCtrl.gene.advQuery}}' data-type="donor"></span>
         </h3>
 
-        <div data-ng-hide="GeneCtrl.collapseSections.projects">
+        <div
+            data-ng-if="GeneCtrl.sections.projects.wasEverVisible"
+            data-ng-show="GeneCtrl.sections.projects.isVisible"
+        >
             <h4 class="subhead">
                 <a data-ng-href='/search?filters={{GeneCtrl.gene.advQuery}}'>
                     <strong>{{GeneCtrl.totalDonors | number}}</strong>
@@ -350,15 +353,20 @@
             <translate>No Mutation occurs in coding region of this Gene.</translate>
         </h3>
     </div>
-    <div data-ng-if="GeneCtrl.gene.uiProteinTranscript.length"
-         data-ng-init="sorted = (GeneCtrl.gene.uiProteinTranscript | orderBy:'+name')">
-        <h3>
-            <span data-ng-click="GeneCtrl.collapseSections.protein=!GeneCtrl.collapseSections.protein">
+    <div
+        data-ng-if="GeneCtrl.gene.uiProteinTranscript.length"
+        data-ng-init="sorted = (GeneCtrl.gene.uiProteinTranscript | orderBy:'+name')"
+    >
+        <h3 data-ng-click="GeneCtrl.sections.protein.toggle()">
+            <span>
                 <translate>Protein</translate>
-                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.protein, 'fa fa-angle-up':GeneCtrl.collapseSections.protein}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.sections.protein.isVisible, 'fa fa-angle-up':GeneCtrl.sections.protein.isVisible}"></i>
             </span>
         </h3>
-        <div data-ng-hide="GeneCtrl.collapseSections.protein">
+        <div
+            data-ng-if="GeneCtrl.sections.protein.wasEverVisible"
+            data-ng-show="GeneCtrl.sections.protein.isVisible"
+        >
             <form data-ng-init="transcript = sorted[0]" data-ng-show="GeneCtrl.gene.uiProteinTranscript.length > 0">
                 <span>
                     <strong><translate>Transcript:</translate> </strong>
@@ -376,15 +384,18 @@
     </h3>
     
     <div data-ng-if="GeneCtrl.gene.hasGVChromosome">
-        <h3>
-            <span data-ng-click="GeneCtrl.collapseSections.genomic=!GeneCtrl.collapseSections.genomic">
+        <h3 data-ng-click="GeneCtrl.sections.genomic.toggle()">
+            <span>
                 <translate>Genomic Context</translate>
                 <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
-                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.genomic, 'fa fa-angle-up':GeneCtrl.collapseSections.genomic}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.sections.genomic.isVisible, 'fa fa-angle-up':GeneCtrl.sections.genomic.isVisible}"></i>
             </span>
         </h3>
 
-        <div data-ng-hide="GeneCtrl.collapseSections.genomic">
+        <div
+            data-ng-if="GeneCtrl.sections.genomic.wasEverVisible"
+            data-ng-show="GeneCtrl.sections.genomic.isVisible"
+        >
             <div data-ng-if="GeneCtrl.gene.hasGVChromosome" class="t_gv__navbar">
                 <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
                 <span class="pull-right gv-navbar-zoom"></span>
@@ -405,14 +416,18 @@
     </h3>
 
     <div data-ng-if="GeneMutationsCtrl.mutations.hits.length > 0">
-        <h3>
-            <span data-ng-click="GeneCtrl.collapseSections.mutations=!GeneCtrl.collapseSections.mutations">
+        <h3 data-ng-click="GeneCtrl.sections.mutations.toggle()">
+            <span>
                 <translate>Most Frequent Mutations</translate>
-                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.collapseSections.mutations, 'fa fa-angle-up':GeneCtrl.collapseSections.mutations}"></i>
+                <i data-ng-class="{'fa fa-angle-down':!GeneCtrl.sections.mutations.isVisible, 'fa fa-angle-up':GeneCtrl.sections.mutations.isVisible}"></i>
                 <span data-open-in-list='/m?filters={{GeneCtrl.gene.advQuery}}'></span>
             </span>
         </h3>
-        <div data-ng-hide="GeneCtrl.collapseSections.mutations">
+        
+        <div
+            data-ng-if="GeneCtrl.sections.mutations.wasEverVisible"
+            data-ng-show="GeneCtrl.sections.mutations.isVisible"
+        >
             <div data-ng-if="GeneMutationsCtrl.bar.hasData" class="clearfix">
                 <bar class="wide" height=200 items="GeneMutationsCtrl.bar" heading=""
                      ylabel="{{'Donors affected' | translate}}"></bar>
