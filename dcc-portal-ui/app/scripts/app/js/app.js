@@ -210,6 +210,7 @@
     'toaster',
     'dndLists',
     'gettext',
+    'xeditable',
 
 
     // 3rd party
