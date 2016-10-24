@@ -125,6 +125,8 @@
       }
     };
 
+    _this.renameSet = SetService.renameSet;
+
   });
 
 

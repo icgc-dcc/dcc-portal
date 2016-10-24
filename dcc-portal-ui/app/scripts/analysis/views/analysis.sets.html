@@ -67,6 +67,7 @@
                             ng-hide="itemNameForm.$visible"
                             editable-text="item.name"
                             e-form="itemNameForm"
+                            onaftersave="SavedSetController.renameSet(item.id, item.name)"
                         >
                             {{ item.name }}
                         </span>

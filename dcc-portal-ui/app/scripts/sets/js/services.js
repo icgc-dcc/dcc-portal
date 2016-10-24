@@ -224,6 +224,12 @@
       return promise;
     };
 
+    _service.renameSet = (setId, newName) => {
+      Restangular.one('entityset', setId).customPUT(`name=${newName}`, null, null, {'Content-Type': 'application/x-www-form-urlencoded'});
+      setList.find(x => x.id === setId).name = newName;
+      localStorageService.set(LIST_ENTITY, setList);
+    };
+
     _service.addExternalSet = function(type, params) {
       var promise = null;
       var data = params2JSON(type, params);
