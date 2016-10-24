@@ -422,6 +422,7 @@
 
     /****** Local storage related API ******/
     _service.getAll = function() {
+      setList = localStorageService.get(LIST_ENTITY) || [];
       return setList;
     };
 
