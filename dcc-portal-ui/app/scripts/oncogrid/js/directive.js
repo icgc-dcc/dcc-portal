@@ -28,7 +28,7 @@
   var module = angular.module('icgc.oncogrid.directives', []);
 
   module.directive('oncogridAnalysis', function (Donors, Genes, Occurrences, Consequence,
-    $q, $filter, OncogridService, SetService, $timeout, LocationService, gettextCatalog) {
+    $q, $filter, OncogridService, SetService, $timeout, LocationService, gettextCatalog, localStorageService) {
     return {
       restrict: 'E',
       scope: {
@@ -292,6 +292,13 @@
 
         $scope.$watch('item', function (n) {
           if (n) {
+            var getName = type => _(localStorageService.get('entity'))
+                            .filter( e => e.id === $scope.item[type])
+                            .map( e => e.name)
+                            .value()[0];
+
+            $scope.geneSetName = getName('geneSet');
+            $scope.donorSetName = getName('donorSet');
             if (typeof $scope.OncoCtrl.grid !== 'undefined' && $scope.OncoCtrl.grid !== null) {
               $scope.cleanActives();
               $scope.OncoCtrl.grid.destroy();
