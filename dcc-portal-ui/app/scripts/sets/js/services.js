@@ -211,6 +211,7 @@
 
         data.type = data.type.toLowerCase();
 
+        setList = localStorageService.get(LIST_ENTITY) || [];
         setList.unshift(data);
         _service.refreshList();
 
@@ -248,6 +249,7 @@
 
         data.type = data.type.toLowerCase();
 
+        setList = localStorageService.get(LIST_ENTITY) || [];
         setList.unshift(data);
         _service.refreshList();
 
@@ -363,6 +365,7 @@
 
         data.type = data.type.toLowerCase();
 
+        setList = localStorageService.get(LIST_ENTITY) || [];
         setList.unshift(data);
         _service.refreshList();
 
@@ -419,6 +422,7 @@
 
     /****** Local storage related API ******/
     _service.getAll = function() {
+      setList = localStorageService.get(LIST_ENTITY) || [];
       return setList;
     };
 
