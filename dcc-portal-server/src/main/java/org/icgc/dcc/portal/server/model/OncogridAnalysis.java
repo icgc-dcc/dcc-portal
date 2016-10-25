@@ -39,11 +39,6 @@ public class OncogridAnalysis implements Identifiable<UUID> {
   private final UUID geneSet;
   @NonNull
   private final UUID donorSet;
-  @NonNull
-  private final String geneSetName;
-  @NonNull
-  private final String donorSetName;
-
   private final long geneCount;
   private final long donorCount;
 
@@ -56,24 +51,21 @@ public class OncogridAnalysis implements Identifiable<UUID> {
       @JsonProperty("id") final UUID id,
       @JsonProperty("geneSet") final UUID geneSet,
       @JsonProperty("geneCount") final long geneCount,
-      @JsonProperty("geneSetName") final String geneSetName,
       @JsonProperty("donorSet") final UUID donorSet,
-      @JsonProperty("donorCount") final long donorCount,
-      @JsonProperty("donorSetName") final String donorSetName) {
+      @JsonProperty("donorCount") final long donorCount) {
     this.id = id;
     this.geneSet = geneSet;
     this.geneCount = geneCount;
-    this.geneSetName = geneSetName;
     this.donorSet = donorSet;
     this.donorCount = donorCount;
-    this.donorSetName = donorSetName;
   }
 
   @RequiredArgsConstructor
   @Getter
   public enum State {
 
-    FINISHED("finished"), ERROR("error");
+    FINISHED("finished"),
+    ERROR("error");
 
     @NonNull
     private final String name;
