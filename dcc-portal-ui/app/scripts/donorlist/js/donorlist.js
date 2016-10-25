@@ -77,8 +77,8 @@
       var filters = LocationService.filters(),
           params = {type: 'donor', facet: 'id'},
           entityType = (isExternalRepo ? 'file' : 'donor'),
-          entitySpecifier = isExternalRepo ?  Extensions.ENTITY : 'id',
-          entityID = isExternalRepo ?  [donorSetId] :  [Extensions.ENTITY_PREFIX + donorSetId],
+          entitySpecifier = isExternalRepo ?  'donorId' : 'id',
+          entityID = [Extensions.ENTITY_PREFIX + donorSetId],
           isOrNot = Facets.isNot(params) ? 'not' : 'is';
 
       return _.set (filters, [entityType, entitySpecifier, isOrNot], entityID);
