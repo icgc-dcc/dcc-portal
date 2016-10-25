@@ -34,7 +34,9 @@
             </thead>
             <tbody>
                 <tr data-ng-repeat="item in setList">
-                    <td>{{getSetShortHand(item, setList)}}</td>
+                    <td>
+                        <span data-ng-bind-html="getSetShortHand(item, setList)"></span>
+                    </td>
                     <td>{{setMap[item].name}}</td>
                     <td class="text-right">
                         <a data-ng-if="setType !== 'file'" href="{{setMap[item].advLink}}">{{setMap[item].count | number}}</a>
