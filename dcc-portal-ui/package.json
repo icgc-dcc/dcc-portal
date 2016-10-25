@@ -99,6 +99,7 @@
   },
   "dependencies": {
     "angular-marked": "1.2.2",
+    "angular-xeditable": "^0.4.0",
     "backbone": "1.0.0",
     "binaryjs": "0.1.8",
     "binaryjs-client": "1.0.0",
