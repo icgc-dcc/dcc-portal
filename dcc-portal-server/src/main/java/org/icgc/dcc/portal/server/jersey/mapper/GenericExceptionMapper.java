@@ -20,6 +20,7 @@ package org.icgc.dcc.portal.server.jersey.mapper;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.serverError;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static org.icgc.dcc.portal.server.util.HttpServletRequests.getHeadersFromRequest;
 import static org.icgc.dcc.portal.server.util.HttpServletRequests.getHttpRequestCallerInfo;
 
 import java.util.Date;
@@ -130,8 +131,11 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
     try {
       val report = new BufferedReport();
       report.addException((Exception) t);
-      report.addInfo("Info", getHttpRequestCallerInfo(request));
-      report.addInfo("Request = %s", request);
+      report.addInfo("Info = %s", getHttpRequestCallerInfo(request));
+      report.addInfo("Request URL = %s", request.getRequestURI());
+      report.addInfo("Request Method = %s", request.getMethod());
+      report.addInfo("Request Query String = %s", request.getQueryString());
+      report.addInfo("Request Headers= %s", getHeadersFromRequest(request));
       report.addInfo("Date = %s", new Date());
 
       val email = new ReportEmail("DCC Portal", report);

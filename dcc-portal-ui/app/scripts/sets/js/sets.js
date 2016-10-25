@@ -60,7 +60,6 @@
 
       params.type = $scope.params.setType;
       params.name = $scope.params.setName;
-      params.description = $scope.params.setDescription;
       params.size = $scope.params.setSize;
 
       if (angular.isDefined($scope.params.setLimit)) {
@@ -96,7 +95,6 @@
 
       params.type = $scope.params.setType;
       params.name = $scope.params.setName;
-      params.description = $scope.params.setDescription;
       params.size = $scope.params.setSize;
       params.sortBy = 'fileName';
 

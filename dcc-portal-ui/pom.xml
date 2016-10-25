@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>4.3.19-SNAPSHOT</version>
+    <version>4.3.20-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -103,21 +103,6 @@
               <executable>npm</executable>
               <arguments>
                 <argument>install</argument>
-              </arguments>
-              <workingDirectory>.</workingDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>bower-install</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>npm</executable>
-              <arguments>
-                <argument>run</argument>
-                <argument>bower</argument>
               </arguments>
               <workingDirectory>.</workingDirectory>
             </configuration>
