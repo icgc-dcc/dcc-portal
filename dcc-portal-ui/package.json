@@ -12,7 +12,7 @@
     "sethost": "hostile set localhost local.dcc.icgc.org",
     "unsethost": "hostile remove local.dcc.icgc.org",
     "checkhost": "node tasks/checkDns.js",
-    "predev": "npm run checkhost",
+    "predev": "npm run ensure-versions && npm run checkhost",
     "dev": "npm start",
     "dev:prodapi": "API_SOURCE=production npm run dev",
     "font:open": "fontello-cli --config app/styles/fonts/config.json open",
@@ -21,7 +21,10 @@
     "test": "karma start karma.conf.js",
     "extract-text": "angular-gettext-cli --files 'app/scripts/**/*.+(html|js)' --dest translations/strings.pot",
     "compile-text": "angular-gettext-cli --compile --files 'translations/*.po' --dest 'app/scripts/translations/js/translations.js'",
-    "lint": "eslint -c config/eslint.js --no-eslintrc app/vendor app"
+    "lint": "eslint -c config/eslint.js --no-eslintrc app/vendor app",
+    "ensure-versions": "npm run ensure-node-version && npm run ensure-npm-version || echo 'Please ensure your version of node and npm satisfies' `json -f package.json engines` && exit 10",
+    "ensure-node-version": "semver `node -v` -r `json -f package.json engines.node`",
+    "ensure-npm-version": "semver `npm -v` -r `json -f package.json engines.npm`"
   },
   "devDependencies": {
     "angular-gettext-cli": "1.0.7",
@@ -68,6 +71,7 @@
     "http-proxy": "0.10.0",
     "imports-loader": "0.6.5",
     "jasmine-core": "2.4.1",
+    "json": "9.0.4",
     "karma": "1.1.2",
     "karma-babel-preprocessor": "6.0.1",
     "karma-chrome-launcher": "1.0.1",
@@ -86,6 +90,7 @@
     "ruby-sass-loader": "0.3.0",
     "sass-loader": "4.0.2",
     "script-loader": "0.7.0",
+    "semver": "5.3.0",
     "sockjs-client": "1.1.1",
     "string-replace-loader": "1.0.5",
     "strip-ansi": "3.0.1",
@@ -95,7 +100,8 @@
     "whatwg-fetch": "1.0.0"
   },
   "engines": {
-    "node": ">=4.4.0"
+    "node": ">=4.4.0",
+    "npm": ">=3"
   },
   "dependencies": {
     "angular-marked": "1.2.2",

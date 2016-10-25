@@ -4,7 +4,15 @@ ICGC DCC - Portal UI
 Requiments
 ---
 
-- Install [node.js](http://nodejs.org/download/ )
+- Node >= 4.4.0  
+  Instructions for installing Node via nvm  
+  https://github.com/creationix/nvm#install-script  
+  https://github.com/creationix/nvm#usage  
+
+- npm >= 3
+  ```bash
+  npm install npm@latest -g
+  ```
 
 Setup
 ---
