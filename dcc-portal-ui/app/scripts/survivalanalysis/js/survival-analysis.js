@@ -235,7 +235,8 @@ function renderPlot (params) {
   var survivalAnalysisController = function (
       $scope,
       $element,
-      FullScreenService
+      FullScreenService,
+      SetOperationService
     ) {
       var ctrl = this;
       var graphContainer = $element.find('.survival-graph').get(0);
@@ -364,6 +365,7 @@ function renderPlot (params) {
         window.removeEventListener('resize', update);
       };
 
+      this.SetOperationService = SetOperationService;
   };
 
   module.component('survivalAnalysisGraph', {
