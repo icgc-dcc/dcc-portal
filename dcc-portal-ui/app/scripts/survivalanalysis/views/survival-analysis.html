@@ -48,7 +48,7 @@
   <i class="icon-spin icon-spinner absolute-center" ng-class="{'ng-hide': ctrl.dataSets.length}"></i>
 
 
-  <div class="pull-right p-value-test">
+  <div class="p-value-test">
     <span ng-if="ctrl.pvalue !== undefined && ctrl.pvalue!==0">Log-Rank Test P-Value = {{ ctrl.pvalue.toExponential(2) }}</span>
     <span ng-if="ctrl.pvalue === 0">Log-Rank Test P-Value ≈ {{ ctrl.pvalue.toExponential(2) }}</span>
   </div>
