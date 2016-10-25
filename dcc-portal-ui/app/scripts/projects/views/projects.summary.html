@@ -1,5 +1,8 @@
+<div data-ng-if="ProjectsCtrl.isLoadingData" class="loading"><h3><i class="icon-spinner icon-spin"></i>
+    <translate>Loading Summary...</translate>
+</h3></div>
 
-<div data-ng-show="ProjectsCtrl.projects" ng-init="lineHeight = 310">
+<div data-ng-show="ProjectsCtrl.projects && !ProjectsCtrl.isLoadingData" ng-init="lineHeight = 310">
     <section>
         <div class="narrow">
             <div ng-show="! ProjectsCtrl.hasDonutData()" class="text-center">
