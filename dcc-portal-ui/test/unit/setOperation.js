@@ -33,8 +33,8 @@ describe('Test SetOperationService', function() {
   });
 
   it('Test set operation alias', function() {
-     expect(SetOperationService.getSetShortHand('a', ['b', 'a', 'c'])).toEqual('S2');
-     expect(SetOperationService.getSetShortHand('a', ['a', 'b', 'c'])).toEqual('S1');
+     expect(SetOperationService.getSetShortHand('a', ['b', 'a', 'c'])).toEqual('S<sub>2</sub>');
+     expect(SetOperationService.getSetShortHand('a', ['a', 'b', 'c'])).toEqual('S<sub>1</sub>');
   });
 
 });
