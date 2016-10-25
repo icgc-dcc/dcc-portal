@@ -334,8 +334,6 @@
 
           if (stopIfNoHits (genes)) {return;}
 
-          Page.stopWork();
-
           geneDonorCountsRestangular = Restangular
             .one('ui/search/gene-project-donor-counts/' + _.map(genes.hits, 'id').join(','));
 
@@ -390,8 +388,8 @@
     }
 
     function refresh() {
-      Page.startWork();
-      
+      _ctrl.isLoadingData = true;
+
       // Needs to first grab every single project for projectIdLookupMap. Otherwise could be missing from map.
       Projects.getList({from: 1, size:100, filters:{}}).then(function(data) {
         _ctrl.projectIDLookupMap = _.mapKeys(data.hits, function(project) {
