@@ -80,15 +80,7 @@
       return result;
     };
 
-    function _getSetShortHand(setId, setList) {
-      if (setList) {
-        return shortHandPrefix + '<sub>' + (setList.indexOf(setId) + 1) + '</sub>';
-      }
-      return setId;
-    }
-
-    this.getSetShortHand = _getSetShortHand;
-
+    this.getSetShortHand = (setId, setList) => setList ? `<em>${shortHandPrefix}</em><sub>${setList.indexOf(setId) + 1}</sub>` : setId;
 
   });
 
