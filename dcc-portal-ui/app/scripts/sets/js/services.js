@@ -82,7 +82,7 @@
 
     function _getSetShortHand(setId, setList) {
       if (setList) {
-        return shortHandPrefix + (setList.indexOf(setId) + 1);
+        return shortHandPrefix + '<sub>' + (setList.indexOf(setId) + 1) + '</sub>';
       }
       return setId;
     }

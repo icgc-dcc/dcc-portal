@@ -242,14 +242,20 @@
       .attr('y', cy)
       .attr('text-anchor', 'end')
       .style('fill', '#333333')
-      .text(config.setLabelFunc(uniqueIds[0]));
+      .text('S')
+      .append('tspan')
+      .text(config.setLabelFunc(uniqueIds[0]))
+      .style('alignment-baseline', 'central');
 
     svg.append('text')
       .attr('x', cx + 2.8*radius * factor)
       .attr('y', cy)
       .attr('text-anchor', 'start')
       .style('fill', '#333333')
-      .text(config.setLabelFunc(uniqueIds[1]));
+      .text('S')
+      .append('tspan')
+      .text(config.setLabelFunc(uniqueIds[1]))
+      .style('alignment-baseline', 'central');
 
 
     // Label - value
@@ -468,27 +474,30 @@
       .attr('y', cy - Math.cos(Math.PI * 300/180) * 2.5*radius * factor)
       .attr('text-anchor', 'end')
       .style('fill', '#333333')
-      .text(function() {
-        return config.setLabelFunc(uniqueIds[0]);
-      });
+      .text('S')
+      .append('tspan')
+      .text(config.setLabelFunc(uniqueIds[0]))
+      .style('alignment-baseline', 'central');
 
     svg.append('text')
       .attr('x', cx + Math.sin(Math.PI * 60/180) * 2.5*radius * factor)
       .attr('y', cy - Math.cos(Math.PI * 60/180) * 2.5*radius * factor)
       .attr('text-anchor', 'start')
       .style('fill', '#333333')
-      .text(function() {
-        return config.setLabelFunc(uniqueIds[1]);
-      });
+      .text('S')
+      .append('tspan')
+      .text(config.setLabelFunc(uniqueIds[1]))
+      .style('alignment-baseline', 'central');
 
     svg.append('text')
       .attr('x', cx + Math.sin(Math.PI * 180/180) * 2.6*radius * factor)
       .attr('y', cy - Math.cos(Math.PI * 180/180) * 2.6*radius * factor)
       .attr('text-anchor', 'middle')
       .style('fill', '#333333')
-      .text(function() {
-        return config.setLabelFunc(uniqueIds[2]);
-      });
+      .text('S')
+      .append('tspan')
+      .text(config.setLabelFunc(uniqueIds[2]))
+      .style('alignment-baseline', 'central');
 
 
     // Label - value
