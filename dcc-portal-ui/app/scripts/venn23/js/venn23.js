@@ -244,9 +244,7 @@
       .style('fill', '#333333')
       .text('S')
       .append('tspan')
-      .text(function() {
-        return config.setLabelFunc(uniqueIds[0]);
-      })
+      .text(config.setLabelFunc(uniqueIds[0]))
       .style('alignment-baseline', 'central');
 
     svg.append('text')
@@ -256,9 +254,7 @@
       .style('fill', '#333333')
       .text('S')
       .append('tspan')
-      .text(function() {
-        return config.setLabelFunc(uniqueIds[1]);
-      })
+      .text(config.setLabelFunc(uniqueIds[1]))
       .style('alignment-baseline', 'central');
 
 
@@ -480,9 +476,7 @@
       .style('fill', '#333333')
       .text('S')
       .append('tspan')
-      .text(function() {
-        return config.setLabelFunc(uniqueIds[0]);
-      })
+      .text(config.setLabelFunc(uniqueIds[0]))
       .style('alignment-baseline', 'central');
 
     svg.append('text')
@@ -492,9 +486,7 @@
       .style('fill', '#333333')
       .text('S')
       .append('tspan')
-      .text(function() {
-        return config.setLabelFunc(uniqueIds[1]);
-      })
+      .text(config.setLabelFunc(uniqueIds[1]))
       .style('alignment-baseline', 'central');
 
     svg.append('text')
@@ -504,9 +496,7 @@
       .style('fill', '#333333')
       .text('S')
       .append('tspan')
-      .text(function() {
-        return config.setLabelFunc(uniqueIds[2]);
-      })
+      .text(config.setLabelFunc(uniqueIds[2]))
       .style('alignment-baseline', 'central');
 
 
