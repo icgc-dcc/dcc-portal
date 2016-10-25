@@ -25,6 +25,8 @@ import static org.icgc.dcc.portal.server.resource.Resources.API_ASYNC;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_DEFINITION_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_ID_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_ID_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_UPDATE_NAME;
+import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_UPDATE_PARAM;
 import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
 
 import java.util.ArrayList;
@@ -35,8 +37,10 @@ import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -105,6 +109,29 @@ public class EntitySetResource extends Resource {
     }
 
     return entitySet;
+  }
+
+  /**
+   * Updates an entityset.
+   * 
+   * @param entitySetId path param holding the set id to update.
+   * @param setDefinition definition of the set with updated info.
+   * @return updated entityset.
+   */
+  @PUT
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
+  public EntitySet updateSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
+      @ApiParam(value = API_ENTITY_SET_UPDATE_NAME) @FormParam(API_ENTITY_SET_UPDATE_PARAM) final String newName) {
+    val updatedSet = service.updateEntitySet(entitySetId, newName);
+    if (updatedSet == null) {
+      log.warn("updateEntitySet returns empty. The entitySetId '{}' is most likely invalid.", updatedSet);
+      throw new NotFoundException(entitySetId.toString(), API_ENTITY_SET_ID_VALUE);
+    }
+
+    return updatedSet;
   }
 
   @GET

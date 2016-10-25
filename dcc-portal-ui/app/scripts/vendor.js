@@ -21,6 +21,7 @@ require('angularjs-toaster/toaster.js');
 require('angular-drag-and-drop-lists/angular-drag-and-drop-lists.js');
 require('expose?ZeroClipboard!zeroclipboard/dist/ZeroClipboard.js');
 require('angular-gettext/dist/angular-gettext.min.js');
+require('angular-xeditable');
 
 // Other App Dependencies
 require('expose?Highcharts!highcharts');

@@ -537,5 +537,16 @@ a.no-style {
   margin-right: 4px;
 }
 
+.editable-input {
+  padding: 0 0.3em;
+  border-radius: 2px;
+}
+
+.editable-buttons {
+  button {
+    margin-left: 0.3em;
+  }
+}
+
 @import "override.scss";
 @import "flags.scss";

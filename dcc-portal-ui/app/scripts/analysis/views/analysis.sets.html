@@ -61,7 +61,23 @@
                         </span>
                     </td>
                     <td>{{item.type | readable}}</td>
-                    <td>{{item.name}}</td>
+                    <td>
+                        <span
+                            data-ng-click="itemNameForm.$show()"
+                            ng-hide="itemNameForm.$visible"
+                            editable-text="item.name"
+                            e-form="itemNameForm"
+                            onaftersave="SavedSetController.renameSet(item.id, item.name)"
+                        >
+                            {{ item.name }}
+                        </span>
+                        <i
+                            data-tooltip="{{'Rename set' | translate}}"
+                            class="icon-pencil"
+                            data-ng-click="itemNameForm.$show()"
+                            ng-hide="itemNameForm.$visible"
+                        ></i>
+                    </td>
                     <td class="text-right" data-ng-if="item.state === 'FINISHED'">
                         <a data-ng-if="item.type !=='file'" href="{{item.advLink}}">{{item.count | number}}</a>
                         <span data-ng-if="item.type ==='file'">{{item.count | number}}</span>

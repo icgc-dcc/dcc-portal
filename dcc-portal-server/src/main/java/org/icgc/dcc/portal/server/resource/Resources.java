@@ -102,6 +102,8 @@ public final class Resources {
 
   public static final String API_ENTITY_SET_DEFINITION_VALUE = "Entity Set Definition";
   public static final String API_ENTITY_SET_DEFINITION_PARAM = "entitySetDefinition";
+  public static final String API_ENTITY_SET_UPDATE_NAME = "Entity Set Name";
+  public static final String API_ENTITY_SET_UPDATE_PARAM = "name";
   public static final String API_SET_ANALYSIS_DEFINITION_VALUE = "Set Analysis Definition";
 
   public static final String API_ASYNC = "Asyncronous API Request";
