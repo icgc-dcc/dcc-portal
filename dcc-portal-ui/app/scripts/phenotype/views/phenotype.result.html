@@ -138,12 +138,6 @@
                 <tr>
                     <td>
                         <translate>Overall Survival Analysis</translate>
-                        <i
-                            class="icon-file t_tools t_tools__tool pull-right"
-                            ng-click="exportDonors('overall', survivalAnalysisDataSets.overall)"
-                            data-tooltip="{{ 'Export data for [[ survivalGraph ]] survival analysis as TSV' | translate | subDelimiters:{survivalGraph : activeSurvivalGraph === 'overall' ? 'overall' : 'disease free'} }}"
-                            data-tooltip-placement="left"
-                        ></i>
                     </td>
 
                     <td
@@ -166,12 +160,6 @@
                 <tr>
                     <td>
                         <translate>Disease Free Survival Analysis</translate>
-                        <i
-                            class="icon-file t_tools t_tools__tool pull-right"
-                            ng-click="exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
-                            data-tooltip="{{'Export data for [[ survivalGraph ]] survival analysis as TSV' | translate | subDelimiters:{survivalGraph : activeSurvivalGraph === 'overall' ? 'overall' : 'disease free'} }}"
-                            data-tooltip-placement="left"
-                        ></i>
                     </td>
 
                     <td
