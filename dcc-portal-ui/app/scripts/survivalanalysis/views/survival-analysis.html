@@ -11,20 +11,37 @@
     </div>
   </script>
 
+  <div class="tool-buttons">
+    <button
+      data-tooltip="Reset"
+      ng-class="{disabled: !ctrl.canUndo()}"
+      class="btn btn-default"
+      ng-click="ctrl.handleClickReset()"
+    >
+      <i class="icon-undo"></i>
+    </button>
+
+    <button
+      data-tooltip="Fullscreen"
+      class="btn btn-default"
+      ng-click="ctrl.isFullScreen() ? ctrl.handleClickExitFullScreen() : ctrl.handleClickEnterFullScreen()"
+    >
+      <i ng-if="!ctrl.isFullScreen()" class="icon-resize-full"></i>
+      <i ng-if="ctrl.isFullScreen()" class="icon-resize-small"></i>
+    </button>
+
+    <button
+      data-tooltip="Export CSV"
+      class="btn btn-default"
+      ng-click="ctrl.onClickExportCsv()"
+    >
+      <i class="icon-file"></i>
+    </button>
+  </div>
+
   <h1 class="title" ng-if="ctrl.title">{{ ctrl.title }}</h1>
 
   <ul class="legend">
-    <li>
-      <i
-        class="undo-button icon-undo"
-        ng-class="{disabled: !ctrl.canUndo()}"
-        ng-click="ctrl.handleClickReset()"
-      ></i>
-    </li>
-    <li class="fullscreen-toggle">
-      <i ng-if="!ctrl.isFullScreen()" ng-click="ctrl.handleClickEnterFullScreen()" class="icon-resize-full"></i>
-      <i ng-if="ctrl.isFullScreen()" ng-click="ctrl.handleClickExitFullScreen()" class="icon-resize-small"></i>
-    </li>
     <li
       class="set"
       ng-repeat="dataSet in ctrl.dataSets"

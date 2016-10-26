@@ -69,6 +69,7 @@
                 palette="seriesColours"
                 title="'Overall Survival'"
                 pvalue="survivalAnalysisDataSets.overallStats.pvalue"
+                on-click-export-csv="exportDonors('overall', survivalAnalysisDataSets.overall)"
             ></survival-analysis-graph>
 
             <survival-analysis-graph
@@ -83,6 +84,7 @@
                 palette="seriesColours"
                 title="'Disease Free Survival'"
                 pvalue="survivalAnalysisDataSets.diseaseFreeStats.pvalue"
+                on-click-export-csv="exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
             ></survival-analysis-graph>
         </div>
     </div>

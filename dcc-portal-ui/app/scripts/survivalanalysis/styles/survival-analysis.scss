@@ -69,29 +69,12 @@ $faded: #e6dede;
 
 }
 
-%survivalIconButon {
-  display: block;
-  color: $iconColor;
-  cursor: pointer !important;
-  transition: all 0.2s ease;
-  &:hover {
-    transform: scale(1.1);
-  }
-  &.disabled {
-    visibility: hidden;
-  }
-}
-
 .survival-analysis {
   position: relative;
 
-  .undo-button {
-    @extend %survivalIconButon;
-  }
-
-  .fullscreen-toggle {
-    @extend %survivalIconButon;
-    margin-left: 6px;
+  .tool-buttons {
+    position: absolute;
+    right: 0;
   }
 
   .survival-graph {

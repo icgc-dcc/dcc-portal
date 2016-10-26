@@ -378,7 +378,8 @@ function renderPlot (params) {
       censoredStatuses: '<',
       palette: '<',
       title: '<',
-      pvalue: '<'
+      pvalue: '<',
+      onClickExportCsv: '&',
     },
     controller: survivalAnalysisController,
     controllerAs: 'ctrl'
