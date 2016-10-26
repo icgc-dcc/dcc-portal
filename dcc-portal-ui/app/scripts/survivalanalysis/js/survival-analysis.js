@@ -35,7 +35,6 @@ const defaultOptions = {
     bottom: 46,
     left: 60,
   },
-  shouldShowLabels: true
 }
 
 function renderPlot (params) {
@@ -51,7 +50,7 @@ function renderPlot (params) {
     xAxisLabel,
     yAxisLabel,
     margins,
-    shouldShowLabels,
+    getSetSymbol,
   } = _.defaultsDeep({}, params, defaultOptions)
 
 
@@ -208,7 +207,7 @@ function renderPlot (params) {
         onClickDonor(d3.event, d)
       })
 
-    if (shouldShowLabels) {
+    if (getSetSymbol) {
       setGroup.selectAll('circle')
         .data(donorsInRange.slice(-1))
         .enter()
@@ -219,11 +218,7 @@ function renderPlot (params) {
           .attr('text-anchor', 'end')
           .attr('fill', setColor)
           .append('svg:tspan')
-            .text(d => `S`)
-            .append('svg:tspan')
-              .attr('font-size', '0.7em')
-              .attr('baseline-shift', '-15%')
-              .text(d => `${i + 1}`)
+            .html(getSetSymbol(data, dataSets))
     }
   })
   
@@ -271,6 +266,7 @@ function renderPlot (params) {
           markerType: 'line',
           xDomain: state.xDomain,
           height: isFullScreen() && ( window.innerHeight - 100 ),
+          getSetSymbol: SetOperationService.getSetShortHandSVG,
           onMouseEnterDonor: function (event, donor) {
             $scope.$apply(function () {
               ctrl.tooltipParams = {
