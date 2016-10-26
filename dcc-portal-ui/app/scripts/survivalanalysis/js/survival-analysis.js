@@ -84,7 +84,7 @@ function renderPlot (params) {
       : d3.axisBottom().scale(x)
 
   var yAxis = d3.svg
-    ? d3.svg.axis().scale(y).orient('left')
+    ? d3.svg.axis().scale(y).ticks(5).tickSize(axisWidth).orient('right')
     : d3.axisLeft().scale(y)
 
   svg
@@ -113,10 +113,15 @@ function renderPlot (params) {
       .text(xAxisLabel)
 
   // Draw y axis
-  wrapper.append('svg:g')
+  var gy = wrapper.append('svg:g')
     .attr('class', 'y axis')
     .call(yAxis)
-    .append('svg:text')
+  gy.selectAll('g')
+    .filter(d => d)
+    .classed('minor', true)
+  gy.selectAll('text')
+      .attr('x', -20)
+  gy.append('svg:text')
       .attr('class', 'axis-label')
       .attr('transform', 'rotate(-90)')
       .attr('y', -40)
