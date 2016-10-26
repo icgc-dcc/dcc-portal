@@ -55,7 +55,7 @@
       templateUrl: '/scripts/phenotype/views/phenotype.result.html',
       controller: function ($scope) {
         // From D3's cat20 scale
-        $scope.seriesColours = ['#0e6402', '#c20127', '#00005d'];
+        $scope.seriesColours = ['#1880B2', '#c20127', '#00005d'];
         $scope.survivalAnalysisDataSets = undefined;
         $scope.activeSurvivalGraph = 'overall';
         $scope.setAnalysisId = undefined;
