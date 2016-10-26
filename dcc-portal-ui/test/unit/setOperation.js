@@ -14,6 +14,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+const innertext = require('innertext;');
 
 describe('Test SetOperationService', function() {
   var SetOperationService;
@@ -33,8 +34,8 @@ describe('Test SetOperationService', function() {
   });
 
   it('Test set operation alias', function() {
-     expect(SetOperationService.getSetShortHand('a', ['b', 'a', 'c'])).toEqual('S2');
-     expect(SetOperationService.getSetShortHand('a', ['a', 'b', 'c'])).toEqual('S1');
+     expect(innertext(SetOperationService.getSetShortHand('a', ['b', 'a', 'c']))).toEqual('S2');
+     expect(innertext(SetOperationService.getSetShortHand('a', ['a', 'b', 'c']))).toEqual('S1');
   });
 
 });
