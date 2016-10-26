@@ -7,7 +7,7 @@ var paths = require('./paths');
 
 module.exports = {
   bail: true,
-  devtool: 'source-map',
+  devtool: 'eval',
   entry: {
     app: [
       require.resolve('./polyfills'),
