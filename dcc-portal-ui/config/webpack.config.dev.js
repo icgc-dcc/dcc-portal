@@ -55,6 +55,7 @@ module.exports = {
       {
         test: /\.js$/,
         include: paths.appSrc,
+        exclude: [paths.bowerModules, paths.internalVendorModules],
         loaders: ['babel?' + JSON.stringify(require('./babel.dev'))],
       },
       {

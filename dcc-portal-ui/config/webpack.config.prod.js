@@ -41,11 +41,13 @@ module.exports = {
       {
         test: /\.js$/,
         include: paths.appSrc,
+        exclude: [paths.bowerModules, paths.internalVendorModules],
         loader: 'ng-annotate',
       },
       {
         test: /\.js$/,
         include: paths.appSrc,
+        exclude: [paths.bowerModules, paths.internalVendorModules],
         loader: 'babel',
         query: require('./babel.prod'),
       },
