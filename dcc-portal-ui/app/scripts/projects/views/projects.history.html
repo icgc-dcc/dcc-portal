@@ -1,7 +1,15 @@
+<div data-ng-if="ProjectsCtrl.isLoadingData" class="loading">
+  <h3>
+    <i class="icon-spinner icon-spin"></i>
+    <translate>Loading History...</translate>
+  </h3>
+</div>
+
 <section>
 <donor-history
-         data-selected="ProjectsCtrl.projectIds"
-         selected-project-count="ProjectsCtrl.numberOfSelectedProjectsInFilter()"
-         data-items="ProjectsCtrl.donorData">
+  data-ng-if="!ProjectsCtrl.isLoadingData"
+  data-selected="ProjectsCtrl.projectIds"
+  selected-project-count="ProjectsCtrl.numberOfSelectedProjectsInFilter()"
+  data-items="ProjectsCtrl.donorData">
 </donor-history>
 </section>

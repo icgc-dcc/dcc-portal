@@ -60,7 +60,6 @@
 
       params.type = $scope.params.setType;
       params.name = $scope.params.setName;
-      params.description = $scope.params.setDescription;
       params.size = $scope.params.setSize;
 
       if (angular.isDefined($scope.params.setLimit)) {
@@ -96,7 +95,6 @@
 
       params.type = $scope.params.setType;
       params.name = $scope.params.setName;
-      params.description = $scope.params.setDescription;
       params.size = $scope.params.setSize;
       params.sortBy = 'fileName';
 
@@ -253,13 +251,13 @@
       },
       template: '<div>' +
         '(<span data-ng-repeat="setId in item.intersection">' +
-        ' {{getName(setId)}} ' +
+        ' <span data-ng-bind-html="getName(setId)"></span> ' +
         '<span data-ng-if="!$last" class="set-symbol">&cap;</span>' +
         '</span>)' +
         '<span data-ng-if="item.exclusions.length > 0" class="set-symbol"> &minus; </span>' +
         '<span data-ng-if="item.exclusions.length > 0">(</span>' +
         '<span data-ng-repeat="setId in item.exclusions">' +
-        ' {{getName(setId)}} ' +
+        ' <span data-ng-bind-html="getName(setId)"></span> ' +
         '<span data-ng-if="!$last" class="set-symbol">&cup;</span>' +
         '</span>' +
         '<span data-ng-if="item.exclusions.length > 0">)</span>' +
@@ -559,7 +557,7 @@
             return $filter('number')(val);
           },
           setLabelFunc: function(id) {
-            return SetOperationService.getSetShortHand(id, $scope.setList);
+            return $scope.setList.indexOf(id) + 1;
           }
         };
 

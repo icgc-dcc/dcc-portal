@@ -104,7 +104,6 @@ angular.module('icgc.advanced.controllers', [
           var service = serviceObj.service;
 
           if (_.get(service, 'isFacetsInitialized', false)) {
-            Page.stopWork();
             return true;
           }
 
@@ -135,8 +134,6 @@ angular.module('icgc.advanced.controllers', [
 
                 _pageUnblockedTime = nowTime;
                 console.log('Advanced Search Page blocking stopped in ' + timeDelta + 'ms...');
-
-                Page.stopWork();
               }
 
               console.log('Promise #' + serviceObj.promiseCount + ' - Controller ID "' +
@@ -177,7 +174,6 @@ angular.module('icgc.advanced.controllers', [
 
 
         if (_refreshServicesLength > 0) {
-          Page.startWork();
           _.forEach(_nonRefreshedServices, function (refreshServiceObj) {
             _execRefresh(refreshServiceObj);
           });

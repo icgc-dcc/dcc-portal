@@ -2,9 +2,16 @@
 <span data-ng-init="predicate='totalLiveDonorCount'"></span>
 <span data-ng-init="reverse=true"></span>
 
-<div ng-if="ProjectsCtrl.projects.hits.length < 1" class="empty loading-text"><h3><translate>No Projects Found.</translate></h3></div>
+<div data-ng-if="ProjectsCtrl.isLoadingData" class="loading">
+  <h3>
+    <i class="icon-spinner icon-spin"></i>
+    <translate>Loading Details...</translate>
+  </h3>
+</div>
 
-<div ng-if="ProjectsCtrl.projects.hits.length > 0">
+<div ng-if="ProjectsCtrl.projects.hits.length < 1 && !ProjectsCtrl.isLoadingData" class="empty loading-text"><h3><translate>No Projects Found.</translate></h3></div>
+
+<div ng-if="ProjectsCtrl.projects.hits.length > 0 && !ProjectsCtrl.isLoadingData">
 <div class="t_table_top" style="padding:0;margin: 0">
     <translate>
         Showing <strong id="projects-project-count">{{ ProjectsCtrl.projects.hits.length }}</strong> projects

@@ -82,7 +82,7 @@
 
     function _getSetShortHand(setId, setList) {
       if (setList) {
-        return shortHandPrefix + (setList.indexOf(setId) + 1);
+        return shortHandPrefix + '<sub>' + (setList.indexOf(setId) + 1) + '</sub>';
       }
       return setId;
     }
@@ -211,6 +211,7 @@
 
         data.type = data.type.toLowerCase();
 
+        setList = localStorageService.get(LIST_ENTITY) || [];
         setList.unshift(data);
         _service.refreshList();
 
@@ -222,6 +223,12 @@
       });
       
       return promise;
+    };
+
+    _service.renameSet = (setId, newName) => {
+      Restangular.one('entityset', setId).customPUT(`name=${newName}`, null, null, {'Content-Type': 'application/x-www-form-urlencoded'});
+      setList.find(x => x.id === setId).name = newName;
+      localStorageService.set(LIST_ENTITY, setList);
     };
 
     _service.addExternalSet = function(type, params) {
@@ -248,6 +255,7 @@
 
         data.type = data.type.toLowerCase();
 
+        setList = localStorageService.get(LIST_ENTITY) || [];
         setList.unshift(data);
         _service.refreshList();
 
@@ -363,6 +371,7 @@
 
         data.type = data.type.toLowerCase();
 
+        setList = localStorageService.get(LIST_ENTITY) || [];
         setList.unshift(data);
         _service.refreshList();
 
@@ -419,6 +428,7 @@
 
     /****** Local storage related API ******/
     _service.getAll = function() {
+      setList = localStorageService.get(LIST_ENTITY) || [];
       return setList;
     };
 

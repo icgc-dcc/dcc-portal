@@ -54,6 +54,7 @@ import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.security.AuthService;
+import org.icgc.dcc.portal.server.service.BadRequestException;
 import org.icgc.dcc.portal.server.service.CmsAuthService;
 import org.icgc.dcc.portal.server.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -340,10 +341,15 @@ public class AuthResource extends Resource {
    * @return sessionToken or <tt>null</tt> if no token found
    */
   private static UUID getSessionToken(HttpServletRequest request) {
-    for (val cookie : request.getCookies()) {
-      if (isSessionTokenCookie(cookie)) {
-        return stringToUuid(cookie.getValue());
+    val cookies = request.getCookies();
+    if (cookies != null) {
+      for (val cookie : cookies) {
+        if (isSessionTokenCookie(cookie)) {
+          return stringToUuid(cookie.getValue());
+        }
       }
+    } else {
+      throw new BadRequestException("Cookies must be set for this resource.");
     }
 
     return null;
