@@ -28,7 +28,7 @@ module.exports = function(config){
     preprocessors: {
       'app/scripts/vendor.js': ['webpack'],
       'app/scripts/index.js': ['webpack'],
-      'test/unit/**/*.js': ['babel'],
+      'test/unit/**/*.js': ['webpack'],
     },
 
     // files to exclude
