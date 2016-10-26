@@ -236,7 +236,8 @@ function renderPlot (params) {
       $scope,
       $element,
       FullScreenService,
-      SetOperationService
+      SetOperationService,
+      ExportService,
     ) {
       var ctrl = this;
       var graphContainer = $element.find('.survival-graph').get(0);
@@ -335,6 +336,22 @@ function renderPlot (params) {
         stateStack = _.without(stateStack, state);
         update();
       };
+
+      this.handleClickExportSvg = () => ExportService.exportData('survivalplot.svg', `
+        <svg
+          xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <style>
+            .domain {
+              fill-opacity: 0;
+            }
+          </style>
+        ${svg.html()}
+        </svg>`
+      );
 
       this.isFullScreen = isFullScreen;
 
