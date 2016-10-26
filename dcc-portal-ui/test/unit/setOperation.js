@@ -19,7 +19,7 @@ const innertext = require('innertext');
 describe('Test SetOperationService', function() {
   var SetOperationService;
 
-  beforeEach(module('icgc'));
+  beforeEach(angular.mock.module('icgc'));
 
   beforeEach(inject(function ($httpBackend, $q, $rootScope, _SetOperationService_) {
     window._gaq = [];
