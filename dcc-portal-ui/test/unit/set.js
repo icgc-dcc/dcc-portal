@@ -21,7 +21,7 @@
 describe('Test SetService', function() {
   var SetService, httpMock;
 
-  beforeEach(module('icgc'));
+  beforeEach(angular.mock.module('icgc'));
 
   beforeEach(inject(function ($httpBackend, $q, $rootScope, _SetService_, _API_) {
     window._gaq = [];
