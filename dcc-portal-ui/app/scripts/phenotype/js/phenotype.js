@@ -53,14 +53,14 @@
         item: '='
       },
       templateUrl: '/scripts/phenotype/views/phenotype.result.html',
-      link: function($scope, $element) {
-
+      controller: function ($scope) {
         // From D3's cat20 scale
         $scope.seriesColours = ['#0e6402', '#c20127', '#00005d'];
-
         $scope.survivalAnalysisDataSets = undefined;
         $scope.activeSurvivalGraph = 'overall';
         $scope.setAnalysisId = undefined;
+      },
+      link: function($scope, $element) {
 
         function normalize() {
           // Normalize results: Sort by id, then sort by terms
