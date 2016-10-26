@@ -5,7 +5,8 @@ var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 var paths = require('./paths');
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'cheap-module-eval-source-map',
+  cache: true,
   context: path.resolve(__dirname, '../app/scripts'),
   entry: {
     app: [
@@ -55,6 +56,7 @@ module.exports = {
       {
         test: /\.js$/,
         include: paths.appSrc,
+        exclude: [paths.bowerModules, paths.internalVendorModules],
         loaders: ['babel?' + JSON.stringify(require('./babel.dev'))],
       },
       {

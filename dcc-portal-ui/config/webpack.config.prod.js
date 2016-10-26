@@ -7,7 +7,7 @@ var paths = require('./paths');
 
 module.exports = {
   bail: true,
-  devtool: 'source-map',
+  devtool: 'eval',
   entry: {
     app: [
       require.resolve('./polyfills'),
@@ -41,11 +41,13 @@ module.exports = {
       {
         test: /\.js$/,
         include: paths.appSrc,
+        exclude: [paths.bowerModules, paths.internalVendorModules],
         loader: 'ng-annotate',
       },
       {
         test: /\.js$/,
         include: paths.appSrc,
+        exclude: [paths.bowerModules, paths.internalVendorModules],
         loader: 'babel',
         query: require('./babel.prod'),
       },
