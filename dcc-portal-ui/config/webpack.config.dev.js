@@ -6,6 +6,7 @@ var paths = require('./paths');
 
 module.exports = {
   devtool: 'source-map',
+  cache: true,
   context: path.resolve(__dirname, '../app/scripts'),
   entry: {
     app: [
