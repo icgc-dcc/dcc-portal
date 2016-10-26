@@ -521,6 +521,7 @@
 
              // Because SVG urls are based on <base> tag, we need absolute path
             config.urlPath = $location.url();
+            config.setLabelFunc = id => SetOperationService.getSetShortHandSVG(id, _.map(results, 'id'));
 
             vennDiagram = new dcc.Venn23($scope.vennData, config);
             vennDiagram.render( $element.find('.canvas')[0]);

@@ -144,9 +144,7 @@
               var vennDiagram = new dcc.Venn23(vennData, {
                 height: 380,
                 urlPath: $location.url(),
-                setLabelFunc: function (id) {
-                  return 'S' + (setData.indexOf(_.find(setData, {id: id})) + 1);
-                },
+                setLabelFunc: id => SetOperationService.getSetShortHandSVG(id, _.map(setData, 'id')),
               });
               var $canvasContainer = $element.find('.mini-venn-canvas');
               vennDiagram.render( $canvasContainer[0] );
