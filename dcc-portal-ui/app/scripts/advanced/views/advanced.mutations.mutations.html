@@ -31,7 +31,7 @@
     <tr>
         <th data-sortable data-type="mutations" data-field="affectedDonorCountFiltered" data-active="true"
             data-reversed="true" class="text-center">
-            <abbr data-tooltip="{{'Number of Donors affected by Mutation<br>Filtered by Current Search Criteria / unfiltered # donors the mutation is observed.' | translate}}"><translate>Total</translate></abbr>
+            <abbr data-tooltip="{{'Number of Donors affected by Mutation<br># of filtered donors with the current gene mutated / # of filtered donors' | translate}}"><translate>Total</translate></abbr>
         </th>
         <th class="text-center">
             <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
@@ -55,9 +55,9 @@
                         </a>
                         /
                         <a href='/search?filters={"mutation":{"id":{"is":["{{mutation.id}}"]}},"donor":{"availableDataTypes":{"is":["ssm"]}}}'>
-                            {{mutation.affectedDonorCountTotal | number}}
+                            {{AdvancedCtrl.Donor.donors.pagination.total | number}}
                         </a>
-                        <em>({{mutation.affectedDonorCountFiltered / mutation.affectedDonorCountTotal * 100 |
+                        <em>({{mutation.affectedDonorCountFiltered / AdvancedCtrl.Donor.donors.pagination.total * 100 |
                             number:2}}%)</em>
                     </span>
         </td>
