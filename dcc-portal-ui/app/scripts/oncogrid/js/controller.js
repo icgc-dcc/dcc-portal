@@ -163,45 +163,37 @@
             }
         };
 
-        $scope.getSetName = function(filters, setType){
+        $scope.getSetName = function(filters){
             return SetNameService.getSetFilters()
                 .then(function (filters) {
-                    return SetNameService.getSetName(filters, $scope.params.setType);
+                    return SetNameService.getSetName(filters);
                 })
                 .then(function (setName) {
-                    return setName;
+                    $scope.params.setName = setName;
                 });
         }
 
         $scope.getDonorsParams = function(){
-            $scope.getSetName($scope.filters, 'donor').then(function(data){
-                console.log(data);
-            });
 
             var donorSetParams = {
                 filters: $scope.filters || {},
                 size: $scope.params.donorsCount,
                 type: 'donor',
                 isTransient: true,
-                name: `Top ${$scope.params.donorsCount} Donors: ${$scope.getSetName($scope.filters, 'donor').then(function(data){
-                    return data;
-                })}`
+                name: `Top ${$scope.params.donorsCount} Donors: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
             };
 
             return donorSetParams;
         }
 
         $scope.getGenesParams = function(){
-            $scope.getSetName($scope.filters, 'gene').then(function(data){
-                console.log(data);
-            });
 
              var geneSetParams = {
                 filters: $scope.filters || {},
                 size: $scope.params.genesCount,
                 type: 'gene',
                 isTransient: true,
-                name: `Top ${$scope.params.genesCount} Genes: ${$scope.params.setName}`
+                name: `Top ${$scope.params.genesCount} Genes: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
             };
 
             return geneSetParams;
@@ -267,6 +259,7 @@
         }
 
         $scope.checkInput();
+        $scope.getSetName($scope.filters);
     });
 
 })(jQuery, OncoGrid);
