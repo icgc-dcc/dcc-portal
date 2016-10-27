@@ -22,7 +22,7 @@
     "extract-text": "angular-gettext-cli --files 'app/scripts/**/*.+(html|js)' --dest translations/strings.pot",
     "compile-text": "angular-gettext-cli --compile --files 'translations/*.po' --dest 'app/scripts/translations/js/translations.js'",
     "lint": "eslint -c config/eslint.js --no-eslintrc app/vendor app",
-    "ensure-versions": "npm run ensure-node-version && npm run ensure-npm-version || echo 'Please ensure your version of node and npm satisfies' `json -f package.json engines` && exit 10",
+    "ensure-versions": "npm run ensure-node-version && npm run ensure-npm-version || (echo 'Please ensure your version of node and npm satisfies' `json -f package.json engines` && exit 10)",
     "ensure-node-version": "semver `node -v` -r `json -f package.json engines.node`",
     "ensure-npm-version": "semver `npm -v` -r `json -f package.json engines.npm`"
   },
