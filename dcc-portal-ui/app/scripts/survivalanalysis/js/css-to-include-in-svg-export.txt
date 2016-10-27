@@ -1,0 +1,62 @@
+.domain {
+  fill-opacity: 0;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges; }
+
+.axis path {
+  stroke: #e6dede; }
+
+.axis .tick text {
+  fill: #888; }
+
+.axis .axis-label {
+  color: #999999;
+  font-size: 0.75rem;
+  fill: #999999;
+  font-weight: 300; }
+
+.axis .minor line {
+  stroke: #e6dede; }
+
+.line {
+  fill: none;
+  stroke-width: 1.5px; }
+
+.serie .point {
+  r: 3;
+  transition: all 0.1s;
+  cursor: pointer;
+  stroke-width: none; }
+  .serie .point:hover, .serie .point:active {
+    r: 5; }
+  .serie .point[status="alive"] {
+    opacity: 0.5; }
+  .serie .point[status="deceased"] {
+    opacity: 0;
+    transition: r 0.3s, opacity 0.3s;
+    r: 5; }
+    .serie .point[status="deceased"]:hover, .serie .point[status="deceased"]:active {
+      opacity: 1;
+      r: 2; }
+
+.serie .point-line {
+  cursor: pointer; }
+  .serie .point-line[status="deceased"] {
+    opacity: 0; }
+
+.legend > li {
+  cursor: default;
+  font-size: 11px;
+  line-height: 1.7;
+  position: relative;
+  user-select: none;
+  display: inline-block;
+  display: block;
+}
+.legend > li.disabled {
+  color: #b7b7b7 !important;
+}

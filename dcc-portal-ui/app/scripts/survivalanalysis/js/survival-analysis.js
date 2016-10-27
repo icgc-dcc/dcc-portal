@@ -345,11 +345,33 @@ function renderPlot (params) {
           xmlns="http://www.w3.org/2000/svg"
         >
           <style>
-            .domain {
-              fill-opacity: 0;
-            }
+            <![CDATA[
+              ${require('raw!./css-to-include-in-svg-export.txt')}
+            ]]>
           </style>
-        ${svg.html()}
+          <foreignObject x="20" y="60" width="400" height="150">
+              <div class="legend" xmlns="http://www.w3.org/1999/xhtml">
+              ${$element.find('.legend').html()}
+              </div>
+          </foreignObject>
+          <g transform="translate(20, 20)">
+            <text x="0" y="0" text-anchor="left" dominant-baseline="hanging">
+              <tspan style="font-size: 20px;">
+                ${ctrl.title}
+              </tspan>
+
+              <tspan x="0" dy="1.5em">
+                ${$element.find('.p-value-test').text()}
+              </tspan>
+            </text>
+          </g>
+          <g class="survival-graph" transform="translate(0,100)">
+            ${
+              svg.html()
+                .replace(/url\(http\:\/\/(.*?)#/g, 'url(#')
+                .replace(/"axis-label" dy="(\d+?)"/, '"axis-label" dy="50"')
+            }
+          </g>
         </svg>`
       );
 
