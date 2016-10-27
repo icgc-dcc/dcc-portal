@@ -37,6 +37,12 @@
         <h3>
             <translate>Donors</translate>
             <span class="action-toolbar pull-right">
+                <span class="action-item">
+                    <i class="icon-grid"></i>
+                    <a href="#" data-ng-click="AdvancedCtrl.oncogridAnalysis(AdvancedCtrl.Donor.donors.pagination.total, AdvancedCtrl.Gene.genes.pagination.total)">
+                        <translate>Oncogrid Analysis</translate>
+                    </a>
+               </span>
                <span class="action-item">
                    <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('donor', AdvancedCtrl.Donor.donors.pagination.total)"><translate>Save Donor Set</translate></a>
                </span>
