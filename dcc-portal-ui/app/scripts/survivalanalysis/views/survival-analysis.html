@@ -18,7 +18,7 @@
       class="btn btn-default"
       ng-click="ctrl.handleClickReset()"
     >
-      <i class="icon-undo"></i>
+      <i class="fa fa-undo"></i>
     </button>
 
     <button
@@ -26,8 +26,8 @@
       class="btn btn-default"
       ng-click="ctrl.isFullScreen() ? ctrl.handleClickExitFullScreen() : ctrl.handleClickEnterFullScreen()"
     >
-      <i ng-if="!ctrl.isFullScreen()" class="icon-resize-full"></i>
-      <i ng-if="ctrl.isFullScreen()" class="icon-resize-small"></i>
+      <i ng-if="!ctrl.isFullScreen()" class="fa fa-expand"></i>
+      <i ng-if="ctrl.isFullScreen()" class="fa fa-compress"></i>
     </button>
 
     <button
@@ -35,8 +35,7 @@
       class="btn btn-default"
       ng-click="ctrl.onClickExportCsv()"
     >
-      <i class="icon-file"></i>
-      CSV
+      <i class="fa fa-file-text-o"></i>
     </button>
 
     <button
@@ -44,8 +43,7 @@
       class="btn btn-default"
       ng-click="ctrl.handleClickExportSvg()"
     >
-      <i class="icon-file"></i>
-      SVG
+      <i class="fa fa-file-image-o"></i>
     </button>
   </div>
 
