@@ -18,7 +18,7 @@
 describe('Test Facet', function() {
   var Facets, httpMock;
 
-  beforeEach(module('icgc'));
+  beforeEach(angular.mock.module('icgc'));
 
   beforeEach(inject(function (_Facets_) {
     window._gaq = [];

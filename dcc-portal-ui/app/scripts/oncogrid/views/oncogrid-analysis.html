@@ -25,7 +25,7 @@
         <tbody>
           <tr>
             <td><translate>Donor</translate></td>
-            <td>{{donorSetName}}</td>
+            <td>{{donorSetName || item.donorSetName}}</td>
             <td class="text-right"><a href="{{donorLink}}">{{item.donorCount | number}}</a></td>
             <td style="font-size:1.25rem;">                            
               <span class="t_tools__tool">
@@ -45,7 +45,7 @@
           </tr>
           <tr>
             <td><translate>Gene</translate></td>
-            <td>{{geneSetName}}</td>
+            <td>{{geneSetName || item.geneSetName}}</td>
             <td class="text-right"><a href="{{geneLink}}">{{item.geneCount | number}}</a></td>
             <td style="font-size:1.25rem;">                            
               <span class="t_tools__tool">

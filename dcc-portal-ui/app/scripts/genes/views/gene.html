@@ -422,7 +422,12 @@
             <tbody>
             <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits track by mutation.id">
                 <td><a data-ng-href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a></td>
-                <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
+                <td data-tooltip="chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}"
+                    data-tooltip-placement="top">
+                    <span style="text-overflow:ellipsis;width:11em;display:block;overflow:hidden;">
+                        chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}
+                    </span>
+                </td>
                 <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
                 <td style="max-width: 20rem; white-space: normal">
                     <mutation-consequences data-ng-if="mutation.consequences"

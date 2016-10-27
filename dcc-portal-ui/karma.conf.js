@@ -6,7 +6,11 @@ var webpackTestConfig = Object.assign({}, webpackProdConfig, {
   entry: {},
   // Note: plugins that are currently unsupported by karma-webpack need to be removed
   // https://github.com/webpack/karma-webpack/issues/149
-  plugins: webpackProdConfig.plugins.filter(x => !_.includes(['CommonsChunkPlugin'], x.constructor.name))
+  plugins: webpackProdConfig.plugins.filter(x => !_.includes([
+    'CommonsChunkPlugin',
+    // Note: not able to exclude test files from uglification due to https://github.com/webpack/webpack/issues/1079
+    'UglifyJsPlugin',
+    ], x.constructor.name))
 });
 
 module.exports = function(config){
@@ -28,7 +32,7 @@ module.exports = function(config){
     preprocessors: {
       'app/scripts/vendor.js': ['webpack'],
       'app/scripts/index.js': ['webpack'],
-      'test/unit/**/*.js': ['babel'],
+      'test/unit/**/*.js': ['webpack'],
     },
 
     // files to exclude

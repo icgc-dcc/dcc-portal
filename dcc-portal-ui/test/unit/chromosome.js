@@ -17,7 +17,7 @@
 
 describe('Test Chromosome Service', function() {
   var Chromosome;
-  beforeEach(module('icgc'));
+  beforeEach(angular.mock.module('icgc'));
 
   beforeEach(inject(function (_Chromosome_) {
     window._gaq = [];
