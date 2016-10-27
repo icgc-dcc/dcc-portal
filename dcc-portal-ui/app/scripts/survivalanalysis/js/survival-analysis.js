@@ -217,7 +217,7 @@ function renderPlot (params) {
         .data(donorsInRange.slice(-1))
         .enter()
         .append('svg:text')
-          .attr('x', d => x(d.time))
+          .attr('x', d => Math.min(axisWidth, x(d.time)))
           .attr('y', d => y(d.survivalEstimate))
           .attr('dy', '-0.5em')
           .attr('text-anchor', 'end')
