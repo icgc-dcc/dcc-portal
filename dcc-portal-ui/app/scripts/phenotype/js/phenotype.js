@@ -42,6 +42,7 @@
     LocationService,
     Extensions,
     SetService,
+    AnalysisService,
     SetOperationService,
     PhenotypeService,
     SurvivalAnalysisService,
@@ -59,6 +60,7 @@
         $scope.survivalAnalysisDataSets = undefined;
         $scope.activeSurvivalGraph = 'overall';
         $scope.setAnalysisId = undefined;
+        $scope.analysisName = AnalysisService.analysisName('phenotype');
       },
       link: function($scope, $element) {
 
