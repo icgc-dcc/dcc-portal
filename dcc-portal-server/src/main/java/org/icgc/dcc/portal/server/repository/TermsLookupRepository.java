@@ -27,19 +27,9 @@ import static org.dcc.portal.pql.meta.TypeModel.FILE_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.GENE_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.MUTATION_LOOKUP;
 import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
-import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
-import static org.elasticsearch.search.sort.SortOrder.ASC;
-import static org.icgc.dcc.portal.server.model.IndexType.DONOR;
-import static org.icgc.dcc.portal.server.model.IndexType.DONOR_TEXT;
-import static org.icgc.dcc.portal.server.model.IndexType.FILE_DONOR_TEXT;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.toBoolFilterFrom;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.toDonorBoolFilter;
 import static org.icgc.dcc.portal.server.util.JsonUtils.MAPPER;
-import static org.icgc.dcc.portal.server.util.SearchResponses.getHitIdsSet;
-import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -56,9 +46,7 @@ import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermsLookupFilterBuilder;
 import org.icgc.dcc.portal.server.config.ServerProperties;
-import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet.SubType;
-import org.icgc.dcc.portal.server.model.UnionUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -216,75 +204,6 @@ public class TermsLookupRepository {
         request.setIndices(repoIndexName);
       }
     });
-  }
-
-  /**
-   * Special case for Survival Analysis, the fields selected for return are the only ones we currently care about.
-   */
-  public SearchResponse singleUnion(final String indexTypeName,
-      @NonNull final SearchType searchType,
-      @NonNull final BoolFilterBuilder boolFilter, final int max,
-      @NonNull final String[] fields,
-      @NonNull final List<String> sort) {
-    val query = filteredQuery(MATCH_ALL, boolFilter);
-
-    // Donor type is not analyzed but this works due to terms-lookup on _id field.
-    // https://github.com/icgc-dcc/dcc-release/blob/develop/dcc-release-resources/src/main/resources/org/icgc/dcc/release/resources/mappings/donor.mapping.json#L12-L13
-    return execute("Union ES Query", false, (request) -> {
-      request
-          .setTypes(DONOR.getId())
-          .setSearchType(searchType)
-          .setQuery(query)
-          .setSize(max)
-          .addFields(fields);
-
-      sort.forEach(s -> request.addSort(s, ASC));
-    });
-  }
-
-  public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter) {
-    val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
-    return execute("Terms Lookup - Donor Search", true, (request) -> request
-        .setTypes(DONOR_TEXT.getId(), FILE_DONOR_TEXT.getId())
-        .setQuery(query)
-        .setSize(maxUnionCount)
-        .setNoFields()
-        .setSearchType(SearchType.DEFAULT));
-  }
-
-  public long getUnionCount(
-      final UnionUnit unionDefinition,
-      final BaseEntitySet.Type entityType) {
-
-    val response = runUnionEsQuery(
-        entityType.getIndexTypeName(),
-        SearchType.COUNT,
-        toBoolFilterFrom(unionDefinition, entityType),
-        maxUnionCount);
-
-    val count = getCountFrom(response, maxUnionCount);
-    log.debug("Total hits: {}", count);
-
-    return count;
-  }
-
-  public SearchResponse getDonorUnion(final Iterable<UnionUnit> definitions) {
-    val boolFilter = toBoolFilterFrom(definitions, BaseEntitySet.Type.DONOR);
-    val response = donorSearchRequest(boolFilter);
-
-    return response;
-  }
-
-  public long getDonorCount(final UnionUnit unionDefinition) {
-    val boolFilter = toDonorBoolFilter(unionDefinition);
-    val response = donorSearchRequest(boolFilter);
-
-    return getHitIdsSet(response).size();
-  }
-
-  private long getCountFrom(@NonNull final SearchResponse response, final long max) {
-    val result = getTotalHitCount(response);
-    return min(max, result);
   }
 
   private String createSettings() {

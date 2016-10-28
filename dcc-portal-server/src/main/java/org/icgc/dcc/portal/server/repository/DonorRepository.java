@@ -41,10 +41,14 @@ import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.missing;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.stats;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
+import static org.elasticsearch.search.sort.SortOrder.ASC;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
+import static org.icgc.dcc.portal.server.model.IndexType.DONOR;
+import static org.icgc.dcc.portal.server.model.IndexType.DONOR_TEXT;
+import static org.icgc.dcc.portal.server.model.IndexType.FILE_DONOR_TEXT;
 import static org.icgc.dcc.portal.server.model.SearchFieldMapper.searchFieldMapper;
 import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.createTermsLookupFilter;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.isRepositoryDonor;
@@ -68,11 +72,14 @@ import org.elasticsearch.action.search.MultiSearchRequestBuilder;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.NestedQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -401,6 +408,47 @@ public class DonorRepository implements Repository {
     return search.execute().actionGet();
   }
 
+  public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter, int maxUnionCount) {
+    val query = QueryBuilders.filteredQuery(matchAllQuery(), boolFilter);
+    val request = client.prepareSearch(repoIndexName, indexName)
+        .setTypes(DONOR_TEXT.getId(), FILE_DONOR_TEXT.getId())
+        .setQuery(query)
+        .setSize(maxUnionCount)
+        .setNoFields()
+        .setSearchType(SearchType.DEFAULT);
+
+    log.debug("Terms Lookup - Donor Search: {}", request);
+    val response = request.execute().actionGet();
+    log.debug("ElasticSearch result is: '{}'", response);
+    return response;
+  }
+
+  /**
+   * Special case for Survival Analysis, the fields selected for return are the only ones we currently care about.
+   */
+  public SearchResponse singleDonorUnion(final String indexTypeName,
+      @NonNull final SearchType searchType,
+      @NonNull final BoolFilterBuilder boolFilter, final int max,
+      @NonNull final String[] fields,
+      @NonNull final List<String> sort) {
+    val query = filteredQuery(matchAllQuery(), boolFilter);
+
+    // Donor type is not analyzed but this works due to terms-lookup on _id field.
+    // https://github.com/icgc-dcc/dcc-release/blob/develop/dcc-release-resources/src/main/resources/org/icgc/dcc/release/resources/mappings/donor.mapping.json#L12-L13
+    val request = client.prepareSearch(indexName)
+        .setTypes(DONOR.getId())
+        .setSearchType(searchType)
+        .setQuery(query)
+        .setSize(max)
+        .addFields(fields);
+
+    sort.forEach(s -> request.addSort(s, ASC));
+    log.debug("Union ES Query: {}", request);
+    val response = request.execute().actionGet();
+    log.debug("ElasticSearch result is: '{}'", response);
+    return response;
+  }
+
   @Override
   public MultiSearchResponse nestedCounts(LinkedHashMap<String, LinkedHashMap<String, Query>> queries) {
     val search = client.prepareMultiSearch();
@@ -508,7 +556,7 @@ public class DonorRepository implements Repository {
     val maxSize = 5000;
     val fields = isForExternalFile ? FILE_DONOR_ID_SEARCH_FIELDS : DONOR_ID_SEARCH_FIELDS;
     val index = isForExternalFile ? repoIndexName : indexName;
-    val indexType = isForExternalFile ? IndexType.FILE_DONOR_TEXT : IndexType.DONOR_TEXT;
+    val indexType = isForExternalFile ? FILE_DONOR_TEXT : DONOR_TEXT;
 
     val search = client.prepareSearch(index)
         .setTypes(indexType.getId())
