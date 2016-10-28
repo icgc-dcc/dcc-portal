@@ -120,6 +120,7 @@
         $scope.donorsLimit = donorsLimit;
         $scope.genesLimit = genesLimit;
         $scope.filters = filters;
+        $scope.isLaunchingOncoGrid = false;
 
         $scope.maxDonorsLimit = 3000;
         $scope.maxGenesLimit = 100;
@@ -133,7 +134,7 @@
 
         $scope.hasValidDonorCount = function(value){
             var val = parseInt(value,10);
-            if (isNaN(value)) {
+            if (isNaN(val)) {
                 return false;
             }
             if (!angular.isNumber(val) || val > $scope.maxDonorsLimit || val <= 0) {
@@ -144,7 +145,7 @@
 
         $scope.hasValidGeneCount = function(value){
             var val = parseInt(value,10);
-            if (isNaN(value)) {
+            if (isNaN(val)) {
                 return false;
             }
             if (!angular.isNumber(val) || val > $scope.maxGenesLimit || val <= 0) {
@@ -236,6 +237,8 @@
                         throw new Error('Received invalid response from analysis creation');
                     }
                     $location.path('analysis/view/oncogrid/' + data.id);
+                }).finally(function(){
+                    $scope.isLaunchingOncoGrid = false;
                 });
         };
 
@@ -244,6 +247,7 @@
         };
 
         $scope.newOncoGridAnalysis = function(){
+            $scope.isLaunchingOncoGrid = true;
             $q.all({
                 r1: SetService.addSet('donor', $scope.getDonorsParams()),
                 r2: SetService.addSet('gene', $scope.getGenesParams())
