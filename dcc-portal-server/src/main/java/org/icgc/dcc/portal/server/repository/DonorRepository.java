@@ -79,7 +79,6 @@ import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.NestedQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -409,7 +408,7 @@ public class DonorRepository implements Repository {
   }
 
   public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter, int maxUnionCount) {
-    val query = QueryBuilders.filteredQuery(matchAllQuery(), boolFilter);
+    val query = filteredQuery(matchAllQuery(), boolFilter);
     val request = client.prepareSearch(repoIndexName, indexName)
         .setTypes(DONOR_TEXT.getId(), FILE_DONOR_TEXT.getId())
         .setQuery(query)
