@@ -226,6 +226,8 @@ public class FileResource extends Resource {
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
   public Map<String, Map<String, Long>> getManifestSummary(UniqueSummaryQuery summary) {
+    checkRequest(summary == null, "Request body cannot be null or empty.");
+    checkRequest(summary.getQuery() == null, "Query field in request body cannot be null or empty.");
     return fileService.getUniqueFileAggregations(summary);
   }
 
