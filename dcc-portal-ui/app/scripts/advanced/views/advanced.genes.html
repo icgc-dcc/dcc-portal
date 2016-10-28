@@ -39,6 +39,12 @@
                 <abbr data-tooltip="{{'Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria' | translate}}"
                       data-tooltip-placement="left"><translate># Mutations</translate></abbr>
             </th>
+            <th rowspan="2">
+                <i class="icon-chart-bar"
+                    data-tooltip="Survival Analysis / Phenotype Comparison"
+                    data-tooltip-placement="left">
+                </i>
+            </th>
         </tr>
         <tr>
             <th data-sortable data-type="genes" data-field="affectedDonorCountFiltered" data-active="true"
@@ -100,6 +106,10 @@
                    href='/search/m?filters={{gene.embedQuery}}'>
                     {{AdvancedCtrl.Gene.mutationCounts[gene.id] | number}}
                 </a>
+            </td>
+            <td>
+                <i class="icon-chart-bar phenotype-analysis" 
+                    data-ng-click="AdvancedCtrl.launchSurvivalAnalysis('gene', gene.id, gene.symbol)"></i>
             </td>
         </tr>
         </tbody>

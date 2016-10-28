@@ -418,7 +418,8 @@
   });
 
   module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page, PubMed, project,
-    Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState, SetService, Restangular) {
+    Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState, SetService, Restangular, 
+    LocationService, SurvivalAnalysisLaunchService) {
     var _ctrl = this;
 
     Page.setTitle(project.id);
@@ -570,6 +571,14 @@
 
       loadState.loadWhile($q.all([ fetchAndUpdateMutations, fetchAndUpdateStudies ]));
     }
+
+    /**
+       * Run Survival/Phenotypw analysis
+       */
+      _ctrl.launchSurvivalAnalysis = (entityType, entityId, entitySymbol) => {
+        var filters = LocationService.filters();
+        SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters);
+      }
 
     $scope.$on('$locationChangeSuccess', function (event, dest) {
       if (dest.indexOf('projects') !== -1) {

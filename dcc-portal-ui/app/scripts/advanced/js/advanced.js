@@ -55,7 +55,7 @@ angular.module('icgc.advanced.controllers', [
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
               AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular,
-              RouteInfoService, FacetConstants, Extensions, gettextCatalog) {
+              RouteInfoService, FacetConstants, Extensions, SurvivalAnalysisLaunchService, gettextCatalog) {
 
       var _controller = this,
           dataRepoRouteInfo = RouteInfoService.get ('dataRepositories'),
@@ -483,7 +483,13 @@ angular.module('icgc.advanced.controllers', [
         });
       };
 
-
+      /**
+       * Run Survival/Phenotypw analysis
+       */
+      _controller.launchSurvivalAnalysis = (entityType, entityId, entitySymbol) => {
+        var filters = LocationService.filters();
+        SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters);
+      }
       _init();
     })
    // Container to observation popup

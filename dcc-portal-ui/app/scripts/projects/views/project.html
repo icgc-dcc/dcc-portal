@@ -365,6 +365,12 @@
                 <th rowspan="2" class="text-center">
                     <abbr data-tooltip="{{'Number of SSM in the Gene' | translate}}" data-tooltip-placement="left"><translate># Mutations</translate></abbr>
                 </th>
+                <th rowspan="2">
+                    <i class="icon-chart-bar"
+                        data-tooltip="Survival Analysis / Phenotype Comparison"
+                        data-tooltip-placement="left">
+                    </i>
+                </th>
             </tr>
             <tr>
                 <th class="text-center">
@@ -427,6 +433,10 @@
                        href='/search/m?filters={{gene.advQuery}}'>
                         {{ProjectGeneCtrl.mutationCounts[ProjectCtrl.project.id][gene.id] | number}}
                     </a>
+                </td>
+                <td>
+                    <i class="icon-chart-bar phenotype-analysis"
+                        data-ng-click="ProjectCtrl.launchSurvivalAnalysis('gene', gene.id, gene.symbol)"></i>
                 </td>
             </tr>
             </tbody>
@@ -512,6 +522,12 @@
                     <abbr data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
                 </th>
                 <th colspan="2" class="text-center"><translate># Donors affected</translate></th>
+                <th rowspan="2">
+                    <i class="icon-chart-bar"
+                        data-tooltip="Survival Analysis / Phenotype Comparison"
+                        data-tooltip-placement="left">
+                    </i>
+                </th>
             </tr>
             <tr>
                 <th class="text-center"
@@ -567,6 +583,10 @@
                             </span>
                         </li>
                     </ul>
+                </td>
+                <td>
+                    <i class="icon-chart-bar phenotype-analysis"
+                        data-ng-click="ProjectCtrl.launchSurvivalAnalysis('mutation', mutation.id, mutation.id)"></i>
                 </td>
             </tr>
             </tbody>

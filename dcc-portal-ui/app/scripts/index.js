@@ -92,6 +92,7 @@ require('./donorlist/js/donorlist.js');
 require('./enrichment/js/enrichment.js');
 require('./phenotype/js/phenotype.js');
 require('./survivalanalysis/js/survival-analysis.js');
+require('./survivalanalysis/js/service.js');
 require('./oncogrid/js/directive.js');
 require('./oncogrid/js/controller.js');
 require('./oncogrid/js/service.js');

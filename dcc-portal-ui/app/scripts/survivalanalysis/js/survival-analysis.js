@@ -18,7 +18,7 @@
 (function() {
   'use strict';
 
-  var module = angular.module('icgc.survival', ['icgc.donors.models']);
+  var module = angular.module('icgc.survival', ['icgc.survival.services', 'icgc.donors.models']);
 
   function renderChart (params) {
     var svg = params.svg;
@@ -355,101 +355,5 @@
     controller: survivalAnalysisController,
     controllerAs: 'ctrl'
   });
-
-  function processResponses(responses) {
-    var survivalData = responses.survivalData.plain().results;
-    var setsMeta = responses.setsMeta.plain();
-
-    var processGraphData = function (graphType) {
-      return survivalData.map(function (dataSet) {
-        var donors = _.flatten(dataSet[graphType].map(function (interval) {
-          return interval.donors.map(function (donor) {
-            return _.extend({}, donor, {
-              survivalEstimate: interval.cumulativeSurvival
-            });
-          });
-        }));
-
-        return {
-          meta: _.find(setsMeta, {id: dataSet.id}),
-          donors: donors
-        };
-      });
-    };
-    var overallStats = isNaN(responses.survivalData.overallStats.pvalue) ? 
-      undefined : responses.survivalData.overallStats;
-    var diseaseFreeStats = isNaN(responses.survivalData.diseaseFreeStats.pvalue) ? 
-      undefined : responses.survivalData.diseaseFreeStats;
-    return {
-      overall: processGraphData('overall'),
-      overallStats: overallStats, 
-      diseaseFree: processGraphData('diseaseFree'),
-      diseaseFreeStats: diseaseFreeStats
-    };
-  }
-
-  module
-    .service('SurvivalAnalysisService', function(
-        $q,
-        Restangular,
-        SetService
-      ) {
-
-      function fetchSurvivalData (setIds) {
-        var data = setIds;
-
-        var fetchSurvival = Restangular
-          .one('analysis')
-          .post('survival', data, {}, {'Content-Type': 'application/json'})
-          .then(function (response) {
-            return Restangular.one('analysis/survival/' + response.id).get();
-          });
-
-        var fetchSetsMeta = SetService.getMetaData(setIds);
-
-        return $q.all({
-          survivalData: fetchSurvival,
-          setsMeta: fetchSetsMeta,
-        })
-          .then(function (responses) {
-            return processResponses(responses);
-          });
-      }
-
-      var defaultHeadingMap = {
-        setName: 'donor_set_name',
-        id: 'donor_id',
-        time: 'time',
-        status: 'donor_vital_status',
-        survivalEstimate: 'survival_estimate',
-      };
-
-      function dataSetToTSV (dataSet, headingMap) {
-        var headings = _({})
-          .defaults(defaultHeadingMap, headingMap)
-          .values()
-          .join('\t');
-
-        _.defaults({}, defaultHeadingMap, headingMap);
-
-        var contents = _(dataSet)
-          .map(function (set) {
-            return set.donors.map(function (donor) {
-              return [set.meta.name, donor.id, donor.time, donor.status, donor.survivalEstimate].join('\t');
-            });
-          })
-          .flatten()
-          .join('\n');
-
-        var tsv = headings + '\n' + contents;
-        return tsv;
-      }
-
-      _.extend(this, {
-        fetchSurvivalData: fetchSurvivalData,
-        dataSetToTSV: dataSetToTSV
-      });
-
-    });
 
 })();
