@@ -27,8 +27,8 @@ const defaultOptions = {
   onMouseLeaveDonor: _.noop,
   onClickDonor: _.noop,
   palette: ['#0e6402', '#c20127', '#00005d'],
-  xAxisLabel: 'Survival Rate',
-  yAxisLabel: 'Duration (days)',
+  xAxisLabel: 'Duration (days)',
+  yAxisLabel: 'Survival Rate',
   margins: {
     top: 20,
     right: 20,
