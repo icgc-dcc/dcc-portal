@@ -442,16 +442,16 @@ angular.module('icgc.advanced.controllers', [
         });
       };
 
-      _controller.oncogridAnalysis = function(donorsLimit, genesLimit){
+      _controller.oncogridAnalysis = function(){
         $modal.open({
           templateUrl: '/scripts/oncogrid/views/oncogrid.upload.html',
           controller: 'OncoGridUploadController',
           resolve: {
             donorsLimit: function(){
-              return donorsLimit;
+              return _controller.Donor.donors.pagination.total;
             },
             genesLimit: function() {
-              return genesLimit;
+              return  _controller.Gene.genes.pagination.total;
             },
             filters: function() {
               return LocationService.filters();

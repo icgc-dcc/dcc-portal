@@ -115,7 +115,7 @@
     });
 
     module.controller('OncoGridUploadController', function(Restangular, SetNameService, donorsLimit, genesLimit, filters, 
-        $scope, $modalInstance, $location, $q, SetService, $timeout){
+        LocationService, $scope, $modalInstance, $location, $q, SetService, $timeout){
 
         $scope.donorsLimit = donorsLimit;
         $scope.genesLimit = genesLimit;
@@ -137,7 +137,7 @@
             if (isNaN(val)) {
                 return false;
             }
-            if (!angular.isNumber(val) || val > $scope.maxDonorsLimit || val <= 0) {
+            if (!angular.isNumber(val) || val > $scope.maxDonorsLimit || val <= 0 || val > $scope.donorsLimit) {
                 return false;
             }
             return true;
@@ -148,7 +148,7 @@
             if (isNaN(val)) {
                 return false;
             }
-            if (!angular.isNumber(val) || val > $scope.maxGenesLimit || val <= 0) {
+            if (!angular.isNumber(val) || val > $scope.maxGenesLimit || val <= 0 || val > $scope.genesLimit) {
                 return false;
             }
             return true;
@@ -236,7 +236,7 @@
                     if (!data.id) {
                         throw new Error('Received invalid response from analysis creation');
                     }
-                    $location.path('analysis/view/oncogrid/' + data.id);
+                    LocationService.goToPath('analysis/view/oncogrid/' + data.id);
                 }).finally(function(){
                     $scope.isLaunchingOncoGrid = false;
                 });
