@@ -442,6 +442,24 @@ angular.module('icgc.advanced.controllers', [
         });
       };
 
+      _controller.oncogridAnalysis = function(){
+        $modal.open({
+          templateUrl: '/scripts/oncogrid/views/oncogrid.upload.html',
+          controller: 'OncoGridUploadController',
+          resolve: {
+            donorsLimit: function(){
+              return _controller.Donor.donors.pagination.total;
+            },
+            genesLimit: function() {
+              return  _controller.Gene.genes.pagination.total;
+            },
+            filters: function() {
+              return LocationService.filters();
+            }
+          }
+        });
+      }
+
       _controller.projectFlagIconClass = function (projectCode) {
         var defaultValue = '';
         var last3 = _.takeRight (ensureString (projectCode), 3);

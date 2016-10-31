@@ -113,4 +113,157 @@
         };
 
     });
+
+    module.controller('OncoGridUploadController', function(Restangular, SetNameService, donorsLimit, genesLimit, filters, 
+        LocationService, $scope, $modalInstance, $location, $q, SetService, $timeout){
+
+        $scope.donorsLimit = donorsLimit;
+        $scope.genesLimit = genesLimit;
+        $scope.filters = filters;
+        $scope.isLaunchingOncoGrid = false;
+
+        $scope.maxDonorsLimit = 3000;
+        $scope.maxGenesLimit = 100;
+
+        $scope.params = {};
+        $scope.hasValidParams= false;
+
+        $scope.params.donorsCount = Math.min($scope.donorsLimit || 3000, $scope.maxDonorsLimit);
+        $scope.params.genesCount = Math.min($scope.genesLimit || 100, $scope.maxGenesLimit);
+        $scope.params.setName = '';
+
+        $scope.hasValidDonorCount = function(value){
+            var val = parseInt(value,10);
+            if (isNaN(val)) {
+                return false;
+            }
+            if (!angular.isNumber(val) || val > $scope.maxDonorsLimit || val <= 0 || val > $scope.donorsLimit) {
+                return false;
+            }
+            return true;
+        }
+
+        $scope.hasValidGeneCount = function(value){
+            var val = parseInt(value,10);
+            if (isNaN(val)) {
+                return false;
+            }
+            if (!angular.isNumber(val) || val > $scope.maxGenesLimit || val <= 0 || val > $scope.genesLimit) {
+                return false;
+            }
+            return true;
+        }
+
+        $scope.checkInput = function() {
+            var params = $scope.params;
+            if ($scope.hasValidDonorCount(params.donorsCount) && 
+                $scope.hasValidGeneCount(params.genesCount)) {
+                $scope.hasValidParams = true;
+            } else {
+                $scope.hasValidParams = false;
+            }
+        };
+
+        $scope.getSetName = function(filters){
+            return SetNameService.getSetFilters()
+                .then(function (filters) {
+                    return SetNameService.getSetName(filters);
+                })
+                .then(function (setName) {
+                    $scope.params.setName = setName;
+                });
+        }
+
+        $scope.getDonorsParams = function(){
+
+            var donorSetParams = {
+                filters: $scope.filters || {},
+                size: $scope.params.donorsCount,
+                type: 'donor',
+                isTransient: true,
+                name: `Top ${$scope.params.donorsCount} Donors: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
+            };
+
+            return donorSetParams;
+        }
+
+        $scope.getGenesParams = function(){
+
+             var geneSetParams = {
+                filters: $scope.filters || {},
+                size: $scope.params.genesCount,
+                type: 'gene',
+                isTransient: true,
+                name: `Top ${$scope.params.genesCount} Genes: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
+            };
+
+            return geneSetParams;
+        }
+
+        // Wait for sets to materialize
+        function wait(ids, numTries, callback) {
+            if (numTries <= 0) {
+                return;
+            }
+            SetService.getMetaData(ids).then(function(data) {
+                var finished = _.filter(data, function(d) {
+                return d.state === 'FINISHED';
+                });
+
+
+                if (finished.length === ids.length) {
+                callback(data);
+                } else {
+                $timeout(function() {
+                    wait(ids, --numTries, callback);
+                }, 1500);
+                }
+            });
+        }
+
+        $scope.launchOncogridAnalysis = function (setIds) {
+            console.log('Launching OncoGrid with: ', setIds);
+            
+            var payload = {
+                donorSet: setIds.donor,
+                geneSet: setIds.gene
+            };
+            
+            return Restangular
+                .one('analysis')
+                .post('oncogrid', payload, {}, { 'Content-Type': 'application/json' })
+                .then(function (data) {
+                    if (!data.id) {
+                        throw new Error('Received invalid response from analysis creation');
+                    }
+                    LocationService.goToPath('analysis/view/oncogrid/' + data.id);
+                }).finally(function(){
+                    $scope.isLaunchingOncoGrid = false;
+                });
+        };
+
+        $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+        };
+
+        $scope.newOncoGridAnalysis = function(){
+            $scope.isLaunchingOncoGrid = true;
+            $q.all({
+                r1: SetService.addSet('donor', $scope.getDonorsParams()),
+                r2: SetService.addSet('gene', $scope.getGenesParams())
+            }).then(function (responses) {
+                var r1 = responses.r1;
+                var r2 = responses.r2;
+
+                function proxyLaunch() {
+                    $scope.launchOncogridAnalysis({donor: r1.id, gene: r2.id});
+                }
+                wait([r1.id, r2.id], 7, proxyLaunch);
+            });
+        }
+
+        $scope.checkInput();
+        $scope.getSetName($scope.filters);
+    });
+
 })(jQuery, OncoGrid);

@@ -8,6 +8,12 @@
         <translate>Genes</translate>
         <span class="action-toolbar pull-right">
             <span class="action-item">
+                <i class="icon-grid"></i>
+                <a href="#" data-ng-click="AdvancedCtrl.oncogridAnalysis()">
+                    <translate>Oncogrid Analysis</translate>
+                </a>
+            </span>
+            <span class="action-item">
                 <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('gene', AdvancedCtrl.Gene.genes.pagination.total)"><translate>Save Gene Set</translate></a>
             </span>
             <span class="action-item">
@@ -64,7 +70,7 @@
             <td>{{ gene.name }}</td>
             <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
             <td>{{ gene.type | trans }}</td>
-            <td class="text-right" style="display:block; position: relative; white-space: nowrap">
+            <td class="text-right" style="position: relative; white-space: nowrap">
                         <span style="position: relative" data-ng-if="gene.affectedDonorCountFiltered > 0">
                         <a href='/search?filters={{gene.embedQuery}}'>
                             {{gene.affectedDonorCountFiltered | number}}
