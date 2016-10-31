@@ -17,9 +17,13 @@
  */
 package org.icgc.dcc.portal.server.analysis;
 
+import static java.lang.Math.min;
 import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.TERMS_LOOKUP_PATH;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.toBoolFilterFrom;
+import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.toDonorBoolFilter;
 import static org.icgc.dcc.portal.server.util.JsonUtils.LIST_TYPE_REFERENCE;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getHitIdsSet;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +41,7 @@ import org.icgc.dcc.portal.server.model.UnionAnalysisRequest;
 import org.icgc.dcc.portal.server.model.UnionAnalysisResult;
 import org.icgc.dcc.portal.server.model.UnionUnit;
 import org.icgc.dcc.portal.server.model.UnionUnitWithCount;
+import org.icgc.dcc.portal.server.repository.DonorRepository;
 import org.icgc.dcc.portal.server.repository.EntitySetRepository;
 import org.icgc.dcc.portal.server.repository.FileRepository;
 import org.icgc.dcc.portal.server.repository.GeneRepository;
@@ -91,6 +96,8 @@ public class UnionAnalyzer {
   private final GeneRepository geneRepository;
   @NonNull
   private final FileRepository fileRepository;
+  @NonNull
+  private final DonorRepository donorRepository;
 
   @Async
   public void calculateUnionUnitCounts(@NonNull final UUID id, @NonNull final UnionAnalysisRequest request) {
@@ -108,12 +115,12 @@ public class UnionAnalyzer {
 
       if (entityType == BaseEntitySet.Type.DONOR) {
         for (val def : definitions) {
-          val count = termsLookupRepository.getDonorCount(def);
+          val count = getDonorCount(def);
           result.add(UnionUnitWithCount.copyOf(def, count));
         }
       } else {
         for (val def : definitions) {
-          val count = termsLookupRepository.getUnionCount(def, entityType);
+          val count = getUnionCount(def, entityType);
           result.add(UnionUnitWithCount.copyOf(def, count));
         }
       }
@@ -167,7 +174,7 @@ public class UnionAnalyzer {
       Iterable<String> entityIds;
       val maxUnionCount = termsLookupRepository.getMaxUnionCount();
       if (entityType == BaseEntitySet.Type.DONOR) {
-        response = termsLookupRepository.getDonorUnion(definitions);
+        response = getDonorUnion(definitions);
         entityIds = SearchResponses.getHitIdsSet(response);
         totalHits = Iterables.size(entityIds);
       } else {
@@ -229,7 +236,7 @@ public class UnionAnalyzer {
 
   private SearchResponse subtractOne(final UnionUnit definition, final BaseEntitySet.Type entityType,
       final int max, List<String> fields, List<String> sort) {
-    val response = termsLookupRepository.singleUnion(
+    val response = donorRepository.singleDonorUnion(
         entityType.getIndexTypeName(),
         SearchType.QUERY_THEN_FETCH,
         toBoolFilterFrom(definition, entityType),
@@ -238,6 +245,42 @@ public class UnionAnalyzer {
         sort);
 
     return response;
+  }
+
+  private SearchResponse getDonorUnion(final Iterable<UnionUnit> definitions) {
+    val boolFilter = toBoolFilterFrom(definitions, BaseEntitySet.Type.DONOR);
+    val response = donorRepository.donorSearchRequest(boolFilter, termsLookupRepository.getMaxUnionCount());
+
+    return response;
+  }
+
+  private long getDonorCount(final UnionUnit unionDefinition) {
+    val boolFilter = toDonorBoolFilter(unionDefinition);
+    val response = donorRepository.donorSearchRequest(boolFilter, termsLookupRepository.getMaxUnionCount());
+
+    return getHitIdsSet(response).size();
+  }
+
+  private long getUnionCount(
+      final UnionUnit unionDefinition,
+      final BaseEntitySet.Type entityType) {
+    val maxUnionCount = termsLookupRepository.getMaxUnionCount();
+
+    val response = termsLookupRepository.runUnionEsQuery(
+        entityType.getIndexTypeName(),
+        SearchType.COUNT,
+        toBoolFilterFrom(unionDefinition, entityType),
+        maxUnionCount);
+
+    val count = getCountFrom(response, maxUnionCount);
+    log.debug("Total hits: {}", count);
+
+    return count;
+  }
+
+  private static long getCountFrom(@NonNull final SearchResponse response, final long max) {
+    val result = getTotalHitCount(response);
+    return min(max, result);
   }
 
 }
