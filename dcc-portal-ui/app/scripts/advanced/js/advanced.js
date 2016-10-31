@@ -63,10 +63,24 @@ angular.module('icgc.advanced.controllers', [
           _serviceMap = {},
           _filterService = LocationService.getFilterService();
 
+      _controller.SSMDonorCount = 0;
+
       _locationFilterCache = _filterService.getCachedFiltersFactory();
 
       var _isInAdvancedSearchCtrl = true;
 
+      _controller.fetchSSMDonorCount = (filters) => {
+        filters = LocationService.merge(filters, {'donor':{'availableDataTypes':{'is':['ssm']}}});
+        AdvancedDonorService.getSSMDonorCount(filters)
+          .then(function (count) {
+            _controller.SSMDonorCount = count;
+          });
+      }
+
+      _controller.SSMDonorCountQuery = () => {
+        var filters = _.extend({'donor':{'availableDataTypes':{'is':['ssm']}}}, _.cloneDeep(_locationFilterCache.filters()));
+        return `/search?filters=${angular.toJson(filters)}`;
+      }
 
       function _refresh() {
         var filters = _locationFilterCache.filters(),
@@ -181,6 +195,8 @@ angular.module('icgc.advanced.controllers', [
 
 
         _controller.hasGeneFilter = angular.isObject(filters) ?  filters.hasOwnProperty('gene') : false;
+
+        _controller.fetchSSMDonorCount(filters);
       }
 
       function _renderTab(tab, forceFullRefresh) {
@@ -649,7 +665,11 @@ angular.module('icgc.advanced.controllers', [
       return deferred.promise;
     };
 
-
+    _ASDonorService.getSSMDonorCount = (filters) => {
+      return Donors.handler
+        .one('count')
+        .get({filters: filters});
+    }
 
     _ASDonorService.renderBodyTab = function () {
         _initDonors().then(_processDonorHits);

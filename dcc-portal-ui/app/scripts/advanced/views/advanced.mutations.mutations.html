@@ -54,10 +54,10 @@
                             {{mutation.affectedDonorCountFiltered | number}}
                         </a>
                         /
-                        <a href='/search?filters={"mutation":{"id":{"is":["{{mutation.id}}"]}},"donor":{"availableDataTypes":{"is":["ssm"]}}}'>
-                            {{AdvancedCtrl.Donor.donors.pagination.total | number}}
+                        <a href='{{ AdvancedCtrl.SSMDonorCountQuery() }}'>
+                            {{AdvancedCtrl.SSMDonorCount | number}}
                         </a>
-                        <em>({{mutation.affectedDonorCountFiltered/AdvancedCtrl.Donor.donors.pagination.total * 100 |
+                        <em>({{mutation.affectedDonorCountFiltered/AdvancedCtrl.SSMDonorCount * 100 |
                             number:2}}%)</em>
                     </span>
         </td>
