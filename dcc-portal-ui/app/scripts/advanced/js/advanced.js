@@ -72,7 +72,7 @@ angular.module('icgc.advanced.controllers', [
       var _isInAdvancedSearchCtrl = true;
 
       _controller.fetchSSMDonorCount = async (filters) => {
-        filters = LocationService.merge(filters, ssmFilter);
+        filters = _.merge(filters, ssmFilter);
         _controller.SSMDonorCount = await AdvancedDonorService.getSSMDonorCount(filters);
       }
 
