@@ -1,5 +1,4 @@
 .analysis {
-   display: table;
    width: 100%;
    padding:0px;
 
@@ -147,6 +146,7 @@
    }
 
    .sidepanel {
+      display: inline-block;
       position: relative;
       vertical-align: top;
       margin-right: 1rem;
@@ -168,10 +168,7 @@
    }
 
    .content {
-      //float: left;
-      //clear: right;
-      display: table-cell;
-      //width: 76%;
+      display: inline-block;
       
       min-height: 20rem; // Prevent complete collapse when switching content
 
