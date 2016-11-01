@@ -78,7 +78,7 @@ angular.module('icgc.advanced.controllers', [
       }
 
       _controller.SSMDonorCountQuery = () => {
-        var filters = _.extend({'donor':{'availableDataTypes':{'is':['ssm']}}}, _.cloneDeep(_locationFilterCache.filters()));
+        var filters = _.merge(_.cloneDeep(_locationFilterCache.filters()), {'donor':{'availableDataTypes':{'is':['ssm']}}});
         return `/search?filters=${angular.toJson(filters)}`;
       }
 
