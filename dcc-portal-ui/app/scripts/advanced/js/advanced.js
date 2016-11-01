@@ -62,6 +62,8 @@ angular.module('icgc.advanced.controllers', [
           dataRepoUrl = dataRepoRouteInfo.href,
           _serviceMap = {},
           _filterService = LocationService.getFilterService();
+      
+      const ssmFilter = {'donor':{'availableDataTypes':{'is':['ssm']}}};
 
       _controller.SSMDonorCount = 0;
 
@@ -69,16 +71,13 @@ angular.module('icgc.advanced.controllers', [
 
       var _isInAdvancedSearchCtrl = true;
 
-      _controller.fetchSSMDonorCount = (filters) => {
-        filters = LocationService.merge(filters, {'donor':{'availableDataTypes':{'is':['ssm']}}});
-        AdvancedDonorService.getSSMDonorCount(filters)
-          .then(function (count) {
-            _controller.SSMDonorCount = count;
-          });
+      _controller.fetchSSMDonorCount = async (filters) => {
+        filters = LocationService.merge(filters, ssmFilter);
+        _controller.SSMDonorCount = await AdvancedDonorService.getSSMDonorCount(filters);
       }
 
       _controller.SSMDonorCountQuery = () => {
-        var filters = _.merge(_.cloneDeep(_locationFilterCache.filters()), {'donor':{'availableDataTypes':{'is':['ssm']}}});
+        var filters = _.merge(_.cloneDeep(_locationFilterCache.filters()), ssmFilter);
         return `/search?filters=${angular.toJson(filters)}`;
       }
 
@@ -665,11 +664,7 @@ angular.module('icgc.advanced.controllers', [
       return deferred.promise;
     };
 
-    _ASDonorService.getSSMDonorCount = (filters) => {
-      return Donors.handler
-        .one('count')
-        .get({filters: filters});
-    }
+    _ASDonorService.getSSMDonorCount = (filters) => Donors.handler.one('count').get({filters});
 
     _ASDonorService.renderBodyTab = function () {
         _initDonors().then(_processDonorHits);
