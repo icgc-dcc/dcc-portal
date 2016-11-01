@@ -263,6 +263,7 @@
             minCellHeight: 8,
             trackHeight: 12,
             trackLegends: trackLegends,
+            trackLegendLabel: '(Legend)',
             donorTracks: donorTracks,
             donorOpacityFunc: donorOpacity,
             donorClick: donorClick,
