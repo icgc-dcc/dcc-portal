@@ -58,8 +58,10 @@ public class OncogridAnalysisService {
         UUID.randomUUID(),
         geneSet,
         genes.getCount(),
+        genes.getName(),
         donorSet,
-        donors.getCount());
+        donors.getCount(),
+        donors.getName());
 
     val insertCount = oncogridRepository.save(newAnalysis, dataVersion);
     checkState(insertCount == 1, "Could not save analysis. Insert count: %s", insertCount);

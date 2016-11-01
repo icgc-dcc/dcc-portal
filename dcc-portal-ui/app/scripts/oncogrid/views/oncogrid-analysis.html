@@ -25,7 +25,7 @@
         <tbody>
           <tr>
             <td><translate>Donor</translate></td>
-            <td>{{donorSetName}}</td>
+            <td>{{donorSetName || item.donorSetName}}</td>
             <td class="text-right"><a href="{{donorLink}}">{{item.donorCount | number}}</a></td>
             <td style="font-size:1.25rem;">                            
               <span class="t_tools__tool">
@@ -45,7 +45,7 @@
           </tr>
           <tr>
             <td><translate>Gene</translate></td>
-            <td>{{geneSetName}}</td>
+            <td>{{geneSetName || item.geneSetName}}</td>
             <td class="text-right"><a href="{{geneLink}}">{{item.geneCount | number}}</a></td>
             <td style="font-size:1.25rem;">                            
               <span class="t_tools__tool">
@@ -62,7 +62,7 @@
 
     <div class="wide og-grid-align">
       <span class="action-toolbar">
-        <translate>Resulting Number of Mutation Occurrences:</translate> <a href="{{obsLink}}">{{obsCount}}</a>
+        <translate>Resulting Number of High Impact Mutation Occurrences:</translate> <a href="{{obsLink}}">{{obsCount}}</a>
       </span>
       <span class="action-toolbar pull-right">
         <i class="icon-chart"></i><a href="{{gvLink}}"><translate>Genome Viewer</translate></a>
