@@ -129,45 +129,17 @@
 
         <!-- enrichment -->
         <div data-ng-if="NAC.analysisType === 'enrichment'">
-            <div><em>{{NAC.analysisDescription('enrichment')}}</em></div>
-            <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoEnrichment()">{{NAC.analysisDemoDescription('enrichment')}}</a></div>
-            <br>
-
-            <div> 
-                <div ng-bind-html="NAC.datasetSelectionInstructions('enrichment')"></div>
-                <table class="table table-selectable"> 
-                    <thead>
-                        <th></th>
-                        <th><translate>Item Type</translate></th>
-                        <th><translate>Name</translate></th>
-                        <th class="text-right"><translate># Items</translate></th>
-                    </thead>
-                    <tbody>
-                        <tr data-ng-if="NAC.allSets.length === 0">
-                            <td colspan="5" class="text-center"><strong><translate>No saved sets</translate></strong></td>
-                        </tr>
-                        <tr data-ng-repeat="item in NAC.allSets" style="color:{{NAC.isInFilter(item)?'':'#CCC'}}"> 
-                            <td class="text-center" style="width:2rem">
-                                <i class="{{NAC.selectedIds.indexOf(item.id) === -1?'icon-circle-empty':'icon-dot-circled'}}"
-                                   data-ng-click="NAC.selectedIds=[item.id]"
-                                   data-ng-if="NAC.isInFilter(item)"></i>
-                            </td>
-                            <td>{{item.type | readable}}</td>
-                            <td>{{item.name}}</td>
-                            <td class="text-right"> 
-                                <a href="{{item.advLink}}">{{item.count | number}}</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-                <button class="t_button" 
-                    data-ng-disabled="NAC.selectedIds.length !== 1 || NAC.isLaunchingAnalysis()"
-                    data-ng-click="NAC.launchEnrichment(NAC.selectedIds[0])">
-                    <span data-ng-if="NAC.isLaunchingAnalysis()"><i class="icon-spinner icon-spin"></i></span>
-                    Run
-                </button>
-            </div>
+            <set-selection
+                sets="NAC.allSets"
+                description="NAC.analysisDescription('enrichment')"
+                demo-cta-text="NAC.analysisDemoDescription('enrichment')"
+                selection-instructions="NAC.datasetSelectionInstructions('enrichment')"
+                on-click-demo="NAC.demoEnrichment()"
+                is-launching-analysis="NAC.isLaunchingAnalysis()"
+                set-compatibility-criteria="NAC.analysesMeta.enrichment.setCompatibilityCriteria"
+                on-click-launch="NAC.analysesMeta.enrichment.launch"
+                are-selected-sets-valid="NAC.analysesMeta.enrichment.areSelectedSetsValid"
+            ></set-selection>
         </div>
 
         <!-- phenotype -->

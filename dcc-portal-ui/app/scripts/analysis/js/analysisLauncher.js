@@ -50,6 +50,7 @@
     _this.analysisName = AnalysisService.analysisName;
     _this.analysisDescription = AnalysisService.analysisDescription;
     _this.analysisDemoDescription = AnalysisService.analysisDemoDescription;
+    _this.datasetSelectionInstructions = AnalysisService.datasetSelectionInstructions;
 
     _this.toggle = function(setId) {
       _this.selectedIds = _.xor(_this.selectedIds, [setId]);
@@ -131,6 +132,56 @@
         });
       }
     };
+
+    const SET_COMPATIBILITY_CONTEXTS = {
+      ANALYSIS: 'ANALYSIS',
+      SELECTED_SETS: 'SELECTED_SETS',
+    };
+
+    this.analysesMeta = {
+      set: {
+        strings: AnalysisService.analysesStrings.set,
+        setCompatibilityCriteria: [
+          {
+            context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
+            test: (set, selectedSets) => set.type === selectedSets[0].type,
+            message: gettextCatalog.getString('Set types must match'),
+          }
+        ],
+        areSelectedSetsValid: selectedSets => selectedSets.length,
+      },
+      enrichment: {
+        strings: AnalysisService.analysesStrings.enrichment,
+        setCompatibilityCriteria: [
+          {
+            context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
+            test: set => set.type === 'gene',
+            message: gettextCatalog.getString('Set must be of type "gene"'),
+          },
+          {
+            context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
+            test: set => set.count <= 10000,
+            message: gettextCatalog.getString('Set must have less than 10,000 items'),
+          },
+          {
+            context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
+            test: (set, selectedSets) => selectedSets.length === 1
+              ? set === selectedSets[0]
+              : true,
+            message: gettextCatalog.getString('Only 1 set can be selected'),
+          }
+        ],
+        launch: selectedSets => launchEnrichment(selectedSets[0]),
+      },
+      phenotype: {
+        strings: AnalysisService.analysesStrings.phenotype,
+        isSetCompatible: set => set.type === 'donor'
+      },
+      oncogrid: {
+        strings: AnalysisService.analysesStrings.oncogrid,
+        isSetCompatible: set => _.includes(['donor', 'gene'], set.type)
+      },
+    }
 
 
     _this.isLaunchingAnalysis = function() {
@@ -422,13 +473,6 @@
           }
           wait([r1.id, r2.id], 7, proxyLaunch);
       });
-    };
-
-    _this.launchEnrichment = function(setId) {
-      var set = _.filter(_this.filteredList, function(set) {
-        return set.id === setId;
-      })[0];
-      launchEnrichment(set);
     };
 
     function launchEnrichment(set) {

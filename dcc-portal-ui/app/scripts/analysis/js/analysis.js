@@ -15,10 +15,13 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require('./setSelection');
+
 (function () {
   'use strict';
 
   var module = angular.module('icgc.analysis', [
+    'icgc.analysis.setSelection',
     'icgc.analysis.controllers',
     'icgc.share',
     'ui.router'
@@ -238,6 +241,8 @@
         datasetSelectionInstructions: gettextCatalog.getString('Select 1 Gene set and 1 Donor set, then click on Run.'),
       }
     };
+
+    this.analysesStrings = analysesStrings;
 
     this.getAnalysis = function(id, type) {
       return RestangularNoCache.one('analysis/' + type , id).get();
