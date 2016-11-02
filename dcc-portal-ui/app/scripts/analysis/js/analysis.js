@@ -209,7 +209,8 @@
         description: gettextCatalog.getString('Display Venn diagram and find out intersection or union,' + 
           ' etc. of your sets of the same type.'),
         demoDescription: gettextCatalog.getString('Compare high impact mutations in brain cancers across' + 
-          ' GBM-US, LGG-US, and PCBA-DE.')
+          ' GBM-US, LGG-US, and PCBA-DE.'),
+        datasetSelectionInstructions: gettextCatalog.getString('Select 2 or 3 sets of the same type, then click on Run.'),
       },
       get union () {
         return this.set;
@@ -218,7 +219,8 @@
         name: gettextCatalog.getString('Enrichment Analysis'),
         description: gettextCatalog.getString('Find out statistically significantly over-represented groups of ' +
           'gene sets (e.g. Reactome pathways) when comparing with your gene set.'),
-        demoDescription: gettextCatalog.getString('Perform enrichment analysis on top 50 genes in Cancer Gene Census.')
+        demoDescription: gettextCatalog.getString('Perform enrichment analysis on top 50 genes in Cancer Gene Census.'),
+        datasetSelectionInstructions: gettextCatalog.getString('Select the gene set you want to analyze, then click on Run. <small>(Maximum 10,000 genes)</small>'),
       },
       phenotype: {
         name: gettextCatalog.getString('Cohort Comparison'),
@@ -232,13 +234,8 @@
         description: gettextCatalog.getString('Display OncoGrid diagram to visualize genetic alteration occurrences' + 
           ' affecting a set of donors.'),
         demoDescription: gettextCatalog.getString('Generate an OncoGrid using top 75 donors and genes for PCAWG' +
-        ' liver projects.')
-      },
-      survival: {
-        name: gettextCatalog.getString('Survival Analysis'),
-        description: gettextCatalog.getString('Display the survival analysis of your donor sets and compare some' +
-        ' characteristics such as gender, vital status and age at diagnosis between your donor sets.'),
-        demoDescription: 'TBD'
+        ' liver projects.'),
+        datasetSelectionInstructions: gettextCatalog.getString('Select 1 Gene set and 1 Donor set, then click on Run.'),
       }
     };
 
@@ -266,6 +263,8 @@
     this.analysisDescription = function(type) {
       return _.get(analysesStrings[type], 'description', '???d');
     };
+
+    this.datasetSelectionInstructions = type => _.get(analysesStrings[type], 'datasetSelectionInstructions', '???');
 
 
     /**

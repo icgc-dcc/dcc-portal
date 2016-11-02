@@ -134,7 +134,7 @@
             <br>
 
             <div> 
-                <div><translate has-markup>Select the gene set you want to analyze, then click on Run. <small>(Maximum 10,000 genes)</small></translate></div>
+                <div ng-bind-html="NAC.datasetSelectionInstructions('enrichment')"></div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
@@ -206,7 +206,9 @@
                 <br>
                 <button class="t_button" 
                     data-ng-disabled="NAC.selectedIds.length !== 2 || NAC.isLaunchingAnalysis()"
-                    data-ng-click="NAC.launchPhenotype(NAC.selectedIds)"><translate>Run</translate></button>
+                    data-ng-click="NAC.launchPhenotype(NAC.selectedIds)">
+                    <translate>Run</translate>
+                </button>
             </div>
         </div>
 
@@ -217,7 +219,7 @@
             <div>Demo: <a href="" data-ng-click="NAC.demoSetOperation()">{{NAC.analysisDemoDescription('set')}}</a></div>
             <br>
             <div> 
-                <div><translate>Select 2 or 3 sets of the same type, then click on Run.</translate></div>
+                <div>{{NAC.datasetSelectionInstructions('set')}}</div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
@@ -259,7 +261,7 @@
             <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoOncogrid()">{{NAC.analysisDemoDescription('oncogrid')}}</a></div>
             
             <div> 
-                <div><translate>Select 1 Gene set and 1 Donor set, then click on Run.</translate></div>
+                <div>{{NAC.datasetSelectionInstructions('oncogrid')}}</div>
                 <table class="table table-selectable"> 
                     <thead>
                         <th></th>
