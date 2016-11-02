@@ -122,17 +122,6 @@
                      </div>
                 </a>
             </div>
-<!--
-            <div class="analysis-tiles">
-                <div class="analysis-tile-container">
-                    <a class="analysis-tile in-progress" href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">
-                        <i class="icon-beaker"></i><strong>More?</strong><br>
-                        <div class="analysis-tile-detail">Do you have a specific type of analysis you want to see? Leave feedback and let us know. </div>
-                    </a>
-                </div>
-
-            </div>
--->
         </div>
     </div>
     <br> 
@@ -143,13 +132,6 @@
             <div><em>{{NAC.analysisDescription('enrichment')}}</em></div>
             <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoEnrichment()">{{NAC.analysisDemoDescription('enrichment')}}</a></div>
             <br>
-
-            <!--
-            <div class="text-center wide" data-ng-if="NAC.allSets.length === 0">
-                <br><h3>Your have no saved sets.</h3><br>
-            </div>
-            <div class="clearfix"></div>
-            -->
 
             <div> 
                 <div><translate has-markup>Select the gene set you want to analyze, then click on Run. <small>(Maximum 10,000 genes)</small></translate></div>
@@ -194,13 +176,6 @@
             <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoPhenotype()">{{NAC.analysisDemoDescription('phenotype')}}</a></div>
             <br>
 
-            <!--
-            <div class="text-center wide" data-ng-if="NAC.allSets.length === 0">
-                <br><h3>Your have no saved sets.</h3><br>
-            </div>
-            <div class="clearfix"></div>
-            -->
-
             <div> 
                 <div><translate>Select 2 donor sets, then click on Run.</translate></div>
                 <table class="table table-selectable"> 
@@ -241,14 +216,6 @@
             <div><em>{{NAC.analysisDescription('set')}}</em></div>
             <div>Demo: <a href="" data-ng-click="NAC.demoSetOperation()">{{NAC.analysisDemoDescription('set')}}</a></div>
             <br>
-
-            <!--
-            <div class="text-center wide" data-ng-if="NAC.allSets.length === 0">
-                <br><h3>Your have no saved sets.</h3><br>
-            </div>
-            <div class="clearfix"></div>
-            -->
-
             <div> 
                 <div><translate>Select 2 or 3 sets of the same type, then click on Run.</translate></div>
                 <table class="table table-selectable"> 
