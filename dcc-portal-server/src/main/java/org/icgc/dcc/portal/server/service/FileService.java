@@ -35,6 +35,7 @@ import static org.icgc.dcc.portal.server.model.File.parse;
 import static org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys.REPO_DONOR_COUNT;
 import static org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys.REPO_SIZE;
 import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 import static org.icgc.dcc.portal.server.util.SearchResponses.hasHits;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
@@ -64,6 +65,7 @@ import org.elasticsearch.search.aggregations.bucket.nested.InternalNested;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.File;
 import org.icgc.dcc.portal.server.model.Files;
 import org.icgc.dcc.portal.server.model.Keyword;
@@ -160,7 +162,7 @@ public class FileService {
   public Files findAll(@NonNull Query query) {
     val response = fileRepository.findAll(query);
     val hits = response.getHits();
-    val files = new Files(convertHitsToRepoFiles(hits));
+    val files = new Files(convertHitsToRepoFiles(hits, query));
 
     val termFacets = AggregationToFacetConverter.getInstance().convert(response.getAggregations());
     val donorCount = fileRepository.searchGroupByRepoNameDonorId(termFacets, query);
@@ -358,10 +360,12 @@ public class FileService {
     return result;
   }
 
-  private static List<File> convertHitsToRepoFiles(SearchHits hits) {
+  private static List<File> convertHitsToRepoFiles(SearchHits hits, Query query) {
     return FluentIterable.from(hits)
-        .transform(hit -> parse(hit.getSourceAsString()))
+        .transform(hit -> {
+          Map<String, Object> fieldMap = createResponseMap(hit, query, EntityType.FILE);
+          return parse(fieldMap);
+        })
         .toList();
   }
-
 }
