@@ -3,6 +3,25 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+
+[4.3.20](https://github.com/icgc-dcc/dcc-portal/compare/4.3.19...4.3.20)
+--
+- Removed notes from saved sets
+- Removed primary load indicator when refreshing Advanced Search or Projects page
+- Bugfix: Saving sets in different tabs overwrite sets saved in other tabs
+- Bugfix: Uploading donor set in Repository Browser uses correct prefix
+- Improvement: Prevent hard page refresh on filter change in Repository Browser
+- Improvement: Changing query in AS should reset pagination
+- Use subscripts on set identifiers
+- Allow updating set names
+- Enforce npm / node versions in build
+- Elliding sequences in Gene page when too long
+- Additional parameter checking in REST endpoints
+- `TermsLookupService` refactoring
+- Fixed display of Analysis Result page
+- Fixed Collaboratory button URL
+- Fixed border rendering in AS hits table
+
 [4.3.19](https://github.com/icgc-dcc/dcc-portal/compare/4.3.18...4.3.19)
 --
 - Remove “notes” from saved sets
