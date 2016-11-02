@@ -126,45 +126,28 @@
         $scope.maxGenesLimit = 100;
 
         $scope.params = {};
-        $scope.hasValidParams= false;
+        $scope.hasValidParams = false;
 
-        $scope.params.donorsCount = Math.min($scope.donorsLimit || 3000, $scope.maxDonorsLimit);
-        $scope.params.genesCount = Math.min($scope.genesLimit || 100, $scope.maxGenesLimit);
+        $scope.params.donorsCount = Math.min($scope.donorsLimit || $scope.maxDonorsLimit, $scope.maxDonorsLimit);
+        $scope.params.genesCount = Math.min($scope.genesLimit || $scope.maxGenesLimit, $scope.maxGenesLimit);
         $scope.params.setName = '';
 
-        $scope.hasValidDonorCount = function(value){
-            var val = parseInt(value,10);
-            if (isNaN(val)) {
-                return false;
-            }
-            if (!angular.isNumber(val) || val > $scope.maxDonorsLimit || val <= 0 || val > $scope.donorsLimit) {
-                return false;
-            }
-            return true;
+        const hasValidDonorCount = (value) => {
+            const count = parseInt(value,10);
+            return !isNaN(count) && _.inRange(count, 0, Math.min($scope.donorsLimit, $scope.maxDonorsLimit)+1);
         }
 
-        $scope.hasValidGeneCount = function(value){
-            var val = parseInt(value,10);
-            if (isNaN(val)) {
-                return false;
-            }
-            if (!angular.isNumber(val) || val > $scope.maxGenesLimit || val <= 0 || val > $scope.genesLimit) {
-                return false;
-            }
-            return true;
+        const hasValidGeneCount = (value) => {
+            const count = parseInt(value,10);
+            return !isNaN(count) && _.inRange(count, 0, Math.min($scope.genesLimit, $scope.maxGenesLimit)+1);
         }
 
-        $scope.checkInput = function() {
-            var params = $scope.params;
-            if ($scope.hasValidDonorCount(params.donorsCount) && 
-                $scope.hasValidGeneCount(params.genesCount)) {
-                $scope.hasValidParams = true;
-            } else {
-                $scope.hasValidParams = false;
-            }
+        $scope.checkInput = () => {
+            const params = $scope.params;
+            $scope.hasValidParams = hasValidDonorCount(params.donorsCount) && hasValidGeneCount(params.genesCount);
         };
 
-        $scope.getSetName = function(filters){
+        const getSetName = (filters) => {
             return SetNameService.getSetFilters()
                 .then(function (filters) {
                     return SetNameService.getSetName(filters);
@@ -174,31 +157,21 @@
                 });
         }
 
-        $scope.getDonorsParams = function(){
+        const getDonorsParams = () => ({
+            filters: $scope.filters || {},
+            size: $scope.params.donorsCount,
+            type: 'donor',
+            isTransient: true,
+            name: `Top ${$scope.params.donorsCount} Donors: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
+        })
 
-            var donorSetParams = {
-                filters: $scope.filters || {},
-                size: $scope.params.donorsCount,
-                type: 'donor',
-                isTransient: true,
-                name: `Top ${$scope.params.donorsCount} Donors: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
-            };
-
-            return donorSetParams;
-        }
-
-        $scope.getGenesParams = function(){
-
-             var geneSetParams = {
-                filters: $scope.filters || {},
-                size: $scope.params.genesCount,
-                type: 'gene',
-                isTransient: true,
-                name: `Top ${$scope.params.genesCount} Genes: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
-            };
-
-            return geneSetParams;
-        }
+        const getGenesParams = () => ({
+            filters: $scope.filters || {},
+            size: $scope.params.genesCount,
+            type: 'gene',
+            isTransient: true,
+            name: `Top ${$scope.params.genesCount} Genes: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
+        })
 
         // Wait for sets to materialize
         function wait(ids, numTries, callback) {
@@ -207,23 +180,20 @@
             }
             SetService.getMetaData(ids).then(function(data) {
                 var finished = _.filter(data, function(d) {
-                return d.state === 'FINISHED';
+                    return d.state === 'FINISHED';
                 });
 
-
                 if (finished.length === ids.length) {
-                callback(data);
+                    callback(data);
                 } else {
-                $timeout(function() {
-                    wait(ids, --numTries, callback);
-                }, 1500);
+                    $timeout(function() {
+                        wait(ids, --numTries, callback);
+                    }, 1500);
                 }
             });
         }
 
         $scope.launchOncogridAnalysis = function (setIds) {
-            console.log('Launching OncoGrid with: ', setIds);
-            
             var payload = {
                 donorSet: setIds.donor,
                 geneSet: setIds.gene
@@ -249,8 +219,8 @@
         $scope.newOncoGridAnalysis = function(){
             $scope.isLaunchingOncoGrid = true;
             $q.all({
-                r1: SetService.addSet('donor', $scope.getDonorsParams()),
-                r2: SetService.addSet('gene', $scope.getGenesParams())
+                r1: SetService.addSet('donor', getDonorsParams()),
+                r2: SetService.addSet('gene', getGenesParams())
             }).then(function (responses) {
                 var r1 = responses.r1;
                 var r2 = responses.r2;
@@ -263,7 +233,7 @@
         }
 
         $scope.checkInput();
-        $scope.getSetName($scope.filters);
+        getSetName($scope.filters);
     });
 
 })(jQuery, OncoGrid);

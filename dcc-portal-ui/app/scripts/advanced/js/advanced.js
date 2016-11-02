@@ -447,15 +447,9 @@ angular.module('icgc.advanced.controllers', [
           templateUrl: '/scripts/oncogrid/views/oncogrid.upload.html',
           controller: 'OncoGridUploadController',
           resolve: {
-            donorsLimit: function(){
-              return _controller.Donor.donors.pagination.total;
-            },
-            genesLimit: function() {
-              return  _controller.Gene.genes.pagination.total;
-            },
-            filters: function() {
-              return LocationService.filters();
-            }
+            donorsLimit: () => _controller.Donor.donors.pagination.total,
+            genesLimit: () => _controller.Gene.genes.pagination.total,
+            filters: () => LocationService.filters()
           }
         });
       }
