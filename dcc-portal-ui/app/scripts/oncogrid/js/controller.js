@@ -157,20 +157,12 @@
                 });
         }
 
-        const getDonorsParams = () => ({
+        const getSetParams = (entity, count) => ({
             filters: $scope.filters || {},
-            size: $scope.params.donorsCount,
-            type: 'donor',
+            size: count,
+            type: entity,
             isTransient: true,
-            name: `Top ${$scope.params.donorsCount} Donors: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
-        })
-
-        const getGenesParams = () => ({
-            filters: $scope.filters || {},
-            size: $scope.params.genesCount,
-            type: 'gene',
-            isTransient: true,
-            name: `Top ${$scope.params.genesCount} Genes: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
+            name: `Top ${count} ${_.capitalize(entity)}s ${_.includes($scope.params.setName, 'All') ? '' : `: ${$scope.params.setName}`}`
         })
 
         // Wait for sets to materialize
@@ -219,8 +211,8 @@
         $scope.newOncoGridAnalysis = function(){
             $scope.isLaunchingOncoGrid = true;
             $q.all({
-                r1: SetService.addSet('donor', getDonorsParams()),
-                r2: SetService.addSet('gene', getGenesParams())
+                r1: SetService.addSet('donor', getSetParams('donor', $scope.params.donorsCount)),
+                r2: SetService.addSet('gene', getSetParams('gene', $scope.params.genesCount))
             }).then(function (responses) {
                 var r1 = responses.r1;
                 var r2 = responses.r2;
