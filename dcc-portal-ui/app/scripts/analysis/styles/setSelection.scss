@@ -7,4 +7,9 @@
       opacity: 1;
     }
   }
+
+  .is-selected > td {
+    background-color: #FFFFBE;
+    color: #000;
+  }
 }
