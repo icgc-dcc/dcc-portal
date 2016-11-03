@@ -200,13 +200,18 @@
       set: {
         strings: AnalysisService.analysesStrings.set,
         setCompatibilityCriteria: [
+          setLimitCriterium(3),
           {
             context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
-            test: (set, selectedSets) => set.type === selectedSets[0].type,
+            test: (set, selectedSets) => !selectedSets.length || set.type === selectedSets[0].type,
             message: gettextCatalog.getString('Set types must match'),
-          }
+          },
         ],
-        areSelectedSetsValid: selectedSets => selectedSets.length,
+        analysisSatisfactionCriteria: [
+          analysisSetRangeCriterium(2, 3),
+        ],
+        launch: selectedSets => _this.launchSet(selectedSets[0].type, selectedSets.map(x => x.id)),
+        launchDemo: () => _this.demoSetOperation(),
       },
       oncogrid: {
         strings: AnalysisService.analysesStrings.oncogrid,

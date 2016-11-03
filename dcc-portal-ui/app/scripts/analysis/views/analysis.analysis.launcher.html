@@ -155,50 +155,22 @@
                 on-click-launch="NAC.analysesMeta.phenotype.launch"
                 on-click-launch-demo="NAC.analysesMeta.phenotype.launchDemo"
             ></set-selection>
-
-            <div><em>{{NAC.analysisDescription('phenotype')}}</em></div>
-            <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoPhenotype()">{{NAC.analysisDemoDescription('phenotype')}}</a></div>
-            <br>
-
-            <div> 
-                <div><translate>Select 2 donor sets, then click on Run.</translate></div>
-                <table class="table table-selectable"> 
-                    <thead>
-                        <th></th>
-                        <th><translate>Item Type</translate></th>
-                        <th><translate>Name</translate></th>
-                        <th class="text-right"><translate># Items</translate></th>
-                    </thead>
-                    <tbody>
-                        <tr data-ng-if="NAC.allSets.length === 0">
-                            <td colspan="5" class="text-center"><strong><translate>No saved sets</translate></strong></td>
-                        </tr>
-                        <tr data-ng-repeat="item in NAC.allSets" style="color:{{NAC.isInFilter(item)?'':'#CCC'}}"> 
-                            <td class="text-center" style="width:1rem">
-                               <span data-ng-if="NAC.isInFilter(item)" data-ng-click="NAC.toggle(item.id)">
-                                  <i data-ng-class="{'icon-check-empty': NAC.selectedIds.indexOf(item.id) === -1, 'icon-check': NAC.selectedIds.indexOf(item.id) >=0}"></i>
-                               </span>
-                            </td>
-                            <td>{{item.type | readable}}</td>
-                            <td>{{item.name}}</td>
-                            <td class="text-right"> 
-                                <a href="{{item.advLink}}">{{item.count | number}}</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-                <button class="t_button" 
-                    data-ng-disabled="NAC.selectedIds.length !== 2 || NAC.isLaunchingAnalysis()"
-                    data-ng-click="NAC.launchPhenotype(NAC.selectedIds)">
-                    <translate>Run</translate>
-                </button>
-            </div>
         </div>
 
 
         <!-- set -->
         <div data-ng-if="NAC.analysisType === 'set'">
+            <set-selection
+                sets="NAC.allSets"
+                description="NAC.analysesMeta.set.strings.description"
+                demo-cta-text="NAC.analysesMeta.set.strings.demoDescription"
+                selection-instructions="NAC.analysesMeta.set.strings.datasetSelectionInstructions"
+                is-launching-analysis="NAC.isLaunchingAnalysis()"
+                set-compatibility-criteria="NAC.analysesMeta.set.setCompatibilityCriteria"
+                analysis-satisfaction-criteria="NAC.analysesMeta.set.analysisSatisfactionCriteria"
+                on-click-launch="NAC.analysesMeta.set.launch"
+                on-click-launch-demo="NAC.analysesMeta.set.launchDemo"
+            ></set-selection>
             <div><em>{{NAC.analysisDescription('set')}}</em></div>
             <div>Demo: <a href="" data-ng-click="NAC.demoSetOperation()">{{NAC.analysisDemoDescription('set')}}</a></div>
             <br>
