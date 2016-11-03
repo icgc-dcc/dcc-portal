@@ -42,8 +42,9 @@ module.exports = {
     ],
     loaders: [
       {
-        test: /index.html$/,
-        loader: 'raw',
+        test: /\.html$/,
+        include: paths.appSrc,
+        loaders: ['raw']
       },
       {
         test: /index.html$/,
