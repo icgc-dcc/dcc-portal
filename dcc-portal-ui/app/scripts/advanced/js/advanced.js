@@ -72,12 +72,12 @@ angular.module('icgc.advanced.controllers', [
       var _isInAdvancedSearchCtrl = true;
 
       _controller.fetchSSMDonorCount = async (filters) => {
-        filters = _.merge(filters, ssmFilter);
+        filters = merge(filters, ssmFilter);
         _controller.SSMDonorCount = await AdvancedDonorService.getSSMDonorCount(filters);
       }
 
       _controller.SSMDonorCountQuery = () => {
-        var filters = _.merge(_.cloneDeep(_locationFilterCache.filters()), ssmFilter);
+        var filters = merge(_.cloneDeep(_locationFilterCache.filters()), ssmFilter);
         return `/search?filters=${angular.toJson(filters)}`;
       }
 

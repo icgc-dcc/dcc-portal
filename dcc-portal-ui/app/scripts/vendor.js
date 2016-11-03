@@ -31,6 +31,7 @@ require('Blob/Blob.js');
 require('expose?saveAs!exports?saveAs!FileSaver/FileSaver.min.js');
 require('expose?X2JS!x2js');
 require('bootstrap');
+require('expose?merge!deepmerge');
 
 require('./ui/js/table2CSV.js');
 require('../vendor/scripts/invariant.js');
