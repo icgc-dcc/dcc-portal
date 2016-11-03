@@ -33,27 +33,31 @@ angular.module('icgc.analysis.setSelection', [])
                       )"
                     style="color: {{
                       vm.isSetCompatibleWithAnalysis(item)
-                        ? vm.isSetCompatibleWithSelectedSets(item)
+                        ? (vm.isSetSelected(item) || vm.isSetCompatibleWithSelectedSets(item))
                           ? ''
                           : '#777'
                         : '#CCC'
                     }}"
+                    ng-class="{'is-selected': vm.isSetSelected(item)}"
                   > 
                       <td
                         class="text-center"
-                        ng-click="vm.isSetCompatibleWithAllContexts(item) && vm.handleClickItem(item)"
+                        ng-click="
+                          (vm.isSetCompatibleWithAllContexts(item) || vm.isSetSelected(item))
+                            && vm.handleClickItem(item)
+                          "
                         tooltip="{{vm.getSetCompatibilityMessage(item)}}"
                         tooltip-placement="right"
                         style="
                           width: 2rem;
-                          cursor: {{ vm.isSetCompatibleWithAllContexts(item) ? 'pointer' : 'help' }}
+                          cursor: {{ (vm.isSetCompatibleWithAllContexts(item) || vm.isSetSelected(item)) ? 'pointer' : 'help' }}
                         "
                       > 
                             <i
                               ng-if="vm.isSetCompatibleWithAnalysis(item)"
                               ng-class="{
-                              'icon-check-empty': vm.selectedSets.indexOf(item) === -1,
-                              'icon-check': vm.selectedSets.indexOf(item) >= 0,
+                              'icon-check-empty': !vm.isSetSelected(item),
+                              'icon-check': vm.isSetSelected(item),
                               }"
                             ></i>
 
@@ -76,7 +80,7 @@ angular.module('icgc.analysis.setSelection', [])
                             {{ item.name }}
                         </span>
                         <i
-                            data-tooltip="{{'Rename set' | translate}}"
+                            tooltip="{{'Rename set' | translate}}"
                             class="icon-pencil"
                             ng-click="itemNameForm.$show()"
                             ng-hide="itemNameForm.$visible"
@@ -89,7 +93,10 @@ angular.module('icgc.analysis.setSelection', [])
               </tbody>
           </table>
           <br>
-          <div tooltip="{{vm.getAnalysisSatifactionMessage()}}">
+          <div
+            tooltip="{{vm.getAnalysisSatifactionMessage()}}"
+            tooltip-placement="right"
+          >
             <button
               class="t_button"
               ng-disabled="!vm.isAnalysisRunnable()"
@@ -118,6 +125,7 @@ angular.module('icgc.analysis.setSelection', [])
       this.onClickLaunchDemo = this.onClickLaunchDemo();
 
       this.selectedSets = [];
+      this.isSetSelected = set => _.includes(this.selectedSets, set);
       this.isAnalysisRunnable = () => this.isAnalysisSatisfied() && !this.isLaunchingAnalysis;
       this.handleClickItem = item => { this.selectedSets = _.xor(this.selectedSets, [item]) };
 
@@ -133,7 +141,7 @@ angular.module('icgc.analysis.setSelection', [])
         .map(x => x.message)
         .join(separator) 
 
-      this.getSetCompatibilityMessage = (set) => getUnsatisfiedCriteriaMessage(this.setCompatibilityCriteria, criterium => !criterium.test(set, this.selectedSets));
+      this.getSetCompatibilityMessage = (set) => this.isSetSelected(set) ? '' : getUnsatisfiedCriteriaMessage(this.setCompatibilityCriteria, criterium => !criterium.test(set, this.selectedSets));
       this.getAnalysisSatifactionMessage = () => getUnsatisfiedCriteriaMessage(this.analysisSatisfactionCriteria, criterium => !criterium.test(this.selectedSets));
 
       this.handleSaveSetName = (set, newName) => SetService.renameSet(set.id, newName);
