@@ -138,7 +138,65 @@
       SELECTED_SETS: 'SELECTED_SETS',
     };
 
+    const setTypeCriterium = type => ({
+      context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
+      test: set => set.type === type,
+      message: gettextCatalog.getString(`Set must be of type "${type}"`),
+    });
+
+    const setItemLimitCriterium = limit => ({
+      context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
+      test: set => set.count <= limit,
+      message: gettextCatalog.getString(`Set must have less than ${limit.toLocaleString()} items`),
+    })
+
+    const setLimitCriterium = limit => ({
+      context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
+      test: (set, selectedSets) => selectedSets.length >= limit
+        ? _.includes(selectedSets, set)
+        : true,
+      message: gettextCatalog.getString(`Only ${limit} set(s) can be selected`),
+    });
+
+    const analysisSetRangeCriterium = (min, max) => ({
+      test: selectedSets => _.inRange(selectedSets.length, min, max + 1),
+      message: gettextCatalog.getString(`Select ${min} to ${max} set(s)`),
+    });
+
+    const analysisSetCountCriterium = count => ({
+      test: selectedSets => selectedSets.length === count,
+      message: gettextCatalog.getString(`Select ${count} set(s)`),
+    });
+
     this.analysesMeta = {
+      enrichment: {
+        strings: AnalysisService.analysesStrings.enrichment,
+        setCompatibilityCriteria: [
+          setTypeCriterium('gene'),
+          setItemLimitCriterium(10000),
+          setLimitCriterium(1),
+        ],
+        analysisSatisfactionCriteria: [
+          {
+            test: selectedSets => selectedSets.length === 1,
+            message: gettextCatalog.getString('Please select 1 set'),
+          }
+        ],
+        launch: selectedSets => launchEnrichment(selectedSets[0]),
+        launchDemo: () => _this.demoEnrichment(),
+      },
+      phenotype: {
+        strings: AnalysisService.analysesStrings.phenotype,
+        setCompatibilityCriteria: [
+          setLimitCriterium(2),
+          setTypeCriterium('donor'),
+        ],
+        analysisSatisfactionCriteria: [
+          analysisSetCountCriterium(2),
+        ],
+        launch: selectedSets => _this.launchPhenotype(selectedSets.map(x => x.id)),
+        launchDemo: () => _this.demoPhenotype(),
+      },
       set: {
         strings: AnalysisService.analysesStrings.set,
         setCompatibilityCriteria: [
@@ -150,38 +208,11 @@
         ],
         areSelectedSetsValid: selectedSets => selectedSets.length,
       },
-      enrichment: {
-        strings: AnalysisService.analysesStrings.enrichment,
-        setCompatibilityCriteria: [
-          {
-            context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
-            test: set => set.type === 'gene',
-            message: gettextCatalog.getString('Set must be of type "gene"'),
-          },
-          {
-            context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
-            test: set => set.count <= 10000,
-            message: gettextCatalog.getString('Set must have less than 10,000 items'),
-          },
-          {
-            context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
-            test: (set, selectedSets) => selectedSets.length === 1
-              ? set === selectedSets[0]
-              : true,
-            message: gettextCatalog.getString('Only 1 set can be selected'),
-          }
-        ],
-        launch: selectedSets => launchEnrichment(selectedSets[0]),
-      },
-      phenotype: {
-        strings: AnalysisService.analysesStrings.phenotype,
-        isSetCompatible: set => set.type === 'donor'
-      },
       oncogrid: {
         strings: AnalysisService.analysesStrings.oncogrid,
         isSetCompatible: set => _.includes(['donor', 'gene'], set.type)
       },
-    }
+    } 
 
 
     _this.isLaunchingAnalysis = function() {

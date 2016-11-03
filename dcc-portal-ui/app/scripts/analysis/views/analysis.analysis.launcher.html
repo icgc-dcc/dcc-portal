@@ -125,25 +125,37 @@
         </div>
     </div>
     <br> 
-    <div data-ng-if="NAC.analysisType" class="wide">
+    <div data-ng-if="NAC.analysisType">
 
         <!-- enrichment -->
         <div data-ng-if="NAC.analysisType === 'enrichment'">
             <set-selection
                 sets="NAC.allSets"
-                description="NAC.analysisDescription('enrichment')"
-                demo-cta-text="NAC.analysisDemoDescription('enrichment')"
-                selection-instructions="NAC.datasetSelectionInstructions('enrichment')"
-                on-click-demo="NAC.demoEnrichment()"
+                description="NAC.analysesMeta.enrichment.strings.description"
+                demo-cta-text="NAC.analysesMeta.enrichment.strings.demoDescription"
+                selection-instructions="NAC.analysesMeta.enrichment.strings.datasetSelectionInstructions"
                 is-launching-analysis="NAC.isLaunchingAnalysis()"
                 set-compatibility-criteria="NAC.analysesMeta.enrichment.setCompatibilityCriteria"
+                analysis-satisfaction-criteria="NAC.analysesMeta.enrichment.analysisSatisfactionCriteria"
                 on-click-launch="NAC.analysesMeta.enrichment.launch"
-                are-selected-sets-valid="NAC.analysesMeta.enrichment.areSelectedSetsValid"
+                on-click-launch-demo="NAC.analysesMeta.enrichment.launchDemo"
             ></set-selection>
         </div>
 
         <!-- phenotype -->
         <div data-ng-if="NAC.analysisType === 'phenotype'">
+            <set-selection
+                sets="NAC.allSets"
+                description="NAC.analysesMeta.phenotype.strings.description"
+                demo-cta-text="NAC.analysesMeta.phenotype.strings.demoDescription"
+                selection-instructions="NAC.analysesMeta.phenotype.strings.datasetSelectionInstructions"
+                is-launching-analysis="NAC.isLaunchingAnalysis()"
+                set-compatibility-criteria="NAC.analysesMeta.phenotype.setCompatibilityCriteria"
+                analysis-satisfaction-criteria="NAC.analysesMeta.phenotype.analysisSatisfactionCriteria"
+                on-click-launch="NAC.analysesMeta.phenotype.launch"
+                on-click-launch-demo="NAC.analysesMeta.phenotype.launchDemo"
+            ></set-selection>
+
             <div><em>{{NAC.analysisDescription('phenotype')}}</em></div>
             <div><translate>Demo</translate>: <a href="" data-ng-click="NAC.demoPhenotype()">{{NAC.analysisDemoDescription('phenotype')}}</a></div>
             <br>

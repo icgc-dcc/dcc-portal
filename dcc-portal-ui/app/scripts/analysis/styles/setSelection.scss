@@ -1,0 +1,10 @@
+.set-selection-component {
+  .set-name-wrapper {
+    .icon-pencil {
+      opacity: 0;
+    }
+    &:hover .icon-pencil{
+      opacity: 1;
+    }
+  }
+}
