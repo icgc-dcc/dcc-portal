@@ -138,10 +138,10 @@
       SELECTED_SETS: 'SELECTED_SETS',
     };
 
-    const setTypeCriterium = type => ({
+    const setTypesCriterium = types => ({
       context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
-      test: set => set.type === type,
-      message: gettextCatalog.getString(`Set must be of type "${type}"`),
+      test: set => _.includes(types, set.type),
+      message: gettextCatalog.getString(`Set must be of type "${types.join(' or ')}"`),
     });
 
     const setItemLimitCriterium = limit => ({
@@ -172,7 +172,7 @@
       enrichment: {
         strings: AnalysisService.analysesStrings.enrichment,
         setCompatibilityCriteria: [
-          setTypeCriterium('gene'),
+          setTypesCriterium(['gene']),
           setItemLimitCriterium(10000),
           setLimitCriterium(1),
         ],
@@ -189,7 +189,7 @@
         strings: AnalysisService.analysesStrings.phenotype,
         setCompatibilityCriteria: [
           setLimitCriterium(2),
-          setTypeCriterium('donor'),
+          setTypesCriterium(['donor']),
         ],
         analysisSatisfactionCriteria: [
           analysisSetCountCriterium(2),
