@@ -95,7 +95,6 @@ angular.module('icgc.analysis.setSelection', [])
           <br>
           <div
             tooltip="{{vm.getAnalysisSatifactionMessage()}}"
-            tooltip-placement="right"
           >
             <button
               class="t_button"
