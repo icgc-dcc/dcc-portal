@@ -239,7 +239,7 @@ require('./setSelection');
           ' affecting a set of donors.'),
         demoDescription: gettextCatalog.getString('Generate an OncoGrid using top 75 donors and genes for PCAWG' +
         ' liver projects.'),
-        datasetSelectionInstructions: gettextCatalog.getString('Select 1 Gene set and 1 Donor set, then click on Run.'),
+        datasetSelectionInstructions: gettextCatalog.getString('<em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(3000 donors maximum)</small>, then click on Run.</em>'),
       }
     };
 
