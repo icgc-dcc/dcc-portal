@@ -126,68 +126,19 @@
     </div>
     <br> 
     <div data-ng-if="NAC.analysisType">
-
-        <!-- enrichment -->
-        <div data-ng-if="NAC.analysisType === 'enrichment'">
-            <set-selection
-                sets="NAC.allSets"
-                description="NAC.analysesMeta.enrichment.strings.description"
-                demo-cta-text="NAC.analysesMeta.enrichment.strings.demoDescription"
-                selection-instructions="NAC.analysesMeta.enrichment.strings.datasetSelectionInstructions"
-                is-launching-analysis="NAC.isLaunchingAnalysis()"
-                set-compatibility-criteria="NAC.analysesMeta.enrichment.setCompatibilityCriteria"
-                analysis-satisfaction-criteria="NAC.analysesMeta.enrichment.analysisSatisfactionCriteria"
-                on-click-launch="NAC.analysesMeta.enrichment.launch"
-                on-click-launch-demo="NAC.analysesMeta.enrichment.launchDemo"
-            ></set-selection>
-        </div>
-
-        <!-- phenotype -->
-        <div data-ng-if="NAC.analysisType === 'phenotype'">
-            <set-selection
-                sets="NAC.allSets"
-                description="NAC.analysesMeta.phenotype.strings.description"
-                demo-cta-text="NAC.analysesMeta.phenotype.strings.demoDescription"
-                selection-instructions="NAC.analysesMeta.phenotype.strings.datasetSelectionInstructions"
-                is-launching-analysis="NAC.isLaunchingAnalysis()"
-                set-compatibility-criteria="NAC.analysesMeta.phenotype.setCompatibilityCriteria"
-                analysis-satisfaction-criteria="NAC.analysesMeta.phenotype.analysisSatisfactionCriteria"
-                on-click-launch="NAC.analysesMeta.phenotype.launch"
-                on-click-launch-demo="NAC.analysesMeta.phenotype.launchDemo"
-            ></set-selection>
-        </div>
-
-
-        <!-- set -->
-        <div data-ng-if="NAC.analysisType === 'set'">
-            <set-selection
-                sets="NAC.allSets"
-                description="NAC.analysesMeta.set.strings.description"
-                demo-cta-text="NAC.analysesMeta.set.strings.demoDescription"
-                selection-instructions="NAC.analysesMeta.set.strings.datasetSelectionInstructions"
-                is-launching-analysis="NAC.isLaunchingAnalysis()"
-                set-compatibility-criteria="NAC.analysesMeta.set.setCompatibilityCriteria"
-                analysis-satisfaction-criteria="NAC.analysesMeta.set.analysisSatisfactionCriteria"
-                on-click-launch="NAC.analysesMeta.set.launch"
-                on-click-launch-demo="NAC.analysesMeta.set.launchDemo"
-            ></set-selection>
-        </div>
-
-        <!-- OncoGrid -->
-        <div data-ng-if="NAC.analysisType === 'oncogrid'">
-            <set-selection
-                sets="NAC.allSets"
-                description="NAC.analysesMeta.oncogrid.strings.description"
-                demo-cta-text="NAC.analysesMeta.oncogrid.strings.demoDescription"
-                selection-instructions="NAC.analysesMeta.oncogrid.strings.datasetSelectionInstructions"
-                is-launching-analysis="NAC.isLaunchingAnalysis()"
-                set-compatibility-criteria="NAC.analysesMeta.oncogrid.setCompatibilityCriteria"
-                analysis-satisfaction-criteria="NAC.analysesMeta.oncogrid.analysisSatisfactionCriteria"
-                on-click-launch="NAC.analysesMeta.oncogrid.launch"
-                on-click-launch-demo="NAC.analysesMeta.oncogrid.launchDemo"
-            ></set-selection>
-        </div>
-
+        <set-selection
+            ng-repeat="analysisType in ['enrichment', 'phenotype', 'set', 'oncogrid']"
+            data-ng-if="analysisType === NAC.analysisType"
+            sets="NAC.allSets"
+            description="NAC.analysesMeta[analysisType].strings.description"
+            demo-cta-text="NAC.analysesMeta[analysisType].strings.demoDescription"
+            selection-instructions="NAC.analysesMeta[analysisType].strings.datasetSelectionInstructions"
+            is-launching-analysis="NAC.isLaunchingAnalysis()"
+            set-compatibility-criteria="NAC.analysesMeta[analysisType].setCompatibilityCriteria"
+            analysis-satisfaction-criteria="NAC.analysesMeta[analysisType].analysisSatisfactionCriteria"
+            on-click-launch="NAC.analysesMeta[analysisType].launch"
+            on-click-launch-demo="NAC.analysesMeta[analysisType].launchDemo"
+        ></set-selection>
     </div>
 </div>
 </section>
