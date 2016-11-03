@@ -215,7 +215,36 @@
       },
       oncogrid: {
         strings: AnalysisService.analysesStrings.oncogrid,
-        isSetCompatible: set => _.includes(['donor', 'gene'], set.type)
+        setCompatibilityCriteria: [
+          setLimitCriterium(2),
+          setTypesCriterium(['gene', 'donor']),
+          {
+            context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
+            test: set => set.type !== 'gene' || set.count <= 100,
+            message: gettextCatalog.getString('Gene set must have fewer than 100 items'),
+          },
+          {
+            context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
+            test: set => set.type !== 'donor' || set.count <= 3000,
+            message: gettextCatalog.getString('Donor set must have fewer than 3000 items'),
+          },
+          {
+            context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
+            test: (set, selectedSets) => !selectedSets.length || selectedSets[0].type !== 'gene' || set.type === 'donor',
+            message: gettextCatalog.getString('Another donor set is required.'),
+          },
+          {
+            context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
+            test: (set, selectedSets) => !selectedSets.length || selectedSets[0].type !== 'donor' || set.type === 'gene',
+            message: gettextCatalog.getString('Another gene set is required.'),
+          },
+        ],
+        analysisSatisfactionCriteria: [
+          {
+            test: selectedSets => selectedSets.length === 2 && !_.xor(selectedSets.map(x => x.type), ['gene', 'donor'].length),
+            message: gettextCatalog.getString(`OncoGrid takes in 1 donor set and 1 gene set`),
+          }
+        ],
       },
     } 
 
