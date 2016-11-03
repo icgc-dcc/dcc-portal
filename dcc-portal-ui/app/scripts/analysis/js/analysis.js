@@ -230,7 +230,8 @@ require('./setSelection');
         description: gettextCatalog.getString('Display the survival analysis of your donor sets and compare some' +
         ' characteristics such as gender, vital status and age at diagnosis between your donor sets.'),
         demoDescription: gettextCatalog.getString('Display survival analysis and compare phenotypes across ' +
-          'donors with pancreatic cancer with and without mutations in the gene KRAS.')
+          'donors with pancreatic cancer with and without mutations in the gene KRAS.'),
+        datasetSelectionInstructions: gettextCatalog.getString('Select 2 donor sets, then click on Run.'),
       },
       oncogrid: {
         name: gettextCatalog.getString('OncoGrid'),
