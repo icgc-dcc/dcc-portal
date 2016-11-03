@@ -245,6 +245,11 @@
             message: gettextCatalog.getString(`OncoGrid takes in 1 donor set and 1 gene set`),
           }
         ],
+        launchDemo: () => _this.demoOncogrid(),
+        launch: selectedSets => _this.launchOncogridAnalysis({
+          donor: _.find(selectedSets, {type: 'donor'}).id,
+          gene: _.find(selectedSets, {type: 'gene'}).id,
+        }),
       },
     } 
 
