@@ -241,7 +241,7 @@
         ],
         analysisSatisfactionCriteria: [
           {
-            test: selectedSets => selectedSets.length === 2 && !_.xor(selectedSets.map(x => x.type), ['gene', 'donor'].length),
+            test: selectedSets => selectedSets.length === 2 && !_.xor(selectedSets.map(x => x.type), ['gene', 'donor']).length,
             message: gettextCatalog.getString(`OncoGrid takes in 1 donor set and 1 gene set`),
           }
         ],
