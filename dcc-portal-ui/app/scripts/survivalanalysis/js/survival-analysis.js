@@ -132,6 +132,8 @@ import { renderPlot } from '@oncojs/survivalplot';
           xmlns:svg="http://www.w3.org/2000/svg"
           xmlns="http://www.w3.org/2000/svg"
           class="exported-survival-svg"
+          width="${svg.attr('width')}"
+          height="${svg.attr('height')}"
         >
           <style>
             <![CDATA[
