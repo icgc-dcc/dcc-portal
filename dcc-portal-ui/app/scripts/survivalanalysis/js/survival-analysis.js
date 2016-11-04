@@ -127,7 +127,7 @@ import { renderPlot } from '@oncojs/survivalplot';
         update();
       };
 
-      this.handleClickExportSvg = () => ExportService.exportData('survivalplot.svg', `
+      const getExportSVG = () => (`
         <svg
           xmlns:svg="http://www.w3.org/2000/svg"
           xmlns="http://www.w3.org/2000/svg"
@@ -161,8 +161,9 @@ import { renderPlot } from '@oncojs/survivalplot';
                 .replace(/"axis-label" dy="(\d+?)"/, '"axis-label" dy="50"')
             }
           </g>
-        </svg>`
-      );
+        </svg>`);
+
+      this.handleClickExportSvg = () => ExportService.exportData('survivalplot.svg', getExportSVG());
 
       this.isFullScreen = isFullScreen;
 
