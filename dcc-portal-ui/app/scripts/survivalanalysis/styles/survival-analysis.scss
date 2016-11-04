@@ -94,6 +94,21 @@ $faded: #e6dede;
     right: 0;
   }
 
+  .composite-button {
+    .icon {
+      transform: translateY(-3px);
+    }
+    .sub {
+      position: absolute;
+      font-size: 8px;
+      font-weight: 800;
+      width: 100%;
+      left: 0;
+      text-align: center;
+      bottom: 1px;
+    }
+  }
+
   .survival-graph {
     width: 100%;
     svg {
