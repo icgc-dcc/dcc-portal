@@ -49,6 +49,7 @@
       </button>
 
       <button
+        ng-if="ctrl.doesSupportPngExport"
         data-tooltip="Export PNG"
         class="btn btn-default composite-button"
         ng-click="ctrl.handleClickExportPng()"

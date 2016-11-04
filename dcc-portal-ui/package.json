@@ -124,6 +124,7 @@
     "lodash": "3.10.1",
     "marked": "0.3.6",
     "ng-annotate-loader": "0.2.0",
+    "platform": "1.3.2",
     "restangular": "1.5.2",
     "singularitygs": "1.7.0",
     "urijs": "1.16.1",

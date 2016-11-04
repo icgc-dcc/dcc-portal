@@ -18,6 +18,7 @@
 import { renderPlot } from '@oncojs/survivalplot';
 import loadImg from 'load-img';
 import getContext from 'get-canvas-context';
+import platform from 'platform';
 
 function svgToSvgDataUri (svg) {
   return 'data:image/svg+xml;base64,'+ btoa(unescape(encodeURIComponent(svg)))
@@ -225,6 +226,8 @@ function svgToPngDataUri(svg, {width, height}) {
       };
 
       this.SetOperationService = SetOperationService;
+
+      this.doesSupportPngExport = !_.includes(['IE', 'Edge'], platform);
   };
 
   module.component('survivalAnalysisGraph', {
