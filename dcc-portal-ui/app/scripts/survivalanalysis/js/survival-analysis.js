@@ -16,6 +16,26 @@
  */
 
 import { renderPlot } from '@oncojs/survivalplot';
+import loadImg from 'load-img';
+import getContext from 'get-canvas-context';
+
+function svgToSvgDataUri (svg) {
+  return 'data:image/svg+xml;base64,'+ btoa(unescape(encodeURIComponent(svg)))
+}
+
+function svgToPngDataUri(svg, {width, height}) {
+  const ctx = getContext('2d', {width, height});
+  const svgDataUri = svgToSvgDataUri(svg);
+
+  return new Promise((resolve, reject) => {
+    loadImg(svgDataUri, {crossOrigin: true}, (err, image) => {
+      if (err) { reject(err); }
+      ctx.drawImage(image, 0, 0);
+      const pngDataUri = ctx.canvas.toDataURL('image/png');
+      resolve(pngDataUri)
+    });
+  });
+}
 
 (function() {
   'use strict';
@@ -127,13 +147,15 @@ import { renderPlot } from '@oncojs/survivalplot';
         update();
       };
 
-      const getExportSVG = () => (`
+      const getSvgString = ({width, height}={}) => (`
         <svg
           xmlns:svg="http://www.w3.org/2000/svg"
           xmlns="http://www.w3.org/2000/svg"
           class="exported-survival-svg"
-          width="${svg.attr('width')}"
-          height="${svg.attr('height')}"
+          ${
+            (width && height) ? `width="${width}" height="${height}"` : ''
+          }
+          viewBox="0 0 ${svg.attr('width')} ${Number(svg.attr('height')) + 120}"
         >
           <style>
             <![CDATA[
@@ -165,7 +187,12 @@ import { renderPlot } from '@oncojs/survivalplot';
           </g>
         </svg>`);
 
-      this.handleClickExportSvg = () => ExportService.exportData('survivalplot.svg', getExportSVG());
+      const exportDimensions = {width: 1200, height: 753};
+      this.handleClickExportSvg = () => ExportService.exportData('survivalplot.svg', getSvgString());
+      this.handleClickExportPng = async () => {
+        const imageDataUri = await svgToPngDataUri(getSvgString(exportDimensions), exportDimensions);
+        ExportService.exportDataUri('survivalplot.png', imageDataUri); 
+      };
 
       this.isFullScreen = isFullScreen;
 
