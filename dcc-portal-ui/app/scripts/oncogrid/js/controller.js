@@ -128,18 +128,22 @@
         $scope.params = {};
         $scope.hasValidParams = false;
 
-        $scope.params.donorsCount = Math.min($scope.donorsLimit || $scope.maxDonorsLimit, $scope.maxDonorsLimit);
-        $scope.params.genesCount = Math.min($scope.genesLimit || $scope.maxGenesLimit, $scope.maxGenesLimit);
+        const resolveLimit = (entityLimit, maxEntityLimit) => {
+            return Math.min(entityLimit || maxEntityLimit, maxEntityLimit);
+        }
+
+        $scope.params.donorsCount = resolveLimit($scope.donorsLimit, $scope.maxDonorsLimit);
+        $scope.params.genesCount = resolveLimit($scope.genesLimit, $scope.maxGenesLimit);
         $scope.params.setName = '';
 
         const hasValidDonorCount = (value) => {
             const count = parseInt(value,10);
-            return !isNaN(count) && _.inRange(count, 0, Math.min($scope.donorsLimit, $scope.maxDonorsLimit)+1);
+            return !isNaN(count) && _.inRange(count, 0, resolveLimit($scope.donorsLimit, $scope.maxDonorsLimit)+1);
         }
 
         const hasValidGeneCount = (value) => {
             const count = parseInt(value,10);
-            return !isNaN(count) && _.inRange(count, 0, Math.min($scope.genesLimit, $scope.maxGenesLimit)+1);
+            return !isNaN(count) && _.inRange(count, 0, resolveLimit($scope.genesLimit, $scope.maxGenesLimit)+1);
         }
 
         $scope.checkInput = () => {
