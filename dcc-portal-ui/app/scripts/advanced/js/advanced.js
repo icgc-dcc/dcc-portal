@@ -496,9 +496,8 @@ angular.module('icgc.advanced.controllers', [
       };
 
         /**
-       * Run Survival/Phenotypw analysis
+       * Run Survival/Phenotype analysis
        */
-      
       _controller.launchSurvivalAnalysis = (entityType, entityId, entitySymbol) => {
         var filters = LocationService.filters();
         SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters);

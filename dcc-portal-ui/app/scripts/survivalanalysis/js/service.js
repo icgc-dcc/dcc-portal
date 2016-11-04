@@ -67,9 +67,9 @@
         var fetchSetsMeta = SetService.getMetaData(setIds);
 
         return $q.all({
-          survivalData: fetchSurvival,
-          setsMeta: fetchSetsMeta,
-        })
+            survivalData: fetchSurvival,
+            setsMeta: fetchSetsMeta,
+          })
           .then(function (responses) {
             return processResponses(responses);
           });
@@ -114,30 +114,26 @@
   module.service('SurvivalAnalysisLaunchService', function(SetService, Restangular, LocationService,
     SetNameService, $timeout, $location, Page){
       const _service = this;
+      _service.setName = '';
 
-      var d1, d2, type = 'donor';
-
-      _service.getSetName = function(filters){
+      const updateSetName = (filters) => {
         return SetNameService.getSetFilters()
-          .then(function (filters) {
-            return SetNameService.getSetName(filters);
-          });
+          .then((filters) => SetNameService.getSetName(filters))
+          .then((setName) => {_service.setName = setName});
       }
 
       // Wait for sets to materialize
-      _service.wait = (ids, numTries, callback) => {
+      const wait = (ids, numTries, callback) => {
         if (numTries <= 0) {
           return;
         }
-        SetService.getMetaData(ids).then(function(data) {
-          var finished = _.filter(data, function(d) {
-            return d.state === 'FINISHED';
-          });
+        SetService.getMetaData(ids).then((data) => {
+          var finished = _.filter(data, (d) =>  d.state === 'FINISHED');
 
           if (finished.length === ids.length) {
             callback(data);
           } else {
-            $timeout(function() {
+            $timeout(() => {
               _service.wait(ids, --numTries, callback);
             }, 1500);
           }
@@ -145,52 +141,53 @@
       }
 
        /* Phenotype comparison only takes in donor set ids */
-      _service.launchAnalysis = (setIds) => {
+      const launchAnalysis = (setIds) => {
         return Restangular
           .one('analysis')
           .post('phenotype', setIds, {}, {'Content-Type': 'application/json'})
-          .then(function(data) {
+          .then((data) => {
             if (!data.id) {
-              console.log('Could not retrieve analysis data.id');
+              throw new Error('Could not retrieve analysis data id', data);
             }
             LocationService.goToPath('analysis/view/phenotype/' + data.id);
-          }).finally(function(){
+          }).finally(() => {
             Page.stopWork();
           });
       };
 
-      _service.launchSurvivalAnalysis = (entityType, entityId, entitySymbol, filters) => {
+      _service.launchSurvivalAnalysis = async (entityType, entityId, entitySymbol, filters, projectId) => {
+
+        const isGene = _.isEqual(entityType, 'gene');
+        const type = 'donor';
+        const projectCode = projectId || '';
+
+        let donorSet1, donorSet2;
 
         Page.startWork();
 
-        _service.getSetName(filters).then(function (setName) {
-          d1 = {
-            filters: entityType === 'gene' ? _.extend(_.clone(filters), {gene: { id: { is: [entityId] } }}) : _.extend(_.clone(filters), {mutation: { id: { is: [entityId] } }}),
-            isTransient: true,
-            type: type,
-            name: entityType === 'gene' ? entitySymbol + ' Mutated Donors ' + setName : 'Donors with ' + entitySymbol + ' ' + setName
-          };
+        await updateSetName(filters);
 
-          d2 = {
-            filters: entityType === 'gene' ? _.extend(_.clone(filters), {gene: { id: { not: [entityId] } }}) : _.extend(_.clone(filters), {mutation: { id: { not: [entityId] } }}),
-            isTransient: true,
-            type: type,
-            name: entityType === 'gene' ? entitySymbol + ' Not Mutated Donors ' + setName : 'Donors without ' + entitySymbol + ' ' + setName
-          };
+        _service.setName = _.includes(_service.setName, 'All') ? '' : _service.setName;
 
-          var setIds = [];
+        donorSet1 = {
+          filters: isGene ? _.extend(_.clone(filters), {gene: { id: { is: [entityId] } }}) : _.extend(_.clone(filters), {mutation: { id: { is: [entityId] } }}),
+          isTransient: true,
+          type: type,
+          name: isGene ? `${entitySymbol} Mutated Donors ${projectCode} ${_service.setName}` : `Donors with mutations ${entitySymbol} ${projectCode} ${_service.setName}`
+        };
 
-          SetService.addSet(type, d1).then(function (r1) {
-            setIds.push(r1.id);
-            SetService.addSet(type, d2).then(function (r2) {
-              setIds.push(r2.id);
-              function proxyLaunch() {
-                _service.launchAnalysis(setIds);
-              }
-              _service.wait(setIds, 7, proxyLaunch);
-            });
-          });
-        });
+        donorSet2 = {
+          filters: isGene ? _.extend(_.clone(filters), {gene: { id: { not: [entityId] } }}) : _.extend(_.clone(filters), {mutation: { id: { not: [entityId] } }}),
+          isTransient: true,
+          type: type,
+          name: isGene ? `${entitySymbol} Not Mutated Donors ${projectCode} ${_service.setName}` : `Donors without mutations ${entitySymbol} ${projectCode} ${_service.setName}`
+        };
+
+        var setIds = [];
+
+        const [r1, r2] = [await SetService.addSet(type, donorSet1), await SetService.addSet(type, donorSet2)];
+        setIds = setIds.concat([r1.id, r2.id]);
+        wait(setIds, 7, () => launchAnalysis(setIds));
 
       }
 

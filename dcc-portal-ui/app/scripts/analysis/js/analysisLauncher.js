@@ -251,8 +251,6 @@
         name: gettextCatalog.getString('Pancreatic - KRAS not mutated ')
       };
 
-      console.log(p1, p2);
-
       var demoSetIds = [];
       Page.startWork();
       SetService.addSet(type, p1).then(function (r1) {

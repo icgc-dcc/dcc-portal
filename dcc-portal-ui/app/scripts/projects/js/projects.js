@@ -576,8 +576,8 @@
        * Run Survival/Phenotypw analysis
        */
       _ctrl.launchSurvivalAnalysis = (entityType, entityId, entitySymbol) => {
-        var filters = LocationService.filters();
-        SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters);
+        var filters = _.merge(LocationService.filters(), {donor: {projectId: {is: [project.id]}}});
+        SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters, project.id);
       }
 
     $scope.$on('$locationChangeSuccess', function (event, dest) {
