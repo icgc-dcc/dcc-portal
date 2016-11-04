@@ -136,8 +136,6 @@ import { renderPlot } from '@oncojs/survivalplot';
           <style>
             <![CDATA[
               ${require('!raw!sass!prepend?data=$selection:#edf8ff;!../styles/survival-analysis.scss')}
-
-
             ]]>
           </style>
           <foreignObject x="20" y="60" width="400" height="150">
