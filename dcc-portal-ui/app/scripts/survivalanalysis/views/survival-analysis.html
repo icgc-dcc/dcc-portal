@@ -30,29 +30,31 @@
       <i ng-if="ctrl.isFullScreen()" class="fa fa-compress"></i>
     </button>
 
-    <button
-      data-tooltip="Export CSV"
-      class="btn btn-default"
-      ng-click="ctrl.onClickExportCsv()"
-    >
-      <i class="fa fa-file-text-o"></i>
-    </button>
+    <span class="btn-group">
+      <button
+        data-tooltip="Export CSV"
+        class="btn btn-default"
+        ng-click="ctrl.onClickExportCsv()"
+      >
+        <i class="fa fa-file-text-o"></i>
+      </button>
 
-    <button
-      data-tooltip="Export SVG"
-      class="btn btn-default"
-      ng-click="ctrl.handleClickExportSvg()"
-    >
-      <i class="fa fa-file-image-o"></i>
-    </button>
+      <button
+        data-tooltip="Export SVG"
+        class="btn btn-default"
+        ng-click="ctrl.handleClickExportSvg()"
+      >
+        <i class="fa fa-file-image-o"></i>
+      </button>
 
-    <button
-      data-tooltip="Export PNG"
-      class="btn btn-default"
-      ng-click="ctrl.handleClickExportPng()"
-    >
-      <i class="fa fa-file-image-o"></i>
-    </button>
+      <button
+        data-tooltip="Export PNG"
+        class="btn btn-default"
+        ng-click="ctrl.handleClickExportPng()"
+      >
+        <i class="fa fa-file-image-o"></i>
+      </button>
+    </span>
   </div>
 
   <h1 class="title" ng-if="ctrl.title">{{ ctrl.title }}</h1>
