@@ -35,6 +35,10 @@ $faded: #e6dede;
     &.x .tick line {
       opacity: 0.1;
     }
+
+    &.y .tick line {
+      opacity: 1;
+    }
   }
 
   .line {
