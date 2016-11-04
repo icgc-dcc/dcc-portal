@@ -170,23 +170,23 @@
         _service.setName = _.includes(_service.setName, 'All') ? '' : _service.setName;
 
         donorSet1 = {
-          filters: isGene ? _.extend(_.clone(filters), {gene: { id: { is: [entityId] } }}) : _.extend(_.clone(filters), {mutation: { id: { is: [entityId] } }}),
+          filters: isGene ? _.merge(_.clone(filters), {gene: { id: { is: [entityId] } }}) : _.merge(_.clone(filters), {mutation: { id: { is: [entityId] } }}),
           isTransient: true,
-          type: type,
+          type,
           name: isGene ? `${entitySymbol} Mutated Donors ${projectCode} ${_service.setName}` : `Donors with mutations ${entitySymbol} ${projectCode} ${_service.setName}`
         };
 
         donorSet2 = {
-          filters: isGene ? _.extend(_.clone(filters), {gene: { id: { not: [entityId] } }}) : _.extend(_.clone(filters), {mutation: { id: { not: [entityId] } }}),
+          filters: isGene ? _.merge(_.clone(filters), {gene: { id: { not: [entityId] } }}) : _.merge(_.clone(filters), {mutation: { id: { not: [entityId] } }}),
           isTransient: true,
-          type: type,
+          type,
           name: isGene ? `${entitySymbol} Not Mutated Donors ${projectCode} ${_service.setName}` : `Donors without mutations ${entitySymbol} ${projectCode} ${_service.setName}`
         };
 
         var setIds = [];
 
-        const [r1, r2] = [await SetService.addSet(type, donorSet1), await SetService.addSet(type, donorSet2)];
-        setIds = setIds.concat([r1.id, r2.id]);
+        const [response1, response2] = [await SetService.addSet(type, donorSet1), await SetService.addSet(type, donorSet2)];
+        setIds = setIds.concat([response1.id, response2.id]);
         wait(setIds, 7, () => launchAnalysis(setIds));
 
       }
