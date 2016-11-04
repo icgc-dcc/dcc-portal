@@ -608,6 +608,8 @@
     
     var _service = this;
 
+    const maxLength = 61;
+
     // Function to get UI friendly filter
     _service.getSetFilters = function() {
       var ids = LocationService.extractSetIds(FilterService.filters());
@@ -653,7 +655,7 @@
           }
         });
 
-        // Returning Promise Object
+        // Returning Promise Object of names joined by '/' in a single facet term.
         return Promise.all(partialNamesRequests).then(function (partialNames) {
           return partialNames.join(' / ');
         });
@@ -663,7 +665,7 @@
       return Promise.all(promises)
         .then(function (nameParts) {
           var name = nameParts.join(', ');
-          return name.length > 61 ? name.slice(0, 61 - name.length).concat('...') : name;
+          return name.length > maxLength ? name.slice(0, maxLength - name.length).concat('...') : name;
         });
     }
   });

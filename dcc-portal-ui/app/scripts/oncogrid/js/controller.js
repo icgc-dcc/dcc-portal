@@ -126,104 +126,70 @@
         $scope.maxGenesLimit = 100;
 
         $scope.params = {};
-        $scope.hasValidParams= false;
+        $scope.hasValidParams = false;
 
-        $scope.params.donorsCount = Math.min($scope.donorsLimit || 3000, $scope.maxDonorsLimit);
-        $scope.params.genesCount = Math.min($scope.genesLimit || 100, $scope.maxGenesLimit);
+        const resolveLimit = (entityLimit, maxEntityLimit) => {
+            return Math.min(entityLimit || maxEntityLimit, maxEntityLimit);
+        }
+
+        $scope.params.donorsCount = resolveLimit($scope.donorsLimit, $scope.maxDonorsLimit);
+        $scope.params.genesCount = resolveLimit($scope.genesLimit, $scope.maxGenesLimit);
         $scope.params.setName = '';
 
-        $scope.hasValidDonorCount = function(value){
-            var val = parseInt(value,10);
-            if (isNaN(val)) {
-                return false;
-            }
-            if (!angular.isNumber(val) || val > $scope.maxDonorsLimit || val <= 0 || val > $scope.donorsLimit) {
-                return false;
-            }
-            return true;
+        const hasValidDonorCount = (value) => {
+            const count = parseInt(value,10);
+            return !isNaN(count) && _.inRange(count, 0, resolveLimit($scope.donorsLimit, $scope.maxDonorsLimit)+1);
         }
 
-        $scope.hasValidGeneCount = function(value){
-            var val = parseInt(value,10);
-            if (isNaN(val)) {
-                return false;
-            }
-            if (!angular.isNumber(val) || val > $scope.maxGenesLimit || val <= 0 || val > $scope.genesLimit) {
-                return false;
-            }
-            return true;
+        const hasValidGeneCount = (value) => {
+            const count = parseInt(value,10);
+            return !isNaN(count) && _.inRange(count, 0, resolveLimit($scope.genesLimit, $scope.maxGenesLimit)+1);
         }
 
-        $scope.checkInput = function() {
-            var params = $scope.params;
-            if ($scope.hasValidDonorCount(params.donorsCount) && 
-                $scope.hasValidGeneCount(params.genesCount)) {
-                $scope.hasValidParams = true;
-            } else {
-                $scope.hasValidParams = false;
-            }
+        $scope.checkInput = () => {
+            const params = $scope.params;
+            $scope.hasValidParams = hasValidDonorCount(params.donorsCount) && hasValidGeneCount(params.genesCount);
         };
 
-        $scope.getSetName = function(filters){
+        const getSetName = (filters) => {
             return SetNameService.getSetFilters()
-                .then(function (filters) {
+                .then(filters => {
                     return SetNameService.getSetName(filters);
                 })
-                .then(function (setName) {
+                .then(setName => {
                     $scope.params.setName = setName;
                 });
         }
 
-        $scope.getDonorsParams = function(){
-
-            var donorSetParams = {
-                filters: $scope.filters || {},
-                size: $scope.params.donorsCount,
-                type: 'donor',
-                isTransient: true,
-                name: `Top ${$scope.params.donorsCount} Donors: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
-            };
-
-            return donorSetParams;
-        }
-
-        $scope.getGenesParams = function(){
-
-             var geneSetParams = {
-                filters: $scope.filters || {},
-                size: $scope.params.genesCount,
-                type: 'gene',
-                isTransient: true,
-                name: `Top ${$scope.params.genesCount} Genes: ${_.includes($scope.params.setName, 'All') ? '' : $scope.params.setName}`
-            };
-
-            return geneSetParams;
-        }
+        const getSetParams = (entity, count) => ({
+            filters: $scope.filters || {},
+            size: count,
+            type: entity,
+            isTransient: true,
+            name: `Top ${count} ${_.capitalize(entity)}s ${_.includes($scope.params.setName, 'All') ? '' : `: ${$scope.params.setName}`}`
+        })
 
         // Wait for sets to materialize
         function wait(ids, numTries, callback) {
             if (numTries <= 0) {
                 return;
             }
-            SetService.getMetaData(ids).then(function(data) {
-                var finished = _.filter(data, function(d) {
-                return d.state === 'FINISHED';
+            SetService.getMetaData(ids).then(data => {
+                var finished = _.filter(data, d => {
+                    return d.state === 'FINISHED';
                 });
 
-
                 if (finished.length === ids.length) {
-                callback(data);
+                    callback(data);
                 } else {
-                $timeout(function() {
-                    wait(ids, --numTries, callback);
-                }, 1500);
+                    $timeout(() => {
+                        wait(ids, --numTries, callback);
+                    }, 1500);
                 }
             });
         }
 
-        $scope.launchOncogridAnalysis = function (setIds) {
-            console.log('Launching OncoGrid with: ', setIds);
-            
+        $scope.launchOncogridAnalysis = (setIds) => {
             var payload = {
                 donorSet: setIds.donor,
                 geneSet: setIds.gene
@@ -232,26 +198,26 @@
             return Restangular
                 .one('analysis')
                 .post('oncogrid', payload, {}, { 'Content-Type': 'application/json' })
-                .then(function (data) {
+                .then(data => {
                     if (!data.id) {
                         throw new Error('Received invalid response from analysis creation');
                     }
                     LocationService.goToPath('analysis/view/oncogrid/' + data.id);
-                }).finally(function(){
+                }).finally(() => {
                     $scope.isLaunchingOncoGrid = false;
                 });
         };
 
-        $scope.cancel = function() {
+        $scope.cancel = () => {
             $modalInstance.dismiss('cancel');
         };
 
-        $scope.newOncoGridAnalysis = function(){
+        $scope.newOncoGridAnalysis = () => {
             $scope.isLaunchingOncoGrid = true;
             $q.all({
-                r1: SetService.addSet('donor', $scope.getDonorsParams()),
-                r2: SetService.addSet('gene', $scope.getGenesParams())
-            }).then(function (responses) {
+                r1: SetService.addSet('donor', getSetParams('donor', $scope.params.donorsCount)),
+                r2: SetService.addSet('gene', getSetParams('gene', $scope.params.genesCount))
+            }).then(responses => {
                 var r1 = responses.r1;
                 var r2 = responses.r2;
 
@@ -263,7 +229,7 @@
         }
 
         $scope.checkInput();
-        $scope.getSetName($scope.filters);
+        getSetName($scope.filters);
     });
 
 })(jQuery, OncoGrid);

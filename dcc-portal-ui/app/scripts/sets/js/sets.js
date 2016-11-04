@@ -149,10 +149,8 @@
 
     function updateSetName(){
       return SetNameService.getSetFilters()
-        .then(function (filters) {
-          return SetNameService.getSetName(filters, $scope.params.setType);
-        })
-        .then(function (setName) {
+        .then(filters => SetNameService.getSetName(filters, $scope.params.setType))
+        .then(setName => {
           $scope.params.setName = setName;
         });
     }

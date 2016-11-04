@@ -13,13 +13,16 @@
       <ul>
         <li>
           <div>
-            <span>Show </span>
+            <span><translate>Show</translate></span>
             <input type="text"
               style="width:10%;margin:0 5px;"
               data-ng-model="params.donorsCount"
               data-ng-change="checkInput()"
               integer-validator/>
-            <span> most affected donors (Max: {{ maxDonorsLimit }})</span>
+            <span>
+              <translate>most affected donors</translate> 
+              (<translate>Max</translate>: {{ maxDonorsLimit }})
+            </span>
           </div>
         </li>
         <li style="margin-top:20px;">
@@ -30,7 +33,10 @@
               data-ng-model="params.genesCount"
               data-ng-change="checkInput()"
               integer-validator/>
-            <span> most mutated genes (Max: {{ maxGenesLimit }})</span>
+            <span>
+              <translate>most mutated genes</translate> 
+              (<translate>Max</translate>: {{ maxGenesLimit }})
+            </span>
           </div>
         </li>
       </ul>
