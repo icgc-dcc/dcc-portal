@@ -12,8 +12,14 @@ $faded: #e6dede;
       stroke: $faded
     }
 
-    .tick text {
-      fill: #888
+    .tick {
+      line {
+        stroke: #666;
+      }
+      text {
+        fill: #888;
+        font-size: 1.2ex;
+      }
     }
 
     .axis-label {
@@ -21,6 +27,13 @@ $faded: #e6dede;
       font-size: 0.75rem;
       fill: hsl(0, 0%, 60%);
       font-weight: 300;
+    }
+    .minor line {
+      stroke: #e6dede;
+    }
+
+    &.x .tick line {
+      opacity: 0.1;
     }
   }
 
@@ -91,7 +104,7 @@ $faded: #e6dede;
     opacity: 0.6;
     &:before {
       height: 1em;
-      @extend .absolute-center;
+      @extend .absolute-center !optional;
     }
   }
 
@@ -133,5 +146,15 @@ $faded: #e6dede;
 
   .p-value-test{
     text-align: center;
+  }
+}
+
+.exported-survival-svg {
+  .legend li {
+    cursor: default;
+    font-size: 11px;
+    line-height: 1.7;
+    position: relative;
+    display: block;
   }
 }

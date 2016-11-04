@@ -131,10 +131,13 @@ import { renderPlot } from '@oncojs/survivalplot';
         <svg
           xmlns:svg="http://www.w3.org/2000/svg"
           xmlns="http://www.w3.org/2000/svg"
+          class="exported-survival-svg"
         >
           <style>
             <![CDATA[
-              ${require('raw!./css-to-include-in-svg-export.txt')}
+              ${require('!raw!sass!prepend?data=$selection:#edf8ff;!../styles/survival-analysis.scss')}
+
+
             ]]>
           </style>
           <foreignObject x="20" y="60" width="400" height="150">
