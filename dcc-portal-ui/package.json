@@ -85,6 +85,7 @@
     "ng-annotate-loader": "0.2.0",
     "node-sass": "3.10.0",
     "opn": "4.0.2",
+    "phantomjs-prebuilt": "2.1.13",
     "promise": "7.1.1",
     "raw-loader": "0.5.1",
     "rimraf": "2.5.4",
