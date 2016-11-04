@@ -149,10 +149,10 @@
 
         const getSetName = (filters) => {
             return SetNameService.getSetFilters()
-                .then(function (filters) {
+                .then(filters => {
                     return SetNameService.getSetName(filters);
                 })
-                .then(function (setName) {
+                .then(setName => {
                     $scope.params.setName = setName;
                 });
         }
@@ -170,22 +170,22 @@
             if (numTries <= 0) {
                 return;
             }
-            SetService.getMetaData(ids).then(function(data) {
-                var finished = _.filter(data, function(d) {
+            SetService.getMetaData(ids).then(data => {
+                var finished = _.filter(data, d => {
                     return d.state === 'FINISHED';
                 });
 
                 if (finished.length === ids.length) {
                     callback(data);
                 } else {
-                    $timeout(function() {
+                    $timeout(() => {
                         wait(ids, --numTries, callback);
                     }, 1500);
                 }
             });
         }
 
-        $scope.launchOncogridAnalysis = function (setIds) {
+        $scope.launchOncogridAnalysis = (setIds) => {
             var payload = {
                 donorSet: setIds.donor,
                 geneSet: setIds.gene
@@ -194,26 +194,26 @@
             return Restangular
                 .one('analysis')
                 .post('oncogrid', payload, {}, { 'Content-Type': 'application/json' })
-                .then(function (data) {
+                .then(data => {
                     if (!data.id) {
                         throw new Error('Received invalid response from analysis creation');
                     }
                     LocationService.goToPath('analysis/view/oncogrid/' + data.id);
-                }).finally(function(){
+                }).finally(() => {
                     $scope.isLaunchingOncoGrid = false;
                 });
         };
 
-        $scope.cancel = function() {
+        $scope.cancel = () => {
             $modalInstance.dismiss('cancel');
         };
 
-        $scope.newOncoGridAnalysis = function(){
+        $scope.newOncoGridAnalysis = () => {
             $scope.isLaunchingOncoGrid = true;
             $q.all({
                 r1: SetService.addSet('donor', getSetParams('donor', $scope.params.donorsCount)),
                 r2: SetService.addSet('gene', getSetParams('gene', $scope.params.genesCount))
-            }).then(function (responses) {
+            }).then(responses => {
                 var r1 = responses.r1;
                 var r2 = responses.r2;
 

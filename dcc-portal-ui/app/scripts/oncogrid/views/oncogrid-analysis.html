@@ -27,7 +27,7 @@
             <td><translate>Donor</translate></td>
             <td>{{donorSetName || item.donorSetName}}</td>
             <td class="text-right"><a href="{{donorLink}}">{{item.donorCount | number}}</a></td>
-            <td style="font-size:1.25rem;">                            
+            <td style="font-size:1.25rem;min-width:11rem;">
               <span class="t_tools__tool">
                 <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.donorSet)"></i>
               </span>
@@ -47,7 +47,7 @@
             <td><translate>Gene</translate></td>
             <td>{{geneSetName || item.geneSetName}}</td>
             <td class="text-right"><a href="{{geneLink}}">{{item.geneCount | number}}</a></td>
-            <td style="font-size:1.25rem;">                            
+            <td style="font-size:1.25rem;">
               <span class="t_tools__tool">
                 <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.geneSet)"></i>
               </span>
