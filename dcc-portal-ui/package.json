@@ -107,6 +107,7 @@
     "npm": ">=3"
   },
   "dependencies": {
+    "@oncojs/survivalplot": "0.3.3",
     "angular-marked": "1.2.2",
     "angular-xeditable": "^0.4.0",
     "backbone": "1.0.0",
