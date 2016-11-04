@@ -1,0 +1,58 @@
+<div class="modal-content">
+  <!-- header -->
+  <div class="modal-header clearfix">
+    <h3 class="pull-left"><translate>Perform OncoGrid Analysis</translate></h3>
+    <button class="pull-right t_button" data-ng-click="cancel()">
+      <i class="icon-cancel"></i>
+    </button>
+  </div>
+
+  <!-- body -->
+  <div class="modal-body">
+    <div>
+      <ul>
+        <li>
+          <div>
+            <span><translate>Show</translate></span>
+            <input type="text"
+              style="width:10%;margin:0 5px;"
+              data-ng-model="params.donorsCount"
+              data-ng-change="checkInput()"
+              integer-validator/>
+            <span>
+              <translate>most affected donors</translate> 
+              (<translate>Max</translate>: {{ maxDonorsLimit }})
+            </span>
+          </div>
+        </li>
+        <li style="margin-top:20px;">
+          <div>
+            <span>Show </span>
+            <input type="text" 
+              style="width:10%;margin:0 5px;" 
+              data-ng-model="params.genesCount"
+              data-ng-change="checkInput()"
+              integer-validator/>
+            <span>
+              <translate>most mutated genes</translate> 
+              (<translate>Max</translate>: {{ maxGenesLimit }})
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+    <!-- footer -->
+    <div class="modal-footer">
+      <button class="t_button" data-ng-click="cancel();"><translate>Cancel</translate></button>
+      <button class="t_button" 
+        data-ng-click="newOncoGridAnalysis()"
+        data-ng-disabled="!hasValidParams || isLaunchingOncoGrid"
+        >
+        <span data-ng-if="isLaunchingOncoGrid"><i class="icon-spinner icon-spin"></i></span>
+        <translate>Submit</translate>
+      </button>
+    </div>
+</div>
+
