@@ -1,5 +1,5 @@
-<h3 style="margin-bottom:0">
-    <translate>Survival Analysis / Phenotype Comparison</translate>
+<h3>
+    {{analysisName}}
     <span style="font-size:1rem" class="pull-right" data-ng-if="!isDeprecated">
         <share-button></share-button>
     </span>
@@ -36,7 +36,59 @@
     <br>
 
     <div class="survival-analysis-wrapper">
-        <strong><translate>Survival analysis</translate></strong>
+        <h3><translate>Survival Analysis</translate></h3>
+
+        <br>
+        <div class="t_tabs t_tabs__isolated t_tabs--smaller t_tabs--no-accent">
+            <div
+                class="t_tabs__tab"
+                ng-class="{
+                    active: activeSurvivalGraph === 'overall'
+                }"
+                ng-click="activeSurvivalGraph = 'overall'"
+            ><translate>Overall Survival</translate></div>
+            <div
+                class="t_tabs__tab"
+                ng-class="{
+                    active: activeSurvivalGraph === 'diseaseFree'
+                }"
+                ng-click="activeSurvivalGraph = 'diseaseFree'"
+            ><translate>Disease Free Survival</translate></div>
+        </div>
+
+        <div class="survival-graphs">
+            <survival-analysis-graph
+                ng-class="{disabled: activeSurvivalGraph !== 'overall' && activeSurvivalGraph !== undefined}"
+                data-data-sets="survivalAnalysisDataSets.overall"
+                tip-labels="{
+                    survivalEstimate: 'Survival estimate',
+                    survivalTime: 'Time of death',
+                    censoredSurvivalTime: 'Interval of last follow-up',
+                }"
+                censored-statuses="['alive']"
+                palette="seriesColours"
+                title="'Overall Survival'"
+                pvalue="survivalAnalysisDataSets.overallStats.pvalue"
+                on-click-export-csv="exportDonors('overall', survivalAnalysisDataSets.overall)"
+            ></survival-analysis-graph>
+
+            <survival-analysis-graph
+                ng-class="{disabled: activeSurvivalGraph !== 'diseaseFree'}"
+                data-data-sets="survivalAnalysisDataSets.diseaseFree"
+                tip-labels="{
+                    survivalEstimate: 'Disease free estimate',
+                    survivalTime: 'Time of relapse / progression',
+                    censoredSurvivalTime: 'Interval from primary treatment to last follow-up',
+                }"
+                censored-statuses="['progression', 'relapse']"
+                palette="seriesColours"
+                title="'Disease Free Survival'"
+                pvalue="survivalAnalysisDataSets.diseaseFreeStats.pvalue"
+                on-click-export-csv="exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
+            ></survival-analysis-graph>
+        </div>
+    </div>
+    <br>
 
         <div class="container-fluid">
             <div class="row">
@@ -58,7 +110,6 @@
                         <div>
                             <div>
                                 <span style="color:{{seriesColours[$index]}}">{{setMap[donorSetId].name}}</span>
-                                <sub>( S{{($index + 1)}} )</sub>
                             </div>
                             <small>
                                 <translate>Donor count</translate>: {{setMap[setIds[$index]].count | number}}
@@ -87,12 +138,6 @@
                 <tr>
                     <td>
                         <translate>Overall Survival Analysis</translate>
-                        <i
-                            class="icon-file t_tools t_tools__tool pull-right"
-                            ng-click="exportDonors('overall', survivalAnalysisDataSets.overall)"
-                            data-tooltip="{{ 'Export data for [[ survivalGraph ]] survival analysis as TSV' | translate | subDelimiters:{survivalGraph : activeSurvivalGraph === 'overall' ? 'overall' : 'disease free'} }}"
-                            data-tooltip-placement="left"
-                        ></i>
                     </td>
 
                     <td
@@ -115,12 +160,6 @@
                 <tr>
                     <td>
                         <translate>Disease Free Survival Analysis</translate>
-                        <i
-                            class="icon-file t_tools t_tools__tool pull-right"
-                            ng-click="exportDonors('diseaseFree', survivalAnalysisDataSets.diseaseFree)"
-                            data-tooltip="{{'Export data for [[ survivalGraph ]] survival analysis as TSV' | translate | subDelimiters:{survivalGraph : activeSurvivalGraph === 'overall' ? 'overall' : 'disease free'} }}"
-                            data-tooltip-placement="left"
-                        ></i>
                     </td>
 
                     <td
@@ -168,59 +207,9 @@
             </div>
         </div>
 
-        <br>
-        <div class="t_tabs t_tabs__isolated t_tabs--smaller t_tabs--no-accent">
-            <div
-                class="t_tabs__tab"
-                ng-class="{
-                    active: activeSurvivalGraph === 'overall'
-                }"
-                ng-click="activeSurvivalGraph = 'overall'"
-            ><translate>Overall Survival</translate></div>
-            <div
-                class="t_tabs__tab"
-                ng-class="{
-                    active: activeSurvivalGraph === 'diseaseFree'
-                }"
-                ng-click="activeSurvivalGraph = 'diseaseFree'"
-            ><translate>Disease Free Survival</translate></div>
-        </div>
-
-        <div class="survival-graphs">
-            <survival-analysis-graph
-                ng-class="{disabled: activeSurvivalGraph !== 'overall' && activeSurvivalGraph !== undefined}"
-                data-data-sets="survivalAnalysisDataSets.overall"
-                tip-labels="{
-                    survivalEstimate: 'Survival estimate',
-                    survivalTime: 'Time of death',
-                    censoredSurvivalTime: 'Interval of last follow-up',
-                }"
-                censored-statuses="['alive']"
-                palette="seriesColours"
-                title="'Overall Survival Analysis'"
-                pvalue="survivalAnalysisDataSets.overallStats.pvalue"
-            ></survival-analysis-graph>
-
-            <survival-analysis-graph
-                ng-class="{disabled: activeSurvivalGraph !== 'diseaseFree'}"
-                data-data-sets="survivalAnalysisDataSets.diseaseFree"
-                tip-labels="{
-                    survivalEstimate: 'Disease free estimate',
-                    survivalTime: 'Time of relapse / progression',
-                    censoredSurvivalTime: 'Interval from primary treatment to last follow-up',
-                }"
-                censored-statuses="['progression', 'relapse']"
-                palette="seriesColours"
-                title="'Disease Free Survival Analysis'"
-                pvalue="survivalAnalysisDataSets.diseaseFreeStats.pvalue"
-            ></survival-analysis-graph>
-        </div>
-    </div>
-
-
     <br>
     <div data-ng-class="wide"> 
-        <strong><translate>Gender comparison</translate></strong>
+        <h3><translate>Gender Comparison</translate></h3>
         <span data-toolbar data-dl="phenotype-gender"></span>
     </div>
 
@@ -290,7 +279,7 @@
 
     <br>
     <div data-ng-class="wide">
-        <strong><translate>Vital status comparison</translate></strong>
+        <h3><translate>Vital Status Comparison</translate></h3>
         <span data-toolbar data-dl="phenotype-vital-status"></span>
     </div>
     <div data-ng-class="wide"> 
@@ -360,7 +349,7 @@
 
     <br>
     <div data-ng-class="wide">
-        <strong><translate>Age at diagnosis comparison</translate></strong>
+        <h3><translate>Age at Diagnosis Comparison</translate></h3>
         <span data-toolbar data-dl="phenotype-age"></span>
     </div>
     <div data-ng-class="wide"> 

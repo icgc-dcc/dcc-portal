@@ -12,8 +12,14 @@ $faded: #e6dede;
       stroke: $faded
     }
 
-    .tick text {
-      fill: #888
+    .tick {
+      line {
+        stroke: #666;
+      }
+      text {
+        fill: #888;
+        font-size: 1.2ex;
+      }
     }
 
     .axis-label {
@@ -21,6 +27,17 @@ $faded: #e6dede;
       font-size: 0.75rem;
       fill: hsl(0, 0%, 60%);
       font-weight: 300;
+    }
+    .minor line {
+      stroke: #e6dede;
+    }
+
+    &.x .tick line {
+      opacity: 0.1;
+    }
+
+    &.y .tick line {
+      opacity: 1;
     }
   }
 
@@ -69,29 +86,27 @@ $faded: #e6dede;
 
 }
 
-%survivalIconButon {
-  display: block;
-  color: $iconColor;
-  cursor: pointer !important;
-  transition: all 0.2s ease;
-  &:hover {
-    transform: scale(1.1);
-  }
-  &.disabled {
-    visibility: hidden;
-  }
-}
-
 .survival-analysis {
   position: relative;
 
-  .undo-button {
-    @extend %survivalIconButon;
+  .tool-buttons {
+    position: absolute;
+    right: 0;
   }
 
-  .fullscreen-toggle {
-    @extend %survivalIconButon;
-    margin-left: 6px;
+  .composite-button {
+    .icon {
+      transform: translateY(-3px);
+    }
+    .sub {
+      position: absolute;
+      font-size: 8px;
+      font-weight: 800;
+      width: 100%;
+      left: 0;
+      text-align: center;
+      bottom: 1px;
+    }
   }
 
   .survival-graph {
@@ -108,7 +123,7 @@ $faded: #e6dede;
     opacity: 0.6;
     &:before {
       height: 1em;
-      @extend .absolute-center;
+      @extend .absolute-center !optional;
     }
   }
 
@@ -149,6 +164,16 @@ $faded: #e6dede;
   }
 
   .p-value-test{
-    margin-right: 1rem;
+    text-align: center;
+  }
+}
+
+.exported-survival-svg {
+  .legend li {
+    cursor: default;
+    font-size: 11px;
+    line-height: 1.7;
+    position: static;
+    display: block;
   }
 }
