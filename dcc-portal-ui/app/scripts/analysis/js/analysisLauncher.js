@@ -170,6 +170,7 @@
 
     this.analysesMeta = {
       enrichment: {
+        type: 'enrichment',
         strings: AnalysisService.analysesStrings.enrichment,
         setCompatibilityCriteria: [
           setTypesCriterium(['gene']),
@@ -186,6 +187,7 @@
         launchDemo: () => _this.demoEnrichment(),
       },
       phenotype: {
+        type: 'phenotype',
         strings: AnalysisService.analysesStrings.phenotype,
         setCompatibilityCriteria: [
           setLimitCriterium(2),
@@ -198,6 +200,7 @@
         launchDemo: () => _this.demoPhenotype(),
       },
       set: {
+        type: 'set',
         strings: AnalysisService.analysesStrings.set,
         setCompatibilityCriteria: [
           setLimitCriterium(3),
@@ -214,6 +217,7 @@
         launchDemo: () => _this.demoSetOperation(),
       },
       oncogrid: {
+        type: 'oncogrid',
         strings: AnalysisService.analysesStrings.oncogrid,
         setCompatibilityCriteria: [
           setLimitCriterium(2),
@@ -253,6 +257,19 @@
       },
     } 
 
+    _this.addCustomGeneSet = function() {
+      $modal.open({
+        templateUrl: '/scripts/genelist/views/upload.html',
+        controller: 'GeneListController'
+      });
+    };
+
+    _this.selectedAnalysis = undefined;
+
+    _this.handleClickAnalysis = analysis => {
+      _this.selectedAnalysis = analysis === _this.selectedAnalysis ? undefined : analysis;
+      _this.analysisType = (_this.selectedAnalysis || {}).type;
+    };
 
     _this.isLaunchingAnalysis = function() {
       return _isLaunchingAnalysis;

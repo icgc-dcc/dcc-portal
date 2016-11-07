@@ -1,44 +1,32 @@
 <section>
 <div data-ng-if="!analysisId" data-ng-controller="NewAnalysisController as NAC" class="analysis">
-    <div style="font-size:1.25rem">
-        <span class="action-toolbar" data-ng-show="NAC.analysisType !== null">
-          <span class="action-item">
-            <i class="icon-beaker"></i><a href="" data-ng-click="NAC.analysisType = null"><translate>Analysis</translate></a>
-          </span>                  
-        </span>
-        <span data-ng-show="NAC.analysisType !== null">&gt;</span>
-        <span data-ng-show="NAC.analysisType !== null">
-          <translate>Select {{NAC.analysisType === 'enrichment'?'set':'sets'}} for 
-          <strong>{{NAC.analysisName(NAC.analysisType)}}</strong></translate>
-        </span>
-    </div>
-
-    <div data-ng-show="NAC.analysisType === null">
-        <div>
+    <div class="row">
+        <div class="analysis-tools-wrapper col-sm-6">
             <div class="analysis-tiles">
                 <div
                     class="analysis-tile-container"
                     ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
+                    ng-click="NAC.handleClickAnalysis(analysis)"
                 >
                     <div class="analysis-tile">
                         <h2 class="analysis-title">
-                           {{analysis.strings.name}}
+                            {{analysis.strings.name}}
                         </h2>
                         <img
-                           class="analysis-illustration"
-                           ng-src="/styles/images/analysis-{{analysisType}}.svg"
+                            class="analysis-illustration"
+                            ng-src="/styles/images/analysis-{{analysisType}}.svg"
                         />
                         <div class="analysis-tile-detail">{{analysis.strings.description}}</div>
                     </div>
 
                     <div class="tile-extra-container" data-ng-click="analysis.launchDemo()">
                         <div class="tile-extra">
-                           <h3 class="demo-title">
-                              <translate>Demo</translate>
-                           </h3>
-                           <div class="demo-description">
-                              {{analysis.strings.demoDescription}}
-                           </div>
+                            <h3 class="demo-title">
+                                <translate>Demo</translate>
+                            </h3>
+                            <div class="demo-description">
+                                {{analysis.strings.demoDescription}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -54,22 +42,50 @@
                 </a>
             </div>
         </div>
-    </div>
-    <br> 
-    <div data-ng-if="NAC.analysisType">
-        <set-selection
-            ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
-            data-ng-if="analysisType === NAC.analysisType"
-            sets="NAC.allSets"
-            description="analysis.strings.description"
-            demo-cta-text="analysis.strings.demoDescription"
-            selection-instructions="analysis.strings.datasetSelectionInstructions"
-            is-launching-analysis="NAC.isLaunchingAnalysis()"
-            set-compatibility-criteria="analysis.setCompatibilityCriteria"
-            analysis-satisfaction-criteria="analysis.analysisSatisfactionCriteria"
-            on-click-launch="analysis.launch"
-            on-click-launch-demo="analysis.launchDemo"
-        ></set-selection>
+
+        <div class="set-selection-wrapper col-sm-6">
+            <div style="font-size:1.25rem" data-ng-show="NAC.selectedAnalysis">
+                <translate>Select {{NAC.selectedAnalysis.type === 'enrichment' ? 'set' : 'sets'}} for 
+                <strong>{{NAC.selectedAnalysis.type}}</strong></translate>
+            </div>
+
+            <div>
+                <translate has-markup>You can create and save new <strong>donor</strong>, <strong>gene</strong>, or <strong>mutation</strong> sets of interest from
+                <span class="action-toolbar"><span class="action-item"><i class="icon-search"></i><a href="/search">Advanced Search.</a></span></span></translate>
+                <br>
+
+                <translate has-markup>
+                    You can also
+                    <span class="action-toolbar">
+                        <span class="action-item">
+                            <i class="icon-floppy"></i>
+                            <a href="" data-ng-click="NAC.addCustomGeneSet()">Upload your own gene set.</a>
+                        </span>
+                    </span>
+                </translate>
+            </div>
+            <set-selection
+                data-ng-if="!NAC.analysisType"
+                sets="NAC.allSets"
+                description="analysis.strings.description"
+                selection-instructions=""
+                is-launching-analysis="NAC.isLaunchingAnalysis()"
+                set-compatibility-criteria="[]"
+                analysis-satisfaction-criteria="[]"
+            ></set-selection>
+            <set-selection
+                ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
+                data-ng-if="analysisType === NAC.analysisType"
+                sets="NAC.allSets"
+                description="analysis.strings.description"
+                selection-instructions="analysis.strings.datasetSelectionInstructions"
+                is-launching-analysis="NAC.isLaunchingAnalysis()"
+                set-compatibility-criteria="analysis.setCompatibilityCriteria"
+                analysis-satisfaction-criteria="analysis.analysisSatisfactionCriteria"
+                on-click-launch="analysis.launch"
+                on-click-launch-demo="analysis.launchDemo"
+            ></set-selection>
+        </div>
     </div>
 </div>
 </section>
