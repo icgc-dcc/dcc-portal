@@ -24,12 +24,29 @@
       align-items: center;
       cursor: pointer;
       justify-content: space-between;
+      width: calc(50% - 1rem);
+      margin: 0 0.5rem 1rem;
 
       transition: all 0.15s $inExpo;
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.07);
+      border-top: 1px solid rgba(0, 0, 0, 0.04);
+      border-left: 1px solid rgba(0, 0, 0, 0.04);
 
       &:hover {
          background-color: $selection;
-         box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.07);
+      }
+
+      .analysis-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #811D52;
+        -webkit-font-smoothing: antialiased;
+        text-align: center;
+      }
+
+      .analysis-tile-detail {
+        font-size: 14px;
+        line-height: 1.6;
       }
 
       .tile-extra-container {
@@ -40,8 +57,8 @@
          padding-top: 0.5rem;
          padding-bottom: 0.5rem;
          cursor: pointer;
-         margin-left: -1rem;
-         margin-right: -1rem;
+         padding-left: 1rem;
+         padding-right: 1rem;
          background-color: #fff;
 
          transition: all 0.15s ease;
@@ -101,31 +118,14 @@
          color: #99adb3;
       }
 
-      .analysis-tile, .tile-extra {
-         max-width: 20rem;
-         margin: 0 1rem;
-      }
-
       .analysis-tile {
          transition: color .5s, background .5s;
-         margin-bottom: 1rem;
+         width: 100%;
 
          &.in-progress {
            &:hover {
              color: $grey;
            }
-         }
-
-         .analysis-title {
-           font-size: 22px;
-           font-weight: 600;
-           color: #811D52;
-           -webkit-font-smoothing: antialiased;
-         }
-
-         .analysis-tile-detail {
-            font-size: 14px;
-            line-height: 1.6;
          }
       }
    }
