@@ -281,9 +281,9 @@ angular.module('icgc.ui.table.pagination', [])
       rowSizes: '=',
       currentPage: '='
     },
-    controller: function($scope, $rootScope, FilterService){
+    controller: ($scope, $rootScope, FilterService) => {
       let that = this;
-      $rootScope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, toState){
+      $rootScope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, () => {
         that.currentPage = 1;
       });
     }
