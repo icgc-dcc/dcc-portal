@@ -227,7 +227,7 @@ function svgToPngDataUri(svg, {width, height}) {
 
       this.SetOperationService = SetOperationService;
 
-      this.doesSupportPngExport = !_.includes(['IE', 'Edge'], platform);
+      this.doesSupportPngExport = !_.includes(['IE', 'Microsoft Edge'], platform);
   };
 
   module.component('survivalAnalysisGraph', {
