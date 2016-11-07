@@ -26,10 +26,10 @@
         var survivalData = responses.survivalData.plain().results;
         var setsMeta = responses.setsMeta.plain();
 
-        var processGraphData = function (graphType) {
-          return survivalData.map(function (dataSet) {
-            var donors = _.flatten(dataSet[graphType].map(function (interval) {
-              return interval.donors.map(function (donor) {
+        var processGraphData = (graphType) => {
+          return survivalData.map((dataSet) => {
+            var donors = _.flatten(dataSet[graphType].map((interval) => {
+              return interval.donors.map((donor) => {
                 return _.extend({}, donor, {
                   survivalEstimate: interval.cumulativeSurvival
                 });
@@ -60,9 +60,7 @@
         var fetchSurvival = Restangular
           .one('analysis')
           .post('survival', data, {}, {'Content-Type': 'application/json'})
-          .then(function (response) {
-            return Restangular.one('analysis/survival/' + response.id).get();
-          });
+          .then((response) => Restangular.one('analysis/survival/' + response.id).get());
 
         var fetchSetsMeta = SetService.getMetaData(setIds);
 
@@ -70,12 +68,10 @@
             survivalData: fetchSurvival,
             setsMeta: fetchSetsMeta,
           })
-          .then(function (responses) {
-            return processResponses(responses);
-          });
+          .then((responses) => processResponses(responses));
       }
 
-      var defaultHeadingMap = {
+      const defaultHeadingMap = {
         setName: 'donor_set_name',
         id: 'donor_id',
         time: 'time',
@@ -92,8 +88,8 @@
         _.defaults({}, defaultHeadingMap, headingMap);
 
         var contents = _(dataSet)
-          .map(function (set) {
-            return set.donors.map(function (donor) {
+          .map((set) => {
+            return set.donors.map((donor) => {
               return [set.meta.name, donor.id, donor.time, donor.status, donor.survivalEstimate].join('\t');
             });
           })
@@ -105,8 +101,8 @@
       }
 
       _.extend(this, {
-        fetchSurvivalData: fetchSurvivalData,
-        dataSetToTSV: dataSetToTSV
+        fetchSurvivalData,
+        dataSetToTSV
       });
 
     });
@@ -183,10 +179,8 @@
           name: isGene ? `${entitySymbol} Not Mutated Donors ${projectCode} ${_service.setName}` : `Donors without mutations ${entitySymbol} ${projectCode} ${_service.setName}`
         };
 
-        var setIds = [];
-
-        const [response1, response2] = [await SetService.addSet(type, donorSet1), await SetService.addSet(type, donorSet2)];
-        setIds = setIds.concat([response1.id, response2.id]);
+        const sets = [await SetService.addSet(type, donorSet1), await SetService.addSet(type, donorSet2)];
+        const setIds = sets.map(set => set.id);
         wait(setIds, 7, () => launchAnalysis(setIds));
 
       }
