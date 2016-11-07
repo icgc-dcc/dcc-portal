@@ -527,7 +527,7 @@
                 <th rowspan="2">
                     <abbr data-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutation' | translate }}" 
                         data-tooltip-placement="left"
-                        style="display:block;">
+                        style="display:block;padding-left:5px;">
                         <i class="icon-chart-bar">
                         </i>
                     </abbr>
@@ -550,7 +550,7 @@
                 <td>
                     <mutation-consequences data-items="mutation.consequences"></mutation-consequences>
                 </td>
-                <td class="text-right" style="position: relative; display: block;white-space: nowrap">
+                <td class="text-right" style="position: relative;white-space: nowrap">
                         <span data-ng-style="{width:mutation.affectedDonorCountFiltered/ProjectCtrl.project.ssmTestedDonorCount * 100+'%'}"
                               class="t_facets__facet__terms__active__term__bar"></span>
                         <span style="position: relative">
@@ -589,7 +589,7 @@
                     </ul>
                 </td>
                 <td>
-                    <i class="icon-chart-bar phenotype-analysis"
+                    <i class="icon-chart-bar phenotype-analysis" style="padding-left:5px;"
                         data-ng-click="ProjectCtrl.launchSurvivalAnalysis('mutation', mutation.id, mutation.id)"></i>
                 </td>
             </tr>
