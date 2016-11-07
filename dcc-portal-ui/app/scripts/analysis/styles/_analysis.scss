@@ -15,7 +15,7 @@
    .analysis-tiles {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: space-around;
    }
 
    .analysis-tile-container {
@@ -102,7 +102,7 @@
       }
 
       .analysis-tile, .tile-extra {
-         max-width: 24rem;
+         max-width: 20rem;
          margin: 0 1rem;
       }
 
