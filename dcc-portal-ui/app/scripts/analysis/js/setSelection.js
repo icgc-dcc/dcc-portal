@@ -1,4 +1,6 @@
-angular.module('icgc.analysis.setSelection', [])
+require('./setTools');
+
+angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
   .component('setSelection', {
     template: require('../views/set-selection.html'),
     bindings: {
@@ -36,7 +38,7 @@ angular.module('icgc.analysis.setSelection', [])
       this.getSetCompatibilityMessage = (set) => this.isSetSelected(set) ? '' : getUnsatisfiedCriteriaMessage(this.setCompatibilityCriteria, criterium => !criterium.test(set, this.selectedSets));
       this.getAnalysisSatifactionMessage = () => getUnsatisfiedCriteriaMessage(this.analysisSatisfactionCriteria, criterium => !criterium.test(this.selectedSets));
 
-      this.handleSaveSetName = (set, newName) => SetService.renameSet(set.id, newName);
+      this.handleSaveSetName = (set, newName) => SetService.renameSet(vm.set.id, newName);
     },
     controllerAs: 'vm',
   })

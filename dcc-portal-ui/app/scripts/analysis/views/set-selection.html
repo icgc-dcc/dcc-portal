@@ -1,6 +1,5 @@
 <div class="set-selection-component">
   <div><em>{{vm.description}}</em></div>
-  <div>Demo: <a href="" ng-click="vm.onClickLaunchDemo()">{{vm.demoCtaText}}</a></div>
   <br>
   <div> 
       <div ng-bind-html="vm.selectionInstructions"></div>
@@ -10,6 +9,7 @@
               <th><translate>Item Type</translate></th>
               <th><translate>Name</translate></th>
               <th class="text-right"><translate># Items</translate></th>
+              <th></th>
           </thead>
           <tbody>
               <tr ng-if="!vm.sets.length">
@@ -85,6 +85,9 @@
                   </td>
                   <td class="text-right"> 
                       <a href="{{item.advLink}}">{{item.count | number}}</a>
+                  </td>
+                  <td>
+                    <set-tools set="item"></set-tools>
                   </td>
               </tr>
           </tbody>
