@@ -130,7 +130,7 @@
             callback(data);
           } else {
             $timeout(() => {
-              _service.wait(ids, --numTries, callback);
+              wait(ids, --numTries, callback);
             }, 1500);
           }
         });
@@ -166,14 +166,14 @@
         _service.setName = _.includes(_service.setName, 'All') ? '' : _service.setName;
 
         donorSet1 = {
-          filters: isGene ? _.merge(_.clone(filters), {gene: { id: { is: [entityId] } }}) : _.merge(_.clone(filters), {mutation: { id: { is: [entityId] } }}),
+          filters: isGene ? _.merge(_.cloneDeep(filters), {gene: { id: { is: [entityId] } }}) : _.merge(_.cloneDeep(filters), {mutation: { id: { is: [entityId] } }}),
           isTransient: true,
           type,
           name: isGene ? `${entitySymbol} Mutated Donors ${projectCode} ${_service.setName}` : `Donors with mutations ${entitySymbol} ${projectCode} ${_service.setName}`
         };
 
         donorSet2 = {
-          filters: isGene ? _.merge(_.clone(filters), {gene: { id: { not: [entityId] } }}) : _.merge(_.clone(filters), {mutation: { id: { not: [entityId] } }}),
+          filters: isGene ? _.merge(_.cloneDeep(filters), {gene: { id: { not: [entityId] } }}) : _.merge(_.cloneDeep(filters), {mutation: { id: { not: [entityId] } }}),
           isTransient: true,
           type,
           name: isGene ? `${entitySymbol} Not Mutated Donors ${projectCode} ${_service.setName}` : `Donors without mutations ${entitySymbol} ${projectCode} ${_service.setName}`
@@ -182,7 +182,6 @@
         const sets = [await SetService.addSet(type, donorSet1), await SetService.addSet(type, donorSet2)];
         const setIds = sets.map(set => set.id);
         wait(setIds, 7, () => launchAnalysis(setIds));
-
       }
 
     });

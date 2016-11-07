@@ -576,7 +576,7 @@
        * Run Survival/Phenotypw analysis
        */
       _ctrl.launchSurvivalAnalysis = (entityType, entityId, entitySymbol) => {
-        var filters = _.merge(_.clone(LocationService.filters()), {donor: {projectId: {is: [project.id]}}});
+        var filters = _.merge(_.cloneDeep(LocationService.filters()), {donor: {projectId: {is: [project.id]}}});
         SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters, project.id);
       }
 
