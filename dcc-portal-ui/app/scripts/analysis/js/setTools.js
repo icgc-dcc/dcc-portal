@@ -16,7 +16,7 @@ angular.module('icgc.analysis.setTools', [])
           <i
             class="icon-download"
             data-tooltip="{{'Download Donor Data' | translate}}"
-            data-ng-click="vm.downloadDonorData(vm.set.id)"
+            data-ng-click="vm.downloadSetData(vm.set.id)"
           ></i>
         </span>
         <a
@@ -39,11 +39,36 @@ angular.module('icgc.analysis.setTools', [])
     bindings: {
       set: '<',
     },
-    controller: function ($scope, SetService, Settings) {
+    controller: function (
+      $scope,
+      SetService,
+      Settings,
+      $modal,
+      Extensions,
+      RouteInfoService,
+      LocationService
+    ) {
       $scope.SetService = SetService;
       this.downloadEnabled = false; 
       Settings.get().then((settings) => { this.downloadEnabled = !!settings.downloadEnabled; });
 
+      this.downloadSetData = (setId) => $modal.open({
+        templateUrl: '/scripts/downloader/views/request.html',
+        controller: 'DownloadRequestController',
+        resolve: {
+          filters: () => ({donor:{id:{is:[Extensions.ENTITY_PREFIX + setId]}}})
+        }
+      });
+
+      this.dataRepoTitle = RouteInfoService.get('dataRepositories').title;
+
+      this.getEntitySetShareParams = _.memoize((item) => {
+        var base = item.type === 'file' ? 'repositories' : 'search';
+        return {
+          url: LocationService.buildURLFromPath(base + (item.advType !== '' ? ('/' +  item.advType) : '')),
+          filters: JSON.stringify(item.advFilters),
+        };
+      });
     },
     controllerAs: 'vm'
   })
