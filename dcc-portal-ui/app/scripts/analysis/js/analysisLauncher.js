@@ -195,6 +195,10 @@
         ],
         analysisSatisfactionCriteria: [
           analysisSetCountCriterium(2),
+          {
+            test: selectedSets => _.every(selectedSets, setTypesCriterium(['donor']).test),
+            message: setTypesCriterium(['donor']).message,
+          }
         ],
         launch: selectedSets => _this.launchPhenotype(selectedSets.map(x => x.id)),
         launchDemo: () => _this.demoPhenotype(),
