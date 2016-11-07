@@ -16,110 +16,41 @@
     <div data-ng-show="NAC.analysisType === null">
         <div>
             <div class="analysis-tiles">
-                <div class="analysis-tile-container">
-                    <div class="analysis-tile" data-ng-click="NAC.analysisType='enrichment'">
-                        <h2
-                           class="analysis-title"
-                        >
-                           {{NAC.analysisName('enrichment')}}
+                <div
+                    class="analysis-tile-container"
+                    ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
+                >
+                    <div class="analysis-tile">
+                        <h2 class="analysis-title">
+                           {{analysis.strings.name}}
                         </h2>
                         <img
                            class="analysis-illustration"
-                           src="/styles/images/analysis-enrichment.svg"
+                           ng-src="/styles/images/analysis-{{analysisType}}.svg"
                         />
-                        <div class="analysis-tile-detail">{{NAC.analysisDescription('enrichment')}}</div>
+                        <div class="analysis-tile-detail">{{analysis.strings.description}}</div>
                     </div>
 
-                    <div class="tile-extra-container" data-ng-click="NAC.demoEnrichment()">
+                    <div class="tile-extra-container" data-ng-click="analysis.launchDemo()">
                         <div class="tile-extra">
                            <h3 class="demo-title">
                               <translate>Demo</translate>
                            </h3>
                            <div class="demo-description">
-                              {{NAC.analysisDemoDescription('enrichment')}}
+                              {{analysis.strings.demoDescription}}
                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="analysis-tile-container">
-                    <div class="analysis-tile" data-ng-click="NAC.analysisType='phenotype'">
-                        <h2
-                           class="analysis-title"
-                        >
-                           {{NAC.analysisName('phenotype')}}
-                        </h2>
-                        <img
-                           class="analysis-illustration"
-                           src="/styles/images/analysis-phenotype.svg"
-                        />
-                        <div class="analysis-tile-detail">{{NAC.analysisDescription('phenotype')}}</div>
-                    </div>
-                    <div class="tile-extra-container" data-ng-click="NAC.demoPhenotype()">
-                        <div class="tile-extra">
-                           <h3 class="demo-title">
-                              <translate>Demo</translate>
-                           </h3>
-                           <div class="demo-description">
-                              {{NAC.analysisDemoDescription('phenotype')}}
-                           </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="analysis-tile-container">
-                    <div class="analysis-tile" data-ng-click="NAC.analysisType='set'">
-                        <h2
-                           class="analysis-title"
-                        >{{NAC.analysisName('set')}}</h2>
-                        <img
-                           class="analysis-illustration"
-                           src="/styles/images/analysis-set.svg"
-                        />
-                        <div class="analysis-tile-detail">{{NAC.analysisDescription('set')}}</div>
-                    </div>
-                    <div class="tile-extra-container" data-ng-click="NAC.demoSetOperation()">
-                        <div class="tile-extra">
-                           <h3 class="demo-title">
-                              <translate>Demo</translate>
-                           </h3>
-                           <div class="demo-description">
-                              {{NAC.analysisDemoDescription('set')}}
-                           </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="analysis-tile-container">
-                    <div class="analysis-tile" data-ng-click="NAC.analysisType='oncogrid'">
-                        <h2
-                           class="analysis-title"
-                        >{{NAC.analysisName('oncogrid')}}</h2>
-                        <img
-                           class="analysis-illustration"
-                           src="/styles/images/analysis-onco.svg"
-                        />
-                        <div class="analysis-tile-detail">{{NAC.analysisDescription('oncogrid')}}</div>
-                    </div>
-                    <div class="tile-extra-container" data-ng-click="NAC.demoOncogrid()">
-                        <div class="tile-extra">
-                           <h3 class="demo-title">
-                              <translate>Demo</translate>
-                           </h3>
-                           <div class="demo-description">
-                              {{NAC.analysisDemoDescription('oncogrid')}}
-                           </div>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
             <div class="analysis-suggestions">
                 <a class="cta" href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">
-                     <h3 class="cta-title">More?</h3>
-                     <div class="cta-detail">
+                    <h3 class="cta-title">More?</h3>
+                    <div class="cta-detail">
                         <translate>Do you have a specific type of analysis you want to see?</translate>
                         <br/>
                         <translate>Leave feedback and let us know.</translate>
-                     </div>
+                    </div>
                 </a>
             </div>
         </div>
