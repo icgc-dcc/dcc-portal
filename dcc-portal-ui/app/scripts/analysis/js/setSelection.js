@@ -23,20 +23,20 @@ angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
       this.isAnalysisRunnable = () => this.isAnalysisSatisfied() && !this.isLaunchingAnalysis;
       this.handleClickItem = item => { this.selectedSets = _.xor(this.selectedSets, [item]) };
 
-      this.isSetCompatibleWithContext = (set, context) => _.every(_.filter(this.setCompatibilityCriteria, {context}), criterium => criterium.test(set, this.selectedSets));
+      this.isSetCompatibleWithContext = (set, context) => _.every(_.filter(this.setCompatibilityCriteria || [], {context}), criterium => criterium.test(set, this.selectedSets));
       this.isSetCompatibleWithAnalysis = set => this.isSetCompatibleWithContext(set, 'ANALYSIS');
       this.isSetCompatibleWithSelectedSets = set => this.isSetCompatibleWithContext(set, 'SELECTED_SETS');
       this.isSetCompatibleWithAllContexts = (set) => this.isSetCompatibleWithAnalysis(set) && this.isSetCompatibleWithSelectedSets(set);
 
-      this.isAnalysisSatisfied = () => _.every(this.analysisSatisfactionCriteria, criterium => criterium.test(this.selectedSets));
+      this.isAnalysisSatisfied = () => _.every(this.analysisSatisfactionCriteria || [], criterium => criterium.test(this.selectedSets));
       
       const getUnsatisfiedCriteriaMessage = (criteria, testingFn, separator = ', ') => criteria
         .filter(testingFn)
         .map(x => x.message)
         .join(separator) 
 
-      this.getSetCompatibilityMessage = (set) => this.isSetSelected(set) ? '' : getUnsatisfiedCriteriaMessage(this.setCompatibilityCriteria, criterium => !criterium.test(set, this.selectedSets));
-      this.getAnalysisSatifactionMessage = () => getUnsatisfiedCriteriaMessage(this.analysisSatisfactionCriteria, criterium => !criterium.test(this.selectedSets));
+      this.getSetCompatibilityMessage = (set) => (this.isSetSelected(set) && this.isSetCompatibleWithAllContexts(set)) ? '' : getUnsatisfiedCriteriaMessage(this.setCompatibilityCriteria || [], criterium => !criterium.test(set, this.selectedSets));
+      this.getAnalysisSatifactionMessage = () => getUnsatisfiedCriteriaMessage(this.analysisSatisfactionCriteria || [], criterium => !criterium.test(this.selectedSets));
 
       this.handleSaveSetName = (set, newName) => SetService.renameSet(vm.set.id, newName);
     },

@@ -65,25 +65,14 @@
                 </translate>
             </div>
             <set-selection
-                data-ng-if="!NAC.analysisType"
                 sets="NAC.allSets"
-                description="analysis.strings.description"
-                selection-instructions=""
+                description="NAC.selectedAnalysis.strings.description"
+                selection-instructions="NAC.selectedAnalysis.strings.datasetSelectionInstructions"
                 is-launching-analysis="NAC.isLaunchingAnalysis()"
-                set-compatibility-criteria="[]"
-                analysis-satisfaction-criteria="[]"
-            ></set-selection>
-            <set-selection
-                ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
-                data-ng-if="analysisType === NAC.analysisType"
-                sets="NAC.allSets"
-                description="analysis.strings.description"
-                selection-instructions="analysis.strings.datasetSelectionInstructions"
-                is-launching-analysis="NAC.isLaunchingAnalysis()"
-                set-compatibility-criteria="analysis.setCompatibilityCriteria"
-                analysis-satisfaction-criteria="analysis.analysisSatisfactionCriteria"
-                on-click-launch="analysis.launch"
-                on-click-launch-demo="analysis.launchDemo"
+                set-compatibility-criteria="NAC.selectedAnalysis.setCompatibilityCriteria"
+                analysis-satisfaction-criteria="NAC.selectedAnalysis.analysisSatisfactionCriteria"
+                on-click-launch="NAC.selectedAnalysis.launch"
+                on-click-launch-demo="NAC.selectedAnalysis.launchDemo"
             ></set-selection>
         </div>
     </div>
