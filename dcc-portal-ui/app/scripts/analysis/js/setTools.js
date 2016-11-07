@@ -62,13 +62,13 @@ angular.module('icgc.analysis.setTools', [])
 
       this.dataRepoTitle = RouteInfoService.get('dataRepositories').title;
 
-      this.getEntitySetShareParams = (item) => {
+      this.getEntitySetShareParams = _.memoize((item) => {
         var base = item.type === 'file' ? 'repositories' : 'search';
         return {
           url: LocationService.buildURLFromPath(base + (item.advType !== '' ? ('/' +  item.advType) : '')),
           filters: JSON.stringify(item.advFilters),
         };
-      };
+      });
     },
     controllerAs: 'vm'
   })
