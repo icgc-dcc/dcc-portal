@@ -12,4 +12,9 @@
     background-color: #FFFFBE;
     color: #000;
   }
+
+  .is-selected.is-not-compatible > td {
+    background-color: #ffdddd;
+    color: #8a1d00;
+  }
 }

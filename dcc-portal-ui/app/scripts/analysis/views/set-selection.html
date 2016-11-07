@@ -35,7 +35,11 @@
                       : '#777'
                     : '#CCC'
                 }}"
-                ng-class="{'is-selected': vm.isSetSelected(item)}"
+                ng-class="{
+                  'is-selected': vm.isSetSelected(item),
+                  'is-compatible': vm.isSetCompatibleWithAllContexts(item),
+                  'is-not-compatible': !vm.isSetCompatibleWithAllContexts(item),
+                }"
               > 
                   <td
                     class="text-center"
@@ -60,7 +64,11 @@
 
                         <i
                           ng-if="!vm.isSetCompatibleWithAnalysis(item)"
-                          class="icon-info"
+                          class="fa"
+                          ng-class="{
+                            'fa-info': !vm.isSetSelected(item),
+                            'fa-close': vm.isSetSelected(item),
+                          }"
                         ></i>
                   </td>
                   <td>{{item.type | readable}}</td>
