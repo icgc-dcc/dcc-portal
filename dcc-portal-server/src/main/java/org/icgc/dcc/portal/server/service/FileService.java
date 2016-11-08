@@ -65,6 +65,7 @@ import org.elasticsearch.search.aggregations.bucket.nested.InternalNested;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
+import org.icgc.dcc.common.core.util.stream.Collectors;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.File;
 import org.icgc.dcc.portal.server.model.Files;
@@ -82,7 +83,6 @@ import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvMapWriter;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
@@ -361,11 +361,11 @@ public class FileService {
   }
 
   private static List<File> convertHitsToRepoFiles(SearchHits hits, Query query) {
-    return FluentIterable.from(hits)
-        .transform(hit -> {
-          Map<String, Object> fieldMap = createResponseMap(hit, query, EntityType.FILE);
-          return parse(fieldMap);
-        })
-        .toList();
+
+    return Stream.of(hits.getHits())
+        .map(hit -> createResponseMap(hit, query, EntityType.FILE))
+        .map(File::parse)
+        .collect(Collectors.toImmutableList());
   }
+
 }

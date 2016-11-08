@@ -40,17 +40,16 @@ import lombok.val;
 @ApiModel(value = "File")
 public class File {
 
-  private static final Class<File> MY_CLASS = File.class;
   private static final ObjectMapper MAPPER = createMapper();
 
   @SneakyThrows
   public static File parse(@NonNull String json) {
-    return MAPPER.readValue(json, MY_CLASS);
+    return MAPPER.readValue(json, File.class);
   }
 
   @SneakyThrows
   public static File parse(@NonNull Map<String, Object> fieldMap) {
-    return MAPPER.convertValue(fieldMap, MY_CLASS);
+    return MAPPER.convertValue(fieldMap, File.class);
   }
 
   /*
