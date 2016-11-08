@@ -13,15 +13,22 @@ angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
       analysisSatisfactionCriteria: '<',
       onClickLaunch: '&',
       onClickLaunchDemo: '&',
+      onSelectedSetsChange: '&',
     },
     controller: function ($scope, $element, SetService) {
       this.onClickLaunch = this.onClickLaunch();
       this.onClickLaunchDemo = this.onClickLaunchDemo();
 
       this.selectedSets = [];
+
+      this.setSelectedSets = (sets) => {
+        this.selectedSets = sets;
+        this.onSelectedSetsChange()(this.selectedSets);
+      };
+
       this.isSetSelected = set => _.includes(this.selectedSets, set);
       this.isAnalysisRunnable = () => this.isAnalysisSatisfied() && !this.isLaunchingAnalysis;
-      this.handleClickItem = item => { this.selectedSets = _.xor(this.selectedSets, [item]) };
+      this.handleClickItem = item => { this.setSelectedSets(_.xor(this.selectedSets, [item])) };
 
       this.isSetCompatibleWithContext = (set, context) => _.every(_.filter(this.setCompatibilityCriteria || [], {context}), criterium => criterium.test(set, this.selectedSets));
       this.isSetCompatibleWithAnalysis = set => this.isSetCompatibleWithContext(set, 'ANALYSIS');

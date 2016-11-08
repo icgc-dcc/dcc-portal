@@ -277,11 +277,19 @@
     };
 
     _this.selectedAnalysis = undefined;
+    _this.selectedSets = [];
 
     _this.handleClickAnalysis = analysis => {
       _this.selectedAnalysis = analysis === _this.selectedAnalysis ? undefined : analysis;
       _this.analysisType = (_this.selectedAnalysis || {}).type;
     };
+
+    _this.handleSelectedSetsChange = sets => { _this.selectedSets = sets };
+    const doSetsSatisfyCriteria = (sets, criteria) => _.every(criteria || [], criterium => criterium.test(sets))
+    _this.isAnalysisSatisfied = (analysis) => doSetsSatisfyCriteria(_this.selectedSets, analysis.analysisSatisfactionCriteria);
+    const getCriteriaSatisficationMessages = (sets, criteria) => _.reject(criteria || [], criterium => criterium.test(sets)).map(criteria => criteria.message)
+    _this.getCriteriaSatisficationMessage = (analysis) => getCriteriaSatisficationMessages(_this.selectedSets, analysis.analysisSatisfactionCriteria).join('<br>');
+
 
     _this.isLaunchingAnalysis = function() {
       return _isLaunchingAnalysis;
