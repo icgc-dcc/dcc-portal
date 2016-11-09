@@ -12,11 +12,6 @@
             data-nested data-href="analysis"><translate>Launch Analysis</translate></div>
 
         <div class="t_tabs__tab t_tabs__tab__donor" 
-            data-ng-click="currentTab = 'sets'" 
-            data-ng-class="{active: currentTab === 'sets'}" 
-            data-nested data-href="analysis/sets"><translate>Saved Sets</translate></div>
-
-        <div class="t_tabs__tab t_tabs__tab__donor" 
             data-ng-show="AnalysisService.getAll().length > 0"
             data-ng-click="currentTab = 'view'" 
             data-ng-class="{active: currentTab === 'view'}" 
