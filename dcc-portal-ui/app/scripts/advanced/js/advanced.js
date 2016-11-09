@@ -54,7 +54,7 @@ angular.module('icgc.advanced.controllers', [
     'icgc.advanced.services', 'icgc.sets.services', 'icgc.facets'])
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
-              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular,
+              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular, FilterService,
               RouteInfoService, FacetConstants, Extensions, gettextCatalog) {
 
       var _controller = this,
@@ -267,13 +267,18 @@ angular.module('icgc.advanced.controllers', [
         });
 
         $scope.$on(_filterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
-
           if (filterObj.currentPath.indexOf('/search') < 0) {
             // Unfortunately this event fired before a state change notification is posted so this
             // provides a better why to determine if we need to abort requests that have been made.
             //Restangular.abortAllHTTPRequests();
             return;
           }
+
+          let tab = _controller.getActiveTab();
+          if(tab === 'mutation'){
+            tab = _controller.getActiveSubTab();
+          }
+          LocationService.goToFirstPage(`${tab}s`);
 
           _locationFilterCache.updateCache();
           _resetServices();
@@ -480,6 +485,8 @@ angular.module('icgc.advanced.controllers', [
         _controller.state.setSubTab(tab);
       };
 
+      _controller.getActiveSubTab = () =>_controller.state.getSubTab();
+
       /**
        * View observation/experimental details
        */
@@ -494,7 +501,6 @@ angular.module('icgc.advanced.controllers', [
           }
         });
       };
-
 
       _init();
     })
