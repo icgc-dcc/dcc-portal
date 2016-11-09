@@ -274,12 +274,6 @@ angular.module('icgc.advanced.controllers', [
             return;
           }
 
-          let tab = _controller.getActiveTab();
-          if(tab === 'mutation'){
-            tab = _controller.getActiveSubTab();
-          }
-          LocationService.goToFirstPage(`${tab}s`);
-
           _locationFilterCache.updateCache();
           _resetServices();
           _refresh();
