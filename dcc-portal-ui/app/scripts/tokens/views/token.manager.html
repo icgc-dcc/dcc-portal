@@ -122,10 +122,12 @@
                      </span>
                   </td>
                   <td style="max-width:20rem">{{token.description}}</td>
-                  <td>
+                  <td ng-class="{
+                    'alert-error': token.expiresIn < 0
+                  }">
                      <span data-ng-repeat="scope in token.scope" class="badge token-badge" style="font-weight: normal">{{scope}}</span>
                   </td>
-                  <td>{{ (token.expiresIn / (60*60*24)) | number:2 }} <translate>days</translate></td>
+                  <td>{{ token.expiresIn < 0 ? 'Expired' : ((token.expiresIn / (60*60*24)) | number:2) }} <translate>days</translate></td>
                   <td style="text-align: center">
                      <span class="t_tools__tool">
                         <i class="icon-trash" data-ng-click="deleteToken(token.id)"></i>
