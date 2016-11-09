@@ -83,6 +83,9 @@
         <translate>
           You may revoke a token if it is no longer needed or you believe it has been compromised.
         </translate>
+        <div ng-if="errorCreatingToken" class="alert alert-error">
+          <translate>There was an error creating the token. Please contact an administrator.</translate>
+        </div>
       </p>
       <div>
          <div data-ng-if="!activeTokens" class="loading"><i class="icon-spinner icon-spin"></i> 
