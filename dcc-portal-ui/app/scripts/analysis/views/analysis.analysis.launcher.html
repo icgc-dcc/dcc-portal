@@ -1,7 +1,7 @@
 <section>
 <div data-ng-if="!analysisId" data-ng-controller="NewAnalysisController as NAC" class="analysis">
     <div class="row">
-        <div class="analysis-tools-wrapper col-sm-6">
+        <div class="analysis-tools-wrapper col-sm-5">
             <div class="analysis-tiles">
                 <div
                     class="analysis-tile-container"
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div class="set-selection-wrapper col-sm-6">
+        <div class="set-selection-wrapper col-sm-7">
             <div style="font-size:1.25rem" data-ng-show="NAC.selectedAnalysis">
                 <translate>Select {{NAC.selectedAnalysis.type === 'enrichment' ? 'set' : 'sets'}} for 
                 <strong>{{NAC.selectedAnalysis.strings.name}}</strong></translate>
