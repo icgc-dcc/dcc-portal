@@ -11,6 +11,10 @@
                     ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
                     ng-click="NAC.handleClickAnalysis(analysis)"
                 >
+                    <h2 class="analysis-title">
+                        {{analysis.strings.name}}
+                    </h2>
+
                     <div class="reveal-window">
                         <div class="reveal-container">
                             <div class="reveal-item">
@@ -24,10 +28,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <h2 class="analysis-title">
-                        {{analysis.strings.name}}
-                    </h2>
 
                     <div class="analysis-buttons light">
                         <a
