@@ -407,6 +407,10 @@
       return _.isEmpty (countryCode) ? defaultValue : 'flag flag-' + countryCode;
     };
 
+    _ctrl.viewInRepositories = () => {
+      LocationService.goToPath(`/repositories`, `filters={"file":{ "projectCode":{"is":[${ _.map(_ctrl.projects.hits, (project) => `"${project.id}"`, []) }]}}}`);
+    }
+
     $scope.$on('$locationChangeSuccess', function (event, dest) {
       if (dest.match(new RegExp('^' + window.location.protocol + '//' + window.location.host + '/projects'))) {
         // NOTE: need to defer this call till next tick due to this running before filters are updated
