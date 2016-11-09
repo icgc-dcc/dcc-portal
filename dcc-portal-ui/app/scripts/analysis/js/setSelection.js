@@ -26,13 +26,14 @@ angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
       };
 
       this.isSetSelected = set => _.includes(this.selectedSets, set);
-      this.isAnalysisRunnable = () => this.isAnalysisSatisfied() && !this.isLaunchingAnalysis;
+      this.isAnalysisRunnable = () => this.hasAnalysis() && this.isAnalysisSatisfied() && !this.isLaunchingAnalysis;
       this.handleClickItem = item => this.setSelectedSets(_.xor(this.selectedSets, [item]));
 
       const doSetsSatsifyCriteria =  (sets, criteria) => _.every(criteria || [], criterium => criterium.test(sets));
       this.isSetCompatible = set => doSetsSatsifyCriteria(_.unique(this.selectedSets.concat(set)), _.reject(this.analysisSatisfactionCriteria, {type: 'MIN_SETS'}));
       this.isSetCompatibleWithAnalysis = set => doSetsSatsifyCriteria([set], _.reject(this.analysisSatisfactionCriteria, {type: 'MIN_SETS'}));
 
+      this.hasAnalysis = () => this.analysisSatisfactionCriteria && this.analysisSatisfactionCriteria.length;
       this.isAnalysisSatisfied = () => doSetsSatsifyCriteria(this.selectedSets, this.analysisSatisfactionCriteria);
       const getCriteriaSatisfactionMessages = (sets, criteria) => _.reject(criteria || [], criterium => criterium.test(sets)).map(criteria => criteria.message);
       this.getSetCompatibilityMessage = set => getCriteriaSatisfactionMessages(_.unique(this.selectedSets.concat(set)), _.reject(this.analysisSatisfactionCriteria, {type: 'MIN_SETS'})).join('<br>');
