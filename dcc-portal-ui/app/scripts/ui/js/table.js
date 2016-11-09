@@ -285,6 +285,12 @@ angular.module('icgc.ui.table.pagination', [])
       rowLimit: '=',
       rowSizes: '=',
       currentPage: '='
+    },
+    controller: function($scope, $rootScope, FilterService) {
+      let _this = this;
+      $rootScope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, () => {
+        _this.currentPage = 1;
+      });
     }
   });
 
