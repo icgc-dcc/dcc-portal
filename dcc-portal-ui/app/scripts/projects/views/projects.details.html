@@ -17,6 +17,14 @@
         Showing <strong id="projects-project-count">{{ ProjectsCtrl.projects.hits.length }}</strong> projects
     </translate>
     <span data-toolbar data-dl="projects"></span>
+    <span class="pull-right action-toolbar">
+        <span class="action-item" style="margin-top:5px;">
+            <i class="icon-download-cloud"></i>
+            <a href="" data-ng-click='ProjectsCtrl.viewInRepositpries()'>
+                <translate>View in Data Repositories</translate>
+            </a>
+        </span>
+    </span>
 </div>
 
 <table class="table table-bordered table-striped">
