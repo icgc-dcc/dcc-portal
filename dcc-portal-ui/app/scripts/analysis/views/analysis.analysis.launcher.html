@@ -57,12 +57,12 @@
         </div>
 
         <div class="set-selection-wrapper col-sm-7">
+            <div style="font-size:1.25rem" data-ng-show="!NAC.selectedAnalysis">
+                <translate>Saved Sets</translate>
+            </div>
             <div style="font-size:1.25rem" data-ng-show="NAC.selectedAnalysis">
                 <translate>Select {{NAC.selectedAnalysis.type === 'enrichment' ? 'set' : 'sets'}} for 
                 <strong>{{NAC.selectedAnalysis.strings.name}}</strong></translate>
-            </div>
-            <div style="font-size:1.25rem" data-ng-show="!NAC.selectedAnalysis">
-                <translate>Select Sets</translate>
             </div>
 
             <div>
