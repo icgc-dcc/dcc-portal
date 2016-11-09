@@ -28,7 +28,7 @@
                             >Demo</a>
                             <button
                                 class="run t_button"
-                                ng-disabled="!NAC.isAnalysisSatisfied(analysis)"
+                                ng-disabled="(NAC.selectedAnalysis && NAC.selectedAnalysis !== analysis) || !NAC.isAnalysisSatisfied(analysis)"
                                 ng-click="analysis.launch(NAC.selectedSets); $event.stopPropagation();"
                                 tooltip="{{NAC.getCriteriaSatisficationMessage(analysis)}}"
                             >Run</button>
