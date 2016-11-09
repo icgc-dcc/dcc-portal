@@ -169,14 +169,14 @@
           filters: isGene ? _.merge(_.cloneDeep(filters), {gene: { id: { is: [entityId] } }}) : _.merge(_.cloneDeep(filters), {mutation: { id: { is: [entityId] } }}),
           isTransient: true,
           type,
-          name: isGene ? `${entitySymbol} Mutated Donors ${projectCode} ${_service.setName}` : `Donors with mutations ${entitySymbol} ${projectCode} ${_service.setName}`
+          name: isGene ? `${entitySymbol} Mutated Donors ${projectCode} ${_service.setName}` : `Donors with mutation ${entitySymbol} ${projectCode} ${_service.setName}`
         };
 
         donorSet2 = {
           filters: isGene ? _.merge(_.cloneDeep(filters), {gene: { id: { not: [entityId] } }}) : _.merge(_.cloneDeep(filters), {mutation: { id: { not: [entityId] } }}),
           isTransient: true,
           type,
-          name: isGene ? `${entitySymbol} Not Mutated Donors ${projectCode} ${_service.setName}` : `Donors without mutations ${entitySymbol} ${projectCode} ${_service.setName}`
+          name: isGene ? `${entitySymbol} Not Mutated Donors ${projectCode} ${_service.setName}` : `Donors without mutation ${entitySymbol} ${projectCode} ${_service.setName}`
         };
 
         const sets = [await SetService.addSet(type, donorSet1), await SetService.addSet(type, donorSet2)];
