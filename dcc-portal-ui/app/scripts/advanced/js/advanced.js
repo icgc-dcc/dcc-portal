@@ -54,7 +54,7 @@ angular.module('icgc.advanced.controllers', [
     'icgc.advanced.services', 'icgc.sets.services', 'icgc.facets'])
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
-              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular, FilterService,
+              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular,
               RouteInfoService, FacetConstants, Extensions, gettextCatalog) {
 
       var _controller = this,
@@ -478,8 +478,6 @@ angular.module('icgc.advanced.controllers', [
       _controller.setSubTab = function (tab) {
         _controller.state.setSubTab(tab);
       };
-
-      _controller.getActiveSubTab = () =>_controller.state.getSubTab();
 
       /**
        * View observation/experimental details
