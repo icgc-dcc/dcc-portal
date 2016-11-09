@@ -23,6 +23,7 @@
    }
 
    .analysis-buttons {
+      width: 100%;
       display: flex;
       justify-content: space-between;
       margin: 12px 12px;
@@ -30,14 +31,9 @@
         border: none;
         text-decoration: underline;
       }
-   }
-
-   .backface {
-      background-color: #fff7ec;
-      border-bottom: 4px solid #e9931c;
-      height: 100%;
-      position: absolute;
-      transform: rotateY(180deg);
+      .run {
+        margin-right: 12px;
+      }
    }
 
    .analysis-tile-container {
@@ -49,24 +45,47 @@
       justify-content: space-between;
       width: calc(50% - 1rem);
       margin: 0 0.5rem 1rem;
-      perspective: 1000px;
-      transform-style: preserve-3d;
+      overflow: hidden;
+      transition: all 0.2s $inQuad;
 
-      &:hover {
-        transform: scale(1.03);
-      }
-
-      &.selected {
-        transform: rotateY(180deg);
-        &:hover {
-          transform: scale(1.03) rotateY(180deg);
-        }
-      }
-
-      transition: all 0.1s $inQuad;
       box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.07);
       border-top: 1px solid rgba(0, 0, 0, 0.04);
       border-left: 1px solid rgba(0, 0, 0, 0.04);
+
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        background-color: #e9931c;
+        left: 0;
+        bottom: 0;
+        transition: all 0.2s $outQuad;
+        transform: translateX(calc(100% + 1px));
+      }
+
+      &.selected {
+        &:after {
+          transform: translateX(0);
+        }
+        .analysis-title {
+          color: #e9931c;
+        }
+      }
+
+      &:hover {
+        .reveal-item{
+          &:first-child {
+            opacity: 0;
+            transform: translateY(2%);
+          } 
+          &:last-child {
+            opacity: 1;
+            transform: translateX(-100%) translateY(0%);
+          }
+        }
+      }
 
 
       .analysis-title {
@@ -75,63 +94,41 @@
         color: #811D52;
         -webkit-font-smoothing: antialiased;
         text-align: center;
+        transition: 0.2s color $inQuad;
       }
 
       .analysis-tile-detail {
         font-size: 13px;
         line-height: 1.6;
-        margin: 0 1em;
+        margin: 1em 1.5em;
+        color: #666;
       }
 
-      .tile-extra-container {
-         width: 100%;
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         padding-top: 0.5rem;
-         padding-bottom: 0.5rem;
-         cursor: pointer;
-         padding-left: 1rem;
-         padding-right: 1rem;
-         background-color: #fff;
+      .reveal-window {
+        width: 100%;
+        overflow: hidden;
+      }
 
-         transition: all 0.15s ease;
-         transition-delay: 0;
-         position: relative;
-         overflow: hidden;
-         &:after {
-            content: ' ';
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #9b315b;
-            opacity: 0;
-            transform: translateX(calc(100% + 1px));
-            transition: transform 0.2s $outQuad, opacity 0.3s $inQuad;
-            transition-delay: 0;
-         }
-         .tile-extra {
-            z-index: 10;
-         }
-         &:hover {
-            .demo-title, .demo-description {
-               transition-delay: 0.3s;
-            }
-            .demo-title {
-               color: #fff;
-            }
-            .demo-description {
-               color: #e3e3e3;
-            }
-            &:after {
-               transition-delay: 0.2s;
-               opacity: 1;
-               transform: translateX(0);
-            }
-         }
+      .reveal-container {
+        display: flex;
+        flex-direction: row;
+        width: 200%;
+      }
+
+      .reveal-item {
+        width: 50%;
+        overflow: hidden;
+        &:first-child {
+          opacity: 1;
+          transition-delay: 0.1s;
+          transform: translateY(0);
+          transition: transform .2s $inQuad, opacity 0.25s ease;
+        }
+        &:last-child {
+          opacity: 0;
+          transform: translateX(-100%) translateY(5%);
+          transition: transform .2s $outQuad, opacity 0.25s ease;
+        }
       }
 
       .demo-title, .demo-description {

@@ -11,35 +11,36 @@
                     ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
                     ng-click="NAC.handleClickAnalysis(analysis)"
                 >
-
-                    <div class="analysis-tile no-animate">
-                        <img
-                            class="analysis-illustration"
-                            ng-src="/styles/images/analysis-{{analysisType}}.svg"
-                        />
-                        <h2 class="analysis-title">
-                            {{analysis.strings.name}}
-                        </h2>
-                        <div class="analysis-buttons light">
-                            <a
-                                class="btn btn-default demo"
-                                ng-click="analysis.launchDemo()"
-                                tooltip="{{analysis.strings.demoDescription}}"
-                            >Demo</a>
-                            <button
-                                class="run t_button"
-                                ng-disabled="(NAC.selectedAnalysis && NAC.selectedAnalysis !== analysis) || !NAC.isAnalysisSatisfied(analysis)"
-                                ng-click="analysis.launch(NAC.selectedSets); $event.stopPropagation();"
-                                tooltip="{{NAC.getCriteriaSatisficationMessage(analysis)}}"
-                            >Run</button>
+                    <div class="reveal-window">
+                        <div class="reveal-container">
+                            <div class="reveal-item">
+                                <img
+                                    class="analysis-illustration"
+                                    ng-src="/styles/images/analysis-{{analysisType}}.svg"
+                                />
+                            </div>
+                            <div class="reveal-item">
+                                <div class="analysis-tile-detail">{{analysis.strings.description}}</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="analysis-tile backface no-animate">
-                        <h2 class="analysis-title">
-                            {{analysis.strings.name}}
-                        </h2>
-                        <div class="analysis-tile-detail">{{analysis.strings.description}}</div>
+                    <h2 class="analysis-title">
+                        {{analysis.strings.name}}
+                    </h2>
+
+                    <div class="analysis-buttons light">
+                        <a
+                            class="btn btn-default demo"
+                            ng-click="analysis.launchDemo()"
+                            tooltip="{{analysis.strings.demoDescription}}"
+                        >Demo</a>
+                        <button
+                            class="run t_button"
+                            ng-disabled="(NAC.selectedAnalysis && NAC.selectedAnalysis !== analysis) || !NAC.isAnalysisSatisfied(analysis)"
+                            ng-click="analysis.launch(NAC.selectedSets); $event.stopPropagation();"
+                            tooltip="{{NAC.getCriteriaSatisficationMessage(analysis)}}"
+                        >Run</button>
                     </div>
 
                 </div>
