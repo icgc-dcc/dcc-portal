@@ -132,56 +132,51 @@
         });
       }
     };
-
-    const SET_COMPATIBILITY_CONTEXTS = {
-      ANALYSIS: 'ANALYSIS',
-      SELECTED_SETS: 'SELECTED_SETS',
+    
+    const CRITERIA_TYPES = {
+      MIN_SETS: 'MIN_SETS',
     };
 
-    const setTypesCriterium = types => ({
-      context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
-      test: set => _.includes(types, set.type),
-      message: gettextCatalog.getString(`Set must be of type "${types.join(' or ')}"`),
+    const minSetCriterium = count => ({
+      type: CRITERIA_TYPES.MIN_SETS,
+      test: selectedSets => selectedSets.length >= count,
+      message: gettextCatalog.getString(`At least ${count} sets are required`),
+    });
+    
+    const maxSetCriterium = count => ({
+      test: selectedSets => selectedSets.length <= count,
+      message: gettextCatalog.getString(`Must not exceed ${count} set`),
     });
 
-    const setItemLimitCriterium = limit => ({
-      context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
-      test: set => set.count <= limit,
-      message: gettextCatalog.getString(`Set must have less than ${limit.toLocaleString()} items`),
-    })
-
-    const setLimitCriterium = limit => ({
-      context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
-      test: (set, selectedSets) => selectedSets.length >= limit
-        ? _.includes(selectedSets, set)
-        : true,
-      message: gettextCatalog.getString(`Only ${limit} set(s) can be selected`),
+    const itemLimitCriterium = (limit, type) => ({
+      test: selectedSets => _.every(selectedSets, set => set.count <= limit),
+      message: gettextCatalog.getString(`Sets cannot contain more than ${limit.toLocaleString()} items`),
     });
 
-    const analysisSetRangeCriterium = (min, max) => ({
-      test: selectedSets => _.inRange(selectedSets.length, min, max + 1),
-      message: gettextCatalog.getString(`Select ${min} to ${max} set(s)`),
+    const itemLimitForSetTypeCriterium = (limit, type) => ({
+      test: selectedSets => _.every(selectedSets, set => (set.type === type ? set.count <= limit : true)),
+      message: gettextCatalog.getString(`${type} sets cannot contain more than ${limit} items`),
     });
 
-    const analysisSetCountCriterium = count => ({
-      test: selectedSets => selectedSets.length === count,
-      message: gettextCatalog.getString(`Select ${count} set(s)`),
+    const setTypesCriterium = (types) => ({
+      test: selectedSets =>  _.every(selectedSets, set => _.includes(types, set.type) ),
+      message: gettextCatalog.getString(`Sets must have type of ${types.join(' or ')}`),
+    });
+
+    const setTypeLimit = (type, limit) => ({
+      test: selectedSets => _.filter(selectedSets, {type: type}).length <= limit,
+      message: gettextCatalog.getString(`There can only be 1 ${type} set`),
     });
 
     this.analysesMeta = {
       enrichment: {
         type: 'enrichment',
         strings: AnalysisService.analysesStrings.enrichment,
-        setCompatibilityCriteria: [
-          setTypesCriterium(['gene']),
-          setItemLimitCriterium(10000),
-          setLimitCriterium(1),
-        ],
         analysisSatisfactionCriteria: [
-          {
-            test: selectedSets => selectedSets.length === 1,
-            message: gettextCatalog.getString('Please select 1 set'),
-          }
+          minSetCriterium(1),
+          maxSetCriterium(1),
+          itemLimitCriterium(10000),
+          setTypesCriterium(['gene']),
         ],
         launch: selectedSets => launchEnrichment(selectedSets[0]),
         launchDemo: () => _this.demoEnrichment(),
@@ -189,16 +184,10 @@
       phenotype: {
         type: 'phenotype',
         strings: AnalysisService.analysesStrings.phenotype,
-        setCompatibilityCriteria: [
-          setLimitCriterium(2),
-          setTypesCriterium(['donor']),
-        ],
         analysisSatisfactionCriteria: [
-          analysisSetCountCriterium(2),
-          {
-            test: selectedSets => _.every(selectedSets, setTypesCriterium(['donor']).test),
-            message: setTypesCriterium(['donor']).message,
-          }
+          minSetCriterium(2),
+          maxSetCriterium(2),
+          setTypesCriterium(['donor']),
         ],
         launch: selectedSets => _this.launchPhenotype(selectedSets.map(x => x.id)),
         launchDemo: () => _this.demoPhenotype(),
@@ -206,16 +195,9 @@
       set: {
         type: 'set',
         strings: AnalysisService.analysesStrings.set,
-        setCompatibilityCriteria: [
-          setLimitCriterium(3),
-          {
-            context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
-            test: (set, selectedSets) => !selectedSets.length || set.type === selectedSets[0].type,
-            message: gettextCatalog.getString('Set types must match'),
-          },
-        ],
         analysisSatisfactionCriteria: [
-          analysisSetRangeCriterium(2, 3),
+          minSetCriterium(2),
+          maxSetCriterium(3),
           {
             test: (selectedSets) => _.unique(selectedSets.map(x => x.type)).length === 1,
             message: gettextCatalog.getString('Set types must match'),
@@ -227,39 +209,14 @@
       oncogrid: {
         type: 'oncogrid',
         strings: AnalysisService.analysesStrings.oncogrid,
-        setCompatibilityCriteria: [
-          setLimitCriterium(2),
-          setTypesCriterium(['gene', 'donor']),
-          {
-            context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
-            test: set => set.type !== 'gene' || set.count <= 100,
-            message: gettextCatalog.getString('Gene set must have fewer than 100 items'),
-          },
-          {
-            context: SET_COMPATIBILITY_CONTEXTS.ANALYSIS,
-            test: set => set.type !== 'donor' || set.count <= 3000,
-            message: gettextCatalog.getString('Donor set must have fewer than 3000 items'),
-          },
-          {
-            context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
-            test: (set, selectedSets) => !selectedSets.length || _.includes(selectedSets, set) || selectedSets[0].type !== 'gene' || set.type === 'donor' ,
-            message: gettextCatalog.getString('Another donor set is required.'),
-          },
-          {
-            context: SET_COMPATIBILITY_CONTEXTS.SELECTED_SETS,
-            test: (set, selectedSets) => !selectedSets.length || _.includes(selectedSets, set) || selectedSets[0].type !== 'donor' || set.type === 'gene',
-            message: gettextCatalog.getString('Another gene set is required.'),
-          },
-        ],
         analysisSatisfactionCriteria: [
-          {
-            test: selectedSets => selectedSets.length === 2 && !_.xor(selectedSets.map(x => x.type), ['gene', 'donor']).length,
-            message: gettextCatalog.getString(`OncoGrid takes in 1 donor set and 1 gene set`),
-          },
-          {
-            test: selectedSets => _.every(selectedSets, set => set.count <= 3000),
-            message: gettextCatalog.getString(`Sets cannot contain more than 3000 items`),
-          }
+          minSetCriterium(2),
+          maxSetCriterium(2),
+          setTypeLimit('gene', 1),
+          setTypeLimit('donor', 1),
+          setTypesCriterium(['gene', 'donor']),
+          itemLimitForSetTypeCriterium(100, 'gene'),
+          itemLimitForSetTypeCriterium(3000, 'donor'),
         ],
         launchDemo: () => _this.demoOncogrid(),
         launch: selectedSets => _this.launchOncogridAnalysis({
