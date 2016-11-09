@@ -252,6 +252,7 @@ public class FileTypeModel extends TypeModel {
   public static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       Fields.OBJECT_ID,
       Fields.FILE_UUID,
+      Fields.ID,
       Fields.FILE_ID,
       Fields.FILE_COPIES,
       Fields.DONORS,
