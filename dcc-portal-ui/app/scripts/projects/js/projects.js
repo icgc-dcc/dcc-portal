@@ -407,7 +407,7 @@
       return _.isEmpty (countryCode) ? defaultValue : 'flag flag-' + countryCode;
     };
 
-    _ctrl.viewInRepositpries = () => {
+    _ctrl.viewInRepositories = () => {
       LocationService.goToPath(`/repositories`, `filters={"file":{ "projectCode":{"is":[${ _.map(_ctrl.projects.hits, (project) => `"${project.id}"`, []) }]}}}`);
     }
 
