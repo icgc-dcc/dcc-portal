@@ -104,7 +104,7 @@
         <button
           class="t_button"
           ng-disabled="!vm.isAnalysisRunnable()"
-          ng-click="vm.onClickLaunch(vm.selectedSets)"
+          ng-click="vm.handleClickLaunch(vm.selectedSets)"
         >
             <span ng-if="vm.isLaunchingAnalysis"><i class="icon-spinner icon-spin"></i></span>
             <translate>Run</translate>

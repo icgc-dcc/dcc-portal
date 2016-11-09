@@ -15,14 +15,18 @@ angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
       onSelectedSetsChange: '&',
     },
     controller: function ($scope, $element, SetService) {
-      this.onClickLaunch = this.onClickLaunch();
-      this.onClickLaunchDemo = this.onClickLaunchDemo();
+
+      const prepareCallbacks = () => {
+        this.handleClickLaunch = this.onClickLaunch();
+        this.handleClickLaunchDemo = this.onClickLaunchDemo();
+        this.handleSelectedSetsChange = this.onSelectedSetsChange();
+      };
 
       this.selectedSets = [];
 
       this.setSelectedSets = (sets) => {
         this.selectedSets = sets;
-        this.onSelectedSetsChange()(this.selectedSets);
+        this.handleSelectedSetsChange(this.selectedSets);
       };
 
       this.isSetSelected = set => _.includes(this.selectedSets, set);
@@ -40,6 +44,9 @@ angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
       this.getAnalysisSatifactionMessage = () => getCriteriaSatisfactionMessages(this.selectedSets, this.analysisSatisfactionCriteria);
 
       this.handleSaveSetName = (set, newName) => SetService.renameSet(vm.set.id, newName);
+
+      this.$onChanges = changes => prepareCallbacks();
+      this.$onInit = () => prepareCallbacks();
     },
     controllerAs: 'vm',
   })
