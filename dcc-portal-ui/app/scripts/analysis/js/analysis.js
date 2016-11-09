@@ -74,7 +74,6 @@ require('./setSelection');
    * Top level set analyses controller
    *
    * AnalysisController: view analysis
-   *   - SavedSetController: manage saved sets
    *   - AnalysisListController: manage saved analysis
    *   - NewAnalysisController: creates new analysis
    */
