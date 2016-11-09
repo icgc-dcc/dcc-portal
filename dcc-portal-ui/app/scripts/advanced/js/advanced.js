@@ -54,7 +54,7 @@ angular.module('icgc.advanced.controllers', [
     'icgc.advanced.services', 'icgc.sets.services', 'icgc.facets'])
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
-              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular,
+              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular, FilterService,
               RouteInfoService, FacetConstants, Extensions, SurvivalAnalysisLaunchService, gettextCatalog) {
 
       var _controller = this,
@@ -480,6 +480,8 @@ angular.module('icgc.advanced.controllers', [
         _controller.state.setSubTab(tab);
       };
 
+      _controller.getActiveSubTab = () =>_controller.state.getSubTab();
+
       /**
        * View observation/experimental details
        */
@@ -502,6 +504,14 @@ angular.module('icgc.advanced.controllers', [
         var filters = LocationService.filters();
         SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters);
       }
+
+      $rootScope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, () => {
+        let tab = _controller.getActiveTab();
+        if(tab === 'mutation'){
+          tab = _controller.getActiveSubTab();
+        }
+        LocationService.goToFirstPage(tab + 's');
+      });
 
       _init();
     })
