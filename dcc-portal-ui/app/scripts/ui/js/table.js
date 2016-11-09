@@ -140,7 +140,8 @@ angular.module('icgc.ui.table.pagination', [])
     maxSize: 5
   })
 
-  .directive('paginationControls', function (paginationConfig, LocationService, $filter, gettextCatalog) {
+  .directive('paginationControls', function (paginationConfig, LocationService, $filter, 
+    $rootScope, FilterService, gettextCatalog) {
     return {
       restrict: 'E',
       scope: {
@@ -269,6 +270,10 @@ angular.module('icgc.ui.table.pagination', [])
             LocationService.setJsonParam('from', from);
           }
         };
+
+        $rootScope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, () => {
+          scope.updateParams(scope.type, 1);
+        });
       }
     };
   })

@@ -267,7 +267,6 @@ angular.module('icgc.advanced.controllers', [
         });
 
         $scope.$on(_filterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
-
           if (filterObj.currentPath.indexOf('/search') < 0) {
             // Unfortunately this event fired before a state change notification is posted so this
             // provides a better why to determine if we need to abort requests that have been made.
@@ -494,7 +493,6 @@ angular.module('icgc.advanced.controllers', [
           }
         });
       };
-
 
       _init();
     })
