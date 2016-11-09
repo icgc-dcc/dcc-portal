@@ -13,7 +13,19 @@
       <div ng-bind-html="vm.selectionInstructions"></div>
       <table class="table table-selectable"> 
           <thead>
-              <th></th>
+              <th>
+                <i
+                  ng-class="{
+                    'icon-check-empty': !vm.areAllSetsSelected(),
+                    'icon-check': vm.areAllSetsSelected(),
+                  }"
+                  ng-click="
+                    vm.areAllSetsSelected()
+                      ? vm.setSelectedSets([])
+                      : vm.setSelectedSets(vm.sets)
+                  "
+                ></i>
+              </th>
               <th><translate>Item Type</translate></th>
               <th><translate>Name</translate></th>
               <th class="text-right"><translate># Items</translate></th>

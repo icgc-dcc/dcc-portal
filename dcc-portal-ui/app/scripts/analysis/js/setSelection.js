@@ -46,6 +46,8 @@ angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
         }
       };
 
+      this.areAllSetsSelected = () => !_.xor(this.selectedSets, this.sets).length;
+
       this.isSetSelected = set => _.includes(this.selectedSets, set);
       this.isAnalysisRunnable = () => this.hasAnalysis() && this.isAnalysisSatisfied() && !this.isLaunchingAnalysis;
       this.handleClickItem = item => this.setSelectedSets(_.xor(this.selectedSets, [item]));
