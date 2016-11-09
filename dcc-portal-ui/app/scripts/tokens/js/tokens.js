@@ -92,9 +92,13 @@
 
       $scope.createToken = function () {
          $scope.processing = true;
-         TokenService.createToken($scope.selected, $scope.tokenDescription).then(function () {
-            refresh();
-         });
+         $scope.errorCreatingToken = false;
+         TokenService.createToken($scope.selected, $scope.tokenDescription)
+            .then(
+                () => refresh(),
+                response => { $scope.errorCreatingToken = true }
+            )
+            .finally(() => { $scope.processing = false });
       };
 
       $scope.cancel = function () {
