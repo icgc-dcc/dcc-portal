@@ -37,7 +37,7 @@
         <div class="t_tabs__tab"
              data-nested
              data-href="search/m"
-             data-ng-click="AdvancedCtrl.setSubTab('mutation')"
+             data-ng-click="AdvancedCtrl.state.setSubTab('mutation')"
              data-ng-class="{active: AdvancedCtrl.state.isSubTab('mutation')}">
             <translate>Mutations</translate><br>
             <small data-ng-hide="AdvancedCtrl.Mutation.isLoading">{{AdvancedCtrl.Mutation.mutations.pagination.total |
@@ -48,7 +48,7 @@
         <div class="t_tabs__tab"
              data-nested
              data-href="search/m/o"
-             data-ng-click="AdvancedCtrl.setSubTab('occurrence')"
+             data-ng-click="AdvancedCtrl.state.setSubTab('occurrence')"
              data-ng-class="{active: AdvancedCtrl.state.isSubTab('occurrence')}">
             <translate>Mutation Occurrences</translate><br>
             <small data-ng-hide="AdvancedCtrl.Mutation.isLoading">{{AdvancedCtrl.Mutation.occurrences.pagination.total |

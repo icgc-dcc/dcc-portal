@@ -480,8 +480,6 @@ angular.module('icgc.advanced.controllers', [
         _controller.state.setSubTab(tab);
       };
 
-      _controller.getActiveSubTab = () =>_controller.state.getSubTab();
-
       /**
        * View observation/experimental details
        */
@@ -504,14 +502,6 @@ angular.module('icgc.advanced.controllers', [
         var filters = LocationService.filters();
         SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters);
       }
-
-      $rootScope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, () => {
-        let tab = _controller.getActiveTab();
-        if(tab === 'mutation'){
-          tab = _controller.getActiveSubTab();
-        }
-        LocationService.goToFirstPage(tab + 's');
-      });
 
       _init();
     })
