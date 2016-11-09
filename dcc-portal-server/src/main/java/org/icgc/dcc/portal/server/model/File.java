@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.model;
 
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,12 +40,16 @@ import lombok.val;
 @ApiModel(value = "File")
 public class File {
 
-  private static final Class<File> MY_CLASS = File.class;
   private static final ObjectMapper MAPPER = createMapper();
 
   @SneakyThrows
   public static File parse(@NonNull String json) {
-    return MAPPER.readValue(json, MY_CLASS);
+    return MAPPER.readValue(json, File.class);
+  }
+
+  @SneakyThrows
+  public static File parse(@NonNull Map<String, Object> fieldMap) {
+    return MAPPER.convertValue(fieldMap, File.class);
   }
 
   /*
@@ -52,18 +57,24 @@ public class File {
    */
   @ApiModelProperty(value = "ID of a repository file")
   String id;
-
   @ApiModelProperty(value = "Object ID of a repository file")
   String objectId;
-
   @ApiModelProperty(value = "Access type of a repository file")
   String access;
-
   @ApiModelProperty(value = "Study type of a repository file")
   List<String> study;
-
   @ApiModelProperty(value = "Data categorization of a repository file")
   DataCategorization dataCategorization;
+  @ApiModelProperty(value = "Data bundle info of a repository file")
+  DataBundle dataBundle;
+  @ApiModelProperty(value = "Copies of a repository file")
+  List<FileCopy> fileCopies;
+  @ApiModelProperty(value = "Donors info of a repository file")
+  List<Donor> donors;
+  @ApiModelProperty(value = "Reference genome of a repository file")
+  ReferenceGenome referenceGenome;
+  @ApiModelProperty(value = "Analysis method of a repository file")
+  AnalysisMethod analysisMethod;
 
   @Data
   @JsonIgnoreProperties(ignoreUnknown = true)
@@ -77,9 +88,6 @@ public class File {
 
   }
 
-  @ApiModelProperty(value = "Data bundle info of a repository file")
-  DataBundle dataBundle;
-
   @Data
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static final class DataBundle {
@@ -88,9 +96,6 @@ public class File {
     String dataBundleId;
 
   }
-
-  @ApiModelProperty(value = "Copies of a repository file")
-  List<FileCopy> fileCopies;
 
   @Data
   @JsonIgnoreProperties(ignoreUnknown = true)
@@ -173,9 +178,6 @@ public class File {
 
   }
 
-  @ApiModelProperty(value = "Donors info of a repository file")
-  List<Donor> donors;
-
   @Data
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static final class Donor {
@@ -236,9 +238,6 @@ public class File {
 
   }
 
-  @ApiModelProperty(value = "Analysis method of a repository file")
-  AnalysisMethod analysisMethod;
-
   @Data
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static final class AnalysisMethod {
@@ -250,9 +249,6 @@ public class File {
     String software;
 
   }
-
-  @ApiModelProperty(value = "Reference genome of a repository file")
-  ReferenceGenome referenceGenome;
 
   @Data
   @JsonIgnoreProperties(ignoreUnknown = true)
