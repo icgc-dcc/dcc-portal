@@ -14,7 +14,13 @@ angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
       onClickLaunchDemo: '&',
       onSelectedSetsChange: '&',
     },
-    controller: function ($scope, $element, SetService) {
+    controller: function (
+      $scope,
+      $element,
+      SetService,
+      $window,
+      gettextCatalog
+    ) {
 
       const prepareCallbacks = () => {
         this.handleClickLaunch = this.onClickLaunch();
@@ -27,6 +33,17 @@ angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
       this.setSelectedSets = (sets) => {
         this.selectedSets = sets;
         this.handleSelectedSetsChange(this.selectedSets);
+      };
+
+      this.deleteSets = (sets) => {
+        if (!$window.confirm(gettextCatalog.getString('Are you sure you want to remove selected sets?'))) {
+          return;
+        }
+
+        if (sets.length > 0) {
+          SetService.removeSeveral(_.map(sets, 'id'));
+          this.setSelectedSets([]);
+        }
       };
 
       this.isSetSelected = set => _.includes(this.selectedSets, set);
