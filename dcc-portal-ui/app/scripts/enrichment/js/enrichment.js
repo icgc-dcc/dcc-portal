@@ -92,7 +92,7 @@
           'filters=' + JSON.stringify(LocationService.filters()) + '&' ;
       }
 
-      geneSortParam = LocationService.getJsonParam('genes');
+      geneSortParam = LocationService.getJqlParam('genes');
 
       if (!_.isEmpty(geneSortParam)) {
         var sort, order;

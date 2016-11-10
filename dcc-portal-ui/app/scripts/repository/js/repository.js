@@ -1032,7 +1032,7 @@
 
     function refresh() {
       var params = {};
-      var filesParam = LocationService.getJsonParam ('files');
+      var filesParam = LocationService.getJqlParam ('files');
 
       // Default
       params.size = 25;
@@ -1105,7 +1105,7 @@
 
     // Remove any pagination on facet change: see DCC-4589
     $scope.$on(FacetConstants.EVENTS.FACET_STATUS_CHANGE, function() {
-      var filesParam = LocationService.getJsonParam('files');
+      var filesParam = LocationService.getJqlParam('files');
       if (!_.isEmpty(filesParam)) {
         var newParam = {
           from: 1,
