@@ -590,7 +590,7 @@ angular.module('icgc.advanced.controllers', [
       }
 
       function _initDonors() {
-        var params = LocationService.getJsonParam('donors'),
+        var params = LocationService.getJqlParam('donors'),
             filters = _locationFilterCache.filters() || {},
             deferred = $q.defer();
 
@@ -640,7 +640,7 @@ angular.module('icgc.advanced.controllers', [
         _ASDonorService.hitsLoaded = false;
       }
 
-      var params = LocationService.getJsonParam('donors');
+      var params = LocationService.getJqlParam('donors');
 
       params.include = 'facets';
       params.facetsOnly = true;
@@ -797,7 +797,7 @@ angular.module('icgc.advanced.controllers', [
 
     function _initGenes() {
 
-      var params = LocationService.getJsonParam('genes'),
+      var params = LocationService.getJqlParam('genes'),
           filters = _locationFilterCache.filters() || {},
           deferred = $q.defer();
 
@@ -847,7 +847,7 @@ angular.module('icgc.advanced.controllers', [
           _ASGeneService.hitsLoaded = false;
         }
 
-        var params = LocationService.getJsonParam('genes');
+        var params = LocationService.getJqlParam('genes');
 
         params.include = 'facets';
         params.facetsOnly = true;
@@ -981,7 +981,7 @@ angular.module('icgc.advanced.controllers', [
     }
 
     function _initMutations() {
-      var params = LocationService.getJsonParam('mutations'),
+      var params = LocationService.getJqlParam('mutations'),
         filters = _locationFilterCache.filters() || {},
         deferred = $q.defer();
 
@@ -1016,7 +1016,7 @@ angular.module('icgc.advanced.controllers', [
           deferred.resolve();
         });
 
-      var occurrencesFilters = LocationService.getJsonParam('occurrences') || {};
+      var occurrencesFilters = LocationService.getJqlParam('occurrences') || {};
 
       _.assign(occurrencesFilters, filters);
 
@@ -1044,7 +1044,7 @@ angular.module('icgc.advanced.controllers', [
           _ASMutationService.hitsLoaded = false;
         }
 
-        var mParams = LocationService.getJsonParam('mutations');
+        var mParams = LocationService.getJqlParam('mutations');
 
         mParams.include = ['facets', 'consequences'];
         mParams.facetsOnly = true;

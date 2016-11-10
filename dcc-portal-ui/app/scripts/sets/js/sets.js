@@ -65,7 +65,7 @@
       if (angular.isDefined($scope.params.setLimit)) {
         params.filters = LocationService.filters();
 
-        sortParam = LocationService.getJsonParam($scope.setType + 's');
+        sortParam = LocationService.getJqlParam($scope.setType + 's');
 
         if (angular.isDefined(sortParam)) {
           params.sortBy = sortParam.sort;

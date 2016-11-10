@@ -41,7 +41,7 @@ angular.module('icgc.ui.table.size').controller('tableSizeController', function 
   $scope.selectedSize = $scope.currentSize? +$scope.currentSize : $scope.sizes[0];
 
   $scope.changeSize = function () {
-    var so = LocationService.getJsonParam($scope.type);
+    var so = LocationService.getJqlParam($scope.type);
 
     so.size = $scope.selectedSize;
     so.from = 1;
@@ -259,7 +259,7 @@ angular.module('icgc.ui.table.pagination', [])
           var sType, from = (scope.data.pagination.size * (page - 1) + 1);
 
           if (type) {
-            sType = LocationService.getJsonParam(type);
+            sType = LocationService.getJqlParam(type);
             if (sType) {
               sType.from = from;
               LocationService.setJsonParam(type, sType);
@@ -315,7 +315,7 @@ angular.module('icgc.ui.table.sortable', []).directive('sortable', function ($lo
       defaultReversed = scope.reversed;
 
       scope.$watch(function () {
-        return LocationService.getJsonParam(scope.type);
+        return LocationService.getJqlParam(scope.type);
       }, function (so) {
         scope.active = defaultActive;
         scope.reversed = defaultReversed;
@@ -330,7 +330,7 @@ angular.module('icgc.ui.table.sortable', []).directive('sortable', function ($lo
       }, true);
 
       scope.onClick = function () {
-        var so = LocationService.getJsonParam(scope.type);
+        var so = LocationService.getJqlParam(scope.type);
 
         if (so.hasOwnProperty('sort') && so.sort === scope.field) {
           scope.reversed = !scope.reversed;
