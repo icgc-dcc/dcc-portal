@@ -270,7 +270,7 @@
   });
 
 
-  module.service('RepositoryService', function ($filter, RestangularNoCache) {
+  module.service('FileService', function ($filter, RestangularNoCache) {
 
     this.folder = function (path) {
       return RestangularNoCache.one('download/info' + path)

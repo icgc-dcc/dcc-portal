@@ -47,7 +47,7 @@
   /**
    * ICGC static repository controller
    */
-  module.controller('ICGCRepoController', function($scope, $stateParams, Restangular, RepositoryService,
+  module.controller('ICGCRepoController', function($scope, $stateParams, Restangular, FileService,
     ProjectCache, API, Settings, Page, RouteInfoService) {
     var _ctrl = this;
     var dataReleasesRouteInfo = RouteInfoService.get ('dataReleases');
@@ -107,12 +107,12 @@
     }
 
     function getFiles() {
-      RepositoryService.folder(_ctrl.path).then(function (response) {
+      FileService.folder(_ctrl.path).then(function (response) {
         var files = response;
 
         files.forEach(annotate);
 
-        _ctrl.files = RepositoryService.sortFiles(files, _ctrl.slugs.length);
+        _ctrl.files = FileService.sortFiles(files, _ctrl.slugs.length);
 
 
         // Grab text file (markdown)
