@@ -434,5 +434,6 @@ angular.module('icgc.repositories.services', [])
       };
 
    })
+   .service('RepositoryService', require('./repository-service'))
    .controller('RepositoriesContentController', function() {});
 
