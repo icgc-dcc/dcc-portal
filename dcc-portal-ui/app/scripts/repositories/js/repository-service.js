@@ -3,12 +3,6 @@ import memoize from 'memoizee';
 
 const memoizeAsync = fn => memoize(fn, {promise: true});
 
-class Repo {
-  constructor(params) {
-    Object.assign(this, ...params);
-  }
-};
-
 export default function (Restangular) {
   "ngInject";
   
