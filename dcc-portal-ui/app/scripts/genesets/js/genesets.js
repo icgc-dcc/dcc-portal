@@ -246,14 +246,6 @@
         }
       });
 
-      // $scope.$watch(function(){
-      //   return _ctrl.tableFilter.projects;
-      // }, function(newVal){
-      //   if(newVal){
-      //     _ctrl.currentCancerPage = 1;
-      //   }
-      // });
-
       refresh();
     });
 

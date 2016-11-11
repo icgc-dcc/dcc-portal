@@ -221,14 +221,6 @@
           donorId: d.id,
           include: 'consequences'
         }).then(success);
-
-        /*
-        Donors.one().getMutations({
-          include: 'consequences',
-          filters: LocationService.filters(),
-          scoreFilters: {donor: {projectId: {is: donor.projectId }}}
-        }).then(success);
-        */
       });
     }
 

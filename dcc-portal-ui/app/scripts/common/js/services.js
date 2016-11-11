@@ -143,7 +143,7 @@
     };
   });
 
-  module.service('Settings', function (RestangularNoCache) {
+  module.service('Settings', function () {
     Object.freeze(window.ICGC_SETTINGS);
     this.get = () => Promise.resolve(window.ICGC_SETTINGS);
   });

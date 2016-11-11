@@ -170,7 +170,6 @@
             showInfo();
 
             if (overlaps && node.isPartOfPathway) {
-              //console.log('Overlapping!!' , d.reactomeId, overlaps);
               _.keys(overlaps).forEach(function(dbId) {
                 if (dbId === d.reactomeId) {
                   var overlappingGene = overlaps[dbId];
@@ -179,7 +178,6 @@
                 }
               });
 
-              //console.log('OVERLAPPPING!!!', overlappingGenesList);
               $scope.overlappingGenesList = overlappingGenesList;
               $scope.overlappingGenesMap = overlappingGenesMap;
             }

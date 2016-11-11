@@ -685,10 +685,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
             'width':size,
             'height':size,
             'stroke':config.strokeColor
-          }).style('fill',function(d){return _.contains(filled,d.reactionType)?config.strokeColor:'white';})
-          .on('mouseover',function(d){
-            console.log(d.description);
-          });
+          }).style('fill',function(d){return _.contains(filled,d.reactionType)?config.strokeColor:'white';});
 
         svg.selectAll('.ReactionLabelText').data(labels).enter().append('text')
           .attr({
@@ -745,8 +742,6 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           var nodes = model.getNodesByReactomeId(id);
 
           nodes.forEach(function (node) {
-            //console.warn('Overlap found for node: ', node);
-
             var svgNode = svg.selectAll('.entity'+node.id);
 
             svgNode
@@ -1068,7 +1063,6 @@ angular.module('icgc.pathwayviewer.directives.services', [])
             reactomeId: _getIDForType(type),
             text:{content:type,position:{x:x,y:y}}
           };
-          //console.log(node);
 
           nodes.push(node);
 
@@ -1402,7 +1396,6 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           }
         });
       }
-      console.log(geneCount + ' Overlapped genes validated! ');
       return geneOverlapExistsHashUsingDbIds;
     };
 

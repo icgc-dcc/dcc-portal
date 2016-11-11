@@ -113,8 +113,6 @@ angular.module('icgc.advanced.controllers', [
           var refreshPromise = service.init.apply(_controller);
 
           serviceObj.promiseCount = ++_promiseCount;
-          console.log('Promise #' + serviceObj.promiseCount + ' - Controller ID "' + serviceObj.id +
-                        '" started refresh...');
 
           refreshPromise.then(
             function () {
@@ -133,12 +131,7 @@ angular.module('icgc.advanced.controllers', [
                   ) ) {
 
                 _pageUnblockedTime = nowTime;
-                console.log('Advanced Search Page blocking stopped in ' + timeDelta + 'ms...');
               }
-
-              console.log('Promise #' + serviceObj.promiseCount + ' - Controller ID "' +
-                          serviceObj.id + '" refreshed in ' +
-                          (nowTime - serviceObj.startRunTime) + 'ms...');
 
               serviceObj.service.isFacetsInitialized = true;
 
@@ -270,7 +263,6 @@ angular.module('icgc.advanced.controllers', [
           if (filterObj.currentPath.indexOf('/search') < 0) {
             // Unfortunately this event fired before a state change notification is posted so this
             // provides a better why to determine if we need to abort requests that have been made.
-            //Restangular.abortAllHTTPRequests();
             return;
           }
 
@@ -289,8 +281,6 @@ angular.module('icgc.advanced.controllers', [
         });
 
         $rootScope.$on(FacetConstants.EVENTS.FACET_STATUS_CHANGE, function(event, facetStatus) {
-          //console.log('Facet change: ', facetStatus);
-
           if (! facetStatus.isActive) {
             return;
           }

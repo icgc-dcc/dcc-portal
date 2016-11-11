@@ -141,7 +141,7 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
 
     // TODO: refactor the formatting depedency out so the properties
     // can be normalized as not to be case sensitive
-    var normalizedTerm = term; //term.toLowerCase().replace(/[^\w]+/, '_');
+    var normalizedTerm = term;
 
     if (angular.isDefined(primaryColours[normalizedTerm])){
       return primaryColours[term];

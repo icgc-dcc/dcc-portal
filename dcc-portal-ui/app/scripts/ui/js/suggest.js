@@ -286,7 +286,7 @@ angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $docu
           if (suggest === 'tags') {
             addId();
           } else {
-            goTo(e);
+            goTo();
           }
         }
 

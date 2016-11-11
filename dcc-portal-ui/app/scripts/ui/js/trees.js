@@ -152,7 +152,6 @@ angular.module('icgc.ui.trees', []).directive('pathwayTree', function($compile) 
             anchor.appendTo(span);
           }
 
-          // relation = angular.element('<strong>').text(goTerm.relation);
           angular.element('<br>').appendTo(span);
         });
 

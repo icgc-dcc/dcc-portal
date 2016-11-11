@@ -39,7 +39,6 @@
         var _h = _$location.hash();
 
         if (! _shouldSuppressScrollTop() && (! _h || ! _h.match(/^!([\w\-]+)$/i))) {
-          //console.log('Restoring scroll top to original position of: 0');
           jQuery(window).scrollTop(0);
         }
         /*else {
@@ -85,7 +84,6 @@
 
         if (match && match.length > 1) {
           hash = match[1];
-          //$location.hash(hash);
           to = - HEADER_HEIGHT;
         }
 
@@ -108,11 +106,8 @@
 
       // Prevents browser window from jumping around while navigating analysis
       if ( _shouldSuppressScrollTop() && ! _hash) {
-        //console.log('no scroll');
         return;
       }
-
-      //console.log('scroll');
 
       // Prevent the timeout from being fired multiple times if called before previous
       // timeout is complete. Make the last request the most valid.

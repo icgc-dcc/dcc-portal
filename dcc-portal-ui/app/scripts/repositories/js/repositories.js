@@ -256,9 +256,6 @@ angular.module('icgc.repositories.services', [])
             // if null it's target is the whole repo study
             _targettedType = targettedType || RepositoryServiceConstants.DATA_TARGET_TYPE.REPO;
 
-
-
-
          function _init() {
             var repoName = ExternalRepoService.getRepoNameFromCode(_repoID);
 
@@ -266,7 +263,6 @@ angular.module('icgc.repositories.services', [])
                throw new Error('Could not find repository name with the repo code: ' + _repoID + '\nAborting...');
             }
 
-            //console.log(repoName);
             _self._repoID = _repoID;
             _self._repoName = repoName;
             _self._targettedType = _targettedType;

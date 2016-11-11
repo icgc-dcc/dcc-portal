@@ -281,9 +281,7 @@
       });
 
       filters = FilterService.filters();
-      if (params.facet === 'id') {
-        return _.has(filters, params.type+'.'+params.facet+'.not');
-      } else if (params.type === 'go_term') {
+      if (params.type === 'go_term') {
         return _.has(filters, ['gene',params.facet,'not']);
       } else {
         return _.has(filters, params.type+'.'+params.facet+'.not');

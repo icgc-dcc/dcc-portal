@@ -309,9 +309,7 @@
       var acc = [];
 
       function page(params) {
-        console.log(resource.route + ' ' + JSON.stringify(params));
         return resource.get('', params).then(function (data) {
-          console.log(data.plain());
           acc = acc.concat(data.hits);
           var pagination = data.pagination;
           if (pagination.page < pagination.pages) {

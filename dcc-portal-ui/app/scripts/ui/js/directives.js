@@ -923,7 +923,7 @@ angular.module('icgc.ui.iobio', [])
 
             return _.pluck(fCopies, 'fileName')[0];
           } catch (err) {
-            console.log(err);
+            console.error(err);
             return 'Could Not Retrieve File Name';
           }
         };

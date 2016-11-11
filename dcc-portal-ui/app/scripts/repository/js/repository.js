@@ -413,8 +413,7 @@
 
       ExternalRepoService.createManifest(params).then(function (id) {
         if (! id) {
-          console.log('No Manifest UUID is returned from API call.');
-          return;
+          throw new Error('No Manifest UUID is returned from API call.');
         }
         repoData.isGeneratingManifestID = false;
         repoData.manifestID = id;

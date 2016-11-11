@@ -287,7 +287,7 @@ angular.module('icgc.ui.table.pagination', [])
       currentPage: '='
     },
     controller: function($scope, $rootScope, FilterService) {
-      let _this = this;
+      const _this = this;
       $rootScope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, () => {
         _this.currentPage = 1;
       });
@@ -400,24 +400,3 @@ angular.module('icgc.ui.table.row.limitation', [])
         '</div>'
     };
   });
-
-
-/* ************************************
- *   Table Sortable
- * ********************************* */
-/*
-angular.module('icgc.ui.table.sortable', []);
-
-angular.module('icgc.ui.table.sortable').controller('tableSortableController', function () {
-  console.log('tableSortableController');
-});
-
-angular.module('icgc.ui.table.sortable').directive('tableSortable', function () {
-  return {
-    restrict: 'A',
-    link: function (scope, elem, attrs) {
-      console.log('tableSortable', attrs);
-    }
-  };
-});
-*/

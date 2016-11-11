@@ -56,7 +56,7 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
   var _controller = this;
 
 
-  _controller.getSpecies = function getSpecies(callback) {
+  _controller.getSpecies = function (callback) {
     CellBaseManager.get({
       host: GMService.getConfiguration().cellBaseHost,
       category: 'meta',
@@ -144,8 +144,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
     replace: true,
     controller: 'GenomeViewerController',
     link: function (scope, element, attrs, GenomeViewerController) {
-
-      console.log(GenomeViewerController);
       var genomeViewer, navigationBar, tracks = {};
       var availableSpecies;
         var regionObj = new Region({chromosome: 1, start: 1, end: 1}),
@@ -382,7 +380,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
         /** End add tracks **/
 
         genomeViewer.draw();
-        //genomeViewer.enableAutoHeight();
 
         genomeViewer.karyotypePanel.hide();
         genomeViewer.chromosomePanel.hide();

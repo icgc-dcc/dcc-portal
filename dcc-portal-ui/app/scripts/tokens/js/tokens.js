@@ -96,7 +96,7 @@
          TokenService.createToken($scope.selected, $scope.tokenDescription)
             .then(
                 () => refresh(),
-                response => { $scope.errorCreatingToken = true }
+                () => { $scope.errorCreatingToken = true }
             )
             .finally(() => { $scope.processing = false });
       };
