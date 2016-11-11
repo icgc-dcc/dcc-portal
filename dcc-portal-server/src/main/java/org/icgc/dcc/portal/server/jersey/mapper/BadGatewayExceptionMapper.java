@@ -32,6 +32,7 @@ import org.icgc.dcc.portal.server.service.BadGatewayException;
 import org.springframework.stereotype.Component;
 
 import lombok.NoArgsConstructor;
+import lombok.Value;
 
 @Component
 @Provider
@@ -51,27 +52,13 @@ public class BadGatewayExceptionMapper implements ExceptionMapper<BadGatewayExce
     return new Error(STATUS, e.getMessage());
   }
 
+  @Value
   @NoArgsConstructor
   private static class BadGatewayStatus implements StatusType {
 
-    private final int code = 502;
-    private final String reason = "Bad Gateway";
-    private Family family = SERVER_ERROR;
-
-    @Override
-    public int getStatusCode() {
-      return code;
-    }
-
-    @Override
-    public Family getFamily() {
-      return family;
-    }
-
-    @Override
-    public String getReasonPhrase() {
-      return reason;
-    }
+    private final int statusCode = 502;
+    private final String reasonPhrase = "Bad Gateway";
+    private final Family family = SERVER_ERROR;
 
   }
 
