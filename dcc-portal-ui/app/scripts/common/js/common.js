@@ -394,4 +394,6 @@
     };
   });
 
+  module.directive('ngLazyShow', require('./lazy-show'))
+
 })();
