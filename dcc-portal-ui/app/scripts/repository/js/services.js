@@ -100,7 +100,12 @@
         .customPOST(params, undefined, undefined, {'Content-Type': 'application/json'});
     };
 
-    _srv.getList = function (params) {
+    const hydrateFileCopies = (copies, repoCodeMap) => copies.map(copy => ({
+      ...copy,
+      repo: repoCodeMap[copy.repoCode],
+    }));
+
+    _srv.getList = async function (params) {
       var defaults = {
         size: 10,
         from:1
@@ -124,7 +129,7 @@
           'TCGA DCC - Bethesda'
       ];
 
-      return Restangular.one (REPO_API_PATH).get (angular.extend (defaults, params)).then(function (data) {
+      const filesRequest = Restangular.one(REPO_API_PATH).get(angular.extend (defaults, params)).then((data) => {
         if (data.termFacets.hasOwnProperty('repoName') && data.termFacets.repoName.hasOwnProperty('terms')) {
           data.termFacets.repoName.terms = data.termFacets.repoName.terms.sort(function (a, b) {
             return precedence.indexOf(a.term) - precedence.indexOf(b.term);
@@ -133,6 +138,19 @@
 
         return data;
       });
+
+      const [filesResponse, repoCodeMap] = [
+        await filesRequest,
+        await RepositoryService.getRepoCodeMap(),
+      ];
+
+      return {
+        ...filesResponse,
+        hits: filesResponse.hits.map(hit => ({
+          ...hit,
+          fileCopies: hydrateFileCopies(hit.fileCopies, repoCodeMap),
+        }))
+      };
     };
 
     _srv.getRelevantRepos = function (filters) {
@@ -234,9 +252,10 @@
         await Restangular.one(REPO_API_PATH, id).get().then(x => x.plain()),
         await RepositoryService.getRepoCodeMap(),
       ];
-      return Object.assign({}, fileInfo, {
-        fileCopies: fileInfo.fileCopies.map(copy => ({...copy, repo: repoCodeMap[copy.repoCode]}))
-      });
+      return {
+        ...fileInfo,
+        fileCopies: hydrateFileCopies(fileInfo.fileCopies, repoCodeMap),
+      }
     };
 
     function _shortenRepoName (name) {
