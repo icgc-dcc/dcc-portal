@@ -224,17 +224,11 @@
             </a>
 
             <span ng-if="showMetaData"
-              ng-init="metaDataUrl = fileCtrlr.buildMetaDataUrl (fileCopy, info); isS3 = fileCtrlr.isS3 (fileCopy.repo.type);">
+              ng-init="metaDataUrl = fileCtrlr.buildMetaDataUrl (fileCopy, info);">
               <br>
-              <a ng-if="isS3"
-                href="{{ metaDataUrl }}" tooltip="Download Metadata" title="{{ metaDataUrl }}" target="_blank">
-                <i class="icon-download" data-ng-if="fileCopy.repo.name != 'Collaboratory - Toronto'"  /><!--
-                --><i class="icon-external-link" data-ng-if="fileCopy.repo.name === 'Collaboratory - Toronto'"  /><!--
+              <a href="{{ metaDataUrl }}" tooltip="Download Metadata" title="{{ metaDataUrl }}" target="_blank">
+                <i class="icon-external-link"/><!--
                 --><translate>Metadata</translate>
-              </a>
-              <a ng-if="! isS3"
-                target="_blank" href="{{ metaDataUrl }}" tooltip="Show Metadata" title="{{ metaDataUrl }}">
-                <i class="icon-external-link" /><translate>Metadata</translate>
               </a>
             </span>
 
