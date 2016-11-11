@@ -31,7 +31,7 @@
 
   var module = angular.module('icgc.repository.services', []);
 
-  module.service ('ExternalRepoService', function ($window, $q, Restangular, API, HighchartsService) {
+  module.service ('ExternalRepoService', function ($window, $q, Restangular, API, HighchartsService, RepositoryService) {
 
     // Initial values until the call to getRepoMap() returns.
     var _srv = this,
@@ -229,8 +229,14 @@
       return Restangular.one (REPO_API_PATH).one('metadata').get ({});
     };
 
-    _srv.getFileInfo = function (id) {
-      return Restangular.one (REPO_API_PATH, id).get();
+    _srv.getFileInfo = async function (id) {
+      const [fileInfo, repoCodeMap] = [
+        await Restangular.one(REPO_API_PATH, id).get().then(x => x.plain()),
+        await RepositoryService.getRepoCodeMap(),
+      ];
+      return Object.assign({}, fileInfo, {
+        fileCopies: fileInfo.fileCopies.map(copy => ({...copy, repo: repoCodeMap[copy.repoCode]}))
+      });
     };
 
     function _shortenRepoName (name) {
