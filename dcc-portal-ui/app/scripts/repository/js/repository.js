@@ -786,9 +786,6 @@
     /**
      * Tablular display
      */
-    _ctrl.repoNames = function (fileCopies) {
-      return uniquelyConcat (fileCopies, 'repoName');
-    };
 
     _ctrl.fileFormats = function (fileCopies) {
       return uniquelyConcat (fileCopies, 'fileFormat');
@@ -816,7 +813,7 @@
     };
 
     _ctrl.repoNamesInTooltip = function (fileCopies) {
-      return tooltipList (fileCopies, 'repoName', '');
+      return tooltipList (fileCopies, 'repo.name', '');
     };
 
     _ctrl.awsOrCollab = function(fileCopies) {
