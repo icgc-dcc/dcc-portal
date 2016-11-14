@@ -1,4 +1,4 @@
-$copyClipBubbleBG: $tooltipFill;//#000;
+$copyClipBubbleBG: $tooltipFill;
 $borderColour: $tooltipBorder;
 $shadowColor: $tooltipShadowColor;
 $iconColor: #e9931c;
@@ -6,10 +6,6 @@ $iconColor: #e9931c;
 .copy-to-clip {
   position: relative;
   display: inline-block;
-  
-  //.copy-to-clip-content {
-   
-  //}
 
   .icon-clippy {
     color: $iconColor;
@@ -20,7 +16,6 @@ $iconColor: #e9931c;
    background: $copyClipBubbleBG;
    position: absolute;
    opacity: 0.95;
-   //color: #fff;
    color: #000;
    left: 10%;
    top: -3px;
@@ -29,7 +24,6 @@ $iconColor: #e9931c;
    font-weight: 300;
    line-height: 1.6rem;
    font-size: .9rem;
-   //font-size: 1.1rem;
    z-index: 0;
    display: none;
    border: 1px solid $borderColour;

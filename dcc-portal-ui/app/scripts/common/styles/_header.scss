@@ -223,21 +223,18 @@ header {
 
 .t_nav {
   font-size: 1.3rem;
-  //padding-top: .1rem;
 }
 
 .t_nav__pages {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
- // @include float-span(4);
   width: 38%;
 }
 
 .t_nav__actions {
   display: table-cell;
   text-align: right;
-  //@include float-span(4);
   margin-right: 0;
   width: 27%;
 }
@@ -386,7 +383,6 @@ header {
     margin: 0 auto;
     padding: .8rem 1rem .8rem 1.1rem;
     border-radius: 50%;
-    //box-shadow: 0 0 0 30px transparent;
     background: rgba(255, 255, 255, 0.1);
 
     @include breakpoint($break-laptop) {
