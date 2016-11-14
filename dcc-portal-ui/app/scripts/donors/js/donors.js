@@ -488,7 +488,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     _ctrl.getFiles = function (){
       var promise, 
         params = {},
-        filesParam = LocationService.getJsonParam ('files');
+        filesParam = LocationService.getJqlParam ('files');
 
       // Default
       params.from = 1;

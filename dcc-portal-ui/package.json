@@ -14,6 +14,7 @@
     "checkhost": "node tasks/checkDns.js",
     "predev": "npm run ensure-versions && npm run checkhost",
     "dev": "npm start",
+    "dev:breakpoint" : "SOURCE_MAP=source-map npm run dev",
     "dev:prodapi": "API_SOURCE=production npm run dev",
     "font:open": "fontello-cli --config app/styles/fonts/config.json open",
     "build": "node ./tasks/build.js",

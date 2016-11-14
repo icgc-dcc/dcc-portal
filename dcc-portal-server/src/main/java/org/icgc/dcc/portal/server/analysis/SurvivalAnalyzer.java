@@ -130,7 +130,8 @@ public class SurvivalAnalyzer {
     SearchHit[] hits = response.getHits().getHits();
     val donors = filterDonors(hits, filter);
 
-    val intervals = donors.length == 0 ? Collections.<Interval> emptyList() : compute(donors, diseaseFree);
+    // Cannot produce curve with one data point.
+    val intervals = donors.length <= 1 ? Collections.<Interval> emptyList() : compute(donors, diseaseFree);
     return Maps.immutableEntry(hits.length, intervals);
   }
 
@@ -167,6 +168,11 @@ public class SurvivalAnalyzer {
     float atRisk = time.length;
     float cumulativeSurvival = 1;
     val intervalIter = intervals.iterator();
+
+    // Guard with short return if no intervals in iterator.
+    if (!intervalIter.hasNext()) {
+      return intervals;
+    }
 
     // This implementation later mutates this reference.
     Interval currentInterval = intervalIter.next();

@@ -88,6 +88,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON manifest TO dcc;
 
 CREATE TABLE IF NOT EXISTS oncogrid_analysis(
    id   UUID NOT NULL,
+   version INT,
    data TEXT NOT NULL,
 
    PRIMARY KEY(id)
