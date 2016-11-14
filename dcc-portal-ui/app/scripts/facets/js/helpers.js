@@ -226,7 +226,6 @@
       });
 
       filters = FilterService.filters();
-      console.info(filters);
   
       if (_.has(filters, [params.type, params.facet, 'is']) && 
           filters[params.type][params.facet].is.indexOf(params.term)  !== -1) {

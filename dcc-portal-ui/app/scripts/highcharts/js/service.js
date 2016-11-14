@@ -161,8 +161,6 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
     }
 
     chosenColour = colours[colourIndex];
-    //console.log('For Term "' + term + '" (normalized to: ' + normalizedTerm + ' ).' +
-    //              ' The colour Index Chosen is ' + colourIndex + ' (' + colour + ')');
 
     // save it to the primaryColour object store for later caching purposes
     primaryColours[normalizedTerm] = chosenColour;

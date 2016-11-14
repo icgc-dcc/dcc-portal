@@ -148,7 +148,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
       var availableSpecies;
         var regionObj = new Region({chromosome: 1, start: 1, end: 1}),
         done = false; 
-        
+
       function setup() {
         regionObj.start = parseInt(regionObj.start);
         regionObj.end = parseInt(regionObj.end);
@@ -288,7 +288,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
             }
           }),
           dataAdapter: new IcgcGeneAdapter({
-            //multiRegions: true,
             resource: 'gene',
             chromosomeLimitMap: gvConstants.CHROMOSOME_LIMIT_MAP,
             multiRegions: true,

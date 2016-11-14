@@ -341,7 +341,6 @@ angular.module('icgc.ui.suggest').directive('tagsPopup', function (Extensions) {
       };
 
       scope.click = function (item) {
-        console.info(item);
         scope.query = '';
         if (scope.entitySetSearch) {
           item.id = Extensions.ENTITY_PREFIX + item.id;

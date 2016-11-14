@@ -649,7 +649,6 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
           enabled: false,
         },
         yAxis: {
-          //allowDecimals:false,
           min: 0,
           showFirstLabel: true,
           showLastLabel: true,

@@ -190,7 +190,6 @@ angular.module('icgc.advanced.controllers', [
         }
 
         if (service.isHitsInitialized === true && forceFullRefresh !== true) {
-          console.info('Tab already rendered skipping rendering phase...');
           return;
         }
 

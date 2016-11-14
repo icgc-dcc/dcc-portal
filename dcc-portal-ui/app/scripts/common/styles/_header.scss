@@ -454,12 +454,10 @@ header {
     margin: 0.5rem 0rem;
     display:block;
     width: 100%;
-    //margin-right: 0;
     .t_nav__items__item {
       text-align: left;
       margin: 0;
       @include breakpoint($break-tablet) {
-        // margin: 0 2rem;
         margin: 0rem 1.25rem 0.7rem 0rem;
       }
       a {

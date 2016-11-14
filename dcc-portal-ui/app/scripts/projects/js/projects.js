@@ -737,7 +737,6 @@
               size: 0,
               include: 'facets',
               filters: mutation.advQueryAll
-              //filters: {mutation: {id: {is: mutation.id}}}
             }).then(function (data) {
               mutation.uiDonors = data.facets.projectId.terms;
               mutation.uiDonors.forEach(function (facet) {
