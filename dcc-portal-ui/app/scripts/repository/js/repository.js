@@ -251,7 +251,7 @@
 
   module.controller('ExternalFileDownloadController',
     function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params, Restangular, $filter) {
+      Extensions, params, Restangular, $filter, RepositoryService) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
@@ -291,7 +291,10 @@
       return _.find(list, function(t) { return t.term === term; }).count || 0;
     }
 
-    ExternalRepoService.getList (p).then (function (data) {
+    Promise.all([
+      ExternalRepoService.getList(p),
+      RepositoryService.getRepos(),
+    ]).then(function ([data, reposFromService]) {
       var facets = data.termFacets;
       var activeRepos = [];
 
@@ -303,6 +306,7 @@
       var repos = {};
       facets.repoName.terms.forEach(function(term) {
         var repoName = term.term;
+        const repo = _.find(reposFromService, {name: repoName});
 
         // Restrict to active repos if it is available
         if (!_.isEmpty(activeRepos) && !_.contains(activeRepos, repoName)) {
@@ -314,12 +318,12 @@
         }
 
         repos[repoName].repoName = repoName;
-        repos[repoName].repoCode = ExternalRepoService.getRepoCodeFromName(repoName);
+        repos[repoName].repoCode = repo.code;
         repos[repoName].fileSize = findRepoData(facets.repositorySizes.terms, repoName);
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
         repos[repoName].fileCount = term.count;
-        repos[repoName].hasManifest = _.includes(cloudRepos, repoName);
-        repos[repoName].isCloud = _.includes(cloudRepos, repoName);
+        repos[repoName].hasManifest = RepositoryService.isCloudRepo(repo);
+        repos[repoName].isCloud = RepositoryService.isCloudRepo(repo);
       });
 
       $scope.repos = _(repos).values().sortBy('fileSize').value().reverse();
