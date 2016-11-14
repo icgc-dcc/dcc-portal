@@ -144,7 +144,7 @@
     function init() {
       $timeout.cancel(pollTimeout);
       $scope.error = null;
-      $scope.analysisResult = null;
+      $scope.analysisResult = undefined;
 
       if (! $scope.analysisId || ! $scope.analysisType) {
         return;
@@ -162,7 +162,7 @@
         }
 
         if (data.state === 'FINISHED') {
-          $scope.analysisResult = null;
+          $scope.analysisResult = undefined;
           $timeout(function() {
             $scope.analysisResult = data;
           }, 150);
