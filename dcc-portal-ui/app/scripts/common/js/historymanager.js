@@ -41,11 +41,6 @@
         if (! _shouldSuppressScrollTop() && (! _h || ! _h.match(/^!([\w\-]+)$/i))) {
           jQuery(window).scrollTop(0);
         }
-        /*else {
-          console.log('No scroll!');
-        }*/
-
-
 
         return _originalHistoryMethod.apply(this, Array.prototype.slice.call(arguments));
       };
