@@ -103,7 +103,6 @@
      * Push data to results if matches functional impact criteria of filter 
      */
     function pushResults(data, filters, result) {
-      
       var start = data.transcript.consequence.aaMutation.replace(/[^\d]/g, '');
       if (start > 0) {
         var m = {
@@ -117,7 +116,6 @@
         if (data.transcript.functionalImpact) {
           m.functionalImpact = data.transcript.functionalImpact || 'Unknown';
         }
-
         if (filters.mutation && filters.mutation.functionalImpact) {
           var fiFilter = filters.mutation.functionalImpact.is;
           if (fiFilter.indexOf(m.functionalImpact) >= 0) {
@@ -126,7 +124,6 @@
         } else {
           result.push(m);
         }
-
       }
     }
 
