@@ -137,14 +137,10 @@
       var result = [], filters = LocationService.filters();
 
       _(mutations.hits)
-        .map(hit => {
-          return {
+        .map(hit => ({
             mutation: hit, 
-            transcript: _.find(hit.transcripts, function (t) {
-              return t.id === transcriptId;
-            })
-          }
-        })
+            transcript: _.find(hit.transcripts, {id: transcriptId})
+          }))
         .filter( m => m.transcript !== undefined && m.transcript !== null )
         .forEach( data => pushResults(data, filters, result) ) // Push to result through side effect 
         .value(); // Needed for lodash 3.x
