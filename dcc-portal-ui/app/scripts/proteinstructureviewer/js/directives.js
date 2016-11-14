@@ -99,42 +99,55 @@
       return result;
     }
 
-    function transformMutations(mutations, transcriptId) {
-      var result = [], fiFilter = [];
-      var filters = LocationService.filters();
+    /**
+     * Push data to results if matches functional impact criteria of filter 
+     */
+    function pushResults(data, filters, result) {
+      
+      var start = data.transcript.consequence.aaMutation.replace(/[^\d]/g, '');
+      if (start > 0) {
+        var m = {
+          id: data.transcript.consequence.aaMutation,
+          position: start,
+          value: data.mutation.affectedDonorCountTotal,
+          ref: data.mutation.id,
+        };
 
-      if (mutations.hits) {
-        mutations.hits.forEach(function (mutation) {
-          var transcript = _.find(mutation.transcripts, function (t) {
-            return t.id === transcriptId;
-          });
-          var start = transcript.consequence.aaMutation.replace(/[^\d]/g, '');
+        // Add function impact scores
+        if (data.transcript.functionalImpact) {
+          m.functionalImpact = data.transcript.functionalImpact || 'Unknown';
+        }
 
-          if (start > 0) {
-            var m = {
-              id: transcript.consequence.aaMutation,
-              position: start,
-              value: mutation.affectedDonorCountTotal,
-              ref: mutation.id,
-            };
-
-            // Add function impact scores
-            if (transcript.functionalImpact) {
-              m.functionalImpact = transcript.functionalImpact || 'Unknown';
-            }
-
-            if (filters.mutation && filters.mutation.functionalImpact) {
-              fiFilter = filters.mutation.functionalImpact.is;
-              if (fiFilter.indexOf(m.functionalImpact) >= 0) {
-                result.push(m);
-              }
-            } else {
-              result.push(m);
-            }
-
+        if (filters.mutation && filters.mutation.functionalImpact) {
+          var fiFilter = filters.mutation.functionalImpact.is;
+          if (fiFilter.indexOf(m.functionalImpact) >= 0) {
+            result.push(m);
           }
-        });
+        } else {
+          result.push(m);
+        }
+
       }
+    }
+
+    /**
+     * Transforms mutation hits to results for protein vewier. 
+     */
+    function transformMutations(mutations, transcriptId) {
+      var result = [], filters = LocationService.filters();
+
+      _(mutations.hits)
+        .map(hit => {
+          return {
+            mutation: hit, 
+            transcript: _.find(hit.transcripts, function (t) {
+              return t.id === transcriptId;
+            })
+          }
+        })
+        .filter( m => m.transcript !== undefined && m.transcript !== null )
+        .forEach( data => pushResults(data, filters, result) ) // Push to result through side effect 
+        .value(); // Needed for lodash 3.x
 
       return result;
     }
