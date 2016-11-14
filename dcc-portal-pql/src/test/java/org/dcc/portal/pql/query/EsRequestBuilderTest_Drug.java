@@ -32,10 +32,10 @@ public class EsRequestBuilderTest_Drug extends BaseElasticsearchTest {
   QueryEngine queryEngine;
 
   @Before
-  public void setUp() {
-    es.execute(createIndexMappings(DRUG_CENTRIC).withData(bulkFile(getClass())));
+  public void setUpEsRequestBuilderTestDrug() {
+    prepareIndex(DRUG_CENTRIC);
     queryContext = new QueryContext(INDEX_NAME, DRUG_CENTRIC);
-    queryEngine = new QueryEngine(es.client(), INDEX_NAME);
+    queryEngine = new QueryEngine(client, INDEX_NAME);
   }
 
   @Test

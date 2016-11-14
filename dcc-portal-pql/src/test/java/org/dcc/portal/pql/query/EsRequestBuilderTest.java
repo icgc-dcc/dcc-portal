@@ -17,12 +17,12 @@
  */
 package org.dcc.portal.pql.query;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.exception.SemanticException;
 import org.dcc.portal.pql.utils.BaseElasticsearchTest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -50,26 +50,26 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
-  public void setUp() {
-    es.execute(createIndexMappings(MUTATION_CENTRIC).withData(bulkFile(getClass())));
-    visitor = new EsRequestBuilder(es.client());
+  public void setUpEsRequestBuilderTest() {
+    prepareIndex(MUTATION_CENTRIC);
+    visitor = new EsRequestBuilder(client);
     queryContext = new QueryContext(INDEX_NAME, MUTATION_CENTRIC);
-    queryEngine = new QueryEngine(es.client(), INDEX_NAME);
+    queryEngine = new QueryEngine(client, INDEX_NAME);
   }
 
   @Test
   public void sortTest() {
     val result = executeQuery("select(start),sort(-start)");
-    assertThat(getFirstSearchResult(result).getSortValues()[0]).isEqualTo(61020906L);
+    Assertions.assertThat(getFirstSearchResult(result).getSortValues()[0]).isEqualTo(61020906L);
   }
 
   @Test
   public void selectTest() {
     val result = executeQuery("select(chromosome)");
     val hit = getFirstSearchResult(result);
-    assertThat(hit.fields().size()).isEqualTo(1);
+    Assertions.assertThat(hit.fields().size()).isEqualTo(1);
     val value = hit.field("chromosome").getValue();
-    assertThat(value).isEqualTo("1");
+    Assertions.assertThat(value).isEqualTo("1");
   }
 
   @Test
@@ -77,8 +77,8 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
     val result = executeQuery("select(transcripts)");
     assertTotalHitsCount(result, 3);
     val hit = getFirstSearchResult(result);
-    assertThat(hit.fields().size()).isEqualTo(0);
-    assertThat(hit.getSource().get("transcript")).isNotNull();
+    Assertions.assertThat(hit.fields().size()).isEqualTo(0);
+    Assertions.assertThat(hit.getSource().get("transcript")).isNotNull();
   }
 
   @Test
@@ -115,14 +115,14 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
   public void eqTest() {
     val result = executeQuery("eq(id, 'MU2')");
     assertTotalHitsCount(result, 1);
-    assertThat(getFirstSearchResult(result).getId()).isEqualTo("MU2");
+    Assertions.assertThat(getFirstSearchResult(result).getId()).isEqualTo("MU2");
   }
 
   @Test
   public void eqTest_nested() {
     val result = executeQuery("eq(functionalImpact, 'Low')");
     assertTotalHitsCount(result, 1);
-    assertThat(getFirstSearchResult(result).getId()).isEqualTo("MU1");
+    Assertions.assertThat(getFirstSearchResult(result).getId()).isEqualTo("MU1");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
     val result = executeQuery("ne(id, 'MU1')");
     assertTotalHitsCount(result, 2);
     for (val hit : result.getHits()) {
-      assertThat(hit.getId()).isNotEqualTo("MU1");
+      Assertions.assertThat(hit.getId()).isNotEqualTo("MU1");
     }
   }
 
@@ -202,14 +202,14 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
     val result =
         executeQuery("and(eq(verificationStatus, 'tested'), eq(sequencingStrategy, 'WGE'))");
     assertTotalHitsCount(result, 1);
-    assertThat(getFirstSearchResult(result).getId()).isEqualTo("MU2");
+    Assertions.assertThat(getFirstSearchResult(result).getId()).isEqualTo("MU2");
   }
 
   @Test
   public void andTest_rootLevel() {
     val result = executeQuery("eq(verificationStatus, 'tested'), eq(sequencingStrategy, 'WGE')");
     assertTotalHitsCount(result, 1);
-    assertThat(getFirstSearchResult(result).getId()).isEqualTo("MU2");
+    Assertions.assertThat(getFirstSearchResult(result).getId()).isEqualTo("MU2");
   }
 
   @Test
@@ -238,16 +238,16 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
 
     for (val bucket : terms.getBuckets()) {
       if (bucket.getKey().equals("tested")) {
-        assertThat(bucket.getDocCount()).isEqualTo(2);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(2);
       } else {
-        assertThat(bucket.getDocCount()).isEqualTo(4);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(4);
       }
     }
 
     Global globalMissing = result.getAggregations().get("verificationStatus_missing");
     Nested nestedMissing = globalMissing.getAggregations().get("verificationStatus_missing");
     Missing missing = nestedMissing.getAggregations().get("verificationStatus_missing");
-    assertThat(missing.getDocCount()).isEqualTo(0L);
+    Assertions.assertThat(missing.getDocCount()).isEqualTo(0L);
   }
 
   @Test
@@ -258,7 +258,7 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
     Global globaldMissing = result.getAggregations().get("verificationStatus_missing");
     Nested nestedMissing = globaldMissing.getAggregations().get("verificationStatus_missing");
     Missing missing = nestedMissing.getAggregations().get("verificationStatus_missing");
-    assertThat(missing.getDocCount()).isEqualTo(0L);
+    Assertions.assertThat(missing.getDocCount()).isEqualTo(0L);
   }
 
   @Test
@@ -274,9 +274,9 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
 
     for (val bucket : terms.getBuckets()) {
       if (bucket.getKey().equals("tested")) {
-        assertThat(bucket.getDocCount()).isEqualTo(1);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(1);
       } else {
-        assertThat(bucket.getDocCount()).isEqualTo(3);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(3);
       }
     }
   }
@@ -294,9 +294,9 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
 
     for (val bucket : terms.getBuckets()) {
       if (bucket.getKey().equals("tested")) {
-        assertThat(bucket.getDocCount()).isEqualTo(2);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(2);
       } else {
-        assertThat(bucket.getDocCount()).isEqualTo(4);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(4);
       }
     }
   }
@@ -313,9 +313,9 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
 
     for (val bucket : terms.getBuckets()) {
       if (bucket.getKey().equals("tested")) {
-        assertThat(bucket.getDocCount()).isEqualTo(2);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(2);
       } else {
-        assertThat(bucket.getDocCount()).isEqualTo(4);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(4);
       }
     }
   }
@@ -340,9 +340,9 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
 
     for (val bucket : terms.getBuckets()) {
       if (bucket.getKey().equals("tested")) {
-        assertThat(bucket.getDocCount()).isEqualTo(1);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(1);
       } else {
-        assertThat(bucket.getDocCount()).isEqualTo(3);
+        Assertions.assertThat(bucket.getDocCount()).isEqualTo(3);
       }
     }
   }

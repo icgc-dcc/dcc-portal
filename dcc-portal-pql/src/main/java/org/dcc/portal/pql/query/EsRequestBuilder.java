@@ -21,7 +21,6 @@ import static org.dcc.portal.pql.es.utils.Visitors.createAggregationBuilderVisit
 import static org.dcc.portal.pql.es.utils.Visitors.createQueryBuilderVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.filterBuilderVisitor;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
-import static org.elasticsearch.action.search.SearchType.COUNT;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -45,6 +44,8 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.search.sort.SortOrder;
 
+import com.google.common.collect.Lists;
+
 @Slf4j
 @RequiredArgsConstructor
 public class EsRequestBuilder {
@@ -60,6 +61,8 @@ public class EsRequestBuilder {
         .prepareSearch(queryContext.getIndex())
         .setTypes(queryContext.getType().getId());
 
+    val sourceFields = Lists.<String> newArrayList();
+
     for (val child : esAst.getChildren()) {
       if (child instanceof FilterNode) {
         result.setPostFilter(toBuilder(child, filterBuilderVisitor(), queryContext));
@@ -69,10 +72,10 @@ public class EsRequestBuilder {
         addAggregations(result, child, queryContext);
       } else if (child instanceof FieldsNode) {
         val fields = ((FieldsNode) child).getFields();
-        result.addFields(toStringArray(fields));
+        sourceFields.addAll(fields);
       } else if (child instanceof SourceNode) {
         val includeFields = ((SourceNode) child).getFields();
-        result.setFetchSource(toStringArray(includeFields), NO_EXCLUDE);
+        sourceFields.addAll(includeFields);
       } else if (child instanceof LimitNode) {
         val limit = (LimitNode) child;
         result.setFrom(limit.getFrom())
@@ -84,9 +87,13 @@ public class EsRequestBuilder {
       }
     }
 
+    if (!sourceFields.isEmpty()) {
+      result.setFetchSource(toStringArray(sourceFields), NO_EXCLUDE);
+    }
+
     if (containsCount) {
       log.debug("Setting search type to COUNT");
-      result.setSearchType(COUNT);
+      result.setSize(0);
     }
 
     return result;

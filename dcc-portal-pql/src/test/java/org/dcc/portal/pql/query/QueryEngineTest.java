@@ -20,28 +20,30 @@ package org.dcc.portal.pql.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.ast.function.FunctionBuilders.limit;
 import static org.dcc.portal.pql.utils.Tests.initQueryContext;
+import lombok.SneakyThrows;
+import lombok.val;
 
 import org.dcc.portal.pql.ast.StatementNode;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.MissingNode;
 
-import lombok.SneakyThrows;
-import lombok.val;
-
+@RunWith(com.carrotsearch.randomizedtesting.RandomizedRunner.class)
 public class QueryEngineTest {
 
   /**
    * Dependencies
    */
   private static ObjectMapper MAPPER = new ObjectMapper();
-  private Client client = new TransportClient();
+  private Client client = new PreBuiltTransportClient(Settings.EMPTY);
   private QueryContext context = initQueryContext();
   private QueryEngine queryEngine = new QueryEngine(client, context.getIndex());
 
