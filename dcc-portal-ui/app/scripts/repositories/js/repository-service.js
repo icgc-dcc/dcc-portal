@@ -9,5 +9,7 @@ export default function (Restangular) {
   this.getRepos = memoizeAsync(() => fetchRepos());
   this.getRepoCodeMap = memoizeAsync(() => this.getRepos().then(repos => keyBy(repos, 'code')));
 
+  this.isCloudRepo = ({storage}) => _.includes(['icgc', 's3'], storage);
+
   fetchRepos();
 };
