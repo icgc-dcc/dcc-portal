@@ -627,7 +627,7 @@
    */
   module.controller ('ExternalRepoController', function ($scope, $window, $modal, LocationService, Page,
     ExternalRepoService, SetService, ProjectCache, CodeTable, RouteInfoService, $rootScope, PortalFeature,
-    FacetConstants, Facets, LoadState) {
+    FacetConstants, Facets, LoadState, EnsureInputService) {
 
     var dataRepoTitle = RouteInfoService.get ('dataRepositories').title,
         FilterService = LocationService.getFilterService();
@@ -731,7 +731,7 @@
     }
 
     function buildDataInfo (data, property, paths, category, toolTip) {
-      var ids = _(ensureArray (data))
+      var ids = _(EnsureInputService.ensureArray (data))
         .map (property)
         .unique()
         .value();
@@ -830,7 +830,7 @@
 
     _ctrl.flagIconClass = function (projectCode) {
       var defaultValue = '';
-      var last3 = _.takeRight (ensureString (projectCode), 3);
+      var last3 = _.takeRight (EnsureInputService.ensureString (projectCode), 3);
 
       if (_.size (last3) < 3 || _.first (last3) !== '-') {
         return defaultValue;

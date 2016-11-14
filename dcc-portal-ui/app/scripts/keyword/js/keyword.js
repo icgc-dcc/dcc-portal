@@ -33,40 +33,10 @@
 (function () {
   'use strict';
 
-  function ensureArray (array) {
-    return _.isArray (array) ? array : [];
-  }
-  function ensureString (string) {
-    return _.isString (string) ? string.trim() : '';
-  }
-
-  function words (phrase) {
-    return _.words (phrase, /[^, ]+/g);
-  }
-
-  function partiallyContainsIgnoringCase (phrase, keyword) {
-    if (_.isEmpty (phrase)) {
-      return false;
-    }
-
-    var phrase2 = phrase.toUpperCase();
-    var keyword2 = keyword.toUpperCase();
-
-    var tokens = [keyword2].concat (words (keyword2));
-    var matchKeyword = _(tokens)
-      .unique()
-      .find (function (token) {
-        return _.contains (phrase2, token);
-      });
-
-    return ! _.isUndefined (matchKeyword);
-  }
-
-
   var module = angular.module('icgc.keyword.controllers', ['icgc.keyword.models', 'icgc.common.text.utils']);
 
   module.controller('KeywordController',
-    function ($scope, Page, LocationService, debounce, Keyword, RouteInfoService, Abridger, gettextCatalog) {
+    function ($scope, Page, LocationService, debounce, Keyword, RouteInfoService, Abridger, gettextCatalog, EnsureInputService) {
       var pageSize;
 
       $scope.from = 1;
@@ -108,9 +78,9 @@
 
       $scope.concatMatches = function (array) {
         var target = $scope.query;
-        var matches = _(ensureArray (array))
+        var matches = _(EnsureInputService.ensureArray (array))
           .filter (function (element) {
-            return partiallyContainsIgnoringCase (ensureString (element), target);
+            return EnsureInputService.partiallyContainsIgnoringCase (EnsureInputService.ensureString (element), target);
           })
           .take (maxConcat);
 

@@ -347,4 +347,32 @@
     }
   });
 
+  module.service('EnsureInputService', function(){
+    var _service = this;
+
+  _service.ensureArray = (array) => _.isArray(array) ? array : [];
+
+  _service.ensureString = (string) => _.isString(string) ? string.trim() : '';
+
+  _service.words = (phrase) => _.words(phrase, /[^, ]+/g);
+
+  _service.partiallyContainsIgnoringCase = (phrase, keyword) => {
+    if (_.isEmpty(phrase)) {
+      return false;
+    }
+
+    const capitalizedPhrase = phrase.toUpperCase();
+    let capitalizedKeyword = keyword.toUpperCase();
+
+    const tokens = [capitalizedKeyword].concat (_service.words(capitalizedKeyword));
+    const matchKeyword = _(tokens)
+      .unique()
+      .find (function (token) {
+        return _.contains(capitalizedPhrase, token);
+      });
+
+    return !_.isUndefined(matchKeyword);
+  }
+
+  });
 })();

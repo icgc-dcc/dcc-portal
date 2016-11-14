@@ -515,7 +515,7 @@ angular.module('icgc.ui.copyPaste', [])
                              '-' + pasteCommandAlphaKey + ' to paste.';
                     }
                   }
-                  else if (isSuccess) {
+                  else {
                     msg = 'Press' + copyPasteCommandKey + '-' + copyCommandAlphaKey +
                     ' to copy and ' + copyPasteCommandKey + '-' +
                     pasteCommandAlphaKey + ' to paste.';

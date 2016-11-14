@@ -55,7 +55,7 @@ angular.module('icgc.advanced.controllers', [
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
               AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular,
-              RouteInfoService, FacetConstants, Extensions, gettextCatalog) {
+              RouteInfoService, FacetConstants, Extensions, EnsureInputService, gettextCatalog) {
 
       var _controller = this,
           dataRepoRouteInfo = RouteInfoService.get ('dataRepositories'),
@@ -205,10 +205,6 @@ angular.module('icgc.advanced.controllers', [
           service.renderBodyTab();
         }
 
-      }
-
-      function ensureString (string) {
-        return _.isString (string) ? string.trim() : '';
       }
 
       function _resetService(service) {
@@ -445,7 +441,7 @@ angular.module('icgc.advanced.controllers', [
 
       _controller.projectFlagIconClass = function (projectCode) {
         var defaultValue = '';
-        var last3 = _.takeRight (ensureString (projectCode), 3);
+        var last3 = _.takeRight (EnsureInputService.ensureString (projectCode), 3);
 
         if (_.size (last3) < 3 || _.first (last3) !== '-') {
           return defaultValue;
