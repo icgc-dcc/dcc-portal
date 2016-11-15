@@ -173,8 +173,8 @@ public class MutationService {
         transcript.put("functional_impact_prediction_summary", predictionSummary.get(i));
 
         val consequence = Maps.<String, Object> newHashMap();
-        List<Object> f3 = hit.getFields().get("transcript.consequence.aa_mutation").getValues();
-        val mutationString = f3.get(i).toString();
+        List<Object> aminoAcidChange = hit.getFields().get("transcript.consequence.aa_mutation").getValues();
+        val mutationString = aminoAcidChange.get(i).toString();
 
         // Only add to results if not empty.
         if (!mutationString.isEmpty()) {

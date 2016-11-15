@@ -100,49 +100,54 @@
     }
 
     /**
-     * Push data to results if matches functional impact criteria of filter 
-     */
-    function pushResults(data, filters, result) {
-      var start = data.transcript.consequence.aaMutation.replace(/[^\d]/g, '');
-      if (start > 0) {
-        var m = {
-          id: data.transcript.consequence.aaMutation,
-          position: start,
-          value: data.mutation.affectedDonorCountTotal,
-          ref: data.mutation.id,
-        };
-
-        // Add function impact scores
-        if (data.transcript.functionalImpact) {
-          m.functionalImpact = data.transcript.functionalImpact || 'Unknown';
-        }
-        if (filters.mutation && filters.mutation.functionalImpact) {
-          var fiFilter = filters.mutation.functionalImpact.is;
-          if (fiFilter.indexOf(m.functionalImpact) >= 0) {
-            result.push(m);
-          }
-        } else {
-          result.push(m);
-        }
-      }
-    }
-
-    /**
      * Transforms mutation hits to results for protein vewier. 
      */
     function transformMutations(mutations, transcriptId) {
-      var result = [], filters = LocationService.filters();
-
-      _(mutations.hits)
+      var filters = LocationService.filters();
+      var result = _(mutations.hits)
         .map(hit => ({
             mutation: hit, 
             transcript: _.find(hit.transcripts, {id: transcriptId})
           }))
         .filter( m => m.transcript !== undefined && m.transcript !== null )
-        .forEach( data => pushResults(data, filters, result) ) // Push to result through side effect 
+        .map( m => mapToResult(m) )
+        .filter( m => filterResults(m, filters) ) 
         .value(); // Needed for lodash 3.x
 
       return result;
+    }
+
+     /**
+     * Maps to object for protein viewer
+     */
+    function mapToResult(d) {
+      var start = d.transcript.consequence.aaMutation.replace(/[^\d]/g, '');
+        var m = {
+          id: d.transcript.consequence.aaMutation,
+          position: start,
+          value: d.mutation.affectedDonorCountTotal,
+          ref: d.mutation.id,
+          functionalImpact: d.transcript.functionalImpact || 'Unknown'
+        };
+      
+      return m;
+    }
+
+    /** 
+     * Filters results based on valid start and criteria of filter
+     */
+    function filterResults(m, filters) {
+      if (m.start < 0) return false;
+
+      var fiFilter = _.get(filters, 'mutation.functionalImpact.is');
+      if (fiFilter) {
+        if (fiFilter.indexOf(m.functionalImpact) >= 0) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+      return false; 
     }
 
     return {
