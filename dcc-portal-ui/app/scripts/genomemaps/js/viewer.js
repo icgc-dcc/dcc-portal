@@ -144,6 +144,9 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
     replace: true,
     controller: 'GenomeViewerController',
     link: function (scope, element, attrs, GenomeViewerController) {
+      require.ensure([], require => {
+        require('~/scripts/genome-viewer.js');
+      console.log(GenomeViewerController);
       var genomeViewer, navigationBar, tracks = {};
       var availableSpecies;
         var regionObj = new Region({chromosome: 1, start: 1, end: 1}),
@@ -378,12 +381,8 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
         GenomeViewerController.initFullScreenHandler(genomeViewer);
       }
 
-      scope.$watch('[genes, mutations, tab]', function (params) {
-        var genes, mutations, tab;
-
-        genes = params[0];
-        mutations = params[1];
-        tab = params[2];
+      function update() {
+        var {genes, mutations, tab} = scope;
 
         if (!done) {
           if (tab === 'genes' &&
@@ -425,7 +424,8 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
           }
 
         }
-      }, true);
+      }
+      scope.$watch('[genes, mutations, tab]', update, true);
 
       scope.$on('gv:set:region', function (e, params) {
         if (genomeViewer) {
@@ -451,6 +451,10 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
           genomeViewer.destroy();
         }
       });
+
+      update();
+      });
+
     }
   };
 });
@@ -467,7 +471,8 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
     link: function (scope, element, attrs, GenomeViewerController) {
       var genomeViewer, navigationBar, tracks = {};
       var availableSpecies;
-
+      require.ensure([], require => {
+        require('~/scripts/genome-viewer.js');
       function setup(regionObj) {
         regionObj.start = parseInt(regionObj.start);
         regionObj.end = parseInt(regionObj.end);
@@ -770,7 +775,8 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
         });
       }
 
-      attrs.$observe('region', function (region) {
+      function update() {
+        var region = attrs.region;
         if (!region) {
           return;
         }
@@ -795,7 +801,13 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
         } else {
           setup(regionObj);
         }
+      }
+
+      attrs.$observe('region', update);
+      update();
+
       });
+      
     }
   };
 });
