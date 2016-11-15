@@ -461,7 +461,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
         }
       });
 
-      update()
+      update();
       });
 
     }
