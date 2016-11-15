@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -46,19 +47,6 @@
         <artifactId>dcc-download-client</artifactId>
         <version>${dcc-download.version}</version>
       </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-downloader-client</artifactId>
-        <version>${dcc-downloader.version}</version>
-      </dependency>
-
-      <!-- Test -->
-      <dependency>
-        <groupId>com.github.tlrx</groupId>
-        <artifactId>elasticsearch-test</artifactId>
-        <version>${elasticsearch-test.version}</version>
-        <scope>test</scope>
-      </dependency>
 
       <dependency>
         <groupId>org.codehaus.groovy</groupId>
@@ -66,6 +54,43 @@
         <version>${groovy.version}</version>
         <scope>test</scope>
       </dependency>
+
+      <!-- Elasticsearch -->
+      <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>transport</artifactId>
+        <version>${elasticsearch.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.elasticsearch.test</groupId>
+        <artifactId>framework</artifactId>
+        <version>${elasticsearch.version}</version>
+        <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>securemock</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.icgc.dcc</groupId>
+        <artifactId>dcc-elasticsearch-plugins</artifactId>
+        <version>${elasticsearch.version}</version>
+        <scope>test</scope>
+      </dependency>
+      
+    <!-- Logging required for Elasticsearch -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -95,12 +120,13 @@
   <properties>
     <!-- Versions - DCC -->
     <dcc-common.version>4.2.5</dcc-common.version>
+    <elasticsearch.version>5.0.0</elasticsearch.version>
     <dcc-download.version>4.2.18</dcc-download.version>
-    <dcc-release.version>4.1.4</dcc-release.version>
+    <dcc-release.version>4.2.5-SNAPSHOT</dcc-release.version>
     <dcc-repository.version>1.0.0</dcc-repository.version>
 
-    <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
     <groovy.version>2.3.5</groovy.version>
+    <log4j.version>2.6.2</log4j.version>
   </properties>
 
 </project>
