@@ -207,39 +207,33 @@
           <td tooltip="{{:: fileCopy.lastModified * 1000 | date: 'medium' }}"
             ng-bind="fileCopy.lastModified * 1000 | date: 'mediumDate'" />
 
-          <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.repoName)" />
+          <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.repo.name)" />
 
           <td style="text-align: center;"
-            ng-init="countryCode = fileCtrlr.translateCountryCode (fileCopy.repoCountry.toLowerCase())">
+            ng-init="countryCode = fileCtrlr.translateCountryCode (fileCopy.repo.country.toLowerCase())">
             <span class="flag flag-{{ countryCode }}"
               tooltip="{{ fileCtrlr.countryName (countryCode) }}" />
           </td>
-          <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.repoType)" />
+          <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.repo.type)" />
 
           <td style="min-width: 90px"
-            ng-init="showMetaData = fileCtrlr.shouldShowMetaData (fileCopy.repoType); manifestUrl = fileCtrlr.buildManifestUrl (info.id, [fileCopy.repoName])">
+            ng-init="showMetaData = fileCtrlr.shouldShowMetaData (fileCopy.repo.type); manifestUrl = fileCtrlr.buildManifestUrl (info.id, [fileCopy.repo.name])">
 
             <a href="{{ manifestUrl }}" tooltip="Download Manifest" target="_blank">
               <i class="icon-download" /><translate>Manifest</translate>
             </a>
 
             <span ng-if="showMetaData"
-              ng-init="metaDataUrl = fileCtrlr.buildMetaDataUrl (fileCopy, info); isS3 = fileCtrlr.isS3 (fileCopy.repoType);">
+              ng-init="metaDataUrl = fileCtrlr.buildMetaDataUrl (fileCopy, info);">
               <br>
-              <a ng-if="isS3"
-                href="{{ metaDataUrl }}" tooltip="Download Metadata" title="{{ metaDataUrl }}" target="_blank">
-                <i class="icon-download" data-ng-if="fileCopy.repoName != 'Collaboratory - Toronto'"  /><!--
-                --><i class="icon-external-link" data-ng-if="fileCopy.repoName === 'Collaboratory - Toronto'"  /><!--
+              <a href="{{ metaDataUrl }}" tooltip="Download Metadata" title="{{ metaDataUrl }}" target="_blank">
+                <i class="icon-external-link"/><!--
                 --><translate>Metadata</translate>
-              </a>
-              <a ng-if="! isS3"
-                target="_blank" href="{{ metaDataUrl }}" tooltip="Show Metadata" title="{{ metaDataUrl }}">
-                <i class="icon-external-link" /><translate>Metadata</translate>
               </a>
             </span>
 
-            <span ng-if="fileCopy.repoType == 'Web Archive'"
-              ng-init="dataUrl = fileCtrlr.buildUrl (fileCopy.repoBaseUrl, fileCopy.repoDataPath, fileCopy.fileName)">
+            <span ng-if="fileCopy.repo.type == 'Web Archive'"
+              ng-init="dataUrl = fileCtrlr.buildUrl (fileCopy.repo.baseUrl, fileCopy.repo.dataPath, fileCopy.fileName)">
               <br>
               <a target="_blank" href="{{ dataUrl }}" tooltip="Show Data" title="{{ dataUrl }}">
                 <i class="icon-external-link" /><translate>Data</translate>

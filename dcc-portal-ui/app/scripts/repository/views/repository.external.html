@@ -260,7 +260,7 @@
                 </thead>
 
                 <tbody>
-                  <tr data-ng-repeat="row in ExternalRepoController.files.hits">
+                  <tr data-ng-repeat="row in ExternalRepoController.files.hits track by row.id">
                     <td class="text-center" data-ng-click="ExternalRepoController.toggleRow (row)" style="cursor: pointer">
                      <i class="{{ ExternalRepoController.isSelected (row) ? 'icon-check' : 'icon-check-empty' }}" />
                     </td>
@@ -280,7 +280,7 @@
                     </td>
 
                     <td tooltip="{{ ExternalRepoController.repoNamesInTooltip (row.fileCopies) }}"
-                      ng-bind="ExternalRepoController.repoNames (row.fileCopies)" />
+                      ng-bind="(row.fileCopies | _:'map':'repo.name' | _:'unique').join(', ')" />
 
                     <td ng-init="ProjectData = ExternalRepoController.buildProjectInfo (row.donors)">
                       <a href="{{ ProjectData.href }}" tooltip="{{ ProjectData.tooltip }}"
