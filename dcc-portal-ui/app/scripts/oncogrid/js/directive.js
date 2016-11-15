@@ -291,8 +291,8 @@
           gridDiv.addClass('og-pointer-mode'); gridDiv.removeClass('og-crosshair-mode');
         };
 
-        $scope.$watch('item', function (n) {
-          if (n) {
+        function processItem() {
+          if ($scope.item) {
             var getName = type => _(localStorageService.get('entity'))
                             .filter( e => e.id === $scope.item[type])
                             .map( e => e.name)
@@ -321,7 +321,10 @@
               $('#grid-button').addClass('active');
             });
           }
-        });
+        }
+
+        $scope.$watch('item', processItem);
+        processItem();
 
         $scope.fullScreenHandler = function () {
           if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
