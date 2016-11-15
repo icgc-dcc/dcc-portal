@@ -391,7 +391,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
       }
 
       function update() {
-        var {genes, mutations, tab} = $scope;
+        var {genes, mutations, tab} = scope;
 
         if (!done) {
           if (tab === 'genes' &&
