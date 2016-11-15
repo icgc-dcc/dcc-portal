@@ -515,7 +515,7 @@ angular.module('icgc.ui.copyPaste', [])
                              '-' + pasteCommandAlphaKey + ' to paste.';
                     }
                   }
-                  else if (isSuccess) {
+                  else {
                     msg = 'Press' + copyPasteCommandKey + '-' + copyCommandAlphaKey +
                     ' to copy and ' + copyPasteCommandKey + '-' +
                     pasteCommandAlphaKey + ' to paste.';
@@ -923,7 +923,7 @@ angular.module('icgc.ui.iobio', [])
 
             return _.pluck(fCopies, 'fileName')[0];
           } catch (err) {
-            console.log(err);
+            console.error(err);
             return 'Could Not Retrieve File Name';
           }
         };

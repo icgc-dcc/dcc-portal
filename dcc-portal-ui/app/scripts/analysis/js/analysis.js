@@ -105,7 +105,6 @@
 
 
     $scope.newAnalysis = function() {
-      console.log('new analysis request');
 
       if ($scope.analysisId !== undefined) {
         $location.path('analysis');

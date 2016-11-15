@@ -22,7 +22,6 @@
 angular.module('icgc.ui.lists', []).directive('hideLinkList', function () {
   return {
     restrict: 'A',
-    //replace: true,
     transclude: true,
     template: '<div class="t_sh">' +
               '<span data-ng-if="!hasItems"><i class="icon-spin"></i></span>' +
@@ -126,7 +125,6 @@ angular.module('icgc.ui.lists').directive('hideList', function () {
 angular.module('icgc.ui.lists').directive('hideSumList', function (Projects) {
   return {
     restrict: 'A',
-    //replace: true,
     transclude: true,
     template: '<div class="t_sh">' +
               '<span data-ng-if="!hasItems"><i class="icon-spin icon-spinner"></i></span>' +

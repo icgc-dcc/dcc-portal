@@ -56,7 +56,7 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
   var _controller = this;
 
 
-  _controller.getSpecies = function getSpecies(callback) {
+  _controller.getSpecies = function (callback) {
     CellBaseManager.get({
       host: GMService.getConfiguration().cellBaseHost,
       category: 'meta',
@@ -152,8 +152,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
         var regionObj = new Region({chromosome: 1, start: 1, end: 1}),
         done = false; 
 
-
-
       function setup() {
         regionObj.start = parseInt(regionObj.start);
         regionObj.end = parseInt(regionObj.end);
@@ -211,11 +209,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
             'region:move': function (event) {
               genomeViewer._regionMoveHandler(event);
             },
-            /*'restoreDefaultRegion:click': function (event) {
-              Utils.setMinRegion(genomeViewer.defaultRegion, genomeViewer.getSVGCanvasWidth());
-              event.region = genomeViewer.defaultRegion;
-              genomeViewer.trigger('region:change', event);
-            }*/
           }
         });
         genomeViewer.on('region:change', function (event) {
@@ -298,7 +291,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
             }
           }),
           dataAdapter: new IcgcGeneAdapter({
-            //multiRegions: true,
             resource: 'gene',
             chromosomeLimitMap: gvConstants.CHROMOSOME_LIMIT_MAP,
             multiRegions: true,
@@ -383,7 +375,6 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
         /** End add tracks **/
 
         genomeViewer.draw();
-        //genomeViewer.enableAutoHeight();
 
         genomeViewer.karyotypePanel.hide();
         genomeViewer.chromosomePanel.hide();
@@ -404,10 +395,10 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
             if (! availableSpecies) {
               GenomeViewerController.getSpecies(function (s) {
                 availableSpecies = s;
-                setup(regionObj);
+                setup();
               });
             } else {
-              setup(regionObj);
+              setup();
             }
           }
           else if (tab === 'mutations' &&
@@ -425,10 +416,10 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
             if (! availableSpecies) {
               GenomeViewerController.getSpecies(function (s) {
                 availableSpecies = s;
-                setup(regionObj);
+                setup();
               });
             } else {
-              setup(regionObj);
+              setup();
             }
           }
 

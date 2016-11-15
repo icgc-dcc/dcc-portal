@@ -59,7 +59,6 @@ require('expose?lineD3!imports?this=>window!exports?lineD3!../vendor/scripts/vcf
 
 // Genome Viewer
 require('expose?Backbone!backbone');
-// require('../vendor/scripts/backbone.min-1.0.js');
 require('script!../vendor/scripts/bootstrap-slider-2.0.0.js');
 require('script!../vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.js');
 require('expose?URI!urijs');

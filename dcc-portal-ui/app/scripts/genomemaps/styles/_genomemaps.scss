@@ -100,15 +100,11 @@
 }
 
 .gv_selectbox {
-  //stroke-width: 2;
-  //stroke: $blue;
   fill: $blue;
   opacity: 0.4;
 }
 
 .gv_selectbox_active {
-  //stroke-width: 2;
-  //stroke: $orange;
   fill: $orange;
   opacity: .3;
 }
@@ -117,11 +113,6 @@
   z-index: 0;
   position: absolute;
   height: 100%;
-}
-
-.gv_faded_region {
-  //background-color: $black;
-  //opacity: .1;
 }
 
 .gv_active_region {
