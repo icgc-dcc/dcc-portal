@@ -17,8 +17,6 @@
 
 'use strict';
 
-import ensureString from '../../common/js/ensure-input';
-
 angular.module('icgc.advanced', ['icgc.advanced.controllers', 'ui.router'])
   .config(function ($stateProvider) {
     $stateProvider.state('advanced', {
@@ -439,19 +437,6 @@ angular.module('icgc.advanced.controllers', [
           }
         });
       }
-
-      _controller.projectFlagIconClass = function (projectCode) {
-        var defaultValue = '';
-        var last3 = _.takeRight (ensureString (projectCode), 3);
-
-        if (_.size (last3) < 3 || _.first (last3) !== '-') {
-          return defaultValue;
-        }
-
-        var last2 = _.rest (last3).join ('');
-
-        return 'flag flag-' + CodeTable.translateCountryCode (last2.toLowerCase());
-      };
 
       _controller.setActiveTab = function (tab) {
         _controller.state.setTab(tab);

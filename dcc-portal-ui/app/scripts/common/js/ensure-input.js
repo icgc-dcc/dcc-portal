@@ -8,7 +8,7 @@ export const partiallyContainsIgnoringCase = (phrase, keyword) => {
     }
 
     const capitalizedPhrase = phrase.toUpperCase();
-    let capitalizedKeyword = keyword.toUpperCase();
+    const capitalizedKeyword = keyword.toUpperCase();
 
     const tokens = [capitalizedKeyword].concat (words(capitalizedKeyword));
     const matchKeyword = _(tokens)
