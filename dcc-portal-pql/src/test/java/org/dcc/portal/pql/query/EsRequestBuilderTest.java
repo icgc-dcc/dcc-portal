@@ -67,8 +67,9 @@ public class EsRequestBuilderTest extends BaseElasticsearchTest {
   public void selectTest() {
     val result = executeQuery("select(chromosome)");
     val hit = getFirstSearchResult(result);
-    Assertions.assertThat(hit.fields().size()).isEqualTo(1);
-    val value = hit.field("chromosome").getValue();
+    val hitSource = hit.sourceAsMap();
+    Assertions.assertThat(hitSource).hasSize(1);
+    val value = hitSource.get("chromosome");
     Assertions.assertThat(value).isEqualTo("1");
   }
 

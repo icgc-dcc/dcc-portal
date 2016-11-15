@@ -32,14 +32,16 @@ public class EsRequestBuilderTest_Drug extends BaseElasticsearchTest {
   QueryEngine queryEngine;
 
   @Before
-  public void setUpEsRequestBuilderTestDrug() {
-    prepareIndex(DRUG_CENTRIC);
+  public void setUpEsRequestBuilderTestDrug() throws Exception {
+    createIndexMappings(DRUG_CENTRIC);
+    createTermsLookupType();
+    loadData(getClass());
     queryContext = new QueryContext(INDEX_NAME, DRUG_CENTRIC);
     queryEngine = new QueryEngine(client, INDEX_NAME);
   }
 
   @Test
-  public void geneLocationTest() {
+  public void lookupTest() {
     val result = executeQuery("or(eq(drug.id, 'ZINC123'),"
         + "in(gene.id, 'ENS123','ES:6d66b2bd-daed-431e-9a8d-b1d99be0bc18'))");
     assertTotalHitsCount(result, 1);

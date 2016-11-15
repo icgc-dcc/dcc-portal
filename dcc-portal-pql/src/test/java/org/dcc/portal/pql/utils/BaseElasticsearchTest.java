@@ -53,7 +53,7 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
 @Slf4j
-@ClusterScope(scope = Scope.TEST, numDataNodes = 1, maxNumDataNodes = 1)
+@ClusterScope(scope = Scope.TEST, numDataNodes = 1, maxNumDataNodes = 1, supportsDedicatedMasters = false, transportClientRatio = 0.0)
 public class BaseElasticsearchTest extends ESIntegTestCase {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -63,10 +63,10 @@ public class BaseElasticsearchTest extends ESIntegTestCase {
    * Test configuration.
    */
   protected static final String INDEX_NAME = "dcc-release-etl-cli";
-  protected static final String SETTINGS_FILE_NAME = "test-index.settings.json";
+  protected static final String SETTINGS_FILE_NAME = "index.settings.json";
   protected static final String JSON_DIR = "org/icgc/dcc/release/resources/mappings";
   protected static final String FIXTURES_DIR = "src/test/resources/fixtures";
-  protected static final String SETTINGS_FILE = getIndexFileUrl();
+  protected static final URL SETTINGS_FILE = getMappingFileUrl(SETTINGS_FILE_NAME);
 
   /**
    * Parser's setup
@@ -92,10 +92,9 @@ public class BaseElasticsearchTest extends ESIntegTestCase {
   }
 
   protected void createIndexMappings(Type... typeNames) {
-    // TODO: pull settings from file
+    val settingsContents = settingsSource(SETTINGS_FILE);
     val settings = Settings.builder()
-        .put("index.number_of_shards", 1)
-        .put("index.number_of_replicas", 0);
+        .loadFromSource(settingsContents);
 
     val createBuilder = prepareCreate(INDEX_NAME, 1, settings);
     for (val typeName : typeNames) {
@@ -116,21 +115,23 @@ public class BaseElasticsearchTest extends ESIntegTestCase {
     while (iterator.hasNext()) {
       val docMetadata = (ObjectNode) iterator.next();
       val indexMetadata = docMetadata.get("index");
+      val indexName = indexMetadata.get("_index").textValue();
       val indexType = indexMetadata.get("_type").textValue();
       val indexId = indexMetadata.get("_id").textValue();
       checkState(iterator.hasNext(), "Incorrect format of input test data file. Expected data after document metadata");
       val doc = (ObjectNode) iterator.next();
-      val indexRequest = client.prepareIndex(INDEX_NAME, indexType, indexId).setSource(doc.toString());
+      val indexRequest = client.prepareIndex(indexName, indexType, indexId).setSource(doc.toString());
       indexRandom(true, indexRequest);
     }
   }
 
-  private static URL getMappingFileUrl(String fileName) {
-    return Resources.getResource(JSON_DIR + "/" + fileName);
+  protected void createTermsLookupType() {
+    val created = prepareCreate("terms-lookup").execute().actionGet().isAcknowledged();
+    checkState(created, "Failed to create terms-lookup mapping");
   }
 
-  private static String getIndexFileUrl() {
-    return new File(FIXTURES_DIR, SETTINGS_FILE_NAME).getAbsolutePath();
+  private static URL getMappingFileUrl(String fileName) {
+    return Resources.getResource(JSON_DIR + "/" + fileName);
   }
 
   @SneakyThrows

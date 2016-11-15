@@ -24,6 +24,7 @@ import static org.dcc.portal.pql.es.utils.ScoreModes.resolveScoreMode;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsLookupQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 
@@ -90,7 +91,7 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
     if (lookupOpt.isPresent()) {
       val lookup = lookupOpt.get();
 
-      return QueryBuilders.termsLookupQuery(lookup.type() + "-lookup", lookup);
+      return termsLookupQuery(node.getField(), lookup);
     }
 
     return termQuery(node.getField(), node.getValueNode().getValue());

@@ -33,7 +33,7 @@ public final class TermsLookups {
 
   public static Optional<TermsLookup> createTermsLookup(@NonNull TermNode node) {
     val lookup = node.getLookup();
-    if (lookup != null && !lookup.getId().isEmpty()) {
+    if (lookup != null && lookup.isDefine()) {
       val type = lookup.getType();
       val termsLookup = new TermsLookup(lookup.getIndex(), type, lookup.getId(), lookup.getPath());
       return Optional.of(termsLookup);

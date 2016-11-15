@@ -22,8 +22,11 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static org.dcc.portal.pql.es.utils.Nodes.getValues;
 import static org.dcc.portal.pql.es.utils.ScoreModes.resolveScoreMode;
+import static org.dcc.portal.pql.es.utils.TermsLookups.createTermsLookup;
 import static org.dcc.portal.pql.es.utils.VisitorHelpers.checkOptional;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsLookupQuery;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +65,6 @@ import org.dcc.portal.pql.query.QueryContext;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
-import org.elasticsearch.indices.TermsLookup;
 
 import com.google.common.collect.Lists;
 
@@ -178,15 +180,13 @@ public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext
 
     QueryBuilder filter;
     val field = node.getField();
-    val lookupInfo = node.getLookup();
-    if (lookupInfo.isDefine()) {
-      val type = lookupInfo.getType();
-      val lookup = new TermsLookup(lookupInfo.getIndex(), type, lookupInfo.getId(), lookupInfo.getPath());
-      filter = QueryBuilders.termsLookupQuery(type + "-lookup", lookup);
+    val lookupOpt = createTermsLookup(node);
+    if (lookupOpt.isPresent()) {
+      filter = termsLookupQuery(field, lookupOpt.get());
     } else {
       val value = node.getValueNode().getValue();
       log.debug("[visitTerm] Name: {}, Value: {}", field, value);
-      filter = QueryBuilders.termQuery(field, value);
+      filter = termQuery(field, value);
     }
 
     return createNestedFilter(node, field, filter, context.get().getTypeModel());
