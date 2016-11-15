@@ -292,7 +292,9 @@
         };
 
         function processItem() {
-          if ($scope.item) {
+          if (!$scope.item) {
+            return;
+          }
             var getName = type => _(localStorageService.get('entity'))
                             .filter( e => e.id === $scope.item[type])
                             .map( e => e.name)
@@ -320,7 +322,6 @@
               $scope.initOnco();
               $('#grid-button').addClass('active');
             });
-          }
         }
 
         $scope.$watch('item', processItem);
