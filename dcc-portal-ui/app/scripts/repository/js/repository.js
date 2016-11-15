@@ -20,14 +20,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
 (function() {
   'use strict';
 
-  function ensureArray (array) {
-    return _.isArray (array) ? array : [];
-  }
   var isEmptyArray = _.flow (ensureArray, _.isEmpty);
 
-  function ensureString (string) {
-    return _.isString (string) ? string.trim() : '';
-  }
   var isEmptyString = _.flow (ensureString, _.isEmpty);
 
   function ensureObject (o) {
