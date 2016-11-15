@@ -1,13 +1,20 @@
 package org.icgc.dcc.portal.server.service;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.stream.IntStream.range;
+import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
+import static org.dcc.portal.pql.query.PqlParser.parse;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
+
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Mutation;
@@ -20,18 +27,15 @@ import org.icgc.dcc.portal.server.repository.MutationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.util.stream.IntStream.range;
-import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-import static org.dcc.portal.pql.query.PqlParser.parse;
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
-import static org.icgc.dcc.portal.server.util.SearchResponses.*;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -169,11 +173,15 @@ public class MutationService {
         transcript.put("functional_impact_prediction_summary", predictionSummary.get(i));
 
         val consequence = Maps.<String, Object> newHashMap();
-        List<Object> f3 = hit.getFields().get("transcript.consequence.aa_mutation").getValues();
-        consequence.put("aa_mutation", f3.get(i).toString());
-        transcript.put("consequence", consequence);
+        List<Object> aminoAcidChange = hit.getFields().get("transcript.consequence.aa_mutation").getValues();
+        val mutationString = aminoAcidChange.get(i).toString();
 
-        transcripts.add(transcript);
+        // Only add to results if not empty.
+        if (!mutationString.isEmpty()) {
+          consequence.put("aa_mutation", mutationString);
+          transcript.put("consequence", consequence);
+          transcripts.add(transcript);
+        }
       }
 
       map.put("transcript", transcripts);
