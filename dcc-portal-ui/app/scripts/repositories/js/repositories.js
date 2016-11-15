@@ -108,7 +108,7 @@ angular.module('icgc.repositories.controllers', [])
       Page.setTitle(gettextCatalog.getString('User Guide'));
    })
   .controller('RepositoriesController', function ($scope, Page, repoAliasMapConstants,
-                                                  RepositoriesService, $stateParams, gettextCatalog) {
+                                                  RepositorySearchService, RepositoryService, $stateParams, gettextCatalog) {
      var _ctrl = this,
        _repoAlias = $stateParams.repoAlias.toLowerCase(),
        _repoContext = _.get(repoAliasMapConstants, _repoAlias, null),
@@ -135,7 +135,7 @@ angular.module('icgc.repositories.controllers', [])
 
          _repoDataCollectionManager.getFileStats().then(function(repoStats) {
 
-            var chartProvider = RepositoriesService.getChartProvider();
+            var chartProvider = RepositorySearchService.getChartProvider();
             _repoStats.repoDataTypes = _repoDataCollectionManager.orderDataTypes(repoStats.stats);
               _repoStats.primarySites = chartProvider.getSiteProjectDonorChart(repoStats.donorPrimarySite);
          });
@@ -171,7 +171,7 @@ angular.module('icgc.repositories.controllers', [])
          // are no relevant filter facets in the UI to represent Repo Code
          // queries.
          try {
-            _repoDataCollectionManager = RepositoriesService.getRepoDataCollectionManagerFactory(_repoContext);
+            _repoDataCollectionManager = RepositorySearchService.getRepoDataCollectionManagerFactory(_repoContext);
          }
          catch (e) {
             console.error(e, '\nAborting data refresh...');
@@ -232,7 +232,7 @@ angular.module('icgc.repositories.services', [])
          STUDY: 'study'
       }
    })
-   .service('RepositoriesService', function(   PCAWG, ExternalRepoService, Restangular,
+   .service('RepositorySearchService', function(   PCAWG, ExternalRepoService, Restangular,
                                     HighchartsService, RepositoryServiceConstants) {
       var _srv = this,
          _chartProvider = null;
@@ -434,5 +434,6 @@ angular.module('icgc.repositories.services', [])
       };
 
    })
+   .service('RepositoryService', require('./repository-service'))
    .controller('RepositoriesContentController', function() {});
 
