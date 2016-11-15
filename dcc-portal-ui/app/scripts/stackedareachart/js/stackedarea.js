@@ -260,7 +260,7 @@
       .style('text-anchor', 'middle')
       .text(config.xaxis.label);
 
-    var change = function changeView(view){
+    var change = function (view){
       if(view === 'Line'){
         graphTitle.text(config.graphTitles[1]);
         y.domain([0, d3.max(data, function(d) { return d.value; })]);

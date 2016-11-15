@@ -176,11 +176,11 @@ ProteinStructureChart.prototype.addValues = function () {
   }
 
   function markerBBoxX(d, i) {
-    return markerCxFn(d, i) - (markerRadius + bboxOffset);
+    return markerCxFn(d) - (markerRadius + bboxOffset);
   }
 
   function markerBBoxY(d, i) {
-    return markerCyFn(d, i) - (markerRadius + bboxOffset);
+    return markerCyFn(d) - (markerRadius + bboxOffset);
   }
 
   function markerBBoxSize() {
@@ -239,11 +239,9 @@ ProteinStructureChart.prototype.addDomains = function () {
   var domainRowScale = this._domainRowScale;
   var domainColourScale = this._domainColourScale;
   var drh = this.config.domainRowHeight;
-  // var drs = this.config.domainRowSeparation;
   var dbh = this.config.domainBarHeight;
   var dbl = this.config.domainBarLabels;
   var dbo = (drh - dbh) / 2;
-  // var lm = this.config.leftMargin;
 
   function domainXFn(d) {
     return proteinScale(d.start);
@@ -414,7 +412,6 @@ ProteinStructureChart.prototype.addChart = function () {
     .call(xAxis);
 
   // The second axis is the one for the protein coding space
-  //var valueAxis = d3.svg.axis().ticks(6);
   var valueAxis = d3.svg.axis().ticks(Math.min(6, mv));
 
   // Supress decmials

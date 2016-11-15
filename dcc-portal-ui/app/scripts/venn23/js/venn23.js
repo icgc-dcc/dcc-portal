@@ -602,30 +602,6 @@
       d.count = _this.getValueBySetIds(d.data);
     });
 
-
-    // Add legend
-    /*
-    _this.svg.append('text').attr('x', 25).attr('y', 15).text(0);
-    _this.svg.append('text').attr('x', 25 + _this.colours.length*15).attr('y', 15).text(_this.max);
-    _this.svg.selectAll('.legend')
-      .data(_this.colours)
-      .enter()
-      .append('rect')
-      .classed('legend', true)
-      .attr('x', function(d, i) {
-        return 30 + 15*i;
-      })
-      .attr('y', function() {
-        return 15;
-      })
-      .attr('width', 15)
-      .attr('height', 15)
-      .style('stroke', '#FFFFFF')
-      .style('fill', function() {
-        return d;
-      });
-      */
-
   };
 
 

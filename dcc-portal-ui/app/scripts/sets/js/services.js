@@ -119,8 +119,6 @@
       if (angular.isDefined(params.filters) && !angular.isDefined(params.sortBy)) {
         if (type === 'donor') {
           data.sortBy = 'ssmAffectedGenes';
-        } else if (type === 'gene') {
-          data.sortBy = 'affectedDonorCountFiltered';
         } else {
           data.sortBy = 'affectedDonorCountFiltered';
         }
@@ -179,19 +177,24 @@
     *
     * Create a new set from
     */
-    _service.addSet = function(type, params) {
+    _service.addSet = function(type, params, isExternal) {
       var promise = null;
       var data = params2JSON(type, params);
       var addSetSaving;
 
       if(! data.isTransient){
         addSetSaving = _service.savingToaster(data.name);
-      }      
+      } 
 
-      promise = Restangular.one('entityset')
-                .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
+      if(isExternal){
+        promise = Restangular.one('entityset').one('external')
+          .post(undefined, data, {}, {'Content-Type': 'application/json'});
+      } else{
+        promise = Restangular.one('entityset')
+          .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
+      }
 
-      promise.then(function(data) {        
+      promise.then(function(data) {
         
         if (! data.id) {
           return;
@@ -225,40 +228,7 @@
     };
 
     _service.addExternalSet = function(type, params) {
-      var promise = null;
-      var data = params2JSON(type, params);
-      var addSetSaving;
-
-      if(! data.isTransient){
-        addSetSaving = _service.savingToaster(data.name);
-      }
-
-      promise = Restangular.one('entityset').one('external')
-        .post(undefined, data, {}, {'Content-Type': 'application/json'});
-
-      promise.then(function(data) {
-        if (! data.id) {
-          return;
-        }
-
-        // If flagged as transient, don't save to local storage
-        if (data.subtype === 'TRANSIENT') {
-          return;
-        }
-
-        data.type = data.type.toLowerCase();
-
-        setList = localStorageService.get(LIST_ENTITY) || [];
-        setList.unshift(data);
-        _service.refreshList();
-
-        localStorageService.set(LIST_ENTITY, setList);
-
-        _service.saveSuccessToaster(data.name);
-        toaster.clear(addSetSaving);
-      });
-
-      return promise;
+      return _service.addSet(type, params, true);
     };
 
     _service.createFileSet = function (params) {
@@ -358,8 +328,7 @@
 
       promise.then(function(data) {
         if (! data.id) {
-          console.log('there is an error in creating derived set');
-          return;
+          throw new Error('there is an error in creating derived set', data);
         }
 
         data.type = data.type.toLowerCase();

@@ -48,11 +48,6 @@
        if (id === '_missing') { return 'No Data'; }
 
        return getTranslatorModule(type).translate(id) || humanReadable(id);
-       //if (angular.isDefined(type)) {
-       //  return getTranslatorModule(type).translate(id) || humanReadable(id);
-       //} else {
-       //  return humanReadable(id);
-       //}
      };
 
      this.tooltip = function(id, type) {

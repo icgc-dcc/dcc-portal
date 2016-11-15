@@ -260,7 +260,6 @@
 
     function _shortenRepoName (name) {
       return name;
-      // return name.slice(0, 5);
     }
 
     _srv.createFacetCharts = function (facets) {

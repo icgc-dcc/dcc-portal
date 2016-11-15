@@ -17,6 +17,8 @@
 
 'use strict';
 
+import {ensureArray, ensureString, partiallyContainsIgnoringCase} from '../../common/js/ensure-input';
+
 angular.module('icgc.ui.suggest', ['ngSanitize', 'icgc.common.text.utils']);
 
 angular.module('icgc.ui.suggest').controller('suggestController',
@@ -91,35 +93,6 @@ angular.module('icgc.ui.suggest').controller('suggestController',
     var definedType = _.contains (['pathway', 'go_term', 'curated_set'], type) ? 'geneset' : type;
     return 't_badge t_badge__' + definedType;
   };
-
-  function ensureArray (array) {
-    return _.isArray (array) ? array : [];
-  }
-  function ensureString (string) {
-    return _.isString (string) ? string.trim() : '';
-  }
-
-  function words (phrase) {
-    return _.words (phrase, /[^, ]+/g);
-  }
-
-  function partiallyContainsIgnoringCase (phrase, keyword) {
-    if (_.isEmpty (phrase)) {
-      return false;
-    }
-
-    var phrase2 = phrase.toUpperCase();
-    var keyword2 = keyword.toUpperCase();
-
-    var tokens = [keyword2].concat (words (keyword2));
-    var matchKeyword = _(tokens)
-      .unique()
-      .find (function (token) {
-        return _.contains (phrase2, token);
-      });
-
-    return ! _.isUndefined (matchKeyword);
-  }
 
   var maxAbrigementLength = 80;
   var abridger = Abridger.of (maxAbrigementLength);
@@ -286,7 +259,7 @@ angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $docu
           if (suggest === 'tags') {
             addId();
           } else {
-            goTo(e);
+            goTo();
           }
         }
 
@@ -370,7 +343,6 @@ angular.module('icgc.ui.suggest').directive('tagsPopup', function (Extensions) {
       };
 
       scope.click = function (item) {
-        console.info(item);
         scope.query = '';
         if (scope.entitySetSearch) {
           item.id = Extensions.ENTITY_PREFIX + item.id;

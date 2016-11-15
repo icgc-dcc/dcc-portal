@@ -173,9 +173,7 @@
           var donorOpacity = function (d) {
             if (d.type === 'int') {
               return d.value / 100;
-            } else if (d.type === 'vital') {
-              return 1;
-            } else if (d.type === 'sex') {
+            } else if (d.type === 'vital' || d.type === 'sex') {
               return 1;
             } else if (d.type === 'bool') {
               return d.value ? 1 : 0;
@@ -288,7 +286,8 @@
 
           $('#og-crosshair-message').hide();
           var gridDiv = $('#oncogrid-div');
-          gridDiv.addClass('og-pointer-mode'); gridDiv.removeClass('og-crosshair-mode');
+          gridDiv.addClass('og-pointer-mode'); 
+          gridDiv.removeClass('og-crosshair-mode');
         };
 
         function processItem() {

@@ -15,17 +15,13 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import {ensureArray, ensureString} from '../../common/js/ensure-input';
+
 (function() {
   'use strict';
 
-  function ensureArray (array) {
-    return _.isArray (array) ? array : [];
-  }
   var isEmptyArray = _.flow (ensureArray, _.isEmpty);
 
-  function ensureString (string) {
-    return _.isString (string) ? string.trim() : '';
-  }
   var isEmptyString = _.flow (ensureString, _.isEmpty);
 
   function ensureObject (o) {
@@ -417,8 +413,7 @@
 
       ExternalRepoService.createManifest(params).then(function (id) {
         if (! id) {
-          console.log('No Manifest UUID is returned from API call.');
-          return;
+          throw new Error('No Manifest UUID is returned from API call.');
         }
         repoData.isGeneratingManifestID = false;
         repoData.manifestID = id;

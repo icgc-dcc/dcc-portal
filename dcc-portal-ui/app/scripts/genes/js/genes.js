@@ -68,7 +68,7 @@
       var observers = elements.map(function (element) {
         var observer = new MutationObserver(function (mutations) {
           var shouldScroll = mutations.reduce(function (isSignificantMutation, mutation) {
-            return isSignificantMutation || checkMutationSignificance(mutation);
+            return isSignificantMutation || checkMutationSignificance();
           });
           if (shouldScroll) {
             scrollToCurrent();
@@ -366,7 +366,7 @@
       _this.uiCompounds = getUiCompoundsJSON(_this.compounds);
 
     }, function (error) {
-      console.log ('Error getting compounds related to the geneId', error);
+      throw new Error('Error getting compounds related to the geneId', error);
     });
 
     function getUiCompoundsJSON(compounds){
