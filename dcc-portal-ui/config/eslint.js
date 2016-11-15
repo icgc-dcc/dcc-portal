@@ -7,4 +7,4 @@
 // In the future, we might create a separate list of rules for production.
 // It would probably be more strict.
 
-module.exports = require('../.eslintrc');
+module.exports = require('../.eslintrc.json');
