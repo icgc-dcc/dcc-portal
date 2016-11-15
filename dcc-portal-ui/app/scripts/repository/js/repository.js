@@ -15,6 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import {ensureArray, ensureString} from '../../common/js/ensure-input';
+
 (function() {
   'use strict';
 
@@ -627,7 +629,7 @@
    */
   module.controller ('ExternalRepoController', function ($scope, $window, $modal, LocationService, Page,
     ExternalRepoService, SetService, ProjectCache, CodeTable, RouteInfoService, $rootScope, PortalFeature,
-    FacetConstants, Facets, LoadState, EnsureInputService) {
+    FacetConstants, Facets, LoadState) {
 
     var dataRepoTitle = RouteInfoService.get ('dataRepositories').title,
         FilterService = LocationService.getFilterService();
@@ -731,7 +733,7 @@
     }
 
     function buildDataInfo (data, property, paths, category, toolTip) {
-      var ids = _(EnsureInputService.ensureArray (data))
+      var ids = _(ensureArray (data))
         .map (property)
         .unique()
         .value();
@@ -830,7 +832,7 @@
 
     _ctrl.flagIconClass = function (projectCode) {
       var defaultValue = '';
-      var last3 = _.takeRight (EnsureInputService.ensureString (projectCode), 3);
+      var last3 = _.takeRight (ensureString (projectCode), 3);
 
       if (_.size (last3) < 3 || _.first (last3) !== '-') {
         return defaultValue;

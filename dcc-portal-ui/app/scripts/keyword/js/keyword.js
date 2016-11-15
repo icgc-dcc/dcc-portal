@@ -15,6 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import {ensureArray, ensureString, partiallyContainsIgnoringCase} from '../../common/js/ensure-input';
+
 (function () {
   'use strict';
 
@@ -36,7 +38,7 @@
   var module = angular.module('icgc.keyword.controllers', ['icgc.keyword.models', 'icgc.common.text.utils']);
 
   module.controller('KeywordController',
-    function ($scope, Page, LocationService, debounce, Keyword, RouteInfoService, Abridger, gettextCatalog, EnsureInputService) {
+    function ($scope, Page, LocationService, debounce, Keyword, RouteInfoService, Abridger, gettextCatalog) {
       var pageSize;
 
       $scope.from = 1;
@@ -78,9 +80,9 @@
 
       $scope.concatMatches = function (array) {
         var target = $scope.query;
-        var matches = _(EnsureInputService.ensureArray (array))
+        var matches = _(ensureArray (array))
           .filter (function (element) {
-            return EnsureInputService.partiallyContainsIgnoringCase (EnsureInputService.ensureString (element), target);
+            return partiallyContainsIgnoringCase (ensureString (element), target);
           })
           .take (maxConcat);
 

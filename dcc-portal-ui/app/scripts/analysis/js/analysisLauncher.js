@@ -117,14 +117,16 @@
           }
           return true;
         });
+      } else if (type === 'phenotype'){
+        _this.filteredList = _.filter(SetService.getAll(), function (set) {
+          return set.type === 'donor';
+        });
       } else if (type === 'oncogrid') {
         _this.filteredList = _.filter(SetService.getAll(), function (set) {
           return set.type === 'donor' || set.type === 'gene';
         });
       } else {
-        _this.filteredList = _.filter(SetService.getAll(), function (set) {
-          return set.type === 'donor';
-        });
+        console.error(`The requested analysis ${type} doesn't exist!`);
       }
     };
 

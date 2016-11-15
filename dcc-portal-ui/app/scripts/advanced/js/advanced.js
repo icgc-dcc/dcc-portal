@@ -17,6 +17,8 @@
 
 'use strict';
 
+import ensureString from '../../common/js/ensure-input';
+
 angular.module('icgc.advanced', ['icgc.advanced.controllers', 'ui.router'])
   .config(function ($stateProvider) {
     $stateProvider.state('advanced', {
@@ -55,7 +57,7 @@ angular.module('icgc.advanced.controllers', [
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
               AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular,
-              RouteInfoService, FacetConstants, Extensions, EnsureInputService, gettextCatalog) {
+              RouteInfoService, FacetConstants, Extensions, gettextCatalog) {
 
       var _controller = this,
           dataRepoRouteInfo = RouteInfoService.get ('dataRepositories'),
@@ -440,7 +442,7 @@ angular.module('icgc.advanced.controllers', [
 
       _controller.projectFlagIconClass = function (projectCode) {
         var defaultValue = '';
-        var last3 = _.takeRight (EnsureInputService.ensureString (projectCode), 3);
+        var last3 = _.takeRight (ensureString (projectCode), 3);
 
         if (_.size (last3) < 3 || _.first (last3) !== '-') {
           return defaultValue;

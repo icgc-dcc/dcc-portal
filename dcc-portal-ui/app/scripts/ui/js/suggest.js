@@ -17,10 +17,12 @@
 
 'use strict';
 
+import {ensureArray, ensureString, partiallyContainsIgnoringCase} from '../../common/js/ensure-input';
+
 angular.module('icgc.ui.suggest', ['ngSanitize', 'icgc.common.text.utils']);
 
 angular.module('icgc.ui.suggest').controller('suggestController',
-  function ($scope, debounce, Keyword, Abridger, SetService, EnsureInputService) {
+  function ($scope, debounce, Keyword, Abridger, SetService) {
   var pageSize = 5, inactive = -1;
 
   $scope.active = inactive;
@@ -104,9 +106,9 @@ angular.module('icgc.ui.suggest').controller('suggestController',
   var maxConcat = 3;
 
   function concatMatches (array, target) {
-    var matches = _(EnsureInputService.ensureArray (array))
+    var matches = _(ensureArray (array))
       .filter (function (element) {
-        return EnsureInputService.partiallyContainsIgnoringCase (EnsureInputService.ensureString (element), target);
+        return partiallyContainsIgnoringCase (ensureString (element), target);
       })
       .take (maxConcat);
 
