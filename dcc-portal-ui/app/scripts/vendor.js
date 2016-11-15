@@ -57,12 +57,6 @@ require('expose?donutChooserD3!imports?this=>window&outerRadius=>undefined!expor
 require('expose?groupedBarD3!imports?this=>window&colorList=>undefined!exports?groupedBarD3!../vendor/scripts/vcfiobio/groupedBar.d3.js');
 require('expose?lineD3!imports?this=>window!exports?lineD3!../vendor/scripts/vcfiobio/line.d3.js');
 
-// Genome Viewer
-require('expose?Backbone!backbone');
-require('script!../vendor/scripts/bootstrap-slider-2.0.0.js');
-require('script!../vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.js');
-require('expose?URI!urijs');
-
 // Highcharts Rounded Corners
 require('../vendor/scripts/highcharts-rounded-corners.js');
 

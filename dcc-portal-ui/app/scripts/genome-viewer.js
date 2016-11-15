@@ -1,3 +1,9 @@
+// Genome Viewer Dependencies
+require('expose?Backbone!backbone');
+require('script!../vendor/scripts/bootstrap-slider-2.0.0.js');
+require('script!../vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.js');
+require('expose?URI!urijs');
+
 // Genome Viewer Config and Initialization
 // require('script!../vendor/scripts/genome-viewer/gv-config.js');
 Object.assign(window, require('imports?key=>undefined!exports?CODON_CONFIG&GENE_BIOTYPE_COLORS&SNP_BIOTYPE_COLORS&SEQUENCE_COLORS&FEATURE_TYPES!../vendor/scripts/genome-viewer/gv-config.js'));
