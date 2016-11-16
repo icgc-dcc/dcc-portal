@@ -474,7 +474,7 @@
       // Setting the initial language to English CA.
       gettextCatalog.setCurrentLanguage('en_CA');
 
-      HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound', 'dataRepositories', 'donor', 'beacon']);
+      HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound', 'dataRepositories', 'donor', 'beacon', 'project', 'gene']);
       
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         if(error.status === 404){
