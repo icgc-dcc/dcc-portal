@@ -29,10 +29,19 @@
     <dependency>
       <groupId>org.elasticsearch.client</groupId>
       <artifactId>transport</artifactId>
+      <version>${elasticsearch.version}</version>
     </dependency>
     <dependency>
       <groupId>org.elasticsearch.test</groupId>
       <artifactId>framework</artifactId>
+      <version>${elasticsearch.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.elasticsearch</groupId>
+          <artifactId>securemock</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <!-- ES plugins for integration testing -->
     <dependency>
@@ -105,6 +114,7 @@
   </build>
 
   <properties>
+    <elasticsearch.version>5.0.0</elasticsearch.version>
     <jackson.version>2.8.1</jackson.version>
     <jackson-smile.version>2.8.1</jackson-smile.version>
     <jackson-yaml.version>2.8.1</jackson-yaml.version>
