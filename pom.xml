@@ -27,6 +27,11 @@
       <id>dcc-releases</id>
       <url>https://artifacts.oicr.on.ca/artifactory/dcc-release</url>
     </repository>
+    <!-- Remove after the Elasticsearch 5.0.0 mappings are released -->
+    <repository>
+      <id>dcc-pr-snapshot</id>
+      <url>https://artifacts.oicr.on.ca/artifactory/dcc-pr-snapshot</url>
+    </repository>
   </repositories>
 
   <dependencyManagement>
@@ -108,7 +113,7 @@
     <!-- Versions - DCC -->
     <dcc-common.version>4.2.5</dcc-common.version>
     <dcc-download.version>4.2.18</dcc-download.version>
-    <dcc-release.version>4.2.5-SNAPSHOT</dcc-release.version>
+    <dcc-release.version>4.2.5-20161115.215834-7</dcc-release.version>
     <dcc-repository.version>1.0.0</dcc-repository.version>
 
     <groovy.version>2.3.5</groovy.version>
