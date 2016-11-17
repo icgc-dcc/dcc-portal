@@ -30,8 +30,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import lombok.val;
-
 import org.elasticsearch.client.Client;
 import org.icgc.dcc.portal.server.config.ServerProperties.CacheProperties;
 import org.joda.time.DateTime;
@@ -45,6 +43,8 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
+
+import lombok.val;
 
 @Component
 public class CachingFilter implements ContainerRequestFilter, ContainerResponseFilter {
@@ -169,7 +169,7 @@ public class CachingFilter implements ContainerRequestFilter, ContainerResponseF
   private static Date getLastModified(Client client, String indexName) {
     val response = client.prepareSearch(indexName)
         .setTypes(RELEASE_TYPE_NAME)
-        .addField(DATE_FIELD_NAME)
+        .addStoredField(DATE_FIELD_NAME)
         .setSize(1)
         .execute()
         .actionGet();

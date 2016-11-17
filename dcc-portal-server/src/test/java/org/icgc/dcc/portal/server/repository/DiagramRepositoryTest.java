@@ -16,14 +16,13 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.dcc.portal.pql.meta.Type.PROJECT;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.IndexType;
-import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,20 +37,17 @@ public class DiagramRepositoryTest extends BaseElasticSearchTest {
   ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.DIAGRAM);
 
   @Before
-  public void setUp() throws Exception {
-    this.testIndex = TestIndex.RELEASE;
-    es.execute(
-        createIndexMapping(IndexType.DIAGRAM)
-            .withData(bulkFile(getClass())));
+  public void setUpDiagramRepositoryTest() throws Exception {
+    prepareIndex(RELEASE_INDEX_NAME, PROJECT);
     diagramRepository =
-        new DiagramRepository(es.client(), testIndex.getName(), new QueryEngine(es.client(), testIndex.getName()));
+        new DiagramRepository(client, RELEASE_INDEX_NAME, new QueryEngine(client, RELEASE_INDEX_NAME));
   }
 
   @Test
   public void testFindAll() throws Exception {
     val query = Query.builder().from(1).size(10).build();
     val response = diagramRepository.findAll(query);
-    assertThat(response.getHits().getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(1);
   }
 
   @Test
@@ -59,7 +55,7 @@ public class DiagramRepositoryTest extends BaseElasticSearchTest {
     val id = "REACT_163914";
     val query = Query.builder().build();
     val response = diagramRepository.findOne(id, query);
-    assertThat(response.get(FIELDS.get("id"))).isEqualTo(id);
+    Assertions.assertThat(response.get(FIELDS.get("id"))).isEqualTo(id);
   }
 
 }

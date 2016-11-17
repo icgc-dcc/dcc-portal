@@ -19,9 +19,9 @@ package org.icgc.dcc.portal.server.util;
 
 import static java.util.Collections.emptyList;
 import static lombok.AccessLevel.PRIVATE;
+import static org.apache.lucene.search.join.ScoreMode.Avg;
 import static org.dcc.portal.pql.meta.Type.FILE;
-import static org.elasticsearch.action.search.SearchType.COUNT;
-import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
@@ -36,7 +36,7 @@ import org.dcc.portal.pql.meta.TypeModel;
 import org.elasticsearch.action.get.GetRequestBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.BoolFilterBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
@@ -104,10 +104,10 @@ public class ElasticsearchRequestUtils {
   }
 
   @NonNull
-  public static BoolFilterBuilder toBoolFilterFrom(final UnionUnit unionDefinition,
+  public static BoolQueryBuilder toBoolFilterFrom(final UnionUnit unionDefinition,
       final BaseEntitySet.Type entityType) {
     val lookupType = entityType.toLookupType();
-    val boolFilter = boolFilter();
+    val boolFilter = boolQuery();
 
     // Adding Musts
     val intersectionUnits = unionDefinition.getIntersection();
@@ -124,9 +124,9 @@ public class ElasticsearchRequestUtils {
   }
 
   @NonNull
-  public static BoolFilterBuilder toBoolFilterFrom(final Iterable<UnionUnit> definitions,
+  public static BoolQueryBuilder toBoolFilterFrom(final Iterable<UnionUnit> definitions,
       final BaseEntitySet.Type entityType) {
-    val boolFilter = boolFilter();
+    val boolFilter = boolQuery();
 
     for (val def : definitions) {
       boolFilter.should(toBoolFilterFrom(def, entityType));
@@ -134,9 +134,9 @@ public class ElasticsearchRequestUtils {
     return boolFilter;
   }
 
-  public static BoolFilterBuilder toDonorBoolFilter(final UnionUnit unionDefinition) {
+  public static BoolQueryBuilder toDonorBoolFilter(final UnionUnit unionDefinition) {
 
-    val boolFilter = boolFilter();
+    val boolFilter = boolQuery();
 
     // Adding Musts
     val intersectionUnits = unionDefinition.getIntersection();
@@ -161,10 +161,10 @@ public class ElasticsearchRequestUtils {
   private static boolean isRepositoryDonorExecute(Client client, String fieldAlias, String value,
       String repoIndexName) {
     val query = nestedQuery(TYPE_MODEL.getNestedPath(fieldAlias),
-        termQuery(TYPE_MODEL.getField(fieldAlias), value));
+        termQuery(TYPE_MODEL.getField(fieldAlias), value), Avg);
     val search = client.prepareSearch(repoIndexName)
         .setTypes(FILE_INDEX_TYPE)
-        .setSearchType(COUNT)
+        .setSize(0)
         .setQuery(query);
 
     log.debug("ES query: '{}'.", search);

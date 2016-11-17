@@ -20,8 +20,6 @@ package org.icgc.dcc.portal.server.repository;
 import static com.google.common.collect.Maps.toMap;
 import static java.lang.String.format;
 import static org.dcc.portal.pql.meta.Type.OBSERVATION_CENTRIC;
-import static org.elasticsearch.action.search.SearchType.COUNT;
-import static org.elasticsearch.action.search.SearchType.SCAN;
 import static org.icgc.dcc.common.core.model.ConsequenceType.CODING_SEQUENCE_VARIANT;
 import static org.icgc.dcc.common.core.model.ConsequenceType.DISRUPTIVE_INFRAME_DELETION;
 import static org.icgc.dcc.common.core.model.ConsequenceType.DISRUPTIVE_INFRAME_INSERTION;
@@ -149,7 +147,7 @@ public class OccurrenceRepository {
 
     val request = queryEngine.execute(pql, OBSERVATION_CENTRIC)
         .getRequestBuilder()
-        .setSearchType(COUNT);
+        .setSize(0);
     log.debug("Count query is: '{}'.", request);
 
     val response = request.execute().actionGet();

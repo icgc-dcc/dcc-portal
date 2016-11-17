@@ -64,6 +64,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.dcc.portal.pql.ast.StatementNode;
+import org.dcc.portal.pql.ast.builder.NestedBuilder;
 import org.dcc.portal.pql.ast.function.SelectNode;
 import org.dcc.portal.pql.ast.function.SortNode;
 import org.dcc.portal.pql.meta.FileTypeModel.EsFields;
@@ -78,7 +79,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
@@ -86,17 +86,16 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
-import org.elasticsearch.search.aggregations.bucket.nested.NestedBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
 import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.SearchFieldMapper;
 import org.icgc.dcc.portal.server.model.TermFacet;
 import org.icgc.dcc.portal.server.model.TermFacet.Term;
-import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
@@ -181,7 +180,7 @@ public class FileRepository {
     val repoCodeSubAgg = nestedAgg(repoCode, EsFields.FILE_COPIES,
         terms(repoCode).size(100).field(repoCode).subAggregation(repoNameSubAgg));
     val response = searchFileCentric("findRepos", request -> request
-        .setSearchType(COUNT)
+        .setSize(0)
         .addAggregation(repoCodeSubAgg));
     val terms = (Terms) getSubAggResultFromNested(response.getAggregations(), repoCode).get(repoCode);
 
@@ -373,7 +372,7 @@ public class FileRepository {
     val aggKey = "donorCount";
     val pqlAst = PQL_CONVERTER.convert(query, FILE);
     val request = queryEngine.execute(pqlAst, FILE).getRequestBuilder()
-        .setSearchType(COUNT)
+        .setSize(0)
         .addAggregation(donorIdAgg(aggKey));
 
     val response = request.get();
@@ -549,7 +548,7 @@ public class FileRepository {
         .subAggregation(nestedAgg(StatsAggregationKeys.DONOR_PRIMARY_SITE, EsFields.DONORS, primarySiteAgg));
 
     val response = searchFileCentric("findFileStats", request -> request
-        .setSearchType(COUNT)
+        .setSize(0)
         .addAggregation(statsAgg));
 
     log.debug("findFileStats - ES response is: {}", response);

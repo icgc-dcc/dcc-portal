@@ -118,7 +118,7 @@ public final class BrowserParsers {
     long highestAbsolute = 0l;
     Map<String, Histogram.Bucket> buckets = newHashMap();
     for (val bucket : histogramAggs.getBuckets()) {
-      buckets.put(bucket.getKey(), bucket);
+      buckets.put(bucket.getKeyAsString(), bucket);
 
       if (bucket.getDocCount() > highestAbsolute) {
         highestAbsolute = bucket.getDocCount();
@@ -166,7 +166,7 @@ public final class BrowserParsers {
     long highestAbsolute = 0l;
     Map<String, Histogram.Bucket> buckets = newHashMap();
     for (val bucket : histogramAggs.getBuckets()) {
-      buckets.put(bucket.getKey(), bucket);
+      buckets.put(bucket.getKeyAsString(), bucket);
 
       if (bucket.getDocCount() > highestAbsolute) {
         highestAbsolute = bucket.getDocCount();

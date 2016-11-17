@@ -17,7 +17,7 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
@@ -25,15 +25,14 @@ import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
-import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,19 +59,20 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
 
   ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.GENE);
 
+  @Override
   @Before
   public void setUp() throws Exception {
-    this.testIndex = TestIndex.RELEASE;
-    es.execute(createIndexMappings(IndexType.GENE, IndexType.GENE_CENTRIC).withData(bulkFile(getClass())));
+    prepareIndex(RELEASE_INDEX_NAME, GENE_CENTRIC);
+    loadData("GeneRepositoryTest.json");
     geneRepository =
-        new GeneRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()), TestIndex.RELEASE.getName());
+        new GeneRepository(client, new QueryEngine(client, RELEASE_INDEX_NAME), RELEASE_INDEX_NAME);
   }
 
   @Test
   public void testFindAll() throws Exception {
     Query query = Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).build();
     SearchResponse response = geneRepository.findAllCentric(query);
-    assertThat(response.getHits().getTotalHits()).isEqualTo(3);
+    Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(3);
   }
 
   @Test
@@ -83,11 +83,11 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = geneRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(response.getHits().getTotalHits()).isEqualTo(3);
+    Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(3);
 
     for (SearchHit hit : hits) {
-      assertThat(hit.fields().keySet().size()).isEqualTo(2);
-      assertThat(hit.fields().keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("symbol")));
+      Assertions.assertThat(hit.fields().keySet().size()).isEqualTo(2);
+      Assertions.assertThat(hit.fields().keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("symbol")));
     }
   }
 
@@ -99,10 +99,10 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = geneRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(1);
-    assertThat(hits.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
-    assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(GENEID);
+    Assertions.assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(GENEID);
 
   }
 
@@ -114,8 +114,8 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = geneRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(2);
-    assertThat(hits.getHits().length).isEqualTo(2);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(2);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(2);
   }
 
   @Test
@@ -126,11 +126,11 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     SearchResponse responseIs = geneRepository.findAllCentric(queryIs);
     SearchHits hitsIs = responseIs.getHits();
 
-    assertThat(hitsIs.getTotalHits()).isEqualTo(1);
-    assertThat(hitsIs.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hitsIs.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hitsIs.getHits().length).isEqualTo(1);
 
     // assertThat(hitsIs.getAt(0).field(FIELDS.get("id")).getValue()).isEqualTo(GENEID);
-    assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isIn(
+    Assertions.assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isIn(
         Lists.newArrayList("ENSG00000215529"));
 
     FiltersParam filterNot = new FiltersParam(joinFilters(DONOR_NOT_FILTER));
@@ -141,7 +141,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
 
     // Every single gene contains at least one ovary or pancreas donor, hence we get no results back.
     // This behavior is new after: DCC-5113
-    assertThat(hitsNot.getTotalHits()).isEqualTo(0);
+    Assertions.assertThat(hitsNot.getTotalHits()).isEqualTo(0);
   }
 
   @Test
@@ -152,10 +152,10 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     SearchResponse responseIs = geneRepository.findAllCentric(queryIs);
     SearchHits hitsIs = responseIs.getHits();
 
-    assertThat(hitsIs.getTotalHits()).isEqualTo(1);
-    assertThat(hitsIs.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hitsIs.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hitsIs.getHits().length).isEqualTo(1);
 
-    assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(GENEID);
+    Assertions.assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(GENEID);
 
     FiltersParam filterNot = new FiltersParam(joinFilters(GENE_FILTER, MUTATION_NOT_FILTER));
     Query queryNot =
@@ -163,7 +163,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     SearchResponse responseNot = geneRepository.findAllCentric(queryNot);
     SearchHits hitsNot = responseNot.getHits();
 
-    assertThat(hitsNot.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hitsNot.getTotalHits()).isEqualTo(1);
   }
 
   @Test
@@ -174,40 +174,41 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = geneRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(1);
-    assertThat(hits.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
-    assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(GENEID);
+    Assertions.assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(GENEID);
   }
 
   @Test
   public void testCountIntersection() throws Exception {
-    assertThat(geneRepository.count(Query.builder().build())).isEqualTo(3);
+    Assertions.assertThat(geneRepository.count(Query.builder().build())).isEqualTo(3);
   }
 
   @Test
   public void testCountIntersectionWithFilters() throws Exception {
-    assertThat(
+    Assertions.assertThat(
         geneRepository.count(Query.builder().filters(new FiltersParam(joinFilters(GENE_FILTER)).get()).build()))
-            .isEqualTo(1);
-    assertThat(
+        .isEqualTo(1);
+    Assertions.assertThat(
         geneRepository.count(Query.builder().filters(new FiltersParam(joinFilters(GENE_NOT_FILTER)).get())
-            .build())).isEqualTo(2);
+            .build()))
+        .isEqualTo(2);
   }
 
   @Test
   public void testFind() throws Exception {
     Query query = Query.builder().build();
     Map<String, Object> response = geneRepository.findOne(GENEID, query);
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(GENEID);
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(GENEID);
   }
 
   @Test
   public void testFindWithFields() throws Exception {
     Query query = Query.builder().fields(Lists.newArrayList("id", "symbol")).build();
     Map<String, Object> response = geneRepository.findOne(GENEID, query);
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(GENEID);
-    assertThat(response.keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("symbol")));
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(GENEID);
+    Assertions.assertThat(response.keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("symbol")));
   }
 
   @Test
@@ -216,8 +217,8 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
 
     Map<String, Object> response = geneRepository.findOne(GENEID, query);
 
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(GENEID);
-    assertThat(response.containsKey("transcripts")).isFalse();
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(GENEID);
+    Assertions.assertThat(response.containsKey("transcripts")).isFalse();
 
     Query queryInclude =
         Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER)
@@ -225,8 +226,8 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
 
     Map<String, Object> responseInclude = geneRepository.findOne(GENEID, queryInclude);
 
-    assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(GENEID);
-    assertThat(responseInclude.containsKey("transcripts")).isTrue();
+    Assertions.assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(GENEID);
+    Assertions.assertThat(responseInclude.containsKey("transcripts")).isTrue();
   }
 
   @Test(expected = WebApplicationException.class)
@@ -235,7 +236,6 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     geneRepository.findOne(MISSING_ID, query);
   }
 
-  @Override
   protected Object cast(Object object) {
     return object;
   }

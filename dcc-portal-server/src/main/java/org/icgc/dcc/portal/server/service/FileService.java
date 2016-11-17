@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.service;
 
 import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.difference;
@@ -27,7 +28,6 @@ import static com.google.common.collect.Sets.union;
 import static com.google.common.primitives.Longs.tryParse;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toMap;
-import static org.elasticsearch.common.collect.Iterables.toArray;
 import static org.icgc.dcc.common.core.util.Joiners.COMMA;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
@@ -55,7 +55,6 @@ import java.util.stream.Stream;
 import org.dcc.portal.pql.meta.FileTypeModel.Fields;
 import org.dcc.portal.pql.meta.IndexModel;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.common.collect.Iterables;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
@@ -84,6 +83,7 @@ import org.supercsv.io.CsvMapWriter;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import lombok.Cleanup;

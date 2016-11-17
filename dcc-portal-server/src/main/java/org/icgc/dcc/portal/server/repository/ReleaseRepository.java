@@ -17,7 +17,6 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static org.elasticsearch.action.search.SearchType.COUNT;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
@@ -61,7 +60,7 @@ public class ReleaseRepository {
         .setSize(query.getSize())
         .addSort(FIELDS_MAPPING.get(EntityType.RELEASE).get(query.getSort()), query.getOrder());
 
-    search.addFields(getFields(query, EntityType.RELEASE));
+    search.storedFields(getFields(query, EntityType.RELEASE));
 
     log.debug("{}", search);
     SearchResponse response = search.execute().actionGet();
@@ -72,7 +71,7 @@ public class ReleaseRepository {
 
   public long count(Query query) {
     SearchRequestBuilder search =
-        client.prepareSearch(indexName).setTypes(IndexType.RELEASE.getId()).setSearchType(COUNT);
+        client.prepareSearch(indexName).setTypes(IndexType.RELEASE.getId()).setSize(0);
 
     log.debug("{}", search);
     return search.execute().actionGet().getHits().getTotalHits();
@@ -80,7 +79,7 @@ public class ReleaseRepository {
 
   public Map<String, Object> findOne(String id, Query query) {
     val search = client.prepareGet(indexName, IndexType.RELEASE.getId(), id);
-    search.setFields(getFields(query, EntityType.RELEASE));
+    search.setStoredFields(getFields(query, EntityType.RELEASE));
 
     val response = search.execute().actionGet();
     checkResponseState(id, response, EntityType.RELEASE);

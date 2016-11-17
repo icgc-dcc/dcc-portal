@@ -29,7 +29,6 @@ import static java.util.Collections.singletonMap;
 import static org.dcc.portal.pql.ast.function.FunctionBuilders.facets;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
-import static org.elasticsearch.action.search.SearchType.COUNT;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
 import static org.elasticsearch.action.search.SearchType.SCAN;
 import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
@@ -67,6 +66,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.dcc.portal.pql.ast.StatementNode;
+import org.dcc.portal.pql.ast.builder.FilterBuilders;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.MultiSearchRequestBuilder;
 import org.elasticsearch.action.search.MultiSearchResponse;
@@ -76,8 +76,6 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.Aggregation;
@@ -391,7 +389,7 @@ public class DonorRepository implements Repository {
     val pql = CONVERTER.convertCount(query, DONOR_CENTRIC);
 
     val request = queryEngine.execute(pql, DONOR_CENTRIC);
-    return request.getRequestBuilder().setSearchType(COUNT).execute().actionGet().getHits().getTotalHits();
+    return request.getRequestBuilder().setSize(0).execute().actionGet().getHits().getTotalHits();
   }
 
   @Override

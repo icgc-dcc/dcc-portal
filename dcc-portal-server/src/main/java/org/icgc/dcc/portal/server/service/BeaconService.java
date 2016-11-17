@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.service;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.apache.lucene.search.join.ScoreMode.Avg;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
 import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_CHROMOSOME;
 import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_CHROMOSOME_END;
@@ -25,10 +26,9 @@ import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_CHROMOSOME_STAR
 import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_OBSERVATION_PROJECT;
 import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_OCCURRENCES;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_ID;
-import lombok.val;
 
+import org.dcc.portal.pql.ast.builder.FilterBuilders;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.icgc.dcc.portal.server.model.AlleleMutation;
 import org.icgc.dcc.portal.server.model.Beacon;
@@ -42,6 +42,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.ImmutableMap;
+
+import lombok.val;
 
 /**
  * The Beacon searches the dataset for mutation in a given position and chromosome. The result is null if no mutations
@@ -72,7 +74,8 @@ public class BeaconService {
     this.client = client;
   }
 
-  public Beacon query(String chromosome, int position, String reference, AlleleMutation alleleMutation, String dataset) {
+  public Beacon query(String chromosome, int position, String reference, AlleleMutation alleleMutation,
+      String dataset) {
     String allele = alleleMutation.getMutation();
 
     val search = client.prepareSearch(index)
@@ -87,7 +90,8 @@ public class BeaconService {
     if (!isNullOrEmpty(dataset)) boolQuery
         .must(QueryBuilders.nestedQuery(MUTATION_OCCURRENCES,
             QueryBuilders.termQuery(MUTATION_OCCURRENCES + '.' + MUTATION_OBSERVATION_PROJECT + '.' + PROJECT_ID,
-                dataset)));
+                dataset),
+            Avg));
     search.setQuery(boolQuery);
 
     val params = new ImmutableMap.Builder<String, Object>()
@@ -101,8 +105,8 @@ public class BeaconService {
     val filter = FilterBuilders.scriptFilter(
         "m = doc['mutation'].value;"
             + "length = m.substring(m.indexOf('>')+1,m.length()).length();"
-            + "position <= doc['chromosome_start'].value+length"
-        ).addParam("position", position);
+            + "position <= doc['chromosome_start'].value+length")
+        .addParam("position", position);
     search.setPostFilter(filter);
 
     val hits = search.execute().actionGet().getHits();
