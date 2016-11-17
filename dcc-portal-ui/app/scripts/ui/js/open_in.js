@@ -21,6 +21,7 @@
 angular.module('icgc.ui.openin', []).directive('openInList', function () {
   return {
     restrict: 'A',
+    transclude: true,
     replace: true,
     scope: {
       openInList: '@',
