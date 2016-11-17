@@ -224,7 +224,7 @@
           gene: _.find(selectedSets, {type: 'gene'}).id,
         }),
       },
-    } 
+    };
 
     _this.addCustomGeneSet = function() {
       $modal.open({
@@ -244,7 +244,7 @@
     _this.handleSelectedSetsChange = sets => { _this.selectedSets = sets };
     const doSetsSatisfyCriteria = (sets, criteria) => _.every(criteria || [], criterium => criterium.test(sets))
     _this.isAnalysisSatisfied = (analysis) => doSetsSatisfyCriteria(_this.selectedSets, analysis.analysisSatisfactionCriteria);
-    const getCriteriaSatisficationMessages = (sets, criteria) => _.reject(criteria || [], criterium => criterium.test(sets)).map(criteria => criteria.message)
+    const getCriteriaSatisficationMessages = (sets, criteria) => _.reject(criteria || [], criterium => criterium.test(sets)).map(criteria => criteria.message);
     _this.getCriteriaSatisficationMessage = (analysis) => getCriteriaSatisficationMessages(_this.selectedSets, analysis.analysisSatisfactionCriteria).join('<br>');
 
 

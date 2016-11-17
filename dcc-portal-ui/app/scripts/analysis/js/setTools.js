@@ -71,4 +71,4 @@ angular.module('icgc.analysis.setTools', [])
       });
     },
     controllerAs: 'vm'
-  })
+  });

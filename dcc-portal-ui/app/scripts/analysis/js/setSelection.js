@@ -68,4 +68,4 @@ angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
       this.$onInit = () => prepareCallbacks();
     },
     controllerAs: 'vm',
-  })
+  });
