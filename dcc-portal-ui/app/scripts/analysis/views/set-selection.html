@@ -1,7 +1,6 @@
 <div class="set-selection-component">
-  <div><em>{{vm.description}}</em></div>
   <button
-    class="t_button t_button__destructive"
+    class="btn btn-xs pull-right"
     data-ng-click="vm.deleteSets(vm.selectedSets)"
     data-ng-disabled="!vm.selectedSets.length"
     data-tooltip="{{'Delete selected sets' | translate}}"
@@ -10,7 +9,9 @@
     <i class="icon-trash"></i><translate>Delete selected</translate>
   </button>
   <div> 
-      <div ng-bind-html="vm.selectionInstructions"></div>
+      <div
+        ng-bind-html="vm.selectionInstructions"
+        style="color: #999;"></div>
       <table class="table table-selectable"> 
           <thead>
               <th>

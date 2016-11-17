@@ -18,3 +18,12 @@
     color: #8a1d00;
   }
 }
+
+set-tools, [set-tools] {
+  .t_tools__tool, a.t_tools__tool {
+    color: #ccc;
+    &:hover {
+      color: #e9931c;
+    }
+  }
+}

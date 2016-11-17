@@ -28,21 +28,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="analysis-buttons light">
-                        <a
-                            class="btn btn-default demo"
-                            ng-click="analysis.launchDemo()"
-                            tooltip="{{analysis.strings.demoDescription}}"
-                        >Demo</a>
-                        <button
-                            class="run t_button"
-                            ng-disabled="(NAC.selectedAnalysis && NAC.selectedAnalysis !== analysis) || !NAC.isAnalysisSatisfied(analysis)"
-                            ng-click="analysis.launch(NAC.selectedSets); $event.stopPropagation();"
-                            tooltip="{{NAC.getCriteriaSatisficationMessage(analysis)}}"
-                        >Run</button>
-                    </div>
-
                 </div>
             </div>
             <div class="analysis-suggestions">
@@ -58,15 +43,30 @@
         </div>
 
         <div class="set-selection-wrapper col-sm-7">
-            <div style="font-size:1.25rem" data-ng-show="!NAC.selectedAnalysis">
+            <div
+                style="font-size: 22px; color: #333; font-size: 500;"
+                data-ng-show="!NAC.selectedAnalysis"
+            >
                 <translate>Saved Sets</translate>
             </div>
             <div style="font-size:1.25rem" data-ng-show="NAC.selectedAnalysis">
-                <translate>Select {{NAC.selectedAnalysis.type === 'enrichment' ? 'set' : 'sets'}} for 
-                <strong>{{NAC.selectedAnalysis.strings.name}}</strong></translate>
+                <small style="display: block; margin-bottom: -0.2em; color: #666;">
+                    <translate>Select {{NAC.selectedAnalysis.type === 'enrichment' ? 'set' : 'sets'}} for
+                </small> 
+                <div>
+                    <strong style="font-size: 22px; color: #333;">{{NAC.selectedAnalysis.strings.name}}</strong></translate>
+                    <small>
+                        <a
+                            class="demo"
+                            ng-click="NAC.selectedAnalysis.launchDemo()"
+                            tooltip="{{analysis.strings.demoDescription}}"
+                            href="#"
+                        > (demo) </a>
+                    </small>
+                </div>
             </div>
 
-            <div ng-show="!NAC.selectedAnalysis">
+            <div ng-show="!NAC.selectedAnalysis" style="color: #999;">
                 <translate has-markup>You can create and save new <strong>donor</strong>, <strong>gene</strong>, or <strong>mutation</strong> sets of interest from
                 <span class="action-toolbar"><span class="action-item"><i class="icon-search"></i><a href="/search">Advanced Search.</a></span></span></translate>
                 <br>
@@ -76,7 +76,7 @@
                     <span class="action-toolbar">
                         <span class="action-item">
                             <i class="icon-floppy"></i>
-                            <a href="" data-ng-click="NAC.addCustomGeneSet()">Upload your own gene set.</a>
+                            <a href="" data-ng-click="NAC.addCustomGeneSet()">Upload</a> your own gene set.
                         </span>
                     </span>
                 </translate>
