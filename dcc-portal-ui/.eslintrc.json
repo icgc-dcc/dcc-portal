@@ -97,7 +97,7 @@
             }
         ],
         "new-parens": "warn",
-        "semi": ["warn", "always"],
+        "semi": ["warn", "always", { "omitLastInOneLineBlock": true }],
         "no-array-constructor": "warn",
         "no-caller": "warn",
         "no-cond-assign": [
