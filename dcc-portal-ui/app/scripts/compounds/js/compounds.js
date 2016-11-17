@@ -335,8 +335,6 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
         if (angular.isDefined(params.filters) && !angular.isDefined(params.sortBy)) {
           if (type === 'donor') {
             data.sortBy = 'ssmAffectedGenes';
-          } else if (type === 'gene') {
-            data.sortBy = 'affectedDonorCountFiltered';
           } else {
             data.sortBy = 'affectedDonorCountFiltered';
           }
@@ -553,9 +551,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
       _self.getCompoundMutations = function(geneStartIndex, geneLimit) {
         var params = _getResultsCompoundGenesFilter(geneLimit);
         delete params.from;
-        //delete params.filters;
-
-
+        
         return Restangular
             .one('drugs')
             .one(compoundId)

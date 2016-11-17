@@ -303,7 +303,7 @@
               }
             } catch (error) {
               // Gracefully report that an update was in flight during teardown. 
-              console.log('An error occured during chart update: ' + error);
+              throw new Error('An error occured during chart update: ' + error);
             }
              
           }, options);
@@ -798,7 +798,6 @@
           options.binNumber = options.binNumber * statsOptions.samplingMultiplier;
 
           vcfiobio.getStats(refs, options, function(data) {
-            console.log(data);
             renderStats(data);
           });
         }
@@ -932,7 +931,7 @@
           d3.select('#variant-density-panel').select('.hint')
             .text(gettextCatalog.getString('(drag bottom chart to select a region)'));
 
-          loadVariantDensityData(ref, i);
+          loadVariantDensityData(ref);
           loadStats(chromosomeIndex);
         }
 

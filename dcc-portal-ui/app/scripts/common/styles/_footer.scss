@@ -35,7 +35,6 @@ footer {
     @include float-span(6);
     @include breakpoint($break-tablet) {
       @include float-span(1.80);
-      //@include float-span(2); 
     }
   }
 

@@ -102,13 +102,11 @@
 
     if (mutation.functionalImpact.indexOf('High') > 0) {
       mutation.displayedFunctionalImpact = 'High';
-    } else if (mutation.functionalImpact.indexOf('High') > 0) {
+    } else if (mutation.functionalImpact.indexOf('Low') > 0) {
       mutation.displayedFunctionalImpact = 'Low';
     } else {
       mutation.displayedFunctionalImpact = 'Unknown';
     }
-
-    console.log(_ctrl.uiProjects);
 
     if (_ctrl.mutation.hasOwnProperty('consequences') && _ctrl.mutation.consequences.length) {
       var affectedGeneIds = _.filter(_.pluck(_ctrl.mutation.consequences, 'geneAffectedId'), function (d) {

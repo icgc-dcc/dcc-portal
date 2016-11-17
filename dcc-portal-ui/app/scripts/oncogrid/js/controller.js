@@ -89,7 +89,8 @@
             $('#og-crosshair-message').toggle();
             $('#crosshair-button').toggleClass('active');
             var gridDriv = $('#oncogrid-div');
-            gridDriv.toggleClass('og-pointer-mode'); gridDriv.toggleClass('og-crosshair-mode');
+            gridDriv.toggleClass('og-pointer-mode'); 
+            gridDriv.toggleClass('og-crosshair-mode');
             _this.grid.toggleCrosshair();
         };
 

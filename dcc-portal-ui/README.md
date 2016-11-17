@@ -33,6 +33,20 @@ Run
 
 - View the site: [localhost:9000](http://local.dcc.icgc.org:9000/)
 
+Other Commands
+---
+
+```bash
+# Connect to the production server's API instead of a local backend
+npm run dev:prodapi
+
+# Adds local.dcc.icgc.org to your host file and point to localhost
+npm run sethost
+
+# Open fontello with the project's json config loaded
+npm run font:open
+```
+
 ## Basic Style Guide
 
 

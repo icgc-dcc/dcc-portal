@@ -65,7 +65,7 @@
       if (angular.isDefined($scope.params.setLimit)) {
         params.filters = LocationService.filters();
 
-        sortParam = LocationService.getJsonParam($scope.setType + 's');
+        sortParam = LocationService.getJqlParam($scope.setType + 's');
 
         if (angular.isDefined(sortParam)) {
           params.sortBy = sortParam.sort;
@@ -251,7 +251,6 @@
         }
 
         function wait(id, numTries, callback) {
-          console.log('trying .... ', numTries);
           if (numTries <= 0) {
             Page.stopWork();
             return;
@@ -362,8 +361,7 @@
           SetService.materializeSync(type, params).then(function(data) {
             Page.stopWork();
             if (! data.id) {
-              console.log('there is no id!!!!');
-              return;
+              throw new Error('The set id was not found!', data);
             } else {
               var newFilter = JSON.stringify(filterTemplate(data.id));
               $location.path (dataRepoUrl).search ('filters', newFilter);

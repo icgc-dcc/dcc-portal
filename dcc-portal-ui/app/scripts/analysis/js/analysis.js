@@ -108,7 +108,6 @@ require('./setSelection');
 
 
     $scope.newAnalysis = function() {
-      console.log('new analysis request');
 
       if ($scope.analysisId !== undefined) {
         $location.path('analysis');
@@ -148,7 +147,7 @@ require('./setSelection');
     function init() {
       $timeout.cancel(pollTimeout);
       $scope.error = null;
-      $scope.analysisResult = null;
+      $scope.analysisResult = undefined;
 
       if (! $scope.analysisId || ! $scope.analysisType) {
         return;
@@ -166,7 +165,7 @@ require('./setSelection');
         }
 
         if (data.state === 'FINISHED') {
-          $scope.analysisResult = null;
+          $scope.analysisResult = undefined;
           $timeout(function() {
             $scope.analysisResult = data;
           }, 150);

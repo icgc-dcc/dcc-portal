@@ -327,13 +327,6 @@
           }
 
           _cancellableRequests.splice(indexAt, 1);
-
-          //console.log('Removing deferred from abort cache: ', deferredKey);
-
-
-           /*if (_cancellableRequests.length === 0) {
-               console.info('Request abort cache is empty!');
-           }*/
         }
 
         // Create a wrapped request function that will allow us to create http requests that
@@ -367,12 +360,10 @@
 
             requestPromise.then(
               function(data) {
-                //console.log('Success:', restangularObject, data);
                 _deletePromiseAbortCache(abortDeferred);
                 deferred.resolve(data);
               },
               function(error) {
-                //console.log('Failure:', restangularObject);
                 _deletePromiseAbortCache(abortDeferred);
                 deferred.reject(error);
               }
@@ -467,7 +458,6 @@
 
           for (var i = 0; i < abortRequestLength; i++) {
             var requestURL = requestUrls[i];
-            console.log('Cancelling HTTP Request: ', requestURL);
             _cancellableRequests[requestURL].resolve();
           }
 
@@ -484,14 +474,14 @@
       // Setting the initial language to English CA.
       gettextCatalog.setCurrentLanguage('en_CA');
 
-      HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound']);
+      HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound', 'dataRepositories', 'donor', 'beacon', 'project', 'gene']);
       
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         if(error.status === 404){
           $state.go('404', {page: toState.name, id: toParams.id, url: toState.url}, {location: false});
         } else {
           console.error(error.message);
-          console.log(error.stack);
+          console.error(error.stack);
         }
       });
 
@@ -505,14 +495,12 @@
             _debounceDelayMS = 200;
 
         var deregisterLoadingFn = $rootScope.$on('cfpLoadingBar:loading', function () {
-          //console.log('Progress Started!');
           _shouldDisableLoadingBar = false;
         });
 
         var deregisterCompletedFn = $rootScope.$on('cfpLoadingBar:completed', function () {
           // Disable the loading bar after the debounced run first run
           _shouldDisableLoadingBar = true;
-          //console.log('Progress Completed!');
 
           if (_timeoutHandle) {
             clearTimeout(_timeoutHandle);
@@ -520,7 +508,6 @@
 
           _timeoutHandle = setTimeout(function () {
             if (_shouldDisableLoadingBar) {
-              //console.log('Progress Disabled!');
               cfpLoadingBar.enabled(false);
               deregisterLoadingFn();
               deregisterCompletedFn();
@@ -561,9 +548,6 @@
 
       return function(data, operation, model) {
         // perform this check dynamically the computation time is neglible so this shouldn't impede on perfomance
-        if ($icgcApp.getAPI().isDebugEnabled()) {
-          console.log(requestType + ' Method: ', operation.toUpperCase(), '\nModel: ', model, '\nData: ', data);
-        }
         return data;
       };
 
@@ -609,14 +593,14 @@
     Restangular.setErrorInterceptor(function (response) {
 
       if (response.status !== 401 && response.status !== -1) {
-        console.log('Response Error: ', toJson (response));
+        console.error('Response Error: ', toJson (response));
       }
 
       if (response.status === 500) {
         Notify.setMessage ('' + response.data.message || response.statusText);
         Notify.showErrors();
       } else if (response.status === 404) {
-        console.log(response.data.message);
+        console.error(response.data.message);
       }
     });
 

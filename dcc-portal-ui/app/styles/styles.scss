@@ -58,10 +58,7 @@ $fa-font-path: '~font-awesome/fonts';
 @import "../scripts/facets/styles/current";
 @import "../scripts/facets/styles/facets";
 
-@import "../scripts/ui/styles/suggest";
-@import "../scripts/ui/styles/tooltip";
-@import "../scripts/ui/styles/copyclip";
-@import "../scripts/ui/styles/trees";
+@import "../scripts/ui/styles/index";
 
 @import "../scripts/auth/styles/auth";
 
@@ -78,7 +75,6 @@ $fa-font-path: '~font-awesome/fonts';
 @import "../scripts/pathwayviewer/styles/pathwayviewer";
 
 @import "../scripts/repositories/styles/repositories";
-@import "../scripts/repositories/styles/guide";
 
 @import "../scripts/repository/styles/repository";
 

@@ -173,9 +173,7 @@
           var donorOpacity = function (d) {
             if (d.type === 'int') {
               return d.value / 100;
-            } else if (d.type === 'vital') {
-              return 1;
-            } else if (d.type === 'sex') {
+            } else if (d.type === 'vital' || d.type === 'sex') {
               return 1;
             } else if (d.type === 'bool') {
               return d.value ? 1 : 0;
@@ -263,6 +261,7 @@
             minCellHeight: 8,
             trackHeight: 12,
             trackLegends: trackLegends,
+            trackLegendLabel: '<i class="icon-help"></i>',
             donorTracks: donorTracks,
             donorOpacityFunc: donorOpacity,
             donorClick: donorClick,
@@ -287,11 +286,14 @@
 
           $('#og-crosshair-message').hide();
           var gridDiv = $('#oncogrid-div');
-          gridDiv.addClass('og-pointer-mode'); gridDiv.removeClass('og-crosshair-mode');
+          gridDiv.addClass('og-pointer-mode'); 
+          gridDiv.removeClass('og-crosshair-mode');
         };
 
-        $scope.$watch('item', function (n) {
-          if (n) {
+        function processItem() {
+          if (!$scope.item) {
+            return;
+          }
             var getName = type => _(localStorageService.get('entity'))
                             .filter( e => e.id === $scope.item[type])
                             .map( e => e.name)
@@ -319,8 +321,10 @@
               $scope.initOnco();
               $('#grid-button').addClass('active');
             });
-          }
-        });
+        }
+
+        $scope.$watch('item', processItem);
+        processItem();
 
         $scope.fullScreenHandler = function () {
           if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {

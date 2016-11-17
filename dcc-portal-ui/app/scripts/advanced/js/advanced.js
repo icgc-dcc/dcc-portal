@@ -113,8 +113,6 @@ angular.module('icgc.advanced.controllers', [
           var refreshPromise = service.init.apply(_controller);
 
           serviceObj.promiseCount = ++_promiseCount;
-          console.log('Promise #' + serviceObj.promiseCount + ' - Controller ID "' + serviceObj.id +
-                        '" started refresh...');
 
           refreshPromise.then(
             function () {
@@ -133,12 +131,7 @@ angular.module('icgc.advanced.controllers', [
                   ) ) {
 
                 _pageUnblockedTime = nowTime;
-                console.log('Advanced Search Page blocking stopped in ' + timeDelta + 'ms...');
               }
-
-              console.log('Promise #' + serviceObj.promiseCount + ' - Controller ID "' +
-                          serviceObj.id + '" refreshed in ' +
-                          (nowTime - serviceObj.startRunTime) + 'ms...');
 
               serviceObj.service.isFacetsInitialized = true;
 
@@ -197,7 +190,6 @@ angular.module('icgc.advanced.controllers', [
         }
 
         if (service.isHitsInitialized === true && forceFullRefresh !== true) {
-          console.info('Tab already rendered skipping rendering phase...');
           return;
         }
 
@@ -212,10 +204,6 @@ angular.module('icgc.advanced.controllers', [
           service.renderBodyTab();
         }
 
-      }
-
-      function ensureString (string) {
-        return _.isString (string) ? string.trim() : '';
       }
 
       function _resetService(service) {
@@ -267,11 +255,9 @@ angular.module('icgc.advanced.controllers', [
         });
 
         $scope.$on(_filterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
-
           if (filterObj.currentPath.indexOf('/search') < 0) {
             // Unfortunately this event fired before a state change notification is posted so this
             // provides a better why to determine if we need to abort requests that have been made.
-            //Restangular.abortAllHTTPRequests();
             return;
           }
 
@@ -290,8 +276,6 @@ angular.module('icgc.advanced.controllers', [
         });
 
         $rootScope.$on(FacetConstants.EVENTS.FACET_STATUS_CHANGE, function(event, facetStatus) {
-          //console.log('Facet change: ', facetStatus);
-
           if (! facetStatus.isActive) {
             return;
           }
@@ -454,19 +438,6 @@ angular.module('icgc.advanced.controllers', [
         });
       }
 
-      _controller.projectFlagIconClass = function (projectCode) {
-        var defaultValue = '';
-        var last3 = _.takeRight (ensureString (projectCode), 3);
-
-        if (_.size (last3) < 3 || _.first (last3) !== '-') {
-          return defaultValue;
-        }
-
-        var last2 = _.rest (last3).join ('');
-
-        return 'flag flag-' + CodeTable.translateCountryCode (last2.toLowerCase());
-      };
-
       _controller.setActiveTab = function (tab) {
         _controller.state.setTab(tab);
         _renderTab(tab);
@@ -494,7 +465,6 @@ angular.module('icgc.advanced.controllers', [
           }
         });
       };
-
 
       _init();
     })
@@ -592,7 +562,7 @@ angular.module('icgc.advanced.controllers', [
       }
 
       function _initDonors() {
-        var params = LocationService.getJsonParam('donors'),
+        var params = LocationService.getJqlParam('donors'),
             filters = _locationFilterCache.filters() || {},
             deferred = $q.defer();
 
@@ -642,7 +612,7 @@ angular.module('icgc.advanced.controllers', [
         _ASDonorService.hitsLoaded = false;
       }
 
-      var params = LocationService.getJsonParam('donors');
+      var params = LocationService.getJqlParam('donors');
 
       params.include = 'facets';
       params.facetsOnly = true;
@@ -799,7 +769,7 @@ angular.module('icgc.advanced.controllers', [
 
     function _initGenes() {
 
-      var params = LocationService.getJsonParam('genes'),
+      var params = LocationService.getJqlParam('genes'),
           filters = _locationFilterCache.filters() || {},
           deferred = $q.defer();
 
@@ -849,7 +819,7 @@ angular.module('icgc.advanced.controllers', [
           _ASGeneService.hitsLoaded = false;
         }
 
-        var params = LocationService.getJsonParam('genes');
+        var params = LocationService.getJqlParam('genes');
 
         params.include = 'facets';
         params.facetsOnly = true;
@@ -983,7 +953,7 @@ angular.module('icgc.advanced.controllers', [
     }
 
     function _initMutations() {
-      var params = LocationService.getJsonParam('mutations'),
+      var params = LocationService.getJqlParam('mutations'),
         filters = _locationFilterCache.filters() || {},
         deferred = $q.defer();
 
@@ -1018,7 +988,7 @@ angular.module('icgc.advanced.controllers', [
           deferred.resolve();
         });
 
-      var occurrencesFilters = LocationService.getJsonParam('occurrences') || {};
+      var occurrencesFilters = LocationService.getJqlParam('occurrences') || {};
 
       _.assign(occurrencesFilters, filters);
 
@@ -1046,7 +1016,7 @@ angular.module('icgc.advanced.controllers', [
           _ASMutationService.hitsLoaded = false;
         }
 
-        var mParams = LocationService.getJsonParam('mutations');
+        var mParams = LocationService.getJqlParam('mutations');
 
         mParams.include = ['facets', 'consequences'];
         mParams.facetsOnly = true;

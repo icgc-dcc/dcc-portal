@@ -82,12 +82,9 @@ angular.module('icgc.common.filters', [])
         else {
           _filtersObj = {};
         }
-
-        //console.log('Update Filters to ', _filtersObj);
         _updateFilterParamsURL();
       }
 
-      //console.log('Return Filters ', _filtersObj);
       return _.cloneDeep(_filtersObj); // Do not allow overwriting the original object!
     }
 
@@ -155,9 +152,6 @@ angular.module('icgc.common.filters', [])
         },
         updateCache: function(newFilters) {
           var filterObj = newFilters && typeof newFilters === 'object' ? newFilters : _filters();
-
-          //console.log('Updating cache from ', this._cachedFilters, ' to ', _filters());
-
           this.filters(filterObj);
         }
       };
@@ -174,7 +168,6 @@ angular.module('icgc.common.filters', [])
         currentPath: $location.path()
       };
 
-      //console.log('Filter Change ', filterNotifyObj);
       $rootScope.$broadcast(filterConstants.FILTER_EVENTS.FILTER_UPDATE_EVENT, filterNotifyObj);
     }
 

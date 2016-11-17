@@ -251,7 +251,7 @@
                 <th><translate>Tumour Subtype</translate></th>
                 <th style="cursor: pointer"
                     data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
-                    <abbr data-tooltip="{{'Number of Donors where [[ geneSymbol ]] contains SSM' | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}">
+                    <abbr data-tooltip="{{'# donors in current project with [[geneSymbol]] affected by SSM / # SSM-tested donors in current project' | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}">
                     <translate># Donors affected</translate></abbr>
                     <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
                 </th>

@@ -1,5 +1,5 @@
-<section class="analysis">
-    <div class="sidepanel" data-ng-controller="AnalysisListController as ListController">
+<section class="analysis" data-ng-controller="AnalysisListController as ListController">
+    <div class="sidepanel">
 
         <div class="select-list" data-ng-if="ListController.analysisList.length === 0">
             <span class="select-list-no-item"><translate>You have no saved analysis.</translate></span>
@@ -50,33 +50,30 @@
         <i class="icon-trash"></i> <translate>Delete all</translate>
         </button>        
     </div>
-    
-
-    <div class="content ng-cloak analysis-content">
+    <div
+        class="content ng-cloak analysis-content"
+        ng-repeat="item in ListController.analysisList"
+        ng-lazy-show="item.id === analysisId"
+    >
         <div style="padding: 2rem 1rem" data-ng-if="analysisId">
-            <div data-ng-if="analysisType === 'enrichment'" >
+            <div data-ng-if="item.type === 'enrichment'" >
                 <div data-ng-if="!error">
-                    <enrichment-result data-item="analysisResult"></enrichment-result>
+                    <enrichment-result data-item="::(analysisResult.results ? analysisResult : undefined)"></enrichment-result>
                 </div>
             </div>
-            <div data-ng-if="analysisType === 'set' || analysisType === 'union'">
+            <div data-ng-if="item.type === 'set' || item.type === 'union'">
                 <div data-ng-if="!error">
-                    <set-operation data-item="analysisResult"></set-operation>
+                    <set-operation data-item="::(analysisResult.result ? analysisResult : undefined)"></set-operation>
                 </div>
             </div>
-            <div data-ng-if="analysisType === 'phenotype'">
+            <div data-ng-if="item.type === 'phenotype'">
                 <div data-ng-if="!error">
-                    <phenotype-result data-item="analysisResult"></phenotype-result>
+                    <phenotype-result data-item="::(analysisResult.results ? analysisResult : undefined)"></phenotype-result>
                 </div>
             </div>
-            <div data-ng-if="analysisType === 'oncogrid'">
+            <div data-ng-if="item.type === 'oncogrid'">
                 <div data-ng-if="!error">
-                    <oncogrid-analysis data-item="analysisResult"></oncogrid-analysis>
-                </div>
-            </div>
-            <div data-ng-if="analysisType === 'survival'">
-                <div data-ng-if="!error">
-                    <survival-analysis data-analysis-id="analysisId"></survival-analysis>
+                    <oncogrid-analysis data-item="::(analysisResult.state === 'FINISHED' ? analysisResult : undefined)"></oncogrid-analysis>
                 </div>
             </div>
             <div class="clearfix"></div>
