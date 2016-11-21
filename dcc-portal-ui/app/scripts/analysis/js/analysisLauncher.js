@@ -178,6 +178,7 @@
         ],
         launch: selectedSets => launchEnrichment(selectedSets[0]),
         launchDemo: () => _this.demoEnrichment(),
+        image: require('!raw!../../../styles/images/analysis-enrichment.svg'), 
       },
       phenotype: {
         type: 'phenotype',
@@ -189,6 +190,7 @@
         ],
         launch: selectedSets => _this.launchPhenotype(selectedSets.map(x => x.id)),
         launchDemo: () => _this.demoPhenotype(),
+        image: require('!raw!../../../styles/images/analysis-phenotype.svg'), 
       },
       set: {
         type: 'set',
@@ -203,6 +205,7 @@
         ],
         launch: selectedSets => _this.launchSet(selectedSets[0].type, selectedSets.map(x => x.id)),
         launchDemo: () => _this.demoSetOperation(),
+        image: require('!raw!../../../styles/images/analysis-set.svg'), 
       },
       oncogrid: {
         type: 'oncogrid',
@@ -221,6 +224,7 @@
           donor: _.find(selectedSets, {type: 'donor'}).id,
           gene: _.find(selectedSets, {type: 'gene'}).id,
         }),
+        image: require('!raw!../../../styles/images/analysis-oncogrid.svg'), 
       },
     };
 

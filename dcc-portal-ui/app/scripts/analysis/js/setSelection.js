@@ -1,6 +1,6 @@
 require('./setTools');
 
-angular.module('icgc.analysis.setSelection', ['icgc.analysis.setTools'])
+angular.module('icgc.analysis.setSelection', [])
   .component('setSelection', {
     template: require('../views/set-selection.html'),
     bindings: {

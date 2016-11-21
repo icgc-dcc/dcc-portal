@@ -1,48 +1,58 @@
 <section>
 <div data-ng-if="!analysisId" data-ng-controller="NewAnalysisController as NAC" class="analysis">
-    <div class="row">
-        <div class="analysis-tools-wrapper col-sm-5">
-            <div class="analysis-tiles">
-                <div
-                    class="analysis-tile-container"
-                    ng-class="{
-                        selected: analysis === NAC.selectedAnalysis 
-                    }"
-                    ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
-                    ng-click="NAC.handleClickAnalysis(analysis)"
-                >
-                    <h2 class="analysis-title">
-                        {{analysis.strings.name}}
-                    </h2>
-
-                    <div class="reveal-window">
-                        <div class="reveal-container">
-                            <div class="reveal-item">
-                                <img
-                                    class="analysis-illustration"
-                                    ng-src="/styles/images/analysis-{{analysisType}}.svg"
-                                />
-                            </div>
-                            <div class="reveal-item">
-                                <div class="analysis-tile-detail">{{analysis.strings.description}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="analysis-suggestions">
-                <a class="cta" href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">
-                    <h3 class="cta-title">More?</h3>
-                    <div class="cta-detail">
-                        <translate>Do you have a specific type of analysis you want to see?</translate>
-                        <br/>
-                        <translate>Leave feedback and let us know.</translate>
-                    </div>
-                </a>
+    <div class="analysis-tool-selection col-md-7 col-md-push-2" ng-if="!NAC.selectedAnalysis">
+        <div
+            ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
+            class="analysis-tool analysis-tool--{{analysis.type}}"
+            ng-click="NAC.handleClickAnalysis(analysis)"
+        >
+            <div class="analysis-tool__image-wrapper" ng-if="analysis.image" ng-bind-html="analysis.image | to_trusted"></div>
+            <div class="analysis-tool__column--right">
+                <h2 class="analysis-tool__heading">
+                    {{analysis.strings.name}}
+                    <small>
+                        <a
+                            class="demo"
+                            ng-click="analysis.launchDemo(); $event.stopPropagation(); $event.preventDefault();"
+                            tooltip="{{analysis.strings.demoDescription}}"
+                            href="#"
+                        > (demo) </a>
+                    </small>
+                </h2>
+                <p class="analysis-tool__description">
+                    {{analysis.strings.description}}
+                </p>
             </div>
         </div>
 
-        <div class="set-selection-wrapper col-sm-7">
+
+        <a
+            class="analysis-tool analysis-tool--suggestions"
+            href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback"
+        >
+            <div class="analysis-tool__image-wrapper">
+                <img style="width: 48%;" src="/styles/images/lightbulb-illustration.svg">
+            </div>
+            <div class="analysis-tool__column--right">
+                <h2 class="analysis-tool__heading" >More?</h2>
+                <p class="analysis-tool__description">
+                    <translate>Do you have a specific type of analysis you want to see?</translate>
+                    <br/>
+                    <translate>Leave feedback and let us know.</translate>
+                </p>
+            </div>
+        </a>
+    </div>
+    <div
+        class="row"
+        ng-show="NAC.selectedAnalysis"
+    >
+        <div ng-click="NAC.handleClickAnalysis()">
+            <i class="fa fa-arrow-left"></i> Return to tool selection
+        </div>
+        <div
+            class="set-selection-wrapper col-md-7 col-md-push-2"
+        >
             <div
                 style="font-size: 22px; color: #333; font-size: 500;"
                 data-ng-show="!NAC.selectedAnalysis"

@@ -1,13 +1,4 @@
 <div class="set-selection-component">
-  <button
-    class="btn btn-xs pull-right"
-    data-ng-click="vm.deleteSets(vm.selectedSets)"
-    data-ng-disabled="!vm.selectedSets.length"
-    data-tooltip="{{'Delete selected sets' | translate}}"
-    style="margin: 6px 0"
-  >
-    <i class="icon-trash"></i><translate>Delete selected</translate>
-  </button>
   <div> 
       <div
         ng-bind-html="vm.selectionInstructions"
@@ -15,22 +6,10 @@
       <table class="table table-selectable"> 
           <thead>
               <th>
-                <i
-                  ng-class="{
-                    'icon-check-empty': !vm.areAllSetsSelected(),
-                    'icon-check': vm.areAllSetsSelected(),
-                  }"
-                  ng-click="
-                    vm.areAllSetsSelected()
-                      ? vm.setSelectedSets([])
-                      : vm.setSelectedSets(vm.sets)
-                  "
-                ></i>
               </th>
               <th><translate>Item Type</translate></th>
               <th><translate>Name</translate></th>
               <th class="text-right"><translate># Items</translate></th>
-              <th></th>
           </thead>
           <tbody>
               <tr ng-if="!vm.sets.length">
@@ -111,9 +90,6 @@
                   </td>
                   <td class="text-right"> 
                       <a href="{{item.advLink}}">{{item.count | number}}</a>
-                  </td>
-                  <td>
-                    <set-tools set="item"></set-tools>
                   </td>
               </tr>
           </tbody>

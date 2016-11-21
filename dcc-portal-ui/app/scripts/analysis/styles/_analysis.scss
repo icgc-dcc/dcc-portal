@@ -12,6 +12,113 @@
       margin-top: 0;
    }
 
+  .analysis-tool {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: rgba(0,0,0,0.87);
+    position: relative;
+    justify-content: center;
+
+    & + .analysis-tool {
+      margin-top: 40px;
+      &:before {
+        content: '';
+        display: block;
+        width: 100%;
+        position: absolute;
+        height: 1px;
+        background: #e6e6e6;
+        top: -20px;
+      }
+    }
+
+    &__column--right {
+      
+    }
+
+    &__image-wrapper {
+      width: 180px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+      flex-grow: 0;
+    }
+
+    &__image, svg {
+      width: 100%;
+      max-width: calc(100% - 40px);
+      max-height: calc(100% - 20px);
+    }
+
+    &__heading {
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    &__description {
+      font-size: 14px;
+      width: 33em;
+    }
+
+    &--enrichment {
+      svg {
+        fill: #9b315b;
+        height: 100px;
+        width: auto;
+      }
+    }
+
+    &--phenotype {
+      svg {
+        width: 62%;
+      }
+      .person-fg {
+        fill: #0099e3;
+      }
+      .person-bg {
+        fill: #C20127;
+      }
+    }
+
+    &--set {
+      svg {
+        width: 62%;
+      }
+      path {
+        stroke: #ffffff;
+        stroke-width: 5px;
+      }
+      #top-right {
+        fill: rgba(166, 28, 133, 0.7);
+      }
+      #bottom {
+        fill: rgba(255, 148, 1, 0.7);
+      }
+      #top-left, #top-left-diff {
+        fill: rgba(#0099e3, 0.7)
+        
+      }
+    }
+
+    &--oncogrid {
+      svg {
+        width: 65%;
+      }
+      .st0 {
+        fill: rgba(155, 49, 91, 0.84);
+      }
+    }
+
+    &--suggestions {
+     .analysis-tool__heading, .analysis-tool__description {
+       color: #9b315b;
+     }
+   }
+  }
+
+
    .analysis-tiles {
       display: flex;
       flex-wrap: wrap;
@@ -165,25 +272,6 @@
            }
          }
       }
-   }
-
-   .analysis-suggestions {
-      margin-top: 1.5rem;
-
-      .cta {
-         display: inline-block;
-         padding: 1rem;
-
-         .cta-detail, .cta-title {
-            color: #9b315b;
-         }
-
-         .cta-title {
-            font-weight: 500;
-            font-size: 22px;
-         }
-      }
-
    }
 
    .sidepanel {
