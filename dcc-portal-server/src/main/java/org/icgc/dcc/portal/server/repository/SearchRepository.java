@@ -23,12 +23,12 @@ import static com.google.common.collect.Sets.newHashSet;
 import static java.lang.String.format;
 import static lombok.AccessLevel.PRIVATE;
 import static org.elasticsearch.action.search.SearchType.DFS_QUERY_THEN_FETCH;
-import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
-import static org.elasticsearch.index.query.FilterBuilders.termFilter;
-import static org.elasticsearch.index.query.FilterBuilders.termsFilter;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 import static org.elasticsearch.index.query.QueryBuilders.prefixQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
+import static org.elasticsearch.index.query.QueryBuilders.typeQuery;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
@@ -46,11 +46,8 @@ import java.util.stream.Stream;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.FilteredQueryBuilder;
-import org.elasticsearch.index.query.IndicesFilterBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.TypeFilterBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexType;
@@ -72,7 +69,11 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class SearchRepository {
 
-  // Constants
+  /**
+   * Constants
+   */
+  private static final String[] NO_EXCLUDE = null;
+
   @NoArgsConstructor(access = PRIVATE)
   private static final class Types {
 
@@ -170,21 +171,20 @@ public class SearchRepository {
   }
 
   @NonNull
+  @SuppressWarnings("deprecation")
   public SearchResponse findAll(Query query, String type) {
     log.debug("Requested search type is: '{}'.", type);
 
-    val typeFilterBuilder = new TypeFilterBuilder("donor-text");
-    val typeBoolFilter = new BoolFilterBuilder().mustNot(typeFilterBuilder);
-    val indicesFilterBuilder = new IndicesFilterBuilder(typeBoolFilter, repoIndexName);
-
-    val filteredQuery = new FilteredQueryBuilder(getQuery(query, type), indicesFilterBuilder);
+    val typeBoolFilter = boolQuery().mustNot(typeQuery("donor-text"));
+    val indicesFilterBuilder = QueryBuilders.indicesQuery(typeBoolFilter, repoIndexName);
+    val filteredQuery = boolQuery().must(getQuery(query, type)).filter(indicesFilterBuilder);
 
     val search = createSearch(type)
         .setSearchType(DFS_QUERY_THEN_FETCH)
         .setFrom(query.getFrom())
         .setSize(query.getSize())
         .setTypes(getSearchTypes(type))
-        .addFields(getFields(query, EntityType.KEYWORD))
+        .setFetchSource(getFields(query, EntityType.KEYWORD), NO_EXCLUDE)
         .setQuery(filteredQuery)
         .setPostFilter(getPostFilter(type));
 
@@ -226,20 +226,20 @@ public class SearchRepository {
     // return TYPE_ID_MAPPINGS.containsKey(type) ? new String[] { TYPE_ID_MAPPINGS.get(type) } : MULTIPLE_SEARCH_TYPES;
   }
 
-  private static FilterBuilder getPostFilter(String type) {
+  private static QueryBuilder getPostFilter(String type) {
     val field = "type";
-    val result = boolFilter();
+    val result = boolQuery();
 
     if (SIMPLE_TERM_FILTER_TYPES.contains(type)) {
-      return result.must(termFilter(field, type));
+      return result.must(termQuery(field, type));
     }
 
-    val donor = boolFilter()
-        .must(termFilter(field, Types.DONOR));
-    val project = boolFilter()
-        .must(termFilter(field, Types.PROJECT));
-    val others = boolFilter()
-        .mustNot(termsFilter(field, Types.DONOR, Types.PROJECT));
+    val donor = boolQuery()
+        .must(termQuery(field, Types.DONOR));
+    val project = boolQuery()
+        .must(termQuery(field, Types.PROJECT));
+    val others = boolQuery()
+        .mustNot(termsQuery(field, Types.DONOR, Types.PROJECT));
 
     // FIXME
     return result

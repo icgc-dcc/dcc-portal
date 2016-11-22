@@ -205,6 +205,24 @@ public class TermsLookupRepository {
     });
   }
 
+  public SearchResponse runUnionEsQueryCount(final String indexTypeName, @NonNull final BoolQueryBuilder boolFilter,
+      final int max) {
+
+    val query = QueryBuilders.boolQuery().must(MATCH_ALL).filter(boolFilter);
+    return execute("Union ES Query", false, (request) -> {
+      request
+          .setTypes(indexTypeName)
+          .setSize(0)
+          .setQuery(query)
+          .setSize(max)
+          .setFetchSource(false);
+
+      if (indexTypeName.equalsIgnoreCase(FILE.getId())) {
+        request.setIndices(repoIndexName);
+      }
+    });
+  }
+
   private String createSettings() {
     val settings = MAPPER.createObjectNode();
     settings.put("index.auto_expand_replicas", "0-all");

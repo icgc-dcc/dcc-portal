@@ -85,6 +85,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class OccurrenceRepository {
 
+  private static final String[] NO_EXCLUDE = null;
   private static final IndexType CENTRIC_TYPE = IndexType.OCCURRENCE_CENTRIC;
   private final static TimeValue KEEP_ALIVE = new TimeValue(10000);
 
@@ -158,7 +159,7 @@ public class OccurrenceRepository {
 
   public Map<String, Object> findOne(String id, Query query) {
     val search = client.prepareGet(indexName, CENTRIC_TYPE.getId(), id);
-    search.setFields(getFields(query, EntityType.OCCURRENCE));
+    search.setFetchSource(getFields(query, EntityType.OCCURRENCE), NO_EXCLUDE);
 
     val response = search.execute().actionGet();
     checkResponseState(id, response, EntityType.OCCURRENCE);
@@ -205,7 +206,6 @@ public class OccurrenceRepository {
         COMMA_JOINER.join(consequenceList));
 
     val search = queryEngine.execute(pql, OBSERVATION_CENTRIC).getRequestBuilder()
-        .setSearchType(SCAN)
         .setSize(searchSize)
         .setScroll(KEEP_ALIVE);
     log.debug("ES search is: '{}'.", search);

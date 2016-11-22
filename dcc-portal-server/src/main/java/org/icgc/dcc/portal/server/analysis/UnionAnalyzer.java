@@ -266,9 +266,8 @@ public class UnionAnalyzer {
       final BaseEntitySet.Type entityType) {
     val maxUnionCount = termsLookupRepository.getMaxUnionCount();
 
-    val response = termsLookupRepository.runUnionEsQuery(
+    val response = termsLookupRepository.runUnionEsQueryCount(
         entityType.getIndexTypeName(),
-        SearchType.COUNT,
         toBoolFilterFrom(unionDefinition, entityType),
         maxUnionCount);
 

@@ -20,6 +20,9 @@ package org.icgc.dcc.portal.server.repository;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.size;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.EMPTY_SOURCE_FIELDS;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.resolveSourceFields;
@@ -33,11 +36,8 @@ import java.util.Map;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilteredQueryBuilder;
-import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.TermFilterBuilder;
-import org.elasticsearch.index.query.TermsFilterBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.GeneSetType;
 import org.icgc.dcc.portal.server.model.IndexType;
@@ -64,6 +64,7 @@ public class GeneSetRepository {
   /**
    * Constants.
    */
+  private static final String[] NO_EXCLUDE = null;
   private static final String INDEX_GENE_COUNT_FIELD_NAME = "_summary._gene_count";
   private static final String INDEX_GENE_SETS_NAME_FIELD_NAME = "name";
   public static final Map<String, String> SOURCE_FIELDS = ImmutableMap.of(
@@ -104,36 +105,33 @@ public class GeneSetRepository {
 
   public int countDecendants(@NonNull GeneSetType type, @NonNull Optional<String> id) {
     QueryBuilder query;
+    QueryBuilder filter;
 
     switch (type) {
     case GO_TERM:
-      query =
-          new FilteredQueryBuilder(new MatchAllQueryBuilder(),
-              id.isPresent() ? new TermFilterBuilder("go_term.inferred_tree.id",
-                  id.get()) : new TermFilterBuilder("type", "go_term"));
+      filter = id.isPresent() ? termQuery("go_term.inferred_tree.id", id.get()) : termQuery("type", "go_term");
+      query = boolQuery().must(matchAllQuery()).filter(filter);
       break;
     case PATHWAY:
-      query =
-          new FilteredQueryBuilder(new MatchAllQueryBuilder(),
-              id.isPresent() ? new TermFilterBuilder("pathway.hierarchy.id", id.get()) : new TermFilterBuilder("type",
-                  "pathway"));
+      filter = id.isPresent() ? termQuery("pathway.hierarchy.id", id.get()) : termQuery("type", "pathway");
+      query = boolQuery().must(matchAllQuery()).filter(filter);
       break;
     case CURATED_SET:
-      query =
-          new FilteredQueryBuilder(new MatchAllQueryBuilder(), id.isPresent() ? new TermFilterBuilder("curated_set.id",
-              id.get()) : new TermFilterBuilder("type", "curated_set"));
+      filter = id.isPresent() ? termQuery("curated_set.id", id.get()) : termQuery("type", "curated_set");
+      query = boolQuery().must(matchAllQuery()).filter(filter);
       break;
     default:
       checkState(false, "Unexpected type %s", type);
       return -1;
     }
 
-    val result = client.prepareCount(indexName)
+    val result = client.prepareSearch(indexName)
         .setTypes(IndexType.GENE_SET.getId())
         .setQuery(query)
-        .execute()
-        .actionGet()
-        .getCount();
+        .setSize(0)
+        .get()
+        .getHits()
+        .getTotalHits();
 
     return Ints.saturatedCast(result);
   }
@@ -160,7 +158,7 @@ public class GeneSetRepository {
   public Map<String, Object> findOne(String id, Iterable<String> fieldNames) {
     val query = Query.builder().fields(Lists.newArrayList(fieldNames)).build();
     val search = client.prepareGet(indexName, IndexType.GENE_SET.getId(), id);
-    search.setFields(getFields(query, EntityType.GENE_SET));
+    search.setFetchSource(getFields(query, EntityType.GENE_SET), NO_EXCLUDE);
     String[] sourceFields = resolveSourceFields(query, EntityType.GENE_SET);
     if (sourceFields != EMPTY_SOURCE_FIELDS) {
       search.setFetchSource(resolveSourceFields(query, EntityType.GENE_SET), EMPTY_SOURCE_FIELDS);
@@ -176,7 +174,7 @@ public class GeneSetRepository {
   }
 
   private SearchResponse findField(Iterable<String> ids, String fieldName) {
-    val filters = new TermsFilterBuilder("_id", ids);
+    val filters = QueryBuilders.termQuery("_id", ids);
 
     val search = client.prepareSearch(indexName)
         .setTypes(IndexType.GENE_SET.getId())
@@ -184,7 +182,7 @@ public class GeneSetRepository {
         .setFrom(0)
         .setSize(size(ids))
         .setPostFilter(filters)
-        .addField(fieldName);
+        .setFetchSource(fieldName, null);
 
     return search.execute().actionGet();
   }

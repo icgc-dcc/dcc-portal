@@ -19,10 +19,9 @@ package org.icgc.dcc.portal.server.config;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Maps.newHashMap;
-import static com.google.common.collect.Sets.newHashSet;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.elasticsearch.common.network.InetAddresses.forString;
 import static org.icgc.dcc.portal.server.config.ServerProperties.ElasticSearchProperties.SNIFF_MODE_KEY;
 import static org.icgc.dcc.portal.server.util.VersionUtils.getApiVersion;
 import static org.icgc.dcc.portal.server.util.VersionUtils.getApplicationVersion;
@@ -31,15 +30,14 @@ import static org.icgc.dcc.portal.server.util.VersionUtils.getCommitId;
 import java.net.InetAddress;
 import java.util.Map;
 
-import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.ClusterState;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
-import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.index.Index;
-import org.elasticsearch.indices.IndexMissingException;
+import org.elasticsearch.index.IndexNotFoundException;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.icgc.dcc.portal.server.config.ServerProperties.ElasticSearchProperties;
 import org.icgc.dcc.portal.server.model.Versions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +70,7 @@ public class SearchConfig {
       checkState(InetAddress.getByName(nodeAddress.getHost()).isReachable((int) SECONDS.toMillis(5)));
 
       client.addTransportAddress(new InetSocketTransportAddress(
-          nodeAddress.getHost(),
+          forString(nodeAddress.getHost()),
           nodeAddress.getPort()));
     }
 
@@ -114,15 +112,10 @@ public class SearchConfig {
         .actionGet()
         .getState();
 
-    val aliases = clusterState.getMetaData().aliases().get(indexName);
-    if (aliases != null) {
-      val indexNames = newHashSet(aliases.keys().toArray(String.class));
-      if (indexNames.size() != 1) throw new ElasticsearchException(
-          String.format("Expected alias to point to a single index but instead it points to '%s'", indexNames));
-
-      val realIndexName = getFirst(indexNames, null);
-      log.warn("Redirecting configured index alias of '{}' with real index name '{}'", indexName, realIndexName);
-      indexName = realIndexName;
+    clusterState.getMetaData().getAliasAndIndexLookup().get(indexName);
+    val aliasesOrIndex = clusterState.getMetaData().getAliasAndIndexLookup().get(indexName);
+    if (aliasesOrIndex != null) {
+      indexName = aliasesOrIndex.getIndices().iterator().next().getIndex().getName();
     }
 
     return indexName;
@@ -140,7 +133,7 @@ public class SearchConfig {
         .getState();
 
     val indexMetaData = clusterState.getMetaData().index(indexName);
-    if (indexMetaData == null) throw new IndexMissingException(new Index(indexName));
+    if (indexMetaData == null) throw new IndexNotFoundException(indexName);
 
     // Get the first mappings. This is arbitrary since they all contain the same metadata
     MappingMetaData mappingMetaData = indexMetaData.getMappings().values().iterator().next().value;
@@ -156,7 +149,7 @@ public class SearchConfig {
 
   private static TransportClient createTransportClient(Map<String, String> clientSettings) {
     logClientSettings(clientSettings);
-    val settingsBuilder = ImmutableSettings.settingsBuilder();
+    val settingsBuilder = Settings.builder();
     if (!isSniffModeSet(clientSettings)) {
       settingsBuilder.put(SNIFF_MODE_KEY, true);
     }
@@ -164,7 +157,7 @@ public class SearchConfig {
     clientSettings.entrySet().stream()
         .forEach(s -> settingsBuilder.put(s.getKey(), s.getValue()));
 
-    return new TransportClient(settingsBuilder.build());
+    return new PreBuiltTransportClient(settingsBuilder.build());
   }
 
   private static boolean isSniffModeSet(Map<String, String> clientSettings) {

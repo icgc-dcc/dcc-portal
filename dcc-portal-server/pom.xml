@@ -73,6 +73,11 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-download-client</artifactId>
     </dependency>
+    <dependency>
+    <groupId>org.icgc.dcc</groupId>
+    <artifactId>dcc-release-resources</artifactId>
+    <version>4.2.5-20161117.210648-8</version>
+	</dependency>
 
     <!-- JDBI -->
     <dependency>
