@@ -248,9 +248,20 @@
           };
 
           var templates = {
-            mainGridCrosshair: '{{#donor}}Donor: {{donor.id}}<br>{{/donor}}' +
-              '{{#gene}}Gene: {{gene.symbol}}<br>{{/gene}}' +
-              '{{#observation}}Mutation: {{observation.id}}<br>{{/observation}}'
+            mainGridCrosshair: `
+              <div class="og-crosshair-tooltip">
+                <div>
+                  <span><b>Mutation</b>:&nbsp;</span>
+                  <span>{{observation.id}}</span>
+                </div>
+                <div>
+                  <span><b>Donor</b>:&nbsp;</span>
+                  <span>{{donor.id}}</span>
+                </div>
+                <div>
+                  <span><b>Gene</b>:&nbsp;</span>
+                  <span>{{gene.symbol}}</span>
+                </div>`
           };
 
           $scope.params = {
