@@ -20,18 +20,21 @@ package org.dcc.portal.pql.es.visitor;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static java.util.Optional.empty;
+import static org.dcc.portal.pql.es.utils.Nodes.getOptionalChild;
 import static org.dcc.portal.pql.es.utils.ScoreModes.resolveScoreMode;
+import static org.dcc.portal.pql.es.utils.TermsLookups.createTermsLookup;
+import static org.dcc.portal.pql.es.utils.Visitors.filterBuilderVisitor;
+import static org.elasticsearch.common.lucene.search.function.CombineFunction.REPLACE;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.functionScoreQuery;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsLookupQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
+import static org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders.scriptFunction;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 
 import java.util.Optional;
-
-import lombok.NonNull;
-import lombok.val;
 
 import org.dcc.portal.pql.es.ast.NestedNode;
 import org.dcc.portal.pql.es.ast.TerminalNode;
@@ -44,16 +47,12 @@ import org.dcc.portal.pql.es.ast.filter.TermNode;
 import org.dcc.portal.pql.es.ast.filter.TermsNode;
 import org.dcc.portal.pql.es.ast.query.FunctionScoreNode;
 import org.dcc.portal.pql.es.ast.query.QueryNode;
-import org.dcc.portal.pql.es.utils.Nodes;
-import org.dcc.portal.pql.es.utils.ScoreModes;
-import org.dcc.portal.pql.es.utils.TermsLookups;
-import org.dcc.portal.pql.es.utils.Visitors;
 import org.dcc.portal.pql.query.QueryContext;
-import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.script.Script;
+
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * Creates QueryBuilder by visiting {@link QueryNode}
@@ -78,8 +77,7 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
     val query = node.getFirstChild().accept(this, context);
     val scoreMode = resolveScoreMode(node.getScoreMode());
 
-    return QueryBuilders
-        .nestedQuery(node.getPath(), query, scoreMode);
+    return nestedQuery(node.getPath(), query, scoreMode);
   }
 
   /**
@@ -87,7 +85,7 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
    */
   @Override
   public QueryBuilder visitTerm(@NonNull TermNode node, @NonNull Optional<QueryContext> context) {
-    val lookupOpt = TermsLookups.createTermsLookup(node);
+    val lookupOpt = createTermsLookup(node);
     if (lookupOpt.isPresent()) {
       val lookup = lookupOpt.get();
 
@@ -116,28 +114,28 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
 
   @Override
   public QueryBuilder visitFunctionScore(@NonNull FunctionScoreNode node, @NonNull Optional<QueryContext> context) {
-    val filterNode = Nodes.getOptionalChild(node, FilterNode.class);
-    val scoreFunction = ScoreFunctionBuilders.scriptFunction(new Script(node.getScript()));
+    val filterNode = getOptionalChild(node, FilterNode.class);
+    val scoreFunction = scriptFunction(new Script(node.getScript()));
 
     if (filterNode.isPresent()) {
       val filteredQuery = filterNode.get().accept(this, context);
 
-      return QueryBuilders.functionScoreQuery(filteredQuery, scoreFunction).boostMode(CombineFunction.REPLACE);
+      return functionScoreQuery(filteredQuery, scoreFunction).boostMode(REPLACE);
     }
 
-    return QueryBuilders.functionScoreQuery(scoreFunction).boostMode(CombineFunction.REPLACE);
+    return functionScoreQuery(scoreFunction).boostMode(REPLACE);
   }
 
   @Override
   public QueryBuilder visitFilter(@NonNull FilterNode node, @NonNull Optional<QueryContext> context) {
-    val filterBuilder = node.accept(Visitors.filterBuilderVisitor(), context);
+    val filterBuilder = node.accept(filterBuilderVisitor(), context);
 
     return filterBuilder;
   }
 
   @Override
   public QueryBuilder visitBool(@NonNull BoolNode node, @NonNull Optional<QueryContext> context) {
-    val boolQueryBuilder = QueryBuilders.boolQuery();
+    val boolQueryBuilder = boolQuery();
     for (val child : node.getChildren()) {
       if (child instanceof MustBoolNode) {
         for (val subChild : child.getChildren()) {
@@ -164,7 +162,7 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
    * @return Optional with NestedQueryBuilder if we have a lone term or terms node in the nested, otherwrise empty
    */
   private static Optional<QueryBuilder> nestedSoloTerm(NestedNode node) {
-    val scoreMode = ScoreModes.resolveScoreMode(node.getScoreMode());
+    val scoreMode = resolveScoreMode(node.getScoreMode());
     if (node.getFirstChild() instanceof TermsNode) {
       val termsNode = (TermsNode) node.getFirstChild();
       val values = termsNode.getChildren().stream()

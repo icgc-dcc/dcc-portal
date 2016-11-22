@@ -22,7 +22,7 @@ import static java.lang.String.format;
 /**
  * This type of exception is thrown when the query is valid, but has invalid field names etc.
  */
-public class SemanticException extends RuntimeException {
+public class SemanticException extends PqlException {
 
   public SemanticException(String message, Object... args) {
     super(format(message, args));

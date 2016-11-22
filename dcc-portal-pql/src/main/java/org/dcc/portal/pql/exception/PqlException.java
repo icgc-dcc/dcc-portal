@@ -15,34 +15,17 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.dcc.portal.pql.es.utils;
+package org.dcc.portal.pql.exception;
 
-import static lombok.AccessLevel.PRIVATE;
+import static java.lang.String.format;
 
-import org.apache.lucene.search.join.ScoreMode;
-import org.dcc.portal.pql.es.ast.NestedNode;
-import org.dcc.portal.pql.exception.PqlException;
+/**
+ * A generic PQL exception.
+ */
+public class PqlException extends RuntimeException {
 
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = PRIVATE)
-public final class ScoreModes {
-
-  public static ScoreMode resolveScoreMode(NestedNode.ScoreMode scoreMode) {
-    switch (scoreMode) {
-    case AVG:
-      return ScoreMode.Avg;
-    case MAX:
-      return ScoreMode.Max;
-    case NONE:
-      return ScoreMode.None;
-    case MIN:
-      return ScoreMode.Min;
-    case TOTAL:
-      return ScoreMode.Total;
-    default:
-      throw new PqlException("Unrecognized nested query score mode '%s'", scoreMode);
-    }
+  public PqlException(String message, Object... args) {
+    super(format(message, args));
   }
 
 }
