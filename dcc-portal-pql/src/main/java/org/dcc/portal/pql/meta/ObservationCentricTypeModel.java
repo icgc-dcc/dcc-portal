@@ -136,7 +136,7 @@ public class ObservationCentricTypeModel extends TypeModel {
   }
 
   private static ObjectFieldModel defineProject() {
-    return nestedObject("project",
+    return nestedObject("observation_project",
         string("_project_id", ImmutableSet.of("donor.projectId", "projectId")),
         string("primary_site", "donor.primarySite"));
   }
