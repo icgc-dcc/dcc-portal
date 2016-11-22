@@ -31,7 +31,7 @@ import org.elasticsearch.common.io.PathUtils;
 public class JarHell {
 
   public static void checkJarHell() throws IOException, URISyntaxException {
-
+    // Do nothing
   }
 
   public static URL[] parseClassPath() {

@@ -24,18 +24,17 @@ import static org.dcc.portal.pql.es.utils.Nodes.getValues;
 import static org.dcc.portal.pql.es.utils.ScoreModes.resolveScoreMode;
 import static org.dcc.portal.pql.es.utils.TermsLookups.createTermsLookup;
 import static org.dcc.portal.pql.es.utils.VisitorHelpers.checkOptional;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.existsQuery;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsLookupQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
-
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.lucene.search.join.ScoreMode;
 import org.dcc.portal.pql.es.ast.ExpressionNode;
@@ -63,10 +62,14 @@ import org.dcc.portal.pql.meta.Type;
 import org.dcc.portal.pql.meta.TypeModel;
 import org.dcc.portal.pql.query.QueryContext;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 
 import com.google.common.collect.Lists;
+
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Visits {@link FilterNode} and builds FilterBuilders
@@ -91,7 +94,7 @@ public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext
 
   @Override
   public QueryBuilder visitBool(@NonNull BoolNode node, @NonNull Optional<QueryContext> context) {
-    val resultBuilder = QueryBuilders.boolQuery();
+    val resultBuilder = boolQuery();
 
     for (val child : node.getChildren()) {
       val childrenResult = visitChildren(child, context);
@@ -158,7 +161,7 @@ public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext
     checkState(childrenCount == 1, "NotNode can have only one child. Found %s", childrenCount);
 
     // TODO: Rework AST to eliminate NotNode
-    return QueryBuilders.boolQuery().mustNot(node.getFirstChild().accept(this, context));
+    return boolQuery().mustNot(node.getFirstChild().accept(this, context));
   }
 
   @Override
@@ -166,7 +169,7 @@ public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext
     checkOptional(context);
     checkState(node.childrenCount() > 0, "RangeNode has no children");
 
-    stack.push(QueryBuilders.rangeQuery(node.getFieldName()));
+    stack.push(rangeQuery(node.getFieldName()));
     for (val child : node.getChildren()) {
       child.accept(this, context);
     }
@@ -197,7 +200,7 @@ public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext
     checkOptional(context);
     val field = node.getField();
     log.debug("[visitExists] Field: {}", field);
-    val result = QueryBuilders.existsQuery(field);
+    val result = existsQuery(field);
 
     return createNestedFilter(node, field, result, context.get().getTypeModel());
   }
@@ -209,17 +212,16 @@ public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext
     log.debug("[visitMissing] Field: {}", field);
 
     // TODO: Include in some common bool
-    val missing = QueryBuilders.boolQuery().mustNot(QueryBuilders.existsQuery(field));
+    val missing = boolQuery().mustNot(existsQuery(field));
 
     QueryBuilder result;
     // It is possible for genes to have no donors aside from a placeholder value.
     // In order to exclude these genes from filters with donors, we require a check for this case.
     // JIRA: DCC-3914 for more information.
     if (context.get().getType() == Type.GENE_CENTRIC && field.startsWith("donor.")) {
-      result = QueryBuilders.boolQuery()
+      result = boolQuery()
           .must(missing)
-          .mustNot(QueryBuilders.termQuery("placeholder", true));
-      ;
+          .mustNot(termQuery("placeholder", true));
     } else {
       result = missing;
     }
@@ -230,7 +232,7 @@ public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext
   @Override
   public QueryBuilder visitTerms(@NonNull TermsNode node, @NonNull Optional<QueryContext> context) {
     checkOptional(context);
-    val termsFilter = QueryBuilders.termsQuery(node.getField(), getValues(node));
+    val termsFilter = termsQuery(node.getField(), getValues(node));
 
     return createNestedFilter(node, node.getField(), termsFilter, context.get().getTypeModel());
   }
@@ -257,7 +259,7 @@ public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext
       log.debug("[visitTerm] Node '{}' does not have a nested parent. Nesting at path '{}'", node, nestedPath);
 
       // FIXME: Properly resolve score
-      return QueryBuilders.nestedQuery(nestedPath, sourceFilter, ScoreMode.Avg);
+      return nestedQuery(nestedPath, sourceFilter, ScoreMode.Avg);
     }
 
     return sourceFilter;
