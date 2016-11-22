@@ -129,6 +129,10 @@ public class BaseElasticSearchTest extends ESIntegTestCase {
     return "{" + COMMA.join(filters) + "}";
   }
 
+  protected Object cast(Object object) {
+    return object;
+  }
+
   @SneakyThrows
   private static String settingsSource(URL settingsFile) {
     // Override production values that would introduce test timing delays / issues

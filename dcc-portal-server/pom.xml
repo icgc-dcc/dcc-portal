@@ -120,10 +120,17 @@
       <groupId>org.icgc.dcc</groupId>
       <artifactId>dcc-elasticsearch-plugins</artifactId>
     </dependency>
-    
+
+	<!-- Logging - Elasticsearch dependency -->
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-all</artifactId>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j.version}</version>
     </dependency>
 
     <!-- Servlets -->
@@ -348,6 +355,7 @@
 
   <properties>
   	<elasticsearch.version>5.0.0</elasticsearch.version>
+  	<log4j.version>2.6.2</log4j.version>
   
     <!-- Versions - Spring -->
     <spring-boot.version>1.4.0.RELEASE</spring-boot.version>

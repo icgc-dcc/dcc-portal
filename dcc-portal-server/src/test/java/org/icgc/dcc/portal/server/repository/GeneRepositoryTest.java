@@ -59,9 +59,8 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
 
   ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.GENE);
 
-  @Override
   @Before
-  public void setUp() throws Exception {
+  public void setUpGeneRepositoryTest() throws Exception {
     prepareIndex(RELEASE_INDEX_NAME, GENE_CENTRIC);
     loadData("GeneRepositoryTest.json");
     geneRepository =

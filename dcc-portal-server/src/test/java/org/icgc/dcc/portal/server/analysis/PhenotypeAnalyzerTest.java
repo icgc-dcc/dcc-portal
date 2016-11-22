@@ -17,20 +17,19 @@
 package org.icgc.dcc.portal.server.analysis;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet.State;
-import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
 import org.icgc.dcc.portal.server.repository.DonorRepository;
 import org.icgc.dcc.portal.server.repository.EntitySetRepository;
@@ -53,19 +52,17 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
   EntitySetRepository entitySetRepository;
 
   @Before
-  public void setUp() throws Exception {
-    this.testIndex = TestIndex.RELEASE;
+  public void setUpPhenotypeAnalyzerTest() throws Exception {
+    prepareIndex(RELEASE_INDEX_NAME, DONOR_CENTRIC);
+    loadData("PhenotypeAnalyzer.json");
+    loadData("ManifestServiceTest.json");
 
     val set = new EntitySet(UUID.randomUUID(), State.FINISHED, 200L, "test", "test", BaseEntitySet.Type.DONOR, 1);
     when(entitySetRepository.find(any())).thenReturn(set);
 
-    es.execute(createIndexMappings(IndexType.DONOR, IndexType.DONOR_CENTRIC)
-        .withData(bulkFile(getClass()))
-        // This is needed because the DonorRepository now does a 'secondary' search on icgc-repository index.
-        .withData(MANIFEST_TEST_DATA));
     donorRepository =
-        new DonorRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()),
-            TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName());
+        new DonorRepository(client, new QueryEngine(client, RELEASE_INDEX_NAME),
+            RELEASE_INDEX_NAME, REPOSITORY_INDEX_NAME);
 
     phenotypeAnalyzer = new PhenotypeAnalyzer(donorRepository, entitySetRepository);
   }
@@ -85,16 +82,16 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
         .flatMap(result -> result.getData().stream())
         .collect(Collectors.toList());
 
-    assertThat(data.size()).isEqualTo(2);
+    Assertions.assertThat(data.size()).isEqualTo(2);
 
     for (val analysisResult : data) {
       val uuid = analysisResult.getId();
       val mean = analysisResult.getSummary().getMean();
 
       if (uuid.equals(id1)) {
-        assertThat(mean).isEqualTo(109.6);
+        Assertions.assertThat(mean).isEqualTo(109.6);
       } else if (uuid.equals(id2)) {
-        assertThat(mean).isEqualTo(135.66666666666666);
+        Assertions.assertThat(mean).isEqualTo(135.66666666666666);
       } else {
         fail("Encountered an unexpected UUID in query result.");
       }
@@ -104,7 +101,7 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
 
   private void setUpTermsLookup(final UUID id1, final UUID id2) {
     val termsLookupRepository =
-        new TermsLookupRepository(es.client(), TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName(),
+        new TermsLookupRepository(client, TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName(),
             new ServerProperties());
     val lookupType = TermsLookupRepository.TermLookupType.DONOR_IDS;
 

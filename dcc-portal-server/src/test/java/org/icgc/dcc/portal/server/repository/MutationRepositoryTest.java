@@ -17,7 +17,7 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
@@ -25,15 +25,14 @@ import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
-import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,20 +59,17 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
   ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.MUTATION);
 
   @Before
-  public void setUp() throws Exception {
-    this.testIndex = TestIndex.RELEASE;
-    es.execute(
-        createIndexMappings(IndexType.MUTATION_CENTRIC)
-            .withData(bulkFile(getClass())));
+  public void setUpMutationRepositoryTest() throws Exception {
+    prepareIndex(RELEASE_INDEX_NAME, MUTATION_CENTRIC);
     mutationRepository =
-        new MutationRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()), testIndex.getName());
+        new MutationRepository(client, new QueryEngine(client, RELEASE_INDEX_NAME), RELEASE_INDEX_NAME);
   }
 
   @Test
   public void testFindAll() throws Exception {
     Query query = Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).build();
     SearchResponse response = mutationRepository.findAllCentric(query);
-    assertThat(response.getHits().getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(1);
   }
 
   @Test
@@ -86,11 +82,11 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = mutationRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(response.getHits().getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(1);
 
     for (SearchHit hit : hits) {
-      assertThat(hit.fields().keySet().size()).isEqualTo(2);
-      assertThat(hit.fields().keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("mutation")));
+      Assertions.assertThat(hit.fields().keySet().size()).isEqualTo(2);
+      Assertions.assertThat(hit.fields().keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("mutation")));
     }
   }
 
@@ -102,10 +98,10 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = mutationRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(1);
-    assertThat(hits.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
-    assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
+    Assertions.assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
 
   }
 
@@ -117,8 +113,8 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = mutationRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(0);
-    assertThat(hits.getHits().length).isEqualTo(0);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(0);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(0);
   }
 
   @Test
@@ -129,10 +125,10 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     SearchResponse responseIs = mutationRepository.findAllCentric(queryIs);
     SearchHits hitsIs = responseIs.getHits();
 
-    assertThat(hitsIs.getTotalHits()).isEqualTo(1);
-    assertThat(hitsIs.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hitsIs.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hitsIs.getHits().length).isEqualTo(1);
 
-    assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
+    Assertions.assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
 
     FiltersParam filterNot = new FiltersParam(joinFilters(MUTATION_FILTER, DONOR_NOT_FILTER));
     Query queryNot = Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).filters(filterNot
@@ -140,7 +136,7 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     SearchResponse responseNot = mutationRepository.findAllCentric(queryNot);
     SearchHits hitsNot = responseNot.getHits();
 
-    assertThat(hitsNot.getTotalHits()).isEqualTo(0);
+    Assertions.assertThat(hitsNot.getTotalHits()).isEqualTo(0);
   }
 
   @Test
@@ -151,10 +147,10 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     SearchResponse responseIs = mutationRepository.findAllCentric(queryIs);
     SearchHits hitsIs = responseIs.getHits();
 
-    assertThat(hitsIs.getTotalHits()).isEqualTo(1);
-    assertThat(hitsIs.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hitsIs.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hitsIs.getHits().length).isEqualTo(1);
 
-    assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
+    Assertions.assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
 
     FiltersParam filterNot = new FiltersParam(joinFilters(MUTATION_FILTER, GENES_NOT_FILTER));
     Query queryNot = Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).filters(filterNot
@@ -162,7 +158,7 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     SearchResponse responseNot = mutationRepository.findAllCentric(queryNot);
     SearchHits hitsNot = responseNot.getHits();
 
-    assertThat(hitsNot.getTotalHits()).isEqualTo(0);
+    Assertions.assertThat(hitsNot.getTotalHits()).isEqualTo(0);
   }
 
   @Test
@@ -173,22 +169,22 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = mutationRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(1);
-    assertThat(hits.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
-    assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
+    Assertions.assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
   }
 
   @Test
   public void testCountIntersection() throws Exception {
-    assertThat(mutationRepository.count(Query.builder().build())).isEqualTo(1);
+    Assertions.assertThat(mutationRepository.count(Query.builder().build())).isEqualTo(1);
   }
 
   @Test
   public void testCountIntersectionWithFilters() throws Exception {
-    assertThat(mutationRepository.count(
+    Assertions.assertThat(mutationRepository.count(
         Query.builder().filters(new FiltersParam(joinFilters(MUTATION_FILTER)).get()).build())).isEqualTo(1);
-    assertThat(mutationRepository.count(
+    Assertions.assertThat(mutationRepository.count(
         Query.builder().filters(new FiltersParam(joinFilters(MUTATION_NOT_FILTER)).get()).build())).isEqualTo(0);
   }
 
@@ -197,7 +193,7 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
 
     Query query = Query.builder().build();
     Map<String, Object> response = mutationRepository.findOne(ID, query);
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(ID);
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(ID);
   }
 
   @Test
@@ -205,8 +201,8 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
 
     Query query = Query.builder().fields(Lists.newArrayList("id", "mutation")).build();
     Map<String, Object> response = mutationRepository.findOne(ID, query);
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(ID);
-    assertThat(response.keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("mutation")));
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(ID);
+    Assertions.assertThat(response.keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("mutation")));
   }
 
   @Test
@@ -216,9 +212,9 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
 
     Map<String, Object> response = mutationRepository.findOne(ID, query);
 
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(ID);
-    assertThat(response.containsKey("transcripts")).isFalse();
-    assertThat(response.containsKey("consequence")).isFalse();
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(ID);
+    Assertions.assertThat(response.containsKey("transcripts")).isFalse();
+    Assertions.assertThat(response.containsKey("consequence")).isFalse();
   }
 
   @Test
@@ -229,9 +225,9 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
 
     Map<String, Object> responseInclude = mutationRepository.findOne(ID, query);
 
-    assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(ID);
-    assertThat(responseInclude.containsKey("transcript")).isTrue();
-    assertThat(responseInclude.containsKey("consequence")).isFalse();
+    Assertions.assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(ID);
+    Assertions.assertThat(responseInclude.containsKey("transcript")).isTrue();
+    Assertions.assertThat(responseInclude.containsKey("consequence")).isFalse();
   }
 
   @Test
@@ -242,9 +238,9 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
 
     Map<String, Object> responseInclude = mutationRepository.findOne(ID, query);
 
-    assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(ID);
-    assertThat(responseInclude.containsKey("transcript")).isFalse();
-    assertThat(responseInclude.containsKey("consequences")).isTrue();
+    Assertions.assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(ID);
+    Assertions.assertThat(responseInclude.containsKey("transcript")).isFalse();
+    Assertions.assertThat(responseInclude.containsKey("consequences")).isTrue();
   }
 
   @Test
@@ -255,9 +251,9 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
 
     Map<String, Object> responseInclude = mutationRepository.findOne(ID, query);
 
-    assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(ID);
-    assertThat(responseInclude.containsKey("transcript")).isTrue();
-    assertThat(responseInclude.containsKey("consequences")).isTrue();
+    Assertions.assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(ID);
+    Assertions.assertThat(responseInclude.containsKey("transcript")).isTrue();
+    Assertions.assertThat(responseInclude.containsKey("consequences")).isTrue();
   }
 
   @Test(expected = WebApplicationException.class)
