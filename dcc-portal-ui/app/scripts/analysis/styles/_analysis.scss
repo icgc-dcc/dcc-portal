@@ -27,6 +27,40 @@
     }
   }
 
+  @for $i from 0 to 5 {
+    $step: log($i + 1) * 0.15s;
+    @debug $step; 
+    &:nth-child(#{$i}) {
+      &:before {
+        transition-delay: 0.1 + $step;
+        .condensed & {
+          transition-delay: $step;
+        }
+      }
+
+      .analysis-tool__column--text, .analysis-tool__heading, .analysis-tool__image-wrapper {
+        transition-delay: 0.1s + $step;
+        .condensed & {
+          transition-delay: 0.1s + $step;
+        }
+      }
+
+      .analysis-tool__image-wrapper {
+        transition-delay: 0.1s + $step;
+        .condensed & {
+          transition-delay: 0.15s + $step;
+        }
+      }
+
+      .analysis-tool__description {
+        transition-delay: 0.3s + $step;
+        .condensed & {
+          transition-delay: 0s;
+        }
+      }
+    }
+  }
+
   & + .analysis-tool {
     margin-top: 40px;
     &:before {
@@ -38,12 +72,9 @@
       background: #e6e6e6;
       top: -20px;
       transition: transform 0.3s;
-      transition-timing-function: $outExpo;
-      transition-delay: 0.1s;
-      
+      transition-timing-function: $outQuad;
       .condensed & {
-        transition-delay: 0s;
-        transition-timing-function: $inExpo;
+        transition-timing-function: $inQuad;
         transform: translateX(-110%);
       }
     }
@@ -58,9 +89,9 @@
     flex-grow: 0;
 
     transition: 0.2s ease;
-    transition-delay: 0.2s;
+    /*transition-delay: 0.2s;*/
     .condensed & {
-      transition-delay: 0.1s;
+      /*transition-delay: 0.15s;*/
       transform: translateY(30px) scale(0.9);
     }
   }
@@ -73,9 +104,9 @@
 
   &__column--text {
     transition: 0.2s ease;
-    transition-delay: 0.2s;
+    /*transition-delay: 0.2s;*/
     .condensed & {
-      transition-delay: 0.15s;
+      /*transition-delay: 0.15s;*/
       transform: translateX(-90px);
     }
   }
@@ -86,10 +117,10 @@
     position: relative;
     display: inline-block;
     transition: transform 0.2s $inQuad;
-    transition-delay: 0.2s;
+    /*transition-delay: 0.2s;*/
 
     .condensed & {
-      transition-delay: 0.15s;
+      /*transition-delay: 0.15s;*/
       transform: translateX(-50%) translateY(0px);
     }
 
@@ -110,10 +141,8 @@
     font-size: 14px;
     width: 33em;
     transition: 0.16s ease;
-    transition-delay: 0.3s;
     .condensed & {
       opacity: 0;
-      transition-delay: 0s;
     }
   }
 
@@ -202,6 +231,7 @@
   .close-btn {
     cursor: pointer;
     position: absolute;
+    top: 10px;
     right: 0;
     width: 30px;
     height: 30px;
