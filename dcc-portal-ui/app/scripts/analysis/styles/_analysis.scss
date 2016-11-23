@@ -12,6 +12,72 @@
       margin-top: 0;
    }
 
+  .analysis-tool-selection {
+    transition: width 0.2s $inOutQuad;
+    &--condensed {
+      left: 0;
+      width: 260px;
+      .analysis-tool {
+        position: relative;
+        height: 170px;
+        justify-content: space-between;
+        flex-direction: column;
+
+        &:hover {
+          .analysis-tool__image-wrapper {
+            filter: blur(6px) opacity(0.3);
+          }
+          .analysis-tool__description {
+            opacity: 1;
+            transform: translateZ(0px);
+          }
+        }
+
+        &__image-wrapper {
+          order: 2;
+          margin-bottom: 20px;
+          transition: filter 0.1s $inOutQuad;
+        }
+
+        &__column--text {
+          width: 100%;
+        }
+        
+        & + .analysis-tool {
+          margin-top: 0;
+          &:before {
+            display: none;
+          } 
+        }
+
+        &__heading, &__description {
+          /*position: absolute;*/
+        }
+        &__heading {
+          left: 50%;
+          transform: translateX(-50%);
+          .demo {
+            display: none;
+          }
+        }
+        &__description {
+          cursor: default;
+          font-size: 13px;
+          position: absolute;
+          bottom: 10px;
+          left: 0;
+          width: calc(100% - 2em);
+          height: calc(100% - 60px);
+          margin: 0 1em;
+          line-height: 1.5;
+          transform: translateZ(50px);
+          opacity: 0;
+          transition: filter 0.1s $inOutQuad, transform 0.25s $outQuad, opacity 0.25s $inOutQuad;
+        }
+      }
+    }
+  }
+
   .analysis-tool {
     display: flex;
     flex-direction: row;
@@ -19,6 +85,11 @@
     color: rgba(0,0,0,0.87);
     position: relative;
     justify-content: center;
+    perspective: 1000px;
+
+    &:hover {
+      background: transparent;
+    }
 
     & + .analysis-tool {
       margin-top: 40px;
@@ -31,10 +102,6 @@
         background: #e6e6e6;
         top: -20px;
       }
-    }
-
-    &__column--right {
-      
     }
 
     &__image-wrapper {
@@ -55,6 +122,8 @@
     &__heading {
       font-size: 20px;
       font-weight: 500;
+      position: relative;
+      display: inline-block;
     }
 
     &__description {
@@ -112,10 +181,10 @@
     }
 
     &--suggestions {
-     .analysis-tool__heading, .analysis-tool__description {
-       color: #9b315b;
-     }
-   }
+      .analysis-tool__heading, .analysis-tool__description {
+        color: #9b315b;
+      }
+    }
   }
 
 

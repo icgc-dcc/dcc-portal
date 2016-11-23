@@ -1,13 +1,18 @@
 <section>
 <div data-ng-if="!analysisId" data-ng-controller="NewAnalysisController as NAC" class="analysis">
-    <div class="analysis-tool-selection col-md-7 col-md-push-2" ng-if="!NAC.selectedAnalysis">
+    <div
+        class="analysis-tool-selection col-md-7 col-md-push-2"
+        ng-class="{
+            'analysis-tool-selection--condensed': !!NAC.selectedAnalysis
+            }"
+    >
         <div
             ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
             class="analysis-tool analysis-tool--{{analysis.type}}"
             ng-click="NAC.handleClickAnalysis(analysis)"
         >
             <div class="analysis-tool__image-wrapper" ng-if="analysis.image" ng-bind-html="analysis.image | to_trusted"></div>
-            <div class="analysis-tool__column--right">
+            <div class="analysis-tool__column--text">
                 <h2 class="analysis-tool__heading">
                     {{analysis.strings.name}}
                     <small>
@@ -33,7 +38,7 @@
             <div class="analysis-tool__image-wrapper">
                 <img style="width: 48%;" src="/styles/images/lightbulb-illustration.svg">
             </div>
-            <div class="analysis-tool__column--right">
+            <div class="analysis-tool__column--text">
                 <h2 class="analysis-tool__heading" >More?</h2>
                 <p class="analysis-tool__description">
                     <translate>Do you have a specific type of analysis you want to see?</translate>
