@@ -23,30 +23,14 @@
 
     <!-- Search -->
     <dependency>
-      <groupId>org.elasticsearch</groupId>
-      <artifactId>elasticsearch</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.elasticsearch.client</groupId>
-      <artifactId>transport</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>elasticsearch-shaded</artifactId>
       <version>${elasticsearch.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.elasticsearch.test</groupId>
-      <artifactId>framework</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>elasticsearch-test-shaded</artifactId>
       <version>${elasticsearch.version}</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.elasticsearch</groupId>
-          <artifactId>securemock</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <!-- ES plugins for integration testing -->
-    <dependency>
-      <groupId>org.icgc.dcc</groupId>
-      <artifactId>dcc-elasticsearch-plugins</artifactId>
     </dependency>
     
     <!-- Logging -->
