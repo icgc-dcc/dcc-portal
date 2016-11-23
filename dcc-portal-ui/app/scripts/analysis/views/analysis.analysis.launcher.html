@@ -10,6 +10,9 @@
             ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
             class="analysis-tool analysis-tool--{{analysis.type}}"
             ng-click="NAC.handleClickAnalysis(analysis)"
+            ng-class="{
+                'analysis-tool--selected': analysis === NAC.selectedAnalysis
+            }"
         >
             <div class="analysis-tool__image-wrapper" ng-if="analysis.image" ng-bind-html="analysis.image | to_trusted"></div>
             <div class="analysis-tool__column--text">
@@ -50,9 +53,10 @@
         class="sets-container"
         ng-class="{'should-show': !!NAC.selectedAnalysis}"
     >
-        <div ng-click="NAC.handleClickAnalysis()">
-            <i class="fa fa-arrow-left"></i> Return to tool selection
-        </div>
+        <i
+            ng-click="NAC.handleClickAnalysis()"
+            class="fa fa-close close-btn"
+        ></i>
         <div
             class="set-selection-wrapper"
         >

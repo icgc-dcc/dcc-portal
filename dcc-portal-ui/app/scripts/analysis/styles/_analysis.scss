@@ -7,10 +7,24 @@
   color: rgba(0,0,0,0.87);
   position: relative;
   perspective: 1000px;
-  cursor: default;
+  cursor: pointer;
 
   &:hover {
     background: transparent;
+  }
+
+  .condensed & {
+    .analysis-tool__image-wrapper > * {
+      transition: 0.2s ease;
+    }
+    &:not(.analysis-tool--selected):not(:hover) {
+      .analysis-tool__image-wrapper > * {
+        filter: grayscale(20%) opacity(0.6);
+      }
+      .analysis-tool__heading {
+        color: #666;
+      }
+    }
   }
 
   & + .analysis-tool {
@@ -23,9 +37,14 @@
       height: 1px;
       background: #e6e6e6;
       top: -20px;
-      transition: transform 0.2s ease;
+      transition: transform 0.3s;
+      transition-timing-function: $outExpo;
+      transition-delay: 0.1s;
+      
       .condensed & {
-        transform: translateX(calc(-100% + 170px));
+        transition-delay: 0s;
+        transition-timing-function: $inExpo;
+        transform: translateX(-110%);
       }
     }
   }
@@ -39,8 +58,10 @@
     flex-grow: 0;
 
     transition: 0.2s ease;
+    transition-delay: 0.2s;
     .condensed & {
-      transform: translateY(20px) scale(0.9);
+      transition-delay: 0.1s;
+      transform: translateY(30px) scale(0.9);
     }
   }
 
@@ -51,7 +72,10 @@
   }
 
   &__column--text {
+    transition: 0.2s ease;
+    transition-delay: 0.2s;
     .condensed & {
+      transition-delay: 0.15s;
       transform: translateX(-90px);
     }
   }
@@ -61,10 +85,12 @@
     font-weight: 500;
     position: relative;
     display: inline-block;
-    transition: 0.2s ease;
+    transition: transform 0.2s $inQuad;
+    transition-delay: 0.2s;
 
     .condensed & {
-      transform: translateX(-50%) translateY(-10px);
+      transition-delay: 0.15s;
+      transform: translateX(-50%) translateY(0px);
     }
 
     .demo {
@@ -83,9 +109,11 @@
   &__description {
     font-size: 14px;
     width: 33em;
-    transition: 0.2s ease;
+    transition: 0.16s ease;
+    transition-delay: 0.3s;
     .condensed & {
       opacity: 0;
+      transition-delay: 0s;
     }
   }
 
@@ -142,20 +170,50 @@
     .analysis-tool__heading, .analysis-tool__description {
       color: #9b315b;
     }
+    transition: all 0.2s;
+    max-height: 300px;
+    .condensed & {
+      opacity: 0;
+      max-height: 0;
+      pointer-events: none;
+    }
   }
 }
 
 .sets-container {
   position: absolute;
   top: 0;
-  left: 210px;
-  width: calc(100% - 210px);
-  transition: 0.2s ease;
+  left: 220px;
+  width: calc(100% - 220px);
+  transition: 0.2s;
   transform: translateX(0);
+  &.should-show {
+    transition-timing-function: $outQuad;
+    transition-delay: 0.3s;
+  }
   &:not(.should-show) {
+    transition-delay: 0s;
+    transition-timing-function: $inQuad;
     opacity: 0;
     transform: translateX(10%);
     pointer-events: none;
+  }
+
+  .close-btn {
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 15px;
+    transition: 0.1s ease;
+    &:hover {
+      background: #eee;
+    }
   }
 }
 
@@ -172,41 +230,6 @@
    h3 {
       margin-top: 0;
    }
-
-  .analysis-tool-selection {
-    &--condensed {
-      
-    }
-  }
-
-
-   .analysis-tiles {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-   }
-
-   .analysis-tile {
-      backface-visibility: hidden;
-   }
-
-   .analysis-buttons {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      margin: 12px 12px;
-      .demo {
-        border: none;
-        text-decoration: underline;
-      }
-      .run {
-        margin-right: 12px;
-      }
-   }
-
-   .action-toolbar {
-      text-transform: none;
-    }
 
    .analysis-tile-container {
       position: relative;
