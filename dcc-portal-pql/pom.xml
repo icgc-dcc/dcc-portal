@@ -21,29 +21,16 @@
       <artifactId>dcc-common-core</artifactId>
     </dependency>
 
-    <!-- Search -->		
+    <!-- Search -->
     <dependency>
-    	<groupId>org.icgc.dcc</groupId>
-    	<artifactId>elasticsearch-plugins-shaded</artifactId>
-    	<version>5.0.0</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.icgc.dcc</groupId>
-	    <artifactId>elasticsearch-shaded</artifactId>
-	    <version>5.0.0</version>
-	</dependency>
-	
-    <dependency>
-      <groupId>org.elasticsearch.test</groupId>
-      <artifactId>framework</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>elasticsearch-shaded</artifactId>
       <version>${elasticsearch.version}</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.elasticsearch</groupId>
-          <artifactId>securemock</artifactId>
-        </exclusion>
-      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>elasticsearch-test-shaded</artifactId>
+      <version>${elasticsearch.version}</version>
     </dependency>
     
     <!-- Logging -->
