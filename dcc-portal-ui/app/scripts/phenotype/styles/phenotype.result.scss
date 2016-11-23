@@ -33,29 +33,23 @@
 
 .survival-graphs {
   position: relative;
+  display: flex;
   survival-analysis-graph {
     display: block;
-    opacity: 1;
-    transition: 0.4s opacity ease;
     width: 100%;
-
-    &.disabled {
-      position: absolute;
-      z-index: -100;
-      opacity: 0;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-    }
   }
 
   survival-analysis-graph {
     .title {
       text-transform: none;
       font-size: 20px;
-      text-align: center;
+      /*text-align: center;*/
       margin-top: 12px;
       margin-bottom: 0;
+      padding-left: 60px;
+    }
+    .p-value-test{
+      padding-left: 60px;
     }
     &:not(:fullscreen) {
       .title {

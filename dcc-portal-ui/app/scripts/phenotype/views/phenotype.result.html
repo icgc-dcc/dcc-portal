@@ -38,27 +38,8 @@
     <div class="survival-analysis-wrapper">
         <h3><translate>Survival Analysis</translate></h3>
 
-        <br>
-        <div class="t_tabs t_tabs__isolated t_tabs--smaller t_tabs--no-accent">
-            <div
-                class="t_tabs__tab"
-                ng-class="{
-                    active: activeSurvivalGraph === 'overall'
-                }"
-                ng-click="activeSurvivalGraph = 'overall'"
-            ><translate>Overall Survival</translate></div>
-            <div
-                class="t_tabs__tab"
-                ng-class="{
-                    active: activeSurvivalGraph === 'diseaseFree'
-                }"
-                ng-click="activeSurvivalGraph = 'diseaseFree'"
-            ><translate>Disease Free Survival</translate></div>
-        </div>
-
         <div class="survival-graphs">
             <survival-analysis-graph
-                ng-class="{disabled: activeSurvivalGraph !== 'overall' && activeSurvivalGraph !== undefined}"
                 data-data-sets="survivalAnalysisDataSets.overall"
                 tip-labels="{
                     survivalEstimate: 'Survival estimate',
@@ -73,7 +54,6 @@
             ></survival-analysis-graph>
 
             <survival-analysis-graph
-                ng-class="{disabled: activeSurvivalGraph !== 'diseaseFree'}"
                 data-data-sets="survivalAnalysisDataSets.diseaseFree"
                 tip-labels="{
                     survivalEstimate: 'Disease free estimate',

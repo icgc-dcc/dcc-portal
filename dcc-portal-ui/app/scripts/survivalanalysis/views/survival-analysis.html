@@ -62,6 +62,24 @@
 
   <h1 class="title" ng-if="ctrl.title">{{ ctrl.title }}</h1>
 
+  <i class="icon-spin icon-spinner absolute-center" ng-class="{'ng-hide': ctrl.dataSets.length}"></i>
+
+  <div class="p-value-test">
+    <span ng-if="ctrl.pvalue !== undefined && ctrl.pvalue!==0">Log-Rank Test P-Value = {{ ctrl.pvalue.toExponential(2) }}</span>
+    <span ng-if="ctrl.pvalue === 0">Log-Rank Test P-Value ≈ {{ ctrl.pvalue.toExponential(2) }}</span>
+  </div>
+
+  <div ng-show="!ctrl.canUndo()" class="drag-to-zoom-prompt">drag to zoom</div>
+
+  <div class="survival-graph">
+    
+  </div>
+
+  <tooltip-control
+    is-local="true"
+    params="ctrl.tooltipParams"
+  ></tooltip-control>
+
   <ul class="legend">
     <li
       class="set"
@@ -82,24 +100,4 @@
       <span ng-bind-html="ctrl.SetOperationService.getSetShortHand(dataSet, ctrl.dataSets)"></span> (N = {{dataSet.donors.length}}) - {{ dataSet.meta.name }}
     </li>
   </ul>
-
-  <i class="icon-spin icon-spinner absolute-center" ng-class="{'ng-hide': ctrl.dataSets.length}"></i>
-
-
-  <div class="p-value-test">
-    <span ng-if="ctrl.pvalue !== undefined && ctrl.pvalue!==0">Log-Rank Test P-Value = {{ ctrl.pvalue.toExponential(2) }}</span>
-    <span ng-if="ctrl.pvalue === 0">Log-Rank Test P-Value ≈ {{ ctrl.pvalue.toExponential(2) }}</span>
-  </div>
-
-  <div ng-show="!ctrl.canUndo()" class="drag-to-zoom-prompt">drag to zoom</div>
-
-  <div class="survival-graph">
-    
-  </div>
-
-  <tooltip-control
-    is-local="true"
-    params="ctrl.tooltipParams"
-  ></tooltip-control>
-
 </div>
