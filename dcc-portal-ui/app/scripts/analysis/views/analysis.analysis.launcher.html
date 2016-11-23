@@ -3,13 +3,13 @@
     <div
         class="analysis-tool-selection"
         ng-class="{
-            'condensed': !!NAC.selectedAnalysis
-            }"
+            'condensed': NAC.shouldShowSetSelection
+        }"
     >
         <div
             ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
             class="analysis-tool analysis-tool--{{analysis.type}}"
-            ng-click="NAC.handleClickAnalysis(analysis)"
+            ng-click="NAC.handleClickAnalysis(analysis); NAC.shouldShowSetSelection = true;"
             ng-class="{
                 'analysis-tool--selected': analysis === NAC.selectedAnalysis
             }"
@@ -51,10 +51,10 @@
     </div>
     <div
         class="sets-container"
-        ng-class="{'should-show': !!NAC.selectedAnalysis}"
+        ng-class="{'should-show': NAC.shouldShowSetSelection}"
     >
         <i
-            ng-click="NAC.handleClickAnalysis()"
+            ng-click="NAC.shouldShowSetSelection = false;"
             class="fa fa-close close-btn"
         ></i>
         <div
