@@ -247,6 +247,23 @@
             'Study': OncogridService.studyLegend()
           };
 
+          var templates = {
+            mainGridCrosshair: `
+              <div class="og-crosshair-tooltip">
+                <div>
+                  <span><b>Mutation</b>:&nbsp;</span>
+                  <span>{{observation.id}}</span>
+                </div>
+                <div>
+                  <span><b>Donor</b>:&nbsp;</span>
+                  <span>{{donor.id}}</span>
+                </div>
+                <div>
+                  <span><b>Gene</b>:&nbsp;</span>
+                  <span>{{gene.symbol}}</span>
+                </div>`
+          };
+
           $scope.params = {
             donors: donors,
             genes: genes,
@@ -262,6 +279,7 @@
             trackHeight: 12,
             trackLegends: trackLegends,
             trackLegendLabel: '<i class="icon-help"></i>',
+            templates,
             donorTracks: donorTracks,
             donorOpacityFunc: donorOpacity,
             donorClick: donorClick,

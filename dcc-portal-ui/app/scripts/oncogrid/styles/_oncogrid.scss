@@ -372,3 +372,12 @@ $pcawgColor: #e9931c;
   }
 
 }
+
+.og-crosshair-tooltip{
+  div{
+    display: table-row;
+  } 
+  span{
+    display: table-cell;
+  }
+}
