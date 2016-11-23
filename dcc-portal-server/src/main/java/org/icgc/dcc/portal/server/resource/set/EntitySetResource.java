@@ -277,4 +277,14 @@ public class EntitySetResource extends Resource {
         .build();
   }
 
+  private EntitySet getEntitySet(UUID entitySetId) {
+    val entitySet = service.getEntitySet(entitySetId);
+    if (entitySet == null) {
+      log.warn("getEntitySet for the updated set returns empty. The entitySetId '{}' is most likely invalid.",
+          entitySetId);
+      throw new NotFoundException(entitySetId.toString(), API_ENTITY_SET_ID_VALUE);
+    }
+    return entitySet;
+  }
+
 }
