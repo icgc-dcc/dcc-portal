@@ -97,11 +97,7 @@ public class EntitySetResource extends Resource {
   public EntitySet getSet(
       @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
       @ApiParam(value = "Include items in the response?", required = true) @QueryParam("includeItems") @DefaultValue("false") final boolean includeItems) {
-    val entitySet = service.getEntitySet(entitySetId);
-    if (entitySet == null) {
-      log.warn("getSetsByIds returns empty. The entitySetId '{}' is most likely invalid.", entitySetId);
-      throw new NotFoundException(entitySetId.toString(), API_ENTITY_SET_ID_VALUE);
-    }
+    val entitySet = this.getEntitySet(entitySetId);
 
     if (includeItems) {
       val items = service.getSetItems(entitySet);
