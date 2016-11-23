@@ -48,6 +48,12 @@
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-servlet</artifactId>
       <version>${jersey.version}</version>
+      <exclusions>
+      	<exclusion>
+      		<groupId>asm</groupId>
+      		<artifactId>asm</artifactId>
+      	</exclusion>
+      </exclusions>
     </dependency>
 
     <!-- DCC -->
@@ -95,31 +101,27 @@
 
     <!-- Search -->
     <dependency>
-      <groupId>org.elasticsearch</groupId>
-      <artifactId>elasticsearch</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.elasticsearch.client</groupId>
-      <artifactId>transport</artifactId>
-      <version>${elasticsearch.version}</version>
-    </dependency>
+    	<groupId>org.icgc.dcc</groupId>
+    	<artifactId>elasticsearch-plugins-shaded</artifactId>
+    	<version>5.0.0</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.icgc.dcc</groupId>
+	    <artifactId>elasticsearch-shaded</artifactId>
+	    <version>5.0.0</version>
+	</dependency>
     <dependency>
       <groupId>org.elasticsearch.test</groupId>
       <artifactId>framework</artifactId>
       <version>${elasticsearch.version}</version>
-      <scope>test</scope>
       <exclusions>
-        <exclusion>
-          <groupId>org.elasticsearch</groupId>
-          <artifactId>securemock</artifactId>
-        </exclusion>
+      	<exclusion>
+      		<groupId>org.elasticsearch</groupId>
+      		<artifactId>elasticsearch</artifactId>
+      	</exclusion>
       </exclusions>
     </dependency>
-    <!-- ES plugins for integration testing -->
-    <dependency>
-      <groupId>org.icgc.dcc</groupId>
-      <artifactId>dcc-elasticsearch-plugins</artifactId>
-    </dependency>
+
 
 	<!-- Logging - Elasticsearch dependency -->
     <dependency>
@@ -261,6 +263,12 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <version>${spring-boot.version}</version>
       <scope>test</scope>
+      <exclusions>
+      	<exclusion>
+      		<groupId>net.minidev</groupId>
+      		<artifactId>accessors-smart</artifactId>
+      	</exclusion>
+      </exclusions>
     </dependency>
     <!-- Test - Jersey-->
     <dependency>
@@ -301,6 +309,7 @@
             <exclude>**/*IT.java</exclude>
             <exclude>**/*IntegrationTest.java</exclude>
           </excludes>
+          <argLine>-Dtests.security.manager=false</argLine>
         </configuration>
       </plugin>
 

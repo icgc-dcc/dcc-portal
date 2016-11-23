@@ -81,6 +81,12 @@ public class BeaconService {
       String dataset) {
     String allele = alleleMutation.getMutation();
 
+    val poo = client.prepareSearch(index)
+        .setTypes(IndexType.MUTATION_CENTRIC.getId())
+        .setSearchType(QUERY_THEN_FETCH)
+        .get();
+    System.out.print(poo.toString());
+
     val search = client.prepareSearch(index)
         .setTypes(IndexType.MUTATION_CENTRIC.getId())
         .setSearchType(QUERY_THEN_FETCH);
@@ -106,11 +112,13 @@ public class BeaconService {
         allele.contains(">") ? generateInsertionOrDeletionScriptField(params) : generateDefaultScriptField(params));
 
     val filter = QueryBuilders.scriptQuery(
-        new Script("def m = doc['mutation'].value;"
-            + "length = m.substring(m.indexOf('>')+1,m.length()).length();"
-            + "position <= doc['chromosome_start'].value+length", ScriptType.INLINE, "painless",
+        new Script("def m = doc['mutation'].value; "
+            + "int length = m.substring(m.indexOf('>')+1,m.length()).length();"
+            + "params.position <= doc['chromosome_start'].value+length", ScriptType.INLINE, "painless",
             ImmutableMap.of("position", position)));
     search.setPostFilter(filter);
+
+    System.out.print(search.request().toString());
 
     val hits = search.execute().actionGet().getHits();
     String finalResult = "null";
@@ -129,12 +137,13 @@ public class BeaconService {
   }
 
   private Script generateDefaultScriptField(Map<String, Object> params) {
-    val scriptString = "def m = doc['mutation'].value;"
-        + "def offset = position - doc['chromosome_start'].value;"
-        + "def int begin = m.indexOf('>') + 1 + offset;"
-        + "def int end = Math.min(begin + allelelength, m.length());"
+    val scriptString = "def m = doc['mutation'].value; "
+        + "int offset = (int) params.position - (int) doc['chromosome_start'].value;"
+        + "int begin = m.indexOf('>') + 1 + offset;"
+        + "int foo = begin + params.allelelength; int bar = m.length();"
+        + "int end = foo < bar ? foo : bar;"
         + "m = m.substring(begin,end);"
-        + "m==allele";
+        + "m==params.allele";
     return new Script(scriptString, ScriptType.INLINE, "painless", params);
   }
 

@@ -25,11 +25,13 @@ import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
+import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.createTermsLookupFilter;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.dcc.portal.pql.meta.FileTypeModel.Fields;
 import org.dcc.portal.pql.meta.IndexModel;
 import org.dcc.portal.pql.meta.TypeModel;
@@ -72,7 +74,7 @@ public class ElasticsearchRequestUtils {
   @NonNull
   public static GetRequestBuilder setFetchSourceOfGetRequest(GetRequestBuilder builder, Query query,
       EntityType entityType) {
-    String[] sourceFields = resolveSourceFields(query, entityType);
+    String[] sourceFields = ArrayUtils.addAll(resolveSourceFields(query, entityType), getFields(query, entityType));
 
     if (sourceFields != EMPTY_SOURCE_FIELDS) {
       builder.setFetchSource(sourceFields, EMPTY_SOURCE_FIELDS);

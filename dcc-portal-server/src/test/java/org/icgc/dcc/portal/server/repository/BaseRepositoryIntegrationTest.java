@@ -18,8 +18,10 @@
 package org.icgc.dcc.portal.server.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,20 +43,20 @@ import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Query.QueryBuilder;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.util.JsonUtils;
-import org.mockito.Spy;
+import org.junit.After;
+import org.junit.Before;
+import org.mockito.MockitoAnnotations;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import lombok.SneakyThrows;
 import lombok.val;
 
 public class BaseRepositoryIntegrationTest {
 
-  @Spy
-  final TransportClient client;
+  TransportClient client;
 
   private static String DONOR_FILTER = "{'donor':{'gender':{'is':['male']},'availableDataTypes':{'is':['cnsm']}}}";
 
@@ -97,10 +99,17 @@ public class BaseRepositoryIntegrationTest {
   protected static String MUTATION_PROJECT_FILTER_TEMPLATE =
       "{mutation:{id:{is:['%s']}},donor:{projectId:{is:['%s']}}}";
 
-  @SneakyThrows
-  public BaseRepositoryIntegrationTest() {
-    client = new PreBuiltTransportClient(Settings.EMPTY)
-        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300));
+  @Before
+  @SuppressWarnings("resource")
+  public void setUp() throws UnknownHostException {
+    client = spy(new PreBuiltTransportClient(Settings.EMPTY)
+        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300)));
+    MockitoAnnotations.initMocks(this);
+  }
+
+  @After
+  public void tearDown() {
+    client.close();
   }
 
   private static List<String> generateFilters() {

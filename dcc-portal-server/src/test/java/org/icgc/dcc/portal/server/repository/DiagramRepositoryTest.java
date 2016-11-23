@@ -39,6 +39,7 @@ public class DiagramRepositoryTest extends BaseElasticSearchTest {
   @Before
   public void setUpDiagramRepositoryTest() throws Exception {
     prepareIndex(RELEASE_INDEX_NAME, PROJECT);
+    loadData("DiagramRepositoryTest.json");
     diagramRepository =
         new DiagramRepository(client, RELEASE_INDEX_NAME, new QueryEngine(client, RELEASE_INDEX_NAME));
   }

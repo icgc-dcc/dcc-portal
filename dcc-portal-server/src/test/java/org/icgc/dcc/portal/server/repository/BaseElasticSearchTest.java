@@ -86,6 +86,21 @@ public class BaseElasticSearchTest extends ESIntegTestCase {
     loadData(file);
   }
 
+  protected void createIndexMappings(String indexName, String... typeNames) {
+    val settingsContents = settingsSource(SETTINGS_FILE);
+    val settings = Settings.builder()
+        .loadFromSource(settingsContents);
+
+    val createBuilder = prepareCreate(indexName, 1, settings);
+    for (val typeName : typeNames) {
+      log.debug("Creating mapping for type: {}", typeName);
+      createBuilder.addMapping(typeName, mappingSource(typeName));
+    }
+
+    val created = createBuilder.execute().actionGet().isAcknowledged();
+    checkState(created, "Failed to create index");
+  }
+
   protected void createIndexMappings(String indexName, Type... typeNames) {
     val settingsContents = settingsSource(SETTINGS_FILE);
     val settings = Settings.builder()
@@ -150,13 +165,21 @@ public class BaseElasticSearchTest extends ESIntegTestCase {
     return mappingSource(mappingFile(typeName));
   }
 
+  private static String mappingSource(String typeName) {
+    return mappingSource(mappingFile(typeName));
+  }
+
   @SneakyThrows
   private static String mappingSource(URL mappingFile) {
     return json(mappingFile);
   }
 
   private static URL mappingFile(Type typeName) {
-    String mappingFileName = typeName.getId() + ".mapping.json";
+    return mappingFile(typeName.getId());
+  }
+
+  private static URL mappingFile(String typeName) {
+    String mappingFileName = typeName + ".mapping.json";
     return getMappingFileUrl(mappingFileName);
   }
 

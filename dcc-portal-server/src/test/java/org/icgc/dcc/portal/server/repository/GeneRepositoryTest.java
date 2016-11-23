@@ -85,8 +85,9 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(3);
 
     for (SearchHit hit : hits) {
-      Assertions.assertThat(hit.fields().keySet().size()).isEqualTo(2);
-      Assertions.assertThat(hit.fields().keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("symbol")));
+      Assertions.assertThat(hit.getSource().keySet().size()).isEqualTo(2);
+      Assertions.assertThat(hit.getSource().keySet())
+          .isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("symbol")));
     }
   }
 
@@ -101,7 +102,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
     Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
-    Assertions.assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(GENEID);
+    Assertions.assertThat(cast(hits.getAt(0).getSource().get(FIELDS.get("id")))).isEqualTo(GENEID);
 
   }
 
@@ -129,7 +130,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hitsIs.getHits().length).isEqualTo(1);
 
     // assertThat(hitsIs.getAt(0).field(FIELDS.get("id")).getValue()).isEqualTo(GENEID);
-    Assertions.assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isIn(
+    Assertions.assertThat(cast(hitsIs.getAt(0).getSource().get(FIELDS.get("id")))).isIn(
         Lists.newArrayList("ENSG00000215529"));
 
     FiltersParam filterNot = new FiltersParam(joinFilters(DONOR_NOT_FILTER));
@@ -154,7 +155,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hitsIs.getTotalHits()).isEqualTo(1);
     Assertions.assertThat(hitsIs.getHits().length).isEqualTo(1);
 
-    Assertions.assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(GENEID);
+    Assertions.assertThat(cast(hitsIs.getAt(0).getSource().get(FIELDS.get("id")))).isEqualTo(GENEID);
 
     FiltersParam filterNot = new FiltersParam(joinFilters(GENE_FILTER, MUTATION_NOT_FILTER));
     Query queryNot =
@@ -176,7 +177,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
     Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
-    Assertions.assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(GENEID);
+    Assertions.assertThat(cast(hits.getAt(0).getSource().get(FIELDS.get("id")))).isEqualTo(GENEID);
   }
 
   @Test
@@ -235,6 +236,7 @@ public class GeneRepositoryTest extends BaseElasticSearchTest {
     geneRepository.findOne(MISSING_ID, query);
   }
 
+  @Override
   protected Object cast(Object object) {
     return object;
   }

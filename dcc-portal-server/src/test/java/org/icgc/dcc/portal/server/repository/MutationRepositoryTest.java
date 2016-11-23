@@ -61,6 +61,7 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
   @Before
   public void setUpMutationRepositoryTest() throws Exception {
     prepareIndex(RELEASE_INDEX_NAME, MUTATION_CENTRIC);
+    loadData("MutationRepositoryTest.json");
     mutationRepository =
         new MutationRepository(client, new QueryEngine(client, RELEASE_INDEX_NAME), RELEASE_INDEX_NAME);
   }
@@ -85,8 +86,9 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(1);
 
     for (SearchHit hit : hits) {
-      Assertions.assertThat(hit.fields().keySet().size()).isEqualTo(2);
-      Assertions.assertThat(hit.fields().keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("mutation")));
+      Assertions.assertThat(hit.getSource().keySet().size()).isEqualTo(2);
+      Assertions.assertThat(hit.getSource().keySet())
+          .isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("mutation")));
     }
   }
 
@@ -101,7 +103,7 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
     Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
-    Assertions.assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
+    Assertions.assertThat(cast(hits.getAt(0).getSource().get(FIELDS.get("id")))).isEqualTo(ID);
 
   }
 
@@ -128,7 +130,7 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hitsIs.getTotalHits()).isEqualTo(1);
     Assertions.assertThat(hitsIs.getHits().length).isEqualTo(1);
 
-    Assertions.assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
+    Assertions.assertThat(cast(hitsIs.getAt(0).getSource().get(FIELDS.get("id")))).isEqualTo(ID);
 
     FiltersParam filterNot = new FiltersParam(joinFilters(MUTATION_FILTER, DONOR_NOT_FILTER));
     Query queryNot = Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).filters(filterNot
@@ -150,7 +152,7 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hitsIs.getTotalHits()).isEqualTo(1);
     Assertions.assertThat(hitsIs.getHits().length).isEqualTo(1);
 
-    Assertions.assertThat(cast(hitsIs.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
+    Assertions.assertThat(cast(hitsIs.getAt(0).getSource().get(FIELDS.get("id")))).isEqualTo(ID);
 
     FiltersParam filterNot = new FiltersParam(joinFilters(MUTATION_FILTER, GENES_NOT_FILTER));
     Query queryNot = Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).filters(filterNot
@@ -172,7 +174,7 @@ public class MutationRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
     Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
-    Assertions.assertThat(cast(hits.getAt(0).field(FIELDS.get("id")).getValue())).isEqualTo(ID);
+    Assertions.assertThat(cast(hits.getAt(0).getSource().get(FIELDS.get("id")))).isEqualTo(ID);
   }
 
   @Test

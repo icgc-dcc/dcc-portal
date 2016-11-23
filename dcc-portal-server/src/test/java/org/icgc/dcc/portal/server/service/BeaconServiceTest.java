@@ -35,6 +35,7 @@ public class BeaconServiceTest extends BaseElasticSearchTest {
     prepareIndex(RELEASE_INDEX_NAME, MUTATION_CENTRIC);
     loadData("BeaconServiceTest.json");
     service = new BeaconService(client, RELEASE_INDEX_NAME);
+    System.out.println("SETUP HAS FINISHED");
   }
 
   @Test

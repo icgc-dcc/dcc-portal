@@ -40,7 +40,6 @@ import static org.elasticsearch.search.sort.SortOrder.ASC;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
-import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.server.model.IndexType.DONOR;
 import static org.icgc.dcc.portal.server.model.IndexType.DONOR_TEXT;
 import static org.icgc.dcc.portal.server.model.IndexType.FILE_DONOR_TEXT;
@@ -467,8 +466,7 @@ public class DonorRepository implements Repository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(indexName, IndexType.DONOR.getId(), id)
-        .setFetchSource(getFields(query, EntityType.DONOR), NO_EXCLUDE);
+    val search = client.prepareGet(indexName, IndexType.DONOR.getId(), id);
     setFetchSourceOfGetRequest(search, query, EntityType.DONOR);
 
     val response = search.execute().actionGet();

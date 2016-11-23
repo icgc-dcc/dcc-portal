@@ -17,7 +17,6 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
@@ -31,17 +30,17 @@ import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
-import org.icgc.dcc.portal.server.test.TestIndex;
+import org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-@RunWith(MockitoJUnitRunner.class)
+import lombok.val;
+
+//@RunWith(MockitoJUnitRunner.class)
 public class DonorRepositoryTest extends BaseElasticSearchTest {
 
   private static final String DEFAULT_SORT = "ssmAffectedGenes";
@@ -57,11 +56,12 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
   ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.DONOR);
 
   @Before
-  public void setUpDonorRepositoryTest() throws Exception {
-    prepareIndex(RELEASE_INDEX_NAME, DONOR_CENTRIC);
+  public void setUpDonorRepositoryTest() {
+    createIndexMappings(RELEASE_INDEX_NAME, "donor-centric", "donor");
+    loadData("DonorRepositoryTest.json");
     donorRepository =
         new DonorRepository(client, new QueryEngine(client, RELEASE_INDEX_NAME), RELEASE_INDEX_NAME,
-            TestIndex.REPOSITORY.getName());
+            REPOSITORY_INDEX_NAME);
   }
 
   @Test
@@ -86,8 +86,9 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getHits().length).isEqualTo(9);
 
     for (SearchHit hit : hits) {
-      Assertions.assertThat(hit.fields().keySet().size()).isEqualTo(2);
-      Assertions.assertThat(hit.fields().keySet())
+      Assertions.assertThat(hit.getSource().keySet().size()).isEqualTo(2);
+      val flatMap = ElasticsearchResponseUtils.flatternMap(hit.getSource(), query, EntityType.DONOR);
+      Assertions.assertThat(flatMap.keySet())
           .isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("primarySite")));
     }
   }
@@ -104,7 +105,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getHits().length).isEqualTo(3);
 
     for (SearchHit hit : hits) {
-      Assertions.assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isIn(Lists.newArrayList("DO2", "DO6", "DO7"));
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id")))).isIn(Lists.newArrayList("DO2", "DO6", "DO7"));
     }
   }
 
@@ -120,7 +121,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getHits().length).isEqualTo(6);
 
     for (SearchHit hit : hits) {
-      Assertions.assertThat(cast(hit.field(FIELDS.get("id")).getValue()))
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id"))))
           .isNotIn(Lists.newArrayList("DO2", "DO6", "DO7"));
     }
   }
@@ -137,7 +138,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getHits().length).isEqualTo(5);
 
     for (SearchHit hit : hits) {
-      Assertions.assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isIn(
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id")))).isIn(
           Lists.newArrayList("DO2", "DO2", "DO9", "DO1", "DO4", "DO8", "DO5"));
     }
   }
@@ -154,7 +155,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
     for (SearchHit hit : hits) {
-      Assertions.assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isIn(Lists.newArrayList("DO9"));
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id")))).isIn(Lists.newArrayList("DO9"));
     }
   }
 
@@ -170,7 +171,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
     for (SearchHit hit : hits) {
-      Assertions.assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isIn(Lists.newArrayList("DO2"));
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id")))).isIn(Lists.newArrayList("DO2"));
     }
   }
 

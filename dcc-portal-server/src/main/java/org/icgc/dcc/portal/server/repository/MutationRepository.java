@@ -22,9 +22,7 @@ import static org.apache.lucene.search.join.ScoreMode.Avg;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
-import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.EMPTY_SOURCE_FIELDS;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.resolveSourceFields;
+import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.setFetchSourceOfGetRequest;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
@@ -195,12 +193,7 @@ public class MutationRepository implements Repository {
 
   public Map<String, Object> findOne(String id, Query query) {
     val search = client.prepareGet(indexName, CENTRIC_TYPE.getId(), id);
-    search.setFetchSource(getFields(query, EntityType.MUTATION), NO_EXCLUDE);
-    String[] sourceFields = resolveSourceFields(query, EntityType.MUTATION);
-    if (sourceFields != EMPTY_SOURCE_FIELDS) {
-      search.setFetchSource(resolveSourceFields(query, EntityType.MUTATION), EMPTY_SOURCE_FIELDS);
-    }
-
+    setFetchSourceOfGetRequest(search, query, EntityType.MUTATION);
     val response = search.execute().actionGet();
     checkResponseState(id, response, EntityType.MUTATION);
 

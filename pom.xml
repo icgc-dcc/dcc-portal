@@ -26,11 +26,17 @@
     <repository>
       <id>dcc-releases</id>
       <url>https://artifacts.oicr.on.ca/artifactory/dcc-release</url>
+      <snapshots><enabled>true</enabled></snapshots>
     </repository>
     <!-- Remove after the Elasticsearch 5.0.0 mappings are released -->
     <repository>
       <id>dcc-pr-snapshot</id>
       <url>https://artifacts.oicr.on.ca/artifactory/dcc-pr-snapshot</url>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+    <repository>
+      <id>dcc-dependencies</id>
+      <url>https://artifacts.oicr.on.ca/artifactory/dcc-dependencies</url>
     </repository>
   </repositories>
 
@@ -53,18 +59,16 @@
         <version>${dcc-download.version}</version>
       </dependency>
 
-      <dependency>
-        <groupId>org.codehaus.groovy</groupId>
-        <artifactId>groovy-all</artifactId>
-        <version>${groovy.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.icgc.dcc</groupId>
-        <artifactId>dcc-elasticsearch-plugins</artifactId>
-        <version>${elasticsearch.version}</version>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+    	<groupId>org.icgc.dcc</groupId>
+    	<artifactId>elasticsearch-plugins-shaded</artifactId>
+    	<version>5.0.0</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.icgc.dcc</groupId>
+	    <artifactId>elasticsearch-shaded</artifactId>
+	    <version>5.0.0</version>
+	</dependency>
       <dependency>
         <groupId>com.github.tlrx</groupId>
         <artifactId>elasticsearch-test</artifactId>
@@ -116,9 +120,7 @@
     <dcc-release.version>4.2.5-20161122.153150-11</dcc-release.version>
     <dcc-repository.version>1.0.0</dcc-repository.version>
 
-    <groovy.version>2.3.5</groovy.version>
     <log4j.version>2.6.2</log4j.version>
-    <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
   </properties>
 
 </project>
