@@ -1,9 +1,9 @@
 <section>
 <div data-ng-if="!analysisId" data-ng-controller="NewAnalysisController as NAC" class="analysis">
     <div
-        class="analysis-tool-selection col-md-7 col-md-push-2"
+        class="analysis-tool-selection"
         ng-class="{
-            'analysis-tool-selection--condensed': !!NAC.selectedAnalysis
+            'condensed': !!NAC.selectedAnalysis
             }"
     >
         <div
@@ -15,14 +15,12 @@
             <div class="analysis-tool__column--text">
                 <h2 class="analysis-tool__heading">
                     {{analysis.strings.name}}
-                    <small>
-                        <a
-                            class="demo"
-                            ng-click="analysis.launchDemo(); $event.stopPropagation(); $event.preventDefault();"
-                            tooltip="{{analysis.strings.demoDescription}}"
-                            href="#"
-                        > (demo) </a>
-                    </small>
+                    <a
+                        class="demo"
+                        ng-click="analysis.launchDemo(); $event.stopPropagation(); $event.preventDefault();"
+                        tooltip="{{analysis.strings.demoDescription}}"
+                        href="#"
+                    > (demo) </a>
                 </h2>
                 <p class="analysis-tool__description">
                     {{analysis.strings.description}}
@@ -49,22 +47,16 @@
         </a>
     </div>
     <div
-        class="row"
-        ng-show="NAC.selectedAnalysis"
+        class="sets-container"
+        ng-class="{'should-show': !!NAC.selectedAnalysis}"
     >
         <div ng-click="NAC.handleClickAnalysis()">
             <i class="fa fa-arrow-left"></i> Return to tool selection
         </div>
         <div
-            class="set-selection-wrapper col-md-7 col-md-push-2"
+            class="set-selection-wrapper"
         >
-            <div
-                style="font-size: 22px; color: #333; font-size: 500;"
-                data-ng-show="!NAC.selectedAnalysis"
-            >
-                <translate>Saved Sets</translate>
-            </div>
-            <div style="font-size:1.25rem" data-ng-show="NAC.selectedAnalysis">
+            <div style="font-size:1.25rem">
                 <small style="display: block; margin-bottom: -0.2em; color: #666;">
                     <translate>Select {{NAC.selectedAnalysis.type === 'enrichment' ? 'set' : 'sets'}} for
                 </small> 
@@ -79,22 +71,6 @@
                         > (demo) </a>
                     </small>
                 </div>
-            </div>
-
-            <div ng-show="!NAC.selectedAnalysis" style="color: #999;">
-                <translate has-markup>You can create and save new <strong>donor</strong>, <strong>gene</strong>, or <strong>mutation</strong> sets of interest from
-                <span class="action-toolbar"><span class="action-item"><i class="icon-search"></i><a href="/search">Advanced Search.</a></span></span></translate>
-                <br>
-
-                <translate has-markup>
-                    You can also
-                    <span class="action-toolbar">
-                        <span class="action-item">
-                            <i class="icon-floppy"></i>
-                            <a href="" data-ng-click="NAC.addCustomGeneSet()">Upload</a> your own gene set.
-                        </span>
-                    </span>
-                </translate>
             </div>
             <set-selection
                 sets="NAC.allSets"

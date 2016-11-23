@@ -1,8 +1,169 @@
 @import "./setSelection";
 
+.analysis-tool {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: rgba(0,0,0,0.87);
+  position: relative;
+  perspective: 1000px;
+  cursor: default;
+
+  &:hover {
+    background: transparent;
+  }
+
+  & + .analysis-tool {
+    margin-top: 40px;
+    &:before {
+      content: '';
+      display: block;
+      width: 100%;
+      position: absolute;
+      height: 1px;
+      background: #e6e6e6;
+      top: -20px;
+      transition: transform 0.2s ease;
+      .condensed & {
+        transform: translateX(calc(-100% + 170px));
+      }
+    }
+  }
+
+  &__image-wrapper {
+    width: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    transition: 0.2s ease;
+    .condensed & {
+      transform: translateY(20px) scale(0.9);
+    }
+  }
+
+  &__image, svg {
+    width: 100%;
+    max-width: calc(100% - 40px);
+    max-height: calc(100% - 20px);
+  }
+
+  &__column--text {
+    .condensed & {
+      transform: translateX(-90px);
+    }
+  }
+
+  &__heading {
+    font-size: 20px;
+    font-weight: 500;
+    position: relative;
+    display: inline-block;
+    transition: 0.2s ease;
+
+    .condensed & {
+      transform: translateX(-50%) translateY(-10px);
+    }
+
+    .demo {
+      position: absolute;
+      font-size: 16px;
+      bottom: 0;
+      right: -4px;
+      transform: translateX(100%);
+      transition: 0.2s ease;
+      .condensed & {
+        opacity: 0;
+      }
+    }
+  }
+
+  &__description {
+    font-size: 14px;
+    width: 33em;
+    transition: 0.2s ease;
+    .condensed & {
+      opacity: 0;
+    }
+  }
+
+  &--enrichment {
+    svg {
+      fill: #9b315b;
+      height: 100px;
+      width: auto;
+    }
+  }
+
+  &--phenotype {
+    svg {
+      width: 62%;
+    }
+    .person-fg {
+      fill: #0099e3;
+    }
+    .person-bg {
+      fill: #C20127;
+    }
+  }
+
+  &--set {
+    svg {
+      width: 62%;
+    }
+    path {
+      stroke: #ffffff;
+      stroke-width: 5px;
+    }
+    #top-right {
+      fill: rgba(166, 28, 133, 0.7);
+    }
+    #bottom {
+      fill: rgba(255, 148, 1, 0.7);
+    }
+    #top-left, #top-left-diff {
+      fill: rgba(#0099e3, 0.7)
+      
+    }
+  }
+
+  &--oncogrid {
+    svg {
+      width: 65%;
+    }
+    .st0 {
+      fill: rgba(155, 49, 91, 0.84);
+    }
+  }
+
+  &--suggestions {
+    .analysis-tool__heading, .analysis-tool__description {
+      color: #9b315b;
+    }
+  }
+}
+
+.sets-container {
+  position: absolute;
+  top: 0;
+  left: 210px;
+  width: calc(100% - 210px);
+  transition: 0.2s ease;
+  transform: translateX(0);
+  &:not(.should-show) {
+    opacity: 0;
+    transform: translateX(10%);
+    pointer-events: none;
+  }
+}
+
 .analysis {
    width: 100%;
    padding:0px;
+   position: relative;
+   perspective: 1000px;
 
    &:before{
      display: none;
@@ -13,177 +174,8 @@
    }
 
   .analysis-tool-selection {
-    transition: width 0.2s $inOutQuad;
     &--condensed {
-      left: 0;
-      width: 260px;
-      .analysis-tool {
-        position: relative;
-        height: 170px;
-        justify-content: space-between;
-        flex-direction: column;
-
-        &:hover {
-          .analysis-tool__image-wrapper {
-            filter: blur(6px) opacity(0.3);
-          }
-          .analysis-tool__description {
-            opacity: 1;
-            transform: translateZ(0px);
-          }
-        }
-
-        &__image-wrapper {
-          order: 2;
-          margin-bottom: 20px;
-          transition: filter 0.1s $inOutQuad;
-        }
-
-        &__column--text {
-          width: 100%;
-        }
-        
-        & + .analysis-tool {
-          margin-top: 0;
-          &:before {
-            display: none;
-          } 
-        }
-
-        &__heading, &__description {
-          /*position: absolute;*/
-        }
-        &__heading {
-          left: 50%;
-          transform: translateX(-50%);
-          .demo {
-            display: none;
-          }
-        }
-        &__description {
-          cursor: default;
-          font-size: 13px;
-          position: absolute;
-          bottom: 10px;
-          left: 0;
-          width: calc(100% - 2em);
-          height: calc(100% - 60px);
-          margin: 0 1em;
-          line-height: 1.5;
-          transform: translateZ(50px);
-          opacity: 0;
-          transition: filter 0.1s $inOutQuad, transform 0.25s $outQuad, opacity 0.25s $inOutQuad;
-        }
-      }
-    }
-  }
-
-  .analysis-tool {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    color: rgba(0,0,0,0.87);
-    position: relative;
-    justify-content: center;
-    perspective: 1000px;
-
-    &:hover {
-      background: transparent;
-    }
-
-    & + .analysis-tool {
-      margin-top: 40px;
-      &:before {
-        content: '';
-        display: block;
-        width: 100%;
-        position: absolute;
-        height: 1px;
-        background: #e6e6e6;
-        top: -20px;
-      }
-    }
-
-    &__image-wrapper {
-      width: 180px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-      flex-grow: 0;
-    }
-
-    &__image, svg {
-      width: 100%;
-      max-width: calc(100% - 40px);
-      max-height: calc(100% - 20px);
-    }
-
-    &__heading {
-      font-size: 20px;
-      font-weight: 500;
-      position: relative;
-      display: inline-block;
-    }
-
-    &__description {
-      font-size: 14px;
-      width: 33em;
-    }
-
-    &--enrichment {
-      svg {
-        fill: #9b315b;
-        height: 100px;
-        width: auto;
-      }
-    }
-
-    &--phenotype {
-      svg {
-        width: 62%;
-      }
-      .person-fg {
-        fill: #0099e3;
-      }
-      .person-bg {
-        fill: #C20127;
-      }
-    }
-
-    &--set {
-      svg {
-        width: 62%;
-      }
-      path {
-        stroke: #ffffff;
-        stroke-width: 5px;
-      }
-      #top-right {
-        fill: rgba(166, 28, 133, 0.7);
-      }
-      #bottom {
-        fill: rgba(255, 148, 1, 0.7);
-      }
-      #top-left, #top-left-diff {
-        fill: rgba(#0099e3, 0.7)
-        
-      }
-    }
-
-    &--oncogrid {
-      svg {
-        width: 65%;
-      }
-      .st0 {
-        fill: rgba(155, 49, 91, 0.84);
-      }
-    }
-
-    &--suggestions {
-      .analysis-tool__heading, .analysis-tool__description {
-        color: #9b315b;
-      }
+      
     }
   }
 

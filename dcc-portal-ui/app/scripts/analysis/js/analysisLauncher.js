@@ -239,7 +239,8 @@
     _this.selectedSets = [];
 
     _this.handleClickAnalysis = analysis => {
-      _this.selectedAnalysis = analysis === _this.selectedAnalysis ? undefined : analysis;
+      // _this.selectedAnalysis = analysis === _this.selectedAnalysis ? undefined : analysis;
+      _this.selectedAnalysis = analysis;
       _this.analysisType = (_this.selectedAnalysis || {}).type;
     };
 
