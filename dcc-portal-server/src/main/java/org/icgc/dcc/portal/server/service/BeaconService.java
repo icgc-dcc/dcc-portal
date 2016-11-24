@@ -81,12 +81,6 @@ public class BeaconService {
       String dataset) {
     String allele = alleleMutation.getMutation();
 
-    val poo = client.prepareSearch(index)
-        .setTypes(IndexType.MUTATION_CENTRIC.getId())
-        .setSearchType(QUERY_THEN_FETCH)
-        .get();
-    System.out.print(poo.toString());
-
     val search = client.prepareSearch(index)
         .setTypes(IndexType.MUTATION_CENTRIC.getId())
         .setSearchType(QUERY_THEN_FETCH);
@@ -117,8 +111,6 @@ public class BeaconService {
             + "params.position <= doc['chromosome_start'].value+length", ScriptType.INLINE, "painless",
             ImmutableMap.of("position", position)));
     search.setPostFilter(filter);
-
-    System.out.print(search.request().toString());
 
     val hits = search.execute().actionGet().getHits();
     String finalResult = "null";
