@@ -30,7 +30,7 @@ import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet.State;
-import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
+import org.icgc.dcc.portal.server.repository.BaseElasticsearchTest;
 import org.icgc.dcc.portal.server.repository.DonorRepository;
 import org.icgc.dcc.portal.server.repository.EntitySetRepository;
 import org.icgc.dcc.portal.server.repository.TermsLookupRepository;
@@ -42,7 +42,7 @@ import org.mockito.MockitoAnnotations;
 
 import lombok.val;
 
-public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
+public class PhenotypeAnalyzerTest extends BaseElasticsearchTest {
 
   PhenotypeAnalyzer phenotypeAnalyzer;
   DonorRepository donorRepository;

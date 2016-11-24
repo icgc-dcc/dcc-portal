@@ -40,7 +40,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-public class MutationRepositoryTest extends BaseElasticSearchTest {
+public class MutationRepositoryTest extends BaseElasticsearchTest {
 
   private static final String DEFAULT_SORT = "affectedDonorCountFiltered";
   private static final String DEFAULT_ORDER = "desc";

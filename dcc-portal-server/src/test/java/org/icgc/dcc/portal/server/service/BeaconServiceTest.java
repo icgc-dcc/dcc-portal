@@ -22,11 +22,11 @@ import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import org.assertj.core.api.Assertions;
 import org.icgc.dcc.portal.server.model.AlleleMutation;
 import org.icgc.dcc.portal.server.model.Beacon;
-import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
+import org.icgc.dcc.portal.server.repository.BaseElasticsearchTest;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BeaconServiceTest extends BaseElasticSearchTest {
+public class BeaconServiceTest extends BaseElasticsearchTest {
 
   private BeaconService service;
 

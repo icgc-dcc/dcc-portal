@@ -49,7 +49,7 @@ import org.icgc.dcc.portal.server.manifest.model.Manifest;
 import org.icgc.dcc.portal.server.manifest.model.ManifestFormat;
 import org.icgc.dcc.portal.server.model.Repository;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
-import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
+import org.icgc.dcc.portal.server.repository.BaseElasticsearchTest;
 import org.icgc.dcc.portal.server.repository.FileRepository;
 import org.icgc.dcc.portal.server.repository.ManifestRepository;
 import org.icgc.dcc.portal.server.repository.RepositoryRepository;
@@ -74,7 +74,7 @@ import lombok.val;
 /**
  * Test suite for {@link ManifestService}.
  */
-public class ManifestServiceTest extends BaseElasticSearchTest {
+public class ManifestServiceTest extends BaseElasticsearchTest {
 
   private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
   private static final ObjectNode EMPTY_FILTER = new FiltersParam("{}").get();
@@ -85,7 +85,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
 
   /**
    * We only have two documents in the test index. See this file for details:
-   * {@link BaseElasticSearchTest.MANIFEST_TEST_DATA}. The following expected values come from the file. Update the
+   * {@link BaseElasticsearchTest.MANIFEST_TEST_DATA}. The following expected values come from the file. Update the
    * values here if the fixture file is changed.
    */
   private final static class ExpectedValues {

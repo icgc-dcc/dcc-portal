@@ -41,7 +41,7 @@ import com.google.common.collect.Sets;
 import lombok.val;
 
 //@RunWith(MockitoJUnitRunner.class)
-public class DonorRepositoryTest extends BaseElasticSearchTest {
+public class DonorRepositoryTest extends BaseElasticsearchTest {
 
   private static final String DEFAULT_SORT = "ssmAffectedGenes";
   private static final String DEFAULT_ORDER = "desc";

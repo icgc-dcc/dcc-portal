@@ -30,7 +30,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.icgc.dcc.portal.server.model.IndexType;
-import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
+import org.icgc.dcc.portal.server.repository.BaseElasticsearchTest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +38,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AggregationToFacetConverterTest extends BaseElasticSearchTest {
+public class AggregationToFacetConverterTest extends BaseElasticsearchTest {
 
   private static final String AGG_NAME = "consequenceTypeNested";
   private static final String MISSING_AGG_NAME = AGG_NAME + "_missing";

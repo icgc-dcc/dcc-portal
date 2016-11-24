@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Ignore
 @Slf4j
-public class RepositoryTest extends BaseElasticSearchTest {
+public class RepositoryTest extends BaseElasticsearchTest {
 
   @Before
   public void setUpRepositoryTest() throws Exception {

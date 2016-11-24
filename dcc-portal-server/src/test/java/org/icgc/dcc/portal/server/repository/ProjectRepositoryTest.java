@@ -39,7 +39,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-public class ProjectRepositoryTest extends BaseElasticSearchTest {
+public class ProjectRepositoryTest extends BaseElasticsearchTest {
 
   private static final String DEFAULT_SORT = "totalDonorCount";
   private static final String DEFAULT_ORDER = "desc";

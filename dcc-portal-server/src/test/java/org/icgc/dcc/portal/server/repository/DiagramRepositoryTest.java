@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableMap;
 
 import lombok.val;
 
-public class DiagramRepositoryTest extends BaseElasticSearchTest {
+public class DiagramRepositoryTest extends BaseElasticsearchTest {
 
   DiagramRepository diagramRepository;
 

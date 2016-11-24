@@ -51,7 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SeedDecorators(value = SecurityManagerWorkaroundSeedDecorator.class)
 @ClusterScope(scope = Scope.TEST, numDataNodes = 1, maxNumDataNodes = 1, supportsDedicatedMasters = false, transportClientRatio = 0.0)
-public class BaseElasticSearchTest extends ESIntegTestCase {
+public class BaseElasticsearchTest extends ESIntegTestCase {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
   private static final ObjectReader READER = MAPPER.readerFor(ObjectNode.class);
