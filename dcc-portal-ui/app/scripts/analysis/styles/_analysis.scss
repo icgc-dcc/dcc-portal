@@ -71,9 +71,10 @@
       height: 1px;
       background: #e6e6e6;
       top: -20px;
-      transition: transform 0.4s;
+      transition: all 0.4s;
       transition-timing-function: $inQuad;
       .condensed & {
+        opacity: 0;
         transition-timing-function: $outQuad;
         transform: translateX(-110%);
       }
@@ -253,133 +254,6 @@
    
    h3 {
       margin-top: 0;
-   }
-
-   .analysis-tile-container {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      justify-content: space-between;
-      width: calc(50% - 1rem);
-      margin: 0 0.5rem 1rem;
-      overflow: hidden;
-      transition: all 0.2s $inQuad;
-
-      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.07);
-      border-top: 1px solid rgba(0, 0, 0, 0.04);
-      border-left: 1px solid rgba(0, 0, 0, 0.04);
-
-      &:after {
-        content: '';
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 3px;
-        background-color: #e9931c;
-        left: 0;
-        bottom: 0;
-        transition: all 0.2s $inQuad;
-        transform: translateX(calc(100% + 1px));
-      }
-
-      &.selected {
-        &:after {
-          transition: all 0.2s $outExpo;
-          transform: translateX(0);
-        }
-        .analysis-title {
-          color: #e9931c;
-        }
-      }
-
-      &:hover {
-        .reveal-item{
-          &:first-child {
-            opacity: 0;
-            transform: translateX(-10px) translateY(2%) translateZ(-100px);
-          } 
-          &:last-child {
-            opacity: 1;
-            transform: translateX(-100%) translateY(0%) translateZ(0px);
-          }
-        }
-      }
-
-
-      .analysis-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #811D52;
-        -webkit-font-smoothing: antialiased;
-        text-align: center;
-        transition: 0.2s color $inQuad;
-      }
-
-      .analysis-tile-detail {
-        font-size: 13px;
-        line-height: 1.6;
-        margin: 1em 1.5em;
-        color: #666;
-      }
-
-      .reveal-window {
-        width: 100%;
-        overflow: hidden;
-      }
-
-      .reveal-container {
-        display: flex;
-        flex-direction: row;
-        width: 200%;
-        perspective: 1000px;
-        user-select: none;
-      }
-
-      .reveal-item {
-        width: 50%;
-        overflow: hidden;
-        &:first-child {
-          opacity: 1;
-          transform: translateY(0) translateZ(0px);
-          transition: transform .2s $inQuad, opacity 0.25s ease;
-        }
-        &:last-child {
-          opacity: 0;
-          transform: translateX(calc(-100% + 10px)) translateY(5%) translateZ(100px);
-          transition: transform .2s $outQuad, opacity 0.25s ease;
-        }
-      }
-
-      .demo-title, .demo-description {
-         transition: all 0.15s ease;
-         transition-delay: 0;
-      }
-
-      .demo-title {
-         font-size: 13px;
-         font-weight: 600;
-         color: #F38721;
-         margin-bottom: 0.2em;
-      }
-
-      .demo-description {
-         line-height: 1.5;
-         font-size: 11px;
-         color: #99adb3;
-      }
-
-      .analysis-tile {
-         transition: color .5s, background .5s;
-         width: 100%;
-
-         &.in-progress {
-           &:hover {
-             color: $grey;
-           }
-         }
-      }
    }
 
    .sidepanel {
