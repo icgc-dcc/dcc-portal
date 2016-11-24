@@ -1,11 +1,37 @@
 @import "./setSelection";
 
+.analysis-tool-selection {
+  position: relative;
+  &.elevated {
+    z-index: 3;
+  }
+  &.condensed:after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    width: calc(100% - 300px);
+    height: 100%;
+    left: 200px;
+    top: 0;
+    background: linear-gradient(to right, rgba(255,255,255,0.93) 50%, rgba(255,255,255,0) 100%);
+    transition: 0.7s $outExpo;
+    transform-origin: 0 0;
+    transform: scaleX(0);
+  }
+  &.condensed.elevated:after {
+    transform: scaleX(1);
+  }
+}
+
+$condensedWidth: 180px;
+
 .analysis-tool {
   display: flex;
   flex-direction: row;
   align-items: center;
   color: rgba(0,0,0,0.87);
   position: relative;
+  z-index: 2;
   perspective: 1000px;
   cursor: pointer;
 
@@ -17,6 +43,16 @@
     .analysis-tool__image-wrapper > * {
       transition: 0.2s ease;
     }
+    &:not(.analysis-tool--selected) {
+      .analysis-tool__image-wrapper > * {
+        transform: scale(0.9);
+      }
+    }
+    &:not(:hover) {
+      .analysis-tool__description {
+        color: rgba(0,0,0,0.6);
+      }
+    }
     &:not(.analysis-tool--selected):not(:hover) {
       .analysis-tool__image-wrapper > * {
         filter: grayscale(20%) opacity(0.6);
@@ -27,9 +63,20 @@
     }
   }
 
+  .condensed-hitarea {
+    position: absolute;
+    width: $condensedWidth;
+    height: 150%;
+    left: 0;
+    z-index: 1;
+    display: none;
+    .condensed & {
+      display: block;
+    }
+  }
+
   @for $i from 0 to 5 {
-    $step: log($i + 1) * 0.15s;
-    @debug $step; 
+    $step: log($i + 1) * 0.15s; 
     &:nth-child(#{$i}) {
       &:before {
         transition-delay: 0.1 + $step;
@@ -57,6 +104,9 @@
         .condensed & {
           transition-delay: 0s;
         }
+        .condensed.elevated & {
+          transition-delay: $step, $step, 0.1s;
+        }
       }
     }
   }
@@ -82,7 +132,7 @@
   }
 
   &__image-wrapper {
-    width: 180px;
+    width: $condensedWidth;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -104,6 +154,7 @@
   &__column--text {
     transition: 0.2s $inQuad;
     .condensed & {
+      pointer-events: none;
       transform: translateX(-90px);
     }
   }
@@ -138,6 +189,11 @@
     transition: 0.16s ease;
     .condensed & {
       opacity: 0;
+    }
+    .condensed.elevated & {
+      opacity: 1;
+      transform: translateX(100px);
+      transition: transform 0.3s $outQuad, opacity 0.3s ease, color 0.1s ease;
     }
   }
 
@@ -206,6 +262,7 @@
 
 .sets-container {
   position: absolute;
+  z-index: 2;
   top: 0;
   left: 220px;
   width: calc(100% - 220px);

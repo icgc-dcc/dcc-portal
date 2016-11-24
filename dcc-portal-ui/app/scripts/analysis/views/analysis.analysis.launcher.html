@@ -3,7 +3,8 @@
     <div
         class="analysis-tool-selection"
         ng-class="{
-            'condensed': NAC.shouldShowSetSelection
+            'condensed': NAC.shouldShowSetSelection,
+            'elevated': NAC.shouldElevateToolSelection,
         }"
     >
         <div
@@ -11,10 +12,20 @@
             class="analysis-tool analysis-tool--{{analysis.type}}"
             ng-click="NAC.handleClickAnalysis(analysis); NAC.shouldShowSetSelection = true;"
             ng-class="{
-                'analysis-tool--selected': analysis === NAC.selectedAnalysis
+                'analysis-tool--selected': analysis === NAC.selectedAnalysis,
             }"
         >
-            <div class="analysis-tool__image-wrapper" ng-if="analysis.image" ng-bind-html="analysis.image | to_trusted"></div>
+            <div
+                class="condensed-hitarea"
+                ng-mouseover="NAC.shouldElevateToolSelection = true"
+                ng-mouseleave="NAC.shouldElevateToolSelection = false"
+                ng-click="NAC.shouldElevateToolSelection = false"
+            ></div>
+            <div
+                class="analysis-tool__image-wrapper"
+                ng-if="analysis.image"
+                ng-bind-html="analysis.image | to_trusted"
+            ></div>
             <div class="analysis-tool__column--text">
                 <h2 class="analysis-tool__heading">
                     {{analysis.strings.name}}
