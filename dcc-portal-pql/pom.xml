@@ -99,10 +99,6 @@
 
   <properties>
     <elasticsearch.version>5.0.0</elasticsearch.version>
-    <jackson.version>2.8.1</jackson.version>
-    <jackson-smile.version>2.8.1</jackson-smile.version>
-    <jackson-yaml.version>2.8.1</jackson-yaml.version>
-    <jackson-csv.version>2.8.1</jackson-csv.version>
     <junit.version>4.11</junit.version>
     <antlr4.version>4.5.1</antlr4.version>
     <antlr4-maven.version>4.5.1</antlr4-maven.version>

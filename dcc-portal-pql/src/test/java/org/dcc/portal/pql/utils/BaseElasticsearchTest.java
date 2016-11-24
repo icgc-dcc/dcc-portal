@@ -38,8 +38,10 @@ import org.elasticsearch.plugins.Plugin;
 import org.elasticsearch.test.ESIntegTestCase;
 import org.elasticsearch.test.ESIntegTestCase.ClusterScope;
 import org.elasticsearch.test.ESIntegTestCase.Scope;
+import org.icgc.dcc.common.es.security.SecurityManagerWorkaroundSeedDecorator;
 import org.junit.Before;
 
+import com.carrotsearch.randomizedtesting.annotations.SeedDecorators;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -53,11 +55,12 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@SeedDecorators(value = SecurityManagerWorkaroundSeedDecorator.class)
 @ClusterScope(scope = Scope.TEST, numDataNodes = 1, maxNumDataNodes = 1, supportsDedicatedMasters = false, transportClientRatio = 0.0)
 public class BaseElasticsearchTest extends ESIntegTestCase {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
-  private static final ObjectReader READER = MAPPER.readerFor(ObjectNode.class);
+  private static final ObjectReader READER = MAPPER.reader(ObjectNode.class);
 
   /**
    * Test configuration.
