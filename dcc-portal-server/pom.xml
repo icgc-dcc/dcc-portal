@@ -80,9 +80,14 @@
       <artifactId>dcc-download-client</artifactId>
     </dependency>
     <dependency>
-    <groupId>org.icgc.dcc</groupId>
-    <artifactId>dcc-release-resources</artifactId>
-    <version>4.2.5-20161117.210648-8</version>
+	    <groupId>org.icgc.dcc</groupId>
+	    <artifactId>dcc-release-resources</artifactId>
+	    <version>4.2.5-20161117.210648-8</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.icgc.dcc</groupId>
+	    <artifactId>dcc-repository-resources</artifactId>
+	    <version>1.0.10-SNAPSHOT</version>
 	</dependency>
 
     <!-- JDBI -->
@@ -116,12 +121,10 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
-      <version>${log4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>${log4j.version}</version>
     </dependency>
 
     <!-- Servlets -->

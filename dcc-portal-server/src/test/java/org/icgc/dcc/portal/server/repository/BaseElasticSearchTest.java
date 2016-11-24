@@ -64,6 +64,7 @@ public class BaseElasticSearchTest extends ESIntegTestCase {
   protected static final String REPOSITORY_INDEX_NAME = "test-icgc-repository";
   protected static final String SETTINGS_FILE_NAME = "index.settings.json";
   protected static final String JSON_DIR = "org/icgc/dcc/release/resources/mappings";
+  protected static final String REPO_JSON_DIR = "org/icgc/dcc/repository/resources/mappings";
   protected static final String FIXTURES_DIR = "src/test/resources/fixtures";
   protected static final URL SETTINGS_FILE = getMappingFileUrl(SETTINGS_FILE_NAME);
 
@@ -112,7 +113,8 @@ public class BaseElasticSearchTest extends ESIntegTestCase {
     val createBuilder = prepareCreate(indexName, 1, settings);
     for (val typeName : typeNames) {
       log.debug("Creating mapping for type: {}", typeName);
-      createBuilder.addMapping(typeName.getId(), mappingSource(typeName));
+      createBuilder.addMapping(typeName.getId(),
+          indexName.equals(REPOSITORY_INDEX_NAME) ? repoMappingSource(typeName) : mappingSource(typeName));
     }
 
     val created = createBuilder.execute().actionGet().isAcknowledged();
@@ -162,6 +164,14 @@ public class BaseElasticSearchTest extends ESIntegTestCase {
 
   private static URL getMappingFileUrl(String fileName) {
     return Resources.getResource(JSON_DIR + "/" + fileName);
+  }
+
+  private static URL getRepoMappingFileUrl(String fileName) {
+    return Resources.getResource(REPO_JSON_DIR + "/" + fileName);
+  }
+
+  private static String repoMappingSource(Type typeName) {
+    return mappingSource(getRepoMappingFileUrl(typeName.getId() + ".mapping.json"));
   }
 
   private static String mappingSource(Type typeName) {
