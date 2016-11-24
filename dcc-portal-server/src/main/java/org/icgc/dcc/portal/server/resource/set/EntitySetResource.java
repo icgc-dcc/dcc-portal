@@ -22,6 +22,7 @@ import static com.sun.jersey.core.header.ContentDisposition.type;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ASYNC;
+import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_DEFINITION_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_DEFINITION_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_ID_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_ID_VALUE;
@@ -30,6 +31,8 @@ import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_UPDAT
 import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -52,6 +55,7 @@ import org.icgc.dcc.portal.server.model.BaseEntitySet.Type;
 import org.icgc.dcc.portal.server.model.DerivedEntitySetDefinition;
 import org.icgc.dcc.portal.server.model.EntitySet;
 import org.icgc.dcc.portal.server.model.EntitySetDefinition;
+import org.icgc.dcc.portal.server.model.UnionUnit;
 import org.icgc.dcc.portal.server.model.param.UUIDSetParam;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.service.BadRequestException;
@@ -59,6 +63,8 @@ import org.icgc.dcc.portal.server.service.EntitySetService;
 import org.icgc.dcc.portal.server.service.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.google.common.collect.ImmutableSet;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -128,6 +134,25 @@ public class EntitySetResource extends Resource {
     }
 
     return updatedSet;
+  }
+
+  @POST
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}/entities")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Adds entities to an existing set based on set definition.", response = EntitySet.class)
+  public EntitySet addSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) @FormParam(API_ENTITY_SET_DEFINITION_PARAM) final EntitySetDefinition tempSetDefinition) {
+
+    val currentSet = this.getEntitySet(entitySetId);
+    val tempSet = service.createEntitySet(tempSetDefinition, false);
+
+    val sets = ImmutableSet.of(currentSet.getId(), tempSet.getId());
+    val unionUnit = new UnionUnit(sets, Collections.emptySet());
+    val derivedSetDefinition = new DerivedEntitySetDefinition(Arrays.asList(unionUnit), currentSet.getName(),
+        currentSet.getDescription(), currentSet.getType(), true);
+
+    return service.updateEntitySet(entitySetId, derivedSetDefinition);
   }
 
   @GET
