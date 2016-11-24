@@ -53,7 +53,7 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
   public void setUpPhenotypeAnalyzerTest() throws Exception {
     MockitoAnnotations.initMocks(this);
     prepareIndex(RELEASE_INDEX_NAME, DONOR_CENTRIC);
-    loadData("PhenotypeAnalyzer.json");
+    loadData("PhenotypeAnalyzerTest.json");
     loadData("ManifestServiceTest.json");
 
     val set = new EntitySet(UUID.randomUUID(), State.FINISHED, 200L, "test", "test", BaseEntitySet.Type.DONOR, 1);
