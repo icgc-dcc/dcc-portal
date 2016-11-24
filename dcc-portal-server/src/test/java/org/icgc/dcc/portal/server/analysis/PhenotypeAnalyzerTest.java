@@ -37,13 +37,11 @@ import org.icgc.dcc.portal.server.repository.TermsLookupRepository;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 
 import lombok.val;
 
-@RunWith(MockitoJUnitRunner.class)
 public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
 
   PhenotypeAnalyzer phenotypeAnalyzer;
@@ -53,6 +51,7 @@ public class PhenotypeAnalyzerTest extends BaseElasticSearchTest {
 
   @Before
   public void setUpPhenotypeAnalyzerTest() throws Exception {
+    MockitoAnnotations.initMocks(this);
     prepareIndex(RELEASE_INDEX_NAME, DONOR_CENTRIC);
     loadData("PhenotypeAnalyzer.json");
     loadData("ManifestServiceTest.json");

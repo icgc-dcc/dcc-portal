@@ -298,7 +298,6 @@
             <exclude>**/*IT.java</exclude>
             <exclude>**/*IntegrationTest.java</exclude>
           </excludes>
-          <argLine>-Dtests.security.manager=false</argLine>
         </configuration>
       </plugin>
 
