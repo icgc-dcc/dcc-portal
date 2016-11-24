@@ -17,14 +17,14 @@
 
 package org.icgc.dcc.portal.server.service;
 
-import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-
 import org.assertj.core.api.Assertions;
 import org.icgc.dcc.portal.server.model.AlleleMutation;
 import org.icgc.dcc.portal.server.model.Beacon;
 import org.icgc.dcc.portal.server.repository.BaseElasticsearchTest;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 
 public class BeaconServiceTest extends BaseElasticsearchTest {
 
@@ -34,8 +34,7 @@ public class BeaconServiceTest extends BaseElasticsearchTest {
   public void setUpBeaconServiceTest() throws Exception {
     prepareIndex(RELEASE_INDEX_NAME, MUTATION_CENTRIC);
     loadData("BeaconServiceTest.json");
-    service = new BeaconService(client, RELEASE_INDEX_NAME);
-    System.out.println("SETUP HAS FINISHED");
+    service = new BeaconService(client(), RELEASE_INDEX_NAME);
   }
 
   @Test

@@ -106,7 +106,7 @@ public class BeaconService {
         allele.contains(">") ? generateInsertionOrDeletionScriptField(params) : generateDefaultScriptField(params));
 
     val filter = QueryBuilders.scriptQuery(
-        new Script("def m = doc['mutation'].value; "
+        new Script("def m = doc['mutation'].value; if (m == null) return false;"
             + "int length = m.substring(m.indexOf('>')+1,m.length()).length();"
             + "params.position <= doc['chromosome_start'].value+length", ScriptType.INLINE, "painless",
             ImmutableMap.of("position", position)));
@@ -132,8 +132,8 @@ public class BeaconService {
     val scriptString = "def m = doc['mutation'].value; "
         + "int offset = (int) params.position - (int) doc['chromosome_start'].value;"
         + "int begin = m.indexOf('>') + 1 + offset;"
-        + "int foo = begin + params.allelelength; int bar = m.length();"
-        + "int end = foo < bar ? foo : bar;"
+        + "int i = begin + params.allelelength; int j = m.length();"
+        + "int end = i < j ? i : j;"
         + "m = m.substring(begin,end);"
         + "m==params.allele";
     return new Script(scriptString, ScriptType.INLINE, "painless", params);
