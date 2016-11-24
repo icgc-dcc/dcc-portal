@@ -543,5 +543,16 @@ a.no-style {
   }
 }
 
+/* legend icon */
+.legend-icon{
+  color: #666;
+  font-size: large;
+  vertical-align: middle;
+
+  &.baseline{
+    vertical-align: baseline;
+  }
+}
+
 @import "override.scss";
 @import "flags.scss";
