@@ -278,7 +278,7 @@
             minCellHeight: 8,
             trackHeight: 12,
             trackLegends: trackLegends,
-            trackLegendLabel: '<i class="icon-help og-legend-icon"></i>',
+            trackLegendLabel: '<i class="icon-info og-legend-icon"></i>',
             templates,
             donorTracks: donorTracks,
             donorOpacityFunc: donorOpacity,
