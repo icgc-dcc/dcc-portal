@@ -126,22 +126,40 @@ public class EntitySetResource extends Resource {
   public EntitySet updateSet(
       @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
       @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition,
+      // TODO: make operation an enum
+      @ApiParam(value = "Entity Set Operation") @QueryParam("operation") final String operation,
       @ApiParam(value = API_ENTITY_SET_UPDATE_NAME) @QueryParam(API_ENTITY_SET_UPDATE_PARAM) final String newName) {
 
+    // could this be made redundant by the set definition? set defs have `name` field
     if (newName != null) {
       service.updateEntitySet(entitySetId, newName);
+    }
+
+    if (operation != null && modifierSetDefinition == null) {
+      throw new BadRequestException("A 'set definition' is required if 'operation' is not null");
     }
 
     if (modifierSetDefinition != null) {
       val currentSet = this.getEntitySet(entitySetId);
       val modifierSet = service.createEntitySet(modifierSetDefinition, false);
+      DerivedEntitySetDefinition derivedSetDefinition;
 
-      val unionUnit1 = new UnionUnit(ImmutableSet.of(modifierSet.getId()), Collections.emptySet());
-      val unionUnit2 = new UnionUnit(ImmutableSet.of(currentSet.getId()), Collections.emptySet());
-      val derivedSetDefinition =
-          new DerivedEntitySetDefinition(Arrays.asList(unionUnit1, unionUnit2), currentSet.getName(),
-              currentSet.getDescription(), currentSet.getType(), true);
-      service.updateEntitySet(entitySetId, derivedSetDefinition);
+      if (operation.equals("ADD")) {
+        UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(modifierSet.getId()), Collections.emptySet());
+        UnionUnit unionUnit2 = new UnionUnit(ImmutableSet.of(currentSet.getId()), Collections.emptySet());
+        derivedSetDefinition =
+            new DerivedEntitySetDefinition(Arrays.asList(unionUnit1, unionUnit2), currentSet.getName(),
+                currentSet.getDescription(), currentSet.getType(), false);
+        service.updateEntitySet(entitySetId, derivedSetDefinition);
+      } else if (operation.equals("REMOVE")) {
+        UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(currentSet.getId()), ImmutableSet.of(modifierSet.getId()));
+        derivedSetDefinition =
+            new DerivedEntitySetDefinition(Arrays.asList(unionUnit1), currentSet.getName(),
+                currentSet.getDescription(), currentSet.getType(), false);
+        service.updateEntitySet(entitySetId, derivedSetDefinition);
+      } else {
+        throw new BadRequestException("Invalid operation" + operation);
+      }
     }
 
     return this.getEntitySet(entitySetId);
