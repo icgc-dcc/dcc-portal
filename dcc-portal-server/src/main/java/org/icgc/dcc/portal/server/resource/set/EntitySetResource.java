@@ -136,10 +136,11 @@ public class EntitySetResource extends Resource {
       val currentSet = this.getEntitySet(entitySetId);
       val modifierSet = service.createEntitySet(modifierSetDefinition, false);
 
-      val sets = ImmutableSet.of(currentSet.getId(), modifierSet.getId());
-      val unionUnit = new UnionUnit(sets, Collections.emptySet());
-      val derivedSetDefinition = new DerivedEntitySetDefinition(Arrays.asList(unionUnit), currentSet.getName(),
-          currentSet.getDescription(), currentSet.getType(), true);
+      val unionUnit1 = new UnionUnit(ImmutableSet.of(modifierSet.getId()), Collections.emptySet());
+      val unionUnit2 = new UnionUnit(ImmutableSet.of(currentSet.getId()), Collections.emptySet());
+      val derivedSetDefinition =
+          new DerivedEntitySetDefinition(Arrays.asList(unionUnit1, unionUnit2), currentSet.getName(),
+              currentSet.getDescription(), currentSet.getType(), true);
       service.updateEntitySet(entitySetId, derivedSetDefinition);
     }
 
