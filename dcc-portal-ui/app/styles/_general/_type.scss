@@ -76,4 +76,14 @@ h5 {
   font-style: italic;
 }
 
+b, i {
+  font-weight: normal;
+  font-style: normal;
+}
+
+code, pre {
+  font-family: $mono-stack;
+}
+
+
 
