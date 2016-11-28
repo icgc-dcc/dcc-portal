@@ -373,3 +373,14 @@ a.no-style {
     margin-left: 0.3em;
   }
 }
+
+/* legend icon */
+.legend-icon{
+  color: #666;
+  font-size: large;
+  vertical-align: middle;
+
+  &.baseline{
+    vertical-align: baseline;
+  }
+}
