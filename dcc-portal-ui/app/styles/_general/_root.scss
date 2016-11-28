@@ -28,4 +28,22 @@ $focus: '&:hover, &:focus, &:active';
 //-----------------------------------------------------------------------------
 // Root
 
+html {
+  font-family: $sans-stack;
+  font-size: .7rem;
+  line-height: 1.618rem;
+  overflow-y: scroll;
+
+  @include breakpoint($break-laptop) {
+    font-size: .8rem;
+  }
+  @include breakpoint($break-widescreen) {
+    font-size: 0.9rem;
+  }
+}
+
+html, body {
+  background: $greyLightest;
+}
+
 //@include establish-baseline;
