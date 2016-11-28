@@ -82,7 +82,7 @@ function svgToPngDataUri(svg, {width, height}) {
           palette: ctrl.palette,
           markerType: 'line',
           xDomain: state.xDomain,
-          height: isFullScreen() && ( window.innerHeight - 100 ),
+          height: isFullScreen() && ( window.innerHeight - 140 ),
           getSetSymbol: SetOperationService.getSetShortHandSVG,
           onMouseEnterDonor: function (event, donor) {
             $scope.$apply(function () {

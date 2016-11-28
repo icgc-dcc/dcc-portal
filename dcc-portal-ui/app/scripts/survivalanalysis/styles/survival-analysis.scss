@@ -89,9 +89,17 @@ $faded: #e6dede;
 .survival-analysis {
   position: relative;
 
+  &:not(:hover) {
+    .tool-buttons {
+      opacity: 0;
+    }
+  }
   .tool-buttons {
+    opacity: 1;
+    transition: all 0.25s ease;
+    text-align: right;
     position: absolute;
-    right: 0;
+    right: 0; 
   }
 
   .composite-button {
@@ -136,13 +144,10 @@ $faded: #e6dede;
   }
 
   .legend {
-    position: absolute;
-    bottom: -20px;
-    left: 0;
-    right: 0;
     text-align: center;
     display: flex;
     justify-content: center;
+    flex-direction: column;
 
     & > li {
       cursor: default;
@@ -170,13 +175,12 @@ $faded: #e6dede;
     }
 
   }
-
-  .p-value-test{
-    text-align: center;
-  }
 }
 
 .exported-survival-svg {
+  .legend {
+    flex-direction: row;
+  }
   .legend li {
     cursor: default;
     font-size: 11px;
