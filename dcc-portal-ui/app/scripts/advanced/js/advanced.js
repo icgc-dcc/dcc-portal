@@ -66,6 +66,18 @@ angular.module('icgc.advanced.controllers', [
       _locationFilterCache = _filterService.getCachedFiltersFactory();
 
       var _isInAdvancedSearchCtrl = true;
+      
+      // NOTE: using IDs instead of storing references to entities b/c pagination results in new objects  
+      this.selectedEntityIdsMap = {};
+      this.toggleSelectedEntity = (type, entity) => {
+        if (!this.selectedEntityIdsMap[type]) {
+          this.selectedEntityIdsMap[type] = [];
+        }
+        this.selectedEntityIdsMap[type] = _.xor(this.selectedEntityIdsMap[type], [entity.id]);
+      };
+      this.isEntitySelected = (type, entity) => {
+        return this.selectedEntityIdsMap[type] && this.selectedEntityIdsMap[type].includes(entity.id);
+      }
 
 
       function _refresh() {
