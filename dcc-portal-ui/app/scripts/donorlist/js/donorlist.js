@@ -15,6 +15,9 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// const deepmerge = require('deepmerge');
+import deepmerge from 'deepmerge';
+
 // Declaring 'icgc.donorlist', used in app.js
 (function() {
   'use strict';
@@ -97,12 +100,8 @@
     .controller ('DonorListController', function ($scope, $timeout, $location, $modalInstance,
     DonorSetVerificationService, LocationService, Page) {
 
-    const _this = this;
-
     var DELAY = 1000;
     var verificationPromise = null;
-
-    _this.selectedSets = [];
 
     $scope.checkAll = false;
     $scope.donorSets = DonorSetVerificationService.getDonorSets();
@@ -110,20 +109,19 @@
     /* Select all / de-select all */
     $scope.toggleCheckAll = function() {
       $scope.checkAll = !$scope.checkAll;
-
       $scope.donorSets.forEach(function(set) {
         set.checked = $scope.checkAll;
       });
     };
 
     $scope.updateSelectedSets = () => {
-      _this.selectedSets = [];
+      $scope.params.selectedSets = [];
       $scope.donorSets.forEach(function(set) {
         if (set.checked === true) {
-          _this.selectedSets.push(set);
+          $scope.params.selectedSets.push(set);
         }
       });
-      $scope.checkAll = (_this.selectedSets.length === $scope.donorSets.length) ? true : false ;
+      $scope.checkAll = ($scope.params.selectedSets.length === $scope.donorSets.length) ? true : false ;
     };
 
     function initialize() {
@@ -132,7 +130,8 @@
         state: '',
         myFile: null,
         fileName: '',
-        inputMethod: 'id'
+        inputMethod: 'id',
+        selectedSets: []
       };
       $scope.out = {};
       $timeout.cancel (verificationPromise);
@@ -230,8 +229,22 @@
     };
 
     $scope.save = function() {
-      createDonorList();
-      closeMe();
+      if(!_.isEmpty($scope.params.selectedSets)){
+        let filters = LocationService.filters(), donorSetFilter = {};
+        _.each($scope.params.selectedSets, (set) => {
+          filters = deepmerge(filters, set.advFilters);
+        });
+        // if(filters.donor.id){
+        //   filters.donor.id = donorSetFilter.donor.id;
+        // }else{
+        //   filters = deepmerge(filters, donorSetFilter);
+        // }
+        LocationService.filters(filters);
+        closeMe();
+      } else {
+        createDonorList();
+        closeMe();
+      }
     };
 
     // This triggers the upload after user selects a file.
