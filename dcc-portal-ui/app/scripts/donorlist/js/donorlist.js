@@ -15,7 +15,6 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// const deepmerge = require('deepmerge');
 import deepmerge from 'deepmerge';
 
 // Declaring 'icgc.donorlist', used in app.js
@@ -104,9 +103,11 @@ import deepmerge from 'deepmerge';
     var verificationPromise = null;
 
     $scope.checkAll = false;
+    $scope.isSavedSetVisible = true;
+    $scope.isUploadSetVisible = false;
     $scope.donorSets = DonorSetVerificationService.getDonorSets();
 
-    /* Select all / de-select all */
+    /* Select/deselect all */
     $scope.toggleCheckAll = function() {
       $scope.checkAll = !$scope.checkAll;
       $scope.donorSets.forEach(function(set) {
@@ -134,6 +135,7 @@ import deepmerge from 'deepmerge';
         selectedSets: []
       };
       $scope.out = {};
+      $scope.checkAll = false;
       $timeout.cancel (verificationPromise);
     }
     initialize();
@@ -230,15 +232,10 @@ import deepmerge from 'deepmerge';
 
     $scope.save = function() {
       if(!_.isEmpty($scope.params.selectedSets)){
-        let filters = LocationService.filters(), donorSetFilter = {};
+        let filters = LocationService.filters();
         _.each($scope.params.selectedSets, (set) => {
           filters = deepmerge(filters, set.advFilters);
         });
-        // if(filters.donor.id){
-        //   filters.donor.id = donorSetFilter.donor.id;
-        // }else{
-        //   filters = deepmerge(filters, donorSetFilter);
-        // }
         LocationService.filters(filters);
         closeMe();
       } else {

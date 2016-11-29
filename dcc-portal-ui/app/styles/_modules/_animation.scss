@@ -34,6 +34,17 @@
   animation-name: fadeInDownEnter;
 }
 
+/* chevron icon animation */
+.fa{
+  &.right{
+    transform: rotate(0deg);
+  }
+  &.down{
+    transform: rotate(90deg);
+  }
+  transition: 0.1s ease transform;
+}
+
 
 @keyframes fadeInDownEnter {
   from {
