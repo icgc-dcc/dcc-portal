@@ -250,18 +250,24 @@
           var templates = {
             mainGridCrosshair: `
               <div class="og-crosshair-tooltip">
-                <div>
-                  <span><b>Mutation</b>:&nbsp;</span>
-                  <span>{{observation.id}}</span>
-                </div>
+                {{#donor}}
                 <div>
                   <span><b>Donor</b>:&nbsp;</span>
                   <span>{{donor.id}}</span>
                 </div>
+                {{/donor}}
+                {{#gene}}
                 <div>
                   <span><b>Gene</b>:&nbsp;</span>
                   <span>{{gene.symbol}}</span>
-                </div>`
+                </div>
+                {{/gene}}
+                {{#obs}}
+                <div>
+                  <span><b>Mutations</b>:&nbsp;</span>
+                  <span>{{obs}}</span>
+                </div>
+                {{/obs}}`
           };
 
           $scope.params = {
