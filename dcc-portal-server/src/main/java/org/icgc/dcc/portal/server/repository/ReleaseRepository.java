@@ -42,6 +42,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ReleaseRepository {
 
+  private static final String[] NO_EXCLUDE = null;
+
   private final Client client;
   private final String indexName;
 
@@ -60,7 +62,7 @@ public class ReleaseRepository {
         .setSize(query.getSize())
         .addSort(FIELDS_MAPPING.get(EntityType.RELEASE).get(query.getSort()), query.getOrder());
 
-    search.storedFields(getFields(query, EntityType.RELEASE));
+    search.setFetchSource(getFields(query, EntityType.RELEASE), NO_EXCLUDE);
 
     log.debug("{}", search);
     SearchResponse response = search.execute().actionGet();
@@ -79,7 +81,7 @@ public class ReleaseRepository {
 
   public Map<String, Object> findOne(String id, Query query) {
     val search = client.prepareGet(indexName, IndexType.RELEASE.getId(), id);
-    search.setStoredFields(getFields(query, EntityType.RELEASE));
+    search.setFetchSource(getFields(query, EntityType.RELEASE), NO_EXCLUDE);
 
     val response = search.execute().actionGet();
     checkResponseState(id, response, EntityType.RELEASE);

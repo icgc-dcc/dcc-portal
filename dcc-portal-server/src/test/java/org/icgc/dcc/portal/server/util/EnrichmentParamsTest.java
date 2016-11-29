@@ -18,7 +18,6 @@
 package org.icgc.dcc.portal.server.util;
 
 import static com.google.common.collect.Iterables.get;
-import static junit.framework.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.portal.server.model.EnrichmentParams.MAX_INPUT_GENES;
 import static org.icgc.dcc.portal.server.model.EnrichmentParams.MAX_OUTPUT_GENE_SETS;
@@ -28,11 +27,11 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 
-import lombok.val;
-
 import org.icgc.dcc.portal.server.model.EnrichmentParams;
 import org.icgc.dcc.portal.server.test.AbstractValidationTest;
 import org.junit.Test;
+
+import lombok.val;
 
 public class EnrichmentParamsTest extends AbstractValidationTest<EnrichmentParams> {
 
@@ -71,7 +70,7 @@ public class EnrichmentParamsTest extends AbstractValidationTest<EnrichmentParam
   private static void assertSingleViolation(Set<ConstraintViolation<EnrichmentParams>> violations,
       String expectedMessage) {
     assertThat(violations).hasSize(1);
-    assertEquals(expectedMessage, get(violations, 0).getMessage());
+    assertThat(get(violations, 0).getMessage()).isEqualTo(expectedMessage);
   }
 
 }

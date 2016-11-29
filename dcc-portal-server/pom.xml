@@ -114,6 +114,7 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>elasticsearch-test-shaded</artifactId>
       <version>${elasticsearch.version}</version>
+      <scope>test</scope>
     </dependency>
 
 
