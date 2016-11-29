@@ -1,0 +1,34 @@
+<div class="entityset-persistence-dropdown dropdown">
+  <i class="fa fa-floppy-o"></i>
+  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+    <translate>Save/Edit Set</translate>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right">
+    <li class="dropdown-header">
+      <ng-pluralize count="vm.selectedEntityIds.length"
+          when="{
+            '0': 'Top {{vm.setLimit | number}} {{vm.entityType}}s',
+            '1': 'Selected {{vm.selectedEntityIds.length | number}} {{vm.entityType}}',
+            'other': 'Selected {{vm.selectedEntityIds.length | number}} {{vm.entityType}}s'
+          }">
+      </ng-pluralize>
+    </li>
+    <li ng-click="vm.onClickSaveNew()">
+      <a>
+        <translate>Save as new set</translate>
+      </a>
+    </li>
+    <li>
+      <a>
+        <translate>Add to existing set
+        </translate>
+      </a>
+    </li>
+    <li>
+      <a>
+        <translate>Remove from existing set</translate>
+      </a>
+    </li>
+  </ul>
+</div>

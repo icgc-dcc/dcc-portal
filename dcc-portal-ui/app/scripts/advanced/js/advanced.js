@@ -17,7 +17,9 @@
 
 'use strict';
 
-angular.module('icgc.advanced', ['icgc.advanced.controllers', 'ui.router'])
+import './entityset.persistence.dropdown/entityset.persistence.dropdown.js';
+
+angular.module('icgc.advanced', ['icgc.advanced.controllers', 'ui.router', 'entityset.persistence.dropdown'])
   .config(function ($stateProvider) {
     $stateProvider.state('advanced', {
       url: '/search?filters',
@@ -298,6 +300,7 @@ angular.module('icgc.advanced.controllers', [
 
         Settings.get().then(function(settings) {
           _controller.downloadEnabled = settings.downloadEnabled || false;
+          _controller.Settings = settings;
         });
 
         // Tabs need to update when using browser buttons
