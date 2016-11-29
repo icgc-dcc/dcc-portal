@@ -20,7 +20,7 @@
 
     var module = angular.module('icgc.oncogrid.controllers', []);
 
-    module.controller('OncogridController', function($scope, LocationService, OncogridService, SetService,
+    module.controller('OncogridController', function($scope, $element, LocationService, OncogridService, SetService,
         $timeout, $modal, Extensions, Settings, FullScreenService) {
         var _this = this;
 
@@ -88,7 +88,7 @@
             $scope.crosshairMode = $scope.crosshairMode ? false : true;
             $('#og-crosshair-message').toggle();
             $('#crosshair-button').toggleClass('active');
-            var gridDriv = $('#oncogrid-div');
+            var gridDriv = $element.find('#oncogrid-div');
             gridDriv.toggleClass('og-pointer-mode'); 
             gridDriv.toggleClass('og-crosshair-mode');
             _this.grid.toggleCrosshair();
