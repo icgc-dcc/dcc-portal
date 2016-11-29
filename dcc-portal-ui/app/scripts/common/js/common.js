@@ -15,10 +15,14 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require('../components');
+
 (function () {
   'use strict';
 
+
   var module = angular.module('app.common', [
+    'app.common.components',
     'app.common.services',
     'app.common.header',
     'app.common.footer',
