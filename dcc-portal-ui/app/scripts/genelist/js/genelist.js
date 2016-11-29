@@ -16,7 +16,7 @@
  */
 
 
-(function() {
+(function () {
 
   'use strict';
 
@@ -28,54 +28,53 @@
 })();
 
 
-(function() {
+(function () {
   'use strict';
 
   var module = angular.module('icgc.genelist.services', []);
 
-  module.service('GeneSetVerificationService', function(Restangular, LocationService, Extensions, Facets) {
+  module.service('GeneSetVerificationService', function (Restangular, LocationService, Extensions, Facets, SetService) {
 
     /* Verify text input */
-    this.verify = function(text) {
+    this.verify = function (text) {
       var data = 'geneIds=' + encodeURI(text);
-      return Restangular.one('genesets').withHttpConfig({transformRequest: angular.identity})
-        .customPOST(data, undefined, {'validationOnly':true});
+      return Restangular.one('genesets').withHttpConfig({ transformRequest: angular.identity })
+        .customPOST(data, undefined, { 'validationOnly': true });
     };
 
 
     /* Create new gene set based on text input - assumes input is already correct */
-    this.create = function(text) {
+    this.create = function (text) {
       var data = 'geneIds=' + encodeURI(text);
 
-      return Restangular.one('genesets').withHttpConfig({transformRequest: angular.identity})
+      return Restangular.one('genesets').withHttpConfig({ transformRequest: angular.identity })
         .customPOST(data);
     };
 
     /* Echo back the text content of file */
-    this.fileContent = function(filepath) {
+    this.fileContent = function (filepath) {
       var data = new FormData();
       data.append('filepath', filepath);
-      return Restangular.one('ui').one('search').withHttpConfig({transformRequest: angular.identity})
-        .customPOST(data, 'file', {}, {'Content-Type': undefined});
+      return Restangular.one('ui').one('search').withHttpConfig({ transformRequest: angular.identity })
+        .customPOST(data, 'file', {}, { 'Content-Type': undefined });
     };
 
-
-    this.geneSetIdFilters = function(geneSetId) {
+    this.geneSetIdFilters = function (geneSetId) {
       var filters = LocationService.filters(),
-          entitySpecifier = 'id',
-          newGeneSetCollection = [Extensions.ENTITY_PREFIX + geneSetId],
-          logicalISorNOT = 'is';
+        entitySpecifier = 'id',
+        newGeneSetCollection = [Extensions.ENTITY_PREFIX + geneSetId],
+        logicalISorNOT = 'is';
 
 
-      if (! filters.hasOwnProperty('gene')) {
+      if (!filters.hasOwnProperty('gene')) {
         filters.gene = {};
       }
 
-      if (! filters.gene.hasOwnProperty(entitySpecifier)) {
+      if (!filters.gene.hasOwnProperty(entitySpecifier)) {
         filters.gene[entitySpecifier] = {};
       }
 
-      var params = {type: 'gene', facet: 'id'};
+      var params = { type: 'gene', facet: 'id' };
 
       if (Facets.isNot(params)) {
         logicalISorNOT = 'not';
@@ -108,29 +107,29 @@
      *   }
      *
      */
-    this.formatResult = function(verifyResult) {
+    this.formatResult = function (verifyResult) {
       var uiResult = {}, uniqueEnsemblMap = {}, totalInputCount = 0;
       var validIds = [], hasType = {};
 
-      angular.forEach(verifyResult.validGenes, function(type, typeName) {
-        angular.forEach(type, function(geneList, inputToken) {
+      angular.forEach(verifyResult.validGenes, function (type, typeName) {
+        angular.forEach(type, function (geneList, inputToken) {
 
           // Sanity check
           if (!geneList || geneList.length === 0) {
             return;
           }
 
-          geneList.forEach(function(gene) {
+          geneList.forEach(function (gene) {
             var symbol = gene.symbol, row;
 
             // Initialize row structure
-            if (! uiResult.hasOwnProperty(symbol)) {
+            if (!uiResult.hasOwnProperty(symbol)) {
               uiResult[symbol] = {};
             }
             row = uiResult[symbol];
 
             // Aggregate input ids that match to the same symbol
-            if (! row.hasOwnProperty(typeName)) {
+            if (!row.hasOwnProperty(typeName)) {
               row[typeName] = [];
             }
             if (row[typeName].indexOf(inputToken) === -1) {
@@ -141,7 +140,7 @@
             }
 
             // Aggregate matched ensembl ids that match to the same symbol
-            if (! row.hasOwnProperty('matchedId')) {
+            if (!row.hasOwnProperty('matchedId')) {
               row.matchedId = [];
             }
             if (row.matchedId.indexOf(gene.id) === -1) {
@@ -151,10 +150,9 @@
             uniqueEnsemblMap[gene.id] = 1;
 
           });
-          totalInputCount ++;
+          totalInputCount++;
         });
       });
-
 
       return {
         uiResult: uiResult,
@@ -168,6 +166,8 @@
       };
     };
 
+    this.getGeneSets = () => _.filter(SetService.getAll(), (set) => set.type === 'gene' ? true : false);
+
   });
 })();
 
@@ -177,7 +177,7 @@
 
   var module = angular.module('icgc.genelist.controllers', []);
 
-  module.controller('GeneListController', function($scope, $timeout, $location, $modalInstance,
+  module.controller('GeneListController', function ($scope, $timeout, $location, $modalInstance,
     GeneSetVerificationService, LocationService, SetService, Page) {
 
     var verifyPromise = null;
@@ -191,9 +191,13 @@
     $scope.params.fileName = '';
     $scope.params.inputMethod = 'id';
 
+    $scope.checkAll = false;
+    $scope.isSavedSetVisible = true;
+    $scope.isUploadSetVisible = false;
+    $scope.geneSets = GeneSetVerificationService.getGeneSets();
+
     // Fields needed for saving into custom gene set
     $scope.params.setName = '';
-
 
     $scope.params.savedSets = SetService.getAllGeneSets();
     $scope.params.selectedSavedSet = -1;
@@ -202,12 +206,11 @@
     $scope.out = {};
 
     // Determine display params based on current page
-    $scope.analysisMode = Page.page() === 'analysis'? true: false;
-
+    $scope.analysisMode = Page.page() === 'analysis' ? true : false;
 
     function verify() {
       $scope.params.state = 'verifying';
-      GeneSetVerificationService.verify($scope.params.rawText).then(function(result) {
+      GeneSetVerificationService.verify($scope.params.rawText).then(function (result) {
         $scope.params.state = 'verified';
         $scope.out = GeneSetVerificationService.formatResult(result);
       });
@@ -219,8 +222,8 @@
       $scope.params.fileName = $scope.params.myFile.name;
 
       // The $timeout is just to give sufficent time in order to convey system state
-      $timeout(function() {
-        GeneSetVerificationService.fileContent($scope.params.myFile).then(function(result) {
+      $timeout(function () {
+        GeneSetVerificationService.fileContent($scope.params.myFile).then(function (result) {
           $scope.params.rawText = result.data;
           verify();
         });
@@ -228,7 +231,7 @@
     }
 
     function createNewGeneList() {
-      GeneSetVerificationService.create($scope.params.rawText).then(function(result) {
+      GeneSetVerificationService.create($scope.params.rawText).then(function (result) {
         var search = LocationService.search();
         search.filters = angular.toJson(GeneSetVerificationService.geneSetIdFilters(result.geneListId));
 
@@ -238,7 +241,7 @@
     }
 
 
-    $scope.submitList = function() {
+    $scope.submitList = function () {
 
       if ($scope.analysisMode === true) {
         var setParams = {};
@@ -252,7 +255,7 @@
             }
           }
         };
-        SetService.addSet(setParams.type, setParams).then(function(){
+        SetService.addSet(setParams.type, setParams).then(function () {
           $modalInstance.close();
         });
         return;
@@ -276,15 +279,15 @@
     //
     // Possible issues with illegal invocation
     //  - https://github.com/danialfarid/ng-file-upload/issues/776#issuecomment-106929172
-    $scope.$watch('params.myFile', function(newValue) {
-      if (! newValue) {
+    $scope.$watch('params.myFile', function (newValue) {
+      if (!newValue) {
         return;
       }
       verifyFile();
     });
 
 
-    $scope.updateGenelist = function() {
+    $scope.updateGenelist = function () {
       // If content was from file, clear out the filename
       $scope.params.fileName = null;
       if ($scope.params.myFile) {
@@ -295,15 +298,15 @@
       verifyPromise = $timeout(verify, delay, true);
     };
 
-    $scope.cancel = function() {
+    $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
 
-    $scope.resetListInput = function() {
+    $scope.resetListInput = function () {
       $scope.params.selectedSavedSet = -1;
     };
 
-    $scope.resetCustomInput = function() {
+    $scope.resetCustomInput = function () {
       $scope.params.state = '';
       $scope.params.fileName = null;
       $scope.params.rawText = '';
@@ -313,7 +316,7 @@
       }
     };
 
-    $scope.$on('$destroy', function() {
+    $scope.$on('$destroy', function () {
       if (verifyPromise) {
         $timeout.cancel(verifyPromise);
       }
