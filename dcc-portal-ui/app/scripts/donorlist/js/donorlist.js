@@ -40,7 +40,7 @@
 
   // Angular wiring
   angular.module ('icgc.donorlist.services', [])
-    .service ('DonorSetVerificationService', function (Restangular, LocationService, Extensions, Facets) {
+    .service ('DonorSetVerificationService', function (Restangular, LocationService, Extensions, Facets, SetService) {
     // Helpers
     function restEndpoint (endpointName) {
       return Restangular.one (endpointName)
@@ -83,6 +83,8 @@
 
       return _.set (filters, [entityType, entitySpecifier, isOrNot], entityID);
     };
+
+    this.getDonorSets = () => _.filter(SetService.getAll(), (set) => set.type === 'donor' ? true : false);
   });
 
 })();
@@ -95,8 +97,34 @@
     .controller ('DonorListController', function ($scope, $timeout, $location, $modalInstance,
     DonorSetVerificationService, LocationService, Page) {
 
+    const _this = this;
+
     var DELAY = 1000;
     var verificationPromise = null;
+
+    _this.selectedSets = [];
+
+    $scope.checkAll = false;
+    $scope.donorSets = DonorSetVerificationService.getDonorSets();
+
+    /* Select all / de-select all */
+    $scope.toggleCheckAll = function() {
+      $scope.checkAll = !$scope.checkAll;
+
+      $scope.donorSets.forEach(function(set) {
+        set.checked = $scope.checkAll;
+      });
+    };
+
+    $scope.updateSelectedSets = () => {
+      _this.selectedSets = [];
+      $scope.donorSets.forEach(function(set) {
+        if (set.checked === true) {
+          _this.selectedSets.push(set);
+        }
+      });
+      $scope.checkAll = (_this.selectedSets.length === $scope.donorSets.length) ? true : false ;
+    };
 
     function initialize() {
       $scope.params = {
