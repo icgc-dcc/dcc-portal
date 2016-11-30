@@ -196,6 +196,11 @@
     $scope.isUploadSetVisible = false;
     $scope.geneSets = GeneSetVerificationService.getGeneSets();
 
+    if(!$scope.geneSets.length){
+      $scope.isSavedSetVisible = false;
+      $scope.isUploadSetVisible = true;
+    }
+
     // Fields needed for saving into custom gene set
     $scope.params.setName = '';
 

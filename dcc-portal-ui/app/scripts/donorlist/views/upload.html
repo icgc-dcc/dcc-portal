@@ -35,13 +35,16 @@
           </thead>
           <tbody>
             <tr data-ng-if="donorSets.length === 0">
-              <td colspan="6" class="text-center"><strong><translate>No saved set</translate></strong></td>
+              <td colspan="3" class="text-center"><strong><translate>No saved set</translate></strong></td>
             </tr>
-            <tr data-ng-repeat="set in donorSets" data-ng-init="set.checked=false">
+            <tr data-ng-repeat="set in donorSets" data-ng-init="set.checked=false" ng-style="{'color':set.disabled ? '#777' : '#000'}">
               <td class="text-center">
-                <span data-ng-if="set.state === 'FINISHED'" style="cursor:pointer" data-ng-click="set.checked = !set.checked; updateSelectedSets();">
-                            <i class="{{ (set.checked === true || checkAll === true) ? 'icon-check': 'icon-check-empty'}}"></i>
-                        </span>
+                <span data-ng-if="set.state === 'FINISHED' && !set.disabled" style="cursor:pointer" data-ng-click="set.checked = !set.checked; updateSelectedSets();">
+                  <i class="{{ (set.checked === true || checkAll === true) ? 'icon-check': 'icon-check-empty'}}"></i>
+                </span>
+                <span data-ng-if="set.state === 'FINISHED' && set.disabled">
+                  <i class="icon-check"></i>
+                </span>
               </td>
               <td>{{ set.name }}</td>
               <td class="text-right" data-ng-if="set.state === 'FINISHED'">{{ set.count | number }}</td>

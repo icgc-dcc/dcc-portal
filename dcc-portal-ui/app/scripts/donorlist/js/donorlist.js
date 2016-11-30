@@ -102,10 +102,17 @@ import deepmerge from 'deepmerge';
     var DELAY = 1000;
     var verificationPromise = null;
 
+    let filters = LocationService.filters();
+
     $scope.checkAll = false;
     $scope.isSavedSetVisible = true;
     $scope.isUploadSetVisible = false;
     $scope.donorSets = DonorSetVerificationService.getDonorSets();
+
+    if(!$scope.donorSets.length){
+      $scope.isSavedSetVisible = false;
+      $scope.isUploadSetVisible = true;
+    }
 
     /* Select/deselect all */
     $scope.toggleCheckAll = function() {
@@ -125,6 +132,23 @@ import deepmerge from 'deepmerge';
       $scope.checkAll = ($scope.params.selectedSets.length === $scope.donorSets.length) ? true : false ;
     };
 
+    // to check if a set was previously selected and is still in effect
+    const checkSetInFilter = () => {
+      if(filters.donor && filters.donor.id){
+        $scope.params.selectedSets = [];
+        _.each(filters.donor.id.is, (id) => {
+          if(_.includes(id,'ES')){
+            const set = _.find($scope.donorSets, function(set){
+              return `ES:${set.id}` === id;
+            });
+            if(set){
+              set.disabled = true;
+            }
+          }
+        })
+      }
+    };
+
     function initialize() {
       $scope.params = {
         rawText: '',
@@ -136,6 +160,7 @@ import deepmerge from 'deepmerge';
       };
       $scope.out = {};
       $scope.checkAll = false;
+      checkSetInFilter();
       $timeout.cancel (verificationPromise);
     }
     initialize();
@@ -232,7 +257,6 @@ import deepmerge from 'deepmerge';
 
     $scope.save = function() {
       if(!_.isEmpty($scope.params.selectedSets)){
-        let filters = LocationService.filters();
         _.each($scope.params.selectedSets, (set) => {
           filters = deepmerge(filters, set.advFilters);
         });
