@@ -109,12 +109,12 @@ import deepmerge from 'deepmerge';
     $scope.isSavedSetVisible = true;
     $scope.isUploadSetVisible = false;
     $scope.donorSets = _.map(DonorSetVerificationService.getDonorSets(), (set) => {
+      // If the current page is repository then create repoFilters
       if($scope.isInRepositoryFile){
         set.repoFilters = {};
         set.repoFilters.file = {};
         set.repoFilters.file.donorId = set.advFilters.donor.id;
       }
-      console.log(set);
       return set;
     });
 
@@ -146,6 +146,17 @@ import deepmerge from 'deepmerge';
       if(filters.donor && filters.donor.id){
         $scope.params.selectedSets = [];
         _.each(filters.donor.id.is, (id) => {
+          if(_.includes(id,'ES')){
+            const set = _.find($scope.donorSets, function(set){
+              return `ES:${set.id}` === id;
+            });
+            if(set){
+              set.disabled = true;
+            }
+          }
+        })
+      } else if(filters.file && filters.file.donorId) {
+        _.each(filters.file.donorId.is, (id) => {
           if(_.includes(id,'ES')){
             const set = _.find($scope.donorSets, function(set){
               return `ES:${set.id}` === id;
