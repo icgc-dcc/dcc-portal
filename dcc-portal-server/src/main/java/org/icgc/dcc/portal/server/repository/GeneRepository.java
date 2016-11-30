@@ -344,9 +344,9 @@ public class GeneRepository implements Repository {
       }
 
       for (val hit : response.getHits()) {
-        val values = hit.getFields();
-        val ensemblId = values.get(ENSEMBL_ID_FIELD_NAME).getValue().toString();
-        val geneSymbol = values.get(GENE_SYMBOL_FIELD_NAME).getValue().toString();
+        val values = hit.getSource();
+        val ensemblId = values.get(ENSEMBL_ID_FIELD_NAME).toString();
+        val geneSymbol = values.get(GENE_SYMBOL_FIELD_NAME).toString();
 
         result.put(geneSymbol, ensemblId);
       }

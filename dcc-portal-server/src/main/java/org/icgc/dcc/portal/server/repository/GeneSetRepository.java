@@ -19,15 +19,18 @@ package org.icgc.dcc.portal.server.repository;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.size;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.EMPTY_SOURCE_FIELDS;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.resolveSourceFields;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flatternMap;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
@@ -37,7 +40,6 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.GeneSetType;
 import org.icgc.dcc.portal.server.model.IndexType;
@@ -95,7 +97,8 @@ public class GeneSetRepository {
     val map = Maps.<String, Integer> newLinkedHashMap();
     for (val hit : response.getHits()) {
       val id = hit.getId();
-      val count = (Integer) hit.getFields().get(fieldName).getValue();
+      val sourceMap = flatternMap(hit.getSource());
+      val count = (Integer) sourceMap.get(fieldName);
 
       map.put(id, count);
     }
@@ -143,7 +146,7 @@ public class GeneSetRepository {
     val map = Maps.<String, String> newLinkedHashMap();
     for (val hit : response.getHits()) {
       val id = hit.getId();
-      val count = getString(hit.getFields().get(fieldName).getValue());
+      val count = getString(hit.getSource().get(fieldName));
 
       map.put(id, count);
     }
@@ -174,7 +177,9 @@ public class GeneSetRepository {
   }
 
   private SearchResponse findField(Iterable<String> ids, String fieldName) {
-    val filters = QueryBuilders.termQuery("_id", ids);
+    // The ArrayList is needed because Elasticsearch cannot serialize an ImmutableMapKeySet, or Iterables for that
+    // matter.
+    val filters = termsQuery("_id", newArrayList(ids));
 
     val search = client.prepareSearch(indexName)
         .setTypes(IndexType.GENE_SET.getId())
@@ -184,7 +189,7 @@ public class GeneSetRepository {
         .setPostFilter(filters)
         .setFetchSource(fieldName, null);
 
-    return search.execute().actionGet();
+    return search.get();
   }
 
 }
