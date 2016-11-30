@@ -104,10 +104,19 @@ import deepmerge from 'deepmerge';
 
     let filters = LocationService.filters();
 
+    $scope.isInRepositoryFile = Page.page() === 'repository';
     $scope.checkAll = false;
     $scope.isSavedSetVisible = true;
     $scope.isUploadSetVisible = false;
-    $scope.donorSets = DonorSetVerificationService.getDonorSets();
+    $scope.donorSets = _.map(DonorSetVerificationService.getDonorSets(), (set) => {
+      if($scope.isInRepositoryFile){
+        set.repoFilters = {};
+        set.repoFilters.file = {};
+        set.repoFilters.file.donorId = set.advFilters.donor.id;
+      }
+      console.log(set);
+      return set;
+    });
 
     if(!$scope.donorSets.length){
       $scope.isSavedSetVisible = false;
@@ -164,8 +173,6 @@ import deepmerge from 'deepmerge';
       $timeout.cancel (verificationPromise);
     }
     initialize();
-
-    $scope.isInRepositoryFile = Page.page() === 'repository';
 
     function setUiState (state) {
       $scope.params.state = state;
@@ -260,14 +267,8 @@ import deepmerge from 'deepmerge';
         _.each($scope.params.selectedSets, (set) => {
           if(!$scope.isInRepositoryFile){
             filters = deepmerge(filters, set.advFilters);
-          } else {
-            if(filters.file && filters.file.donorId){
-              filters.file.donorId = deepmerge(filters.file.donorId, set.advFilters.donor.id);
-            } else if(filters.file) {
-              filters.file.donorId = deepmerge(filters.file.donorId, set.advFilters.donor.id);
-            } else {
-              console.log(sets);
-            }
+          } else if($scope.isInRepositoryFile) {
+            filters = deepmerge(filters, set.repoFilters);
           }
         });
         LocationService.filters(filters);
