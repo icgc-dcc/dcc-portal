@@ -132,7 +132,7 @@ import deepmerge from 'deepmerge';
       $scope.checkAll = ($scope.params.selectedSets.length === $scope.donorSets.length) ? true : false ;
     };
 
-    // to check if a set was previously selected and is still in effect
+    // to check if a set was previously selected and if its still in effect
     const checkSetInFilter = () => {
       if(filters.donor && filters.donor.id){
         $scope.params.selectedSets = [];
@@ -258,7 +258,17 @@ import deepmerge from 'deepmerge';
     $scope.save = function() {
       if(!_.isEmpty($scope.params.selectedSets)){
         _.each($scope.params.selectedSets, (set) => {
-          filters = deepmerge(filters, set.advFilters);
+          if(!$scope.isInRepositoryFile){
+            filters = deepmerge(filters, set.advFilters);
+          } else {
+            if(filters.file && filters.file.donorId){
+              filters.file.donorId = deepmerge(filters.file.donorId, set.advFilters.donor.id);
+            } else if(filters.file) {
+              filters.file.donorId = deepmerge(filters.file.donorId, set.advFilters.donor.id);
+            } else {
+              console.log(sets);
+            }
+          }
         });
         LocationService.filters(filters);
         closeMe();
