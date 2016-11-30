@@ -262,7 +262,7 @@ public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext
       return nestedQuery(nestedPath, sourceFilter, ScoreMode.Avg);
     }
 
-    return sourceFilter;
+    return sourceFilter.boost(0.0f);
   }
 
   /**
