@@ -46,8 +46,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.Lists;
-
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +55,14 @@ import lombok.extern.slf4j.Slf4j;
 public class MutationRepository implements Repository {
 
   private static final String[] NO_EXCLUDE = null;
+  private static final String[] PROTEIN_FIELDS = new String[] { 
+      "id",
+      "mutation", 
+      "transcript.id", 
+      "transcript.consequence.aa_mutation", 
+      "transcript.functional_impact_prediction_summary", 
+      "_summary._affected_donor_count"
+  };
   private static final IndexType CENTRIC_TYPE = IndexType.MUTATION_CENTRIC;
   private final QueryEngine queryEngine;
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
@@ -204,24 +210,13 @@ public class MutationRepository implements Repository {
   }
 
   public SearchResponse protein(Query query) {
-    // Customize fields, we need to add more fields once we
-    // have the search request, as not all the fields are publicly addressable through the PQL interface
-    query.setFields(Lists.<String> newArrayList(
-        "id",
-        "mutation",
-        "affectedDonorCountTotal",
-        "functionalImpact",
-        "transcriptId"));
-
     val pql = converter.convert(query, MUTATION_CENTRIC);
     val search = queryEngine.execute(pql, MUTATION_CENTRIC)
         .getRequestBuilder();
 
     search.setFrom(0)
         .setSize(10000)
-        .setFetchSource(
-            new String[] { "transcript.consequence.aa_mutation", "transcript.functional_impact_prediction_summary"
-            }, NO_EXCLUDE);
+        .setFetchSource(PROTEIN_FIELDS, NO_EXCLUDE);
 
     log.debug("!!! {}", search);
 

@@ -178,7 +178,6 @@ public class DonorRepository implements Repository {
 
     val request = queryEngine.execute(pql, DONOR_CENTRIC);
     val response = request.getRequestBuilder().execute().actionGet();
-
     return response;
   }
 

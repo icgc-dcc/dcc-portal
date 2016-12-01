@@ -1,14 +1,24 @@
 package org.icgc.dcc.portal.server.service;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.stream.IntStream.range;
+import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
+import static org.dcc.portal.pql.query.PqlParser.parse;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flatternMap;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
+
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.elasticsearch.action.search.MultiSearchResponse;
+import org.icgc.dcc.common.core.util.stream.Collectors;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Mutation;
 import org.icgc.dcc.portal.server.model.Mutations;
@@ -20,18 +30,15 @@ import org.icgc.dcc.portal.server.repository.MutationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.util.stream.IntStream.range;
-import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
-import static org.dcc.portal.pql.query.PqlParser.parse;
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
-import static org.icgc.dcc.portal.server.util.SearchResponses.*;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -139,6 +146,7 @@ public class MutationService {
     return new Mutation(mutationRepository.findOne(mutationId, query));
   }
 
+  @SuppressWarnings("unchecked")
   public Mutations protein(Query query) {
     log.info("{}", query);
 
@@ -151,26 +159,36 @@ public class MutationService {
       val map = Maps.<String, Object> newHashMap();
       val transcripts = Lists.<Map<String, Object>> newArrayList();
 
-      map.put("_mutation_id", hit.getFields().get("_mutation_id").getValue());
-      map.put("mutation", hit.getFields().get("mutation").getValue());
-      map.put("_summary._affected_donor_count", hit.getFields().get("_summary._affected_donor_count").getValue());
-      /*
-       * map.put("functional_impact_prediction_summary", hit.getFields().get("functional_impact_prediction_summary")
-       * .getValues());
-       */
+      val hitSource = flatternMap(hit.getSource());
+      map.put("_mutation_id", hitSource.get("_mutation_id"));
+      map.put("mutation", hitSource.get("mutation"));
+      map.put("_summary._affected_donor_count", hitSource.get("_summary._affected_donor_count"));
 
-      List<Object> transcriptIds = hit.getFields().get("transcript.id").getValues();
-      val predictionSummary = hit.getFields().get("transcript.functional_impact_prediction_summary").getValues();
+      val nestedTranscripts = (List<Map<String, Object>>) hitSource.get("transcript");
+      List<String> transcriptIds = nestedTranscripts.stream()
+          .map(t -> t.get("id").toString())
+          .collect(toImmutableList());
+
+      val predictionSummary = nestedTranscripts.stream()
+          .map(t -> t.get("functional_impact_prediction_summary").toString())
+          .collect(toImmutableList());
+
+      Map<String, String> f3 = nestedTranscripts.stream()
+          .map(t -> new SimpleImmutableEntry<String, String>(t.get("id").toString(),
+              ((Map<String, Object>) t.get("consequence")).get("aa_mutation").toString()))
+          .collect(Collectors.toImmutableMap(SimpleImmutableEntry::getKey, SimpleImmutableEntry::getValue));
+
+      // hit.getFields().get("transcript.consequence.aa_mutation").getValues();
 
       for (int i = 0; i < transcriptIds.size(); ++i) {
         val transcript = Maps.<String, Object> newHashMap();
 
-        transcript.put("id", transcriptIds.get(i));
+        val id = transcriptIds.get(i);
+        transcript.put("id", id);
         transcript.put("functional_impact_prediction_summary", predictionSummary.get(i));
 
         val consequence = Maps.<String, Object> newHashMap();
-        List<Object> f3 = hit.getFields().get("transcript.consequence.aa_mutation").getValues();
-        consequence.put("aa_mutation", f3.get(i).toString());
+        consequence.put("aa_mutation", f3.get(id));
         transcript.put("consequence", consequence);
 
         transcripts.add(transcript);
