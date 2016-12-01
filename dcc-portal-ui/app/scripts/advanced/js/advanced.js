@@ -18,8 +18,14 @@
 'use strict';
 
 import './entityset.persistence.dropdown/entityset.persistence.dropdown.js';
+import './entityset.persistence.modal/entityset.persistence.modal.js';
 
-angular.module('icgc.advanced', ['icgc.advanced.controllers', 'ui.router', 'entityset.persistence.dropdown'])
+angular.module('icgc.advanced', [
+  'icgc.advanced.controllers',
+  'ui.router',
+  'entityset.persistence.dropdown',
+  'entityset.persistence.modal',
+  ])
   .config(function ($stateProvider) {
     $stateProvider.state('advanced', {
       url: '/search?filters',
@@ -80,6 +86,18 @@ angular.module('icgc.advanced.controllers', [
       this.isEntitySelected = (type, entity) => {
         return this.selectedEntityIdsMap[type] && this.selectedEntityIdsMap[type].includes(entity.id);
       }
+
+      this.showAddToSetModal = () => {
+        console.log('add to set modal');
+        $modal.open({
+          template: `
+            <entityset-persistence-modal
+              close="$close"
+            ></entityset-persistence-modal>
+          `,
+          // component: 'entitysetPersistenceModal',
+        });
+      };
 
 
       function _refresh() {

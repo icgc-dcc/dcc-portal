@@ -61,9 +61,11 @@
                <span class="action-item">
                     <entityset-persistence-dropdown
                         selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.donor"
-                        on-click-save-new="AdvancedCtrl.saveSet('donor', AdvancedCtrl.Donor.donors.pagination.total)"
                         entity-type="'donor'"
                         set-limit="[AdvancedCtrl.Donor.donors.pagination.total, AdvancedCtrl.Settings.maxNumberOfHits].sort()[0]"
+                        on-click-save-new="AdvancedCtrl.saveSet('donor', AdvancedCtrl.Donor.donors.pagination.total)"
+                        on-click-add-to-set="AdvancedCtrl.showAddToSetModal()"
+                        on-click-remove-from-set="AdvancedCtrl.showRemoveFromSetModal()"
                     ></entityset-persistence-dropdown>
                </span>
             </span>

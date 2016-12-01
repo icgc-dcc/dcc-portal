@@ -227,6 +227,15 @@
       localStorageService.set(LIST_ENTITY, setList);
     };
 
+    _service.addToSet = (setId, entitysetDefinition) => {
+      console.log('Add entitities in ', entitysetDefinition, 'to', setId);
+    };
+
+    _service.removeFromSet = (setId, entitysetDefinition) => {
+      console.log('Remove entities in ', entitysetDefinition, 'from', setId);
+
+    };
+
     _service.addExternalSet = function(type, params) {
       return _service.addSet(type, params, true);
     };

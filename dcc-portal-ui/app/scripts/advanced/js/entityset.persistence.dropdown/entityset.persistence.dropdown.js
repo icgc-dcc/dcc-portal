@@ -13,10 +13,12 @@ ngModule.component('entitysetPersistenceDropdown', {
     this.$onChanges = guardBindings;
   },
   bindings: {
-    onClickSaveNew: '&',
     selectedEntityIds: '<',
     entityType: '<',
     setLimit: '<',
+    onClickSaveNew: '&',
+    onClickAddToSet: '&',
+    onClickRemoveFromSet: '&',
   },
   controllerAs: 'vm',
 });
