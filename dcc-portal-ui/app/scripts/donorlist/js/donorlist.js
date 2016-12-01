@@ -124,7 +124,7 @@ import deepmerge from 'deepmerge';
     }
 
     /* Select/deselect all */
-    $scope.toggleCheckAll = function() {
+    $scope.toggleCheckAll = () => {
       $scope.checkAll = !$scope.checkAll;
       $scope.donorSets.forEach(function(set) {
         set.checked = $scope.checkAll;
@@ -144,7 +144,6 @@ import deepmerge from 'deepmerge';
     // to check if a set was previously selected and if its still in effect
     const checkSetInFilter = () => {
       if(filters.donor && filters.donor.id){
-        $scope.params.selectedSets = [];
         _.each(filters.donor.id.is, (id) => {
           if(_.includes(id,'ES')){
             const set = _.find($scope.donorSets, function(set){

@@ -15,6 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import deepmerge from 'deepmerge';
 
 (function () {
 
@@ -165,9 +166,6 @@
         warnings: verifyResult.warnings || []
       };
     };
-
-    this.getGeneSets = () => _.filter(SetService.getAll(), (set) => set.type === 'gene' ? true : false);
-
   });
 })();
 
@@ -183,6 +181,8 @@
     var verifyPromise = null;
     var delay = 1000;
 
+    let filters = LocationService.filters();
+
     // Fields for searching by custom gene identifiers
     $scope.params = {};
     $scope.params.rawText = '';
@@ -190,13 +190,17 @@
     $scope.params.myFile = null;
     $scope.params.fileName = '';
     $scope.params.inputMethod = 'id';
+    $scope.params.selectedSets = [];
+
+    // Determine display params based on current page
+    $scope.analysisMode = Page.page() === 'analysis' ? true : false;
 
     $scope.checkAll = false;
     $scope.isSavedSetVisible = true;
     $scope.isUploadSetVisible = false;
-    $scope.geneSets = GeneSetVerificationService.getGeneSets();
+    $scope.geneSets = SetService.getAllGeneSets();
 
-    if(!$scope.geneSets.length){
+    if(!$scope.geneSets.length || $scope.analysisMode){
       $scope.isSavedSetVisible = false;
       $scope.isUploadSetVisible = true;
     }
@@ -204,14 +208,44 @@
     // Fields needed for saving into custom gene set
     $scope.params.setName = '';
 
-    $scope.params.savedSets = SetService.getAllGeneSets();
-    $scope.params.selectedSavedSet = -1;
-
     // Output
     $scope.out = {};
 
-    // Determine display params based on current page
-    $scope.analysisMode = Page.page() === 'analysis' ? true : false;
+     /* Select/deselect all */
+    $scope.toggleCheckAll = () => {
+      $scope.checkAll = !$scope.checkAll;
+      $scope.geneSets.forEach(function(set) {
+        set.checked = $scope.checkAll;
+      });
+    };
+
+    $scope.updateSelectedSets = () => {
+      $scope.params.selectedSets = [];
+      $scope.geneSets.forEach(function(set) {
+        if (set.checked === true) {
+          $scope.params.selectedSets.push(set);
+        }
+      });
+      $scope.checkAll = ($scope.params.selectedSets.length === $scope.geneSets.length) ? true : false ;
+    };
+
+    // to check if a set was previously selected and if its still in effect
+    const checkSetInFilter = () => {
+      if(filters.gene && filters.gene.id){
+        _.each(filters.gene.id.is, (id) => {
+          if(_.includes(id,'ES')){
+            const set = _.find($scope.geneSets, function(set){
+              return `ES:${set.id}` === id;
+            });
+            if(set){
+              set.disabled = true;
+            }
+          }
+        })
+      }
+    };
+
+    checkSetInFilter();
 
     function verify() {
       $scope.params.state = 'verifying';
@@ -266,12 +300,11 @@
         return;
       }
 
-      if ($scope.params.selectedSavedSet >= 0) {
-        var id = $scope.params.savedSets[$scope.params.selectedSavedSet].id;
-        var search = LocationService.search();
-        search.filters = angular.toJson(GeneSetVerificationService.geneSetIdFilters(id));
-        $location.path('/search/g').search(search);
-
+      if ($scope.params.selectedSets.length) {
+         _.each($scope.params.selectedSets, (set) => {
+          filters = deepmerge(filters, set.advFilters);
+        });
+        LocationService.filters(filters);
       } else {
         createNewGeneList();
       }
@@ -305,10 +338,6 @@
 
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
-    };
-
-    $scope.resetListInput = function () {
-      $scope.params.selectedSavedSet = -1;
     };
 
     $scope.resetCustomInput = function () {
