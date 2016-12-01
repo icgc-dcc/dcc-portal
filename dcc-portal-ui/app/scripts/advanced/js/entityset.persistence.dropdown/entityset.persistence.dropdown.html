@@ -6,13 +6,16 @@
   </button>
   <ul class="dropdown-menu dropdown-menu-right">
     <li class="dropdown-header">
-      <ng-pluralize count="vm.selectedEntityIds.length"
-          when="{
-            '0': 'Top {{vm.setLimit | number}} {{vm.entityType}}s',
-            '1': 'Selected {{vm.selectedEntityIds.length | number}} {{vm.entityType}}',
-            'other': 'Selected {{vm.selectedEntityIds.length | number}} {{vm.entityType}}s'
-          }">
-      </ng-pluralize>
+      <span ng-if="vm.selectedEntityIds.length">
+        <translate>Selected</translate> {{vm.selectedEntityIds.length | number}} {{ vm.entityType | pluralize : vm.selectedEntityIds.length }}
+      </span>
+      <span ng-if="!vm.selectedEntityIds.length && vm.setTotalCount < vm.setLimit">
+        {{vm.setTotalCount | number}} {{ vm.entityType | pluralize : vm.setTotalCount }}
+      </span>
+      <span ng-if="!vm.selectedEntityIds.length && vm.setTotalCount > vm.setLimit">
+        Top {{vm.setLimit | number}} {{ vm.entityType | pluralize : vm.setLimit }}
+      </span>
+      
     </li>
     <li ng-click="vm.onClickSaveNew()">
       <a>

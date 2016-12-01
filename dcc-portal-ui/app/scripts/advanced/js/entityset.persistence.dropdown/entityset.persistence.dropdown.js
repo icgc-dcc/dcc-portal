@@ -16,6 +16,7 @@ ngModule.component('entitysetPersistenceDropdown', {
     selectedEntityIds: '<',
     entityType: '<',
     setLimit: '<',
+    setTotalCount: '<',
     onClickSaveNew: '&',
     onClickAddToSet: '&',
     onClickRemoveFromSet: '&',
