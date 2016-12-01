@@ -17,6 +17,7 @@
 
 package org.icgc.dcc.portal.server.repository;
 
+import static org.apache.commons.lang3.ArrayUtils.addAll;
 import static org.apache.lucene.search.join.ScoreMode.None;
 import static org.elasticsearch.action.search.SearchType.QUERY_AND_FETCH;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -54,6 +55,9 @@ public class BrowserRepository {
   private static final String GENE = IndexType.GENE_CENTRIC.getId();
   private static final Integer MUTATION_SIZE = 100000;
   private static final Integer GENE_SIZE = 10000;
+  private static final String[] FETCH_SOURCE =
+      { "_gene_id", "name", "biotype", "chromosome", "start", "end", "strand", "description" };
+  private static final String[] NO_EXCLUDE = null;
 
   private final Client client;
   private final String indexName;
@@ -72,20 +76,19 @@ public class BrowserRepository {
         .setTypes(MUTATION)
         .setSearchType(QUERY_AND_FETCH)
         .setPostFilter(filter)
-        .storedFields(
-            "_mutation_id",
-            "chromosome",
-            "chromosome_start",
-            "chromosome_end",
-            "mutation_type",
-            "mutation",
-            "reference_genome_allele",
-            "functional_impact_prediction_summary",
-            "ssm_occurrence.project._project_id",
-            "ssm_occurrence.project.project_name",
-            "ssm_occurrence.project._summary._ssm_tested_donor_count")
         .setFetchSource(
             includes(
+                "_mutation_id",
+                "chromosome",
+                "chromosome_start",
+                "chromosome_end",
+                "mutation_type",
+                "mutation",
+                "reference_genome_allele",
+                "functional_impact_prediction_summary",
+                "ssm_occurrence.project._project_id",
+                "ssm_occurrence.project.project_name",
+                "ssm_occurrence.project._summary._ssm_tested_donor_count",
                 "transcript.gene.symbol",
                 "transcript.consequence._transcript_id",
                 "transcript.consequence.consequence_type",
@@ -102,21 +105,14 @@ public class BrowserRepository {
     val request = client.prepareSearch(indexName)
         .setTypes(GENE)
         .setSearchType(QUERY_AND_FETCH)
-        .storedFields(
-            "_gene_id",
-            "name",
-            "biotype",
-            "chromosome",
-            "start",
-            "end",
-            "strand",
-            "description")
         .setPostFilter(filter)
         .setFrom(0)
         .setSize(GENE_SIZE);
 
     if (withTranscripts) {
-      request.setFetchSource("transcripts", null);
+      request.setFetchSource(addAll(FETCH_SOURCE, "transcripts"), NO_EXCLUDE);
+    } else {
+      request.setFetchSource(FETCH_SOURCE, NO_EXCLUDE);
     }
 
     log.debug("Browser Gene Request", request);
