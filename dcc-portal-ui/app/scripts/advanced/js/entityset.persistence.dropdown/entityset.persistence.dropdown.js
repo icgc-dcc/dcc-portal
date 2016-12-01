@@ -4,7 +4,7 @@ import './entityset.persistence.dropdown.scss';
 
 ngModule.component('entitysetPersistenceDropdown', {
   replace: true,
-  template: require('./entityset.persistence.dropdown.html'),
+  template: require('!raw!./entityset.persistence.dropdown.html'),
   controller: function () {
     const guardBindings = () => {
       this.selectedEntityIds = this.selectedEntityIds || [];
