@@ -157,7 +157,7 @@ public class BrowserRepository {
     val request = client.prepareSearch(indexName);
     customizer.accept(request);
 
-    log.info("{}: {}", message, request);
+    log.debug("{}: {}", message, request);
     return request.execute().actionGet();
   }
 
