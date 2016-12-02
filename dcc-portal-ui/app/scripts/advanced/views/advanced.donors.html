@@ -64,9 +64,9 @@
                         entity-type="'donor'"
                         set-total-count="AdvancedCtrl.Donor.donors.pagination.total"
                         set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
-                        on-click-save-new="AdvancedCtrl.saveSet('donor', AdvancedCtrl.Donor.donors.pagination.total)"
-                        on-click-add-to-set="AdvancedCtrl.showAddToSetModal()"
-                        on-click-remove-from-set="AdvancedCtrl.showRemoveFromSetModal()"
+                        on-click-save-new="AdvancedCtrl.handleClickSaveNew()"
+                        on-click-add-to-set="AdvancedCtrl.handleClickAddToSet('donor')"
+                        on-click-remove-from-set="AdvancedCtrl.handleClickRemoveFromSet('donor')"
                     ></entityset-persistence-dropdown>
                </span>
             </span>

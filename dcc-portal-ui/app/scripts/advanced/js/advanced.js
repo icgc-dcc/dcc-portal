@@ -18,13 +18,13 @@
 'use strict';
 
 import './entityset.persistence.dropdown/entityset.persistence.dropdown.js';
-import './entityset.persistence.modal/entityset.persistence.modal.js';
+import './entityset.persistence.modals';
 
 angular.module('icgc.advanced', [
   'icgc.advanced.controllers',
   'ui.router',
   'entityset.persistence.dropdown',
-  'entityset.persistence.modal',
+  'entityset.persistence.modals',
   ])
   .config(function ($stateProvider) {
     $stateProvider.state('advanced', {
@@ -87,13 +87,13 @@ angular.module('icgc.advanced.controllers', [
         return this.selectedEntityIdsMap[type] && this.selectedEntityIdsMap[type].includes(entity.id);
       }
 
-      this.showAddToSetModal = () => {
+      this.handleClickSaveNew = () => {
         console.log('add to set modal');
         $modal.open({
           template: `
-            <entityset-persistence-modal
+            <save-new-set-modal
               close="$close"
-            ></entityset-persistence-modal>
+            ></save-new-set-modal>
           `,
           // component: 'entitysetPersistenceModal',
         });

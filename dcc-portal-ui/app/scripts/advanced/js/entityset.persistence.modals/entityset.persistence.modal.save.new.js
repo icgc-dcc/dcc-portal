@@ -1,8 +1,6 @@
-const ngModule = angular.module('entityset.persistence.modal', []);
+const ngModule = angular.module('entityset.persistence.modals.save.new', []);
 
-// import './entityset.persistence.dropdown.scss';
-
-ngModule.component('entitysetPersistenceModal', {
+ngModule.component('saveNewSetModal', {
   replace: true,
   template: `
     <div class="modal-content">
