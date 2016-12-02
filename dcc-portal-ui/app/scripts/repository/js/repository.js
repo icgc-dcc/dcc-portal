@@ -719,6 +719,12 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
         }
       }
     };
+    _ctrl.donorSets = _.map(SetService.getAllDonorSets(), (set) => {
+      set.repoFilters = {};
+      set.repoFilters.file = {};
+      set.repoFilters.file.donorId = set.advFilters.donor.id;
+      return set;
+    });
 
     function toSummarizedString (values, name) {
       var size = _.size (values);

@@ -41,18 +41,23 @@
                 <!-- Split button -->
                 <div class="btn-group entity-search pull-right">
                     <button type="button" class="btn t_button" data-ng-click="useDonorSet('upload')">Upload Donor Set</button>
-                    <button type="button" class="btn t_button dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" 
+                        class="btn t_button dropdown-toggle" 
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="false" 
+                        data-ng-if="entitySets.length">
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" data-ng-if="entitySets.length">
                         <li><a href="" data-ng-click="useDonorSet('select')">Select Donor Set</a></li>
                         <li class="divider-label">
                             <div>
                                 <span>Recent Donor Sets</span>
                             </div>
                         </li>
-                        <li data-ng-repeat="set in entitySets" class="set-list" >
+                        <li data-ng-repeat="set in entitySets" class="set-list">
                             <a href="" data-ng-click="selectDonorSet(set);" data-ng-class="{selected: set.selected}">
                                 <span>{{ set.name | limitTo: 10 }}... </span>
                                 <span>{{ set.count | number }} Donors </span>

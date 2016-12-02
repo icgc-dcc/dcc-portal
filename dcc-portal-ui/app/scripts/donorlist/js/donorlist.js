@@ -127,6 +127,7 @@ import deepmerge from 'deepmerge';
 
     // to check if a set was previously selected and if its still in effect
     const checkSetInFilter = () => {
+      console.log(filters);
       if(filters.donor && filters.donor.id){
         _.each(filters.donor.id.is, (id) => {
           if(_.includes(id,'ES')){
