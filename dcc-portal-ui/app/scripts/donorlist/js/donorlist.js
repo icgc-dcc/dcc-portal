@@ -42,7 +42,7 @@ import deepmerge from 'deepmerge';
 
   // Angular wiring
   angular.module ('icgc.donorlist.services', [])
-    .service ('DonorSetVerificationService', function (Restangular, LocationService, Extensions, Facets, SetService) {
+    .service ('DonorSetVerificationService', function (Restangular, LocationService, Extensions, Facets) {
     // Helpers
     function restEndpoint (endpointName) {
       return Restangular.one (endpointName)
@@ -85,8 +85,6 @@ import deepmerge from 'deepmerge';
 
       return _.set (filters, [entityType, entitySpecifier, isOrNot], entityID);
     };
-
-    this.getDonorSets = () => _.filter(SetService.getAll(), (set) => set.type === 'donor' ? true : false);
   });
 
 })();
@@ -97,7 +95,7 @@ import deepmerge from 'deepmerge';
 
   angular.module ('icgc.donorlist.controllers', [])
     .controller ('DonorListController', function ($scope, $timeout, $location, $modalInstance,
-    DonorSetVerificationService, LocationService, Page) {
+    DonorSetVerificationService, LocationService, Page, SetService, modalAction) {
 
     var DELAY = 1000;
     var verificationPromise = null;
@@ -105,10 +103,10 @@ import deepmerge from 'deepmerge';
     let filters = LocationService.filters();
 
     $scope.isInRepositoryFile = Page.page() === 'repository';
-    $scope.checkAll = false;
-    $scope.isSavedSetVisible = true;
-    $scope.isUploadSetVisible = false;
-    $scope.donorSets = _.map(DonorSetVerificationService.getDonorSets(), (set) => {
+    $scope.action = modalAction;
+    $scope.isSelect = false;
+
+    $scope.donorSets = _.map(SetService.getAllDonorSets(), (set) => {
       // If the current page is repository then create repoFilters
       if($scope.isInRepositoryFile){
         set.repoFilters = {};
@@ -118,19 +116,6 @@ import deepmerge from 'deepmerge';
       return set;
     });
 
-    if(!$scope.donorSets.length){
-      $scope.isSavedSetVisible = false;
-      $scope.isUploadSetVisible = true;
-    }
-
-    /* Select/deselect all */
-    $scope.toggleCheckAll = () => {
-      $scope.checkAll = !$scope.checkAll;
-      $scope.donorSets.forEach(function(set) {
-        set.checked = $scope.checkAll;
-      });
-    };
-
     $scope.updateSelectedSets = () => {
       $scope.params.selectedSets = [];
       $scope.donorSets.forEach(function(set) {
@@ -138,7 +123,6 @@ import deepmerge from 'deepmerge';
           $scope.params.selectedSets.push(set);
         }
       });
-      $scope.checkAll = ($scope.params.selectedSets.length === $scope.donorSets.length) ? true : false ;
     };
 
     // to check if a set was previously selected and if its still in effect
@@ -150,7 +134,7 @@ import deepmerge from 'deepmerge';
               return `ES:${set.id}` === id;
             });
             if(set){
-              set.disabled = true;
+              set.selected = true;
             }
           }
         })
@@ -161,7 +145,7 @@ import deepmerge from 'deepmerge';
               return `ES:${set.id}` === id;
             });
             if(set){
-              set.disabled = true;
+              set.selected = true;
             }
           }
         })
@@ -178,7 +162,11 @@ import deepmerge from 'deepmerge';
         selectedSets: []
       };
       $scope.out = {};
-      $scope.checkAll = false;
+
+      if($scope.action === 'select') {
+        $scope.isSelect = true;
+      }
+      
       checkSetInFilter();
       $timeout.cancel (verificationPromise);
     }

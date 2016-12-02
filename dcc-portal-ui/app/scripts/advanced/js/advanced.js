@@ -65,8 +65,32 @@ angular.module('icgc.advanced.controllers', [
 
       _locationFilterCache = _filterService.getCachedFiltersFactory();
 
-      var _isInAdvancedSearchCtrl = true;
+      let filters = _locationFilterCache.filters();
 
+      _controller.donorSets = SetService.getAllDonorSets();
+
+      // to check if a set was previously selected and if its still in effect
+      const checkSetInFilter = () => {
+        if(filters.donor && filters.donor.id){
+          _.each(filters.donor.id.is, (id) => {
+            if(_.includes(id,'ES')){
+              const set = _.find(_controller.donorSets, function(set){
+                return `ES:${set.id}` === id;
+              });
+              if(set){
+                set.selected = true;
+              }
+            }
+          })
+        } else {
+          _.each(_controller.donorSets, (set) => {
+            set.selected = false;
+          });
+        }
+        console.log(_controller.donorSets);
+      };
+
+      var _isInAdvancedSearchCtrl = true;
 
       function _refresh() {
         var filters = _locationFilterCache.filters(),
@@ -172,8 +196,8 @@ angular.module('icgc.advanced.controllers', [
           });
         }
 
-
         _controller.hasGeneFilter = angular.isObject(filters) ?  filters.hasOwnProperty('gene') : false;
+        checkSetInFilter();
       }
 
       function _renderTab(tab, forceFullRefresh) {

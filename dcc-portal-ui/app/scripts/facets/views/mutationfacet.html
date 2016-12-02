@@ -38,31 +38,9 @@
     <li class="t_facets__facet__button">
         <ul class="t_facets__facet__terms__active">
             <li class="text-right" data-ng-hide="collapsed">
-                <!-- Split button -->
-                <div class="btn-group entity-search pull-right">
-                    <button type="button" class="btn t_button" data-ng-click="useDonorSet('upload')">Upload Donor Set</button>
-                    <button type="button" class="btn t_button dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="" data-ng-click="useDonorSet('select')">Select Donor Set</a></li>
-                        <li class="divider-label">
-                            <div>
-                                <span>Recent Donor Sets</span>
-                            </div>
-                        </li>
-                        <li data-ng-repeat="set in entitySets" class="set-list" >
-                            <a href="" data-ng-click="selectDonorSet(set);" data-ng-class="{selected: set.selected}">
-                                <span>{{ set.name | limitTo: 10 }}... </span>
-                                <span>{{ set.count | number }} Donors </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <!--<button type="button" class="t_button pull-right" >
-                    <i class="icon-search"></i> <translate>Use Donor Set</translate>
-                </button>-->
+                <button type="button" class="t_button pull-right" data-ng-click="useMutationSet()">
+                    <i class="icon-search"></i> <translate>Use Mutation Set</translate>
+                </button>
                 <br><br>
             </li>
         </ul>

@@ -15,6 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import deepmerge from 'deepmerge';
+
 (function () {
   'use strict';
 
@@ -22,9 +24,10 @@
 
   module.controller('tagsFacetCtrl',
     function ($scope, $modal, Facets, FilterService, LocationService, HighchartsService, FiltersUtil,
-      Extensions, GeneSets, Genes, GeneSetNameLookupService, SetService, GeneSymbols, CompoundsService) {
+      Extensions, GeneSets, Genes, GeneSetNameLookupService, SetService, GeneSymbols, CompoundsService, Page) {
 
     $scope.Extensions = Extensions;
+    $scope.isInRepositoryFile = Page.page() === 'repository';
 
     var _fetchNameForSelections = function ( selections ) {
 
@@ -386,12 +389,36 @@
       });
     };
 
-    $scope.uploadDonorSet = function() {
+    $scope.useDonorSet = (action) => {
       $modal.open({
         templateUrl: '/scripts/donorlist/views/upload.html',
-        controller: 'DonorListController'
+        controller: 'DonorListController',
+        resolve :{
+          modalAction: () => action
+        }
       });
     };
+
+     $scope.useMutationSet = function() {
+      $modal.open({
+        templateUrl: '/scripts/mutationlist/views/upload.html',
+        controller: 'MutationListController'
+      });
+    };
+
+    $scope.selectDonorSet = (set) => {
+      let filters = FilterService.filters();
+      if(!set.selected){
+        if(!$scope.isInRepositoryFile){
+          filters = deepmerge(filters, set.advFilters);
+        } else if($scope.isInRepositoryFile) {
+          filters = deepmerge(filters, set.repoFilters);
+        }
+      } else {
+        event.stopPropagation();
+      }
+      LocationService.filters(filters);
+    }
 
     // Needed if term removed from outside scope
     $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, setup);
@@ -409,7 +436,7 @@
         type: '@',
         example: '@',
         placeholder: '@',
-
+        entitySets: '=',
         proxyType: '@',
         proxyFacetName: '@'
       },
@@ -439,6 +466,9 @@
         }
         if (_.contains (['donor', 'file-donor'], type) && facetName === 'id') {
           return path_ ('donorfacet');
+        }
+        if (type === 'mutation' && facetName === 'id') {
+          return path_ ('mutationfacet');
         }
 
         return path_ ('tags');

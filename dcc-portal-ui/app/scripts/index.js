@@ -101,5 +101,6 @@ require('./beacon/js/beacon.js');
 require('./tokens/js/tokens.js');
 require('./pancancer/js/pancancer.js');
 require('./translations/js/translations.js');
+require('./mutationlist/js/mutationlist.js');
 require('./404/js/404.js');
 

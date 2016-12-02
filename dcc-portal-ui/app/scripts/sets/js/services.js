@@ -400,6 +400,18 @@
       });
     };
 
+    _service.getAllDonorSets = function() {
+      return _.filter(setList, function(s) {
+        return s.type === 'donor';
+      });
+    };
+
+    _service.getAllMutationSets = function() {
+      return _.filter(setList, function(s) {
+        return s.type === 'mutation';
+      });
+    };
+
     _service.initService = function() {
 
       setList = localStorageService.get(LIST_ENTITY) || [];

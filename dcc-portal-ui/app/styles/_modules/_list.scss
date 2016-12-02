@@ -95,6 +95,59 @@
       transition: all 0.2s;
     }
   }
-
-
 }
+
+/* Entity saved set list facet */
+
+.entity-search{
+  button, ul{
+    font-size: 100%;
+  }
+
+  ul{
+    .divider-label{
+      height: 30px;
+
+      div{
+        width: 100%;
+        height: 14px;
+        border-bottom: 1px solid #ddd;
+      }
+      span{
+        font-size: 10px;
+        background: #FFF;
+        margin: 0px 20px;
+        padding: 0px 3px;
+        color: #666;
+      }
+    }
+    .set-list{
+      a{
+        cursor: pointer;
+
+        &.selected{
+          cursor: default;
+          span{
+            color: #555;
+
+            &:last-child{
+              color: #555;
+            }
+          }
+        }
+        
+        span{
+          min-width: 50%;
+          display:inline-block;
+
+          &:last-child{
+            text-align: right;
+            font-size: 10px;
+            color: #000;
+          }
+        }
+      }
+    }
+  }
+}
+

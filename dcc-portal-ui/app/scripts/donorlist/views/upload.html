@@ -3,7 +3,8 @@
   <!-- header -->
   <div class="modal-header clearfix">
     <h3 class="pull-left">
-      <translate>Use Donor Set</translate>
+      <span data-ng-if="isSelect"><translate>Select Donor Set</translate></span>
+      <span data-ng-if="!isSelect"><translate>Upload Donor Set</translate></span>
     </h3>
     <button class="pull-right t_button" data-ng-click="cancel()">
       <i class="icon-cancel"></i>
@@ -12,169 +13,148 @@
 
   <!-- body -->
   <div class="modal-body" style="margin:0; max-height:40rem; overflow-y: scroll">
-
-    <div>
-      <div data-ng-click="isSavedSetVisible = !isSavedSetVisible; isUploadSetVisible = false; resetAll();">
-        <h3>
-          <i class="fa fa-angle-right" data-ng-class="{'right':!isSavedSetVisible, 'down':isSavedSetVisible}"></i>
-          <span style="margin-left:10px;"><translate>Select Saved Sets</translate></span>
-        </h3>
-      </div>
-      <div data-ng-if="isSavedSetVisible">
-        <table class="table table-selectable">
-          <thead>
-            <th class="text-center" data-ng-click="toggleCheckAll(); updateSelectedSets();">
-              <i class="{{ checkAll === true ? 'icon-check' : 'icon-check-empty' }}"></i>
-            </th>
-            <th>
-              <translate>Name</translate>
-            </th>
-            <th class="text-right">
-              <translate># Donors</translate>
-            </th>
-          </thead>
-          <tbody>
-            <tr data-ng-if="donorSets.length === 0">
-              <td colspan="3" class="text-center"><strong><translate>No saved set</translate></strong></td>
-            </tr>
-            <tr data-ng-repeat="set in donorSets" data-ng-init="set.checked=false" ng-style="{'color':set.disabled ? '#777' : '#000'}">
-              <td class="text-center">
-                <span data-ng-if="set.state === 'FINISHED' && !set.disabled" style="cursor:pointer" data-ng-click="set.checked = !set.checked; updateSelectedSets();">
-                  <i class="{{ (set.checked === true || checkAll === true) ? 'icon-check': 'icon-check-empty'}}"></i>
-                </span>
-                <span data-ng-if="set.state === 'FINISHED' && set.disabled">
-                  <i class="icon-check"></i>
-                </span>
-              </td>
-              <td>{{ set.name }}</td>
-              <td class="text-right" data-ng-if="set.state === 'FINISHED'">{{ set.count | number }}</td>
-              <td data-ng-if="set.state !== 'FINISHED'">
-                <translate>Processing ...</translate> <i class="icon-spinner icon-spin"></i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <br>
-    <div>
-      <div data-ng-click="isUploadSetVisible = !isUploadSetVisible; isSavedSetVisible = false; resetAll();">
-        <h3>
-          <i class="fa fa-angle-right" data-ng-class="{'right':!isUploadSetVisible, 'down':isUploadSetVisible}"></i>
-          <span style="margin-left:10px;"><translate>Upload a Set</translate></span>
-        </h3>
-      </div>
-      <div data-ng-if="isUploadSetVisible">
-        <!-- Input section -->
-        <div style="padding:0.25rem">
-          <span><translate>Type or copy-and-paste a list of Donor IDs</translate></span>
-
-          <span class="pull-right" data-tooltip-placement="left" data-tooltip="{{'<li>Donor identifier: ICGC or Submitter ID for Donor, Specimen and Sample. E.g. DO35741, ML_92, TCGA-DU-6407</li>
-              <li>Delimiters between donor identifiers: comma, space or one donor per line</li>
-              <li>If you upload a file, the file format should be a text file (.txt, .csv, .tsv)</li>' | translate}}" has-markup>
-            <a href="">
-              <i class="fa fa-question-circle legend-icon"></i>
-            </a>
-          </span>
-
-          <div class="set-input" style="position:relative;">
-            <textarea rows="4" placeholder="{{ isInRepositoryFile ? 'e.g. DO35741, SP107417, SA517428, ICGC_MB111, cce62116-3dcd-400d-ada0-9839ca02466e' : 'e.g. DO45299, SP119250, SA553002, PCSI_0083, TARGET-10-PASLZM-04A' }}"
-              data-autofocus data-ng-model="params.rawText" data-ng-change="verifyDonorInput()">
-            </textarea>
-            <i style="position:absolute;top:0;right:0;cursor:pointer;" ng-show="params.rawText" class="icon-cancel" data-ng-click="resetAll()"></i>
-          </div>
-        </div>
-        <br>
-        <div>
-          <div>
-            <translate>Or choose a file to upload</translate>
-          </div>
-          <span class="t_button btn-file">
-              <translate>Browse</translate> <input type="file" accept=".tsv,.csv,text/*" data-file-upload="params.myFile">
-          </span>
-          <span style="margin-left: 5px">{{ params.fileName }}</span>
-        </div>
-
-        <span data-ng-if="isInState ('verifying')">
-          <i class="icon-spin icon-spinner"></i> <translate>Verifying Donor Set...</translate>
-        </span>
-        <span data-ng-if="isInState ('uploading')">
-          <i class="icon-spin icon-spinner"></i> <translate>Reading Donor Set file...</translate>
-        </span>
-
-        <!-- Result section -->
-
-        <div data-ng-if="isInState ('verified')">
-
-          <div data-ng-if="hasWarnings()">
-            <span class="alert-error" data-ng-repeat="warning in out.warnings">
-              <i class="icon-attention-1"></i> {{ warning }}
-            </span>
-          </div>
-
-          <div data-ng-show="hasBothValidsAndInvalidsButNoWarnings()" data-ng-init="expanded = false">
-            <a href="" data-ng-click="expanded = ! expanded">
-              <span class="alert-warning">
-                <i class="icon-attention-1"></i><translate translate-comment="{{out.invalidIds.length}} will be a number">{{out.invalidIds.length}} submitted donor identifier(s) not recognized in the system</translate>
-                  <i class="{{ expanded? 'icon-caret-down' : 'icon-caret-left' }}"></i>
-                </span>
-            </a>
-
-            <div class="gene-list-ids" data-ng-hide="! expanded">
-              <em>{{ out.invalidIds.join (', ') }}</em>
-            </div>
-          </div>
-
-          <!-- Main table -->
-          <div data-ng-if="hasValidsButNoWarnings()">
-            <br>
-            <span>
-              <span data-ng-init="expanded = true" data-ng-click="expanded = ! expanded">
-                <a href="">
-                  <translate>{{ validIdCount() }} submitted donor identifier(s) mapped to {{ numberOfUiRows }} ICGC Donor ID(s)</translate>
-                  <i class="{{ expanded? 'icon-caret-down' : 'icon-caret-left' }}"></i>
-                </a>
+    <div data-ng-if="isSelect">
+      <span><translate>Select one or more of your saved sets: </translate></span>
+      <table class="table table-selectable">
+        <thead>
+          <th>
+          </th>
+          <th>
+            <translate>Name</translate>
+          </th>
+          <th class="text-right">
+            <translate># Donors</translate>
+          </th>
+        </thead>
+        <tbody>
+          <tr data-ng-if="donorSets.length === 0">
+            <td colspan="3" class="text-center"><strong><translate>No saved set</translate></strong></td>
+          </tr>
+          <tr data-ng-repeat="set in donorSets" data-ng-init="set.checked=false" ng-style="{'color':set.selected ? '#777' : '#000'}">
+            <td class="text-center">
+              <span data-ng-if="set.state === 'FINISHED' && !set.selected" style="cursor:pointer" data-ng-click="set.checked = !set.checked; updateSelectedSets();">
+                <i class="{{ set.checked === true ? 'icon-check': 'icon-check-empty'}}"></i>
               </span>
+              <span data-ng-if="set.state === 'FINISHED' && set.selected">
+                <i class="icon-check"></i>
+              </span>
+            </td>
+            <td>{{ set.name }}</td>
+            <td class="text-right" data-ng-if="set.state === 'FINISHED'">{{ set.count | number }}</td>
+            <td data-ng-if="set.state !== 'FINISHED'">
+              <translate>Processing ...</translate> <i class="icon-spinner icon-spin"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div data-ng-if="!isSelect">
+      <!-- Input section -->
+      <div style="padding:0.25rem">
+        <span><translate>Type or copy-and-paste a list of Donor IDs</translate></span>
+        <span class="pull-right" data-tooltip-placement="left" 
+          data-tooltip="{{'<li>Donor identifier: ICGC or Submitter ID for Donor, Specimen and Sample. E.g. DO35741, ML_92, TCGA-DU-6407</li>
+          <li>Delimiters between donor identifiers: comma, space or one donor per line</li>
+          <li>If you upload a file, the file format should be a text file (.txt, .csv, .tsv)</li>' | translate}}" has-markup>
+          <a href="">
+            <i class="fa fa-question-circle legend-icon"></i>
+          </a>
+        </span>
+        <div class="set-input" style="position:relative;">
+          <textarea rows="4" placeholder="{{ isInRepositoryFile ? 'e.g. DO35741, SP107417, SA517428, ICGC_MB111, cce62116-3dcd-400d-ada0-9839ca02466e' : 'e.g. DO45299, SP119250, SA553002, PCSI_0083, TARGET-10-PASLZM-04A' }}"
+            data-autofocus data-ng-model="params.rawText" data-ng-change="verifyDonorInput()">
+          </textarea>
+          <i style="position:absolute;top:0;right:0;cursor:pointer;" ng-show="params.rawText" class="icon-cancel" data-ng-click="resetAll()"></i>
+        </div>
+      </div>
+      <br>
+      <div>
+        <div>
+          <translate>Or choose a file to upload</translate>
+        </div>
+        <span class="t_button btn-file">
+          <translate>Browse</translate> <input type="file" accept=".tsv,.csv,text/*" data-file-upload="params.myFile">
+        </span>
+        <span style="margin-left: 5px">{{ params.fileName }}</span>
+      </div>
+      <span data-ng-if="isInState ('verifying')">
+        <i class="icon-spin icon-spinner"></i> <translate>Verifying Donor Set...</translate>
+      </span>
+      <span data-ng-if="isInState ('uploading')">
+        <i class="icon-spin icon-spinner"></i> <translate>Reading Donor Set file...</translate>
+      </span>
+
+      <!-- Result section -->
+      <div data-ng-if="isInState ('verified')">
+        <div data-ng-if="hasWarnings()">
+          <span class="alert-error" data-ng-repeat="warning in out.warnings">
+            <i class="icon-attention-1"></i> {{ warning }}
+          </span>
+        </div>
+        <div data-ng-show="hasBothValidsAndInvalidsButNoWarnings()" data-ng-init="expanded = false">
+          <a href="" data-ng-click="expanded = ! expanded">
+            <span class="alert-warning">
+              <i class="icon-attention-1"></i>
+              <translate translate-comment="{{out.invalidIds.length}} will be a number">
+                {{out.invalidIds.length}} submitted donor identifier(s) not recognized in the system
+              </translate>
+              <i class="{{ expanded? 'icon-caret-down' : 'icon-caret-left' }}"></i>
+            </span>
+          </a>
+
+          <div class="gene-list-ids" data-ng-hide="! expanded">
+            <em>{{ out.invalidIds.join (', ') }}</em>
+          </div>
+        </div>
+
+        <!-- Main table -->
+        <div data-ng-if="hasValidsButNoWarnings()">
+          <br>
+          <span>
+            <span data-ng-init="expanded = true" data-ng-click="expanded = ! expanded">
+              <a href="">
+                <translate>{{ validIdCount() }} submitted donor identifier(s) mapped to {{ numberOfUiRows }} ICGC Donor ID(s)</translate>
+                <i class="{{ expanded? 'icon-caret-down' : 'icon-caret-left' }}"></i>
+              </a>
+            </span>
             <span data-toolbar data-dl="donorset"></span>
-            </span>
+          </span>
+          <div data-ng-show="expanded">
+            <table class="table table-info" id="donorset">
+              <thead>
+                <tr>
+                  <th colspan="{{ numberOfUiColumns }}" class="text-center">
+                    <translate>Submitted</translate>
+                  </th>
+                  <th class="text-center" style="border-left:1px solid">
+                    <translate>Mapped</translate>
+                  </th>
+                </tr>
+                <tr>
+                  <td class="text-center" data-ng-if="out.hasIcgcIds">ICGC ID</td>
+                  <td class="text-center" data-ng-if="out.hasSubmitterIds">
+                    <translate>Submitter ID</translate>
+                  </td>
+                  <td style="border-left:1px solid">ICGC ID</td>
+                </tr>
+              </thead>
 
-            <div data-ng-show="expanded">
-              <table class="table table-info" id="donorset">
-                <thead>
-                  <tr>
-                    <th colspan="{{ numberOfUiColumns }}" class="text-center">
-                      <translate>Submitted</translate>
-                    </th>
-                    <th class="text-center" style="border-left:1px solid">
-                      <translate>Mapped</translate>
-                    </th>
-                  </tr>
-                  <tr>
-                    <td class="text-center" data-ng-if="out.hasIcgcIds">ICGC ID</td>
-                    <td class="text-center" data-ng-if="out.hasSubmitterIds">
-                      <translate>Submitter ID</translate>
-                    </td>
-                    <td style="border-left:1px solid">ICGC ID</td>
-                  </tr>
-                </thead>
+              <tbody>
+                <tr data-ng-repeat="(donorId, row) in out.donorSet">
+                  <td data-ng-if="out.hasIcgcIds">{{ row ['icgc'].join (', ') }}</td>
+                  <td data-ng-if="out.hasSubmitterIds">{{ row ['submitter'].join (', ') }}</td>
+                  <td style="border-left:1px solid">{{ donorId }}</td>
+                </tr>
+              </tbody>
 
-                <tbody>
-                  <tr data-ng-repeat="(donorId, row) in out.donorSet">
-                    <td data-ng-if="out.hasIcgcIds">{{ row ['icgc'].join (', ') }}</td>
-                    <td data-ng-if="out.hasSubmitterIds">{{ row ['submitter'].join (', ') }}</td>
-                    <td style="border-left:1px solid">{{ donorId }}</td>
-                  </tr>
-                </tbody>
-
-              </table>
-            </div>
+            </table>
           </div>
+        </div>
 
-          <div data-ng-if="hasNeitherValidsNorWarnings()">
-            <span class="alert-error">
-              <i class="icon-attention-1"></i> <translate>No submitted donor recognized in the system</translate>
-            </span>
-          </div>
+        <div data-ng-if="hasNeitherValidsNorWarnings()">
+          <span class="alert-error">
+            <i class="icon-attention-1"></i> <translate>No submitted donor recognized in the system</translate>
+          </span>
         </div>
       </div>
     </div>
