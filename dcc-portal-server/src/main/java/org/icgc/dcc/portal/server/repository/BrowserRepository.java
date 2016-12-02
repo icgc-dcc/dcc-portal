@@ -21,7 +21,6 @@ import static org.apache.commons.lang3.ArrayUtils.addAll;
 import static org.apache.lucene.search.join.ScoreMode.None;
 import static org.elasticsearch.action.search.SearchType.QUERY_AND_FETCH;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
@@ -121,13 +120,12 @@ public class BrowserRepository {
 
   public SearchResponse getGeneHistogram(Long interval, String segmentId, Long start, Long stop,
       List<String> biotypes, List<String> impactFilters) {
-    val filter = getGeneFilter(segmentId, start, stop, biotypes, impactFilters);
+    val query = getGeneFilter(segmentId, start, stop, biotypes, impactFilters);
 
     val histogramAggs = AggregationBuilders.histogram("hf")
         .field("start")
         .interval(interval);
 
-    val query = boolQuery().must(matchAllQuery()).filter(filter);
     return execute("Browser Gene Histogram Request", (request) -> request
         .setTypes(GENE)
         .setSearchType(QUERY_AND_FETCH)
@@ -168,8 +166,8 @@ public class BrowserRepository {
       List<String> projectFilters, List<String> impacts) {
     val andQueryFilter = boolQuery()
         .must(termQuery("chromosome", segmentId))
-        .must(rangeQuery("chromosome_start").gte(start).lte(stop))
-        .must(rangeQuery("chromosome_end").gte(start).lte(stop));
+        .must(rangeQuery("chromosome_start").lte(stop))
+        .must(rangeQuery("chromosome_end").gte(start));
 
     if (impacts != null && !impacts.isEmpty()) {
       val impactFilter = getImpactFilterMutation(impacts);
@@ -196,8 +194,8 @@ public class BrowserRepository {
       List<String> biotypes, List<String> impacts) {
     val andQueryFilter = boolQuery()
         .must(termQuery("chromosome", segmentId))
-        .must(rangeQuery("start").gte(start).lte(stop))
-        .must(rangeQuery("end").gte(start).lte(stop));
+        .must(rangeQuery("start").lte(stop))
+        .must(rangeQuery("end").gte(start));
 
     if (biotypes != null) {
       val biotypeFilter = getBiotypeFilterBuilder(biotypes);
