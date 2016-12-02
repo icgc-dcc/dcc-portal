@@ -138,13 +138,12 @@ public class BrowserRepository {
 
   public SearchResponse getMutationHistogram(Long interval, String segmentId, Long start, Long stop,
       List<String> consequenceTypes, List<String> projectFilters, List<String> impactFilters) {
-    val filter = getMutationFilter(segmentId, start, stop, consequenceTypes, projectFilters, impactFilters);
+    val query = getMutationFilter(segmentId, start, stop, consequenceTypes, projectFilters, impactFilters);
 
     val histogramAggs = AggregationBuilders.histogram("hf")
         .field("chromosome_start")
         .interval(interval);
 
-    val query = boolQuery().must(matchAllQuery()).filter(filter);
     return execute("Browser Mutation Histogram Request", (request) -> request
         .setTypes(MUTATION)
         .setSearchType(QUERY_AND_FETCH)
@@ -158,7 +157,7 @@ public class BrowserRepository {
     val request = client.prepareSearch(indexName);
     customizer.accept(request);
 
-    log.debug("{}: {}", message, request);
+    log.info("{}: {}", message, request);
     return request.execute().actionGet();
   }
 
@@ -169,8 +168,8 @@ public class BrowserRepository {
       List<String> projectFilters, List<String> impacts) {
     val andQueryFilter = boolQuery()
         .must(termQuery("chromosome", segmentId))
-        .must(rangeQuery("chromosome_start").lte(stop))
-        .must(rangeQuery("chromosome_end").lte(start));
+        .must(rangeQuery("chromosome_start").gte(start).lte(stop))
+        .must(rangeQuery("chromosome_end").gte(start).lte(stop));
 
     if (impacts != null && !impacts.isEmpty()) {
       val impactFilter = getImpactFilterMutation(impacts);
@@ -197,8 +196,8 @@ public class BrowserRepository {
       List<String> biotypes, List<String> impacts) {
     val andQueryFilter = boolQuery()
         .must(termQuery("chromosome", segmentId))
-        .must(rangeQuery("start").lte(stop))
-        .must(rangeQuery("end").lte(start));
+        .must(rangeQuery("start").gte(start).lte(stop))
+        .must(rangeQuery("end").gte(start).lte(stop));
 
     if (biotypes != null) {
       val biotypeFilter = getBiotypeFilterBuilder(biotypes);

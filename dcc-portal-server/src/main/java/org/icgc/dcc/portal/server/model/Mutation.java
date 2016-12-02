@@ -179,7 +179,7 @@ public class Mutation {
   }
 
   private static List<String> collectFunctionalImpacts(List<Map<String, Object>> transcripts) {
-    return transcripts.stream()
+    return transcripts == null ? null : transcripts.stream()
         .map(t -> t.get("functional_impact_prediction_summary").toString())
         .collect(toImmutableList());
   }
