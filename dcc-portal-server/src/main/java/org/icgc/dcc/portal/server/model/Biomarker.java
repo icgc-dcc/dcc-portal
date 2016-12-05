@@ -17,42 +17,43 @@
  */
 package org.icgc.dcc.portal.server.model;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-public enum EntityType {
-  PROJECT("project"),
-  DONOR("donor"),
-  GENE("gene"),
-  MUTATION("mutation"),
-  PATHWAY("pathway"),
+import java.util.Map;
 
-  GENE_SET("geneSet"),
-  FILE("file"),
-  REPOSITORY("repository"),
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-  CONSEQUENCE("consequence"),
-  TRANSCRIPT("transcript"),
-  OCCURRENCE("occurrence"),
-  EMB_OCCURRENCE("embOccurrence"),
-  OBSERVATION("observation"),
-  RELEASE("release"),
-  KEYWORD(""),
-  SPECIMEN(""),
-  SAMPLE(""),
-  SEQ_DATA(""),
-  DOMAIN(""),
-  EXON(""),
-  DIAGRAM("diagram"),
-  FAMILY(""),
-  EXPOSURE(""),
-  THERAPY(""),
-  BIOMARKER("biomarker"),
-  SURGERY("surgery");
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Value;
+import lombok.val;
 
-  private final String id;
+@Value
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@ApiModel(value = "Biomarker")
+public class Biomarker {
+
+  @ApiModelProperty(value = "Specimen ID", required = true)
+  String specimenId;
+
+  @ApiModelProperty(value = "Biomarker Name", required = true)
+  String biomarkerName;
+
+  @ApiModelProperty(value = "Biomarker Threshold", required = true)
+  String biomarkerThreshold;
+
+  @ApiModelProperty(value = "Biomarker Positive", required = true)
+  String biomarkerPositive;
+
+  @JsonCreator
+  public Biomarker(Map<String, Object> fieldMap) {
+    val fields = FIELDS_MAPPING.get(EntityType.BIOMARKER);
+    specimenId = getString(fieldMap.get(fields.get("specimenId")));
+    biomarkerName = getString(fieldMap.get(fields.get("biomarkerName")));
+    biomarkerThreshold = getString(fieldMap.get(fields.get("biomarkerThreshold")));
+    biomarkerPositive = getString(fieldMap.get(fields.get("biomarkerPositive")));
+  }
 
 }
