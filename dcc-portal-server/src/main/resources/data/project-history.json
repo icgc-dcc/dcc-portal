@@ -95,6 +95,11 @@
         "value": 220
     },
     {
+        "group": "ALL-US",
+        "index": 23,
+        "value": 220
+    },
+    {
         "group": "AML-US",
         "index": 4,
         "value": 0
@@ -190,6 +195,11 @@
         "value": 161
     },
     {
+        "group": "AML-US",
+        "index": 23,
+        "value": 161
+    },
+    {
         "group": "BLCA-CN",
         "index": 4,
         "value": 0
@@ -282,6 +292,11 @@
     {
         "group": "BLCA-CN",
         "index": 22,
+        "value": 103
+    },
+    {
+        "group": "BLCA-CN",
+        "index": 23,
         "value": 103
     },
     {
@@ -380,6 +395,11 @@
         "value": 299
     },
     {
+        "group": "BLCA-US",
+        "index": 23,
+        "value": 299
+    },
+    {
         "group": "BOCA-FR",
         "index": 4,
         "value": 0
@@ -475,6 +495,11 @@
         "value": 98
     },
     {
+        "group": "BOCA-FR",
+        "index": 23,
+        "value": 98
+    },
+    {
         "group": "BOCA-UK",
         "index": 4,
         "value": 0
@@ -567,6 +592,11 @@
     {
         "group": "BOCA-UK",
         "index": 22,
+        "value": 69
+    },
+    {
+        "group": "BOCA-UK",
+        "index": 23,
         "value": 69
     },
     {
@@ -662,6 +692,11 @@
     {
         "group": "BRCA-EU",
         "index": 22,
+        "value": 560
+    },
+    {
+        "group": "BRCA-EU",
+        "index": 23,
         "value": 560
     },
     {
@@ -760,6 +795,11 @@
         "value": 99
     },
     {
+        "group": "BRCA-FR",
+        "index": 23,
+        "value": 99
+    },
+    {
         "group": "BRCA-KR",
         "index": 4,
         "value": 0
@@ -852,6 +892,11 @@
     {
         "group": "BRCA-KR",
         "index": 22,
+        "value": 33
+    },
+    {
+        "group": "BRCA-KR",
+        "index": 23,
         "value": 33
     },
     {
@@ -950,6 +995,11 @@
         "value": 141
     },
     {
+        "group": "BRCA-UK",
+        "index": 23,
+        "value": 141
+    },
+    {
         "group": "BRCA-US",
         "index": 4,
         "value": 0
@@ -1045,6 +1095,11 @@
         "value": 1045
     },
     {
+        "group": "BRCA-US",
+        "index": 23,
+        "value": 1045
+    },
+    {
         "group": "BTCA-JP",
         "index": 4,
         "value": 0
@@ -1140,6 +1195,11 @@
         "value": 239
     },
     {
+        "group": "BTCA-JP",
+        "index": 23,
+        "value": 239
+    },
+    {
         "group": "CCSK-US",
         "index": 4,
         "value": 0
@@ -1232,6 +1292,11 @@
     {
         "group": "CCSK-US",
         "index": 22,
+        "value": 13
+    },
+    {
+        "group": "CCSK-US",
+        "index": 23,
         "value": 13
     },
     {
@@ -1330,6 +1395,11 @@
         "value": 261
     },
     {
+        "group": "CESC-US",
+        "index": 23,
+        "value": 261
+    },
+    {
         "group": "CLLE-ES",
         "index": 4,
         "value": 0
@@ -1425,6 +1495,11 @@
         "value": 549
     },
     {
+        "group": "CLLE-ES",
+        "index": 23,
+        "value": 549
+    },
+    {
         "group": "CMDI-UK",
         "index": 4,
         "value": 0
@@ -1517,6 +1592,11 @@
     {
         "group": "CMDI-UK",
         "index": 22,
+        "value": 129
+    },
+    {
+        "group": "CMDI-UK",
+        "index": 23,
         "value": 129
     },
     {
@@ -1615,6 +1695,11 @@
         "value": 451
     },
     {
+        "group": "COAD-US",
+        "index": 23,
+        "value": 451
+    },
+    {
         "group": "COCA-CN",
         "index": 4,
         "value": 0
@@ -1710,6 +1795,11 @@
         "value": 187
     },
     {
+        "group": "COCA-CN",
+        "index": 23,
+        "value": 187
+    },
+    {
         "group": "EOPC-DE",
         "index": 4,
         "value": 0
@@ -1802,6 +1892,11 @@
     {
         "group": "EOPC-DE",
         "index": 22,
+        "value": 62
+    },
+    {
+        "group": "EOPC-DE",
+        "index": 23,
         "value": 62
     },
     {
@@ -1900,6 +1995,11 @@
         "value": 203
     },
     {
+        "group": "ESAD-UK",
+        "index": 23,
+        "value": 203
+    },
+    {
         "group": "ESCA-CN",
         "index": 4,
         "value": 0
@@ -1995,6 +2095,11 @@
         "value": 228
     },
     {
+        "group": "ESCA-CN",
+        "index": 23,
+        "value": 228
+    },
+    {
         "group": "GACA-CN",
         "index": 4,
         "value": 0
@@ -2087,6 +2192,11 @@
     {
         "group": "GACA-CN",
         "index": 22,
+        "value": 9
+    },
+    {
+        "group": "GACA-CN",
+        "index": 23,
         "value": 9
     },
     {
@@ -2185,6 +2295,11 @@
         "value": 589
     },
     {
+        "group": "GBM-US",
+        "index": 23,
+        "value": 589
+    },
+    {
         "group": "HNSC-US",
         "index": 4,
         "value": 0
@@ -2277,6 +2392,11 @@
     {
         "group": "HNSC-US",
         "index": 22,
+        "value": 494
+    },
+    {
+        "group": "HNSC-US",
+        "index": 23,
         "value": 494
     },
     {
@@ -2375,6 +2495,11 @@
         "value": 525
     },
     {
+        "group": "KIRC-US",
+        "index": 23,
+        "value": 525
+    },
+    {
         "group": "KIRP-US",
         "index": 4,
         "value": 0
@@ -2470,6 +2595,11 @@
         "value": 233
     },
     {
+        "group": "KIRP-US",
+        "index": 23,
+        "value": 223
+    },
+    {
         "group": "LAML-CN",
         "index": 4,
         "value": 0
@@ -2562,6 +2692,11 @@
     {
         "group": "LAML-CN",
         "index": 22,
+        "value": 63
+    },
+    {
+        "group": "LAML-CN",
+        "index": 23,
         "value": 63
     },
     {
@@ -2660,6 +2795,11 @@
         "value": 157
     },
     {
+        "group": "LAML-KR",
+        "index": 23,
+        "value": 157
+    },
+    {
         "group": "LAML-US",
         "index": 4,
         "value": 0
@@ -2752,6 +2892,11 @@
     {
         "group": "LAML-US",
         "index": 22,
+        "value": 200
+    },
+    {
+        "group": "LAML-US",
+        "index": 23,
         "value": 200
     },
     {
@@ -2850,6 +2995,11 @@
         "value": 441
     },
     {
+        "group": "LGG-US",
+        "index": 23,
+        "value": 441
+    },
+    {
         "group": "LIAD-FR",
         "index": 4,
         "value": 0
@@ -2942,6 +3092,11 @@
     {
         "group": "LIAD-FR",
         "index": 22,
+        "value": 30
+    },
+    {
+        "group": "LIAD-FR",
+        "index": 23,
         "value": 30
     },
     {
@@ -3037,6 +3192,11 @@
     {
         "group": "LICA-CN",
         "index": 22,
+        "value": 163
+    },
+    {
+        "group": "LICA-CN",
+        "index": 23,
         "value": 163
     },
     {
@@ -3135,6 +3295,11 @@
         "value": 277
     },
     {
+        "group": "LICA-FR",
+        "index": 23,
+        "value": 277
+    },
+    {
         "group": "LIHC-US",
         "index": 4,
         "value": 0
@@ -3230,6 +3395,11 @@
         "value": 317
     },
     {
+        "group": "LIHC-US",
+        "index": 23,
+        "value": 317
+    },
+    {
         "group": "LIHM-FR",
         "index": 4,
         "value": 0
@@ -3322,6 +3492,11 @@
     {
         "group": "LIHM-FR",
         "index": 22,
+        "value": 4
+    },
+    {
+        "group": "LIHM-FR",
+        "index": 23,
         "value": 4
     },
     {
@@ -3420,6 +3595,11 @@
         "value": 244
     },
     {
+        "group": "LINC-JP",
+        "index": 23,
+        "value": 244
+    },
+    {
         "group": "LIRI-JP",
         "index": 4,
         "value": 1
@@ -3512,6 +3692,11 @@
     {
         "group": "LIRI-JP",
         "index": 22,
+        "value": 260
+    },
+    {
+        "group": "LIRI-JP",
+        "index": 23,
         "value": 260
     },
     {
@@ -3610,6 +3795,11 @@
         "value": 485
     },
     {
+        "group": "LUAD-US",
+        "index": 23,
+        "value": 485
+    },
+    {
         "group": "LUSC-CN",
         "index": 4,
         "value": 0
@@ -3702,6 +3892,11 @@
     {
         "group": "LUSC-CN",
         "index": 22,
+        "value": 10
+    },
+    {
+        "group": "LUSC-CN",
+        "index": 23,
         "value": 10
     },
     {
@@ -3797,6 +3992,11 @@
     {
         "group": "LUSC-KR",
         "index": 22,
+        "value": 66
+    },
+    {
+        "group": "LUSC-KR",
+        "index": 23,
         "value": 66
     },
     {
@@ -3895,6 +4095,11 @@
         "value": 431
     },
     {
+        "group": "LUSC-US",
+        "index": 23,
+        "value": 431
+    },
+    {
         "group": "MALY-DE",
         "index": 4,
         "value": 0
@@ -3987,6 +4192,11 @@
     {
         "group": "MALY-DE",
         "index": 22,
+        "value": 117
+    },
+    {
+        "group": "MALY-DE",
+        "index": 23,
         "value": 117
     },
     {
@@ -4085,6 +4295,11 @@
         "value": 183
     },
     {
+        "group": "MELA-AU",
+        "index": 23,
+        "value": 183
+    },
+    {
         "group": "NBL-US",
         "index": 4,
         "value": 0
@@ -4177,6 +4392,11 @@
     {
         "group": "NBL-US",
         "index": 22,
+        "value": 448
+    },
+    {
+        "group": "NBL-US",
+        "index": 23,
         "value": 448
     },
     {
@@ -4275,6 +4495,11 @@
         "value": 131
     },
     {
+        "group": "ORCA-IN",
+        "index": 23,
+        "value": 131
+    },
+    {
         "group": "OV-AU",
         "index": 4,
         "value": 0
@@ -4370,6 +4595,11 @@
         "value": 93
     },
     {
+        "group": "OV-AU",
+        "index": 23,
+        "value": 93
+    },
+    {
         "group": "OV-US",
         "index": 4,
         "value": 0
@@ -4462,6 +4692,11 @@
     {
         "group": "OV-US",
         "index": 22,
+        "value": 582
+    },
+    {
+        "group": "OV-US",
+        "index": 23,
         "value": 582
     },
     {
@@ -4560,6 +4795,11 @@
         "value": 148
     },
     {
+        "group": "PAAD-US",
+        "index": 23,
+        "value": 148
+    },
+    {
         "group": "PACA-AU",
         "index": 4,
         "value": 5
@@ -4652,6 +4892,11 @@
     {
         "group": "PACA-AU",
         "index": 22,
+        "value": 430
+    },
+    {
+        "group": "PACA-AU",
+        "index": 23,
         "value": 430
     },
     {
@@ -4750,6 +4995,11 @@
         "value": 308
     },
     {
+        "group": "PACA-CA",
+        "index": 23,
+        "value": 308
+    },
+    {
         "group": "PACA-IT",
         "index": 4,
         "value": 0
@@ -4842,6 +5092,11 @@
     {
         "group": "PACA-IT",
         "index": 22,
+        "value": 0
+    },
+    {
+        "group": "PACA-IT",
+        "index": 23,
         "value": 0
     },
     {
@@ -4940,6 +5195,11 @@
         "value": 66
     },
     {
+        "group": "PAEN-AU",
+        "index": 23,
+        "value": 66
+    },
+    {
         "group": "PAEN-IT",
         "index": 4,
         "value": 0
@@ -5032,6 +5292,11 @@
     {
         "group": "PAEN-IT",
         "index": 22,
+        "value": 37
+    },
+    {
+        "group": "PAEN-IT",
+        "index": 23,
         "value": 37
     },
     {
@@ -5130,6 +5395,11 @@
         "value": 421
     },
     {
+        "group": "PBCA-DE",
+        "index": 23,
+        "value": 421
+    },
+    {
         "group": "PEME-CA",
         "index": 4,
         "value": 0
@@ -5222,6 +5492,11 @@
     {
         "group": "PEME-CA",
         "index": 22,
+        "value": 0
+    },
+    {
+        "group": "PEME-CA",
+        "index": 23,
         "value": 0
     },
     {
@@ -5317,6 +5592,11 @@
     {
         "group": "PRAD-CA",
         "index": 22,
+        "value": 125
+    },
+    {
+        "group": "PRAD-CA",
+        "index": 23,
         "value": 125
     },
     {
@@ -5415,6 +5695,11 @@
         "value": 108
     },
     {
+        "group": "PRAD-UK",
+        "index": 23,
+        "value": 108
+    },
+    {
         "group": "PRAD-US",
         "index": 4,
         "value": 0
@@ -5507,6 +5792,11 @@
     {
         "group": "PRAD-US",
         "index": 22,
+        "value": 384
+    },
+    {
+        "group": "PRAD-US",
+        "index": 23,
         "value": 384
     },
     {
@@ -5605,6 +5895,11 @@
         "value": 169
     },
     {
+        "group": "READ-US",
+        "index": 23,
+        "value": 169
+    },
+    {
         "group": "RECA-CN",
         "index": 4,
         "value": 0
@@ -5700,6 +5995,11 @@
         "value": 10
     },
     {
+        "group": "RECA-CN",
+        "index": 23,
+        "value": 10
+    },
+    {
         "group": "RECA-EU",
         "index": 4,
         "value": 0
@@ -5792,6 +6092,11 @@
     {
         "group": "RECA-EU",
         "index": 22,
+        "value": 122
+    },
+    {
+        "group": "RECA-EU",
+        "index": 23,
         "value": 122
     },
     {
@@ -5890,6 +6195,11 @@
         "value": 70
     },
     {
+        "group": "SKCA-BR",
+        "index": 23,
+        "value": 80
+    },
+    {
         "group": "SKCM-US",
         "index": 4,
         "value": 0
@@ -5982,6 +6292,11 @@
     {
         "group": "SKCM-US",
         "index": 22,
+        "value": 433
+    },
+    {
+        "group": "SKCM-US",
+        "index": 23,
         "value": 433
     },
     {
@@ -6080,6 +6395,11 @@
         "value": 433
     },
     {
+        "group": "STAD-US",
+        "index": 23,
+        "value": 433
+    },
+    {
         "group": "THCA-SA",
         "index": 4,
         "value": 0
@@ -6172,6 +6492,11 @@
     {
         "group": "THCA-SA",
         "index": 22,
+        "value": 129
+    },
+    {
+        "group": "THCA-SA",
+        "index": 23,
         "value": 129
     },
     {
@@ -6270,6 +6595,11 @@
         "value": 502
     },
     {
+        "group": "THCA-US",
+        "index": 23,
+        "value": 502
+    },
+    {
         "group": "UCEC-US",
         "index": 4,
         "value": 0
@@ -6365,6 +6695,11 @@
         "value": 513
     },
     {
+        "group": "UCEC-US",
+        "index": 23,
+        "value": 513
+    },
+    {
         "group": "WT-US",
         "index": 4,
         "value": 0
@@ -6457,6 +6792,11 @@
     {
         "group": "WT-US",
         "index": 22,
+        "value": 126
+    },
+    {
+        "group": "WT-US",
+        "index": 23,
         "value": 126
     }
 ]
