@@ -65,29 +65,29 @@ angular.module('icgc.advanced.controllers', [
 
       _locationFilterCache = _filterService.getCachedFiltersFactory();
 
-      let filters = _locationFilterCache.filters();
-
-      _controller.donorSets = SetService.getAllDonorSets();
+      _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
 
       // to check if a set was previously selected and if its still in effect
       const checkSetInFilter = () => {
+        let filters = _locationFilterCache.filters();
+        const setIdPrefix = 'ES:';
+
         if(filters.donor && filters.donor.id){
-          _.each(filters.donor.id.is, (id) => {
-            if(_.includes(id,'ES')){
-              const set = _.find(_controller.donorSets, function(set){
-                return `ES:${set.id}` === id;
-              });
-              if(set){
-                set.selected = true;
+          _.each(_controller.donorSets, (set) => {
+            set.selected = false;
+            _.each(filters.donor.id.is, (id) => {
+              if(_.includes(id, setIdPrefix)){
+                if(`${setIdPrefix}${set.id}` === id){
+                  set.selected = true;
+                }
               }
-            }
-          })
+            });
+          });
         } else {
           _.each(_controller.donorSets, (set) => {
             set.selected = false;
           });
         }
-        console.log(_controller.donorSets);
       };
 
       var _isInAdvancedSearchCtrl = true;
@@ -197,7 +197,6 @@ angular.module('icgc.advanced.controllers', [
         }
 
         _controller.hasGeneFilter = angular.isObject(filters) ?  filters.hasOwnProperty('gene') : false;
-        checkSetInFilter();
       }
 
       function _renderTab(tab, forceFullRefresh) {
@@ -286,6 +285,7 @@ angular.module('icgc.advanced.controllers', [
           }
 
           _locationFilterCache.updateCache();
+          checkSetInFilter();
           _resetServices();
           _refresh();
         });
@@ -350,6 +350,8 @@ angular.module('icgc.advanced.controllers', [
             _controller.setSubTab(subTab);
           }
         });
+
+        checkSetInFilter();
       }
 
 

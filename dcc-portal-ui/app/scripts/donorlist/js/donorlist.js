@@ -106,7 +106,7 @@ import deepmerge from 'deepmerge';
     $scope.action = modalAction;
     $scope.isSelect = false;
 
-    $scope.donorSets = _.map(SetService.getAllDonorSets(), (set) => {
+    $scope.donorSets = _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
       // If the current page is repository then create repoFilters
       if($scope.isInRepositoryFile){
         set.repoFilters = {};
@@ -127,7 +127,6 @@ import deepmerge from 'deepmerge';
 
     // to check if a set was previously selected and if its still in effect
     const checkSetInFilter = () => {
-      console.log(filters);
       if(filters.donor && filters.donor.id){
         _.each(filters.donor.id.is, (id) => {
           if(_.includes(id,'ES')){

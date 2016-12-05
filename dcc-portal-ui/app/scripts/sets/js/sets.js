@@ -81,9 +81,13 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addSet(setType, params);
+        SetService.addSet(setType, params).then(() => {
+          console.log('Set added');
+        });
       } else {
-        SetService.addDerivedSet(setType, params);
+        SetService.addDerivedSet(setType, params).then(() => {
+          console.log('Derived Set added');
+        });
       }
 
       // Reset
@@ -112,7 +116,9 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addExternalSet(setType, params);
+        SetService.addExternalSet(setType, params).then(() => {
+          console.log('External Set added');
+        });
       }
 
       // Reset
