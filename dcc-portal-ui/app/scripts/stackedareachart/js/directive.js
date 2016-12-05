@@ -38,7 +38,8 @@
       19:'Jun-15',
       20: 'Nov-15',
       21: 'May-16',
-      22: 'August-16'
+      22: 'August-16',
+      23: 'Dec-16'
     };
 
   module.directive('donorHistory', function ($location, HighchartsService, gettextCatalog) {
@@ -80,7 +81,7 @@
           yaxis:{label: gettextCatalog.getString('# of Donors'),ticks:8},
           xaxis: {
             label: gettextCatalog.getString('Release'),
-            ticksValueRange: [4, 22],
+            ticksValueRange: [4, 23],
             secondaryLabel: function(data){return releaseDates[data];}
           },
           onClick: function(project){
@@ -131,7 +132,7 @@
               $scope.selected = newValue;
               var showPlot = shouldShowPlot ($scope.items);
               $scope.showPlot = showPlot;
-              if (! showPlot) {return;}
+              if (! showPlot) { return }
 
               chart = new dcc.StackedAreaChart (filterProjects ($scope.items, $scope.selected), config);
               renderChart (chart);
@@ -141,7 +142,7 @@
         $scope.$watch('items', function (newValue) {
           var showPlot = shouldShowPlot (newValue);
           $scope.showPlot = showPlot;
-          if (! showPlot) {return;}
+          if (! showPlot) { return }
 
           if (!chart && newValue) {
             chart = new dcc.StackedAreaChart(filterProjects($scope.items,$scope.selected),config);
