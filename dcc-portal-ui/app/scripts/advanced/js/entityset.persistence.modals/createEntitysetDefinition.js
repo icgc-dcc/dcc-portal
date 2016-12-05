@@ -20,13 +20,13 @@ export default function createEntitysetDefinition ({
   type,
   size,
   isTransient,
-} = {
-  isTransient: false
 }) {
   const requiredFields = {filters, name, type, size};
   const missingRequiredFields = _.pickBy(requiredFields, _.isUndefined);
   invariant(!Object.keys(missingRequiredFields).length, `Required properties [${Object.keys(missingRequiredFields)}] cannot be undefined.`);
   invariant(_.values(ENTITY_TYPES).includes(type), `'type' must be one of [${_.values(ENTITY_TYPES)}]`);
+  sortBy = sortBy || type === ENTITY_TYPES.DONOR ? 'ssmAffectedGenes' : 'affectedDonorCountFiltered';
+  sortOrder = sortOrder || SORT_ORDERS.DESCENDING;
   return {
     filters,
     sortBy,
