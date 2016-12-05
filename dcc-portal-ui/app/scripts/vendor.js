@@ -1,12 +1,5 @@
 require('expose?jQuery!expose?$!jquery');
-
-// prevent window's lodash from being overwritten'
-const _ = require('../bower_components/lodash/lodash.js');
-Object.defineProperty(window, '_', {
-  get: function () {
-    return _;
-  }
-});
+require('expose?_!../bower_components/lodash/lodash.js');
 
 // Angular Libs
 require('angular/angular.js');
