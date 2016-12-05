@@ -117,7 +117,7 @@
 
       // Set default sort values if necessary
       if (angular.isDefined(params.filters) && !angular.isDefined(params.sortBy)) {
-        if (type.toLowerCase() === 'donor') {
+        if (type === 'donor') {
           data.sortBy = 'ssmAffectedGenes';
         } else {
           data.sortBy = 'affectedDonorCountFiltered';
