@@ -21,6 +21,9 @@
  * along with JS Common Libs. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Dead man's switch to account for pixelBase potentially accoutning for zoom when we update genome-viewer.js
+window.GENOME_VIEWER_PIXELBASE_DOES_NOT_ACCOUNT_FOR_ZOOM = true;
+
 var Utils = {
     //properties
     characters: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",

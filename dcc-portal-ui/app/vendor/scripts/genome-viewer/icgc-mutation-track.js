@@ -100,6 +100,12 @@ IcgcMutationTrack.prototype.initializeDom = function(targetId) {
 };
 
 function getSvgCanvasOffset(icgcMutationTrack) {
+  if (!window.GENOME_VIEWER_PIXELBASE_DOES_NOT_ACCOUNT_FOR_ZOOM) {
+    console.warn(`Was genome-viewer updated?
+      This method currently assumes pixelBase does not account for zoom (zoom is different from zoomMultiplier).
+      If pixelBase now accounts for zoom, remove "/ Math.min(window.gv.zoom, 1)"
+    `);
+  }
   return (icgcMutationTrack.width * 3 / 2) / icgcMutationTrack.pixelBase / Math.min(window.gv.zoom, 1);
 };
 
