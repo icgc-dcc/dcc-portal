@@ -77,25 +77,53 @@ angular.module('icgc.advanced.controllers', [
       
       // NOTE: using IDs instead of storing references to entities b/c pagination results in new objects  
       this.selectedEntityIdsMap = {};
-      this.toggleSelectedEntity = (type, entity) => {
-        if (!this.selectedEntityIdsMap[type]) {
-          this.selectedEntityIdsMap[type] = [];
+      this.toggleSelectedEntity = (entityType, entity) => {
+        if (!this.selectedEntityIdsMap[entityType]) {
+          this.selectedEntityIdsMap[entityType] = [];
         }
-        this.selectedEntityIdsMap[type] = _.xor(this.selectedEntityIdsMap[type], [entity.id]);
+        this.selectedEntityIdsMap[entityType] = _.xor(this.selectedEntityIdsMap[entityType], [entity.id]);
       };
-      this.isEntitySelected = (type, entity) => {
-        return this.selectedEntityIdsMap[type] && this.selectedEntityIdsMap[type].includes(entity.id);
-      }
+      this.isEntitySelected = (entityType, entity) => {
+        return this.selectedEntityIdsMap[entityType] && this.selectedEntityIdsMap[entityType].includes(entity.id);
+      };
 
-      this.handleClickSaveNew = () => {
-        console.log('add to set modal');
+      const getEntitysetDefinitionByEntityIds = () => ({});
+      
+
+      this.handleClickSaveNew = (entityType, limit) => {
+        const selectedEntityIds = this.selectedEntityIdsMap[entityType];
+        if (!selectedEntityIds || !selectedEntityIds.length) {
+          _controller.saveSet(entityType, limit);
+          return;
+        }
+
+        const filters = {
+          [entityType]: {
+            id: {
+              is: selectedEntityIds
+            }
+          }
+        };
+
+        const entitysetDefinition = require('./entityset.persistence.modals/createEntitysetDefinition')({
+          filters,
+          name: selectedEntityIds.join(' / '),
+          type: String.prototype.toUpperCase.apply(entityType),
+          size: selectedEntityIds.length,
+        });
+
         $modal.open({
           template: `
             <save-new-set-modal
-              close="$close"
+              close="vm.$close"
+              initial-entityset-definition="vm.entitysetDefinition"
             ></save-new-set-modal>
           `,
-          // component: 'entitysetPersistenceModal',
+          controller: function () {
+            this.entitysetDefinition = entitysetDefinition;
+          },
+          controllerAs: 'vm',
+          bindToController: true,
         });
       };
 
