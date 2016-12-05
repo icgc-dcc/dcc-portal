@@ -326,13 +326,13 @@
 
             $scope.geneSetName = getName('geneSet');
             $scope.donorSetName = getName('donorSet');
+            if (typeof $scope.OncoCtrl.grid !== 'undefined' && $scope.OncoCtrl.grid !== null) {
+              $scope.cleanActives();
+              $scope.OncoCtrl.grid.destroy();
+            }
             $element.find('#oncogrid-spinner').toggle(true);
             createLinks();
             $scope.materializeSets().then(function () {
-              if ($scope.OncoCtrl.grid) {
-                $scope.cleanActives();
-                $scope.OncoCtrl.grid.destroy();
-              }
               $element.find('#oncogrid-spinner').toggle(false);
 
               // Temporary fix:
