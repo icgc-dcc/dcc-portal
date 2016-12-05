@@ -17,42 +17,48 @@
  */
 package org.icgc.dcc.portal.server.model;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-public enum EntityType {
-  PROJECT("project"),
-  DONOR("donor"),
-  GENE("gene"),
-  MUTATION("mutation"),
-  PATHWAY("pathway"),
+import java.util.Map;
 
-  GENE_SET("geneSet"),
-  FILE("file"),
-  REPOSITORY("repository"),
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-  CONSEQUENCE("consequence"),
-  TRANSCRIPT("transcript"),
-  OCCURRENCE("occurrence"),
-  EMB_OCCURRENCE("embOccurrence"),
-  OBSERVATION("observation"),
-  RELEASE("release"),
-  KEYWORD(""),
-  SPECIMEN(""),
-  SAMPLE(""),
-  SEQ_DATA(""),
-  DOMAIN(""),
-  EXON(""),
-  DIAGRAM("diagram"),
-  FAMILY(""),
-  EXPOSURE(""),
-  THERAPY(""),
-  BIOMARKER("biomarker"),
-  SURGERY("surgery");
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Value;
+import lombok.val;
 
-  private final String id;
+@Value
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@ApiModel(value = "Surgery")
+public class Surgery {
+
+  @ApiModelProperty(value = "Specimen ID", required = false)
+  String specimenId;
+
+  @ApiModelProperty(value = "Procedure Interval", required = false)
+  Long procedureInterval;
+
+  @ApiModelProperty(value = "Procedure Type", required = true)
+  String procedureType;
+
+  @ApiModelProperty(value = "Procedure Site", required = true)
+  String procedureSite;
+
+  @ApiModelProperty(value = "Resection Status", required = false)
+  String resectionStatus;
+
+  @JsonCreator
+  public Surgery(Map<String, Object> fieldMap) {
+    val fields = FIELDS_MAPPING.get(EntityType.SURGERY);
+    specimenId = getString(fieldMap.get(fields.get("specimenId")));
+    procedureInterval = getLong(fieldMap.get(fields.get("procedureInterval")));
+    procedureType = getString(fieldMap.get(fields.get("procedureType")));
+    procedureSite = getString(fieldMap.get(fields.get("procedureSite")));
+    resectionStatus = getString(fieldMap.get(fields.get("resectionStatus")));
+  }
 
 }

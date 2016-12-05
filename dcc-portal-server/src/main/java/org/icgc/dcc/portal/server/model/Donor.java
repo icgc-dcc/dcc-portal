@@ -122,6 +122,12 @@ public class Donor {
   @ApiModelProperty(value = "Exposure")
   List<Exposure> exposure;
 
+  @ApiModelProperty(value = "Biomarker")
+  List<Biomarker> biomarker;
+
+  @ApiModelProperty(value = "Surgery")
+  List<Surgery> surgery;
+
   @ApiModelProperty(value = "State")
   String state;
 
@@ -175,27 +181,40 @@ public class Donor {
     therapy = buildTherapy((List<Map<String, Object>>) fieldMap.get("therapy"));
     family = buildFamily((List<Map<String, Object>>) fieldMap.get("family"));
     exposure = buildExposure((List<Map<String, Object>>) fieldMap.get("exposure"));
+    biomarker = buildBiomarker((List<Map<String, Object>>) fieldMap.get("biomarker"));
+    surgery = buildSurgery((List<Map<String, Object>>) fieldMap.get("surgery"));
 
     state = getString(fieldMap.get(fields.get("state")));
   }
 
-  private List<Exposure> buildExposure(List<Map<String, Object>> field) {
+  private static List<Surgery> buildSurgery(List<Map<String, Object>> field) {
+    if (field == null) return null;
+    return field.stream().map(Surgery::new).collect(toImmutableList());
+  }
+
+  private static List<Biomarker> buildBiomarker(List<Map<String, Object>> field) {
+    if (field == null) return null;
+    return field.stream().map(Biomarker::new).collect(toImmutableList());
+  }
+
+  private static List<Exposure> buildExposure(List<Map<String, Object>> field) {
     if (field == null) return null;
     return field.stream().map(Exposure::new).collect(toImmutableList());
   }
 
-  private List<Family> buildFamily(List<Map<String, Object>> field) {
+  private static List<Family> buildFamily(List<Map<String, Object>> field) {
     if (field == null) return null;
     return field.stream().map(Family::new).collect(toImmutableList());
   }
 
-  private List<Therapy> buildTherapy(List<Map<String, Object>> field) {
+  private static List<Therapy> buildTherapy(List<Map<String, Object>> field) {
     if (field == null) return null;
     return field.stream().map(Therapy::new).collect(toImmutableList());
   }
 
-  private List<Specimen> buildSpecimen(List<Map<String, Object>> field) {
+  private static List<Specimen> buildSpecimen(List<Map<String, Object>> field) {
     if (field == null) return null;
     return field.stream().map(Specimen::new).collect(toImmutableList());
   }
+
 }
