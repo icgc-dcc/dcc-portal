@@ -137,9 +137,8 @@
         }
         
         span{
-          min-width: 50%;
-          display:inline-block;
-
+          display: block;
+          
           &:last-child{
             text-align: right;
             font-size: 10px;

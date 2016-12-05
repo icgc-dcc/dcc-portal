@@ -94,7 +94,10 @@
     _this.addCustomGeneSet = function() {
       $modal.open({
         templateUrl: '/scripts/genelist/views/upload.html',
-        controller: 'GeneListController'
+        controller: 'GeneListController',
+        resolve :{
+          modalAction: () => 'upload'
+        }
       });
     };
 

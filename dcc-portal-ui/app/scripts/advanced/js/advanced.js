@@ -66,16 +66,17 @@ angular.module('icgc.advanced.controllers', [
       _locationFilterCache = _filterService.getCachedFiltersFactory();
 
       _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
+      _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
 
       // to check if a set was previously selected and if its still in effect
-      const checkSetInFilter = () => {
+      const checkSetInFilter = (entity, entitySets) => {
         let filters = _locationFilterCache.filters();
         const setIdPrefix = 'ES:';
 
-        if(filters.donor && filters.donor.id){
-          _.each(_controller.donorSets, (set) => {
+        if(filters[entity] && filters[entity].id){
+          _.each(entitySets, (set) => {
             set.selected = false;
-            _.each(filters.donor.id.is, (id) => {
+            _.each(filters[entity].id.is, (id) => {
               if(_.includes(id, setIdPrefix)){
                 if(`${setIdPrefix}${set.id}` === id){
                   set.selected = true;
@@ -84,7 +85,7 @@ angular.module('icgc.advanced.controllers', [
             });
           });
         } else {
-          _.each(_controller.donorSets, (set) => {
+          _.each(entitySets, (set) => {
             set.selected = false;
           });
         }
@@ -285,7 +286,8 @@ angular.module('icgc.advanced.controllers', [
           }
 
           _locationFilterCache.updateCache();
-          checkSetInFilter();
+          checkSetInFilter('donor', _controller.donorSets);
+          checkSetInFilter('gene', _controller.geneSets);
           _resetServices();
           _refresh();
         });
@@ -351,7 +353,8 @@ angular.module('icgc.advanced.controllers', [
           }
         });
 
-        checkSetInFilter();
+        checkSetInFilter('donor', _controller.donorSets);
+        checkSetInFilter('gene', _controller.geneSets);
       }
 
 

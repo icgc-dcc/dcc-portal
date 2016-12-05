@@ -176,7 +176,7 @@ import deepmerge from 'deepmerge';
   var module = angular.module('icgc.genelist.controllers', []);
 
   module.controller('GeneListController', function ($scope, $timeout, $location, $modalInstance,
-    GeneSetVerificationService, LocationService, SetService, Page) {
+    GeneSetVerificationService, LocationService, SetService, Page, modalAction) {
 
     var verifyPromise = null;
     var delay = 1000;
@@ -191,18 +191,17 @@ import deepmerge from 'deepmerge';
     $scope.params.fileName = '';
     $scope.params.inputMethod = 'id';
     $scope.params.selectedSets = [];
+    
 
     // Determine display params based on current page
     $scope.analysisMode = Page.page() === 'analysis' ? true : false;
 
-    $scope.checkAll = false;
-    $scope.isSavedSetVisible = true;
-    $scope.isUploadSetVisible = false;
-    $scope.geneSets = SetService.getAllGeneSets();
+    $scope.action = modalAction;
+    $scope.isSelect = false;
+    $scope.geneSets = _.cloneDeep(SetService.getAllGeneSets());
 
-    if(!$scope.geneSets.length || $scope.analysisMode){
-      $scope.isSavedSetVisible = false;
-      $scope.isUploadSetVisible = true;
+    if($scope.action === 'select'){
+      $scope.isSelect = true;
     }
 
     // Fields needed for saving into custom gene set
@@ -211,14 +210,6 @@ import deepmerge from 'deepmerge';
     // Output
     $scope.out = {};
 
-     /* Select/deselect all */
-    $scope.toggleCheckAll = () => {
-      $scope.checkAll = !$scope.checkAll;
-      $scope.geneSets.forEach(function(set) {
-        set.checked = $scope.checkAll;
-      });
-    };
-
     $scope.updateSelectedSets = () => {
       $scope.params.selectedSets = [];
       $scope.geneSets.forEach(function(set) {
@@ -226,7 +217,6 @@ import deepmerge from 'deepmerge';
           $scope.params.selectedSets.push(set);
         }
       });
-      $scope.checkAll = ($scope.params.selectedSets.length === $scope.geneSets.length) ? true : false ;
     };
 
     // to check if a set was previously selected and if its still in effect
@@ -238,7 +228,7 @@ import deepmerge from 'deepmerge';
               return `ES:${set.id}` === id;
             });
             if(set){
-              set.disabled = true;
+              set.selected = true;
             }
           }
         })

@@ -58,8 +58,8 @@
                             </div>
                         </li>
                         <li data-ng-repeat="set in entitySets" class="set-list">
-                            <a href="" data-ng-click="selectDonorSet(set);" data-ng-class="{selected: set.selected}">
-                                <span>{{ set.name | limitTo: 10 }}... </span>
+                            <a href="" data-ng-click="selectSet(set);" data-ng-class="{selected: set.selected}">
+                                <span>{{ set.name | limitTo: 16}}{{set.name.length > 16 ? '...' : ''}}</span>
                                 <span>{{ set.count | number }} Donors </span>
                             </a>
                         </li>
