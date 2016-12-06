@@ -32,7 +32,7 @@ ngModule.component('saveNewSetModal', {
       this.close()();
       SetService.addSet(this.initialEntitysetDefinition.type, Object.assign({}, this.initialEntitysetDefinition, {
         name: this.name,
-      })).then(res=> console.log(res));
+      }));
     };
   },
   bindings: {
