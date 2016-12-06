@@ -1,3 +1,4 @@
+import createEntitysetDefinition from './createEntitysetDefinition';
 const ngModule = angular.module('entityset.persistence.dropdown', []);
 
 import './entityset.persistence.dropdown.scss';
@@ -11,8 +12,6 @@ ngModule.component('entitysetPersistenceDropdown', {
     };
     this.$onInit = guardBindings;
     this.$onChanges = guardBindings;
-
-    // (vm.entityType, [vm.setTotalCount, vm.setLimit].sort()[0])
 
     this.handleClickSaveNew = () => {
       const {selectedEntityIds, entityType} = this;
@@ -38,7 +37,7 @@ ngModule.component('entitysetPersistenceDropdown', {
         }
       };
 
-      const entitysetDefinition = require('./createEntitysetDefinition')({
+      const entitysetDefinition = createEntitysetDefinition({
         filters,
         name: selectedEntityIds.join(' / '),
         type: String.prototype.toUpperCase.apply(entityType),
@@ -72,7 +71,7 @@ ngModule.component('entitysetPersistenceDropdown', {
         }
       : FilterService.filters();
 
-      const entitysetDefinition = require('./createEntitysetDefinition')({
+      const entitysetDefinition = createEntitysetDefinition({
         filters,
         name: 'temp set',
         type: String.prototype.toUpperCase.apply(entityType),
