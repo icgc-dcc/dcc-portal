@@ -196,11 +196,10 @@ import deepmerge from 'deepmerge';
     // Determine display params based on current page
     $scope.analysisMode = Page.page() === 'analysis' ? true : false;
 
-    $scope.action = modalAction;
     $scope.isSelect = false;
     $scope.geneSets = _.cloneDeep(SetService.getAllGeneSets());
 
-    if($scope.action === 'select'){
+    if(modalAction === 'select'){
       $scope.isSelect = true;
     }
 

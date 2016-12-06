@@ -289,6 +289,7 @@ angular.module('icgc.advanced.controllers', [
           _locationFilterCache.updateCache();
           checkSetInFilter('donor', _controller.donorSets);
           checkSetInFilter('gene', _controller.geneSets);
+          checkSetInFilter('mutation', _controller.mutationSets);
           _resetServices();
           _refresh();
         });
@@ -356,6 +357,7 @@ angular.module('icgc.advanced.controllers', [
 
         checkSetInFilter('donor', _controller.donorSets);
         checkSetInFilter('gene', _controller.geneSets);
+        checkSetInFilter('mutation', _controller.mutationSets);
       }
 
 

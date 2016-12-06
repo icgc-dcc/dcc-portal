@@ -41,9 +41,38 @@ import deepmerge from 'deepmerge';
   'use strict';
 
   angular.module ('icgc.mutationlist.controllers', [])
-    .controller ('MutationListController', function ($scope, $modalInstance) {
-      $scope.cancel = function () {
+    .controller ('MutationListController', function ($scope, $modalInstance, modalAction,
+      SetService, LocationService) {
+
+      let filters = LocationService.filters();
+
+      $scope.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
+      $scope.isSelect = false;
+
+      if(modalAction === 'select'){
+        $scope.isSelect = true;
+      }
+
+      // to check if a set was previously selected and if its still in effect
+      const checkSetInFilter = () => {
+        if(filters.mutation && filters.mutation.id){
+          _.each(filters.mutation.id.is, (id) => {
+            if(_.includes(id,'ES')){
+              const set = _.find($scope.mutationSets, function(set){
+                return `ES:${set.id}` === id;
+              });
+              if(set){
+                set.selected = true;
+              }
+            }
+          })
+        }
+      };
+
+       $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
       };
+
+      checkSetInFilter();
   });
 })();

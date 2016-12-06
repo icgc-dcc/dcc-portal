@@ -103,7 +103,6 @@ import deepmerge from 'deepmerge';
     let filters = LocationService.filters();
 
     $scope.isInRepositoryFile = Page.page() === 'repository';
-    $scope.action = modalAction;
     $scope.isSelect = false;
 
     $scope.donorSets = _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
@@ -163,7 +162,7 @@ import deepmerge from 'deepmerge';
       };
       $scope.out = {};
 
-      if($scope.action === 'select') {
+      if(modalAction === 'select') {
         $scope.isSelect = true;
       }
       

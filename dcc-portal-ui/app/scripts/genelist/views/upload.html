@@ -2,8 +2,8 @@
   <!-- header -->
   <div class="modal-header clearfix">
     <h3 class="pull-left">
+      <span data-ng-if="isSelect"><translate>Select Gene Set</translate></span>
       <span data-ng-if="!isSelect"><translate>Upload Gene Set</translate></span>
-      <span data-ng-if="isSelect"><translate>selectedSets Gene Set</translate></span>
     </h3>
     <button class="pull-right t_button" data-ng-click="cancel()">
       <i class="icon-cancel"></i>
