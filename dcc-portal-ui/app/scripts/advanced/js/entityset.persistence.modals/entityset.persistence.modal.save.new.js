@@ -11,7 +11,6 @@ ngModule.component('saveNewSetModal', {
           </button>
       </div>
       <div class="modal-body light" style="max-height:none">
-        {{ vm.entitysetDefinition | json }}
         Name: 
         <input type="text" ng-model="vm.name" maxlength="64" select-on-click style="width:100%;" autofocus></input>
       </div>
