@@ -278,7 +278,7 @@
         <div data-ng-if='isBusy' style="text-align: center; padding-top: 1rem">
             <i class="icon-spin icon-spinner"></i>
         </div>
-        <div data-ng-if="limit && !isBusy && !isFinished" class="results_show_more_bar" data-type="button"
+        <div data-ng-if="limit && !isBusy && !isFinished && results.hits.length" class="results_show_more_bar" data-type="button"
              data-ng-click="next()">
             <i class="icon-double-angle-down"></i> <translate>Show more results</translate>
         </div>
