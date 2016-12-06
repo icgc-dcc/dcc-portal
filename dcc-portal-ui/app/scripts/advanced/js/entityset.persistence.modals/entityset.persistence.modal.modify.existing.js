@@ -7,7 +7,7 @@ ngModule.component('modifyExistingSetModal', {
   template: `
     <div class="modal-content">
       <div class="modal-header clearfix">
-          <h3 class="pull-left"><translate>{{ vm.operation }} {{ vm.operation.toLowerCase() === 'add' ? 'to' : 'from' }} {{vm.initialEntitysetDefinition.type.toLowerCase()}} set</translate></h3>
+          <h3 class="pull-left" style="text-transform: capitalize;"><translate>{{ vm.operation }} {{ vm.operation.toLowerCase() === 'add' ? 'to' : 'from' }} {{vm.initialEntitysetDefinition.type.toLowerCase()}} set</translate></h3>
           <button class="pull-right t_button" ng-click="vm.handleClickClose();">
             <i class="icon-cancel"></i>
           </button>
