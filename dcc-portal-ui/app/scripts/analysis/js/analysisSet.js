@@ -20,7 +20,7 @@
 
   var module = angular.module('icgc.analysis.controllers');
 
-  module.controller('SavedSetController', function($scope, $window, $location, $timeout, $modal,
+  module.controller('SavedSetController', function($scope, $rootScope, $window, $location, $timeout, $modal,
     SetService, Settings, LocationService, RouteInfoService, Extensions, gettextCatalog) {
 
     var _this = this;
@@ -126,6 +126,10 @@
     };
 
     _this.renameSet = SetService.renameSet;
+
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+      _this.entitySets = SetService.getAll();
+    });
 
   });
 
