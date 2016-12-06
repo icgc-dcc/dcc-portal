@@ -104,7 +104,7 @@ angular.module('icgc.advanced.controllers', [
           }
         };
 
-        const entitysetDefinition = require('./entityset.persistence.modals/createEntitysetDefinition')({
+        const entitysetDefinition = require('./createEntitysetDefinition')({
           filters,
           name: selectedEntityIds.join(' / '),
           type: String.prototype.toUpperCase.apply(entityType),
