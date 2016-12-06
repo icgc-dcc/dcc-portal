@@ -195,6 +195,7 @@
       }
 
       promise.then(function(data) {
+        data = data.plain();
         
         if (! data.id) {
           return;
