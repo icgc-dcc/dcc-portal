@@ -1,0 +1,29 @@
+.set-selection-component {
+  .set-name-wrapper {
+    .icon-pencil {
+      opacity: 0;
+    }
+    &:hover .icon-pencil{
+      opacity: 1;
+    }
+  }
+
+  .is-selected > td {
+    background-color: #FFFFBE;
+    color: #000;
+  }
+
+  .is-selected.is-not-compatible > td {
+    background-color: #ffdddd;
+    color: #8a1d00;
+  }
+}
+
+set-tools, [set-tools] {
+  .t_tools__tool, a.t_tools__tool {
+    color: #ccc;
+    &:hover {
+      color: #e9931c;
+    }
+  }
+}

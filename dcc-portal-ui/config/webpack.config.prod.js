@@ -39,6 +39,11 @@ module.exports = {
     ],
     loaders: [
       {
+        test: /\.html$/,
+        include: paths.appSrc,
+        loaders: ['raw']
+      },
+      {
         test: /\.js$/,
         include: paths.appSrc,
         exclude: [paths.bowerModules, paths.internalVendorModules],

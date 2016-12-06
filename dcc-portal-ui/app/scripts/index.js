@@ -94,7 +94,6 @@ require('./oncogrid/js/service.js');
 require('./analysis/js/analysis.js');
 require('./analysis/js/analysisList.js');
 require('./analysis/js/analysisLauncher.js');
-require('./analysis/js/analysisSet.js');
 require('./sets/js/services.js');
 require('./sets/js/sets.js');
 require('./beacon/js/beacon.js');
