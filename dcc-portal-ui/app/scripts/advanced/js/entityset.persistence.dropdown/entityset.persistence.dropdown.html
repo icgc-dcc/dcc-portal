@@ -17,18 +17,18 @@
       </span>
       
     </li>
-    <li ng-click="vm.onClickSaveNew()(vm.entityType, [vm.setTotalCount, vm.setLimit].sort()[0])">
+    <li ng-click="vm.handleClickSaveNew()">
       <a>
         <translate>Save as new {{ vm.entityType }} set</translate>
       </a>
     </li>
-    <li ng-click="vm.onClickAddToSet()(vm.entityType, [vm.setTotalCount, vm.setLimit].sort()[0])">
+    <li ng-click="vm.handleClickAddToSet()">
       <a>
         <translate>Add to existing {{ vm.entityType }} set
         </translate>
       </a>
     </li>
-    <li ng-click="vm.onClickRemoveFromSet()(vm.entityType, [vm.setTotalCount, vm.setLimit].sort()[0])">
+    <li ng-click="vm.handleClickRemoveFromSet()">
       <a>
         <translate>Remove from existing {{ vm.entityType }} set</translate>
       </a>

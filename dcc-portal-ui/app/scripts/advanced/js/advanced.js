@@ -89,43 +89,6 @@ angular.module('icgc.advanced.controllers', [
         return this.selectedEntityIdsMap[entityType] && this.selectedEntityIdsMap[entityType].includes(entity.id);
       };
 
-      this.handleClickSaveNew = (entityType, limit) => {
-        const selectedEntityIds = this.selectedEntityIdsMap[entityType];
-        if (!selectedEntityIds || !selectedEntityIds.length) {
-          _controller.saveSet(entityType, limit);
-          return;
-        }
-
-        const filters = {
-          [entityType]: {
-            id: {
-              is: selectedEntityIds
-            }
-          }
-        };
-
-        const entitysetDefinition = require('./createEntitysetDefinition')({
-          filters,
-          name: selectedEntityIds.join(' / '),
-          type: String.prototype.toUpperCase.apply(entityType),
-          size: selectedEntityIds.length,
-        });
-
-        $modal.open({
-          template: `
-            <save-new-set-modal
-              close="vm.$close"
-              initial-entityset-definition="vm.entitysetDefinition"
-            ></save-new-set-modal>
-          `,
-          controller: function () {
-            this.entitysetDefinition = entitysetDefinition;
-          },
-          controllerAs: 'vm',
-          bindToController: true,
-        });
-      };
-
 
       function _refresh() {
         var filters = _locationFilterCache.filters(),
