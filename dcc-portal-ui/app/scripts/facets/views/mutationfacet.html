@@ -38,9 +38,33 @@
     <li class="t_facets__facet__button">
         <ul class="t_facets__facet__terms__active">
             <li class="text-right" data-ng-hide="collapsed">
-                <button type="button" class="t_button pull-right" data-ng-click="useMutationSet()">
-                    <i class="icon-search"></i> <translate>Use Mutation Set</translate>
-                </button>
+                <!-- Split button -->
+                <div class="btn-group entity-search pull-right">
+                    <button type="button" class="btn t_button" data-ng-click="useMutationSet('upload')">Upload Donor Set</button>
+                    <button type="button" 
+                        class="btn t_button dropdown-toggle" 
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="false" 
+                        data-ng-if="entitySets.length">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" data-ng-if="entitySets.length">
+                        <li><a href="" data-ng-click="useMutationSet('select')">Select Saved Mutation Sets</a></li>
+                        <li class="divider-label">
+                            <div>
+                                <span>Recent Donor Sets</span>
+                            </div>
+                        </li>
+                        <li data-ng-repeat="set in entitySets | limitTo: displaySavedSetLimit" class="set-list">
+                            <a href="" data-ng-click="selectSet(set);" data-ng-class="{selected: set.selected}">
+                                <span>{{ set.name | limitTo: 16}}{{set.name.length > 16 ? '...' : ''}}</span>
+                                <span>{{ set.count | number }} Mutations </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 <br><br>
             </li>
         </ul>

@@ -28,6 +28,7 @@ import deepmerge from 'deepmerge';
 
     $scope.Extensions = Extensions;
     $scope.isInRepositoryFile = Page.page() === 'repository';
+    $scope.displaySavedSetLimit = $scope.entitySetsLimit;
 
     var _fetchNameForSelections = function ( selections ) {
 
@@ -382,7 +383,7 @@ import deepmerge from 'deepmerge';
 
 
     /* Add a gene set term to the search filters */
-    $scope.useGeneSet = function(action) {
+    $scope.useGeneSet = (action) => {
       $modal.open({
         templateUrl: '/scripts/genelist/views/upload.html',
         controller: 'GeneListController',
@@ -402,10 +403,13 @@ import deepmerge from 'deepmerge';
       });
     };
 
-     $scope.useMutationSet = function() {
+     $scope.useMutationSet = (action) => {
       $modal.open({
         templateUrl: '/scripts/mutationlist/views/upload.html',
-        controller: 'MutationListController'
+        controller: 'MutationListController',
+        resolve :{
+          modalAction: () => action
+        }
       });
     };
 
@@ -441,7 +445,8 @@ import deepmerge from 'deepmerge';
         placeholder: '@',
         entitySets: '=',
         proxyType: '@',
-        proxyFacetName: '@'
+        proxyFacetName: '@',
+        entitySetsLimit: '@'
       },
       templateUrl: function (elem, attr) {
         var path_ = function (s) {

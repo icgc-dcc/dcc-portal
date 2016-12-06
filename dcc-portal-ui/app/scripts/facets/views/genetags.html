@@ -71,16 +71,16 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu" data-ng-if="entitySets.length">
-                        <li><a href="" data-ng-click="useGeneSet('select')">Select Gene Set</a></li>
+                        <li><a href="" data-ng-click="useGeneSet('select')">Select Saved Gene Sets</a></li>
                         <li class="divider-label">
                             <div>
                                 <span>Recent Gene Sets</span>
                             </div>
                         </li>
-                        <li data-ng-repeat="set in entitySets" class="set-list">
+                        <li data-ng-repeat="set in entitySets | limitTo: displaySavedSetLimit" class="set-list">
                             <a href="" data-ng-click="selectSet(set);" data-ng-class="{selected: set.selected}">
                                 <span>{{ set.name | limitTo: 16 }} {{set.name.length > 16 ? '...' : ''}} </span>
-                                <span>{{ set.count | number }} Donors </span>
+                                <span>{{ set.count | number }} Genes </span>
                             </a>
                         </li>
                     </ul>

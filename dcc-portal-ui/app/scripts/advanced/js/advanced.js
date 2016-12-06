@@ -67,6 +67,7 @@ angular.module('icgc.advanced.controllers', [
 
       _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
       _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
+      _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
 
       // to check if a set was previously selected and if its still in effect
       const checkSetInFilter = (entity, entitySets) => {
