@@ -13,6 +13,14 @@ ngModule.component('entitysetPersistenceDropdown', {
     this.$onInit = guardBindings;
     this.$onChanges = guardBindings;
 
+    const getFiltersFromEntityIds = (entityType, ids) => ({
+      [entityType]: {
+        id: {
+          is: ids
+        }
+      }
+    });
+
     this.handleClickSaveNew = () => {
       const {selectedEntityIds, entityType} = this;
       if (!selectedEntityIds || !selectedEntityIds.length) {
@@ -29,16 +37,8 @@ ngModule.component('entitysetPersistenceDropdown', {
         return;
       }
 
-      const filters = {
-        [entityType]: {
-          id: {
-            is: selectedEntityIds
-          }
-        }
-      };
-
       const entitysetDefinition = createEntitysetDefinition({
-        filters,
+        filters: getFiltersFromEntityIds(entityType, selectedEntityIds),
         name: selectedEntityIds.join(' / '),
         type: String.prototype.toUpperCase.apply(entityType),
         size: selectedEntityIds.length,
@@ -62,13 +62,7 @@ ngModule.component('entitysetPersistenceDropdown', {
     this.handleClickAddToSet = () => {
       const {selectedEntityIds, entityType} = this;
       const filters = selectedEntityIds.length
-      ? {
-          [entityType]: {
-            id: {
-              is: selectedEntityIds
-            }
-          }
-        }
+      ? getFiltersFromEntityIds(entityType, selectedEntityIds)
       : FilterService.filters();
 
       const entitysetDefinition = createEntitysetDefinition({
