@@ -41,17 +41,13 @@ import deepmerge from 'deepmerge';
   'use strict';
 
   angular.module ('icgc.mutationlist.controllers', [])
-    .controller ('MutationListController', function ($scope, $modalInstance, modalAction,
+    .controller ('MutationListController', function ($scope, $modalInstance,
       SetService, LocationService) {
 
       let filters = LocationService.filters();
 
       $scope.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
       $scope.isSelect = false;
-
-      if(modalAction === 'select'){
-        $scope.isSelect = true;
-      }
 
       // to check if a set was previously selected and if its still in effect
       const checkSetInFilter = () => {

@@ -1,0 +1,33 @@
+<div class="btn-group entity-search pull-right">
+  <button type="button" class="btn t_button" data-ng-click="$ctrl.clickEvent()" data-capitalize="true">
+    Upload {{ $ctrl.entityType | _:'capitalize' }} Set
+  </button>
+  <button type="button" 
+    class="btn t_button dropdown-toggle" 
+    data-toggle="dropdown"
+    data-ng-if="$ctrl.entitySet.length">
+      <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" data-ng-if="$ctrl.entitySet.length">
+    <li class="divider-label">
+      <div>
+        <span><b>Saved {{ $ctrl.entityType | _:'capitalize' }} Sets</b></span>
+      </div>
+    </li>
+    <li data-ng-repeat="set in $ctrl.entitySet" class="set-list">
+      <a href="" data-ng-click="$ctrl.selectEvent(set);" data-ng-class="{selected: set.selected}">
+        <div>
+          <div>
+            <span>
+              <i class="{{ set.selected === true ? 'icon-ok': 'icon-check-empty'}}"></i>
+            </span>
+          </div>
+          <div>
+            <span>{{ set.name | limitTo: 16 }} {{set.name.length > 16 ? '...' : ''}} </span>
+            <span>{{ set.count | number }} {{ $ctrl.entityType | _:'capitalize' }} </span>
+          </div>
+        </div>
+      </a>
+    </li>
+  </ul>
+</div>

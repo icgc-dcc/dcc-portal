@@ -41,6 +41,18 @@ import deepmerge from 'deepmerge';
       }
     };
 
+    $scope.uploadEntityFn = () => {
+      if($scope.type === 'donor' || $scope.type === 'file-donor'){
+        return $scope.useDonorSet();
+      }
+      if($scope.type === 'gene'){
+        return $scope.useGeneSet();
+      }
+      if($scope.type === 'mutation'){
+        return $scope.useMutationSet();
+      }
+    }
+
     // This function is called by tags.html to prevent the File input box in
     // External Repo File page from displaying the "Uploaded donor set" label.
     $scope.shouldDisplayEntitySetId = function () {
@@ -397,13 +409,10 @@ import deepmerge from 'deepmerge';
       });
     };
 
-     $scope.useMutationSet = (action) => {
+     $scope.useMutationSet = () => {
       $modal.open({
         templateUrl: '/scripts/mutationlist/views/upload.html',
-        controller: 'MutationListController',
-        resolve :{
-          modalAction: () => action
-        }
+        controller: 'MutationListController'
       });
     };
 
@@ -411,6 +420,8 @@ import deepmerge from 'deepmerge';
       let filters = FilterService.filters();
       if(!set.selected){
         if(!$scope.isInRepositoryFile){
+          filters = deepmerge(filters, set.advFilters);
+        } else if($scope.isInRepositoryFile && $scope.type === 'file'){
           filters = deepmerge(filters, set.advFilters);
         } else if($scope.isInRepositoryFile) {
           filters = deepmerge(filters, set.repoFilters);
@@ -441,7 +452,7 @@ import deepmerge from 'deepmerge';
         entitySets: '=',
         proxyType: '@',
         proxyFacetName: '@',
-        entitySetsLimit: '@'
+        showEntitySetFacet: '@'
       },
       templateUrl: function (elem, attr) {
         var path_ = function (s) {
@@ -461,19 +472,7 @@ import deepmerge from 'deepmerge';
         if (type === 'compound') {
           return path_ ('compoundtags');
         }
-
-        var facetName = attr.facetName;
-
-        if (type === 'gene' && facetName === 'id') {
-          return path_ ('genetags');
-        }
-        if (_.contains (['donor', 'file-donor'], type) && facetName === 'id') {
-          return path_ ('donorfacet');
-        }
-        if (type === 'mutation' && facetName === 'id') {
-          return path_ ('mutationfacet');
-        }
-
+        
         return path_ ('tags');
       },
       controller: 'tagsFacetCtrl'

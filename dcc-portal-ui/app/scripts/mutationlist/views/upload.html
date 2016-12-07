@@ -3,8 +3,7 @@
   <!-- header -->
   <div class="modal-header clearfix">
     <h3 class="pull-left">
-      <span data-ng-if="isSelect"><translate>Select Mutation Set</translate></span>
-      <span data-ng-if="!isSelect"><translate>Upload Mutation Set</translate></span>
+      <span><translate>Upload Mutation Set</translate></span>
     </h3>
     <button class="pull-right t_button" data-ng-click="cancel()">
       <i class="icon-cancel"></i>
@@ -13,42 +12,8 @@
 
   <!-- body -->
   <div class="modal-body" style="margin:0; max-height:40rem; overflow-y: scroll">
-    <div data-ng-if="isSelect">
-      <span><translate>Select one or more of your saved sets: </translate></span>
-      <table class="table table-selectable">
-        <thead>
-          <th>
-          </th>
-          <th>
-            <translate>Name</translate>
-          </th>
-          <th class="text-right">
-            <translate># Donors</translate>
-          </th>
-        </thead>
-        <tbody>
-          <tr data-ng-if="mutationSets.length === 0">
-            <td colspan="3" class="text-center"><strong><translate>No saved set</translate></strong></td>
-          </tr>
-          <tr data-ng-repeat="set in mutationSets" data-ng-init="set.checked=false" ng-style="{'color':set.selected ? '#777' : '#000'}">
-            <td class="text-center">
-              <span data-ng-if="set.state === 'FINISHED' && !set.selected" style="cursor:pointer" data-ng-click="set.checked = !set.checked; updateSelectedSets();">
-                <i class="{{ set.checked === true ? 'icon-check': 'icon-check-empty'}}"></i>
-              </span>
-              <span data-ng-if="set.state === 'FINISHED' && set.selected">
-                <i class="icon-check"></i>
-              </span>
-            </td>
-            <td>{{ set.name }}</td>
-            <td class="text-right" data-ng-if="set.state === 'FINISHED'">{{ set.count | number }}</td>
-            <td data-ng-if="set.state !== 'FINISHED'">
-              <translate>Processing ...</translate> <i class="icon-spinner icon-spin"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div data-ng-if="!isSelect">
+    <div>
+
     </div>
   </div>
 

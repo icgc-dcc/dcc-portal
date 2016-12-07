@@ -394,23 +394,13 @@
       return setList;
     };
 
-    _service.getAllGeneSets = function() {
-      return _.filter(setList, function(s) {
-        return s.type === 'gene';
-      });
-    };
+    _service.getAllGeneSets = () => _.filter(setList, (s) => s.type === 'gene');
 
-    _service.getAllDonorSets = function() {
-      return _.filter(setList, function(s) {
-        return s.type === 'donor';
-      });
-    };
+    _service.getAllDonorSets = () => _.filter(setList, (s) => s.type === 'donor');
 
-    _service.getAllMutationSets = function() {
-      return _.filter(setList, function(s) {
-        return s.type === 'mutation';
-      });
-    };
+    _service.getAllMutationSets = () => _.filter(setList, (s) => s.type === 'mutation');
+
+    _service.getAllFileSets = () => _.filter(setList, (s) => s.type === 'file');
 
     _service.initService = function() {
 

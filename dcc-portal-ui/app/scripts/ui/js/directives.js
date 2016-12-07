@@ -35,7 +35,8 @@ angular.module('icgc.ui', [
   'icgc.ui.popover',
   'icgc.ui.numberTween',
   'icgc.ui.iobio',
-  'icgc.ui.loader'
+  'icgc.ui.loader',
+  'icgc.ui.splitButtons'
 ]);
 
 
@@ -938,4 +939,16 @@ angular.module('icgc.ui.loader', [])
         {{ ['&#9724;&#9724;&#9724;','&#9724;&#9724;&#9724;', '&#9724;&#9724;', '&#9724;'] | _:'sample' }}
       </span>`,
       replace: true
+  });
+
+angular.module('icgc.ui.splitButtons', [])
+  .component('entitySetFacet', {
+    templateUrl: '/scripts/ui/views/entity-set-facet.html',
+    bindings: {
+      entityType: '@',
+      entitySet: '=',
+      clickEvent: '<',
+      selectEvent: '<'
+    },
+    replace: true
   });

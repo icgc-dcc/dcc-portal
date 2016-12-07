@@ -719,12 +719,18 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
         }
       }
     };
-    _ctrl.donorSets = _.map(SetService.getAllDonorSets(), (set) => {
+
+    // Adding filters for repository to the donor set
+    _ctrl.donorSets = _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
       set.repoFilters = {};
       set.repoFilters.file = {};
       set.repoFilters.file.donorId = set.advFilters.donor.id;
       return set;
     });
+
+    _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
+
+    console.log(_ctrl.fileSets);
 
     function toSummarizedString (values, name) {
       var size = _.size (values);
@@ -1081,7 +1087,32 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       loadState.loadWhile([listRequest, summaryRequest, metaDataRequeset, cacheReqeust]);
     }
 
+    // to check if a set was previously selected and if its still in effect
+    const checkSetInFilter = (entity, entitySets) => {
+      let filters = FilterService.filters();
+      const setIdPrefix = 'ES:';
+
+      if(filters.file && filters.file[entity]){
+        _.each(entitySets, (set) => {
+          set.selected = false;
+          _.each(filters.file[entity].is, (id) => {
+            if(_.includes(id, setIdPrefix)){
+              if(`${setIdPrefix}${set.id}` === id){
+                set.selected = true;
+              }
+            }
+          });
+        });
+      } else {
+        _.each(entitySets, (set) => {
+          set.selected = false;
+        });
+      }
+    };
+
     refresh();
+    checkSetInFilter('donorId', _ctrl.donorSets);
+    checkSetInFilter('id', _ctrl.fileSets);
 
     // Pagination watcher, gets destroyed with scope.
     $scope.$watch(function() {
@@ -1103,6 +1134,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       else {
         refresh();
       }
+      checkSetInFilter('donorId', _ctrl.donorSets);
+      checkSetInFilter('id', _ctrl.fileSets);
     });
 
     // Remove any pagination on facet change: see DCC-4589
