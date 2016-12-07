@@ -5,7 +5,15 @@
             <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('mutation', AdvancedCtrl.Mutation.mutations.pagination.total)"><translate>Save Mutation Set</translate></a>
         </span>
         <span class="action-item">
-            <i class="icon-chart"></i><a href="/browser/m?filters={{AdvancedCtrl.Location.filters()}}"><translate>Genome Viewer</translate></a></span>
+            <i class="icon-chart"></i><a href="/browser/m?filters={{AdvancedCtrl.Location.filters()}}"><translate>Genome Viewer</translate></a>
+        </span>
+        <span class="action-item">
+            <entityset-persistence-dropdown
+                selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.mutation"
+                entity-type="'mutation'"
+                set-total-count="AdvancedCtrl.Mutation.mutations.pagination.total"
+                set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
+            ></entityset-persistence-dropdown>
         </span>
     </span>
 </h3>
@@ -17,6 +25,7 @@
 <table class="table table-bordered table-striped table-condensed">
     <thead>
     <tr>
+        <th rowspan="2"></th>
         <th rowspan="2" data-sortable data-type="mutations" data-field="id">ID</th>
         <th rowspan="2">
             <abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
@@ -48,7 +57,16 @@
     </tr>
     </thead>
     <tbody>
-    <tr data-ng-repeat="mutation in AdvancedCtrl.Mutation.mutations.hits track by mutation.id">
+    <tr
+        data-ng-repeat="mutation in AdvancedCtrl.Mutation.mutations.hits track by mutation.id"
+        ng-class="{
+            'is-selected': AdvancedCtrl.isEntitySelected('mutation', mutation)
+        }"
+        ng-click="AdvancedCtrl.toggleSelectedEntity('mutation', mutation)"
+    >
+        <td>
+            <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('mutation', mutation)"></icgc-checkbox>
+        </td>
         <td><a href='/mutations/{{ mutation.id }}'>{{ mutation.id }}</a></td>
         <td class="t_cell_line_break">chr{{mutation.chromosome}}:g.{{ mutation.start }}{{ mutation.mutation }}</td>
         <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
