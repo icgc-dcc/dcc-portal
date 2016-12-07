@@ -17,8 +17,10 @@
  */
 package org.icgc.dcc.portal.server.analysis;
 
+import static com.google.common.base.Preconditions.checkState;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import static java.lang.String.format;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +28,13 @@ import lombok.val;
 import org.apache.commons.math3.stat.inference.ChiSquareTest;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import org.icgc.dcc.portal.server.model.EntitySetTermFacet;
 import org.icgc.dcc.portal.server.model.PhenotypeResult;
 import org.icgc.dcc.portal.server.repository.DonorRepository;
+import static org.icgc.dcc.portal.server.repository.DonorRepository.FACETS_FOR_PHENOTYPE;
 import org.icgc.dcc.portal.server.repository.EntitySetRepository;
+import org.icgc.dcc.portal.server.service.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,11 +42,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static com.google.common.base.Preconditions.checkState;
-import static java.lang.String.format;
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
-import static org.icgc.dcc.portal.server.repository.DonorRepository.FACETS_FOR_PHENOTYPE;
 
 @Slf4j
 @Service
@@ -79,7 +79,13 @@ public final class PhenotypeAnalyzer {
       val aggsMap = aggregations.asMap();
       val entitySetId = setIds.get(i);
 
-      val entitySetCount = entitySetRepository.find(entitySetId).getCount();
+      val entitySet = entitySetRepository.find(entitySetId);
+      Long entitySetCount = 0l;
+      if (entitySet != null) {
+        entitySetCount = entitySet.getCount();
+      } else {
+        throw new NotFoundException(entitySetId.toString(), "Missing Donor Set");
+      }
 
       // We go through the main Results map for each facet and build the inner list by populating it with instances of
       // EntitySetTermFacet.
