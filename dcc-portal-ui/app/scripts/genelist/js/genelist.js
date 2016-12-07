@@ -177,8 +177,8 @@
 
   var module = angular.module('icgc.genelist.controllers', []);
 
-  module.controller('GeneListController', function($scope, $timeout, $location, $modalInstance,
-    GeneSetVerificationService, LocationService, SetService, Page) {
+  module.controller('GeneListController', function($scope, $rootScope, $timeout, $location,
+    $modalInstance, GeneSetVerificationService, LocationService, SetService, Page) {
 
     var verifyPromise = null;
     var delay = 1000;
@@ -252,7 +252,8 @@
             }
           }
         };
-        SetService.addSet(setParams.type, setParams).then(function(){
+        SetService.addSet(setParams.type, setParams).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
           $modalInstance.close();
         });
         return;

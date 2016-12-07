@@ -90,14 +90,19 @@
   /**
    * Abstracts CRUD operations on entity lists (gene, donor, mutation)
    */
-  module.service('SetService',
-    function ($window, $location, $q, $timeout, Restangular, RestangularNoCache, API,
+  module.constant('SetServiceConstants', {
+    SET_EVENTS: {
+      SET_ADD_EVENT: 'event.set.added'
+    }
+  }).service('SetService',
+    function ($window, $location, $q, $timeout, Restangular, RestangularNoCache, API, SetServiceConstants,
               localStorageService, toaster, Extensions, Page, FilterService, RouteInfoService, gettextCatalog) {
 
     var LIST_ENTITY = 'entity';
     var dataRepoUrl = RouteInfoService.get ('dataRepositories').href;
     var _service = this;
 
+    _service.setServiceConstants = SetServiceConstants;
     // For application/json format
     function params2JSON(type, params, derived) {
       var data = {};

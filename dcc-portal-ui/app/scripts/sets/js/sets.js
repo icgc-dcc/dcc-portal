@@ -33,7 +33,7 @@
   var module = angular.module('icgc.sets.controllers', []);
 
   module.controller('SetUploadController',
-    function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
+    function($scope, $rootScope, $modalInstance, $timeout, LocationService, SetService, Settings, 
       setType, setLimit, setUnion, selectedIds, FiltersUtil, FilterService, $filter, 
       CompoundsService, GeneSymbols, SetNameService) {
 
@@ -81,12 +81,12 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addSet(setType, params).then(() => {
-          console.log('Set added');
+        SetService.addSet(setType, params).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
         });
       } else {
-        SetService.addDerivedSet(setType, params).then(() => {
-          console.log('Derived Set added');
+        SetService.addDerivedSet(setType, params).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
         });
       }
 
@@ -116,8 +116,8 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addExternalSet(setType, params).then(() => {
-          console.log('External Set added');
+        SetService.addExternalSet(setType, params).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
         });
       }
 
