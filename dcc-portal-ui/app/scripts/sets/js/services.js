@@ -208,11 +208,7 @@
 
         data.type = data.type.toLowerCase();
 
-        setList = localStorageService.get(LIST_ENTITY) || [];
-        setList.unshift(data);
-        _service.refreshList();
-
-        localStorageService.set(LIST_ENTITY, setList);
+        _service.add(data);
         
         _service.saveSuccessToaster(data.name);
         toaster.clear(addSetSaving);
@@ -230,7 +226,8 @@
 
     _service.modifySet = async (existingSet, entitysetDefinition, operation) => {
       const savingToaster = _service.savingToaster(existingSet.name);
-      await Restangular.one(`entityset/${existingSet.id}?operation=${operation}`).customPUT(entitysetDefinition, null, null, {'Content-Type': 'application/json'});
+      const updatedEntityset = await Restangular.one(`entityset/${existingSet.id}?operation=${operation}`).customPUT(entitysetDefinition, null, null, {'Content-Type': 'application/json'});
+      _service.update(updatedEntityset);
       toaster.clear(savingToaster);
       _service.saveSuccessToaster(existingSet.name);
     };
@@ -422,6 +419,18 @@
       });
       localStorageService.set(LIST_ENTITY, setList);
       return true;
+    };
+
+    _service.add = (entityset) => {
+      setList = localStorageService.get(LIST_ENTITY) || [];
+      setList.unshift(entityset);
+      _service.refreshList();
+      localStorageService.set(LIST_ENTITY, setList);
+    };
+
+    _service.update = (entityset) => {
+      _service.remove(entityset.id);
+      _service.add(entityset);
     };
 
     _service.remove = function(id) {
