@@ -43,9 +43,6 @@
                         <translate>OncoGrid</translate>
                     </a>
                </span>
-               <span class="action-item">
-                   <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('donor', AdvancedCtrl.Donor.donors.pagination.total)"><translate>Save Donor Set</translate></a>
-               </span>
                <span class="action-item" data-ng-if="!AdvancedCtrl.downloadEnabled">
                    <i class="icon-download"></i><span><translate has-markup>Data download is<br> currently unavailable</translate></span>
                </span>
@@ -61,6 +58,14 @@
                       <translate>View in</translate> {{:: AdvancedCtrl.dataRepoTitle }}</a></span>
                    </span>
                </span>
+               <span class="action-item">
+                    <entityset-persistence-dropdown
+                        selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.donor"
+                        entity-type="'donor'"
+                        set-total-count="AdvancedCtrl.Donor.donors.pagination.total"
+                        set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
+                    ></entityset-persistence-dropdown>
+               </span>
             </span>
         </h3>
 
@@ -71,6 +76,7 @@
         <table class="table table-bordered table-striped table-condensed">
             <thead>
             <tr>
+                <th rowspan="2"></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="id">ID
                 </th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="projectId"><translate>Project</translate></th>
@@ -119,7 +125,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="donor in AdvancedCtrl.Donor.donors.hits track by donor.id">
+            <tr
+                ng-class="{
+                    'is-selected': AdvancedCtrl.isEntitySelected('donor', donor)
+                }"
+                data-ng-repeat="donor in AdvancedCtrl.Donor.donors.hits track by donor.id"
+                ng-click="AdvancedCtrl.toggleSelectedEntity('donor', donor)"
+            >
+                <td>
+                    <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('donor', donor)"></icgc-checkbox>
+                </td>
                 <td><a href="/donors/{{ donor.id }}">{{ donor.id }}</a></td>
                 <td>
                     <a data-tooltip="{{ donor.projectName }}" data-tooltip-placement="top" href="/projects/{{ donor.projectId }}">

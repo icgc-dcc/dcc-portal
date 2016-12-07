@@ -17,7 +17,15 @@
 
 'use strict';
 
-angular.module('icgc.advanced', ['icgc.advanced.controllers', 'ui.router'])
+import './entityset.persistence.dropdown/entityset.persistence.dropdown.js';
+import './entityset.persistence.modals';
+
+angular.module('icgc.advanced', [
+  'icgc.advanced.controllers',
+  'ui.router',
+  'entityset.persistence.dropdown',
+  'entityset.persistence.modals',
+  ])
   .config(function ($stateProvider) {
     $stateProvider.state('advanced', {
       url: '/search?filters',
@@ -66,6 +74,20 @@ angular.module('icgc.advanced.controllers', [
       _locationFilterCache = _filterService.getCachedFiltersFactory();
 
       var _isInAdvancedSearchCtrl = true;
+      
+      // NOTE: using IDs instead of storing references to entities b/c pagination results in new objects  
+      this.selectedEntityIdsMap = {};
+
+      this.toggleSelectedEntity = (entityType, entity) => {
+        if (!this.selectedEntityIdsMap[entityType]) {
+          this.selectedEntityIdsMap[entityType] = [];
+        }
+        this.selectedEntityIdsMap[entityType] = _.xor(this.selectedEntityIdsMap[entityType], [entity.id]);
+      };
+
+      this.isEntitySelected = (entityType, entity) => {
+        return this.selectedEntityIdsMap[entityType] && this.selectedEntityIdsMap[entityType].includes(entity.id);
+      };
 
 
       function _refresh() {
@@ -286,6 +308,7 @@ angular.module('icgc.advanced.controllers', [
 
         Settings.get().then(function(settings) {
           _controller.downloadEnabled = settings.downloadEnabled || false;
+          _controller.Settings = settings;
         });
 
         // Tabs need to update when using browser buttons

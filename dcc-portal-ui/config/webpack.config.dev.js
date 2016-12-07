@@ -5,7 +5,7 @@ var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 var paths = require('./paths');
 
 module.exports = {
-  devtool: process.env.SOURCE_MAP ? process.env.SOURCE_MAP : 'cheap-module-eval-source-map',
+  devtool: process.env.SOURCE_MAP ? process.env.SOURCE_MAP : 'eval-source-map',
   cache: true,
   context: path.resolve(__dirname, '../app/scripts'),
   entry: {
@@ -40,6 +40,7 @@ module.exports = {
         include: paths.appSrc,
       }
     ],
+    noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
       {
         test: /index.html$/,
