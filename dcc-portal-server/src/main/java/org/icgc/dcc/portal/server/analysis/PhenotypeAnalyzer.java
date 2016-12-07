@@ -80,12 +80,11 @@ public final class PhenotypeAnalyzer {
       val entitySetId = setIds.get(i);
 
       val entitySet = entitySetRepository.find(entitySetId);
-      Long entitySetCount = 0l;
-      if (entitySet != null) {
-        entitySetCount = entitySet.getCount();
-      } else {
-        throw new NotFoundException(entitySetId.toString(), "Missing Donor Set");
+      if (entitySet == null) {
+        throw new NotFoundException(entitySetId.toString(), "donor set");
       }
+
+      val entitySetCount = entitySet.getCount();
 
       // We go through the main Results map for each facet and build the inner list by populating it with instances of
       // EntitySetTermFacet.
