@@ -15,8 +15,6 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import deepmerge from 'deepmerge';
-
 // Declaring 'icgc.donorlist', used in app.js
 (function() {
   'use strict';
@@ -95,61 +93,10 @@ import deepmerge from 'deepmerge';
 
   angular.module ('icgc.donorlist.controllers', [])
     .controller ('DonorListController', function ($scope, $timeout, $location, $modalInstance,
-    DonorSetVerificationService, LocationService, Page, SetService, modalAction) {
+    DonorSetVerificationService, LocationService, Page) {
 
     var DELAY = 1000;
     var verificationPromise = null;
-
-    let filters = LocationService.filters();
-
-    $scope.isInRepositoryFile = Page.page() === 'repository';
-    $scope.isSelect = false;
-
-    $scope.donorSets = _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
-      // If the current page is repository then create repoFilters
-      if($scope.isInRepositoryFile){
-        set.repoFilters = {};
-        set.repoFilters.file = {};
-        set.repoFilters.file.donorId = set.advFilters.donor.id;
-      }
-      return set;
-    });
-
-    $scope.updateSelectedSets = () => {
-      $scope.params.selectedSets = [];
-      $scope.donorSets.forEach(function(set) {
-        if (set.checked === true) {
-          $scope.params.selectedSets.push(set);
-        }
-      });
-    };
-
-    // to check if a set was previously selected and if its still in effect
-    const checkSetInFilter = () => {
-      if(filters.donor && filters.donor.id){
-        _.each(filters.donor.id.is, (id) => {
-          if(_.includes(id,'ES')){
-            const set = _.find($scope.donorSets, function(set){
-              return `ES:${set.id}` === id;
-            });
-            if(set){
-              set.selected = true;
-            }
-          }
-        })
-      } else if(filters.file && filters.file.donorId) {
-        _.each(filters.file.donorId.is, (id) => {
-          if(_.includes(id,'ES')){
-            const set = _.find($scope.donorSets, function(set){
-              return `ES:${set.id}` === id;
-            });
-            if(set){
-              set.selected = true;
-            }
-          }
-        })
-      }
-    };
 
     function initialize() {
       $scope.params = {
@@ -157,19 +104,14 @@ import deepmerge from 'deepmerge';
         state: '',
         myFile: null,
         fileName: '',
-        inputMethod: 'id',
-        selectedSets: []
+        inputMethod: 'id'
       };
       $scope.out = {};
-
-      if(modalAction === 'select') {
-        $scope.isSelect = true;
-      }
-      
-      checkSetInFilter();
       $timeout.cancel (verificationPromise);
     }
     initialize();
+
+    $scope.isInRepositoryFile = Page.page() === 'repository';
 
     function setUiState (state) {
       $scope.params.state = state;
@@ -260,20 +202,8 @@ import deepmerge from 'deepmerge';
     };
 
     $scope.save = function() {
-      if(!_.isEmpty($scope.params.selectedSets)){
-        _.each($scope.params.selectedSets, (set) => {
-          if(!$scope.isInRepositoryFile){
-            filters = deepmerge(filters, set.advFilters);
-          } else if($scope.isInRepositoryFile) {
-            filters = deepmerge(filters, set.repoFilters);
-          }
-        });
-        LocationService.filters(filters);
-        closeMe();
-      } else {
-        createDonorList();
-        closeMe();
-      }
+      createDonorList();
+      closeMe();
     };
 
     // This triggers the upload after user selects a file.

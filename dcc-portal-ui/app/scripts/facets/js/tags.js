@@ -390,13 +390,10 @@ import deepmerge from 'deepmerge';
       });
     };
 
-    $scope.useDonorSet = (action) => {
+    $scope.useDonorSet = () => {
       $modal.open({
         templateUrl: '/scripts/donorlist/views/upload.html',
-        controller: 'DonorListController',
-        resolve :{
-          modalAction: () => action
-        }
+        controller: 'DonorListController'
       });
     };
 
