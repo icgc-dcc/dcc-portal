@@ -29,6 +29,9 @@ ngModule.component('modifyExistingSetModal', {
         >
           {{entityset.name}}
         </div>
+        <div ng-if="!vm.eligibleEntitysets.length" class="empty">
+          <translate>No saved {{vm.initialEntitysetDefinition.type.toLowerCase()}} sets are eligible</translate>
+        </div>
       </div>
       <div class="modal-footer">
           <button class="t_button" ng-click="vm.handleClickClose()"><translate>Cancel</translate></button>
