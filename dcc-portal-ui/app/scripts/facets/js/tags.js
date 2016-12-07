@@ -383,13 +383,10 @@ import deepmerge from 'deepmerge';
 
 
     /* Add a gene set term to the search filters */
-    $scope.useGeneSet = (action) => {
+    $scope.useGeneSet = () => {
       $modal.open({
         templateUrl: '/scripts/genelist/views/upload.html',
-        controller: 'GeneListController',
-        resolve :{
-          modalAction: () => action
-        }
+        controller: 'GeneListController'
       });
     };
 
@@ -421,6 +418,7 @@ import deepmerge from 'deepmerge';
         } else if($scope.isInRepositoryFile) {
           filters = deepmerge(filters, set.repoFilters);
         }
+        event.stopPropagation();
       } else {
         event.stopPropagation();
       }

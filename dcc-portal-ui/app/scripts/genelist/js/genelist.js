@@ -15,9 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import deepmerge from 'deepmerge';
 
-(function () {
+(function() {
 
   'use strict';
 
@@ -29,53 +28,54 @@ import deepmerge from 'deepmerge';
 })();
 
 
-(function () {
+(function() {
   'use strict';
 
   var module = angular.module('icgc.genelist.services', []);
 
-  module.service('GeneSetVerificationService', function (Restangular, LocationService, Extensions, Facets, SetService) {
+  module.service('GeneSetVerificationService', function(Restangular, LocationService, Extensions, Facets) {
 
     /* Verify text input */
-    this.verify = function (text) {
+    this.verify = function(text) {
       var data = 'geneIds=' + encodeURI(text);
-      return Restangular.one('genesets').withHttpConfig({ transformRequest: angular.identity })
-        .customPOST(data, undefined, { 'validationOnly': true });
+      return Restangular.one('genesets').withHttpConfig({transformRequest: angular.identity})
+        .customPOST(data, undefined, {'validationOnly':true});
     };
 
 
     /* Create new gene set based on text input - assumes input is already correct */
-    this.create = function (text) {
+    this.create = function(text) {
       var data = 'geneIds=' + encodeURI(text);
 
-      return Restangular.one('genesets').withHttpConfig({ transformRequest: angular.identity })
+      return Restangular.one('genesets').withHttpConfig({transformRequest: angular.identity})
         .customPOST(data);
     };
 
     /* Echo back the text content of file */
-    this.fileContent = function (filepath) {
+    this.fileContent = function(filepath) {
       var data = new FormData();
       data.append('filepath', filepath);
-      return Restangular.one('ui').one('search').withHttpConfig({ transformRequest: angular.identity })
-        .customPOST(data, 'file', {}, { 'Content-Type': undefined });
+      return Restangular.one('ui').one('search').withHttpConfig({transformRequest: angular.identity})
+        .customPOST(data, 'file', {}, {'Content-Type': undefined});
     };
 
-    this.geneSetIdFilters = function (geneSetId) {
+
+    this.geneSetIdFilters = function(geneSetId) {
       var filters = LocationService.filters(),
-        entitySpecifier = 'id',
-        newGeneSetCollection = [Extensions.ENTITY_PREFIX + geneSetId],
-        logicalISorNOT = 'is';
+          entitySpecifier = 'id',
+          newGeneSetCollection = [Extensions.ENTITY_PREFIX + geneSetId],
+          logicalISorNOT = 'is';
 
 
-      if (!filters.hasOwnProperty('gene')) {
+      if (! filters.hasOwnProperty('gene')) {
         filters.gene = {};
       }
 
-      if (!filters.gene.hasOwnProperty(entitySpecifier)) {
+      if (! filters.gene.hasOwnProperty(entitySpecifier)) {
         filters.gene[entitySpecifier] = {};
       }
 
-      var params = { type: 'gene', facet: 'id' };
+      var params = {type: 'gene', facet: 'id'};
 
       if (Facets.isNot(params)) {
         logicalISorNOT = 'not';
@@ -108,29 +108,29 @@ import deepmerge from 'deepmerge';
      *   }
      *
      */
-    this.formatResult = function (verifyResult) {
+    this.formatResult = function(verifyResult) {
       var uiResult = {}, uniqueEnsemblMap = {}, totalInputCount = 0;
       var validIds = [], hasType = {};
 
-      angular.forEach(verifyResult.validGenes, function (type, typeName) {
-        angular.forEach(type, function (geneList, inputToken) {
+      angular.forEach(verifyResult.validGenes, function(type, typeName) {
+        angular.forEach(type, function(geneList, inputToken) {
 
           // Sanity check
           if (!geneList || geneList.length === 0) {
             return;
           }
 
-          geneList.forEach(function (gene) {
+          geneList.forEach(function(gene) {
             var symbol = gene.symbol, row;
 
             // Initialize row structure
-            if (!uiResult.hasOwnProperty(symbol)) {
+            if (! uiResult.hasOwnProperty(symbol)) {
               uiResult[symbol] = {};
             }
             row = uiResult[symbol];
 
             // Aggregate input ids that match to the same symbol
-            if (!row.hasOwnProperty(typeName)) {
+            if (! row.hasOwnProperty(typeName)) {
               row[typeName] = [];
             }
             if (row[typeName].indexOf(inputToken) === -1) {
@@ -141,7 +141,7 @@ import deepmerge from 'deepmerge';
             }
 
             // Aggregate matched ensembl ids that match to the same symbol
-            if (!row.hasOwnProperty('matchedId')) {
+            if (! row.hasOwnProperty('matchedId')) {
               row.matchedId = [];
             }
             if (row.matchedId.indexOf(gene.id) === -1) {
@@ -151,9 +151,10 @@ import deepmerge from 'deepmerge';
             uniqueEnsemblMap[gene.id] = 1;
 
           });
-          totalInputCount++;
+          totalInputCount ++;
         });
       });
+
 
       return {
         uiResult: uiResult,
@@ -166,6 +167,7 @@ import deepmerge from 'deepmerge';
         warnings: verifyResult.warnings || []
       };
     };
+
   });
 })();
 
@@ -175,13 +177,11 @@ import deepmerge from 'deepmerge';
 
   var module = angular.module('icgc.genelist.controllers', []);
 
-  module.controller('GeneListController', function ($scope, $timeout, $location, $modalInstance,
-    GeneSetVerificationService, LocationService, SetService, Page, modalAction) {
+  module.controller('GeneListController', function($scope, $timeout, $location, $modalInstance,
+    GeneSetVerificationService, LocationService, SetService, Page) {
 
     var verifyPromise = null;
     var delay = 1000;
-
-    let filters = LocationService.filters();
 
     // Fields for searching by custom gene identifiers
     $scope.params = {};
@@ -190,55 +190,24 @@ import deepmerge from 'deepmerge';
     $scope.params.myFile = null;
     $scope.params.fileName = '';
     $scope.params.inputMethod = 'id';
-    $scope.params.selectedSets = [];
-    
-
-    // Determine display params based on current page
-    $scope.analysisMode = Page.page() === 'analysis' ? true : false;
-
-    $scope.isSelect = false;
-    $scope.geneSets = _.cloneDeep(SetService.getAllGeneSets());
-
-    if(modalAction === 'select'){
-      $scope.isSelect = true;
-    }
 
     // Fields needed for saving into custom gene set
     $scope.params.setName = '';
 
+
+    $scope.params.savedSets = SetService.getAllGeneSets();
+    $scope.params.selectedSavedSet = -1;
+
     // Output
     $scope.out = {};
 
-    $scope.updateSelectedSets = () => {
-      $scope.params.selectedSets = [];
-      $scope.geneSets.forEach(function(set) {
-        if (set.checked === true) {
-          $scope.params.selectedSets.push(set);
-        }
-      });
-    };
+    // Determine display params based on current page
+    $scope.analysisMode = Page.page() === 'analysis'? true: false;
 
-    // to check if a set was previously selected and if its still in effect
-    const checkSetInFilter = () => {
-      if(filters.gene && filters.gene.id){
-        _.each(filters.gene.id.is, (id) => {
-          if(_.includes(id,'ES')){
-            const set = _.find($scope.geneSets, function(set){
-              return `ES:${set.id}` === id;
-            });
-            if(set){
-              set.selected = true;
-            }
-          }
-        })
-      }
-    };
-
-    checkSetInFilter();
 
     function verify() {
       $scope.params.state = 'verifying';
-      GeneSetVerificationService.verify($scope.params.rawText).then(function (result) {
+      GeneSetVerificationService.verify($scope.params.rawText).then(function(result) {
         $scope.params.state = 'verified';
         $scope.out = GeneSetVerificationService.formatResult(result);
       });
@@ -250,8 +219,8 @@ import deepmerge from 'deepmerge';
       $scope.params.fileName = $scope.params.myFile.name;
 
       // The $timeout is just to give sufficent time in order to convey system state
-      $timeout(function () {
-        GeneSetVerificationService.fileContent($scope.params.myFile).then(function (result) {
+      $timeout(function() {
+        GeneSetVerificationService.fileContent($scope.params.myFile).then(function(result) {
           $scope.params.rawText = result.data;
           verify();
         });
@@ -259,7 +228,7 @@ import deepmerge from 'deepmerge';
     }
 
     function createNewGeneList() {
-      GeneSetVerificationService.create($scope.params.rawText).then(function (result) {
+      GeneSetVerificationService.create($scope.params.rawText).then(function(result) {
         var search = LocationService.search();
         search.filters = angular.toJson(GeneSetVerificationService.geneSetIdFilters(result.geneListId));
 
@@ -269,7 +238,7 @@ import deepmerge from 'deepmerge';
     }
 
 
-    $scope.submitList = function () {
+    $scope.submitList = function() {
 
       if ($scope.analysisMode === true) {
         var setParams = {};
@@ -283,17 +252,18 @@ import deepmerge from 'deepmerge';
             }
           }
         };
-        SetService.addSet(setParams.type, setParams).then(function () {
+        SetService.addSet(setParams.type, setParams).then(function(){
           $modalInstance.close();
         });
         return;
       }
 
-      if ($scope.params.selectedSets.length) {
-         _.each($scope.params.selectedSets, (set) => {
-          filters = deepmerge(filters, set.advFilters);
-        });
-        LocationService.filters(filters);
+      if ($scope.params.selectedSavedSet >= 0) {
+        var id = $scope.params.savedSets[$scope.params.selectedSavedSet].id;
+        var search = LocationService.search();
+        search.filters = angular.toJson(GeneSetVerificationService.geneSetIdFilters(id));
+        $location.path('/search/g').search(search);
+
       } else {
         createNewGeneList();
       }
@@ -306,15 +276,15 @@ import deepmerge from 'deepmerge';
     //
     // Possible issues with illegal invocation
     //  - https://github.com/danialfarid/ng-file-upload/issues/776#issuecomment-106929172
-    $scope.$watch('params.myFile', function (newValue) {
-      if (!newValue) {
+    $scope.$watch('params.myFile', function(newValue) {
+      if (! newValue) {
         return;
       }
       verifyFile();
     });
 
 
-    $scope.updateGenelist = function () {
+    $scope.updateGenelist = function() {
       // If content was from file, clear out the filename
       $scope.params.fileName = null;
       if ($scope.params.myFile) {
@@ -325,11 +295,15 @@ import deepmerge from 'deepmerge';
       verifyPromise = $timeout(verify, delay, true);
     };
 
-    $scope.cancel = function () {
+    $scope.cancel = function() {
       $modalInstance.dismiss('cancel');
     };
 
-    $scope.resetCustomInput = function () {
+    $scope.resetListInput = function() {
+      $scope.params.selectedSavedSet = -1;
+    };
+
+    $scope.resetCustomInput = function() {
       $scope.params.state = '';
       $scope.params.fileName = null;
       $scope.params.rawText = '';
@@ -339,7 +313,7 @@ import deepmerge from 'deepmerge';
       }
     };
 
-    $scope.$on('$destroy', function () {
+    $scope.$on('$destroy', function() {
       if (verifyPromise) {
         $timeout.cancel(verifyPromise);
       }

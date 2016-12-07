@@ -60,7 +60,7 @@
             <li class="text-right" data-ng-hide="collapsed">
                 <!-- Split button -->
                 <div class="btn-group entity-search pull-right">
-                    <button type="button" class="btn t_button" data-ng-click="useGeneSet('upload')">Upload Gene Set</button>
+                    <button type="button" class="btn t_button" data-ng-click="useGeneSet()">Upload Gene Set</button>
                     <button type="button" 
                         class="btn t_button dropdown-toggle" 
                         data-toggle="dropdown" 
@@ -71,16 +71,24 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu" data-ng-if="entitySets.length">
-                        <li><a href="" data-ng-click="useGeneSet('select')">Select Saved Gene Sets</a></li>
                         <li class="divider-label">
                             <div>
-                                <span>Recent Gene Sets</span>
+                                <span><b>Saved Gene Sets</b></span>
                             </div>
                         </li>
-                        <li data-ng-repeat="set in entitySets | limitTo: displaySavedSetLimit" class="set-list">
+                        <li data-ng-repeat="set in entitySets" class="set-list">
                             <a href="" data-ng-click="selectSet(set);" data-ng-class="{selected: set.selected}">
-                                <span>{{ set.name | limitTo: 16 }} {{set.name.length > 16 ? '...' : ''}} </span>
-                                <span>{{ set.count | number }} Genes </span>
+                                <div>
+                                    <div>
+                                        <span>
+                                           <i class="{{ set.selected === true ? 'icon-check': 'icon-check-empty'}}"></i>
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span>{{ set.name | limitTo: 16 }} {{set.name.length > 16 ? '...' : ''}} </span>
+                                        <span>{{ set.count | number }} Genes </span>
+                                    </div>
+                                </div>
                             </a>
                         </li>
                     </ul>

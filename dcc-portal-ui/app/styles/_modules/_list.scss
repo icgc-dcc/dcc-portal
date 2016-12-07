@@ -116,7 +116,7 @@
       span{
         font-size: 10px;
         background: #FFF;
-        margin: 0px 20px;
+        margin: 0px 10px;
         padding: 0px 3px;
         color: #666;
       }
@@ -124,6 +124,7 @@
     .set-list{
       a{
         cursor: pointer;
+        padding: 3px 10px;
 
         &.selected{
           cursor: default;
@@ -132,6 +133,20 @@
 
             &:last-child{
               color: #555;
+            }
+          }
+        }
+
+        div{
+          display: flex;
+
+          div{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            i{
+              padding: 0px 8px 0px 0px;
             }
           }
         }
