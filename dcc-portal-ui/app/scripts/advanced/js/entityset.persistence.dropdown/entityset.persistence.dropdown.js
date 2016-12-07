@@ -6,7 +6,13 @@ import './entityset.persistence.dropdown.scss';
 ngModule.component('entitysetPersistenceDropdown', {
   replace: true,
   template: require('!raw!./entityset.persistence.dropdown.html'),
-  controller: function (SetService, FilterService, $modal) {
+  controller: function (
+    SetService,
+    SetNameService,
+    FilterService,
+    $modal,
+    FiltersUtil
+  ) {
     const guardBindings = () => {
       this.selectedEntityIds = this.selectedEntityIds || [];
     };
@@ -21,7 +27,7 @@ ngModule.component('entitysetPersistenceDropdown', {
       }
     });
 
-    this.handleClickSaveNew = () => {
+    this.handleClickSaveNew = async () => {
       const {selectedEntityIds, entityType} = this;
       if (!selectedEntityIds || !selectedEntityIds.length) {
         $modal.open({
@@ -37,9 +43,10 @@ ngModule.component('entitysetPersistenceDropdown', {
         return;
       }
 
+      const filters = await getFiltersFromEntityIds(entityType, selectedEntityIds);
       const entitysetDefinition = createEntitysetDefinition({
-        filters: getFiltersFromEntityIds(entityType, selectedEntityIds),
-        name: selectedEntityIds.join(' / '),
+        filters,
+        name: await SetNameService.getSetName(FiltersUtil.buildUIFilters(filters)),
         type: String.prototype.toUpperCase.apply(entityType),
         size: selectedEntityIds.length,
       });
@@ -59,11 +66,11 @@ ngModule.component('entitysetPersistenceDropdown', {
       });
     };
 
-    this.handleClickAddToSet = () => {
+    this.handleClickModifySet = (operation) => {
       const {selectedEntityIds, entityType} = this;
       const filters = selectedEntityIds.length
-      ? getFiltersFromEntityIds(entityType, selectedEntityIds)
-      : FilterService.filters();
+        ? getFiltersFromEntityIds(entityType, selectedEntityIds)
+        : FilterService.filters();
 
       const entitysetDefinition = createEntitysetDefinition({
         filters,
@@ -77,11 +84,12 @@ ngModule.component('entitysetPersistenceDropdown', {
           <modify-existing-set-modal
             close="vm.$close"
             initial-entityset-definition="vm.entitysetDefinition"
-            operation="'add'"
+            operation="vm.operation"
           ></modify-existing-set-modal>
         `,
         controller: function () {
           this.entitysetDefinition = entitysetDefinition;
+          this.operation = operation;
         },
         controllerAs: 'vm',
         bindToController: true,

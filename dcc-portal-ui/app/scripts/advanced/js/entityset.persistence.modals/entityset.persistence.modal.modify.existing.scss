@@ -1,0 +1,21 @@
+.modify-existing-set-modal {
+  .modal-body {
+    padding: 0;
+  }
+  .saved-set {
+    padding: 2px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    &:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+    &:hover {
+      background-color: #F2F2F2;
+    }
+    &.is-selected {
+      background-color: #e9931c;
+      color: #fff;
+    }
+    user-select: none;
+  }
+}
