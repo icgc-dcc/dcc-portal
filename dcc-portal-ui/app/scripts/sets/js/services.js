@@ -103,7 +103,7 @@
       var data = {};
       
       if (typeof derived === 'undefined' || !derived) {
-        data.filters = encodeURI(JSON.stringify(params.filters));
+        data.filters = params.filters;
         data.size = params.size || 0;
       }
       
@@ -230,7 +230,7 @@
 
     _service.modifySet = async (existingSet, entitysetDefinition, operation) => {
       const savingToaster = _service.savingToaster(existingSet.name);
-      await Restangular.one(`entityset/${existingSet.id}?operation=${operation}`).customPUT(Object.assign({}, entitysetDefinition, {filters: JSON.stringify(entitysetDefinition.filters)}), null, null, {'Content-Type': 'application/json'});
+      await Restangular.one(`entityset/${existingSet.id}?operation=${operation}`).customPUT(entitysetDefinition, null, null, {'Content-Type': 'application/json'});
       toaster.clear(savingToaster);
       _service.saveSuccessToaster(existingSet.name);
     };
