@@ -86,7 +86,7 @@ public class TokenService {
   }
 
   public Tokens list(@NonNull User user) {
-    return client.listTokens(user.getOpenIDIdentifier());
+    return client.listTokens(user.getId());
   }
 
   public void delete(@NonNull String tokenId) {
