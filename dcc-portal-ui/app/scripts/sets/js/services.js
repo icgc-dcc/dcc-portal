@@ -227,7 +227,7 @@
     _service.modifySet = async (existingSet, entitysetDefinition, operation) => {
       const savingToaster = _service.savingToaster(existingSet.name);
       const updatedEntityset = await Restangular.one(`entityset/${existingSet.id}?operation=${operation}`).customPUT(entitysetDefinition, null, null, {'Content-Type': 'application/json'});
-      _service.update(updatedEntityset);
+      _service.update(Object.assign({}, updatedEntityset, {type: updatedEntityset.type.toLowerCase()}));
       toaster.clear(savingToaster);
       _service.saveSuccessToaster(existingSet.name);
     };
