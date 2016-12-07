@@ -62,7 +62,7 @@ import {ensureArray, ensureString, partiallyContainsIgnoringCase} from '../../co
       };
 
       $scope.next = function () {
-        if ($scope.isBusy || $scope.isFinished) {
+        if ($scope.isBusy || $scope.isFinished || !$scope.results.hits.length) {
           return;
         }
 
