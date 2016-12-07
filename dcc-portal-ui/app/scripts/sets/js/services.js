@@ -223,18 +223,16 @@
     };
 
     _service.renameSet = (setId, newName) => {
-      Restangular.one('entityset', setId).customPUT(`name=${newName}`, null, null, {'Content-Type': 'application/x-www-form-urlencoded'});
+      Restangular.one(`entityset/${setId}/?name=${newName}`).customPUT('', null, null, {'Content-Type': 'application/json'});
       setList.find(x => x.id === setId).name = newName;
       localStorageService.set(LIST_ENTITY, setList);
     };
 
-    _service.addToSet = (setId, entitysetDefinition) => {
-      console.log('Add entitities in ', entitysetDefinition, 'to', setId);
-    };
-
-    _service.removeFromSet = (setId, entitysetDefinition) => {
-      console.log('Remove entities in ', entitysetDefinition, 'from', setId);
-
+    _service.modifySet = async (existingSet, entitysetDefinition, operation) => {
+      const savingToaster = _service.savingToaster(existingSet.name);
+      await Restangular.one(`entityset/${existingSet.id}?operation=${operation}`).customPUT(Object.assign({}, entitysetDefinition, {filters: JSON.stringify(entitysetDefinition.filters)}), null, null, {'Content-Type': 'application/json'});
+      toaster.clear(savingToaster);
+      _service.saveSuccessToaster(existingSet.name);
     };
 
     _service.addExternalSet = function(type, params) {
