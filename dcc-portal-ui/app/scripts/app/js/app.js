@@ -556,7 +556,14 @@
     RestangularProvider.setRequestInterceptor(_getInterceptorDebugFunction('Request'));
     RestangularProvider.setResponseInterceptor(_getInterceptorDebugFunction('Reponse'));
 
-
+    RestangularProvider.addFullRequestInterceptor(function (element, operation, route, url, headers, params, httpConfig) {
+      if (params && params.filters && JSON.stringify(params.filters).match('ES:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')) {
+        console.log('has entityset id, do not cache');
+        return {
+          httpConfig: {cache: false}
+        };
+      }
+    });
 
     RestangularProvider.setDefaultHttpFields({cache: true});
 
