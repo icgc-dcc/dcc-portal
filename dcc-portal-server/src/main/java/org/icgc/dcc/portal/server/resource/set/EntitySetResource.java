@@ -144,14 +144,14 @@ public class EntitySetResource extends Resource {
       val modifierSet = service.createEntitySet(modifierSetDefinition, false);
       DerivedEntitySetDefinition derivedSetDefinition;
 
-      if (operation.equals("ADD")) {
+      if (operation.equalsIgnoreCase("ADD")) {
         UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(modifierSet.getId()), Collections.emptySet());
         UnionUnit unionUnit2 = new UnionUnit(ImmutableSet.of(currentSet.getId()), Collections.emptySet());
         derivedSetDefinition =
             new DerivedEntitySetDefinition(Arrays.asList(unionUnit1, unionUnit2), currentSet.getName(),
                 currentSet.getDescription(), currentSet.getType(), false);
         service.updateEntitySet(entitySetId, derivedSetDefinition);
-      } else if (operation.equals("REMOVE")) {
+      } else if (operation.equalsIgnoreCase("REMOVE")) {
         UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(currentSet.getId()), ImmutableSet.of(modifierSet.getId()));
         derivedSetDefinition =
             new DerivedEntitySetDefinition(Arrays.asList(unionUnit1), currentSet.getName(),
