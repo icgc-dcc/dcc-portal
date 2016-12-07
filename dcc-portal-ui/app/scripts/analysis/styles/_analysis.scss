@@ -1,3 +1,5 @@
+@import "./setSelection";
+
 .analysis {
    width: 100%;
    padding:0px;
@@ -13,70 +15,126 @@
    .analysis-tiles {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: space-around;
    }
 
+   .analysis-tile {
+      backface-visibility: hidden;
+   }
+
+   .analysis-buttons {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 12px;
+      .demo {
+        border: none;
+        text-decoration: underline;
+      }
+      .run {
+        margin-right: 12px;
+      }
+   }
+
+   .action-toolbar {
+      text-transform: none;
+    }
+
    .analysis-tile-container {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       cursor: pointer;
       justify-content: space-between;
+      width: calc(50% - 1rem);
+      margin: 0 0.5rem 1rem;
+      overflow: hidden;
+      transition: all 0.2s $inQuad;
 
-      transition: all 0.15s $inExpo;
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.07);
+      border-top: 1px solid rgba(0, 0, 0, 0.04);
+      border-left: 1px solid rgba(0, 0, 0, 0.04);
 
-      &:hover {
-         background-color: $selection;
-         box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.07);
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        background-color: #e9931c;
+        left: 0;
+        bottom: 0;
+        transition: all 0.2s $inQuad;
+        transform: translateX(calc(100% + 1px));
       }
 
-      .tile-extra-container {
-         width: 100%;
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         padding-top: 0.5rem;
-         padding-bottom: 0.5rem;
-         cursor: pointer;
-         margin-left: -1rem;
-         margin-right: -1rem;
-         background-color: #fff;
+      &.selected {
+        &:after {
+          transition: all 0.2s $outExpo;
+          transform: translateX(0);
+        }
+        .analysis-title {
+          color: #e9931c;
+        }
+      }
 
-         transition: all 0.15s ease;
-         transition-delay: 0;
-         position: relative;
-         overflow: hidden;
-         &:after {
-            content: ' ';
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #9b315b;
-            transform: translateX(100%);
-            transition: transform 0.2s $outQuad;
-            transition-delay: 0;
-         }
-         .tile-extra {
-            z-index: 10;
-         }
-         &:hover {
-            .demo-title, .demo-description {
-               transition-delay: 0.3s;
-            }
-            .demo-title {
-               color: #fff;
-            }
-            .demo-description {
-               color: #e3e3e3;
-            }
-            &:after {
-               transition-delay: 0.2s;
-               transform: translateX(0);
-            }
-         }
+      &:hover {
+        .reveal-item{
+          &:first-child {
+            opacity: 0;
+            transform: translateX(-10px) translateY(2%) translateZ(-100px);
+          } 
+          &:last-child {
+            opacity: 1;
+            transform: translateX(-100%) translateY(0%) translateZ(0px);
+          }
+        }
+      }
+
+
+      .analysis-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #811D52;
+        -webkit-font-smoothing: antialiased;
+        text-align: center;
+        transition: 0.2s color $inQuad;
+      }
+
+      .analysis-tile-detail {
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 1em 1.5em;
+        color: #666;
+      }
+
+      .reveal-window {
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .reveal-container {
+        display: flex;
+        flex-direction: row;
+        width: 200%;
+        perspective: 1000px;
+        user-select: none;
+      }
+
+      .reveal-item {
+        width: 50%;
+        overflow: hidden;
+        &:first-child {
+          opacity: 1;
+          transform: translateY(0) translateZ(0px);
+          transition: transform .2s $inQuad, opacity 0.25s ease;
+        }
+        &:last-child {
+          opacity: 0;
+          transform: translateX(calc(-100% + 10px)) translateY(5%) translateZ(100px);
+          transition: transform .2s $outQuad, opacity 0.25s ease;
+        }
       }
 
       .demo-title, .demo-description {
@@ -97,31 +155,14 @@
          color: #99adb3;
       }
 
-      .analysis-tile, .tile-extra {
-         max-width: 24rem;
-         margin: 0 1rem;
-      }
-
       .analysis-tile {
          transition: color .5s, background .5s;
-         margin-bottom: 1rem;
+         width: 100%;
 
          &.in-progress {
            &:hover {
              color: $grey;
            }
-         }
-
-         .analysis-title {
-           font-size: 22px;
-           font-weight: 600;
-           color: #811D52;
-           -webkit-font-smoothing: antialiased;
-         }
-
-         .analysis-tile-detail {
-            font-size: 14px;
-            line-height: 1.6;
          }
       }
    }

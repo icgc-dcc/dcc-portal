@@ -15,10 +15,13 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require('./setSelection');
+
 (function () {
   'use strict';
 
   var module = angular.module('icgc.analysis', [
+    'icgc.analysis.setSelection',
     'icgc.analysis.controllers',
     'icgc.share',
     'ui.router'
@@ -71,7 +74,6 @@
    * Top level set analyses controller
    *
    * AnalysisController: view analysis
-   *   - SavedSetController: manage saved sets
    *   - AnalysisListController: manage saved analysis
    *   - NewAnalysisController: creates new analysis
    */
@@ -208,7 +210,8 @@
         description: gettextCatalog.getString('Display Venn diagram and find out intersection or union,' + 
           ' etc. of your sets of the same type.'),
         demoDescription: gettextCatalog.getString('Compare high impact mutations in brain cancers across' + 
-          ' GBM-US, LGG-US, and PCBA-DE.')
+          ' GBM-US, LGG-US, and PCBA-DE.'),
+        datasetSelectionInstructions: gettextCatalog.getString('Select 2 or 3 sets of the same type.'),
       },
       get union () {
         return this.set;
@@ -217,29 +220,28 @@
         name: gettextCatalog.getString('Enrichment Analysis'),
         description: gettextCatalog.getString('Find out statistically significantly over-represented groups of ' +
           'gene sets (e.g. Reactome pathways) when comparing with your gene set.'),
-        demoDescription: gettextCatalog.getString('Perform enrichment analysis on top 50 genes in Cancer Gene Census.')
+        demoDescription: gettextCatalog.getString('Perform enrichment analysis on top 50 genes in Cancer Gene Census.'),
+        datasetSelectionInstructions: gettextCatalog.getString('Select the gene set you want to analyze. <small>(Maximum 10,000 genes)</small>'),
       },
       phenotype: {
         name: gettextCatalog.getString('Cohort Comparison'),
         description: gettextCatalog.getString('Display the survival analysis of your donor sets and compare some' +
         ' characteristics such as gender, vital status and age at diagnosis between your donor sets.'),
         demoDescription: gettextCatalog.getString('Display survival analysis and compare phenotypes across ' +
-          'donors with pancreatic cancer with and without mutations in the gene KRAS.')
+          'donors with pancreatic cancer with and without mutations in the gene KRAS.'),
+        datasetSelectionInstructions: gettextCatalog.getString('Select 2 donor sets.'),
       },
       oncogrid: {
         name: gettextCatalog.getString('OncoGrid'),
         description: gettextCatalog.getString('Display OncoGrid diagram to visualize genetic alteration occurrences' + 
           ' affecting a set of donors.'),
         demoDescription: gettextCatalog.getString('Generate an OncoGrid using top 75 donors and genes for PCAWG' +
-        ' liver projects.')
-      },
-      survival: {
-        name: gettextCatalog.getString('Survival Analysis'),
-        description: gettextCatalog.getString('Display the survival analysis of your donor sets and compare some' +
-        ' characteristics such as gender, vital status and age at diagnosis between your donor sets.'),
-        demoDescription: 'TBD'
+        ' liver projects.'),
+        datasetSelectionInstructions: gettextCatalog.getString('<em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(3000 donors maximum)</small>.</em>'),
       }
     };
+
+    this.analysesStrings = analysesStrings;
 
     this.getAnalysis = function(id, type) {
       return RestangularNoCache.one('analysis/' + type , id).get();
@@ -265,6 +267,8 @@
     this.analysisDescription = function(type) {
       return _.get(analysesStrings[type], 'description', '???d');
     };
+
+    this.datasetSelectionInstructions = type => _.get(analysesStrings[type], 'datasetSelectionInstructions', '???');
 
 
     /**
