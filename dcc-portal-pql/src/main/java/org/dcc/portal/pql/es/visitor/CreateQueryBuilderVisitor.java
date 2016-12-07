@@ -90,7 +90,7 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
     val lookup = node.getLookup();
     if (lookup != null && !lookup.getId().isEmpty()) {
       val termsLookup = termsLookupFilter(node.getField())
-          .cacheKey(lookup.getId())
+          .lookupCache(false)
           .lookupPath(lookup.getPath())
           .lookupIndex(lookup.getIndex())
           .lookupType(lookup.getType())

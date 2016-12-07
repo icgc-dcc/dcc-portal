@@ -182,7 +182,7 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
     val lookupInfo = node.getLookup();
     if (lookupInfo.isDefine()) {
       filter = FilterBuilders.termsLookupFilter(field)
-          .cacheKey(lookupInfo.getId())
+          .lookupCache(false)
           .lookupIndex(lookupInfo.getIndex())
           .lookupType(lookupInfo.getType())
           .lookupPath(lookupInfo.getPath())
