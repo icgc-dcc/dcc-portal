@@ -3,6 +3,15 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[4.3.23](https://github.com/icgc-dcc/dcc-portal/compare/4.3.22...4.3.23)
+--
+- Bugfix: Race condition with cleanup in Saved Results
+- Bugfix: Deactivating infinite scroll if there are no results
+- Bugfix: Creating custom gene set should show up right away in the table
+- Bugfix: Adds null check for returned entity set in phenotype analyzer
+- Bugfix: Update copyright year on build
+- Bugfix: Display only specific user token if user has multiple accounts
+
 [4.3.22](https://github.com/icgc-dcc/dcc-portal/compare/4.3.21...4.3.22)
 --
 - Site: Remove uppercase transform and separator on action toolbar
