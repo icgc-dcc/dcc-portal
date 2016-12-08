@@ -91,12 +91,21 @@ $faded: #e6dede;
 
   .tool-buttons {
     position: absolute;
-    right: 0;
+    right: 20px;
+    top:8px;
+
+    button{
+      padding: 3px 6px;
+      i{
+        font-size: smaller;
+        transform: translateY(-1px);
+      }
+    }
   }
 
   .composite-button {
     .icon {
-      transform: translateY(-3px);
+      transform: translateY(-6px);
     }
     .sub {
       position: absolute;
@@ -137,11 +146,12 @@ $faded: #e6dede;
 
   .legend {
     position: absolute;
-    bottom: 0;
+    bottom: -20px;
     left: 0;
     right: 0;
     text-align: center;
     display: flex;
+    flex-direction: column;
     justify-content: center;
 
     & > li {
@@ -151,9 +161,7 @@ $faded: #e6dede;
       position: relative;
       user-select: none;
       display: inline-block;
-      & + .set {
-        margin-left: 20px;
-      }
+      
       &.disabled {
         color: #b7b7b7 !important;
       }
@@ -172,7 +180,7 @@ $faded: #e6dede;
   }
 
   .p-value-test{
-    text-align: center;
+    margin-left: 40px;
   }
 }
 

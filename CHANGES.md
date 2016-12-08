@@ -3,6 +3,32 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[4.3.23](https://github.com/icgc-dcc/dcc-portal/compare/4.3.22...4.3.23)
+--
+- Bugfix: Race condition with cleanup in Saved Results
+- Bugfix: Deactivating infinite scroll if there are no results
+- Bugfix: Creating custom gene set should show up right away in the table
+- Bugfix: Adds null check for returned entity set in phenotype analyzer
+- Bugfix: Update copyright year on build
+- Bugfix: Display only specific user token if user has multiple accounts
+
+[4.3.22](https://github.com/icgc-dcc/dcc-portal/compare/4.3.21...4.3.22)
+--
+- Site: Remove uppercase transform and separator on action toolbar
+- Site: Help icon changed to question circle icon
+- Sets: Getting the set name based on the filter
+- Sets: Names now includes filter values
+- Entity Tables: Text wrapping long set name into new lines
+- Launch Cohort Analysis from AS and Project page
+- AS: Resetting the tables pagination on filter change based on the tab
+- AS: Added OncoGrid to AS page for Donors and Genes tables.
+- Token Manager: Conditionally show “days” in “Expires in” column
+- OncoGrid: Adding mutation ID to crosshair tooltip
+- OncoGrid: Fixed regression for set name change with demo	
+- Survival Analysis: Show overall and disease free survival graphs side
+- Donor: Add biomarker and surgery to model
+- Genome Viewer: Account for zoom when getting start and end of mutation track
+
 [4.3.21](https://github.com/icgc-dcc/dcc-portal/compare/4.3.20...4.3.21)
 --
 - Add oncogrid to advanced search 

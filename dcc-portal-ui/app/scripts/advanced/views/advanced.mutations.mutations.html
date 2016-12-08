@@ -27,6 +27,14 @@
             <abbr data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
         </th>
         <th class="text-center" colspan="2"><translate># Donors affected</translate></th>
+        <th rowspan="2">
+            <abbr data-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutation' | translate }}" 
+                data-tooltip-placement="left"
+                style="display:block;padding-left:5px;">
+                <i class="icon-chart-bar">
+                </i>
+            </abbr>
+        </th>
     </tr>
     <tr>
         <th data-sortable data-type="mutations" data-field="affectedDonorCountFiltered" data-active="true"
@@ -80,6 +88,10 @@
                             </span>
                 </li>
             </ul>
+        </td>
+        <td>
+            <i class="icon-chart-bar phenotype-analysis" style="padding-left:5px;"
+                data-ng-click="AdvancedCtrl.launchSurvivalAnalysis('mutation', mutation.id, mutation.id)"></i>
         </td>
     </tr>
     </tbody>

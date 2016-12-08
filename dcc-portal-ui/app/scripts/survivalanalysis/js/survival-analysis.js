@@ -41,7 +41,7 @@ function svgToPngDataUri(svg, {width, height}) {
 (function() {
   'use strict';
 
-  var module = angular.module('icgc.survival', ['icgc.donors.models']);
+  var module = angular.module('icgc.survival', ['icgc.survival.services', 'icgc.donors.models']);
 
   var survivalAnalysisController = function (
       $scope,
@@ -306,7 +306,7 @@ function svgToPngDataUri(svg, {width, height}) {
           });
       }
 
-      var defaultHeadingMap = {
+      const defaultHeadingMap = {
         setName: 'donor_set_name',
         id: 'donor_id',
         time: 'time',
@@ -336,8 +336,8 @@ function svgToPngDataUri(svg, {width, height}) {
       }
 
       _.extend(this, {
-        fetchSurvivalData: fetchSurvivalData,
-        dataSetToTSV: dataSetToTSV
+        fetchSurvivalData,
+        dataSetToTSV
       });
 
     });

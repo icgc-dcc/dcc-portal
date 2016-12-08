@@ -1,5 +1,29 @@
 <br>
+<div data-ng-if="DonorCtrl.donor.biomarker">
+    <div style="font-size:1.5rem"><translate>Donor Biomarker</translate></div>
+    <table class="table table-info">
+        <thead>
+            <tr>
+                <th><translate>Specimen ID</translate></th>
+                <th><translate>Biomarker Name</translate></th>
+                <th><translate>Biomarker Threshold</translate></th>
+                <th><translate>Biomarker Positive</translate></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="f in DonorCtrl.donor.biomarker">
+                <td>{{f.specimenId}}</td>
+                <td>{{f.biomarkerName}}</td>
+                <td>{{f.biomarkerThreshold}}</td>
+                <td>{{f.biomarkerPositive}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="clearfix"></div>
+
 <div data-ng-if="DonorCtrl.donor.family">
+	<br>
     <div style="font-size:1.5rem"><translate>Donor Family</translate></div>
     <table class="table table-info">
         <thead>
@@ -27,9 +51,35 @@
     </table>
 </div>
 <div class="clearfix"></div>
-<br>
+
+<div data-ng-if="DonorCtrl.donor.surgery">
+	<br>
+    <div style="font-size:1.5rem"><translate>Donor Surgery</translate></div>
+    <table class="table table-info">
+        <thead>
+            <tr>
+                <th><translate>Specimen ID</translate></th>
+                <th><translate>Procedure Interval</translate></th>
+                <th><translate>Procedure Type</translate></th>
+                <th><translate>Procedure Site</translate></th>
+                <th><translate>Resection Status</translate></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="f in DonorCtrl.donor.surgery">
+                <td>{{f.specimenId}}</td>
+                <td>{{f.procedureInterval}}</td>
+                <td>{{f.procedureType}}</td>
+                <td>{{f.procedureSite}}</td>
+                <td>{{f.resectionStatus}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="clearfix"></div>
 
 <div class="half" data-ng-if="DonorCtrl.donor.exposure" data-ng-init="exposureIdx = 0; exposure = DonorCtrl.donor.exposure[exposureIdx]">
+	<br>
     <div style="font-size:1.5rem">Donor Exposure</div>
     <div data-ng-show="DonorCtrl.donor.exposure.length > 1">
        <span data-ng-repeat="e in DonorCtrl.donor.exposure">
@@ -72,7 +122,7 @@
 
 <div class="half" data-ng-if="DonorCtrl.donor.therapy" data-ng-class="{'omega': DonorCtrl.donor.exposure}"
      data-ng-init="therapyIdx = 0; therapy = DonorCtrl.donor.therapy[therapyIdx]">
-
+	<br>
     <div style="font-size:1.5rem"><translate>Donor Postresection Therapy</translate></div>
     <div data-ng-show="DonorCtrl.donor.therapy.length > 1">
        <span data-ng-repeat="t in DonorCtrl.donor.therapy">

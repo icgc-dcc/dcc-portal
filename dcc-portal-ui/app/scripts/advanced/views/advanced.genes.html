@@ -10,7 +10,7 @@
             <span class="action-item">
                 <i class="icon-grid"></i>
                 <a href="#" data-ng-click="AdvancedCtrl.oncogridAnalysis()">
-                    <translate>Oncogrid</translate>
+                    <translate>OncoGrid</translate>
                 </a>
             </span>
             <span class="action-item">
@@ -44,6 +44,14 @@
             <th rowspan="2" class="text-center">
                 <abbr data-tooltip="{{'Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria' | translate}}"
                       data-tooltip-placement="left"><translate># Mutations</translate></abbr>
+            </th>
+            <th rowspan="2">
+                <abbr data-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutated gene' | translate }}" 
+                    data-tooltip-placement="left"
+                    style="display:block;">
+                    <i class="icon-chart-bar">
+                    </i>
+                </abbr>
             </th>
         </tr>
         <tr>
@@ -106,6 +114,10 @@
                    href='/search/m?filters={{gene.embedQuery}}'>
                     {{AdvancedCtrl.Gene.mutationCounts[gene.id] | number}}
                 </a>
+            </td>
+            <td>
+                <i class="icon-chart-bar phenotype-analysis"
+                    data-ng-click="AdvancedCtrl.launchSurvivalAnalysis('gene', gene.id, gene.symbol)"></i>
             </td>
         </tr>
         </tbody>

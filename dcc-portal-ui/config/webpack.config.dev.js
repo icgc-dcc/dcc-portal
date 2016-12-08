@@ -5,7 +5,7 @@ var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 var paths = require('./paths');
 
 module.exports = {
-  devtool: process.env.SOURCE_MAP ? process.env.SOURCE_MAP : 'cheap-module-eval-source-map',
+  devtool: process.env.SOURCE_MAP ? process.env.SOURCE_MAP : 'eval-source-map',
   cache: true,
   context: path.resolve(__dirname, '../app/scripts'),
   entry: {
@@ -50,8 +50,16 @@ module.exports = {
         test: /index.html$/,
         loader: 'string-replace',
         query: {
-          search: '\<portal-settings\>\<\/portal-settings\>',
-          replace: `<script>window.ICGC_SETTINGS = ${JSON.stringify(require('./ICGC_SETTINGS.dev.js'))}</script>`,
+          multiple: [
+            {
+              search: '\<portal-settings\>\<\/portal-settings\>',
+              replace: `<script>window.ICGC_SETTINGS = ${JSON.stringify(require('./ICGC_SETTINGS.dev.js'))}</script>`
+            },
+            {
+              search: '\'COPYRIGHT_YEAR\'',
+              replace: new Date().getUTCFullYear()
+            },
+          ]
         }
       },
       {

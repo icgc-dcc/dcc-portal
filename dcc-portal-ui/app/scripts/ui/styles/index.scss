@@ -5,10 +5,6 @@
 
 [data-open-in-list], [open-in-list] {
   & > a + a, & > ng-transclude > a {
-    margin-left: 0.3em;
-    &:before {
-      content: '|';
-      color: #ddd;
-    }
+    margin-left: 0.5em;
   }
 }

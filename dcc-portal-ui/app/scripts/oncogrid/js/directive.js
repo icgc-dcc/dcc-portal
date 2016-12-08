@@ -37,7 +37,7 @@
       controller: 'OncogridController',
       controllerAs: 'OncoCtrl',
       templateUrl: '/scripts/oncogrid/views/oncogrid-analysis.html',
-      link: function ($scope) {
+      link: function ($scope, $element) {
         var donorSearch = '/search?filters=';
         var geneSearch = '/search/g?filters=';
         var obsSearch = '/search/m/o?filters=';
@@ -247,11 +247,34 @@
             'Study': OncogridService.studyLegend()
           };
 
+          var templates = {
+            mainGridCrosshair: `
+              <div class="og-crosshair-tooltip">
+                {{#donor}}
+                <div>
+                  <span><b>Donor</b>:&nbsp;</span>
+                  <span>{{donor.id}}</span>
+                </div>
+                {{/donor}}
+                {{#gene}}
+                <div>
+                  <span><b>Gene</b>:&nbsp;</span>
+                  <span>{{gene.symbol}}</span>
+                </div>
+                {{/gene}}
+                {{#obs}}
+                <div>
+                  <span><b>Mutations</b>:&nbsp;</span>
+                  <span>{{obs}}</span>
+                </div>
+                {{/obs}}`
+          };
+
           $scope.params = {
             donors: donors,
             genes: genes,
             observations: observations,
-            element: '#oncogrid-div',
+            element: $element.find('#oncogrid-div').get(0),
             height: 150,
             width: 680,
             colorMap: colorMap,
@@ -261,7 +284,9 @@
             minCellHeight: 8,
             trackHeight: 12,
             trackLegends: trackLegends,
-            trackLegendLabel: '<i class="icon-help"></i>',
+            trackLegendLabel: '<i class="fa fa-question-circle legend-icon baseline"></i>',
+            trackPadding: 25,
+            templates,
             donorTracks: donorTracks,
             donorOpacityFunc: donorOpacity,
             donorClick: donorClick,
@@ -285,7 +310,7 @@
           $('#grid-button').removeClass('active');
 
           $('#og-crosshair-message').hide();
-          var gridDiv = $('#oncogrid-div');
+          var gridDiv = $element.find('#oncogrid-div');
           gridDiv.addClass('og-pointer-mode'); 
           gridDiv.removeClass('og-crosshair-mode');
         };
@@ -301,14 +326,14 @@
 
             $scope.geneSetName = getName('geneSet');
             $scope.donorSetName = getName('donorSet');
-            if (typeof $scope.OncoCtrl.grid !== 'undefined' && $scope.OncoCtrl.grid !== null) {
-              $scope.cleanActives();
-              $scope.OncoCtrl.grid.destroy();
-            }
-            $('#oncogrid-spinner').toggle(true);
+            $element.find('#oncogrid-spinner').toggle(true);
             createLinks();
             $scope.materializeSets().then(function () {
-              $('#oncogrid-spinner').toggle(false);
+              if ($scope.OncoCtrl.grid) {
+                $scope.cleanActives();
+                $scope.OncoCtrl.grid.destroy();
+              }
+              $element.find('#oncogrid-spinner').toggle(false);
 
               // Temporary fix:
               //http://stackoverflow.com/a/23444942
