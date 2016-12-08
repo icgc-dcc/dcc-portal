@@ -11,11 +11,14 @@
   <ul class="dropdown-menu" data-ng-if="$ctrl.entitySet.length">
     <li class="divider-label">
       <div>
-        <span><b>Saved {{ $ctrl.entityType | _:'capitalize' }} Sets</b></span>
+        <span><b>Select Saved Sets</b></span>
       </div>
     </li>
     <li data-ng-repeat="set in $ctrl.entitySet" class="set-list">
-      <a href="" data-ng-click="$ctrl.selectEvent(set);" data-ng-class="{selected: set.selected}">
+      <a href="" 
+        data-ng-click="$ctrl.selectEvent(set);" 
+        data-ng-class="{selected: set.selected}"
+        data-tooltip="{{ set.name }}">
         <div>
           <div>
             <span>

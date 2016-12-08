@@ -28,11 +28,30 @@ import deepmerge from 'deepmerge';
 
 (function() {
   'use strict';
-
-  // Angular wiring
+  
   angular.module ('icgc.mutationlist.services', [])
-  .service ('MutationSetVerificationService', function () {
-    
+  .service ('MutationSetVerificationService', function (Restangular, SetService, LocationService) {
+    const _service = this;
+
+    _service.readFileContent = (filepath) => {
+      let data = new FormData();
+      data.append('filepath', filepath);
+
+      return Restangular.one('ui').customPOST(data, 'search/file', {}, {'Content-Type': undefined});
+    }
+
+    _service.addSet = (mutationIds) => {
+      let params = {};
+      const type = 'mutation';
+
+      params.filters = {mutation: {id : {is : mutationIds }}};
+      params.isTransient = true;
+      params.type = type;
+      params.size = mutationIds.length;
+      params.name = 'Uploaded Mutation Set';
+
+      return SetService.addSet(type, params);
+    }
   });
 
 })();
@@ -40,35 +59,55 @@ import deepmerge from 'deepmerge';
 (function () {
   'use strict';
 
+  const mutationIdRegEx = new RegExp(/MU([1-9])\d*/g);
+
   angular.module ('icgc.mutationlist.controllers', [])
-    .controller ('MutationListController', function ($scope, $modalInstance,
-      SetService, LocationService) {
+    .controller ('MutationListController', function ($scope, $modalInstance, MutationSetVerificationService,
+      LocationService) {
 
-      let filters = LocationService.filters();
+      const _controller = this;
 
-      $scope.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
-      $scope.isSelect = false;
+      _controller.mutationService = MutationSetVerificationService;
+      _controller.mutationIdsArray = [];
 
-      // to check if a set was previously selected and if its still in effect
-      const checkSetInFilter = () => {
-        if(filters.mutation && filters.mutation.id){
-          _.each(filters.mutation.id.is, (id) => {
-            if(_.includes(id,'ES')){
-              const set = _.find($scope.mutationSets, function(set){
-                return `ES:${set.id}` === id;
-              });
-              if(set){
-                set.selected = true;
-              }
-            }
-          })
-        }
-      };
+      $scope.params = {};
 
-       $scope.cancel = function () {
+      $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
       };
 
-      checkSetInFilter();
+      _controller.fileUpload = () => {
+        if($scope.params.uploadedFile){
+          $scope.params.fileName = $scope.params.uploadedFile.name;
+          _controller.mutationService.readFileContent($scope.params.uploadedFile).then((fileData) => {
+            $scope.params.mutationIds = fileData.data;
+          });
+        }
+      };
+
+      $scope.submit = () => {
+        if(!$scope.params.mutationIds) {return;}
+
+        _controller.mutationIdsArray = _.words($scope.params.mutationIds, mutationIdRegEx);
+
+        if(!_controller.mutationIdsArray.length) {
+          $scope.params.verified = false;
+          return;
+        }
+        let filters = LocationService.filters();
+
+        _controller.mutationService.addSet(_controller.mutationIdsArray).then((set) => {
+          filters = deepmerge(filters, {mutation: {id: {is: [`ES:${set.id}`]}}});
+          debugger;
+          LocationService.filters(filters);
+        });
+      };
+
+      $scope.$watch('params.uploadedFile', function (newValue) {
+      if (!newValue) {return;}
+      _controller.fileUpload();
+    });
+    
+
   });
 })();

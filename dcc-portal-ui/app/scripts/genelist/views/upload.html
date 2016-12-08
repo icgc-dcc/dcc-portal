@@ -8,7 +8,7 @@
     </div>
 
     <!-- body -->
-    <div class="modal-body" style="margin:0; max-height:40rem; overflow-y: scroll">
+    <div class="modal-body set-upload">
 
        <!-- By ID -->
        <div data-ng-if="params.inputMethod === 'id'">
@@ -25,14 +25,17 @@
                   data-tooltip-placement="left">
                   <a href=""><i class="fa fa-question-circle legend-icon"></i></a>
                </span>
-
-               <textarea
-                   rows="3"
-                   tabindex=3
-                   placeholder="{{'e.g. TTN, ENSG00000151952, Q9Y5I3' | translate}}"
-                   data-ng-model="params.rawText" data-ng-change="updateGenelist()">
-               </textarea>
-
+               <div class="set-input">
+                   <textarea
+                       rows="3"
+                       tabindex=3
+                       placeholder="{{'e.g. TTN, ENSG00000151952, Q9Y5I3' | translate}}"
+                       data-ng-model="params.rawText" data-ng-change="updateGenelist()">
+                </textarea>
+                <i class="icon-cancel"
+                    data-ng-if="params.rawText"
+                    data-ng-click="resetCustomInput()"></i>
+               </div>
            </div>
 
 
@@ -43,14 +46,16 @@
                   data-tooltip-placement="left">
                   <a href=""><i class="fa fa-question-circle legend-icon"></i></a>
                </span>
-               <textarea
+               <div class="set-input">
+                 <textarea
                    rows="4"
                    placeholder="{{'e.g. TTN, ENSG00000151952, Q9Y5I3' | translate}}"
                    data-autofocus data-ng-model="params.rawText" data-ng-change="updateGenelist()">
-               </textarea>
-           </div>
-           <div>
-               <button class="t_button pull-right" data-ng-click="resetCustomInput()"><translate>Clear</translate></button>
+                 </textarea>
+                 <i class="icon-cancel"
+                   data-ng-if="params.rawText"
+                   data-ng-click="resetCustomInput()"></i>
+               </div>
            </div>
            <br>
            <div>

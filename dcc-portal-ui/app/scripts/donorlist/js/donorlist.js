@@ -15,6 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import deepmerge from 'deepmerge';
+
 // Declaring 'icgc.donorlist', used in app.js
 (function() {
   'use strict';
@@ -81,7 +83,7 @@
           entityID = [Extensions.ENTITY_PREFIX + donorSetId],
           isOrNot = Facets.isNot(params) ? 'not' : 'is';
 
-      return _.set (filters, [entityType, entitySpecifier, isOrNot], entityID);
+      return deepmerge(filters, _.set ({},[entityType, entitySpecifier, isOrNot], entityID));
     };
   });
 

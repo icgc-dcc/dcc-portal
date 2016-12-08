@@ -11,16 +11,117 @@
   </div>
 
   <!-- body -->
-  <div class="modal-body" style="margin:0; max-height:40rem; overflow-y: scroll">
+  <div class="modal-body set-upload">
     <div>
+      <span><translate>Type or copy-and-paste a list of Mutation IDs</translate></span>
 
+      <span class="pull-right" data-tooltip-placement="left"
+        data-tooltip="{{'<li>Mutation identifier: ICGC ID for Mutation. E.g. MU123</li>
+          <li>Delimiters between mutation identifiers: comma, space or one mutation per line</li>
+          <li>If you upload a file, the file format should be a text file (.txt, .csv, .tsv)</li>' | translate}}" has-markup>
+        <a href="">
+          <i class="fa fa-question-circle legend-icon"></i>
+        </a>
+      </span>
+      <div class="set-input">
+        <textarea rows="4"
+          placeholder="e.g. MU123"
+          data-autofocus data-ng-model="params.mutationIds"
+          data-ng-change="verifyMutationInput()">
+        </textarea>
+        <i class="icon-cancel"
+          data-ng-if="params.mutationIds"
+          data-ng-click="clear()"></i>
+      </div>
     </div>
+    <div>
+      <div><translate>Or choose a file to upload</translate></div>
+      <span class="t_button btn-file">
+        <translate>Browse</translate> 
+        <input type="file" accept=".tsv,.csv,text/*" 
+          data-file-upload="params.uploadedFile">
+      </span>
+      <span style="margin-left: 5px">{{ params.fileName }}</span>
+    </div>
+
+    <span data-ng-if="isInState ('verifying')">
+      <i class="icon-spin icon-spinner"></i> <translate>Verifying Donor Set...</translate>
+    </span>
+    <span data-ng-if="isInState ('uploading')">
+      <i class="icon-spin icon-spinner"></i> <translate>Reading Donor Set file...</translate>
+    </span>
+
+    <div data-ng-if="isInState ('verified')">
+
+      <div data-ng-if="hasWarnings()">
+        <span class="alert-error" data-ng-repeat="warning in out.warnings">
+          <i class="icon-attention-1"></i> {{ warning }}
+        </span>
+      </div>
+
+      <div data-ng-show="hasBothValidsAndInvalidsButNoWarnings()" data-ng-init="expanded = false">
+        <a href="" data-ng-click="expanded = ! expanded">
+          <span class="alert-warning">
+            <i class="icon-attention-1"></i><translate translate-comment="{{out.invalidIds.length}} will be a number">{{out.invalidIds.length}} submitted donor identifier(s) not recognized in the system</translate>
+              <i class="{{ expanded? 'icon-caret-down' : 'icon-caret-left' }}"></i>
+            </span>
+        </a>
+
+        <div class="gene-list-ids" data-ng-hide="! expanded">
+          <em>{{ out.invalidIds.join (', ') }}</em>
+        </div>
+      </div>
+      <!-- Main table -->
+      <div data-ng-if="hasValidsButNoWarnings()">
+        <br>
+        <span>
+          <span data-ng-init="expanded = true" data-ng-click="expanded = ! expanded">
+            <a href="">
+              <translate>{{ validIdCount() }} submitted donor identifier(s) mapped to {{ numberOfUiRows }} ICGC Donor ID(s)</translate>
+              <i class="{{ expanded? 'icon-caret-down' : 'icon-caret-left' }}"></i>
+            </a>
+          </span>
+          <span data-toolbar data-dl="donorset"></span>
+        </span>
+        <div data-ng-show="expanded">
+          <table class="table table-info" id="donorset">
+
+            <thead>
+              <tr>
+                <th colspan="{{ numberOfUiColumns }}" class="text-center"><translate>Submitted</translate></th>
+                <th class="text-center" style="border-left:1px solid"><translate>Mapped</translate></th>
+              </tr>
+              <tr>
+                <td class="text-center" data-ng-if="out.hasIcgcIds">ICGC ID</td>
+                <td class="text-center" data-ng-if="out.hasSubmitterIds"><translate>Submitter ID</translate></td>
+                <td style="border-left:1px solid">ICGC ID</td>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr data-ng-repeat="(donorId, row) in out.donorSet">
+                <td data-ng-if="out.hasIcgcIds">{{ row ['icgc'].join (', ') }}</td>
+                <td data-ng-if="out.hasSubmitterIds">{{ row ['submitter'].join (', ') }}</td>
+                <td style="border-left:1px solid">{{ donorId }}</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+      <div data-ng-if="hasNeitherValidsNorWarnings()">
+        <span class="alert-error">
+          <i class="icon-attention-1"></i> <translate>No submitted donor recognized in the system</translate>
+        </span>
+      </div>
+    </div>
+
   </div>
 
   <!-- footer -->
   <div class="modal-footer">
     <button class="t_button" data-ng-click="cancel();"><translate>Cancel</translate></button>
-    <button class="t_button" data-ng-disabled="true" data-ng-click="submit();"><translate>Submit</translate></button>
+    <button class="t_button" data-ng-disabled="!params.mutationIds" data-ng-click="submit();"><translate>Submit</translate></button>
   </div>
 
 </div>

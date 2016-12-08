@@ -730,8 +730,6 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
 
     _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
 
-    console.log(_ctrl.fileSets);
-
     function toSummarizedString (values, name) {
       var size = _.size (values);
       return (size > 1) ? '' + size + ' ' + name + 's' :
