@@ -39,6 +39,22 @@ module.exports = {
     ],
     loaders: [
       {
+        test: /index.html$/,
+        loader: 'raw',
+      },
+      {
+        test: /index.html$/,
+        loader: 'string-replace',
+        query: {
+          multiple: [
+            {
+              search: '\'COPYRIGHT_YEAR\'',
+              replace: new Date().getUTCFullYear()
+            },
+          ]
+        }
+      },
+      {
         test: /\.js$/,
         include: paths.appSrc,
         exclude: [paths.bowerModules, paths.internalVendorModules],
