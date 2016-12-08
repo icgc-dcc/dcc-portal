@@ -18,6 +18,6 @@ export const partiallyContainsIgnoringCase = (phrase, keyword) => {
       });
 
     return !_.isUndefined(matchKeyword);
-  }
+  };
 
 const words = (phrase) => _.words(phrase, /[^, ]+/g);

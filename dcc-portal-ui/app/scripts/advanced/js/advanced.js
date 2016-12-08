@@ -358,7 +358,7 @@ angular.module('icgc.advanced.controllers', [
           templateUrl: '/scripts/downloader/views/request.html',
           controller: 'DownloadRequestController',
           resolve: {
-            filters: function() { return undefined; }
+            filters: function() { return undefined }
           }
         });
       };
@@ -436,7 +436,7 @@ angular.module('icgc.advanced.controllers', [
             filters: () => LocationService.filters()
           }
         });
-      }
+      };
 
       _controller.setActiveTab = function (tab) {
         _controller.state.setTab(tab);
@@ -472,7 +472,7 @@ angular.module('icgc.advanced.controllers', [
       _controller.launchSurvivalAnalysis = (entityType, entityId, entitySymbol) => {
         var filters = LocationService.filters();
         SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters);
-      }
+      };
 
       _init();
     })

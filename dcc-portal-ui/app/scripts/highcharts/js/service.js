@@ -193,7 +193,7 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
       var inner = hit[innerFacet],
         name = hit[outerFacet],
         count = hit[countBy] ? hit[countBy] : 0,
-        inArray = _.filter(inner, function() { return inner === iName; }).length > 0,
+        inArray = _.filter(inner, function() { return inner === iName }).length > 0,
         inValue = inner === iName;
 
       if (inArray || inValue) {

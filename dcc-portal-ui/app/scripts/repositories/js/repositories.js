@@ -391,7 +391,7 @@ angular.module('icgc.repositories.services', [])
                });
 
                // Sorted
-               return list.sort(function(a, b) { return b.total - a.total; });
+               return list.sort(function(a, b) { return b.total - a.total });
          };
 
          _self.getPrimarySiteDonorChart = function(data) {
@@ -404,7 +404,7 @@ angular.module('icgc.repositories.services', [])
                colour: HighchartsService.getPrimarySiteColourForTerm(d)
                });
             });
-            list = _.sortBy(list, function(d) { return -d.count; });
+            list = _.sortBy(list, function(d) { return -d.count });
 
             return HighchartsService.bar({
                hits: list,

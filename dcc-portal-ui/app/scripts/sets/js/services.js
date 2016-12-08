@@ -81,7 +81,7 @@
     };
 
     this.getSetShortHand = (setId, setList) => setList ? `<em>${shortHandPrefix}</em><sub>${setList.indexOf(setId) + 1}</sub>` : setId;
-    this.getSetShortHandSVG = (setId, setList) => `<tspan font-style="italic">${shortHandPrefix}</tspan><tspan font-size="0.7em" baseline-shift="-15%">${setList.indexOf(setId) + 1}</tspan>`
+    this.getSetShortHandSVG = (setId, setList) => `<tspan font-style="italic">${shortHandPrefix}</tspan><tspan font-size="0.7em" baseline-shift="-15%">${setList.indexOf(setId) + 1}</tspan>`;
 
   });
 
@@ -583,7 +583,7 @@
       return ids.length ? SetService.getMetaData(ids).then(function (results) {
             return FiltersUtil.buildUIFilters (FilterService.filters(), SetService.lookupTable(results.plain()));
           }) : Promise.resolve(FiltersUtil.buildUIFilters(FilterService.filters(), {}));
-    }
+    };
 
     // Returns the promise to get the set name
     _service.getSetName = function(filters, setType) {
@@ -634,7 +634,7 @@
           var name = nameParts.join(', ');
           return name.length > maxLength ? name.slice(0, maxLength - name.length).concat('...') : name;
         });
-    }
+    };
   });
 
 })();
