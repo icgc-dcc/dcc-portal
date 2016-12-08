@@ -135,15 +135,15 @@
           sampleMultiplier += 1;
           var options = {
             sequenceNames: [scope.chromosomeId],
-            binNumber: binNumber + parseInt(binNumber / 4 * sampleMultiplier),
-            binSize: binSize + parseInt(binSize / 4 * sampleMultiplier)
+            binNumber: binNumber + parseInt(binNumber / 4 * sampleMultiplier, 10),
+            binSize: binSize + parseInt(binSize / 4 * sampleMultiplier, 10)
           };
           // Sets new options and samples for new statistics
           var lengthExtent = charts.depthChart.brush().extent();
           if (lengthExtent.length !== 0 &&
             lengthExtent.toString() !== '0,0') {
-            options.start = parseInt(lengthExtent[0]);
-            options.end = parseInt(lengthExtent[1]);
+            options.start = parseInt(lengthExtent[0], 10);
+            options.end = parseInt(lengthExtent[1], 10);
           }
           goSampling(options);
         };
@@ -199,8 +199,8 @@
                   sequenceNames: [scope.chromosomeId]
                 };
                 if (!brush.empty()) {
-                  options.start = parseInt(brush.extent()[0]);
-                  options.end = parseInt(brush.extent()[1]);
+                  options.start = parseInt(brush.extent()[0], 10);
+                  options.end = parseInt(brush.extent()[1], 10);
                   scope.region = {
                     chr: scope.chromosomeId,
                     'start': options.start,
