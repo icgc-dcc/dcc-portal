@@ -200,6 +200,7 @@
       }
 
       promise.then(function(data) {
+        data = data.plain();
         
         if (! data.id) {
           return;
@@ -230,6 +231,15 @@
       Restangular.one('entityset', setId).customPUT(`name=${newName}`, null, null, {'Content-Type': 'application/x-www-form-urlencoded'});
       setList.find(x => x.id === setId).name = newName;
       localStorageService.set(LIST_ENTITY, setList);
+    };
+
+    _service.addToSet = (setId, entitysetDefinition) => {
+      console.log('Add entitities in ', entitysetDefinition, 'to', setId);
+    };
+
+    _service.removeFromSet = (setId, entitysetDefinition) => {
+      console.log('Remove entities in ', entitysetDefinition, 'from', setId);
+
     };
 
     _service.addExternalSet = function(type, params) {
