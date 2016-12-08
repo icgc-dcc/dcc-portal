@@ -117,7 +117,7 @@ public class TokenServiceTest {
   }
 
   private static User createUser(String userId, Boolean hasDaco) {
-    val user = new User(null, null);
+    val user = new User(USER_ID, null);
     user.setOpenIDIdentifier(USER_ID);
     user.setEmailAddress(USER_ID);
     user.setDaco(hasDaco);
