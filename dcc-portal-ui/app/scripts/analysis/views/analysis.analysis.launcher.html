@@ -10,7 +10,6 @@
         <div
             ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
             class="analysis-tool analysis-tool--{{analysis.type}}"
-            ng-click="NAC.handleClickAnalysis(analysis); NAC.shouldShowSetSelection = true;"
             ng-class="{
                 'analysis-tool--selected': analysis === NAC.selectedAnalysis,
             }"
@@ -19,7 +18,7 @@
                 class="condensed-hitarea"
                 ng-mouseover="NAC.shouldElevateToolSelection = true"
                 ng-mouseleave="NAC.shouldElevateToolSelection = false"
-                ng-click="NAC.shouldElevateToolSelection = false"
+                ng-click="NAC.shouldElevateToolSelection = false; NAC.handleClickAnalysis(analysis);"
             ></div>
             <div
                 class="analysis-tool__image-wrapper"
@@ -39,6 +38,14 @@
                 <p class="analysis-tool__description">
                     {{analysis.strings.description}}
                 </p>
+                <div>
+                    <button
+                        class="btn btn-primary select-btn"
+                        ng-click="NAC.handleClickAnalysis(analysis); NAC.shouldShowSetSelection = true;"
+                    >
+                        Select
+                    </button>
+                </div>
             </div>
         </div>
 

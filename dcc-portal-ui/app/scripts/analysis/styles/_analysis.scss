@@ -21,6 +21,11 @@
   &.condensed.elevated:after {
     transform: scaleX(1);
   }
+  &.condensed {
+    .select-btn {
+      opacity: 0;
+    }
+  }
 }
 
 $condensedWidth: 180px;
@@ -33,7 +38,6 @@ $condensedWidth: 180px;
   position: relative;
   z-index: 2;
   perspective: 1000px;
-  cursor: pointer;
 
   &:hover {
     background: transparent;
@@ -72,6 +76,7 @@ $condensedWidth: 180px;
     display: none;
     .condensed & {
       display: block;
+      cursor: pointer;
     }
   }
 
