@@ -19,7 +19,7 @@ ngModule.component('modifyExistingSetModal', {
           </button>
       </div>
       <div class="modal-body light" style="max-height:80vh; overflow: auto;">
-        <table class="table table-info">
+        <table class="table table-info" ng-if="vm.eligibleEntitysets.length">
           <thead>
             <tr>
               <td><translate>Name</translate></td>
