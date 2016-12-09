@@ -31,7 +31,7 @@ ngModule.component('saveNewSetModal', {
       this.close();
       SetService.addSet(this.initialEntitysetDefinition.type, Object.assign({}, this.initialEntitysetDefinition, {
         name: this.name,
-      }))
+      }), this.initialEntitysetDefinition.type.toLowerCase() === 'file')
         .then(this.onOperationSuccess);
     };
   },
