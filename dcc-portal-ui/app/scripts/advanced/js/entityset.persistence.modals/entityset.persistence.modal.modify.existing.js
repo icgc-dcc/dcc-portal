@@ -19,16 +19,26 @@ ngModule.component('modifyExistingSetModal', {
           </button>
       </div>
       <div class="modal-body light" style="max-height:80vh; overflow: auto;">
-        <div
-          class="saved-set"
-          ng-repeat="entityset in vm.eligibleEntitysets"
-          ng-click="vm.handleClickSavedEntityset(entityset)"
-          ng-class="{
-            'is-selected': vm.selectedEntitysets.includes(entityset)
-          }"
-        >
-          {{entityset.name}}
-        </div>
+        <table class="table table-info">
+          <thead>
+            <tr>
+              <td><translate>Name</translate></td>
+              <td><translate># Items</translate></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              ng-repeat="entityset in vm.eligibleEntitysets"
+              ng-click="vm.handleClickSavedEntityset(entityset)"
+              ng-class="{
+                'is-selected': vm.selectedEntitysets.includes(entityset)
+              }"
+            >
+              <td>{{entityset.name}}</td>
+              <td>{{entityset.count}}</td>
+            </tr>
+          </tbody>
+        </table>
         <div ng-if="!vm.eligibleEntitysets.length" class="empty">
           <translate>No saved {{vm.initialEntitysetDefinition.type.toLowerCase()}} sets are eligible</translate>
         </div>
