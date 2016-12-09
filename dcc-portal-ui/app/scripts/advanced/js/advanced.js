@@ -62,7 +62,7 @@ angular.module('icgc.advanced.controllers', [
     'icgc.advanced.services', 'icgc.sets.services', 'icgc.facets'])
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
-              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular, FilterService,
+              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Restangular, FilterService,
               RouteInfoService, FacetConstants, Extensions, SurvivalAnalysisLaunchService, gettextCatalog) {
 
       var _controller = this,
@@ -296,11 +296,6 @@ angular.module('icgc.advanced.controllers', [
 
           _controller.loadingFacet = true;
 
-        });
-
-        Settings.get().then(function(settings) {
-          _controller.downloadEnabled = settings.downloadEnabled || false;
-          _controller.Settings = settings;
         });
 
         // Tabs need to update when using browser buttons

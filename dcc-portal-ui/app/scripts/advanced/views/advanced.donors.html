@@ -43,10 +43,10 @@
                         <translate>OncoGrid</translate>
                     </a>
                </span>
-               <span class="action-item" data-ng-if="!AdvancedCtrl.downloadEnabled">
+               <span class="action-item" data-ng-if="!ICGC_SETTINGS.downloadEnabled">
                    <i class="icon-download"></i><span><translate has-markup>Data download is<br> currently unavailable</translate></span>
                </span>
-               <span class="action-item" data-ng-if="AdvancedCtrl.downloadEnabled">
+               <span class="action-item" data-ng-if="ICGC_SETTINGS.downloadEnabled">
                    <span>
                       <i class="icon-download"></i><a href="" data-ng-click="AdvancedCtrl.downloadDonorData()"><translate>Download Donor Data</translate></a>
                    </span>
@@ -63,7 +63,7 @@
                         selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.donor"
                         entity-type="'donor'"
                         set-total-count="AdvancedCtrl.Donor.donors.pagination.total"
-                        set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
+                        set-limit="ICGC_SETTINGS.maxNumberOfHits"
                         on-operation-success="AdvancedCtrl.handleOperationSuccess('donor')"
                     ></entityset-persistence-dropdown>
                </span>

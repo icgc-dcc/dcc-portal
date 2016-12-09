@@ -21,17 +21,13 @@
   var module = angular.module('icgc.analysis.controllers');
 
   module.controller('SavedSetController', function($scope, $window, $location, $timeout, $modal,
-    SetService, Settings, LocationService, RouteInfoService, Extensions, gettextCatalog) {
+    SetService, LocationService, RouteInfoService, Extensions, gettextCatalog) {
 
     var _this = this;
     _this.entitySets = SetService.getAll();
     _this.selectedSets = [];
     _this.checkAll = false;
     _this.dataRepoTitle = RouteInfoService.get ('dataRepositories').title;
-
-    Settings.get().then(function(settings) {
-      _this.downloadEnabled = settings.downloadEnabled || false;
-    });
 
     // Selected sets
     _this.update = function() {

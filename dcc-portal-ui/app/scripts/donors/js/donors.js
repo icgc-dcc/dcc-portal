@@ -43,7 +43,7 @@
   var module = angular.module('icgc.donors.controllers', ['icgc.donors.models']);
 
   module.controller('DonorCtrl', function ($scope, $modal, Page, donor, Projects, Mutations,
-    Settings, ExternalRepoService, PCAWG, RouteInfoService) {
+    ExternalRepoService, PCAWG, RouteInfoService) {
 
     var _ctrl = this, promise;
     var dataRepoRoutInfo = RouteInfoService.get ('dataRepositories');
@@ -128,10 +128,6 @@
       };
       Mutations.getList(params).then(function (d) {
         _ctrl.mutationFacets = d.facets;
-      });
-
-      Settings.get().then(function(settings) {
-        _ctrl.downloadEnabled = settings.downloadEnabled || false;
       });
     }
 

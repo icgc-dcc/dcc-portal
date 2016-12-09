@@ -627,7 +627,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
    */
   module.controller ('ExternalRepoController', function ($scope, $window, $modal, LocationService, Page,
     ExternalRepoService, SetService, ProjectCache, CodeTable, RouteInfoService, $rootScope, PortalFeature,
-    FacetConstants, Facets, LoadState, Settings) {
+    FacetConstants, Facets, LoadState) {
 
     var dataRepoTitle = RouteInfoService.get ('dataRepositories').title,
         FilterService = LocationService.getFilterService();
@@ -643,7 +643,6 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     var projectMap = {};
     var _ctrl = this;
 
-    this.Settings = Settings;
     this.handleOperationSuccess = () => { this.selectedFiles = [] };
 
     _ctrl.showIcgcGet = PortalFeature.get('ICGC_GET');

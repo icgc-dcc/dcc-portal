@@ -469,7 +469,7 @@
       }]);
 
     })
-    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog) {
+    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog, Settings) {
       
       // Setting the initial language to English CA.
       gettextCatalog.setCurrentLanguage('en_CA');
@@ -488,6 +488,8 @@
       $rootScope.$on('$stateNotFound', function() {
         $state.go('404', {}, {location: false});
       });
+
+      Settings.get().then(ICGC_SETTINGS => { $rootScope.ICGC_SETTINGS = ICGC_SETTINGS });
 
       function _initProgressBarRunOnce() {
         var _shouldDisableLoadingBar = true,
