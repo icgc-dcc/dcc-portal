@@ -77,21 +77,9 @@ angular.module('icgc.advanced.controllers', [
       
       // NOTE: using IDs instead of storing references to entities b/c pagination results in new objects  
       this.selectedEntityIdsMap = {};
-
-      this.toggleSelectedEntity = (entityType, entity) => {
-        if (!this.selectedEntityIdsMap[entityType]) {
-          this.selectedEntityIdsMap[entityType] = [];
-        }
-        this.selectedEntityIdsMap[entityType] = _.xor(this.selectedEntityIdsMap[entityType], [entity.id]);
-      };
-
-      this.isEntitySelected = (entityType, entity) => {
-        return this.selectedEntityIdsMap[entityType] && this.selectedEntityIdsMap[entityType].includes(entity.id);
-      };
-
-      this.handleOperationSuccess = (entityType) => {
-        this.selectedEntityIdsMap[entityType] = [];
-      };
+      this.toggleSelectedEntity = (entityType, entity) => { this.selectedEntityIdsMap[entityType] = _.xor((this.selectedEntityIdsMap[entityType] || []), [entity.id]) };
+      this.isEntitySelected = (entityType, entity) =>  this.selectedEntityIdsMap[entityType] && this.selectedEntityIdsMap[entityType].includes(entity.id);
+      this.handleOperationSuccess = (entityType) => { this.selectedEntityIdsMap[entityType] = [] };
 
 
       function _refresh() {
