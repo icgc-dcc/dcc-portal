@@ -152,7 +152,8 @@ public class EntitySetResource extends Resource {
       @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition) {
 
     val currentSet = this.getEntitySet(entitySetId);
-    val modifierSet = service.createEntitySet(modifierSetDefinition, false);
+    val modifierSet = modifierSetDefinition.getType() == Type.FILE ? service
+        .createFileEntitySet(modifierSetDefinition) : service.createEntitySet(modifierSetDefinition, false);
     UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(modifierSet.getId()), Collections.emptySet());
     UnionUnit unionUnit2 = new UnionUnit(ImmutableSet.of(currentSet.getId()), Collections.emptySet());
     DerivedEntitySetDefinition derivedSetDefinition =
@@ -170,6 +171,11 @@ public class EntitySetResource extends Resource {
    * @param setDefinition definition of the set with updated info.
    * @return updated entityset.
    */
+  /**
+   * @param entitySetId
+   * @param modifierSetDefinition
+   * @return
+   */
   @POST
   @Path("/{" + API_ENTITY_SET_ID_PARAM + "}/differences")
   @Consumes(APPLICATION_JSON)
@@ -180,7 +186,8 @@ public class EntitySetResource extends Resource {
       @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition) {
 
     val currentSet = this.getEntitySet(entitySetId);
-    val modifierSet = service.createEntitySet(modifierSetDefinition, false);
+    val modifierSet = modifierSetDefinition.getType() == Type.FILE ? service
+        .createFileEntitySet(modifierSetDefinition) : service.createEntitySet(modifierSetDefinition, false);
     UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(currentSet.getId()), ImmutableSet.of(modifierSet.getId()));
     DerivedEntitySetDefinition derivedSetDefinition =
         new DerivedEntitySetDefinition(Arrays.asList(unionUnit1), currentSet.getName(),
