@@ -39,6 +39,7 @@ import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -120,24 +121,19 @@ public class EntitySetResource extends Resource {
    */
   @PUT
   @Path("/{" + API_ENTITY_SET_ID_PARAM + "}")
-  @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
   public EntitySet updateSet(
       @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
-      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition,
-      // TODO: make operation an enum
-      @ApiParam(value = "Entity Set Operation") @QueryParam("operation") final String operation,
-      @ApiParam(value = API_ENTITY_SET_UPDATE_NAME) @QueryParam(API_ENTITY_SET_UPDATE_PARAM) final String newName) {
-
-    // could this be made redundant by the set definition? set defs have `name` field
-    if (newName != null) {
-      service.updateEntitySet(entitySetId, newName);
+      @ApiParam(value = API_ENTITY_SET_UPDATE_NAME) @FormParam(API_ENTITY_SET_UPDATE_PARAM) final String newName) {
+    val updatedSet = service.updateEntitySet(entitySetId, newName);
+    if (updatedSet == null) {
+      log.warn("updateEntitySet returns empty. The entitySetId '{}' is most likely invalid.", updatedSet);
+      throw new NotFoundException(entitySetId.toString(), API_ENTITY_SET_ID_VALUE);
     }
 
-    if (operation != null && modifierSetDefinition == null) {
-      throw new BadRequestException("A 'set definition' is required if 'operation' is not null");
-    }
+    return updatedSet;
+  }
 
     if (modifierSetDefinition != null) {
       val currentSet = this.getEntitySet(entitySetId);

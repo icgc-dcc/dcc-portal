@@ -219,7 +219,7 @@
     };
 
     _service.renameSet = (setId, newName) => {
-      Restangular.one(`entityset/${setId}/?name=${newName}`).customPUT('', null, null, {'Content-Type': 'application/json'});
+      Restangular.one('entityset', setId).customPUT(`name=${newName}`, null, null, {'Content-Type': 'application/x-www-form-urlencoded'});
       setList.find(x => x.id === setId).name = newName;
       localStorageService.set(LIST_ENTITY, setList);
     };
