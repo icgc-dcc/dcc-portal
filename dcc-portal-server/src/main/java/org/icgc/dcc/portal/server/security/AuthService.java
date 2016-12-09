@@ -64,6 +64,7 @@ public class AuthService {
 
   public Optional<org.icgc.dcc.common.client.api.daco.User> getDacoUser(@NonNull UserType userType,
       @NonNull String userId) {
+    log.debug("Verifying DACO access for user '{}'", userId);
     if (userType.equals(OPENID)) {
       return getDacoUserByOpenId(userId);
     } else {

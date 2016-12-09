@@ -53,7 +53,7 @@
     Page.setPage('entity');
 
     _ctrl.hasSupplementalFiles = function(donor) {
-      return donor.family || donor.exposure || donor.therapy;
+      return donor.biomarker || donor.family || donor.exposure || donor.surgery || donor.therapy;
     };
 
     _ctrl.isPCAWG = function(donor) {
