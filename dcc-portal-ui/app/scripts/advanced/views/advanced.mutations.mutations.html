@@ -13,6 +13,7 @@
                 entity-type="'mutation'"
                 set-total-count="AdvancedCtrl.Mutation.mutations.pagination.total"
                 set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
+                on-operation-success="AdvancedCtrl.handleOperationSuccess('mutation')"
             ></entityset-persistence-dropdown>
         </span>
     </span>

@@ -64,6 +64,7 @@
                         entity-type="'donor'"
                         set-total-count="AdvancedCtrl.Donor.donors.pagination.total"
                         set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
+                        on-operation-success="AdvancedCtrl.handleOperationSuccess('donor')"
                     ></entityset-persistence-dropdown>
                </span>
             </span>

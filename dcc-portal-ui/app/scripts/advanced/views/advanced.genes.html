@@ -28,6 +28,7 @@
                     entity-type="'gene'"
                     set-total-count="AdvancedCtrl.Gene.genes.pagination.total"
                     set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
+                    on-operation-success="AdvancedCtrl.handleOperationSuccess('gene')"
                 ></entityset-persistence-dropdown>
             </span>
         </span>

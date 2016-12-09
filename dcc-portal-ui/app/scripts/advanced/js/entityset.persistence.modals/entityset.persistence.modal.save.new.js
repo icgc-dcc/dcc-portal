@@ -25,19 +25,21 @@ ngModule.component('saveNewSetModal', {
   controller: function (SetService) {
     this.name = this.initialEntitysetDefinition.name;
     this.handleClickClose = () => {
-      this.close()();
+      this.close();
     };
     this.handleClickSave = () => {
-      this.close()();
+      this.close();
       SetService.addSet(this.initialEntitysetDefinition.type, Object.assign({}, this.initialEntitysetDefinition, {
         name: this.name,
-      }));
+      }))
+        .then(this.onOperationSuccess);
     };
   },
   bindings: {
     close: '&',
     dismiss: '&',
     initialEntitysetDefinition: '<',
+    onOperationSuccess: '&',
   },
   controllerAs: 'vm',
 });

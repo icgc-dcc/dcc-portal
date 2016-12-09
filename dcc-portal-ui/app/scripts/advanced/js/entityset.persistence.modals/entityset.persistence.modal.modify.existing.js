@@ -48,12 +48,13 @@ ngModule.component('modifyExistingSetModal', {
     this.selectedEntitysets = [];
 
     this.handleClickClose = () => {
-      this.close()();
+      this.close();
     };
 
     this.handleClickSave = () => {
-      this.close()();
-      SetService.modifySet(this.selectedEntitysets[0], this.initialEntitysetDefinition, this.operation);
+      this.close();
+      SetService.modifySet(this.selectedEntitysets[0], this.initialEntitysetDefinition, this.operation)
+        .then(this.onOperationSuccess);
     };
 
     this.handleClickSavedEntityset = (entityset) => {
@@ -67,7 +68,8 @@ ngModule.component('modifyExistingSetModal', {
     close: '&',
     dismiss: '&',
     initialEntitysetDefinition: '<',
-    operation: '<'
+    operation: '<',
+    onOperationSuccess: '&',
   },
   controllerAs: 'vm',
 });

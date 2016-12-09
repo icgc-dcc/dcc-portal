@@ -89,6 +89,10 @@ angular.module('icgc.advanced.controllers', [
         return this.selectedEntityIdsMap[entityType] && this.selectedEntityIdsMap[entityType].includes(entity.id);
       };
 
+      this.handleOperationSuccess = (entityType) => {
+        this.selectedEntityIdsMap[entityType] = [];
+      };
+
 
       function _refresh() {
         var filters = _locationFilterCache.filters(),

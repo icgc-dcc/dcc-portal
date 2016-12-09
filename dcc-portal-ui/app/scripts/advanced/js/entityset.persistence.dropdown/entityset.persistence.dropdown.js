@@ -28,7 +28,7 @@ ngModule.component('entitysetPersistenceDropdown', {
     });
 
     this.handleClickSaveNew = async () => {
-      const {selectedEntityIds, entityType} = this;
+      const {selectedEntityIds, entityType, onOperationSuccess} = this;
       if (!selectedEntityIds || !selectedEntityIds.length) {
         $modal.open({
           templateUrl: '/scripts/sets/views/sets.upload.html',
@@ -54,12 +54,14 @@ ngModule.component('entitysetPersistenceDropdown', {
       $modal.open({
         template: `
           <save-new-set-modal
-            close="vm.$close"
+            close="vm.$close()"
             initial-entityset-definition="vm.entitysetDefinition"
+            on-operation-success="vm.onOperationSuccess()"
           ></save-new-set-modal>
         `,
         controller: function () {
           this.entitysetDefinition = entitysetDefinition;
+          this.onOperationSuccess = onOperationSuccess;
         },
         controllerAs: 'vm',
         bindToController: true,
@@ -67,7 +69,7 @@ ngModule.component('entitysetPersistenceDropdown', {
     };
 
     this.handleClickModifySet = (operation) => {
-      const {selectedEntityIds, entityType} = this;
+      const {selectedEntityIds, entityType, onOperationSuccess} = this;
       const filters = selectedEntityIds.length
         ? getFiltersFromEntityIds(entityType, selectedEntityIds)
         : FilterService.filters();
@@ -82,14 +84,16 @@ ngModule.component('entitysetPersistenceDropdown', {
       $modal.open({
         template: `
           <modify-existing-set-modal
-            close="vm.$close"
+            close="vm.$close()"
             initial-entityset-definition="vm.entitysetDefinition"
             operation="vm.operation"
+            on-operation-success="vm.onOperationSuccess()"
           ></modify-existing-set-modal>
         `,
         controller: function () {
           this.entitysetDefinition = entitysetDefinition;
           this.operation = operation;
+          this.onOperationSuccess = onOperationSuccess;
         },
         controllerAs: 'vm',
         bindToController: true,
@@ -101,6 +105,7 @@ ngModule.component('entitysetPersistenceDropdown', {
     entityType: '<',
     setLimit: '<',
     setTotalCount: '<',
+    onOperationSuccess: '&',
   },
   controllerAs: 'vm',
 });
