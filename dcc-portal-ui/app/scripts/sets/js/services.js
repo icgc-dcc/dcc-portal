@@ -225,8 +225,11 @@
     };
 
     _service.modifySet = async (existingSet, entitysetDefinition, operation) => {
+      const validOperations = ['add', 'remove'];
+      invariant(validOperations.includes(operation), `operation must be one of ${JSON.stringify(validOperations)}`);
       const savingToaster = _service.savingToaster(existingSet.name);
-      const updatedEntityset = await Restangular.one(`entityset/${existingSet.id}?operation=${operation}`).customPUT(entitysetDefinition, null, null, {'Content-Type': 'application/json'});
+      const resource = {add: 'unions', remove: 'differences'}[operation];
+      const updatedEntityset = await Restangular.one(`entityset/${existingSet.id}/${resource}`).customPOST(entitysetDefinition, null, null, {'Content-Type': 'application/json'});
       _service.update(Object.assign({}, updatedEntityset, {type: updatedEntityset.type.toLowerCase()}));
       toaster.clear(savingToaster);
       _service.saveSuccessToaster(existingSet.name);

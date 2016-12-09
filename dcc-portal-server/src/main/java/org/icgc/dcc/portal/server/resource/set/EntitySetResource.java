@@ -135,28 +135,57 @@ public class EntitySetResource extends Resource {
     return updatedSet;
   }
 
-    if (modifierSetDefinition != null) {
-      val currentSet = this.getEntitySet(entitySetId);
-      val modifierSet = service.createEntitySet(modifierSetDefinition, false);
-      DerivedEntitySetDefinition derivedSetDefinition;
+  /**
+   * Updates an entityset.
+   * 
+   * @param entitySetId path param holding the set id to update.
+   * @param setDefinition definition of the set with updated info.
+   * @return updated entityset.
+   */
+  @POST
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}/unions")
+  @Consumes(APPLICATION_JSON)
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
+  public EntitySet addToSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition) {
 
-      if (operation.equalsIgnoreCase("ADD")) {
-        UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(modifierSet.getId()), Collections.emptySet());
-        UnionUnit unionUnit2 = new UnionUnit(ImmutableSet.of(currentSet.getId()), Collections.emptySet());
-        derivedSetDefinition =
-            new DerivedEntitySetDefinition(Arrays.asList(unionUnit1, unionUnit2), currentSet.getName(),
-                currentSet.getDescription(), currentSet.getType(), false);
-        service.updateEntitySet(entitySetId, derivedSetDefinition);
-      } else if (operation.equalsIgnoreCase("REMOVE")) {
-        UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(currentSet.getId()), ImmutableSet.of(modifierSet.getId()));
-        derivedSetDefinition =
-            new DerivedEntitySetDefinition(Arrays.asList(unionUnit1), currentSet.getName(),
-                currentSet.getDescription(), currentSet.getType(), false);
-        service.updateEntitySet(entitySetId, derivedSetDefinition);
-      } else {
-        throw new BadRequestException("Invalid operation" + operation);
-      }
-    }
+    val currentSet = this.getEntitySet(entitySetId);
+    val modifierSet = service.createEntitySet(modifierSetDefinition, false);
+    UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(modifierSet.getId()), Collections.emptySet());
+    UnionUnit unionUnit2 = new UnionUnit(ImmutableSet.of(currentSet.getId()), Collections.emptySet());
+    DerivedEntitySetDefinition derivedSetDefinition =
+        new DerivedEntitySetDefinition(Arrays.asList(unionUnit1, unionUnit2), currentSet.getName(),
+            currentSet.getDescription(), currentSet.getType(), false);
+    service.updateEntitySet(entitySetId, derivedSetDefinition);
+
+    return this.getEntitySet(entitySetId);
+  }
+
+  /**
+   * Updates an entityset.
+   * 
+   * @param entitySetId path param holding the set id to update.
+   * @param setDefinition definition of the set with updated info.
+   * @return updated entityset.
+   */
+  @POST
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}/differences")
+  @Consumes(APPLICATION_JSON)
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
+  public EntitySet removeFromSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition) {
+
+    val currentSet = this.getEntitySet(entitySetId);
+    val modifierSet = service.createEntitySet(modifierSetDefinition, false);
+    UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(currentSet.getId()), ImmutableSet.of(modifierSet.getId()));
+    DerivedEntitySetDefinition derivedSetDefinition =
+        new DerivedEntitySetDefinition(Arrays.asList(unionUnit1), currentSet.getName(),
+            currentSet.getDescription(), currentSet.getType(), false);
+    service.updateEntitySet(entitySetId, derivedSetDefinition);
 
     return this.getEntitySet(entitySetId);
   }
