@@ -114,7 +114,7 @@ public class BrowserRepository {
       request.setFetchSource(FETCH_SOURCE, NO_EXCLUDE);
     }
 
-    log.debug("Browser Gene Request", request);
+    log.info("Browser Gene Request", request);
     return request.execute().actionGet();
   }
 
@@ -155,7 +155,7 @@ public class BrowserRepository {
     val request = client.prepareSearch(indexName);
     customizer.accept(request);
 
-    log.debug("{}: {}", message, request);
+    log.info("{}: {}", message, request);
     return request.execute().actionGet();
   }
 

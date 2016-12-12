@@ -223,7 +223,6 @@ public class SearchRepository {
     val result = TYPE_ID_MAPPINGS.containsKey(type) ? newHashSet(TYPE_ID_MAPPINGS.get(type)) : MULTIPLE_SEARCH_TYPES;
 
     return toStringArray(result);
-    // return TYPE_ID_MAPPINGS.containsKey(type) ? new String[] { TYPE_ID_MAPPINGS.get(type) } : MULTIPLE_SEARCH_TYPES;
   }
 
   private static QueryBuilder getPostFilter(String type) {
@@ -300,7 +299,7 @@ public class SearchRepository {
     keys.addAll(appendSuffixes(FieldNames.GENE_MUTATIONS, geneMutationSearchSuffixes));
 
     // Exact-match search on "id".
-    keys.add(FieldNames.ID);
+    keys.add(FieldNames.ID + ".raw");
 
     if (isRepositoryFileRelated(type)) {
       // For repository file related searches, we want fuzzy search.

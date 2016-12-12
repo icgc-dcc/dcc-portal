@@ -25,9 +25,7 @@ import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
-import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.EMPTY_SOURCE_FIELDS;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.resolveSourceFields;
+import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.setFetchSourceOfGetRequest;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flatternMap;
@@ -66,7 +64,6 @@ public class GeneSetRepository {
   /**
    * Constants.
    */
-  private static final String[] NO_EXCLUDE = null;
   private static final String INDEX_GENE_COUNT_FIELD_NAME = "_summary._gene_count";
   private static final String INDEX_GENE_SETS_NAME_FIELD_NAME = "name";
   public static final Map<String, String> SOURCE_FIELDS = ImmutableMap.of(
@@ -161,11 +158,7 @@ public class GeneSetRepository {
   public Map<String, Object> findOne(String id, Iterable<String> fieldNames) {
     val query = Query.builder().fields(Lists.newArrayList(fieldNames)).build();
     val search = client.prepareGet(indexName, IndexType.GENE_SET.getId(), id);
-    search.setFetchSource(getFields(query, EntityType.GENE_SET), NO_EXCLUDE);
-    String[] sourceFields = resolveSourceFields(query, EntityType.GENE_SET);
-    if (sourceFields != EMPTY_SOURCE_FIELDS) {
-      search.setFetchSource(resolveSourceFields(query, EntityType.GENE_SET), EMPTY_SOURCE_FIELDS);
-    }
+    setFetchSourceOfGetRequest(search, query, EntityType.GENE_SET);
 
     GetResponse response = search.execute().actionGet();
     checkResponseState(id, response, EntityType.GENE_SET);
