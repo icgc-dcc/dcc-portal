@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.repository;
 
 import static com.google.common.collect.Lists.transform;
+import static com.google.common.collect.Maps.immutableEntry;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -40,6 +41,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -55,6 +57,7 @@ import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.icgc.dcc.common.core.util.stream.Collectors;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
@@ -91,6 +94,15 @@ public class GeneRepository implements Repository {
       ImmutableMap.<String, String> of("id.search", "_gene_id",
           "symbol.search", "symbol",
           "uniprotkbSwissprot.search", "external_db_ids.uniprotkb_swissprot");
+
+  // This is currently needed due to the change from fields to source in the move from ES 1.4.4 -> 5.0.x
+  public static final Map<String, String> GENE_ID_RESPONSE_SOURCE = GENE_ID_SEARCH_FIELDS.entrySet().stream()
+      .map(e -> {
+        int i = e.getKey().lastIndexOf(".search");
+        String cleanedKey = i > 0 ? e.getKey().substring(0, i) : e.getKey();
+        return immutableEntry(cleanedKey, e.getValue());
+      })
+      .collect(Collectors.toImmutableMap(Entry::getKey, Entry::getValue));
 
   private final Client client;
   private final String indexName;
@@ -289,7 +301,7 @@ public class GeneRepository implements Repository {
     for (val searchField : GENE_ID_SEARCH_FIELDS.keySet()) {
       boolQuery.should(termsQuery(searchField, input.toArray()));
       highlight.field(searchField);
-      includes.add(searchField);
+      includes.add(searchField.substring(0, searchField.lastIndexOf(".search")));
     }
     search.setFetchSource(toStringArray(includes), NO_EXCLUDE);
     search.highlighter(highlight);

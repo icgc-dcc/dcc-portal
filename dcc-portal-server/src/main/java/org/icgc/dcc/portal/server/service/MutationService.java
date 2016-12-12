@@ -164,9 +164,12 @@ public class MutationService {
       map.put("mutation", hitSource.get("mutation"));
       map.put("_summary._affected_donor_count", hitSource.get("_summary._affected_donor_count"));
 
-      val nestedTranscripts = (List<Map<String, Object>>) hitSource.get("transcript");
+      val nestedTranscripts = ((List<Map<String, Object>>) hitSource.get("transcript")).stream()
+          .filter(t -> t.get("id") != null) // This is to filter out fake transcripts.
+          .collect(toImmutableList());
+
       List<String> transcriptIds = nestedTranscripts.stream()
-          .map(t -> t.get("id").toString())
+          .map(t -> (String) t.get("id"))
           .collect(toImmutableList());
 
       val predictionSummary = nestedTranscripts.stream()

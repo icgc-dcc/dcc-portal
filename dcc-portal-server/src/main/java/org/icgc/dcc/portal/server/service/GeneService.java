@@ -7,6 +7,7 @@ import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_UNIPROT_IDS;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
+import static org.icgc.dcc.portal.server.repository.GeneRepository.GENE_ID_RESPONSE_SOURCE;
 import static org.icgc.dcc.portal.server.repository.GeneRepository.GENE_ID_SEARCH_FIELDS;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
@@ -147,7 +148,7 @@ public class GeneService {
     // Organize the results into the categories
     // Note: it may be possible that a uniprot id can be matched to multiple genes
     for (val hit : response.getHits()) {
-      val fields = hit.getFields();
+      val source = hit.getSource();
       val highlightedFields = hit.getHighlightFields();
       val matchedGene = geneText2Gene(hit);
 
@@ -162,15 +163,18 @@ public class GeneService {
           // Because we need to group by the inpu, we need to figure out which one of the uniprot ids
           // was in the input identifiers - this requires us to normalize to lower case to make the comparisons
           if (field.equals(GENE_UNIPROT_IDS)) {
-            val keys = fields.get(searchField.getKey()).getValues();
+            val cleanedKey = searchField.getKey().substring(0, searchField.getKey().lastIndexOf(".search"));
 
-            for (val key : keys) {
-              if (ids.contains(key.toString().toLowerCase())) {
-                result.get(field).put(getString(key), matchedGene);
+            val keys = source.get(cleanedKey);
+            if (keys instanceof List<?>) {
+              for (val key : (List<?>) keys) {
+                if (ids.contains(key.toString().toLowerCase())) {
+                  result.get(field).put(getString(key), matchedGene);
+                }
               }
             }
           } else {
-            val key = getString(fields.get(searchField.getKey()).getValues());
+            val key = getString(source.get(searchField.getKey()));
             result.get(field).put(key, matchedGene);
           }
         }
@@ -298,7 +302,7 @@ public class GeneService {
     val fieldMap = createResponseMap(hit, Query.builder().build(), EntityType.GENE);
     Map<String, Object> geneMap = Maps.newHashMap();
     fieldMap.forEach((k, v) -> {
-      geneMap.put(GENE_ID_SEARCH_FIELDS.get(k), v);
+      geneMap.put(GENE_ID_RESPONSE_SOURCE.get(k), v);
     });
 
     return new Gene(geneMap);

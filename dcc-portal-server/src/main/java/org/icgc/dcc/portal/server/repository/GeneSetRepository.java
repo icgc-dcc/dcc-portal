@@ -67,7 +67,7 @@ public class GeneSetRepository {
   private static final String INDEX_GENE_COUNT_FIELD_NAME = "_summary._gene_count";
   private static final String INDEX_GENE_SETS_NAME_FIELD_NAME = "name";
   public static final Map<String, String> SOURCE_FIELDS = ImmutableMap.of(
-      "hierarchy", "pathway.hierarchy",
+      "hierarchy", "gene_set_pathway.hierarchy",
       "inferredTree", "go_term.inferred_tree",
       "altIds", "go_term.alt_ids",
       "synonyms", "go_term.synonyms");
