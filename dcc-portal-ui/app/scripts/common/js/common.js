@@ -392,6 +392,6 @@
     };
   });
 
-  module.directive('ngLazyShow', require('./lazy-show'))
+  module.directive('ngLazyShow', require('./lazy-show'));
 
 })();

@@ -100,7 +100,7 @@
         $scope.$watch ('items', function (newValue) {
           var showPlot = shouldShowPlot (newValue);
           $scope.showPlot = showPlot;
-          if (! showPlot) {return;}
+          if (! showPlot) {return}
 
           if (newValue && typeof $scope.items[0] !== 'undefined') {
             if (!chart) {
@@ -108,7 +108,7 @@
             }
 
             // Adaptive margin based on char length of labels
-            var max = _.max(_.pluck( $scope.items, 'key').map(function(d) { return d.length; }));
+            var max = _.max(_.pluck( $scope.items, 'key').map(function(d) { return d.length }));
             if (max >= 10) {
               config.margin.bottom += 25;
             }

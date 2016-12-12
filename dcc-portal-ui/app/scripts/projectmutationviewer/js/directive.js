@@ -146,7 +146,7 @@
           });
 
           $scope.showPlot = showPlot;
-          if (! showPlot) {return;}
+          if (! showPlot) {return}
 
           if (newData && !chart) {
             chart = new dcc.ProjectMutationChart (transform ($scope.items), config);

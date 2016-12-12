@@ -255,7 +255,7 @@
       return {
         ...fileInfo,
         fileCopies: hydrateFileCopies(fileInfo.fileCopies, repoCodeMap),
-      }
+      };
     };
 
     function _shortenRepoName (name) {

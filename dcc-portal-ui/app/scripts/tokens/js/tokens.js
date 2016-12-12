@@ -55,7 +55,7 @@
             $scope.activeTokens = data.tokens;
 
             // Give this a slight delay to make viewers aware that UI is updating
-            $timeout(function() { $scope.processing = false; }, 250);
+            $timeout(function() { $scope.processing = false }, 250);
          });
 
          TokenService.getScopes().then(function(data) {

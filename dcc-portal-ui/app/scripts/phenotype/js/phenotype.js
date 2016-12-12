@@ -121,7 +121,7 @@
             $scope.gender = PhenotypeService.buildAnalysis(gender, $scope.setMap);
             $scope.vital = PhenotypeService.buildAnalysis(vital, $scope.setMap);
             $scope.age = PhenotypeService.buildAnalysis(age, $scope.setMap);
-            $scope.meanAge = age.data.map(function(d) { return d.summary.mean; });
+            $scope.meanAge = age.data.map(function(d) { return d.summary.mean });
 
           });
 
@@ -337,7 +337,7 @@
       return {
         uiTable: uiTable,
         uiGraph: {
-          categories: terms.map(function(term) { return ValueTranslator.translate(term); }),
+          categories: terms.map(function(term) { return ValueTranslator.translate(term) }),
           series: uiSeries
         },
         pvalue: analysis.pvalue

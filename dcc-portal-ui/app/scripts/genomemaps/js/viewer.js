@@ -153,8 +153,8 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
         done = false; 
 
       function setup() {
-        regionObj.start = parseInt(regionObj.start);
-        regionObj.end = parseInt(regionObj.end);
+        regionObj.start = parseInt(regionObj.start, 10);
+        regionObj.end = parseInt(regionObj.end, 10);
         var species = availableSpecies.vertebrates[0];
         genomeViewer = genomeViewer || new GenomeViewer({
             cellBaseHost: GMService.getConfiguration().cellBaseHost,
@@ -474,8 +474,8 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
       require.ensure([], require => {
         require('~/scripts/genome-viewer.js');
       function setup(regionObj) {
-        regionObj.start = parseInt(regionObj.start);
-        regionObj.end = parseInt(regionObj.end);
+        regionObj.start = parseInt(regionObj.start, 10);
+        regionObj.end = parseInt(regionObj.end, 10);
         var species = availableSpecies.vertebrates[0];
         genomeViewer = genomeViewer || new GenomeViewer({
             cellBaseHost: GMService.getConfiguration().cellBaseHost,
