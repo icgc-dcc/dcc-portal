@@ -103,8 +103,8 @@
           // Clean gene & donor data before using for oncogrid. 
           var donorObs = _.map(observations, 'donorId');
           var geneObs = _.map(observations, 'geneId');
-          donors = _.filter(donors, function(d) { return donorObs.indexOf(d.id) >= 0;});
-          genes = _.filter(genes, function(g) { return geneObs.indexOf(g.id) >= 0;});
+          donors = _.filter(donors, function(d) { return donorObs.indexOf(d.id) >= 0});
+          genes = _.filter(genes, function(g) { return geneObs.indexOf(g.id) >= 0});
 
           if (observations.length === 0) {
             $('#oncogrid-controls').toggle();
@@ -168,7 +168,7 @@
             { 'name': 'PCAWG', 'fieldName': 'pcawg', 'type': 'bool', 'sort': sortBool, 'group': 'Study' }
           ];
 
-          var maxSurvival = _.max(_.map(donors, function(d) { return d.survivalTime; } ));
+          var maxSurvival = _.max(_.map(donors, function(d) { return d.survivalTime } ));
 
           var donorOpacity = function (d) {
             if (d.type === 'int') {
@@ -191,7 +191,7 @@
                'fieldName': 'cgc', 'type': 'bool', 'sort': sortBool, 'group': 'Gene Sets'}
           ];
 
-          var maxDonorsAffected = _.max(genes, function (g) { return g.totalDonors; }).totalDonors;
+          var maxDonorsAffected = _.max(genes, function (g) { return g.totalDonors }).totalDonors;
 
           var geneOpacity = function (g) {
             if (g.type === 'int') {

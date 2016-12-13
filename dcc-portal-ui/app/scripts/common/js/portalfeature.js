@@ -22,7 +22,7 @@
 
 
       function _enable(feature) {
-        if (features.hasOwnProperty(feature) === false) { return; }
+        if (features.hasOwnProperty(feature) === false) { return }
         features[feature] = true;
         if ($state.current.name) {
           $state.go($state.current.name, {}, {reload: true});
@@ -30,7 +30,7 @@
       }
 
       function _disable(feature) {
-        if (features.hasOwnProperty(feature) === false) { return; }
+        if (features.hasOwnProperty(feature) === false) { return }
         features[feature] = false;
         if ($state.current.name) {
           $state.go($state.current.name, {}, {reload: true});
@@ -60,7 +60,7 @@
       Settings.get().then(init);
 
       this.get = function(s) {
-        if (features.hasOwnProperty(s) === false) { return false; }
+        if (features.hasOwnProperty(s) === false) { return false }
         return features[s];
       };
 

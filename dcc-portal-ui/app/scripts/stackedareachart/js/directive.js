@@ -82,7 +82,7 @@
           xaxis: {
             label: gettextCatalog.getString('Release'),
             ticksValueRange: [4, 23],
-            secondaryLabel: function(data){return releaseDates[data];}
+            secondaryLabel: function(data){return releaseDates[data]}
           },
           onClick: function(project){
             $scope.$emit('tooltip::hide');

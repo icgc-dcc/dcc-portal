@@ -284,7 +284,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     p.include = 'facets';
 
     function findRepoData(list, term) {
-      return _.find(list, function(t) { return t.term === term; }).count || 0;
+      return _.find(list, function(t) { return t.term === term }).count || 0;
     }
 
     Promise.all([

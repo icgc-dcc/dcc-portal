@@ -887,7 +887,7 @@ angular.module('icgc.ui.iobio', [])
               }
             }
           }).opened.then(function() {
-            setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
+            setTimeout(function() { $rootScope.$broadcast('bamready.event', {})}, 300);
 
           });
         };
@@ -912,7 +912,7 @@ angular.module('icgc.ui.iobio', [])
               }
             }
           }).opened.then(function() {
-            setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
+            setTimeout(function() { $rootScope.$broadcast('bamready.event', {})}, 300);
           });
         };
 

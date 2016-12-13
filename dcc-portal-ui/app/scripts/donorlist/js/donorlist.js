@@ -217,7 +217,7 @@ import deepmerge from 'deepmerge';
      *  - https://github.com/danialfarid/ng-file-upload/issues/776#issuecomment-106929172
      */
     $scope.$watch ('params.myFile', function (newValue) {
-      if (! newValue) {return;}
+      if (! newValue) {return}
 
       verifyFileUpload();
     });

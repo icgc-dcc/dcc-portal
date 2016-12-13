@@ -344,6 +344,6 @@
           window.open(uri, '_temp', 'menubar=no,toolbar=no,status=no');
         }
       }
-    }
+    };
   });
 })();

@@ -152,8 +152,8 @@ import deepmerge from 'deepmerge';
 
       // Find any entity set ids among the entity ids in order to query for their names
       var setIds = _($scope.activeEntityIds)
-        .filter(function(id) { return id.indexOf(Extensions.ENTITY_PREFIX) === 0;})
-        .map(function(id) { return id.replace('ES:', '');})
+        .filter(function(id) { return id.indexOf(Extensions.ENTITY_PREFIX) === 0})
+        .map(function(id) { return id.replace('ES:', '')})
         .value();
 
       if (setIds.length > 0) {
@@ -284,7 +284,7 @@ import deepmerge from 'deepmerge';
     };
 
     var _captureTermInfo = function ( term ) {
-      if ( ! term ) { return; }
+      if ( ! term ) { return }
 
       var _type = term.type;
       var _id = term.id;
