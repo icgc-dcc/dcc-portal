@@ -100,7 +100,7 @@
               <goal>exec</goal>
             </goals>
             <configuration>
-              <executable>yarn</executable>
+              <executable>yarnpkg</executable>
               <workingDirectory>.</workingDirectory>
             </configuration>
           </execution>
