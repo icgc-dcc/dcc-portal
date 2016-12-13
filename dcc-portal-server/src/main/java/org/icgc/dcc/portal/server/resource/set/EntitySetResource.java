@@ -96,6 +96,25 @@ public class EntitySetResource extends Resource {
   private final EntitySetService service;
 
   @GET
+  @Path("/sets/{" + API_ENTITY_SET_ID_PARAM + "}")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves a list of entity sets by their IDs.", response = EntitySet.class, responseContainer = "List")
+  public List<EntitySet> getSets(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUIDSetParam entitySetIds) {
+    Set<UUID> setIds = null;
+    try {
+      setIds = entitySetIds.get();
+    } catch (Exception e) {
+      log.error("Exception occurred while parsing the UUID list from web request: '{}'", entitySetIds);
+      log.error("The exception while parsing the UUID list is: ", e);
+      throw new BadRequestException("Unable to parse the entitySetId parameter.");
+    }
+    log.debug("Received a getSets request for these lists: '{}'", setIds);
+  
+    return getSetsByIds(setIds);
+  }
+
+  @GET
   @Path("/{" + API_ENTITY_SET_ID_PARAM + "}")
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)

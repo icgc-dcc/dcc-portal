@@ -85,11 +85,14 @@ public class GeneRepository implements Repository {
   private static final String ENSEMBL_ID_FIELD_NAME = "id";
   private static final String[] GENE_SYMBOL_ENSEMBL_ID_FIELDS = { GENE_SYMBOL_FIELD_NAME, ENSEMBL_ID_FIELD_NAME };
 
-  public static final Map<String, String> GENE_ID_SEARCH_FIELDS =
-      ImmutableMap.<String, String> of("id.search", "_gene_id",
-          "symbol.search", "symbol",
-          "uniprotkbSwissprot.search", "external_db_ids.uniprotkb_swissprot");
+  public static final Map<String, String> GENE_ID_SEARCH_FIELDS = ImmutableMap.of(
+      "id.search", "_gene_id",
+      "symbol.search", "symbol",
+      "uniprotkbSwissprot.search", "external_db_ids.uniprotkb_swissprot");
 
+  /**
+   * Dependencies.
+   */
   private final Client client;
   private final String indexName;
 
