@@ -4,6 +4,7 @@ var webpackProdConfig = require('./config/webpack.config.prod.js');
 
 var webpackTestConfig = Object.assign({}, webpackProdConfig, {
   entry: {},
+  devtool: 'cheap-source-map',
   // Note: plugins that are currently unsupported by karma-webpack need to be removed
   // https://github.com/webpack/karma-webpack/issues/149
   plugins: webpackProdConfig.plugins.filter(x => !_.includes([

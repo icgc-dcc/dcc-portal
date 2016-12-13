@@ -37,7 +37,7 @@
       controller: 'OncogridController',
       controllerAs: 'OncoCtrl',
       templateUrl: '/scripts/oncogrid/views/oncogrid-analysis.html',
-      link: function ($scope) {
+      link: function ($scope, $element) {
         var donorSearch = '/search?filters=';
         var geneSearch = '/search/g?filters=';
         var obsSearch = '/search/m/o?filters=';
@@ -103,8 +103,8 @@
           // Clean gene & donor data before using for oncogrid. 
           var donorObs = _.map(observations, 'donorId');
           var geneObs = _.map(observations, 'geneId');
-          donors = _.filter(donors, function(d) { return donorObs.indexOf(d.id) >= 0;});
-          genes = _.filter(genes, function(g) { return geneObs.indexOf(g.id) >= 0;});
+          donors = _.filter(donors, function(d) { return donorObs.indexOf(d.id) >= 0});
+          genes = _.filter(genes, function(g) { return geneObs.indexOf(g.id) >= 0});
 
           if (observations.length === 0) {
             $('#oncogrid-controls').toggle();
@@ -168,14 +168,12 @@
             { 'name': 'PCAWG', 'fieldName': 'pcawg', 'type': 'bool', 'sort': sortBool, 'group': 'Study' }
           ];
 
-          var maxSurvival = _.max(_.map(donors, function(d) { return d.survivalTime; } ));
+          var maxSurvival = _.max(_.map(donors, function(d) { return d.survivalTime } ));
 
           var donorOpacity = function (d) {
             if (d.type === 'int') {
               return d.value / 100;
-            } else if (d.type === 'vital') {
-              return 1;
-            } else if (d.type === 'sex') {
+            } else if (d.type === 'vital' || d.type === 'sex') {
               return 1;
             } else if (d.type === 'bool') {
               return d.value ? 1 : 0;
@@ -193,7 +191,7 @@
                'fieldName': 'cgc', 'type': 'bool', 'sort': sortBool, 'group': 'Gene Sets'}
           ];
 
-          var maxDonorsAffected = _.max(genes, function (g) { return g.totalDonors; }).totalDonors;
+          var maxDonorsAffected = _.max(genes, function (g) { return g.totalDonors }).totalDonors;
 
           var geneOpacity = function (g) {
             if (g.type === 'int') {
@@ -249,11 +247,34 @@
             'Study': OncogridService.studyLegend()
           };
 
+          var templates = {
+            mainGridCrosshair: `
+              <div class="og-crosshair-tooltip">
+                {{#donor}}
+                <div>
+                  <span><b>Donor</b>:&nbsp;</span>
+                  <span>{{donor.id}}</span>
+                </div>
+                {{/donor}}
+                {{#gene}}
+                <div>
+                  <span><b>Gene</b>:&nbsp;</span>
+                  <span>{{gene.symbol}}</span>
+                </div>
+                {{/gene}}
+                {{#obs}}
+                <div>
+                  <span><b>Mutations</b>:&nbsp;</span>
+                  <span>{{obs}}</span>
+                </div>
+                {{/obs}}`
+          };
+
           $scope.params = {
             donors: donors,
             genes: genes,
             observations: observations,
-            element: '#oncogrid-div',
+            element: $element.find('#oncogrid-div').get(0),
             height: 150,
             width: 680,
             colorMap: colorMap,
@@ -263,7 +284,9 @@
             minCellHeight: 8,
             trackHeight: 12,
             trackLegends: trackLegends,
-            trackLegendLabel: '<i class="icon-help"></i>',
+            trackLegendLabel: '<i class="fa fa-question-circle legend-icon baseline"></i>',
+            trackPadding: 25,
+            templates,
             donorTracks: donorTracks,
             donorOpacityFunc: donorOpacity,
             donorClick: donorClick,
@@ -287,12 +310,15 @@
           $('#grid-button').removeClass('active');
 
           $('#og-crosshair-message').hide();
-          var gridDiv = $('#oncogrid-div');
-          gridDiv.addClass('og-pointer-mode'); gridDiv.removeClass('og-crosshair-mode');
+          var gridDiv = $element.find('#oncogrid-div');
+          gridDiv.addClass('og-pointer-mode'); 
+          gridDiv.removeClass('og-crosshair-mode');
         };
 
-        $scope.$watch('item', function (n) {
-          if (n) {
+        function processItem() {
+          if (!$scope.item) {
+            return;
+          }
             var getName = type => _(localStorageService.get('entity'))
                             .filter( e => e.id === $scope.item[type])
                             .map( e => e.name)
@@ -300,14 +326,14 @@
 
             $scope.geneSetName = getName('geneSet');
             $scope.donorSetName = getName('donorSet');
-            if (typeof $scope.OncoCtrl.grid !== 'undefined' && $scope.OncoCtrl.grid !== null) {
-              $scope.cleanActives();
-              $scope.OncoCtrl.grid.destroy();
-            }
-            $('#oncogrid-spinner').toggle(true);
+            $element.find('#oncogrid-spinner').toggle(true);
             createLinks();
             $scope.materializeSets().then(function () {
-              $('#oncogrid-spinner').toggle(false);
+              if ($scope.OncoCtrl.grid) {
+                $scope.cleanActives();
+                $scope.OncoCtrl.grid.destroy();
+              }
+              $element.find('#oncogrid-spinner').toggle(false);
 
               // Temporary fix:
               //http://stackoverflow.com/a/23444942
@@ -320,8 +346,10 @@
               $scope.initOnco();
               $('#grid-button').addClass('active');
             });
-          }
-        });
+        }
+
+        $scope.$watch('item', processItem);
+        processItem();
 
         $scope.fullScreenHandler = function () {
           if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {

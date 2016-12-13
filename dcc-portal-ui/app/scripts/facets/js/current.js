@@ -53,8 +53,8 @@
     $scope.inPluralForm = function (terms) {
       var filters = _.get (terms, 'is', _.get (terms, 'not', []));
 
-      if (_.isEmpty (filters)) {return false;}
-      if (_.size (filters) > 1) {return true;}
+      if (_.isEmpty (filters)) {return false}
+      if (_.size (filters) > 1) {return true}
 
       var filter = _.first (filters);
 
@@ -63,16 +63,14 @@
     
     $scope.isNot = function(terms) {
       var currentFilters = LocationService.filters();
-      if (terms.facet === 'id') {
-        return _.has(currentFilters, terms.type+'.'+terms.facet+'.not');
-      } else if (terms.type === 'go_term') {
+      if (terms.type === 'go_term') {
         return _.has(currentFilters, ['gene',terms.facet,'not']);
       } else {
         return _.has(currentFilters, terms.type+'.'+terms.facet+'.not');
       }
     };
     
-    $scope.activeClass = function(terms) {     
+    $scope.activeClass = function(terms) {
       return $scope.isNot(terms) ? 't_facets__facet__not' : '';
     };
 

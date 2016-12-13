@@ -246,14 +246,6 @@
         }
       });
 
-      // $scope.$watch(function(){
-      //   return _ctrl.tableFilter.projects;
-      // }, function(newVal){
-      //   if(newVal){
-      //     _ctrl.currentCancerPage = 1;
-      //   }
-      // });
-
       refresh();
     });
 
@@ -283,7 +275,7 @@
               });
             });
             // Timeout so that our scroll function gets called after render. 
-            $timeout(function() {$scope.fixScroll();},0);
+            $timeout(function() {$scope.fixScroll()},0);
           });
       }
     }
@@ -366,7 +358,7 @@
                 });
               }
               // Timeout so that our scroll function gets called after render. 
-              $timeout(function() {$scope.fixScroll();},0);            
+              $timeout(function() {$scope.fixScroll()},0);            
             });
           });
         });

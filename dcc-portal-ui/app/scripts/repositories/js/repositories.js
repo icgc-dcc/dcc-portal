@@ -108,7 +108,7 @@ angular.module('icgc.repositories.controllers', [])
       Page.setTitle(gettextCatalog.getString('User Guide'));
    })
   .controller('RepositoriesController', function ($scope, Page, repoAliasMapConstants,
-                                                  RepositoriesService, $stateParams, gettextCatalog) {
+                                                  RepositorySearchService, RepositoryService, $stateParams, gettextCatalog) {
      var _ctrl = this,
        _repoAlias = $stateParams.repoAlias.toLowerCase(),
        _repoContext = _.get(repoAliasMapConstants, _repoAlias, null),
@@ -135,7 +135,7 @@ angular.module('icgc.repositories.controllers', [])
 
          _repoDataCollectionManager.getFileStats().then(function(repoStats) {
 
-            var chartProvider = RepositoriesService.getChartProvider();
+            var chartProvider = RepositorySearchService.getChartProvider();
             _repoStats.repoDataTypes = _repoDataCollectionManager.orderDataTypes(repoStats.stats);
               _repoStats.primarySites = chartProvider.getSiteProjectDonorChart(repoStats.donorPrimarySite);
          });
@@ -171,7 +171,7 @@ angular.module('icgc.repositories.controllers', [])
          // are no relevant filter facets in the UI to represent Repo Code
          // queries.
          try {
-            _repoDataCollectionManager = RepositoriesService.getRepoDataCollectionManagerFactory(_repoContext);
+            _repoDataCollectionManager = RepositorySearchService.getRepoDataCollectionManagerFactory(_repoContext);
          }
          catch (e) {
             console.error(e, '\nAborting data refresh...');
@@ -232,7 +232,7 @@ angular.module('icgc.repositories.services', [])
          STUDY: 'study'
       }
    })
-   .service('RepositoriesService', function(   PCAWG, ExternalRepoService, Restangular,
+   .service('RepositorySearchService', function(   PCAWG, ExternalRepoService, Restangular,
                                     HighchartsService, RepositoryServiceConstants) {
       var _srv = this,
          _chartProvider = null;
@@ -256,9 +256,6 @@ angular.module('icgc.repositories.services', [])
             // if null it's target is the whole repo study
             _targettedType = targettedType || RepositoryServiceConstants.DATA_TARGET_TYPE.REPO;
 
-
-
-
          function _init() {
             var repoName = ExternalRepoService.getRepoNameFromCode(_repoID);
 
@@ -266,7 +263,6 @@ angular.module('icgc.repositories.services', [])
                throw new Error('Could not find repository name with the repo code: ' + _repoID + '\nAborting...');
             }
 
-            //console.log(repoName);
             _self._repoID = _repoID;
             _self._repoName = repoName;
             _self._targettedType = _targettedType;
@@ -395,7 +391,7 @@ angular.module('icgc.repositories.services', [])
                });
 
                // Sorted
-               return list.sort(function(a, b) { return b.total - a.total; });
+               return list.sort(function(a, b) { return b.total - a.total });
          };
 
          _self.getPrimarySiteDonorChart = function(data) {
@@ -408,7 +404,7 @@ angular.module('icgc.repositories.services', [])
                colour: HighchartsService.getPrimarySiteColourForTerm(d)
                });
             });
-            list = _.sortBy(list, function(d) { return -d.count; });
+            list = _.sortBy(list, function(d) { return -d.count });
 
             return HighchartsService.bar({
                hits: list,
@@ -434,5 +430,6 @@ angular.module('icgc.repositories.services', [])
       };
 
    })
+   .service('RepositoryService', require('./repository-service'))
    .controller('RepositoriesContentController', function() {});
 

@@ -77,61 +77,49 @@
 
     <div id="oncogrid-container">
       <div id="oncogrid-controls" class="og-grid-align" style="margin-top: 10px; min-height: 70px;">
-        <div style="float:left">
+        <div class="tool-buttons" style="float:left">
           <table>
             <tr>
               <td>
-                <button id="reload-button" 
-                  data-tooltip="{{'Reload grid' | translate}}" 
-                  class="btn btn-default btn-onco" 
-                  data-ng-click="OncoCtrl.reloadGrid()">
-                  <i class="icon-undo"></i>
-                </button>
-              </td>
-              <td>
-                <button id="cluster-button" 
-                  data-tooltip="{{'Cluster data' | translate}}" 
-                  class="btn btn-default btn-onco" 
-                  data-ng-click="OncoCtrl.clusterData()">
-                  <i class="icon-sort-alt-down"></i>
-                </button>
-              </td>
-
-              <td>
-                <button 
-                  id="heat-button" 
-                  data-tooltip="{{'Toggle heatmap view' | translate}}" 
-                  class="btn btn-default btn-onco" 
-                  data-ng-click="OncoCtrl.heatMap()">
-                  <i class="icon-fire"></i>
-                </button>
-              </td>
-
-              <td>
-                <button id="grid-button" 
-                  data-tooltip="{{'Toggle grid lines' | translate}}" 
-                  class="btn btn-default btn-onco" 
-                  data-ng-click="OncoCtrl.gridLines()">
-                  <i class="icon-grid"></i>
-                </button>
-              </td>
-
-              <td>
-                <button id="crosshair-button" 
-                  data-tooltip="{{'Toggle crosshair' | translate}}" 
-                  class="btn btn-default btn-onco" 
-                  data-ng-click="OncoCtrl.crosshair()">
-                  <i class="icon-target"></i>
-                </button>
-              </td>
-
-              <td>
-                <button id="fullscreen-button" 
-                  data-tooltip="{{'Fullscreen' | translate}}" 
-                  class="btn btn-default btn-onco" 
-                  data-ng-click="OncoCtrl.requestFullScreen()">
-                  <i id="og-fullscreen-button" class="icon-resize-full"></i>
-                </button>
+                <span class="btn-group">
+                  <button id="reload-button" 
+                    data-tooltip="{{'Reload grid' | translate}}" 
+                    class="btn btn-default btn-onco" 
+                    data-ng-click="OncoCtrl.reloadGrid()">
+                    <i class="icon-undo"></i>
+                  </button>
+                  <button id="fullscreen-button" 
+                    data-tooltip="{{'Fullscreen' | translate}}" 
+                    class="btn btn-default btn-onco" 
+                    data-ng-click="OncoCtrl.requestFullScreen()">
+                    <i id="og-fullscreen-button" class="icon-resize-full"></i>
+                  </button>
+                  <button id="cluster-button" 
+                    data-tooltip="{{'Cluster data' | translate}}" 
+                    class="btn btn-default btn-onco" 
+                    data-ng-click="OncoCtrl.clusterData()">
+                    <i class="icon-sort-alt-down"></i>
+                  </button>
+                  <button 
+                    id="heat-button" 
+                    data-tooltip="{{'Toggle heatmap view' | translate}}" 
+                    class="btn btn-default btn-onco" 
+                    data-ng-click="OncoCtrl.heatMap()">
+                    <i class="icon-fire"></i>
+                  </button>
+                  <button id="grid-button" 
+                    data-tooltip="{{'Toggle grid lines' | translate}}" 
+                    class="btn btn-default btn-onco" 
+                    data-ng-click="OncoCtrl.gridLines()">
+                    <i class="icon-grid"></i>
+                  </button>
+                  <button id="crosshair-button" 
+                    data-tooltip="{{'Toggle crosshair' | translate}}" 
+                    class="btn btn-default btn-onco" 
+                    data-ng-click="OncoCtrl.crosshair()">
+                    <i class="icon-target"></i>
+                  </button>
+                </span>
               </td>
             </tr>
 

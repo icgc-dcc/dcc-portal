@@ -37,28 +37,9 @@
 
     <div class="survival-analysis-wrapper">
         <h3><translate>Survival Analysis</translate></h3>
-
         <br>
-        <div class="t_tabs t_tabs__isolated t_tabs--smaller t_tabs--no-accent">
-            <div
-                class="t_tabs__tab"
-                ng-class="{
-                    active: activeSurvivalGraph === 'overall'
-                }"
-                ng-click="activeSurvivalGraph = 'overall'"
-            ><translate>Overall Survival</translate></div>
-            <div
-                class="t_tabs__tab"
-                ng-class="{
-                    active: activeSurvivalGraph === 'diseaseFree'
-                }"
-                ng-click="activeSurvivalGraph = 'diseaseFree'"
-            ><translate>Disease Free Survival</translate></div>
-        </div>
-
         <div class="survival-graphs">
             <survival-analysis-graph
-                ng-class="{disabled: activeSurvivalGraph !== 'overall' && activeSurvivalGraph !== undefined}"
                 data-data-sets="survivalAnalysisDataSets.overall"
                 tip-labels="{
                     survivalEstimate: 'Survival estimate',
@@ -73,7 +54,6 @@
             ></survival-analysis-graph>
 
             <survival-analysis-graph
-                ng-class="{disabled: activeSurvivalGraph !== 'diseaseFree'}"
                 data-data-sets="survivalAnalysisDataSets.diseaseFree"
                 tip-labels="{
                     survivalEstimate: 'Disease free estimate',
@@ -106,6 +86,7 @@
                     <th
                         colspan="2"
                         data-ng-repeat="donorSetId in setIds"
+                        style="white-space:normal"
                     >
                         <div>
                             <div>
@@ -218,15 +199,15 @@
             <thead>
                 <tr>
                     <th colspan="1"></th>
-                    <th class="multi-line-heading" colspan="2">
+                    <th class="multi-line-heading" colspan="2" style="white-space:normal">
                         <span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span><br>
                         <small><translate>Donor count:</translate> {{setMap[setIds[0]].count | number}}</small>
                     </th>
-                    <th class="multi-line-heading" colspan="2">
+                    <th class="multi-line-heading" colspan="2" style="white-space:normal">
                         <span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span><br>
                         <small><translate>Donor count:</translate> {{setMap[setIds[1]].count | number}}</small>
                     </th>
-                    <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]">
+                    <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]" style="white-space:normal">
                         <span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span><br>
                         <small><translate>Donor count:</translate> {{setMap[setIds[2]].count | number}}</small>
                     </th>
@@ -287,15 +268,15 @@
             <thead>
                 <tr>
                     <th colspan="1"></th>
-                    <th class="multi-line-heading" colspan="2">
+                    <th class="multi-line-heading" colspan="2" style="white-space:normal">
                         <span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span><br>
                         <small><translate>Donor count:</translate> {{setMap[setIds[0]].count | number}}</small>
                     </th>
-                    <th class="multi-line-heading" colspan="2">
+                    <th class="multi-line-heading" colspan="2" style="white-space:normal">
                         <span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span><br>
                         <small><translate>Donor count:</translate> {{setMap[setIds[1]].count | number}}</small>
                     </th>
-                    <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]">
+                    <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]" style="white-space:normal">
                         <span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span><br>
                         <small><translate>Donor count:</translate> {{setMap[setIds[2]].count | number}}</small>
                     </th>
@@ -357,15 +338,18 @@
             <thead>
                 <tr>
                     <th colspan="1"></th>
-                    <th class="multi-line-heading" colspan="2"><span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span>
+                    <th class="multi-line-heading" colspan="2" style="white-space:normal">
+                        <span style="color:{{seriesColours[0]}}">{{setMap[setIds[0]].name}}</span>
                         <br><small><translate>Donor count:</translate> {{setMap[setIds[0]].count | number}}</small>
                         <br><small><translate>Average age:</translate> {{meanAge[0] | number:2}}</small>
                     </th>
-                    <th class="multi-line-heading" colspan="2"><span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span>
+                    <th class="multi-line-heading" colspan="2" style="white-space:normal">
+                        <span style="color:{{seriesColours[1]}}">{{setMap[setIds[1]].name}}</span>
                         <br><small><translate>Donor count:</translate> {{setMap[setIds[1]].count | number}}</small>
                         <br><small><translate>Average age:</translate> {{meanAge[1] | number:2}}</small>
                     </th>
-                    <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]"><span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span>
+                    <th class="multi-line-heading" colspan="2" data-ng-if="setIds[2]" style="white-space:normal">
+                        <span style="color:{{seriesColours[2]}}">{{setMap[setIds[2]].name}}</span>
                         <br><small><translate>Donor count:</translate> {{setMap[setIds[2]].count | number}}</small>
                         <br><small><translate>Average age:</translate> {{meanAge[2] | number:2}}</small>
                     </th>

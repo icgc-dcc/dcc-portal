@@ -90,10 +90,10 @@ public class GeneRepository implements Repository {
   private static final String ENSEMBL_ID_FIELD_NAME = "id";
   private static final String[] GENE_SYMBOL_ENSEMBL_ID_FIELDS = { GENE_SYMBOL_FIELD_NAME, ENSEMBL_ID_FIELD_NAME };
 
-  public static final Map<String, String> GENE_ID_SEARCH_FIELDS =
-      ImmutableMap.<String, String> of("id.search", "_gene_id",
-          "symbol.search", "symbol",
-          "uniprotkbSwissprot.search", "external_db_ids.uniprotkb_swissprot");
+  public static final Map<String, String> GENE_ID_SEARCH_FIELDS = ImmutableMap.of(
+      "id.search", "_gene_id",
+      "symbol.search", "symbol",
+      "uniprotkbSwissprot.search", "external_db_ids.uniprotkb_swissprot");
 
   // This is currently needed due to the change from fields to source in the move from ES 1.4.4 -> 5.0.x
   public static final Map<String, String> GENE_ID_RESPONSE_SOURCE = GENE_ID_SEARCH_FIELDS.entrySet().stream()
@@ -104,6 +104,9 @@ public class GeneRepository implements Repository {
       })
       .collect(Collectors.toImmutableMap(Entry::getKey, Entry::getValue));
 
+  /**
+   * Dependencies.
+   */
   private final Client client;
   private final String indexName;
 

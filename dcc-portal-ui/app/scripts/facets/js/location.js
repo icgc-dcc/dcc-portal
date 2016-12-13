@@ -24,7 +24,6 @@ angular.module('icgc.facets.location')
 
   var submitted;
 
-  //$scope.regex = /^(chr)?[xy0-9]+(:\d+(\-\d+)?)?$/i;
   $scope.regex = /^(chr)?(x|y|mt|[0-9]+)(:\d+(\-\d+)?)?$/i;
 
   submitted = false;

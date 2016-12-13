@@ -21,7 +21,7 @@ import getContext from 'get-canvas-context';
 import platform from 'platform';
 
 function svgToSvgDataUri (svg) {
-  return 'data:image/svg+xml;base64,'+ btoa(unescape(encodeURIComponent(svg)))
+  return 'data:image/svg+xml;base64,'+ btoa(unescape(encodeURIComponent(svg)));
 }
 
 function svgToPngDataUri(svg, {width, height}) {
@@ -30,10 +30,10 @@ function svgToPngDataUri(svg, {width, height}) {
 
   return new Promise((resolve, reject) => {
     loadImg(svgDataUri, {crossOrigin: true}, (err, image) => {
-      if (err) { reject(err); }
+      if (err) { reject(err) }
       ctx.drawImage(image, 0, 0);
       const pngDataUri = ctx.canvas.toDataURL('image/png');
-      resolve(pngDataUri)
+      resolve(pngDataUri);
     });
   });
 }
@@ -41,7 +41,7 @@ function svgToPngDataUri(svg, {width, height}) {
 (function() {
   'use strict';
 
-  var module = angular.module('icgc.survival', ['icgc.donors.models']);
+  var module = angular.module('icgc.survival', ['icgc.survival.services', 'icgc.donors.models']);
 
   var survivalAnalysisController = function (
       $scope,
@@ -306,7 +306,7 @@ function svgToPngDataUri(svg, {width, height}) {
           });
       }
 
-      var defaultHeadingMap = {
+      const defaultHeadingMap = {
         setName: 'donor_set_name',
         id: 'donor_id',
         time: 'time',
@@ -336,8 +336,8 @@ function svgToPngDataUri(svg, {width, height}) {
       }
 
       _.extend(this, {
-        fetchSurvivalData: fetchSurvivalData,
-        dataSetToTSV: dataSetToTSV
+        fetchSurvivalData,
+        dataSetToTSV
       });
 
     });

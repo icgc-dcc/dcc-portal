@@ -203,7 +203,6 @@
               }
 
               $scope.closeLoginPopup();
-              console.log('logged in as: ', $scope.params.user);
             });
         }
       }

@@ -53,7 +53,7 @@
     Page.setPage('entity');
 
     _ctrl.hasSupplementalFiles = function(donor) {
-      return donor.family || donor.exposure || donor.therapy;
+      return donor.biomarker || donor.family || donor.exposure || donor.surgery || donor.therapy;
     };
 
     _ctrl.isPCAWG = function(donor) {
@@ -221,14 +221,6 @@
           donorId: d.id,
           include: 'consequences'
         }).then(success);
-
-        /*
-        Donors.one().getMutations({
-          include: 'consequences',
-          filters: LocationService.filters(),
-          scoreFilters: {donor: {projectId: {is: donor.projectId }}}
-        }).then(success);
-        */
       });
     }
 
@@ -488,7 +480,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     _ctrl.getFiles = function (){
       var promise, 
         params = {},
-        filesParam = LocationService.getJsonParam ('files');
+        filesParam = LocationService.getJqlParam ('files');
 
       // Default
       params.from = 1;

@@ -160,8 +160,8 @@
     };
 
     _srv.mapOccurences = function(occurrences, donors, genes) {
-      var donorIds = _.map(donors, function (g) { return g.id; });
-      var geneIds = _.map(genes, function (d) { return d.id; });
+      var donorIds = _.map(donors, function (g) { return g.id });
+      var geneIds = _.map(genes, function (d) { return d.id });
 
       var geneIdToSymbol = {};
       _(genes).forEach(function(g) {
@@ -286,7 +286,7 @@
           return index;
         });
 
-        ret.consequence = _(consequences).filter(function (d) { return d.functionalImpact === 'High'; } ).value()[0];
+        ret.consequence = _(consequences).filter(function (d) { return d.functionalImpact === 'High' } ).value()[0];
         if (ret.consequence === undefined) {
           ret.consequence = {functionalImpact: null, consequenceType: null};
         }

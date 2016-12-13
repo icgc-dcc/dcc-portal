@@ -15,16 +15,18 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.resource.entity;
+package org.icgc.dcc.portal.server.resource.set;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_SET_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_SET_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.TOTAL;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +42,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.icgc.dcc.portal.server.model.Gene;
 import org.icgc.dcc.portal.server.model.GeneSet;
 import org.icgc.dcc.portal.server.model.UploadedGeneSet;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
@@ -53,11 +56,10 @@ import org.icgc.dcc.portal.server.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-import com.yammer.metrics.annotation.Timed;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -80,9 +82,9 @@ public class GeneSetResource extends Resource {
   /**
    * Constants.
    */
-  // Spaces, tabs, commas, or new lines
-  private final static Pattern GENE_DELIMITERS = Pattern.compile("[, \t\r\n]");
-  private final static int MAX_GENE_LIST_SIZE = 1000;
+  private static final Pattern GENE_DELIMITERS = Pattern.compile("[, \t\r\n]"); // Spaces, tabs, commas, or new lines
+  private static final Splitter GENE_ID_SPLITTER = Splitter.on(GENE_DELIMITERS).omitEmptyStrings();
+  private static final int MAX_GENE_LIST_SIZE = 1000;
 
   /**
    * Dependencies.
@@ -94,129 +96,144 @@ public class GeneSetResource extends Resource {
   @NonNull
   private final GeneService geneService;
 
+  @Path("/{id}")
+  @GET
+  @ApiOperation(value = "Find a gene set by id", notes = "If a gene set does not exist with the specified id an error will be returned", response = GeneSet.class)
+  @ApiResponses(value = { @ApiResponse(code = 404, message = "GeneSet not found") })
+  public GeneSet get(
+      @ApiParam(value = "GeneSet ID", required = true) @PathParam("id") String id,
+      @ApiParam(value = "Select fields returned", allowMultiple = true) @QueryParam("field") List<String> fields) {
+    log.info("Request for gene set'{}'", id);
+    val geneSet = geneSetService.findOne(id, fields);
+    log.debug("Returning '{}'", geneSet);
+
+    return geneSet;
+  }
+
   @POST
   @Consumes(APPLICATION_FORM_URLENCODED)
   @Produces(APPLICATION_JSON)
-  @Timed
-  @ApiOperation(value = "Save a gene set")
-  public UploadedGeneSet processGeneList(
-      @ApiParam(value = "The Ids to be saved as a Gene Set") @FormParam("geneIds") String geneIds,
+  @ApiOperation(value = "Validate and/or save a gene set")
+  public UploadedGeneSet process(
+      @ApiParam(value = "The IDs to be saved as a Gene Set") @FormParam("geneIds") String geneIds,
       @ApiParam(value = "Validation") @QueryParam("validationOnly") @DefaultValue("false") boolean validationOnly) {
-
-    val result = findGenesByIdentifiers(geneIds);
+    val ids = parseIds(geneIds);
+    val result = createUploadedGeneSet(ids);
 
     if (validationOnly) {
       return result;
     }
 
-    // Extract the set of unique ensembl ids for storage
-    Set<String> uniqueIds = Sets.<String> newHashSet();
-    for (val searchField : GeneRepository.GENE_ID_SEARCH_FIELDS.values()) {
-      if (result.getValidGenes().containsKey(searchField)) {
-        for (val gene : result.getValidGenes().get(searchField).values()) {
-          uniqueIds.add(gene.getId());
-        }
-      }
-    }
+    val validIds = resolveValidIds(result);
 
     // Sanity check, we require at least one valid id in order to store
-    if (uniqueIds.size() == 0) {
+    val invalid = validIds.isEmpty();
+    if (invalid) {
       result.getWarnings().add("Request contains no valid gene Ids");
 
       return result;
     }
 
-    val id = userGeneSetService.save(uniqueIds);
-
-    result.setGeneListId(id.toString());
+    val geneSetId = userGeneSetService.save(validIds);
+    result.setGeneListId(geneSetId.toString());
 
     return result;
   }
 
   @Path("/{" + API_GENE_SET_PARAM + "}/genes/counts")
   @GET
-  @Timed
   @ApiOperation(value = "Find number of genes associated with each gene set")
   public Map<String, Long> countGenes(
       @ApiParam(value = API_GENE_SET_VALUE, required = true) @PathParam(API_GENE_SET_PARAM) IdsParam geneSetIds,
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
-
-    ObjectNode filters = filtersParam.get();
+    val filters = filtersParam.get();
     val geneSetIdFilter = "{gene:{geneSetId:{is:['%s']}}}";
+    val geneSets = geneSetIds.get();
 
-    List<String> geneSets = geneSetIds.get();
+    val mergedFilters = mergeFilters(filters, geneSetIdFilter, JsonUtils.join(geneSets));
+    val uniqueCount = geneService.count(query().filters(mergedFilters).build());
 
     val queries = queries(filters, geneSetIdFilter, geneSets);
     val counts = geneService.counts(queries);
-
-    filters = mergeFilters(filters, geneSetIdFilter, JsonUtils.join(geneSets));
-    long uniqueCount = geneService.count(query().filters(filters).build());
-
     counts.put(TOTAL, uniqueCount);
 
     return counts;
   }
 
-  @Path("/{Id}")
-  @GET
-  @Timed
-  @ApiOperation(value = "Find a gene set by id", notes = "If a gene set does not exist with the specified id an error will be returned", response = GeneSet.class)
-  @ApiResponses(value = { @ApiResponse(code = 404, message = "GeneSet not found") })
-  public GeneSet find(
-      @ApiParam(value = "GeneSet ID", required = true) @PathParam("Id") String id,
-      @ApiParam(value = "Select fields returned", allowMultiple = true) @QueryParam("field") List<String> fields) {
-    log.info("Request for gene set'{}'", id);
-
-    GeneSet geneSet = geneSetService.findOne(id, fields);
-
-    log.info("Returning '{}'", geneSet);
-
-    return geneSet;
-  }
-
-  private UploadedGeneSet findGenesByIdentifiers(String data) {
+  private UploadedGeneSet createUploadedGeneSet(List<String> ids) {
     val geneSet = new UploadedGeneSet();
-
-    val splitter = Splitter.on(GENE_DELIMITERS).omitEmptyStrings();
-    val originalIds = ImmutableList.<String> copyOf(splitter.split(data));
-    val matchIds = ImmutableList.<String> builder();
-
-    if (originalIds.size() > MAX_GENE_LIST_SIZE) {
-      log.info("Exceeds maximum size {}", MAX_GENE_LIST_SIZE);
+    if (isLimitExceeded(ids)) {
+      log.warn("Exceeds maximum size {}", MAX_GENE_LIST_SIZE);
       geneSet.getWarnings().add(
           String.format("Input data exceeds maximum threshold of %s gene identifiers.", MAX_GENE_LIST_SIZE));
       return geneSet;
     }
 
-    for (val id : originalIds) {
-      matchIds.add(id.toLowerCase());
-    }
-    val validResults = geneService.validateIdentifiers(matchIds.build());
-
+    val normalizeIds = normalizeIds(ids);
+    val validResults = geneService.validateIdentifiers(normalizeIds);
     log.debug("Search results {}", validResults);
 
     // All matched identifiers
-    val allMatchedIdentifiers = Sets.<String> newHashSet();
-    for (val searchField : GeneRepository.GENE_ID_SEARCH_FIELDS.values()) {
-      if (!validResults.get(searchField).isEmpty()) {
-
-        // Case doesn't matter
-        for (val k : validResults.get(searchField).keySet()) {
-          allMatchedIdentifiers.add(k.toLowerCase());
-        }
-
-        geneSet.getValidGenes().put(searchField, validResults.get(searchField));
-      }
-    }
+    val matchedIds = resolveMatchedIds(geneSet, validResults);
 
     // Construct valid and invalid gene matches
-    for (val id : originalIds) {
-      if (!allMatchedIdentifiers.contains(id.toLowerCase())) {
+    for (val id : ids) {
+      val invalid = !matchedIds.contains(id.toLowerCase());
+      if (invalid) {
         geneSet.getInvalidGenes().add(id);
       }
     }
 
     return geneSet;
+  }
+
+  private static boolean isLimitExceeded(List<String> ids) {
+    return ids.size() > MAX_GENE_LIST_SIZE;
+  }
+
+  private static Set<String> resolveMatchedIds(UploadedGeneSet geneSet,
+      Map<String, Multimap<String, Gene>> validResults) {
+    val matchedIds = Sets.<String> newHashSet();
+    for (val searchField : GeneRepository.GENE_ID_SEARCH_FIELDS.values()) {
+      val validIds = validResults.get(searchField);
+      if (validIds.isEmpty()) continue;
+
+      for (val matchedId : validIds.keySet()) {
+        // Case doesn't matter
+        matchedIds.add(matchedId.toLowerCase());
+      }
+
+      geneSet.getValidGenes().put(searchField, validIds);
+    }
+
+    return matchedIds;
+  }
+
+  private static List<String> parseIds(String data) {
+    return ImmutableList.<String> copyOf(GENE_ID_SPLITTER.split(data));
+  }
+
+  private static List<String> normalizeIds(Collection<String> ids) {
+    return ids.stream().map(String::toLowerCase).collect(toImmutableList());
+  }
+
+  private static Set<String> resolveValidIds(UploadedGeneSet result) {
+    // Extract the set of unique Ensembl ids for storage
+    val validIds = Sets.<String> newHashSet();
+    val validGenes = result.getValidGenes();
+    val searchFields = GeneRepository.GENE_ID_SEARCH_FIELDS.values();
+
+    for (val searchField : searchFields) {
+      val invalid = !validGenes.containsKey(searchField);
+      if (invalid) continue;
+
+      val genes = validGenes.get(searchField).values();
+      for (val gene : genes) {
+        validIds.add(gene.getId());
+      }
+    }
+
+    return validIds;
   }
 
 }

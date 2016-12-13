@@ -358,6 +358,23 @@ public class IndexModel {
           .put("geneCount", "gene_count")
           .build();
 
+  private static final ImmutableMap<String, String> BIOMARKER_FIELDS_MAPPING =
+      ImmutableMap.<String, String> builder()
+          .put("specimenId", "specimen_id")
+          .put("biomarkerName", "biomarker_name")
+          .put("biomarkerThreshold", "biomarker_threshold")
+          .put("biomarkerPositive", "biomarker_positive")
+          .build();
+
+  private static final ImmutableMap<String, String> SURGERY_FIELDS_MAPPING =
+      ImmutableMap.<String, String> builder()
+          .put("specimenId", "specimen_id")
+          .put("procedureInterval", "procedure_interval")
+          .put("procedureType", "procedure_type")
+          .put("procedureSite", "procedure_site")
+          .put("resectionStatus", "resection_status")
+          .build();
+
   private static final ImmutableMap<EntityType, TypeModel> TYPE_MODEL_BY_ENTITY =
       ImmutableMap.<EntityType, TypeModel> builder()
           .put(EntityType.DONOR, org.dcc.portal.pql.meta.IndexModel.getDonorCentricTypeModel())
@@ -379,6 +396,8 @@ public class IndexModel {
     FIELDS_MAPPING.put(EntityType.FAMILY, FAMILY_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.EXPOSURE, EXPOSURE_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.THERAPY, THERAPY_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.BIOMARKER, BIOMARKER_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.SURGERY, SURGERY_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.SAMPLE, SAMPLE_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.SEQ_DATA, RAWSEQDATA_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.GENE, createFieldsMapping(EntityType.GENE));
