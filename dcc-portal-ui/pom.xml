@@ -94,7 +94,18 @@
         <executions>
           <!-- Compile -->
           <execution>
-            <id>npm-install</id>
+            <id>yarn-install</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>yarn</executable>
+              <workingDirectory>.</workingDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>bower-install</id>
             <phase>compile</phase>
             <goals>
               <goal>exec</goal>
@@ -102,9 +113,9 @@
             <configuration>
               <executable>npm</executable>
               <arguments>
-                <argument>install</argument>
+                <argument>run</argument>
+                <argument>bower</argument>
               </arguments>
-              <workingDirectory>.</workingDirectory>
             </configuration>
           </execution>
           <execution>
