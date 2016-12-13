@@ -110,7 +110,7 @@ public class EntitySetResource extends Resource {
       throw new BadRequestException("Unable to parse the entitySetId parameter.");
     }
     log.debug("Received a getSets request for these lists: '{}'", setIds);
-  
+
     return getSetsByIds(setIds);
   }
 
@@ -171,8 +171,7 @@ public class EntitySetResource extends Resource {
       @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition) {
 
     val currentSet = this.getEntitySet(entitySetId);
-    val modifierSet = modifierSetDefinition.getType() == Type.FILE ? service
-        .createFileEntitySet(modifierSetDefinition) : service.createEntitySet(modifierSetDefinition, false);
+    val modifierSet = createModifierSet(modifierSetDefinition);
     UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(modifierSet.getId()), Collections.emptySet());
     UnionUnit unionUnit2 = new UnionUnit(ImmutableSet.of(currentSet.getId()), Collections.emptySet());
     DerivedEntitySetDefinition derivedSetDefinition =
@@ -181,6 +180,11 @@ public class EntitySetResource extends Resource {
     service.updateEntitySet(entitySetId, derivedSetDefinition);
 
     return this.getEntitySet(entitySetId);
+  }
+
+  public EntitySet createModifierSet(final EntitySetDefinition modifierSetDefinition) {
+    return modifierSetDefinition.getType() == Type.FILE ? service
+        .createFileEntitySet(modifierSetDefinition) : service.createEntitySet(modifierSetDefinition, false);
   }
 
   /**
@@ -205,8 +209,7 @@ public class EntitySetResource extends Resource {
       @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition) {
 
     val currentSet = this.getEntitySet(entitySetId);
-    val modifierSet = modifierSetDefinition.getType() == Type.FILE ? service
-        .createFileEntitySet(modifierSetDefinition) : service.createEntitySet(modifierSetDefinition, false);
+    val modifierSet = createModifierSet(modifierSetDefinition);
     UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(currentSet.getId()), ImmutableSet.of(modifierSet.getId()));
     DerivedEntitySetDefinition derivedSetDefinition =
         new DerivedEntitySetDefinition(Arrays.asList(unionUnit1), currentSet.getName(),
@@ -214,25 +217,6 @@ public class EntitySetResource extends Resource {
     service.updateEntitySet(entitySetId, derivedSetDefinition);
 
     return this.getEntitySet(entitySetId);
-  }
-
-  @GET
-  @Path("/sets/{" + API_ENTITY_SET_ID_PARAM + "}")
-  @Produces(APPLICATION_JSON)
-  @ApiOperation(value = "Retrieves a list of entity sets by their IDs.", response = EntitySet.class, responseContainer = "List")
-  public List<EntitySet> getSets(
-      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUIDSetParam entitySetIds) {
-    Set<UUID> setIds = null;
-    try {
-      setIds = entitySetIds.get();
-    } catch (Exception e) {
-      log.error("Exception occurred while parsing the UUID list from web request: '{}'", entitySetIds);
-      log.error("The exception while parsing the UUID list is: ", e);
-      throw new BadRequestException("Unable to parse the entitySetId parameter.");
-    }
-    log.debug("Received a getSets request for these lists: '{}'", setIds);
-
-    return getSetsByIds(setIds);
   }
 
   /**
