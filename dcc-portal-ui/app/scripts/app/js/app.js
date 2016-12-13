@@ -237,7 +237,7 @@
     'icgc.browser',
     'icgc.donorlist',
     'icgc.genelist',
-    'icgc.mutationlist',
+    'icgc.entitySetUpload',
     'icgc.genesets',
     'icgc.visualization',
     'icgc.enrichment',

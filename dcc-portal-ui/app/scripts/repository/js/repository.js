@@ -1148,6 +1148,18 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       }
     });
 
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, (e) => {
+      // Adding filters for repository to the donor set
+      _ctrl.donorSets = _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
+        set.repoFilters = {};
+        set.repoFilters.file = {};
+        set.repoFilters.file.donorId = set.advFilters.donor.id;
+        return set;
+      });
+
+      _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
+    });
+
   });
 
 })();

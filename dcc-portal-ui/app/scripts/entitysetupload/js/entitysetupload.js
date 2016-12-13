@@ -20,17 +20,17 @@ import deepmerge from 'deepmerge';
 (function() {
   'use strict';
 
-  angular.module ('icgc.mutationlist', [
-    'icgc.mutationlist.controllers',
-    'icgc.mutationlist.services'
+  angular.module ('icgc.entitySetUpload', [
+    'icgc.entitySetUpload.controllers',
+    'icgc.entitySetUpload.services'
   ]);
 })();
 
 (function() {
   'use strict';
   
-  angular.module ('icgc.mutationlist.services', [])
-  .service ('MutationSetVerificationService', function (Restangular, SetService, LocationService) {
+  angular.module ('icgc.entitySetUpload.services', [])
+  .service ('EntitySetUploadVerificationService', function (Restangular, SetService) {
     const _service = this;
 
     _service.readFileContent = (filepath) => {
@@ -40,17 +40,16 @@ import deepmerge from 'deepmerge';
       return Restangular.one('ui').customPOST(data, 'search/file', {}, {'Content-Type': undefined});
     }
 
-    _service.addSet = (mutationIds) => {
+    _service.addSet = (entityIds, entityType) => {
       let params = {};
-      const type = 'mutation';
 
-      params.filters = {mutation: {id : {is : mutationIds }}};
+      params.filters = {};
+      params.filters[entityType] = {id : {is : entityIds }};
       params.isTransient = true;
-      params.type = type;
-      params.size = mutationIds.length;
-      params.name = 'Uploaded Mutation Set';
-
-      return SetService.addSet(type, params);
+      params.type = entityType;
+      params.size = entityIds.length;
+      params.name = `Uploaded ${entityType} Set`;
+      return SetService.addSet(entityType, params, entityType === 'file');
     }
   });
 
@@ -60,17 +59,18 @@ import deepmerge from 'deepmerge';
   'use strict';
 
   const mutationIdRegEx = new RegExp(/MU([1-9])\d*/g);
+  const fileIdRegEx = new RegExp(/FI([1-9])\d*/g);
 
-  angular.module ('icgc.mutationlist.controllers', [])
-    .controller ('MutationListController', function ($scope, $modalInstance, MutationSetVerificationService,
-      LocationService) {
+  angular.module ('icgc.entitySetUpload.controllers', [])
+    .controller ('EntitySetUploadController', function ($scope, $modalInstance, EntitySetUploadVerificationService,
+      LocationService, entityType) {
 
       const _controller = this;
 
-      _controller.mutationService = MutationSetVerificationService;
-      _controller.mutationIdsArray = [];
+      _controller.entityUploadService = EntitySetUploadVerificationService;
 
       $scope.params = {};
+      $scope.params.entityType = entityType;
 
       $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
@@ -79,16 +79,16 @@ import deepmerge from 'deepmerge';
       _controller.fileUpload = () => {
         if($scope.params.uploadedFile){
           $scope.params.fileName = $scope.params.uploadedFile.name;
-          _controller.mutationService.readFileContent($scope.params.uploadedFile).then((fileData) => {
-            $scope.params.mutationIds = fileData.data;
-            $scope.verifyMutationInput();
+          _controller.entityUploadService.readFileContent($scope.params.uploadedFile).then((fileData) => {
+            $scope.params.entityIds = fileData.data;
+            $scope.verifyInput();
           });
         }
       };
 
-      $scope.verifyMutationInput = () => {
-        $scope.params.mutationIdsArray = _.words($scope.params.mutationIds, mutationIdRegEx);
-        if(!$scope.params.mutationIdsArray.length) {
+      $scope.verifyInput = () => {
+        $scope.params.entityIdsArray = _.words($scope.params.entityIds, $scope.params.entityType === 'file' ? fileIdRegEx : mutationIdRegEx);
+        if(!$scope.params.entityIdsArray.length) {
           $scope.params.verified = false;
         } else {
           $scope.params.verified = true;
@@ -96,27 +96,28 @@ import deepmerge from 'deepmerge';
       }
 
       $scope.submit = () => {
-        if(!$scope.params.mutationIds) {return;}
+        if(!$scope.params.entityIds) {return;}
 
-        $scope.params.mutationIdsArray = _.words($scope.params.mutationIds, mutationIdRegEx);
+        $scope.params.entityIdsArray = _.words($scope.params.entityIds, $scope.params.entityType === 'file' ? fileIdRegEx : mutationIdRegEx);
 
-        if(!$scope.params.mutationIdsArray.length) {
+        if(!$scope.params.entityIdsArray.length) {
           $scope.params.verified = false;
           return;
         }
         let filters = LocationService.filters();
+        let entityFilter = {};
+        
 
-        _controller.mutationService.addSet($scope.params.mutationIdsArray).then((set) => {
-          filters = deepmerge(filters, {mutation: {id: {is: [`ES:${set.id}`]}}});
+        _controller.entityUploadService.addSet($scope.params.entityIdsArray, $scope.params.entityType).then((set) => {
+          entityFilter[$scope.params.entityType] = {id: {is: [`ES:${set.id}`]}};
+          filters = deepmerge(filters, entityFilter);
           LocationService.filters(filters);
         });
       };
 
       $scope.$watch('params.uploadedFile', function (newValue) {
-      if (!newValue) {return;}
-      _controller.fileUpload();
-    });
-    
-
+        if (!newValue) {return;}
+        _controller.fileUpload();
+      });
   });
 })();

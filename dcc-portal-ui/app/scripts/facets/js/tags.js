@@ -48,8 +48,8 @@ import deepmerge from 'deepmerge';
       if($scope.type === 'gene'){
         return $scope.useGeneSet();
       }
-      if($scope.type === 'mutation'){
-        return $scope.useMutationSet();
+      if($scope.type === 'mutation' || $scope.type === 'file'){
+        return $scope.useFileOrMutationSet();
       }
     }
 
@@ -409,10 +409,15 @@ import deepmerge from 'deepmerge';
       });
     };
 
-     $scope.useMutationSet = () => {
+     $scope.useFileOrMutationSet = () => {
       $modal.open({
-        templateUrl: '/scripts/mutationlist/views/upload.html',
-        controller: 'MutationListController'
+        templateUrl: '/scripts/entitysetupload/views/upload.html',
+        controller: 'EntitySetUploadController',
+        resolve: {
+          entityType: () => {
+            return $scope.type;
+          }
+        }
       });
     };
 

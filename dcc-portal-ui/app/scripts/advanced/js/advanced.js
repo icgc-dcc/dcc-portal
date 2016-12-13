@@ -72,24 +72,10 @@ angular.module('icgc.advanced.controllers', [
       // to check if a set was previously selected and if its still in effect
       const checkSetInFilter = (entity, entitySets) => {
         let filters = _locationFilterCache.filters();
-        const setIdPrefix = 'ES:';
 
-        if(filters[entity] && filters[entity].id){
-          _.each(entitySets, (set) => {
-            set.selected = false;
-            _.each(filters[entity].id.is, (id) => {
-              if(_.includes(id, setIdPrefix)){
-                if(`${setIdPrefix}${set.id}` === id){
-                  set.selected = true;
-                }
-              }
-            });
-          });
-        } else {
-          _.each(entitySets, (set) => {
-            set.selected = false;
-          });
-        }
+        entitySets.forEach( (set) =>
+          set.selected = filters[entity] && filters[entity].id &&  _.includes(filters[entity].id.is, `ES:${set.id}`)
+        );
       };
 
       var _isInAdvancedSearchCtrl = true;
@@ -310,6 +296,12 @@ angular.module('icgc.advanced.controllers', [
 
           _controller.loadingFacet = true;
 
+        });
+
+        $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, (e) => {
+          _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
+          _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
+          _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
         });
 
         Settings.get().then(function(settings) {
