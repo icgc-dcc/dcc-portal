@@ -202,7 +202,7 @@
         bar.total = 0;
         bar.stack = [];
 
-        gene.uiFIProjects.sort(function(a, b) { return a.count - b.count; }).forEach(function(p) {
+        gene.uiFIProjects.sort(function(a, b) { return a.count - b.count }).forEach(function(p) {
           bar.stack.push({
             name: p.id,
             y0: bar.total,
@@ -216,7 +216,7 @@
         });
         list.push(bar);
       });
-      return list.sort(function(a, b) { return b.total - a.total; });
+      return list.sort(function(a, b) { return b.total - a.total });
     }
 
     _ctrl.donutChartSubTitle = function () {
@@ -316,7 +316,7 @@
         });
 
         cancelInFlightAggregationAjax();
-        if (stopIfNoHits (data)) {return;}
+        if (stopIfNoHits (data)) {return}
 
         var mutationFilter = {
           mutation: {
@@ -332,7 +332,7 @@
           // About to launch a new ajax getting project aggregation data. Cancel any active call.
           cancelInFlightAggregationAjax();
 
-          if (stopIfNoHits (genes)) {return;}
+          if (stopIfNoHits (genes)) {return}
 
           geneDonorCountsRestangular = Restangular
             .one('ui/search/gene-project-donor-counts/' + _.map(genes.hits, 'id').join(','));
@@ -408,8 +408,8 @@
     };
 
     _ctrl.viewInRepositories = () => {
-      LocationService.goToPath(`/repositories`, `filters={"file":{ "projectCode":{"is":[${ _.map(_ctrl.projects.hits, (project) => `"${project.id}"`, []) }]}}}`);
-    }
+      LocationService.goToPath('/repositories', `filters={"file":{ "projectCode":{"is":[${ _.map(_ctrl.projects.hits, (project) => `"${project.id}"`, []) }]}}}`);
+    };
 
     $scope.$on('$locationChangeSuccess', function (event, dest) {
       if (dest.match(new RegExp('^' + window.location.protocol + '//' + window.location.host + '/projects'))) {
@@ -582,7 +582,7 @@
       _ctrl.launchSurvivalAnalysis = (entityType, entityId, entitySymbol) => {
         var filters = _.merge(_.cloneDeep(LocationService.filters()), {donor: {projectId: {is: [project.id]}}});
         SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters, project.id);
-      }
+      };
 
     $scope.$on('$locationChangeSuccess', function (event, dest) {
       if (dest.indexOf('projects') !== -1) {

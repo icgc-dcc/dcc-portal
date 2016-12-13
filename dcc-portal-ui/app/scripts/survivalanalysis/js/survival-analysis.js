@@ -21,7 +21,7 @@ import getContext from 'get-canvas-context';
 import platform from 'platform';
 
 function svgToSvgDataUri (svg) {
-  return 'data:image/svg+xml;base64,'+ btoa(unescape(encodeURIComponent(svg)))
+  return 'data:image/svg+xml;base64,'+ btoa(unescape(encodeURIComponent(svg)));
 }
 
 function svgToPngDataUri(svg, {width, height}) {
@@ -30,10 +30,10 @@ function svgToPngDataUri(svg, {width, height}) {
 
   return new Promise((resolve, reject) => {
     loadImg(svgDataUri, {crossOrigin: true}, (err, image) => {
-      if (err) { reject(err); }
+      if (err) { reject(err) }
       ctx.drawImage(image, 0, 0);
       const pngDataUri = ctx.canvas.toDataURL('image/png');
-      resolve(pngDataUri)
+      resolve(pngDataUri);
     });
   });
 }
