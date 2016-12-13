@@ -176,26 +176,26 @@ public class MutationService {
           .map(t -> t.get("functional_impact_prediction_summary").toString())
           .collect(toImmutableList());
 
-      Map<String, String> f3 = nestedTranscripts.stream()
+      Map<String, String> aaMutations = nestedTranscripts.stream()
           .map(t -> new SimpleImmutableEntry<String, String>(t.get("id").toString(),
               ((Map<String, Object>) t.get("consequence")).get("aa_mutation").toString()))
           .collect(Collectors.toImmutableMap(SimpleImmutableEntry::getKey, SimpleImmutableEntry::getValue));
 
-      // hit.getFields().get("transcript.consequence.aa_mutation").getValues();
-
       for (int i = 0; i < transcriptIds.size(); ++i) {
-        val transcript = Maps.<String, Object> newHashMap();
-
         val id = transcriptIds.get(i);
-        transcript.put("id", id);
-        transcript.put("functional_impact_prediction_summary", predictionSummary.get(i));
+        val aminoAcidChange = aaMutations.get(id);
 
-        val consequence = Maps.<String, Object> newHashMap();
+        if (!aminoAcidChange.isEmpty()) {
+          val transcript = Maps.<String, Object> newHashMap();
+          transcript.put("id", id);
+          transcript.put("functional_impact_prediction_summary", predictionSummary.get(i));
 
-        consequence.put("aa_mutation", f3.get(id));
-        transcript.put("consequence", consequence);
+          val consequence = Maps.<String, Object> newHashMap();
+          consequence.put("aa_mutation", aaMutations.get(id));
+          transcript.put("consequence", consequence);
 
-        transcripts.add(transcript);
+          transcripts.add(transcript);
+        }
       }
 
       map.put("transcript", transcripts);

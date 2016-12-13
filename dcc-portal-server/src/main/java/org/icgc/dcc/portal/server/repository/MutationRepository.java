@@ -56,7 +56,7 @@ public class MutationRepository implements Repository {
 
   private static final String[] NO_EXCLUDE = null;
   private static final String[] PROTEIN_FIELDS =
-      new String[] { "id", "mutation", "transcript.id", "transcript.consequence.aa_mutation", "transcript.functional_impact_prediction_summary", "_summary._affected_donor_count"
+      new String[] { "_mutation_id", "mutation", "transcript.id", "transcript.consequence.aa_mutation", "transcript.functional_impact_prediction_summary", "_summary._affected_donor_count"
       };
   private static final IndexType CENTRIC_TYPE = IndexType.MUTATION_CENTRIC;
   private final QueryEngine queryEngine;
