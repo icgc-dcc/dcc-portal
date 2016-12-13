@@ -81,7 +81,7 @@
         templateUrl: '/scripts/downloader/views/request.html',
         controller: 'DownloadRequestController',
         resolve: {
-          filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + id]}}}; }
+          filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + id]}}} }
         }
       });
     };

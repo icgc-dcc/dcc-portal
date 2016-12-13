@@ -397,7 +397,6 @@ require('../components');
   });
 
   module.directive('ngLazyShow', require('./lazy-show'));
-
   module.filter('pluralize', () => (...args) => require('pluralize')(...args));
 
 })();

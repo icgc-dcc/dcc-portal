@@ -232,8 +232,8 @@
             );
 
             annotatedGeneIds.forEach(function (geneId) {
-              var mutatedGene = _.find(mutatedGenesList, function(o) { return o.id === geneId; });
-              var druggableGene = _.find(druggableGenesList, function(o) { return o.id === geneId; });
+              var mutatedGene = _.find(mutatedGenesList, function(o) { return o.id === geneId });
+              var druggableGene = _.find(druggableGenesList, function(o) { return o.id === geneId });
               
               annotatedGenesList.push({
                 id: geneId,

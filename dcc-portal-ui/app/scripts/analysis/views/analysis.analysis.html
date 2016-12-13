@@ -58,7 +58,7 @@
         <div style="padding: 2rem 1rem" data-ng-if="analysisId">
             <div data-ng-if="item.type === 'enrichment'" >
                 <div data-ng-if="!error">
-                    <enrichment-result data-item="::(analysisResult.results ? analysisResult : undefined)"></enrichment-result>
+                    <enrichment-result data-item="analysisResult"></enrichment-result>
                 </div>
             </div>
             <div data-ng-if="item.type === 'set' || item.type === 'union'">
