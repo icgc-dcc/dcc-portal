@@ -81,24 +81,33 @@ import deepmerge from 'deepmerge';
           $scope.params.fileName = $scope.params.uploadedFile.name;
           _controller.mutationService.readFileContent($scope.params.uploadedFile).then((fileData) => {
             $scope.params.mutationIds = fileData.data;
+            $scope.verifyMutationInput();
           });
         }
       };
 
+      $scope.verifyMutationInput = () => {
+        $scope.params.mutationIdsArray = _.words($scope.params.mutationIds, mutationIdRegEx);
+        if(!$scope.params.mutationIdsArray.length) {
+          $scope.params.verified = false;
+        } else {
+          $scope.params.verified = true;
+        }
+      }
+
       $scope.submit = () => {
         if(!$scope.params.mutationIds) {return;}
 
-        _controller.mutationIdsArray = _.words($scope.params.mutationIds, mutationIdRegEx);
+        $scope.params.mutationIdsArray = _.words($scope.params.mutationIds, mutationIdRegEx);
 
-        if(!_controller.mutationIdsArray.length) {
+        if(!$scope.params.mutationIdsArray.length) {
           $scope.params.verified = false;
           return;
         }
         let filters = LocationService.filters();
 
-        _controller.mutationService.addSet(_controller.mutationIdsArray).then((set) => {
+        _controller.mutationService.addSet($scope.params.mutationIdsArray).then((set) => {
           filters = deepmerge(filters, {mutation: {id: {is: [`ES:${set.id}`]}}});
-          debugger;
           LocationService.filters(filters);
         });
       };
