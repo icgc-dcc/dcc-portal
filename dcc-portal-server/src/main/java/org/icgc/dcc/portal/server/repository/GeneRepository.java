@@ -28,6 +28,7 @@ import static org.elasticsearch.search.aggregations.AggregationBuilders.nested;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 import static org.elasticsearch.search.sort.FieldSortBuilder.DOC_FIELD_NAME;
 import static org.elasticsearch.search.sort.SortOrder.ASC;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
@@ -57,7 +58,6 @@ import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.icgc.dcc.common.core.util.stream.Collectors;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
@@ -102,7 +102,7 @@ public class GeneRepository implements Repository {
         String cleanedKey = i > 0 ? e.getKey().substring(0, i) : e.getKey();
         return immutableEntry(cleanedKey, e.getValue());
       })
-      .collect(Collectors.toImmutableMap(Entry::getKey, Entry::getValue));
+      .collect(toImmutableMap(Entry::getKey, Entry::getValue));
 
   /**
    * Dependencies.
