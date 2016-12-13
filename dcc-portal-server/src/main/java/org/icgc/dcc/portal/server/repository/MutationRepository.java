@@ -55,14 +55,9 @@ import lombok.extern.slf4j.Slf4j;
 public class MutationRepository implements Repository {
 
   private static final String[] NO_EXCLUDE = null;
-  private static final String[] PROTEIN_FIELDS = new String[] { 
-      "id",
-      "mutation", 
-      "transcript.id", 
-      "transcript.consequence.aa_mutation", 
-      "transcript.functional_impact_prediction_summary", 
-      "_summary._affected_donor_count"
-  };
+  private static final String[] PROTEIN_FIELDS =
+      new String[] { "id", "mutation", "transcript.id", "transcript.consequence.aa_mutation", "transcript.functional_impact_prediction_summary", "_summary._affected_donor_count"
+      };
   private static final IndexType CENTRIC_TYPE = IndexType.MUTATION_CENTRIC;
   private final QueryEngine queryEngine;
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
@@ -83,17 +78,14 @@ public class MutationRepository implements Repository {
     val pql = converter.convert(query, MUTATION_CENTRIC);
     val search = queryEngine.execute(pql, MUTATION_CENTRIC);
 
-    log.debug("Mutation : {}", search.getRequestBuilder());
-
-    SearchResponse response = search.getRequestBuilder().execute().actionGet();
-    return response;
+    return search.getRequestBuilder().get();
   }
 
   @NonNull
   public SearchResponse findAllCentric(StatementNode pqlAst) {
     val search = queryEngine.execute(pqlAst, MUTATION_CENTRIC);
-
-    return search.getRequestBuilder().execute().actionGet();
+    log.debug("Mutation : {}", search.getRequestBuilder());
+    return search.getRequestBuilder().get();
   }
 
   /**
