@@ -92,6 +92,12 @@ $faded: #e6dede;
   display: flex;
   flex-direction: column;
 
+  &--empty {
+    &, .title {
+      color: #999;
+    } 
+  }
+
   .tool-buttons {
     position: absolute;
     right: 20px;
