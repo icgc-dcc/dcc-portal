@@ -22,6 +22,7 @@ ngModule.component('modifyExistingSetModal', {
         <table class="table table-info" ng-if="vm.eligibleEntitysets.length">
           <thead>
             <tr>
+              <td></td>
               <td><translate>Name</translate></td>
               <td><translate># Items</translate></td>
             </tr>
@@ -34,6 +35,12 @@ ngModule.component('modifyExistingSetModal', {
                 'is-selected': vm.selectedEntitysets.includes(entityset)
               }"
             >
+              <td style="text-align: center;">
+                <icgc-checkbox
+                  is-checked="vm.selectedEntitysets.includes(entityset)"
+                  type="'radio'"
+                ></icgc-checkbox>
+              </td>
               <td>{{entityset.name}}</td>
               <td>{{entityset.count}}</td>
             </tr>
