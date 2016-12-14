@@ -58,8 +58,8 @@ import deepmerge from 'deepmerge';
 (function () {
   'use strict';
 
-  const mutationIdRegEx = new RegExp(/MU([1-9])\d*/g);
-  const fileIdRegEx = new RegExp(/FI([1-9])\d*/g);
+  const mutationIdRegEx = new RegExp(/\bMU([1-9])\d*\b/g);
+  const fileIdRegEx = new RegExp(/\bFI([1-9])\d*\b/g);
 
   angular.module ('icgc.entitySetUpload.controllers', [])
     .controller ('EntitySetUploadController', function ($scope, $modalInstance, EntitySetUploadVerificationService,
@@ -87,6 +87,7 @@ import deepmerge from 'deepmerge';
       };
 
       $scope.verifyInput = () => {
+        $scope.params.entityIdsTotal = $scope.params.entityIds.split(/\W+/g).length;
         $scope.params.entityIdsArray = _.words($scope.params.entityIds, $scope.params.entityType === 'file' ? fileIdRegEx : mutationIdRegEx);
         if(!$scope.params.entityIdsArray.length) {
           $scope.params.verified = false;
@@ -96,17 +97,10 @@ import deepmerge from 'deepmerge';
       }
 
       $scope.submit = () => {
-        if(!$scope.params.entityIds) {return;}
+        if(!$scope.params.entityIds || !$scope.params.verified) {return;}
 
-        $scope.params.entityIdsArray = _.words($scope.params.entityIds, $scope.params.entityType === 'file' ? fileIdRegEx : mutationIdRegEx);
-
-        if(!$scope.params.entityIdsArray.length) {
-          $scope.params.verified = false;
-          return;
-        }
         let filters = LocationService.filters();
         let entityFilter = {};
-        
 
         _controller.entityUploadService.addSet($scope.params.entityIdsArray, $scope.params.entityType).then((set) => {
           entityFilter[$scope.params.entityType] = {id: {is: [`ES:${set.id}`]}};
