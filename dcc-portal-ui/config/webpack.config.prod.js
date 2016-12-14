@@ -39,7 +39,7 @@ module.exports = {
     ],
     loaders: [
       {
-        test: /index.html$/,
+        test: /\.html$/,
         loader: 'raw',
       },
       {
