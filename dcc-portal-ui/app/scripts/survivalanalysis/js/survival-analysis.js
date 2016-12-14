@@ -15,6 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require('./survival-analysis-service.js');
+
 import { renderPlot } from '@oncojs/survivalplot';
 import loadImg from 'load-img';
 import getContext from 'get-canvas-context';
