@@ -1,4 +1,4 @@
-<div class="survival-analysis">
+<div ng-show="!ctrl.isEmpty()" class="survival-analysis">
 
   <div class="tool-buttons">
     <button
@@ -91,4 +91,10 @@
     params="ctrl.tooltipParams"
   ></tooltip-control>
 
+</div>
+<div ng-show="ctrl.isEmpty()" class="survival-analysis survival-analysis--empty">
+  <h1 class="title" ng-if="ctrl.title">{{ ctrl.title }}</h1>
+  <div class="flex flex-center flex-grow" style="color: #999;">
+    Insufficient data
+  </div>
 </div>

@@ -88,6 +88,9 @@ $faded: #e6dede;
 
 .survival-analysis {
   position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   .tool-buttons {
     position: absolute;
