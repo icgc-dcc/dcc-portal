@@ -11,7 +11,7 @@ ngModule.component('modifyExistingSetModal', {
     <div class="modal-content modify-existing-set-modal">
       <div class="modal-header clearfix">
           <h3 class="pull-left">
-            {{ vm.operation.toLowerCase() === 'add' ? 'Add to' : 'Remove from' }}
+            {{ vm.operation.toLowerCase() === 'add' ? 'Add ' + vm.initialEntitysetDefinition.size + ' to' : 'Remove ' + vm.initialEntitysetDefinition.size + ' from' }}
             <translate> existing {{ vm.initialEntitysetDefinition.type.toLowerCase() }} set</translate>
           </h3>
           <button class="pull-right t_button" ng-click="vm.handleClickClose();">
