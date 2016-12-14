@@ -70,10 +70,10 @@ function svgToPngDataUri(svg, {width, height}) {
           ], $element.get(0));
       };
 
-      this.isEmpty = () => _.every(this.dataSets.map(set => set.donors), _.isEmpty);
+      this.isEmpty = () => !ctrl.dataSets || _.every(this.dataSets.map(set => set.donors), _.isEmpty);
 
       var update = function (params) {
-        if (!ctrl.dataSets) {
+        if (ctrl.isEmpty()) {
           return;
         }
 
