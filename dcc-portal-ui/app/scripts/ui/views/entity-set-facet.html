@@ -1,6 +1,6 @@
 <div class="btn-group entity-search pull-right">
   <button type="button" class="btn t_button" data-ng-click="$ctrl.clickEvent()" data-capitalize="true">
-    Upload {{ $ctrl.entityType | _:'capitalize' }} Set
+    Upload {{ $ctrl.entityType }} Set
   </button>
   <button type="button" 
     class="btn t_button dropdown-toggle" 
@@ -10,9 +10,7 @@
   </button>
   <ul class="dropdown-menu" data-ng-if="$ctrl.entitySet.length">
     <li class="divider-label">
-      <div>
-        <span><b>Select Saved Sets</b></span>
-      </div>
+      <span><b>Select Saved Sets</b></span>
     </li>
     <li data-ng-repeat="set in $ctrl.entitySet" class="set-list">
       <a href="" 
@@ -27,7 +25,7 @@
           </div>
           <div>
             <span>{{ set.name | limitTo: 16 }} {{set.name.length > 16 ? '...' : ''}} </span>
-            <span>{{ set.count | number }} {{ $ctrl.entityType | _:'capitalize' }} </span>
+            <span>{{ set.count | number }} {{ $ctrl.entityType.toLowerCase() }}{{ set.count > 1 ? 's' : '' }} </span>
           </div>
         </div>
       </a>
