@@ -70,6 +70,8 @@ function svgToPngDataUri(svg, {width, height}) {
           ], $element.get(0));
       };
 
+      this.isEmpty = () => _.every(this.dataSets.map(set => set.donors), _.isEmpty);
+
       var update = function (params) {
         if (!ctrl.dataSets) {
           return;
@@ -149,11 +151,6 @@ function svgToPngDataUri(svg, {width, height}) {
         stateStack = _.without(stateStack, state);
         update();
       };
-
-      this.isEmpty = () => {
-        console.log(this.dataSets);
-      };
-      window.sss = this;
 
       const getSvgString = ({width, height}={}) => (`
         <svg
