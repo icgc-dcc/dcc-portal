@@ -720,13 +720,16 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       }
     };
 
+    _ctrl.donorSetsForRepo = () => 
+      _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
+        set.repoFilters = {};
+        set.repoFilters.file = {};
+        set.repoFilters.file.donorId = set.advFilters.donor.id;
+        return set;
+      });
+
     // Adding filters for repository to the donor set
-    _ctrl.donorSets = _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
-      set.repoFilters = {};
-      set.repoFilters.file = {};
-      set.repoFilters.file.donorId = set.advFilters.donor.id;
-      return set;
-    });
+    _ctrl.donorSets = _ctrl.donorSetsForRepo();
 
     _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
 
@@ -1086,31 +1089,17 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     }
 
     // to check if a set was previously selected and if its still in effect
-    const checkSetInFilter = (entity, entitySets) => {
+    const updateSetSelection = (entity, entitySets) => {
       let filters = FilterService.filters();
-      const setIdPrefix = 'ES:';
 
-      if(filters.file && filters.file[entity]){
-        _.each(entitySets, (set) => {
-          set.selected = false;
-          _.each(filters.file[entity].is, (id) => {
-            if(_.includes(id, setIdPrefix)){
-              if(`${setIdPrefix}${set.id}` === id){
-                set.selected = true;
-              }
-            }
-          });
-        });
-      } else {
-        _.each(entitySets, (set) => {
-          set.selected = false;
-        });
-      }
+      entitySets.forEach( (set) =>
+        set.selected = filters.file && filters.file[entity] &&  _.includes(filters.file[entity].is, `ES:${set.id}`)
+      );
     };
 
     refresh();
-    checkSetInFilter('donorId', _ctrl.donorSets);
-    checkSetInFilter('id', _ctrl.fileSets);
+    updateSetSelection('donorId', _ctrl.donorSets);
+    updateSetSelection('id', _ctrl.fileSets);
 
     // Pagination watcher, gets destroyed with scope.
     $scope.$watch(function() {
@@ -1132,8 +1121,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       else {
         refresh();
       }
-      checkSetInFilter('donorId', _ctrl.donorSets);
-      checkSetInFilter('id', _ctrl.fileSets);
+      updateSetSelection('donorId', _ctrl.donorSets);
+      updateSetSelection('id', _ctrl.fileSets);
     });
 
     // Remove any pagination on facet change: see DCC-4589
@@ -1148,15 +1137,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       }
     });
 
-    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, (e) => {
-      // Adding filters for repository to the donor set
-      _ctrl.donorSets = _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
-        set.repoFilters = {};
-        set.repoFilters.file = {};
-        set.repoFilters.file.donorId = set.advFilters.donor.id;
-        return set;
-      });
-
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+      _ctrl.donorSets = _ctrl.donorSetsForRepo();
       _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
     });
 

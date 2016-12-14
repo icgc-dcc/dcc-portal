@@ -65,20 +65,20 @@ angular.module('icgc.advanced.controllers', [
 
       _locationFilterCache = _filterService.getCachedFiltersFactory();
 
+      var _isInAdvancedSearchCtrl = true;
+
       _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
       _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
       _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
 
       // to check if a set was previously selected and if its still in effect
-      const checkSetInFilter = (entity, entitySets) => {
+      const updateSetSelection = (entity, entitySets) => {
         let filters = _locationFilterCache.filters();
 
         entitySets.forEach( (set) =>
           set.selected = filters[entity] && filters[entity].id &&  _.includes(filters[entity].id.is, `ES:${set.id}`)
         );
       };
-
-      var _isInAdvancedSearchCtrl = true;
 
       function _refresh() {
         var filters = _locationFilterCache.filters(),
@@ -273,9 +273,9 @@ angular.module('icgc.advanced.controllers', [
           }
 
           _locationFilterCache.updateCache();
-          checkSetInFilter('donor', _controller.donorSets);
-          checkSetInFilter('gene', _controller.geneSets);
-          checkSetInFilter('mutation', _controller.mutationSets);
+          updateSetSelection('donor', _controller.donorSets);
+          updateSetSelection('gene', _controller.geneSets);
+          updateSetSelection('mutation', _controller.mutationSets);
           _resetServices();
           _refresh();
         });
@@ -347,12 +347,10 @@ angular.module('icgc.advanced.controllers', [
           }
         });
 
-        checkSetInFilter('donor', _controller.donorSets);
-        checkSetInFilter('gene', _controller.geneSets);
-        checkSetInFilter('mutation', _controller.mutationSets);
+        updateSetSelection('donor', _controller.donorSets);
+        updateSetSelection('gene', _controller.geneSets);
+        updateSetSelection('mutation', _controller.mutationSets);
       }
-
-
 
       /////////////////////////////////////////////////////////////////
       // Advanced Search Public API
