@@ -344,7 +344,11 @@
                                     </ul>
                                 </td>
                                 <td data-ng-bind-html="trial.uiStartDate | highlight: CompoundCtrl.tableFilter.clinicalTrials" style="width:6rem; white-space: nowrap;"></td>
-                                <td data-ng-bind-html="trial.uiPhaseName | highlight: CompoundCtrl.tableFilter.clinicalTrials"></td>
+                                <td>
+                                    <div data-ng-repeat="phase in trial.uiPhaseName">
+                                        <span data-ng-bind-html="phase | highlight: CompoundCtrl.tableFilter.clinicalTrials"></span>
+                                    </div>
+                                </td>
                                 <td class="text-wrap" data-ng-bind-html="trial.uiStatusName | highlight: CompoundCtrl.tableFilter.clinicalTrials"></td>
                             </tr>
                         </tbody>

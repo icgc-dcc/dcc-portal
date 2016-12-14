@@ -248,7 +248,6 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
           _trials = _arrayOrEmptyArray(compound.trials),
           _uiTrials = getUiTrialsJSON(compound.trials);
 
-
       return {
         id: _id,
         inchiKey: _inchikey,
@@ -301,7 +300,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
           uiDescription: trial.description,
           uiConditions: trial.conditions,
           uiStartDate: trial.startDate,
-          uiPhaseName: trial.phaseName,
+          uiPhaseName: trial.phaseName.split('/'),
           uiStatusName: trial.statusName
         });
       }));
