@@ -22,12 +22,18 @@
         <translate>Save as new {{ vm.entityType }} set</translate>
       </a>
     </li>
-    <li ng-click="vm.handleClickModifySet('add')">
+    <li
+      ng-click="vm.handleClickModifySet('add')"
+      ng-class="{'disabled': !vm.hasSets()}"
+    >
       <a>
         <translate>Add to existing {{ vm.entityType }} set</translate>
       </a>
     </li>
-    <li ng-click="vm.handleClickModifySet('remove')">
+    <li
+      ng-click="vm.handleClickModifySet('remove')"
+      ng-class="{'disabled': !vm.hasSets()}"
+    >
       <a>
         <translate>Remove from existing {{ vm.entityType }} set</translate>
       </a>

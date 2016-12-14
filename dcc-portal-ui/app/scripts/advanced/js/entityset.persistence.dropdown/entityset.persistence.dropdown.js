@@ -19,6 +19,8 @@ ngModule.component('entitysetPersistenceDropdown', {
     this.$onInit = guardBindings;
     this.$onChanges = guardBindings;
 
+    this.hasSets = () => !!SetService.getAll().length;
+
     const getFiltersFromEntityIds = (entityType, ids) => ({
       [entityType]: {
         id: {
@@ -69,6 +71,9 @@ ngModule.component('entitysetPersistenceDropdown', {
     };
 
     this.handleClickModifySet = (operation) => {
+      if (!this.hasSets()) {
+        return;
+      }
       const {selectedEntityIds, entityType, onOperationSuccess} = this;
       const filters = selectedEntityIds.length
         ? getFiltersFromEntityIds(entityType, selectedEntityIds)
