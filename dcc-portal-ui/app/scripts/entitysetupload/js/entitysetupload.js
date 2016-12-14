@@ -87,8 +87,15 @@ import deepmerge from 'deepmerge';
       };
 
       $scope.verifyInput = () => {
+        // Total number of user added entity IDs
         $scope.params.entityIdsTotal = $scope.params.entityIds.split(/\W+/g).length;
+
+        /**
+         *  We should be verfying the entity IDs against an API endpoint
+         *  currently the endpoint doesnt exist so checking against a RegEx
+         * */ 
         $scope.params.entityIdsArray = _.words($scope.params.entityIds, $scope.params.entityType === 'file' ? fileIdRegEx : mutationIdRegEx);
+
         if(!$scope.params.entityIdsArray.length) {
           $scope.params.verified = false;
         } else {

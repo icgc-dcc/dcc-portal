@@ -28,7 +28,6 @@ import deepmerge from 'deepmerge';
 
     $scope.Extensions = Extensions;
     $scope.isInRepositoryFile = Page.page() === 'repository';
-    $scope.displaySavedSetLimit = $scope.entitySetsLimit;
 
     var _fetchNameForSelections = function ( selections ) {
 
@@ -43,13 +42,13 @@ import deepmerge from 'deepmerge';
 
     $scope.uploadEntityFn = () => {
       if($scope.type === 'donor' || $scope.type === 'file-donor'){
-        return $scope.useDonorSet();
+        return $scope.uploadDonorSet();
       }
       if($scope.type === 'gene'){
-        return $scope.useGeneSet();
+        return $scope.uploadGeneSet();
       }
       if($scope.type === 'mutation' || $scope.type === 'file'){
-        return $scope.useFileOrMutationSet();
+        return $scope.uploadEntitySet();
       }
     }
 
@@ -395,21 +394,21 @@ import deepmerge from 'deepmerge';
 
 
     /* Add a gene set term to the search filters */
-    $scope.useGeneSet = () => {
+    $scope.uploadGeneSet = () => {
       $modal.open({
         templateUrl: '/scripts/genelist/views/upload.html',
         controller: 'GeneListController'
       });
     };
 
-    $scope.useDonorSet = () => {
+    $scope.uploadDonorSet = () => {
       $modal.open({
         templateUrl: '/scripts/donorlist/views/upload.html',
         controller: 'DonorListController'
       });
     };
 
-     $scope.useFileOrMutationSet = () => {
+     $scope.uploadEntitySet = () => {
       $modal.open({
         templateUrl: '/scripts/entitysetupload/views/upload.html',
         controller: 'EntitySetUploadController',
@@ -424,12 +423,10 @@ import deepmerge from 'deepmerge';
     $scope.selectSet = (set) => {
       let filters = FilterService.filters();
       if(!set.selected){
-        if(!$scope.isInRepositoryFile){
-          filters = deepmerge(filters, set.advFilters);
-        } else if($scope.isInRepositoryFile && $scope.type === 'file'){
-          filters = deepmerge(filters, set.advFilters);
-        } else if($scope.isInRepositoryFile) {
+        if($scope.isInRepositoryFile && $scope.type === 'file-donor') {
           filters = deepmerge(filters, set.repoFilters);
+        } else {
+          filters = deepmerge(filters, set.advFilters);
         }
         event.stopPropagation();
       } else {
@@ -440,7 +437,6 @@ import deepmerge from 'deepmerge';
 
     // Needed if term removed from outside scope
     $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, setup);
-
 
     setup();
   });
