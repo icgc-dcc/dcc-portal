@@ -55,7 +55,7 @@ function svgToPngDataUri(svg, {width, height}) {
       var ctrl = this;
       var graphContainer = $element.find('.survival-graph').get(0);
       var svg = d3.select(graphContainer).append('svg');
-      var tipTemplate = _.template($element.find('.survival-tip-template').html());
+      var tipTemplate = _.template(require('./survival-tip-template.html'));
       var stateStack = [];
       var state = {
         xDomain: undefined,
@@ -149,6 +149,11 @@ function svgToPngDataUri(svg, {width, height}) {
         stateStack = _.without(stateStack, state);
         update();
       };
+
+      this.isEmpty = () => {
+        console.log(this.dataSets);
+      };
+      window.sss = this;
 
       const getSvgString = ({width, height}={}) => (`
         <svg
