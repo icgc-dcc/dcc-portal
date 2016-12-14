@@ -68,7 +68,13 @@
           'icon-check-empty': ctrl.isDataSetDisabled(dataSet) && dataSet.donors.length,
         }"
       ></i>
-      <span ng-bind-html="ctrl.SetOperationService.getSetShortHand(dataSet, ctrl.dataSets)"></span> (N = {{dataSet.donors.length}}) - {{ dataSet.meta.name }}
+      <span ng-bind-html="ctrl.SetOperationService.getSetShortHand(dataSet, ctrl.dataSets)"></span>
+      (N =
+      <span ng-style="{
+        'font-weight': dataSet.donors.length ? '400' : '700', 
+        'color': dataSet.donors.length ? 'inherit' : '#666', 
+      }">{{dataSet.donors.length}}</span>)
+      - {{ dataSet.meta.name }}
     </li>
   </ul>
 
