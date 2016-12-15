@@ -24,7 +24,7 @@
     </li>
     <li
       ng-click="vm.handleClickModifySet('add')"
-      ng-class="{'disabled': !vm.hasSets()}"
+      ng-show="vm.hasSets()"
     >
       <a>
         <translate>Add to existing {{ vm.entityType }} set</translate>
@@ -32,7 +32,7 @@
     </li>
     <li
       ng-click="vm.handleClickModifySet('remove')"
-      ng-class="{'disabled': !vm.hasSets()}"
+      ng-show="vm.hasSets()"
     >
       <a>
         <translate>Remove from existing {{ vm.entityType }} set</translate>
