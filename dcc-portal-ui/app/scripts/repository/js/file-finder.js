@@ -10,7 +10,7 @@ ngModule.component('fileFinder', {
         <tr ng-repeat="result in vm.results">
           <td style="font-size: 1.1rem;">
             <i class="icon-file"></i>
-            <a ng-href="/releases/{{result.original.name}}" ng-bind-html="result.string"></a>
+            <a target="_self" href="{{vm.ApiBaseurl}}/download?fn={{result.original.name}}" ng-bind-html="result.string"></a>
           </td>
         </tr>
         <tr ng-if="!vm.results.length">
@@ -21,9 +21,10 @@ ngModule.component('fileFinder', {
       </table>
     </div>
   `,
-  controller: function (FileService) {
+  controller: function (FileService, API) {
     this.allFiles = [];
     this.results = [];
+    this.ApiBaseurl = API.BASE_URL;
 
     FileService.getAllFiles().then((files) => {
       this.allFiles = files;
