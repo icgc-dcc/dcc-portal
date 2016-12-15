@@ -2,7 +2,6 @@ import fuzzy from 'fuzzy';
 
 const ngModule = angular.module('file-finder', []);
 
-
 ngModule.component('fileFinder', {
   replace: true,
   template: `
