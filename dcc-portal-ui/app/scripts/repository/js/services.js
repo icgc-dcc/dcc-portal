@@ -301,6 +301,10 @@
               .get();
     };
 
+    this.getAllFiles = () => {
+      return Promise.resolve(require('./sample-listing.json'));
+    };
+
     this.getStatus = function () {
       return RestangularNoCache.one('download', 'status')
               .get();

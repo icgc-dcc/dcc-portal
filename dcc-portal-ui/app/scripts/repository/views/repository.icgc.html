@@ -31,7 +31,7 @@
         </section>
 
         <div data-ng-if="ICGCRepoController.files" ng-init="releaseUrl = ICGCRepoController.dataReleasesUrl;">
-            <ul class="breadcrumb" style="background:#fff;font-size:1.25rem; margin-bottom:0">
+            <ul class="breadcrumb" style="background:#fff;font-size:1.25rem; margin-bottom:0;position:relative;">
                 <li><a href="{{:: releaseUrl }}"><i class="icon-database"></i>DCC</a></li>
                 <li data-ng-repeat="p in ICGCRepoController.slugs">
                     <a data-ng-if="!$last"
@@ -40,9 +40,36 @@
                     <span data-ng-if="$last"
                           data-ng-style="deprecatedReleases.indexOf(p.name) >= 0?{'text-decoration':'line-through'}:{}">{{ p.name }}</span>
                 </li>
+                <li>
+                    <span class="t_suggest t_suggest__header table-filter" style="width: 10em!important;position:absolute;top:0;right:0;">
+                        <input
+                            type="text" class="t_suggest__input form-control"
+                            ng-model="ICGCRepoController.fileQuery"
+                            placeholder="placeholder"
+                            ng-keyup="ICGCRepoController.handleFileQueryKeyup($event)"
+                        />
+                        <i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search"></i>
+                        <i
+                            class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel ng-hide"
+                            data-ng-click="ICGCRepoController.fileQuery = ''"
+                            data-ng-show="ICGCRepoController.fileQuery"
+                        ></i>
+                    </span>
+                </li>
             </ul>
 
-            <table class="table" style="font-size: 1.1rem">
+            <file-finder
+                ng-show="ICGCRepoController.fileQuery"
+                query="ICGCRepoController.slugs.slice(-1)[0].url + ICGCRepoController.fileQuery"
+            >
+
+            </file-finder>
+
+            <table
+                ng-show="!ICGCRepoController.fileQuery || !ICGCRepoController.fileQuery.length"
+                class="table"
+                style="font-size: 1.1rem"
+            >
                 <thead>
                 <tr>
                     <th><translate>Name</translate></th>
@@ -70,7 +97,7 @@
             </table>
         </div>
 
-        <div>
+        <div ng-show="!ICGCRepoController.fileQuery || !ICGCRepoController.fileQuery.length">
            <br>
            <div data-ng-repeat="file in ICGCRepoController.textFiles | filter:{name : '!notice.txt'}">
                <div class="well well-small">
