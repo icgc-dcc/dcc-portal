@@ -7,6 +7,9 @@ ngModule.component('fileFinder', {
   template: `
     <div>
       <table class="table">
+        <tr ng-if="!vm.allFiles.length">
+          <td class="text-center"><i class="icon-spinner icon-spin"></i>Loading</td>
+        </tr>
         <tr ng-repeat="result in vm.results">
           <td style="font-size: 1.1rem;">
             <i class="icon-file"></i>
