@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "angular-gettext-cli": "1.0.7",
-    "autoprefixer": "6.3.7",
+    "autoprefixer": "^6.5.4",
     "babel-core": "6.11.4",
     "babel-eslint": "6.1.2",
     "babel-loader": "6.2.4",
@@ -89,6 +89,7 @@
     "node-sass": "3.10.0",
     "opn": "4.0.2",
     "phantomjs-prebuilt": "2.1.13",
+    "postcss-loader": "^1.2.1",
     "prepend-loader": "0.0.2",
     "promise": "7.1.1",
     "raw-loader": "0.5.1",

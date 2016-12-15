@@ -71,7 +71,7 @@ module.exports = {
       {
         test: /\.scss$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: ExtractTextPlugin.extract('style', 'css!sass'),
+        loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss!sass'),
       },
       {
         test: /\.json$/,
@@ -102,6 +102,11 @@ module.exports = {
     // e.g. to enable no-console and no-debugger only in prod.
     configFile: path.join(__dirname, 'eslint.js'),
     useEslintrc: false
+  },
+  postcss: function() {
+    return [
+      require('autoprefixer'),
+    ];
   },
   plugins: [
     new CopyWebpackPlugin([
