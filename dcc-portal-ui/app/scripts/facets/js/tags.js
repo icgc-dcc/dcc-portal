@@ -423,7 +423,12 @@ import deepmerge from 'deepmerge';
     $scope.selectSet = (set) => {
       let term = {};
       if(!set.selected){
-        term.id = _.head(set.advFilters[$scope.type].id.is);
+        if($scope.isInRepositoryFile && $scope.type === 'file-donor') {
+          term.id = _.head(set.repoFilters.file.donorId.is);
+        } else{
+          term.id = _.head(set.advFilters[$scope.type].id.is);
+        }
+        
         term.type = $scope.type;
         term.name = set.name;
         $scope.addTerm(term);

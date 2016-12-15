@@ -48,7 +48,7 @@ import deepmerge from 'deepmerge';
       params.isTransient = true;
       params.type = entityType;
       params.size = entityIds.length;
-      params.name = `Uploaded ${entityType} Set`;
+      params.name = `Uploaded ${entityType} set`;
       return SetService.addSet(entityType, params, entityType === 'file');
     }
   });
