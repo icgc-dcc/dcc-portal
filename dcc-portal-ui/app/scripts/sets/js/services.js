@@ -108,7 +108,7 @@
       var data = {};
       
       if (typeof derived === 'undefined' || !derived) {
-        data.filters = encodeURI(JSON.stringify(params.filters));
+        data.filters = params.filters;
         data.size = params.size || 0;
       }
       
@@ -200,6 +200,7 @@
       }
 
       promise.then(function(data) {
+        data = data.plain();
         
         if (! data.id) {
           return;
@@ -212,11 +213,7 @@
 
         data.type = data.type.toLowerCase();
 
-        setList = localStorageService.get(LIST_ENTITY) || [];
-        setList.unshift(data);
-        _service.refreshList();
-
-        localStorageService.set(LIST_ENTITY, setList);
+        _service.add(data);
         
         _service.saveSuccessToaster(data.name);
         toaster.clear(addSetSaving);
@@ -230,6 +227,17 @@
       Restangular.one('entityset', setId).customPUT(`name=${newName}`, null, null, {'Content-Type': 'application/x-www-form-urlencoded'});
       setList.find(x => x.id === setId).name = newName;
       localStorageService.set(LIST_ENTITY, setList);
+    };
+
+    _service.modifySet = async (existingSet, entitysetDefinition, operation) => {
+      const validOperations = ['add', 'remove'];
+      invariant(validOperations.includes(operation), `operation must be one of ${JSON.stringify(validOperations)}`);
+      const savingToaster = _service.savingToaster(existingSet.name);
+      const resource = {add: 'unions', remove: 'differences'}[operation];
+      const updatedEntityset = await Restangular.one(`entityset/${existingSet.id}/${resource}`).customPOST(entitysetDefinition, null, null, {'Content-Type': 'application/json'});
+      _service.update(Object.assign({}, updatedEntityset, {type: updatedEntityset.type.toLowerCase()}));
+      toaster.clear(savingToaster);
+      _service.saveSuccessToaster(existingSet.name);
     };
 
     _service.addExternalSet = function(type, params) {
@@ -419,6 +427,18 @@
       });
       localStorageService.set(LIST_ENTITY, setList);
       return true;
+    };
+
+    _service.add = (entityset) => {
+      setList = localStorageService.get(LIST_ENTITY) || [];
+      setList.unshift(entityset);
+      _service.refreshList();
+      localStorageService.set(LIST_ENTITY, setList);
+    };
+
+    _service.update = (entityset) => {
+      _service.remove(entityset.id);
+      _service.add(entityset);
     };
 
     _service.remove = function(id) {

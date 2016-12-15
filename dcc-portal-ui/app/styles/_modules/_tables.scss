@@ -123,6 +123,11 @@ $table-th-fixed-width: 200px;
        }
     }
   }
+
+  .is-selected > td {
+    transition: 0.1s;
+    background-color: #ffffbe;
+  }
 }
 
 .t_table_top {

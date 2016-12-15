@@ -156,9 +156,14 @@ public class TermsLookupRepository {
   @SneakyThrows
   private void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
       @NonNull final Map<String, Object> keyValuePairs) {
-    client.prepareIndex(TERMS_LOOKUP_INDEX_NAME, type.getName())
-        .setId(id.toString())
-        .setSource(keyValuePairs).execute().get();
+    val key = id.toString();
+    val request = client.prepareIndex(TERMS_LOOKUP_INDEX_NAME, type.getName())
+        .setId(key)
+        .setSource(keyValuePairs)
+        .setRefresh(true);
+
+    log.trace("{}", request.request());
+    request.execute().get();
   }
 
   public void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
@@ -182,7 +187,7 @@ public class TermsLookupRepository {
       @NonNull TermLookupType type, @NonNull UUID id) {
     val key = id.toString();
     return termsLookupFilter(fieldName)
-        // .cacheKey(key)
+        .lookupCache(false)
         .lookupId(key)
         .lookupIndex(TERMS_LOOKUP_INDEX_NAME)
         .lookupType(type.getName())

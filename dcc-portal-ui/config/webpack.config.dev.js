@@ -40,9 +40,10 @@ module.exports = {
         include: paths.appSrc,
       }
     ],
+    noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
       {
-        test: /index.html$/,
+        test: /\.html$/,
         loader: 'raw',
       },
       {
@@ -75,7 +76,12 @@ module.exports = {
       {
         test: /\.scss$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loaders: ['style', 'css?sourceMap', 'sass?sourceMap']
+        loaders: [
+          'style',
+          'css?sourceMap&-autoprefixer',
+          'postcss',
+          'sass?sourceMap'
+        ]
       },
       {
         test: /\.json$/,
@@ -104,6 +110,11 @@ module.exports = {
   eslint: {
     configFile: path.join(__dirname, 'eslint.js'),
     useEslintrc: false
+  },
+  postcss: function() {
+    return [
+      require('autoprefixer'),
+    ];
   },
   plugins: [
     new HtmlWebpackPlugin({

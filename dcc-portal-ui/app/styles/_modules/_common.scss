@@ -384,3 +384,24 @@ a.no-style {
     vertical-align: baseline;
   }
 }
+
+.external-link, [external-link] {
+  &:after {
+    content: '\e831';
+    font-family: "icgc-icons";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    margin-left: .2em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

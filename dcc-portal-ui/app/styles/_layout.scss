@@ -196,3 +196,18 @@ section {
   justify-content: center;
   align-items: center;
 }
+
+.sticky {
+  position: sticky;
+  &--with-defaults {
+    background: white;
+    box-shadow: 3px 2px 1px 0px rgba(0,0,0,0.1);
+  }
+  &--secondary {
+    top: 60px;
+  }
+}
+
+.flex-grow {
+  flex-grow: 1;
+}

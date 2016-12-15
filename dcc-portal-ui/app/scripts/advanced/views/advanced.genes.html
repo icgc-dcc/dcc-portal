@@ -22,6 +22,15 @@
             <span class="action-item">
                <i class="icon-chart"></i><a href="/browser/g?filters={{AdvancedCtrl.Location.filters()}}"><translate>Genome Viewer</translate></a>
             </span>
+            <span class="action-item">
+                <entityset-persistence-dropdown
+                    selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.gene"
+                    entity-type="'gene'"
+                    set-total-count="AdvancedCtrl.Gene.genes.pagination.total"
+                    set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
+                    on-operation-success="AdvancedCtrl.handleOperationSuccess('gene')"
+                ></entityset-persistence-dropdown>
+            </span>
         </span>
     </h3>
 
@@ -33,6 +42,7 @@
     <table class="table table-bordered table-striped table-condensed">
         <thead>
         <tr>
+            <th rowspan="2"></th>
             <th rowspan="2" data-sortable data-type="genes" data-field="symbol">
                 <translate>Symbol</translate>
             </th>
@@ -67,7 +77,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-ng-repeat="gene in AdvancedCtrl.Gene.genes.hits track by gene.id">
+        <tr
+            ng-class="{
+                'is-selected': AdvancedCtrl.isEntitySelected('gene', gene)
+            }"
+            ng-click="AdvancedCtrl.toggleSelectedEntity('gene', gene)"
+            data-ng-repeat="gene in AdvancedCtrl.Gene.genes.hits track by gene.id"
+        >
+            <td>
+                <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('gene', gene)"></icgc-checkbox>
+            </td>
             <td><a href="/genes/{{ gene.id }}">{{ gene.symbol }}</a></td>
             <td>{{ gene.name }}</td>
             <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>

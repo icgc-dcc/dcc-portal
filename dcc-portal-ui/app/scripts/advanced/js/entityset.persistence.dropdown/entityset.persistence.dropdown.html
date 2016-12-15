@@ -1,0 +1,42 @@
+<div class="entityset-persistence-dropdown dropdown">
+  <i class="fa fa-floppy-o"></i>
+  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+    <translate>Save/Edit {{ vm.selectedEntityIds.length ? 'Selection' : 'Results' }}</translate>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right">
+    <li class="dropdown-header">
+      <span ng-if="vm.selectedEntityIds.length">
+        <translate>Selected</translate> {{vm.selectedEntityIds.length | number}} {{ vm.entityType | pluralize : vm.selectedEntityIds.length }}
+      </span>
+      <span ng-if="!vm.selectedEntityIds.length && vm.setTotalCount < vm.setLimit">
+        {{vm.setTotalCount | number}} {{ vm.entityType | pluralize : vm.setTotalCount }}
+      </span>
+      <span ng-if="!vm.selectedEntityIds.length && vm.setTotalCount > vm.setLimit">
+        Top {{vm.setLimit | number}} {{ vm.entityType | pluralize : vm.setLimit }}
+      </span>
+      
+    </li>
+    <li ng-click="vm.handleClickSaveNew()">
+      <a>
+        <translate>Save as new {{ vm.entityType }} set</translate>
+      </a>
+    </li>
+    <li
+      ng-click="vm.handleClickModifySet('add')"
+      ng-show="vm.hasSets()"
+    >
+      <a>
+        <translate>Add to existing {{ vm.entityType }} set</translate>
+      </a>
+    </li>
+    <li
+      ng-click="vm.handleClickModifySet('remove')"
+      ng-show="vm.hasSets()"
+    >
+      <a>
+        <translate>Remove from existing {{ vm.entityType }} set</translate>
+      </a>
+    </li>
+  </ul>
+</div>

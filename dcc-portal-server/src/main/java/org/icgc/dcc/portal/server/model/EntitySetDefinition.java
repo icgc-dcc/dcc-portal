@@ -20,19 +20,17 @@ package org.icgc.dcc.portal.server.model;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import org.icgc.dcc.portal.server.model.param.FiltersParam;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Represents the definition of a set originated from Advanced Search
@@ -72,7 +70,7 @@ public class EntitySetDefinition extends BaseEntitySetDefinition {
 
   @JsonCreator
   public EntitySetDefinition(
-      @JsonProperty(JsonPropertyName.FILTERS) final String filters,
+      @JsonProperty(JsonPropertyName.FILTERS) final ObjectNode filters,
       @JsonProperty(JsonPropertyName.SORT_BY) final String sortBy,
       @JsonProperty(JsonPropertyName.SORT_ORDER) final SortOrder sortOrder,
       @NonNull @JsonProperty(JsonPropertyName.NAME) final String name,
@@ -85,7 +83,7 @@ public class EntitySetDefinition extends BaseEntitySetDefinition {
     checkArgument(!isNullOrEmpty(sortBy), "The 'sortBy' argument must contain a valid expression.");
 
     this.sortBy = sortBy;
-    this.filters = FiltersParam.parseFilters(filters);
+    this.filters = filters;
     this.sortOrder = sortOrder;
     this.size = (limit < MIN_SIZE) ? MAX_SIZE : limit;
   }

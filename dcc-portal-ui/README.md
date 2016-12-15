@@ -48,6 +48,9 @@ Other Commands
 # Connect to the production server's API instead of a local backend
 npm run dev:prodapi
 
+# Connect to the staging API instead of local backend
+API_SOURCE=https://staging.dcc.icgc.org npm start
+
 # Adds local.dcc.icgc.org to your host file and point to localhost
 npm run sethost
 

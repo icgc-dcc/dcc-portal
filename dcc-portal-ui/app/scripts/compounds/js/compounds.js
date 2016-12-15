@@ -321,7 +321,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
       // For application/json format
       function _params2JSON(type, params) {
         var data = {};
-        data.filters = encodeURI(JSON.stringify(params.filters));
+        data.filters = params.filters;
         data.type = type.toUpperCase();
         data.name = params.name;
         data.description = params.description || '';
