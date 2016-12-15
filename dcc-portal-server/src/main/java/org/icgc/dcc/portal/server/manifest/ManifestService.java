@@ -145,7 +145,7 @@ public class ManifestService {
 
     val entitySetDefinition =
         new EntitySetDefinition(
-            DEFAULT.writeValueAsString(manifest.getFilters()),
+            manifest.getFilters(),
             "id",
             DESCENDING,
             MANIFEST_SET_NAME,

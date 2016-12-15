@@ -643,6 +643,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     var projectMap = {};
     var _ctrl = this;
 
+    this.handleOperationSuccess = () => { this.selectedFiles = [] };
+
     _ctrl.showIcgcGet = PortalFeature.get('ICGC_GET');
     _ctrl.selectedFiles = [];
     _ctrl.summary = {};
@@ -954,19 +956,9 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       });
     };
     
-    _ctrl.isSelected = function (row) {
-      return _.contains (_ctrl.selectedFiles, row.id);
-    };
+    _ctrl.isSelected = (row) => _ctrl.selectedFiles.includes(row.id);
 
-    _ctrl.toggleRow = function (row) {
-      if (_ctrl.isSelected (row) === true) {
-        _.remove (_ctrl.selectedFiles, function (r) {
-          return r === row.id;
-        });
-      } else {
-        _ctrl.selectedFiles.push (row.id);
-      }
-    };
+    _ctrl.toggleRow = (row) => { _ctrl.selectedFiles = _.xor(_ctrl.selectedFiles, [row.id]) };
 
     /**
      * Undo user selected files

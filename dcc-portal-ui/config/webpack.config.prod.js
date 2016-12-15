@@ -37,6 +37,7 @@ module.exports = {
         include: paths.appSrc
       }
     ],
+    noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
       {
         test: /\.html$/,
