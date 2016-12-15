@@ -1,0 +1,111 @@
+<div class="set-selection-component">
+  <div> 
+      <div
+        ng-bind-html="vm.selectionInstructions"
+        style="color: #999;"></div>
+      <table class="table table-selectable"> 
+          <thead>
+              <th>
+              </th>
+              <th><translate>Item Type</translate></th>
+              <th><translate>Name</translate></th>
+              <th class="text-right"><translate># Items</translate></th>
+          </thead>
+          <tbody>
+              <tr ng-if="!vm.sets.length">
+                  <td colspan="5" class="text-center">
+                    <strong><translate>No saved sets</translate></strong>
+                  </td>
+              </tr>
+              <tr
+                ng-repeat="item in (
+                    vm.sets
+                      | _:'filter':vm.isSetCompatibleWithAnalysis
+                      | _:'sortBy':'timestamp'
+                  ).reverse().concat((
+                    vm.sets
+                      | _:'reject':vm.isSetCompatibleWithAnalysis
+                      | _:'sortBy':'timestamp'
+                      ).reverse()
+                  )"
+                style="color: {{
+                  vm.isSetCompatibleWithAnalysis(item)
+                    ? (vm.isSetSelected(item) || vm.isSetCompatible(item))
+                      ? ''
+                      : '#777'
+                    : '#CCC'
+                }}"
+                ng-class="{
+                  'is-selected': vm.isSetSelected(item),
+                  'is-compatible': vm.isSetCompatible(item),
+                  'is-not-compatible': !vm.isSetCompatible(item),
+                }"
+              > 
+                  <td
+                    class="text-center"
+                    ng-click="(vm.isSetCompatible(item) || vm.isSetSelected(item)) && vm.handleClickItem(item)"
+                    tooltip="{{vm.getSetCompatibilityMessage(item)}}"
+                    tooltip-placement="right"
+                    style="
+                      width: 2rem;
+                      cursor: {{ (vm.isSetCompatible(item) || vm.isSetSelected(item)) ? 'pointer' : 'help' }}
+                    "
+                  > 
+                        <i
+                          ng-if="vm.isSetCompatibleWithAnalysis(item)"
+                          ng-class="{
+                          'icon-check-empty': !vm.isSetSelected(item),
+                          'icon-check': vm.isSetSelected(item),
+                          }"
+                        ></i>
+
+                        <i
+                          ng-if="!vm.isSetCompatibleWithAnalysis(item)"
+                          class="fa"
+                          ng-class="{
+                            'fa-info': !vm.isSetSelected(item),
+                            'fa-close': vm.isSetSelected(item),
+                          }"
+                        ></i>
+                  </td>
+                  <td>{{item.type | readable}}</td>
+                  <td
+                    class="set-name-wrapper"
+                  >
+                    <span
+                        ng-click="itemNameForm.$show()"
+                        ng-hide="itemNameForm.$visible"
+                        editable-text="item.name"
+                        e-form="itemNameForm"
+                        onaftersave="vm.handleSaveSetName(item, item.name)"
+                    >
+                        {{ item.name }}
+                    </span>
+                    <i
+                        tooltip="{{'Rename set' | translate}}"
+                        class="icon-pencil"
+                        ng-click="itemNameForm.$show()"
+                        ng-hide="itemNameForm.$visible"
+                    ></i>
+                  </td>
+                  <td class="text-right"> 
+                      <a href="{{item.advLink}}">{{item.count | number}}</a>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+      <br>
+      <div
+        tooltip="{{vm.getAnalysisSatifactionMessage()}}"
+      >
+        <button
+          class="t_button"
+          ng-disabled="!vm.isAnalysisRunnable()"
+          ng-click="vm.handleClickLaunch(vm.selectedSets)"
+        >
+            <span ng-if="vm.isLaunchingAnalysis"><i class="icon-spinner icon-spin"></i></span>
+            <translate>Run</translate>
+        </button>
+      </span>
+  </div>
+</div>

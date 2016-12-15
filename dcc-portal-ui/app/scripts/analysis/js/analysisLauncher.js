@@ -50,6 +50,7 @@
     _this.analysisName = AnalysisService.analysisName;
     _this.analysisDescription = AnalysisService.analysisDescription;
     _this.analysisDemoDescription = AnalysisService.analysisDemoDescription;
+    _this.datasetSelectionInstructions = AnalysisService.datasetSelectionInstructions;
 
     _this.toggle = function(setId) {
       _this.selectedIds = _.xor(_this.selectedIds, [setId]);
@@ -129,6 +130,125 @@
         console.error(`The requested analysis ${type} doesn't exist!`);
       }
     };
+    
+    const CRITERIA_TYPES = {
+      MIN_SETS: 'MIN_SETS',
+    };
+
+    const minSetCriterium = count => ({
+      type: CRITERIA_TYPES.MIN_SETS,
+      test: selectedSets => selectedSets.length >= count,
+      message: gettextCatalog.getString(`At least ${count} sets are required`),
+    });
+    
+    const maxSetCriterium = count => ({
+      test: selectedSets => selectedSets.length <= count,
+      message: gettextCatalog.getString(`Must not exceed ${count} set`),
+    });
+
+    const itemLimitCriterium = (limit, type) => ({
+      test: selectedSets => _.every(selectedSets, set => set.count <= limit),
+      message: gettextCatalog.getString(`Sets cannot contain more than ${limit.toLocaleString()} items`),
+    });
+
+    const itemLimitForSetTypeCriterium = (limit, type) => ({
+      test: selectedSets => _.every(selectedSets, set => (set.type === type ? set.count <= limit : true)),
+      message: gettextCatalog.getString(`${type} sets cannot contain more than ${limit} items`),
+    });
+
+    const setTypesCriterium = (types) => ({
+      test: selectedSets =>  _.every(selectedSets, set => _.includes(types, set.type) ),
+      message: gettextCatalog.getString(`Sets must have type of ${types.join(' or ')}`),
+    });
+
+    const setTypeLimit = (type, limit) => ({
+      test: selectedSets => _.filter(selectedSets, {type: type}).length <= limit,
+      message: gettextCatalog.getString(`There can only be 1 ${type} set`),
+    });
+
+    this.analysesMeta = {
+      enrichment: {
+        type: 'enrichment',
+        strings: AnalysisService.analysesStrings.enrichment,
+        analysisSatisfactionCriteria: [
+          minSetCriterium(1),
+          maxSetCriterium(1),
+          itemLimitCriterium(10000),
+          setTypesCriterium(['gene']),
+        ],
+        launch: selectedSets => launchEnrichment(selectedSets[0]),
+        launchDemo: () => _this.demoEnrichment(),
+        image: require('!raw!../../../styles/images/analysis-enrichment.svg'), 
+      },
+      phenotype: {
+        type: 'phenotype',
+        strings: AnalysisService.analysesStrings.phenotype,
+        analysisSatisfactionCriteria: [
+          minSetCriterium(2),
+          maxSetCriterium(2),
+          setTypesCriterium(['donor']),
+        ],
+        launch: selectedSets => _this.launchPhenotype(selectedSets.map(x => x.id)),
+        launchDemo: () => _this.demoPhenotype(),
+        image: require('!raw!../../../styles/images/analysis-phenotype.svg'), 
+      },
+      set: {
+        type: 'set',
+        strings: AnalysisService.analysesStrings.set,
+        analysisSatisfactionCriteria: [
+          minSetCriterium(2),
+          maxSetCriterium(3),
+          {
+            test: (selectedSets) => _.unique(selectedSets.map(x => x.type)).length === 1,
+            message: gettextCatalog.getString('Set types must match'),
+          },
+        ],
+        launch: selectedSets => _this.launchSet(selectedSets[0].type, selectedSets.map(x => x.id)),
+        launchDemo: () => _this.demoSetOperation(),
+        image: require('!raw!../../../styles/images/analysis-set.svg'), 
+      },
+      oncogrid: {
+        type: 'oncogrid',
+        strings: AnalysisService.analysesStrings.oncogrid,
+        analysisSatisfactionCriteria: [
+          minSetCriterium(2),
+          maxSetCriterium(2),
+          setTypeLimit('gene', 1),
+          setTypeLimit('donor', 1),
+          setTypesCriterium(['gene', 'donor']),
+          itemLimitForSetTypeCriterium(100, 'gene'),
+          itemLimitForSetTypeCriterium(3000, 'donor'),
+        ],
+        launchDemo: () => _this.demoOncogrid(),
+        launch: selectedSets => _this.launchOncogridAnalysis({
+          donor: _.find(selectedSets, {type: 'donor'}).id,
+          gene: _.find(selectedSets, {type: 'gene'}).id,
+        }),
+        image: require('!raw!../../../styles/images/analysis-oncogrid.svg'), 
+      },
+    };
+
+    _this.addCustomGeneSet = function() {
+      $modal.open({
+        templateUrl: '/scripts/genelist/views/upload.html',
+        controller: 'GeneListController'
+      });
+    };
+
+    _this.selectedAnalysis = undefined;
+    _this.selectedSets = [];
+
+    _this.handleClickAnalysis = analysis => {
+      // _this.selectedAnalysis = analysis === _this.selectedAnalysis ? undefined : analysis;
+      _this.selectedAnalysis = analysis;
+      _this.analysisType = (_this.selectedAnalysis || {}).type;
+    };
+
+    _this.handleSelectedSetsChange = sets => { _this.selectedSets = sets };
+    const doSetsSatisfyCriteria = (sets, criteria) => _.every(criteria || [], criterium => criterium.test(sets))
+    _this.isAnalysisSatisfied = (analysis) => doSetsSatisfyCriteria(_this.selectedSets, analysis.analysisSatisfactionCriteria);
+    const getCriteriaSatisficationMessages = (sets, criteria) => _.reject(criteria || [], criterium => criterium.test(sets)).map(criteria => criteria.message);
+    _this.getCriteriaSatisficationMessage = (analysis) => getCriteriaSatisficationMessages(_this.selectedSets, analysis.analysisSatisfactionCriteria).join('<br>');
 
 
     _this.isLaunchingAnalysis = function() {
@@ -418,13 +538,6 @@
           }
           wait([r1.id, r2.id], 7, proxyLaunch);
       });
-    };
-
-    _this.launchEnrichment = function(setId) {
-      var set = _.filter(_this.filteredList, function(set) {
-        return set.id === setId;
-      })[0];
-      launchEnrichment(set);
     };
 
     function launchEnrichment(set) {
