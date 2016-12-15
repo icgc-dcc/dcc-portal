@@ -17,7 +17,7 @@
  */
 package org.icgc.dcc.portal.server.config;
 
-import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.HOURS;
 
 import java.util.concurrent.ConcurrentMap;
 
@@ -57,7 +57,7 @@ public class CacheConfig extends CachingConfigurerSupport {
       private ConcurrentMap<Object, Object> createStore() {
         return CacheBuilder
             .newBuilder()
-            .expireAfterWrite(10, MINUTES)
+            .expireAfterWrite(1, HOURS)
             .maximumSize(1000)
             .build()
             .asMap();

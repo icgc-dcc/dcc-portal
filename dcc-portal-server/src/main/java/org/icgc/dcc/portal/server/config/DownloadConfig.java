@@ -17,8 +17,7 @@
 
 package org.icgc.dcc.portal.server.config;
 
-import lombok.SneakyThrows;
-import lombok.val;
+import java.util.Collection;
 
 import org.icgc.dcc.download.client.DownloadClient;
 import org.icgc.dcc.download.client.DownloadClientConfig;
@@ -28,10 +27,15 @@ import org.icgc.dcc.download.core.jwt.DefaultJwtService;
 import org.icgc.dcc.download.core.jwt.JwtConfig;
 import org.icgc.dcc.download.core.jwt.JwtService;
 import org.icgc.dcc.download.core.jwt.NoOpJwtService;
+import org.icgc.dcc.download.core.model.DownloadFile;
 import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+
+import lombok.SneakyThrows;
+import lombok.val;
 
 @Lazy
 @Configuration
@@ -51,7 +55,15 @@ public class DownloadConfig {
         .requestLoggingEnabled(properties.isRequestLoggingEnabled())
         .strictSSLCertificates(properties.isStrictSSLCertificates());
 
-    return new HttpDownloadClient(clientConfig);
+    return new HttpDownloadClient(clientConfig) {
+
+      @Override
+      @Cacheable("downloads")
+      public Collection<DownloadFile> listFiles(String path, boolean recursive) {
+        return super.listFiles(path, recursive);
+      }
+
+    };
   }
 
   @Bean
