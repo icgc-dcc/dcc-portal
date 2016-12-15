@@ -139,8 +139,14 @@
 
           &:hover{
             color: #555;
+            text-decoration: line-through;
+
             i {
               color: #555;
+              
+              &:before {
+                content: '\e81d';
+              }
             }
           }
            &:focus {

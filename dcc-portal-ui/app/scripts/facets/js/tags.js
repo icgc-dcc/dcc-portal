@@ -421,18 +421,17 @@ import deepmerge from 'deepmerge';
     };
 
     $scope.selectSet = (set) => {
-      let filters = FilterService.filters();
+      let term = {};
       if(!set.selected){
-        if($scope.isInRepositoryFile && $scope.type === 'file-donor') {
-          filters = deepmerge(filters, set.repoFilters);
-        } else {
-          filters = deepmerge(filters, set.advFilters);
-        }
+        term.id = _.head(set.advFilters[$scope.type].id.is);
+        term.type = $scope.type;
+        term.name = set.name;
+        $scope.addTerm(term);
         event.stopPropagation();
-      } else {
+      } else if(set.selected) {
+        $scope.removeTerm(`ES:${set.id}`);
         event.stopPropagation();
       }
-      LocationService.filters(filters);
     }
 
     // Needed if term removed from outside scope
