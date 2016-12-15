@@ -3,6 +3,15 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[4.3.24](https://github.com/icgc-dcc/dcc-portal/compare/4.3.23...4.3.24)
+- Feature: Added support for recursive download file listing in endpoint in DCC Data Releases
+- Feature: Added instructions in Repository Browser modals
+- Feature: Added polyfill.io for older browsers
+- Fix: Remove one-time binding for Enrichment Analysis
+- Build: Using `yarn` for dependency management
+- Build: Make eslint extension agnostic
+- Refactor: A bit of cleanup for gene set logic
+
 [4.3.23](https://github.com/icgc-dcc/dcc-portal/compare/4.3.22...4.3.23)
 --
 - Bugfix: Race condition with cleanup in Saved Results
