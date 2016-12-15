@@ -722,6 +722,19 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       }
     };
 
+    _ctrl.donorSetsForRepo = () => 
+      _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
+        set.repoFilters = {};
+        set.repoFilters.file = {};
+        set.repoFilters.file.donorId = set.advFilters.donor.id;
+        return set;
+      });
+
+    // Adding filters for repository to the donor set
+    _ctrl.donorSets = _ctrl.donorSetsForRepo();
+
+    _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
+
     function toSummarizedString (values, name) {
       var size = _.size (values);
       return (size > 1) ? '' + size + ' ' + name + 's' :
@@ -1067,7 +1080,18 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       loadState.loadWhile([listRequest, summaryRequest, metaDataRequeset, cacheReqeust]);
     }
 
+    // to check if a set was previously selected and if its still in effect
+    const updateSetSelection = (entity, entitySets) => {
+      let filters = FilterService.filters();
+
+      entitySets.forEach( (set) =>
+        set.selected = filters.file && filters.file[entity] &&  _.includes(filters.file[entity].is, `ES:${set.id}`)
+      );
+    };
+
     refresh();
+    updateSetSelection('donorId', _ctrl.donorSets);
+    updateSetSelection('id', _ctrl.fileSets);
 
     // Pagination watcher, gets destroyed with scope.
     $scope.$watch(function() {
@@ -1089,6 +1113,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       else {
         refresh();
       }
+      updateSetSelection('donorId', _ctrl.donorSets);
+      updateSetSelection('id', _ctrl.fileSets);
     });
 
     // Remove any pagination on facet change: see DCC-4589
@@ -1101,6 +1127,11 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
           };
         LocationService.setJsonParam('files', newParam);
       }
+    });
+
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+      _ctrl.donorSets = _ctrl.donorSetsForRepo();
+      _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
     });
 
   });

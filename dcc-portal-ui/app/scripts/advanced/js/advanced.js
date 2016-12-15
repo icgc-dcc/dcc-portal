@@ -81,6 +81,18 @@ angular.module('icgc.advanced.controllers', [
       this.isEntitySelected = (entityType, entity) =>  this.selectedEntityIdsMap[entityType] && this.selectedEntityIdsMap[entityType].includes(entity.id);
       this.handleOperationSuccess = (entityType) => { this.selectedEntityIdsMap[entityType] = [] };
 
+      _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
+      _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
+      _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
+
+      // to check if a set was previously selected and if its still in effect
+      const updateSetSelection = (entity, entitySets) => {
+        let filters = _locationFilterCache.filters();
+
+        entitySets.forEach( (set) =>
+          set.selected = filters[entity] && filters[entity].id &&  _.includes(filters[entity].id.is, `ES:${set.id}`)
+        );
+      };
 
       function _refresh() {
         var filters = _locationFilterCache.filters(),
@@ -186,7 +198,6 @@ angular.module('icgc.advanced.controllers', [
           });
         }
 
-
         _controller.hasGeneFilter = angular.isObject(filters) ?  filters.hasOwnProperty('gene') : false;
       }
 
@@ -276,6 +287,9 @@ angular.module('icgc.advanced.controllers', [
           }
 
           _locationFilterCache.updateCache();
+          updateSetSelection('donor', _controller.donorSets);
+          updateSetSelection('gene', _controller.geneSets);
+          updateSetSelection('mutation', _controller.mutationSets);
           _resetServices();
           _refresh();
         });
@@ -296,6 +310,16 @@ angular.module('icgc.advanced.controllers', [
 
           _controller.loadingFacet = true;
 
+        });
+
+        $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+          _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
+          _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
+          _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
+        });
+
+        Settings.get().then(function(settings) {
+          _controller.downloadEnabled = settings.downloadEnabled || false;
         });
 
         // Tabs need to update when using browser buttons
@@ -336,9 +360,11 @@ angular.module('icgc.advanced.controllers', [
             _controller.setSubTab(subTab);
           }
         });
+
+        updateSetSelection('donor', _controller.donorSets);
+        updateSetSelection('gene', _controller.geneSets);
+        updateSetSelection('mutation', _controller.mutationSets);
       }
-
-
 
       /////////////////////////////////////////////////////////////////
       // Advanced Search Public API

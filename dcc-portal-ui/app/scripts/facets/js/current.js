@@ -81,13 +81,14 @@
       } else if (_.has(filters, 'gene.id.is')) {
         activeGeneIds = getActiveIds(filters, 'id', 'is');
       }
-      
-      if (_.isEmpty (activeGeneIds)) {
+
+      const filteredGeneIds = _.filter(activeGeneIds, (id) => _.contains(id, 'ENSG'));
+      if (_.isEmpty (filteredGeneIds)) {
         $scope.ensemblIdGeneSymbolMap = {};
         return;
       }
 
-      GeneSymbols.resolve (activeGeneIds).then (function (ensemblIdGeneSymbolMap) {
+      GeneSymbols.resolve (filteredGeneIds).then (function (ensemblIdGeneSymbolMap) {
         $scope.ensemblIdGeneSymbolMap = ensemblIdGeneSymbolMap.plain();
       });
     }
