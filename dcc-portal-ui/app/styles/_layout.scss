@@ -197,7 +197,7 @@ section {
   align-items: center;
 }
 
-&.sticky {
+.sticky {
   position: sticky;
   &--with-defaults {
     background: white;
@@ -206,4 +206,8 @@ section {
   &--secondary {
     top: 60px;
   }
+}
+
+.flex-grow {
+  flex-grow: 1;
 }
