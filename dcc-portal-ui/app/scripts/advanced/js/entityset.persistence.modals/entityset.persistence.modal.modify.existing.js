@@ -42,7 +42,7 @@ ngModule.component('modifyExistingSetModal', {
                 ></icgc-checkbox>
               </td>
               <td>{{entityset.name}}</td>
-              <td>{{entityset.count}}</td>
+              <td class="text-right">{{entityset.count.toLocaleString()}}</td>
             </tr>
           </tbody>
         </table>
