@@ -107,11 +107,9 @@ import deepmerge from 'deepmerge';
         if(!$scope.params.entityIds || !$scope.params.verified) {return;}
 
         let filters = LocationService.filters();
-        let entityFilter = {};
 
         _controller.entityUploadService.addSet($scope.params.entityIdsArray, $scope.params.entityType).then((set) => {
-          entityFilter[$scope.params.entityType] = {id: {is: [`ES:${set.id}`]}};
-          filters = deepmerge(filters, entityFilter);
+          filters = _.set (filters, [$scope.params.entityType, 'id', 'is'], [`ES:${set.id}`]);
           LocationService.filters(filters);
         });
       };

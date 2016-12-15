@@ -83,7 +83,7 @@ import deepmerge from 'deepmerge';
           entityID = [Extensions.ENTITY_PREFIX + donorSetId],
           isOrNot = Facets.isNot(params) ? 'not' : 'is';
 
-      return deepmerge(filters, _.set ({},[entityType, entitySpecifier, isOrNot], entityID));
+      return _.set (filters, [entityType, entitySpecifier, isOrNot], entityID);
     };
   });
 
