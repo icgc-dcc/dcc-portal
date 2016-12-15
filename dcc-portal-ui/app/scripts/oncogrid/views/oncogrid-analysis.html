@@ -31,7 +31,7 @@
               <span class="t_tools__tool">
                 <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.donorSet)"></i>
               </span>
-              <span class="t_tools__tool">
+              <span class="t_tools__tool" data-ng-if="ICGC_SETTINGS.downloadEnabled">
                 <i data-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="OncoCtrl.downloadDonorData(item.donorSet)"></i>
               </span>
               <a class="t_tools__tool"

@@ -136,6 +136,18 @@ public class EntitySetService {
     return updateCount == 1 ? updatedSet : null;
   }
 
+  public EntitySet updateEntitySet(@NonNull final UUID entitySetId,
+      @NonNull final EntitySetDefinition entitySetDefinition) {
+    materializeList(entitySetId, entitySetDefinition);
+    return getEntitySet(entitySetId);
+  }
+
+  public EntitySet updateEntitySet(@NonNull final UUID entitySetId,
+      @NonNull final DerivedEntitySetDefinition entitySetDefinition) {
+    analyzer.combineLists(entitySetId, entitySetDefinition);
+    return getEntitySet(entitySetId);
+  }
+
   public EntitySet createEntitySet(@NonNull final EntitySetDefinition entitySetDefinition, boolean async) {
     val newEntitySet = createAndSaveNewListFrom(entitySetDefinition);
     if (async) {

@@ -1,0 +1,9 @@
+<div>
+  <strong><%= donor.id %></strong>
+  <div><%= labels.survivalEstimate %>: <%= (donor.survivalEstimate * 100).toFixed(2) %>%</div>
+  <% if (donor.isCensored) { %>
+    <div><%= labels.censoredSurvivalTime %>: <%= donor.time %> <%= unit %> (censored)</div>
+  <% } else { %>
+    <div><%= labels.survivalTime %>: <%= donor.time %> <%= unit %> </div>
+  <% } %>
+</div>

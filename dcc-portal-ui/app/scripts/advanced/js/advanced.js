@@ -17,7 +17,15 @@
 
 'use strict';
 
-angular.module('icgc.advanced', ['icgc.advanced.controllers', 'ui.router'])
+import './entityset.persistence.dropdown/entityset.persistence.dropdown.js';
+import './entityset.persistence.modals';
+
+angular.module('icgc.advanced', [
+  'icgc.advanced.controllers',
+  'ui.router',
+  'entityset.persistence.dropdown',
+  'entityset.persistence.modals',
+  ])
   .config(function ($stateProvider) {
     $stateProvider.state('advanced', {
       url: '/search?filters',
@@ -54,7 +62,7 @@ angular.module('icgc.advanced.controllers', [
     'icgc.advanced.services', 'icgc.sets.services', 'icgc.facets'])
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
-              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Settings, Restangular, FilterService,
+              AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Restangular, FilterService,
               RouteInfoService, FacetConstants, Extensions, SurvivalAnalysisLaunchService, gettextCatalog) {
 
       var _controller = this,
@@ -66,6 +74,12 @@ angular.module('icgc.advanced.controllers', [
       _locationFilterCache = _filterService.getCachedFiltersFactory();
 
       var _isInAdvancedSearchCtrl = true;
+      
+      // NOTE: using IDs instead of storing references to entities b/c pagination results in new objects  
+      this.selectedEntityIdsMap = {};
+      this.toggleSelectedEntity = (entityType, entity) => { this.selectedEntityIdsMap[entityType] = _.xor((this.selectedEntityIdsMap[entityType] || []), [entity.id]) };
+      this.isEntitySelected = (entityType, entity) =>  this.selectedEntityIdsMap[entityType] && this.selectedEntityIdsMap[entityType].includes(entity.id);
+      this.handleOperationSuccess = (entityType) => { this.selectedEntityIdsMap[entityType] = [] };
 
       _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
       _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());

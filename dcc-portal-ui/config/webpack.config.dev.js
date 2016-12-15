@@ -40,9 +40,10 @@ module.exports = {
         include: paths.appSrc,
       }
     ],
+    noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
       {
-        test: /index.html$/,
+        test: /\.html$/,
         loader: 'raw',
       },
       {
