@@ -318,10 +318,6 @@ angular.module('icgc.advanced.controllers', [
           _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
         });
 
-        Settings.get().then(function(settings) {
-          _controller.downloadEnabled = settings.downloadEnabled || false;
-        });
-
         // Tabs need to update when using browser buttons
         // Shouldn't have to worry about refreshing data here
         // since you cannot change tabs and filters in one movement
