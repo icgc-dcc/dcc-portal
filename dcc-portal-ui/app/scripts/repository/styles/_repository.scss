@@ -222,3 +222,39 @@
     margin-bottom: 0;
   }
 }
+
+.file-path-container {
+  background: #fff;
+  font-size: 1.25rem;
+  position: relative;
+  border-radius: 6px;
+  border: 0.2rem solid #ddd;
+  padding: 2px 4px;
+  margin-bottom: 1em;
+  display: flex;
+
+  li:last-child {
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: flex;
+  }
+
+  .file-query-wrapper {
+    position: relative;
+    display: inline-flex;
+    flex-grow: 1;
+  }
+
+  .file-query-input {
+    flex-grow: 1;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+    border: 0;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}

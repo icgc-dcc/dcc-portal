@@ -31,7 +31,7 @@
         </section>
 
         <div data-ng-if="ICGCRepoController.files" ng-init="releaseUrl = ICGCRepoController.dataReleasesUrl;">
-            <ul class="breadcrumb" style="background:#fff;font-size:1.25rem; margin-bottom:0;position:relative;">
+            <ul class="breadcrumb file-path-container">
                 <li><a href="{{:: releaseUrl }}"><i class="icon-database"></i>DCC</a></li>
                 <li data-ng-repeat="p in ICGCRepoController.slugs">
                     <a data-ng-if="!$last"
@@ -41,16 +41,18 @@
                           data-ng-style="deprecatedReleases.indexOf(p.name) >= 0?{'text-decoration':'line-through'}:{}">{{ p.name }}</span>
                 </li>
                 <li>
-                    <span class="t_suggest t_suggest__header table-filter" style="width: 10em!important;position:absolute;top:0;right:0;">
+                    <span class="file-query-wrapper">
                         <input
-                            type="text" class="t_suggest__input form-control"
+                            type="text" class="form-control file-query-input"
+                            autofocus
+                            spellcheck="false"
                             ng-model="ICGCRepoController.fileQuery"
-                            placeholder="Search"
+                            placeholder="Filter by file name..."
                             ng-keyup="ICGCRepoController.handleFileQueryKeyup($event)"
                         />
-                        <i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search"></i>
                         <i
-                            class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel ng-hide"
+                            style="position: absolute; top: 0; right: 3px; cursor: pointer;"
+                            class="icon-cancel ng-hide"
                             data-ng-click="ICGCRepoController.fileQuery = ''"
                             data-ng-show="ICGCRepoController.fileQuery"
                         ></i>
