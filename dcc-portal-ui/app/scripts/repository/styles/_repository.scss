@@ -233,6 +233,10 @@
   margin-bottom: 1em;
   display: flex;
 
+  & > li + li:before {
+    padding: 0 0px 0 5px;
+  }
+
   li:last-child {
     flex-grow: 1;
     flex-shrink: 1;
@@ -243,6 +247,7 @@
     position: relative;
     display: inline-flex;
     flex-grow: 1;
+    margin-left: 2px;
   }
 
   .file-query-input {
