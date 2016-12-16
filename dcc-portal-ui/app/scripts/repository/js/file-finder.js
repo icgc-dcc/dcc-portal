@@ -12,8 +12,23 @@ ngModule.component('fileFinder', {
         </tr>
         <tr ng-repeat="result in vm.results | limitTo: vm.getLimit()">
           <td style="font-size: 1.1rem;">
-            <i class="icon-file"></i>
-            <a target="_self" href="{{:: vm.ApiBaseurl}}/download?fn={{:: result.original.name}}" ng-bind-html=":: result.string"></a>
+            <i
+              ng-class="{
+                'icon-file': result.original.type === 'f',
+                'icon-folder-open': result.original.type === 'd',
+              }"
+            ></i>
+            <a
+              ng-if="result.original.type === 'f'"
+              target="_self"
+              href="{{:: vm.ApiBaseurl}}/download?fn={{:: result.original.name}}"
+              ng-bind-html=":: result.string"
+            ></a>
+            <a
+              ng-if="result.original.type === 'd'"
+              href="/releases{{:: result.original.name}}"
+              ng-bind-html=":: result.string"
+            ></a>
           </td>
         </tr>
         <tr ng-if="vm.allFiles.length && !vm.results.length">

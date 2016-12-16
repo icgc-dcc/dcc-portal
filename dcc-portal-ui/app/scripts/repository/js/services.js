@@ -304,7 +304,7 @@
     this.getAllFiles = () => {
       return RestangularNoCache.one('download/info')
         .get({
-          fields: 'name',
+          fields: 'name,type',
           recursive: true,
           flatten: true,
         });
