@@ -16,6 +16,7 @@
  */
 
 import {ensureArray, ensureString} from '../../common/js/ensure-input';
+import './file-finder';
 
 (function() {
   'use strict';
@@ -36,7 +37,10 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
   var toJson = angular.toJson;
   var commaAndSpace = ', ';
 
-  var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
+  var module = angular.module('icgc.repository.controllers', [
+    'icgc.repository.services',
+    'file-finder',
+    ]);
 
   var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto', 'PDC - Chicago'];
 
@@ -58,6 +62,14 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     _ctrl.downloadEnabled = true;
     _ctrl.dataReleasesTitle = dataReleasesRouteInfo.title;
     _ctrl.dataReleasesUrl = dataReleasesRouteInfo.href;
+
+    _ctrl.fileQuery = '';
+    _ctrl.handleFileQueryKeyup = ($event) => {
+      if (event.keyCode === 27) {
+        _ctrl.fileQuery = '';
+        $event.currentTarget.blur();
+      }
+    };
 
     function buildBreadcrumbs() {
       var i, s, slug, url;

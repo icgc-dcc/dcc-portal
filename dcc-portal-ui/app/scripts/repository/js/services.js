@@ -301,6 +301,15 @@
               .get();
     };
 
+    this.getAllFiles = () => {
+      return RestangularNoCache.one('download/info')
+        .get({
+          fields: 'name,type',
+          recursive: true,
+          flatten: true,
+        });
+    };
+
     this.getStatus = function () {
       return RestangularNoCache.one('download', 'status')
               .get();
