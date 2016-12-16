@@ -39,7 +39,6 @@ ngModule.component('fileFinder', {
               }"
             ></i>
             Show All ({{vm.results.length.toLocaleString()}})
-            
           </td>
         </tr>
       </table>
