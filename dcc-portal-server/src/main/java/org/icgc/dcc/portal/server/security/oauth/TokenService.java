@@ -60,6 +60,7 @@ public class TokenService {
   private static final String DEFAULT_SCOPE_DESCRIPTION = EMPTY_STRING;
   private static final Map<String, String> SCOPE_DESCRIPTIONS = ImmutableMap.<String, String> builder()
       .put("portal.download", "Allows secure downloads from the Data Portal")
+      .put("portal.export", "Allows to download controlled export data from the download server")
       .put("aws.upload", "Allows uploads to AWS S3")
       .put("aws.download", "Allows secure downloads from AWS S3")
       .put("collab.upload", "Allows uploads to the Collaboratory cloud")
