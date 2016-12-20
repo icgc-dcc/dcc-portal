@@ -405,3 +405,12 @@ a.no-style {
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+// Notificatin bar when browser is out of date
+.buorg{
+  div{
+    a {
+      color: $white !important;
+    }
+  }
+}
