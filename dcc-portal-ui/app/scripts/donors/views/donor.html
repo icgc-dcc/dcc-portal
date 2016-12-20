@@ -146,12 +146,12 @@
         </table>
 
         <div>
-            <button class="t_button" type="button" data-ng-click="DonorCtrl.downloadDonorData()" data-ng-disabled="!DonorCtrl.downloadEnabled">
+            <button class="t_button" type="button" data-ng-click="DonorCtrl.downloadDonorData()" data-ng-disabled="!ICGC_SETTINGS.downloadEnabled">
                 <i class="icon-download"></i>
                 <span> <translate>Download Donor Data</translate></span>
             </button>
             <br>
-            <span data-ng-if="!DonorCtrl.downloadEnabled" class="alert-warning"><translate>Data download is currently unavailable.</translate></span>
+            <span data-ng-if="!ICGC_SETTINGS.downloadEnabled" class="alert-warning"><translate>Data download is currently unavailable.</translate></span>
         </div>
 
     </div>
@@ -244,9 +244,11 @@
     <div data-ng-init="supplementalCollapsed=true">
        <span data-ng-show="DonorCtrl.hasSupplementalFiles(DonorCtrl.donor)">
            <a href="" data-ng-click="supplementalCollapsed=!supplementalCollapsed">
-               <translate>Supplemental files</translate>:
+               <translate>Supplemental data</translate>:
+               {{ DonorCtrl.donor.biomarker? " " + DonorCtrl.donor.biomarker.length + " Biomarker, " : "" }}
                {{ DonorCtrl.donor.family? " " + DonorCtrl.donor.family.length + " Family, " : "" }}
                {{ DonorCtrl.donor.exposure? " " + DonorCtrl.donor.exposure.length + " Exposure, " : "" }}
+               {{ DonorCtrl.donor.surgery? " " + DonorCtrl.donor.surgery.length + " Surgery, " : "" }}
                {{ DonorCtrl.donor.therapy? " " + DonorCtrl.donor.therapy.length + " Therapy" : "" }}
                <i class="icon-caret-left" data-ng-if="supplementalCollapsed===true"></i>
                <i class="icon-caret-down" data-ng-if="supplementalCollapsed===false"></i>

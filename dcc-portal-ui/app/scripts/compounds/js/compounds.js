@@ -248,7 +248,6 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
           _trials = _arrayOrEmptyArray(compound.trials),
           _uiTrials = getUiTrialsJSON(compound.trials);
 
-
       return {
         id: _id,
         inchiKey: _inchikey,
@@ -301,7 +300,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
           uiDescription: trial.description,
           uiConditions: trial.conditions,
           uiStartDate: trial.startDate,
-          uiPhaseName: trial.phaseName,
+          uiPhaseName: trial.phaseName.split('/'),
           uiStatusName: trial.statusName
         });
       }));
@@ -321,7 +320,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
       // For application/json format
       function _params2JSON(type, params) {
         var data = {};
-        data.filters = encodeURI(JSON.stringify(params.filters));
+        data.filters = params.filters;
         data.type = type.toUpperCase();
         data.name = params.name;
         data.description = params.description || '';
@@ -335,8 +334,6 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
         if (angular.isDefined(params.filters) && !angular.isDefined(params.sortBy)) {
           if (type === 'donor') {
             data.sortBy = 'ssmAffectedGenes';
-          } else if (type === 'gene') {
-            data.sortBy = 'affectedDonorCountFiltered';
           } else {
             data.sortBy = 'affectedDonorCountFiltered';
           }
@@ -553,9 +550,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
       _self.getCompoundMutations = function(geneStartIndex, geneLimit) {
         var params = _getResultsCompoundGenesFilter(geneLimit);
         delete params.from;
-        //delete params.filters;
-
-
+        
         return Restangular
             .one('drugs')
             .one(compoundId)

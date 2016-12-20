@@ -19,13 +19,12 @@
   width: 100%;
   max-height: 42rem;
   overflow-y: auto;
-  // box-shadow: inset -2px 0px 0px 0px rgba(0,0,0,0.2);
   &:before {
     content: '';
     position: absolute;
     top: 0;
     right: 0;
-    width: 5px;
+    width: 1px;
     height: 100%;
     background: linear-gradient(to right, transparent, rgba(0,0,0,0.2));
     z-index: 1;
@@ -96,6 +95,127 @@
       transition: all 0.2s;
     }
   }
-
-
 }
+
+/* Entity saved set list facet */
+
+.entity-search{
+  button, ul{
+    font-size: 100%;
+  }
+  button{
+    &:focus, &:active, &:focus:active{
+      color: $white;
+      outline: none;
+    }
+  }
+  ul{
+    .divider-label{
+      span{
+        font-size: 10px;
+        background: $white;
+        margin: 0px 10px;
+        padding: 0px 3px;
+        color: $greyDark;
+      }
+    }
+    .set-list{
+       position: relative;
+       
+       &:after { 
+         content: ""; 
+         position: absolute;
+         left: 0px;
+       }
+
+      &:after { 
+        right: 0px; 
+        height: 1px; 
+        background-image: -webkit-linear-gradient(left, #eee, transparent); 
+        background-image: -moz-linear-gradient(left, #eee, transparent); 
+        background-image: -o-linear-gradient(left, #eee, transparent); 
+      }
+
+      &:last-child{
+        &:after {
+          background-image: none;
+        }
+      }
+
+      a{
+        cursor: pointer;
+        padding: 3px 10px;
+        transition: .5s color;
+
+        i {
+          transition: .5s color;
+        }
+
+        &.selected{
+          cursor: default;
+          color: #555;
+
+          i {
+            color: #555;
+          }
+
+          &:hover{
+            color: #555;
+            text-decoration: line-through;
+
+            i {
+              color: #555;
+
+              &:before {
+                content: '\e81d';
+              }
+            }
+          }
+           &:focus {
+            outline: none;
+            background: $white;
+          }
+        }
+
+        &:hover {
+          color: #ce6503;
+
+          i{
+            color: #ce6503;
+          }
+        }
+
+        &:focus {
+          outline: none;
+        }
+
+        div{
+          display: flex;
+
+          div{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            i{
+              padding: 0px 8px 0px 0px;
+              font-size: .9rem;
+              color: #166aa2;
+            }
+          }
+        }
+        
+        span{
+          display: block;
+          
+          &:last-child{
+            text-align: left;
+            font-size: 8px;
+            color: #555;
+          }
+        }
+      }
+    }
+  }
+}
+

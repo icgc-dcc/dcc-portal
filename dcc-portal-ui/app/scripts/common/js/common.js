@@ -15,10 +15,14 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require('../components');
+
 (function () {
   'use strict';
 
+
   var module = angular.module('app.common', [
+    'app.common.components',
     'app.common.services',
     'app.common.header',
     'app.common.footer',
@@ -309,9 +313,7 @@
       var acc = [];
 
       function page(params) {
-        console.log(resource.route + ' ' + JSON.stringify(params));
         return resource.get('', params).then(function (data) {
-          console.log(data.plain());
           acc = acc.concat(data.hits);
           var pagination = data.pagination;
           if (pagination.page < pagination.pages) {
@@ -393,5 +395,8 @@
       return string.replace(new RegExp(pattern, 'g'), replacement);
     };
   });
+
+  module.directive('ngLazyShow', require('./lazy-show'));
+  module.filter('pluralize', () => (...args) => require('pluralize')(...args));
 
 })();

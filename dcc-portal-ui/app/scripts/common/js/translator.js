@@ -37,27 +37,22 @@
 
      function humanReadable(str) {
        var res = str;
-       if (_.isEmpty(res) === true) { return res; }
+       if (_.isEmpty(res) === true) { return res }
        res = res.replace(/_/g, '\u00A0').replace(/^\s+|\s+$/g, '');
        res = res.charAt(0).toUpperCase() + res.slice(1);
        return res;
      }
 
      this.translate = function(id, type) {
-       if (!id) { return ''; }
-       if (id === '_missing') { return 'No Data'; }
+       if (!id) { return '' }
+       if (id === '_missing') { return 'No Data' }
 
        return getTranslatorModule(type).translate(id) || humanReadable(id);
-       //if (angular.isDefined(type)) {
-       //  return getTranslatorModule(type).translate(id) || humanReadable(id);
-       //} else {
-       //  return humanReadable(id);
-       //}
      };
 
      this.tooltip = function(id, type) {
-       if (!id) { return ''; }
-       if (id === '_missing') { return 'No Data'; }
+       if (!id) { return '' }
+       if (id === '_missing') { return 'No Data' }
 
        return getTranslatorModule(type).tooltip(id) || id;
      };

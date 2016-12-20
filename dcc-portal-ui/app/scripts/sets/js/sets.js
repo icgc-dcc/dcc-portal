@@ -33,9 +33,9 @@
   var module = angular.module('icgc.sets.controllers', []);
 
   module.controller('SetUploadController',
-    function($scope, $modalInstance, $timeout, LocationService, SetService, Settings, 
+    function($scope, $rootScope, $modalInstance, $timeout, LocationService, SetService, Settings, 
       setType, setLimit, setUnion, selectedIds, FiltersUtil, FilterService, $filter, 
-      CompoundsService, GeneSymbols) {
+      CompoundsService, GeneSymbols, SetNameService) {
 
     $scope.setLimit = setLimit;
     $scope.isValid = false;
@@ -65,7 +65,7 @@
       if (angular.isDefined($scope.params.setLimit)) {
         params.filters = LocationService.filters();
 
-        sortParam = LocationService.getJsonParam($scope.setType + 's');
+        sortParam = LocationService.getJqlParam($scope.setType + 's');
 
         if (angular.isDefined(sortParam)) {
           params.sortBy = sortParam.sort;
@@ -81,9 +81,13 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addSet(setType, params);
+        SetService.addSet(setType, params).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
+        });
       } else {
-        SetService.addDerivedSet(setType, params);
+        SetService.addDerivedSet(setType, params).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
+        });
       }
 
       // Reset
@@ -112,7 +116,9 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addExternalSet(setType, params);
+        SetService.addExternalSet(setType, params).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
+        });
       }
 
       // Reset
@@ -147,71 +153,10 @@
       $scope.isValid = true;
     };
 
-    // Function to get UI friendly filter
-    function getSetFilters() {
-      var ids = LocationService.extractSetIds(FilterService.filters());
-      return ids.length ? SetService.getMetaData(ids).then(function (results) {
-            return FiltersUtil.buildUIFilters (FilterService.filters(), SetService.lookupTable(results.plain()));
-          }) : Promise.resolve(FiltersUtil.buildUIFilters(FilterService.filters(), {}));
-    }
-
-    // Returns the promise to get the set name
-    function getSetName(filters) {
-      if (_.isEmpty(filters)) {
-        return Promise.resolve('All ' + _.capitalize(setType) + 's');
-      }
-
-      // Going throught filters to create a custom Collection of filters
-      var promises = _(filters).map(function (filter, filterKey) {
-        return _.map(filter, function (facet, facetKey) {
-          return facet.is.map(function (value) {
-            return { term: value.term, facetName: value.controlFacet, facetGroup: filterKey + facetKey, operator: 'is' };
-          }).concat((facet.not || []).map(function (value) {
-            return { term: value.term, facetName: value.controlFacet, facetGroup: filterKey + facetKey, operator: 'not' };
-          }));
-        });
-      })
-      .flattenDeep()
-      .groupBy('facetGroup')
-      .map(function (facetTermWrappers) {
-        var partialNamesRequests = facetTermWrappers.map(function (termWrapper) {
-          // If filter is compound, need to return CompoundService promise that will get the name based on compound ID
-          if (termWrapper.facetName === 'compoundId') {
-            return CompoundsService.getCompoundByZincId(termWrapper.term).then(function (compound) {
-              return _.capitalize(compound.name);
-            });
-            // Following condition will get the Gene name based on ID
-          } else if (termWrapper.facetName === 'id' && termWrapper.term.indexOf('ENSG') > -1) {
-            return GeneSymbols.resolve(termWrapper.term).then(function (ensemblIdGeneSymbolMap) {
-              return _.get(ensemblIdGeneSymbolMap.plain(), termWrapper.term);
-            });
-          } else if(termWrapper.term === '_missing'){
-            return Promise.resolve('No ' + $filter('trans')(termWrapper.facetName) + ' Data');
-          } else {
-            return Promise.resolve($filter('trans')(termWrapper.term, termWrapper.facetName));
-          }
-        });
-
-        // Returning Promise Object
-        return Promise.all(partialNamesRequests).then(function (partialNames) {
-          return partialNames.join(' / ');
-        });
-      })
-      .value();
-
-      return Promise.all(promises)
-        .then(function (nameParts) {
-          var name = nameParts.join(', ');
-          return name.length > 61 ? name.slice(0, 61 - name.length).concat('...') : name;
-        });
-    }
-
     function updateSetName(){
-      return getSetFilters()
-        .then(function (filters) {
-          return getSetName(filters);
-        })
-        .then(function (setName) {
+      return SetNameService.getSetFilters()
+        .then(filters => SetNameService.getSetName(filters, $scope.params.setType))
+        .then(setName => {
           $scope.params.setName = setName;
         });
     }
@@ -312,7 +257,6 @@
         }
 
         function wait(id, numTries, callback) {
-          console.log('trying .... ', numTries);
           if (numTries <= 0) {
             Page.stopWork();
             return;
@@ -394,7 +338,7 @@
               templateUrl: '/scripts/downloader/views/request.html',
               controller: 'DownloadRequestController',
               resolve: {
-                filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + data.id]}}}; }
+                filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + data.id]}}} }
               }
             });
           });
@@ -423,8 +367,7 @@
           SetService.materializeSync(type, params).then(function(data) {
             Page.stopWork();
             if (! data.id) {
-              console.log('there is no id!!!!');
-              return;
+              throw new Error('The set id was not found!', data);
             } else {
               var newFilter = JSON.stringify(filterTemplate(data.id));
               $location.path (dataRepoUrl).search ('filters', newFilter);
@@ -582,6 +525,7 @@
 
              // Because SVG urls are based on <base> tag, we need absolute path
             config.urlPath = $location.url();
+            config.setLabelFunc = id => SetOperationService.getSetShortHandSVG(id, _.map(results, 'id'));
 
             vennDiagram = new dcc.Venn23($scope.vennData, config);
             vennDiagram.render( $element.find('.canvas')[0]);

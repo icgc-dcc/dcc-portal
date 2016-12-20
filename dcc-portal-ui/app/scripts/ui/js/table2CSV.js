@@ -44,42 +44,30 @@ jQuery.fn.table2CSV = function(opts) {
     // portal-ui: support 2-level table header, dependent on the use of subhead class
     var subQueue = [];
     var idx = -1;
-    //jQuery(el).filter(':visible').find('tr').each(function() {
     jQuery(el).find('tr').each(function() {
       // Second level processing
       if (jQuery(this).hasClass('subhead')) {
         jQuery(this).find('th').each(function() {
-          //if (jQuery(this).css('display') != 'none') {
-            if (subQueue.length > 0) {
-              idx = subQueue.splice(0, 1);
-              tmpRow[idx] += ' ' + formatData(jQuery(this).html());
-            }
-          //}
+          if (subQueue.length > 0) {
+            idx = subQueue.splice(0, 1);
+            tmpRow[idx] += ' ' + formatData(jQuery(this).html());
+          }
         });
       } else {
         // Top level processing
         jQuery(this).find('th').each(function() {
-          //if (jQuery(this).css('display') != 'none') {
-            if (jQuery(this).attr('colspan')) {
-              var cols = jQuery(this).attr('colspan');
-              for (var i=0; i < cols; i++) {
-                subQueue.push( tmpRow.length );
-                tmpRow[tmpRow.length] = formatData(jQuery(this).html());
-              }
-            } else {
+          if (jQuery(this).attr('colspan')) {
+            var cols = jQuery(this).attr('colspan');
+            for (var i=0; i < cols; i++) {
+              subQueue.push( tmpRow.length );
               tmpRow[tmpRow.length] = formatData(jQuery(this).html());
             }
-          //}
+          } else {
+            tmpRow[tmpRow.length] = formatData(jQuery(this).html());
+          }
         });
       }
     });
-
-
-    /* Original
-    jQuery(el).filter(':visible').find('th').each(function() {
-      if (jQuery(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData(jQuery(this).html());
-    });
-    */
   }
 
   row2CSV(tmpRow);
@@ -87,10 +75,8 @@ jQuery.fn.table2CSV = function(opts) {
   // actual data
   jQuery(el).find('tr').each(function() {
     var tmpRow = [];
-    //jQuery(this).filter(':visible').find('td').each(function() {
     jQuery(this).find('td').each(function() {
-      //if (jQuery(this).css('display') != 'none') 
-        tmpRow[tmpRow.length] = formatData(jQuery(this).html());
+      tmpRow[tmpRow.length] = formatData(jQuery(this).html());
     });
     row2CSV(tmpRow);
   });
@@ -108,7 +94,6 @@ jQuery.fn.table2CSV = function(opts) {
 
   function row2CSV(tmpRow) {
     var tmp = tmpRow.join(''); // to remove any blank rows
-    // alert(tmp);
     if (tmpRow.length > 0 && tmp !== '') {
       csvData[csvData.length] = tmpRow.join(options.separator);
     }

@@ -226,6 +226,8 @@ public class ElasticsearchRequestUtils {
     sourceFields.add("family");
     sourceFields.add("exposure");
     sourceFields.add("therapy");
+    sourceFields.add("biomarker");
+    sourceFields.add("surgery");
 
     return sourceFields;
   }

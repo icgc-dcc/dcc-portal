@@ -20,6 +20,7 @@
 }
 
 .survival-table {
+  margin-top: 20px;
   .icon-info {
     font-size: 10px;
     cursor: help;
@@ -33,6 +34,7 @@
 
 .survival-graphs {
   position: relative;
+  display: flex;
   survival-analysis-graph {
     display: block;
     opacity: 1;
@@ -52,10 +54,8 @@
   survival-analysis-graph {
     .title {
       text-transform: none;
-      font-size: 26px;
-      text-align: center;
-      margin-top: 12px;
-      margin-bottom: 0;
+      font-size: 16px;
+      margin: 0 auto 0 40px;
     }
     &:not(:fullscreen) {
       .title {

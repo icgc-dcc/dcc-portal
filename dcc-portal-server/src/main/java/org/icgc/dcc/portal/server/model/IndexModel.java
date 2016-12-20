@@ -3,13 +3,11 @@ package org.icgc.dcc.portal.server.model;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
-import static org.dcc.portal.pql.meta.IndexModel.getFileTypeModel;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dcc.portal.pql.meta.FileTypeModel;
 import org.dcc.portal.pql.meta.TypeModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import lombok.val;
 
@@ -36,35 +33,6 @@ public class IndexModel {
   public static final int MAX_FACET_TERM_COUNT = 1024;
   public static final String IS = "is";
   public static final String ALL = "all";
-
-  private static final TypeModel REPO_FILE_TYPE_MODEL = getFileTypeModel();
-
-  // These names are used by the client
-  private static final List<String> FILE_CLIENT_FIELD_ALIAS_MAPPING = ImmutableList.of(
-      FileTypeModel.Fields.ID,
-      FileTypeModel.Fields.REPO_NAME,
-      FileTypeModel.Fields.REPO_CODE,
-      FileTypeModel.Fields.FILE_NAME,
-      FileTypeModel.Fields.FILE_SIZE,
-      FileTypeModel.Fields.PROJECT_CODE,
-      FileTypeModel.Fields.PRIMARY_SITE,
-      FileTypeModel.Fields.STUDY,
-      FileTypeModel.Fields.DONOR_STUDY,
-      FileTypeModel.Fields.DATA_TYPE,
-      FileTypeModel.Fields.EXPERIMENTAL_STRATEGY,
-      FileTypeModel.Fields.FILE_FORMAT,
-      FileTypeModel.Fields.ACCESS,
-      FileTypeModel.Fields.DONOR_ID,
-      FileTypeModel.Fields.SUBMITTED_DONOR_ID,
-      FileTypeModel.Fields.SPECIMEN_ID,
-      FileTypeModel.Fields.SPECIMEN_TYPE,
-      FileTypeModel.Fields.SAMPLE_ID,
-      FileTypeModel.Fields.PROGRAM,
-      FileTypeModel.Fields.ANALYSIS_SOFTWARE);
-  private static final ImmutableMap<String, String> FILE_FIELDS_MAPPING = ImmutableMap
-      .<String, String> builder()
-      .putAll(Maps.toMap(FILE_CLIENT_FIELD_ALIAS_MAPPING, alias -> REPO_FILE_TYPE_MODEL.getField(alias)))
-      .build();
 
   private static final ImmutableMap<String, String> FAMILY_FIELDS_MAPPING =
       new ImmutableMap.Builder<String, String>()
@@ -390,6 +358,23 @@ public class IndexModel {
           .put("geneCount", "gene_count")
           .build();
 
+  private static final ImmutableMap<String, String> BIOMARKER_FIELDS_MAPPING =
+      ImmutableMap.<String, String> builder()
+          .put("specimenId", "specimen_id")
+          .put("biomarkerName", "biomarker_name")
+          .put("biomarkerThreshold", "biomarker_threshold")
+          .put("biomarkerPositive", "biomarker_positive")
+          .build();
+
+  private static final ImmutableMap<String, String> SURGERY_FIELDS_MAPPING =
+      ImmutableMap.<String, String> builder()
+          .put("specimenId", "specimen_id")
+          .put("procedureInterval", "procedure_interval")
+          .put("procedureType", "procedure_type")
+          .put("procedureSite", "procedure_site")
+          .put("resectionStatus", "resection_status")
+          .build();
+
   private static final ImmutableMap<EntityType, TypeModel> TYPE_MODEL_BY_ENTITY =
       ImmutableMap.<EntityType, TypeModel> builder()
           .put(EntityType.DONOR, org.dcc.portal.pql.meta.IndexModel.getDonorCentricTypeModel())
@@ -398,6 +383,7 @@ public class IndexModel {
           .put(EntityType.GENE, org.dcc.portal.pql.meta.IndexModel.getGeneCentricTypeModel())
           .put(EntityType.GENE_SET, org.dcc.portal.pql.meta.IndexModel.getGeneSetTypeModel())
           .put(EntityType.PROJECT, org.dcc.portal.pql.meta.IndexModel.getProjectTypeModel())
+          .put(EntityType.FILE, org.dcc.portal.pql.meta.IndexModel.getFileTypeModel())
           .build();
 
   public static final EnumMap<EntityType, ImmutableMap<String, String>> FIELDS_MAPPING =
@@ -410,6 +396,8 @@ public class IndexModel {
     FIELDS_MAPPING.put(EntityType.FAMILY, FAMILY_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.EXPOSURE, EXPOSURE_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.THERAPY, THERAPY_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.BIOMARKER, BIOMARKER_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.SURGERY, SURGERY_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.SAMPLE, SAMPLE_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.SEQ_DATA, RAWSEQDATA_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.GENE, createFieldsMapping(EntityType.GENE));
@@ -426,7 +414,7 @@ public class IndexModel {
     FIELDS_MAPPING.put(EntityType.PATHWAY, PATHWAY_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.GENE_SET, createFieldsMapping(EntityType.GENE_SET));
     FIELDS_MAPPING.put(EntityType.DIAGRAM, DIAGRAM_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(EntityType.FILE, FILE_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.FILE, createFieldsMapping(EntityType.FILE));
   }
 
   @Autowired

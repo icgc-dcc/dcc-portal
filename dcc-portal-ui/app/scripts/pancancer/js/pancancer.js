@@ -133,7 +133,7 @@
           });
         });
 
-        bar.stack.sort(function(a, b) { return b.count - a.count; }).forEach(function(p) {
+        bar.stack.sort(function(a, b) { return b.count - a.count }).forEach(function(p) {
           p.y0 = bar.total;
           p.y1 = bar.total + p.count;
           bar.total += p.count;
@@ -142,7 +142,7 @@
       });
 
       // Sorted
-      return list.sort(function(a, b) { return b.total - a.total; });
+      return list.sort(function(a, b) { return b.total - a.total });
     };
 
 
@@ -156,7 +156,7 @@
           colour: HighchartsService.getPrimarySiteColourForTerm(d)
         });
       });
-      list = _.sortBy(list, function(d) { return -d.count; });
+      list = _.sortBy(list, function(d) { return -d.count });
 
       return HighchartsService.bar({
         hits: list,

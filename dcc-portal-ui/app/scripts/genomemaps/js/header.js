@@ -101,13 +101,6 @@ angular.module('icgc.modules.genomeviewer.header').controller('GenomeViewerHeade
     $scope.zoom.current = $scope.zoom.current - 0 + 0;
     $scope.$apply();
   };
-//  $scope.$watch('zoom.current', function(n, o) {
-//    if (!angular.isNumber(n) || n === o) {
-//      return;
-//    }
-//    $scope.$emit('gv:zoom:set', n);
-//  }, true);
-
 
   $scope.setRegion = function (params) {
     // Check for required parameters

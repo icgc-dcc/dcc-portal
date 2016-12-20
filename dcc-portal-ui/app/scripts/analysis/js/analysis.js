@@ -105,7 +105,6 @@
 
 
     $scope.newAnalysis = function() {
-      console.log('new analysis request');
 
       if ($scope.analysisId !== undefined) {
         $location.path('analysis');
@@ -145,7 +144,7 @@
     function init() {
       $timeout.cancel(pollTimeout);
       $scope.error = null;
-      $scope.analysisResult = null;
+      $scope.analysisResult = undefined;
 
       if (! $scope.analysisId || ! $scope.analysisType) {
         return;
@@ -163,7 +162,7 @@
         }
 
         if (data.state === 'FINISHED') {
-          $scope.analysisResult = null;
+          $scope.analysisResult = undefined;
           $timeout(function() {
             $scope.analysisResult = data;
           }, 150);
@@ -221,7 +220,7 @@
         demoDescription: gettextCatalog.getString('Perform enrichment analysis on top 50 genes in Cancer Gene Census.')
       },
       phenotype: {
-        name: gettextCatalog.getString('Survival Analysis / Phenotype Comparison'),
+        name: gettextCatalog.getString('Cohort Comparison'),
         description: gettextCatalog.getString('Display the survival analysis of your donor sets and compare some' +
         ' characteristics such as gender, vital status and age at diagnosis between your donor sets.'),
         demoDescription: gettextCatalog.getString('Display survival analysis and compare phenotypes across ' +

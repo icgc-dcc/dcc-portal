@@ -4,8 +4,8 @@ ICGC DCC - Portal UI
 Requiments
 ---
 
-- Node >= 4.4.0  
-  Instructions for installing Node via nvm  
+- Node >= 6  
+  Instructions for installing Node via nvm   
   https://github.com/creationix/nvm#install-script  
   https://github.com/creationix/nvm#usage  
 
@@ -14,14 +14,22 @@ Requiments
   npm install npm@latest -g
   ```
 
+- yarn >= 0.17
+  ```
+  brew update
+  brew install yarn
+  ```
+  Other methods:  
+  https://yarnpkg.com/en/docs/install#linux-tab
+
 Setup
 ---
 
 - Install npm and bower dependencies
 
 	```
-	npm install
-    # bower dependencies are auto-installed via the postinstall hook script
+	yarn
+    npm run bower # this installs bower dependencies
 	```
 
 Run
@@ -31,7 +39,24 @@ Run
 
 - Start the [Portal Server](../dcc-portal-server/README.md)
 
-- View the site: [localhost:9000](http://local.dcc.icgc.org:9000/)
+- View the site: [local.dcc.icgc.org:9000](http://local.dcc.icgc.org:9000/)
+
+Other Commands
+---
+
+```bash
+# Connect to the production server's API instead of a local backend
+npm run dev:prodapi
+
+# Connect to the staging API instead of local backend
+API_SOURCE=https://staging.dcc.icgc.org npm start
+
+# Adds local.dcc.icgc.org to your host file and point to localhost
+npm run sethost
+
+# Open fontello with the project's json config loaded
+npm run font:open
+```
 
 ## Basic Style Guide
 

@@ -130,7 +130,7 @@
     <div class="content transition-fade" data-ui-view></div>
     <div class="push"></div>
 </div>
-<footer class="ng-cloak" data-ng-controller="FooterCtrl as FooterCtrl">
+<footer class="ng-cloak" data-ng-controller="FooterCtrl as FooterCtrl" data-ng-init="COPYRIGHT_YEAR = 'COPYRIGHT_YEAR'">
     <div data-ng-include="'/scripts/common/views/footer.html'"></div>
 </footer>
 <tooltip-control></tooltip-control>
@@ -223,5 +223,6 @@ try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
 catch(e){window.attachEvent("onload", $buo_f)}
 </script>
 <portal-settings></portal-settings>
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 </body>
 </html>

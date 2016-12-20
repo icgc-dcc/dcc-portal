@@ -1,0 +1,407 @@
+/*
+ * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+.amp {
+  font-family: $amp-stack;
+}
+
+.caps {
+  @extend %caps;
+}
+
+//-----------------------------------------------------------------------------
+// Code Blocks
+
+.highlight {
+  background: transparent;
+  border: 0;
+}
+
+abbr {
+  border-bottom: 1px dashed $orangeLight;
+}
+
+pre {
+  overflow: auto;
+}
+
+article {
+  border: {
+    top: 1px solid $greyLight;
+    left: 1px solid $greyLight;
+  }
+}
+
+section {
+  padding: 2rem;
+  margin: 0;
+  box-shadow: none;
+  background: $white;
+  border-radius: 0;
+  border-bottom: 1px solid $greyLight;
+
+  a {
+    text-indent: initial;
+
+    &.link {
+      white-space: nowrap;
+    }
+  }
+
+  .indent {
+    text-align: justify;
+    text-indent: 1rem;
+  }
+
+  &.no-border {
+    border-bottom: none;
+  }
+
+  &.no-vert-padding {
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+  }
+}
+
+section:last-child {
+  border: none;
+}
+
+aside {
+  font-size: .9rem;
+  section {
+    padding: 1rem;
+  }
+}
+
+article.full {
+  @include grid-span(12);
+  border: 0;
+}
+
+ul, ul li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ol {
+  vertical-align: middle;
+  p {
+    margin: .2rem 0;
+    font: {
+      family: $sans-stack;
+      size: 1rem;
+    }
+  }
+}
+
+.match {
+  font-weight: 700;
+}
+
+.empty, .loading {
+  color: $greyDark;
+  h3 {
+    color: $greyDark;
+    margin-bottom: 0;
+  }
+}
+
+.loading-text {
+  margin: 2rem;
+}
+
+.loading-icon {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.data-available {
+  color: $green;
+}
+
+.data-missing {
+  color: $red;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.ui-scrollfix {
+  position: fixed;
+  z-index: 99;
+}
+
+.h1-wrap {
+  height: 5rem;
+  h1 {
+    display: flex;
+    align-items: center;
+  }
+}
+
+h1.ui-scrollfix, .sug-wrap.ui-scrollfix {
+  // Sets a max width. Site will be fluid until it reaches 1200, then stick there.
+  width: $break-desktop;
+
+  @include breakpoint($break-widescreen) {
+    width: 1440px;
+  }
+  top: 0;
+  padding: .5rem 0;
+  background: hsla(0, 0%, 100%, .9);
+  border-bottom: 1px solid $greyLightest;
+}
+
+h1.sticky-scrollfix {
+  border-bottom: 1px solid $greyLightest;
+  padding-bottom: 0.5rem;
+}
+
+aside.ui-scrollfix {
+  top: 5rem;
+  section {
+    background: transparent;
+  }
+}
+
+.open-in {
+  font-size: 1rem;
+  color: $grey;
+}
+
+h3:hover {
+  .pilcrow {
+    opacity: 1;
+  }
+}
+
+.pilcrow {
+  opacity: .1;
+}
+
+.t_sidebar {
+  position: relative;
+
+  .t_facets_container{
+    position: relative;
+    border-right: 1px solid #cccccc
+  }
+}
+
+.t_notify_popup, #buorg {
+  position: fixed;
+  z-index: 1000000;
+  width: 100%;
+  font-size: 1.25rem;
+  background: $orange;
+  color: $white;
+  padding: 1rem 2rem;
+  left: 0;
+  border: none;
+  font-family: inherit;
+}
+
+.t_notify_link {
+  cursor: pointer;
+  color: #FFF;
+}
+
+.t_notify_link:hover {
+  text-decoration: underline;
+}
+
+
+.t_notify_body {
+  font-size: 1rem;
+}
+
+.t_notify_warning {
+  background: $orangeLight;
+}
+
+.t_notify_success {
+  background: $green;
+}
+
+a.no-style {
+  background: none;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    background: none;
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+#buorg {
+  div {
+    padding: 0
+  }
+
+  #buorgclose {
+    position: relative;
+    float: right;
+    right: 0;
+    top: 0;
+    height: 0;
+    width: 0;
+    font-weight: normal;
+    font-size: 1rem;
+    padding: 0;
+    padding-right: 1rem;
+  }
+}
+
+.blur {
+   @include filter(blur(2px));
+}
+
+#loading-screen {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  /* Fallback for web browsers that doesn't support RGBa */
+  background: hsl(0, 0, 0) transparent;
+  /* RGBa with 0.6 opacity */
+  background: hsla(100, 100, 100, 0.6);
+  text-align: center;
+  left: 0;
+
+  font-size: 6rem;
+  color: $greyDark;
+  img {
+    height: 46px;
+  }
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+}
+
+.iobio-popup, .phenotype-analysis {
+  color:#e9931c;
+  transition: color .5s, border .5s;
+  width:18px;
+  vertical-align:middle;
+  cursor: pointer;
+  &:hover {
+    color:#ce6503;
+  }
+}
+
+.inline-code {
+  font-family: $mono-stack;
+  padding: 2px 4px;
+  font-size: 12.6px;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+  [class^="icon-"]:before, [class*=" icon-"]:before {
+    line-height: inherit;
+  }
+}
+
+.no-select {
+  user-select: none;
+}
+
+.elegant-spinner {
+  animation: rotate 2s linear infinite;
+  z-index: 2;
+  width: 80px;
+  height: 80px;
+  margin-top: -63px;
+  .path {
+    stroke: #838383;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+}
+
+
+.loading-block{
+  letter-spacing: -0.4em; 
+  font-size: 15px; 
+  color: #ddd; 
+  display: inline-block; 
+  margin-right: 4px;
+}
+
+.editable-input {
+  padding: 0 0.3em;
+  border-radius: 2px;
+}
+
+.editable-buttons {
+  button {
+    margin-left: 0.3em;
+  }
+}
+
+/* legend icon */
+.legend-icon{
+  color: #666;
+  font-size: large;
+  vertical-align: middle;
+
+  &.baseline{
+    vertical-align: baseline;
+  }
+}
+
+.external-link, [external-link] {
+  &:after {
+    content: '\e831';
+    font-family: "icgc-icons";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    margin-left: .2em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

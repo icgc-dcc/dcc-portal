@@ -15,6 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import deepmerge from 'deepmerge';
+
 // Declaring 'icgc.donorlist', used in app.js
 (function() {
   'use strict';
@@ -215,7 +217,7 @@
      *  - https://github.com/danialfarid/ng-file-upload/issues/776#issuecomment-106929172
      */
     $scope.$watch ('params.myFile', function (newValue) {
-      if (! newValue) {return;}
+      if (! newValue) {return}
 
       verifyFileUpload();
     });

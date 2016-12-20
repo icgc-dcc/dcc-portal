@@ -15,207 +15,47 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require('./survival-analysis-service.js');
+
+import { renderPlot } from '@oncojs/survivalplot';
+import loadImg from 'load-img';
+import getContext from 'get-canvas-context';
+import platform from 'platform';
+
+function svgToSvgDataUri (svg) {
+  return 'data:image/svg+xml;base64,'+ btoa(unescape(encodeURIComponent(svg)));
+}
+
+function svgToPngDataUri(svg, {width, height}) {
+  const ctx = getContext('2d', {width, height});
+  const svgDataUri = svgToSvgDataUri(svg);
+
+  return new Promise((resolve, reject) => {
+    loadImg(svgDataUri, {crossOrigin: true}, (err, image) => {
+      if (err) { reject(err) }
+      ctx.drawImage(image, 0, 0);
+      const pngDataUri = ctx.canvas.toDataURL('image/png');
+      resolve(pngDataUri);
+    });
+  });
+}
+
 (function() {
   'use strict';
 
-  var module = angular.module('icgc.survival', ['icgc.donors.models']);
-
-  function renderChart (params) {
-    var svg = params.svg;
-    var container = params.container;
-    var dataSets = params.dataSets;
-    var disabledDataSets = params.disabledDataSets;
-    var onMouseEnterDonor = params.onMouseEnterDonor || _.noop;
-    var onMouseLeaveDonor = params.onMouseLeaveDonor || _.noop;
-    var onClickDonor = params.onClickDonor || _.noop;
-    var palette = params.palette;
-    var markerType = params.markerType || 'circle';
-
-    var containerBounds = container.getBoundingClientRect();
-
-    var yAxisLabel = 'Survival Rate';
-    var xAxisLabel = 'Duration ' + ' (days)';
-
-    var margin = {
-      top: 20,
-      right: 20,
-      bottom: 46,
-      left: 60
-    };
-    var outerWidth = containerBounds.width;
-    var outerHeight = params.height || outerWidth * 0.5;
-
-    var axisWidth = outerWidth - margin.left - margin.right;
-    var axisHeight = outerHeight - margin.top - margin.bottom;
-
-    var longestDuration = _.max(dataSets
-        .filter(function (data) {
-          return !_.includes(disabledDataSets, data) && data.donors.length;
-        })
-        .map(function (data) {
-          return data.donors.slice(-1)[0].time;
-        }));
-    
-    var xDomain = params.xDomain || [0, longestDuration];
-    var onDomainChange = params.onDomainChange;
-
-    var x = d3.scale.linear()
-      .range([0, axisWidth]);
-
-    var y = d3.scale.linear()
-      .range([axisHeight, 0]);
-
-    var xAxis = d3.svg.axis()
-      .scale(x)
-      .orient('bottom');
-
-    var yAxis = d3.svg.axis()
-      .scale(y)
-      .orient('left');
-
-    svg
-      .attr('width', outerWidth)
-      .attr('height', outerHeight);
-
-    var wrapperFragment = document.createDocumentFragment();
-
-    var wrapper = d3.select(wrapperFragment).append('svg:g')
-        .attr('class', 'wrapper')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-    x.domain([xDomain[0], xDomain[1]]);
-    y.domain([0, 1]);
-
-    // Draw x axis
-    wrapper.append('svg:g')
-      .attr('class', 'x axis')
-      .attr('transform', 'translate( 0,' + axisHeight + ')')
-      .call(xAxis)
-      .append('svg:text')
-        .attr('class', 'axis-label')
-        .attr('dy', 30)
-        .attr('x', axisWidth / 2)
-        .style('text-anchor', 'end')
-        .text(xAxisLabel);
-
-    // Draw y axis
-    wrapper.append('svg:g')
-      .attr('class', 'y axis')
-      .call(yAxis)
-      .append('svg:text')
-        .attr('class', 'axis-label')
-        .attr('transform', 'rotate(-90)')
-        .attr('y', -40)
-        .attr('x', - (margin.top + axisHeight / 2))
-        .text(yAxisLabel);
-    
-    function brushend() {
-      var extent = brush.extent();
-      svg.select('.brush').call(brush.clear());
-      if (extent[1] - extent[0] > 1) {
-        onDomainChange(extent);
-      }
-    }
-    var brush = d3.svg.brush()
-      .x(x)
-      .on('brushend', brushend);
-
-    wrapper.append('svg:g')
-      .attr('class', 'brush')
-      .call(brush)
-      .selectAll('rect')
-      .attr('height', axisHeight);
-
-    var maskName = 'mask_' + _.uniqueId();
-
-    svg.append('svg:clipPath')
-      .attr('id', maskName)
-      .append('svg:rect')
-        .attr('x', 0)
-        .attr('y', -10)
-        .attr('width', axisWidth)
-        .attr('height', axisHeight + margin.top);
-
-    dataSets.forEach(function (data, i) {
-      if (_.includes(disabledDataSets, data)) {
-        return;
-      }
-      var line = d3.svg.area()
-        .interpolate('step-before')
-        .x(function(p) { return x(p.x); })
-        .y(function(p) { return y(p.y); });
-
-      var setGroup = wrapper.append('svg:g')
-        .attr('class', 'serie')
-        .attr('set-id', data.meta.id)
-        .attr('clip-path', 'url(' + window.location.href + '#' + maskName + ')');
-
-      var setColor = palette[i % palette.length];
-
- 
-      var donorsInRange = data.donors.filter(function (donor, i, arr) {
-        return _.inRange(donor.time, xDomain[0], xDomain[1] + 1) ||
-          ( arr[i - 1] && donor.time >= xDomain[1] && arr[i - 1].time <= xDomain[1] ) ||
-          ( arr[i + 1] && donor.time <= xDomain[0] && arr[i + 1].time >= xDomain[0] );
-      });
-
-      // Draw the data as an svg path
-      setGroup.append('svg:path')
-        .datum(donorsInRange
-          .map(function (d) { return {x: d.time, y: d.survivalEstimate}; }))
-        .attr('class', 'line')
-        .attr('d', line)
-        .attr('stroke', setColor);
-
-      // Draw the data points as circles
-      var markers = setGroup.selectAll('circle')
-        .data(donorsInRange)
-        .enter();
-
-      if (markerType === 'line') {
-        markers = markers.append('svg:line')
-          .attr('class', 'point-line')
-          .attr('status', function (d) { return d.status; })
-          .attr('x1', function(d) { return x(d.time); })
-          .attr('y1', function(d) { return y(d.survivalEstimate); })
-          .attr('x2', function(d) { return x(d.time); })
-          .attr('y2', function(d) { return y(d.survivalEstimate) + (d.status === 'deceased' ? 10 : -5); })
-          .attr('stroke', setColor);
-      } else {
-        markers = markers.append('svg:circle')
-          .attr('class', 'point')
-          .attr('status', function (d) { return d.status; })
-          .attr('cx', function(d) { return x(d.time); })
-          .attr('cy', function(d) { return y(d.survivalEstimate); })
-          .attr('fill', setColor );
-      }
-
-      markers
-        .on('mouseover', function (d) {
-          onMouseEnterDonor(d3.event, d);
-        })
-        .on('mouseout', function (d) {
-          onMouseLeaveDonor(d3.event, d);
-        })
-        .on('click', function (d) {
-          onClickDonor(d3.event, d);
-        });
-    });
-    
-    svg.node().appendChild(wrapperFragment);
-
-    return svg;
-  }
+  var module = angular.module('icgc.survival', ['icgc.survival.services', 'icgc.donors.models']);
 
   var survivalAnalysisController = function (
       $scope,
       $element,
-      FullScreenService
+      FullScreenService,
+      SetOperationService,
+      ExportService,
     ) {
       var ctrl = this;
       var graphContainer = $element.find('.survival-graph').get(0);
       var svg = d3.select(graphContainer).append('svg');
-      var tipTemplate = _.template($element.find('.survival-tip-template').html());
+      var tipTemplate = _.template(require('./survival-tip-template.html'));
       var stateStack = [];
       var state = {
         xDomain: undefined,
@@ -230,13 +70,15 @@
           ], $element.get(0));
       };
 
+      this.isEmpty = () => !ctrl.dataSets || _.every(this.dataSets.map(set => set.donors), _.isEmpty);
+
       var update = function (params) {
-        if (!ctrl.dataSets) {
+        if (ctrl.isEmpty()) {
           return;
         }
 
         svg.selectAll('*').remove();
-        renderChart(_.defaults({
+        renderPlot(_.defaults({
           svg: svg, 
           container: graphContainer, 
           dataSets: ctrl.dataSets,
@@ -245,6 +87,7 @@
           markerType: 'line',
           xDomain: state.xDomain,
           height: isFullScreen() && ( window.innerHeight - 100 ),
+          getSetSymbol: SetOperationService.getSetShortHandSVG,
           onMouseEnterDonor: function (event, donor) {
             $scope.$apply(function () {
               ctrl.tooltipParams = {
@@ -309,6 +152,53 @@
         update();
       };
 
+      const getSvgString = ({width, height}={}) => (`
+        <svg
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns="http://www.w3.org/2000/svg"
+          class="exported-survival-svg"
+          ${
+            (width && height) ? `width="${width}" height="${height}"` : ''
+          }
+          viewBox="0 0 ${svg.attr('width')} ${Number(svg.attr('height')) + 120}"
+        >
+          <style>
+            <![CDATA[
+              ${require('!raw!sass!prepend?data=$selection:#edf8ff;!../styles/survival-analysis.scss')}
+            ]]>
+          </style>
+          <foreignObject x="20" y="60" width="400" height="150">
+              <div class="legend" xmlns="http://www.w3.org/1999/xhtml">
+              ${$element.find('.legend').html()}
+              </div>
+          </foreignObject>
+          <g transform="translate(20, 20)">
+            <text x="0" y="0" text-anchor="left" dominant-baseline="hanging">
+              <tspan style="font-size: 20px;">
+                ${ctrl.title}
+              </tspan>
+
+              <tspan x="0" dy="1.5em">
+                ${$element.find('.p-value-test').text()}
+              </tspan>
+            </text>
+          </g>
+          <g class="survival-graph" transform="translate(0,100)">
+            ${
+              svg.html()
+                .replace(/url\(http\:\/\/(.*?)#/g, 'url(#')
+                .replace(/"axis-label" dy="(\d+?)"/, '"axis-label" dy="50"')
+            }
+          </g>
+        </svg>`);
+
+      const exportDimensions = {width: 1200, height: 753};
+      this.handleClickExportSvg = () => ExportService.exportData('survivalplot.svg', getSvgString());
+      this.handleClickExportPng = async () => {
+        const imageDataUri = await svgToPngDataUri(getSvgString(exportDimensions), exportDimensions);
+        ExportService.exportDataUri('survivalplot.png', imageDataUri); 
+      };
+
       this.isFullScreen = isFullScreen;
 
       this.handleClickEnterFullScreen = function () {
@@ -339,6 +229,9 @@
         window.removeEventListener('resize', update);
       };
 
+      this.SetOperationService = SetOperationService;
+
+      this.doesSupportPngExport = !_.includes(['IE', 'Microsoft Edge'], platform);
   };
 
   module.component('survivalAnalysisGraph', {
@@ -350,7 +243,8 @@
       censoredStatuses: '<',
       palette: '<',
       title: '<',
-      pvalue: '<'
+      pvalue: '<',
+      onClickExportCsv: '&',
     },
     controller: survivalAnalysisController,
     controllerAs: 'ctrl'
@@ -387,69 +281,5 @@
       diseaseFreeStats: diseaseFreeStats
     };
   }
-
-  module
-    .service('SurvivalAnalysisService', function(
-        $q,
-        Restangular,
-        SetService
-      ) {
-
-      function fetchSurvivalData (setIds) {
-        var data = setIds;
-
-        var fetchSurvival = Restangular
-          .one('analysis')
-          .post('survival', data, {}, {'Content-Type': 'application/json'})
-          .then(function (response) {
-            return Restangular.one('analysis/survival/' + response.id).get();
-          });
-
-        var fetchSetsMeta = SetService.getMetaData(setIds);
-
-        return $q.all({
-          survivalData: fetchSurvival,
-          setsMeta: fetchSetsMeta,
-        })
-          .then(function (responses) {
-            return processResponses(responses);
-          });
-      }
-
-      var defaultHeadingMap = {
-        setName: 'donor_set_name',
-        id: 'donor_id',
-        time: 'time',
-        status: 'donor_vital_status',
-        survivalEstimate: 'survival_estimate',
-      };
-
-      function dataSetToTSV (dataSet, headingMap) {
-        var headings = _({})
-          .defaults(defaultHeadingMap, headingMap)
-          .values()
-          .join('\t');
-
-        _.defaults({}, defaultHeadingMap, headingMap);
-
-        var contents = _(dataSet)
-          .map(function (set) {
-            return set.donors.map(function (donor) {
-              return [set.meta.name, donor.id, donor.time, donor.status, donor.survivalEstimate].join('\t');
-            });
-          })
-          .flatten()
-          .join('\n');
-
-        var tsv = headings + '\n' + contents;
-        return tsv;
-      }
-
-      _.extend(this, {
-        fetchSurvivalData: fetchSurvivalData,
-        dataSetToTSV: dataSetToTSV
-      });
-
-    });
 
 })();

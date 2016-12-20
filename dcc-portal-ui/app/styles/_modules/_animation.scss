@@ -25,11 +25,14 @@
   transform: translateZ(0);
 }
 
+.no-animate {
+   transition: none !important;
+}
+
 .fadeInDownEnter {
   -webkit-animation-name: fadeInDownEnter;
   animation-name: fadeInDownEnter;
 }
-
 
 @keyframes fadeInDownEnter {
   from {
@@ -108,4 +111,24 @@
   }
 }
 
+@keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
 ////////////////////

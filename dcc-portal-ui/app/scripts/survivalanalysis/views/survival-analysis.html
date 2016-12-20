@@ -1,30 +1,57 @@
-<div class="survival-analysis">
-  <script type="text/template" class="survival-tip-template">
-    <div>
-      <strong><%= donor.id %></strong>
-      <div><%= labels.survivalEstimate %>: <%= (donor.survivalEstimate * 100).toFixed(2) %>%</div>
-      <% if (donor.isCensored) { %>
-        <div><%= labels.censoredSurvivalTime %>: <%= donor.time %> <%= unit %> (censored)</div>
-      <% } else { %>
-        <div><%= labels.survivalTime %>: <%= donor.time %> <%= unit %> </div>
-      <% } %>
-    </div>
-  </script>
+<div ng-show="!ctrl.isEmpty()" class="survival-analysis">
+
+  <div class="tool-buttons">
+    <button
+      data-tooltip="Reset"
+      ng-class="{disabled: !ctrl.canUndo()}"
+      class="btn btn-default"
+      ng-click="ctrl.handleClickReset()"
+    >
+      <i class="icon-undo"></i>
+    </button>
+
+    <button
+      data-tooltip="Fullscreen"
+      class="btn btn-default"
+      ng-click="ctrl.isFullScreen() ? ctrl.handleClickExitFullScreen() : ctrl.handleClickEnterFullScreen()"
+    >
+      <i ng-if="!ctrl.isFullScreen()" class="fa fa-expand"></i>
+      <i ng-if="ctrl.isFullScreen()" class="fa fa-compress"></i>
+    </button>
+
+    <span class="btn-group">
+      <button
+        data-tooltip="Export CSV"
+        class="btn btn-default"
+        ng-click="ctrl.onClickExportCsv()"
+      >
+        <i class="fa fa-file-text-o"></i>
+      </button>
+
+      <button
+        data-tooltip="Export SVG"
+        class="btn btn-default composite-button"
+        ng-click="ctrl.handleClickExportSvg()"
+      >
+        <i class="fa fa-file-image-o icon"></i>
+        <span class="sub">SVG</span>
+      </button>
+
+      <button
+        ng-if="ctrl.doesSupportPngExport"
+        data-tooltip="Export PNG"
+        class="btn btn-default composite-button"
+        ng-click="ctrl.handleClickExportPng()"
+      >
+        <i class="fa fa-file-image-o icon"></i>
+        <span class="sub">PNG</span>
+      </button>
+    </span>
+  </div>
 
   <h1 class="title" ng-if="ctrl.title">{{ ctrl.title }}</h1>
 
   <ul class="legend">
-    <li>
-      <i
-        class="undo-button icon-undo"
-        ng-class="{disabled: !ctrl.canUndo()}"
-        ng-click="ctrl.handleClickReset()"
-      ></i>
-    </li>
-    <li class="fullscreen-toggle">
-      <i ng-if="!ctrl.isFullScreen()" ng-click="ctrl.handleClickEnterFullScreen()" class="icon-resize-full"></i>
-      <i ng-if="ctrl.isFullScreen()" ng-click="ctrl.handleClickExitFullScreen()" class="icon-resize-small"></i>
-    </li>
     <li
       class="set"
       ng-repeat="dataSet in ctrl.dataSets"
@@ -41,17 +68,26 @@
           'icon-check-empty': ctrl.isDataSetDisabled(dataSet) && dataSet.donors.length,
         }"
       ></i>
-      {{ dataSet.meta.name }}
+      <span ng-bind-html="ctrl.SetOperationService.getSetShortHand(dataSet, ctrl.dataSets)"></span>
+      (N =
+      <span ng-style="{
+        'font-weight': dataSet.donors.length ? '400' : '700', 
+        'color': dataSet.donors.length ? 'inherit' : '#666', 
+      }">{{dataSet.donors.length}}</span>)
+      - {{ dataSet.meta.name }}
     </li>
   </ul>
 
   <i class="icon-spin icon-spinner absolute-center" ng-class="{'ng-hide': ctrl.dataSets.length}"></i>
 
 
-  <div class="pull-right p-value-test">
+  <div class="p-value-test">
     <span ng-if="ctrl.pvalue !== undefined && ctrl.pvalue!==0">Log-Rank Test P-Value = {{ ctrl.pvalue.toExponential(2) }}</span>
     <span ng-if="ctrl.pvalue === 0">Log-Rank Test P-Value ≈ {{ ctrl.pvalue.toExponential(2) }}</span>
   </div>
+
+  <div ng-show="!ctrl.canUndo()" class="drag-to-zoom-prompt">drag to zoom</div>
+
   <div class="survival-graph">
     
   </div>
@@ -61,4 +97,10 @@
     params="ctrl.tooltipParams"
   ></tooltip-control>
 
+</div>
+<div ng-show="ctrl.isEmpty()" class="survival-analysis survival-analysis--empty">
+  <h1 class="title" ng-if="ctrl.title">{{ ctrl.title }}</h1>
+  <div class="flex flex-center flex-grow">
+    Insufficient data
+  </div>
 </div>

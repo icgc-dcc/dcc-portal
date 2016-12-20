@@ -12,8 +12,14 @@ $faded: #e6dede;
       stroke: $faded
     }
 
-    .tick text {
-      fill: #888
+    .tick {
+      line {
+        stroke: #666;
+      }
+      text {
+        fill: #888;
+        font-size: 1.2ex;
+      }
     }
 
     .axis-label {
@@ -21,6 +27,17 @@ $faded: #e6dede;
       font-size: 0.75rem;
       fill: hsl(0, 0%, 60%);
       font-weight: 300;
+    }
+    .minor line {
+      stroke: #e6dede;
+    }
+
+    &.x .tick line {
+      opacity: 0.1;
+    }
+
+    &.y .tick line {
+      opacity: 1;
     }
   }
 
@@ -69,29 +86,45 @@ $faded: #e6dede;
 
 }
 
-%survivalIconButon {
-  display: block;
-  color: $iconColor;
-  cursor: pointer !important;
-  transition: all 0.2s ease;
-  &:hover {
-    transform: scale(1.1);
-  }
-  &.disabled {
-    visibility: hidden;
-  }
-}
-
 .survival-analysis {
   position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
-  .undo-button {
-    @extend %survivalIconButon;
+  &--empty {
+    &, .title {
+      color: #999;
+    } 
   }
 
-  .fullscreen-toggle {
-    @extend %survivalIconButon;
-    margin-left: 6px;
+  .tool-buttons {
+    position: absolute;
+    right: 20px;
+    top:8px;
+
+    button{
+      padding: 3px 6px;
+      i{
+        font-size: smaller;
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  .composite-button {
+    .icon {
+      transform: translateY(-6px);
+    }
+    .sub {
+      position: absolute;
+      font-size: 8px;
+      font-weight: 800;
+      width: 100%;
+      left: 0;
+      text-align: center;
+      bottom: 1px;
+    }
   }
 
   .survival-graph {
@@ -108,17 +141,26 @@ $faded: #e6dede;
     opacity: 0.6;
     &:before {
       height: 1em;
-      @extend .absolute-center;
+      @extend .absolute-center !optional;
     }
+  }
+
+  .drag-to-zoom-prompt {
+    color: #999;
+    font-size: 11px;
+    margin-right: 30px;
+    height: 0;
+    text-align: right;
   }
 
   .legend {
     position: absolute;
-    bottom: 0;
+    bottom: -20px;
     left: 0;
     right: 0;
     text-align: center;
     display: flex;
+    flex-direction: column;
     justify-content: center;
 
     & > li {
@@ -128,9 +170,7 @@ $faded: #e6dede;
       position: relative;
       user-select: none;
       display: inline-block;
-      & + .set {
-        margin-left: 20px;
-      }
+      
       &.disabled {
         color: #b7b7b7 !important;
       }
@@ -149,6 +189,16 @@ $faded: #e6dede;
   }
 
   .p-value-test{
-    margin-right: 1rem;
+    margin-left: 40px;
+  }
+}
+
+.exported-survival-svg {
+  .legend li {
+    cursor: default;
+    font-size: 11px;
+    line-height: 1.7;
+    position: static;
+    display: block;
   }
 }

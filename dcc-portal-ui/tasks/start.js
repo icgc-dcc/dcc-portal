@@ -156,9 +156,15 @@ function runDevServer(port) {
       ignored: /node_modules/
     },
     proxy: {
-      '/api/*': {
-        target: 'http://localhost:8080',
+      '/api/**': {
+        target: process.env.API_SOURCE
+          ? process.env.API_SOURCE === 'production'
+            ? 'https://dcc.icgc.org/'
+            : process.env.API_SOURCE
+          : 'http://localhost:8080'
+        ,
         secure: false,
+        changeOrigin: true,
       },
       '/(scripts|styles|vendor|bower_components)/**': {
         target: 'http://localhost:9000/app',

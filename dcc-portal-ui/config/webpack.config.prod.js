@@ -37,7 +37,24 @@ module.exports = {
         include: paths.appSrc
       }
     ],
+    noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
+      {
+        test: /\.html$/,
+        loader: 'raw',
+      },
+      {
+        test: /index.html$/,
+        loader: 'string-replace',
+        query: {
+          multiple: [
+            {
+              search: '\'COPYRIGHT_YEAR\'',
+              replace: new Date().getUTCFullYear()
+            },
+          ]
+        }
+      },
       {
         test: /\.js$/,
         include: paths.appSrc,
@@ -54,7 +71,7 @@ module.exports = {
       {
         test: /\.scss$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: ExtractTextPlugin.extract('style', 'css!sass'),
+        loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss!sass'),
       },
       {
         test: /\.json$/,
@@ -85,6 +102,11 @@ module.exports = {
     // e.g. to enable no-console and no-debugger only in prod.
     configFile: path.join(__dirname, 'eslint.js'),
     useEslintrc: false
+  },
+  postcss: function() {
+    return [
+      require('autoprefixer'),
+    ];
   },
   plugins: [
     new CopyWebpackPlugin([

@@ -8,6 +8,12 @@
         <translate>Genes</translate>
         <span class="action-toolbar pull-right">
             <span class="action-item">
+                <i class="icon-grid"></i>
+                <a href="#" data-ng-click="AdvancedCtrl.oncogridAnalysis()">
+                    <translate>OncoGrid</translate>
+                </a>
+            </span>
+            <span class="action-item">
                 <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('gene', AdvancedCtrl.Gene.genes.pagination.total)"><translate>Save Gene Set</translate></a>
             </span>
             <span class="action-item">
@@ -15,6 +21,15 @@
             </span>
             <span class="action-item">
                <i class="icon-chart"></i><a href="/browser/g?filters={{AdvancedCtrl.Location.filters()}}"><translate>Genome Viewer</translate></a>
+            </span>
+            <span class="action-item">
+                <entityset-persistence-dropdown
+                    selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.gene"
+                    entity-type="'gene'"
+                    set-total-count="AdvancedCtrl.Gene.genes.pagination.total"
+                    set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
+                    on-operation-success="AdvancedCtrl.handleOperationSuccess('gene')"
+                ></entityset-persistence-dropdown>
             </span>
         </span>
     </h3>
@@ -27,6 +42,7 @@
     <table class="table table-bordered table-striped table-condensed">
         <thead>
         <tr>
+            <th rowspan="2"></th>
             <th rowspan="2" data-sortable data-type="genes" data-field="symbol">
                 <translate>Symbol</translate>
             </th>
@@ -38,6 +54,14 @@
             <th rowspan="2" class="text-center">
                 <abbr data-tooltip="{{'Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria' | translate}}"
                       data-tooltip-placement="left"><translate># Mutations</translate></abbr>
+            </th>
+            <th rowspan="2">
+                <abbr data-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutated gene' | translate }}" 
+                    data-tooltip-placement="left"
+                    style="display:block;">
+                    <i class="icon-chart-bar">
+                    </i>
+                </abbr>
             </th>
         </tr>
         <tr>
@@ -53,7 +77,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-ng-repeat="gene in AdvancedCtrl.Gene.genes.hits track by gene.id">
+        <tr
+            ng-class="{
+                'is-selected': AdvancedCtrl.isEntitySelected('gene', gene)
+            }"
+            ng-click="AdvancedCtrl.toggleSelectedEntity('gene', gene)"
+            data-ng-repeat="gene in AdvancedCtrl.Gene.genes.hits track by gene.id"
+        >
+            <td>
+                <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('gene', gene)"></icgc-checkbox>
+            </td>
             <td><a href="/genes/{{ gene.id }}">{{ gene.symbol }}</a></td>
             <td>{{ gene.name }}</td>
             <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
@@ -100,6 +133,10 @@
                    href='/search/m?filters={{gene.embedQuery}}'>
                     {{AdvancedCtrl.Gene.mutationCounts[gene.id] | number}}
                 </a>
+            </td>
+            <td>
+                <i class="icon-chart-bar phenotype-analysis"
+                    data-ng-click="AdvancedCtrl.launchSurvivalAnalysis('gene', gene.id, gene.symbol)"></i>
             </td>
         </tr>
         </tbody>

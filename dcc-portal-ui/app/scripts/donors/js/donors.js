@@ -43,7 +43,7 @@
   var module = angular.module('icgc.donors.controllers', ['icgc.donors.models']);
 
   module.controller('DonorCtrl', function ($scope, $modal, Page, donor, Projects, Mutations,
-    Settings, ExternalRepoService, PCAWG, RouteInfoService) {
+    ExternalRepoService, PCAWG, RouteInfoService) {
 
     var _ctrl = this, promise;
     var dataRepoRoutInfo = RouteInfoService.get ('dataRepositories');
@@ -53,7 +53,7 @@
     Page.setPage('entity');
 
     _ctrl.hasSupplementalFiles = function(donor) {
-      return donor.family || donor.exposure || donor.therapy;
+      return donor.biomarker || donor.family || donor.exposure || donor.surgery || donor.therapy;
     };
 
     _ctrl.isPCAWG = function(donor) {
@@ -128,10 +128,6 @@
       };
       Mutations.getList(params).then(function (d) {
         _ctrl.mutationFacets = d.facets;
-      });
-
-      Settings.get().then(function(settings) {
-        _ctrl.downloadEnabled = settings.downloadEnabled || false;
       });
     }
 
@@ -221,14 +217,6 @@
           donorId: d.id,
           include: 'consequences'
         }).then(success);
-
-        /*
-        Donors.one().getMutations({
-          include: 'consequences',
-          filters: LocationService.filters(),
-          scoreFilters: {donor: {projectId: {is: donor.projectId }}}
-        }).then(success);
-        */
       });
     }
 
@@ -488,7 +476,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     _ctrl.getFiles = function (){
       var promise, 
         params = {},
-        filesParam = LocationService.getJsonParam ('files');
+        filesParam = LocationService.getJqlParam ('files');
 
       // Default
       params.from = 1;

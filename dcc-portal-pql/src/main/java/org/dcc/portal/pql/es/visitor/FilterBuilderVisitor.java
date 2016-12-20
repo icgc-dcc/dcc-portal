@@ -34,11 +34,6 @@ import static org.elasticsearch.index.query.FilterBuilders.termsFilter;
 import java.util.Optional;
 import java.util.Stack;
 
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.NestedNode;
 import org.dcc.portal.pql.es.ast.aggs.FilterAggregationNode;
@@ -70,6 +65,11 @@ import org.elasticsearch.index.query.RangeFilterBuilder;
 import org.elasticsearch.index.query.TermFilterBuilder;
 
 import com.google.common.collect.Lists;
+
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Visits {@link FilterNode} and builds FilterBuilders
@@ -182,6 +182,7 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
     val lookupInfo = node.getLookup();
     if (lookupInfo.isDefine()) {
       filter = FilterBuilders.termsLookupFilter(field)
+          .lookupCache(false)
           .lookupIndex(lookupInfo.getIndex())
           .lookupType(lookupInfo.getType())
           .lookupPath(lookupInfo.getPath())

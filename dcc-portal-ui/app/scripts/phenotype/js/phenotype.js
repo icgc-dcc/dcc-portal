@@ -42,6 +42,7 @@
     LocationService,
     Extensions,
     SetService,
+    AnalysisService,
     SetOperationService,
     PhenotypeService,
     SurvivalAnalysisService,
@@ -53,14 +54,14 @@
         item: '='
       },
       templateUrl: '/scripts/phenotype/views/phenotype.result.html',
-      link: function($scope, $element) {
-
+      controller: function ($scope) {
         // From D3's cat20 scale
-        $scope.seriesColours = ['#6baed6', '#fd8d3c', '#74c476'];
-
+        $scope.seriesColours = ['#1880B2', '#c20127', '#00005d'];
         $scope.survivalAnalysisDataSets = undefined;
-        $scope.activeSurvivalGraph = 'overall';
         $scope.setAnalysisId = undefined;
+        $scope.analysisName = AnalysisService.analysisName('phenotype');
+      },
+      link: function($scope, $element) {
 
         function normalize() {
           // Normalize results: Sort by id, then sort by terms
@@ -120,7 +121,7 @@
             $scope.gender = PhenotypeService.buildAnalysis(gender, $scope.setMap);
             $scope.vital = PhenotypeService.buildAnalysis(vital, $scope.setMap);
             $scope.age = PhenotypeService.buildAnalysis(age, $scope.setMap);
-            $scope.meanAge = age.data.map(function(d) { return d.summary.mean; });
+            $scope.meanAge = age.data.map(function(d) { return d.summary.mean });
 
           });
 
@@ -144,9 +145,7 @@
               var vennDiagram = new dcc.Venn23(vennData, {
                 height: 380,
                 urlPath: $location.url(),
-                setLabelFunc: function (id) {
-                  return 'S' + (setData.indexOf(_.find(setData, {id: id})) + 1);
-                },
+                setLabelFunc: id => SetOperationService.getSetShortHandSVG(id, _.map(setData, 'id')),
               });
               var $canvasContainer = $element.find('.mini-venn-canvas');
               vennDiagram.render( $canvasContainer[0] );
@@ -338,7 +337,7 @@
       return {
         uiTable: uiTable,
         uiGraph: {
-          categories: terms.map(function(term) { return ValueTranslator.translate(term); }),
+          categories: terms.map(function(term) { return ValueTranslator.translate(term) }),
           series: uiSeries
         },
         pvalue: analysis.pvalue

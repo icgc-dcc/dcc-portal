@@ -1,11 +1,11 @@
 <span class="pull-right open-in">
     <span><translate>Open in</translate></span>
     <a data-ng-if="type !== 'viewer'" href="/search{{openInList}}"><translate>Advanced Search</translate></a>
-    <span data-ng-if="['donor','viewer'].indexOf(type) === -1">|</span>
     <a data-ng-if="type !== 'donor' && context===null" href="/browser{{openInList}}">
         <i class="icon-chart"></i><translate>Genome Viewer</translate>
     </a>
     <a data-ng-if="type !== 'donor' && context==='donor'" href="/browser{{openInViewer}}&context={{context}}">
         <i class="icon-chart"></i><translate>Genome Viewer</translate>
     </a>
+    <ng-transclude></ng-transclude>
 </span>

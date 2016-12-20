@@ -47,17 +47,13 @@
    line-height: 1.25rem;
    font-size: 1rem;
    color: #999999;
-   text-transform: uppercase;
 
    .action-item {
       display: inline-block;
       padding-right: 0.5rem;
       padding-left: 0.25rem;
-      border-right-width: 1px;
-      border-right-style: solid;
    }
 }
 .action-toolbar > .action-item:last-child {
    border: 0;
 }
-

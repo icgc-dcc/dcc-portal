@@ -2,9 +2,12 @@
     <i class="icon-spinner icon-spin icon-4x"></i>
 </h3>
 <ul data-ng-show="AdvancedCtrl.Gene.genes" class="t_facets">
-    <li data-tags-facet data-label="{{'Gene' | translate}}" data-facet-name="id" data-placeholder="{{'e.g. KRAS, ENSG00000133703' | translate}}"
-        data-type="gene">
-    </li>
+    <li data-tags-facet data-label="{{'Gene' | translate}}" 
+        data-facet-name="id" 
+        data-placeholder="{{'e.g. KRAS, ENSG00000133703' | translate}}"
+        data-type="gene"
+        data-entity-sets="AdvancedCtrl.geneSets"
+        data-show-entity-set-facet="true"></li>
 
     <terms data-type="gene" data-facet-name="type" data-facet="AdvancedCtrl.Gene.genes.facets.type"
            data-capitalize="true" data-label="{{'Type' | translate}}"></terms>

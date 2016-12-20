@@ -15,17 +15,14 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import {ensureArray, ensureString} from '../../common/js/ensure-input';
+import './file-finder';
+
 (function() {
   'use strict';
 
-  function ensureArray (array) {
-    return _.isArray (array) ? array : [];
-  }
   var isEmptyArray = _.flow (ensureArray, _.isEmpty);
 
-  function ensureString (string) {
-    return _.isString (string) ? string.trim() : '';
-  }
   var isEmptyString = _.flow (ensureString, _.isEmpty);
 
   function ensureObject (o) {
@@ -40,14 +37,17 @@
   var toJson = angular.toJson;
   var commaAndSpace = ', ';
 
-  var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
+  var module = angular.module('icgc.repository.controllers', [
+    'icgc.repository.services',
+    'file-finder',
+    ]);
 
   var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto', 'PDC - Chicago'];
 
   /**
    * ICGC static repository controller
    */
-  module.controller('ICGCRepoController', function($scope, $stateParams, Restangular, RepositoryService,
+  module.controller('ICGCRepoController', function($scope, $stateParams, Restangular, FileService,
     ProjectCache, API, Settings, Page, RouteInfoService) {
     var _ctrl = this;
     var dataReleasesRouteInfo = RouteInfoService.get ('dataReleases');
@@ -62,6 +62,14 @@
     _ctrl.downloadEnabled = true;
     _ctrl.dataReleasesTitle = dataReleasesRouteInfo.title;
     _ctrl.dataReleasesUrl = dataReleasesRouteInfo.href;
+
+    _ctrl.fileQuery = '';
+    _ctrl.handleFileQueryKeyup = ($event) => {
+      if (event.keyCode === 27) {
+        _ctrl.fileQuery = '';
+        $event.currentTarget.blur();
+      }
+    };
 
     function buildBreadcrumbs() {
       var i, s, slug, url;
@@ -107,12 +115,12 @@
     }
 
     function getFiles() {
-      RepositoryService.folder(_ctrl.path).then(function (response) {
+      FileService.folder(_ctrl.path).then(function (response) {
         var files = response;
 
         files.forEach(annotate);
 
-        _ctrl.files = RepositoryService.sortFiles(files, _ctrl.slugs.length);
+        _ctrl.files = FileService.sortFiles(files, _ctrl.slugs.length);
 
 
         // Grab text file (markdown)
@@ -251,7 +259,7 @@
 
   module.controller('ExternalFileDownloadController',
     function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params, Restangular, $filter) {
+      Extensions, params, Restangular, $filter, RepositoryService) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
@@ -288,10 +296,13 @@
     p.include = 'facets';
 
     function findRepoData(list, term) {
-      return _.find(list, function(t) { return t.term === term; }).count || 0;
+      return _.find(list, function(t) { return t.term === term }).count || 0;
     }
 
-    ExternalRepoService.getList (p).then (function (data) {
+    Promise.all([
+      ExternalRepoService.getList(p),
+      RepositoryService.getRepos(),
+    ]).then(function ([data, reposFromService]) {
       var facets = data.termFacets;
       var activeRepos = [];
 
@@ -303,6 +314,7 @@
       var repos = {};
       facets.repoName.terms.forEach(function(term) {
         var repoName = term.term;
+        const repo = _.find(reposFromService, {name: repoName});
 
         // Restrict to active repos if it is available
         if (!_.isEmpty(activeRepos) && !_.contains(activeRepos, repoName)) {
@@ -314,12 +326,12 @@
         }
 
         repos[repoName].repoName = repoName;
-        repos[repoName].repoCode = ExternalRepoService.getRepoCodeFromName(repoName);
+        repos[repoName].repoCode = repo.code;
         repos[repoName].fileSize = findRepoData(facets.repositorySizes.terms, repoName);
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
         repos[repoName].fileCount = term.count;
-        repos[repoName].hasManifest = _.includes(cloudRepos, repoName);
-        repos[repoName].isCloud = _.includes(cloudRepos, repoName);
+        repos[repoName].hasManifest = RepositoryService.isCloudRepo(repo);
+        repos[repoName].isCloud = RepositoryService.isCloudRepo(repo);
       });
 
       $scope.repos = _(repos).values().sortBy('fileSize').value().reverse();
@@ -413,8 +425,7 @@
 
       ExternalRepoService.createManifest(params).then(function (id) {
         if (! id) {
-          console.log('No Manifest UUID is returned from API call.');
-          return;
+          throw new Error('No Manifest UUID is returned from API call.');
         }
         repoData.isGeneratingManifestID = false;
         repoData.manifestID = id;
@@ -644,6 +655,8 @@
     var projectMap = {};
     var _ctrl = this;
 
+    this.handleOperationSuccess = () => { this.selectedFiles = [] };
+
     _ctrl.showIcgcGet = PortalFeature.get('ICGC_GET');
     _ctrl.selectedFiles = [];
     _ctrl.summary = {};
@@ -721,6 +734,19 @@
       }
     };
 
+    _ctrl.donorSetsForRepo = () => 
+      _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
+        set.repoFilters = {};
+        set.repoFilters.file = {};
+        set.repoFilters.file.donorId = set.advFilters.donor.id;
+        return set;
+      });
+
+    // Adding filters for repository to the donor set
+    _ctrl.donorSets = _ctrl.donorSetsForRepo();
+
+    _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
+
     function toSummarizedString (values, name) {
       var size = _.size (values);
       return (size > 1) ? '' + size + ' ' + name + 's' :
@@ -786,9 +812,6 @@
     /**
      * Tablular display
      */
-    _ctrl.repoNames = function (fileCopies) {
-      return uniquelyConcat (fileCopies, 'repoName');
-    };
 
     _ctrl.fileFormats = function (fileCopies) {
       return uniquelyConcat (fileCopies, 'fileFormat');
@@ -816,7 +839,7 @@
     };
 
     _ctrl.repoNamesInTooltip = function (fileCopies) {
-      return tooltipList (fileCopies, 'repoName', '');
+      return tooltipList (fileCopies, 'repo.name', '');
     };
 
     _ctrl.awsOrCollab = function(fileCopies) {
@@ -958,19 +981,9 @@
       });
     };
     
-    _ctrl.isSelected = function (row) {
-      return _.contains (_ctrl.selectedFiles, row.id);
-    };
+    _ctrl.isSelected = (row) => _ctrl.selectedFiles.includes(row.id);
 
-    _ctrl.toggleRow = function (row) {
-      if (_ctrl.isSelected (row) === true) {
-        _.remove (_ctrl.selectedFiles, function (r) {
-          return r === row.id;
-        });
-      } else {
-        _ctrl.selectedFiles.push (row.id);
-      }
-    };
+    _ctrl.toggleRow = (row) => { _ctrl.selectedFiles = _.xor(_ctrl.selectedFiles, [row.id]) };
 
     /**
      * Undo user selected files
@@ -1032,7 +1045,7 @@
 
     function refresh() {
       var params = {};
-      var filesParam = LocationService.getJsonParam ('files');
+      var filesParam = LocationService.getJqlParam ('files');
 
       // Default
       params.size = 25;
@@ -1079,7 +1092,18 @@
       loadState.loadWhile([listRequest, summaryRequest, metaDataRequeset, cacheReqeust]);
     }
 
+    // to check if a set was previously selected and if its still in effect
+    const updateSetSelection = (entity, entitySets) => {
+      let filters = FilterService.filters();
+
+      entitySets.forEach( (set) =>
+        set.selected = filters.file && filters.file[entity] &&  _.includes(filters.file[entity].is, `ES:${set.id}`)
+      );
+    };
+
     refresh();
+    updateSetSelection('donorId', _ctrl.donorSets);
+    updateSetSelection('id', _ctrl.fileSets);
 
     // Pagination watcher, gets destroyed with scope.
     $scope.$watch(function() {
@@ -1101,11 +1125,13 @@
       else {
         refresh();
       }
+      updateSetSelection('donorId', _ctrl.donorSets);
+      updateSetSelection('id', _ctrl.fileSets);
     });
 
     // Remove any pagination on facet change: see DCC-4589
     $scope.$on(FacetConstants.EVENTS.FACET_STATUS_CHANGE, function() {
-      var filesParam = LocationService.getJsonParam('files');
+      var filesParam = LocationService.getJqlParam('files');
       if (!_.isEmpty(filesParam)) {
         var newParam = {
           from: 1,
@@ -1113,6 +1139,11 @@
           };
         LocationService.setJsonParam('files', newParam);
       }
+    });
+
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+      _ctrl.donorSets = _ctrl.donorSetsForRepo();
+      _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
     });
 
   });

@@ -5,7 +5,7 @@ var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 var paths = require('./paths');
 
 module.exports = {
-  devtool: 'cheap-module-eval-source-map',
+  devtool: process.env.SOURCE_MAP ? process.env.SOURCE_MAP : 'eval-source-map',
   cache: true,
   context: path.resolve(__dirname, '../app/scripts'),
   entry: {
@@ -22,7 +22,7 @@ module.exports = {
     path: paths.appBuild,
     pathinfo: true,
     filename: 'static/js/[name].js',
-    publicPath: '/'
+    publicPath: 'http://local.dcc.icgc.org:9000/',
   },
   resolve: {
     extensions: ['', '.js', '.json'],
@@ -40,17 +40,26 @@ module.exports = {
         include: paths.appSrc,
       }
     ],
+    noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
       {
-        test: /index.html$/,
+        test: /\.html$/,
         loader: 'raw',
       },
       {
         test: /index.html$/,
         loader: 'string-replace',
         query: {
-          search: '\<portal-settings\>\<\/portal-settings\>',
-          replace: `<script>window.ICGC_SETTINGS = ${JSON.stringify(require('./ICGC_SETTINGS.dev.js'))}</script>`,
+          multiple: [
+            {
+              search: '\<portal-settings\>\<\/portal-settings\>',
+              replace: `<script>window.ICGC_SETTINGS = ${JSON.stringify(require('./ICGC_SETTINGS.dev.js'))}</script>`
+            },
+            {
+              search: '\'COPYRIGHT_YEAR\'',
+              replace: new Date().getUTCFullYear()
+            },
+          ]
         }
       },
       {
@@ -67,7 +76,12 @@ module.exports = {
       {
         test: /\.scss$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loaders: ['style', 'css?sourceMap', 'sass?sourceMap']
+        loaders: [
+          'style',
+          'css?sourceMap&-autoprefixer',
+          'postcss',
+          'sass?sourceMap'
+        ]
       },
       {
         test: /\.json$/,
@@ -96,6 +110,11 @@ module.exports = {
   eslint: {
     configFile: path.join(__dirname, 'eslint.js'),
     useEslintrc: false
+  },
+  postcss: function() {
+    return [
+      require('autoprefixer'),
+    ];
   },
   plugins: [
     new HtmlWebpackPlugin({

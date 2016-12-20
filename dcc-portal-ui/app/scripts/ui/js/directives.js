@@ -35,7 +35,8 @@ angular.module('icgc.ui', [
   'icgc.ui.popover',
   'icgc.ui.numberTween',
   'icgc.ui.iobio',
-  'icgc.ui.loader'
+  'icgc.ui.loader',
+  'icgc.ui.splitButtons'
 ]);
 
 
@@ -515,7 +516,7 @@ angular.module('icgc.ui.copyPaste', [])
                              '-' + pasteCommandAlphaKey + ' to paste.';
                     }
                   }
-                  else if (isSuccess) {
+                  else {
                     msg = 'Press' + copyPasteCommandKey + '-' + copyCommandAlphaKey +
                     ' to copy and ' + copyPasteCommandKey + '-' +
                     pasteCommandAlphaKey + ' to paste.';
@@ -886,7 +887,7 @@ angular.module('icgc.ui.iobio', [])
               }
             }
           }).opened.then(function() {
-            setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
+            setTimeout(function() { $rootScope.$broadcast('bamready.event', {})}, 300);
 
           });
         };
@@ -911,7 +912,7 @@ angular.module('icgc.ui.iobio', [])
               }
             }
           }).opened.then(function() {
-            setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
+            setTimeout(function() { $rootScope.$broadcast('bamready.event', {})}, 300);
           });
         };
 
@@ -923,7 +924,7 @@ angular.module('icgc.ui.iobio', [])
 
             return _.pluck(fCopies, 'fileName')[0];
           } catch (err) {
-            console.log(err);
+            console.error(err);
             return 'Could Not Retrieve File Name';
           }
         };
@@ -938,4 +939,16 @@ angular.module('icgc.ui.loader', [])
         {{ ['&#9724;&#9724;&#9724;','&#9724;&#9724;&#9724;', '&#9724;&#9724;', '&#9724;'] | _:'sample' }}
       </span>`,
       replace: true
+  });
+
+angular.module('icgc.ui.splitButtons', [])
+  .component('entitySetFacet', {
+    templateUrl: '/scripts/ui/views/entity-set-facet.html',
+    bindings: {
+      entityType: '@',
+      entitySet: '=',
+      clickEvent: '<',
+      selectEvent: '<'
+    },
+    replace: true
   });

@@ -53,7 +53,6 @@ angular.module('app.downloader.services').service('DownloaderService', function(
   };
 
   this.setCurrentJobIds = function(data) {
-    console.log('Saving...', data);
     $window.localStorage.setItem('dcc.icgc.downloader', JSON.stringify(data));
   };
 

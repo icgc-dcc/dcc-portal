@@ -145,6 +145,7 @@ public class AuthResource extends Resource {
       val tokenUserEntry = resolveIcgcUser(cudToken, cmsToken);
       val token = tokenUserEntry.getKey();
       val icgcUser = tokenUserEntry.getValue();
+      log.debug("Resolved ICGC user: {}", icgcUser);
 
       val userType = resolveUserType(cudToken, cmsToken);
       val userId = icgcUser.getUserName();

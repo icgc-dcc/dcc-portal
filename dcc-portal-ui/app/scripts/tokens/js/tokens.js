@@ -55,7 +55,7 @@
             $scope.activeTokens = data.tokens;
 
             // Give this a slight delay to make viewers aware that UI is updating
-            $timeout(function() { $scope.processing = false; }, 250);
+            $timeout(function() { $scope.processing = false }, 250);
          });
 
          TokenService.getScopes().then(function(data) {
@@ -92,9 +92,13 @@
 
       $scope.createToken = function () {
          $scope.processing = true;
-         TokenService.createToken($scope.selected, $scope.tokenDescription).then(function () {
-            refresh();
-         });
+         $scope.errorCreatingToken = false;
+         TokenService.createToken($scope.selected, $scope.tokenDescription)
+            .then(
+                () => refresh(),
+                () => { $scope.errorCreatingToken = true }
+            )
+            .finally(() => { $scope.processing = false });
       };
 
       $scope.cancel = function () {

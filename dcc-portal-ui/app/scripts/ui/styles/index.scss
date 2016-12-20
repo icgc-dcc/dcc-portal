@@ -1,0 +1,10 @@
+@import "./suggest";
+@import "./tooltip";
+@import "./copyclip";
+@import "./trees";
+
+[data-open-in-list], [open-in-list] {
+  & > a + a, & > ng-transclude > a {
+    margin-left: 0.5em;
+  }
+}

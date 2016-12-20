@@ -141,7 +141,7 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
 
     // TODO: refactor the formatting depedency out so the properties
     // can be normalized as not to be case sensitive
-    var normalizedTerm = term; //term.toLowerCase().replace(/[^\w]+/, '_');
+    var normalizedTerm = term;
 
     if (angular.isDefined(primaryColours[normalizedTerm])){
       return primaryColours[term];
@@ -161,8 +161,6 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
     }
 
     chosenColour = colours[colourIndex];
-    //console.log('For Term "' + term + '" (normalized to: ' + normalizedTerm + ' ).' +
-    //              ' The colour Index Chosen is ' + colourIndex + ' (' + colour + ')');
 
     // save it to the primaryColour object store for later caching purposes
     primaryColours[normalizedTerm] = chosenColour;
@@ -195,7 +193,7 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
       var inner = hit[innerFacet],
         name = hit[outerFacet],
         count = hit[countBy] ? hit[countBy] : 0,
-        inArray = _.filter(inner, function() { return inner === iName; }).length > 0,
+        inArray = _.filter(inner, function() { return inner === iName }).length > 0,
         inValue = inner === iName;
 
       if (inArray || inValue) {

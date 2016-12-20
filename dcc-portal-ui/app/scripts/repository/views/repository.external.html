@@ -35,7 +35,9 @@
           data-proxy-type="file"
           data-proxy-facet-name="id"
           data-label="{{'File' | translate}}"
-          data-placeholder="{{'e.g. F123, 7f87aa6a-b447-5092...' | translate}}" />
+          data-placeholder="{{'e.g. FI123, 7f87aa6a-b447-5092...' | translate}}" 
+          data-entity-sets="ExternalRepoController.fileSets"
+          data-show-entity-set-facet="true"/>
         <terms data-type="file"
           data-facet-name="repoName"
           data-facet="ExternalRepoController.files.termFacets.repoName"
@@ -81,7 +83,9 @@
           data-label="{{'Donor' | translate}}"
           data-placeholder="{{'e.g. DO45299, SA501608' | translate}}"
           data-proxy-type="file"
-          data-proxy-facet-name="donorId"></li>
+          data-proxy-facet-name="donorId"
+          data-entity-sets="ExternalRepoController.donorSets"
+          data-show-entity-set-facet="true"></li>
       <terms data-type="file" data-facet-name="projectCode"
              data-label="{{'Project' | translate}}"
              data-facet="ExternalRepoController.files.termFacets.projectCode"
@@ -211,10 +215,16 @@
 
             <span class="action-toolbar pull-right">
               <span class="action-item">
-                  <i class="icon-floppy"></i><a href="" data-ng-click="ExternalRepoController.saveFileSet('file', ExternalRepoController.summary.fileCount)"><translate>Save File Set</translate></a>
+                  <i class="icon-floppy"></i><a href="" data-ng-click="ExternalRepoController.saveDonorSet('donor', ExternalRepoController.summary.donorCount)"><translate>Save Donor Set</translate></a>
               </span>
               <span class="action-item">
-                  <i class="icon-floppy"></i><a href="" data-ng-click="ExternalRepoController.saveDonorSet('donor', ExternalRepoController.summary.donorCount)"><translate>Save Donor Set</translate></a>
+                  <entityset-persistence-dropdown
+                      selected-entity-ids="ExternalRepoController.selectedFiles"
+                      entity-type="'file'"
+                      set-total-count="ExternalRepoController.files.pagination.total"
+                      set-limit="ICGC_SETTINGS.maxNumberOfHits"
+                      on-operation-success="ExternalRepoController.handleOperationSuccess()"
+                  ></entityset-persistence-dropdown>
               </span>
             </span>
 
@@ -260,9 +270,15 @@
                 </thead>
 
                 <tbody>
-                  <tr data-ng-repeat="row in ExternalRepoController.files.hits">
-                    <td class="text-center" data-ng-click="ExternalRepoController.toggleRow (row)" style="cursor: pointer">
-                     <i class="{{ ExternalRepoController.isSelected (row) ? 'icon-check' : 'icon-check-empty' }}" />
+                  <tr
+                    data-ng-repeat="row in ExternalRepoController.files.hits track by row.id"
+                    data-ng-click="ExternalRepoController.toggleRow (row)"
+                    ng-class="{
+                        'is-selected': ExternalRepoController.isSelected(row)
+                    }"
+                  >
+                    <td>
+                        <icgc-checkbox is-checked="ExternalRepoController.isSelected(row)"></icgc-checkbox>
                     </td>
 
                     <td style="white-space:nowrap;max-width: 8rem; font-size: {{ row.fileId.length > 100? '0.75rem' : ' inherit' }}">
@@ -280,7 +296,7 @@
                     </td>
 
                     <td tooltip="{{ ExternalRepoController.repoNamesInTooltip (row.fileCopies) }}"
-                      ng-bind="ExternalRepoController.repoNames (row.fileCopies)" />
+                      ng-bind="(row.fileCopies | _:'map':'repo.name' | _:'unique').join(', ')" />
 
                     <td ng-init="ProjectData = ExternalRepoController.buildProjectInfo (row.donors)">
                       <a href="{{ ProjectData.href }}" tooltip="{{ ProjectData.tooltip }}"

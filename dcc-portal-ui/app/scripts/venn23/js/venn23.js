@@ -137,6 +137,7 @@
     this.svg = undefined;
     this.vis = undefined;
     this.chart = undefined;
+    this.getId = _.memoize((id) => _.uniqueId(id));
   };
 
 
@@ -155,28 +156,28 @@
     var uniqueIds = this.getDistinctIds();
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle1-set2')
+      .attr('id', this.getId('circle1-set2'))
       .append('svg:circle')
       .attr('cx', cx - radius * factor)
       .attr('cy', cy)
       .attr('r', radius);
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle2-set2')
+      .attr('id', this.getId('circle2-set2'))
       .append('svg:circle')
       .attr('cx', cx + radius * factor)
       .attr('cy', cy)
       .attr('r', radius);
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle1_out-set2')
+      .attr('id', this.getId('circle1_out-set2'))
       .append('svg:circle')
       .attr('cx', cx - radius * factor)
       .attr('cy', cy)
       .attr('r', radius+ config.outlineWidth);
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle2_out-set2')
+      .attr('id', this.getId('circle2_out-set2'))
       .append('svg:circle')
       .attr('cx', cx + radius * factor)
       .attr('cy', cy)
@@ -185,19 +186,19 @@
 
     // 1 intersection
     svg.append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1_out-set2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1_out-set2')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
     svg.append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2_out-set2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2_out-set2')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
 
     svg.append('svg:rect')
       .datum({selected: false, data:[uniqueIds[0]]})
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1-set2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1-set2')})`)
       .attr('class', 'inner')
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
@@ -207,7 +208,7 @@
     svg.append('svg:rect')
       .datum({selected:false, data:[uniqueIds[1]]})
       .attr('class', 'inner')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2-set2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2-set2')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', function() {
@@ -217,18 +218,18 @@
 
     // 2 intersections
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1_out-set2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1_out-set2')})`)
       .append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2_out-set2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2_out-set2')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1-set2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1-set2')})`)
       .append('svg:rect')
       .datum({selected: false, data:[uniqueIds[0], uniqueIds[1]]})
       .attr('class', 'inner')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2-set2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2-set2')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', function() {
@@ -242,9 +243,8 @@
       .attr('y', cy)
       .attr('text-anchor', 'end')
       .style('fill', '#333333')
-      .text('S')
       .append('tspan')
-      .text(config.setLabelFunc(uniqueIds[0]))
+      .html(config.setLabelFunc(uniqueIds[0]))
       .style('alignment-baseline', 'central');
 
     svg.append('text')
@@ -252,9 +252,8 @@
       .attr('y', cy)
       .attr('text-anchor', 'start')
       .style('fill', '#333333')
-      .text('S')
       .append('tspan')
-      .text(config.setLabelFunc(uniqueIds[1]))
+      .html(config.setLabelFunc(uniqueIds[1]))
       .style('alignment-baseline', 'central');
 
 
@@ -298,42 +297,42 @@
     var uniqueIds = this.getDistinctIds();
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle1')
+      .attr('id', this.getId('circle1'))
       .append('svg:circle')
       .attr('cx', cx + Math.sin(Math.PI * 300/180) * radius * factor)
       .attr('cy', cy - Math.cos(Math.PI * 300/180) * radius * factor)
       .attr('r', radius);
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle2')
+      .attr('id', this.getId('circle2'))
       .append('svg:circle')
       .attr('cx', cx + Math.sin(Math.PI * 60/180) * radius * factor)
       .attr('cy', cy - Math.cos(Math.PI * 60/180) * radius * factor)
       .attr('r', radius);
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle3')
+      .attr('id', this.getId('circle3'))
       .append('svg:circle')
       .attr('cx', cx + Math.sin(Math.PI * 180/180) * radius * factor)
       .attr('cy', cy - Math.cos(Math.PI * 180/180) * radius * factor)
       .attr('r', radius);
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle1_out')
+      .attr('id', this.getId('circle1_out'))
       .append('svg:circle')
       .attr('cx', cx + Math.sin(Math.PI * 300/180) * radius * factor)
       .attr('cy', cy - Math.cos(Math.PI * 300/180) * radius * factor)
       .attr('r', radius+ config.outlineWidth);
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle2_out')
+      .attr('id', this.getId('circle2_out'))
       .append('svg:circle')
       .attr('cx', cx + Math.sin(Math.PI * 60/180) * radius * factor)
       .attr('cy', cy - Math.cos(Math.PI * 60/180) * radius * factor)
       .attr('r', radius+ config.outlineWidth);
 
     defs.append('svg:clipPath')
-      .attr('id', 'circle3_out')
+      .attr('id', this.getId('circle3_out'))
       .append('svg:circle')
       .attr('cx', cx + Math.sin(Math.PI * 180/180) * radius * factor)
       .attr('cy', cy - Math.cos(Math.PI * 180/180) * radius * factor)
@@ -342,24 +341,24 @@
 
     // 1 intersection
     svg.append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1_out')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
     svg.append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2_out')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
     svg.append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle3_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle3_out')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
 
     svg.append('svg:rect')
       .datum({selected:false, data:[uniqueIds[0]]})
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1')})`)
       .attr('class', 'inner')
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
@@ -369,7 +368,7 @@
     svg.append('svg:rect')
       .datum({selected:false, data:[uniqueIds[1]]})
       .attr('class', 'inner')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', function() {
@@ -378,7 +377,7 @@
     svg.append('svg:rect')
       .datum({selected:false, data:[uniqueIds[2]]})
       .attr('class', 'inner')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle3)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle3')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', function() {
@@ -387,18 +386,18 @@
 
     // 2 intersections
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1_out')})`)
       .append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2_out')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1')})`)
       .append('svg:rect')
       .datum({selected:false, data:[uniqueIds[0], uniqueIds[1]]})
       .attr('class', 'inner')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', function() {
@@ -406,18 +405,18 @@
       });
 
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2_out')})`)
       .append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle3_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle3_out')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2')})`)
       .append('svg:rect')
       .datum({selected:false, data:[uniqueIds[1], uniqueIds[2]]})
       .attr('class', 'inner')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle3)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle3')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', function() {
@@ -425,18 +424,18 @@
       });
 
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle3_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle3_out')})`)
       .append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1_out')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle3)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle3')})`)
       .append('svg:rect')
       .datum({selected:false, data:[uniqueIds[2], uniqueIds[0]]})
       .attr('class', 'inner')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', function() {
@@ -446,22 +445,22 @@
 
     // 3 intersections
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle3_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle3_out')})`)
       .append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2_out')})`)
       .append('svg:rect')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1_out)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1_out')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', config.outlineColour);
     svg.append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle3)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle3')})`)
       .append('svg:g')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle2)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle2')})`)
       .append('svg:rect')
       .datum({selected:false, data:[uniqueIds[0], uniqueIds[1], uniqueIds[2]]})
       .attr('class', 'inner')
-      .attr('clip-path', 'url(' + config.urlPath + '#circle1)')
+      .attr('clip-path', 'url(' + config.urlPath + `#${this.getId('circle1')})`)
       .attr('width', config.chartWidth)
       .attr('height', config.chartHeight)
       .style('fill', function() {
@@ -474,9 +473,8 @@
       .attr('y', cy - Math.cos(Math.PI * 300/180) * 2.5*radius * factor)
       .attr('text-anchor', 'end')
       .style('fill', '#333333')
-      .text('S')
       .append('tspan')
-      .text(config.setLabelFunc(uniqueIds[0]))
+      .html(config.setLabelFunc(uniqueIds[0]))
       .style('alignment-baseline', 'central');
 
     svg.append('text')
@@ -484,9 +482,8 @@
       .attr('y', cy - Math.cos(Math.PI * 60/180) * 2.5*radius * factor)
       .attr('text-anchor', 'start')
       .style('fill', '#333333')
-      .text('S')
       .append('tspan')
-      .text(config.setLabelFunc(uniqueIds[1]))
+      .html(config.setLabelFunc(uniqueIds[1]))
       .style('alignment-baseline', 'central');
 
     svg.append('text')
@@ -494,9 +491,8 @@
       .attr('y', cy - Math.cos(Math.PI * 180/180) * 2.6*radius * factor)
       .attr('text-anchor', 'middle')
       .style('fill', '#333333')
-      .text('S')
       .append('tspan')
-      .text(config.setLabelFunc(uniqueIds[2]))
+      .html(config.setLabelFunc(uniqueIds[2]))
       .style('alignment-baseline', 'central');
 
 
@@ -606,30 +602,6 @@
     _this.svg.selectAll('.inner').each(function(d) {
       d.count = _this.getValueBySetIds(d.data);
     });
-
-
-    // Add legend
-    /*
-    _this.svg.append('text').attr('x', 25).attr('y', 15).text(0);
-    _this.svg.append('text').attr('x', 25 + _this.colours.length*15).attr('y', 15).text(_this.max);
-    _this.svg.selectAll('.legend')
-      .data(_this.colours)
-      .enter()
-      .append('rect')
-      .classed('legend', true)
-      .attr('x', function(d, i) {
-        return 30 + 15*i;
-      })
-      .attr('y', function() {
-        return 15;
-      })
-      .attr('width', 15)
-      .attr('height', 15)
-      .style('stroke', '#FFFFFF')
-      .style('fill', function() {
-        return d;
-      });
-      */
 
   };
 

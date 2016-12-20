@@ -117,7 +117,7 @@
           }
           return true;
         });
-      } else if (type === 'phenotype') {
+      } else if (type === 'phenotype'){
         _this.filteredList = _.filter(SetService.getAll(), function (set) {
           return set.type === 'donor';
         });
@@ -126,9 +126,7 @@
           return set.type === 'donor' || set.type === 'gene';
         });
       } else {
-        _this.filteredList = _.filter(SetService.getAll(), function (set) {
-          return set.type === 'donor';
-        });
+        console.error(`The requested analysis ${type} doesn't exist!`);
       }
     };
 
@@ -154,7 +152,7 @@
         .post(resourceName, data, {}, {'Content-Type': 'application/json'})
         .then(function(data) {
           if (!data.id) {
-            console.log('Could not retrieve analysis data.id');
+           throw new Error('Could not retrieve analysis data.id', data);
           }
           $location.path(redirectRootPath + data.id);
         })
@@ -180,9 +178,7 @@
       return _launchAnalysis(setIds, 'survival', 'analysis/view/survival/');
     };
     
-    _this.launchOncogridAnalysis = function (setIds) {
-      console.log('Launching OncoGrid with: ', setIds);
-      
+    _this.launchOncogridAnalysis = function (setIds) {      
       if (_isLaunchingAnalysis) {
         return;
       }

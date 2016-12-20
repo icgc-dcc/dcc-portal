@@ -202,7 +202,7 @@
         bar.total = 0;
         bar.stack = [];
 
-        gene.uiFIProjects.sort(function(a, b) { return a.count - b.count; }).forEach(function(p) {
+        gene.uiFIProjects.sort(function(a, b) { return a.count - b.count }).forEach(function(p) {
           bar.stack.push({
             name: p.id,
             y0: bar.total,
@@ -216,7 +216,7 @@
         });
         list.push(bar);
       });
-      return list.sort(function(a, b) { return b.total - a.total; });
+      return list.sort(function(a, b) { return b.total - a.total });
     }
 
     _ctrl.donutChartSubTitle = function () {
@@ -316,7 +316,7 @@
         });
 
         cancelInFlightAggregationAjax();
-        if (stopIfNoHits (data)) {return;}
+        if (stopIfNoHits (data)) {return}
 
         var mutationFilter = {
           mutation: {
@@ -332,7 +332,7 @@
           // About to launch a new ajax getting project aggregation data. Cancel any active call.
           cancelInFlightAggregationAjax();
 
-          if (stopIfNoHits (genes)) {return;}
+          if (stopIfNoHits (genes)) {return}
 
           geneDonorCountsRestangular = Restangular
             .one('ui/search/gene-project-donor-counts/' + _.map(genes.hits, 'id').join(','));
@@ -407,6 +407,10 @@
       return _.isEmpty (countryCode) ? defaultValue : 'flag flag-' + countryCode;
     };
 
+    _ctrl.viewInRepositories = () => {
+      LocationService.goToPath('/repositories', `filters={"file":{ "projectCode":{"is":[${ _.map(_ctrl.projects.hits, (project) => `"${project.id}"`, []) }]}}}`);
+    };
+
     $scope.$on('$locationChangeSuccess', function (event, dest) {
       if (dest.match(new RegExp('^' + window.location.protocol + '//' + window.location.host + '/projects'))) {
         // NOTE: need to defer this call till next tick due to this running before filters are updated
@@ -418,7 +422,8 @@
   });
 
   module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page, PubMed, project,
-    Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState, SetService, Restangular) {
+    Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState, SetService, Restangular, 
+    LocationService, SurvivalAnalysisLaunchService) {
     var _ctrl = this;
 
     Page.setTitle(project.id);
@@ -570,6 +575,14 @@
 
       loadState.loadWhile($q.all([ fetchAndUpdateMutations, fetchAndUpdateStudies ]));
     }
+
+    /**
+       * Run Survival/Phenotypw analysis
+       */
+      _ctrl.launchSurvivalAnalysis = (entityType, entityId, entitySymbol) => {
+        var filters = _.merge(_.cloneDeep(LocationService.filters()), {donor: {projectId: {is: [project.id]}}});
+        SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters, project.id);
+      };
 
     $scope.$on('$locationChangeSuccess', function (event, dest) {
       if (dest.indexOf('projects') !== -1) {
@@ -733,7 +746,6 @@
               size: 0,
               include: 'facets',
               filters: mutation.advQueryAll
-              //filters: {mutation: {id: {is: mutation.id}}}
             }).then(function (data) {
               mutation.uiDonors = data.facets.projectId.terms;
               mutation.uiDonors.forEach(function (facet) {
