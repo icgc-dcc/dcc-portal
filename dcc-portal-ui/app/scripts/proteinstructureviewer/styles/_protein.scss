@@ -78,3 +78,10 @@ g.marker rect.selected {
     stroke: #666;
     stroke-width: 1px;
 }
+
+.protein-structure-viewer-diagram {
+    height: 300px;
+    .minimap-zoom {
+        fill: #{rgba($selection, 0.5)}!important;
+    }
+}
