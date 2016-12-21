@@ -47,8 +47,8 @@ import './file-finder';
   /**
    * ICGC static repository controller
    */
-  module.controller('ICGCRepoController', function($scope, $stateParams, Restangular, FileService,
-    ProjectCache, API, Settings, Page, RouteInfoService) {
+  module.controller('ICGCRepoController', function($scope, $stateParams, $window, Restangular, 
+    FileService, ProjectCache, API, Settings, Page, RouteInfoService) {
     var _ctrl = this;
     var dataReleasesRouteInfo = RouteInfoService.get ('dataReleases');
 
@@ -62,6 +62,9 @@ import './file-finder';
     _ctrl.downloadEnabled = true;
     _ctrl.dataReleasesTitle = dataReleasesRouteInfo.title;
     _ctrl.dataReleasesUrl = dataReleasesRouteInfo.href;
+
+    _ctrl.isSafari = /Safari/.test($window.navigator.userAgent);
+    _ctrl.isChrome = /Chrome/.test($window.navigator.userAgent);
 
     _ctrl.fileQuery = '';
     _ctrl.handleFileQueryKeyup = ($event) => {

@@ -114,6 +114,14 @@
     </div>
     <div class="narrow omega" data-ng-if="ICGCRepoController.downloadEnabled">
         <br>
+         <div data-ng-if="ICGCRepoController.isSafari && !ICGCRepoController.isChrome" 
+            class="alert alert-info" 
+            style="margin:2rem 0;">
+            <a href="#" class="close pull-right" style="cursor:pointer;" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><span>Using Safari browser?</span></strong><br>
+            We know that users have problems downloading gzip files from the download server.
+            The downloaded files only contain file headers. To fix the problem please either use any other browser or disable the "Open 'safe' files after downloading" option in Safari browser as described in <a href="https://discussions.apple.com/thread/2297632?tstart=0" target="_blank">this article</a>.
+        </div>
         <p>
             <span>
                 <a href="http://docs.icgc.org/portal/repositories/#having-trouble-downloading-a-file-from-dcc-repository" target="_blank">
