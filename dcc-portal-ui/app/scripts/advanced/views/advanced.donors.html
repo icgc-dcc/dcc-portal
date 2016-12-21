@@ -21,10 +21,32 @@
                  height="150"></pie>
             <pie items='AdvancedCtrl.Donor.pieAge' heading="{{'Age' | translate}}" label="{{'Donors' | translate}}" type="pie"
                  width="195" height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieDataTypes' heading="{{'Data Types' | translate}}" label="{{'Donors' | translate}}" type="pie"
-                 width="195" height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieAnalysisTypes' heading="{{'Analysis Types' | translate}}" label="{{'Donors' | translate}}" type="pie"
-                 width="195" height="150"></pie>
+            <span>
+                <bar
+                    config-overrides="AdvancedCtrl.repoChartConfigOverrides"
+                    items="AdvancedCtrl.Donor.barDataTypes"
+                    heading="{{'Data Types' | translate}}"
+                    ylabel="{{'Donors' | translate}}"
+                    type="bar"
+                    width="390"
+                    height="250"
+                    >
+                </bar>
+            </span>
+            <span>
+                <bar
+                    config-overrides="AdvancedCtrl.repoChartConfigOverrides"
+                    items="AdvancedCtrl.Donor.barAnalysisTypes"
+                    heading="{{'Analysis Types' | translate}}"
+                    ylabel="{{'Donors' | translate}}"
+                    type="bar"
+                    width="390"
+                    height="250"
+                    >
+                </bar>
+            </span>
+            <!--<pie items='AdvancedCtrl.Donor.pieAnalysisTypes' heading="{{'Analysis Types' | translate}}" label="{{'Donors' | translate}}" type="pie"
+                 width="195" height="150"></pie>-->
         </div>
         <div class="more-graphs-wrap">
             <span data-ng-click="donorExpand=!donorExpand" class="more-graphs t_tools__tool">

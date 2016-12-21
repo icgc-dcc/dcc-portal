@@ -85,6 +85,19 @@ angular.module('icgc.advanced.controllers', [
       _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
       _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
 
+      _controller.repoChartConfigOverrides = {
+        yAxis: {
+          gridLineColor: 'transparent',
+          endOnTick: false,
+          lineWidth: 1
+        },
+        plotOptions: {
+          series: {
+            minPointLength: 2
+          }
+        }
+      };
+
       // to check if a set was previously selected and if its still in effect
       const updateSetSelection = (entity, entitySets) => {
         let filters = _locationFilterCache.filters();
@@ -571,10 +584,20 @@ angular.module('icgc.advanced.controllers', [
           facet: 'availableDataTypes',
           facets: facets
         });
+        _ASDonorService.barDataTypes = HighchartsService.bar({
+          hits: _ASDonorService.pieDataTypes,
+          xAxis: 'name',
+          yValue: 'y'
+        });
         _ASDonorService.pieAnalysisTypes = HighchartsService.pie({
           type: 'donor',
           facet: 'analysisTypes',
           facets: facets
+        });
+        _ASDonorService.barAnalysisTypes = HighchartsService.bar({
+          hits: _ASDonorService.pieAnalysisTypes,
+          xAxis: 'name',
+          yValue: 'y'
         });
       }
 
