@@ -167,7 +167,6 @@
 
       // Fetch dynaimc mutations and donors
       geneProjectPromise.then(function(projects) {
-        debugger;
         var mutationPromise, donorPromise;
         if ( !projects.hits || projects.hits.length === 0) {
           _ctrl.gene.projects = [];
@@ -275,7 +274,6 @@
       var _ctrl = this;
 
       function success(mutations) {
-        debugger;
         if (mutations.hasOwnProperty('hits')) {
           var projectCachePromise = ProjectCache.getData();
 

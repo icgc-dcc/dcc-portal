@@ -63,7 +63,7 @@ angular.module('icgc.advanced.controllers', [
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
               AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Restangular, FilterService,
-              RouteInfoService, FacetConstants, Extensions, SurvivalAnalysisLaunchService, gettextCatalog) {
+              RouteInfoService, FacetConstants, Extensions, SurvivalAnalysisLaunchService, gettextCatalog, Facets) {
 
       var _controller = this,
           dataRepoRouteInfo = RouteInfoService.get ('dataRepositories'),
@@ -89,11 +89,32 @@ angular.module('icgc.advanced.controllers', [
         yAxis: {
           gridLineColor: 'transparent',
           endOnTick: false,
-          lineWidth: 1
+          lineWidth: 1,
+          labels: {
+            formatter: function () {
+              return this.value > 1000 ? this.value / 1000 + 'k' : this.value ;
+            }
+          },
         },
         plotOptions: {
           series: {
-            minPointLength: 2
+            minPointLength: 2,
+            borderRadiusTopLeft: 3,
+            borderRadiusTopRight: 3,
+            cursor: 'pointer',
+            stickyTracking: false,
+            point: {
+              events: {
+                click: function () {
+                  Facets.toggleTerm({
+                    type: this.type,
+                    facet: this.facet,
+                    term: this.term
+                  });
+                  $scope.$apply();
+                }
+              }
+            }
           }
         }
       };
@@ -534,7 +555,7 @@ angular.module('icgc.advanced.controllers', [
   // interface for facet initialization via <service>.init(), and hits initialization via <service>.renderBodyTab()
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   .service('AdvancedDonorService', // Advanced Donor Service
-    function(Page, LocationService, HighchartsService, Donors, AdvancedSearchTabs, Extensions, $q) {
+    function(Page, LocationService, HighchartsService, Donors, AdvancedSearchTabs, Extensions, $q, $filter) {
 
       var _ASDonorService = this;
 
@@ -585,7 +606,13 @@ angular.module('icgc.advanced.controllers', [
           facets: facets
         });
         _ASDonorService.barDataTypes = HighchartsService.bar({
-          hits: _ASDonorService.pieDataTypes,
+          hits: _.map(_.sortByOrder(_ASDonorService.pieDataTypes, 'y', false), (dataType) => ({
+            y: dataType.y,
+            name: $filter('trans')(dataType.name, 'availableDataTypes'),
+            term: dataType.name,
+          })),
+          type: 'donor',
+          facet: 'availableDataTypes',
           xAxis: 'name',
           yValue: 'y'
         });
@@ -595,7 +622,13 @@ angular.module('icgc.advanced.controllers', [
           facets: facets
         });
         _ASDonorService.barAnalysisTypes = HighchartsService.bar({
-          hits: _ASDonorService.pieAnalysisTypes,
+          hits: _.map(_.sortByOrder(_ASDonorService.pieAnalysisTypes, 'y', false), (analysisType) => ({
+            y: analysisType.y,
+            name: $filter('trans')(analysisType.name, 'analysisTypes'),
+            term: analysisType.name,
+          })),
+          type: 'donor',
+          facet: 'analysisTypes',
           xAxis: 'name',
           yValue: 'y'
         });

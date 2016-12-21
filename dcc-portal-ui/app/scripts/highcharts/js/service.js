@@ -330,8 +330,19 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
 
       data.y = hit[params.yValue];
 
+      if(params.type){
+        data.type = params.type;
+      }
+
+      if(params.facet){
+        data.facet = params.facet;
+      }
+
       if (hit.colour) {
         data.color = hit.colour;
+      } else if(hit.term) {
+        data.term = hit.term;
+        data.color = _this.getPrimarySiteColourForTerm(hit.term);
       }
 
       // Additional options
