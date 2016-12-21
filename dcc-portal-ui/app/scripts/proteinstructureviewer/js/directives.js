@@ -14,6 +14,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import lolliplot from '@oncojs/lolliplot/dist/lib';
 
 (function () {
   'use strict';
@@ -74,8 +75,12 @@
       domainCount = sortedDomains.length;
       for (d = 0; d < domainCount; d++) {
         domain = sortedDomains[d];
-        transformedDomains.push({id: domain.hitName, start: domain.start, stop: domain.end,
-          description: domain.description});
+        transformedDomains.push({
+          id: domain.hitName,
+          start: domain.start,
+          end: domain.end,
+          description: domain.description
+        });
       }
 
       return transformedDomains;
@@ -123,11 +128,11 @@
     function mapToResult(d) {
       var start = d.transcript.consequence.aaMutation.replace(/[^\d]/g, '');
         var m = {
-          id: d.transcript.consequence.aaMutation,
-          position: start,
-          value: d.mutation.affectedDonorCountTotal,
-          ref: d.mutation.id,
-          functionalImpact: d.transcript.functionalImpact || 'Unknown'
+          consequence: d.transcript.consequence.aaMutation,
+          x: start,
+          donors: d.mutation.affectedDonorCountTotal,
+          id: d.mutation.id,
+          impact: d.transcript.functionalImpact || 'Unknown'
         };
       
       return m;
@@ -184,7 +189,7 @@
               // rules that indicate only domains in the same family can overlap. Our strategy is
               // simple: when we find two domains that overlap, at all, we replace them by the larger
               // until we are done.
-              chartData.domains = transformDomains(transcript.domains);
+              chartData.proteins = transformDomains(transcript.domains);
 
               // Now reformat the mutations as required. Yes, it would be better to provide an
               // iterator function for these, and for the domains too, for that matter, but this
@@ -254,12 +259,17 @@
 
              options.displayWidth = jQuery('.protein-structure-viewer-diagram').width() - 100;
 
-              var chart = chartmaker.chart(options, chartData);
-              if (chartData.mutations.length > 0) {
-                chart.display(element);
-              } else {
-                chart.displayError(element, gettextCatalog.getString('No Mutation occurs in coding region of this Gene.'));
-              }
+              var chart = lolliplot({
+                ...options,
+                element,
+                data: chartData,
+              });
+              // console.log(options, chartData);
+              // if (chartData.mutations.length > 0) {
+              //   chart.display(element);
+              // } else {
+              //   chart.displayError(element, gettextCatalog.getString('No Mutation occurs in coding region of this Gene.'));
+              // }
             });
           }
         }
