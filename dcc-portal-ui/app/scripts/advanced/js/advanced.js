@@ -99,6 +99,7 @@ angular.module('icgc.advanced.controllers', [
         plotOptions: {
           series: {
             minPointLength: 2,
+            pointWidth: 18,
             borderRadiusTopLeft: 3,
             borderRadiusTopRight: 3,
             cursor: 'pointer',
