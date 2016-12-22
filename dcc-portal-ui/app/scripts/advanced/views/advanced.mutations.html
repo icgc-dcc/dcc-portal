@@ -7,38 +7,38 @@
     </h3>
 </div>
 <div data-ng-show="AdvancedCtrl.Mutation.mutations.hits.length && AdvancedCtrl.Mutation.hitsLoaded && ! AdvancedCtrl.Mutation.isLoading">
-    <section>
+    <section class="graphs-container">
         <div class="graphs">
-            <div class="span">
-                <bar
-                    config-overrides="AdvancedCtrl.mutationConsequenceTypeChartConfig"
-                    items="AdvancedCtrl.Mutation.barConsequences"
-                    heading="{{'Consequence Type' | translate}}"
-                    ylabel="{{'Mutations' | translate}}"
-                    type="bar"
-                    width="390"
-                    height="250"
-                    >
-                </bar>
-                <!--<pie items='AdvancedCtrl.Mutation.pieConsequences' heading="{{'Consequence Type' | translate}}" label="{{'Mutations' | translate}}"
-                     type="pie"
-                     width="225"
-                     height="150"></pie>-->
-            </div>
-            <div class="span">
-                <pie items='AdvancedCtrl.Mutation.piePlatform' heading="{{'Platform' | translate}}" label="{{'Mutations' | translate}}" type="pie"
-                     width="225"
-                     height="150"></pie>
-            </div>
-            <div class="span">
-                <pie items='AdvancedCtrl.Mutation.pieVerificationStatus' heading="{{'Verification Status' | translate}}" label="{{'Mutations' | translate}}"
-                     type="pie"
-                     width="225"
-                     height="150"></pie>
-            </div>
-            <div class="span">
-                <pie items='AdvancedCtrl.Mutation.pieType' heading="{{'Type' | translate}}" label="{{'Mutations' | translate}}" type="pie" width="225"
-                     height="150"></pie>
+            <div class="row">
+                <div class="span">
+                    <span>
+                        <bar
+                            config-overrides="AdvancedCtrl.mutationConsequenceTypeChartConfig"
+                            items="AdvancedCtrl.Mutation.barConsequences"
+                            heading="{{'Consequence Type' | translate}}"
+                            ylabel="{{'Mutations' | translate}}"
+                            type="bar"
+                            width="390"
+                            height="250"
+                            >
+                        </bar>
+                    </span>
+                </div>
+                <div class="span">
+                    <pie items='AdvancedCtrl.Mutation.piePlatform' heading="{{'Platform' | translate}}" label="{{'Mutations' | translate}}" type="pie"
+                        width="225"
+                        height="150"></pie>
+                </div>
+                <div class="span">
+                    <pie items='AdvancedCtrl.Mutation.pieVerificationStatus' heading="{{'Verification Status' | translate}}" label="{{'Mutations' | translate}}"
+                        type="pie"
+                        width="225"
+                        height="150"></pie>
+                </div>
+                <div class="span">
+                    <pie items='AdvancedCtrl.Mutation.pieType' heading="{{'Type' | translate}}" label="{{'Mutations' | translate}}" type="pie" width="225"
+                        height="150"></pie>
+                </div>
             </div>
         </div>
     </section>

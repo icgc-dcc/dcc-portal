@@ -334,7 +334,7 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
         data.color = hit.colour;
       } else if(hit.term) {
         data.term = hit.term;
-        data.color = _this.getPrimarySiteColourForTerm(hit.term);
+        data.color = !_.isArray(hit.term) ? _this.getPrimarySiteColourForTerm(hit.term) : '' ;
       }
 
       // Additional options

@@ -19,7 +19,6 @@
 
 import './entityset.persistence.dropdown/entityset.persistence.dropdown.js';
 import './entityset.persistence.modals';
-import deepmerge from 'deepmerge';
 
 angular.module('icgc.advanced', [
   'icgc.advanced.controllers',
@@ -87,9 +86,13 @@ angular.module('icgc.advanced.controllers', [
       _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
 
       _controller.createChartConfig = (barWidth, entityType, entityFacet) => ({
-        // xAxis: {
-        //   gridLineWidth: '1px'
-        // },
+        chart: {
+          type: 'column',
+          backgroundColor: 'transparent'
+        },
+        xAxis: {
+          gridLineWidth: '1px'
+        },
         yAxis: {
           gridLineColor: 'transparent',
           endOnTick: false,
@@ -111,11 +114,19 @@ angular.module('icgc.advanced.controllers', [
             point: {
               events: {
                 click: function () {
-                  Facets.toggleTerm({
-                    type: entityType,
-                    facet: entityFacet,
-                    term: this.term
-                  });
+                  if (angular.isArray(this.term)) {
+                    Facets.setTerms({
+                      type: entityType,
+                      facet: entityFacet,
+                      terms: this.term
+                    });
+                  } else {
+                    Facets.toggleTerm({
+                      type: entityType,
+                      facet: entityFacet,
+                      term: this.term
+                    });
+                  }
                   $scope.$apply();
                 }
               }
@@ -126,7 +137,7 @@ angular.module('icgc.advanced.controllers', [
 
       _controller.donorDataTypeChartConfig = _controller.createChartConfig(18, 'donor', 'availableDataTypes');
       _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig(20, 'donor', 'analysisTypes');
-      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(20, 'mutation', 'consequenceType');
+      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(25, 'mutation', 'consequenceType');
 
       // to check if a set was previously selected and if its still in effect
       const updateSetSelection = (entity, entitySets) => {
@@ -955,6 +966,38 @@ angular.module('icgc.advanced.controllers', [
       _ASMutationService.occurrences = occurrences;
     }
 
+    const summarizeData = (items) => {
+      const count = _.size(items);
+      const firstItem = _.first(items);
+
+      if (count < 2) {
+        return items;
+      }
+
+      return {
+        name: `Others (${count} Consequence Types)`,
+        color: '#999',
+        y: _.sum(items, 'y'),
+        type: firstItem.type,
+        facet: firstItem.facet,
+        term: _.map(items, 'name')
+      };
+    };
+
+    const transformConsequenceData = (data) => {
+      if (_.isEmpty(data)) {
+        return [];
+      }
+
+      const max = _.max (data, (item) => item.y);
+      const isBelowGroupPercent = (item) => (item.y / max.y) < (3 / 100);
+      const separated = _.partition (data, isBelowGroupPercent);
+      const belowGroupPercent = _.first(separated);
+      const regular = _.last(separated);
+
+      return _.sortByOrder(regular.concat(summarizeData(belowGroupPercent)), 'y', false);
+      };
+
     function _initFacets(facets) {
       _ASMutationService.pieConsequences = HighchartsService.pie({
         type: 'mutation',
@@ -962,10 +1005,10 @@ angular.module('icgc.advanced.controllers', [
         facets: facets
       });
       _ASMutationService.barConsequences = HighchartsService.bar({
-        hits: _.map(_.sortByOrder(_ASMutationService.pieConsequences, 'y', false), (consequence) => ({
-          y: consequence.y,
-          name: $filter('trans')(consequence.name, 'consequenceType'),
-          term: consequence.name,
+        hits: _.map(transformConsequenceData(_ASMutationService.pieConsequences), (consequence) => ({
+            y: consequence.y,
+            name: $filter('trans')(consequence.name, 'consequenceType'),
+            term: consequence.term ? consequence.term : consequence.name,
         })),
         xAxis: 'name',
         yValue: 'y'
