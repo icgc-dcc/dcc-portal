@@ -287,7 +287,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
         });
         
         jQuery(window).resize(function() {
-          refresh(scope.transcript);
+          // refresh(scope.transcript);
         });
         
         scope.$on('$destroy', function () {
