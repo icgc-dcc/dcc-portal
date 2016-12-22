@@ -2,7 +2,7 @@ require('expose?jQuery!expose?$!jquery');
 require('expose?_!../bower_components/lodash/lodash.js');
 
 // Angular Libs
-require('angular/angular.js');
+require('expose?angular!angular');
 require('angular-sanitize/angular-sanitize.js');
 require('angular-animate/angular-animate.js');
 require('angular-cookies/angular-cookies.js');

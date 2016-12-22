@@ -27,7 +27,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "1.5.7",
     "angular-sanitize": "1.4.11",
     "angular-animate": "1.5.7",
     "angular-cookies": "1.5.7",
