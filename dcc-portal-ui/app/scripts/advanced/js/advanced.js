@@ -85,23 +85,38 @@ angular.module('icgc.advanced.controllers', [
       _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
       _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
 
-      _controller.createChartConfig = (barWidth, entityType, entityFacet) => ({
+      _controller.createChartConfig = (barWidth, entityType, entityFacet, entityFormatter) => ({
         chart: {
           type: 'column',
-          backgroundColor: 'transparent'
+          marginTop: 20,
+          backgroundColor: 'transparent',
+          spacingTop: 1,
+          spacingRight: 20,
+          spacingBottom: 20,
+          spacingLeft: 25
         },
         xAxis: {
-          gridLineWidth: '1px'
+          labels: {
+            rotation: 0,
+            align: 'left',
+            x: -5,
+            y: 12,
+            formatter: () => ''
+          },
         },
         yAxis: {
           gridLineColor: 'transparent',
           endOnTick: false,
           lineWidth: 1,
           labels: {
-            formatter: function () {
-              return this.value > 1000 ? this.value / 1000 + 'k' : this.value ;
-            }
+            formatter: entityFormatter
           },
+          title: {
+            align: 'high',
+            offset: 0,
+            y: -10,
+            rotation: 0
+          }
         },
         plotOptions: {
           series: {
@@ -135,9 +150,13 @@ angular.module('icgc.advanced.controllers', [
         }
       });
 
-      _controller.donorDataTypeChartConfig = _controller.createChartConfig(18, 'donor', 'availableDataTypes');
-      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig(20, 'donor', 'analysisTypes');
-      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(25, 'mutation', 'consequenceType');
+      _controller.donorDataTypeChartConfig = _controller.createChartConfig(18, 'donor', 'availableDataTypes', function () { return this.value > 1000 ? this.value / 1000 + 'K' : this.value;});
+      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig(20, 'donor', 'analysisTypes', function () { return this.value > 1000 ? this.value / 1000 + 'K' : this.value;});
+      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(25, 'mutation', 'consequenceType', function () { 
+        if(this.value > 1000000){ return `${this.value / 1000000}M`}
+        else if(this.value > 1000){ return `${this.value / 1000}K`}
+        else{ return this.value;}
+      });
 
       // to check if a set was previously selected and if its still in effect
       const updateSetSelection = (entity, entitySets) => {
@@ -990,7 +1009,7 @@ angular.module('icgc.advanced.controllers', [
       }
 
       const max = _.max (data, (item) => item.y);
-      const isBelowGroupPercent = (item) => (item.y / max.y) < (3 / 100);
+      const isBelowGroupPercent = (item) => (item.y / max.y) < (1 / 100);
       const separated = _.partition (data, isBelowGroupPercent);
       const belowGroupPercent = _.first(separated);
       const regular = _.last(separated);
