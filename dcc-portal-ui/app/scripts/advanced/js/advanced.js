@@ -150,8 +150,8 @@ angular.module('icgc.advanced.controllers', [
         }
       });
 
-      _controller.donorDataTypeChartConfig = _controller.createChartConfig(18, 'donor', 'availableDataTypes', function () { return this.value > 1000 ? this.value / 1000 + 'K' : this.value;});
-      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig(20, 'donor', 'analysisTypes', function () { return this.value > 1000 ? this.value / 1000 + 'K' : this.value;});
+      _controller.donorDataTypeChartConfig = _controller.createChartConfig(18, 'donor', 'availableDataTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
+      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig(20, 'donor', 'analysisTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
       _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(25, 'mutation', 'consequenceType', function () { 
         if(this.value > 1000000){ return `${this.value / 1000000}M`}
         else if(this.value > 1000){ return `${this.value / 1000}K`}
