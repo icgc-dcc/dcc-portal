@@ -17,10 +17,10 @@ require('expose?marked!marked');
 require('angular-marked');
 require('angular-lodash/angular-lodash.js');
 require('angular-ui-bootstrap');
-require('angularjs-toaster/toaster.js');
+require('angularjs-toaster');
 require('angular-drag-and-drop-lists/angular-drag-and-drop-lists.js');
-require('expose?ZeroClipboard!zeroclipboard/dist/ZeroClipboard.js');
-require('angular-gettext/dist/angular-gettext.min.js');
+require('expose?ZeroClipboard!zeroclipboard');
+require('angular-gettext');
 require('angular-xeditable');
 
 // Other App Dependencies

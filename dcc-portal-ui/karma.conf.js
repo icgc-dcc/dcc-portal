@@ -26,7 +26,7 @@ module.exports = function(config){
       'app/scripts/vendor.js',
       'app/scripts/index.js',
       // === Test, mock files ===
-      'app/bower_components/angular-mocks/angular-mocks.js',
+      './node_modules/angular-mocks/angular-mocks.js',
       {pattern: 'test/unit/**/*.js', watched: false},
     ],
 
