@@ -85,6 +85,14 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+angular-animate@1.5.7:
+  version "1.5.7"
+  resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.5.7.tgz#04e5d657416ed5ea2ad2ffe33c20c5529aa3922e"
+
+angular-cookies@1.5.7:
+  version "1.5.7"
+  resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.5.7.tgz#be078492cbe321fd966fd85a381a3db7b93652b9"
+
 angular-gettext-cli@1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/angular-gettext-cli/-/angular-gettext-cli-1.0.7.tgz#31d26e2fc226a3885e7db42170f702bbba068309"
@@ -103,11 +111,31 @@ angular-gettext-tools@^2.1.11:
     lodash "^4.0.0"
     pofile "~1.0.0"
 
+angular-loading-bar@0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/angular-loading-bar/-/angular-loading-bar-0.6.0.tgz#3749b6935c19e65b6279e0564efdbc2b0e91d879"
+
+angular-local-storage@0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/angular-local-storage/-/angular-local-storage-0.1.5.tgz#f5c435726acc995a30c9c504ee671a3dd529fef5"
+
 angular-marked@1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/angular-marked/-/angular-marked-1.2.2.tgz#031f81015dad5fb01adf8d48922c52feb3588de5"
   dependencies:
     marked "^0.3.3"
+
+angular-sanitize@1.4.11:
+  version "1.4.11"
+  resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.4.11.tgz#5c39c4f29ae09f79a3f65e318268a35ec4ebc188"
+
+angular-ui-bootstrap@0.13.4:
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-0.13.4.tgz#d9981523b12ecb5f911cb0b4829fa3e5f20ed9ec"
+
+angular-ui-router@0.2.15:
+  version "0.2.15"
+  resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-0.2.15.tgz#87b61ba8f2bce85895c6679a0f93f0ab976cbae5"
 
 angular-xeditable@^0.4.0:
   version "0.4.0"
@@ -118,13 +146,13 @@ angular-xeditable@^0.4.0:
     jquery "^1.11.1"
     moment "^2.5.0"
 
-angular@1.5.7:
+angular@1.5.7, angular@~1.x:
   version "1.5.7"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.5.7.tgz#4ecefd0c7134b72757ba3b41bba3a1e4d5eff5ac"
 
-angular@~1.x:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.0.tgz#16c5edebd0a342046bd5281cca2decf04c40df76"
+angularytics@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/angularytics/-/angularytics-0.3.0.tgz#ee1fda4799835362f3cab8cb4c569b84802ba406"
 
 ansi-escapes@^1.1.0:
   version "1.4.0"
@@ -277,18 +305,7 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-autoprefixer@^6.3.1:
-  version "6.3.7"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-6.3.7.tgz#8edf3166dd9fd6116533662c8bb36a03c0efc874"
-  dependencies:
-    browserslist "~1.3.4"
-    caniuse-db "^1.0.30000488"
-    normalize-range "^0.1.2"
-    num2fraction "^1.2.2"
-    postcss "^5.0.21"
-    postcss-value-parser "^3.2.3"
-
-autoprefixer@^6.5.4:
+autoprefixer@^6.3.1, autoprefixer@^6.5.4:
   version "6.5.4"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-6.5.4.tgz#1386eb6708ccff36aefff70adc694ecfd60af1b0"
   dependencies:
@@ -1142,12 +1159,6 @@ browserify-zlib@~0.1.4:
   dependencies:
     pako "~0.2.0"
 
-browserslist@~1.3.4:
-  version "1.3.6"
-  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-1.3.6.tgz#952ff48d56463d3b538f85ef2f8eaddfd284b133"
-  dependencies:
-    caniuse-db "^1.0.30000525"
-
 browserslist@~1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-1.4.0.tgz#9cfdcf5384d9158f5b70da2aa00b30e8ff019049"
@@ -1227,10 +1238,6 @@ camelcase@^2.0.0:
 camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
-
-caniuse-db@^1.0.30000488, caniuse-db@^1.0.30000525:
-  version "1.0.30000595"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000595.tgz#952e756cda62cd4f563c871cc6401d131bde4186"
 
 caniuse-db@^1.0.30000539, caniuse-db@^1.0.30000597:
   version "1.0.30000602"
@@ -2396,6 +2403,10 @@ file-loader@0.9.0:
   resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-0.9.0.tgz#1d2daddd424ce6d1b07cfe3f79731bed3617ab42"
   dependencies:
     loader-utils "~0.2.5"
+
+file-saver@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/file-saver/-/file-saver-1.3.1.tgz#1de62cc1ba40b9dea771bb7d4eba30610316b4d1"
 
 filename-regex@^2.0.0:
   version "2.0.0"
@@ -3582,11 +3593,11 @@ lodash.words@^3.0.0:
   dependencies:
     lodash._root "^3.0.0"
 
-lodash@4.17.2, lodash@^4.0.0, lodash@^4.0.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.5.0:
+lodash@4.17.2, lodash@>=1.3.0, lodash@^4.0.0, lodash@^4.0.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.5.0:
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
-lodash@>=1.3.0, lodash@^3.10.1, lodash@^3.2.0, lodash@^3.8.0:
+lodash@^3.10.1, lodash@^3.2.0, lodash@^3.8.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
@@ -3908,6 +3919,10 @@ ng-annotate@1.2.1:
     stringmap "~0.2.2"
     stringset "~0.2.1"
     tryor "~0.1.2"
+
+ng-infinite-scroll@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ng-infinite-scroll/-/ng-infinite-scroll-1.2.0.tgz#6dad57a036488963b31b631ded0b9baddaa9f931"
 
 no-case@^2.2.0:
   version "2.3.0"
@@ -4647,7 +4662,7 @@ postcss-zindex@^2.0.1:
     postcss "^5.0.4"
     uniqs "^2.0.0"
 
-postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0.14, postcss@^5.0.16, postcss@^5.0.2, postcss@^5.0.21, postcss@^5.0.4, postcss@^5.0.5, postcss@^5.0.6, postcss@^5.0.8, postcss@^5.2.6:
+postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0.14, postcss@^5.0.16, postcss@^5.0.2, postcss@^5.0.4, postcss@^5.0.5, postcss@^5.0.6, postcss@^5.0.8, postcss@^5.2.6:
   version "5.2.6"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-5.2.6.tgz#a252cd67cd52585035f17e9ad12b35137a7bdd9e"
   dependencies:
