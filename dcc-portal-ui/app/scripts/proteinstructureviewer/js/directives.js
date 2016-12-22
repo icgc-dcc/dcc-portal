@@ -263,6 +263,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
                 ...options,
                 element,
                 data: chartData,
+                hideStats: true,
               });
               // console.log(options, chartData);
               // if (chartData.mutations.length > 0) {
