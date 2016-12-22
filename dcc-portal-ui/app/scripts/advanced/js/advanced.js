@@ -19,6 +19,7 @@
 
 import './entityset.persistence.dropdown/entityset.persistence.dropdown.js';
 import './entityset.persistence.modals';
+import deepmerge from 'deepmerge';
 
 angular.module('icgc.advanced', [
   'icgc.advanced.controllers',
@@ -85,7 +86,10 @@ angular.module('icgc.advanced.controllers', [
       _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
       _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
 
-      _controller.repoChartConfigOverrides = {
+      _controller.createChartConfig = (barWidth, entityType, entityFacet) => ({
+        // xAxis: {
+        //   gridLineWidth: '1px'
+        // },
         yAxis: {
           gridLineColor: 'transparent',
           endOnTick: false,
@@ -99,7 +103,7 @@ angular.module('icgc.advanced.controllers', [
         plotOptions: {
           series: {
             minPointLength: 2,
-            pointWidth: 18,
+            pointWidth: barWidth,
             borderRadiusTopLeft: 3,
             borderRadiusTopRight: 3,
             cursor: 'pointer',
@@ -108,8 +112,8 @@ angular.module('icgc.advanced.controllers', [
               events: {
                 click: function () {
                   Facets.toggleTerm({
-                    type: this.type,
-                    facet: this.facet,
+                    type: entityType,
+                    facet: entityFacet,
                     term: this.term
                   });
                   $scope.$apply();
@@ -118,7 +122,11 @@ angular.module('icgc.advanced.controllers', [
             }
           }
         }
-      };
+      });
+
+      _controller.donorDataTypeChartConfig = _controller.createChartConfig(18, 'donor', 'availableDataTypes');
+      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig(20, 'donor', 'analysisTypes');
+      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(20, 'mutation', 'consequenceType');
 
       // to check if a set was previously selected and if its still in effect
       const updateSetSelection = (entity, entitySets) => {
@@ -612,8 +620,6 @@ angular.module('icgc.advanced.controllers', [
             name: $filter('trans')(dataType.name, 'availableDataTypes'),
             term: dataType.name,
           })),
-          type: 'donor',
-          facet: 'availableDataTypes',
           xAxis: 'name',
           yValue: 'y'
         });
@@ -628,8 +634,6 @@ angular.module('icgc.advanced.controllers', [
             name: $filter('trans')(analysisType.name, 'analysisTypes'),
             term: analysisType.name,
           })),
-          type: 'donor',
-          facet: 'analysisTypes',
           xAxis: 'name',
           yValue: 'y'
         });
@@ -936,13 +940,10 @@ angular.module('icgc.advanced.controllers', [
       };
   })
   .service('AdvancedMutationService', function (Page, LocationService, HighchartsService, Mutations,
-    Occurrences, Projects, Donors, AdvancedSearchTabs, Extensions, ProjectCache, $q) {
+    Occurrences, Projects, Donors, AdvancedSearchTabs, Extensions, ProjectCache, $q, $filter) {
 
     var _ASMutationService = this,
         _projectCachePromise = ProjectCache.getData();
-
-
-
 
     function _initOccurrences(occurrences) {
         occurrences.hits.forEach(function(occurrence) {
@@ -959,6 +960,15 @@ angular.module('icgc.advanced.controllers', [
         type: 'mutation',
         facet: 'consequenceType',
         facets: facets
+      });
+      _ASMutationService.barConsequences = HighchartsService.bar({
+        hits: _.map(_.sortByOrder(_ASMutationService.pieConsequences, 'y', false), (consequence) => ({
+          y: consequence.y,
+          name: $filter('trans')(consequence.name, 'consequenceType'),
+          term: consequence.name,
+        })),
+        xAxis: 'name',
+        yValue: 'y'
       });
       _ASMutationService.piePlatform = HighchartsService.pie({
         type: 'mutation',

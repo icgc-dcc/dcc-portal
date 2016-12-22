@@ -10,10 +10,20 @@
     <section>
         <div class="graphs">
             <div class="span">
-                <pie items='AdvancedCtrl.Mutation.pieConsequences' heading="{{'Consequence Type' | translate}}" label="{{'Mutations' | translate}}"
+                <bar
+                    config-overrides="AdvancedCtrl.mutationConsequenceTypeChartConfig"
+                    items="AdvancedCtrl.Mutation.barConsequences"
+                    heading="{{'Consequence Type' | translate}}"
+                    ylabel="{{'Mutations' | translate}}"
+                    type="bar"
+                    width="390"
+                    height="250"
+                    >
+                </bar>
+                <!--<pie items='AdvancedCtrl.Mutation.pieConsequences' heading="{{'Consequence Type' | translate}}" label="{{'Mutations' | translate}}"
                      type="pie"
                      width="225"
-                     height="150"></pie>
+                     height="150"></pie>-->
             </div>
             <div class="span">
                 <pie items='AdvancedCtrl.Mutation.piePlatform' heading="{{'Platform' | translate}}" label="{{'Mutations' | translate}}" type="pie"
