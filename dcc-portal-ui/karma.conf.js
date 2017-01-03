@@ -40,7 +40,6 @@ module.exports = function(config){
     exclude : [
         'app/lib/angular/angular-loader.js'
       , 'app/lib/angular/*.min.js'
-      , 'app/lib/angular/angular-scenario.js'
     ],
 
     singleRun: true,
