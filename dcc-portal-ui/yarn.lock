@@ -6183,9 +6183,9 @@ ws@1.0.1:
     options ">=0.0.5"
     ultron "1.0.x"
 
-x2js@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.0.0.tgz#225f4e64a9f5c7e83a6dcfd423a8f64b57bc37ec"
+x2js@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.1.0.tgz#469ea2fa6ec5242409946c3e3832a3fec09b0c26"
   dependencies:
     xmldom "^0.1.19"
 
