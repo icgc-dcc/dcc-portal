@@ -253,7 +253,6 @@
           }
         };
         SetService.addSet(setParams.type, setParams).then((set) => {
-          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
           $modalInstance.close();
         });
         return;
