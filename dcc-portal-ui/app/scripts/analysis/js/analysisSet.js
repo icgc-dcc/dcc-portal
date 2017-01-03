@@ -101,7 +101,7 @@
         return set.state !== 'FINISHED';
       });
       if (toRemove.length > 0) {
-        SetService.removeSeveral(_.pluck(toRemove, 'id'));
+        SetService.removeSeveral(_.map(toRemove, 'id'));
         _this.checkAll = false; // reset
       }
     };
@@ -116,7 +116,7 @@
 
       var toRemove = _this.selectedSets;
       if (toRemove.length > 0) {
-        SetService.removeSeveral(_.pluck(toRemove, 'id'));
+        SetService.removeSeveral(_.map(toRemove, 'id'));
         _this.checkAll = false; // reset
       }
     };

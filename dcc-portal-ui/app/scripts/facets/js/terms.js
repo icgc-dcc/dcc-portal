@@ -37,7 +37,7 @@
           term.label = missingText;
         }
 
-        if (_.contains (['projectId', 'projectCode'], facetName)) {
+        if (_.includes (['projectId', 'projectCode'], facetName)) {
           ProjectCache.getData().then (function (cache) {
             term.tooltip = cache[termName];
           });

@@ -154,7 +154,7 @@
         include: ['facets'],
         filters: _ctrl.gene.advQuery
       }).then(function(data) {
-        var ids = _.pluck(data.facets.projectId.terms, 'term');
+        var ids = _.map(data.facets.projectId.terms, 'term');
 
         if (_.isEmpty(ids)) {
           return [];
@@ -173,10 +173,10 @@
           return;
         }
 
-        mutationPromise = Projects.one(_.pluck(projects.hits, 'id').join(','))
+        mutationPromise = Projects.one(_.map(projects.hits, 'id').join(','))
           .handler.one('mutations', 'counts').get({filters: _ctrl.gene.advQuery });
 
-        donorPromise = Projects.one(_.pluck(projects.hits, 'id').join(','))
+        donorPromise = Projects.one(_.map(projects.hits, 'id').join(','))
           .handler.one('donors', 'counts').get({filters: _ctrl.gene.advQuery });
 
         mutationPromise.then(function(projectMutations) {

@@ -296,7 +296,7 @@
                     </td>
 
                     <td tooltip="{{ ExternalRepoController.repoNamesInTooltip (row.fileCopies) }}"
-                      ng-bind="(row.fileCopies | _:'map':'repo.name' | _:'unique').join(', ')" />
+                      ng-bind="(row.fileCopies | _:'map':'repo.name' | _:'uniq').join(', ')" />
 
                     <td ng-init="ProjectData = ExternalRepoController.buildProjectInfo (row.donors)">
                       <a href="{{ ProjectData.href }}" tooltip="{{ ProjectData.tooltip }}"

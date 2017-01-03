@@ -91,7 +91,7 @@
           $scope.isLoadingData = newValue;
         });
 
-        var svgMountPoint = _.first ($element.find ('.canvas'));
+        var svgMountPoint = _.head ($element.find ('.canvas'));
 
         function shouldShowPlot (data) {
           return ! _.isEmpty (data);
@@ -108,7 +108,7 @@
             }
 
             // Adaptive margin based on char length of labels
-            var max = _.max(_.pluck( $scope.items, 'key').map(function(d) { return d.length }));
+            var max = _.max(_.map( $scope.items, 'key').map(function(d) { return d.length }));
             if (max >= 10) {
               config.margin.bottom += 25;
             }

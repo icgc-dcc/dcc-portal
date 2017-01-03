@@ -179,7 +179,7 @@
                 <strong>{{MutationCtrl.mutation.affectedDonorCountTotal | number}}</strong>
             </a>
             <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">distinct donors across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(MutationCtrl.projects|pluck:"id").join("\",\"")}}"]}}}'>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(MutationCtrl.projects|_:"map":"id").join("\",\"")}}"]}}}'>
                 <strong>{{MutationCtrl.mutation.affectedProjectCount | number}}</strong>
             </a>
             <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">cancer projects</translate>

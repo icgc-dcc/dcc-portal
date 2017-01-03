@@ -204,7 +204,7 @@
             <a data-ng-href='/search/m?filters={{GeneSetCtrl.baseAdvQuery}}'>
                 <strong>{{GeneSetCtrl.totalMutations | number}}</strong></a>
             <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">mutations across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|pluck:"id").join("\",\"")}}"]}}}'>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|_:"map":"id").join("\",\"")}}"]}}}'>
                 <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong></a>
             <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">projects</translate>
             <br>
@@ -217,7 +217,7 @@
                 <strong>{{GeneSetCtrl.geneSet.geneCount}}</strong>
             </a>
             <translate translate-comment="'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects">genes in this gene set affected by mutations across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|pluck:"id").join("\",\"")}}"]}}}'>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|_:"map":"id").join("\",\"")}}"]}}}'>
                 <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong>
             </a>
             <translate translate-comment="'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects">cancer projects</translate>

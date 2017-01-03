@@ -591,7 +591,7 @@ angular.module('icgc.advanced.controllers', [
           delete filters.donor.id;
         }
         Donors
-          .one(_.pluck(_ASDonorService.donors.hits, 'id').join(','))
+          .one(_.map(_ASDonorService.donors.hits, 'id').join(','))
           .handler
           .one('mutations', 'counts')
           .get({filters: filters})
@@ -718,7 +718,7 @@ angular.module('icgc.advanced.controllers', [
 
       _ASGeneService.mutationCounts = null;
 
-      var geneIds = _.pluck(_ASGeneService.genes.hits, 'id').join(',');
+      var geneIds = _.map(_ASGeneService.genes.hits, 'id').join(',');
       var projectCachePromise = ProjectCache.getData();
 
 
