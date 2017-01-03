@@ -6,27 +6,27 @@
     <section class="graphs-container" style="position:relative;">
         <div data-ng-class="{'graphs-collapsed': !donorExpand}" class="graphs">
             <div class="row">
-                <pie items='AdvancedCtrl.Donor.pieProjectId' heading="{{'Project' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195" group-percent="3"
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieProjectId' heading="{{'Project' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195" group-percent="3"
                  height="150"></pie>
-                <pie items='AdvancedCtrl.Donor.piePrimarySite' heading="{{'Primary Site' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.piePrimarySite' heading="{{'Primary Site' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                     height="150"></pie>
-                <pie items='AdvancedCtrl.Donor.pieGender' heading="{{'Gender' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieGender' heading="{{'Gender' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                     height="150"></pie>
-                <pie items='AdvancedCtrl.Donor.pieTumourStage' heading="{{'Tumour Stage' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieTumourStage' heading="{{'Tumour Stage' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                     height="150"></pie>
             </div>
             <div class="row">
-                <pie items='AdvancedCtrl.Donor.pieVitalStatus' heading="{{'Vital Status' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieVitalStatus' heading="{{'Vital Status' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                  height="150"></pie>
-                <pie items='AdvancedCtrl.Donor.pieStatusFollowup' heading="{{'Disease Status' | translate}}" label="{{'Donors' | translate}}" type="pie"
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieStatusFollowup' heading="{{'Disease Status' | translate}}" label="{{'Donors' | translate}}" type="pie"
                     width="195" height="150"></pie>
-                <pie items='AdvancedCtrl.Donor.pieRelapseType' heading="{{'Relapse Type' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieRelapseType' heading="{{'Relapse Type' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                     height="150"></pie>
-                <pie items='AdvancedCtrl.Donor.pieAge' heading="{{'Age' | translate}}" label="{{'Donors' | translate}}" type="pie"
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieAge' heading="{{'Age' | translate}}" label="{{'Donors' | translate}}" type="pie"
                     width="195" height="150"></pie>
             </div>
             <div class="row" style="margin-top:20px;">
-                <span style="margin: 0 auto;">
+                <span class="col-md-6 col-sm-12">
                     <bar
                         config-overrides="AdvancedCtrl.donorDataTypeChartConfig"
                         items="AdvancedCtrl.Donor.barDataTypes"
@@ -35,10 +35,11 @@
                         type="bar"
                         width="390"
                         height="150"
+                        style="padding-left: 20px;"
                         >
                     </bar>
                 </span>
-                <span style="margin: 0 auto;">
+                <span class="col-md-6 col-sm-12">
                     <bar
                         config-overrides="AdvancedCtrl.donorAnalysisTypeChartConfig"
                         items="AdvancedCtrl.Donor.barAnalysisTypes"
@@ -47,6 +48,7 @@
                         type="bar"
                         width="390"
                         height="150"
+                        style="padding-left: 20px;"
                         >
                     </bar>
                 </span>
