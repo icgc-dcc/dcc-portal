@@ -25,11 +25,10 @@ Requiments
 Setup
 ---
 
-- Install npm and bower dependencies
+- Install npm dependencies
 
 	```
 	yarn
-    npm run bower # this installs bower dependencies
 	```
 
 Run
