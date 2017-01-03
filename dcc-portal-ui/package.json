@@ -133,6 +133,7 @@
     "backbone": "1.0.0",
     "binaryjs": "0.1.8",
     "binaryjs-client": "1.0.0",
+    "blob": "^0.0.4",
     "bootstrap": "3.3.6",
     "class.js": "0.0.1",
     "d3": "3.5.6",

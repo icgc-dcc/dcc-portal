@@ -193,7 +193,7 @@
 
     // angular plugins
     'restangular',
-    'ui.scrollfix',
+    'ui.scrollpoint',
     'ui.bootstrap.modal',
     'ui.bootstrap.position',
     'ui.bootstrap.pagination',
