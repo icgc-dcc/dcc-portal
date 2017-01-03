@@ -202,7 +202,6 @@
     'template/pagination/pagination.html',
     'ui.router',
     'infinite-scroll',
-    'angular-lodash',
     'angularytics',
     'angular-loading-bar',
     'hc.marked',
