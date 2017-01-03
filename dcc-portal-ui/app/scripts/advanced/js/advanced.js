@@ -90,7 +90,7 @@ angular.module('icgc.advanced.controllers', [
           type: 'column',
           marginTop: 20,
           backgroundColor: 'transparent',
-          spacingTop: 10,
+          spacingTop: 1,
         },
         xAxis: {
           labels: {
@@ -149,7 +149,7 @@ angular.module('icgc.advanced.controllers', [
 
       _controller.donorDataTypeChartConfig = _controller.createChartConfig(18, 'donor', 'availableDataTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
       _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig(20, 'donor', 'analysisTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
-      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(25, 'mutation', 'consequenceType', function () { 
+      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(20, 'mutation', 'consequenceType', function () { 
         if(this.value > 1000000){ return `${this.value / 1000000}M`}
         else if(this.value > 1000){ return `${this.value / 1000}K`}
         else{ return this.value;}
@@ -1006,7 +1006,7 @@ angular.module('icgc.advanced.controllers', [
       }
 
       const max = _.max (data, (item) => item.y);
-      const isBelowGroupPercent = (item) => (item.y / max.y) < (1 / 100);
+      const isBelowGroupPercent = (item) => (item.y / max.y) < (2 / 100);
       const separated = _.partition (data, isBelowGroupPercent);
       const belowGroupPercent = _.first(separated);
       const regular = _.last(separated);
