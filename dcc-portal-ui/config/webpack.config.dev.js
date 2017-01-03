@@ -26,7 +26,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.json'],
-    modulesDirectories: ['node_modules', 'bower_components'],
   },
   resolveLoader: {
     root: paths.ownNodeModules,
