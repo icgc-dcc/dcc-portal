@@ -15,7 +15,6 @@ require('angularytics');
 require('angular-ui-utils/scrollfix.js');
 require('expose?marked!marked');
 require('angular-marked');
-require('angular-lodash/angular-lodash.js');
 require('angular-ui-bootstrap');
 require('angularjs-toaster');
 require('angular-drag-and-drop-lists');

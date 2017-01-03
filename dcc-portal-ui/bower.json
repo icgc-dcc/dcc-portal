@@ -28,7 +28,6 @@
   ],
   "dependencies": {
     "Blob": "*",
-    "angular-lodash": "0.1.2",
     "angular-ui-utils": "bower-scrollfix",
     "angular-underscore": "0.5.0",
     "lodash": "3.10.1",
