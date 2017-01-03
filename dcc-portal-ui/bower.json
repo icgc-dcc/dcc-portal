@@ -27,7 +27,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular-ui-utils": "bower-scrollfix",
     "lodash": "3.10.1",
     "x2js": "1.1.7"
   },

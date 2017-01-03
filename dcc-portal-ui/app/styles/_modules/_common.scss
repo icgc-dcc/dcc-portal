@@ -155,7 +155,7 @@ ol {
   cursor: pointer;
 }
 
-.ui-scrollfix {
+.ui-scrollpoint {
   position: fixed;
   z-index: 99;
 }
@@ -168,7 +168,7 @@ ol {
   }
 }
 
-h1.ui-scrollfix, .sug-wrap.ui-scrollfix {
+h1.ui-scrollpoint, .sug-wrap.ui-scrollpoint {
   // Sets a max width. Site will be fluid until it reaches 1200, then stick there.
   width: $break-desktop;
 
@@ -186,7 +186,7 @@ h1.sticky-scrollfix {
   padding-bottom: 0.5rem;
 }
 
-aside.ui-scrollfix {
+aside.ui-scrollpoint {
   top: 5rem;
   section {
     background: transparent;

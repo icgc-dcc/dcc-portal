@@ -127,6 +127,7 @@
     "angular-sanitize": "1.4.11",
     "angular-ui-bootstrap": "0.13.4",
     "angular-ui-router": "0.2.15",
+    "angular-ui-scrollpoint": "^2.1.1",
     "angular-xeditable": "^0.4.0",
     "angularjs-toaster": "2.0.0",
     "angularytics": "0.3.0",
