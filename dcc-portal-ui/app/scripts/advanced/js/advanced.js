@@ -312,7 +312,7 @@ angular.module('icgc.advanced.controllers', [
 
         });
 
-        $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
+        $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
           _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
           _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
           _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());

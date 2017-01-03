@@ -81,9 +81,13 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addSet(setType, params);
+        SetService.addSet(setType, params).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
+        });
       } else {
-        SetService.addDerivedSet(setType, params);
+        SetService.addDerivedSet(setType, params).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
+        });
       }
 
       // Reset
@@ -112,7 +116,9 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addExternalSet(setType, params);
+        SetService.addExternalSet(setType, params).then((set) => {
+          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
+        });
       }
 
       // Reset
