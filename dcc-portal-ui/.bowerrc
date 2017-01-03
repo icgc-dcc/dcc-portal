@@ -1,5 +1,4 @@
 {
-   "directory": "app/bower_components",
    "registry": "https://artifacts.oicr.on.ca/artifactory/api/bower/bower-dependencies",
    "resolvers": [
       "bower-art-resolver"

@@ -11,7 +11,7 @@ module.exports = {
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('app'),
   appNodeModules: resolveApp('node_modules'),
-  bowerModules: resolveApp('app/bower_components'),
+  bowerModules: resolveApp('bower_components'),
   internalVendorModules: resolveApp('app/vendor'),
   ownNodeModules: resolveApp('node_modules')
 };

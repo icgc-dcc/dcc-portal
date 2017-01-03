@@ -1,5 +1,5 @@
 require('expose?jQuery!expose?$!jquery');
-require('expose?_!../bower_components/lodash/lodash.js');
+require('expose?_!../../bower_components/lodash/lodash.js');
 
 // Angular Libs
 require('expose?angular!angular');

@@ -160,7 +160,7 @@
             </goals>
             <configuration>
               <excludes>
-                <exclude>app/bower_components/**</exclude>
+                <exclude>bower_components/**</exclude>
               </excludes>
             </configuration>
           </execution>
