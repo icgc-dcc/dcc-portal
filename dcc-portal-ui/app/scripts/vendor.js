@@ -18,7 +18,7 @@ require('angular-marked');
 require('angular-lodash/angular-lodash.js');
 require('angular-ui-bootstrap');
 require('angularjs-toaster');
-require('angular-drag-and-drop-lists/angular-drag-and-drop-lists.js');
+require('angular-drag-and-drop-lists');
 require('expose?ZeroClipboard!zeroclipboard');
 require('angular-gettext');
 require('angular-xeditable');

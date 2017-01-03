@@ -87,6 +87,10 @@ angular-cookies@1.5.7:
   version "1.5.7"
   resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.5.7.tgz#be078492cbe321fd966fd85a381a3db7b93652b9"
 
+angular-drag-and-drop-lists@1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/angular-drag-and-drop-lists/-/angular-drag-and-drop-lists-1.4.0.tgz#291104c935e10a42f8459696ed30069509d79bfc"
+
 angular-gettext-cli@1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/angular-gettext-cli/-/angular-gettext-cli-1.0.7.tgz#31d26e2fc226a3885e7db42170f702bbba068309"

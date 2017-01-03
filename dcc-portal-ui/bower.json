@@ -28,7 +28,6 @@
   ],
   "dependencies": {
     "Blob": "*",
-    "angular-drag-and-drop-lists": "^1.4.0",
     "angular-lodash": "0.1.2",
     "angular-ui-utils": "bower-scrollfix",
     "angular-underscore": "0.5.0",
