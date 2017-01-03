@@ -90,10 +90,7 @@ angular.module('icgc.advanced.controllers', [
           type: 'column',
           marginTop: 20,
           backgroundColor: 'transparent',
-          spacingTop: 1,
-          spacingRight: 20,
-          spacingBottom: 20,
-          spacingLeft: 25
+          spacingTop: 10,
         },
         xAxis: {
           labels: {
@@ -120,7 +117,7 @@ angular.module('icgc.advanced.controllers', [
         },
         plotOptions: {
           series: {
-            minPointLength: 2,
+            minPointLength: 5,
             pointWidth: barWidth,
             borderRadiusTopLeft: 3,
             borderRadiusTopRight: 3,
