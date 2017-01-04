@@ -19,13 +19,14 @@
   'use strict';
   var module = angular.module('icgc.visualization.stackedbar', []);
 
-  module.directive('stacked', function ($location, HighchartsService, $window) {
+  module.directive('stacked', function ($location, HighchartsService, $window, Page) {
     return {
       restrict: 'E',
       replace: true,
       scope: {
         items: '=',
         isLoading: '=',
+        isProjectPage: '=',
         alternateBrightness: '=',
         selected: '=',
         selectedProjectCount: '=',
@@ -56,9 +57,19 @@
             label: $scope.yLabel,
             ticks: 4
           },
-          onClick: function(link){
+          onClick: function(data){
             $scope.$emit('tooltip::hide');
-            $location.path(link).search({});
+            if($scope.isProjectPage){
+              $location.path(data.link).search({});
+            } else {
+              let filter = {projectCode: {is: [data.name]}, primarySite: {is: [data.key]}};
+              if(_.contains(Page.page(), 'aws')){
+                filter = {file: _.extend(filter, {repoName: {is: ['AWS - Virginia']}})};
+              } else if(_.contains(Page.page(), 'collaboratory')) {
+                filter = {file: _.extend(filter, {repoName: {is: ['Collaboratory - Toronto']}})};
+              }
+              $location.path('repositories').search('filters', JSON.stringify(filter));
+            }
             $scope.$apply();
           },
           tooltipShowFunc: function(elem, d) {
@@ -122,7 +133,6 @@
             chart.destroy();
           }
         });
-
       }
     };
   });

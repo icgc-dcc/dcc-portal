@@ -108,7 +108,7 @@ angular.module('icgc.repositories.controllers', [])
       Page.setTitle(gettextCatalog.getString('User Guide'));
    })
   .controller('RepositoriesController', function ($scope, Page, repoAliasMapConstants,
-                                                  RepositorySearchService, RepositoryService, $stateParams, gettextCatalog) {
+    RepositorySearchService, RepositoryService, $stateParams, gettextCatalog) {
      var _ctrl = this,
        _repoAlias = $stateParams.repoAlias.toLowerCase(),
        _repoContext = _.get(repoAliasMapConstants, _repoAlias, null),
@@ -116,8 +116,7 @@ angular.module('icgc.repositories.controllers', [])
        _repoCreationDate = null,
        _filterQueryStr = null,
        _repoSummaryData = null,
-       _repoStats = {};      
-
+       _repoStats = {};
 
       function _capitalizeWords(str) {
          return str.replace(/[^\s]+/g, function(word) {
@@ -157,7 +156,7 @@ angular.module('icgc.repositories.controllers', [])
 
       function _init() {
          Page.stopWork();
-         Page.setPage('entity');
+         Page.setPage(_repoContext);
          /// ${repoContext} would be a noun
          Page.setTitle(_.template(gettextCatalog.getString('ICGC in the Cloud - ${repoContext} Repository'))({
             repoContext : _capitalizeWords(_repoContext)
