@@ -26,7 +26,6 @@
       scope: {
         items: '=',
         isLoading: '=',
-        isProjectPage: '=',
         alternateBrightness: '=',
         selected: '=',
         selectedProjectCount: '=',
@@ -59,7 +58,7 @@
           },
           onClick: function(data){
             $scope.$emit('tooltip::hide');
-            if($scope.isProjectPage){
+            if(_.contains(Page.page(), 'projects')){
               $location.path(data.link).search({});
             } else {
               let filter = {projectCode: {is: [data.name]}, primarySite: {is: [data.key]}};
