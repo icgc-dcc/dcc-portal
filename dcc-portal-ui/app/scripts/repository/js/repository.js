@@ -698,7 +698,7 @@ import './file-finder';
         maxPadding: 0.01,
         labels: {
           formatter: function () {
-            return this.value / 1000 + 'k';
+            return this.value > 1000 ? this.value / 1000 + 'k' : this.value ;
           }
         },
         lineWidth: 1,
