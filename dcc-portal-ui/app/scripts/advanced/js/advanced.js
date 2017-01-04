@@ -90,14 +90,10 @@ angular.module('icgc.advanced.controllers', [
           type: 'column',
           marginTop: 20,
           backgroundColor: 'transparent',
-          spacingTop: 1,
+          spacingTop: 2,
         },
         xAxis: {
           labels: {
-            rotation: 0,
-            align: 'left',
-            x: -5,
-            y: 12,
             formatter: () => ''
           },
         },
