@@ -28,11 +28,16 @@ mvn -am
 ## Running
 
 ### Command-line
+
+The following commands assume the current directory is the root directory, `dcc-portal`.
+
 To run a basic test setup, execute the following:
 
 ```shell
 mvn -pl dcc-portal-server spring-boot:run -Drun.profiles=test
 ```
+
+Note that you may need to tweak `application.yml` to point to various systems for this to work.
 
 To run a basic development setup, execute the following supplying information about the config server:
 
