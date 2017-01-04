@@ -23,17 +23,17 @@
           <i class="fa fa-question-circle legend-icon"></i>
         </a>
       </span>
-      <div class="set-input">
-        <textarea rows="4"
-          placeholder="{{ params.entityType === 'file' ? 'e.g. FI123' : 'e.g. MU123' }}"
-          data-autofocus data-ng-model="params.entityIds"
-          data-ng-change="verifyInput()">
-        </textarea>
-        <i class="icon-cancel"
-          data-ng-if="params.entityIds"
-          data-ng-click="clear()"></i>
-      </div>
+      <textarea rows="4"
+        placeholder="{{ params.entityType === 'file' ? 'e.g. FI123' : 'e.g. MU123' }}"
+        data-autofocus data-ng-model="params.entityIds"
+        data-ng-change="verifyInput()">
+      </textarea>
     </div>
+    <div>
+      <button class="t_button pull-right"
+        data-ng-click="resetAll()"><translate>Clear</translate></button>
+    </div>
+    <br>
     <div>
       <div><translate>Or choose a file to upload</translate></div>
       <span class="t_button btn-file">

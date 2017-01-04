@@ -304,7 +304,7 @@
       $scope.params.selectedSavedSet = -1;
     };
 
-    $scope.resetCustomInput = function() {
+    $scope.resetAll = function() {
       $scope.params.state = '';
       $scope.params.fileName = null;
       $scope.params.rawText = '';
