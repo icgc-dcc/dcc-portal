@@ -2,11 +2,14 @@
 # yarn lockfile v1
 
 
-"@oncojs/lolliplot@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@oncojs/lolliplot/-/lolliplot-0.4.1.tgz#2f8dd147e8247eb71eaf347413198490b68c3320"
+"@oncojs/lolliplot@0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@oncojs/lolliplot/-/lolliplot-0.5.1.tgz#83a7c4f19f8985e4d12cbf3267a6031fde07be36"
   dependencies:
-    lodash "^4.17.2"
+    d3-selection "^1.0.3"
+    lodash.startcase "^4.4.0"
+    redux "^3.6.0"
+    redux-actions "^0.12.0"
 
 "@oncojs/survivalplot@0.3.3":
   version "0.3.3"
@@ -3565,6 +3568,10 @@ lodash.pickby@^4.0.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.pickby/-/lodash.pickby-4.6.0.tgz#7dea21d8c18d7703a27c704c15d3b84a67e33aff"
 
+lodash.startcase@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/lodash.startcase/-/lodash.startcase-4.4.0.tgz#9436e34ed26093ed7ffae1936144350915d9add8"
+
 lodash.words@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/lodash.words/-/lodash.words-3.2.0.tgz#4e2a8649bc08745b17c695b1a3ce8fee596623b3"
@@ -4903,6 +4910,13 @@ reduce-function-call@^1.0.1:
 reduce-reducers@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.1.2.tgz#fa1b4718bc5292a71ddd1e5d839c9bea9770f14b"
+
+redux-actions@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/redux-actions/-/redux-actions-0.12.0.tgz#8a4f0114f1bde2e6b61d5b7205d4818004c67461"
+  dependencies:
+    lodash "^4.13.1"
+    reduce-reducers "^0.1.0"
 
 redux-actions@^1.2.0:
   version "1.2.0"

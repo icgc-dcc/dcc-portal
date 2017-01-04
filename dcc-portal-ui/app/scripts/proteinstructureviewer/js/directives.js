@@ -260,6 +260,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
              options.displayWidth = jQuery('.protein-structure-viewer-diagram').width() - 100;
 
               var chart = lolliplot({
+                d3: require('d3'),
                 ...options,
                 element,
                 data: chartData,
