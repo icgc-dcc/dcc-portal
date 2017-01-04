@@ -61,11 +61,11 @@
             if(_.contains(Page.page(), 'projects')){
               $location.path(data.link).search({});
             } else {
-              let filter = {projectCode: {is: [data.name]}, primarySite: {is: [data.key]}};
+              let filter = {file: {projectCode: {is: [data.name]}, primarySite: {is: [data.key]}}};
               if(_.contains(Page.page(), 'aws')){
-                filter = {file: _.extend(filter, {repoName: {is: ['AWS - Virginia']}})};
+                filter = {file: _.extend(filter.file, {repoName: {is: ['AWS - Virginia']}})};
               } else if(_.contains(Page.page(), 'collaboratory')) {
-                filter = {file: _.extend(filter, {repoName: {is: ['Collaboratory - Toronto']}})};
+                filter = {file: _.extend(filter.file, {repoName: {is: ['Collaboratory - Toronto']}})};
               }
               $location.path('repositories').search('filters', JSON.stringify(filter));
             }
