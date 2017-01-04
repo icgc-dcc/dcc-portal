@@ -103,7 +103,7 @@ import deepmerge from 'deepmerge';
         }
       }
 
-      $scope.clear = () => {
+      $scope.resetAll = () => {
         $scope.params.entityIds = '';
         $scope.verifyInput();
       }
