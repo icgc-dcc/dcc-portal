@@ -2,11 +2,12 @@
 # yarn lockfile v1
 
 
-"@oncojs/lolliplot@0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@oncojs/lolliplot/-/lolliplot-0.5.1.tgz#83a7c4f19f8985e4d12cbf3267a6031fde07be36"
+"@oncojs/lolliplot@0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@oncojs/lolliplot/-/lolliplot-0.5.3.tgz#709ec3227b564f5c38dcc9800f0cdec50487f2e3"
   dependencies:
     d3-selection "^1.0.3"
+    lodash.countby "^4.6.0"
     lodash.startcase "^4.4.0"
     redux "^3.6.0"
     redux-actions "^0.12.0"
@@ -3543,6 +3544,10 @@ lodash.camelcase@^3.0.1:
 lodash.clonedeep@^4.3.2:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+
+lodash.countby@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.countby/-/lodash.countby-4.6.0.tgz#5351f24de16724a0059b561f920b0d80af78a33c"
 
 lodash.deburr@^3.0.0:
   version "3.2.0"
