@@ -1,12 +1,23 @@
 require('expose?jQuery!expose?$!jquery');
 
+const _4 = require('lodash');
 // Don't require lodash here until we can remove lodash-migrate.
 // Stick lodash4 methods onto lodash-migrate's `_`
-Object.assign(_, _.pick(require('lodash'), [
+Object.assign(_, _.pick(_4, [
   'orderBy',
   'maxBy',
   'sumBy',
   ]));
+
+var cache = new _4.memoize.Cache;
+global.migrate({
+  log: (message) => {
+    if (!cache.has(message)) {
+      cache.set(message, true);
+      console.trace(message);
+    }
+  },
+});
 
 // Angular Libs
 require('expose?angular!angular');
