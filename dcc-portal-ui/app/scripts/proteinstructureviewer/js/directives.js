@@ -173,9 +173,12 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
         function refresh(transcript) {
           var element, chartData;
 
-          if (transcript && transcript.id) {
+          if (!transcript || !transcript.id) {
+            console.warn('Aborting refresh due to missing transcript');
+            return;
+          }
 
-            Protein.init(transcript.id).get().then(function (mutations) {
+            const drawChart = (mutations) => {
               scope.mutations = mutations;
 
 
@@ -196,50 +199,6 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
               // will do for now.
               chartData.mutations = transformMutations(mutations, transcript.id);
 
-              options.tooltipShowFunc = function(elem, d, options, isDomain) {
-                var getLabel = function(){
-
-                  if(isDomain) {
-                    return d.id + ': ' + d.description;
-                  }
-
-                  var FI = getOverallFunctionalImpact(d);
-                  return gettextCatalog.getString('Mutation ID') + ': ' + d.ref + '<br>' +
-                         gettextCatalog.getString('Number of donors') + ': ' + d.value + '<br>' +
-                         gettextCatalog.getString('Amino acid change') + ': ' + d.id + '<br>' +
-                         gettextCatalog.getString('Functional Impact') + ': ' + FI;
-                };
-
-                var position = null;
-
-                if(isDomain){
-                  // The domain svg element consits of a group of text and rect. Since the text
-                  // can extend the rect which we care about it, get the first child (rect)
-                  var actualElement = angular.element(angular.element(elem).context.firstChild);
-
-                  // Use the width/height of the rect and the CTM of the svg container plus the
-                  // x and y position of the rect within the svg container to find the left/right values
-                  position = {
-                    width: actualElement.prop('width').baseVal.value,
-                    height: actualElement.prop('height').baseVal.value,
-                    left: elem.getScreenCTM().e + actualElement.prop('x').baseVal.value,
-                    top: elem.getScreenCTM().f + $window.pageYOffset + actualElement.prop('y').baseVal.value
-                  };
-
-                }
-
-                scope.$emit('tooltip::show', {
-                  element: angular.element(elem),
-                  text: getLabel(),
-                  placement: options.placement,
-                  elementPosition: isDomain?position:null
-                });
-              };
-
-              options.tooltipHideFunc = function() {
-                scope.$emit('tooltip::hide');
-              };
-
               options.markerClassFn = function(d) {
                 var style;
                 style = getOverallFunctionalImpact(d);
@@ -253,19 +212,19 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
                 return style;
               };
 
-              options.markerUrlFn = function (d) {
-                $location.path('/mutations/' + d.ref);
-              };
-
-             options.displayWidth = jQuery('.protein-structure-viewer-diagram').width() - 100;
+              const hideTooltip = () => scope.$emit('tooltip::hide');
 
               var chart = lolliplot({
                 d3: require('d3'),
                 ...options,
+                width: jQuery('.protein-structure-viewer-diagram').width(),
                 element,
-                animate: false,
+                animate: true,
                 data: chartData,
                 hideStats: true,
+                onMutationClick: (data) => {
+                  $location.path('/mutations/' + data.id);
+                },
                 onMutationMouseover: (data, event) => {
                   scope.$emit('tooltip::show', {
                     element: angular.element(event.target),
@@ -276,19 +235,24 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
                     placement: 'top',
                   });
                 },
-                onMutationMouseout: () => scope.$emit('tooltip::hide'),
+                onMutationMouseout: hideTooltip,
+                onProteinMouseover: (data, event) => {
+                  scope.$emit('tooltip::show', {
+                    elementPosition: {
+                      width: 0,
+                      height: 0,
+                      top: event.target.getBoundingClientRect().top + document.body.scrollTop,
+                      left: event.pageX,
+                    },
+                    text: `${data.id} : ${data.description}`,
+                    placement: 'top'
+                  });
+                },
+                onProteinMouseout: hideTooltip,
               });
-              onProteinMouseover: (data, event) => {
-                console.log(data, event)
-              }
-              // console.log(options, chartData);
-              // if (chartData.mutations.length > 0) {
-              //   chart.display(element);
-              // } else {
-              //   chart.displayError(element, gettextCatalog.getString('No Mutation occurs in coding region of this Gene.'));
-              // }
-            });
-          }
+            }
+            Protein.init(transcript.id).get().then(drawChart);;
+          
         }
 
 
