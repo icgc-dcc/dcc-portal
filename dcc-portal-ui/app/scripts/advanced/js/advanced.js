@@ -638,7 +638,7 @@ angular.module('icgc.advanced.controllers', [
           facets: facets
         });
         _ASDonorService.barDataTypes = HighchartsService.bar({
-          hits: _.map(_.sortByOrder(_ASDonorService.pieDataTypes, 'y', false), (dataType) => ({
+          hits: _.map(_.orderBy(_ASDonorService.pieDataTypes, 'y', false), (dataType) => ({
             y: dataType.y,
             name: $filter('trans')(dataType.name, 'availableDataTypes'),
             term: dataType.name,
@@ -652,7 +652,7 @@ angular.module('icgc.advanced.controllers', [
           facets: facets
         });
         _ASDonorService.barAnalysisTypes = HighchartsService.bar({
-          hits: _.map(_.sortByOrder(_ASDonorService.pieAnalysisTypes, 'y', false), (analysisType) => ({
+          hits: _.map(_.orderBy(_ASDonorService.pieAnalysisTypes, 'y', false), (analysisType) => ({
             y: analysisType.y,
             name: $filter('trans')(analysisType.name, 'analysisTypes'),
             term: analysisType.name,
@@ -1007,7 +1007,7 @@ angular.module('icgc.advanced.controllers', [
       const belowGroupPercent = _.first(separated);
       const regular = _.last(separated);
 
-      return _.sortByOrder(regular.concat(summarizeData(belowGroupPercent)), 'y', false);
+      return _.orderBy(regular.concat(summarizeData(belowGroupPercent)), 'y', false);
       };
 
     function _initFacets(facets) {
