@@ -11,8 +11,11 @@ ngModule.component('modifyExistingSetModal', {
     <div class="modal-content modify-existing-set-modal">
       <div class="modal-header clearfix">
           <h3 class="pull-left">
-            {{ vm.operation.toLowerCase() === 'add' ? 'Add ' + vm.initialEntitysetDefinition.size + ' to' : 'Remove ' + vm.initialEntitysetDefinition.size + ' from' }}
-            <translate> existing {{ vm.initialEntitysetDefinition.type.toLowerCase() }} set</translate>
+            {{ vm.operation.toLowerCase() === 'add' ? 'Add' : 'Remove' }}
+            {{ vm.initialEntitysetDefinition.size.toLocaleString() }}
+            {{ vm.initialEntitysetDefinition.type.toLowerCase() | pluralize : vm.initialEntitysetDefinition.size}}
+            {{ vm.operation.toLowerCase() === 'add' ? 'to' : 'from' }}
+            <translate>existing set</translate>
           </h3>
           <button class="pull-right t_button" ng-click="vm.handleClickClose();">
             <i class="icon-cancel"></i>
@@ -24,7 +27,7 @@ ngModule.component('modifyExistingSetModal', {
             <tr>
               <td></td>
               <td><translate>Name</translate></td>
-              <td><translate># Items</translate></td>
+              <td class="text-right"><translate># Items</translate></td>
             </tr>
           </thead>
           <tbody>

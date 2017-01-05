@@ -92,10 +92,12 @@
    */
   module.constant('SetServiceConstants', {
     SET_EVENTS: {
-      SET_ADD_EVENT: 'event.set.added'
+      SET_ADD_EVENT: 'event.set.added',
+      SET_REMOVE_EVENT: 'event.set.removed',
+      SET_CHANGE_EVENT: 'event.set.changed',
     }
   }).service('SetService',
-    function ($window, $location, $q, $timeout, Restangular, RestangularNoCache, API, SetServiceConstants,
+    function ($window, $location, $q, $timeout, Restangular, $rootScope, RestangularNoCache, API, SetServiceConstants,
               localStorageService, toaster, Extensions, Page, FilterService, RouteInfoService, gettextCatalog) {
 
     var LIST_ENTITY = 'entity';
@@ -212,12 +214,9 @@
         }
 
         data.type = data.type.toLowerCase();
-
         _service.add(data);
-        
         _service.saveSuccessToaster(data.name);
         toaster.clear(addSetSaving);
-
       });
       
       return promise;
@@ -227,6 +226,7 @@
       Restangular.one('entityset', setId).customPUT(`name=${newName}`, null, null, {'Content-Type': 'application/x-www-form-urlencoded'});
       setList.find(x => x.id === setId).name = newName;
       localStorageService.set(LIST_ENTITY, setList);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT);
     };
 
     _service.modifySet = async (existingSet, entitysetDefinition, operation) => {
@@ -345,13 +345,7 @@
         }
 
         data.type = data.type.toLowerCase();
-
-        setList = localStorageService.get(LIST_ENTITY) || [];
-        setList.unshift(data);
-        _service.refreshList();
-
-        localStorageService.set(LIST_ENTITY, setList);
-
+        _service.add(data);
         _service.saveSuccessToaster(data.name);
         toaster.clear(addSetSaving);
       });
@@ -428,6 +422,8 @@
         return ids.indexOf(list.id) >= 0;
       });
       localStorageService.set(LIST_ENTITY, setList);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_REMOVE_EVENT);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT);
       return true;
     };
 
@@ -436,6 +432,8 @@
       setList.unshift(entityset);
       _service.refreshList();
       localStorageService.set(LIST_ENTITY, setList);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_ADD_EVENT);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT);
     };
 
     _service.update = (entityset) => {
@@ -448,6 +446,8 @@
         return list.id === id;
       });
       localStorageService.set(LIST_ENTITY, setList);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_REMOVE_EVENT);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT);
       return true;
     };
 

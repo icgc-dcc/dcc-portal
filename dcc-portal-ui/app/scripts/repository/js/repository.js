@@ -698,7 +698,7 @@ import './file-finder';
         maxPadding: 0.01,
         labels: {
           formatter: function () {
-            return this.value / 1000 + 'k';
+            return this.value > 1000 ? this.value / 1000 + 'k' : this.value ;
           }
         },
         lineWidth: 1,
@@ -1144,7 +1144,7 @@ import './file-finder';
       }
     });
 
-    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
       _ctrl.donorSets = _ctrl.donorSetsForRepo();
       _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
     });

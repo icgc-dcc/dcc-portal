@@ -123,7 +123,7 @@
 
     _this.renameSet = SetService.renameSet;
 
-    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
       _this.entitySets = SetService.getAll();
     });
 
