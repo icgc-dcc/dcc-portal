@@ -3,6 +3,21 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[4.3.26](https://github.com/icgc-dcc/dcc-portal/compare/4.3.25...4.3.26)
+--
+- Fixed bad dcc-commons version conflict with download server.
+
+[4.3.25](https://github.com/icgc-dcc/dcc-portal/compare/4.3.24...4.3.25)
+--
+- Advanced Search: Added ability to add to and remove from saved sets from search results
+- Advanced Search: Added ability to filter results by saved sets
+- Repository Browser: Added ability to filter results by saved sets
+- Tokens: Added `portal.export` scope description
+- Releases: Added message for Safari users regarding concatenated gzip files
+- Site: Fixed Firefox font weighting in links
+- Site: Changes to browser version check and message
+
+
 [4.3.24](https://github.com/icgc-dcc/dcc-portal/compare/4.3.23...4.3.24)
 --
 - Feature: Added support for recursive download file listing in endpoint in DCC Data Releases

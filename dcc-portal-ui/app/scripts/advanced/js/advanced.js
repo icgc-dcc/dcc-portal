@@ -85,7 +85,7 @@ angular.module('icgc.advanced.controllers', [
       _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
       _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
 
-      _controller.createChartConfig = (barWidth, entityType, entityFacet, entityFormatter) => ({
+      _controller.createChartConfig = (entityType, entityFacet, entityFormatter) => ({
         chart: {
           type: 'column',
           marginTop: 20,
@@ -114,7 +114,7 @@ angular.module('icgc.advanced.controllers', [
         plotOptions: {
           series: {
             minPointLength: 5,
-            pointWidth: barWidth,
+            maxPointWidth: 20,
             borderRadiusTopLeft: 3,
             borderRadiusTopRight: 3,
             cursor: 'pointer',
@@ -143,9 +143,9 @@ angular.module('icgc.advanced.controllers', [
         }
       });
 
-      _controller.donorDataTypeChartConfig = _controller.createChartConfig(18, 'donor', 'availableDataTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
-      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig(20, 'donor', 'analysisTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
-      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(20, 'mutation', 'consequenceType', function () { 
+      _controller.donorDataTypeChartConfig = _controller.createChartConfig('donor', 'availableDataTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
+      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig('donor', 'analysisTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
+      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig('mutation', 'consequenceType', function () { 
         if(this.value > 1000000){ return `${this.value / 1000000}M`}
         else if(this.value > 1000){ return `${this.value / 1000}K`}
         else{ return this.value;}
