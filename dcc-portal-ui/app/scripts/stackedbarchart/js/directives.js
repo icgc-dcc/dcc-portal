@@ -33,7 +33,8 @@
         title: '@',
         subtitle: '@',
         yLabel: '@',
-        currentPage: '@'
+        currentPage: '@',
+        repoName: '@'
       },
       templateUrl: '/scripts/stackedbarchart/views/stackedbarchart.html',
       link: function ($scope, $element) {
@@ -63,10 +64,8 @@
               $location.path(data.link).search({});
             } else {
               let filter = {file: {projectCode: {is: [data.name]}, primarySite: {is: [data.key]}}};
-              if(_.contains($scope.currentPage, 'aws')){
-                filter = {file: _.extend(filter.file, {repoName: {is: ['AWS - Virginia']}})};
-              } else if(_.contains($scope.currentPage, 'collaboratory')) {
-                filter = {file: _.extend(filter.file, {repoName: {is: ['Collaboratory - Toronto']}})};
+              if(_.contains($scope.currentPage, 'cloud')){
+                filter = {file: _.extend(filter.file, {repoName: {is: [$scope.repoName]}})};
               } else if (_.contains($scope.currentPage, 'pcawg')) {
                 filter = {file: _.extend(filter.file, {study: {is: ['PCAWG']}})};
               }

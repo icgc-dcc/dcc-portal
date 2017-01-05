@@ -218,6 +218,14 @@ angular.module('icgc.repositories.controllers', [])
       _ctrl.getFilterQueryStr = function() {
          return _filterQueryStr;
       };
+
+      _ctrl.getRepoName = () => {
+        if(_.contains(_repoContext, 'aws')){
+          return 'AWS - Virginia';
+        } else if(_.contains(_repoContext, 'collaboratory')) {
+          return 'Collaboratory - Toronto';
+        }
+      }
 });
 
 
