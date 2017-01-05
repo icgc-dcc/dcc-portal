@@ -112,7 +112,8 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
       var result = _(mutations.hits)
         .map(hit => ({
             mutation: hit, 
-            transcript: _.find(hit.transcripts, {id: transcriptId})
+            transcript: _.find(hit.transcripts, {id: transcriptId}),
+            
           }))
         .filter( m => m.transcript !== undefined && m.transcript !== null )
         .map( m => mapToResult(m) )
@@ -127,13 +128,16 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
      */
     function mapToResult(d) {
       var start = d.transcript.consequence.aaMutation.replace(/[^\d]/g, '');
-        var m = {
-          consequence: d.transcript.consequence.aaMutation,
-          x: start,
-          donors: d.mutation.affectedDonorCountTotal,
-          id: d.mutation.id,
-          impact: d.transcript.functionalImpact || 'Unknown'
-        };
+      var m = {
+        consequence: d.transcript.consequence.aaMutation,
+        x: start,
+        donors: d.mutation.affectedDonorCountTotal,
+        id: d.mutation.id,
+        impact: ({
+          // High: 'HIGH',
+          // Low: 'MODERATE'
+        })[d.transcript.functionalImpact] || 'Unknown'
+      };
       
       return m;
     }
@@ -159,10 +163,31 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
       restrict: 'E',
       replace: true,
       scope: {'highlightMarker': '&', 'transcript': '='},
-      template: '<div class="protein-structure-viewer-diagram"></div>',
+      template: `
+        <div class="protein-structure-viewer-diagram">
+          <button
+            class="btn btn-default"
+            data-tooltip="Reset"
+            ng-click="handleClickReset()"
+            style="
+              position: absolute;
+              right: 0;
+              top: -37px;
+            "
+          >
+            <i class="icon-undo"></i>
+          </button>
+        </div>
+      `,
       link: function (scope, iElement) {
         var selectedMutation;
         let chart;
+
+        
+
+        scope.handleClickReset = () => {
+          chart.reset();
+        };
 
         selectedMutation = scope.$eval('highlightMarker');
         if (selectedMutation) {
