@@ -161,98 +161,94 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
       scope: {'highlightMarker': '&', 'transcript': '='},
       template: '<div class="protein-structure-viewer-diagram"></div>',
       link: function (scope, iElement) {
-        var options, selectedMutation;
-
-        options = iElement.data();
+        var selectedMutation;
+        let chart;
 
         selectedMutation = scope.$eval('highlightMarker');
         if (selectedMutation) {
           selectedMutation = selectedMutation();
         }
+        const drawChart = (mutations, transcript) => {
+          scope.mutations = mutations;
+          const element = jQuery(iElement).get()[0];
+          const chartData = {};
+          chartData.start = 1;
+          chartData.stop = transcript.lengthAminoAcid;
+
+          // Ideally, we need to merge domains that overlap. This is based on pfam curation
+          // rules that indicate only domains in the same family can overlap. Our strategy is
+          // simple: when we find two domains that overlap, at all, we replace them by the larger
+          // until we are done.
+          chartData.proteins = transformDomains(transcript.domains);
+
+          // Now reformat the mutations as required. Yes, it would be better to provide an
+          // iterator function for these, and for the domains too, for that matter, but this
+          // will do for now.
+          chartData.mutations = transformMutations(mutations, transcript.id);
+
+          const markerClassFn = function(d) {
+            var style;
+            style = getOverallFunctionalImpact(d);
+            if (selectedMutation) {
+              if( d.ref === selectedMutation) {
+                style = style + ' selected';
+              } else {
+                style = style + ' fade';
+              }
+            }
+            return style;
+          };
+
+          const hideTooltip = () => scope.$emit('tooltip::hide');
+
+          if (chart) {
+            chart.remove();
+          }
+
+          chart = lolliplot({
+            d3: require('d3'),
+            width: jQuery('.protein-structure-viewer-diagram').width(),
+            element,
+            animate: false,
+            data: chartData,
+            hideStats: true,
+            mutationId: selectedMutation,
+            onMutationClick: (data) => {
+              $location.path('/mutations/' + data.id);
+            },
+            onMutationMouseover: (data, event) => {
+              scope.$emit('tooltip::show', {
+                element: angular.element(event.target),
+                text: gettextCatalog.getString('Mutation ID') + ': ' + data.id + '<br>' +
+                  gettextCatalog.getString('Number of donors') + ': ' + data.donors + '<br>' +
+                  gettextCatalog.getString('Amino acid change') + ': ' + data.consequence + '<br>' +
+                  gettextCatalog.getString('Functional Impact') + ': ' + data.impact,
+                placement: 'top',
+              });
+            },
+            onMutationMouseout: hideTooltip,
+            onProteinMouseover: (data, event) => {
+              scope.$emit('tooltip::show', {
+                elementPosition: {
+                  width: 0,
+                  height: 0,
+                  top: event.target.getBoundingClientRect().top + document.body.scrollTop,
+                  left: event.pageX,
+                },
+                text: `${data.id} : ${data.description}`,
+                placement: 'top'
+              });
+            },
+            onProteinMouseout: hideTooltip,
+          });
+        };
 
         function refresh(transcript) {
-          var element, chartData;
-
           if (!transcript || !transcript.id) {
             console.warn('Aborting refresh due to missing transcript');
             return;
           }
-
-            const drawChart = (mutations) => {
-              scope.mutations = mutations;
-
-
-              element = jQuery(iElement).get()[0];
-
-              chartData = {};
-              chartData.start = 1;
-              chartData.stop = transcript.lengthAminoAcid;
-
-              // Ideally, we need to merge domains that overlap. This is based on pfam curation
-              // rules that indicate only domains in the same family can overlap. Our strategy is
-              // simple: when we find two domains that overlap, at all, we replace them by the larger
-              // until we are done.
-              chartData.proteins = transformDomains(transcript.domains);
-
-              // Now reformat the mutations as required. Yes, it would be better to provide an
-              // iterator function for these, and for the domains too, for that matter, but this
-              // will do for now.
-              chartData.mutations = transformMutations(mutations, transcript.id);
-
-              options.markerClassFn = function(d) {
-                var style;
-                style = getOverallFunctionalImpact(d);
-                if (selectedMutation) {
-                  if( d.ref === selectedMutation) {
-                    style = style + ' selected';
-                  } else {
-                    style = style + ' fade';
-                  }
-                }
-                return style;
-              };
-
-              const hideTooltip = () => scope.$emit('tooltip::hide');
-
-              var chart = lolliplot({
-                d3: require('d3'),
-                ...options,
-                width: jQuery('.protein-structure-viewer-diagram').width(),
-                element,
-                animate: true,
-                data: chartData,
-                hideStats: true,
-                onMutationClick: (data) => {
-                  $location.path('/mutations/' + data.id);
-                },
-                onMutationMouseover: (data, event) => {
-                  scope.$emit('tooltip::show', {
-                    element: angular.element(event.target),
-                    text: gettextCatalog.getString('Mutation ID') + ': ' + data.id + '<br>' +
-                      gettextCatalog.getString('Number of donors') + ': ' + data.donors + '<br>' +
-                      gettextCatalog.getString('Amino acid change') + ': ' + data.consequence + '<br>' +
-                      gettextCatalog.getString('Functional Impact') + ': ' + data.impact,
-                    placement: 'top',
-                  });
-                },
-                onMutationMouseout: hideTooltip,
-                onProteinMouseover: (data, event) => {
-                  scope.$emit('tooltip::show', {
-                    elementPosition: {
-                      width: 0,
-                      height: 0,
-                      top: event.target.getBoundingClientRect().top + document.body.scrollTop,
-                      left: event.pageX,
-                    },
-                    text: `${data.id} : ${data.description}`,
-                    placement: 'top'
-                  });
-                },
-                onProteinMouseout: hideTooltip,
-              });
-            }
-            Protein.init(transcript.id).get().then(drawChart);;
-          
+          Protein.init(transcript.id).get().then((mutations) => drawChart(mutations, transcript));
         }
 
 

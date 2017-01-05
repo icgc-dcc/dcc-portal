@@ -55,7 +55,7 @@ g.marker rect {
    visibility: hidden;
 }
 
-g.marker rect.selected {
+.selected-mutation {
    stroke-width: 2.0;
    stroke: #33A; 
    fill: none;
