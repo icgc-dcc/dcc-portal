@@ -989,7 +989,7 @@ angular.module('icgc.advanced.controllers', [
       return {
         name: `Others (${count} Consequence Types)`,
         color: '#999',
-        y: _.sum(items, 'y'),
+        y: _.sumBy(items, 'y'),
         type: firstItem.type,
         facet: firstItem.facet,
         term: _.map(items, 'name')
@@ -1001,7 +1001,7 @@ angular.module('icgc.advanced.controllers', [
         return [];
       }
 
-      const max = _.max (data, (item) => item.y);
+      const max = _.maxBy (data, (item) => item.y);
       const isBelowGroupPercent = (item) => (item.y / max.y) < (2 / 100);
       const separated = _.partition (data, isBelowGroupPercent);
       const belowGroupPercent = _.first(separated);
