@@ -266,7 +266,21 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
                 animate: false,
                 data: chartData,
                 hideStats: true,
+                onMutationMouseover: (data, event) => {
+                  scope.$emit('tooltip::show', {
+                    element: angular.element(event.target),
+                    text: gettextCatalog.getString('Mutation ID') + ': ' + data.id + '<br>' +
+                      gettextCatalog.getString('Number of donors') + ': ' + data.donors + '<br>' +
+                      gettextCatalog.getString('Amino acid change') + ': ' + data.consequence + '<br>' +
+                      gettextCatalog.getString('Functional Impact') + ': ' + data.impact,
+                    placement: 'top',
+                  });
+                },
+                onMutationMouseout: () => scope.$emit('tooltip::hide'),
               });
+              onProteinMouseover: (data, event) => {
+                console.log(data, event)
+              }
               // console.log(options, chartData);
               // if (chartData.mutations.length > 0) {
               //   chart.display(element);
