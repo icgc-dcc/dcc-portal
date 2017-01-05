@@ -3,6 +3,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var CompressionPlugin = require('compression-webpack-plugin');
 var paths = require('./paths');
 
 module.exports = {
@@ -157,5 +158,12 @@ module.exports = {
     }),
     new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
     new ExtractTextPlugin('static/css/[name].[contenthash:8].css'),
+    new CompressionPlugin({
+      asset: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /\.js$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8
+    }),
   ]
 };
