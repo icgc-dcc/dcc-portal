@@ -156,7 +156,7 @@ angular.module('icgc.repositories.controllers', [])
 
       function _init() {
          Page.stopWork();
-         Page.setPage(_repoContext);
+         Page.setPage('entity');
          /// ${repoContext} would be a noun
          Page.setTitle(_.template(gettextCatalog.getString('ICGC in the Cloud - ${repoContext} Repository'))({
             repoContext : _capitalizeWords(_repoContext)

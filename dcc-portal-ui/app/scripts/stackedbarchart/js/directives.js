@@ -19,7 +19,7 @@
   'use strict';
   var module = angular.module('icgc.visualization.stackedbar', []);
 
-  module.directive('stacked', function ($location, HighchartsService, $window, Page) {
+  module.directive('stacked', function ($location, HighchartsService, $window) {
     return {
       restrict: 'E',
       replace: true,
@@ -32,7 +32,8 @@
         lineHeight: '=',
         title: '@',
         subtitle: '@',
-        yLabel: '@'
+        yLabel: '@',
+        currentPage: '@'
       },
       templateUrl: '/scripts/stackedbarchart/views/stackedbarchart.html',
       link: function ($scope, $element) {
@@ -58,14 +59,16 @@
           },
           onClick: function(data){
             $scope.$emit('tooltip::hide');
-            if(_.contains(Page.page(), 'projects')){
+            if(_.contains($scope.currentPage, 'projects')){
               $location.path(data.link).search({});
             } else {
               let filter = {file: {projectCode: {is: [data.name]}, primarySite: {is: [data.key]}}};
-              if(_.contains(Page.page(), 'aws')){
+              if(_.contains($scope.currentPage, 'aws')){
                 filter = {file: _.extend(filter.file, {repoName: {is: ['AWS - Virginia']}})};
-              } else if(_.contains(Page.page(), 'collaboratory')) {
+              } else if(_.contains($scope.currentPage, 'collaboratory')) {
                 filter = {file: _.extend(filter.file, {repoName: {is: ['Collaboratory - Toronto']}})};
+              } else if (_.contains($scope.currentPage, 'pcawg')) {
+                filter = {file: _.extend(filter.file, {study: {is: ['PCAWG']}})};
               }
               $location.path('repositories').search('filters', JSON.stringify(filter));
             }
