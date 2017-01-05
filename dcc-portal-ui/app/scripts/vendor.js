@@ -1,5 +1,6 @@
 require('expose?jQuery!expose?$!jquery');
 global._ = require('lodash');
+require('lodash-migrate');
 
 // Angular Libs
 require('expose?angular!angular');
