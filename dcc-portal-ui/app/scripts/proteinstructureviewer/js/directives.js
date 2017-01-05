@@ -263,6 +263,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
                 d3: require('d3'),
                 ...options,
                 element,
+                animate: false,
                 data: chartData,
                 hideStats: true,
               });
