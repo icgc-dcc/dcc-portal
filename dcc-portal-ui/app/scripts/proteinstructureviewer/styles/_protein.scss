@@ -58,9 +58,18 @@ g.marker rect {
 .selected-mutation {
    stroke-width: 2.0;
    stroke: #33A; 
-   fill: none;
    opacity: 1.0;
    visibility: visible;
+}
+
+[class^="mutation-circle"] {
+    transform-origin: center;
+    transition: transform 0.2s ease;
+    &:not(.selected-mutation):hover {
+        cursor: pointer;
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
 }
 
 
@@ -81,6 +90,9 @@ g.marker rect {
 
 .protein-structure-viewer-diagram {
     height: 300px;
+    svg {
+        user-select: none;
+    }
     .minimap-zoom {
         fill: #{rgba($selection, 0.5)}!important;
     }
