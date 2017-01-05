@@ -225,7 +225,7 @@ angular.module('icgc.repositories.controllers', [])
         } else if(_.contains(_repoContext, 'collaboratory')) {
           return 'Collaboratory - Toronto';
         }
-      }
+      };
 });
 
 
