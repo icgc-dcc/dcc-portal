@@ -12,7 +12,7 @@ Object.assign(_, _.pick(_4, [
 var cache = new _4.memoize.Cache;
 global.migrate({
   log: (message) => {
-    if (!cache.has(message)) {
+    if (!cache.has(message) && !message.includes('getRestangularUrl')) {
       cache.set(message, true);
       console.trace(message);
     }
