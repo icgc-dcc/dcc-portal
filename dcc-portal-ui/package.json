@@ -114,6 +114,7 @@
     "npm": ">=3"
   },
   "dependencies": {
+    "@oncojs/pathwayviewer": "^0.2.5",
     "@oncojs/survivalplot": "0.3.3",
     "angular-marked": "1.2.2",
     "angular-xeditable": "^0.4.0",

@@ -16,7 +16,7 @@
  */
 
 
-
+import {ReactomePathway, PathwayModel} from '@oncojs/pathwayviewer';
 
 (function($) {
   'use strict';
@@ -132,7 +132,7 @@
           infoRenderer.renderNodes([node]);
 
           if(isClickableNode){
-            var model = new pathwayViewerCtrl.PathwayModel();
+            var model = new PathwayModel();
             model.nodes = [node];
             
             infoRenderer.highlightEntity(
@@ -147,8 +147,8 @@
         var controllerSettings = {
           width: 500,
           height: 350,
-          container: '#pathway-viewer-mini',
-          onClick: function (d) {
+          containerNode: document.getElementById('pathway-viewer-mini'),
+          onNodeClick: function (d3Event, d, svg) {
             var mutationCount = '*',
               drugCount = '*',
               druggableGenesList = [],
@@ -227,8 +227,8 @@
             }
 
             var annotatedGeneIds = _.union(
-              _.pluck(mutatedGenesList, 'id'),
-              _.pluck(druggableGenesList, 'id')
+              _.map(mutatedGenesList, 'id'),
+              _.map(druggableGenesList, 'id')
             );
 
             annotatedGeneIds.forEach(function (geneId) {
@@ -254,15 +254,14 @@
             );
           },
           urlPath: $location.url(),
-          strokeColor: '#696969',
-          mutationHighlightColor: '#9b315b',
-          drugHighlightColor: 'navy',
-          overlapColor: '#ff9900',
-          initScaleFactor: 0.90,
-          subPathwayColor: 'navy'
+          colors: {
+            stroke: '#696969',
+            overlap: '#ff9900',
+            subPathway: 'navy',
+          },
         };
 
-        var controller = new pathwayViewerCtrl.ReactomePathway(controllerSettings);
+        var controller; // = new pathwayViewerCtrl.ReactomePathway(controllerSettings);
 
 
         $('.pathway-info-controller').on('click',function(){
@@ -342,7 +341,10 @@
             return;
           }else if(!rendered){
             $('.pathwaysvg').remove();
-            controller.render(xml,zoomedOn);
+            
+            controllerSettings.model = new PathwayModel(xml);
+            controller = new ReactomePathway(controllerSettings);
+            controller.render(zoomedOn);
             rendered = true;
           }else{
             hideInfo();
@@ -407,7 +409,8 @@
 
         // Render legend last to ensure all dependencies are initialized. Timeout of 0 does not work in firefox.
         $scope.$on(PathwaysConstants.EVENTS.MODEL_READY_EVENT, function() {
-            controller.renderLegend(270, 671);
+            // TO-DO - finish separation of legend's creation and insertion logic
+            //controller.renderLegend(270, 671);
         });
 
         // Needed to fix url paths for SVGs on url change due to <base> tag required by angular
