@@ -136,8 +136,10 @@
 
         $scope.params.processing = false;
       },function (error) {
-        $scope.params.processing = false;
-        $scope.params.downloadEnabled = false;
+        if(error.status === 503){
+          $scope.params.processing = false;
+          $scope.params.downloadEnabled = false;
+        }
       });
     };
 
