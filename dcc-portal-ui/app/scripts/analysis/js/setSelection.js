@@ -60,7 +60,7 @@ angular.module('icgc.analysis.setSelection', [])
       this.isAnalysisSatisfied = () => doSetsSatsifyCriteria(this.selectedSets, this.analysisSatisfactionCriteria);
       const getCriteriaSatisfactionMessages = (sets, criteria) => _.reject(criteria || [], criterium => criterium.test(sets)).map(criteria => criteria.message);
       this.getSetCompatibilityMessage = set => getCriteriaSatisfactionMessages(_.unique(this.selectedSets.concat(set)), _.reject(this.analysisSatisfactionCriteria, {type: 'MIN_SETS'})).join('<br>');
-      this.getAnalysisSatifactionMessage = () => getCriteriaSatisfactionMessages(this.selectedSets, this.analysisSatisfactionCriteria);
+      this.getAnalysisSatifactionMessage = () => getCriteriaSatisfactionMessages(this.selectedSets, this.analysisSatisfactionCriteria).join(', ');
 
       this.handleSaveSetName = (set, newName) => SetService.renameSet(vm.set.id, newName);
 
