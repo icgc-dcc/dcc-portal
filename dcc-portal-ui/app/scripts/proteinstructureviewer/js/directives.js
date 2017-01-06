@@ -236,6 +236,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
             element,
             animate: false,
             data: chartData,
+            domainWidth: transcript.lengthAminoAcid,
             hideStats: true,
             mutationId: selectedMutation,
             onMutationClick: (data) => {
