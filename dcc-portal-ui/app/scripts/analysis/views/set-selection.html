@@ -96,16 +96,27 @@
       </table>
       <br>
       <div
-        tooltip="{{vm.getAnalysisSatifactionMessage()}}"
+        tooltip=""
+        class="actions"
       >
         <button
-          class="t_button"
+            class="cancel btn btn-default btn-xs"
+            ng-click="vm.handleClickCancel()"
+        > Cancel </button>
+        <button
+            class="demo btn btn-default btn-xs"
+            tooltip="{{analysis.strings.demoDescription}}"
+            ng-click="vm.handleClickLaunchDemo()"
+        > Demo </button>
+        <button
+          class="btn btn-primary"
           ng-disabled="!vm.isAnalysisRunnable()"
           ng-click="vm.handleClickLaunch(vm.selectedSets)"
+          tooltip="{{vm.getAnalysisSatifactionMessage()}}"
         >
             <span ng-if="vm.isLaunchingAnalysis"><i class="icon-spinner icon-spin"></i></span>
             <translate>Run</translate>
         </button>
-      </span>
+      </div>
   </div>
 </div>

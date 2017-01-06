@@ -10,6 +10,7 @@ angular.module('icgc.analysis.setSelection', [])
       selectionInstructions: '<',
       isLaunchingAnalysis: '<',
       analysisSatisfactionCriteria: '<',
+      onClickCancel: '&',
       onClickLaunch: '&',
       onClickLaunchDemo: '&',
       onSelectedSetsChange: '&',
@@ -23,6 +24,7 @@ angular.module('icgc.analysis.setSelection', [])
     ) {
 
       const prepareCallbacks = () => {
+        this.handleClickCancel = this.onClickCancel;
         this.handleClickLaunch = this.onClickLaunch();
         this.handleClickLaunchDemo = this.onClickLaunchDemo();
         this.handleSelectedSetsChange = this.onSelectedSetsChange();

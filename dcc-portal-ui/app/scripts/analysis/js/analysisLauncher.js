@@ -242,6 +242,8 @@
       // _this.selectedAnalysis = analysis === _this.selectedAnalysis ? undefined : analysis;
       _this.selectedAnalysis = analysis;
       _this.analysisType = (_this.selectedAnalysis || {}).type;
+      // need to timeout to give the dom some time to swap out the image
+      $timeout(() => { this.shouldShowSetSelection = true });
     };
 
     _this.handleSelectedSetsChange = sets => { _this.selectedSets = sets };

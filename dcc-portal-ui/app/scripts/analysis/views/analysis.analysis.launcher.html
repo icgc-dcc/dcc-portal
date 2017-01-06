@@ -2,10 +2,7 @@
 <div data-ng-if="!analysisId" data-ng-controller="NewAnalysisController as NAC" class="analysis">
     <div
         class="analysis-tool-selection"
-        ng-class="{
-            'condensed': NAC.shouldShowSetSelection,
-            'elevated': NAC.shouldElevateToolSelection,
-        }"
+        ng-show="!NAC.shouldShowSetSelection"
     >
         <div
             ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
@@ -15,12 +12,6 @@
             }"
         >
             <div
-                class="condensed-hitarea"
-                ng-mouseover="NAC.shouldElevateToolSelection = true"
-                ng-mouseleave="NAC.shouldElevateToolSelection = false"
-                ng-click="NAC.shouldElevateToolSelection = false; NAC.handleClickAnalysis(analysis);"
-            ></div>
-            <div
                 class="analysis-tool__image-wrapper"
                 ng-if="analysis.image"
                 ng-bind-html="analysis.image | to_trusted"
@@ -28,23 +19,22 @@
             <div class="analysis-tool__column--text">
                 <h2 class="analysis-tool__heading">
                     {{analysis.strings.name}}
-                    <a
-                        class="demo"
-                        ng-click="analysis.launchDemo(); $event.stopPropagation(); $event.preventDefault();"
-                        tooltip="{{analysis.strings.demoDescription}}"
-                        href="#"
-                    > (demo) </a>
                 </h2>
                 <p class="analysis-tool__description">
                     {{analysis.strings.description}}
                 </p>
-                <div>
+                <div class="analysis-tool__actions">
                     <button
                         class="btn btn-primary select-btn"
-                        ng-click="NAC.handleClickAnalysis(analysis); NAC.shouldShowSetSelection = true;"
+                        ng-click="NAC.handleClickAnalysis(analysis);"
                     >
                         Select
                     </button>
+                    <button
+                        class="demo btn btn-default btn-xs"
+                        tooltip="{{analysis.strings.demoDescription}}"
+                        ng-click="analysis.launchDemo(); $event.stopPropagation(); $event.preventDefault();"
+                    > Demo </button>
                 </div>
             </div>
         </div>
@@ -68,43 +58,44 @@
         </a>
     </div>
     <div
-        class="sets-container"
-        ng-class="{'should-show': NAC.shouldShowSetSelection}"
+        class="set-selection-screen"
+        ng-show="NAC.shouldShowSetSelection"
     >
-        <i
-            ng-click="NAC.shouldShowSetSelection = false;"
-            class="fa fa-close close-btn"
-        ></i>
         <div
-            class="set-selection-wrapper"
+            ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
+            ng-show="analysis === NAC.selectedAnalysis"
+            class="analysis-tool analysis-tool--{{NAC.selectedAnalysis.type}}"
         >
-            <div style="font-size:1.25rem">
-                <small style="display: block; margin-bottom: -0.2em; color: #666;">
-                    <translate>Select {{NAC.selectedAnalysis.type === 'enrichment' ? 'set' : 'sets'}} for
-                </small> 
-                <div>
-                    <strong style="font-size: 22px; color: #333;">{{NAC.selectedAnalysis.strings.name}}</strong></translate>
-                    <small>
-                        <a
-                            class="demo"
-                            ng-click="NAC.selectedAnalysis.launchDemo()"
-                            tooltip="{{analysis.strings.demoDescription}}"
-                            href="#"
-                        > (demo) </a>
-                    </small>
+            <div
+                class="analysis-tool__image-wrapper"
+                ng-if="analysis.image"
+                ng-bind-html="analysis.image | to_trusted"
+            ></div>
+        </div>
+        <div
+            class="sets-container"
+        >
+            <div
+                class="set-selection-wrapper"
+            >
+                <div style="font-size:1.25rem">
+                    <div>
+                        <strong style="font-size: 22px; color: #333;">{{NAC.selectedAnalysis.strings.name}}</strong></translate>
+                    </div>
                 </div>
+                <set-selection
+                    sets="NAC.allSets"
+                    description="NAC.selectedAnalysis.strings.description"
+                    selection-instructions="NAC.selectedAnalysis.strings.datasetSelectionInstructions"
+                    is-launching-analysis="NAC.isLaunchingAnalysis()"
+                    set-compatibility-criteria="NAC.selectedAnalysis.setCompatibilityCriteria"
+                    analysis-satisfaction-criteria="NAC.selectedAnalysis.analysisSatisfactionCriteria"
+                    on-click-launch="NAC.selectedAnalysis.launch"
+                    on-click-launch-demo="NAC.selectedAnalysis.launchDemo"
+                    on-click-cancel="NAC.shouldShowSetSelection = false"
+                    on-selected-sets-change="NAC.handleSelectedSetsChange"
+                ></set-selection>
             </div>
-            <set-selection
-                sets="NAC.allSets"
-                description="NAC.selectedAnalysis.strings.description"
-                selection-instructions="NAC.selectedAnalysis.strings.datasetSelectionInstructions"
-                is-launching-analysis="NAC.isLaunchingAnalysis()"
-                set-compatibility-criteria="NAC.selectedAnalysis.setCompatibilityCriteria"
-                analysis-satisfaction-criteria="NAC.selectedAnalysis.analysisSatisfactionCriteria"
-                on-click-launch="NAC.selectedAnalysis.launch"
-                on-click-launch-demo="NAC.selectedAnalysis.launchDemo"
-                on-selected-sets-change="NAC.handleSelectedSetsChange"
-            ></set-selection>
         </div>
     </div>
 </div>

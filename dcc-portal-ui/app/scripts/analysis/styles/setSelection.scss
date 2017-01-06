@@ -17,6 +17,17 @@
     background-color: #ffdddd;
     color: #8a1d00;
   }
+  .table {
+    margin-top: 10px;
+  }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .btn:not(:last-child) {
+      margin-right: 12px;
+    }
+  }
 }
 
 set-tools, [set-tools] {

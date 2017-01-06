@@ -2,6 +2,14 @@
 
 .analysis-tool-selection {
   position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .analysis-tool {
+    width: calc(50% - 50px);
+    margin-bottom: 3em;
+  }
+
   &.elevated {
     z-index: 3;
   }
@@ -43,43 +51,6 @@ $condensedWidth: 180px;
     background: transparent;
   }
 
-  .condensed & {
-    .analysis-tool__image-wrapper > * {
-      transition: 0.2s ease;
-    }
-    &:not(.analysis-tool--selected) {
-      .analysis-tool__image-wrapper > * {
-        transform: scale(0.9);
-      }
-    }
-    &:not(:hover) {
-      .analysis-tool__description {
-        color: rgba(0,0,0,0.6);
-      }
-    }
-    &:not(.analysis-tool--selected):not(:hover) {
-      .analysis-tool__image-wrapper > * {
-        filter: grayscale(20%) opacity(0.6);
-      }
-      .analysis-tool__heading {
-        color: #666;
-      }
-    }
-  }
-
-  .condensed-hitarea {
-    position: absolute;
-    width: $condensedWidth;
-    height: 150%;
-    left: 0;
-    z-index: 1;
-    display: none;
-    .condensed & {
-      display: block;
-      cursor: pointer;
-    }
-  }
-
   @for $i from 0 to 5 {
     $step: log($i + 1) * 0.15s; 
     &:nth-child(#{$i}) {
@@ -116,24 +87,8 @@ $condensedWidth: 180px;
     }
   }
 
-  & + .analysis-tool {
+  .analysis-tool {
     margin-top: 40px;
-    &:before {
-      content: '';
-      display: block;
-      width: 100%;
-      position: absolute;
-      height: 1px;
-      background: #e6e6e6;
-      top: -20px;
-      transition: all 0.4s;
-      transition-timing-function: $inQuad;
-      .condensed & {
-        opacity: 0;
-        transition-timing-function: $outQuad;
-        transform: translateX(-110%);
-      }
-    }
   }
 
   &__image-wrapper {
@@ -145,9 +100,6 @@ $condensedWidth: 180px;
     flex-grow: 0;
 
     transition: 0.2s ease;
-    .condensed & {
-      transform: translateY(30px) scale(0.9);
-    }
   }
 
   &__image, svg {
@@ -158,10 +110,6 @@ $condensedWidth: 180px;
 
   &__column--text {
     transition: 0.2s $inQuad;
-    .condensed & {
-      pointer-events: none;
-      transform: translateX(-90px);
-    }
   }
 
   &__heading {
@@ -169,36 +117,19 @@ $condensedWidth: 180px;
     font-weight: 500;
     position: relative;
     display: inline-block;
+    margin-bottom: 0;
     transition: transform 0.2s $inQuad;
-
-    .condensed & {
-      transform: translateX(-50%) translateY(0px);
-    }
-
-    .demo {
-      position: absolute;
-      font-size: 16px;
-      bottom: 0;
-      right: -4px;
-      transform: translateX(100%);
-      transition: 0.2s ease;
-      .condensed & {
-        opacity: 0;
-      }
-    }
   }
 
   &__description {
     font-size: 14px;
-    width: 33em;
+    line-height: 1.5;
     transition: 0.16s ease;
-    .condensed & {
-      opacity: 0;
-    }
-    .condensed.elevated & {
-      opacity: 1;
-      transform: translateX(100px);
-      transition: transform 0.3s $outQuad, opacity 0.3s ease, color 0.1s ease;
+  }
+
+  &__actions {
+    .demo {
+      margin-left: 12px;
     }
   }
 
@@ -265,26 +196,24 @@ $condensedWidth: 180px;
   }
 }
 
-.sets-container {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 220px;
-  width: calc(100% - 220px);
-  transition: 0.2s;
-  transform: translateX(0);
-  &.should-show {
-    transition-timing-function: $outQuad;
-    transition-delay: 0.3s;
+.set-selection-screen {
+  display: flex;
+  flex-direction: row;
+  .sets-container {
+    flex-grow: 1;
   }
-  &:not(.should-show) {
-    transition-delay: 0s;
-    transition-timing-function: $inQuad;
-    opacity: 0;
-    transform: translateX(10%);
-    pointer-events: none;
+  .analysis-tool {
+    align-items: flex-start;
+    &__image-wrapper {
+      margin-top: 31px;
+    }
   }
+  .set-selection-component {
+    table { width: 66% }
+  }
+}
 
+.sets-container {
   .close-btn {
     cursor: pointer;
     position: absolute;
