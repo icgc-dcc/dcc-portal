@@ -9,31 +9,6 @@
     width: calc(50% - 50px);
     margin-bottom: 3em;
   }
-
-  &.elevated {
-    z-index: 3;
-  }
-  &.condensed:after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    width: calc(100% - 300px);
-    height: 100%;
-    left: 200px;
-    top: 0;
-    background: linear-gradient(to right, rgba(255,255,255,0.93) 50%, rgba(255,255,255,0) 100%);
-    transition: 0.7s $outExpo;
-    transform-origin: 0 0;
-    transform: scaleX(0);
-  }
-  &.condensed.elevated:after {
-    transform: scaleX(1);
-  }
-  &.condensed {
-    .select-btn {
-      opacity: 0;
-    }
-  }
 }
 
 $condensedWidth: 180px;
@@ -47,46 +22,6 @@ $condensedWidth: 180px;
   z-index: 2;
   perspective: 1000px;
 
-  &:hover {
-    background: transparent;
-  }
-
-  @for $i from 0 to 5 {
-    $step: log($i + 1) * 0.15s; 
-    &:nth-child(#{$i}) {
-      &:before {
-        transition-delay: 0.1 + $step;
-        .condensed & {
-          transition-delay: $step;
-        }
-      }
-
-      .analysis-tool__column--text, .analysis-tool__heading, .analysis-tool__image-wrapper {
-        transition-delay: 0.1s + $step;
-        .condensed & {
-          transition-delay: 0.1s + $step;
-        }
-      }
-
-      .analysis-tool__image-wrapper {
-        transition-delay: 0.1s + $step;
-        .condensed & {
-          transition-delay: 0.11s + $step;
-        }
-      }
-
-      .analysis-tool__description {
-        transition-delay: 0.3s + $step;
-        .condensed & {
-          transition-delay: 0s;
-        }
-        .condensed.elevated & {
-          transition-delay: $step, $step, 0.1s;
-        }
-      }
-    }
-  }
-
   .analysis-tool {
     margin-top: 40px;
   }
@@ -98,8 +33,6 @@ $condensedWidth: 180px;
     align-items: center;
     flex-shrink: 0;
     flex-grow: 0;
-
-    transition: 0.2s ease;
   }
 
   &__image, svg {
@@ -108,23 +41,17 @@ $condensedWidth: 180px;
     max-height: calc(100% - 20px);
   }
 
-  &__column--text {
-    transition: 0.2s $inQuad;
-  }
-
   &__heading {
     font-size: 20px;
     font-weight: 500;
     position: relative;
     display: inline-block;
     margin-bottom: 0;
-    transition: transform 0.2s $inQuad;
   }
 
   &__description {
     font-size: 14px;
     line-height: 1.5;
-    transition: 0.16s ease;
   }
 
   &__actions {
@@ -188,11 +115,6 @@ $condensedWidth: 180px;
     }
     transition: all 0.2s;
     max-height: 300px;
-    .condensed & {
-      opacity: 0;
-      max-height: 0;
-      pointer-events: none;
-    }
   }
 }
 
