@@ -107,19 +107,19 @@
     }
 
     return {
-      isVisible: isVisible,
-      show: show,
-      showErrors: showErrors,
-      hide: hide,
-      redirectHome: redirectHome,
-      setParams: setParams,
-      getParams: getParams,
-      setMessage: setMessage,
-      getMessage: getMessage,
-      setRemovable: setRemovable,
-      isRemovable: isRemovable,
-      setTheme: setTheme,
-      getTheme: getTheme
+      isVisible,
+      show,
+      showErrors,
+      hide,
+      redirectHome,
+      setParams,
+      getParams,
+      setMessage,
+      getMessage,
+      setRemovable,
+      isRemovable,
+      setTheme,
+      getTheme
     };
   });
 
