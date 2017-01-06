@@ -277,7 +277,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
           title: 'ICGC Genes',
           minHistogramRegionSize: 20000000,
           maxLabelRegionSize: 10000000,
-          minTranscriptRegionSize: 300000,
+          minTranscriptRegionSize: 500000,
           height: 100,
           renderer: new GeneRenderer({
             tooltipContainerID: '#genomic',
@@ -633,7 +633,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
           title: 'ICGC Genes',
           minHistogramRegionSize: 20000000,
           maxLabelRegionSize: 10000000,
-          minTranscriptRegionSize: 300000,
+          minTranscriptRegionSize: 500000,
           height: 100,
           functional_impact: _.get(LocationService.filters(), 'mutation.functionalImpact.is', ''),
           renderer: new GeneRenderer({
