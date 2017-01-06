@@ -7,6 +7,12 @@
         <span data-ng-if="actives.length" class="t_facets__facet__terms__inactive__reset t_tools">
             <span data-ng-click="removeFacet()" class="t_tools__tool"><i class="icon-undo"></i></span>
         </span>
+        <span class="pull-right" data-ng-show="(inactives.length > 5 || actives.length > 5) && !collapsed">
+            <span data-ng-click="showSearch = !showSearch" class="t_tools__tool"><i class="icon-search"></i></span>
+        </span>
+    </li>
+    <li class="t_facets__facet__search" data-ng-if="showSearch">
+        <input type="search" placeholder="Search for {{label}}" ng-model="search">
     </li>
     <li class="t_facets__facet__terms">
         <ul class="t_facets__facet__terms__active">
