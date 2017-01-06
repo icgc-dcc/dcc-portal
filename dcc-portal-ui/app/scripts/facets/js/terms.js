@@ -180,7 +180,10 @@
         iconGetter: '&iconGetter',
         showWhenEmpty: '<',
 
-        resetPaginationOnChange: '<'
+        resetPaginationOnChange: '<',
+
+        //Search Config
+        searchIconShowLimit : '@'
       },
       transclude: true,
       templateUrl: '/scripts/facets/views/terms.html',
