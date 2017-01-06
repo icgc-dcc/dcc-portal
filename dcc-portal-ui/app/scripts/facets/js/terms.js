@@ -24,6 +24,7 @@
     function ($scope, $filter, Facets, HighchartsService, ProjectCache, ValueTranslator, LocationService) {
  
       $scope.resetPaginationOnChange = _.isUndefined($scope.resetPaginationOnChange) ? true : $scope.resetPaginationOnChange;  
+      $scope.search = {};
 
     // Translation on UI is slow, do in here
     function addTranslations (terms, facetName, missingText) {

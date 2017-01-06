@@ -361,7 +361,7 @@ angular.module('icgc.ui.table.filter', [])
         class: '@'
       },
       template: '<span class="t_suggest t_suggest__header table-filter {{class}}">' +
-        '<input type="text" class="t_suggest__input form-control" placeholder="' + gettextCatalog.getString('Table filter') + 
+        '<input type="text" class="t_suggest__input form-control" placeholder="' + gettextCatalog.getString('Filter table') + 
         '" data-ng-change="currentPage = 1;" data-ng-model="filterModel" />' + 
         '<i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search">' +
         '</i>'+
