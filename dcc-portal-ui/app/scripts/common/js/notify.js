@@ -79,7 +79,7 @@
         params.source = response.config.url;
         params.message = response.data.message || response.statusText;
       }
-    }
+    };
 
     const getParams = () => params;
 
