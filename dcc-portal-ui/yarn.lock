@@ -2,11 +2,12 @@
 # yarn lockfile v1
 
 
-"@oncojs/lolliplot@0.5.7":
-  version "0.5.7"
-  resolved "https://registry.yarnpkg.com/@oncojs/lolliplot/-/lolliplot-0.5.7.tgz#4c16c94320384cd49e0f2e397c6d9439776bd2a0"
+"@oncojs/lolliplot@0.5.8":
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/@oncojs/lolliplot/-/lolliplot-0.5.8.tgz#0688af4bdcd77b9d1b5bc6c885708d9d50a07460"
   dependencies:
     d3-selection "^1.0.3"
+    invariant "^2.2.2"
     lodash.countby "^4.6.0"
     lodash.range "^3.2.0"
     lodash.startcase "^4.4.0"
@@ -3062,7 +3063,7 @@ interpret@^0.6.4:
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-0.6.6.tgz#fecd7a18e7ce5ca6abfb953e1f86213a49f1625b"
 
-invariant@^2.2.0, invariant@^2.2.1:
+invariant@^2.2.0, invariant@^2.2.1, invariant@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.2.tgz#9e1f56ac0acdb6bf303306f338be3b204ae60360"
   dependencies:
