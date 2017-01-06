@@ -167,6 +167,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
         <div class="protein-structure-viewer-diagram">
           <button
             class="btn btn-default"
+            ng-class="{disabled: !canUndo()}"
             data-tooltip="Reset"
             ng-click="handleClickReset()"
             style="
@@ -183,10 +184,15 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
         var selectedMutation;
         let chart;
 
-        
-
         scope.handleClickReset = () => {
           chart.reset();
+        };
+
+        scope.canUndo = () => {
+          if (chart) {
+            const {min, max, domain} = chart.store.getState();
+            return !(min === 0 && max === domain);
+          }
         };
 
         selectedMutation = scope.$eval('highlightMarker');
@@ -197,8 +203,6 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
           scope.mutations = mutations;
           const element = jQuery(iElement).get()[0];
           const chartData = {};
-          chartData.start = 1;
-          chartData.stop = transcript.lengthAminoAcid;
 
           // Ideally, we need to merge domains that overlap. This is based on pfam curation
           // rules that indicate only domains in the same family can overlap. Our strategy is
