@@ -314,6 +314,13 @@
         <a href="{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}">
         <i class="icon-database"></i>{{:: ProjectCtrl.dataReleasesTitle }}
         </a>
+        <span class="open-in pull-right">
+            View in
+            <a href='/repositories?filters={"file":{"projectCode":{"is":["{{ProjectCtrl.project.id}}"]}}}'>
+                <i class="icon-download-cloud"></i>
+                <translate>Data Repositories</translate>
+            </a>
+        </span>
     </div>
 </div>
 </section>
