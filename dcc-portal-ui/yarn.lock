@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@oncojs/lolliplot@0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@oncojs/lolliplot/-/lolliplot-0.5.5.tgz#483c81ca9cc31e6f1abcb7d2ab025142a758a490"
+"@oncojs/lolliplot@0.5.7":
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/@oncojs/lolliplot/-/lolliplot-0.5.7.tgz#4c16c94320384cd49e0f2e397c6d9439776bd2a0"
   dependencies:
     d3-selection "^1.0.3"
     lodash.countby "^4.6.0"
