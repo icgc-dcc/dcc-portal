@@ -60,13 +60,13 @@
           },
           onClick: function(data){
             $scope.$emit('tooltip::hide');
-            if(_.contains($scope.currentPage, 'projects')){
+            if(_.includes($scope.currentPage, 'projects')){
               $location.path(data.link).search({});
             } else {
               let filter = {file: {projectCode: {is: [data.name]}, primarySite: {is: [data.key]}}};
-              if(_.contains($scope.currentPage, 'cloud')){
+              if(_.includes($scope.currentPage, 'cloud')){
                 filter = {file: _.extend(filter.file, {repoName: {is: [$scope.repoName]}})};
-              } else if (_.contains($scope.currentPage, 'pcawg')) {
+              } else if (_.includes($scope.currentPage, 'pcawg')) {
                 filter = {file: _.extend(filter.file, {study: {is: ['PCAWG']}})};
               }
               $location.path('repositories').search('filters', JSON.stringify(filter));

@@ -220,9 +220,9 @@ angular.module('icgc.repositories.controllers', [])
       };
 
       _ctrl.getRepoName = () => {
-        if(_.contains(_repoContext, 'aws')){
+        if(_.includes(_repoContext, 'aws')){
           return 'AWS - Virginia';
-        } else if(_.contains(_repoContext, 'collaboratory')) {
+        } else if(_.includes(_repoContext, 'collaboratory')) {
           return 'Collaboratory - Toronto';
         }
       };

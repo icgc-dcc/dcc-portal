@@ -980,7 +980,7 @@ angular.module('icgc.advanced.controllers', [
 
     const summarizeData = (items) => {
       const count = _.size(items);
-      const firstItem = _.first(items);
+      const firstItem = _.head(items);
 
       if (count < 2) {
         return items;
@@ -1004,7 +1004,7 @@ angular.module('icgc.advanced.controllers', [
       const max = _.maxBy (data, (item) => item.y);
       const isBelowGroupPercent = (item) => (item.y / max.y) < (2 / 100);
       const separated = _.partition (data, isBelowGroupPercent);
-      const belowGroupPercent = _.first(separated);
+      const belowGroupPercent = _.head(separated);
       const regular = _.last(separated);
 
       return _.orderBy(regular.concat(summarizeData(belowGroupPercent)), 'y', false);
