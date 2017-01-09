@@ -343,6 +343,8 @@ public class EntitySetService {
       return Type.GENE_CENTRIC;
     } else if (entityType == BaseEntitySet.Type.MUTATION) {
       return Type.MUTATION_CENTRIC;
+    } else if (entityType == BaseEntitySet.Type.FILE) {
+      return Type.FILE;
     }
 
     log.error("No mapping for enum value '{}' of BaseEntitySet.Type.", entityType);
