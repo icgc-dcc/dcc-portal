@@ -194,9 +194,7 @@
           config.tooltipHideFunc();
         })
         .on('click',function(d){
-          if (d.link) {
-            config.onClick(d.link);
-          }
+          config.onClick(d);
         })
         .transition()
         .attr ('y', function (d) {return y (d.y1)})

@@ -164,11 +164,11 @@
                         <a data-ng-switch-when="dbSNP" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectSNP()}}">
                             <i class="icon-external-link"></i><translate>NCBI dbSNP</translate></a>
 
-                        <a data-ng-switch-when="TCGA" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectTCGA()}}">
-                            <i class="icon-external-link"></i><translate>The Cancer Genome Atlas</translate></a>
+                        <a data-ng-switch-when="TCGA" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGDCLegacy()}}">
+                            <i class="icon-external-link"></i><translate>Genomic Data Commons (Legacy)</translate></a>
 
-                        <a data-ng-switch-when="CGHub" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectCGHub(ProjectCtrl.project.id.split('-')[0])}}">
-                            <i class="icon-external-link"></i><translate>Cancer Genomics Hub</translate></a>
+                        <a data-ng-switch-when="CGHub" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGDCActive()}}">
+                            <i class="icon-external-link"></i><translate>Genomic Data Commons (Active)</translate></a>
 
                         <a data-ng-switch-when="GEO" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGEO()}}">
                             <i class="icon-external-link"></i><translate>Gene Expression Omnibus</translate></a>
@@ -310,10 +310,28 @@
         </tr>
     </table>
     <div>
-        <span class="open-in"><translate>Open in</translate></span>
-        <a href="{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}">
-        <i class="icon-database"></i>{{:: ProjectCtrl.dataReleasesTitle }}
-        </a>
+        <span class="action-toolbar">
+            <span class="action-item">
+                <span>
+                    <i class="icon-database"></i>
+                    <span>
+                        <a href='{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}'>
+                            <translate>Open in {{:: ProjectCtrl.dataReleasesTitle }}</translate>
+                        </a>
+                    </span>
+                </span>
+            </span>
+            <span class="action-item">
+                <span>
+                    <i class="icon-download-cloud"></i>
+                    <span>
+                        <a href='/repositories?filters={"file":{"projectCode":{"is":["{{ProjectCtrl.project.id}}"]}}}'>
+                            <translate>View in Data Repositories</translate>
+                        </a>
+                    </span>
+                </span>
+            </span>
+        </span>
     </div>
 </div>
 </section>
