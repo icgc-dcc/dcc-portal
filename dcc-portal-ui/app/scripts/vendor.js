@@ -10,14 +10,16 @@ Object.assign(_, _.pick(_4, [
   ]));
 
 var cache = new _4.memoize.Cache;
-global.migrate({
-  log: (message) => {
-    if (!cache.has(message) && !message.includes('getRestangularUrl')) {
-      cache.set(message, true);
-      console.trace(message);
-    }
-  },
-});
+if(global.migrate){
+  global.migrate({
+    log: (message) => {
+      if (!cache.has(message) && !message.includes('getRestangularUrl')) {
+        cache.set(message, true);
+        console.trace(message);
+      }
+    },
+  });
+}
 
 // Angular Libs
 require('expose?angular!angular');

@@ -23,6 +23,7 @@ module.exports = function(config){
     // files to include, ordered by dependencies
     files : [
       './node_modules/es6-shim/es6-shim.js',
+      './node_modules/lodash-migrate/dist/lodash-migrate.js',
       'app/scripts/vendor.js',
       'app/scripts/index.js',
       // === Test, mock files ===
