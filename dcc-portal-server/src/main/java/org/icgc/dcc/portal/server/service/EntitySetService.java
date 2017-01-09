@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Math.min;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static lombok.AccessLevel.PRIVATE;
+import org.springframework.beans.factory.annotation.Value;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
 import java.io.IOException;
@@ -91,6 +92,9 @@ public class EntitySetService {
   private final ServerProperties properties;
   @NonNull
   private final QueryEngine queryEngine;
+  @NonNull
+  @Value("#{repoIndexName}")
+  private final String repoIndexName;
 
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
 
@@ -369,10 +373,12 @@ public class EntitySetService {
 
     val type = getRepositoryByEntityType(definition.getType());
     val pql = converter.convert(query, type);
-    val request = queryEngine.execute(pql, type);
-    return request.getRequestBuilder()
-        .setSize(max)
-        .execute().actionGet();
+    val request = queryEngine.execute(pql, type).getRequestBuilder().setSize(max);
+
+    if (type == Type.FILE) {
+      request.setIndices(repoIndexName);
+    }
+    return request.get();
   }
 
   @PostConstruct
