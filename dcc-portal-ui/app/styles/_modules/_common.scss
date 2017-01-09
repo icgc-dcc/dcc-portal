@@ -230,6 +230,18 @@ h3:hover {
   font-family: inherit;
 }
 
+.t_notify_popup {
+  pre{
+    background: #d3741c;
+    color: #fff;
+    padding: 10px;
+    box-shadow: inset 1px 1px 1px 0px rgba(0,0,0,0.5);
+    overflow: scroll;
+    max-height: 100px;
+    line-height: 1rem;
+  }
+}
+
 .t_notify_link {
   cursor: pointer;
   color: #FFF;
