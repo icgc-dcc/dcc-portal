@@ -13,6 +13,20 @@ angular.module('icgc.compounds.index', [])
       getAll,
     });
   })
+  .component('paginatedTable', {
+    bindings: {
+      rows: '<',
+    },
+    controller: function () {},
+    controllerAs: 'vm',
+    template: `
+      <table>
+        <tr ng-repeat="row in vm.rows">
+          {{ row }}
+        </tr>
+      </table>
+    `,
+  })
   .component('compoundIndex', {
     template: `
       <div>
@@ -22,9 +36,12 @@ angular.module('icgc.compounds.index', [])
             <span>Compounds</span>
           </h1>
         </div>
-        <pre>
-          {{ vm.compounds | json }}
-        </pre>
+        <div>
+          <paginated-table
+            rows="vm.compounds"
+          >
+          </paginated-table>
+        </div>
       </div>
     `,
     controller: function (Page, CompoundIndexService) {
