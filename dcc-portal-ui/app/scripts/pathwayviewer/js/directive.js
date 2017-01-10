@@ -16,7 +16,7 @@
  */
 
 
-import {ReactomePathway, PathwayModel} from '@oncojs/pathwayviewer';
+import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
 
 (function($) {
   'use strict';
