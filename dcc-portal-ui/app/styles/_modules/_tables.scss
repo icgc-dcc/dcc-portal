@@ -39,7 +39,7 @@ $table-th-fixed-width: 200px;
     tr {
       vertical-align: top;
 
-      &:nth-child(odd) {
+      &:nth-child(odd) td {
         background: $greyLightest;
       }
     }
