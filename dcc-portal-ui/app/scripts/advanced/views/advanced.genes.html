@@ -81,10 +81,9 @@
             ng-class="{
                 'is-selected': AdvancedCtrl.isEntitySelected('gene', gene)
             }"
-            ng-click="AdvancedCtrl.toggleSelectedEntity('gene', gene)"
             data-ng-repeat="gene in AdvancedCtrl.Gene.genes.hits track by gene.id"
         >
-            <td>
+            <td ng-click="AdvancedCtrl.toggleSelectedEntity('gene', gene)">
                 <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('gene', gene)"></icgc-checkbox>
             </td>
             <td><a href="/genes/{{ gene.id }}">{{ gene.symbol }}</a></td>

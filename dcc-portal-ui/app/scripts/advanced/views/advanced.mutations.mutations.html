@@ -63,9 +63,8 @@
         ng-class="{
             'is-selected': AdvancedCtrl.isEntitySelected('mutation', mutation)
         }"
-        ng-click="AdvancedCtrl.toggleSelectedEntity('mutation', mutation)"
     >
-        <td>
+        <td ng-click="AdvancedCtrl.toggleSelectedEntity('mutation', mutation)">
             <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('mutation', mutation)"></icgc-checkbox>
         </td>
         <td><a href='/mutations/{{ mutation.id }}'>{{ mutation.id }}</a></td>
