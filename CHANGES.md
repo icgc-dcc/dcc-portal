@@ -3,6 +3,19 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[4.3.27](https://github.com/icgc-dcc/dcc-portal/compare/4.3.26...4.3.27)
+--
+- Project Page: TCGA and CGHub links update
+- Edit Set Dialog: Thousand separator in title, reword modal title. right align items
+- Updated Collab / PCAWG repo links in about pages
+- Site: Improved error dialog contents and added email link
+- GV: Increase genome browser minTranscriptRegionSize to 500k
+- GV: Added loading indicator
+- AS / Repository Browser: Added facet filter
+- AS / Repository Browser: Removed entity set save option
+- Fix: Added missing file entity sets in the backend
+- Incorporate the name of the tab into the 'Save/Edit Results' verbiage
+
 [4.3.26](https://github.com/icgc-dcc/dcc-portal/compare/4.3.25...4.3.26)
 --
 - Fixed bad dcc-commons version conflict with download server.
