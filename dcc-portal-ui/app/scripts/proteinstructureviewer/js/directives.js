@@ -154,10 +154,16 @@
       restrict: 'E',
       replace: true,
       scope: {'highlightMarker': '&', 'transcript': '='},
-      template: '<div class="protein-structure-viewer-diagram"></div>',
+      template: `
+      <div class="empty">
+        <h3 data-ng-if="!done">
+          <i class="icon-spinner icon-spin"></i>Loading Protein Viewer
+        </h3>
+        <div class="protein-structure-viewer-diagram"></div>
+      </div>`,
       link: function (scope, iElement) {
         var options, selectedMutation;
-
+        scope.done = false;
         options = iElement.data();
 
         selectedMutation = scope.$eval('highlightMarker');
@@ -257,8 +263,10 @@
               var chart = chartmaker.chart(options, chartData);
               if (chartData.mutations.length > 0) {
                 chart.display(element);
+                scope.done = true;
               } else {
                 chart.displayError(element, gettextCatalog.getString('No Mutation occurs in coding region of this Gene.'));
+                scope.done = true;
               }
             });
           }
