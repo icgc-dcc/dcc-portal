@@ -52,6 +52,13 @@ angular.module('icgc.modules.genomeviewer', ['icgc.modules.genomeviewer.header',
     }
   });
 
+/**
+genome-viewer.js roughly line 25612 setWidth subtracts 18 for windows scrollbars.
+https://github.com/opencb/jsorolla/blob/b969877f53b64927568cd1309413ba141a848ae7/src/genome-viewer/genome-viewer.js#L70
+https://github.com/opencb/jsorolla/blob/b969877f53b64927568cd1309413ba141a848ae7/src/genome-viewer/tracks/tracklist-panel.js#L57
+Adjusting for it here
+TODO: detect for the type of scrollbar and adjust dynamically
+*/
 const getWidth = (containerWidth) => containerWidth + 18;
 
 angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController', function ($scope, $element, GMService) {
