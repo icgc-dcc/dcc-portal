@@ -115,25 +115,25 @@
 
 <table class="hidden" id="mutations" data-ng-if="AdvancedCtrl.Page.isExporting()">
     <thead>
-    <tr>
-        <th><translate>Mutation ID</translate></th>
-        <th><translate>Genomic DNA Change</translate></th>
-        <th><translate>Type</translate></th>
-        <th><translate>Consequences</translate></th>
-        <th><translate>Donors affected</translate></th>
-        <th><translate>Projects Mutation Observed</translate></th>
-    </tr>
+        <tr>
+            <th><translate>Mutation ID</translate></th>
+            <th><translate>Genomic DNA Change</translate></th>
+            <th><translate>Type</translate></th>
+            <th><translate>Consequences</translate></th>
+            <th><translate>Donors affected</translate></th>
+            <th><translate>Projects Mutation Observed</translate></th>
+        </tr>
     </thead>
     <tbody>
-    <tr data-ng-repeat="mutation in AdvancedCtrl.Mutation.mutations.hits track by mutation.id">
-        <td>{{mutation.id}}</td>
-        <td>chr{{mutation.chromosome}}:g.{{ mutation.start }}{{ mutation.mutation }}</td>
-        <td>{{mutation.type | define }}</td>
-        <td>
-            <mutation-consequences items="mutation.consequences"></mutation-consequences>
-        </td>
-        <td>{{mutation.affectedDonorCountFiltered}}/{{mutation.affectedDonorCountTotal}}</td>
-        <td>{{mutation.uiDonorsExportString}}</td>
-    </tr>
+        <tr data-ng-repeat="mutation in AdvancedCtrl.Mutation.mutations.hits track by mutation.id">
+            <td>{{mutation.id}}</td>
+            <td>chr{{mutation.chromosome}}:g.{{ mutation.start }}{{ mutation.mutation }}</td>
+            <td>{{mutation.type | define }}</td>
+            <td>
+                <mutation-consequences items="mutation.consequences"></mutation-consequences>
+            </td>
+            <td>{{mutation.affectedDonorCountFiltered}}/{{mutation.affectedDonorCountTotal}}</td>
+            <td>{{mutation.uiDonorsExportString}}</td>
+        </tr>
     </tbody>
 </table>
