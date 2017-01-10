@@ -32,7 +32,7 @@
 
         <div data-ng-if="ICGCRepoController.files" ng-init="releaseUrl = ICGCRepoController.dataReleasesUrl;">
             <div class="file-path-container">
-                <ul class="breadcrumb file-path-container">
+                <ul class="breadcrumb">
                     <li><a href="{{:: releaseUrl }}"><i class="icon-database"></i>DCC</a></li>
                     <li data-ng-repeat="p in ICGCRepoController.slugs">
                         <a data-ng-if="!$last"
