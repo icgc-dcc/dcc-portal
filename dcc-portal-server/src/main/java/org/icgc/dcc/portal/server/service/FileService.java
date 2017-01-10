@@ -112,6 +112,7 @@ public class FileService {
       .build();
   private static final Set<String> DATA_TABLE_EXPORT_MAP_FIELD_KEYS = toRawFieldSet(
       DATA_TABLE_EXPORT_MAP.keySet());
+  private static final String[] DATA_TABLE_MAPPING_KEYS = toArray(DATA_TABLE_EXPORT_MAP.keySet(), String.class);
   private static final String[] DATA_TABLE_EXPORT_MAP_FIELD_ARRAY =
       toArray(DATA_TABLE_EXPORT_MAP_FIELD_KEYS, String.class);
 
@@ -206,14 +207,12 @@ public class FileService {
 
   public void exportFiles(OutputStream output, Query query) {
     val prepResponse = fileRepository.findAll(query, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
-
-    exportFiles(output, prepResponse, query, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
+    exportFiles(output, prepResponse, query, DATA_TABLE_MAPPING_KEYS);
   }
 
   public void exportFiles(OutputStream output, String setId) {
     val prepResponse = fileRepository.findAll(setId, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
-
-    exportFiles(output, prepResponse, new Query(), DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
+    exportFiles(output, prepResponse, new Query(), DATA_TABLE_MAPPING_KEYS);
   }
 
   public Map<String, Map<String, Long>> getUniqueFileAggregations(UniqueSummaryQuery summary) {
@@ -266,10 +265,9 @@ public class FileService {
         break;
       }
 
-      val fileObjs = convertHitsToRepoFiles(response.getHits(), query);
-      val keySet = DATA_TABLE_EXPORT_MAP.keySet();
-      for (val file : fileObjs) {
-        writer.write(toRowMap(file), keySet.toArray(new String[keySet.size()]));
+      val files = convertHitsToRepoFiles(response.getHits(), query);
+      for (val file : files) {
+        writer.write(toRowMap(file), keys);
       }
 
       scrollId = response.getScrollId();
