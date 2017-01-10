@@ -49,6 +49,7 @@
                             ng-model="ICGCRepoController.fileQuery"
                             placeholder="Filter by file name..."
                             ng-keyup="ICGCRepoController.handleFileQueryKeyup($event)"
+                            size="2"
                         />
                         <i
                             style="position: absolute; top: 0; right: 3px; cursor: pointer;"
@@ -61,14 +62,14 @@
             </ul>
 
             <file-finder
-                ng-show="ICGCRepoController.fileQuery"
+                ng-show="ICGCRepoController.fileQuery.length >= 2"
                 query="ICGCRepoController.slugs.slice(-1)[0].url + ICGCRepoController.fileQuery"
             >
 
             </file-finder>
 
             <table
-                ng-show="!ICGCRepoController.fileQuery || !ICGCRepoController.fileQuery.length"
+                ng-show="!ICGCRepoController.fileQuery || !ICGCRepoController.fileQuery.length || ICGCRepoController.fileQuery.length < 2"
                 class="table"
                 style="font-size: 1.1rem"
             >
