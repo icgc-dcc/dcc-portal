@@ -155,7 +155,7 @@
       replace: true,
       scope: {'highlightMarker': '&', 'transcript': '='},
       template: `
-      <div class="empty">
+      <div ng-class="{empty : !done}">
         <h3 data-ng-if="!done">
           <i class="icon-spinner icon-spin"></i>Loading Protein Viewer
         </h3>
