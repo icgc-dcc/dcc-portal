@@ -198,7 +198,7 @@
 </section>
 <section id="projects" class="dynamic-height"
          data-ng-class="{'loading': !GeneCtrl.gene.projects.hits, 'empty': GeneCtrl.gene.fprojects.length == 0}">
-    <h3 data-ng-if="!GeneCtrl.gene.projects.hits"><i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate></h3>
+    <h3 data-ng-if="!GeneCtrl.gene.projects.hits"><i class="icon-spinner icon-spin"></i> <translate>Loading Donors...</translate></h3>
 
     <h3 data-ng-if="GeneCtrl.gene.projects.hits.length == 0"><translate>No Donors Affected.</translate></h3>
 
@@ -379,7 +379,7 @@
          data-ng-controller="GeneMutationsCtrl as GeneMutationsCtrl"
          data-ng-class="{'loading': !GeneMutationsCtrl.mutations.hits, 'empty': GeneMutationsCtrl.mutations.hits.length == 0}">
     <h3 data-ng-if="!GeneMutationsCtrl.mutations.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="GeneMutationsCtrl.mutations.hits.length == 0">
@@ -496,7 +496,7 @@
   ng-class="{ 'loading': GeneCompoundsCtrl.compounds === undefined, 'empty': GeneCompoundsCtrl.compoundslength === 0 }">
 
   <h3 ng-if="GeneCompoundsCtrl.compounds === undefined">
-    <i class="icon-spinner icon-spin" /><translate>Fetching Compounds...</translate>
+    <i class="icon-spinner icon-spin" /><translate>Loading Compounds...</translate>
   </h3>
 
   <h3 ng-if="GeneCompoundsCtrl.compounds.length === 0">

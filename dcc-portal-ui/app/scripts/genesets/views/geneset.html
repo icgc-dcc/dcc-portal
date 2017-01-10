@@ -187,7 +187,7 @@
 </section>
 <section id="projects"
          data-ng-class="{'loading': !GeneSetCtrl.geneSet.projects, 'empty': GeneSetCtrl.geneSet.projects.length == 0}">
-    <h3 data-ng-if="!GeneSetCtrl.geneSet.projects"><i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate></h3>
+    <h3 data-ng-if="!GeneSetCtrl.geneSet.projects"><i class="icon-spinner icon-spin"></i> <translate>Loading Donors...</translate></h3>
 
     <h3 data-ng-if="GeneSetCtrl.geneSet.projects.length == 0"><translate>No Donors Affected.</translate></h3>
 
@@ -362,7 +362,7 @@
     data-ng-class="{'loading': !GeneSetGenesCtrl.genes.hits, 'empty': GeneSetGenesCtrl.genes.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!GeneSetGenesCtrl.genes.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutated Genes...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutated Genes...</translate>
     </h3>
 
     <h3 data-ng-if="GeneSetGenesCtrl.genes.hits.length == 0">
@@ -466,7 +466,7 @@
          data-ng-class="{'loading': !GeneSetCtrl.pathway.xml, 'empty': GeneSetCtrl.pathway.xml}">
     <h3 data-ng-if="!GeneSetCtrl.pathway.xml">
         <i class="icon-spinner icon-spin"></i>
-        <translate>Fetching Pathway Viewer...</translate>
+        <translate>Loading Pathway Viewer...</translate>
     </h3>
     <div data-ng-if="GeneSetCtrl.pathway.xml">
         <h3><translate>Pathway Viewer</translate></h3>
@@ -487,7 +487,7 @@
     data-ng-class="{'loading': !GeneSetMutationsCtrl.mutations.hits, 'empty': GeneSetMutationsCtrl.mutations.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!GeneSetMutationsCtrl.mutations.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="GeneSetMutationsCtrl.mutations.hits.length == 0">
@@ -597,7 +597,7 @@
     data-ng-class="{'loading': !GeneSetDonorsCtrl.donors.hits, 'empty': GeneSetDonorsCtrl.donors.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!GeneSetDonorsCtrl.donors.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Donors...</translate>
     </h3>
 
     <h3 data-ng-if="GeneSetDonorsCtrl.donors.hits.length == 0">

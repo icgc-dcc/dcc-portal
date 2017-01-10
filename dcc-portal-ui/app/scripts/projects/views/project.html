@@ -341,7 +341,7 @@
     data-ng-class="{'loading': !ProjectGeneCtrl.genes.hits, 'empty': ProjectGeneCtrl.genes.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!ProjectGeneCtrl.genes.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutated Genes...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutated Genes...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectGeneCtrl.genes.hits.length == 0">
@@ -503,7 +503,7 @@
     data-ng-class="{'loading': !ProjectMutationsCtrl.mutations.hits, 'empty': ProjectMutationsCtrl.mutations.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!ProjectMutationsCtrl.mutations.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectMutationsCtrl.mutations.hits.length == 0">
@@ -656,7 +656,7 @@
     data-ng-class="{'loading': !ProjectDonorsCtrl.donors.hits, 'empty': ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0}"
     fix-scroll>
     <h3 data-ng-if="!ProjectDonorsCtrl.donors.hits && ProjectCtrl.project.ssmTestedDonorCount > 0">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Donors...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0">

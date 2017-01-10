@@ -482,7 +482,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
     template: `
       <div ng-class="{empty : !done}">
         <h3 data-ng-if="!done">
-          <i class="icon-spinner icon-spin"></i>Loading Genome Viewer
+          <i class="icon-spinner icon-spin"></i>Loading Genome Viewer...
         </h3>
         <div id="gv-application" style="border:1px solid #d3d3d3;border-top-width: 0px;" data-ng-show="done"></div>
       </div>`,

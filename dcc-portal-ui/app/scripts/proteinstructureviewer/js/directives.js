@@ -157,7 +157,7 @@
       template: `
       <div ng-class="{empty : !done}">
         <h3 data-ng-if="!done">
-          <i class="icon-spinner icon-spin"></i>Loading Protein Viewer
+          <i class="icon-spinner icon-spin"></i>Loading Protein Viewer...
         </h3>
         <div class="protein-structure-viewer-diagram"></div>
       </div>`,
