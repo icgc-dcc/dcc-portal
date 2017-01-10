@@ -52,7 +52,9 @@ angular.module('icgc.modules.genomeviewer', ['icgc.modules.genomeviewer.header',
     }
   });
 
-angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController', function ($scope, GMService) {
+const getWidth = (containerWidth) => containerWidth + 18;
+
+angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController', function ($scope, $element, GMService) {
   var _controller = this;
 
 
@@ -99,7 +101,7 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
 
 
   // Assume this is a single use call i.e. this is not an idempotent function so don't call this more than once!
-  _controller.initFullScreenHandler = function(genomeViewer) {
+  _controller.initResizeHandler = function(genomeViewer) {
 
     if (! document.addEventListener) {
       return false;
@@ -126,10 +128,14 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
     document.addEventListener('mozfullscreenchange', _fullscreenHandler);
     document.addEventListener('fullscreenchange', _fullscreenHandler);
 
+    const handleResize = _.debounce(() => genomeViewer.setWidth(getWidth($element.width())));
+    jQuery(window).on('resize', handleResize);
+
     $scope.$on('$destroy', function() {
       document.removeEventListener('webkitfullscreenchange', _fullscreenHandler);
       document.removeEventListener('mozfullscreenchange', _fullscreenHandler);
       document.removeEventListener('fullscreenchange', _fullscreenHandler);
+      jQuery(window).off('resize', handleResize);
     });
 
   };
@@ -160,7 +166,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
             cellBaseHost: GMService.getConfiguration().cellBaseHost,
             cellBaseVersion: 'v3',
             target: 'genome-viewer',
-            width: 1135,
+            width: getWidth(element.width()),
             availableSpecies: availableSpecies,
             species: species,
             region: regionObj,
@@ -378,7 +384,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
 
         genomeViewer.karyotypePanel.hide();
         genomeViewer.chromosomePanel.hide();
-        GenomeViewerController.initFullScreenHandler(genomeViewer);
+        GenomeViewerController.initResizeHandler(genomeViewer);
       }
 
       function update() {
@@ -481,7 +487,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
             cellBaseHost: GMService.getConfiguration().cellBaseHost,
             cellBaseVersion: 'v3',
             target: 'gv-application',
-            width: 1135,
+            width: getWidth(element.width()),
             availableSpecies: availableSpecies,
             species: species,
             region: regionObj,
@@ -739,7 +745,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
 
         genomeViewer.draw();
 
-        GenomeViewerController.initFullScreenHandler(genomeViewer);
+        GenomeViewerController.initResizeHandler(genomeViewer);
 
         scope.$on('$locationChangeSuccess', function () {
           tracks.icgcMutationsTrack.functional_impact = _.get(LocationService.filters(),
