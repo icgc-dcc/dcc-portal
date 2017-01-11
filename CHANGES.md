@@ -12,8 +12,7 @@ Change log for the DCC Data Portal.
 - Add check for for empty set definition
 - Fixed swapped date and size in recursive download dir listing
 - Added temporary workaround for Chrome bug with alternating table row background colours
-- Release page now requires at least 2 characters for filtering
-- 
+- Release page now requires at least 2 characters for filtering by file name
 
 [4.3.27](https://github.com/icgc-dcc/dcc-portal/compare/4.3.26...4.3.27)
 --
