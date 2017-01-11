@@ -174,8 +174,7 @@
                             <translate>No targeted genes found.</translate>
                         </span>
                     </div>
-                    <div data-ng-class="{empty : !CompoundCtrl.getTargetedCompoundGenes()}"
-                         data-ng-if="! CompoundCtrl.getTargetedCompoundGenes()">
+                    <div class="empty" data-ng-if="! CompoundCtrl.getTargetedCompoundGenes()">
                         <h3>
                             <i class="icon-spinner icon-spin"></i> <translate>Loading targeted genes...</translate>
                         </h3>
