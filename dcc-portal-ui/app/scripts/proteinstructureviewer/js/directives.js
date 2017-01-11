@@ -162,7 +162,7 @@
         if (selectedMutation) {
           selectedMutation = selectedMutation();
         }
-console.log('PV', scope);
+
         function refresh(transcript) {
           var element, chartData;
 
