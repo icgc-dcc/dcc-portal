@@ -386,7 +386,8 @@
     </div>
     <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" 
         region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"
-        data-is-gv-loading="GeneCtrl.isGVLoading"></gvembed>
+        data-is-gv-loading="GeneCtrl.isGVLoading"
+        data-ng-style="{'visibility': GeneCtrl.isGVLoading ? 'hidden' : 'visible'}"></gvembed>
 </section>
 <section id="mutations" class="dynamic-height"
          data-ng-controller="GeneMutationsCtrl as GeneMutationsCtrl"

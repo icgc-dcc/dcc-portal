@@ -337,7 +337,8 @@
     </div>
     <gvembed
         region="{{MutationCtrl.mutation.chromosome}}:{{MutationCtrl.mutation.start}}-{{MutationCtrl.mutation.end}}"
-        data-is-gv-loading="MutationCtrl.isGVLoading"></gvembed>
+        data-is-gv-loading="MutationCtrl.isGVLoading"
+        data-ng-style="{'visibility': MutationCtrl.isGVLoading ? 'hidden' : 'visible'}"></gvembed>
 </section>
 </article>
 </div>
