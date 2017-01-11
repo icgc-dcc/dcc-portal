@@ -3,6 +3,17 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+
+[4.4.0](https://github.com/icgc-dcc/dcc-portal/compare/4.3.27...4.4.0)
+--
+- Shrink hit area to select set from row to checkbox cell
+- Added trailing newline to all exported TSVs
+- Fixed rendering offset with genome viewer
+- Add check for for empty set definition
+- Fixed swapped date and size in recursive download dir listing
+- Added temporary workaround for Chrome bug with alternating table row background colours
+- Release page now requires at least 2 characters for filtering by file name
+
 [4.3.27](https://github.com/icgc-dcc/dcc-portal/compare/4.3.26...4.3.27)
 --
 - Project Page: TCGA and CGHub links update
