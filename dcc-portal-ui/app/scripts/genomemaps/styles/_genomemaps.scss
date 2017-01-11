@@ -164,3 +164,11 @@
   top: 0;
   background: white;
 }
+
+.gv-embed{
+  border: 1px solid #d3d3d3;
+  border-top:0px;
+  &.no-border{
+    border:none;
+  }
+}

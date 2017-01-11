@@ -480,7 +480,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
     transclude: true,
     controller: 'GenomeViewerController',
     scope: {'isGvLoading': '='},
-    template: '<div id="gv-application" style="border:1px solid #d3d3d3;border-top-width: 0px;"></div>',
+    template: `<div id="gv-application" class="gv-embed" data-ng-class="{'no-border': isGvLoading}"></div>`,
 
     link: function (scope, element, attrs, GenomeViewerController) {
       var genomeViewer, navigationBar, tracks = {};
