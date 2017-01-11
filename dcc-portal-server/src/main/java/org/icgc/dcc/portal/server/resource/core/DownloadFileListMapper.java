@@ -69,7 +69,7 @@ public class DownloadFileListMapper {
 
   private void flatten(Collection<DownloadFile> result, DownloadFile file) {
     // Remove contents
-    result.add(new DownloadFile(file.getName(), file.getType(), file.getDate(), file.getSize()));
+    result.add(new DownloadFile(file.getName(), file.getType(), file.getSize(), file.getDate()));
 
     // Base case
     if (file.getContents() == null) return;
