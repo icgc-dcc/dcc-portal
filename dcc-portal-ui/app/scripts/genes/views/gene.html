@@ -197,7 +197,7 @@
     </div>
 </section>
 <section id="projects" class="dynamic-height"
-         data-ng-class="{'loading': !GeneCtrl.gene.projects.hits, 'empty': GeneCtrl.gene.fprojects.length == 0}">
+         data-ng-class="{'loading': !GeneCtrl.gene.projects.hits, 'empty': GeneCtrl.gene.projects.length == 0}">
     <h3 data-ng-if="!GeneCtrl.gene.projects.hits"><i class="icon-spinner icon-spin"></i> <translate>Loading Donors...</translate></h3>
 
     <h3 data-ng-if="GeneCtrl.gene.projects.hits.length == 0"><translate>No Donors Affected.</translate></h3>
@@ -338,42 +338,56 @@
     </div>
 </section>
 <section id="protein" class="dynamic-height">
+    <div class="empty" data-ng-if="GeneCtrl.isPVLoading">
+        <h3>
+            <i class="icon-spinner icon-spin"></i>Loading Protein...
+        </h3>
+    </div>
     <div data-ng-if="!GeneCtrl.gene.uiProteinTranscript.length" class="empty">
         <h3 data-ng-if="GeneCtrl.gene.affectedTranscriptIds.length">
             <translate>No Protein Coding Transcript Found.</translate>
         </h3>
-
         <h3 data-ng-if="!GeneCtrl.gene.affectedTranscriptIds.length">
             <translate>No Mutation occurs in coding region of this Gene.</translate>
         </h3>
     </div>
     <div data-ng-if="GeneCtrl.gene.uiProteinTranscript.length"
          data-ng-init="sorted = (GeneCtrl.gene.uiProteinTranscript | orderBy:'+name')">
-        <h3><translate>Protein</translate></h3>
+        <h3 data-ng-if="!GeneCtrl.isPVLoading"><translate>Protein</translate></h3>
 
         <form data-ng-init="transcript = sorted[0]" data-ng-show="GeneCtrl.gene.uiProteinTranscript.length > 0">
-          <span><strong><translate>Transcript:</translate> </strong>
-            <select data-ng-model="transcript"
+            <div data-ng-if="!GeneCtrl.isPVLoading">
+                <span><strong><translate>Transcript:</translate> </strong>
+                <select data-ng-model="transcript"
                     data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)' for t in sorted"></select>
-            <proteinstructure transcript="transcript" data-value-height="200"></proteinstructure>
+            </div>
+            <proteinstructure transcript="transcript" data-value-height="200" data-is-pv-loading="GeneCtrl.isPVLoading"></proteinstructure>
           </span>
         </form>
     </div>
 </section>
 <section id="genomic" class="gv_full_screen dynamic-height" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
-    <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome">
+    <div class="empty" data-ng-if="GeneCtrl.isGVLoading">
+        <h3>
+            <i class="icon-spinner icon-spin"></i>Loading Genomic Context...
+        </h3>
+    </div>
+    <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
         <translate>Genomic Context</translate>
         <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
     </h3>
-    <h3 data-ng-if="!GeneCtrl.gene.hasGVChromosome">
+    <h3 data-ng-if="!GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
         <translate>No Genomic Context available.</translate>
     </h3>
 
-    <div data-ng-if="GeneCtrl.gene.hasGVChromosome" class="t_gv__navbar">
+    <div data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading" class="t_gv__navbar">
        <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
        <span class="pull-right gv-navbar-zoom"></span>
     </div>
-    <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"></gvembed>
+    <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" 
+        region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"
+        data-is-gv-loading="GeneCtrl.isGVLoading"
+        ng-style="{'border':GeneCtrl.isGVLoading ? 'none' : 'inherit'}"></gvembed>
 </section>
 <section id="mutations" class="dynamic-height"
          data-ng-controller="GeneMutationsCtrl as GeneMutationsCtrl"
