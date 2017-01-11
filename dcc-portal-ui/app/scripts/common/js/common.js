@@ -75,6 +75,7 @@ require('../components');
   });
 
   module.filter('_', function () {
+    var _ = require('lodash');
     return function () {
       var input = arguments[0];
       var method = arguments[1];

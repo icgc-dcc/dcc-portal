@@ -358,16 +358,31 @@ angular.module('icgc.ui.table.filter', [])
       scope: {
         filterModel: '=',
         currentPage: '=',
-        class: '@'
+        class: '@',
+        onChange: '&',
       },
       template: '<span class="t_suggest t_suggest__header table-filter {{class}}">' +
         '<input type="text" class="t_suggest__input form-control" placeholder="' + gettextCatalog.getString('Table filter') + 
-        '" data-ng-change="currentPage = 1;" data-ng-model="filterModel" />' + 
+        '" data-ng-change="handleChange(filterModel)" data-ng-model="filterModel" />' + 
         '<i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search">' +
         '</i>'+
         '<i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel ng-hide"' + 
-        ' data-ng-click="filterModel = \'\'" data-ng-show="filterModel"></i>' +
+        ' data-ng-click="handleClear()" data-ng-show="filterModel"></i>' +
         '</span>',
+      link: function (scope) {
+        scope.handleChange = () => {
+          console.log('handle change');
+          if (scope.onChange()) {
+            scope.onChange()(scope.filterModel);
+          } else {
+            scope.currentPage = 1;
+          }
+        };
+        scope.handleClear = () => {
+          scope.filterModel = '';
+          scope.handleChange();
+        };
+      },
       replace: true
     };
   });

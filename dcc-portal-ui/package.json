@@ -127,6 +127,7 @@
     "get-canvas-context": "1.0.2",
     "highcharts": "5.0.0",
     "jquery": "2.1.2",
+    "jsonpath-plus": "^0.15.0",
     "load-img": "1.0.0",
     "lodash": "4.17.2",
     "lodash.keyby": "4.6.0",
