@@ -89,21 +89,23 @@
       </div>
   </aside>
   <article style="margin-right:1px;">
-      <section data-ng-hide="isValidChromosome">
-      <h3 style="color:#666666"><translate>No Genomic Context available</translate></h3>
-      </section>
-  
-      <div style="padding: 0.25rem 1rem; font-size:1.2rem" data-ng-if="filters"><translate>Query</translate>: <a href="/search/g?filters={{filtersStr}}"><query-display data-filters="filters"></query-display></a></div>
-  
-      <section data-ng-show="isValidChromosome" style="padding: 0.5rem 1rem" class="t_gv__navbar">
-        <span data-gv-header></span>
-        <span class="pull-right gv-navbar-zoom"></span>
-      </section>
+
       <div class="empty" data-ng-show="!done">
           <h3 style="margin:20px;">
               <i class="icon-spinner icon-spin"></i> Loading Genome Viewer...
           </h3>
       </div>
+
+      <section data-ng-hide="isValidChromosome">
+      <h3 style="color:#666666"><translate>No Genomic Context available</translate></h3>
+      </section>
+      
+      <div style="padding: 0.25rem 1rem; font-size:1.2rem" data-ng-if="filters && done"><translate>Query</translate>: <a href="/search/g?filters={{filtersStr}}"><query-display data-filters="filters"></query-display></a></div>
+  
+      <section data-ng-show="isValidChromosome && done" style="padding: 0.5rem 1rem" class="t_gv__navbar">
+        <span data-gv-header></span>
+        <span class="pull-right gv-navbar-zoom"></span>
+      </section>
       <div data-ng-show="isValidChromosome && done" data-genome-viewer></div>
   </article>
 </div>
