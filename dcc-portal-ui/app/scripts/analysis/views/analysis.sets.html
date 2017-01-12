@@ -30,6 +30,13 @@
     </div>
     <br>
 
+    <div style="padding:.5rem 0" data-ng-if="SavedSetController.entitySets.length > 0">
+        <button class="t_button t_button__destructive" data-ng-click="SavedSetController.removeSets()"
+            data-ng-disabled="SavedSetController.selectedSets.length === 0"
+            data-tooltip="{{'Delete selected sets' | translate}}">
+            <i class="icon-trash"></i><translate>Delete selected</translate>
+        </button>
+    </div>
     <div class="wide">
         <table class="table table-selectable">
             <thead>
