@@ -159,7 +159,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
     link: function (scope, element, attrs, GenomeViewerController) {
       require.ensure([], require => {
         require('~/scripts/genome-viewer.js');
-      console.log(GenomeViewerController);
+
       var genomeViewer, navigationBar, tracks = {};
       var availableSpecies;
         var regionObj = new Region({chromosome: 1, start: 1, end: 1}),
@@ -479,11 +479,13 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
     replace: true,
     transclude: true,
     controller: 'GenomeViewerController',
+    scope: {'isGvLoading': '='},
     template: '<div id="gv-application" style="border:1px solid #d3d3d3;border-top-width: 0px;"></div>',
 
     link: function (scope, element, attrs, GenomeViewerController) {
       var genomeViewer, navigationBar, tracks = {};
       var availableSpecies;
+
       require.ensure([], require => {
         require('~/scripts/genome-viewer.js');
       function setup(regionObj) {
@@ -810,9 +812,11 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
           GenomeViewerController.getSpecies(function (s) {
             availableSpecies = s;
             setup(regionObj);
+            scope.isGvLoading = false;
           });
         } else {
           setup(regionObj);
+          scope.isGvLoading = false;
         }
       }
 

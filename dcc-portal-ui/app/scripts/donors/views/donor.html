@@ -264,7 +264,7 @@
          data-ng-if="DonorCtrl.donor.state === 'live'"
          data-ng-controller="DonorMutationsCtrl as DonorMutationsCtrl"
          data-ng-class="{'loading': !DonorMutationsCtrl.mutations.hits, 'empty': DonorMutationsCtrl.mutations.hits.length == 0}">
-    <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits"><i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
+    <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits"><i class="icon-spinner icon-spin"></i> <translate>Loading Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="DonorMutationsCtrl.mutations.hits.length == 0"><translate>No Mutations Reported.</translate></h3>
@@ -413,7 +413,7 @@
 
     <h3 data-ng-if="!DonorFilesCtrl.files.hits">
         <i class="icon-spinner icon-spin"></i>
-        <translate>Fetching Files...</translate>
+        <translate>Loading Files...</translate>
     </h3>
 
     <h3 data-ng-if="DonorFilesCtrl.files.hits.length == 0"><translate>No Files Found.</translate></h3>
