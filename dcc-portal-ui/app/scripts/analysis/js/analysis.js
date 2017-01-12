@@ -210,8 +210,7 @@ require('./setSelection');
         name: gettextCatalog.getString('Set Operations'),
         description: gettextCatalog.getString('Display Venn diagram and find intersection or union,' + 
           ' etc. of your sets of the same type.'),
-        demoDescription: gettextCatalog.getString('Compare high impact mutations in brain cancers across' + 
-          ' GBM-US, LGG-US, and PCBA-DE.'),
+        demoDescription: gettextCatalog.getString('Demo showing high impact mutations in brain cancers across GBM-US, LGG-US, and PCBA-DE.'),
         datasetSelectionInstructions: gettextCatalog.getString('Select 2 or 3 sets of the same type.'),
       },
       get union () {
@@ -220,22 +219,20 @@ require('./setSelection');
       enrichment: {
         name: gettextCatalog.getString('Enrichment Analysis'),
         description: gettextCatalog.getString('Find over-represented groups of gene sets (e.g. Reactome pathways) that are of statstical significance when comparing with your gene set.'),
-        demoDescription: gettextCatalog.getString('Perform enrichment analysis on top 50 genes in Cancer Gene Census.'),
+        demoDescription: gettextCatalog.getString('Demo showing top 50 genes in Cancer Gene Census.'),
         datasetSelectionInstructions: gettextCatalog.getString('Select the gene set you want to analyze. <small>(Maximum 10,000 genes)</small>'),
       },
       phenotype: {
         name: gettextCatalog.getString('Cohort Comparison'),
         description: gettextCatalog.getString('Display the survival analysis of your donor sets and compare ' +
         ' characteristics such as gender, vital status and age at diagnosis between your donor sets.'),
-        demoDescription: gettextCatalog.getString('Display survival analysis and compare phenotypes across ' +
-          'donors with pancreatic cancer with and without mutations in the gene KRAS.'),
+        demoDescription: gettextCatalog.getString('Demo showing donors with pancreatic cancer with and without mutations in the gene KRAS.'),
         datasetSelectionInstructions: gettextCatalog.getString('Select 2 donor sets.'),
       },
       oncogrid: {
         name: gettextCatalog.getString('OncoGrid'),
         description: gettextCatalog.getString('Visualize genetic alterations affecting a set of donors.'),
-        demoDescription: gettextCatalog.getString('Generate an OncoGrid using top 75 donors and genes for PCAWG' +
-        ' liver projects.'),
+        demoDescription: gettextCatalog.getString('Demo showing top 75 donors and genes for PCAWG liver projects.'),
         datasetSelectionInstructions: gettextCatalog.getString('<em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(3000 donors maximum)</small>.</em>'),
       }
     };
