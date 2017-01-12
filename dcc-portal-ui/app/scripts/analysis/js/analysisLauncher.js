@@ -262,7 +262,9 @@
       return _this.selectedForOnco.donor !== null && _this.selectedForOnco.gene !== null;
     };
 
-    function _launchAnalysis(data, resourceName, redirectRootPath) {
+    const markSetIdAsDemo = (setId) => localStorage.setItem('demoIds', JSON.stringify((JSON.parse(localStorage.getItem('demoIds')) || []).concat(setId)));
+
+    function _launchAnalysis(data, resourceName, redirectRootPath, {isDemo}) {
       if (_isLaunchingAnalysis) {
         return;
       }
@@ -276,6 +278,7 @@
           if (!data.id) {
            throw new Error('Could not retrieve analysis data.id', data);
           }
+          if (isDemo) markSetIdAsDemo(data.id);
           $location.path(redirectRootPath + data.id);
         })
         .finally(function() {
@@ -284,23 +287,23 @@
     }
 
     /* Phenotype comparison only takes in donor set ids */
-    _this.launchPhenotype = function(setIds) {
-      return _launchAnalysis(setIds, 'phenotype', 'analysis/view/phenotype/');
+    _this.launchPhenotype = function(setIds, {isDemo} = {isDemo: false}) {
+      return _launchAnalysis(setIds, 'phenotype', 'analysis/view/phenotype/', {isDemo});
     };
 
-    _this.launchSet = function(type, setIds) {
+    _this.launchSet = function(type, setIds, {isDemo} = {isDemo: false}) {
       var payload = {
         lists: setIds,
         type: type.toUpperCase()
       };
-      return _launchAnalysis(payload, 'union', 'analysis/view/set/');
+      return _launchAnalysis(payload, 'union', 'analysis/view/set/', {isDemo});
     };
 
-    _this.launchSurvival = function(setIds) {
-      return _launchAnalysis(setIds, 'survival', 'analysis/view/survival/');
+    _this.launchSurvival = function(setIds, {isDemo} = {isDemo: false}) {
+      return _launchAnalysis(setIds, 'survival', 'analysis/view/survival/', {isDemo});
     };
     
-    _this.launchOncogridAnalysis = function (setIds) {      
+    _this.launchOncogridAnalysis = function (setIds, {isDemo} = {isDemo: false}) {      
       if (_isLaunchingAnalysis) {
         return;
       }
@@ -319,6 +322,7 @@
           if (!data.id) {
             throw new Error('Received invalid response from analysis creation');
           }
+          if (isDemo) markSetIdAsDemo(data.id);
           $location.path('analysis/view/oncogrid/' + data.id);
         })
         .finally(function () {
@@ -377,7 +381,7 @@
           demoSetIds.push(r2.id);
           function proxyLaunch() {
             Page.stopWork();
-            _this.launchPhenotype(demoSetIds);
+            _this.launchPhenotype(demoSetIds, {isDemo: true});
           }
           wait(demoSetIds, 7, proxyLaunch);
         });
@@ -441,7 +445,7 @@
 
             function proxyLaunch() {
               Page.stopWork();
-              _this.launchSet('mutation', demoSetIds);
+              _this.launchSet('mutation', demoSetIds, {isDemo: true});
             }
             wait(demoSetIds, 7, proxyLaunch);
           });
@@ -476,7 +480,7 @@
       SetService.addSet(type, params).then(function(result) {
         function proxyLaunch(sets) {
           Page.stopWork();
-          launchEnrichment(sets[0]);
+          launchEnrichment(sets[0], {isDemo: true});
         }
         wait([result.id], 5, proxyLaunch);
       });
@@ -536,7 +540,7 @@
 
           function proxyLaunch() {
             Page.stopWork();
-            _this.launchOncogridAnalysis({donor: r1.id, gene: r2.id});
+            _this.launchOncogridAnalysis({donor: r1.id, gene: r2.id}, {isDemo: true});
           }
           wait([r1.id, r2.id], 7, proxyLaunch);
       });
@@ -557,6 +561,9 @@
           },
           filters: function() {
             return filters;
+          },
+          afterSave: function () {
+            return (result) => markSetIdAsDemo(result.id)
           }
         }
       });
