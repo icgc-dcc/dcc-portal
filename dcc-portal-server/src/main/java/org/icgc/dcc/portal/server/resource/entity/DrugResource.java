@@ -163,7 +163,7 @@ public class DrugResource extends Resource {
 
     val query = query(fields, include, filters, from, size, sort, order);
 
-    return drugService.findAll(query);
+    return drugService.findAll(query.toBuilder().defaultLimit(2000).build());
   }
 
 }
