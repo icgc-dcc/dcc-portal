@@ -3,6 +3,13 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[4.4.1](https://github.com/icgc-dcc/dcc-portal/compare/4.4.0...4.4.1)
+--
+- Analysis Page: Show survival title on side by side
+- API: Adds exception and exception mapper for download files not found
+- API: Added null check for type in keywords search
+- Site: Account for th in alternating rows for Chrome bug with alternating table row background colours
+- Site: Made loading indicators consistent
 
 [4.4.0](https://github.com/icgc-dcc/dcc-portal/compare/4.3.27...4.4.0)
 --
