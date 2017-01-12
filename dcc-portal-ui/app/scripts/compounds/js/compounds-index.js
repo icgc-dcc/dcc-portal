@@ -23,6 +23,7 @@ angular.module('icgc.compounds.index', [])
   .component('paginatedTableWrapper', {
     bindings: {
       rows: '<',
+      columns: '<',
       itemsPerPage: '<',
       itemsPerPageOptions: '<',
       currentPageNumber: '<',
@@ -192,8 +193,38 @@ angular.module('icgc.compounds.index', [])
           </h1>
         </div>
         <div>
+          <div>
+            Compound
+            <input
+              ng-model="vm.filters.name"
+              ng-change="vm.handleFiltersChange(vm.filters)"
+            ></input>
+          </div>
+          <div>
+            Targeted Gene
+            <input
+              ng-model="vm.filters.gene"
+              ng-change="vm.handleFiltersChange(vm.filters)"
+            ></input>
+          </div>
+          <div>
+            ATC Code / Description
+            <input
+              ng-model="vm.filters.atc"
+              ng-change="vm.handleFiltersChange(vm.filters)"
+            ></input>
+          </div>
+          <div>
+            Clinical Trial Condition
+            <input
+              ng-model="vm.filters.clinicalTrialCondition"
+              ng-change="vm.handleFiltersChange(vm.filters)"
+            ></input>
+          </div>
+        </div>
+        <div>
           <paginated-table-wrapper
-            rows="vm.compounds"
+            rows="(vm.filteredCompounds) || vm.compounds"
             searchable-jsonpaths="[
               '$.name',
               '$.zincId',
@@ -202,6 +233,7 @@ angular.module('icgc.compounds.index', [])
             ]"
             order-by="vm.orderBy"
             sort-order="vm.sortOrder"
+            columns="vm.columns"
           >
             <table class="table">
               <thead>
@@ -227,13 +259,14 @@ angular.module('icgc.compounds.index', [])
                     <span ng-bind-html="row.name | highlight: $parent.$parent.vm.filter"></span> 
                     (<span ng-bind-html="row.zincId | highlight: $parent.$parent.vm.filter"></span>)
                   </td>
-                  <td ng-bind-html="row.drugClass | highlight: $parent.$parent.vm.filter"></td>
 
                   <td
                     collapsible-text
                     style="max-width: 200px;"
                     ng-bind-html="row.atcCodes | _:'map':'description' | _:'join':', ' | highlight: $parent.$parent.vm.filter"
                   ></td>
+
+                  <td ng-bind-html="row.drugClass | highlight: $parent.$parent.vm.filter"></td>
 
                   <td>
                     {{ row.genes.length }}
@@ -256,8 +289,9 @@ angular.module('icgc.compounds.index', [])
       Page.setTitle('Compounds');
 
       const update = _.debounce(async () => {
-        this.compounds = await CompoundIndexService.getAll()
+        this.compounds = await CompoundIndexService.getAll();
         console.log('compounds from service', this.compounds)
+        this.handleFiltersChange(this.filters);
       });
 
       this.$onInit = update;
@@ -265,6 +299,21 @@ angular.module('icgc.compounds.index', [])
 
       this.orderBy = (row) => row.genes.length;
       this.sortOrder = 'desc';
+
+      this.filters = {};
+
+      this.handleFiltersChange = (filters) => {
+        const nameRegex = new RegExp(this.filters.name, 'i');
+        const atcRegex = new RegExp(this.filters.atc, 'i');
+        const clinicalTrialConditionRegex = new RegExp(this.filters.clinicalTrialCondition, 'i');
+        this.filteredCompounds = _.filter(this.compounds, (compound) => {
+          return _.every([
+            this.filters.name ? (compound.name.match(nameRegex) || compound.zincId.match(nameRegex)) : true,
+            this.filters.atc ? (_.some(compound.atcCodes, item => _.some(_.values(item).map(value => value.match(atcRegex))))) : true,
+            this.filters.clinicalTrialCondition ? (_.some(_.flattenDeep(compound.trials.map(trial => trial.conditions.map(_.values))), str => str.match(clinicalTrialConditionRegex))) : true,
+          ]);
+        });
+      }
     },
     controllerAs: 'vm',
   })
