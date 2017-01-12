@@ -121,10 +121,8 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
               .attr('preserveAspectRatio', 'xMidYMid')
               .attr('style', 'padding-top:20px')
               .append('g');
-          var infoRenderer = new pathwayViewerCtrl.Renderer(infoSvg, {
-            onClick: null, urlPath: $location.url(), overlapColor: '#ff9900',
-            mutationHighlightColor: '#9b315b', drugHighlightColor: 'navy',
-            strokeColor: '#696969'
+          var infoRenderer = new Renderer(infoSvg, {
+            urlPath: $location.url(),
           });
 
           node.size={width:120-padding*2,height:60-padding*2};
@@ -254,11 +252,6 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
             );
           },
           urlPath: $location.url(),
-          colors: {
-            stroke: '#696969',
-            overlap: '#ff9900',
-            subPathway: 'navy',
-          },
         };
 
         var controller; // = new pathwayViewerCtrl.ReactomePathway(controllerSettings);
@@ -345,6 +338,12 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
             controllerSettings.model = new PathwayModel(xml);
             controller = new ReactomePathway(controllerSettings);
             controller.render(zoomedOn);
+
+            var legendSVGElement = controller.getLegendSVGElement(270, 671);
+            d3.select('.pathway-legend-content').append(function(){
+              return legendSVGElement;
+            }).attr('class', 'pathway-legend-svg');
+
             rendered = true;
           }else{
             hideInfo();
@@ -410,7 +409,6 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
         // Render legend last to ensure all dependencies are initialized. Timeout of 0 does not work in firefox.
         $scope.$on(PathwaysConstants.EVENTS.MODEL_READY_EVENT, function() {
             // TO-DO - finish separation of legend's creation and insertion logic
-            //controller.renderLegend(270, 671);
         });
 
         // Needed to fix url paths for SVGs on url change due to <base> tag required by angular
