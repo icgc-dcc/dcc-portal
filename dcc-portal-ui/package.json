@@ -115,6 +115,7 @@
   },
   "dependencies": {
     "@oncojs/survivalplot": "0.3.3",
+    "angular-bind-html-compile-ci-dev": "^1.2.2",
     "angular-marked": "1.2.2",
     "angular-xeditable": "^0.4.0",
     "backbone": "1.0.0",

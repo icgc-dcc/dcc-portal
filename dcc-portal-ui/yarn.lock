@@ -85,6 +85,10 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+angular-bind-html-compile-ci-dev@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/angular-bind-html-compile-ci-dev/-/angular-bind-html-compile-ci-dev-1.2.2.tgz#fb85dba1ab8e8ceb9564a4260dd360ddd43606ab"
+
 angular-gettext-cli@1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/angular-gettext-cli/-/angular-gettext-cli-1.0.7.tgz#31d26e2fc226a3885e7db42170f702bbba068309"

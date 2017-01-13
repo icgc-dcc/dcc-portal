@@ -211,6 +211,7 @@
     'dndLists',
     'gettext',
     'xeditable',
+    'angular-bind-html-compile',
 
 
     // 3rd party
