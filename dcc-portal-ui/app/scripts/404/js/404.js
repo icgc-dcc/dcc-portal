@@ -1,5 +1,5 @@
 /*
- * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ * Copyright 2017(c) The Ontario Institute for Cancer Research. All rights reserved.
  *
  * This program and the accompanying materials are made available under the terms of the GNU Public
  * License v3.0. You should have received a copy of the GNU General Public License along with this
@@ -28,9 +28,37 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
 
 (function(){
   angular.module('icgc.404.controllers', [])
-    .controller('404Controller', function($stateParams, Page){
+    .controller('404Controller', function($stateParams, Page, $location, $http, $timeout){
       var _ctrl = this;
       _ctrl.info = '';
+      _ctrl.path = $location.path();
+      _ctrl.pathToGoTo;
+      _ctrl.redirects = {};
+      _ctrl.isRedirect = false;
+      _ctrl.timeToRedirect = 5;
+      _ctrl.count = 0;
+
+      const processRedirect = () => {
+        $timeout(() => {
+          _ctrl.count++;
+          if(_ctrl.count == _ctrl.timeToRedirect){
+            window.location.href = _ctrl.pathToGoTo;
+          } else {
+            processRedirect();
+          }
+        },1000);
+      }
+
+      $http.get('config/redirects.json')
+        .then((redirects) => {
+          _ctrl.redirects = redirects.data;
+          _ctrl.redirect = _.find(redirects.data.redirects, (object) => object.from === _ctrl.path)
+          if(_ctrl.redirect){
+            _ctrl.isRedirect = true;
+            _ctrl.pathToGoTo = _ctrl.redirect.to;
+            processRedirect();
+          }
+        });
 
       Page.setTitle('404');
       Page.setPage('error');

@@ -1,0 +1,8 @@
+{
+	"redirects": [
+	{
+		"from": "/icgc-in-the-cloud/guide",
+		"to": "http://docs.icgc.org/cloud/guide/"
+	}
+	]
+}
