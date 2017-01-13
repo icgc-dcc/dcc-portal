@@ -28,7 +28,7 @@
    * - phenotype analysis
    */
   module.controller('NewAnalysisController',
-    function($scope, $modal, $location, $timeout, Page, AnalysisService, Restangular, SetService, Extensions, $q, gettextCatalog) {
+    function($scope, $state, $modal, $location, $timeout, Page, AnalysisService, Restangular, SetService, Extensions, $q, gettextCatalog) {
 
     var _this = this,
         _isLaunchingAnalysis = false;
@@ -43,6 +43,12 @@
       donor: null,
       gene: null
     };
+
+    $scope.$watch(() => {
+      return $state.params.tool;
+    }, () => {
+      this.selectAnalysisByType($state.params.tool);
+    });
 
     _this.allSets = SetService.getAll();
 
@@ -238,14 +244,18 @@
     _this.selectedAnalysis = undefined;
     _this.selectedSets = [];
 
-    _this.handleClickAnalysis = analysis => {
-      // _this.selectedAnalysis = analysis === _this.selectedAnalysis ? undefined : analysis;
-      _this.selectedAnalysis = analysis;
-      _this.analysisType = (_this.selectedAnalysis || {}).type;
-      // need to timeout to give the dom some time to swap out the image
-      $timeout(() => { this.shouldShowSetSelection = true });
+    this.selectAnalysisByType = analysisType => {
+      _this.analysisType = analysisType;
+      _this.selectedAnalysis = _.find(this.analysesMeta, {type: analysisType});
+      $timeout(() => { this.shouldShowSetSelection = !!_this.selectedAnalysis });
     };
 
+    _this.handleClickAnalysis = analysis => {
+      this.selectAnalysisByType(analysis.type);
+    };
+    _this.handleSetSelectionCancel = () => {
+      $state.go('analysis');
+    };
     _this.handleSelectedSetsChange = sets => { _this.selectedSets = sets };
     const doSetsSatisfyCriteria = (sets, criteria) => _.every(criteria || [], criterium => criterium.test(sets))
     _this.isAnalysisSatisfied = (analysis) => doSetsSatisfyCriteria(_this.selectedSets, analysis.analysisSatisfactionCriteria);

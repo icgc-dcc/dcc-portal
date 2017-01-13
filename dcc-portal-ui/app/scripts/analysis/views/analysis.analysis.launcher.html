@@ -16,7 +16,7 @@
                 ng-if="analysis.image"
                 ng-bind-html="analysis.image | to_trusted"
             ></div>
-            <div class="analysis-tool__column--text">
+            <div class="analysis-tool__column--text" ui-sref="analysis.setSelection({tool: analysis.type})">
                 <h2 class="analysis-tool__heading">
                     {{analysis.strings.name}}
                 </h2>
@@ -26,7 +26,7 @@
                 <div class="analysis-tool__actions">
                     <button
                         class="t_button select-btn"
-                        ng-click="NAC.handleClickAnalysis(analysis);"
+                        ng-click="NAC.selectAnalysisByType(analysis.type);"
                     >
                         Select
                     </button>
@@ -79,7 +79,7 @@
                     analysis-satisfaction-criteria="NAC.selectedAnalysis.analysisSatisfactionCriteria"
                     on-click-launch="NAC.selectedAnalysis.launch"
                     on-click-launch-demo="NAC.selectedAnalysis.launchDemo"
-                    on-click-cancel="NAC.shouldShowSetSelection = false"
+                    on-click-cancel="NAC.handleSetSelectionCancel()"
                     on-selected-sets-change="NAC.handleSelectedSetsChange"
                 ></set-selection>
             </div>

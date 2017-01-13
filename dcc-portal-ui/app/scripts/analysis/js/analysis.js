@@ -37,6 +37,15 @@ require('./setSelection');
         tab: 'analysis'
       }
     });
+
+    $stateProvider.state('analysis.setSelection', {
+      url: '/set-selection/:tool',
+      reloadOnSearch: false,
+      data: {
+        tab: 'analysis'
+      }
+    });
+
     $stateProvider.state('analysis.sets', {
       url: '/sets',
       reloadOnSearch: false,
@@ -105,7 +114,6 @@ require('./setSelection');
       $scope.analysisType = $state.params.type === 'set'? 'union' : $state.params.type;
       init();
     });
-
 
     $scope.newAnalysis = function() {
 
