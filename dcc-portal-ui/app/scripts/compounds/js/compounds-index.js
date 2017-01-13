@@ -287,6 +287,7 @@ angular.module('icgc.compounds.index', [])
     `,
     controller: function (Page, CompoundIndexService) {
       Page.setTitle('Compounds');
+      Page.setPage('entity');
 
       const update = _.debounce(async () => {
         this.compounds = await CompoundIndexService.getAll();
