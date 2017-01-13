@@ -193,7 +193,7 @@
 
     // angular plugins
     'restangular',
-    'ui.scrollfix',
+    'ui.scrollpoint',
     'ui.bootstrap.modal',
     'ui.bootstrap.position',
     'ui.bootstrap.pagination',
@@ -202,7 +202,6 @@
     'template/pagination/pagination.html',
     'ui.router',
     'infinite-scroll',
-    'angular-lodash',
     'angularytics',
     'angular-loading-bar',
     'hc.marked',

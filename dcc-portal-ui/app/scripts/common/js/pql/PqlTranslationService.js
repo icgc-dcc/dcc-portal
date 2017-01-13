@@ -54,7 +54,7 @@
       }
 
       var vals = _.isArray (unit.values) ? unit.values : [];
-      var values = (_.contains (noNestingOperators, op) ? vals : vals.map(convertNodeToPqlString)).join();
+      var values = (_.includes (noNestingOperators, op) ? vals : vals.map(convertNodeToPqlString)).join();
 
       var parameters = unit.field || '';
 

@@ -332,7 +332,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
           },
           tooltipText: function (f) {
             var consequences = GMService.tooltipConsequences(f.consequences), fi;
-            fi = (f.functionalImpact && _.contains(f.functionalImpact, 'High')) ? 'High' : 'Low';
+            fi = (f.functionalImpact && _.includes(f.functionalImpact, 'High')) ? 'High' : 'Low';
             return '<span class="gmkeys">' + gettextCatalog.getString('mutation') + ':&nbsp;</span>' + 
             f.mutation + '<br>' +
               '<span class="gmkeys">' + gettextCatalog.getString('reference allele') + ':&nbsp;</span>' + 
@@ -691,7 +691,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
             },
             tooltipText: function (f) {
               var consequences = GMService.tooltipConsequences(f.consequences), fi;
-              fi = (f.functionalImpact && _.contains(f.functionalImpact, 'High')) ? 'High' : 'Low';
+              fi = (f.functionalImpact && _.includes(f.functionalImpact, 'High')) ? 'High' : 'Low';
 
               return '<span class="gmkeys">' + gettextCatalog.getString('mutation:') + '&nbsp;</span>' + 
                 f.mutation + '<br>' +

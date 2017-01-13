@@ -281,7 +281,7 @@
       if (data.hasOwnProperty('hits')) {
         var totalDonors = 0, ssmTotalDonors = 0;
 
-        _ctrl.projectIds = _.pluck (data.hits, 'id');
+        _ctrl.projectIds = _.map (data.hits, 'id');
 
         data.hits.forEach(function (p) {
           totalDonors += p.totalDonorCount;
@@ -291,7 +291,7 @@
         var totalRowProjectIds = hasQueryFilter() ? _ctrl.projectIds : undefined;
         _ctrl.totals = _.map (_ctrl.fieldKeys, function (fieldKey) {
           return {
-            total: _.sum (data.hits, fieldKey),
+            total: _.sumBy (data.hits, fieldKey),
             sref: $scope.toAdvancedSearch (fieldKey, totalRowProjectIds)
           };
         });
@@ -408,7 +408,7 @@
     };
 
     _ctrl.viewInRepositories = () => {
-      LocationService.goToPath('/repositories', `filters={"file":{ "projectCode":{"is":[${ _.map(_ctrl.projects.hits, (project) => `"${project.id}"`, []) }]}}}`);
+      LocationService.goToPath('/repositories', `filters={"file":{ "projectCode":{"is":[${ _.map(_ctrl.projects.hits, _.bind((project) => `"${project.id}"`, [])) }]}}}`);
     };
 
     $scope.$on('$locationChangeSuccess', function (event, dest) {
@@ -614,7 +614,7 @@
     function success(genes) {
       if (genes.hasOwnProperty('hits') ) {
         var projectCachePromise = ProjectCache.getData();
-        var geneIds = _.pluck(genes.hits, 'id').join(',');
+        var geneIds = _.map(genes.hits, 'id').join(',');
         _ctrl.genes = genes;
 
         if (_.isEmpty(_ctrl.genes.hits)) {
@@ -827,7 +827,7 @@
           donor.advQuery = LocationService.mergeIntoFilters({donor: {id: {is: [donor.id]}}});
         });
         Donors
-          .one(_.pluck(donors.hits, 'id').join(',')).handler.all('mutations')
+          .one(_.map(donors.hits, 'id').join(',')).handler.all('mutations')
           .one('counts').get({filters: LocationService.filters()}).then(function (data) {
             _ctrl.mutationCounts = data;
           });
@@ -999,7 +999,7 @@
       pub.journal = get('FullJournalName');
       pub.issue = get('Issue');
       pub.pubdate = get('PubDate');
-      pub.authors = _.pluck(_.find(json.Item, function (o) {
+      pub.authors = _.map(_.find(json.Item, function (o) {
         return o._Name === 'AuthorList';
       }).Item, '__text');
       pub.refCount = parseInt(get('PmcRefCount'), 10);
