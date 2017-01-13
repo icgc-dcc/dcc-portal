@@ -32,7 +32,7 @@ import java.util.Map;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.script.Script;
-import org.elasticsearch.script.ScriptService.ScriptType;
+import org.elasticsearch.script.ScriptType;
 import org.icgc.dcc.portal.server.model.AlleleMutation;
 import org.icgc.dcc.portal.server.model.Beacon;
 import org.icgc.dcc.portal.server.model.BeaconInfo;
@@ -106,9 +106,9 @@ public class BeaconService {
         allele.contains(">") ? generateInsertionOrDeletionScriptField(params) : generateDefaultScriptField(params));
 
     val filter = QueryBuilders.scriptQuery(
-        new Script("def m = doc['mutation'].value; if (m == null) return false;"
+        new Script(ScriptType.INLINE, "painless", "def m = doc['mutation'].value; if (m == null) return false;"
             + "int length = m.substring(m.indexOf('>')+1,m.length()).length();"
-            + "params.position <= doc['chromosome_start'].value+length", ScriptType.INLINE, "painless",
+            + "params.position <= doc['chromosome_start'].value+length",
             ImmutableMap.of("position", position)));
     search.setPostFilter(filter);
 
@@ -136,12 +136,12 @@ public class BeaconService {
         + "int end = i < j ? i : j;"
         + "m = m.substring(begin,end);"
         + "m==params.allele";
-    return new Script(scriptString, ScriptType.INLINE, "painless", params);
+    return new Script(ScriptType.INLINE, "painless", scriptString, params);
   }
 
   private Script generateInsertionOrDeletionScriptField(Map<String, Object> params) {
     val scriptString = "doc['mutation'].value == allele";
-    return new Script(scriptString, ScriptType.INLINE, "painless", params);
+    return new Script(ScriptType.INLINE, "painless", scriptString, params);
   }
 
   private Beacon createBeaconResponse(String exists, String chromosome, int position, String reference, String allele,
