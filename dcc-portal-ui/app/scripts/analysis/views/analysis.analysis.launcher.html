@@ -16,7 +16,7 @@
                 ng-if="analysis.image"
                 ng-bind-html="analysis.image | to_trusted"
             ></div>
-            <div class="analysis-tool__column--text" ui-sref="analysis.setSelection({tool: analysis.type})">
+            <div class="analysis-tool__column--text">
                 <h2 class="analysis-tool__heading">
                     {{analysis.strings.name}}
                 </h2>
@@ -26,7 +26,7 @@
                 <div class="analysis-tool__actions">
                     <button
                         class="t_button select-btn"
-                        ng-click="NAC.selectAnalysisByType(analysis.type);"
+                        ui-sref="analysis.setSelection({tool: analysis.type})"
                     >
                         Select
                     </button>
