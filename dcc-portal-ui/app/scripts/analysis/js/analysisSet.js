@@ -21,17 +21,13 @@
   var module = angular.module('icgc.analysis.controllers');
 
   module.controller('SavedSetController', function($scope, $rootScope, $window, $location, $timeout, $modal,
-    SetService, Settings, LocationService, RouteInfoService, Extensions, gettextCatalog) {
+    SetService, LocationService, RouteInfoService, Extensions, gettextCatalog) {
 
     var _this = this;
     _this.entitySets = SetService.getAll();
     _this.selectedSets = [];
     _this.checkAll = false;
     _this.dataRepoTitle = RouteInfoService.get ('dataRepositories').title;
-
-    Settings.get().then(function(settings) {
-      _this.downloadEnabled = settings.downloadEnabled || false;
-    });
 
     // Selected sets
     _this.update = function() {
@@ -85,7 +81,7 @@
         templateUrl: '/scripts/downloader/views/request.html',
         controller: 'DownloadRequestController',
         resolve: {
-          filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + id]}}}; }
+          filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + id]}}} }
         }
       });
     };
@@ -127,7 +123,7 @@
 
     _this.renameSet = SetService.renameSet;
 
-    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
       _this.entitySets = SetService.getAll();
     });
 

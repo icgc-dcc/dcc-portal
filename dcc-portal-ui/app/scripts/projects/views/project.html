@@ -164,11 +164,11 @@
                         <a data-ng-switch-when="dbSNP" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectSNP()}}">
                             <i class="icon-external-link"></i><translate>NCBI dbSNP</translate></a>
 
-                        <a data-ng-switch-when="TCGA" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectTCGA()}}">
-                            <i class="icon-external-link"></i><translate>The Cancer Genome Atlas</translate></a>
+                        <a data-ng-switch-when="TCGA" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGDCLegacy()}}">
+                            <i class="icon-external-link"></i><translate>Genomic Data Commons (Legacy)</translate></a>
 
-                        <a data-ng-switch-when="CGHub" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectCGHub(ProjectCtrl.project.id.split('-')[0])}}">
-                            <i class="icon-external-link"></i><translate>Cancer Genomics Hub</translate></a>
+                        <a data-ng-switch-when="CGHub" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGDCActive()}}">
+                            <i class="icon-external-link"></i><translate>Genomic Data Commons (Active)</translate></a>
 
                         <a data-ng-switch-when="GEO" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGEO()}}">
                             <i class="icon-external-link"></i><translate>Gene Expression Omnibus</translate></a>
@@ -310,10 +310,28 @@
         </tr>
     </table>
     <div>
-        <span class="open-in"><translate>Open in</translate></span>
-        <a href="{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}">
-        <i class="icon-database"></i>{{:: ProjectCtrl.dataReleasesTitle }}
-        </a>
+        <span class="action-toolbar">
+            <span class="action-item">
+                <span>
+                    <i class="icon-database"></i>
+                    <span>
+                        <a href='{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}'>
+                            <translate>Open in {{:: ProjectCtrl.dataReleasesTitle }}</translate>
+                        </a>
+                    </span>
+                </span>
+            </span>
+            <span class="action-item">
+                <span>
+                    <i class="icon-download-cloud"></i>
+                    <span>
+                        <a href='/repositories?filters={"file":{"projectCode":{"is":["{{ProjectCtrl.project.id}}"]}}}'>
+                            <translate>View in Data Repositories</translate>
+                        </a>
+                    </span>
+                </span>
+            </span>
+        </span>
     </div>
 </div>
 </section>
@@ -323,7 +341,7 @@
     data-ng-class="{'loading': !ProjectGeneCtrl.genes.hits, 'empty': ProjectGeneCtrl.genes.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!ProjectGeneCtrl.genes.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutated Genes...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutated Genes...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectGeneCtrl.genes.hits.length == 0">
@@ -485,7 +503,7 @@
     data-ng-class="{'loading': !ProjectMutationsCtrl.mutations.hits, 'empty': ProjectMutationsCtrl.mutations.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!ProjectMutationsCtrl.mutations.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectMutationsCtrl.mutations.hits.length == 0">
@@ -638,7 +656,7 @@
     data-ng-class="{'loading': !ProjectDonorsCtrl.donors.hits, 'empty': ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0}"
     fix-scroll>
     <h3 data-ng-if="!ProjectDonorsCtrl.donors.hits && ProjectCtrl.project.ssmTestedDonorCount > 0">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Donors...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0">

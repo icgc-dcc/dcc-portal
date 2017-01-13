@@ -15,8 +15,6 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function(){
-  'use strict'
 
   var module = angular.module('icgc.survival.services', []);
 
@@ -116,7 +114,7 @@
         return SetNameService.getSetFilters()
           .then((filters) => SetNameService.getSetName(filters))
           .then((setName) => {_service.setName = setName});
-      }
+      };
 
       // Wait for sets to materialize
       const wait = (ids, numTries, callback) => {
@@ -134,7 +132,7 @@
             }, 1500);
           }
         });
-      }
+      };
 
        /* Phenotype comparison only takes in donor set ids */
       const launchAnalysis = (setIds) => {
@@ -182,8 +180,6 @@
         const sets = [await SetService.addSet(type, donorSet1), await SetService.addSet(type, donorSet2)];
         const setIds = sets.map(set => set.id);
         wait(setIds, 7, () => launchAnalysis(setIds));
-      }
+      };
 
     });
-
-})();

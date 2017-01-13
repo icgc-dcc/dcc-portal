@@ -52,7 +52,16 @@ angular.module('icgc.modules.genomeviewer', ['icgc.modules.genomeviewer.header',
     }
   });
 
-angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController', function ($scope, GMService) {
+/**
+genome-viewer.js roughly line 25612 setWidth subtracts 18 for windows scrollbars.
+https://github.com/opencb/jsorolla/blob/b969877f53b64927568cd1309413ba141a848ae7/src/genome-viewer/genome-viewer.js#L70
+https://github.com/opencb/jsorolla/blob/b969877f53b64927568cd1309413ba141a848ae7/src/genome-viewer/tracks/tracklist-panel.js#L57
+Adjusting for it here
+TODO: detect for the type of scrollbar and adjust dynamically
+*/
+const getWidth = (containerWidth) => containerWidth + 18;
+
+angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController', function ($scope, $element, GMService) {
   var _controller = this;
 
 
@@ -99,7 +108,7 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
 
 
   // Assume this is a single use call i.e. this is not an idempotent function so don't call this more than once!
-  _controller.initFullScreenHandler = function(genomeViewer) {
+  _controller.initResizeHandler = function(genomeViewer) {
 
     if (! document.addEventListener) {
       return false;
@@ -126,10 +135,14 @@ angular.module('icgc.modules.genomeviewer').controller('GenomeViewerController',
     document.addEventListener('mozfullscreenchange', _fullscreenHandler);
     document.addEventListener('fullscreenchange', _fullscreenHandler);
 
+    const handleResize = _.debounce(() => genomeViewer.setWidth(getWidth($element.width())));
+    jQuery(window).on('resize', handleResize);
+
     $scope.$on('$destroy', function() {
       document.removeEventListener('webkitfullscreenchange', _fullscreenHandler);
       document.removeEventListener('mozfullscreenchange', _fullscreenHandler);
       document.removeEventListener('fullscreenchange', _fullscreenHandler);
+      jQuery(window).off('resize', handleResize);
     });
 
   };
@@ -146,21 +159,21 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
     link: function (scope, element, attrs, GenomeViewerController) {
       require.ensure([], require => {
         require('~/scripts/genome-viewer.js');
-      console.log(GenomeViewerController);
+
       var genomeViewer, navigationBar, tracks = {};
       var availableSpecies;
         var regionObj = new Region({chromosome: 1, start: 1, end: 1}),
         done = false; 
 
       function setup() {
-        regionObj.start = parseInt(regionObj.start);
-        regionObj.end = parseInt(regionObj.end);
+        regionObj.start = parseInt(regionObj.start, 10);
+        regionObj.end = parseInt(regionObj.end, 10);
         var species = availableSpecies.vertebrates[0];
         genomeViewer = genomeViewer || new GenomeViewer({
             cellBaseHost: GMService.getConfiguration().cellBaseHost,
             cellBaseVersion: 'v3',
             target: 'genome-viewer',
-            width: 1135,
+            width: getWidth(element.width()),
             availableSpecies: availableSpecies,
             species: species,
             region: regionObj,
@@ -277,7 +290,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
           title: 'ICGC Genes',
           minHistogramRegionSize: 20000000,
           maxLabelRegionSize: 10000000,
-          minTranscriptRegionSize: 300000,
+          minTranscriptRegionSize: 500000,
           height: 100,
           renderer: new GeneRenderer({
             tooltipContainerID: '#genomic',
@@ -378,7 +391,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
 
         genomeViewer.karyotypePanel.hide();
         genomeViewer.chromosomePanel.hide();
-        GenomeViewerController.initFullScreenHandler(genomeViewer);
+        GenomeViewerController.initResizeHandler(genomeViewer);
       }
 
       function update() {
@@ -466,22 +479,24 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
     replace: true,
     transclude: true,
     controller: 'GenomeViewerController',
+    scope: {'isGvLoading': '='},
     template: '<div id="gv-application" style="border:1px solid #d3d3d3;border-top-width: 0px;"></div>',
 
     link: function (scope, element, attrs, GenomeViewerController) {
       var genomeViewer, navigationBar, tracks = {};
       var availableSpecies;
+
       require.ensure([], require => {
         require('~/scripts/genome-viewer.js');
       function setup(regionObj) {
-        regionObj.start = parseInt(regionObj.start);
-        regionObj.end = parseInt(regionObj.end);
+        regionObj.start = parseInt(regionObj.start, 10);
+        regionObj.end = parseInt(regionObj.end, 10);
         var species = availableSpecies.vertebrates[0];
         genomeViewer = genomeViewer || new GenomeViewer({
             cellBaseHost: GMService.getConfiguration().cellBaseHost,
             cellBaseVersion: 'v3',
             target: 'gv-application',
-            width: 1135,
+            width: getWidth(element.width()),
             availableSpecies: availableSpecies,
             species: species,
             region: regionObj,
@@ -633,7 +648,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
           title: 'ICGC Genes',
           minHistogramRegionSize: 20000000,
           maxLabelRegionSize: 10000000,
-          minTranscriptRegionSize: 300000,
+          minTranscriptRegionSize: 500000,
           height: 100,
           functional_impact: _.get(LocationService.filters(), 'mutation.functionalImpact.is', ''),
           renderer: new GeneRenderer({
@@ -739,7 +754,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
 
         genomeViewer.draw();
 
-        GenomeViewerController.initFullScreenHandler(genomeViewer);
+        GenomeViewerController.initResizeHandler(genomeViewer);
 
         scope.$on('$locationChangeSuccess', function () {
           tracks.icgcMutationsTrack.functional_impact = _.get(LocationService.filters(),
@@ -797,9 +812,11 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
           GenomeViewerController.getSpecies(function (s) {
             availableSpecies = s;
             setup(regionObj);
+            scope.isGvLoading = false;
           });
         } else {
           setup(regionObj);
+          scope.isGvLoading = false;
         }
       }
 

@@ -108,7 +108,7 @@ angular.module('icgc.repositories.controllers', [])
       Page.setTitle(gettextCatalog.getString('User Guide'));
    })
   .controller('RepositoriesController', function ($scope, Page, repoAliasMapConstants,
-                                                  RepositorySearchService, RepositoryService, $stateParams, gettextCatalog) {
+    RepositorySearchService, RepositoryService, $stateParams, gettextCatalog) {
      var _ctrl = this,
        _repoAlias = $stateParams.repoAlias.toLowerCase(),
        _repoContext = _.get(repoAliasMapConstants, _repoAlias, null),
@@ -116,8 +116,7 @@ angular.module('icgc.repositories.controllers', [])
        _repoCreationDate = null,
        _filterQueryStr = null,
        _repoSummaryData = null,
-       _repoStats = {};      
-
+       _repoStats = {};
 
       function _capitalizeWords(str) {
          return str.replace(/[^\s]+/g, function(word) {
@@ -218,6 +217,14 @@ angular.module('icgc.repositories.controllers', [])
 
       _ctrl.getFilterQueryStr = function() {
          return _filterQueryStr;
+      };
+
+      _ctrl.getRepoName = () => {
+        if(_.contains(_repoContext, 'aws')){
+          return 'AWS - Virginia';
+        } else if(_.contains(_repoContext, 'collaboratory')) {
+          return 'Collaboratory - Toronto';
+        }
       };
 });
 
@@ -391,7 +398,7 @@ angular.module('icgc.repositories.services', [])
                });
 
                // Sorted
-               return list.sort(function(a, b) { return b.total - a.total; });
+               return list.sort(function(a, b) { return b.total - a.total });
          };
 
          _self.getPrimarySiteDonorChart = function(data) {
@@ -404,7 +411,7 @@ angular.module('icgc.repositories.services', [])
                colour: HighchartsService.getPrimarySiteColourForTerm(d)
                });
             });
-            list = _.sortBy(list, function(d) { return -d.count; });
+            list = _.sortBy(list, function(d) { return -d.count });
 
             return HighchartsService.bar({
                hits: list,

@@ -112,7 +112,8 @@
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
     _ctrl.defaultProjectsLimit = 10;
-
+    _ctrl.isPVLoading = true;
+    _ctrl.isGVLoading = true;
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 
     _ctrl.gene = gene;

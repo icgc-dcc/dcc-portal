@@ -193,7 +193,7 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
       var inner = hit[innerFacet],
         name = hit[outerFacet],
         count = hit[countBy] ? hit[countBy] : 0,
-        inArray = _.filter(inner, function() { return inner === iName; }).length > 0,
+        inArray = _.filter(inner, function() { return inner === iName }).length > 0,
         inValue = inner === iName;
 
       if (inArray || inValue) {
@@ -329,6 +329,11 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
       xAxis.push(hit[params.xAxis]);
 
       data.y = hit[params.yValue];
+
+      if(hit.term) {
+        data.term = hit.term;
+        data.color = !_.isArray(hit.term) ? _this.getPrimarySiteColourForTerm(hit.term) : '' ;
+      }
 
       if (hit.colour) {
         data.color = hit.colour;

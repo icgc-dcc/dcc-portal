@@ -81,13 +81,9 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addSet(setType, params).then((set) => {
-          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
-        });
+        SetService.addSet(setType, params);
       } else {
-        SetService.addDerivedSet(setType, params).then((set) => {
-          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
-        });
+        SetService.addDerivedSet(setType, params);
       }
 
       // Reset
@@ -116,9 +112,7 @@
       }
 
       if (angular.isDefined($scope.params.setLimit)) {
-        SetService.addExternalSet(setType, params).then((set) => {
-          $rootScope.$broadcast(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, set);
-        });
+        SetService.addExternalSet(setType, params);
       }
 
       // Reset
@@ -339,7 +333,7 @@
               templateUrl: '/scripts/downloader/views/request.html',
               controller: 'DownloadRequestController',
               resolve: {
-                filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + data.id]}}}; }
+                filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + data.id]}}} }
               }
             });
           });

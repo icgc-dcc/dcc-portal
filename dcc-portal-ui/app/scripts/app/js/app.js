@@ -237,6 +237,7 @@
     'icgc.browser',
     'icgc.donorlist',
     'icgc.genelist',
+    'icgc.entitySetUpload',
     'icgc.genesets',
     'icgc.visualization',
     'icgc.enrichment',
@@ -469,7 +470,7 @@
       }]);
 
     })
-    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog) {
+    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog, Settings) {
       
       // Setting the initial language to English CA.
       gettextCatalog.setCurrentLanguage('en_CA');
@@ -488,6 +489,8 @@
       $rootScope.$on('$stateNotFound', function() {
         $state.go('404', {}, {location: false});
       });
+
+      Settings.get().then(ICGC_SETTINGS => { $rootScope.ICGC_SETTINGS = ICGC_SETTINGS });
 
       function _initProgressBarRunOnce() {
         var _shouldDisableLoadingBar = true,
@@ -556,7 +559,13 @@
     RestangularProvider.setRequestInterceptor(_getInterceptorDebugFunction('Request'));
     RestangularProvider.setResponseInterceptor(_getInterceptorDebugFunction('Reponse'));
 
-
+    RestangularProvider.addFullRequestInterceptor(function (element, operation, route, url, headers, params, httpConfig) {
+      if (params && params.filters && JSON.stringify(params.filters).match('ES:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')) {
+        return {
+          httpConfig: {cache: false}
+        };
+      }
+    });
 
     RestangularProvider.setDefaultHttpFields({cache: true});
 
@@ -595,9 +604,9 @@
       if (response.status !== 401 && response.status !== -1) {
         console.error('Response Error: ', toJson (response));
       }
-
+      
       if (response.status === 500) {
-        Notify.setMessage ('' + response.data.message || response.statusText);
+        Notify.setParams(response);
         Notify.showErrors();
       } else if (response.status === 404) {
         console.error(response.data.message);

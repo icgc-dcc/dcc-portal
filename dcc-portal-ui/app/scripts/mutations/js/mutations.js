@@ -52,6 +52,8 @@
 
     _ctrl.mutation = mutation;
     _ctrl.mutation.uiProteinTranscript = [];
+    _ctrl.isPVLoading = true;
+    _ctrl.isGVLoading = true;
 
     // Defaults for client side pagination 
     _ctrl.currentProjectsPage = 1;

@@ -56,8 +56,7 @@ angular.module('icgc.ui.toolbar', []).directive('toolbar', function ($filter, $t
         tableData = jQuery('#' + sanitizedId).table2CSV({
           delivery: 'value',
           separator: delimiter
-        });
-
+        }) + '\n';
         if (window.Blob && window.File) {
           saveAs(new Blob([tableData], {type: 'text/plain;charset=ascii'}), filename);
         } else {

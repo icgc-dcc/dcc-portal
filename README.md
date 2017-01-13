@@ -6,6 +6,8 @@ Parent project of the portal modules
 
 ## Build
 
+First, follow the instructions for setting up the UI [here](dcc-portal-ui/README.md#setup).
+
 To compile, test and package the system, execute the following from the root of the repository:
 
 ```shell

@@ -255,7 +255,7 @@
       return {
         ...fileInfo,
         fileCopies: hydrateFileCopies(fileInfo.fileCopies, repoCodeMap),
-      }
+      };
     };
 
     function _shortenRepoName (name) {
@@ -299,6 +299,15 @@
     this.folder = function (path) {
       return RestangularNoCache.one('download/info' + path)
               .get();
+    };
+
+    this.getAllFiles = () => {
+      return RestangularNoCache.one('download/info')
+        .get({
+          fields: 'name,type',
+          recursive: true,
+          flatten: true,
+        });
     };
 
     this.getStatus = function () {

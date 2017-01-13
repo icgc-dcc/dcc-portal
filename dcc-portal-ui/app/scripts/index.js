@@ -87,7 +87,6 @@ require('./donorlist/js/donorlist.js');
 require('./enrichment/js/enrichment.js');
 require('./phenotype/js/phenotype.js');
 require('./survivalanalysis/js/survival-analysis.js');
-require('./survivalanalysis/js/service.js');
 require('./oncogrid/js/directive.js');
 require('./oncogrid/js/controller.js');
 require('./oncogrid/js/service.js');
@@ -101,5 +100,6 @@ require('./beacon/js/beacon.js');
 require('./tokens/js/tokens.js');
 require('./pancancer/js/pancancer.js');
 require('./translations/js/translations.js');
+require('./entitysetupload/js/entitysetupload.js');
 require('./404/js/404.js');
 

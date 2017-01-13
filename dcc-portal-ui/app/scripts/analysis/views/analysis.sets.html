@@ -86,7 +86,7 @@
                             <span class="t_tools__tool">
                                 <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="SavedSetController.exportSet(item.id)"></i>
                             </span>
-                            <span class="t_tools__tool" data-ng-if="SavedSetController.downloadEnabled && item.type==='donor'">
+                            <span class="t_tools__tool" data-ng-if="ICGC_SETTINGS.downloadEnabled && item.type==='donor'">
                                 <i data-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="SavedSetController.downloadDonorData(item.id)"></i>
                             </span>
                             <a data-ng-if="item.type==='donor' || item.type==='file'" class="t_tools__tool"

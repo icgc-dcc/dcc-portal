@@ -16,6 +16,7 @@
  */
 
 import {ensureArray, ensureString} from '../../common/js/ensure-input';
+import './file-finder';
 
 (function() {
   'use strict';
@@ -36,15 +37,18 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
   var toJson = angular.toJson;
   var commaAndSpace = ', ';
 
-  var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
+  var module = angular.module('icgc.repository.controllers', [
+    'icgc.repository.services',
+    'file-finder',
+    ]);
 
   var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto', 'PDC - Chicago'];
 
   /**
    * ICGC static repository controller
    */
-  module.controller('ICGCRepoController', function($scope, $stateParams, Restangular, FileService,
-    ProjectCache, API, Settings, Page, RouteInfoService) {
+  module.controller('ICGCRepoController', function($scope, $stateParams, $window, Restangular, 
+    FileService, ProjectCache, API, Settings, Page, RouteInfoService) {
     var _ctrl = this;
     var dataReleasesRouteInfo = RouteInfoService.get ('dataReleases');
 
@@ -58,6 +62,17 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     _ctrl.downloadEnabled = true;
     _ctrl.dataReleasesTitle = dataReleasesRouteInfo.title;
     _ctrl.dataReleasesUrl = dataReleasesRouteInfo.href;
+
+    _ctrl.isSafari = /Safari/.test($window.navigator.userAgent);
+    _ctrl.isChrome = /Chrome/.test($window.navigator.userAgent);
+
+    _ctrl.fileQuery = '';
+    _ctrl.handleFileQueryKeyup = ($event) => {
+      if (event.keyCode === 27) {
+        _ctrl.fileQuery = '';
+        $event.currentTarget.blur();
+      }
+    };
 
     function buildBreadcrumbs() {
       var i, s, slug, url;
@@ -284,7 +299,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     p.include = 'facets';
 
     function findRepoData(list, term) {
-      return _.find(list, function(t) { return t.term === term; }).count || 0;
+      return _.find(list, function(t) { return t.term === term }).count || 0;
     }
 
     Promise.all([
@@ -643,6 +658,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     var projectMap = {};
     var _ctrl = this;
 
+    this.handleOperationSuccess = () => { this.selectedFiles = [] };
+
     _ctrl.showIcgcGet = PortalFeature.get('ICGC_GET');
     _ctrl.selectedFiles = [];
     _ctrl.summary = {};
@@ -681,7 +698,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
         maxPadding: 0.01,
         labels: {
           formatter: function () {
-            return this.value / 1000 + 'k';
+            return this.value > 1000 ? this.value / 1000 + 'k' : this.value ;
           }
         },
         lineWidth: 1,
@@ -719,6 +736,19 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
         }
       }
     };
+
+    _ctrl.donorSetsForRepo = () => 
+      _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
+        set.repoFilters = {};
+        set.repoFilters.file = {};
+        set.repoFilters.file.donorId = set.advFilters.donor.id;
+        return set;
+      });
+
+    // Adding filters for repository to the donor set
+    _ctrl.donorSets = _ctrl.donorSetsForRepo();
+
+    _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
 
     function toSummarizedString (values, name) {
       var size = _.size (values);
@@ -954,19 +984,9 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       });
     };
     
-    _ctrl.isSelected = function (row) {
-      return _.contains (_ctrl.selectedFiles, row.id);
-    };
+    _ctrl.isSelected = (row) => _ctrl.selectedFiles.includes(row.id);
 
-    _ctrl.toggleRow = function (row) {
-      if (_ctrl.isSelected (row) === true) {
-        _.remove (_ctrl.selectedFiles, function (r) {
-          return r === row.id;
-        });
-      } else {
-        _ctrl.selectedFiles.push (row.id);
-      }
-    };
+    _ctrl.toggleRow = (row) => { _ctrl.selectedFiles = _.xor(_ctrl.selectedFiles, [row.id]) };
 
     /**
      * Undo user selected files
@@ -1075,7 +1095,18 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       loadState.loadWhile([listRequest, summaryRequest, metaDataRequeset, cacheReqeust]);
     }
 
+    // to check if a set was previously selected and if its still in effect
+    const updateSetSelection = (entity, entitySets) => {
+      let filters = FilterService.filters();
+
+      entitySets.forEach( (set) =>
+        set.selected = filters.file && filters.file[entity] &&  _.includes(filters.file[entity].is, `ES:${set.id}`)
+      );
+    };
+
     refresh();
+    updateSetSelection('donorId', _ctrl.donorSets);
+    updateSetSelection('id', _ctrl.fileSets);
 
     // Pagination watcher, gets destroyed with scope.
     $scope.$watch(function() {
@@ -1097,6 +1128,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       else {
         refresh();
       }
+      updateSetSelection('donorId', _ctrl.donorSets);
+      updateSetSelection('id', _ctrl.fileSets);
     });
 
     // Remove any pagination on facet change: see DCC-4589
@@ -1109,6 +1142,11 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
           };
         LocationService.setJsonParam('files', newParam);
       }
+    });
+
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
+      _ctrl.donorSets = _ctrl.donorSetsForRepo();
+      _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
     });
 
   });

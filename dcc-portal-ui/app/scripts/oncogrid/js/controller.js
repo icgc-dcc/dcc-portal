@@ -21,13 +21,8 @@
     var module = angular.module('icgc.oncogrid.controllers', []);
 
     module.controller('OncogridController', function($scope, $element, LocationService, OncogridService, SetService,
-        $timeout, $modal, Extensions, Settings, FullScreenService) {
+        $timeout, $modal, Extensions, FullScreenService) {
         var _this = this;
-
-        Settings.get().then(function(settings) {
-            _this.downloadEnabled = settings.downloadEnabled || false;
-        });
-
         _this.getGrid = function() {
             return _this.grid;
         };
@@ -42,7 +37,7 @@
                 templateUrl: '/scripts/downloader/views/request.html',
                 controller: 'DownloadRequestController',
                 resolve: {
-                filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + id]}}}; }
+                filters: function() { return {donor:{id:{is:[Extensions.ENTITY_PREFIX + id]}}} }
                 }
             });
         };
@@ -131,7 +126,7 @@
 
         const resolveLimit = (entityLimit, maxEntityLimit) => {
             return Math.min(entityLimit || maxEntityLimit, maxEntityLimit);
-        }
+        };
 
         $scope.params.donorsCount = resolveLimit($scope.donorsLimit, $scope.maxDonorsLimit);
         $scope.params.genesCount = resolveLimit($scope.genesLimit, $scope.maxGenesLimit);
@@ -140,12 +135,12 @@
         const hasValidDonorCount = (value) => {
             const count = parseInt(value,10);
             return !isNaN(count) && _.inRange(count, 0, resolveLimit($scope.donorsLimit, $scope.maxDonorsLimit)+1);
-        }
+        };
 
         const hasValidGeneCount = (value) => {
             const count = parseInt(value,10);
             return !isNaN(count) && _.inRange(count, 0, resolveLimit($scope.genesLimit, $scope.maxGenesLimit)+1);
-        }
+        };
 
         $scope.checkInput = () => {
             const params = $scope.params;
@@ -160,7 +155,7 @@
                 .then(setName => {
                     $scope.params.setName = setName;
                 });
-        }
+        };
 
         const getSetParams = (entity, count) => ({
             filters: $scope.filters || {},
@@ -168,7 +163,7 @@
             type: entity,
             isTransient: true,
             name: `Top ${count} ${_.capitalize(entity)}s ${_.includes($scope.params.setName, 'All') ? '' : `: ${$scope.params.setName}`}`
-        })
+        });
 
         // Wait for sets to materialize
         function wait(ids, numTries, callback) {
@@ -227,7 +222,7 @@
                 }
                 wait([r1.id, r2.id], 7, proxyLaunch);
             });
-        }
+        };
 
         $scope.checkInput();
         getSetName($scope.filters);

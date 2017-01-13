@@ -32,7 +32,9 @@
         lineHeight: '=',
         title: '@',
         subtitle: '@',
-        yLabel: '@'
+        yLabel: '@',
+        currentPage: '@',
+        repoName: '@'
       },
       templateUrl: '/scripts/stackedbarchart/views/stackedbarchart.html',
       link: function ($scope, $element) {
@@ -56,9 +58,19 @@
             label: $scope.yLabel,
             ticks: 4
           },
-          onClick: function(link){
+          onClick: function(data){
             $scope.$emit('tooltip::hide');
-            $location.path(link).search({});
+            if(_.contains($scope.currentPage, 'projects')){
+              $location.path(data.link).search({});
+            } else {
+              let filter = {file: {projectCode: {is: [data.name]}, primarySite: {is: [data.key]}}};
+              if(_.contains($scope.currentPage, 'cloud')){
+                filter = {file: _.extend(filter.file, {repoName: {is: [$scope.repoName]}})};
+              } else if (_.contains($scope.currentPage, 'pcawg')) {
+                filter = {file: _.extend(filter.file, {study: {is: ['PCAWG']}})};
+              }
+              $location.path('repositories').search('filters', JSON.stringify(filter));
+            }
             $scope.$apply();
           },
           tooltipShowFunc: function(elem, d) {
@@ -100,7 +112,7 @@
         $scope.$watch ('items', function (newValue) {
           var showPlot = shouldShowPlot (newValue);
           $scope.showPlot = showPlot;
-          if (! showPlot) {return;}
+          if (! showPlot) {return}
 
           if (newValue && typeof $scope.items[0] !== 'undefined') {
             if (!chart) {
@@ -108,7 +120,7 @@
             }
 
             // Adaptive margin based on char length of labels
-            var max = _.max(_.pluck( $scope.items, 'key').map(function(d) { return d.length; }));
+            var max = _.max(_.pluck( $scope.items, 'key').map(function(d) { return d.length }));
             if (max >= 10) {
               config.margin.bottom += 25;
             }
@@ -122,7 +134,6 @@
             chart.destroy();
           }
         });
-
       }
     };
   });

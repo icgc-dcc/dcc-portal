@@ -21,16 +21,16 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
-import lombok.Data;
-import lombok.NonNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.NonNull;
 
 /**
  * Represents a unit of a set union comprised of a list of sets that form the intersection and a list of sets that need

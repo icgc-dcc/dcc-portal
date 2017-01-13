@@ -7,7 +7,7 @@
 <h5 class="analysis-subtitle"> {{ subtitle }} </h5>
 
 <div data-ng-if="!item || item.state === 'ANALYZING'">
-    <h1 class="text-center"><i class="icon-spinner icon-spin" style="font-size:5rem"></i></h1>
+    <span><i class="icon-spinner icon-spin"></i> Loading Analysis...</span>
 </div>
 <div data-ng-if="item && item.state !== 'ANALYZING'">
     <div>
