@@ -33,15 +33,14 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
       _ctrl.info = '';
       _ctrl.path = $location.path();
       _ctrl.pathToGoTo;
-      _ctrl.redirects = {};
+      _ctrl.redirect = {};
       _ctrl.isRedirect = false;
       _ctrl.timeToRedirect = 5;
-      _ctrl.count = 0;
 
       const processRedirect = () => {
         $timeout(() => {
-          _ctrl.count++;
-          if(_ctrl.count == _ctrl.timeToRedirect){
+          _ctrl.timeToRedirect--;
+          if(_ctrl.timeToRedirect == 0){
             window.location.href = _ctrl.pathToGoTo;
           } else {
             processRedirect();
@@ -51,7 +50,6 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
 
       $http.get('config/redirects.json')
         .then((redirects) => {
-          _ctrl.redirects = redirects.data;
           _ctrl.redirect = _.find(redirects.data.redirects, (object) => object.from === _ctrl.path)
           if(_ctrl.redirect){
             _ctrl.isRedirect = true;
