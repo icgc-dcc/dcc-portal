@@ -112,7 +112,7 @@
     this.getValueBySetIds = function(ids) {
       var val = 0;
       this.data.forEach(function(group) {
-        var groupIds = _.pluck(group, 'id');
+        var groupIds = _.map(group, 'id');
         if (_.difference(groupIds, ids).length === 0 && _.difference(ids, groupIds).length === 0) {
           val = group[0].count;
         }

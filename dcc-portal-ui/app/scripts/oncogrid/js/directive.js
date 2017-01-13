@@ -191,7 +191,7 @@
                'fieldName': 'cgc', 'type': 'bool', 'sort': sortBool, 'group': 'Gene Sets'}
           ];
 
-          var maxDonorsAffected = _.max(genes, function (g) { return g.totalDonors }).totalDonors;
+          var maxDonorsAffected = _.maxBy(genes, function (g) { return g.totalDonors }).totalDonors;
 
           var geneOpacity = function (g) {
             if (g.type === 'int') {

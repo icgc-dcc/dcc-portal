@@ -15,11 +15,11 @@
   ~ WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 <div class="h1-wrap">
-    <h1 data-ui-scrollfix=79><span class="t_badge t_badge__geneset"></span>
+    <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__geneset"></span>
         {{ GeneSetCtrl.geneSet.id }}</h1>
 </div>
 <div data-scroll-spy="">
-<aside data-ui-scrollfix=79 class="t_sidenav">
+<aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
             <li data-spy="summary" class="t_subnav__items__item current">
@@ -204,7 +204,7 @@
             <a data-ng-href='/search/m?filters={{GeneSetCtrl.baseAdvQuery}}'>
                 <strong>{{GeneSetCtrl.totalMutations | number}}</strong></a>
             <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">mutations across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|pluck:"id").join("\",\"")}}"]}}}'>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|_:"map":"id").join("\",\"")}}"]}}}'>
                 <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong></a>
             <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">projects</translate>
             <br>
@@ -217,7 +217,7 @@
                 <strong>{{GeneSetCtrl.geneSet.geneCount}}</strong>
             </a>
             <translate translate-comment="'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects">genes in this gene set affected by mutations across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|pluck:"id").join("\",\"")}}"]}}}'>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|_:"map":"id").join("\",\"")}}"]}}}'>
                 <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong>
             </a>
             <translate translate-comment="'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects">cancer projects</translate>

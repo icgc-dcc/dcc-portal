@@ -313,7 +313,7 @@ Add your ```helloworld``` module dependency to the ```scripts/app/js/app.js``` f
 
     // angular plugins
     'restangular',
-    'ui.scrollfix',
+    'ui.scrollpoint',
 
     // More modules included here ...
     'helloworld' // <--- Define your module here!

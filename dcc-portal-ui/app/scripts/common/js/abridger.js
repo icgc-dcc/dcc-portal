@@ -71,9 +71,9 @@
 
       var tokens = [keyword2].concat (words (keyword2));
       var matchKeyword = _(tokens)
-        .unique()
+        .uniq()
         .find (function (token) {
-          return _.contains (sentence2, token);
+          return _.includes (sentence2, token);
         });
 
       return _.isUndefined (matchKeyword) ? {} : {
@@ -114,7 +114,7 @@
     };
 
     this.processLeftAndRight = function (newElements) {
-      var left = _.first (newElements);
+      var left = _.head (newElements);
       var right = _.last (newElements);
 
       if (withinLimit (newElements)) {
@@ -147,7 +147,7 @@
     };
 
     this.processLeftOnly = function (newElements) {
-      var left = _.first (newElements);
+      var left = _.head (newElements);
 
       if (withinLimit (left)) {
         _this.resultArray = [left].concat (_this.resultArray);

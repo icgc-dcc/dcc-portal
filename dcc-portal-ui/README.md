@@ -13,11 +13,10 @@ nvm install 6
 nvm use 6
 ```
   
-Next, install `npm` and `bower` dependencies:
+Next, install `npm` dependencies:
 
 ```shell
 yarn
-npm run bower
 ```
 
 ## Running
