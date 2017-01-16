@@ -2,15 +2,16 @@
   &.container-404{
     margin: 0;
     padding: 0;
+    width: 100%;
 
     .page-not-found-container {
-      padding: 2rem;
+      padding: 0rem 2rem 2rem;
       
       .message-404 {
 
         &:after{
           display: block;
-          margin-top: 2rem;
+          margin-top: 1rem;
           height: 2px;
           border-bottom: 1px solid #e6e6e6;
           margin-left: -2rem;
@@ -27,6 +28,10 @@
           i{
             color:#fff;
           }
+        }
+
+        span{
+          vertical-align: middle;
         }
 
         .page{
