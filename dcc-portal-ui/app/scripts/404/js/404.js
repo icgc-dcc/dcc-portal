@@ -24,16 +24,23 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
       templateUrl: '/scripts/404/views/404.html',
       controller: '404Controller as ctrlr'
     });
-  });
+  })
+  .constant('REDIRECTS', [
+      {
+        "from": "/icgc-in-the-cloud/guide",
+        "to": "http://docs.icgc.org/cloud/guide/"
+      }
+    ]
+  );
 
 (function(){
   angular.module('icgc.404.controllers', [])
-    .controller('404Controller', function($stateParams, Page, $location, $http, $timeout, $window){
+    .controller('404Controller', function($stateParams, Page, $location, $timeout, $window, REDIRECTS){
       var _ctrl = this;
       _ctrl.info = '';
       _ctrl.path = $location.path();
       _ctrl.pathToGoTo;
-      _ctrl.redirect = {};
+      _ctrl.redirect = _.find(REDIRECTS, (redirect) => redirect.from === _ctrl.path);
       _ctrl.isRedirect = false;
       _ctrl.timeToRedirect = 5;
 
@@ -46,17 +53,13 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
             processRedirect();
           }
         },1000);
-      }
+      };
 
-      $http.get('config/redirects.json')
-        .then((redirects) => {
-          _ctrl.redirect = _.find(redirects.data.redirects, (object) => object.from === _ctrl.path)
-          if(_ctrl.redirect){
-            _ctrl.isRedirect = true;
-            _ctrl.pathToGoTo = _ctrl.redirect.to;
-            processRedirect();
-          }
-        });
+      if(_ctrl.redirect){
+        _ctrl.isRedirect = true;
+        _ctrl.pathToGoTo = _ctrl.redirect.to;
+        processRedirect();
+      }
 
       Page.setTitle('404');
       Page.setPage('error');
