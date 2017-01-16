@@ -359,7 +359,7 @@
         firstSort = _.map(files, 'name');
         files = $filter('orderBy')(files, logicalSort);
       } else {
-        files = $filter('orderBy')(files, 'date', 'reverse');
+        files = $filter('orderBy')(files, 'date', 'desc');
         firstSort = _.map(files, 'name');
         files = $filter('orderBy')(files, logicalSort);
       }
