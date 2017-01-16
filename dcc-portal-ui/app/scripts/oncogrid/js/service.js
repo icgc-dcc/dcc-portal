@@ -164,7 +164,7 @@
       var geneIds = _.map(genes, function (d) { return d.id });
 
       var geneIdToSymbol = {};
-      _(genes).forEach(function(g) {
+      _.forEach(genes, function(g) {
         geneIdToSymbol[g.id] = g.symbol;
       });
 
@@ -274,7 +274,7 @@
       var expanded = [];
       var precedence = Consequence.precedence();
 
-      _(o.genes).forEach(function (g) {
+      _.forEach(o.genes, function (g) {
         var ret = _.clone(o);
         ret.geneId = g.geneId;
 
