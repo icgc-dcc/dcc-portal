@@ -28,7 +28,7 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
 
 (function(){
   angular.module('icgc.404.controllers', [])
-    .controller('404Controller', function($stateParams, Page, $location, $http, $timeout){
+    .controller('404Controller', function($stateParams, Page, $location, $http, $timeout, $window){
       var _ctrl = this;
       _ctrl.info = '';
       _ctrl.path = $location.path();
@@ -41,7 +41,7 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
         $timeout(() => {
           _ctrl.timeToRedirect--;
           if(_ctrl.timeToRedirect == 0){
-            window.location.href = _ctrl.pathToGoTo;
+            $window.location.href = _ctrl.pathToGoTo;
           } else {
             processRedirect();
           }
