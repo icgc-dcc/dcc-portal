@@ -135,7 +135,7 @@ public class GeneRepository implements Repository {
       search.getRequestBuilder().setSize(limit.intValue());
     }
 
-    log.info(" find all centric {}", search);
+    log.debug(" find all centric {}", search);
 
     return search.getRequestBuilder().execute().actionGet();
   }
@@ -309,7 +309,7 @@ public class GeneRepository implements Repository {
     search.setFetchSource(toStringArray(includes), NO_EXCLUDE);
     search.highlighter(highlight);
     search.setQuery(boolQuery);
-    log.info("Search is {}", search);
+    log.debug("Search is {}", search);
 
     return search.execute().actionGet();
   }
