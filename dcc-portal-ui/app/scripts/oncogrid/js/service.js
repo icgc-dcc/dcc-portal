@@ -292,7 +292,7 @@
         }
 
         expanded.push(ret);
-      }).value();
+      });
 
       return expanded;
     }
