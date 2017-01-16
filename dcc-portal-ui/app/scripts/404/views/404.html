@@ -32,7 +32,7 @@
         </a>.
       </p>
       <p data-ng-if="ctrlr.isRedirect">
-        <span>We are redirecting you to the requested page in <strong>{{ctrlr.timeToRedirect}}</strong> seconds.</span>
+        <span>We are redirecting you to the requested page in <strong>{{ctrlr.timeToRedirect}}{{ ctrlr.timeToRedirect === 0 ? ' (redirecting)' : ''}}</strong> seconds.</span>
         <br>
         <br>
         <span>Optionally you can also click on <a href="{{ctrlr.pathToGoTo}}">{{ctrlr.pathToGoTo}}</a> to go there now.</span>
