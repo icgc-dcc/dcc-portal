@@ -27,8 +27,8 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
   })
   .constant('REDIRECTS', [
       {
-        "from": "/icgc-in-the-cloud/guide",
-        "to": "http://docs.icgc.org/cloud/guide/"
+        'from': '/icgc-in-the-cloud/guide',
+        'to': 'http://docs.icgc.org/cloud/guide/'
       }
     ]
   );
