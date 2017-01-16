@@ -502,7 +502,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
                   _compoundTargetedGenes.push(gene);
                 }
 
-                _compoundTargetedGenes = _.orderBy(_compoundTargetedGenes, 'affectedDonorCountFiltered', false);
+                _compoundTargetedGenes = _.orderBy(_compoundTargetedGenes, 'affectedDonorCountFiltered', 'desc');
 
                 deferred.resolve(_compoundTargetedGenes);
 
