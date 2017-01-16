@@ -166,7 +166,7 @@
       var geneIdToSymbol = {};
       _(genes).forEach(function(g) {
         geneIdToSymbol[g.id] = g.symbol;
-      }).value();
+      });
 
       function validOnco(o) {
         return geneIds.indexOf(o.geneId) >= 0 && donorIds.indexOf(o.donorId) >= 0 && o.functionalImpact === 'High';
