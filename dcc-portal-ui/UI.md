@@ -83,7 +83,7 @@ These folders lie under the ```dcc-portal-ui/app``` directory.
 
 Folder | Purpose   | Example
 ------ | --------- | -------
-/scripts/404| 404 Page. It also redirects if the current page has been moved to a different URL. Configuration for this can be found in `config/redirects.json` | [https://dcc.icgc.org/404](https://dcc.icgc.org/404)
+/scripts/404| 404 Page. It also redirects if the current page has been moved to a different URL. Configuration for this can be found in `/js/404.js` | [https://dcc.icgc.org/404](https://dcc.icgc.org/404)
 /scripts/advanced| Advanced Page | [https://dcc.icgc.org/search](https://dcc.icgc.org/search)
 /scripts/analysis | Set Analysis Page | [https://dcc.icgc.org/analysis](https://dcc.icgc.org/analysis) 
 **/scripts/app** | The main entry point in the application. This is the file that provides the definition of the main application module and it's dependencies.It also contains bootstrap code and some configuration for some of the dependencies (i.e. Restangular) used within the application. | N/A
