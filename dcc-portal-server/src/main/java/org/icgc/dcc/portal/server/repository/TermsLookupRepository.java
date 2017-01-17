@@ -26,6 +26,7 @@ import static org.dcc.portal.pql.meta.TypeModel.DONOR_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.FILE_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.GENE_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.MUTATION_LOOKUP;
+import static org.elasticsearch.action.support.WriteRequest.RefreshPolicy.IMMEDIATE;
 import static org.elasticsearch.index.query.QueryBuilders.termsLookupQuery;
 import static org.icgc.dcc.portal.server.util.JsonUtils.MAPPER;
 
@@ -156,7 +157,9 @@ public class TermsLookupRepository {
       @NonNull final Map<String, Object> keyValuePairs) {
     val request = client.prepareIndex(TERMS_LOOKUP_INDEX_NAME, type.getName())
         .setId(id.toString())
-        .setSource(keyValuePairs);
+        .setSource(keyValuePairs)
+        .setRefreshPolicy(IMMEDIATE);
+    log.trace("{}", request.request());
     request.get();
   }
 
@@ -179,9 +182,7 @@ public class TermsLookupRepository {
 
   public static TermsQueryBuilder createTermsLookupFilter(@NonNull String fieldName,
       @NonNull TermLookupType type, @NonNull UUID id) {
-    val key = id.toString();
-
-    val termsLookup = new TermsLookup(TERMS_LOOKUP_INDEX_NAME, type.getName(), key, TERMS_LOOKUP_PATH);
+    val termsLookup = new TermsLookup(TERMS_LOOKUP_INDEX_NAME, type.getName(), id.toString(), TERMS_LOOKUP_PATH);
     return termsLookupQuery(fieldName, termsLookup);
   }
 

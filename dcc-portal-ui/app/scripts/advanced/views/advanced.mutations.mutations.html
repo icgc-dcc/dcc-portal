@@ -2,10 +2,16 @@
     <translate>Mutations</translate>
     <span class="action-toolbar pull-right">
         <span class="action-item">
-            <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('mutation', AdvancedCtrl.Mutation.mutations.pagination.total)"><translate>Save Mutation Set</translate></a>
+            <i class="icon-chart"></i><a href="/browser/m?filters={{AdvancedCtrl.Location.filters()}}"><translate>Genome Viewer</translate></a>
         </span>
         <span class="action-item">
-            <i class="icon-chart"></i><a href="/browser/m?filters={{AdvancedCtrl.Location.filters()}}"><translate>Genome Viewer</translate></a></span>
+            <entityset-persistence-dropdown
+                selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.mutation"
+                entity-type="'mutation'"
+                set-total-count="AdvancedCtrl.Mutation.mutations.pagination.total"
+                set-limit="AdvancedCtrl.Settings.maxNumberOfHits"
+                on-operation-success="AdvancedCtrl.handleOperationSuccess('mutation')"
+            ></entityset-persistence-dropdown>
         </span>
     </span>
 </h3>
@@ -17,6 +23,7 @@
 <table class="table table-bordered table-striped table-condensed">
     <thead>
     <tr>
+        <th rowspan="2"></th>
         <th rowspan="2" data-sortable data-type="mutations" data-field="id">ID</th>
         <th rowspan="2">
             <abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
@@ -48,7 +55,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr data-ng-repeat="mutation in AdvancedCtrl.Mutation.mutations.hits track by mutation.id">
+    <tr
+        data-ng-repeat="mutation in AdvancedCtrl.Mutation.mutations.hits track by mutation.id"
+        ng-class="{
+            'is-selected': AdvancedCtrl.isEntitySelected('mutation', mutation)
+        }"
+    >
+        <td ng-click="AdvancedCtrl.toggleSelectedEntity('mutation', mutation)">
+            <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('mutation', mutation)"></icgc-checkbox>
+        </td>
         <td><a href='/mutations/{{ mutation.id }}'>{{ mutation.id }}</a></td>
         <td class="t_cell_line_break">chr{{mutation.chromosome}}:g.{{ mutation.start }}{{ mutation.mutation }}</td>
         <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
@@ -100,25 +115,25 @@
 
 <table class="hidden" id="mutations" data-ng-if="AdvancedCtrl.Page.isExporting()">
     <thead>
-    <tr>
-        <th><translate>Mutation ID</translate></th>
-        <th><translate>Genomic DNA Change</translate></th>
-        <th><translate>Type</translate></th>
-        <th><translate>Consequences</translate></th>
-        <th><translate>Donors affected</translate></th>
-        <th><translate>Projects Mutation Observed</translate></th>
-    </tr>
+        <tr>
+            <th><translate>Mutation ID</translate></th>
+            <th><translate>Genomic DNA Change</translate></th>
+            <th><translate>Type</translate></th>
+            <th><translate>Consequences</translate></th>
+            <th><translate>Donors affected</translate></th>
+            <th><translate>Projects Mutation Observed</translate></th>
+        </tr>
     </thead>
     <tbody>
-    <tr data-ng-repeat="mutation in AdvancedCtrl.Mutation.mutations.hits track by mutation.id">
-        <td>{{mutation.id}}</td>
-        <td>chr{{mutation.chromosome}}:g.{{ mutation.start }}{{ mutation.mutation }}</td>
-        <td>{{mutation.type | define }}</td>
-        <td>
-            <mutation-consequences items="mutation.consequences"></mutation-consequences>
-        </td>
-        <td>{{mutation.affectedDonorCountFiltered}}/{{mutation.affectedDonorCountTotal}}</td>
-        <td>{{mutation.uiDonorsExportString}}</td>
-    </tr>
+        <tr data-ng-repeat="mutation in AdvancedCtrl.Mutation.mutations.hits track by mutation.id">
+            <td>{{mutation.id}}</td>
+            <td>chr{{mutation.chromosome}}:g.{{ mutation.start }}{{ mutation.mutation }}</td>
+            <td>{{mutation.type | define }}</td>
+            <td>
+                <mutation-consequences items="mutation.consequences"></mutation-consequences>
+            </td>
+            <td>{{mutation.affectedDonorCountFiltered}}/{{mutation.affectedDonorCountTotal}}</td>
+            <td>{{mutation.uiDonorsExportString}}</td>
+        </tr>
     </tbody>
 </table>

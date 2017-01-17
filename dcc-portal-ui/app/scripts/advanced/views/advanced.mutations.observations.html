@@ -102,10 +102,10 @@
             <td>{{occurrence.donorId}}</td>
             <td>{{occurrence.projectId}}</td>
             <td>chr{{occurrence.chromosome}}:g.{{occurrence.start}}{{occurrence.mutation}}</td>
-            <td>{{ (occurrence.observations | pluck:'icgcSampleId').join(',') }}</td>
-            <td>{{ (occurrence.observations | pluck:'matchedICGCSampleId').join(',') }}</td>
-            <td>{{ (occurrence.observations | pluck:'platform').join(',') }}</td>
-            <td>{{ (occurrence.observations | pluck:'verificationStatus').join(',') }}</td>
+            <td>{{ (occurrence.observations | _:"map":'icgcSampleId').join(',') }}</td>
+            <td>{{ (occurrence.observations | _:"map":'matchedICGCSampleId').join(',') }}</td>
+            <td>{{ (occurrence.observations | _:"map":'platform').join(',') }}</td>
+            <td>{{ (occurrence.observations | _:"map":'verificationStatus').join(',') }}</td>
         </tr>
         </tbody>
     </table>

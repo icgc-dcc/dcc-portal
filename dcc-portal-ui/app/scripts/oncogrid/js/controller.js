@@ -21,13 +21,8 @@
     var module = angular.module('icgc.oncogrid.controllers', []);
 
     module.controller('OncogridController', function($scope, $element, LocationService, OncogridService, SetService,
-        $timeout, $modal, Extensions, Settings, FullScreenService) {
+        $timeout, $modal, Extensions, FullScreenService) {
         var _this = this;
-
-        Settings.get().then(function(settings) {
-            _this.downloadEnabled = settings.downloadEnabled || false;
-        });
-
         _this.getGrid = function() {
             return _this.grid;
         };

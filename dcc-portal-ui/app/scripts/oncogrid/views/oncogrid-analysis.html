@@ -7,7 +7,7 @@
   </h3>    
 </div>
 <div data-ng-if="!item || item.state === 'ANALYZING'">
-  <h1 class="text-center"><i class="icon-spinner icon-spin" style="font-size:5rem"></i></h1>
+  <span><i class="icon-spinner icon-spin"></i> Loading Analysis...</span>
 </div>
 <div data-ng-if="item && item.state !== 'ANALYZING'">
   <div>
@@ -31,7 +31,7 @@
               <span class="t_tools__tool">
                 <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.donorSet)"></i>
               </span>
-              <span class="t_tools__tool">
+              <span class="t_tools__tool" data-ng-if="ICGC_SETTINGS.downloadEnabled">
                 <i data-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="OncoCtrl.downloadDonorData(item.donorSet)"></i>
               </span>
               <a class="t_tools__tool"
@@ -71,9 +71,9 @@
     
     <div class="clearfix"></div>
     
-    <h1 id="oncogrid-spinner" class="text-center oncogrid-spinner">
-      <i class="icon-spinner icon-spin" style="font-size:5rem"></i>
-    </h1>
+    <span id="oncogrid-spinner" class="text-center oncogrid-spinner">
+      <i class="icon-spinner icon-spin"></i> Loading OncoGrid...
+    </span>
 
     <div id="oncogrid-container">
       <div id="oncogrid-controls" class="og-grid-align" style="margin-top: 10px; min-height: 70px;">

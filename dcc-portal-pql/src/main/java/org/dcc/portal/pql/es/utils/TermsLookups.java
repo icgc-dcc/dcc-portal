@@ -21,12 +21,12 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.util.Optional;
 
+import org.dcc.portal.pql.es.ast.filter.TermNode;
+import org.elasticsearch.indices.TermsLookup;
+
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
-
-import org.dcc.portal.pql.es.ast.filter.TermNode;
-import org.elasticsearch.indices.TermsLookup;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class TermsLookups {

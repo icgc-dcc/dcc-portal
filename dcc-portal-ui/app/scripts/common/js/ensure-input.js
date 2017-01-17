@@ -12,9 +12,9 @@ export const partiallyContainsIgnoringCase = (phrase, keyword) => {
 
     const tokens = [capitalizedKeyword].concat (words(capitalizedKeyword));
     const matchKeyword = _(tokens)
-      .unique()
+      .uniq()
       .find (function (token) {
-        return _.contains(capitalizedPhrase, token);
+        return _.includes(capitalizedPhrase, token);
       });
 
     return !_.isUndefined(matchKeyword);

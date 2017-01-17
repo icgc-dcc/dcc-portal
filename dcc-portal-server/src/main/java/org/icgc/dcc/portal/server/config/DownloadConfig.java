@@ -17,9 +17,9 @@
 
 package org.icgc.dcc.portal.server.config;
 
+import static java.lang.String.format;
 import lombok.SneakyThrows;
 import lombok.val;
-
 import org.icgc.dcc.download.client.DownloadClient;
 import org.icgc.dcc.download.client.DownloadClientConfig;
 import org.icgc.dcc.download.client.impl.HttpDownloadClient;
@@ -28,10 +28,15 @@ import org.icgc.dcc.download.core.jwt.DefaultJwtService;
 import org.icgc.dcc.download.core.jwt.JwtConfig;
 import org.icgc.dcc.download.core.jwt.JwtService;
 import org.icgc.dcc.download.core.jwt.NoOpJwtService;
+import org.icgc.dcc.download.core.model.DownloadFile;
 import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
+import org.icgc.dcc.portal.server.download.DownloadFilesNotFoundException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+
+import java.util.Collection;
 
 @Lazy
 @Configuration
@@ -51,7 +56,21 @@ public class DownloadConfig {
         .requestLoggingEnabled(properties.isRequestLoggingEnabled())
         .strictSSLCertificates(properties.isStrictSSLCertificates());
 
-    return new HttpDownloadClient(clientConfig);
+    return new HttpDownloadClient(clientConfig) {
+
+      @Override
+      @Cacheable("downloads")
+      public Collection<DownloadFile> listFiles(String path, boolean recursive) {
+        // TODO: Investigate handling this in the download-client code, DCC-5463
+        val files = super.listFiles(path, recursive);
+        if (files == null) {
+          throw new DownloadFilesNotFoundException(format("Files not found under path %s", path));
+        }
+
+        return files;
+      }
+
+    };
   }
 
   @Bean

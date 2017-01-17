@@ -21,17 +21,13 @@
   var module = angular.module('icgc.analysis.controllers');
 
   module.controller('SavedSetController', function($scope, $rootScope, $window, $location, $timeout, $modal,
-    SetService, Settings, LocationService, RouteInfoService, Extensions, gettextCatalog) {
+    SetService, LocationService, RouteInfoService, Extensions, gettextCatalog) {
 
     var _this = this;
     _this.entitySets = SetService.getAll();
     _this.selectedSets = [];
     _this.checkAll = false;
     _this.dataRepoTitle = RouteInfoService.get ('dataRepositories').title;
-
-    Settings.get().then(function(settings) {
-      _this.downloadEnabled = settings.downloadEnabled || false;
-    });
 
     // Selected sets
     _this.update = function() {
@@ -105,7 +101,7 @@
         return set.state !== 'FINISHED';
       });
       if (toRemove.length > 0) {
-        SetService.removeSeveral(_.pluck(toRemove, 'id'));
+        SetService.removeSeveral(_.map(toRemove, 'id'));
         _this.checkAll = false; // reset
       }
     };
@@ -120,14 +116,14 @@
 
       var toRemove = _this.selectedSets;
       if (toRemove.length > 0) {
-        SetService.removeSeveral(_.pluck(toRemove, 'id'));
+        SetService.removeSeveral(_.map(toRemove, 'id'));
         _this.checkAll = false; // reset
       }
     };
 
     _this.renameSet = SetService.renameSet;
 
-    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
       _this.entitySets = SetService.getAll();
     });
 

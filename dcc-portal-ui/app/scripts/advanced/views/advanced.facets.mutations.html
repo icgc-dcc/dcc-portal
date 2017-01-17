@@ -2,8 +2,12 @@
     <i class="icon-spinner icon-spin icon-4x"></i>
 </div>
 <ul data-ng-show="AdvancedCtrl.Mutation.mutations" class="t_facets">
-    <li data-tags-facet data-label="{{'Mutation' | translate}}" data-facet-name="id" data-placeholder="{{'e.g. MU123' | translate}}"
-        data-type="mutation"></li>
+    <li data-tags-facet data-label="{{'Mutation' | translate}}" 
+        data-facet-name="id" 
+        data-placeholder="{{'e.g. MU123' | translate}}"
+        data-type="mutation"
+        data-entity-sets="AdvancedCtrl.mutationSets"
+        data-show-entity-set-facet="true"></li>
 
     <terms data-type="mutation" data-facet-name="consequenceType" data-defined="true"
            data-label="{{'Consequence Type' | translate}}"
@@ -30,6 +34,6 @@
            data-facet="AdvancedCtrl.Mutation.mutations.facets.verificationStatus"></terms>
 
     <li data-location-facet data-type="mutation" data-facet-name="location" data-label="{{'Location' | translate}}"
-        data-placeholder="{{'Enter mutation location' | translate}}" data-example="{{'e.g. chr12:43566-3457633' | translate}}"></li>
+        data-placeholder="{{'e.g. chr12:43566-3457633' | translate}}" ></li>
 </ul>
 

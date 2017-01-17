@@ -23,7 +23,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.json'],
-    modulesDirectories: ['node_modules', 'bower_components'],
   },
   resolveLoader: {
     root: paths.ownNodeModules,
@@ -37,9 +36,10 @@ module.exports = {
         include: paths.appSrc
       }
     ],
+    noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
       {
-        test: /index.html$/,
+        test: /\.html$/,
         loader: 'raw',
       },
       {
@@ -57,20 +57,20 @@ module.exports = {
       {
         test: /\.js$/,
         include: paths.appSrc,
-        exclude: [paths.bowerModules, paths.internalVendorModules],
+        exclude: [paths.internalVendorModules],
         loader: 'ng-annotate',
       },
       {
         test: /\.js$/,
         include: paths.appSrc,
-        exclude: [paths.bowerModules, paths.internalVendorModules],
+        exclude: [paths.internalVendorModules],
         loader: 'babel',
         query: require('./babel.prod'),
       },
       {
         test: /\.scss$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: ExtractTextPlugin.extract('style', 'css!sass'),
+        loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss!sass'),
       },
       {
         test: /\.json$/,
@@ -101,6 +101,11 @@ module.exports = {
     // e.g. to enable no-console and no-debugger only in prod.
     configFile: path.join(__dirname, 'eslint.js'),
     useEslintrc: false
+  },
+  postcss: function() {
+    return [
+      require('autoprefixer'),
+    ];
   },
   plugins: [
     new CopyWebpackPlugin([

@@ -7,6 +7,19 @@
         <span data-ng-if="actives.length" class="t_facets__facet__terms__inactive__reset t_tools">
             <span data-ng-click="removeFacet()" class="t_tools__tool"><i class="icon-undo"></i></span>
         </span>
+        <span class="t_tools t_facets_facet_search_icon" 
+            data-ng-show="(inactives.length > (searchIconShowLimit || 5)) && !collapsed">
+            <span data-ng-click="showSearch = !showSearch" class="t_tools__tool"><i class="icon-search"></i></span>
+        </span>
+        <div class="t_facets__facet__search t_facets__facet__input" data-ng-if="showSearch && !collapsed">
+            <input class="t_input__block" type="search" placeholder="Filter values" ng-model="search.query" autofocus>
+            <i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel"
+                data-ng-click="search.query = ''"
+                data-ng-show="search.query"></i>
+        </div>
+    </li>
+    <li class="t_facets__facet__search" data-ng-show="showSearch">
+        
     </li>
     <li class="t_facets__facet__terms">
         <ul class="t_facets__facet__terms__active">
@@ -41,7 +54,7 @@
         </ul>
 
         <ul data-ng-hide="collapsed || inactives.length == 0" class="t_facets__facet__terms__inactive">
-            <li data-ng-repeat="item in inactives | limitTo: (collapsed? 0 : displayLimit)"
+            <li data-ng-repeat="item in inactives | filter: search.query | limitTo: (collapsed? 0 : displayLimit)"
                 class="t_facets__facet__terms__inactive__term">
 
                 <span data-ng-hide="hideCount" data-ng-style="bar(item.count)" class="t_facets__facet__terms__inactive__term__bar"></span>
@@ -58,11 +71,11 @@
                 <span data-ng-if="hideCount" class="t_facets__facet__terms__inactive__term__count t_facets__facet__term__na">{{hideText}}</span>
 
             </li>
-            <li data-ng-show="inactives.length > displayLimit || expanded" class="t_sh__toggle">
+            <li data-ng-show="(inactives | filter: search.query).length > displayLimit || expanded" class="t_sh__toggle">
                 <a data-ng-click="toggle()" href="" class="t_tools__tool">
                   <span>
                      <i class="{{ expanded? 'icon-caret-up': 'icon-caret-down' }}"></i>
-                     {{ expanded? "less" : (inactives.length - displayLimit) + " more" }}
+                     {{ expanded? "less" : ((inactives | filter: search.query).length - displayLimit) + " more" }}
                   </span>
                 </a>
             </li>

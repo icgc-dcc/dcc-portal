@@ -19,8 +19,8 @@
 //-----------------------------------------------------------------------------
 @import "bootstrap.scss";
 @import "../vendor/styles/slider.css";
-@import "../bower_components/angular-loading-bar/build/loading-bar.css";
-@import "../bower_components/angularjs-toaster/toaster.css";
+@import "~angular-loading-bar/build/loading-bar.css";
+@import "~angularjs-toaster/toaster.css";
 
 // Genome Browser
 @import "../vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.css";

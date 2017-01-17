@@ -118,7 +118,6 @@ ol {
   color: $greyDark;
   h3 {
     color: $greyDark;
-    margin-bottom: 0;
   }
 }
 
@@ -155,7 +154,7 @@ ol {
   cursor: pointer;
 }
 
-.ui-scrollfix {
+.ui-scrollpoint {
   position: fixed;
   z-index: 99;
 }
@@ -168,7 +167,7 @@ ol {
   }
 }
 
-h1.ui-scrollfix, .sug-wrap.ui-scrollfix {
+h1.ui-scrollpoint, .sug-wrap.ui-scrollpoint {
   // Sets a max width. Site will be fluid until it reaches 1200, then stick there.
   width: $break-desktop;
 
@@ -186,7 +185,7 @@ h1.sticky-scrollfix {
   padding-bottom: 0.5rem;
 }
 
-aside.ui-scrollfix {
+aside.ui-scrollpoint {
   top: 5rem;
   section {
     background: transparent;
@@ -228,6 +227,18 @@ h3:hover {
   left: 0;
   border: none;
   font-family: inherit;
+}
+
+.t_notify_popup {
+  pre{
+    background: #d3741c;
+    color: #fff;
+    padding: 10px;
+    box-shadow: inset 1px 1px 1px 0px rgba(0,0,0,0.5);
+    overflow: scroll;
+    max-height: 100px;
+    line-height: 1rem;
+  }
 }
 
 .t_notify_link {
@@ -382,5 +393,35 @@ a.no-style {
 
   &.baseline{
     vertical-align: baseline;
+  }
+}
+
+.external-link, [external-link] {
+  &:after {
+    content: '\e831';
+    font-family: "icgc-icons";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    margin-left: .2em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+// Notificatin bar when browser is out of date
+.buorg{
+  div{
+    a {
+      color: $white !important;
+    }
   }
 }

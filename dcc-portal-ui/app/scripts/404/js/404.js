@@ -1,5 +1,5 @@
 /*
- * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ * Copyright 2017(c) The Ontario Institute for Cancer Research. All rights reserved.
  *
  * This program and the accompanying materials are made available under the terms of the GNU Public
  * License v3.0. You should have received a copy of the GNU General Public License along with this
@@ -24,13 +24,42 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
       templateUrl: '/scripts/404/views/404.html',
       controller: '404Controller as ctrlr'
     });
-  });
+  })
+  .constant('REDIRECTS', [
+      {
+        'from': '/icgc-in-the-cloud/guide',
+        'to': 'http://docs.icgc.org/cloud/guide/'
+      }
+    ]
+  );
 
 (function(){
   angular.module('icgc.404.controllers', [])
-    .controller('404Controller', function($stateParams, Page){
+    .controller('404Controller', function($stateParams, Page, $location, $timeout, $window, REDIRECTS){
       var _ctrl = this;
       _ctrl.info = '';
+      _ctrl.path = $location.path();
+      _ctrl.pathToGoTo;
+      _ctrl.redirect = _.find(REDIRECTS, (redirect) => redirect.from === _ctrl.path);
+      _ctrl.isRedirect = false;
+      _ctrl.timeToRedirect = 5;
+
+      const processRedirect = () => {
+        $timeout(() => {
+          _ctrl.timeToRedirect--;
+          if(_ctrl.timeToRedirect == 0){
+            $window.location.href = _ctrl.pathToGoTo;
+          } else {
+            processRedirect();
+          }
+        },1000);
+      };
+
+      if(_ctrl.redirect){
+        _ctrl.isRedirect = true;
+        _ctrl.pathToGoTo = _ctrl.redirect.to;
+        processRedirect();
+      }
 
       Page.setTitle('404');
       Page.setPage('error');

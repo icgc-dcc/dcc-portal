@@ -1,15 +1,4 @@
-<div class="survival-analysis">
-  <script type="text/template" class="survival-tip-template">
-    <div>
-      <strong><%= donor.id %></strong>
-      <div><%= labels.survivalEstimate %>: <%= (donor.survivalEstimate * 100).toFixed(2) %>%</div>
-      <% if (donor.isCensored) { %>
-        <div><%= labels.censoredSurvivalTime %>: <%= donor.time %> <%= unit %> (censored)</div>
-      <% } else { %>
-        <div><%= labels.survivalTime %>: <%= donor.time %> <%= unit %> </div>
-      <% } %>
-    </div>
-  </script>
+<div ng-show="!ctrl.isEmpty()" class="survival-analysis">
 
   <div class="tool-buttons">
     <button
@@ -79,7 +68,13 @@
           'icon-check-empty': ctrl.isDataSetDisabled(dataSet) && dataSet.donors.length,
         }"
       ></i>
-      <span ng-bind-html="ctrl.SetOperationService.getSetShortHand(dataSet, ctrl.dataSets)"></span> (N = {{dataSet.donors.length}}) - {{ dataSet.meta.name }}
+      <span ng-bind-html="ctrl.SetOperationService.getSetShortHand(dataSet, ctrl.dataSets)"></span>
+      (N =
+      <span ng-style="{
+        'font-weight': dataSet.donors.length ? '400' : '700', 
+        'color': dataSet.donors.length ? 'inherit' : '#666', 
+      }">{{dataSet.donors.length}}</span>)
+      - {{ dataSet.meta.name }}
     </li>
   </ul>
 
@@ -102,4 +97,10 @@
     params="ctrl.tooltipParams"
   ></tooltip-control>
 
+</div>
+<div ng-show="ctrl.isEmpty()" class="survival-analysis survival-analysis--empty">
+  <h1 class="title" ng-if="ctrl.title">{{ ctrl.title }}</h1>
+  <div class="flex flex-center flex-grow">
+    Insufficient data
+  </div>
 </div>

@@ -15,10 +15,14 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require('../components');
+
 (function () {
   'use strict';
 
+
   var module = angular.module('app.common', [
+    'app.common.components',
     'app.common.services',
     'app.common.header',
     'app.common.footer',
@@ -62,7 +66,7 @@
     return function (items, param) {
       var ret = null;
       if (angular.isArray(items)) {
-        ret = _.reduce(_.pluck(items, param), function (sum, num) {
+        ret = _.reduce(_.map(items, param), function (sum, num) {
           return sum + num;
         });
       }
@@ -75,6 +79,7 @@
       var input = arguments[0];
       var method = arguments[1];
       invariant(_.isString(method), 'The first argument must be a string that specifies a lodash method name');
+      invariant(_[method], `_.${method} does not exist`);
       var args = Array.prototype.slice.call(arguments, 2);
       return _[method].apply(null, [input].concat(args));
     };
@@ -183,7 +188,7 @@
         selfLoadState.isLoading = val;
       },
       addContributingLoadState: function (loadState) {
-        if (_.contains(contributingLoadStates, loadState)) {
+        if (_.includes(contributingLoadStates, loadState)) {
           console.warn('load state is already in contributing loadStates, this shouldnt happen');
           return;
         }
@@ -393,5 +398,6 @@
   });
 
   module.directive('ngLazyShow', require('./lazy-show'));
+  module.filter('pluralize', () => (...args) => require('pluralize')(...args));
 
 })();

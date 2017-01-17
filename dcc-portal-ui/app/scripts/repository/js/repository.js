@@ -16,6 +16,7 @@
  */
 
 import {ensureArray, ensureString} from '../../common/js/ensure-input';
+import './file-finder';
 
 (function() {
   'use strict';
@@ -36,15 +37,18 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
   var toJson = angular.toJson;
   var commaAndSpace = ', ';
 
-  var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
+  var module = angular.module('icgc.repository.controllers', [
+    'icgc.repository.services',
+    'file-finder',
+    ]);
 
   var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto', 'PDC - Chicago'];
 
   /**
    * ICGC static repository controller
    */
-  module.controller('ICGCRepoController', function($scope, $stateParams, Restangular, FileService,
-    ProjectCache, API, Settings, Page, RouteInfoService) {
+  module.controller('ICGCRepoController', function($scope, $stateParams, $window, Restangular, 
+    FileService, ProjectCache, API, Settings, Page, RouteInfoService) {
     var _ctrl = this;
     var dataReleasesRouteInfo = RouteInfoService.get ('dataReleases');
 
@@ -58,6 +62,17 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     _ctrl.downloadEnabled = true;
     _ctrl.dataReleasesTitle = dataReleasesRouteInfo.title;
     _ctrl.dataReleasesUrl = dataReleasesRouteInfo.href;
+
+    _ctrl.isSafari = /Safari/.test($window.navigator.userAgent);
+    _ctrl.isChrome = /Chrome/.test($window.navigator.userAgent);
+
+    _ctrl.fileQuery = '';
+    _ctrl.handleFileQueryKeyup = ($event) => {
+      if (event.keyCode === 27) {
+        _ctrl.fileQuery = '';
+        $event.currentTarget.blur();
+      }
+    };
 
     function buildBreadcrumbs() {
       var i, s, slug, url;
@@ -95,7 +110,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
 
       // Check file extension
       extension = file.name.split('.').pop();
-      if (_.contains(['txt', 'md'], extension.toLowerCase())) {
+      if (_.includes(['txt', 'md'], extension.toLowerCase())) {
         file.isText = true;
       } else {
         file.isText = false;
@@ -260,7 +275,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     $scope.summary = {};
 
     $scope.getRepoFieldValue = function (repoName, fieldName) {
-      var repoData = $scope.shouldDeduplicate ? $scope.summary[repoName] : _.findWhere($scope.repos, { repoName: repoName });
+      var repoData = $scope.shouldDeduplicate ? $scope.summary[repoName] : _.find($scope.repos, { repoName: repoName });
       return repoData && repoData[fieldName];
     };
 
@@ -305,7 +320,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
         const repo = _.find(reposFromService, {name: repoName});
 
         // Restrict to active repos if it is available
-        if (!_.isEmpty(activeRepos) && !_.contains(activeRepos, repoName)) {
+        if (!_.isEmpty(activeRepos) && !_.includes(activeRepos, repoName)) {
           return;
         }
 
@@ -595,8 +610,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     this.countryName = CodeTable.countryName;
 
     this.awsOrCollab = function(fileCopies) {
-       return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
-         _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
+       return _.includes(_.map(fileCopies, 'repoCode'), 'aws-virginia') ||
+         _.includes(_.map(fileCopies, 'repoCode'), 'collaboratory');
     };
 
     function getUiDonorInfoJSON(donors){
@@ -643,6 +658,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     var projectMap = {};
     var _ctrl = this;
 
+    this.handleOperationSuccess = () => { this.selectedFiles = [] };
+
     _ctrl.showIcgcGet = PortalFeature.get('ICGC_GET');
     _ctrl.selectedFiles = [];
     _ctrl.summary = {};
@@ -681,7 +698,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
         maxPadding: 0.01,
         labels: {
           formatter: function () {
-            return this.value / 1000 + 'k';
+            return this.value > 1000 ? this.value / 1000 + 'k' : this.value ;
           }
         },
         lineWidth: 1,
@@ -720,10 +737,23 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       }
     };
 
+    _ctrl.donorSetsForRepo = () => 
+      _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
+        set.repoFilters = {};
+        set.repoFilters.file = {};
+        set.repoFilters.file.donorId = set.advFilters.donor.id;
+        return set;
+      });
+
+    // Adding filters for repository to the donor set
+    _ctrl.donorSets = _ctrl.donorSetsForRepo();
+
+    _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
+
     function toSummarizedString (values, name) {
       var size = _.size (values);
       return (size > 1) ? '' + size + ' ' + name + 's' :
-        _.first (values);
+        _.head (values);
     }
 
     function createFilter (category, ids) {
@@ -733,7 +763,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     function buildDataInfo (data, property, paths, category, toolTip) {
       var ids = _(ensureArray (data))
         .map (property)
-        .unique()
+        .uniq()
         .value();
 
       return isEmptyArray (ids) ? {} : {
@@ -741,7 +771,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
         tooltip: toolTip (ids),
         href: _.size (ids) > 1 ?
           paths.many + createFilter (category, ids) :
-          paths.one + _.first (ids)
+          paths.one + _.head (ids)
       };
     }
 
@@ -769,7 +799,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
 
     _ctrl.buildProjectInfo = function (donors) {
       var toolTipMaker = function (ids) {
-        return _.size (ids) === 1 ? _.get (projectMap, _.first (ids), '') : '';
+        return _.size (ids) === 1 ? _.get (projectMap, _.head (ids), '') : '';
       };
       return buildDataInfo (donors, 'projectCode', {one: '/projects/', many: '/projects?filters='},
         'project', toolTipMaker);
@@ -778,7 +808,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     function uniquelyConcat (fileCopies, property) {
       return _(fileCopies)
         .map (property)
-        .unique()
+        .uniq()
         .join(commaAndSpace);
     }
 
@@ -793,7 +823,7 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     function tooltipList (objects, property, oneItemHandler) {
       var uniqueItems = _(objects)
         .map (property)
-        .unique();
+        .uniq();
 
       if (uniqueItems.size() < 2) {
         return _.isFunction (oneItemHandler) ? oneItemHandler() :
@@ -816,24 +846,24 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     };
 
     _ctrl.awsOrCollab = function(fileCopies) {
-       return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
-         _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
+       return _.includes(_.map(fileCopies, 'repoCode'), 'aws-virginia') ||
+         _.includes(_.map(fileCopies, 'repoCode'), 'collaboratory');
     };
 
     _ctrl.fileAverageSize = function (fileCopies) {
       var count = _.size (fileCopies);
-      return (count > 0) ? _.sum (fileCopies, 'fileSize') / count : 0;
+      return (count > 0) ? _.sumBy (fileCopies, 'fileSize') / count : 0;
     };
 
     _ctrl.flagIconClass = function (projectCode) {
       var defaultValue = '';
       var last3 = _.takeRight (ensureString (projectCode), 3);
 
-      if (_.size (last3) < 3 || _.first (last3) !== '-') {
+      if (_.size (last3) < 3 || _.head (last3) !== '-') {
         return defaultValue;
       }
 
-      var last2 = _.rest (last3).join ('');
+      var last2 = _.tail (last3).join ('');
 
       return 'flag flag-' + CodeTable.translateCountryCode (last2.toLowerCase());
     };
@@ -954,19 +984,9 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       });
     };
     
-    _ctrl.isSelected = function (row) {
-      return _.contains (_ctrl.selectedFiles, row.id);
-    };
+    _ctrl.isSelected = (row) => _ctrl.selectedFiles.includes(row.id);
 
-    _ctrl.toggleRow = function (row) {
-      if (_ctrl.isSelected (row) === true) {
-        _.remove (_ctrl.selectedFiles, function (r) {
-          return r === row.id;
-        });
-      } else {
-        _ctrl.selectedFiles.push (row.id);
-      }
-    };
+    _ctrl.toggleRow = (row) => { _ctrl.selectedFiles = _.xor(_ctrl.selectedFiles, [row.id]) };
 
     /**
      * Undo user selected files
@@ -980,11 +1000,11 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
     };
 
     function removeCityFromRepoName (repoName) {
-      if (_.contains (repoName, 'CGHub')) {
+      if (_.includes (repoName, 'CGHub')) {
         return 'CGHub';
       }
 
-      if (_.contains (repoName, 'TCGA DCC')) {
+      if (_.includes (repoName, 'TCGA DCC')) {
         return 'TCGA DCC';
       }
 
@@ -1075,7 +1095,18 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       loadState.loadWhile([listRequest, summaryRequest, metaDataRequeset, cacheReqeust]);
     }
 
+    // to check if a set was previously selected and if its still in effect
+    const updateSetSelection = (entity, entitySets) => {
+      let filters = FilterService.filters();
+
+      entitySets.forEach( (set) =>
+        set.selected = filters.file && filters.file[entity] &&  _.includes(filters.file[entity].is, `ES:${set.id}`)
+      );
+    };
+
     refresh();
+    updateSetSelection('donorId', _ctrl.donorSets);
+    updateSetSelection('id', _ctrl.fileSets);
 
     // Pagination watcher, gets destroyed with scope.
     $scope.$watch(function() {
@@ -1097,6 +1128,8 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
       else {
         refresh();
       }
+      updateSetSelection('donorId', _ctrl.donorSets);
+      updateSetSelection('id', _ctrl.fileSets);
     });
 
     // Remove any pagination on facet change: see DCC-4589
@@ -1109,6 +1142,11 @@ import {ensureArray, ensureString} from '../../common/js/ensure-input';
           };
         LocationService.setJsonParam('files', newParam);
       }
+    });
+
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
+      _ctrl.donorSets = _ctrl.donorSetsForRepo();
+      _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
     });
 
   });

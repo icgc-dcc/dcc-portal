@@ -240,14 +240,13 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
           _drugClass = compound.drugClass || '--',
           _cancerTrialCount = compound.cancerTrialCount || '--',
           _atcCodes = _arrayOrEmptyArray(compound.atcCodes),
-          _genes = _.filter(_.pluck(_arrayOrEmptyArray(compound.genes), 'ensemblGeneId'),
+          _genes = _.filter(_.map(_arrayOrEmptyArray(compound.genes), 'ensemblGeneId'),
             function(id) {
               return id !== null && id.length > 0;
             }),
           _drugGenesLength = _genes.length,
           _trials = _arrayOrEmptyArray(compound.trials),
           _uiTrials = getUiTrialsJSON(compound.trials);
-
 
       return {
         id: _id,
@@ -301,7 +300,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
           uiDescription: trial.description,
           uiConditions: trial.conditions,
           uiStartDate: trial.startDate,
-          uiPhaseName: trial.phaseName,
+          uiPhaseName: trial.phaseName.split('/'),
           uiStatusName: trial.statusName
         });
       }));
@@ -321,7 +320,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
       // For application/json format
       function _params2JSON(type, params) {
         var data = {};
-        data.filters = encodeURI(JSON.stringify(params.filters));
+        data.filters = params.filters;
         data.type = type.toUpperCase();
         data.name = params.name;
         data.description = params.description || '';
@@ -477,7 +476,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
                 if (geneList.pagination.total !==  _compoundEntity.genes.length) {
 
                   // Validate genes against current Filters
-                  var validGenes = _.pluck(geneListResults, 'id');
+                  var validGenes = _.map(geneListResults, 'id');
 
                   _compoundEntity.genes = validGenes;
                 }
@@ -503,7 +502,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
                   _compoundTargetedGenes.push(gene);
                 }
 
-                _compoundTargetedGenes = _.sortByOrder(_compoundTargetedGenes, 'affectedDonorCountFiltered', false);
+                _compoundTargetedGenes = _.orderBy(_compoundTargetedGenes, 'affectedDonorCountFiltered', 'desc');
 
                 deferred.resolve(_compoundTargetedGenes);
 

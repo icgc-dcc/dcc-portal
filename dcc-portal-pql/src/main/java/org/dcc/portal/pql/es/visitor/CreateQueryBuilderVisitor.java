@@ -88,7 +88,6 @@ public class CreateQueryBuilderVisitor extends NodeVisitor<QueryBuilder, QueryCo
     val lookupOpt = createTermsLookup(node);
     if (lookupOpt.isPresent()) {
       val lookup = lookupOpt.get();
-
       return termsLookupQuery(node.getField(), lookup);
     }
 

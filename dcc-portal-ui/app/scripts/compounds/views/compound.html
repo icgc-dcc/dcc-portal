@@ -1,12 +1,12 @@
 <div data-ng-init="compound = CompoundCtrl.getCompound()">
     <div class="h1-wrap">
-        <h1 data-ui-scrollfix="79">
+        <h1 data-ui-scrollpoint="79">
             <span class="t_badge t_badge__compound"></span>
             <span data-ng-bind=":: compound.name"></span>
         </h1>
     </div>
     <div data-scroll-spy="">
-        <aside data-ui-scrollfix="79" class="t_sidenav">
+        <aside data-ui-scrollpoint="79" class="t_sidenav">
             <section>
                 <ul class="t_subnav__items">
                     <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
@@ -174,9 +174,11 @@
                             <translate>No targeted genes found.</translate>
                         </span>
                     </div>
-                    <h3 data-ng-if="! CompoundCtrl.getTargetedCompoundGenes()">
-                        <i class="icon-spinner icon-spin"></i> <translate>Fetching targeted genes...</translate>
-                    </h3>
+                    <div class="empty" data-ng-if="! CompoundCtrl.getTargetedCompoundGenes()">
+                        <h3>
+                            <i class="icon-spinner icon-spin"></i> <translate>Loading targeted genes...</translate>
+                        </h3>
+                    </div>
                     <table class="table table-info" data-ng-if="CompoundCtrl.getTargetedCompoundGenes().length > 0">
                         <tbody>
                             <tr>
@@ -344,7 +346,11 @@
                                     </ul>
                                 </td>
                                 <td data-ng-bind-html="trial.uiStartDate | highlight: CompoundCtrl.tableFilter.clinicalTrials" style="width:6rem; white-space: nowrap;"></td>
-                                <td data-ng-bind-html="trial.uiPhaseName | highlight: CompoundCtrl.tableFilter.clinicalTrials"></td>
+                                <td>
+                                    <div data-ng-repeat="phase in trial.uiPhaseName">
+                                        <span data-ng-bind-html="phase | highlight: CompoundCtrl.tableFilter.clinicalTrials"></span>
+                                    </div>
+                                </td>
                                 <td class="text-wrap" data-ng-bind-html="trial.uiStatusName | highlight: CompoundCtrl.tableFilter.clinicalTrials"></td>
                             </tr>
                         </tbody>

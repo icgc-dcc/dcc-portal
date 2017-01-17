@@ -15,6 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require('./survival-analysis-service.js');
+
 import { renderPlot } from '@oncojs/survivalplot';
 import loadImg from 'load-img';
 import getContext from 'get-canvas-context';
@@ -53,7 +55,7 @@ function svgToPngDataUri(svg, {width, height}) {
       var ctrl = this;
       var graphContainer = $element.find('.survival-graph').get(0);
       var svg = d3.select(graphContainer).append('svg');
-      var tipTemplate = _.template($element.find('.survival-tip-template').html());
+      var tipTemplate = _.template(require('./survival-tip-template.html'));
       var stateStack = [];
       var state = {
         xDomain: undefined,
@@ -68,8 +70,10 @@ function svgToPngDataUri(svg, {width, height}) {
           ], $element.get(0));
       };
 
+      this.isEmpty = () => !ctrl.dataSets || _.every(this.dataSets.map(set => set.donors), _.isEmpty);
+
       var update = function (params) {
-        if (!ctrl.dataSets) {
+        if (ctrl.isEmpty()) {
           return;
         }
 
@@ -277,69 +281,5 @@ function svgToPngDataUri(svg, {width, height}) {
       diseaseFreeStats: diseaseFreeStats
     };
   }
-
-  module
-    .service('SurvivalAnalysisService', function(
-        $q,
-        Restangular,
-        SetService
-      ) {
-
-      function fetchSurvivalData (setIds) {
-        var data = setIds;
-
-        var fetchSurvival = Restangular
-          .one('analysis')
-          .post('survival', data, {}, {'Content-Type': 'application/json'})
-          .then(function (response) {
-            return Restangular.one('analysis/survival/' + response.id).get();
-          });
-
-        var fetchSetsMeta = SetService.getMetaData(setIds);
-
-        return $q.all({
-          survivalData: fetchSurvival,
-          setsMeta: fetchSetsMeta,
-        })
-          .then(function (responses) {
-            return processResponses(responses);
-          });
-      }
-
-      const defaultHeadingMap = {
-        setName: 'donor_set_name',
-        id: 'donor_id',
-        time: 'time',
-        status: 'donor_vital_status',
-        survivalEstimate: 'survival_estimate',
-      };
-
-      function dataSetToTSV (dataSet, headingMap) {
-        var headings = _({})
-          .defaults(defaultHeadingMap, headingMap)
-          .values()
-          .join('\t');
-
-        _.defaults({}, defaultHeadingMap, headingMap);
-
-        var contents = _(dataSet)
-          .map(function (set) {
-            return set.donors.map(function (donor) {
-              return [set.meta.name, donor.id, donor.time, donor.status, donor.survivalEstimate].join('\t');
-            });
-          })
-          .flatten()
-          .join('\n');
-
-        var tsv = headings + '\n' + contents;
-        return tsv;
-      }
-
-      _.extend(this, {
-        fetchSurvivalData,
-        dataSetToTSV
-      });
-
-    });
 
 })();

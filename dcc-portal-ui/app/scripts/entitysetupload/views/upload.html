@@ -1,0 +1,100 @@
+<div class="modal-content">
+
+  <!-- header -->
+  <div class="modal-header clearfix">
+    <h3 class="pull-left">
+      <span><translate>Upload {{ params.entityType | _:'capitalize'}} Set</translate></span>
+    </h3>
+    <button class="pull-right t_button" data-ng-click="cancel()">
+      <i class="icon-cancel"></i>
+    </button>
+  </div>
+
+  <!-- body -->
+  <div class="modal-body set-upload">
+    <div>
+      <span><translate>Type or copy-and-paste a list of {{ params.entityType | _:'capitalize'}} IDs</translate></span>
+
+      <span class="pull-right" data-tooltip-placement="left"
+        tooltip="<li>{{ params.entityType | _:'capitalize' }} identifier: ICGC ID for {{ params.entityType | _:'capitalize' }}. E.g. MU123</li>
+          <li>Delimiters between {{ params.entityType }} identifiers: comma, space or one {{ params.entityType }} per line</li>
+          <li>If you upload a file, the file format should be a text file (.txt, .csv, .tsv)</li>" has-markup>
+        <a href="">
+          <i class="fa fa-question-circle legend-icon"></i>
+        </a>
+      </span>
+      <textarea rows="4"
+        placeholder="{{ params.entityType === 'file' ? 'e.g. FI123' : 'e.g. MU123' }}"
+        data-autofocus data-ng-model="params.entityIds"
+        data-ng-change="verifyInput()">
+      </textarea>
+    </div>
+    <div>
+      <button class="t_button pull-right"
+        data-ng-click="resetAll()"><translate>Clear</translate></button>
+    </div>
+    <br>
+    <div>
+      <div><translate>Or choose a file to upload</translate></div>
+      <span class="t_button btn-file">
+        <translate>Browse</translate> 
+        <input type="file" accept=".tsv,.csv,text/*" 
+          data-file-upload="params.uploadedFile">
+      </span>
+      <span style="margin-left: 5px">{{ params.fileName }}</span>
+    </div>
+    <div>
+      <!-- Main table -->
+      <div data-ng-if="params.entityIdsArray.length">
+        <br>
+        <span>
+          <span data-ng-init="expanded = true" data-ng-click="expanded = !expanded">
+            <a href="">
+              <translate>
+                {{ params.entityIdsTotal }} submitted {{ params.entityType | _:'capitalize'}} identifier(s) mapped to {{ params.entityIdsArray.length }} ICGC {{ params.entityType | _:'capitalize'}} ID(s)
+              </translate>
+              <i class="{{ expanded? 'icon-caret-down' : 'icon-caret-left' }}"></i>
+            </a>
+          </span>
+          <span data-toolbar data-dl="{{params.entityType}}set"></span>
+        </span>
+        <div data-ng-show="expanded">
+          <table class="table table-info" id="{{params.entityType}}set">
+            <thead>
+              <tr>
+                <th colspan="{{ numberOfUiColumns }}" class="text-center"><translate>Submitted</translate></th>
+                <th class="text-center" style="border-left:1px solid"><translate>Mapped</translate></th>
+              </tr>
+              <tr>
+                <td class="text-center" >ICGC ID</td>
+                <td class="text-center" style="border-left:1px solid">ICGC ID</td>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr data-ng-repeat="id in params.entityIdsArray">
+                <td>{{ id }}</td>
+                <td style="border-left:1px solid">{{ id }}</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+      <div data-ng-if="!params.verified && params.entityIds">
+        <br>
+        <span class="alert-error">
+          <i class="icon-attention-1"></i> <translate>No submitted {{ params.entityType | _:'capitalize'}} recognized in the system</translate>
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- footer -->
+  <div class="modal-footer">
+    <button class="t_button" data-ng-click="cancel();"><translate>Cancel</translate></button>
+    <button class="t_button" data-ng-disabled="!params.entityIdsArray.length || !params.verified" data-ng-click="submit();"><translate>Submit</translate></button>
+  </div>
+
+</div>
