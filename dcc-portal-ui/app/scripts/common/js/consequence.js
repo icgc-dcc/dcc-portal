@@ -72,7 +72,7 @@
 
 
     this.precedence = function() {
-      return _.pluck(dataOrdered, 'id');
+      return _.map(dataOrdered, 'id');
     };
 
     this.translate = function(id) {

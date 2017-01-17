@@ -1,9 +1,9 @@
 <div class="h1-wrap">
-    <h1 data-ui-scrollfix=79><span class="t_badge t_badge__mutation"></span>
+    <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__mutation"></span>
         {{ MutationCtrl.mutation.id }}</h1>
 </div>
 <div data-scroll-spy="">
-<aside data-ui-scrollfix=79 class="t_sidenav">
+<aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
             <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a>
@@ -179,7 +179,7 @@
                 <strong>{{MutationCtrl.mutation.affectedDonorCountTotal | number}}</strong>
             </a>
             <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">distinct donors across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(MutationCtrl.projects|pluck:"id").join("\",\"")}}"]}}}'>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(MutationCtrl.projects|_:"map":"id").join("\",\"")}}"]}}}'>
                 <strong>{{MutationCtrl.mutation.affectedProjectCount | number}}</strong>
             </a>
             <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">cancer projects</translate>
@@ -296,19 +296,19 @@
     </div>
 </section>
 <section id="protein">
-    <div class="empty" data-ng-if="MutationCtrl.isPVLoading">
+    <div class="empty" data-ng-if="MutationCtrl.isPVLoading && MutationCtrl.mutation.uiProteinTranscript.length">
         <h3>
             <i class="icon-spinner icon-spin"></i>Loading Protein...
         </h3>
     </div>
-    <div data-ng-if="!MutationCtrl.mutation.uiProteinTranscript.length && !MutationCtrl.isPVLoading" class="empty">
+    <div data-ng-if="!MutationCtrl.mutation.uiProteinTranscript.length" class="empty">
         <h3><translate>No protein coding transcript is affected by this mutation in CDS region.</translate></h3>
     </div>
     <div data-ng-if="MutationCtrl.mutation.uiProteinTranscript.length">
         <h3 data-ng-if="!MutationCtrl.isPVLoading"><translate>Protein</translate></h3>
 
         <form data-ng-init="transcript = MutationCtrl.mutation.uiProteinTranscript[0]">
-            <div data-ng-if="!MutationCtrl.isPVLoading">
+            <div data-ng-show="!MutationCtrl.isPVLoading">
                 <strong><translate>Transcript:</translate> </strong>
                 <select data-ng-model="transcript"
                     data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)'  for t in MutationCtrl.mutation.uiProteinTranscript"></select>

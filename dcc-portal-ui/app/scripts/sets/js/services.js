@@ -40,7 +40,7 @@ import { getDefaultSetSortOrder } from './getDefaultSetSortOrder';
       var result = [];
       items.forEach(function(set) {
         set.intersection.forEach(function(id) {
-          if (_.contains(result, id) === false) {
+          if (_.includes(result, id) === false) {
             result.push(id);
           }
         });

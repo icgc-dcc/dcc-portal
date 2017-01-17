@@ -1,34 +1,34 @@
 require('expose?jQuery!expose?$!jquery');
-require('expose?_!../bower_components/lodash/lodash.js');
+
+global._ = require('lodash');
 
 // Angular Libs
-require('angular/angular.js');
-require('angular-sanitize/angular-sanitize.js');
-require('angular-animate/angular-animate.js');
-require('angular-cookies/angular-cookies.js');
-require('angular-loading-bar/build/loading-bar.js');
+require('expose?angular!angular');
+require('angular-sanitize');
+require('angular-animate');
+require('angular-cookies');
+require('angular-loading-bar');
 require('restangular');
-require('angular-ui-router/release/angular-ui-router.js');
-require('ngInfiniteScroll/build/ng-infinite-scroll.js');
-require('angular-local-storage/dist/angular-local-storage.js');
-require('angularytics/dist/angularytics.js');
-require('angular-ui-utils/scrollfix.js');
+require('angular-ui-router');
+require('ng-infinite-scroll');
+require('angular-local-storage');
+require('angularytics');
+require('angular-ui-scrollpoint');
 require('expose?marked!marked');
 require('angular-marked');
-require('angular-lodash/angular-lodash.js');
-require('angular-bootstrap/ui-bootstrap-tpls.min.js');
-require('angularjs-toaster/toaster.js');
-require('angular-drag-and-drop-lists/angular-drag-and-drop-lists.js');
-require('expose?ZeroClipboard!zeroclipboard/dist/ZeroClipboard.js');
-require('angular-gettext/dist/angular-gettext.min.js');
+require('angular-ui-bootstrap');
+require('angularjs-toaster');
+require('angular-drag-and-drop-lists');
+require('expose?ZeroClipboard!zeroclipboard');
+require('angular-gettext');
 require('angular-xeditable');
 
 // Other App Dependencies
 require('expose?Highcharts!highcharts');
 require('highcharts/modules/no-data-to-display.src.js');
 require('d3/d3.min.js');
-require('Blob/Blob.js');
-require('expose?saveAs!exports?saveAs!FileSaver/FileSaver.min.js');
+require('blob');
+require('expose?saveAs!exports?saveAs!file-saver/FileSaver.min.js');
 require('expose?X2JS!x2js');
 require('bootstrap');
 

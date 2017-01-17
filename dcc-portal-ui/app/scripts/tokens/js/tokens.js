@@ -72,11 +72,11 @@
       }
 
       $scope.isActive = function (s) {
-         return _.contains($scope.selected, s);
+         return _.includes($scope.selected, s);
       };
 
       $scope.toggleScope = function (s) {
-         if (_.contains($scope.selected, s)) {
+         if (_.includes($scope.selected, s)) {
             _.remove($scope.selected, s);
          } else {
             $scope.selected.push(s);
@@ -126,7 +126,7 @@
       };
 
       this.createToken = function (scopes, desc) {
-         var scopeStr = _.pluck(scopes, 'name').join(' ');
+         var scopeStr = _.map(scopes, 'name').join(' ');
          return RestangularNoCache.one('settings')
             .post('tokens', 'scope=' + scopeStr + '&desc=' + desc, {}, {
             'Accept': 'text/plain'

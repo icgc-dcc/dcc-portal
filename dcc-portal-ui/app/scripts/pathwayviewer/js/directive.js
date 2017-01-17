@@ -186,7 +186,7 @@
             if(mutationHighlights && node.isPartOfPathway){
               mutationHighlights.forEach(function (mutationHighlight) {
 
-                if(_.contains(mutationHighlight.dbIds,d.reactomeId)){
+                if(_.includes(mutationHighlight.dbIds,d.reactomeId)){
 
                   if(!mutationHighlight.advQuery){
                     return;
@@ -212,7 +212,7 @@
             // Create list of uniprot ids if we have any
             if(drugHighlights && node.isPartOfPathway){
               drugHighlights.forEach(function (drugHighlight) {
-                if(_.contains(drugHighlight.dbIds,d.reactomeId)){
+                if(_.includes(drugHighlight.dbIds,d.reactomeId)){
                   druggableGenesList.push({
                     symbol: drugHighlight.geneSymbol,
                     id: drugHighlight.geneId,
@@ -227,8 +227,8 @@
             }
 
             var annotatedGeneIds = _.union(
-              _.pluck(mutatedGenesList, 'id'),
-              _.pluck(druggableGenesList, 'id')
+              _.map(mutatedGenesList, 'id'),
+              _.map(druggableGenesList, 'id')
             );
 
             annotatedGeneIds.forEach(function (geneId) {

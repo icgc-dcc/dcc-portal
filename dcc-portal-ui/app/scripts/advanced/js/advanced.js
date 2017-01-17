@@ -638,7 +638,7 @@ angular.module('icgc.advanced.controllers', [
           facets: facets
         });
         _ASDonorService.barDataTypes = HighchartsService.bar({
-          hits: _.map(_.sortByOrder(_ASDonorService.pieDataTypes, 'y', false), (dataType) => ({
+          hits: _.map(_.orderBy(_ASDonorService.pieDataTypes, 'y', 'desc'), (dataType) => ({
             y: dataType.y,
             name: $filter('trans')(dataType.name, 'availableDataTypes'),
             term: dataType.name,
@@ -652,7 +652,7 @@ angular.module('icgc.advanced.controllers', [
           facets: facets
         });
         _ASDonorService.barAnalysisTypes = HighchartsService.bar({
-          hits: _.map(_.sortByOrder(_ASDonorService.pieAnalysisTypes, 'y', false), (analysisType) => ({
+          hits: _.map(_.orderBy(_ASDonorService.pieAnalysisTypes, 'y', 'desc'), (analysisType) => ({
             y: analysisType.y,
             name: $filter('trans')(analysisType.name, 'analysisTypes'),
             term: analysisType.name,
@@ -675,7 +675,7 @@ angular.module('icgc.advanced.controllers', [
           delete filters.donor.id;
         }
         Donors
-          .one(_.pluck(_ASDonorService.donors.hits, 'id').join(','))
+          .one(_.map(_ASDonorService.donors.hits, 'id').join(','))
           .handler
           .one('mutations', 'counts')
           .get({filters: filters})
@@ -802,7 +802,7 @@ angular.module('icgc.advanced.controllers', [
 
       _ASGeneService.mutationCounts = null;
 
-      var geneIds = _.pluck(_ASGeneService.genes.hits, 'id').join(',');
+      var geneIds = _.map(_ASGeneService.genes.hits, 'id').join(',');
       var projectCachePromise = ProjectCache.getData();
 
 
@@ -980,7 +980,7 @@ angular.module('icgc.advanced.controllers', [
 
     const summarizeData = (items) => {
       const count = _.size(items);
-      const firstItem = _.first(items);
+      const firstItem = _.head(items);
 
       if (count < 2) {
         return items;
@@ -989,7 +989,7 @@ angular.module('icgc.advanced.controllers', [
       return {
         name: `Others (${count} Consequence Types)`,
         color: '#999',
-        y: _.sum(items, 'y'),
+        y: _.sumBy(items, 'y'),
         type: firstItem.type,
         facet: firstItem.facet,
         term: _.map(items, 'name')
@@ -1001,13 +1001,13 @@ angular.module('icgc.advanced.controllers', [
         return [];
       }
 
-      const max = _.max (data, (item) => item.y);
+      const max = _.maxBy (data, (item) => item.y);
       const isBelowGroupPercent = (item) => (item.y / max.y) < (2 / 100);
       const separated = _.partition (data, isBelowGroupPercent);
-      const belowGroupPercent = _.first(separated);
+      const belowGroupPercent = _.head(separated);
       const regular = _.last(separated);
 
-      return _.sortByOrder(regular.concat(summarizeData(belowGroupPercent)), 'y', false);
+      return _.orderBy(regular.concat(summarizeData(belowGroupPercent)), 'y', 'desc');
       };
 
     function _initFacets(facets) {

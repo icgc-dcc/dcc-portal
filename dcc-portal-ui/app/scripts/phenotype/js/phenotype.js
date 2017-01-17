@@ -94,7 +94,7 @@
         function buildAnalyses() {
 
           // Globals
-          $scope.setIds = _.pluck($scope.item.results[0].data, 'id');
+          $scope.setIds = _.map($scope.item.results[0].data, 'id');
           $scope.setFilters = $scope.setIds.map(function(id) {
             return PhenotypeService.entityFilters(id);
           });
@@ -287,8 +287,8 @@
     this.buildAnalysis = function(analysis, setMap) {
       var uiTable = [];
       var uiSeries = [];
-      var terms = _.pluck(analysis.data[0].terms, 'term');
-      var setIds = _.pluck(analysis.data, 'id');
+      var terms = _.map(analysis.data[0].terms, 'term');
+      var setIds = _.map(analysis.data, 'id');
 
       // Create 'no data' term
       terms.push('_missing');

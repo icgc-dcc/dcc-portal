@@ -57,7 +57,7 @@
     };
 
     _ctrl.isPCAWG = function(donor) {
-      return _.any(donor.studies, PCAWG.isPCAWGStudy);
+      return _.some(donor.studies, PCAWG.isPCAWGStudy);
     };
 
     _ctrl.donor = donor;
@@ -247,7 +247,7 @@
         return false;
       }
 
-      return _.any(_.pluck(specimen.samples, 'study'), PCAWG.isPCAWGStudy);
+      return _.some(_.map(specimen.samples, 'study'), PCAWG.isPCAWGStudy);
     };
 
     _ctrl.setActive = function (id) {
@@ -382,7 +382,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     function tooltipList (objects, property, oneItemHandler) {
       var uniqueItems = _(objects)
         .map (property)
-        .unique();
+        .uniq();
 
       if (uniqueItems.size() < 2) {
         return _.isFunction (oneItemHandler) ? oneItemHandler() :
@@ -397,7 +397,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     function uniquelyConcat (fileCopies, property) {
       return _(fileCopies)
         .map (property)
-        .unique()
+        .uniq()
         .join(commaAndSpace);
     }
 
@@ -421,7 +421,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
 
     _ctrl.fileAverageSize = function (fileCopies) {
       var count = _.size (fileCopies);
-      return (count > 0) ? _.sum (fileCopies, 'fileSize') / count : 0;
+      return (count > 0) ? _.sumBy (fileCopies, 'fileSize') / count : 0;
     };
 
     _ctrl.export = function() {
@@ -430,11 +430,11 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     };
 
     _ctrl.removeCityFromRepoName = function(repoName) {
-      if (_.contains(repoName, 'CGHub')) {
+      if (_.includes(repoName, 'CGHub')) {
         return 'CGHub';
       }
 
-      if (_.contains (repoName, 'TCGA DCC')) {
+      if (_.includes (repoName, 'TCGA DCC')) {
         return 'TCGA DCC';
       }
 

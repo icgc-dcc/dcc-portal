@@ -111,7 +111,7 @@
     }
 
     if (_ctrl.mutation.hasOwnProperty('consequences') && _ctrl.mutation.consequences.length) {
-      var affectedGeneIds = _.filter(_.pluck(_ctrl.mutation.consequences, 'geneAffectedId'), function (d) {
+      var affectedGeneIds = _.filter(_.map(_ctrl.mutation.consequences, 'geneAffectedId'), function (d) {
         return !_.isUndefined(d);
       });
 
@@ -122,7 +122,7 @@
           include: 'transcripts',
           size: 100
         }).then(function (genes) {
-          var geneTranscripts = _.pluck(genes.hits, 'transcripts');
+          var geneTranscripts = _.map(genes.hits, 'transcripts');
           var mergedTranscripts = [];
           geneTranscripts.forEach(function (t) {
             mergedTranscripts = mergedTranscripts.concat(t);

@@ -279,8 +279,8 @@ require('./setSelection');
      * Add analysis to local storage
      */
     this.addAnalysis = function(analysis, type) {
-      var ids = _.pluck(analysisList, 'id');
-      if (_.contains(ids, analysis.id) === true) {
+      var ids = _.map(analysisList, 'id');
+      if (_.includes(ids, analysis.id) === true) {
         return;
       }
 
@@ -311,9 +311,9 @@ require('./setSelection');
     };
 
     this.remove = function(id) {
-      var ids = _.pluck(analysisList, 'id');
+      var ids = _.map(analysisList, 'id');
 
-      if (_.contains(ids, id)) {
+      if (_.includes(ids, id)) {
         var index = ids.indexOf(id);
         analysisList.splice(index, 1);
         localStorageService.set(ANALYSIS_ENTITY, analysisList);
