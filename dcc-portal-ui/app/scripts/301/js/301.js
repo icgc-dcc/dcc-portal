@@ -17,24 +17,24 @@
 
 'use strict';
 
-angular.module('icgc.304', ['icgc.304.controllers', 'ui.router'])
+angular.module('icgc.301', ['icgc.301.controllers', 'ui.router'])
   .config(function($stateProvider){
-    $stateProvider.state('304', {
-      url: '/304?page',
+    $stateProvider.state('301', {
+      url: '/301?page',
       templateUrl: '/scripts/404/views/404.html',
-      controller: '304Controller as ctrlr'
+      controller: '301Controller as ctrlr'
     });
   });
 
 (function(){
-  angular.module('icgc.304.controllers', [])
-    .controller('304Controller', function($stateParams, Page, $timeout, $window){
+  angular.module('icgc.301.controllers', [])
+    .controller('301Controller', function($stateParams, Page, $timeout, $window){
       const _ctrl = this;
       _ctrl.isRedirect = true;
       _ctrl.pathToGoTo = $stateParams.page;
       _ctrl.timeToRedirect = 5;
 
-      Page.setTitle('304 - Redirecting');
+      Page.setTitle('301 - Redirecting');
       Page.setPage('error');
 
       const processRedirect = () => {

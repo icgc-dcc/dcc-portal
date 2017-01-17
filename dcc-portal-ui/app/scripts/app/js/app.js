@@ -256,7 +256,7 @@
     'icgc.historyManager',
     'icgc.survival',
     'icgc.404',
-    'icgc.304',
+    'icgc.301',
 
     // old
     'app.ui',
@@ -475,16 +475,15 @@
       // Setting the initial language to English CA.
       gettextCatalog.setCurrentLanguage('en_CA');
 
-      const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.url());
-
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound', 'dataRepositories', 'donor', 'beacon', 'project', 'gene']);
       
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         if(error.status === 404) {
+          const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.url());
           let state = '404', page = toState.name;
 
           if(redirect){
-            state = '304';
+            state = '301';
             page = redirect.to;
           }
       
@@ -496,10 +495,11 @@
       });
 
       $rootScope.$on('$stateNotFound', function() {
+        const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.url());
         let  state = '404', page = '';
 
         if(redirect){
-          state = '304';
+          state = '301';
           page = redirect.to;
         }
         
@@ -615,7 +615,7 @@
       let state = '404', page = $location.url();
 
       if(redirect){
-        state = '304';
+        state = '301';
         page = redirect.to;
       }
 
