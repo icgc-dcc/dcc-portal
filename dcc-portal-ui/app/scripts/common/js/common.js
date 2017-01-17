@@ -60,6 +60,9 @@ require('../components');
     };
   });
 
+  module.filter('to_trusted', function($sce) {
+      return (text) => $sce.trustAsHtml(text) ;
+  });
 
 
   module.filter('sum', function () {

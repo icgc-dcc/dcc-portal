@@ -51,7 +51,8 @@
     return {
       restrict: 'E',
       scope: {
-        item: '='
+        item: '=',
+        subtitle: '<',
       },
       templateUrl: '/scripts/phenotype/views/phenotype.result.html',
       controller: function ($scope) {

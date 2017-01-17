@@ -32,7 +32,8 @@
     return {
       restrict: 'E',
       scope: {
-        item: '='
+        item: '=',
+        subtitle: '<',
       },
       controller: 'OncogridController',
       controllerAs: 'OncoCtrl',

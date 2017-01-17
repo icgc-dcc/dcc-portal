@@ -1,1 +1,19 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 294 142"><defs><style>.cls-1{fill:transparent;}.cls-2{fill:#9b315b;}.cls-3{fill:#e9931c;opacity:0.2;}</style></defs><title>ICGC_DA_setop</title><rect class="cls-1" width="294" height="142"/><path class="cls-2" d="M123.42,15.5A37.42,37.42,0,1,1,86,52.92,37.46,37.46,0,0,1,123.42,15.5m0-4a41.42,41.42,0,1,0,41.42,41.42A41.42,41.42,0,0,0,123.42,11.5Z"/><path class="cls-2" d="M168.61,15.5a37.42,37.42,0,1,1-37.42,37.42A37.46,37.46,0,0,1,168.61,15.5m0-4A41.42,41.42,0,1,0,210,52.92,41.42,41.42,0,0,0,168.61,11.5Z"/><path class="cls-2" d="M146,53.16a37.42,37.42,0,1,1-37.42,37.42A37.46,37.46,0,0,1,146,53.16m0-4a41.42,41.42,0,1,0,41.42,41.42A41.42,41.42,0,0,0,146,49.16Z"/><path class="cls-3" d="M127.18,53.68c0-.25,0-.5,0-.75a41.33,41.33,0,0,1,15.33-32.16,37.41,37.41,0,1,0-37.59,64.67A41.43,41.43,0,0,1,127.18,53.68Z"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 20.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 128 120.5" style="enable-background:new 0 0 128 120.5;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#9B315B;}
+</style>
+<title>ICGC_DA_setop</title>
+<circle id="top-left" class="st0" cx="41.4" cy="41.4" r="41.4"/>
+<g>
+	<path id="top-right" class="st0" d="M86.6,0C63.7,0,45.2,18.5,45.2,41.4c0,22.9,18.5,41.4,41.4,41.4c22.9,0,41.4-18.5,41.4-41.4
+		c0,0,0,0,0,0C128,18.6,109.5,0,86.6,0z"/>
+	<path id="bottom" class="st0" d="M64,37.7c-22.9,0-41.4,18.5-41.4,41.4s18.5,41.4,41.4,41.4s41.4-18.5,41.4-41.4S86.9,37.7,64,37.7
+		L64,37.7z"/>
+</g>
+<title>ICGC_DA_setop</title>
+<path id="top-left-diff" class="st0" d="M45.2,42.2c0-0.3,0-0.5,0-0.8c0-14.5,7.5-27.3,18.8-34.7C57.5,2.5,49.8,0,41.4,0
+	C18.5,0,0,18.5,0,41.4c0,16.1,9.2,30,22.6,36.9C22.9,62.5,32,48.9,45.2,42.2z"/>
+</svg>
