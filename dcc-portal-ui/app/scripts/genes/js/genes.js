@@ -113,6 +113,7 @@
     _ctrl.shouldLimitDisplayProjects = true;
     _ctrl.defaultProjectsLimit = 10;
     _ctrl.isPVLoading = true;
+    _ctrl.isPVInitialLoad = true;
     _ctrl.isGVLoading = true;
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 
