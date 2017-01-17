@@ -205,7 +205,7 @@
           minSetCriterium(2),
           maxSetCriterium(3),
           {
-            test: (selectedSets) => _.unique(selectedSets.map(x => x.type)).length === 1,
+            test: (selectedSets) => _.uniq(selectedSets.map(x => x.type)).length === 1,
             message: gettextCatalog.getString('Set types must match'),
           },
         ],
