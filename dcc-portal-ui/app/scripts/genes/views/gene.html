@@ -338,7 +338,7 @@
     </div>
 </section>
 <section id="protein" class="dynamic-height">
-    <div class="empty" data-ng-if="GeneCtrl.isPVLoading">
+    <div class="empty" data-ng-if="GeneCtrl.isPVLoading && GeneCtrl.gene.uiProteinTranscript.length">
         <h3>
             <i class="icon-spinner icon-spin"></i>Loading Protein...
         </h3>
@@ -356,7 +356,7 @@
         <h3 data-ng-if="!GeneCtrl.isPVLoading"><translate>Protein</translate></h3>
 
         <form data-ng-init="transcript = sorted[0]" data-ng-show="GeneCtrl.gene.uiProteinTranscript.length > 0">
-            <div data-ng-if="!GeneCtrl.isPVLoading">
+            <div data-ng-show="!GeneCtrl.isPVLoading">
                 <span><strong><translate>Transcript:</translate> </strong>
                 <select data-ng-model="transcript"
                     data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)' for t in sorted"></select>

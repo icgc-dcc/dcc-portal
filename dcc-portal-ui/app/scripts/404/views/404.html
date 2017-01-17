@@ -1,31 +1,41 @@
 <div class="wrapper">
-  <div class="container">
+  <div class="container container-404">
     <div class="page-not-found-container">
       <h1 class="message-404">
         <span class="header-badge t_badge t_badge_icon t_badge__analysis">
-          <i class="fa fa-exclamation-triangle"></i>
+          <i class="fa fa-exclamation-triangle" data-ng-if="!ctrlr.isRedirect"></i>
+          <i class="fa fa-share" data-ng-if="ctrlr.isRedirect"></i>
         </span>
-        <span data-ng-if="ctrlr.info">
+        <span data-ng-if="ctrlr.info && !ctrlr.isRedirect">
           <span class="page">{{ ctrlr.info.page === 'dataRepositoryFile' ? 'File' : ctrlr.info.page }}</span>
           <span class="id">{{ ctrlr.info.id }}</span> not found!
         </span>
-        <span data-ng-if="!ctrlr.info">
+        <span data-ng-if="!ctrlr.info && !ctrlr.isRedirect">
           Sorry the Page Cannot be Found!
         </span>
+        <span data-ng-if="ctrlr.isRedirect">
+          Looks Like this Page Moved!
+        </span>
       </h1>
-      <p data-ng-if="ctrlr.info">
+      <p data-ng-if="ctrlr.info && !ctrlr.isRedirect">
         Sorry, we couldn't find the page <strong>{{ ctrlr.info.url | replace : ':id' : ctrlr.info.id }}</strong>.<br/><br/>
         If you believe this is an error please contact us at 
         <a href="mailto:dcc-support@icgc.org?subject={{ ctrlr.emailSubject }}">
           <i class="fa fa-envelope"></i> dcc-support@icgc.org
         </a>.
       </p>
-      <p data-ng-if="!ctrlr.info">
+      <p data-ng-if="!ctrlr.info && !ctrlr.isRedirect">
         Sorry, we couldn't find the page <strong>{{ ctrlr.page }}</strong>.<br/><br/>
         If you believe this is an error please contact us at 
         <a href="mailto:dcc-support@icgc.org?subject={{ ctrlr.emailSubject }}">
           <i class="fa fa-envelope"></i> dcc-support@icgc.org
         </a>.
+      </p>
+      <p data-ng-if="ctrlr.isRedirect">
+        <span>We are redirecting you to the requested page in <strong>{{ctrlr.timeToRedirect}}{{ ctrlr.timeToRedirect === 0 ? ' (redirecting)' : ''}}</strong> seconds.</span>
+        <br>
+        <br>
+        <span>Optionally you can also click on <a href="{{ctrlr.pathToGoTo}}">{{ctrlr.pathToGoTo}}</a> to go there now.</span>
       </p>
     </div>
   </div>
