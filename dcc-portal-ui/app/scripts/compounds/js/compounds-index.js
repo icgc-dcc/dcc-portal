@@ -33,8 +33,8 @@ angular.module('icgc.compounds.index', [])
        */
       searchableJsonpaths: '<',
       filterFunction: '<',
-      orderBy: '<',
-      sortOrder: '<',
+      initialOrderBy: '<',
+      initialSortOrder: '<',
     },
     controller: function ($filter, $compile, $scope) {
       this.filter = '';
@@ -85,12 +85,33 @@ angular.module('icgc.compounds.index', [])
         return this.pages()[this.currentPageNumber - 1];
       };
 
-      this.$onInit = update;
+      this.$onInit = function () {
+        update();
+        _.extend(this, {
+          orderBy: this.initialOrderBy,
+          sortOrder: this.initialSortOrder,
+        });
+      }
       this.$onChanges = update;
 
       this.handleFilterChange = (filter) => {
         this.filter = filter;
         this.currentPageNumber = 1;
+      };
+
+      this.handleClickTableHead = (column) => {
+        if (column.isSortable) {
+          const previousOrderBy = this.orderBy;
+          if (column.sortFunction) {
+            this.orderBy = column.sortFunction;
+          } else {
+            this.orderBy = column.dataFormat || column.field;
+            if (!this.orderBy) {
+              console.warn('missing value for this.orderBy');
+            }
+          }
+          this.sortOrder = (previousOrderBy === this.orderBy) ? _.xor([this.sortOrder], ['asc', 'desc'] )[0] : this.initialSortOrder;
+        }
       };
     },
     controllerAs: 'vm',
@@ -144,6 +165,7 @@ angular.module('icgc.compounds.index', [])
           <thead>
             <th
               ng-repeat="column in vm.columns"
+              ng-click="vm.handleClickTableHead(column)"
               bind-html-compile="column.headingFormat ? column.headingFormat(column.heading) : column.heading"
             >
             </th>
@@ -252,8 +274,8 @@ angular.module('icgc.compounds.index', [])
               '$.drugClass',
               '$.atcCodes[*].description',
             ]"
-            order-by="vm.orderBy"
-            sort-order="vm.sortOrder"
+            initial-order-by="vm.orderBy"
+            initial-sort-order="'desc'"
             columns="vm.columns"
           >
           </paginated-table>
@@ -277,7 +299,6 @@ angular.module('icgc.compounds.index', [])
       this.$onChanges = update;
 
       this.orderBy = (row) => row.genes.length;
-      this.sortOrder = 'desc';
 
       this.filters = {};
 
@@ -285,14 +306,7 @@ angular.module('icgc.compounds.index', [])
         {
           heading: 'Name',
           dataFormat: (cell, row, array) => {
-            return `
-              <span
-                data-ng-bind-html="'${row.name}'"
-                data-dd="'${row.name}'">
-                  ${row.name}
-              </span> 
-              (<span data-ng-bind-html="'${row.zincId}'"></span>)
-            `;
+            return `${row.name} (${row.zincId})`;
           }
         },
         {
@@ -321,6 +335,8 @@ angular.module('icgc.compounds.index', [])
         {
           heading: '# Clinical Trials',
           classes: 'text-right',
+          isSortable: true,
+          sortFunction: (row) => row.trials.length,
           dataFormat: (cell, row, array) => {
             return row.trials.length;
           }
