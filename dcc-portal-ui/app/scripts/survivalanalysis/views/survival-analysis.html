@@ -2,7 +2,7 @@
 
   <div class="tool-buttons">
     <button
-      data-tooltip="Reset"
+      data-icgc-tooltip="Reset"
       ng-class="{disabled: !ctrl.canUndo()}"
       class="btn btn-default"
       ng-click="ctrl.handleClickReset()"
@@ -11,7 +11,7 @@
     </button>
 
     <button
-      data-tooltip="Fullscreen"
+      data-icgc-tooltip="Fullscreen"
       class="btn btn-default"
       ng-click="ctrl.isFullScreen() ? ctrl.handleClickExitFullScreen() : ctrl.handleClickEnterFullScreen()"
     >
@@ -21,7 +21,7 @@
 
     <span class="btn-group">
       <button
-        data-tooltip="Export CSV"
+        data-icgc-tooltip="Export CSV"
         class="btn btn-default"
         ng-click="ctrl.onClickExportCsv()"
       >
@@ -29,7 +29,7 @@
       </button>
 
       <button
-        data-tooltip="Export SVG"
+        data-icgc-tooltip="Export SVG"
         class="btn btn-default composite-button"
         ng-click="ctrl.handleClickExportSvg()"
       >
@@ -39,7 +39,7 @@
 
       <button
         ng-if="ctrl.doesSupportPngExport"
-        data-tooltip="Export PNG"
+        data-icgc-tooltip="Export PNG"
         class="btn btn-default composite-button"
         ng-click="ctrl.handleClickExportPng()"
       >

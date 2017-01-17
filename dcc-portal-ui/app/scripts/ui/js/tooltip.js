@@ -149,7 +149,7 @@
   /**
    * Light weight directive for request tooltips
    */
-  module.directive('tooltip', function($timeout) {
+  module.directive('icgcTooltip', function($timeout) {
     return {
       restrict: 'A',
       replace: false,
@@ -160,8 +160,8 @@
 
         element.bind('mouseenter', function() {
           var placement = attrs.tooltipPlacement || 'top';
-
-          if (! attrs.tooltip) {
+          var tooltip = attrs.icgcTooltip
+          if (! tooltip) {
             return;
           }
 
@@ -177,7 +177,7 @@
           tooltipPromise = $timeout(function() {
             scope.$emit('tooltip::show', {
               element: element,
-              text: attrs.tooltip || '???',
+              text: tooltip || '???',
               placement: placement || 'top'
             });
           }, 500);

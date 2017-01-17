@@ -48,15 +48,15 @@
             </th>
             <th rowspan="2" data-sortable data-type="genes" data-field="name"><translate>Name</translate></th>
             <th rowspan="2" data-sortable data-type="genes" data-field="start"><abbr
-                    data-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}"><translate>Location</translate></abbr></th>
+                    data-icgc-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}"><translate>Location</translate></abbr></th>
             <th rowspan="2" data-sortable data-type="genes" data-field="type"><translate>Type</translate></th>
             <th colspan="2" class="text-center"><translate># Donors affected</translate></th>
             <th rowspan="2" class="text-center">
-                <abbr data-tooltip="{{'Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria' | translate}}"
+                <abbr data-icgc-tooltip="{{'Number of Simple Somatic Mutations<br>Filtered by Current Search Criteria' | translate}}"
                       data-tooltip-placement="left"><translate># Mutations</translate></abbr>
             </th>
             <th rowspan="2">
-                <abbr data-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutated gene' | translate }}" 
+                <abbr data-icgc-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutated gene' | translate }}" 
                     data-tooltip-placement="left"
                     style="display:block;">
                     <i class="icon-chart-bar">
@@ -67,11 +67,11 @@
         <tr>
             <th data-sortable data-type="genes" data-field="affectedDonorCountFiltered" data-active="true"
                 data-reversed="true" class="text-center">
-                <abbr data-tooltip="{{'Number of Donors where Gene contains SSM<br>Filtered by Current Search Criteria / unfiltered # donors the gene is mutated.' | translate}}">
+                <abbr data-icgc-tooltip="{{'Number of Donors where Gene contains SSM<br>Filtered by Current Search Criteria / unfiltered # donors the gene is mutated.' | translate}}">
                 <translate>Total</translate></abbr>
             </th>
             <th class="text-center">
-                <abbr data-tooltip="{{'# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}">
+                <abbr data-icgc-tooltip="{{'# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}">
                     <translate>Across all Projects</translate></abbr>
             </th>
         </tr>
@@ -113,7 +113,7 @@
                         style="position: relative">
                             <span style="position: relative">
                                 <a data-tooltip-placement="left"
-                                   data-tooltip="{{ p.projectName }}"
+                                   data-icgc-tooltip="{{ p.projectName }}"
                                    href="/projects/{{p.term}}">{{p.term}}</a>:
                             <a href='/search?filters={{AdvancedCtrl.Gene.projectGeneQuery(p.term, gene.id)}}'>
                                 {{p.count | number}}

@@ -116,7 +116,7 @@
         <th><translate>Experimental Strategy</translate></th>
         <td ng-init="expStrategy = categorization.experimentalStrategy; isEmpty = fileCtrlr.isEmptyString (expStrategy);">
           <span ng-if="isEmpty" ng-bind="fileCtrlr.defaultString" />
-          <abbr ng-if="! isEmpty" tooltip="{{ expStrategy | define }}" ng-bind="expStrategy" />
+          <abbr ng-if="! isEmpty" icgc-tooltip="{{ expStrategy | define }}" ng-bind="expStrategy" />
         </td>
       </tr>
     </table>
@@ -149,7 +149,7 @@
         <th><translate>Reference Name</translate></th>
         <td ng-init="downloadUrl = referenceGenome.downloadUrl">
           <span ng-bind="fileCtrlr.stringOrDefault (referenceGenome.referenceName)" />
-          <a ng-if="downloadUrl" tooltip="Download"
+          <a ng-if="downloadUrl" icgc-tooltip="Download"
             title="{{ downloadUrl }}" href="{{ downloadUrl }}">
             <i class="icon-download" />
             <!-- {{:: downloadUrl }} -->
@@ -202,9 +202,9 @@
           <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.fileName)" />
           <!-- <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.fileMd5sum)" /> -->
           <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.fileFormat)" />
-          <td tooltip="{{:: fileCopy.fileSize | number }} bytes"
+          <td icgc-tooltip="{{:: fileCopy.fileSize | number }} bytes"
             ng-bind="fileCopy.fileSize | bytes" />
-          <td tooltip="{{:: fileCopy.lastModified * 1000 | date: 'medium' }}"
+          <td icgc-tooltip="{{:: fileCopy.lastModified * 1000 | date: 'medium' }}"
             ng-bind="fileCopy.lastModified * 1000 | date: 'mediumDate'" />
 
           <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.repo.name)" />
@@ -212,21 +212,21 @@
           <td style="text-align: center;"
             ng-init="countryCode = fileCtrlr.translateCountryCode (fileCopy.repo.country.toLowerCase())">
             <span class="flag flag-{{ countryCode }}"
-              tooltip="{{ fileCtrlr.countryName (countryCode) }}" />
+              icgc-tooltip="{{ fileCtrlr.countryName (countryCode) }}" />
           </td>
           <td ng-bind="fileCtrlr.stringOrDefault (fileCopy.repo.type)" />
 
           <td style="min-width: 90px"
             ng-init="showMetaData = fileCtrlr.shouldShowMetaData (fileCopy.repo.type); manifestUrl = fileCtrlr.buildManifestUrl (info.id, [fileCopy.repo.name])">
 
-            <a href="{{ manifestUrl }}" tooltip="Download Manifest" target="_blank">
+            <a href="{{ manifestUrl }}" icgc-tooltip="Download Manifest" target="_blank">
               <i class="icon-download" /><translate>Manifest</translate>
             </a>
 
             <span ng-if="showMetaData"
               ng-init="metaDataUrl = fileCtrlr.buildMetaDataUrl (fileCopy, info);">
               <br>
-              <a href="{{ metaDataUrl }}" tooltip="Download Metadata" title="{{ metaDataUrl }}" target="_blank">
+              <a href="{{ metaDataUrl }}" icgc-tooltip="Download Metadata" title="{{ metaDataUrl }}" target="_blank">
                 <i class="icon-external-link"/><!--
                 --><translate>Metadata</translate>
               </a>
@@ -235,7 +235,7 @@
             <span ng-if="fileCopy.repo.type == 'Web Archive'"
               ng-init="dataUrl = fileCtrlr.buildUrl (fileCopy.repo.baseUrl, fileCopy.repo.dataPath, fileCopy.fileName)">
               <br>
-              <a target="_blank" href="{{ dataUrl }}" tooltip="Show Data" title="{{ dataUrl }}">
+              <a target="_blank" href="{{ dataUrl }}" icgc-tooltip="Show Data" title="{{ dataUrl }}">
                 <i class="icon-external-link" /><translate>Data</translate>
               </a>
             </span>
@@ -280,7 +280,7 @@
       <tr>
         <th><translate>Project ID</translate></th>
         <td>
-            <a href="/projects/{{ donorInfo.uiProjectCode }}" tooltip="{{:: donorInfo.uiProjectName }}"
+            <a href="/projects/{{ donorInfo.uiProjectCode }}" icgc-tooltip="{{:: donorInfo.uiProjectName }}"
               ng-bind-html="donorInfo.uiStringProjectCode | highlight: fileCtrlr.tableFilter.donors" />
         </td>
       </tr>

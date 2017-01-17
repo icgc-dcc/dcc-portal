@@ -84,45 +84,45 @@
                 <th rowspan="2" data-sortable data-type="donors" data-field="primarySite"><translate>Site</translate></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="gender"><translate>Gender</translate></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="ageAtDiagnosis" class="text-center">
-                    <abbr data-tooltip="{{'Age at Diagnosis' | translate}}"><translate>Age</translate></abbr>
+                    <abbr data-icgc-tooltip="{{'Age at Diagnosis' | translate}}"><translate>Age</translate></abbr>
                 </th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="tumourStageAtDiagnosis">
-                    <abbr data-tooltip="{{'Tumour Stage at Diagnosis' | translate}}"><translate>Stage</translate></abbr></th>
+                    <abbr data-icgc-tooltip="{{'Tumour Stage at Diagnosis' | translate}}"><translate>Stage</translate></abbr></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="survivalTime" class="text-center">
-                    <abbr data-tooltip="{{'Survival Time in days' | translate}}"><translate has-markup>Survival<br>(days)</translate></abbr>
+                    <abbr data-icgc-tooltip="{{'Survival Time in days' | translate}}"><translate has-markup>Survival<br>(days)</translate></abbr>
                 </th>
                 <th colspan="11" class="text-center"><translate>Available Data Types:</translate></th>
                 <th rowspan="2">
-                    <abbr data-tooltip="{{'Number of SSM<br>Filtered by Current Search Criteria' | translate}}"><translate># Mutations</translate></abbr></th>
+                    <abbr data-icgc-tooltip="{{'Number of SSM<br>Filtered by Current Search Criteria' | translate}}"><translate># Mutations</translate></abbr></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="ssmAffectedGenes" data-active="true"
                     data-reversed="true">
-                    <abbr data-tooltip="{{'Number of Genes with SSM<br>Filtered by Current Search Criteria' | translate}}"
+                    <abbr data-icgc-tooltip="{{'Number of Genes with SSM<br>Filtered by Current Search Criteria' | translate}}"
                           data-tooltip-placement="left"><translate># Genes</translate></abbr>
                 </th>
             </tr>
             <tr>
                 <th class="text-center" data-type="donors" data-field="ssmCount"><abbr
-                        data-tooltip="{{ 'ssm' | datatype }}" class="tiny-header">SSM</abbr></th>
+                        data-icgc-tooltip="{{ 'ssm' | datatype }}" class="tiny-header">SSM</abbr></th>
                 <th class="text-center" data-type="donors" data-field="cnsmExists"><abbr
-                        data-tooltip="{{ 'cnsm' | datatype }}" class="tiny-header">CNSM</abbr></th>
+                        data-icgc-tooltip="{{ 'cnsm' | datatype }}" class="tiny-header">CNSM</abbr></th>
                 <th class="text-center" data-type="donors" data-field="stsmExists"><abbr
-                        data-tooltip="{{ 'stsm' | datatype}}" class="tiny-header">StSM</abbr></th>
+                        data-icgc-tooltip="{{ 'stsm' | datatype}}" class="tiny-header">StSM</abbr></th>
                 <th class="text-center" data-type="donors" data-field="sgvExists"><abbr
-                        data-tooltip="{{ 'sgv' | datatype}}" class="tiny-header">SGV</abbr></th>
+                        data-icgc-tooltip="{{ 'sgv' | datatype}}" class="tiny-header">SGV</abbr></th>
                 <th class="text-center" data-type="donors" data-field="methArrayExists"><abbr
-                        data-tooltip="{{ 'meth_array' | datatype}}" class="tiny-header">METH-A</abbr></th>
+                        data-icgc-tooltip="{{ 'meth_array' | datatype}}" class="tiny-header">METH-A</abbr></th>
                 <th class="text-center" data-type="donors" data-field="methSeqExists"><abbr
-                        data-tooltip="{{ 'meth_seq' | datatype}}" class="tiny-header">METH-S</abbr></th>
+                        data-icgc-tooltip="{{ 'meth_seq' | datatype}}" class="tiny-header">METH-S</abbr></th>
                 <th class="text-center" data-type="donors" data-field="expArrayExists"><abbr
-                        data-tooltip="{{ 'exp_array' | datatype}}" class="tiny-header">EXP-A</abbr></th>
+                        data-icgc-tooltip="{{ 'exp_array' | datatype}}" class="tiny-header">EXP-A</abbr></th>
                 <th class="text-center" data-type="donors" data-field="expSeqExists"><abbr
-                        data-tooltip="{{ 'exp_seq' | datatype}}" class="tiny-header">EXP-S</abbr></th>
+                        data-icgc-tooltip="{{ 'exp_seq' | datatype}}" class="tiny-header">EXP-S</abbr></th>
                 <th class="text-center" data-type="donors" data-field="pexpExists"><abbr
-                        data-tooltip="{{ 'pexp' | datatype}}" class="tiny-header">PEXP</abbr></th>
+                        data-icgc-tooltip="{{ 'pexp' | datatype}}" class="tiny-header">PEXP</abbr></th>
                 <th class="text-center" data-type="donors" data-field="mirnaSeqExists"><abbr
-                        tooltip="{{ 'mirna_seq' | datatype}}" class="tiny-header">miRNA-S</abbr></th>
+                        icgc-tooltip="{{ 'mirna_seq' | datatype}}" class="tiny-header">miRNA-S</abbr></th>
                 <th class="text-center" data-type="donors" data-field="jcnExists"><abbr
-                        data-tooltip="{{ 'jcn' | datatype}}" class="tiny-header">JCN</abbr></th>
+                        data-icgc-tooltip="{{ 'jcn' | datatype}}" class="tiny-header">JCN</abbr></th>
             </tr>
             </thead>
             <tbody>
@@ -138,7 +138,7 @@
                 </td>
                 <td><a href="/donors/{{ donor.id }}">{{ donor.id }}</a></td>
                 <td>
-                    <a data-tooltip="{{ donor.projectName }}" data-tooltip-placement="top" href="/projects/{{ donor.projectId }}">
+                    <a data-icgc-tooltip="{{ donor.projectName }}" data-tooltip-placement="top" href="/projects/{{ donor.projectId }}">
                         {{ donor.projectId }}
                     </a>
                 </td>

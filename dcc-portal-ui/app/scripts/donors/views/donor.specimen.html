@@ -176,7 +176,7 @@
                     <td>
                         <ul>
                             <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
-                            <abbr data-tooltip="{{ item.libraryStrategy | define }}">
+                            <abbr data-icgc-tooltip="{{ item.libraryStrategy | define }}">
                                     <span data-ng-bind-html="item.libraryStrategy | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
                                 </abbr>
                             </li>
@@ -196,7 +196,7 @@
                             <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
                             <i data-ng-if="item.id" style="cursor: pointer" class="icon-file-alt"
                                    data-tooltip-placement="left"
-                                   data-tooltip="{{ item.id }}"></i>
+                                   data-icgc-tooltip="{{ item.id }}"></i>
                                 <span data-ng-if="!item.id">--</span>
                             </li>
                         </ul>

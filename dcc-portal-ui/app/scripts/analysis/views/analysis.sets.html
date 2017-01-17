@@ -34,7 +34,7 @@
     <div style="padding:.5rem 0" data-ng-if="SavedSetController.entitySets.length > 0">
         <button class="t_button t_button__destructive" data-ng-click="SavedSetController.removeSets()"
             data-ng-disabled="SavedSetController.selectedSets.length === 0"
-            data-tooltip="{{'Delete selected sets' | translate}}">
+            data-icgc-tooltip="{{'Delete selected sets' | translate}}">
             <i class="icon-trash"></i><translate>Delete selected</translate>
         </button>
     </div>
@@ -72,7 +72,7 @@
                             {{ item.name }}
                         </span>
                         <i
-                            data-tooltip="{{'Rename set' | translate}}"
+                            data-icgc-tooltip="{{'Rename set' | translate}}"
                             class="icon-pencil"
                             data-ng-click="itemNameForm.$show()"
                             ng-hide="itemNameForm.$visible"
@@ -85,16 +85,16 @@
                     <td data-ng-if="item.state === 'FINISHED'">
                         <span style="float:left; font-size:1.25rem">
                             <span class="t_tools__tool">
-                                <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="SavedSetController.exportSet(item.id)"></i>
+                                <i class="icon-file" data-icgc-tooltip="{{'Export as TSV' | translate}}" data-ng-click="SavedSetController.exportSet(item.id)"></i>
                             </span>
                             <span class="t_tools__tool" data-ng-if="ICGC_SETTINGS.downloadEnabled && item.type==='donor'">
-                                <i data-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="SavedSetController.downloadDonorData(item.id)"></i>
+                                <i data-icgc-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="SavedSetController.downloadDonorData(item.id)"></i>
                             </span>
                             <a data-ng-if="item.type==='donor' || item.type==='file'" class="t_tools__tool"
-                              data-tooltip="{{'View in [[:: dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: SavedSetController.dataRepoTitle} }}" href="{{item.repoLink}}">
+                              data-icgc-tooltip="{{'View in [[:: dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: SavedSetController.dataRepoTitle} }}" href="{{item.repoLink}}">
                               <i class="icon-download-cloud"></i>
                             </a>
-                            <span data-tooltip="{{'Share Saved Set' | translate}}">
+                            <span data-icgc-tooltip="{{'Share Saved Set' | translate}}">
                                 <share-icon data-custom-popup-disclaimer="" data-share-params="SavedSetController.getEntitySetShareParams(item)" class="t_tools__tool"></share-icon>
                             </span>
                         </span>

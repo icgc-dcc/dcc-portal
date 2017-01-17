@@ -14,7 +14,7 @@
                   <i
                     class="icon-cancel pull-right select-list-cancel"
                     data-ng-click="$event.stopPropagation(); ListController.remove(item.id, analysisId);"
-                    data-tooltip="{{'Delete Analysis' | translate}}"
+                    data-icgc-tooltip="{{'Delete Analysis' | translate}}"
                     data-tooltip-placement="right">
                   </i>
                   <span>{{ ListController.analysisName(item.type) }}</span>
@@ -46,7 +46,7 @@
 
         <button class="delete-button t_button t_button__destructive pull-right" data-ng-click="ListController.removeAllAnalyses()" 
                 data-ng-disabled="ListController.analysisList.length === 0"
-                data-tooltip="{{'Delete All Analysis' | translate}}">
+                data-icgc-tooltip="{{'Delete All Analysis' | translate}}">
         <i class="icon-trash"></i> <translate>Delete all</translate>
         </button>        
     </div>

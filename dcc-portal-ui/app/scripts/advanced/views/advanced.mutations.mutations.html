@@ -29,16 +29,16 @@
         <th rowspan="2"></th>
         <th rowspan="2" data-sortable data-type="mutations" data-field="id">ID</th>
         <th rowspan="2">
-            <abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+            <abbr data-icgc-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
                 <translate>DNA change</translate></abbr>
         </th>
         <th rowspan="2" data-sortable data-type="mutations" data-field="type"><translate>Type</translate></th>
         <th rowspan="2">
-            <abbr data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
+            <abbr data-icgc-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
         </th>
         <th class="text-center" colspan="2"><translate># Donors affected</translate></th>
         <th rowspan="2">
-            <abbr data-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutation' | translate }}" 
+            <abbr data-icgc-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutation' | translate }}" 
                 data-tooltip-placement="left"
                 style="display:block;padding-left:5px;">
                 <i class="icon-chart-bar">
@@ -49,10 +49,10 @@
     <tr>
         <th data-sortable data-type="mutations" data-field="affectedDonorCountFiltered" data-active="true"
             data-reversed="true" class="text-center">
-            <abbr data-tooltip="{{'Number of Donors affected by Mutation<br>Filtered by Current Search Criteria / unfiltered # donors the mutation is observed.' | translate}}"><translate>Total</translate></abbr>
+            <abbr data-icgc-tooltip="{{'Number of Donors affected by Mutation<br>Filtered by Current Search Criteria / unfiltered # donors the mutation is observed.' | translate}}"><translate>Total</translate></abbr>
         </th>
         <th class="text-center">
-            <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+            <abbr data-icgc-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
                   data-tooltip-placement="left"><translate>Across all Projects</translate></abbr>
         </th>
     </tr>
@@ -70,7 +70,7 @@
         </td>
         <td><a href='/mutations/{{ mutation.id }}'>{{ mutation.id }}</a></td>
         <td class="t_cell_line_break">chr{{mutation.chromosome}}:g.{{ mutation.start }}{{ mutation.mutation }}</td>
-        <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
+        <td><abbr data-icgc-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
         <td style="max-width: 15rem; white-space: normal">
             <mutation-consequences  items="mutation.consequences"></mutation-consequences>
         </td>
@@ -95,7 +95,7 @@
                     style="position: relative">
                             <span style="position: relative">
                                 <a data-tooltip-placement="left"
-                                   data-tooltip="{{ p.projectName }}"
+                                   data-icgc-tooltip="{{ p.projectName }}"
                                    href="/projects/{{p.term}}">{{p.term}}</a>:
                             <a href='/search?filters={{AdvancedCtrl.Mutation.projectMutationQuery(p.term, mutation.id)}}'>
                                 {{p.count | number}}

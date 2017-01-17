@@ -29,16 +29,16 @@
             <td class="text-right"><a href="{{donorLink}}">{{item.donorCount | number}}</a></td>
             <td style="font-size:1.25rem;min-width:11rem;">
               <span class="t_tools__tool">
-                <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.donorSet)"></i>
+                <i class="icon-file" data-icgc-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.donorSet)"></i>
               </span>
               <span class="t_tools__tool" data-ng-if="ICGC_SETTINGS.downloadEnabled">
-                <i data-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="OncoCtrl.downloadDonorData(item.donorSet)"></i>
+                <i data-icgc-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="OncoCtrl.downloadDonorData(item.donorSet)"></i>
               </span>
               <a class="t_tools__tool"
-                data-tooltip="{{'View in Data Repositores' | translate}}" href="{{repoLink}}">
+                data-icgc-tooltip="{{'View in Data Repositores' | translate}}" href="{{repoLink}}">
                 <i class="icon-download-cloud"></i>
               </a>
-              <span data-tooltip="{{'Share Saved Set' | translate}}">
+              <span data-icgc-tooltip="{{'Share Saved Set' | translate}}">
                 <share-icon data-custom-popup-disclaimer="" data-share-params="donorShare" class="t_tools__tool"></share-icon>
               </span>
             </td>
@@ -49,9 +49,9 @@
             <td class="text-right"><a href="{{geneLink}}">{{item.geneCount | number}}</a></td>
             <td style="font-size:1.25rem;">
               <span class="t_tools__tool">
-                <i class="icon-file" data-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.geneSet)"></i>
+                <i class="icon-file" data-icgc-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.geneSet)"></i>
               </span>
-              <span data-tooltip="{{'Share Saved Set' | translate}}">
+              <span data-icgc-tooltip="{{'Share Saved Set' | translate}}">
                 <share-icon data-custom-popup-disclaimer="" data-share-params="geneShare" class="t_tools__tool"></share-icon>
               </span>
             </td>
@@ -83,38 +83,38 @@
               <td>
                 <span class="btn-group">
                   <button id="reload-button" 
-                    data-tooltip="{{'Reload grid' | translate}}" 
+                    data-icgc-tooltip="{{'Reload grid' | translate}}" 
                     class="btn btn-default btn-onco" 
                     data-ng-click="OncoCtrl.reloadGrid()">
                     <i class="icon-undo"></i>
                   </button>
                   <button id="fullscreen-button" 
-                    data-tooltip="{{'Fullscreen' | translate}}" 
+                    data-icgc-tooltip="{{'Fullscreen' | translate}}" 
                     class="btn btn-default btn-onco" 
                     data-ng-click="OncoCtrl.requestFullScreen()">
                     <i id="og-fullscreen-button" class="icon-resize-full"></i>
                   </button>
                   <button id="cluster-button" 
-                    data-tooltip="{{'Cluster data' | translate}}" 
+                    data-icgc-tooltip="{{'Cluster data' | translate}}" 
                     class="btn btn-default btn-onco" 
                     data-ng-click="OncoCtrl.clusterData()">
                     <i class="icon-sort-alt-down"></i>
                   </button>
                   <button 
                     id="heat-button" 
-                    data-tooltip="{{'Toggle heatmap view' | translate}}" 
+                    data-icgc-tooltip="{{'Toggle heatmap view' | translate}}" 
                     class="btn btn-default btn-onco" 
                     data-ng-click="OncoCtrl.heatMap()">
                     <i class="icon-fire"></i>
                   </button>
                   <button id="grid-button" 
-                    data-tooltip="{{'Toggle grid lines' | translate}}" 
+                    data-icgc-tooltip="{{'Toggle grid lines' | translate}}" 
                     class="btn btn-default btn-onco" 
                     data-ng-click="OncoCtrl.gridLines()">
                     <i class="icon-grid"></i>
                   </button>
                   <button id="crosshair-button" 
-                    data-tooltip="{{'Toggle crosshair' | translate}}" 
+                    data-icgc-tooltip="{{'Toggle crosshair' | translate}}" 
                     class="btn btn-default btn-onco" 
                     data-ng-click="OncoCtrl.crosshair()">
                     <i class="icon-target"></i>
