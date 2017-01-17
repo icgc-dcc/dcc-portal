@@ -20,31 +20,7 @@ angular.module('icgc.compounds.index', [])
       getAll,
     });
   })
-  .directive('compile', ['$compile', function ($compile) {
-      return function(scope, element, attrs) {
-          var ensureCompileRunsOnce = scope.$watch(
-            function(scope) {
-               // watch the 'compile' expression for changes
-              return scope.$eval(attrs.compile);
-            },
-            function(value) {
-              // when the 'compile' expression changes
-              // assign it into the current DOM
-              element.html(value);
-
-              // compile the new DOM and link it to the current
-              // scope.
-              // NOTE: we only compile .childNodes so that
-              // we don't get into infinite loop compiling ourselves
-              $compile(element.contents())(scope);
-                
-              // Use Angular's un-watch feature to ensure compilation only happens once.
-              ensureCompileRunsOnce();
-            }
-        );
-    };
-  }])
-  .component('paginatedTableWrapper', {
+  .component('paginatedTable', {
     bindings: {
       rows: '<',
       columns: '<',
@@ -60,7 +36,7 @@ angular.module('icgc.compounds.index', [])
       orderBy: '<',
       sortOrder: '<',
     },
-    controller: function ($filter) {
+    controller: function ($filter, $compile, $scope) {
       this.filter = '';
 
       const defaultBindings = {
@@ -87,13 +63,13 @@ angular.module('icgc.compounds.index', [])
       const containsString = (target, query) => target.toLowerCase().includes(query.toLowerCase());
 
       const getFilterExpression = (filterFunction, searchableJsonpaths, filter) => (filterFunction
-          ? filterFunction
-          : searchableJsonpaths
-            ? (row, rowIndex, array) => {
-              const searchTargets = _.flattenDeep(searchableJsonpaths.map((path) => jp({json: row, path})));
-              return _.some(searchTargets, target => target && containsString(target, filter))
-            }
-            : filter
+        ? filterFunction
+        : searchableJsonpaths
+          ? (row, rowIndex, array) => {
+            const searchTargets = _.flattenDeep(searchableJsonpaths.map((path) => jp({ json: row, path })));
+            return _.some(searchTargets, target => target && containsString(target, filter))
+          }
+          : filter
       );
 
       this.filteredRows = () => {
@@ -163,6 +139,27 @@ angular.module('icgc.compounds.index', [])
               <translate>No targeted genes found.</translate>
           </span>
         </div>
+
+        <table class="table">
+          <thead>
+            <th
+              ng-repeat="column in vm.columns"
+              bind-html-compile="column.headingFormat ? column.headingFormat(column.heading) : column.heading"
+            >
+            </th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in vm.currentPage()">
+              <td
+                ng-repeat="column in vm.columns"
+                style="{{column.style}}"
+                class="{{column.classes}}"
+                bind-html-compile="column.dataFormat ? column.dataFormat(row[column.field], row, vm.columns) : row[column.field]"
+              >
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         <div class="table-container" ng-transclude></div>
 
@@ -247,7 +244,7 @@ angular.module('icgc.compounds.index', [])
           </div>
         </div>
         <div>
-          <paginated-table-wrapper
+          <paginated-table
             rows="(vm.filteredCompounds) || vm.compounds"
             searchable-jsonpaths="[
               '$.name',
@@ -259,56 +256,13 @@ angular.module('icgc.compounds.index', [])
             sort-order="vm.sortOrder"
             columns="vm.columns"
           >
-            <table class="table">
-              <thead>
-                <th>
-                  Name
-                </th>
-                <th>
-                  ATC Level 4 Description
-                </th>
-                <th>
-                  Compound Class
-                </th>
-                <th>
-                  Targeted Genes
-                </th>
-                <th>
-                  # Clinical Trials
-                </th>
-              </thead>
-              <tbody>
-                <tr ng-repeat="row in $parent.vm.currentPage()" style="">
-                  <td>
-                    <span ng-bind-html="row.name | highlight: $parent.$parent.vm.filter"></span> 
-                    (<span ng-bind-html="row.zincId | highlight: $parent.$parent.vm.filter"></span>)
-                  </td>
-
-                  <td
-                    collapsible-text
-                    style="max-width: 200px;"
-                    ng-bind-html="row.atcCodes | _:'map':'description' | _:'join':', ' | highlight: $parent.$parent.vm.filter"
-                  ></td>
-
-                  <td ng-bind-html="row.drugClass | highlight: $parent.$parent.vm.filter"></td>
-
-                  <td>
-                    {{ row.genes.length }}
-                  </td>
-                  <!--
-                  # genes targetd with bars
-                  100% width would be max length of 
-                  http://local.dcc.icgc.org:9000/api/v1/ui/search/gene-symbols/ENSG00000170827,ENSG00000095303
-                  -->
-
-                  <td ng-bind-html="row.cancerTrialCount | highlight: $parent.$parent.vm.filter"></td>
-                </tr>
-              </tbody>
-            </table>
-          </paginated-table-wrapper>
+          </paginated-table>
         </div>
       </div>
     `,
+    // # genes targetd with bars
+    // 100% width would be max length of 
+    // http://local.dcc.icgc.org:9000/api/v1/ui/search/gene-symbols/ENSG00000170827,ENSG00000095303
     controller: function (Page, CompoundIndexService) {
       Page.setTitle('Compounds');
       Page.setPage('entity');
@@ -326,6 +280,52 @@ angular.module('icgc.compounds.index', [])
       this.sortOrder = 'desc';
 
       this.filters = {};
+
+      this.columns = [
+        {
+          heading: 'Name',
+          dataFormat: (cell, row, array) => {
+            return `
+              <span
+                data-ng-bind-html="'${row.name}'"
+                data-dd="'${row.name}'">
+                  ${row.name}
+              </span> 
+              (<span data-ng-bind-html="'${row.zincId}'"></span>)
+            `;
+          }
+        },
+        {
+          heading: 'ATC Level 4 Description',
+          style: 'max-width: 200px',
+          dataFormat: (cell, row, array) => {
+            return `<div collapsible-text>
+              ${_.map(row.atcCodes, 'description').join(', ')}
+            </div>`;
+          },
+        },
+        {
+          heading: 'Compound Class',
+          field: 'drugClass',
+          dataFormat: (cell, row, array) => {
+            return { fda: 'FDA', world: 'World' }[cell];
+          }
+        },
+        {
+          heading: '# Targed Genes',
+          classes: 'text-right',
+          dataFormat: (cell, row, array) => {
+            return row.genes.length;
+          }
+        },
+        {
+          heading: '# Clinical Trials',
+          classes: 'text-right',
+          dataFormat: (cell, row, array) => {
+            return row.trials.length;
+          }
+        },
+      ];
 
       this.handleFiltersChange = (filters) => {
         const nameRegex = new RegExp(this.filters.name, 'i');
