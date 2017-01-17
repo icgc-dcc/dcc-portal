@@ -256,6 +256,7 @@
     'icgc.historyManager',
     'icgc.survival',
     'icgc.404',
+    'icgc.301',
 
     // old
     'app.ui',
@@ -469,7 +470,7 @@
       }]);
 
     })
-    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog, Settings) {
+    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog, Settings, REDIRECTS) {
       
       // Setting the initial language to English CA.
       gettextCatalog.setCurrentLanguage('en_CA');
@@ -477,8 +478,16 @@
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound', 'dataRepositories', 'donor', 'beacon', 'project', 'gene']);
       
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-        if(error.status === 404){
-          $state.go('404', {page: toState.name, id: toParams.id, url: toState.url}, {location: false});
+        if(error.status === 404) {
+          const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
+          let state = '404', page = toState.name;
+
+          if(redirect){
+            state = '301';
+            page = redirect.to;
+          }
+      
+          $state.go(state, {page, id: toParams.id, url: toState.url}, {location: false});
         } else {
           console.error(error.message);
           console.error(error.stack);
@@ -486,7 +495,15 @@
       });
 
       $rootScope.$on('$stateNotFound', function() {
-        $state.go('404', {}, {location: false});
+        const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
+        let  state = '404', page = '';
+
+        if(redirect){
+          state = '301';
+          page = redirect.to;
+        }
+        
+        $state.go(state, {page}, {location: false});
       });
 
       Settings.get().then(ICGC_SETTINGS => { $rootScope.ICGC_SETTINGS = ICGC_SETTINGS });
@@ -530,11 +547,18 @@
 
   module.constant('API', {
     BASE_URL: $icgcApp.getAPI().getBasePathURL(),
-  });
+  })
+  .constant('REDIRECTS', [
+      {
+        'from': '/icgc-in-the-cloud/guide',
+        'to': 'http://docs.icgc.org/cloud/guide/'
+      }
+    ]
+  );
 
   module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, $compileProvider,
                           AngularyticsProvider, $httpProvider, RestangularProvider,
-                          markedProvider, localStorageServiceProvider, API) {
+                          markedProvider, localStorageServiceProvider, API, REDIRECTS) {
 
     // Disables debugging information
     $compileProvider.debugInfoEnabled(false);
@@ -587,7 +611,17 @@
 
     // If invalid route is requested
     $urlRouterProvider.otherwise(function ($injector, $location){
-      return '/404?page=' + $location.url();
+      const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
+      let state = '404', page = $location.url();
+
+      if(redirect){
+        state = '301';
+        page = redirect.to;
+      }
+
+      $injector.invoke(['$state', function($state) {
+        $state.go(state, {page}, {location: false});
+      }]);
     });
 
     markedProvider.setOptions({ gfm: true });
