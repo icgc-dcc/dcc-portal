@@ -119,7 +119,7 @@
             return;
           }
 
-          ids = _.pluck(projects.hits, 'id');
+          ids = _.map(projects.hits, 'id');
           mutationPromise = GeneSetService.getProjectMutations(ids, mergedGeneSetFilter);
 
           mutationPromise.then(function(projectMutations) {
@@ -143,7 +143,7 @@
             return;
           }
 
-          ids = _.pluck(projects.hits, 'id');
+          ids = _.map(projects.hits, 'id');
 
           donorPromise = GeneSetService.getProjectDonors(ids, mergedGeneSetFilter);
           genePromise = GeneSetService.getProjectGenes(ids, mergedGeneSetFilter);
@@ -262,7 +262,7 @@
           return;
         }
 
-        Genes.one(_.pluck(_ctrl.genes.hits, 'id').join(',')).handler.one('mutations',
+        Genes.one(_.map(_ctrl.genes.hits, 'id').join(',')).handler.one('mutations',
           'counts').get({filters: mergedGeneSetFilter}).then(function (data) {
             _ctrl.genes.hits.forEach(function (g) {
 
@@ -407,7 +407,7 @@
           return;
         }
 
-        Donors.one(_.pluck(_ctrl.donors.hits, 'id').join(',')).handler.one('mutations', 'counts').get({
+        Donors.one(_.map(_ctrl.donors.hits, 'id').join(',')).handler.one('mutations', 'counts').get({
           filters: mergedGeneSetFilter
         }).then(function (data) {
           _ctrl.donors.hits.forEach(function (d) {

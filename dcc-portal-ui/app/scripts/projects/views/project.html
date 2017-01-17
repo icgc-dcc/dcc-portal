@@ -1,7 +1,7 @@
 
 <span data-ng-if="ProjectCtrl.isPendingDonor">
   <div class="h1-wrap">
-      <h1 data-ui-scrollfix=79><span class="t_badge t_badge__project"></span>
+      <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__project"></span>
           {{ProjectCtrl.project.id}}
       </h1>
   </div>
@@ -21,12 +21,12 @@
 
 <span data-ng-if="!ProjectCtrl.isPendingDonor">
 <div class="h1-wrap">
-    <h1 data-ui-scrollfix=79><span class="t_badge t_badge__project"></span>
+    <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__project"></span>
         {{ProjectCtrl.project.name}}
     </h1>
 </div>
 <div data-scroll-spy="">
-<aside data-ui-scrollfix=79 class="t_sidenav">
+<aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
             <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
@@ -341,7 +341,7 @@
     data-ng-class="{'loading': !ProjectGeneCtrl.genes.hits, 'empty': ProjectGeneCtrl.genes.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!ProjectGeneCtrl.genes.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutated Genes...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutated Genes...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectGeneCtrl.genes.hits.length == 0">
@@ -503,7 +503,7 @@
     data-ng-class="{'loading': !ProjectMutationsCtrl.mutations.hits, 'empty': ProjectMutationsCtrl.mutations.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!ProjectMutationsCtrl.mutations.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectMutationsCtrl.mutations.hits.length == 0">
@@ -656,7 +656,7 @@
     data-ng-class="{'loading': !ProjectDonorsCtrl.donors.hits, 'empty': ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0}"
     fix-scroll>
     <h3 data-ng-if="!ProjectDonorsCtrl.donors.hits && ProjectCtrl.project.ssmTestedDonorCount > 0">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Donors...</translate>
     </h3>
 
     <h3 data-ng-if="ProjectDonorsCtrl.donors.hits.length == 0 || ProjectCtrl.project.ssmTestedDonorCount == 0">

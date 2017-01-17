@@ -184,7 +184,7 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
             if(mutationHighlights && node.isPartOfPathway){
               mutationHighlights.forEach(function (mutationHighlight) {
 
-                if(_.contains(mutationHighlight.dbIds,d.reactomeId)){
+                if(_.includes(mutationHighlight.dbIds,d.reactomeId)){
 
                   if(!mutationHighlight.advQuery){
                     return;
@@ -210,7 +210,7 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
             // Create list of uniprot ids if we have any
             if(drugHighlights && node.isPartOfPathway){
               drugHighlights.forEach(function (drugHighlight) {
-                if(_.contains(drugHighlight.dbIds,d.reactomeId)){
+                if(_.includes(drugHighlight.dbIds,d.reactomeId)){
                   druggableGenesList.push({
                     symbol: drugHighlight.geneSymbol,
                     id: drugHighlight.geneId,

@@ -159,9 +159,8 @@
                     'is-selected': AdvancedCtrl.isEntitySelected('donor', donor)
                 }"
                 data-ng-repeat="donor in AdvancedCtrl.Donor.donors.hits track by donor.id"
-                ng-click="AdvancedCtrl.toggleSelectedEntity('donor', donor)"
             >
-                <td>
+                <td ng-click="AdvancedCtrl.toggleSelectedEntity('donor', donor)">
                     <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('donor', donor)"></icgc-checkbox>
                 </td>
                 <td><a href="/donors/{{ donor.id }}">{{ donor.id }}</a></td>

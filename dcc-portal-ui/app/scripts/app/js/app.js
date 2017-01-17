@@ -193,7 +193,7 @@
 
     // angular plugins
     'restangular',
-    'ui.scrollfix',
+    'ui.scrollpoint',
     'ui.bootstrap.modal',
     'ui.bootstrap.position',
     'ui.bootstrap.pagination',
@@ -202,7 +202,6 @@
     'template/pagination/pagination.html',
     'ui.router',
     'infinite-scroll',
-    'angular-lodash',
     'angularytics',
     'angular-loading-bar',
     'hc.marked',
@@ -604,9 +603,9 @@
       if (response.status !== 401 && response.status !== -1) {
         console.error('Response Error: ', toJson (response));
       }
-
+      
       if (response.status === 500) {
-        Notify.setMessage ('' + response.data.message || response.statusText);
+        Notify.setParams(response);
         Notify.showErrors();
       } else if (response.status === 404) {
         console.error(response.data.message);

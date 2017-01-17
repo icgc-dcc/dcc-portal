@@ -83,7 +83,7 @@
             return;
           }
 
-          var _updateSelectedPathway = _.first(
+          var _updateSelectedPathway = _.head(
             _.filter(entityData.results, function (pathway) {
               return pathway.geneSetId === _selectedPathway.geneSetId;
             })
@@ -122,7 +122,7 @@
 
       // Select the first gene set in the pathway as the
       // default value if one exists...
-      var firstGenesetPathway = _.first($scope.pathways);
+      var firstGenesetPathway = _.head($scope.pathways);
 
       if (firstGenesetPathway) {
         $scope.setSelectedPathway(firstGenesetPathway);

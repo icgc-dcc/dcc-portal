@@ -15,6 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { getDefaultSetSortOrder } from './getDefaultSetSortOrder';
+
 (function () {
   'use strict';
 
@@ -38,7 +40,7 @@
       var result = [];
       items.forEach(function(set) {
         set.intersection.forEach(function(id) {
-          if (_.contains(result, id) === false) {
+          if (_.includes(result, id) === false) {
             result.push(id);
           }
         });
@@ -124,11 +126,7 @@
 
       // Set default sort values if necessary
       if (angular.isDefined(params.filters) && !angular.isDefined(params.sortBy)) {
-        if (type === 'donor') {
-          data.sortBy = 'ssmAffectedGenes';
-        } else {
-          data.sortBy = 'affectedDonorCountFiltered';
-        }
+        data.sortBy = getDefaultSetSortOrder(type.toUpperCase());
         data.sortOrder = 'DESCENDING';
       } else {
         data.sortBy = params.sortBy;
@@ -201,6 +199,10 @@
           .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
       }
 
+      const handleError = (error) => {
+        toaster.pop('error', gettextCatalog.getString(`Error saving ${data.name}`), error.message, 0);
+      };
+
       promise.then(function(data) {
         data = data.plain();
         
@@ -213,9 +215,17 @@
           return;
         }
 
+        if (data.state === 'ERROR') {
+          handleError(data);
+          return;
+        }
+
         data.type = data.type.toLowerCase();
         _service.add(data);
         _service.saveSuccessToaster(data.name);
+      })
+      .catch(handleError)
+      .finally(() => {
         toaster.clear(addSetSaving);
       });
       

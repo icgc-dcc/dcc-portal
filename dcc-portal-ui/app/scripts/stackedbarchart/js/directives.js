@@ -60,13 +60,13 @@
           },
           onClick: function(data){
             $scope.$emit('tooltip::hide');
-            if(_.contains($scope.currentPage, 'projects')){
+            if(_.includes($scope.currentPage, 'projects')){
               $location.path(data.link).search({});
             } else {
               let filter = {file: {projectCode: {is: [data.name]}, primarySite: {is: [data.key]}}};
-              if(_.contains($scope.currentPage, 'cloud')){
+              if(_.includes($scope.currentPage, 'cloud')){
                 filter = {file: _.extend(filter.file, {repoName: {is: [$scope.repoName]}})};
-              } else if (_.contains($scope.currentPage, 'pcawg')) {
+              } else if (_.includes($scope.currentPage, 'pcawg')) {
                 filter = {file: _.extend(filter.file, {study: {is: ['PCAWG']}})};
               }
               $location.path('repositories').search('filters', JSON.stringify(filter));
@@ -103,7 +103,7 @@
           $scope.isLoadingData = newValue;
         });
 
-        var svgMountPoint = _.first ($element.find ('.canvas'));
+        var svgMountPoint = _.head ($element.find ('.canvas'));
 
         function shouldShowPlot (data) {
           return ! _.isEmpty (data);
@@ -120,7 +120,7 @@
             }
 
             // Adaptive margin based on char length of labels
-            var max = _.max(_.pluck( $scope.items, 'key').map(function(d) { return d.length }));
+            var max = _.max(_.map( $scope.items, 'key').map(function(d) { return d.length }));
             if (max >= 10) {
               config.margin.bottom += 25;
             }

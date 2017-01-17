@@ -117,7 +117,7 @@
         }
 
         function shouldShowPlot (history) {
-          var projectsWithHistory = _.pluck (history, 'group');
+          var projectsWithHistory = _.map (history, 'group');
           var selectedProjects = $scope.selected;
           var selectedProjectsWithHistory = _.intersection (projectsWithHistory, selectedProjects);
           return ! _.isEmpty (selectedProjectsWithHistory);
