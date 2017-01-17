@@ -32,7 +32,6 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,7 +213,7 @@ public class BrowserRepository {
    * Readability method to build list of biotype filters.
    */
   private static QueryBuilder getBiotypeFilterBuilder(List<String> biotypes) {
-    val biotypeFilter = QueryBuilders.boolQuery();
+    val biotypeFilter = boolQuery();
     for (val biotype : biotypes) {
       biotypeFilter.should(termQuery("biotype", biotype));
     }
@@ -240,7 +239,7 @@ public class BrowserRepository {
    * Builds a FilterBuilder for consequence types
    */
   private static QueryBuilder getConsequenceFilter(List<String> consequenceTypes) {
-    val consequenceFilter = QueryBuilders.boolQuery();
+    val consequenceFilter = boolQuery();
     for (val consequenceType : consequenceTypes) {
       consequenceFilter.should(termQuery("transcript.consequence.consequence_type", consequenceType));
     }
@@ -252,7 +251,7 @@ public class BrowserRepository {
    * Builds a FilterBuilder for project names.
    */
   private static QueryBuilder getProjectFilter(List<String> projects) {
-    val projectFilter = QueryBuilders.boolQuery();
+    val projectFilter = boolQuery();
     for (val project : projects) {
       projectFilter.should(termQuery("ssm_occurrence.project.project_name", project));
     }
@@ -264,7 +263,7 @@ public class BrowserRepository {
    * Builds a QueryBuilder for Functional Impact. This filter is special as Transcripts are nested documents.
    */
   private static QueryBuilder getImpactFilterMutation(List<String> impacts) {
-    val impactOrFilter = QueryBuilders.boolQuery();
+    val impactOrFilter = boolQuery();
     for (val impact : impacts) {
       impactOrFilter.should(termQuery("transcript.functional_impact_prediction_summary", impact));
     }
@@ -277,7 +276,7 @@ public class BrowserRepository {
    * Builds a FilterBuilder for Functional Impact. This filter is special as Transcripts are nested documents.
    */
   private static QueryBuilder getImpactFilterGene(List<String> impacts) {
-    val impactOrFilter = QueryBuilders.boolQuery();
+    val impactOrFilter = boolQuery();
     for (val impact : impacts) {
       impactOrFilter.should(termQuery("donor.ssm.consequence.functional_impact_prediction_summary", impact));
     }

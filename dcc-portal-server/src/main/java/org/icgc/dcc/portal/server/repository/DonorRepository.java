@@ -72,7 +72,6 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -363,7 +362,7 @@ public class DonorRepository implements Repository {
     // can move the createTermsLookupFilter() routine out of TermsLookupRepository.
     val termsLookupFilter = createTermsLookupFilter(mustFilterFieldName, TermLookupType.DONOR_IDS, donorId);
 
-    return QueryBuilders.boolQuery().must(termsLookupFilter);
+    return boolQuery().must(termsLookupFilter);
   }
 
   @Override
