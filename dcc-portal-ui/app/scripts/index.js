@@ -102,4 +102,5 @@ require('./pancancer/js/pancancer.js');
 require('./translations/js/translations.js');
 require('./entitysetupload/js/entitysetupload.js');
 require('./404/js/404.js');
+require('./304/js/304.js');
 

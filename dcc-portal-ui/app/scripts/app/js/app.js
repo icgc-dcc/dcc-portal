@@ -256,6 +256,7 @@
     'icgc.historyManager',
     'icgc.survival',
     'icgc.404',
+    'icgc.304',
 
     // old
     'app.ui',
@@ -469,24 +470,40 @@
       }]);
 
     })
-    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog, Settings) {
+    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog, Settings, REDIRECTS) {
       
       // Setting the initial language to English CA.
       gettextCatalog.setCurrentLanguage('en_CA');
 
+      const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.url());
+
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound', 'dataRepositories', 'donor', 'beacon', 'project', 'gene']);
       
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-        if(error.status === 404){
-          $state.go('404', {page: toState.name, id: toParams.id, url: toState.url}, {location: false});
+        if(error.status === 404) {
+          let state = '404', page = toState.name;
+
+          if(redirect){
+            state = '304';
+            page = redirect.to;
+          }
+      
+          $state.go(state, {page, id: toParams.id, url: toState.url}, {location: false});
         } else {
           console.error(error.message);
           console.error(error.stack);
         }
       });
 
-      $rootScope.$on('$stateNotFound', function() {
-        $state.go('404', {}, {location: false});
+      $rootScope.$on('$stateNotFound', function(e) {
+        let  state = '404', page = '';
+
+        if(redirect){
+          state = '304';
+          page = redirect.to;
+        }
+        
+        $state.go(state, {page}, {location: false});
       });
 
       Settings.get().then(ICGC_SETTINGS => { $rootScope.ICGC_SETTINGS = ICGC_SETTINGS });
@@ -530,11 +547,18 @@
 
   module.constant('API', {
     BASE_URL: $icgcApp.getAPI().getBasePathURL(),
-  });
+  })
+  .constant('REDIRECTS', [
+      {
+        'from': '/icgc-in-the-cloud/guide',
+        'to': 'http://docs.icgc.org/cloud/guide/'
+      }
+    ]
+  );
 
   module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, $compileProvider,
                           AngularyticsProvider, $httpProvider, RestangularProvider,
-                          markedProvider, localStorageServiceProvider, API) {
+                          markedProvider, localStorageServiceProvider, API, REDIRECTS) {
 
     // Disables debugging information
     $compileProvider.debugInfoEnabled(false);
@@ -587,8 +611,16 @@
 
     // If invalid route is requested
     $urlRouterProvider.otherwise(function ($injector, $location){
+      const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.url());
+      let state = '404', page = $location.url();
+
+      if(redirect){
+        state = '304';
+        page = redirect.to;
+      }
+
       $injector.invoke(['$state', function($state) {
-        $state.go('404', {page: $location.url()}, {location: false});
+        $state.go(state, {page}, {location: false});
       }]);
     });
 

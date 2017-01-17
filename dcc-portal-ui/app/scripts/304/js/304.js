@@ -17,32 +17,37 @@
 
 'use strict';
 
-angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
+angular.module('icgc.304', ['icgc.304.controllers', 'ui.router'])
   .config(function($stateProvider){
-    $stateProvider.state('404', {
-      url: '/404?page&id&url',
+    $stateProvider.state('304', {
+      url: '/304?page',
       templateUrl: '/scripts/404/views/404.html',
-      controller: '404Controller as ctrlr'
+      controller: '304Controller as ctrlr'
     });
   });
 
 (function(){
-  angular.module('icgc.404.controllers', [])
-    .controller('404Controller', function($stateParams, Page){
-      var _ctrl = this;
-      _ctrl.info = '';
+  angular.module('icgc.304.controllers', [])
+    .controller('304Controller', function($stateParams, Page, $timeout, $window){
+      const _ctrl = this;
+      _ctrl.isRedirect = true;
+      _ctrl.pathToGoTo = $stateParams.page;
+      _ctrl.timeToRedirect = 5;
 
-      Page.setTitle('404');
+      Page.setTitle('304 - Redirecting');
       Page.setPage('error');
 
-      if($stateParams.page && $stateParams.id && $stateParams.url){
-        _ctrl.info = {page: $stateParams.page, id: $stateParams.id, url: $stateParams.url};
-      }
+      const processRedirect = () => {
+         $timeout(() => {
+           _ctrl.timeToRedirect--;
+           if(_ctrl.timeToRedirect == 0){
+             $window.location.href = _ctrl.pathToGoTo;
+           } else {
+             processRedirect();
+           }
+         },1000);
+       };
 
-      _ctrl.page = $stateParams.page;
-      
-      _ctrl.emailSubject = _ctrl.info ? 
-        'ICGC DCC /' + _ctrl.info.page  + '/' + _ctrl.info.id +' Page Not Found' : 
-        'ICGC DCC Page Not Found' ;
+       processRedirect();
     });
 })();
