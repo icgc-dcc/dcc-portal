@@ -37,7 +37,8 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
       controller: 'PathwayViewerCtrl',
       templateUrl: 'scripts/pathwayviewer/views/viewer.html',
       link: function ($scope, element, attrs, pathwayViewerCtrl) {
-        var showingLegend = false,
+        var controller,
+            showingLegend = false,
             rendered = false,
             zoomedOn = $scope.zooms || [''],
             xml = $scope.items,
@@ -254,9 +255,6 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
           urlPath: $location.url(),
         };
 
-        var controller; // = new pathwayViewerCtrl.ReactomePathway(controllerSettings);
-
-
         $('.pathway-info-controller').on('click',function(){
           hideInfo();
         });
@@ -339,9 +337,8 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
             controller = new ReactomePathway(controllerSettings);
             controller.render(zoomedOn);
 
-            var legendSVGElement = controller.getLegendSVGElement(270, 671);
             d3.select('.pathway-legend-content').append(function(){
-              return legendSVGElement;
+              return controller.getLegendSVGElement(270, 671);
             }).attr('class', 'pathway-legend-svg');
 
             rendered = true;
@@ -404,11 +401,6 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
 
           overlaps = newValue;
           handleRender();
-        });
-
-        // Render legend last to ensure all dependencies are initialized. Timeout of 0 does not work in firefox.
-        $scope.$on(PathwaysConstants.EVENTS.MODEL_READY_EVENT, function() {
-            // TO-DO - finish separation of legend's creation and insertion logic
         });
 
         // Needed to fix url paths for SVGs on url change due to <base> tag required by angular
