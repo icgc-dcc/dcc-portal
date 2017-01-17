@@ -251,7 +251,7 @@ angular.module('app.ui.mutation', []).directive('mutationConsequences', function
 });
 //Mike
 angular.module('icgc.ui.popover', [])
-  .directive('popover', function ($sce) {
+  .directive('icgcPopover', function ($sce) {
     return {
       restrict: 'AE',
       transclude: true,

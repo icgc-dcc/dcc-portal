@@ -194,6 +194,8 @@
     // angular plugins
     'restangular',
     'ui.scrollfix',
+   //'ui.bootstrap.popover',
+    //'ui.bootstrap.tpls',
     'ui.bootstrap.modal',
     'ui.bootstrap.position',
     'ui.bootstrap.pagination',

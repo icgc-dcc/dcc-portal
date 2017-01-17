@@ -60,11 +60,16 @@
 
     _service.getShortUrl = function (params, shouldUseParamsOnlyForRequest) {
 
-      var port = window.location.port ? ':' +  window.location.port : '',
-          defaults = {
-            url: window.location.protocol + '//' + window.location.hostname + 
-            port + window.location.pathname
-          },
+      // var port = window.location.port ? ':' +  window.location.port : '',
+      //     defaults = {
+      //       url: window.location.protocol + '//' + window.location.hostname + 
+      //       port + window.location.pathname
+      //     },
+
+      var port = '8080',
+        defaults = {
+          url: 'https://dev.dcc.icgc.org:' + port + window.location.pathname
+        },
           requestParams = (shouldUseParamsOnlyForRequest === true ? params : $location.search()),
           queryStr = '',
           urlShortnerParams = defaults;
@@ -121,32 +126,35 @@
       _ctrl.active = opt;
     };
 
-    _ctrl.getShortUrl = function(shareParams, shouldUseParamsOnlyForRequest) {
-      _ctrl.shortUrl = '';
+    this.requestShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => Share.getShortUrl(shareParams, shouldUseParamsOnlyForRequest);
+    this.requestShortUrl().then(url => console.log(url));
 
-      Share.getShortUrl(shareParams, shouldUseParamsOnlyForRequest).then(function(url) {
-        _ctrl.shortUrl = url.shortUrl;
+    // _ctrl.getShortUrl = function(shareParams, shouldUseParamsOnlyForRequest) {
+    //   _ctrl.shortUrl = '';
 
-        $modal.open({
-          templateUrl: '/scripts/share/views/share.popup.html',
-          controller: 'SharePopupController',
-          resolve: {
-            shortUrl: function() {
-              return _ctrl.shortUrl;
-            },
-            customPopupDisclaimer: function() {
+    //   Share.getShortUrl(shareParams, shouldUseParamsOnlyForRequest).then(function(url) {
+    //     _ctrl.shortUrl = url.shortUrl;
 
-              if (angular.isDefined($scope.customPopupDisclaimer) && ! $scope.customPopupDisclaimer) {
-                $scope.customPopupDisclaimer = true;
-              }
+    //     $modal.open({
+    //       templateUrl: '/scripts/share/views/share.popup.html',
+    //       controller: 'SharePopupController',
+    //       resolve: {
+    //         shortUrl: function() {
+    //           return _ctrl.shortUrl;
+    //         },
+    //         customPopupDisclaimer: function() {
 
-              return $scope.customPopupDisclaimer || false;
-            }
+    //           if (angular.isDefined($scope.customPopupDisclaimer) && ! $scope.customPopupDisclaimer) {
+    //             $scope.customPopupDisclaimer = true;
+    //           }
 
-          }
-        });
-      });
-    };
+    //           return $scope.customPopupDisclaimer || false;
+    //         }
+
+    //       }
+    //     });
+    //   });
+    // };
 
   });
 })();
