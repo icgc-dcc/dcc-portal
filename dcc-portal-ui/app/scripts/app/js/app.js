@@ -481,7 +481,7 @@
         if(error.status === 404) {
           const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
           let state = '404', page = toState.name;
-          debugger;
+
           if(redirect){
             state = '301';
             page = redirect.to;
@@ -497,7 +497,7 @@
       $rootScope.$on('$stateNotFound', function() {
         const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
         let  state = '404', page = '';
-        debugger;
+
         if(redirect){
           state = '301';
           page = redirect.to;
