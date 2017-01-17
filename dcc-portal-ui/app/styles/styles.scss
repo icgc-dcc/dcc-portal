@@ -17,8 +17,6 @@
  */
 
 //-----------------------------------------------------------------------------
-// Base
-@import "_base/base";
 @import "bootstrap.scss";
 @import "../vendor/styles/slider.css";
 @import "../bower_components/angular-loading-bar/build/loading-bar.css";
@@ -31,6 +29,8 @@ $fa-font-path: '~font-awesome/fonts';
 
 @import "../vendor/styles/genomeviewer/css/style.css";
 
+// Base
+@import "_base/base";
 //-----------------------------------------------------------------------------
 // Layout
 @import "layout";
