@@ -40,7 +40,7 @@ angular.module('icgc.304', ['icgc.304.controllers', 'ui.router'])
       const processRedirect = () => {
          $timeout(() => {
            _ctrl.timeToRedirect--;
-           if(_ctrl.timeToRedirect == 0){
+           if(_ctrl.timeToRedirect === 0){
              $window.location.href = _ctrl.pathToGoTo;
            } else {
              processRedirect();

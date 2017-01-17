@@ -495,7 +495,7 @@
         }
       });
 
-      $rootScope.$on('$stateNotFound', function(e) {
+      $rootScope.$on('$stateNotFound', function() {
         let  state = '404', page = '';
 
         if(redirect){
