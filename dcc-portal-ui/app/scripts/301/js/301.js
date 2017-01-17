@@ -32,7 +32,7 @@ angular.module('icgc.301', ['icgc.301.controllers', 'ui.router'])
       const _ctrl = this;
       _ctrl.isRedirect = true;
       _ctrl.pathToGoTo = $stateParams.page;
-      _ctrl.timeToRedirect = 5;
+      _ctrl.timeToRedirect = 10;
 
       Page.setTitle('301 - Redirecting');
       Page.setPage('error');
