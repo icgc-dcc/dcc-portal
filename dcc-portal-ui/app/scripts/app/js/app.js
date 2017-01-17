@@ -587,7 +587,9 @@
 
     // If invalid route is requested
     $urlRouterProvider.otherwise(function ($injector, $location){
-      return '/404?page=' + $location.url();
+      $injector.invoke(['$state', function($state) {
+        $state.go('404', {page: $location.url()}, {location: false});
+      }]);
     });
 
     markedProvider.setOptions({ gfm: true });
