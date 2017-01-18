@@ -479,7 +479,7 @@
       
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         if(error.status === 404) {
-          const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
+          const redirect = _.find(REDIRECTS, (redirect) => _.startsWith($location.path(), redirect.from));
           let state = '404', page = toState.name;
 
           if(redirect){
@@ -495,7 +495,7 @@
       });
 
       $rootScope.$on('$stateNotFound', function() {
-        const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
+        const redirect = _.find(REDIRECTS, (redirect) => _.startsWith($location.path(), redirect.from));
         let  state = '404', page = '';
 
         if(redirect){
@@ -611,7 +611,7 @@
 
     // If invalid route is requested
     $urlRouterProvider.otherwise(function ($injector, $location){
-      const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
+      const redirect = _.find(REDIRECTS, (redirect) => _.startsWith($location.path(), redirect.from));
       let state = '404', page = $location.url();
 
       if(redirect){
