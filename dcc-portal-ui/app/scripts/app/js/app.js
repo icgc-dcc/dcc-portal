@@ -272,7 +272,7 @@
   ];
 
   const getRedirectObject = (currentUrl) => {
-    const redirect = _.find(REDIRECTS, (redirect) => _.startsWith(currentUrl, redirect.from));
+    const redirect = _.find(REDIRECTS, (redirect) => _.startsWith(currentUrl, redirect.from.replace(/\/$/, "")));
     let state = '404', page = currentUrl;
 
     if(redirect){
