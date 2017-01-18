@@ -259,6 +259,7 @@ public class FileRepository {
     return searchFileCentric(request -> request.setQuery(query), fields);
   }
 
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   public Set<String> findAllDonorIds(@NonNull Query query, final int setLimit) {
     val pqlAst = parse(PQL_CONVERTER.convert(query, FILE));
     val size = query.getSize();
@@ -272,16 +273,23 @@ public class FileRepository {
     // Number of files > max limit, so we must page files in order to ensure we get all donors.
     while (pageNumber <= pageCount) {
       for (val hit : response.getHits()) {
-        val donorIdField = hit.field(DONOR_ID_RAW_FIELD_NAME);
+        val donors = hit.sourceAsMap().get("donors");
+        if (!(donors instanceof List)) {
+          // Donors should be a list, if otherwise then the mapping has changed and this is an internal server error.
+          throw new RuntimeException(format("Unexpected type for donors in files. Expected List, but was of type: %",
+              donors.getClass().getName()));
+        }
 
-        if (null == donorIdField) {
+        if (null == donors || ((List) donors).isEmpty()) {
           // Skips when donorId doesn't appear in the fields.
           log.warn("The Donors array in this document (id: {}) is empty, which is not valid.", hit.getId());
           continue;
         }
 
-        val donorIds = donorIdField.getValues();
-        result.addAll(transform(donorIds, id -> id.toString()));
+        val donorIds = ((List<Map<String, Object>>) donors).stream()
+            .map(d -> d.get("donor_id").toString())
+            .collect(toImmutableList());
+        result.addAll(donorIds);
 
         if (result.size() >= setLimit) {
           return result;
