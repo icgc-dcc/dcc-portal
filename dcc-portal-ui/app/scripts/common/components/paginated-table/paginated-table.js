@@ -87,8 +87,8 @@ angular.module('app.common.components')
     this.handleClickTableHead = (column) => {
       if (column.isSortable) {
         const previousOrderBy = this.orderBy;
-        const newOrderBy = column.sortFunction || column.dataFormat || column.field;
-        invariant(newOrderBy, 'sortable column must have either a field, dataFormat, or sortFunction');
+        const newOrderBy = column.sortFunction || column.field;
+        invariant(newOrderBy, 'sortable column must have either a field or sortFunction');
         this.orderBy = newOrderBy;
         this.sortOrder = (previousOrderBy === newOrderBy) ? _.xor([this.sortOrder], ['asc', 'desc'] )[0] : this.initialSortOrder;
       }
