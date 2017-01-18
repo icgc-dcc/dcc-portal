@@ -119,6 +119,7 @@ angular.module('icgc.advanced.controllers', [
             borderRadiusTopRight: 3,
             cursor: 'pointer',
             stickyTracking: false,
+            colorByPoint: true,
             point: {
               events: {
                 click: function () {
