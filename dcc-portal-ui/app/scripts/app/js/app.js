@@ -264,6 +264,24 @@
     'app.downloader'
   ]);
 
+  const REDIRECTS = [
+    {
+      'from': '/icgc-in-the-cloud/guide',
+      'to': 'http://docs.icgc.org/cloud/guide'
+    }
+  ];
+
+  const getRedirectObject = (currentUrl) => {
+    const redirect = _.find(REDIRECTS, (redirect) => _.startsWith(currentUrl, redirect.from.replace(/\/$/, "")));
+    let state = '404', page = currentUrl;
+
+    if(redirect){
+      state = '301';
+      page = redirect.to;
+    }
+
+    return {state, page};
+  }
   // Fix needed for loading subviews without jumping back to the
   // top of the page:
   // https://github.com/angular-ui/ui-router/issues/110#issuecomment-18348811
@@ -470,7 +488,7 @@
       }]);
 
     })
-    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog, Settings, REDIRECTS) {
+    .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog, Settings) {
       
       // Setting the initial language to English CA.
       gettextCatalog.setCurrentLanguage('en_CA');
@@ -479,15 +497,8 @@
       
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         if(error.status === 404) {
-          const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
-          let state = '404', page = toState.name;
-
-          if(redirect){
-            state = '301';
-            page = redirect.to;
-          }
-      
-          $state.go(state, {page, id: toParams.id, url: toState.url}, {location: false});
+          const redirect = getRedirectObject($location.url());
+          $state.go(redirect.state, {page: redirect.page, id: toParams.id, url: toState.url}, {location: false});
         } else {
           console.error(error.message);
           console.error(error.stack);
@@ -495,15 +506,8 @@
       });
 
       $rootScope.$on('$stateNotFound', function() {
-        const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
-        let  state = '404', page = '';
-
-        if(redirect){
-          state = '301';
-          page = redirect.to;
-        }
-        
-        $state.go(state, {page}, {location: false});
+        const redirect = getRedirectObject($location.url());
+        $state.go(redirect.state, {page: redirect.page}, {location: false});
       });
 
       Settings.get().then(ICGC_SETTINGS => { $rootScope.ICGC_SETTINGS = ICGC_SETTINGS });
@@ -547,18 +551,11 @@
 
   module.constant('API', {
     BASE_URL: $icgcApp.getAPI().getBasePathURL(),
-  })
-  .constant('REDIRECTS', [
-      {
-        'from': '/icgc-in-the-cloud/guide',
-        'to': 'http://docs.icgc.org/cloud/guide/'
-      }
-    ]
-  );
+  });
 
   module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, $compileProvider,
                           AngularyticsProvider, $httpProvider, RestangularProvider,
-                          markedProvider, localStorageServiceProvider, API, REDIRECTS) {
+                          markedProvider, localStorageServiceProvider, API) {
 
     // Disables debugging information
     $compileProvider.debugInfoEnabled(false);
@@ -611,16 +608,9 @@
 
     // If invalid route is requested
     $urlRouterProvider.otherwise(function ($injector, $location){
-      const redirect = _.find(REDIRECTS, (redirect) => redirect.from === $location.path());
-      let state = '404', page = $location.url();
-
-      if(redirect){
-        state = '301';
-        page = redirect.to;
-      }
-
+      const redirect = getRedirectObject($location.url());
       $injector.invoke(['$state', function($state) {
-        $state.go(state, {page}, {location: false});
+        $state.go(redirect.state, {page: redirect.page}, {location: false});
       }]);
     });
 

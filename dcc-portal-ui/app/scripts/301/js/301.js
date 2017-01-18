@@ -28,7 +28,7 @@ angular.module('icgc.301', ['icgc.301.controllers', 'ui.router'])
 
 (function(){
   angular.module('icgc.301.controllers', [])
-    .controller('301Controller', function($stateParams, Page, $timeout, $window){
+    .controller('301Controller', function($stateParams, Page, $timeout, $window, $scope){
       const _ctrl = this;
       _ctrl.isRedirect = true;
       _ctrl.pathToGoTo = $stateParams.page;
@@ -38,7 +38,7 @@ angular.module('icgc.301', ['icgc.301.controllers', 'ui.router'])
       Page.setPage('error');
 
       const processRedirect = () => {
-         $timeout(() => {
+         _ctrl.timer = $timeout(() => {
            _ctrl.timeToRedirect--;
            if(_ctrl.timeToRedirect === 0){
              $window.location.href = _ctrl.pathToGoTo;
@@ -47,6 +47,10 @@ angular.module('icgc.301', ['icgc.301.controllers', 'ui.router'])
            }
          },1000);
        };
+
+       $scope.$on('$destroy',() => {
+         $timeout.cancel(_ctrl.timer);
+       });
 
        processRedirect();
     });
