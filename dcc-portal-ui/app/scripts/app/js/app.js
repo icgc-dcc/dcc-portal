@@ -344,7 +344,7 @@
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         if(error.status === 404) {
           const redirect = getRedirectObject($location.url());
-          $state.go(redirect.state, {page: redirect.page, id: toParams.id, url: toState.url}, {location: false});
+          $state.go(redirect.state, {page: redirect.page, name: toState.name, id: toParams.id, url: toState.url}, {location: false});
         } else {
           console.error(error.message);
           console.error(error.stack);
