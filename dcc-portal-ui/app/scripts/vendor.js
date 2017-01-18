@@ -1,6 +1,9 @@
 require('expose?jQuery!expose?$!jquery');
-
 global._ = require('lodash');
+
+// Polyfills
+const includes = require('array-includes');
+includes.shim();
 
 // Angular Libs
 require('expose?angular!angular');
