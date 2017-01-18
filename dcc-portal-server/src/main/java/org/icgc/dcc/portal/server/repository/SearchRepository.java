@@ -52,10 +52,10 @@ import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.IndicesFilterBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.TypeFilterBuilder;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -189,7 +189,7 @@ public class SearchRepository {
         .setQuery(filteredQuery)
         .setPostFilter(getPostFilter(type));
 
-    log.debug("ES search query is: {}", search);
+    log.info("ES search query is: {}", search);
     val response = search.execute().actionGet();
     log.debug("ES search result is: {}", response);
 
