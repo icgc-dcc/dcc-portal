@@ -96,6 +96,8 @@ angular.module('icgc.compounds.index', [])
       this.columns = [
         {
           heading: 'Name',
+          isSortable: true,
+          sortFunction: (row) => `${row.name} (${row.zincId})`,
           dataFormat: (cell, row, array) => {
             return `${row.name} (${row.zincId})`;
           }
@@ -111,6 +113,7 @@ angular.module('icgc.compounds.index', [])
         },
         {
           heading: 'Compound Class',
+          isSortable: true,
           field: 'drugClass',
           dataFormat: (cell, row, array) => {
             return { fda: 'FDA', world: 'World' }[cell];
@@ -119,6 +122,8 @@ angular.module('icgc.compounds.index', [])
         {
           heading: '# Targed Genes',
           classes: 'text-right',
+          isSortable: true,
+          sortFunction: (row) => row.genes.length,
           dataFormat: (cell, row, array) => {
             return row.genes.length;
           }
