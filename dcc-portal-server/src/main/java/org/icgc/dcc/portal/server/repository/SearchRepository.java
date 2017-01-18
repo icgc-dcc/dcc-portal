@@ -189,7 +189,7 @@ public class SearchRepository {
         .setQuery(filteredQuery)
         .setPostFilter(getPostFilter(type));
 
-    log.info("ES search query is: {}", search);
+    log.debug("ES search query is: {}", search);
     val response = search.execute().actionGet();
     log.debug("ES search result is: {}", response);
 
