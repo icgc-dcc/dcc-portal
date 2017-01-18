@@ -58,6 +58,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import lombok.NoArgsConstructor;
@@ -111,7 +112,7 @@ public class SearchRepository {
       FieldNames.FILE_NAME, FieldNames.INCHIKEY, FieldNames.ID,
       FieldNames.CHEMBL, FieldNames.DRUG_BANK, FieldNames.ATC_CODES, FieldNames.ATC_LEVEL5_CODES);
 
-  private static final Set<String> FIELD_KEYS = FIELDS_MAPPING.get(EntityType.KEYWORD).keySet();
+  private static final Set<String> FIELD_KEYS = ImmutableSet.copyOf(FIELDS_MAPPING.get(EntityType.KEYWORD).values());
   private static final float TIE_BREAKER = 0.7F;
   private static final List<String> SIMPLE_TERM_FILTER_TYPES = ImmutableList.of(
       Types.PATHWAY, Types.CURATED_SET, Types.GO_TERM);
@@ -179,16 +180,17 @@ public class SearchRepository {
     val indicesFilterBuilder = QueryBuilders.indicesQuery(typeBoolFilter, repoIndexName);
     val filteredQuery = boolQuery().must(getQuery(query, type)).filter(indicesFilterBuilder);
 
+    val sourceFields = getFields(query, EntityType.KEYWORD);
     val search = createSearch(type)
         .setSearchType(DFS_QUERY_THEN_FETCH)
         .setFrom(query.getFrom())
         .setSize(query.getSize())
         .setTypes(getSearchTypes(type))
-        .setFetchSource(getFields(query, EntityType.KEYWORD), NO_EXCLUDE)
+        .setFetchSource(sourceFields, NO_EXCLUDE)
         .setQuery(filteredQuery)
         .setPostFilter(getPostFilter(type));
 
-    log.debug("ES search query is: {}", search);
+    log.info("ES search query is: {}", search);
     val response = search.execute().actionGet();
     log.debug("ES search result is: {}", response);
 

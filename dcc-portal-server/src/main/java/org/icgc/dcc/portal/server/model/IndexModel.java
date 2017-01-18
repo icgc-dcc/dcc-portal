@@ -1,7 +1,6 @@
 package org.icgc.dcc.portal.server.model;
 
 import static com.google.common.base.Preconditions.checkState;
-import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 import java.util.EnumMap;
@@ -283,59 +282,59 @@ public class IndexModel {
       "inchikey", "drug_class", "atc_codes_code", "atc_codes_description", "atc_level5_codes",
       "trials_description", "trials_conditions_name", "external_references_drugbank", "external_references_chembl")
       .stream().collect(
-          toMap(field -> IndexType.DRUG_TEXT.id + "." + field, identity()));
+          toMap(field -> IndexType.DRUG_TEXT.id + "." + field, field -> "text." + field));
 
   private static final ImmutableMap<String, String> KEYWORD_FIELDS_MAPPING = ImmutableMap.<String, String> builder()
       // Common
-      .put("id", "id")
-      .put("type", "type")
+      .put("id", "text.id")
+      .put("type", "text.type")
 
       // Gene and project and pathway
-      .put("name", "name")
+      .put("name", "text.name")
 
       // Gene
-      .put("symbol", "symbol")
-      .put("ensemblTranscriptId", "ensemblTranscriptId")
-      .put("ensemblTranslationId", "ensemblTranslationId")
-      .put("synonyms", "synonyms")
-      .put("uniprotkbSwissprot", "uniprotkbSwissprot")
-      .put("omimGene", "omimGene")
-      .put("entrezGene", "entrezGene")
-      .put("hgnc", "hgnc")
+      .put("symbol", "text.symbol")
+      .put("ensemblTranscriptId", "text.ensemblTranscriptId")
+      .put("ensemblTranslationId", "text.ensemblTranslationId")
+      .put("synonyms", "text.synonyms")
+      .put("uniprotkbSwissprot", "text.uniprotkbSwissprot")
+      .put("omimGene", "text.omimGene")
+      .put("entrezGene", "text.entrezGene")
+      .put("hgnc", "text.hgnc")
 
       // Mutation
-      .put("mutation", "mutation")
-      .put("geneMutations", "geneMutations")
-      .put("start", "start")
+      .put("mutation", "text.mutation")
+      .put("geneMutations", "text.geneMutations")
+      .put("start", "text.start")
 
       // Project
-      .put("tumourType", "tumourType")
-      .put("tumourSubtype", "tumourSubtype")
-      .put("primarySite", "primarySite")
+      .put("tumourType", "text.tumourType")
+      .put("tumourSubtype", "text.tumourSubtype")
+      .put("primarySite", "text.primarySite")
 
       // Donor
-      .put("specimenIds", "specimenIds")
-      .put("submittedSpecimenIds", "submittedSpecimenIds")
-      .put("sampleIds", "sampleIds")
-      .put("submittedSampleIds", "submittedSampleIds")
-      .put("projectId", "projectId")
+      .put("specimenIds", "text.specimenIds")
+      .put("submittedSpecimenIds", "text.submittedSpecimenIds")
+      .put("sampleIds", "text.sampleIds")
+      .put("submittedSampleIds", "text.submittedSampleIds")
+      .put("projectId", "text.projectId")
 
       // Donor-file, these are derived from file
-      .put("submittedId", "submittedId")
-      .put("TCGAParticipantBarcode", "TCGAParticipantBarcode")
-      .put("TCGASampleBarcode", "TCGASampleBarcode")
-      .put("TCGAAliquotBarcode", "TCGAAliquotBarcode")
+      .put("submittedId", "text.submittedId")
+      .put("TCGAParticipantBarcode", "text.TCGAParticipantBarcode")
+      .put("TCGASampleBarcode", "text.TCGASampleBarcode")
+      .put("TCGAAliquotBarcode", "text.TCGAAliquotBarcode")
 
       // GO Term
-      .put("altIds", "altIds")
+      .put("altIds", "text.altIds")
 
       // File Repo
-      .put("file_name", "file_name")
-      .put("donor_id", "donor_id")
-      .put("object_id", "object_id")
-      .put("data_type", "data_type")
-      .put("project_code", "project_code")
-      .put("data_bundle_id", "data_bundle_id")
+      .put("file_name", "text.file_name")
+      .put("donor_id", "text.donor_id")
+      .put("object_id", "text.object_id")
+      .put("data_type", "text.data_type")
+      .put("project_code", "text.project_code")
+      .put("data_bundle_id", "text.data_bundle_id")
 
       // Drug-text
       .putAll(DRUG_KEYWORD_FIELDS)
