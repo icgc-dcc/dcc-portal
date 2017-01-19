@@ -42,24 +42,16 @@ angular.module('icgc.compounds.index', [])
           </span>
         </li>
         <li
-          class="t_facets__facet__input"
+          class=""
           ng-transclude
           ng-show="!vm.isCollapsed"
-        >
-          <input
-            class="t_input__block"
-            type="search"
-            ng-model="vm.filters.name"
-            ng-change="vm.handleFiltersChange(vm.filters)"
-            placeholder="e.g. Aspirin, ZINC00003376543"
-          >
-        </li>
+        ></li>
       </ul>
     `
   })
   .component('compoundIndex', {
     template: `
-      <div>
+      <div class="compound-index">
         <div class="h1-wrap">
           <h1 data-ui-scrollfix="79">
             <span class="t_badge t_badge__compound"></span>
@@ -116,23 +108,56 @@ angular.module('icgc.compounds.index', [])
             <collapsible-wrapper
               title="'Class'"
             >
-              <label>
-                <input
-                  class="t_input__block"
-                  type="checkbox"
-                  ng-click="vm.toggleFacetContent('drugClass', 'fda')"
-                ></input>
-                FDA
-              </label>
+              <div
+                ng-class="{
+                  't_facets__facet__terms__active__term__label': vm.filters.drugClass.includes('fda'),
+                  't_facets__facet__terms__inactive__term': !vm.filters.drugClass.includes('fda'),
+                }"
+                data-ng-click="vm.toggleFacetContent('drugClass', 'fda')"
+                style="padding: 0;"
+              >
+                  <span
+                    class="t_facets__facet__terms__inactive__term__label"
+                    data-tooltip="FDA"
+                    data-tooltip-placement="overflow"
+                  >
+                    <i
+                      ng-class="{
+                        'icon-ok': vm.filters.drugClass.includes('fda'),
+                        'icon-check-empty': !vm.filters.drugClass.includes('fda'),
+                      }"
+                    ></i>
+                    <translate>
+                      <span>FDA</span>
+                    </translate>
+                  </span>
+             </div>
 
-              <label>
-                <input
-                  class="t_input__block"
-                  type="checkbox"
-                  ng-click="vm.toggleFacetContent('drugClass', 'world')"
-                ></input>
-                World
-              </label>
+             <div
+                ng-class="{
+                  't_facets__facet__terms__active__term__label': vm.filters.drugClass.includes('world'),
+                  't_facets__facet__terms__inactive__term': !vm.filters.drugClass.includes('world'),
+                }"
+                data-ng-click="vm.toggleFacetContent('drugClass', 'world')"
+                style="padding: 0;"
+              >
+                  <span
+                    class="t_facets__facet__terms__inactive__term__label"
+                    data-tooltip="World"
+                    data-tooltip-placement="overflow"
+                  >
+                    <i
+                      ng-class="{
+                        'icon-ok': vm.filters.drugClass.includes('world'),
+                        'icon-check-empty': !vm.filters.drugClass.includes('world'),
+                      }"
+                    ></i>
+                    <translate>
+                      <span>World</span>
+                    </translate>
+                  </span>
+             </div>
+
             </collapsible-wrapper>
           </aside>
           <article>
