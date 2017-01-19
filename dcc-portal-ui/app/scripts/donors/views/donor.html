@@ -1,5 +1,5 @@
 <div class="h1-wrap">
-    <h1 data-ui-scrollfix=79><span class="t_badge t_badge__donor"></span>
+    <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__donor"></span>
         {{ DonorCtrl.donor.id }}
         <pcawg-badge data-ng-if="DonorCtrl.isPCAWG(DonorCtrl.donor)"></pcawg-badge>
     </h1>
@@ -19,7 +19,7 @@
 
 <span data-ng-if="!DonorCtrl.isPendingDonor">
 <div data-scroll-spy="">
-<aside data-ui-scrollfix=79 class="t_sidenav">
+<aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
             <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
@@ -264,7 +264,7 @@
          data-ng-if="DonorCtrl.donor.state === 'live'"
          data-ng-controller="DonorMutationsCtrl as DonorMutationsCtrl"
          data-ng-class="{'loading': !DonorMutationsCtrl.mutations.hits, 'empty': DonorMutationsCtrl.mutations.hits.length == 0}">
-    <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits"><i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
+    <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits"><i class="icon-spinner icon-spin"></i> <translate>Loading Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="DonorMutationsCtrl.mutations.hits.length == 0"><translate>No Mutations Reported.</translate></h3>
@@ -413,7 +413,7 @@
 
     <h3 data-ng-if="!DonorFilesCtrl.files.hits">
         <i class="icon-spinner icon-spin"></i>
-        <translate>Fetching Files...</translate>
+        <translate>Loading Files...</translate>
     </h3>
 
     <h3 data-ng-if="DonorFilesCtrl.files.hits.length == 0"><translate>No Files Found.</translate></h3>

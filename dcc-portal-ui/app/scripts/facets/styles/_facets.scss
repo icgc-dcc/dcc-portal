@@ -21,10 +21,25 @@ $foregroundRed: #ff654b;
     size: 1.1rem;
     weight: 300;
   }
+
+  .t_facets_facet_search_icon{
+    i{
+      font-size: 1.5rem;
+    }
+  }
+
+  .t_facets__facet__search{
+    input{
+      font-size: 1rem;
+    }
+  }
 }
 
 .t_facets__facet__title_active {
   border-left-color: $orangeLight;
+  .t_facets_facet_search_icon{
+    margin-right: -.5rem;
+  }
 }
 
 .t_facets__facet__title__label {
@@ -317,5 +332,5 @@ $togglerFontSize: 10px;
 }
 
 .t_facet_location_search{
-  margin: 0px 0px 10px 0px;
+  margin: 10px 0px 10px 0px;
 }

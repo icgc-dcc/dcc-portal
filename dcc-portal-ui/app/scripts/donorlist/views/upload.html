@@ -23,17 +23,17 @@
         </a>
       </span>
 
-      <div class="set-input">
-        <textarea rows="4"
-          placeholder="{{ isInRepositoryFile ? 'e.g. DO35741, SP107417, SA517428, ICGC_MB111, cce62116-3dcd-400d-ada0-9839ca02466e
+
+      <textarea rows="4"
+        placeholder="{{ isInRepositoryFile ? 'e.g. DO35741, SP107417, SA517428, ICGC_MB111, cce62116-3dcd-400d-ada0-9839ca02466e
   ' : 'e.g. DO45299, SP119250, SA553002, PCSI_0083, TARGET-10-PASLZM-04A' }}"
-          data-autofocus data-ng-model="params.rawText"
-          data-ng-change="verifyDonorInput()">
-        </textarea>
-        <i class="icon-cancel"
-          data-ng-if="params.rawText"
-          data-ng-click="resetAll()"></i>
-      </div>
+        data-autofocus data-ng-model="params.rawText"
+        data-ng-change="verifyDonorInput()">
+      </textarea>
+    </div>
+    <div>
+      <button class="t_button pull-right"
+        data-ng-click="resetAll()"><translate>Clear</translate></button>
     </div>
 
     <br>

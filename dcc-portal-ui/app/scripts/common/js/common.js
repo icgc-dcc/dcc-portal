@@ -60,13 +60,16 @@ require('../components');
     };
   });
 
+  module.filter('to_trusted', function($sce) {
+      return (text) => $sce.trustAsHtml(text) ;
+  });
 
 
   module.filter('sum', function () {
     return function (items, param) {
       var ret = null;
       if (angular.isArray(items)) {
-        ret = _.reduce(_.pluck(items, param), function (sum, num) {
+        ret = _.reduce(_.map(items, param), function (sum, num) {
           return sum + num;
         });
       }
@@ -80,6 +83,7 @@ require('../components');
       var input = arguments[0];
       var method = arguments[1];
       invariant(_.isString(method), 'The first argument must be a string that specifies a lodash method name');
+      invariant(_[method], `_.${method} does not exist`);
       var args = Array.prototype.slice.call(arguments, 2);
       return _[method].apply(null, [input].concat(args));
     };
@@ -188,7 +192,7 @@ require('../components');
         selfLoadState.isLoading = val;
       },
       addContributingLoadState: function (loadState) {
-        if (_.contains(contributingLoadStates, loadState)) {
+        if (_.includes(contributingLoadStates, loadState)) {
           console.warn('load state is already in contributing loadStates, this shouldnt happen');
           return;
         }

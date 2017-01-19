@@ -85,12 +85,12 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
           return items.map (enrichDatum);
         }
 
-        var firstItem = _.first (items);
+        var firstItem = _.head (items);
 
         return {
           name: 'Others (' + count + ' ' + $attrs.heading + 's)',
           color: '#999',
-          y: _.sum (items, 'y'),
+          y: _.sumBy (items, 'y'),
           type: firstItem.type,
           facet: firstItem.facet,
           term: _.map (items, 'name')
@@ -104,7 +104,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
 
         // Separates data into two groups, one with a defined 'name' attribute & one without.
         var separated = _.partition (data, 'name');
-        var withName = _.first (separated);
+        var withName = _.head (separated);
         var withoutName = _.last (separated).map (function (datum) {
           datum.color = '#E0E0E0';
           datum.term = null;
@@ -112,7 +112,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
           return datum;
         });
 
-        var max = _.max (withName, function (datum) {
+        var max = _.maxBy (withName, function (datum) {
           return datum.y;
         });
 
@@ -122,7 +122,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
 
         // Further seperation per the rule of isBelowGroupPercent()
         separated = _.partition (withName, isBelowGroupPercent);
-        var belowGroupPercent = _.first (separated);
+        var belowGroupPercent = _.head (separated);
         var regular = _.last (separated);
 
         // Combines all the groups into one collection.

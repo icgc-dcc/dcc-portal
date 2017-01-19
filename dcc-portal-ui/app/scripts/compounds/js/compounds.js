@@ -244,7 +244,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
           _drugClass = compound.drugClass || '--',
           _cancerTrialCount = compound.cancerTrialCount || '--',
           _atcCodes = _arrayOrEmptyArray(compound.atcCodes),
-          _genes = _.filter(_.pluck(_arrayOrEmptyArray(compound.genes), 'ensemblGeneId'),
+          _genes = _.filter(_.map(_arrayOrEmptyArray(compound.genes), 'ensemblGeneId'),
             function(id) {
               return id !== null && id.length > 0;
             }),
@@ -480,7 +480,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
                 if (geneList.pagination.total !==  _compoundEntity.genes.length) {
 
                   // Validate genes against current Filters
-                  var validGenes = _.pluck(geneListResults, 'id');
+                  var validGenes = _.map(geneListResults, 'id');
 
                   _compoundEntity.genes = validGenes;
                 }
@@ -506,7 +506,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
                   _compoundTargetedGenes.push(gene);
                 }
 
-                _compoundTargetedGenes = _.sortByOrder(_compoundTargetedGenes, 'affectedDonorCountFiltered', false);
+                _compoundTargetedGenes = _.orderBy(_compoundTargetedGenes, 'affectedDonorCountFiltered', 'desc');
 
                 deferred.resolve(_compoundTargetedGenes);
 

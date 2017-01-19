@@ -15,6 +15,8 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { getDefaultSetSortOrder } from './getDefaultSetSortOrder';
+
 (function () {
   'use strict';
 
@@ -38,7 +40,7 @@
       var result = [];
       items.forEach(function(set) {
         set.intersection.forEach(function(id) {
-          if (_.contains(result, id) === false) {
+          if (_.includes(result, id) === false) {
             result.push(id);
           }
         });
@@ -92,10 +94,12 @@
    */
   module.constant('SetServiceConstants', {
     SET_EVENTS: {
-      SET_ADD_EVENT: 'event.set.added'
+      SET_ADD_EVENT: 'event.set.added',
+      SET_REMOVE_EVENT: 'event.set.removed',
+      SET_CHANGE_EVENT: 'event.set.changed',
     }
   }).service('SetService',
-    function ($window, $location, $q, $timeout, Restangular, RestangularNoCache, API, SetServiceConstants,
+    function ($window, $location, $q, $timeout, Restangular, $rootScope, RestangularNoCache, API, SetServiceConstants,
               localStorageService, toaster, Extensions, Page, FilterService, RouteInfoService, gettextCatalog) {
 
     var LIST_ENTITY = 'entity';
@@ -122,11 +126,7 @@
 
       // Set default sort values if necessary
       if (angular.isDefined(params.filters) && !angular.isDefined(params.sortBy)) {
-        if (type === 'donor') {
-          data.sortBy = 'ssmAffectedGenes';
-        } else {
-          data.sortBy = 'affectedDonorCountFiltered';
-        }
+        data.sortBy = getDefaultSetSortOrder(type.toUpperCase());
         data.sortOrder = 'DESCENDING';
       } else {
         data.sortBy = params.sortBy;
@@ -199,6 +199,10 @@
           .post(undefined, data, {async: 'false'}, {'Content-Type': 'application/json'});
       }
 
+      const handleError = (error) => {
+        toaster.pop('error', gettextCatalog.getString(`Error saving ${data.name}`), error.message, 0);
+      };
+
       promise.then(function(data) {
         data = data.plain();
         
@@ -211,13 +215,18 @@
           return;
         }
 
+        if (data.state === 'ERROR') {
+          handleError(data);
+          return;
+        }
+
         data.type = data.type.toLowerCase();
-
         _service.add(data);
-        
         _service.saveSuccessToaster(data.name);
+      })
+      .catch(handleError)
+      .finally(() => {
         toaster.clear(addSetSaving);
-
       });
       
       return promise;
@@ -227,6 +236,7 @@
       Restangular.one('entityset', setId).customPUT(`name=${newName}`, null, null, {'Content-Type': 'application/x-www-form-urlencoded'});
       setList.find(x => x.id === setId).name = newName;
       localStorageService.set(LIST_ENTITY, setList);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT);
     };
 
     _service.modifySet = async (existingSet, entitysetDefinition, operation) => {
@@ -345,13 +355,7 @@
         }
 
         data.type = data.type.toLowerCase();
-
-        setList = localStorageService.get(LIST_ENTITY) || [];
-        setList.unshift(data);
-        _service.refreshList();
-
-        localStorageService.set(LIST_ENTITY, setList);
-
+        _service.add(data);
         _service.saveSuccessToaster(data.name);
         toaster.clear(addSetSaving);
       });
@@ -428,6 +432,8 @@
         return ids.indexOf(list.id) >= 0;
       });
       localStorageService.set(LIST_ENTITY, setList);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_REMOVE_EVENT);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT);
       return true;
     };
 
@@ -436,6 +442,8 @@
       setList.unshift(entityset);
       _service.refreshList();
       localStorageService.set(LIST_ENTITY, setList);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_ADD_EVENT);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT);
     };
 
     _service.update = (entityset) => {
@@ -448,6 +456,8 @@
         return list.id === id;
       });
       localStorageService.set(LIST_ENTITY, setList);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_REMOVE_EVENT);
+      $rootScope.$broadcast(_service.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT);
       return true;
     };
 

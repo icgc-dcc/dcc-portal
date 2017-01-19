@@ -24,6 +24,7 @@
     function ($scope, $filter, Facets, HighchartsService, ProjectCache, ValueTranslator, LocationService) {
  
       $scope.resetPaginationOnChange = _.isUndefined($scope.resetPaginationOnChange) ? true : $scope.resetPaginationOnChange;  
+      $scope.search = {};
 
     // Translation on UI is slow, do in here
     function addTranslations (terms, facetName, missingText) {
@@ -37,7 +38,7 @@
           term.label = missingText;
         }
 
-        if (_.contains (['projectId', 'projectCode'], facetName)) {
+        if (_.includes (['projectId', 'projectCode'], facetName)) {
           ProjectCache.getData().then (function (cache) {
             term.tooltip = cache[termName];
           });
@@ -180,7 +181,10 @@
         iconGetter: '&iconGetter',
         showWhenEmpty: '<',
 
-        resetPaginationOnChange: '<'
+        resetPaginationOnChange: '<',
+
+        //Search Config
+        searchIconShowLimit : '@'
       },
       transclude: true,
       templateUrl: '/scripts/facets/views/terms.html',

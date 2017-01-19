@@ -63,7 +63,7 @@ angular.module('icgc.advanced.controllers', [
     .controller('AdvancedCtrl',
     function ($scope, $rootScope, $state, $modal, Page, AdvancedSearchTabs, LocationService, AdvancedDonorService, // jshint ignore:line
               AdvancedGeneService, AdvancedMutationService, SetService, CodeTable, Restangular, FilterService,
-              RouteInfoService, FacetConstants, Extensions, SurvivalAnalysisLaunchService, gettextCatalog) {
+              RouteInfoService, FacetConstants, Extensions, SurvivalAnalysisLaunchService, gettextCatalog, Facets) {
 
       var _controller = this,
           dataRepoRouteInfo = RouteInfoService.get ('dataRepositories'),
@@ -84,6 +84,73 @@ angular.module('icgc.advanced.controllers', [
       _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
       _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
       _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
+
+      _controller.createChartConfig = (entityType, entityFacet, entityFormatter) => ({
+        chart: {
+          type: 'column',
+          marginTop: 20,
+          backgroundColor: 'transparent',
+          spacingTop: 2,
+        },
+        xAxis: {
+          labels: {
+            formatter: () => ''
+          },
+        },
+        yAxis: {
+          gridLineColor: 'transparent',
+          endOnTick: false,
+          lineWidth: 1,
+          labels: {
+            formatter: entityFormatter
+          },
+          title: {
+            align: 'high',
+            offset: 0,
+            y: -10,
+            rotation: 0
+          }
+        },
+        plotOptions: {
+          series: {
+            minPointLength: 5,
+            maxPointWidth: 20,
+            borderRadiusTopLeft: 3,
+            borderRadiusTopRight: 3,
+            cursor: 'pointer',
+            stickyTracking: false,
+            colorByPoint: true,
+            point: {
+              events: {
+                click: function () {
+                  if (angular.isArray(this.term)) {
+                    Facets.setTerms({
+                      type: entityType,
+                      facet: entityFacet,
+                      terms: this.term
+                    });
+                  } else {
+                    Facets.toggleTerm({
+                      type: entityType,
+                      facet: entityFacet,
+                      term: this.term
+                    });
+                  }
+                  $scope.$apply();
+                }
+              }
+            }
+          }
+        }
+      });
+
+      _controller.donorDataTypeChartConfig = _controller.createChartConfig('donor', 'availableDataTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
+      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig('donor', 'analysisTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
+      _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig('mutation', 'consequenceType', function () { 
+        if(this.value > 1000000){ return `${this.value / 1000000}M`}
+        else if(this.value > 1000){ return `${this.value / 1000}K`}
+        else{ return this.value;}
+      });
 
       // to check if a set was previously selected and if its still in effect
       const updateSetSelection = (entity, entitySets) => {
@@ -312,7 +379,7 @@ angular.module('icgc.advanced.controllers', [
 
         });
 
-        $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+        $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
           _controller.donorSets = _.cloneDeep(SetService.getAllDonorSets());
           _controller.geneSets = _.cloneDeep(SetService.getAllGeneSets());
           _controller.mutationSets = _.cloneDeep(SetService.getAllMutationSets());
@@ -521,7 +588,7 @@ angular.module('icgc.advanced.controllers', [
   // interface for facet initialization via <service>.init(), and hits initialization via <service>.renderBodyTab()
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   .service('AdvancedDonorService', // Advanced Donor Service
-    function(Page, LocationService, HighchartsService, Donors, AdvancedSearchTabs, Extensions, $q) {
+    function(Page, LocationService, HighchartsService, Donors, AdvancedSearchTabs, Extensions, $q, $filter) {
 
       var _ASDonorService = this;
 
@@ -571,10 +638,28 @@ angular.module('icgc.advanced.controllers', [
           facet: 'availableDataTypes',
           facets: facets
         });
+        _ASDonorService.barDataTypes = HighchartsService.bar({
+          hits: _.map(_.orderBy(_ASDonorService.pieDataTypes, 'y', 'desc'), (dataType) => ({
+            y: dataType.y,
+            name: $filter('trans')(dataType.name, 'availableDataTypes'),
+            term: dataType.name,
+          })),
+          xAxis: 'name',
+          yValue: 'y'
+        });
         _ASDonorService.pieAnalysisTypes = HighchartsService.pie({
           type: 'donor',
           facet: 'analysisTypes',
           facets: facets
+        });
+        _ASDonorService.barAnalysisTypes = HighchartsService.bar({
+          hits: _.map(_.orderBy(_ASDonorService.pieAnalysisTypes, 'y', 'desc'), (analysisType) => ({
+            y: analysisType.y,
+            name: $filter('trans')(analysisType.name, 'analysisTypes'),
+            term: analysisType.name,
+          })),
+          xAxis: 'name',
+          yValue: 'y'
         });
       }
 
@@ -591,7 +676,7 @@ angular.module('icgc.advanced.controllers', [
           delete filters.donor.id;
         }
         Donors
-          .one(_.pluck(_ASDonorService.donors.hits, 'id').join(','))
+          .one(_.map(_ASDonorService.donors.hits, 'id').join(','))
           .handler
           .one('mutations', 'counts')
           .get({filters: filters})
@@ -718,7 +803,7 @@ angular.module('icgc.advanced.controllers', [
 
       _ASGeneService.mutationCounts = null;
 
-      var geneIds = _.pluck(_ASGeneService.genes.hits, 'id').join(',');
+      var geneIds = _.map(_ASGeneService.genes.hits, 'id').join(',');
       var projectCachePromise = ProjectCache.getData();
 
 
@@ -879,13 +964,10 @@ angular.module('icgc.advanced.controllers', [
       };
   })
   .service('AdvancedMutationService', function (Page, LocationService, HighchartsService, Mutations,
-    Occurrences, Projects, Donors, AdvancedSearchTabs, Extensions, ProjectCache, $q) {
+    Occurrences, Projects, Donors, AdvancedSearchTabs, Extensions, ProjectCache, $q, $filter) {
 
     var _ASMutationService = this,
         _projectCachePromise = ProjectCache.getData();
-
-
-
 
     function _initOccurrences(occurrences) {
         occurrences.hits.forEach(function(occurrence) {
@@ -897,11 +979,52 @@ angular.module('icgc.advanced.controllers', [
       _ASMutationService.occurrences = occurrences;
     }
 
+    const summarizeData = (items) => {
+      const count = _.size(items);
+      const firstItem = _.head(items);
+
+      if (count < 2) {
+        return items;
+      }
+
+      return {
+        name: `Others (${count} Consequence Types)`,
+        color: '#999',
+        y: _.sumBy(items, 'y'),
+        type: firstItem.type,
+        facet: firstItem.facet,
+        term: _.map(items, 'name')
+      };
+    };
+
+    const transformConsequenceData = (data) => {
+      if (_.isEmpty(data)) {
+        return [];
+      }
+
+      const max = _.maxBy (data, (item) => item.y);
+      const isBelowGroupPercent = (item) => (item.y / max.y) < (2 / 100);
+      const separated = _.partition (data, isBelowGroupPercent);
+      const belowGroupPercent = _.head(separated);
+      const regular = _.last(separated);
+
+      return _.orderBy(regular.concat(summarizeData(belowGroupPercent)), 'y', 'desc');
+      };
+
     function _initFacets(facets) {
       _ASMutationService.pieConsequences = HighchartsService.pie({
         type: 'mutation',
         facet: 'consequenceType',
         facets: facets
+      });
+      _ASMutationService.barConsequences = HighchartsService.bar({
+        hits: _.map(transformConsequenceData(_ASMutationService.pieConsequences), (consequence) => ({
+            y: consequence.y,
+            name: $filter('trans')(consequence.name, 'consequenceType'),
+            term: consequence.term ? consequence.term : consequence.name,
+        })),
+        xAxis: 'name',
+        yValue: 'y'
       });
       _ASMutationService.piePlatform = HighchartsService.pie({
         type: 'mutation',

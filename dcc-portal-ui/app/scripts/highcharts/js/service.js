@@ -330,6 +330,10 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
 
       data.y = hit[params.yValue];
 
+      if(hit.term) {
+        data.term = hit.term;
+      }
+
       if (hit.colour) {
         data.color = hit.colour;
       }

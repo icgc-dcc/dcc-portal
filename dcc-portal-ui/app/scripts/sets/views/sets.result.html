@@ -4,9 +4,10 @@
         <share-button></share-button>
     </span>
 </h3>
+<h5 class="analysis-subtitle"> {{ subtitle }} </h5>
 
 <div data-ng-if="!item || item.state === 'IN_PROGRESS'">
-    <h1 class="text-center"><i class="icon-spinner icon-spin" style="font-size:5rem"></i></h1>
+    <span class="text-center"><i class="icon-spinner icon-spin"></i> Loading Analysis...</span>
 </div>
 <div data-ng-if="isDeprecated" class="alert-error">
     <i class="icon-attention"></i>
