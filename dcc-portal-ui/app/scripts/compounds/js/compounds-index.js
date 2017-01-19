@@ -52,8 +52,8 @@ angular.module('icgc.compounds.index', [])
   .component('compoundIndex', {
     template: `
       <div class="compound-index">
-        <div class="h1-wrap">
-          <h1 data-ui-scrollfix="79">
+        <div class="h1-wrap" >
+          <h1 data-ui-scrollpoint="79">
             <span class="t_badge t_badge__compound"></span>
             <span>Compounds</span>
           </h1>
