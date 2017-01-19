@@ -17,6 +17,46 @@ angular.module('icgc.compounds.index', [])
       getAll,
     });
   })
+  .component('collapsibleWrapper', {
+    bindings: {
+      title: '<',
+      isCollapsed: '<'
+    },
+    transclude: true,
+    controller: function () {
+    },
+    controllerAs: 'vm',
+    template: `
+      <ul class="t_facets__facet">
+        <li
+          class="t_facets__facet__title"
+          ng-click="vm.isCollapsed = !vm.isCollapsed"
+        >
+          <span class="t_facets__facet__title__label">
+            <i
+              data-ng-class="{
+                'icon-caret-down': !vm.isCollapsed,
+                'icon-caret-right': vm.isCollapsed,
+            }"></i>
+            {{vm.title}}
+          </span>
+        </li>
+        <li
+          class="t_facets__facet__input"
+          ng-transclude
+          ng-show="vm.isCollapsed"
+        >
+          <input
+            class="t_input__block"
+            type="search"
+            ng-model="vm.filters.name"
+            ng-change="vm.handleFiltersChange(vm.filters)"
+            placeholder="e.g. Aspirin, ZINC00003376543"
+          >
+        </li>
+      </ul>
+    `
+  })
   .component('compoundIndex', {
     template: `
       <div>
@@ -28,34 +68,50 @@ angular.module('icgc.compounds.index', [])
         </div>
         <div class="content">
           <aside class="t_sidebar">
-            <div>
-              Compound
+            <collapsible-wrapper
+              title="'Compound'"
+            >
               <input
+                class="t_input__block"
+                type="search"
                 ng-model="vm.filters.name"
                 ng-change="vm.handleFiltersChange(vm.filters)"
-              ></input>
-            </div>
-            <div>
-              Targeted Gene
+                placeholder="e.g. Aspirin, ZINC00003376543"
+              >
+            </collapsible-wrapper>
+
+            <collapsible-wrapper
+              title="'Targeted Gene'"
+            >
               <input
+                class="t_input__block"
                 ng-model="vm.filters.gene"
                 ng-change="vm.handleFiltersChange(vm.filters)"
+                placeholder="e.g. BRAF"
               ></input>
-            </div>
-            <div>
-              ATC Code / Description
+            </collapsible-wrapper>
+
+            <collapsible-wrapper
+              title="'ATC Code / Description'"
+            >
               <input
+                class="t_input__block"
                 ng-model="vm.filters.atc"
                 ng-change="vm.handleFiltersChange(vm.filters)"
+                placeholder="e.g. L01X1, kinase inhibitors"
               ></input>
-            </div>
-            <div>
-              Clinical Trial Condition
+            </collapsible-wrapper>
+
+            <collapsible-wrapper
+              title="'Clinical Trial Condition'"
+            >
               <input
+                class="t_input__block"
                 ng-model="vm.filters.clinicalTrialCondition"
                 ng-change="vm.handleFiltersChange(vm.filters)"
+                placeholder="e.g. leukemia, ovarian"
               ></input>
-            </div>
+            </collapsible-wrapper>
           </aside>
           <article>
             <section>
