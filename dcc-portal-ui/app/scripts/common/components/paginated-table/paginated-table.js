@@ -94,6 +94,8 @@ angular.module('app.common.components')
         this.currentPageNumber = 1;
       }
     };
+
+    this.isSortingOnColumn = (column) => [column.sortFunction, column.field].includes(this.orderBy);
   },
   controllerAs: 'vm',
   transclude: true,

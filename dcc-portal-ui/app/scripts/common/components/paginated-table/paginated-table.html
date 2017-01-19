@@ -44,8 +44,22 @@
       <th
         ng-repeat="column in vm.columns"
         ng-click="vm.handleClickTableHead(column)"
-        bind-html-compile="column.headingFormat ? column.headingFormat(column.heading) : column.heading"
+        ng-style="{
+          cursor: column.isSortable ? 'pointer' : 'default'
+        }"
       >
+        <span bind-html-compile="column.headingFormat ? column.headingFormat(column.heading) : column.heading"></span>
+        <i
+          ng-if="column.isSortable"
+          ng-class="{
+            'icon-sort': !vm.isSortingOnColumn(column),
+            'icon-sort-up': vm.isSortingOnColumn(column) && vm.sortOrder === 'asc',
+            'icon-sort-down': vm.isSortingOnColumn(column) && vm.sortOrder === 'desc',
+          }"
+          ng-style="{
+            color: vm.isSortingOnColumn(column) ? 'inherit' : 'hsl(0, 0%, 80%)'
+          }"
+        ></i>
       </th>
     </thead>
     <tbody>
