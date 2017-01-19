@@ -26,50 +26,54 @@ angular.module('icgc.compounds.index', [])
             <span>Compounds</span>
           </h1>
         </div>
-        <div>
-          <div>
-            Compound
-            <input
-              ng-model="vm.filters.name"
-              ng-change="vm.handleFiltersChange(vm.filters)"
-            ></input>
-          </div>
-          <div>
-            Targeted Gene
-            <input
-              ng-model="vm.filters.gene"
-              ng-change="vm.handleFiltersChange(vm.filters)"
-            ></input>
-          </div>
-          <div>
-            ATC Code / Description
-            <input
-              ng-model="vm.filters.atc"
-              ng-change="vm.handleFiltersChange(vm.filters)"
-            ></input>
-          </div>
-          <div>
-            Clinical Trial Condition
-            <input
-              ng-model="vm.filters.clinicalTrialCondition"
-              ng-change="vm.handleFiltersChange(vm.filters)"
-            ></input>
-          </div>
-        </div>
-        <div>
-          <paginated-table
-            rows="(vm.filteredCompounds) || vm.compounds"
-            searchable-jsonpaths="[
-              '$.name',
-              '$.zincId',
-              '$.drugClass',
-              '$.atcCodes[*].description',
-            ]"
-            initial-order-by="vm.orderBy"
-            initial-sort-order="'desc'"
-            columns="vm.columns"
-          >
-          </paginated-table>
+        <div class="content">
+          <aside class="t_sidebar">
+            <div>
+              Compound
+              <input
+                ng-model="vm.filters.name"
+                ng-change="vm.handleFiltersChange(vm.filters)"
+              ></input>
+            </div>
+            <div>
+              Targeted Gene
+              <input
+                ng-model="vm.filters.gene"
+                ng-change="vm.handleFiltersChange(vm.filters)"
+              ></input>
+            </div>
+            <div>
+              ATC Code / Description
+              <input
+                ng-model="vm.filters.atc"
+                ng-change="vm.handleFiltersChange(vm.filters)"
+              ></input>
+            </div>
+            <div>
+              Clinical Trial Condition
+              <input
+                ng-model="vm.filters.clinicalTrialCondition"
+                ng-change="vm.handleFiltersChange(vm.filters)"
+              ></input>
+            </div>
+          </aside>
+          <article>
+            <section>
+              <paginated-table
+                rows="(vm.filteredCompounds) || vm.compounds"
+                searchable-jsonpaths="[
+                  '$.name',
+                  '$.zincId',
+                  '$.drugClass',
+                  '$.atcCodes[*].description',
+                ]"
+                initial-order-by="vm.orderBy"
+                initial-sort-order="'desc'"
+                columns="vm.columns"
+              >
+              </paginated-table>
+            </section>
+          </article>
         </div>
       </div>
     `,
@@ -99,7 +103,11 @@ angular.module('icgc.compounds.index', [])
           isSortable: true,
           sortFunction: (row) => `${row.name} (${row.zincId})`,
           dataFormat: (cell, row, array) => {
-            return `${row.name} (${row.zincId})`;
+            return `
+              <a ui-sref="compound({compoundId: '${row.zincId}'})">
+                ${row.name} (${row.zincId})
+              </a>
+            `;
           }
         },
         {
@@ -125,7 +133,13 @@ angular.module('icgc.compounds.index', [])
           isSortable: true,
           sortFunction: (row) => row.genes.length,
           dataFormat: (cell, row, array) => {
-            return row.genes.length;
+            const filtersValue = JSON.stringify({gene:{compoundId:{is: [row.zincId] }}})
+              .replace(/"/g, '&quot;');
+            return `
+              <a ui-sref="advanced.gene({filters: '${filtersValue}'})">
+                ${row.genes.length}
+              </a>
+            `;
           }
         },
         {
@@ -134,7 +148,11 @@ angular.module('icgc.compounds.index', [])
           isSortable: true,
           sortFunction: (row) => row.trials.length,
           dataFormat: (cell, row, array) => {
-            return row.trials.length;
+            return `
+              <a ui-sref="compound({compoundId: '${row.zincId}', '#': 'trials'})">
+                ${row.trials.length}
+              </a>
+            `;
           }
         },
       ];
