@@ -175,7 +175,7 @@ angular.module('icgc.compounds.index', [])
                     '$.drugClass',
                     '$.atcCodes[*].description',
                   ]"
-                  initial-order-by="vm.orderBy"
+                  initial-sort-column-id="'geneCount'"
                   initial-sort-order="'desc'"
                   columns="vm.columns"
                   sticky-header="true"
@@ -211,6 +211,7 @@ angular.module('icgc.compounds.index', [])
 
       this.columns = [
         {
+          id: 'name',
           heading: 'Name',
           isSortable: true,
           sortFunction: (row) => `${row.name} (${row.zincId})`,
@@ -223,6 +224,7 @@ angular.module('icgc.compounds.index', [])
           }
         },
         {
+          id: 'atc',
           heading: 'ATC Level 4 Description',
           style: 'max-width: 200px',
           dataFormat: (cell, row, array) => {
@@ -232,6 +234,7 @@ angular.module('icgc.compounds.index', [])
           },
         },
         {
+          id: 'compoundClass',
           heading: 'Compound Class',
           isSortable: true,
           field: 'drugClass',
@@ -240,6 +243,7 @@ angular.module('icgc.compounds.index', [])
           }
         },
         {
+          id: 'geneCount',
           heading: '# Targed Genes',
           classes: 'text-right',
           isSortable: true,
@@ -255,6 +259,7 @@ angular.module('icgc.compounds.index', [])
           }
         },
         {
+          id: 'trialCount',
           heading: '# Clinical Trials',
           classes: 'text-right',
           isSortable: true,
@@ -268,8 +273,6 @@ angular.module('icgc.compounds.index', [])
           }
         },
       ];
-
-      this.orderBy = _.find(this.columns, {heading: '# Targed Genes'}).sortFunction;
       
       this.toggleFacetContent = (facet, classType) => {
         this.filters[facet] = _.xor((this.filters[facet] || []), [classType]);

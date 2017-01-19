@@ -16,7 +16,7 @@ angular.module('app.common.components')
      */
     searchableJsonpaths: '<',
     filterFunction: '<',
-    initialOrderBy: '<',
+    initialSortColumnId: '<',
     initialSortOrder: '<',
     shouldExportCSV: '<',
     stickyHeader: '<',
@@ -60,7 +60,9 @@ angular.module('app.common.components')
 
     this.filteredRows = () => {
       const filteredRows = getFilteredRows(this.filter);
-      return this.orderBy ? _.orderBy(filteredRows, this.orderBy, this.sortOrder) : filteredRows;
+      const column = _.find(this.columns, {id: this.sortColumnId});
+      const iteratee = column.sortFunction || column.field;
+      return _.orderBy(filteredRows, iteratee, this.sortOrder);
     };
 
     this.pages = () => {
@@ -74,10 +76,11 @@ angular.module('app.common.components')
     this.$onInit = function () {
       update();
       _.extend(this, {
-        orderBy: this.initialOrderBy,
+        sortColumnId: this.initialSortColumnId,
         sortOrder: this.initialSortOrder,
       });
-    }
+    };
+
     this.$onChanges = update;
 
     this.handleFilterChange = (filter) => {
@@ -87,16 +90,13 @@ angular.module('app.common.components')
 
     this.handleClickTableHead = (column) => {
       if (column.isSortable) {
-        const previousOrderBy = this.orderBy;
-        const newOrderBy = column.sortFunction || column.field;
-        invariant(newOrderBy, 'sortable column must have either a field or sortFunction');
-        this.orderBy = newOrderBy;
-        this.sortOrder = (previousOrderBy === newOrderBy) ? _.xor([this.sortOrder], ['asc', 'desc'] )[0] : this.initialSortOrder;
+        this.sortOrder = (column.id === this.sortColumnId) ? _.xor([this.sortOrder], ['asc', 'desc'] )[0] : this.initialSortOrder;
+        this.sortColumnId = column.id;
         this.currentPageNumber = 1;
       }
     };
 
-    this.isSortingOnColumn = (column) => [column.sortFunction, column.field].includes(this.orderBy);
+    this.isSortingOnColumn = (column) => column.id === this.sortColumnId;
   },
   controllerAs: 'vm',
   transclude: true,
