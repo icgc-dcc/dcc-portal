@@ -284,6 +284,7 @@ angular.module('icgc.compounds.index', [])
           ]);
         });
 
+        $location.replace();
         $location.search(this.filters);
       };
     },
