@@ -3,7 +3,7 @@ import _ from 'lodash';
 angular.module('icgc.compounds.index', [])
   .config(function ($stateProvider) {
     $stateProvider.state('compound-index', {
-      url: '/compound',
+      url: '/compound?name&gene&atc&clinicalTrialCondition&drugClass',
       template: '<compound-index></compound-index>',
       reloadOnSearch: false,
     });
@@ -162,6 +162,7 @@ angular.module('icgc.compounds.index', [])
           </aside>
           <article>
             <section>
+              <share-button></share-button>
               <paginated-table
                 rows="(vm.filteredCompounds) || vm.compounds"
                 searchable-jsonpaths="[
@@ -178,13 +179,12 @@ angular.module('icgc.compounds.index', [])
             </section>
           </article>
         </div>
-        <pre>{{ vm.filters | json }}</pre>
       </div>
     `,
     // # genes targetd with bars
     // 100% width would be max length of 
     // http://local.dcc.icgc.org:9000/api/v1/ui/search/gene-symbols/ENSG00000170827,ENSG00000095303
-    controller: function (Page, CompoundIndexService) {
+    controller: function (Page, CompoundIndexService, $location) {
       Page.setTitle('Compounds');
       Page.setPage('entity');
 
@@ -199,7 +199,8 @@ angular.module('icgc.compounds.index', [])
 
       this.orderBy = (row) => row.genes.length;
 
-      this.filters = {};
+      this.filters = $location.search() || {};
+      console.log('filters was ', this.filters);
 
       this.columns = [
         {
@@ -262,7 +263,6 @@ angular.module('icgc.compounds.index', [])
       ];
       
       this.toggleFacetContent = (facet, classType) => {
-        console.log('check change');
         this.filters[facet] = _.xor((this.filters[facet] || []), [classType]);
         this.handleFiltersChange(this.filters);
       };
@@ -272,7 +272,7 @@ angular.module('icgc.compounds.index', [])
         const atcRegex = new RegExp(this.filters.atc, 'i');
         const geneRegex = new RegExp(this.filters.gene, 'i');
         const clinicalTrialConditionRegex = new RegExp(this.filters.clinicalTrialCondition, 'i');
-        console.log(this.filters.class);
+
         this.filteredCompounds = _.filter(this.compounds, (compound) => {
           return _.every([
             this.filters.name ? (compound.name.match(nameRegex) || compound.zincId.match(nameRegex)) : true,
@@ -282,7 +282,9 @@ angular.module('icgc.compounds.index', [])
             this.filters.drugClass && this.filters.drugClass.length ? this.filters.drugClass.includes(compound.drugClass) : true,
           ]);
         });
-      }
+
+        $location.search(this.filters);
+      };
     },
     controllerAs: 'vm',
   })
