@@ -137,7 +137,7 @@ angular.module('icgc.compounds.index', [])
               .replace(/"/g, '&quot;');
             return `
               <a ui-sref="advanced.gene({filters: '${filtersValue}'})">
-                ${row.genes.length}
+                ${row.genes.length.toLocaleString()}
               </a>
             `;
           }
@@ -150,7 +150,7 @@ angular.module('icgc.compounds.index', [])
           dataFormat: (cell, row, array) => {
             return `
               <a ui-sref="compound({compoundId: '${row.zincId}', '#': 'trials'})">
-                ${row.trials.length}
+                ${row.trials.length.toLocaleString()}
               </a>
             `;
           }
