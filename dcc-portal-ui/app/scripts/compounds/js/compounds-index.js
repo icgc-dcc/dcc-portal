@@ -161,22 +161,27 @@ angular.module('icgc.compounds.index', [])
             </collapsible-wrapper>
           </aside>
           <article>
-            <section>
-              <share-button></share-button>
-              <paginated-table
-                rows="(vm.filteredCompounds) || vm.compounds"
-                searchable-jsonpaths="[
-                  '$.name',
-                  '$.zincId',
-                  '$.drugClass',
-                  '$.atcCodes[*].description',
-                ]"
-                initial-order-by="vm.orderBy"
-                initial-sort-order="'desc'"
-                columns="vm.columns"
-                sticky-header="true"
-              >
-              </paginated-table>
+            <section ng-class="{loading: vm.isLoading}">
+              <h3 ng-if="vm.isLoading">
+                  <i class="icon-spinner icon-spin"></i> <translate>Loading Compounds...</translate>
+              </h3>
+              <div ng-if="!vm.isLoading">
+                <share-button></share-button>
+                <paginated-table
+                  rows="(vm.filteredCompounds) || vm.compounds"
+                  searchable-jsonpaths="[
+                    '$.name',
+                    '$.zincId',
+                    '$.drugClass',
+                    '$.atcCodes[*].description',
+                  ]"
+                  initial-order-by="vm.orderBy"
+                  initial-sort-order="'desc'"
+                  columns="vm.columns"
+                  sticky-header="true"
+                >
+                </paginated-table>
+              </div>
             </section>
           </article>
         </div>
@@ -189,9 +194,12 @@ angular.module('icgc.compounds.index', [])
       Page.setTitle('Compounds');
       Page.setPage('entity');
 
+      this.isLoading = false;
+
       const update = _.debounce(async () => {
+        this.isLoading = true;
         this.compounds = await CompoundIndexService.getAll();
-        console.log('compounds from service', this.compounds)
+        this.isLoading = false;
         this.handleFiltersChange(this.filters);
       });
 
