@@ -44,7 +44,7 @@ angular.module('icgc.compounds.index', [])
         <li
           class="t_facets__facet__input"
           ng-transclude
-          ng-show="vm.isCollapsed"
+          ng-show="!vm.isCollapsed"
         >
           <input
             class="t_input__block"
@@ -111,6 +111,28 @@ angular.module('icgc.compounds.index', [])
                 ng-change="vm.handleFiltersChange(vm.filters)"
                 placeholder="e.g. leukemia, ovarian"
               ></input>
+            </collapsible-wrapper>
+
+            <collapsible-wrapper
+              title="'Class'"
+            >
+              <label>
+                <input
+                  class="t_input__block"
+                  type="checkbox"
+                  ng-click="vm.toggleFacetContent('drugClass', 'fda')"
+                ></input>
+                FDA
+              </label>
+
+              <label>
+                <input
+                  class="t_input__block"
+                  type="checkbox"
+                  ng-click="vm.toggleFacetContent('drugClass', 'world')"
+                ></input>
+                World
+              </label>
             </collapsible-wrapper>
           </aside>
           <article>
@@ -212,16 +234,24 @@ angular.module('icgc.compounds.index', [])
           }
         },
       ];
+      
+      this.toggleFacetContent = (facet, classType) => {
+        console.log('check change');
+        this.filters[facet] = _.xor((this.filters[facet] || []), [classType]);
+        this.handleFiltersChange(this.filters);
+      };
 
       this.handleFiltersChange = (filters) => {
         const nameRegex = new RegExp(this.filters.name, 'i');
         const atcRegex = new RegExp(this.filters.atc, 'i');
         const clinicalTrialConditionRegex = new RegExp(this.filters.clinicalTrialCondition, 'i');
+        console.log(this.filters.class);
         this.filteredCompounds = _.filter(this.compounds, (compound) => {
           return _.every([
             this.filters.name ? (compound.name.match(nameRegex) || compound.zincId.match(nameRegex)) : true,
             this.filters.atc ? (_.some(compound.atcCodes, item => _.some(_.values(item).map(value => value.match(atcRegex))))) : true,
             this.filters.clinicalTrialCondition ? (_.some(_.flattenDeep(compound.trials.map(trial => trial.conditions.map(_.values))), str => str.match(clinicalTrialConditionRegex))) : true,
+            this.filters.drugClass && this.filters.drugClass.length ? this.filters.drugClass.includes(compound.drugClass) : true,
           ]);
         });
       }
