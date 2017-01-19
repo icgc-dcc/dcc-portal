@@ -32,7 +32,7 @@
       _ctrl.portalCommit = data.portalCommit;
     });
 
-    _ctrl.mainItems = _.map (['home', 'projects', 'advancedSearch', 'dataAnalysis',
+    _ctrl.mainItems = _.map (['home', 'projects', 'advancedSearch', 'compoundIndex', 'dataAnalysis',
       'dataReleases', 'dataRepositories', 'pcawg'], RouteInfoService.get);
 
    var cloudLinks = [
