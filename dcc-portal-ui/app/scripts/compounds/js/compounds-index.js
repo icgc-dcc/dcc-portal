@@ -174,6 +174,7 @@ angular.module('icgc.compounds.index', [])
                 initial-order-by="vm.orderBy"
                 initial-sort-order="'desc'"
                 columns="vm.columns"
+                sticky-header="true"
               >
               </paginated-table>
             </section>

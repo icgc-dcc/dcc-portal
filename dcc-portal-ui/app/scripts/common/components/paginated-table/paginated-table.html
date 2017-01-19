@@ -40,7 +40,12 @@
   </div>
 
   <table class="table">
-    <thead>
+    <thead
+      ng-class="{
+        'sticky': vm.stickyHeader,
+        'sticky--with-defaults': vm.stickyHeader,
+      }"
+    >
       <th
         ng-repeat="column in vm.columns"
         ng-click="vm.handleClickTableHead(column)"
