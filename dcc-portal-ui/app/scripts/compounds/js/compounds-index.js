@@ -3,7 +3,7 @@ import _ from 'lodash';
 angular.module('icgc.compounds.index', [])
   .config(function ($stateProvider) {
     $stateProvider.state('compound-index', {
-      url: '/compound?name&gene&atc&clinicalTrialCondition&drugClass',
+      url: '/compounds?name&gene&atc&clinicalTrialCondition&drugClass',
       template: '<compound-index></compound-index>',
       reloadOnSearch: false,
     });
