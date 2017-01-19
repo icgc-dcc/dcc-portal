@@ -91,6 +91,7 @@ angular.module('app.common.components')
         invariant(newOrderBy, 'sortable column must have either a field or sortFunction');
         this.orderBy = newOrderBy;
         this.sortOrder = (previousOrderBy === newOrderBy) ? _.xor([this.sortOrder], ['asc', 'desc'] )[0] : this.initialSortOrder;
+        this.currentPageNumber = 1;
       }
     };
   },
