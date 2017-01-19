@@ -197,8 +197,6 @@ angular.module('icgc.compounds.index', [])
       this.$onInit = update;
       this.$onChanges = update;
 
-      this.orderBy = (row) => row.genes.length;
-
       this.filters = $location.search() || {};
       console.log('filters was ', this.filters);
 
@@ -261,6 +259,8 @@ angular.module('icgc.compounds.index', [])
           }
         },
       ];
+
+      this.orderBy = _.find(this.columns, {heading: '# Targed Genes'}).sortFunction;
       
       this.toggleFacetContent = (facet, classType) => {
         this.filters[facet] = _.xor((this.filters[facet] || []), [classType]);
