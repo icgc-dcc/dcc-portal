@@ -79,7 +79,7 @@ angular.module('icgc.compounds.index', [])
                 class="t_input__block"
                 ng-model="vm.filters.gene"
                 ng-change="vm.handleFiltersChange(vm.filters)"
-                placeholder="e.g. BRAF"
+                placeholder="e.g. Q9ULX7, ENSG00000144891"
               ></input>
             </collapsible-wrapper>
 
