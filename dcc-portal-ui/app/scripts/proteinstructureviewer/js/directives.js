@@ -153,7 +153,7 @@
     return {
       restrict: 'E',
       replace: true,
-      scope: {'highlightMarker': '&', 'transcript': '=', 'isPvLoading': '='},
+      scope: {'highlightMarker': '&', 'transcript': '=', 'isPvLoading': '=', 'isInitialLoad': '='},
       template: '<div class="protein-structure-viewer-diagram"></div>',
       link: function (scope, iElement) {
         var options, selectedMutation;
@@ -255,9 +255,11 @@
               var chart = chartmaker.chart(options, chartData);
               if (chartData.mutations.length > 0) {
                 chart.display(element);
+                scope.isInitialLoad = false;
                 scope.isPvLoading = false;
               } else {
                 chart.displayError(element, gettextCatalog.getString('No Mutation occurs in coding region of this Gene.'));
+                scope.isInitialLoad = false;
                 scope.isPvLoading = false;
               }
             });
@@ -273,6 +275,7 @@
 
         scope.$watch('transcript', function (transcript) {
           scope.transcript = transcript;
+          scope.isPvLoading = true;
           refresh(transcript);
         });
         

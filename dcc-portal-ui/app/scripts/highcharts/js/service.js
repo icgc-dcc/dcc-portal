@@ -332,7 +332,6 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
 
       if(hit.term) {
         data.term = hit.term;
-        data.color = !_.isArray(hit.term) ? _this.getPrimarySiteColourForTerm(hit.term) : '' ;
       }
 
       if (hit.colour) {

@@ -217,7 +217,8 @@
     return {
       restrict: 'E',
       scope: {
-        item: '='
+        item: '=',
+        subtitle: '<',
       },
       templateUrl: '/scripts/sets/views/sets.result.html',
       link: function($scope, $element) {

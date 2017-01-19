@@ -3,6 +3,16 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[4.4.2](https://github.com/icgc-dcc/dcc-portal/compare/4.4.1...4.4.2)
+--
+- Migrated from Lodash 3 to 4
+- Redesign of Launch Analysis page
+- Added UI redirect feature
+- Removed unused grunt config
+- Added loading indicator for protein viewer
+- Minor styling adjustments to 404 page for consistency
+- Refreshed team page
+
 [4.4.1](https://github.com/icgc-dcc/dcc-portal/compare/4.4.0...4.4.1)
 --
 - Analysis Page: Show survival title on side by side
