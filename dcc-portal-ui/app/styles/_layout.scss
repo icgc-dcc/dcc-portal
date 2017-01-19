@@ -199,6 +199,7 @@ section {
 
 .sticky {
   position: sticky;
+  top: 0;
   &--with-defaults {
     background: white;
     box-shadow: 3px 2px 1px 0px rgba(0,0,0,0.1);
