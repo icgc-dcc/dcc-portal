@@ -134,10 +134,18 @@ angular.module('icgc.compounds.index', [])
                   't_facets__facet__terms__inactive__term': !vm.filters.drugClass.includes('fda'),
                 }"
                 data-ng-click="vm.toggleFacetContent('drugClass', 'fda')"
-                style="padding: 0;"
+                style="padding: 0; position: relative;"
               >
                   <span
-                    class="t_facets__facet__terms__inactive__term__label"
+                    class="term__extent-bar"
+                    ng-class="{
+                      t_facets__facet__terms__active__term__bar: vm.filters.drugClass.includes('fda'),
+                      t_facets__facet__terms__inactive__term__bar: !vm.filters.drugClass.includes('fda'),
+                    }"
+                    ng-style="{ width: _.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'fda'}).length / vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length * 100 + '%'}"
+                  ></span>
+                  <span
+                    class="term__label t_facets__facet__terms__inactive__term__label"
                     data-tooltip="FDA"
                     data-tooltip-placement="overflow"
                   >
@@ -151,8 +159,8 @@ angular.module('icgc.compounds.index', [])
                       <span>FDA</span>
                     </translate>
                   </span>
-                  <span class="t_facets__facet__terms__active__term__count">
-                    {{ vm.getFilteredAggregation('drugClass', 'fda') }}
+                  <span class="term__count t_facets__facet__terms__active__term__count">
+                    {{ _.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'fda'}).length }}
                   </span>
              </div>
 
@@ -165,7 +173,15 @@ angular.module('icgc.compounds.index', [])
                 style="padding: 0;"
               >
                   <span
-                    class="t_facets__facet__terms__inactive__term__label"
+                    class="term__extent-bar"
+                    ng-class="{
+                      t_facets__facet__terms__active__term__bar: vm.filters.drugClass.includes('world'),
+                      t_facets__facet__terms__inactive__term__bar: !vm.filters.drugClass.includes('world'),
+                    }"
+                    ng-style="{ width: _.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'world'}).length / vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length * 100 + '%'}"
+                  ></span>
+                  <span
+                    class="term__label t_facets__facet__terms__inactive__term__label"
                     data-tooltip="World"
                     data-tooltip-placement="overflow"
                   >
@@ -179,8 +195,8 @@ angular.module('icgc.compounds.index', [])
                       <span>World</span>
                     </translate>
                   </span>
-                  <span class="t_facets__facet__terms__active__term__count">
-                    {{ vm.getFilteredAggregation('drugClass', 'world') }}
+                  <span class="term__count t_facets__facet__terms__active__term__count">
+                    {{ _.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'world'}).length }}
                   </span>
              </div>
 
@@ -219,11 +235,12 @@ angular.module('icgc.compounds.index', [])
     // # genes targetd with bars
     // 100% width would be max length of 
     // http://local.dcc.icgc.org:9000/api/v1/ui/search/gene-symbols/ENSG00000170827,ENSG00000095303
-    controller: function (Page, CompoundIndexService, $location) {
+    controller: function (Page, CompoundIndexService, $location, $scope) {
       Page.setTitle('Compounds');
       Page.setPage('entity');
 
       this.isLoading = false;
+      $scope._ = _;
 
       const update = _.debounce(async () => {
         this.isLoading = true;
@@ -340,9 +357,9 @@ angular.module('icgc.compounds.index', [])
         });
       };
 
-      this.getFilteredAggregation = (filterName, filterValue) => {
-        return _.filter(this.getFilteredCompounds(this.compounds, _.omit(this.filters, [filterName])), {[filterName]: filterValue}).length;
-      }
+      // this.getFilteredAggregation = (filterName, filterValue) => {
+      //   return _.filter(this.getFilteredCompounds(this.compounds, _.omit(this.filters, [filterName])), {[filterName]: filterValue}).length;
+      // };
 
       const getCombinedState = () => Object.assign({},
         _.omitBy(this.filters, (value, key) => _.isEqual(defaultFiltersState[key], value)),

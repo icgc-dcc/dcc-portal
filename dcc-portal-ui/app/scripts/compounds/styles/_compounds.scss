@@ -46,4 +46,11 @@
   .sticky {
     top: 60px;
   }
+
+  .term {
+    &__label, &__count {
+      position: relative;
+      z-index: 1;
+    }
+  }
 }
