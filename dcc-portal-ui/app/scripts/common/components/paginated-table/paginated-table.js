@@ -16,10 +16,11 @@ angular.module('app.common.components')
      */
     searchableJsonpaths: '<',
     filterFunction: '<',
-    initialSortColumnId: '<',
-    initialSortOrder: '<',
+    sortColumnId: '<',
+    sortOrder: '<',
     shouldExportCSV: '<',
     stickyHeader: '<',
+    onChange: '&',
   },
   controller: function ($filter, $compile, $scope) {
     this.filter = '';
@@ -60,7 +61,7 @@ angular.module('app.common.components')
 
     this.filteredRows = () => {
       const filteredRows = getFilteredRows(this.filter);
-      const column = _.find(this.columns, {id: this.sortColumnId});
+      const column = _.find(this.columns, {id: this.sortColumnId}) || this.columns[0];
       const iteratee = column.sortFunction || column.field;
       return _.orderBy(filteredRows, iteratee, this.sortOrder);
     };
@@ -75,10 +76,6 @@ angular.module('app.common.components')
 
     this.$onInit = function () {
       update();
-      _.extend(this, {
-        sortColumnId: this.initialSortColumnId,
-        sortOrder: this.initialSortOrder,
-      });
     };
 
     this.$onChanges = update;
@@ -90,13 +87,27 @@ angular.module('app.common.components')
 
     this.handleClickTableHead = (column) => {
       if (column.isSortable) {
-        this.sortOrder = (column.id === this.sortColumnId) ? _.xor([this.sortOrder], ['asc', 'desc'] )[0] : this.initialSortOrder;
+        this.sortOrder = (column.id === this.sortColumnId) ? _.xor([this.sortOrder], ['asc', 'desc'] )[0] : this.sortOrder;
         this.sortColumnId = column.id;
         this.currentPageNumber = 1;
       }
     };
 
     this.isSortingOnColumn = (column) => column.id === this.sortColumnId;
+
+    $scope.$watchGroup([
+        () => this.sortColumnId,
+        () => this.sortOrder,
+        () => this.currentPageNumber,
+        () => this.itemsPerPage,
+      ], () => {
+      (this.onChange() || _.noop)({
+        sortColumnId: this.sortColumnId,
+        sortOrder: this.sortOrder,
+        currentPageNumber: this.currentPageNumber,
+        itemsPerPage: this.itemsPerPage,
+      });
+    });
   },
   controllerAs: 'vm',
   transclude: true,
