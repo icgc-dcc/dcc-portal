@@ -129,7 +129,7 @@ require('./share.scss');
       $scope.$watch(() => (this.shortUrl), (newValue) => {
       if(newValue){
          setTimeout(() => {
-          var input = $element.find('#shortURLInput');      
+          var input = $element.find('.short-url-input');      
           input.focus();
           input.select();
         });
@@ -137,12 +137,6 @@ require('./share.scss');
     });
       this.popoverIsOpen = true;
     };
-
-    
-
-    
-
-    
 
     const bodyClickListener = function (e) {
       $($element).each(function () {

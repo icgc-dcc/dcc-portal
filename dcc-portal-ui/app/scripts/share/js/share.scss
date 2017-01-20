@@ -6,11 +6,12 @@
     .loading-text{
         font-size: 14px;
         margin: 0px;
+        font-weight: normal;
+        line-height: 225%;
+        color: black;
     }
     .loading{
         font-size: 14px;
-        font-weight: normal;
-        line-height: 225%;
     }
     .input-block-level{
         font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
@@ -18,6 +19,4 @@
         padding:4px;
 
     }
-
-
 }
