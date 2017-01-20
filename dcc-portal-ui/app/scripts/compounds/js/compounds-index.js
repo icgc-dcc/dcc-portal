@@ -309,22 +309,25 @@ angular.module('icgc.compounds.index', [])
 
       const getCombinedState = () => Object.assign({}, this.filters, this.tableState);
 
-      this.handleFiltersChange = (filters) => {
-        const nameRegex = new RegExp(this.filters.name, 'i');
-        const atcRegex = new RegExp(this.filters.atc, 'i');
-        const geneRegex = new RegExp(this.filters.gene, 'i');
-        const clinicalTrialConditionRegex = new RegExp(this.filters.clinicalTrialCondition, 'i');
+      const getFilteredCompounds = (compounds, filters) => {
+        const nameRegex = new RegExp(filters.name, 'i');
+        const atcRegex = new RegExp(filters.atc, 'i');
+        const geneRegex = new RegExp(filters.gene, 'i');
+        const clinicalTrialConditionRegex = new RegExp(filters.clinicalTrialCondition, 'i');
 
-        this.filteredCompounds = _.filter(this.compounds, (compound) => {
+        return _.filter(compounds, (compound) => {
           return _.every([
-            this.filters.name ? (compound.name.match(nameRegex) || compound.zincId.match(nameRegex)) : true,
-            this.filters.gene ? (_.some(compound.genes, item => _.some(_.values(item).map(value => value.match(geneRegex))))) : true,
-            this.filters.atc ? (_.some(compound.atcCodes, item => _.some(_.values(item).map(value => value.match(atcRegex))))) : true,
-            this.filters.clinicalTrialCondition ? (_.some(_.flattenDeep(compound.trials.map(trial => trial.conditions.map(_.values))), str => str.match(clinicalTrialConditionRegex))) : true,
-            this.filters.drugClass && this.filters.drugClass.length ? this.filters.drugClass.includes(compound.drugClass) : true,
+            filters.name ? (compound.name.match(nameRegex) || compound.zincId.match(nameRegex)) : true,
+            filters.gene ? (_.some(compound.genes, item => _.some(_.values(item).map(value => value.match(geneRegex))))) : true,
+            filters.atc ? (_.some(compound.atcCodes, item => _.some(_.values(item).map(value => value.match(atcRegex))))) : true,
+            filters.clinicalTrialCondition ? (_.some(_.flattenDeep(compound.trials.map(trial => trial.conditions.map(_.values))), str => str.match(clinicalTrialConditionRegex))) : true,
+            filters.drugClass && filters.drugClass.length ? filters.drugClass.includes(compound.drugClass) : true,
           ]);
         });
+      };
 
+      this.handleFiltersChange = (filters) => {
+        this.filteredCompounds = getFilteredCompounds(this.compounds, filters);
         $location.replace();
         $location.search(getCombinedState());
       };
