@@ -366,9 +366,8 @@ angular.module('icgc.ui.popover', [])
 angular.module('icgc.ui.copyPaste', [])
   .provider('copyPaste', function () {
     var _provider = this,
-        //_zeroClipPath = require('../assets/ZeroClipboard.swf'), <- for local development only
-        _zeroClipPath = '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf',
-        _copyPasteConfig = {};    
+    _zeroClipPath = require('../assets/ZeroClipboard.swf'),
+    _copyPasteConfig = {};    
     // Getter/Setter for flash fallback
     _provider.zeroClipboardPath = function (path) {
 

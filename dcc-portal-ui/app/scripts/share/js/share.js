@@ -114,7 +114,7 @@ require('./share.scss');
     };
     this.popoverIsOpen = false;
     this.requestShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => Share.getShortUrl(shareParams, shouldUseParamsOnlyForRequest);
-    this.setShortUrl = () => this.requestShortUrl().then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl});
+    this.setShortUrl = () => this.requestShortUrl().then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl; console.log('coon')});
 
     this.handleClickShareButton = () => {
       this.Url = $location.url();
@@ -126,18 +126,20 @@ require('./share.scss');
       }
       this.oldUrl = this.Url;
       this.setShortUrl();
-      this.popoverIsOpen = true;
-    };
-
-    $scope.$watch(() => (this.shortUrl), (newValue) => {
+      $scope.$watch(() => (this.shortUrl), (newValue) => {
       if(newValue){
-        setTimeout(() => {
+         setTimeout(() => {
           var input = $element.find('#shortURLInput');      
           input.focus();
           input.select();
-        })
+          console.log('notch');
+        });
       }
     });
+      this.popoverIsOpen = true;
+    };
+
+    
 
     
 
