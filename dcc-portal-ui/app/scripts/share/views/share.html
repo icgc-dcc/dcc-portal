@@ -2,7 +2,11 @@
     <button
         type="button"
         class="t_button  t_current__remove_all"
-        popover="'some text'"
+        popover-title="Share Link"
+        popover-template = "'/scripts/share/views/share.popup.html'" 
+        popover-placement = "bottom"
+        popover-is-open = "shareCtrl.popoverIsOpen"
+        ng-click = "shareCtrl.handleClickShareButton()"
     >
         <i class="icon-share"></i> <translate>Share</translate>
     </button>

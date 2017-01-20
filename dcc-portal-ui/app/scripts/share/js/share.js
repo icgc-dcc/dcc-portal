@@ -14,8 +14,9 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+require('./share.scss');
 
-(function() {
+(function () {
   'use strict';
 
   var module = angular.module('icgc.share', []);
@@ -47,32 +48,24 @@
     };
   });
 
-  module.directive('sharePopup', function () {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/scripts/share/views/share.popup.html'
-    };
-  });
-
   module.service('Share', function (Restangular, $location) {
     var _service = this;
 
     _service.getShortUrl = function (params, shouldUseParamsOnlyForRequest) {
 
-      // var port = window.location.port ? ':' +  window.location.port : '',
-      //     defaults = {
-      //       url: window.location.protocol + '//' + window.location.hostname + 
-      //       port + window.location.pathname
-      //     },
+      var port = window.location.port ? ':' +  window.location.port : '',
+          defaults = {
+            url: window.location.protocol + '//' + window.location.hostname + 
+            port + window.location.pathname
+          },
 
-      var port = '8080',
+      // var port = '8080', <- for local development only
         defaults = {
           url: 'https://dev.dcc.icgc.org:' + port + window.location.pathname
         },
-          requestParams = (shouldUseParamsOnlyForRequest === true ? params : $location.search()),
-          queryStr = '',
-          urlShortnerParams = defaults;
+        requestParams = (shouldUseParamsOnlyForRequest === true ? params : $location.search()),
+        queryStr = '',
+        urlShortnerParams = defaults;
 
       _.assign(urlShortnerParams, params);
 
@@ -80,19 +73,19 @@
       // has it's own property when using the || - bug with JSHint so ignore the below...
       for (var requestKey in requestParams) { // jshint ignore:line
 
-        if (  ! requestParams.hasOwnProperty(requestKey) ||
-              (shouldUseParamsOnlyForRequest === true && requestKey === 'url')) {
+        if (!requestParams.hasOwnProperty(requestKey) ||
+          (shouldUseParamsOnlyForRequest === true && requestKey === 'url')) {
           continue;
         }
 
-          
+
         if (queryStr !== '') {
           queryStr += '&';
         }
         // FIXME: The url shortner decodes the GET request params for some reason - 
         // I will file a bug with them but in the meantime
         // this double encoding will do...fail...
-        queryStr += requestKey +  '=' + encodeURIComponent(encodeURIComponent(requestParams[requestKey]));
+        queryStr += requestKey + '=' + encodeURIComponent(encodeURIComponent(requestParams[requestKey]));
 
         // The webservice does not take any other parameters so only keep the 'url'
         // property - no point making a request for the rest since we are encoding
@@ -104,57 +97,68 @@
       if (queryStr.length > 0) {
         urlShortnerParams.url += '?' + queryStr;
       }
-      
-     
+
       return Restangular.one('short', '').get(urlShortnerParams);
     };
   });
 
-
-  module.controller('SharePopupController', function($scope, $modalInstance, shortUrl, customPopupDisclaimer) {
+  module.controller('SharePopupController', function ($scope, $modalInstance, shortUrl, customPopupDisclaimer) {
     $scope.shortUrl = shortUrl;
     $scope.customPopupDisclaimer = customPopupDisclaimer;
-    $scope.cancel = function() {
+    $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
   });
 
-  module.controller('shareCtrl', function ($scope, $modal, Share) {
-    var _ctrl= this;
-
-    _ctrl.toggle = function(opt) {
+  module.controller('shareCtrl', function ($scope, $element, $location, Share) {
+    var _ctrl = this;
+    this.oldUrl = '';
+    this.changedUrl = true;
+    _ctrl.toggle = function (opt) {
       _ctrl.active = opt;
     };
-
+    this.popoverIsOpen = false;
     this.requestShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => Share.getShortUrl(shareParams, shouldUseParamsOnlyForRequest);
-    this.requestShortUrl().then(url => console.log(url));
+    this.setShortUrl = () => this.requestShortUrl().then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl});
 
-    // _ctrl.getShortUrl = function(shareParams, shouldUseParamsOnlyForRequest) {
-    //   _ctrl.shortUrl = '';
+    this.handleClickShareButton = () => {
+      this.Url = $location.url();
+      if(this.oldUrl != this.Url){
+        this.changedUrl = true;
+      }
+      else{
+        this.changedUrl = false;
+      }
+      this.oldUrl = this.Url;
+      this.setShortUrl();
+      this.popoverIsOpen = true;
+    };
 
-    //   Share.getShortUrl(shareParams, shouldUseParamsOnlyForRequest).then(function(url) {
-    //     _ctrl.shortUrl = url.shortUrl;
+    $scope.$watch(() => (this.shortUrl), (newValue) => {
+      if(newValue){
+        setTimeout(() => {
+          var input = $element.find('#shortURLInput');      
+          input.focus();
+          input.select();
+        })
+      }
+    });
 
-    //     $modal.open({
-    //       templateUrl: '/scripts/share/views/share.popup.html',
-    //       controller: 'SharePopupController',
-    //       resolve: {
-    //         shortUrl: function() {
-    //           return _ctrl.shortUrl;
-    //         },
-    //         customPopupDisclaimer: function() {
+    
 
-    //           if (angular.isDefined($scope.customPopupDisclaimer) && ! $scope.customPopupDisclaimer) {
-    //             $scope.customPopupDisclaimer = true;
-    //           }
+    
 
-    //           return $scope.customPopupDisclaimer || false;
-    //         }
+    const bodyClickListener = function (e) {
+      $($element).each(function () {
+        if ((!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0)) {
+          _ctrl.popoverIsOpen = false;
+        }
+      });
+    };
 
-    //       }
-    //     });
-    //   });
-    // };
-
+    $('body').on('click', bodyClickListener);
+    $scope.$on('$destroy', () => {
+      $('body').off('click', bodyClickListener);
+    });
   });
 })();
