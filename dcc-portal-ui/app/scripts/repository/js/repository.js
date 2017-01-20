@@ -110,7 +110,7 @@ import './file-finder';
 
       // Check file extension
       extension = file.name.split('.').pop();
-      if (_.contains(['txt', 'md'], extension.toLowerCase())) {
+      if (_.includes(['txt', 'md'], extension.toLowerCase())) {
         file.isText = true;
       } else {
         file.isText = false;
@@ -275,7 +275,7 @@ import './file-finder';
     $scope.summary = {};
 
     $scope.getRepoFieldValue = function (repoName, fieldName) {
-      var repoData = $scope.shouldDeduplicate ? $scope.summary[repoName] : _.findWhere($scope.repos, { repoName: repoName });
+      var repoData = $scope.shouldDeduplicate ? $scope.summary[repoName] : _.find($scope.repos, { repoName: repoName });
       return repoData && repoData[fieldName];
     };
 
@@ -320,7 +320,7 @@ import './file-finder';
         const repo = _.find(reposFromService, {name: repoName});
 
         // Restrict to active repos if it is available
-        if (!_.isEmpty(activeRepos) && !_.contains(activeRepos, repoName)) {
+        if (!_.isEmpty(activeRepos) && !_.includes(activeRepos, repoName)) {
           return;
         }
 
@@ -610,8 +610,8 @@ import './file-finder';
     this.countryName = CodeTable.countryName;
 
     this.awsOrCollab = function(fileCopies) {
-       return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
-         _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
+       return _.includes(_.map(fileCopies, 'repoCode'), 'aws-virginia') ||
+         _.includes(_.map(fileCopies, 'repoCode'), 'collaboratory');
     };
 
     function getUiDonorInfoJSON(donors){
@@ -698,7 +698,7 @@ import './file-finder';
         maxPadding: 0.01,
         labels: {
           formatter: function () {
-            return this.value / 1000 + 'k';
+            return this.value > 1000 ? this.value / 1000 + 'k' : this.value ;
           }
         },
         lineWidth: 1,
@@ -753,7 +753,7 @@ import './file-finder';
     function toSummarizedString (values, name) {
       var size = _.size (values);
       return (size > 1) ? '' + size + ' ' + name + 's' :
-        _.first (values);
+        _.head (values);
     }
 
     function createFilter (category, ids) {
@@ -763,7 +763,7 @@ import './file-finder';
     function buildDataInfo (data, property, paths, category, toolTip) {
       var ids = _(ensureArray (data))
         .map (property)
-        .unique()
+        .uniq()
         .value();
 
       return isEmptyArray (ids) ? {} : {
@@ -771,7 +771,7 @@ import './file-finder';
         tooltip: toolTip (ids),
         href: _.size (ids) > 1 ?
           paths.many + createFilter (category, ids) :
-          paths.one + _.first (ids)
+          paths.one + _.head (ids)
       };
     }
 
@@ -799,7 +799,7 @@ import './file-finder';
 
     _ctrl.buildProjectInfo = function (donors) {
       var toolTipMaker = function (ids) {
-        return _.size (ids) === 1 ? _.get (projectMap, _.first (ids), '') : '';
+        return _.size (ids) === 1 ? _.get (projectMap, _.head (ids), '') : '';
       };
       return buildDataInfo (donors, 'projectCode', {one: '/projects/', many: '/projects?filters='},
         'project', toolTipMaker);
@@ -808,7 +808,7 @@ import './file-finder';
     function uniquelyConcat (fileCopies, property) {
       return _(fileCopies)
         .map (property)
-        .unique()
+        .uniq()
         .join(commaAndSpace);
     }
 
@@ -823,7 +823,7 @@ import './file-finder';
     function tooltipList (objects, property, oneItemHandler) {
       var uniqueItems = _(objects)
         .map (property)
-        .unique();
+        .uniq();
 
       if (uniqueItems.size() < 2) {
         return _.isFunction (oneItemHandler) ? oneItemHandler() :
@@ -846,24 +846,24 @@ import './file-finder';
     };
 
     _ctrl.awsOrCollab = function(fileCopies) {
-       return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
-         _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
+       return _.includes(_.map(fileCopies, 'repoCode'), 'aws-virginia') ||
+         _.includes(_.map(fileCopies, 'repoCode'), 'collaboratory');
     };
 
     _ctrl.fileAverageSize = function (fileCopies) {
       var count = _.size (fileCopies);
-      return (count > 0) ? _.sum (fileCopies, 'fileSize') / count : 0;
+      return (count > 0) ? _.sumBy (fileCopies, 'fileSize') / count : 0;
     };
 
     _ctrl.flagIconClass = function (projectCode) {
       var defaultValue = '';
       var last3 = _.takeRight (ensureString (projectCode), 3);
 
-      if (_.size (last3) < 3 || _.first (last3) !== '-') {
+      if (_.size (last3) < 3 || _.head (last3) !== '-') {
         return defaultValue;
       }
 
-      var last2 = _.rest (last3).join ('');
+      var last2 = _.tail (last3).join ('');
 
       return 'flag flag-' + CodeTable.translateCountryCode (last2.toLowerCase());
     };
@@ -1000,11 +1000,11 @@ import './file-finder';
     };
 
     function removeCityFromRepoName (repoName) {
-      if (_.contains (repoName, 'CGHub')) {
+      if (_.includes (repoName, 'CGHub')) {
         return 'CGHub';
       }
 
-      if (_.contains (repoName, 'TCGA DCC')) {
+      if (_.includes (repoName, 'TCGA DCC')) {
         return 'TCGA DCC';
       }
 
@@ -1144,7 +1144,7 @@ import './file-finder';
       }
     });
 
-    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_ADD_EVENT, () => {
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
       _ctrl.donorSets = _ctrl.donorSetsForRepo();
       _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
     });

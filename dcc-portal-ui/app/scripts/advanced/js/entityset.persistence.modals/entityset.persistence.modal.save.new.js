@@ -5,7 +5,7 @@ ngModule.component('saveNewSetModal', {
   template: `
     <div class="modal-content">
       <div class="modal-header clearfix">
-          <h3 class="pull-left"><translate>Save {{ vm.initialEntitysetDefinition.size }} as new {{vm.initialEntitysetDefinition.type.toLowerCase()}} set</translate></h3>
+          <h3 class="pull-left"><translate>Save {{ vm.initialEntitysetDefinition.size.toLocaleString() }} {{ vm.initialEntitysetDefinition.type.toLowerCase() | pluralize : vm.initialEntitysetDefinition.size }} as new set</translate></h3>
           <button class="pull-right t_button" ng-click="vm.handleClickClose();">
             <i class="icon-cancel"></i>
           </button>

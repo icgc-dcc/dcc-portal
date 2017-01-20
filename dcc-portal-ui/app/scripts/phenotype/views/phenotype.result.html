@@ -4,6 +4,7 @@
         <share-button></share-button>
     </span>
 </h3>
+<h5 class="analysis-subtitle"> {{ subtitle }} </h5>
 
 <div data-ng-if="isDeprecated" class="alert-error">
     <i class="icon-attention"></i>
@@ -11,7 +12,9 @@
     <translate>This analysis was created against an old version of the data and may no longer be valid. Please remove or recreate it again.</translate>
 </div>
 
-<i class="icon-spin icon-spinner" ng-class="{'ng-hide': survivalAnalysisDataSets.overall.length}"></i>
+<span data-ng-if="!survivalAnalysisDataSets.overall.length">
+    <i class="icon-spin icon-spinner"></i> Loading Analysis...
+</span>
 
 <div data-ng-if="survivalAnalysisDataSets.overall.length" data-disable-events="isDeprecated">
 

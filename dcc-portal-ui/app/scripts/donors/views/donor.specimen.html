@@ -230,9 +230,9 @@
                     <td>{{sample.analyzedId}}</td>
                     <td>{{sample.study}}</td>
                     <td>{{sample.analyzedInterval}}</td>
-                    <td>{{ (sample.availableRawSequenceData | unique | pluck:'libraryStrategy').join(', ') }}</td>
-                    <td>{{ (sample.availableRawSequenceData | unique | pluck:'repository').join(', ') }}</td>
-                    <td>{{ (sample.availableRawSequenceData | unique | pluck:'id').join(', ') }}</td>
+                    <td>{{ (sample.availableRawSequenceData | unique | _:"map":'libraryStrategy').join(', ') }}</td>
+                    <td>{{ (sample.availableRawSequenceData | unique | _:"map":'repository').join(', ') }}</td>
+                    <td>{{ (sample.availableRawSequenceData | unique | _:"map":'id').join(', ') }}</td>
                 </tr>
                 </tbody>
             </table>

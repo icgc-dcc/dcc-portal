@@ -39,8 +39,10 @@ $table-th-fixed-width: 200px;
     tr {
       vertical-align: top;
 
-      &:nth-child(odd) {
-        background: $greyLightest;
+      &:nth-child(odd):not(.is-selected) {
+        td, th {
+          background: $greyLightest;
+        }
       }
     }
 

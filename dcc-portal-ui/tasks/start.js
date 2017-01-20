@@ -166,7 +166,7 @@ function runDevServer(port) {
         secure: false,
         changeOrigin: true,
       },
-      '/(scripts|styles|vendor|bower_components)/**': {
+      '/(scripts|styles|vendor)/**': {
         target: 'http://localhost:9000/app',
         secure: false,
       },

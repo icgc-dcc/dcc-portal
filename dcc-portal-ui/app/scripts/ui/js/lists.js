@@ -169,7 +169,7 @@ angular.module('icgc.ui.lists').directive('hideSumList', function (Projects) {
 
         scope.list = next;
 
-        scope.sum = _.reduce(_.pluck(value, 'count'), function (s, n) {
+        scope.sum = _.reduce(_.map(value, 'count'), function (s, n) {
           return s + n;
         });
 
