@@ -217,7 +217,7 @@ public class OccurrenceRepository {
 
     search.addAggregation(buildProjectDonorAggs());
 
-    log.info("ES search is: '{}'.", search);
+    log.debug("ES search is: '{}'.", search);
     return buildResultMap(search.get().getAggregations());
   }
 

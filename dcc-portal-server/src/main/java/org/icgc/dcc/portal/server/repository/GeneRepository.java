@@ -19,7 +19,6 @@ package org.icgc.dcc.portal.server.repository;
 
 import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Maps.immutableEntry;
-import static java.lang.String.format;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -33,6 +32,7 @@ import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
+import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.server.util.Filters.andFilter;
@@ -91,10 +91,9 @@ public class GeneRepository implements Repository {
   private static final TimeValue KEEP_ALIVE = new TimeValue(120000);
   private static final String GENE_SYMBOL_FIELD_NAME = "symbol";
   private static final String ENSEMBL_ID_FIELD_NAME = "id";
-  private static final String TEXT_PREFIX = "text";
   private static final String[] GENE_SYMBOL_ENSEMBL_ID_FIELDS =
-      { format("%s.%s", TEXT_PREFIX, GENE_SYMBOL_FIELD_NAME), format("%s.%s", TEXT_PREFIX, ENSEMBL_ID_FIELD_NAME) };
-
+      { TEXT_PREFIX + GENE_SYMBOL_FIELD_NAME, TEXT_PREFIX + ENSEMBL_ID_FIELD_NAME };
+  public static final String TEXT_PATH = "text";
   public static final Map<String, String> GENE_ID_SEARCH_FIELDS = ImmutableMap.of(
       "id.search", "_gene_id",
       "symbol.search", "symbol",
@@ -303,13 +302,13 @@ public class GeneRepository implements Repository {
         .setSearchType(QUERY_THEN_FETCH)
         .setSize(5000);
 
-    val highlight = new HighlightBuilder();
+    val highlight = new HighlightBuilder().preTags("").postTags("");
     val includes = Lists.<String> newArrayList();
 
     for (val searchField : GENE_ID_SEARCH_FIELDS.keySet()) {
-      boolQuery.should(termsQuery(searchField, input.toArray()));
-      highlight.field(searchField);
-      includes.add(searchField.substring(0, searchField.lastIndexOf(".search")));
+      boolQuery.should(termsQuery(TEXT_PREFIX + searchField, input.toArray()));
+      highlight.field(TEXT_PREFIX + searchField).forceSource(true);
+      includes.add(TEXT_PREFIX + searchField.substring(0, searchField.lastIndexOf(".search")));
     }
     search.setFetchSource(toStringArray(includes), NO_EXCLUDE);
     search.highlighter(highlight);
@@ -365,8 +364,8 @@ public class GeneRepository implements Repository {
 
       for (val hit : response.getHits()) {
         val values = DEFAULT.convertValue(hit.getSource(), JsonNode.class);
-        val ensemblId = values.path(TEXT_PREFIX).path(ENSEMBL_ID_FIELD_NAME).asText();
-        val geneSymbol = values.path(TEXT_PREFIX).path(GENE_SYMBOL_FIELD_NAME).asText();
+        val ensemblId = values.path(TEXT_PATH).path(ENSEMBL_ID_FIELD_NAME).asText();
+        val geneSymbol = values.path(TEXT_PATH).path(GENE_SYMBOL_FIELD_NAME).asText();
         result.put(geneSymbol, ensemblId);
       }
 

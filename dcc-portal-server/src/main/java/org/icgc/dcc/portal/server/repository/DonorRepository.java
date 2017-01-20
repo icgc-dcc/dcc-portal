@@ -40,6 +40,7 @@ import static org.elasticsearch.search.sort.SortOrder.ASC;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
+import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
 import static org.icgc.dcc.portal.server.model.IndexType.DONOR;
 import static org.icgc.dcc.portal.server.model.IndexType.DONOR_TEXT;
 import static org.icgc.dcc.portal.server.model.IndexType.FILE_DONOR_TEXT;
@@ -560,14 +561,14 @@ public class DonorRepository implements Repository {
     val highlight = new HighlightBuilder();
     highlight.preTags("").postTags("");
     for (val searchField : fields.keySet()) {
-      boolQuery.should(termsQuery(searchField, values));
-      highlight.field(searchField);
+      boolQuery.should(termsQuery(TEXT_PREFIX + searchField, values));
+      highlight.field(TEXT_PREFIX + searchField).forceSource(true);
     }
 
     // Set tags to empty strings so we do not have to parse out fragments later.
     search.setQuery(boolQuery)
         .highlighter(highlight)
-        .setFetchSource(false);
+        .setFetchSource(true);
     log.debug("ES query is: '{}'.", search);
 
     val response = search.execute().actionGet();
