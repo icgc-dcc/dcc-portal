@@ -167,6 +167,7 @@ public class GeneService {
           if (field.equals(GENE_UNIPROT_IDS)) {
             val cleanedKey = searchField.getKey().substring(0, searchField.getKey().lastIndexOf(".search"));
             val textSource = source.get(TEXT_PATH);
+
             if (textSource instanceof Map<?, ?>) {
               val keys = ((Map<?, ?>) textSource).get(cleanedKey);
               if (keys instanceof List<?>) {
@@ -177,6 +178,7 @@ public class GeneService {
                 }
               }
             }
+
           } else {
             val keys = highlightedFields.get(TEXT_PREFIX + searchField.getKey());
             if (keys != null) {
