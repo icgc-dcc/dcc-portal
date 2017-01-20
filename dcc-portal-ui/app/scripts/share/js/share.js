@@ -28,7 +28,8 @@ require('./share.scss');
       transclude: true,
       templateUrl: '/scripts/share/views/share.html',
       controller: 'shareCtrl as shareCtrl',
-      link: function () {
+      link: function ($scope) {
+        $scope.entityType = 'page';
       }
     };
   });
@@ -43,7 +44,8 @@ require('./share.scss');
         shareParams: '=',
         customPopupDisclaimer: '@'
       },
-      link: function () {
+      link: function ($scope) {
+        $scope.entityType = 'item'
       }
     };
   });
