@@ -235,13 +235,23 @@ angular.module('icgc.compounds.index', [])
       this.$onInit = update;
       this.$onChanges = update;
 
-      this.filters = _.pick($location.search(), filterParams) || {};
-      this.tableState = _.defaults(_.pick($location.search(), paginatedTableParams), {
+      const defaultFiltersState = {
+        name: '',
+        gene: '',
+        atc: '',
+        clinicalTrialCondition: '',
+        drugClass: [],
+      };
+
+      const defaultTableState = {
         sortColumnId: 'geneCount',
         sortOrder: 'desc',
         currentPageNumber: 1,
         itemsPerPage: 10
-      });
+      };
+
+      this.filters = _.defaults(_.pick($location.search(), filterParams), defaultFiltersState);
+      this.tableState = _.defaults(_.pick($location.search(), paginatedTableParams), defaultTableState);
 
       this.columns = [
         {
@@ -313,8 +323,6 @@ angular.module('icgc.compounds.index', [])
         this.handleFiltersChange(this.filters);
       };
 
-      const getCombinedState = () => Object.assign({}, this.filters, this.tableState);
-
       this.getFilteredCompounds = (compounds, filters) => {
         const nameRegex = new RegExp(filters.name, 'i');
         const atcRegex = new RegExp(filters.atc, 'i');
@@ -335,6 +343,11 @@ angular.module('icgc.compounds.index', [])
       this.getFilteredAggregation = (filterName, filterValue) => {
         return _.filter(this.getFilteredCompounds(this.compounds, _.omit(this.filters, [filterName])), {[filterName]: filterValue}).length;
       }
+
+      const getCombinedState = () => Object.assign({},
+        _.omitBy(this.filters, (value, key) => _.isEqual(defaultFiltersState[key], value)),
+        _.omitBy(this.tableState, (value, key) => _.isEqual(defaultTableState[key], value)),
+      );
 
       this.handleFiltersChange = (filters) => {
         this.filteredCompounds = this.getFilteredCompounds(this.compounds, filters);
