@@ -92,6 +92,7 @@
         Showing
         <select
           ng-model="vm.itemsPerPage"
+          ng-change="vm.handleItemsPerPageChange(vm.itemsPerPage)"
           ng-options="size for size in vm.itemsPerPageOptions"
         ></select>
         rows

@@ -80,6 +80,10 @@ angular.module('app.common.components')
 
     this.$onChanges = update;
 
+    this.handleItemsPerPageChange = (itemsPerPage) => {
+      this.currentPageNumber = 1;
+    };
+
     this.handleFilterChange = (filter) => {
       this.filter = filter;
       this.currentPageNumber = 1;
