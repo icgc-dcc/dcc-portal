@@ -556,13 +556,13 @@
       });
     };
 
-    function launchEnrichment(set) {
+    function launchEnrichment(set, {isDemo} = {isDemo: false}) {
       var filters = {
         gene: {}
       };
       filters.gene.id = { is: [Extensions.ENTITY_PREFIX + set.id] };
 
-      $modal.open({
+      const launchModal = $modal.open({
         templateUrl: '/scripts/enrichment/views/enrichment.upload.html',
         controller: 'EnrichmentUploadController',
         resolve: {
@@ -571,12 +571,13 @@
           },
           filters: function() {
             return filters;
-          },
-          afterSave: function () {
-            return (result) => markSetIdAsDemo(result.id)
           }
         }
       });
+
+      if (isDemo) {
+        launchModal.result.then(result => markSetIdAsDemo(result.id));
+      }
     }
 
     $scope.$on('$locationChangeSuccess', function() {
