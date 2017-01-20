@@ -110,7 +110,7 @@
     "npm": ">=3"
   },
   "dependencies": {
-    "@oncojs/pathwayviewer": "^0.3.2",
+    "@oncojs/pathwayviewer": "^0.3.3",
     "@oncojs/survivalplot": "0.3.3",
     "angular": "1.5.7",
     "angular-animate": "1.5.7",
