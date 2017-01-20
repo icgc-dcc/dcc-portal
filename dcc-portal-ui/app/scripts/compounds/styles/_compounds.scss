@@ -54,3 +54,19 @@
     }
   }
 }
+
+togglable-term {
+  .term__extent-bar {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    right: 0;
+    transition: all 1s;
+    background-color: #f2f2f2;
+  }
+  & > .is-active {
+    .term__extent-bar {
+      background: #bbe7f7;
+    }
+  }
+}

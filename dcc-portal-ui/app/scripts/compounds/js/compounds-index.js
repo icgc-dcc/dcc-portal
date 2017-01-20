@@ -69,6 +69,51 @@ angular.module('icgc.compounds.index', [])
       </ul>
     `
   })
+  .component('togglableTerm', {
+    bindings: {
+      isActive: '<',
+      onClick: '&',
+      label: '<',
+      itemsAffectedByFacet: '<',
+      itemsAffectedByTerm: '<',
+    },
+    transclude: true,
+    controller: function () {},
+    controllerAs: 'vm',
+    template: `
+      <div
+        ng-class="{
+          'is-active': vm.isActive,
+          't_facets__facet__terms__active__term__label': vm.isActive,
+          't_facets__facet__terms__inactive__term': !vm.isActive,
+        }"
+        ng-click="vm.onClick()"
+        style="padding: 0; position: relative;"
+      >
+          <ng-transclude></ng-transclude>
+          <span
+            class="term__extent-bar"
+            ng-style="{ width: vm.itemsAffectedByTerm / vm.itemsAffectedByFacet * 100 + '%'}"
+          ></span>
+          <span
+            class="term__label t_facets__facet__terms__inactive__term__label"
+            data-tooltip="{{ vm.label }}"
+            data-tooltip-placement="overflow"
+          > 
+            <i
+              ng-class="{
+                'icon-ok': vm.isActive,
+                'icon-check-empty': !vm.isActive,
+              }"
+            ></i>
+            <span>{{ vm.label }}</span>
+          </span>
+          <span class="term__count t_facets__facet__terms__active__term__count">
+            {{ vm.itemsAffectedByTerm }}
+          </span>
+      </div>
+    `
+  })
   .component('compoundIndex', {
     template: `
       <div class="compound-index">
@@ -128,78 +173,21 @@ angular.module('icgc.compounds.index', [])
             <collapsible-wrapper
               title="'Class'"
             >
-              <div
-                ng-class="{
-                  't_facets__facet__terms__active__term__label': vm.filters.drugClass.includes('fda'),
-                  't_facets__facet__terms__inactive__term': !vm.filters.drugClass.includes('fda'),
-                }"
-                data-ng-click="vm.toggleFacetContent('drugClass', 'fda')"
-                style="padding: 0; position: relative;"
-              >
-                  <span
-                    class="term__extent-bar"
-                    ng-class="{
-                      t_facets__facet__terms__active__term__bar: vm.filters.drugClass.includes('fda'),
-                      t_facets__facet__terms__inactive__term__bar: !vm.filters.drugClass.includes('fda'),
-                    }"
-                    ng-style="{ width: _.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'fda'}).length / vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length * 100 + '%'}"
-                  ></span>
-                  <span
-                    class="term__label t_facets__facet__terms__inactive__term__label"
-                    data-tooltip="FDA"
-                    data-tooltip-placement="overflow"
-                  >
-                    <i
-                      ng-class="{
-                        'icon-ok': vm.filters.drugClass.includes('fda'),
-                        'icon-check-empty': !vm.filters.drugClass.includes('fda'),
-                      }"
-                    ></i>
-                    <translate>
-                      <span>FDA</span>
-                    </translate>
-                  </span>
-                  <span class="term__count t_facets__facet__terms__active__term__count">
-                    {{ _.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'fda'}).length }}
-                  </span>
-             </div>
+              <togglable-term
+                on-click="vm.toggleFacetContent('drugClass', 'fda')"
+                is-active="vm.filters.drugClass.includes('fda')"
+                label="'FDA'"
+                items-affected-by-facet="vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length"
+                items-affected-by-term="_.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'fda'}).length"
+              ></togglable-term>
 
-             <div
-                ng-class="{
-                  't_facets__facet__terms__active__term__label': vm.filters.drugClass.includes('world'),
-                  't_facets__facet__terms__inactive__term': !vm.filters.drugClass.includes('world'),
-                }"
-                data-ng-click="vm.toggleFacetContent('drugClass', 'world')"
-                style="padding: 0;"
-              >
-                  <span
-                    class="term__extent-bar"
-                    ng-class="{
-                      t_facets__facet__terms__active__term__bar: vm.filters.drugClass.includes('world'),
-                      t_facets__facet__terms__inactive__term__bar: !vm.filters.drugClass.includes('world'),
-                    }"
-                    ng-style="{ width: _.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'world'}).length / vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length * 100 + '%'}"
-                  ></span>
-                  <span
-                    class="term__label t_facets__facet__terms__inactive__term__label"
-                    data-tooltip="World"
-                    data-tooltip-placement="overflow"
-                  >
-                    <i
-                      ng-class="{
-                        'icon-ok': vm.filters.drugClass.includes('world'),
-                        'icon-check-empty': !vm.filters.drugClass.includes('world'),
-                      }"
-                    ></i>
-                    <translate>
-                      <span>World</span>
-                    </translate>
-                  </span>
-                  <span class="term__count t_facets__facet__terms__active__term__count">
-                    {{ _.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'world'}).length }}
-                  </span>
-             </div>
-
+              <togglable-term
+                on-click="vm.toggleFacetContent('drugClass', 'world')"
+                is-active="vm.filters.drugClass.includes('world')"
+                label="'World'"
+                items-affected-by-facet="vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length"
+                items-affected-by-term="_.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'world'}).length"
+              ></togglable-term>
             </collapsible-wrapper>
           </aside>
           <article>
