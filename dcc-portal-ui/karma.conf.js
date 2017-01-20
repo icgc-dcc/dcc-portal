@@ -23,10 +23,11 @@ module.exports = function(config){
     // files to include, ordered by dependencies
     files : [
       './node_modules/es6-shim/es6-shim.js',
+      './node_modules/lodash-migrate/dist/lodash-migrate.js',
       'app/scripts/vendor.js',
       'app/scripts/index.js',
       // === Test, mock files ===
-      'app/bower_components/angular-mocks/angular-mocks.js',
+      './node_modules/angular-mocks/angular-mocks.js',
       {pattern: 'test/unit/**/*.js', watched: false},
     ],
 
@@ -40,7 +41,6 @@ module.exports = function(config){
     exclude : [
         'app/lib/angular/angular-loader.js'
       , 'app/lib/angular/*.min.js'
-      , 'app/lib/angular/angular-scenario.js'
     ],
 
     singleRun: true,

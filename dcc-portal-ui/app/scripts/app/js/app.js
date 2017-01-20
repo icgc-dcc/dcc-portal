@@ -193,9 +193,10 @@
 
     // angular plugins
     'restangular',
-    'ui.scrollfix',
+
     'ui.bootstrap.popover',
     'ui.bootstrap.tpls',
+    'ui.scrollpoint',
     'ui.bootstrap.modal',
     'ui.bootstrap.position',
     'ui.bootstrap.pagination',
@@ -204,7 +205,6 @@
     'template/pagination/pagination.html',
     'ui.router',
     'infinite-scroll',
-    'angular-lodash',
     'angularytics',
     'angular-loading-bar',
     'hc.marked',
@@ -259,6 +259,7 @@
     'icgc.historyManager',
     'icgc.survival',
     'icgc.404',
+    'icgc.301',
 
     // old
     'app.ui',
@@ -266,6 +267,24 @@
     'app.downloader'
   ]);
 
+  const REDIRECTS = [
+    {
+      'from': '/icgc-in-the-cloud/guide',
+      'to': 'http://docs.icgc.org/cloud/guide'
+    }
+  ];
+
+  const getRedirectObject = (currentUrl) => {
+    const redirect = _.find(REDIRECTS, (redirect) => _.startsWith(currentUrl, redirect.from.replace(/\/$/, "")));
+    let state = '404', page = currentUrl;
+
+    if(redirect){
+      state = '301';
+      page = redirect.to;
+    }
+
+    return {state, page};
+  }
   // Fix needed for loading subviews without jumping back to the
   // top of the page:
   // https://github.com/angular-ui/ui-router/issues/110#issuecomment-18348811
@@ -315,161 +334,7 @@
         return $delegate;
       }]);
 
-
-
-      $provide.decorator('Restangular', ['$delegate', '$q',  function($delegate, $q) {
-
-        var _cancellableRequests = [];
-
-        function _deletePromiseAbortCache(deferredKey) {
-
-          var indexAt = _cancellableRequests.indexOf(deferredKey);
-
-          if (indexAt < 0) {
-            return;
-          }
-
-          _cancellableRequests.splice(indexAt, 1);
-        }
-
-        // Create a wrapped request function that will allow us to create http requests that
-        // can timeout when the abort promise is resolved.
-        function _createWrappedRequestFunction(restangularObject, requestFunction) {
-
-          if (! angular.isDefined(requestFunction) || ! angular.isFunction(requestFunction)) {
-            console.warn('Restangular REST function not defined cannot wrap!');
-            return false;
-          }
-
-          // Function to wrap the call in which removes the abort promise from the queue on resolve/reject
-          return function() {
-
-            var deferred = $q.defer(),
-              abortDeferred = $q.defer();
-
-            // Save the deferred object so we may cancel it all later
-            _cancellableRequests.push(abortDeferred);
-
-            // Add an auxiliary method to cancel an individual request if one exists
-            restangularObject.cancelRequest = function() {
-                abortDeferred.resolve();
-                _deletePromiseAbortCache(abortDeferred);
-            };
-
-
-            restangularObject.withHttpConfig({timeout: abortDeferred.promise});
-
-            var requestPromise = requestFunction.apply(restangularObject, Array.prototype.slice.call(arguments));
-
-            requestPromise.then(
-              function(data) {
-                _deletePromiseAbortCache(abortDeferred);
-                deferred.resolve(data);
-              },
-              function(error) {
-                _deletePromiseAbortCache(abortDeferred);
-                deferred.reject(error);
-              }
-            );
-
-            return deferred.promise;
-          };
-
-        }
-
-        function _createCancelableRequest(restangularCollectionFunction, args) {
-          var callingArgs =  Array.prototype.slice.call(args),
-            /*jshint validthis:true */
-            _this = this;
-
-
-
-          var restangularObject = restangularCollectionFunction.apply(_this, callingArgs);
-
-          // Wrap the request items
-          restangularObject.get = _createWrappedRequestFunction(
-            restangularObject, restangularObject.get
-          );
-
-          restangularObject.getList = _createWrappedRequestFunction(
-            restangularObject, restangularObject.getList
-          );
-          restangularObject.post = _createWrappedRequestFunction(
-            restangularObject, restangularObject.post
-          );
-
-          _wrapRestangular(restangularObject);
-
-
-          return restangularObject;
-        }
-
-
-        function _wrapRequest(fn) {
-
-          return function() {
-            return _createCancelableRequest.call(this, fn, arguments);
-          };
-
-        }
-
-
-        function _wrapRequestFunctions(restangularObj) {
-
-          if (! angular.isDefined(restangularObj.one)) {
-            return;
-          }
-
-          restangularObj.one = _.bind(_wrapRequest(restangularObj.one), restangularObj);
-          restangularObj.all = _.bind(_wrapRequest(restangularObj.all), restangularObj);
-        }
-
-
-        function _wrapRestangular(restangularObj) {
-
-          _wrapRequestFunctions(restangularObj);
-
-
-          if (! angular.isDefined(restangularObj.withHttpConfig)) {
-            return;
-          }
-
-          var withHttpConfigFn = restangularObj.withHttpConfig;
-
-          // Wrap the config
-          restangularObj.withHttpConfig = function() {
-            var withHttpConfigRestangularObject = withHttpConfigFn.apply(this, Array.prototype.slice.call(arguments));
-
-            _wrapRequestFunctions(withHttpConfigRestangularObject);
-
-            return withHttpConfigRestangularObject;
-          };
-
-        }
-
-        function _init() {
-          _wrapRestangular($delegate);
-        }
-
-        _init();
-
-        ///////////////
-
-        $delegate.abortAllHTTPRequests = function() {
-          var requestUrls = _.keys(_cancellableRequests);
-          var abortRequestLength = requestUrls.length;
-
-          for (var i = 0; i < abortRequestLength; i++) {
-            var requestURL = requestUrls[i];
-            _cancellableRequests[requestURL].resolve();
-          }
-
-          // Reset the deferred abort list
-          _cancellableRequests.length = 0;
-        };
-
-        return $delegate;
-      }]);
+      require('./wrapRestangular')($provide);
 
     })
     .run(function($state, $location, $window, $timeout, $rootScope, cfpLoadingBar, HistoryManager, gettextCatalog, Settings) {
@@ -480,8 +345,9 @@
       HistoryManager.addToIgnoreScrollResetWhiteList(['analysis','advanced', 'compound', 'dataRepositories', 'donor', 'beacon', 'project', 'gene']);
       
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-        if(error.status === 404){
-          $state.go('404', {page: toState.name, id: toParams.id, url: toState.url}, {location: false});
+        if(error.status === 404) {
+          const redirect = getRedirectObject($location.url());
+          $state.go(redirect.state, {page: redirect.page, name: toState.name, id: toParams.id, url: toState.url}, {location: false});
         } else {
           console.error(error.message);
           console.error(error.stack);
@@ -489,7 +355,8 @@
       });
 
       $rootScope.$on('$stateNotFound', function() {
-        $state.go('404', {}, {location: false});
+        const redirect = getRedirectObject($location.url());
+        $state.go(redirect.state, {page: redirect.page}, {location: false});
       });
 
       Settings.get().then(ICGC_SETTINGS => { $rootScope.ICGC_SETTINGS = ICGC_SETTINGS });
@@ -590,7 +457,10 @@
 
     // If invalid route is requested
     $urlRouterProvider.otherwise(function ($injector, $location){
-      return '/404?page=' + $location.url();
+      const redirect = getRedirectObject($location.url());
+      $injector.invoke(['$state', function($state) {
+        $state.go(redirect.state, {page: redirect.page}, {location: false});
+      }]);
     });
 
     markedProvider.setOptions({ gfm: true });
@@ -606,9 +476,9 @@
       if (response.status !== 401 && response.status !== -1) {
         console.error('Response Error: ', toJson (response));
       }
-
+      
       if (response.status === 500) {
-        Notify.setMessage ('' + response.data.message || response.statusText);
+        Notify.setParams(response);
         Notify.showErrors();
       } else if (response.status === 404) {
         console.error(response.data.message);

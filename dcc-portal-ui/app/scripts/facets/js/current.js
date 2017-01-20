@@ -56,7 +56,7 @@
       if (_.isEmpty (filters)) {return false}
       if (_.size (filters) > 1) {return true}
 
-      var filter = _.first (filters);
+      var filter = _.head (filters);
 
       return (_.get(filter, 'controlTerm', '').startsWith(Extensions.ENTITY_PREFIX));
     };
@@ -82,7 +82,7 @@
         activeGeneIds = getActiveIds(filters, 'id', 'is');
       }
 
-      const filteredGeneIds = _.filter(activeGeneIds, (id) => _.contains(id, 'ENSG'));
+      const filteredGeneIds = _.filter(activeGeneIds, (id) => _.includes(id, 'ENSG'));
       if (_.isEmpty (filteredGeneIds)) {
         $scope.ensemblIdGeneSymbolMap = {};
         return;
@@ -175,7 +175,7 @@
       });
 
       // Remove secondary facet - entity
-      if (_.contains(['gene', 'donor', 'mutation'], type) === true && facet === 'id') {
+      if (_.includes(['gene', 'donor', 'mutation'], type) === true && facet === 'id') {
         Facets.removeFacet({
           type: type,
           facet: Extensions.ENTITY

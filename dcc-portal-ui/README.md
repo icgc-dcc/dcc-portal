@@ -1,56 +1,25 @@
 # ICGC DCC - Portal UI
 
-## Requirements
-
-If using `nvm` all that should be required for `node` and `npm` is:
-
-```shell
-nvm use 6
-```
-
-### `node`
-
-The build requires `node` version ≥ 6
-
-Instructions for installing Node via `nvm:   
-https://github.com/creationix/nvm#install-script  
-https://github.com/creationix/nvm#usage  
-
-### `npm`
-
-The build requires `npm` version ≥ 3
-
-To install:
-
-```shell
-npm install npm@latest -g
-```
-
-### `yarn`
-
-The build requires `yarn` version ≥ 0.17
-
-To install:
-
-```shell
-brew update
-brew install yarn
-```
-
-Other methods: 
- 
-https://yarnpkg.com/en/docs/install#linux-tab
-  
 ## Setup
 
-Install `npm` and `bower` dependencies:
+Install the following:
+- [nvm](http://docs.icgc.org/software/development/setup/#nvm)
+- [yarn](http://docs.icgc.org/software/development/setup/#yarn)
+
+Then execute:
+
+```shell
+nvm install 6
+nvm use 6
+```
+  
+Next, install `npm` dependencies:
 
 ```shell
 yarn
-npm run bower # this installs bower dependencies
 ```
 
-## Run
+## Running
 
 - Start node development server: `npm run dev`
 - Start the [Portal Server](../dcc-portal-server/README.md)

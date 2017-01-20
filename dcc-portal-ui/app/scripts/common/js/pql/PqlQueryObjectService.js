@@ -102,7 +102,7 @@
      */
     function inOperatorProcessor (node, emptyValue) {
       var permittedOps = ['in', 'eq'];
-      if (! _.contains (permittedOps, node.op)) {return emptyValue;}
+      if (! _.includes (permittedOps, node.op)) {return emptyValue;}
 
       var identifier = parseIdentifier (node.field);
       if (! identifier) {return emptyValue;}
@@ -118,7 +118,7 @@
 
     function notOperatorProcessor (node, emptyValue) {
       var permittedOps = ['not'];
-      if (! _.contains (permittedOps, node.op)) {return emptyValue;}
+      if (! _.includes (permittedOps, node.op)) {return emptyValue;}
 
       var values = ensureArray (node.values);
       if (values.length < 1) {return emptyValue;}
@@ -143,7 +143,7 @@
 
     function unaryOperatorProcessor (op, node, emptyValue) {
       var permittedOps = [op];
-      if (! _.contains (permittedOps, node.op)) {return emptyValue;}
+      if (! _.includes (permittedOps, node.op)) {return emptyValue;}
 
       /*
        * For unary operators such as 'exists' and 'missing' (supported here), the identifier is
@@ -162,7 +162,7 @@
 
     function orOperatorProcessor (node, emptyValue, accumulator) {
       var permittedOps = ['or'];
-      if (! _.contains (permittedOps, node.op)) {return emptyValue;}
+      if (! _.includes (permittedOps, node.op)) {return emptyValue;}
 
       return _.reduce (ensureArray (node.values), reduceFilterArrayToQueryFilters, accumulator);
     }
@@ -197,7 +197,7 @@
 
     function reduceFilterArrayToQueryFilters (result, node) {
       if (! node) {return result;}
-      if (! _.contains (supportedOps, node.op)) {return result;}
+      if (! _.includes (supportedOps, node.op)) {return result;}
 
       var values = ensureArray (node.values);
       if (values.length < 1) {return result;}
@@ -451,7 +451,7 @@
       var inValueArray = _.get (queryFilter, propertyPath, []);
 
       _.each (terms, function (term) {
-        if (term && ! _.contains (inValueArray, term)) {
+        if (term && ! _.includes (inValueArray, term)) {
           inValueArray.push (term);
         }
       });
@@ -474,7 +474,7 @@
       var notArray = _.get (queryFilter, propertyPath, []);
 
       _.each (terms, function (term) {
-        if (term && ! _.contains (notArray, term)) {
+        if (term && ! _.includes (notArray, term)) {
           notArray.push (term);
         }
       });
@@ -490,11 +490,11 @@
     function removeTermFromQueryFilter (categoryName, facetName, term, queryFilter) {
       var categoryKeys = getObjectProperties (queryFilter);
 
-      if (_.contains (categoryKeys, categoryName)) {
+      if (_.includes (categoryKeys, categoryName)) {
         var facetKeys = getObjectProperties (queryFilter [categoryName]);
         var inField = 'in';
 
-        if (_.contains (facetKeys, facetName)) {
+        if (_.includes (facetKeys, facetName)) {
           var propertyPath = [categoryName, facetName, inField];
           var inValueArray = _.get (queryFilter, propertyPath, []);
           queryFilter = _.set (queryFilter, propertyPath, _.without (inValueArray, term));
@@ -520,11 +520,11 @@
     function removeFacetFromQueryFilter (categoryName, facetName, notUsed, queryFilter) {
       var categoryKeys = getObjectProperties (queryFilter);
 
-      if (_.contains (categoryKeys, categoryName)) {
+      if (_.includes (categoryKeys, categoryName)) {
         var category = queryFilter [categoryName];
         var facetKeys = getObjectProperties (category);
 
-        if (_.contains (facetKeys, facetName)) {
+        if (_.includes (facetKeys, facetName)) {
           delete category[facetName];
 
           if (_.isEmpty (getObjectProperties (category))) {
@@ -546,7 +546,7 @@
     function addProjections (pql, fields) {
       fields = ensureArray (fields);
       var selectFields = _.remove (fields, function (s) {
-        return _.isString (s) && _.contains (validIncludeFields, s);
+        return _.isString (s) && _.includes (validIncludeFields, s);
       });
 
       if (_.isEmpty (selectFields)) {return pql;}
@@ -614,7 +614,7 @@
         return ensureString (s);
       });
 
-      var pqlArray = _.unique (_.without (args, emptyValue));
+      var pqlArray = _.uniq (_.without (args, emptyValue));
       var numberOfPql = pqlArray.length;
 
       if (numberOfPql < 1) {return emptyValue;}

@@ -854,7 +854,7 @@ angular.module('icgc.ui.iobio', [])
         function uniquelyConcat (fileCopies, property) {
           return _(fileCopies)
             .map (property)
-            .unique()
+            .uniq()
             .join(', ');
         }
 
@@ -863,8 +863,8 @@ angular.module('icgc.ui.iobio', [])
         };
 
         _ctrl.awsOrCollab = function(fileCopies) {
-          return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
-            _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
+          return _.includes(_.map(fileCopies, 'repoCode'), 'aws-virginia') ||
+            _.includes(_.map(fileCopies, 'repoCode'), 'collaboratory');
         };
 
         _ctrl.showIobioModal = function(objectId, objectName, name) {
@@ -922,7 +922,7 @@ angular.module('icgc.ui.iobio', [])
               return fCopy.repoCode === 'aws-virginia' || fCopy.repoCode === 'collaboratory';
             });
 
-            return _.pluck(fCopies, 'fileName')[0];
+            return _.map(fCopies, 'fileName')[0];
           } catch (err) {
             console.error(err);
             return 'Could Not Retrieve File Name';

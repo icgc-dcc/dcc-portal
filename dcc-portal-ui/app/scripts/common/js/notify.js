@@ -26,6 +26,8 @@
       error = false,
       message = '',
       theme = '';
+    
+    let params = {};
 
     function isVisible() {
       return !!visible;
@@ -71,6 +73,16 @@
       message = m;
     }
 
+    const setParams = (response) => {
+      if(!_.isEmpty(response)){
+        params.headers = response.headers();
+        params.source = response.config.url;
+        params.message = response.data.message || response.statusText;
+      }
+    };
+
+    const getParams = () => params;
+
     function getMessage() {
       return message;
     }
@@ -95,22 +107,26 @@
     }
 
     return {
-      isVisible: isVisible,
-      show: show,
-      showErrors: showErrors,
-      hide: hide,
-      redirectHome: redirectHome,
-      setMessage: setMessage,
-      getMessage: getMessage,
-      setRemovable: setRemovable,
-      isRemovable: isRemovable,
-      setTheme: setTheme,
-      getTheme: getTheme
+      isVisible,
+      show,
+      showErrors,
+      hide,
+      redirectHome,
+      setParams,
+      getParams,
+      setMessage,
+      getMessage,
+      setRemovable,
+      isRemovable,
+      setTheme,
+      getTheme
     };
   });
 
   module.controller('NotifyCtrl', function ($scope, Page, Notify) {
     $scope.notify = Notify;
+    $scope.responseParams = $scope.notify.getParams();
+
     $scope.$on('$locationChangeSuccess', function() {
       if (Notify.isVisible() && Page.page() !== 'error') {
         Notify.hide();
@@ -124,17 +140,41 @@
       replace: true,
       controller: 'NotifyCtrl',
       scope: true,
-      template: '<div><div data-ng-if="notify.isVisible()" class="t_notify_popup {{notify.getTheme()}}">' +
-                '<div class="t_notify_body pull-left" data-ng-bind-html="notify.getMessage()"></div>' +
-                '<div class="pull-right">' +
-                '<a class="t_notify_link" data-ng-href="" data-ng-click="notify.redirectHome()">'+
-                '<i data-ng-if="notify.isRemovable()" class="icon-home"></i>Home</a>' +
-                '<span>&nbsp;&nbsp;</span>' +
-                '<a class="t_notify_link" data-ng-href="" data-ng-click="notify.hide()">' +
-                '<i data-ng-if="notify.isRemovable()" class="icon-cancel"></i>Close</a>' +
-                '</div>' +
-                '</div>' +
-                '</div>'
+      template: `<div>
+                  <div data-ng-if="notify.isVisible()" class="t_notify_popup {{notify.getTheme()}}">
+                    <div class="t_notify_body pull-left">
+                      <span>
+                        An error occured while performing the requested operation. 
+                        <a class="t_notify_link" href="" data-ng-click="showMessage = !showMessage">See details</a>
+                         for more information.
+                      </span>
+                      <div data-ng-if="showMessage">
+                        <pre><code data-ng-bind="responseParams.message || notify.getMessage()"></code></pre>
+                        <span data-ng-if="responseParams.source && responseParams.headers">
+                          We have created an error report that you can send to help us improve ICGC Portal.
+                          <a class="t_notify_link" 
+                            href="mailto:dcc-support@icgc.org?Subject=ICGC DCC Portal - Error Report
+                              &body=An error occured while {{responseParams.source}} operation.%0A
+Error: {{responseParams.message || notify.getMessage()}}%0A
+Portal Information: %0A
+  API Version: {{responseParams.headers['x-icgc-api-version']}}%0A
+  Index Commit Id: {{responseParams.headers['x-icgc-index-commitid']}}%0A
+  Index Name: {{responseParams.headers['x-icgc-index-name']}}%0A
+  Portal Commit Id: {{responseParams.headers['x-icgc-portal-commitid']}}">Email error report.</a>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="pull-right">
+                      <a class="t_notify_link" data-ng-href="" data-ng-click="notify.redirectHome()">
+                        <i data-ng-if="notify.isRemovable()" class="icon-home"></i>Home
+                      </a>
+                      <span>&nbsp;&nbsp;</span>
+                      <a class="t_notify_link" data-ng-href="" data-ng-click="notify.hide()">
+                        <i data-ng-if="notify.isRemovable()" class="icon-cancel"></i>Close
+                      </a>
+                    </div>
+                  </div>
+                </div>`
     };
   });
 })();

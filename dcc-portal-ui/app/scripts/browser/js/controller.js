@@ -25,7 +25,8 @@
       Page.setTitle(gettextCatalog.getString('Genome Viewer'));
       Page.setPage('browser');
 
-      var pageSize = 20, done = false;
+      var pageSize = 20;
+      $scope.done = false;
 
       $scope.isValidChromosome = true;
       $scope.filters = LocationService.filters();
@@ -200,23 +201,23 @@
       $scope.activateTab($state.current.data.tab);
 
       $scope.$watch('genes', function (genes) {
-        if (!done &&
+        if (!$scope.done &&
             genes.hasOwnProperty('data') &&
             genes.data.hasOwnProperty('hits') &&
             genes.data.hits.length &&
             $scope.tab === 'genes') {
-          done = true;
+          $scope.done = true;
           var gene = genes.data.hits[0];
           $scope.setGeneActive(gene.id, {chromosome: gene.chromosome, start: gene.start, end: gene.end});
         }
       }, true);
       $scope.$watch('mutations', function (mutations) {
-        if (!done &&
+        if (!$scope.done &&
             mutations.hasOwnProperty('data') &&
             mutations.data.hasOwnProperty('hits') &&
             mutations.data.hits.length &&
             $scope.tab === 'mutations') {
-          done = true;
+          $scope.done = true;
           var mutation = mutations.data.hits[0];
           $scope.setMutationActive(mutation.id,
             {

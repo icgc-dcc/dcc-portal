@@ -172,7 +172,7 @@ import deepmerge from 'deepmerge';
         $scope.predefinedGO = _.filter(Extensions.GENE_SET_ROOTS, function(set) {
           return set.type === 'go_term';
         });
-        $scope.predefinedGOIds = _.pluck($scope.predefinedGO, 'id');
+        $scope.predefinedGOIds = _.map($scope.predefinedGO, 'id');
 
         activeIds = $scope.actives.concat($scope.predefinedGOIds);
 
@@ -240,7 +240,7 @@ import deepmerge from 'deepmerge';
         $scope.predefinedCurated = _.filter(Extensions.GENE_SET_ROOTS, function(set) {
           return set.type === 'curated_set';
         });
-        $scope.predefinedCuratedIds = _.pluck($scope.predefinedCurated, 'id');
+        $scope.predefinedCuratedIds = _.map($scope.predefinedCurated, 'id');
 
         activeIds = $scope.predefinedCuratedIds;
 
@@ -290,7 +290,7 @@ import deepmerge from 'deepmerge';
       var _name = term.name;
 
       var isGeneSet = function () {
-        return _.contains ( ['go_term', 'pathway'], _type );
+        return _.includes ( ['go_term', 'pathway'], _type );
       };
 
       if ( isGeneSet () ) {
@@ -370,7 +370,7 @@ import deepmerge from 'deepmerge';
       });
 
       // Remove secondary facet - entity
-      if (_.contains(['gene', 'donor', 'mutation'], type) === true && $scope.facetName === 'id') {
+      if (_.includes(['gene', 'donor', 'mutation'], type) === true && $scope.facetName === 'id') {
         Facets.removeFacet({
           type: type,
           facet: Extensions.ENTITY
