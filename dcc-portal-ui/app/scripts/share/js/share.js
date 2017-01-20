@@ -58,6 +58,9 @@ require('./share.scss');
             url: window.location.protocol + '//' + window.location.hostname + 
             port + window.location.pathname
           },
+        requestParams = (shouldUseParamsOnlyForRequest === true ? params : $location.search()),
+        queryStr = '',
+        urlShortnerParams = defaults;
 
       _.assign(urlShortnerParams, params);
 
