@@ -1,9 +1,29 @@
 import _ from 'lodash';
 
+const filterParams = [
+  'name',
+  'gene',
+  'atc',
+  'clinicalTrialCondition',
+  'drugClass',
+];
+
+const paginatedTableParams = [
+  'sortColumnId',
+  'sortOrder',
+  'currentPageNumber',
+  'itemsPerPage'
+];
+
+const routeParams = [
+  ...filterParams,
+  ...paginatedTableParams
+];
+
 angular.module('icgc.compounds.index', [])
   .config(function ($stateProvider) {
     $stateProvider.state('compound-index', {
-      url: '/compounds?name&gene&atc&clinicalTrialCondition&drugClass',
+      url: `/compounds?${routeParams.join('&')}`,
       template: '<compound-index></compound-index>',
       reloadOnSearch: false,
     });
@@ -175,10 +195,13 @@ angular.module('icgc.compounds.index', [])
                     '$.drugClass',
                     '$.atcCodes[*].description',
                   ]"
-                  initial-sort-column-id="'geneCount'"
-                  initial-sort-order="'desc'"
+                  sort-column-id="vm.tableState.sortColumnId"
+                  sort-order="vm.tableState.sortOrder"
+                  items-per-page="vm.tableState.itemsPerPage"
+                  current-page-number="vm.tableState.currentPageNumber"
                   columns="vm.columns"
                   sticky-header="true"
+                  on-change="vm.handlePaginatedTableChange"
                 >
                 </paginated-table>
               </div>
@@ -206,8 +229,13 @@ angular.module('icgc.compounds.index', [])
       this.$onInit = update;
       this.$onChanges = update;
 
-      this.filters = $location.search() || {};
-      console.log('filters was ', this.filters);
+      this.filters = _.pick($location.search(), filterParams) || {};
+      this.tableState = _.defaults(_.pick($location.search(), paginatedTableParams), {
+        sortColumnId: 'geneCount',
+        sortOrder: 'desc',
+        currentPageNumber: 1,
+        itemsPerPage: 10
+      });
 
       this.columns = [
         {
@@ -279,6 +307,8 @@ angular.module('icgc.compounds.index', [])
         this.handleFiltersChange(this.filters);
       };
 
+      const getCombinedState = () => Object.assign({}, this.filters, this.tableState);
+
       this.handleFiltersChange = (filters) => {
         const nameRegex = new RegExp(this.filters.name, 'i');
         const atcRegex = new RegExp(this.filters.atc, 'i');
@@ -296,7 +326,13 @@ angular.module('icgc.compounds.index', [])
         });
 
         $location.replace();
-        $location.search(this.filters);
+        $location.search(getCombinedState());
+      };
+
+      this.handlePaginatedTableChange = (newTableState) => {
+        this.tableState = newTableState;
+        $location.replace();
+        $location.search(getCombinedState());
       };
     },
     controllerAs: 'vm',
