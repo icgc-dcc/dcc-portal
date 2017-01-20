@@ -140,7 +140,7 @@ public class UISearchResource extends Resource {
 
   @Path("/projects/donor-mutation-counts")
   @GET
-  public Map<String, Map<String, Integer>> getProjectDonorMutation() {
+  public Map<String, Map<String, Long>> getProjectDonorMutation() {
     return occurrenceService.getProjectMutationDistribution();
   }
 

@@ -46,8 +46,8 @@ import lombok.extern.slf4j.Slf4j;
 public class OccurrenceService {
 
   private final OccurrenceRepository occurrenceRepository;
-  private final AtomicReference<Map<String, Map<String, Integer>>> projectMutationCache =
-      new AtomicReference<Map<String, Map<String, Integer>>>();
+  private final AtomicReference<Map<String, Map<String, Long>>> projectMutationCache =
+      new AtomicReference<Map<String, Map<String, Long>>>();
 
   @Async
   public void init() {
@@ -89,7 +89,7 @@ public class OccurrenceService {
     return new Occurrence(occurrenceRepository.findOne(occurrenceId, query));
   }
 
-  public Map<String, Map<String, Integer>> getProjectMutationDistribution() {
+  public Map<String, Map<String, Long>> getProjectMutationDistribution() {
     val result = projectMutationCache.get();
 
     if (null == result) {

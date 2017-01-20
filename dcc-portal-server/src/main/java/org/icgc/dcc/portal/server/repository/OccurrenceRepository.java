@@ -17,9 +17,11 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static com.google.common.collect.Maps.toMap;
 import static java.lang.String.format;
 import static org.dcc.portal.pql.meta.Type.OBSERVATION_CENTRIC;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.nested;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.reverseNested;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 import static org.icgc.dcc.common.core.model.ConsequenceType.CODING_SEQUENCE_VARIANT;
 import static org.icgc.dcc.common.core.model.ConsequenceType.DISRUPTIVE_INFRAME_DELETION;
 import static org.icgc.dcc.common.core.model.ConsequenceType.DISRUPTIVE_INFRAME_INSERTION;
@@ -47,22 +49,26 @@ import static org.icgc.dcc.common.core.model.ConsequenceType._5_PRIME_UTR_TRUNCA
 import static org.icgc.dcc.common.core.model.ConsequenceType._5_PRIME_UTR_VARIANT;
 import static org.icgc.dcc.common.core.util.Separators.COMMA;
 import static org.icgc.dcc.common.core.util.Strings2.DOUBLE_QUOTE;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
-import static org.icgc.dcc.portal.server.util.SearchResponses.hasHits;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.search.SearchHitField;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.nested.Nested;
+import org.elasticsearch.search.aggregations.bucket.nested.ReverseNested;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.icgc.dcc.common.core.model.ConsequenceType;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
@@ -87,7 +93,6 @@ public class OccurrenceRepository {
 
   private static final String[] NO_EXCLUDE = null;
   private static final IndexType CENTRIC_TYPE = IndexType.OCCURRENCE_CENTRIC;
-  private final static TimeValue KEEP_ALIVE = new TimeValue(10000);
 
   private static final Jql2PqlConverter PQL_CONVERTER = Jql2PqlConverter.getInstance();
 
@@ -111,6 +116,8 @@ public class OccurrenceRepository {
   private static final Map<String, String> FIELD_MAP = ImmutableMap.of(
       PQL_ALIAS_CONSEQUENCE_DONOR_ID, "donor._donor_id",
       PQL_ALIAS_CONSEQUENCE_PROJECT_ID, "project._project_id");
+  private static final String PROJECT_AGGS = "projects";
+  private static final String DONOR_AGGS = "donors";
 
   private final Client client;
   private final String indexName;
@@ -170,7 +177,7 @@ public class OccurrenceRepository {
     return map;
   }
 
-  public Map<String, Map<String, Integer>> getProjectDonorMutationDistribution() {
+  public Map<String, Map<String, Long>> getProjectDonorMutationDistribution() {
     // See DCC-2612
     val consequenceList = Lists.transform(Lists.<ConsequenceType> newArrayList(
         _3_PRIME_UTR_TRUNCATION,
@@ -199,55 +206,41 @@ public class OccurrenceRepository {
         SYNONYMOUS_VARIANT,
         NON_CANONICAL_START_CODON), type -> DOUBLE_QUOTE + type.toString() + DOUBLE_QUOTE);
 
-    val searchSize = 5000;
     val selects = FIELD_MAP.keySet();
     val pql = format("select (%s), in (mutation.consequenceType, %s)",
         COMMA_JOINER.join(selects),
         COMMA_JOINER.join(consequenceList));
-
     val search = queryEngine.execute(pql, OBSERVATION_CENTRIC).getRequestBuilder()
-        .setSize(searchSize)
-        .setScroll(KEEP_ALIVE);
+        .setSize(0);
+
+    search.addAggregation(buildProjectDonorAggs());
+
     log.debug("ES search is: '{}'.", search);
+    return buildResultMap(search.get().getAggregations());
+  }
 
-    SearchResponse response = search.execute().actionGet();
-    val result = Maps.<String, Map<String, Integer>> newHashMap();
+  private static AggregationBuilder buildProjectDonorAggs() {
+    return nested(PROJECT_AGGS, "observation_project")
+        .subAggregation(terms(PROJECT_AGGS).field(FIELD_MAP.get(PQL_ALIAS_CONSEQUENCE_PROJECT_ID)).size(100)
+            .subAggregation(reverseNested(DONOR_AGGS).path("donor")
+                .subAggregation(terms(DONOR_AGGS).field(FIELD_MAP.get(PQL_ALIAS_CONSEQUENCE_DONOR_ID)).size(20000))));
+  }
 
-    while (true) {
-      response = client.prepareSearchScroll(response.getScrollId())
-          .setScroll(KEEP_ALIVE)
-          .execute().actionGet();
+  private static Map<String, Map<String, Long>> buildResultMap(Aggregations aggs) {
+    val result = Maps.<String, Map<String, Long>> newHashMap();
+    val nested = (Nested) aggs.get(PROJECT_AGGS);
+    val projectsAggs = (Terms) nested.getAggregations().get(PROJECT_AGGS);
 
-      for (val hit : response.getHits()) {
-        val fields = hit.getFields();
-        val projectId = getStringByAlias(fields, PQL_ALIAS_CONSEQUENCE_PROJECT_ID);
-        val donorId = getStringByAlias(fields, PQL_ALIAS_CONSEQUENCE_DONOR_ID);
-        val project = result.getOrDefault(projectId, Maps.<String, Integer> newHashMap());
-        val donorCount = project.getOrDefault(donorId, 0);
+    val projects = projectsAggs.getBuckets();
+    projects.forEach(p -> {
+      String projectId = p.getKeyAsString();
+      ReverseNested reverse = p.getAggregations().get(DONOR_AGGS);
+      Terms donorAgg = reverse.getAggregations().get(DONOR_AGGS);
 
-        project.put(donorId, donorCount + 1);
-        result.put(projectId, project);
-      }
-
-      val finished = !hasHits(response);
-
-      if (finished) {
-        break;
-      }
-    }
-
-    // Print out some useful info now
-    if (log.isDebugEnabled()) {
-      val counts = toMap(result.keySet(), projectId -> result.get(projectId).size())
-          .entrySet();
-
-      counts.stream().forEach(entry -> log.debug("Project: {} => Donor Count: {}", entry.getKey(), entry.getValue()));
-
-      val totalDonors = counts.stream()
-          .mapToLong(Entry::getValue)
-          .sum();
-      log.debug("Total donor count: {} ", totalDonors);
-    }
+      Map<String, Long> donorMap =
+          donorAgg.getBuckets().stream().collect(toImmutableMap(Bucket::getKeyAsString, Bucket::getDocCount));
+      result.put(projectId, donorMap);
+    });
 
     return result;
   }

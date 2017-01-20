@@ -19,6 +19,7 @@ package org.icgc.dcc.portal.server.repository;
 
 import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Maps.immutableEntry;
+import static java.lang.String.format;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -28,6 +29,7 @@ import static org.elasticsearch.search.aggregations.AggregationBuilders.nested;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 import static org.elasticsearch.search.sort.FieldSortBuilder.DOC_FIELD_NAME;
 import static org.elasticsearch.search.sort.SortOrder.ASC;
+import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
@@ -67,6 +69,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
@@ -85,10 +88,12 @@ public class GeneRepository implements Repository {
   private static final String[] NO_EXCLUDE = null;
   private static final IndexType CENTRIC_TYPE = IndexType.GENE_CENTRIC;
   private static final String GENE_TEXT = IndexType.GENE_TEXT.getId();
-  private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
+  private static final TimeValue KEEP_ALIVE = new TimeValue(120000);
   private static final String GENE_SYMBOL_FIELD_NAME = "symbol";
   private static final String ENSEMBL_ID_FIELD_NAME = "id";
-  private static final String[] GENE_SYMBOL_ENSEMBL_ID_FIELDS = { GENE_SYMBOL_FIELD_NAME, ENSEMBL_ID_FIELD_NAME };
+  private static final String TEXT_PREFIX = "text";
+  private static final String[] GENE_SYMBOL_ENSEMBL_ID_FIELDS =
+      { format("%s.%s", TEXT_PREFIX, GENE_SYMBOL_FIELD_NAME), format("%s.%s", TEXT_PREFIX, ENSEMBL_ID_FIELD_NAME) };
 
   public static final Map<String, String> GENE_ID_SEARCH_FIELDS = ImmutableMap.of(
       "id.search", "_gene_id",
@@ -359,10 +364,9 @@ public class GeneRepository implements Repository {
       }
 
       for (val hit : response.getHits()) {
-        val values = hit.getSource();
-        val ensemblId = values.get(ENSEMBL_ID_FIELD_NAME).toString();
-        val geneSymbol = values.get(GENE_SYMBOL_FIELD_NAME).toString();
-
+        val values = DEFAULT.convertValue(hit.getSource(), JsonNode.class);
+        val ensemblId = values.path(TEXT_PREFIX).path(ENSEMBL_ID_FIELD_NAME).asText();
+        val geneSymbol = values.path(TEXT_PREFIX).path(GENE_SYMBOL_FIELD_NAME).asText();
         result.put(geneSymbol, ensemblId);
       }
 
