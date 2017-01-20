@@ -352,6 +352,8 @@
         }
       });
 
+      $rootScope._ = require('lodash');
+
       $rootScope.$on('$stateNotFound', function() {
         const redirect = getRedirectObject($location.url());
         $state.go(redirect.state, {page: redirect.page}, {location: false});
