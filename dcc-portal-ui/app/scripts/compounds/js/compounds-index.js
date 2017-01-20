@@ -151,6 +151,9 @@ angular.module('icgc.compounds.index', [])
                       <span>FDA</span>
                     </translate>
                   </span>
+                  <span class="t_facets__facet__terms__active__term__count">
+                    {{ vm.getFilteredAggregation('drugClass', 'fda') }}
+                  </span>
              </div>
 
              <div
@@ -175,6 +178,9 @@ angular.module('icgc.compounds.index', [])
                     <translate>
                       <span>World</span>
                     </translate>
+                  </span>
+                  <span class="t_facets__facet__terms__active__term__count">
+                    {{ vm.getFilteredAggregation('drugClass', 'world') }}
                   </span>
              </div>
 
@@ -309,7 +315,7 @@ angular.module('icgc.compounds.index', [])
 
       const getCombinedState = () => Object.assign({}, this.filters, this.tableState);
 
-      const getFilteredCompounds = (compounds, filters) => {
+      this.getFilteredCompounds = (compounds, filters) => {
         const nameRegex = new RegExp(filters.name, 'i');
         const atcRegex = new RegExp(filters.atc, 'i');
         const geneRegex = new RegExp(filters.gene, 'i');
@@ -326,8 +332,12 @@ angular.module('icgc.compounds.index', [])
         });
       };
 
+      this.getFilteredAggregation = (filterName, filterValue) => {
+        return _.filter(this.getFilteredCompounds(this.compounds, _.omit(this.filters, [filterName])), {[filterName]: filterValue}).length;
+      }
+
       this.handleFiltersChange = (filters) => {
-        this.filteredCompounds = getFilteredCompounds(this.compounds, filters);
+        this.filteredCompounds = this.getFilteredCompounds(this.compounds, filters);
         $location.replace();
         $location.search(getCombinedState());
       };
