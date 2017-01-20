@@ -115,9 +115,11 @@ public class OccurrenceRepository {
    */
   private static final Map<String, String> FIELD_MAP = ImmutableMap.of(
       PQL_ALIAS_CONSEQUENCE_DONOR_ID, "donor._donor_id",
-      PQL_ALIAS_CONSEQUENCE_PROJECT_ID, "project._project_id");
+      PQL_ALIAS_CONSEQUENCE_PROJECT_ID, "observation_project._project_id");
   private static final String PROJECT_AGGS = "projects";
   private static final String DONOR_AGGS = "donors";
+  private static final int PROJECT_UPPER_BOUND = 100;
+  private static final int DONOR_UPPER_BOUND = 25000;
 
   private final Client client;
   private final String indexName;
@@ -215,15 +217,18 @@ public class OccurrenceRepository {
 
     search.addAggregation(buildProjectDonorAggs());
 
-    log.debug("ES search is: '{}'.", search);
+    log.info("ES search is: '{}'.", search);
     return buildResultMap(search.get().getAggregations());
   }
 
   private static AggregationBuilder buildProjectDonorAggs() {
     return nested(PROJECT_AGGS, "observation_project")
-        .subAggregation(terms(PROJECT_AGGS).field(FIELD_MAP.get(PQL_ALIAS_CONSEQUENCE_PROJECT_ID)).size(100)
-            .subAggregation(reverseNested(DONOR_AGGS).path("donor")
-                .subAggregation(terms(DONOR_AGGS).field(FIELD_MAP.get(PQL_ALIAS_CONSEQUENCE_DONOR_ID)).size(20000))));
+        .subAggregation(
+            terms(PROJECT_AGGS).field(FIELD_MAP.get(PQL_ALIAS_CONSEQUENCE_PROJECT_ID)).size(PROJECT_UPPER_BOUND)
+                .subAggregation(reverseNested(DONOR_AGGS).path("donor")
+                    .subAggregation(
+                        terms(DONOR_AGGS).field(FIELD_MAP.get(PQL_ALIAS_CONSEQUENCE_DONOR_ID))
+                            .size(DONOR_UPPER_BOUND))));
   }
 
   private static Map<String, Map<String, Long>> buildResultMap(Aggregations aggs) {
