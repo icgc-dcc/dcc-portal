@@ -190,7 +190,7 @@ public class SearchRepository {
         .setQuery(filteredQuery)
         .setPostFilter(getPostFilter(type));
 
-    log.info("ES search query is: {}", search);
+    log.debug("ES search query is: {}", search);
     val response = search.execute().actionGet();
     log.debug("ES search result is: {}", response);
 
@@ -228,7 +228,7 @@ public class SearchRepository {
   }
 
   private static QueryBuilder getPostFilter(String type) {
-    val field = "type";
+    val field = "text.type";
     val result = boolQuery();
 
     if (SIMPLE_TERM_FILTER_TYPES.contains(type)) {
