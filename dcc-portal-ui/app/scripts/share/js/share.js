@@ -59,14 +59,6 @@ require('./share.scss');
             port + window.location.pathname
           },
 
-      // var port = '8080', <- for local development only
-        defaults = {
-          url: 'https://dev.dcc.icgc.org:' + port + window.location.pathname
-        },
-        requestParams = (shouldUseParamsOnlyForRequest === true ? params : $location.search()),
-        queryStr = '',
-        urlShortnerParams = defaults;
-
       _.assign(urlShortnerParams, params);
 
       // For some reason JSHint is not correctly picking up that we are checking if the object
