@@ -251,7 +251,7 @@ angular.module('icgc.compounds.index', [])
       };
 
       this.filters = _.defaults(_.pick($location.search(), filterParams), defaultFiltersState);
-      this.tableState = _.defaults(_.pick($location.search(), paginatedTableParams), defaultTableState);
+      this.tableState = _.mapValues(_.defaults(_.pick($location.search(), paginatedTableParams), defaultTableState), (value, key) => _.isNumber(defaultTableState[key]) ? _.toNumber(value) : value);
 
       this.columns = [
         {
