@@ -54,27 +54,3 @@
     }
   }
 }
-
-togglable-term {
-  .term__extent-bar {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    right: 0;
-    transition: all 1s;
-    background-color: #f2f2f2;
-  }
-  & > .is-active {
-    .term__extent-bar {
-      background: #bbe7f7;
-    }
-    &:hover {
-      .term__label {
-        text-decoration: line-through;
-      }
-      .term__label__icon:before {
-        content: '\e81d';
-      }
-    }
-  }
-}
