@@ -20,15 +20,9 @@ package org.dcc.portal.pql.query;
 import static org.dcc.portal.pql.es.utils.Visitors.createAggregationBuilderVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.createQueryBuilderVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.filterBuilderVisitor;
-import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 
 import java.util.Collection;
 import java.util.Optional;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.dcc.portal.pql.es.ast.CountNode;
 import org.dcc.portal.pql.es.ast.ExpressionNode;
@@ -45,6 +39,11 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.search.sort.SortOrder;
 
 import com.google.common.collect.Lists;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -116,18 +115,11 @@ public class EsRequestBuilder {
   }
 
   private static void addSorts(SearchRequestBuilder builder, SortNode sorts, QueryContext context) {
-    // TODO: Temporary solution to the sorting issue on the donor tab when sorting by primary site or project.
-    // JIRA: DCC-3791
-    val type = context.getType();
-    val isDonorCentric = (type == DONOR_CENTRIC);
-    val prefix = type.getId();
-
     for (val sort : sorts.getFields().entrySet()) {
       val fieldName = sort.getKey();
-      val qualifiedName = (isDonorCentric && fieldName.startsWith("project.")) ? (prefix + "." + fieldName) : fieldName;
       val sortOrder = SortOrder.valueOf(sort.getValue().toString());
 
-      builder.addSort(qualifiedName, sortOrder);
+      builder.addSort(fieldName, sortOrder);
     }
   }
 
