@@ -21,6 +21,7 @@ angular.module('app.common.components')
     sortOrder: '<',
     shouldExportCSV: '<',
     stickyHeader: '<',
+    itemTypeName: '<',
     onChange: '&',
   },
   controller: function ($filter, $compile, $scope) {

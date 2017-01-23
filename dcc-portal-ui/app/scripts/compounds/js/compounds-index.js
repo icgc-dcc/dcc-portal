@@ -140,6 +140,7 @@ angular.module('icgc.compounds.index', [])
                   columns="vm.columns"
                   sticky-header="true"
                   on-change="vm.handlePaginatedTableChange"
+                  item-type-name="'compound'"
                 >
                 </paginated-table>
               </div>

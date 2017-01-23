@@ -11,7 +11,7 @@
             of
           </span>
           <strong>{{ vm.filteredRows().length.toLocaleString() }}</strong>
-        files
+        {{ (vm.itemTypeName || 'result') | pluralize : vm.filteredRows().length }}
       </span>
 
       <span
