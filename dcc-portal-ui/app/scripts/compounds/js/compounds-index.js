@@ -70,7 +70,7 @@ angular.module('icgc.compounds.index', [])
                 class="t_input__block"
                 ng-model="vm.filters.gene"
                 ng-change="vm.handleFiltersChange(vm.filters)"
-                placeholder="{{ vm.isLoadingGeneSymbolMap ? 'Loading Gene Symbols' : 'e.g. Q9ULX7, ENSG00000144891'}}"
+                placeholder="{{ vm.isLoadingGeneSymbolMap ? 'Loading Gene Symbols' : 'e.g. BRAF, ENSG00000144891'}}"
                 ng-disabled="vm.isLoadingGeneSymbolMap"
               ></input>
             </collapsible-wrapper>
