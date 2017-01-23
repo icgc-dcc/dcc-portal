@@ -196,7 +196,10 @@ angular.module('icgc.compounds.index', [])
           dataFormat: (cell, row, array, extraData) => {
             const { tableFilter } = extraData;
             const unformattedContent = `${row.name} (${row.zincId})`;
-            const content = highlightFn(unformattedContent, [tableFilter, this.filters.name].join(' '));
+            const content = [tableFilter, this.filters.name]
+              .sort((a, b) => b.length - a.length)
+              .filter(Boolean)
+              .reduce((content, query) => highlightFn(content, query), unformattedContent) || unformattedContent;
             return `
               <a ui-sref="compound({compoundId: '${row.zincId}'})">
                 ${content}
@@ -211,7 +214,10 @@ angular.module('icgc.compounds.index', [])
           dataFormat: (cell, row, array, extraData) => {
             const { tableFilter } = extraData;
             const unformattedContent = _.map(row.atcCodes, 'description').join(', ');
-            const content = highlightFn(unformattedContent, [tableFilter, this.filters.atc].join(' '));
+            const content = [tableFilter, this.filters.atc]
+              .sort((a, b) => b.length - a.length)
+              .filter(Boolean)
+              .reduce((content, query) => highlightFn(content, query), unformattedContent) || unformattedContent;
             return `
               <div collapsible-text>
                 ${content}
