@@ -444,6 +444,10 @@
     this.resolve = function (ensemblIds) {
       return Restangular.one (apiUrl, ensemblIds).get();
     };
+
+    this.getAll = () => {
+      return Restangular.one(apiUrl).get().then(x => x.plain());
+    };
   });
 
 })();

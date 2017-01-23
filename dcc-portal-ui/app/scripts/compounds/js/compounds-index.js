@@ -152,7 +152,7 @@ angular.module('icgc.compounds.index', [])
     // # genes targetd with bars
     // 100% width would be max length of 
     // http://local.dcc.icgc.org:9000/api/v1/ui/search/gene-symbols/ENSG00000170827,ENSG00000095303
-    controller: function (Page, CompoundIndexService, $location, $scope) {
+    controller: function (Page, CompoundIndexService, $location, $scope, GeneSymbols) {
       Page.setTitle('Compounds');
       Page.setPage('entity');
 
@@ -164,6 +164,12 @@ angular.module('icgc.compounds.index', [])
         this.compounds = await CompoundIndexService.getAll();
         this.isLoading = false;
         this.handleFiltersChange(this.filters);
+      });
+
+      this.isLoadingGeneSymbols = true;
+      GeneSymbols.getAll().then(geneSymbols => {
+        this.isLoadingGeneSymbols = false;
+        this.geneSymbols = geneSymbols;
       });
 
       this.$onInit = update;
@@ -283,7 +289,7 @@ angular.module('icgc.compounds.index', [])
         return _.filter(compounds, (compound) => {
           return _.every([
             filters.name ? (compound.name.match(nameRegex) || compound.zincId.match(nameRegex)) : true,
-            filters.gene ? (_.some(compound.genes, item => _.some(_.values(item).map(value => value.match(geneRegex))))) : true,
+            filters.gene ? (_.some(compound.genes, item => _.some(_.map(item, (value, key) => (value.match(geneRegex) || (key === 'ensemblGeneId' && this.geneSymbols && this.geneSymbols[value] && this.geneSymbols[value].match(geneRegex))))))) : true,
             filters.atc ? (_.some(compound.atcCodes, item => _.some(_.values(item).map(value => value.match(atcRegex))))) : true,
             filters.clinicalTrialCondition ? (_.some(_.flattenDeep(compound.trials.map(trial => trial.conditions.map(_.values))), str => str.match(clinicalTrialConditionRegex))) : true,
             filters.drugClass && filters.drugClass.length ? filters.drugClass.includes(compound.drugClass) : true,
