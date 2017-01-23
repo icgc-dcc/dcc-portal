@@ -20,6 +20,8 @@ package org.dcc.portal.pql.query;
 import static org.dcc.portal.pql.es.utils.Visitors.createAggregationBuilderVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.createQueryBuilderVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.filterBuilderVisitor;
+import static org.elasticsearch.search.sort.SortBuilders.fieldSort;
+import static org.elasticsearch.search.sort.SortBuilders.scoreSort;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -50,6 +52,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EsRequestBuilder {
 
   private static final String[] NO_EXCLUDE = null;
+  private static final String SCORE_FIELD = "_score";
 
   @NonNull
   private final Client client;
@@ -119,7 +122,17 @@ public class EsRequestBuilder {
       val fieldName = sort.getKey();
       val sortOrder = SortOrder.valueOf(sort.getValue().toString());
 
-      builder.addSort(fieldName, sortOrder);
+      if (fieldName.equals(SCORE_FIELD)) {
+        builder.addSort(scoreSort().order(sortOrder));
+      } else {
+        val sortBuilder = fieldSort(fieldName).order(sortOrder);
+        val nestedPaths = sorts.getNestedPaths();
+        if (nestedPaths.containsKey(fieldName)) {
+          sortBuilder.setNestedPath(nestedPaths.get(fieldName));
+        }
+
+        builder.addSort(sortBuilder);
+      }
     }
   }
 
