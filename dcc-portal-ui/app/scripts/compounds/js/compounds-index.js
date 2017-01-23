@@ -14,7 +14,8 @@ const paginatedTableParams = [
   'sortColumnId',
   'sortOrder',
   'currentPageNumber',
-  'itemsPerPage'
+  'itemsPerPage',
+  'tableFilter',
 ];
 
 const routeParams = [
@@ -131,6 +132,7 @@ angular.module('icgc.compounds.index', [])
                     '$.drugClass',
                     '$.atcCodes[*].description',
                   ]"
+                  table-filter="vm.tableState.tableFilter"
                   sort-column-id="vm.tableState.sortColumnId"
                   sort-order="vm.tableState.sortOrder"
                   items-per-page="vm.tableState.itemsPerPage"
@@ -178,7 +180,8 @@ angular.module('icgc.compounds.index', [])
         sortColumnId: 'geneCount',
         sortOrder: 'desc',
         currentPageNumber: 1,
-        itemsPerPage: 10
+        itemsPerPage: 10,
+        tableFilter: '',
       };
 
       this.filters = _.defaults(_.pick($location.search(), filterParams), defaultFiltersState);

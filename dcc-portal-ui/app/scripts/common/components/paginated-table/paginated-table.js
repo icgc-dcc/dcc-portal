@@ -15,6 +15,7 @@ angular.module('app.common.components')
      * see https://www.npmjs.com/package/jsonpath-plus for valid jsonpath queries
      */
     searchableJsonpaths: '<',
+    tableFilter: '<',
     filterFunction: '<',
     sortColumnId: '<',
     sortOrder: '<',
@@ -23,7 +24,6 @@ angular.module('app.common.components')
     onChange: '&',
   },
   controller: function ($filter, $compile, $scope) {
-    this.filter = '';
 
     const defaultBindings = {
       rows: [],
@@ -32,6 +32,7 @@ angular.module('app.common.components')
       currentPageNumber: 1,
       sortOrder: 'asc',
       shouldExportCSV: false,
+      tableFilter: '',
     };
 
     let getFilteredRows;
@@ -60,7 +61,7 @@ angular.module('app.common.components')
     );
 
     this.filteredRows = () => {
-      const filteredRows = getFilteredRows(this.filter);
+      const filteredRows = getFilteredRows(this.tableFilter);
       const column = _.find(this.columns, {id: this.sortColumnId}) || this.columns[0];
       const iteratee = column.sortFunction || column.field;
       return _.orderBy(filteredRows, iteratee, this.sortOrder);
@@ -76,6 +77,21 @@ angular.module('app.common.components')
 
     this.$onInit = function () {
       update();
+      $scope.$watchGroup([
+        () => this.sortColumnId,
+        () => this.sortOrder,
+        () => this.currentPageNumber,
+        () => this.itemsPerPage,
+        () => this.tableFilter,
+      ], () => {
+        (this.onChange() || _.noop)({
+          sortColumnId: this.sortColumnId,
+          sortOrder: this.sortOrder,
+          currentPageNumber: this.currentPageNumber,
+          itemsPerPage: this.itemsPerPage,
+          tableFilter: this.tableFilter,
+        });
+      });
     };
 
     this.$onChanges = update;
@@ -85,7 +101,7 @@ angular.module('app.common.components')
     };
 
     this.handleFilterChange = (filter) => {
-      this.filter = filter;
+      this.tableFilter = filter;
       this.currentPageNumber = 1;
     };
 
@@ -98,20 +114,6 @@ angular.module('app.common.components')
     };
 
     this.isSortingOnColumn = (column) => column.id === this.sortColumnId;
-
-    $scope.$watchGroup([
-        () => this.sortColumnId,
-        () => this.sortOrder,
-        () => this.currentPageNumber,
-        () => this.itemsPerPage,
-      ], () => {
-      (this.onChange() || _.noop)({
-        sortColumnId: this.sortColumnId,
-        sortOrder: this.sortOrder,
-        currentPageNumber: this.currentPageNumber,
-        itemsPerPage: this.itemsPerPage,
-      });
-    });
   },
   controllerAs: 'vm',
   transclude: true,
