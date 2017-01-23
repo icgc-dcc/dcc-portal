@@ -75,7 +75,11 @@
           ng-repeat="column in vm.columns"
           style="{{column.style}}"
           class="{{column.classes}}"
-          bind-html-compile="column.dataFormat ? column.dataFormat(row[column.field], row, vm.columns) : row[column.field]"
+          bind-html-compile="
+            column.dataFormat
+              ? column.dataFormat(row[column.field], row, vm.columns, {tableFilter: vm.filter})
+              : row[column.field]
+          "
         >
         </td>
       </tr>

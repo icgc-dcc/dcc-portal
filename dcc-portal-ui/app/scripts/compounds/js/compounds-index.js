@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import memoize from 'memoizee';
+import { highlightFn } from '../../common/js/common';
 
 const filterParams = [
   'name',
@@ -189,10 +190,12 @@ angular.module('icgc.compounds.index', [])
           heading: 'Name',
           isSortable: true,
           sortFunction: (row) => `${row.name} (${row.zincId})`,
-          dataFormat: (cell, row, array) => {
+          dataFormat: (cell, row, array, extraData) => {
+            const { tableFilter } = extraData;
+            const content = highlightFn(`${row.name} (${row.zincId})`, tableFilter);
             return `
               <a ui-sref="compound({compoundId: '${row.zincId}'})">
-                ${row.name} (${row.zincId})
+                ${content}
               </a>
             `;
           }
@@ -201,10 +204,14 @@ angular.module('icgc.compounds.index', [])
           id: 'atc',
           heading: 'ATC Level 4 Description',
           style: 'max-width: 200px',
-          dataFormat: (cell, row, array) => {
-            return `<div collapsible-text>
-              ${_.map(row.atcCodes, 'description').join(', ')}
-            </div>`;
+          dataFormat: (cell, row, array, extraData) => {
+            const { tableFilter } = extraData;
+            const content = highlightFn(_.map(row.atcCodes, 'description').join(', '), tableFilter);
+            return `
+              <div collapsible-text>
+                ${content}
+              </div>
+            `;
           },
         },
         {
@@ -212,8 +219,10 @@ angular.module('icgc.compounds.index', [])
           heading: 'Compound Class',
           isSortable: true,
           field: 'drugClass',
-          dataFormat: (cell, row, array) => {
-            return { fda: 'FDA', world: 'World' }[cell];
+          dataFormat: (cell, row, array, extraData) => {
+            const { tableFilter } = extraData;
+            const content = { fda: 'FDA', world: 'World' }[cell];
+            return highlightFn(content, tableFilter)
           }
         },
         {
