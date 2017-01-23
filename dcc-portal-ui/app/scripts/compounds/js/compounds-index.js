@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import memoize from 'memoizee';
 
 const filterParams = [
   'name',
@@ -96,21 +97,22 @@ angular.module('icgc.compounds.index', [])
             <collapsible-wrapper
               title="'Class'"
             >
-              <togglable-term
-                on-click="vm.toggleFacetContent('drugClass', 'fda')"
-                is-active="vm.filters.drugClass.includes('fda')"
-                label="'FDA'"
-                items-affected-by-facet="vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length"
-                items-affected-by-term="_.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'fda'}).length"
-              ></togglable-term>
 
               <togglable-term
-                on-click="vm.toggleFacetContent('drugClass', 'world')"
-                is-active="vm.filters.drugClass.includes('world')"
-                label="'World'"
+                ng-repeat="term in vm.getSortedTerms({
+                  terms: [
+                    {code: 'fda', title: 'FDA'},
+                    {code: 'world', title: 'World'},
+                  ],
+                  facet: vm.filters.drugClass
+                })"
+                on-click="vm.toggleFacetContent('drugClass', term.code)"
+                is-active="vm.filters.drugClass.includes(term.code)"
+                label="term.title"
                 items-affected-by-facet="vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length"
-                items-affected-by-term="_.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: 'world'}).length"
+                items-affected-by-term="_.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: term.code}).length"
               ></togglable-term>
+
             </collapsible-wrapper>
           </aside>
           <article>
@@ -268,9 +270,9 @@ angular.module('icgc.compounds.index', [])
         });
       };
 
-      // this.getFilteredAggregation = (filterName, filterValue) => {
-      //   return _.filter(this.getFilteredCompounds(this.compounds, _.omit(this.filters, [filterName])), {[filterName]: filterValue}).length;
-      // };
+      this.getSortedTerms = memoize(({terms, facet}) => {
+        return _.orderBy(terms, term => !facet.includes(term.code));
+      }, {normalizer: (args) => JSON.stringify(args)});
 
       const getCombinedState = () => Object.assign({},
         _.omitBy(this.filters, (value, key) => _.isEqual(defaultFiltersState[key], value)),
