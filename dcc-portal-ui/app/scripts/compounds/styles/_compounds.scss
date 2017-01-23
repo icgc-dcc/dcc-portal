@@ -68,5 +68,13 @@ togglable-term {
     .term__extent-bar {
       background: #bbe7f7;
     }
+    &:hover {
+      .term__label {
+        text-decoration: line-through;
+      }
+      .term__label__icon:before {
+        content: '\e81d';
+      }
+    }
   }
 }

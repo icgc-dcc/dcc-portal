@@ -101,6 +101,7 @@ angular.module('icgc.compounds.index', [])
             data-tooltip-placement="overflow"
           > 
             <i
+              class="term__label__icon"
               ng-class="{
                 'icon-ok': vm.isActive,
                 'icon-check-empty': !vm.isActive,
