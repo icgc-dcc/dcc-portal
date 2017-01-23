@@ -118,6 +118,8 @@ public class EsRequestBuilder {
   }
 
   private static void addSorts(SearchRequestBuilder builder, SortNode sorts, QueryContext context) {
+    val nestedPaths = sorts.getNestedPaths();
+
     for (val sort : sorts.getFields().entrySet()) {
       val fieldName = sort.getKey();
       val sortOrder = SortOrder.valueOf(sort.getValue().toString());
@@ -126,7 +128,6 @@ public class EsRequestBuilder {
         builder.addSort(scoreSort().order(sortOrder));
       } else {
         val sortBuilder = fieldSort(fieldName).order(sortOrder);
-        val nestedPaths = sorts.getNestedPaths();
         if (nestedPaths.containsKey(fieldName)) {
           sortBuilder.setNestedPath(nestedPaths.get(fieldName));
         }
