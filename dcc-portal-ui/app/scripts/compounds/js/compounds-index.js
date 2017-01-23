@@ -192,7 +192,7 @@ angular.module('icgc.compounds.index', [])
           sortFunction: (row) => `${row.name} (${row.zincId})`,
           dataFormat: (cell, row, array, extraData) => {
             const { tableFilter } = extraData;
-            const content = highlightFn(`${row.name} (${row.zincId})`, tableFilter);
+            const content = highlightFn(`${row.name} (${row.zincId})`, (tableFilter || this.filters.name));
             return `
               <a ui-sref="compound({compoundId: '${row.zincId}'})">
                 ${content}
@@ -206,7 +206,7 @@ angular.module('icgc.compounds.index', [])
           style: 'max-width: 200px',
           dataFormat: (cell, row, array, extraData) => {
             const { tableFilter } = extraData;
-            const content = highlightFn(_.map(row.atcCodes, 'description').join(', '), tableFilter);
+            const content = highlightFn(_.map(row.atcCodes, 'description').join(', '), (tableFilter || this.filters.atc));
             return `
               <div collapsible-text>
                 ${content}
