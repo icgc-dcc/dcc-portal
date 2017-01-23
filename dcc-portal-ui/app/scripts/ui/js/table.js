@@ -371,7 +371,6 @@ angular.module('icgc.ui.table.filter', [])
         '</span>',
       link: function (scope) {
         scope.handleChange = () => {
-          console.log('handle change');
           if (scope.onChange()) {
             scope.onChange()(scope.filterModel);
           } else {
