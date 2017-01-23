@@ -70,7 +70,8 @@ angular.module('icgc.compounds.index', [])
                 class="t_input__block"
                 ng-model="vm.filters.gene"
                 ng-change="vm.handleFiltersChange(vm.filters)"
-                placeholder="e.g. Q9ULX7, ENSG00000144891"
+                placeholder="{{ vm.isLoadingGeneSymbolMap ? 'Loading Gene Symbols' : 'e.g. Q9ULX7, ENSG00000144891'}}"
+                ng-disabled="vm.isLoadingGeneSymbolMap"
               ></input>
             </collapsible-wrapper>
 
@@ -166,9 +167,9 @@ angular.module('icgc.compounds.index', [])
         this.handleFiltersChange(this.filters);
       });
 
-      this.isLoadingGeneSymbols = true;
+      this.isLoadingGeneSymbolMap = true;
       GeneSymbols.getAll().then(geneSymbols => {
-        this.isLoadingGeneSymbols = false;
+        this.isLoadingGeneSymbolMap = false;
         this.geneSymbols = geneSymbols;
       });
 
