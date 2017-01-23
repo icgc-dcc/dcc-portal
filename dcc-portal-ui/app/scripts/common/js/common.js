@@ -25,7 +25,7 @@ export const highlightFn = function (text, search, hide) {
     // Shrink extra spaces, restrict to alpha-numeric chars and a few other special chars
     search = search.toString().replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9:,\s\-_\.]/g, '').split(' ');
     for (var i = 0; i < search.length; ++i) {
-      text = text.replace(new RegExp(search[i], 'gi'), '^$&$');
+      text = text.replace(new RegExp(search[i] + '(?![^<]*>)', 'gi'), '^$&$');
     }
 
     // if match return text
