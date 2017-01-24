@@ -116,9 +116,10 @@ require('./share.scss');
     };
     this.popoverIsOpen = false;
     this.requestShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => Share.getShortUrl(shareParams, shouldUseParamsOnlyForRequest);
-    this.setShortUrl = (shareParams) => this.requestShortUrl(shareParams).then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl;});
+    this.setShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => this.requestShortUrl(shareParams, shouldUseParamsOnlyForRequest).then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl;});
 
-    this.handleClickShareButton = (shareParams) => {
+    this.handleClickShareButton = (shareParams, shouldUseParamsOnlyForRequest) => {
+      console.log(shareParams);
       this.Url = $location.url();
       if(this.oldUrl !== this.Url){
         this.changedUrl = true;
@@ -127,7 +128,7 @@ require('./share.scss');
         this.changedUrl = false;
       }
       this.oldUrl = this.Url;
-      this.setShortUrl(shareParams);
+      this.setShortUrl(shareParams, shouldUseParamsOnlyForRequest);
       $scope.$watch(() => (this.shortUrl), (newValue) => {
       if(newValue){
          setTimeout(() => {
