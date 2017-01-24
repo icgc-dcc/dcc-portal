@@ -45,7 +45,7 @@ require('./share.scss');
         customPopupDisclaimer: '@'
       },
       link: function ($scope) {
-        $scope.entityType = 'item'
+        $scope.entityType = 'item';
       }
     };
   });
@@ -116,18 +116,18 @@ require('./share.scss');
     };
     this.popoverIsOpen = false;
     this.requestShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => Share.getShortUrl(shareParams, shouldUseParamsOnlyForRequest);
-    this.setShortUrl = () => this.requestShortUrl().then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl;});
+    this.setShortUrl = (shareParams) => this.requestShortUrl(shareParams).then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl;});
 
-    this.handleClickShareButton = () => {
+    this.handleClickShareButton = (shareParams) => {
       this.Url = $location.url();
-      if(this.oldUrl != this.Url){
+      if(this.oldUrl !== this.Url){
         this.changedUrl = true;
       }
       else{
         this.changedUrl = false;
       }
       this.oldUrl = this.Url;
-      this.setShortUrl();
+      this.setShortUrl(shareParams);
       $scope.$watch(() => (this.shortUrl), (newValue) => {
       if(newValue){
          setTimeout(() => {

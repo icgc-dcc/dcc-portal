@@ -160,7 +160,7 @@
 
         element.bind('mouseenter', function() {
           var placement = attrs.tooltipPlacement || 'top';
-          var tooltip = attrs.icgcTooltip
+          var tooltip = attrs.icgcTooltip;
           if (! tooltip) {
             return;
           }
