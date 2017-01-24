@@ -119,7 +119,6 @@ require('./share.scss');
     this.setShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => this.requestShortUrl(shareParams, shouldUseParamsOnlyForRequest).then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl;});
 
     this.handleClickShareButton = (shareParams, shouldUseParamsOnlyForRequest) => {
-      console.log(shareParams);
       this.Url = $location.url();
       if(this.oldUrl !== this.Url){
         this.changedUrl = true;
