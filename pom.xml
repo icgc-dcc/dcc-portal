@@ -105,12 +105,6 @@
       <version>${dcc-release.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-repository-resources</artifactId>
-      <version>${dcc-repository.version}</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <properties>
@@ -119,7 +113,7 @@
     <dcc-download.version>4.3.11</dcc-download.version>
     <dcc-release.version>4.2.5-20161122.153150-11</dcc-release.version>
 
-    <dcc-repository.version>1.1.3-SNAPSHOT</dcc-repository.version>
+    <dcc-repository.version>1.1.4-20170124.151031-1</dcc-repository.version>
 	<junit.version>4.11</junit.version>
     <log4j.version>2.6.2</log4j.version>
   </properties>
