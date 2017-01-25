@@ -262,6 +262,10 @@ require('../components');
   });
 
 
+  /**
+   * Filter for converting bytes to human readable form truncated at 2 decimal places. 
+   * Uses bases 10 rather than base 2. So 'TB' rather than 'TiB'.
+   */
   module.filter('bytes', function () {
     return function (input) {
       var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'],
