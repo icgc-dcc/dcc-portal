@@ -269,13 +269,13 @@ require('../components');
         bytes = input,
         precision = 2;
 
-      if (bytes <= 1024) {
+      if (bytes <= 1000) {
         precision = 0;
       }
 
-      while (bytes >= 1024) {
+      while (bytes >= 1000) {
         postTxt++;
-        bytes = bytes / 1024;
+        bytes = bytes / 1000;
       }
 
       return Number(bytes).toFixed(precision) + ' ' + sizes[postTxt];
