@@ -264,7 +264,7 @@ require('../components');
 
   /**
    * Filter for converting bytes to human readable form truncated at 2 decimal places. 
-   * Uses bases 10 rather than base 2. So 'TB' rather than 'TiB'.
+   * Uses bases 10 rather than base 2. So 'TB' rather than TiB.
    */
   module.filter('bytes', function () {
     return function (input) {
@@ -279,7 +279,7 @@ require('../components');
 
       while (bytes >= 1000) {
         postTxt++;
-        bytes = bytes / 1000;
+        bytes /= 1000;
       }
 
       return Number(bytes).toFixed(precision) + ' ' + sizes[postTxt];
