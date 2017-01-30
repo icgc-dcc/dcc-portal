@@ -3,6 +3,16 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[4.4.3](https://github.com/icgc-dcc/dcc-portal/compare/4.4.2...dcc-portal-4.4.3)
+--
+- Factored out restangular from app.js to its own wrapper source file
+- Updated 404 page redirect functionality
+- Fixes to facet colours
+- Changed share link popover, new look, new size, much smaller
+- Fixed byte conversion to use base 10 instead of base 2
+- Created a compounds index page, uses client side filtering
+
+
 [4.4.2](https://github.com/icgc-dcc/dcc-portal/compare/4.4.1...4.4.2)
 --
 - Migrated from Lodash 3 to 4
