@@ -12,7 +12,6 @@ Change log for the DCC Data Portal.
 - Fixed byte conversion to use base 10 instead of base 2
 - Created a compounds index page, uses client side filtering
 
-
 [4.4.2](https://github.com/icgc-dcc/dcc-portal/compare/4.4.1...4.4.2)
 --
 - Migrated from Lodash 3 to 4
