@@ -8,7 +8,7 @@
 
         <span data-ng-click="ctrl.collapsed=!ctrl.collapsed" data-ng-if="type === 'file'" class="t_facets__facet__title__label">
             <i data-ng-class="{'icon-caret-down':!ctrl.collapsed, 'icon-caret-right':ctrl.collapsed}"></i>
-            <abbr data-tooltip="{{'File ID, Object ID, Submitter Bundle ID, File Set ID, Manifest ID' | translate}}" tooltip-placement="right">{{label}}</abbr>
+            <abbr data-icgc-tooltip="{{'File ID, Object ID, Submitter Bundle ID, File Set ID, Manifest ID' | translate}}" tooltip-placement="right">{{label}}</abbr>
         </span>
         
         <span data-ng-if="actives.length > 0 || activeEntityIds.length > 0"
@@ -29,7 +29,7 @@
 
                 <span class="t_facets__facet__terms__active__term__label__text">
                   <i class="icon-ok" />
-                  <span tooltip="{{:: gene.tooltip }}"
+                  <span icgc-tooltip="{{:: gene.tooltip }}"
                         tooltip-placement="top">
                     {{ entityIdMap[gene.uiText.replace('ES:', '')] || gene.uiText }}
                 </span>
@@ -45,7 +45,7 @@
 
                 <span class="t_facets__facet__terms__active__term__label__text">
                     <i class="icon-ok"></i>
-                    <span tooltip="{{:: item }}" 
+                    <span icgc-tooltip="{{:: item }}" 
                         tooltip-placement="top">
                         {{ entityIdMap [item.replace('ES:', '')] || item }}
                     </span>

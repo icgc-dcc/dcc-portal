@@ -42,7 +42,7 @@
                     <span data-ng-if="defined">
                         <i class="icon-ok"></i>
                         <span ng-if='iconClass (item.term)' class='{{ iconClass (item.term) }}' />
-                        <span data-tooltip="{{ item.tooltip }}">
+                        <span data-icgc-tooltip="{{ item.tooltip }}">
                         {{ item.label }}
                         </span>
                     </span>
@@ -59,7 +59,7 @@
 
                 <span data-ng-hide="hideCount" data-ng-style="bar(item.count)" class="t_facets__facet__terms__inactive__term__bar"></span>
                 <span class="t_facets__facet__terms__inactive__term__label"
-                      data-tooltip="{{ item.tooltip }}"
+                      data-icgc-tooltip="{{ item.tooltip }}"
                       data-tooltip-placement="{{ defined? 'right':'overflow'}}"
                       data-ng-click="addTerm(item.term)">
                     <i style='color:{{ sites[item.term] }}' class="icon-check-empty t_impact_{{item.term | lowercase}}"></i>
