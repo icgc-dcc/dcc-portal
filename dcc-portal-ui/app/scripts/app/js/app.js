@@ -213,6 +213,7 @@
     'dndLists',
     'gettext',
     'xeditable',
+    'angular-bind-html-compile',
 
 
     // 3rd party
@@ -353,6 +354,8 @@
           console.error(error.stack);
         }
       });
+
+      $rootScope._ = require('lodash');
 
       $rootScope.$on('$stateNotFound', function() {
         const redirect = getRedirectObject($location.url());

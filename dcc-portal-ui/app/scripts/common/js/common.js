@@ -17,6 +17,31 @@
 
 require('../components');
 
+export const highlightFn = function (text, search, hide) {
+  text = text || '';
+  hide = hide || false;
+  if (search) {
+    text = angular.isArray(text) ? text.join(', ') : text.toString();
+    // Shrink extra spaces, restrict to alpha-numeric chars and a few other special chars
+    search = search.toString().replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9:,\s\-_\.]/g, '').split(' ');
+    for (var i = 0; i < search.length; ++i) {
+      text = text.replace(new RegExp(search[i] + '(?![^<]*>)', 'gi'), '^$&$');
+    }
+
+    // if match return text
+    if (text.indexOf('^') !== -1) {
+      return text.replace(/\^/g, '<span class="match">').replace(/\$/g, '</span>');
+    } else { // no match
+      if (hide) {
+        return '';
+      } // hide
+    }
+  }
+
+  // return base text if no match and not hiding
+  return text;
+};
+
 (function () {
   'use strict';
 
@@ -78,6 +103,7 @@ require('../components');
   });
 
   module.filter('_', function () {
+    var _ = require('lodash');
     return function () {
       var input = arguments[0];
       var method = arguments[1];
@@ -117,32 +143,7 @@ require('../components');
   });
 
 
-  module.filter('highlight', function () {
-    return function (text, search, hide) {
-      text = text || '';
-      hide = hide || false;
-      if (search) {
-        text = angular.isArray(text) ? text.join(', ') : text.toString();
-        // Shrink extra spaces, restrict to alpha-numeric chars and a few other special chars
-        search = search.toString().replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9:,\s\-_\.]/g, '').split(' ');
-        for (var i = 0; i < search.length; ++i) {
-          text = text.replace(new RegExp(search[i], 'gi'), '^$&$');
-        }
-
-        // if match return text
-        if (text.indexOf('^') !== -1) {
-          return text.replace(/\^/g, '<span class="match">').replace(/\$/g, '</span>');
-        } else { // no match
-          if (hide) {
-            return '';
-          } // hide
-        }
-      }
-
-      // return base text if no match and not hiding
-      return text;
-    };
-  });
+  module.filter('highlight', () => highlightFn);
 
   module.factory('debounce', function ($timeout, $q) {
     return function (func, wait, immediate) {

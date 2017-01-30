@@ -15,12 +15,16 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use strict';
+require('./compounds-index');
 
 ////////////////////////////////////////////////////////////////////////
 // Primary Compound Module
 ////////////////////////////////////////////////////////////////////////
-angular.module('icgc.compounds', ['icgc.compounds.controllers', 'icgc.compounds.services'])
+angular.module('icgc.compounds', [
+  'icgc.compounds.controllers',
+  'icgc.compounds.services',
+  'icgc.compounds.index',
+  ])
   .config(function ($stateProvider) {
     $stateProvider.state('compound', {
       url: '/compound/:compoundId',

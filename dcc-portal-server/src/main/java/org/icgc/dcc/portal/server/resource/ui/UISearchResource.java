@@ -157,6 +157,12 @@ public class UISearchResource extends Resource {
     return ImmutableMap.of("data", content);
   }
 
+  @Path("/gene-symbols")
+  @GET
+  public Map<String, String> ensemblIdGeneSymbolMappings() {
+    return geneService.getEnsemblIdGeneSymbolMap();
+  }
+
   @Path("/gene-symbols/{" + API_GENE_PARAM + "}")
   @GET
   public Map<String, String> ensemblIdGeneSymbolMappings(
