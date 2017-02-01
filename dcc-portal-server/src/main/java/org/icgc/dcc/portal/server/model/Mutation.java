@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.model;
 
 import static com.google.common.collect.Sets.newHashSet;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
@@ -108,7 +109,7 @@ public class Mutation {
     occurrences = buildOccurrences((List<Map<String, Object>>) fieldMap.get("ssm_occurrence"));
     transcripts = buildTranscripts((List<Map<String, Object>>) fieldMap.get("transcript"));
     consequences = buildConsequences((List<Map<String, Object>>) fieldMap.get("consequences"));
-    functionalImpact = (List<String>) fieldMap.get(fields.get("functionalImpact"));
+    functionalImpact = collectFunctionalImpacts((List<Map<String, Object>>) fieldMap.get("transcript"));
   }
 
   private List<EmbOccurrence> buildOccurrences(List<Map<String, Object>> occurrences) {
@@ -175,6 +176,12 @@ public class Mutation {
     }
 
     return lst;
+  }
+
+  private static List<String> collectFunctionalImpacts(List<Map<String, Object>> transcripts) {
+    return transcripts == null ? null : transcripts.stream()
+        .map(t -> t.get("functional_impact_prediction_summary").toString())
+        .collect(toImmutableList());
   }
 
   private static Collection<String> unique(List<String> list) {

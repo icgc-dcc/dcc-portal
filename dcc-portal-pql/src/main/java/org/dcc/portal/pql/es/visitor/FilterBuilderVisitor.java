@@ -21,19 +21,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static org.dcc.portal.pql.es.utils.Nodes.getValues;
+import static org.dcc.portal.pql.es.utils.ScoreModes.resolveScoreMode;
+import static org.dcc.portal.pql.es.utils.TermsLookups.createTermsLookup;
 import static org.dcc.portal.pql.es.utils.VisitorHelpers.checkOptional;
-import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
-import static org.elasticsearch.index.query.FilterBuilders.existsFilter;
-import static org.elasticsearch.index.query.FilterBuilders.missingFilter;
-import static org.elasticsearch.index.query.FilterBuilders.nestedFilter;
-import static org.elasticsearch.index.query.FilterBuilders.notFilter;
-import static org.elasticsearch.index.query.FilterBuilders.rangeFilter;
-import static org.elasticsearch.index.query.FilterBuilders.termFilter;
-import static org.elasticsearch.index.query.FilterBuilders.termsFilter;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.existsQuery;
+import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsLookupQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
 
+import org.apache.lucene.search.join.ScoreMode;
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.NestedNode;
 import org.dcc.portal.pql.es.ast.aggs.FilterAggregationNode;
@@ -58,11 +61,8 @@ import org.dcc.portal.pql.es.utils.Visitors;
 import org.dcc.portal.pql.meta.Type;
 import org.dcc.portal.pql.meta.TypeModel;
 import org.dcc.portal.pql.query.QueryContext;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.index.query.RangeFilterBuilder;
-import org.elasticsearch.index.query.TermFilterBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 
 import com.google.common.collect.Lists;
 
@@ -76,31 +76,32 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @NoArgsConstructor
-public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContext> {
+public class FilterBuilderVisitor extends NodeVisitor<QueryBuilder, QueryContext> {
 
-  private final Stack<FilterBuilder> stack = new Stack<FilterBuilder>();
+  private final Stack<QueryBuilder> stack = new Stack<QueryBuilder>();
 
   @Override
-  public FilterBuilder visitFilter(@NonNull FilterNode node, @NonNull Optional<QueryContext> context) {
+  public QueryBuilder visitFilter(@NonNull FilterNode node, @NonNull Optional<QueryContext> context) {
     return node.getFirstChild().accept(this, context);
   }
 
   @Override
-  public FilterBuilder visitQuery(@NonNull QueryNode node, @NonNull Optional<QueryContext> context) {
+  public QueryBuilder visitQuery(@NonNull QueryNode node, @NonNull Optional<QueryContext> context) {
     val queryBuilder = node.accept(Visitors.createQueryBuilderVisitor(), context);
 
-    return FilterBuilders.queryFilter(queryBuilder);
+    return queryBuilder;
   }
 
   @Override
-  public FilterBuilder visitBool(@NonNull BoolNode node, @NonNull Optional<QueryContext> context) {
-    BoolFilterBuilder resultBuilder = boolFilter();
+  public QueryBuilder visitBool(@NonNull BoolNode node, @NonNull Optional<QueryContext> context) {
+    val resultBuilder = boolQuery();
+
     for (val child : node.getChildren()) {
       val childrenResult = visitChildren(child, context);
       if (child instanceof MustBoolNode) {
-        resultBuilder.must(childrenResult);
+        childrenResult.forEach(result -> resultBuilder.must(result));
       } else if (child instanceof ShouldBoolNode) {
-        resultBuilder.should(childrenResult);
+        childrenResult.forEach(result -> resultBuilder.should(result));
       } else {
         throw new IllegalStateException(format("Operation type %s is not supported", child.getNodeName()));
       }
@@ -110,8 +111,8 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   }
 
   @Override
-  public FilterBuilder visitGreaterEqual(@NonNull GreaterEqualNode node, @NonNull Optional<QueryContext> context) {
-    val rangeFilter = (RangeFilterBuilder) stack.peek();
+  public QueryBuilder visitGreaterEqual(@NonNull GreaterEqualNode node, @NonNull Optional<QueryContext> context) {
+    val rangeFilter = (RangeQueryBuilder) stack.peek();
     checkNotNull(rangeFilter, "Could not find the RangeFilter on the stack");
     rangeFilter.gte(node.getValue());
 
@@ -119,8 +120,8 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   }
 
   @Override
-  public FilterBuilder visitGreaterThan(@NonNull GreaterThanNode node, @NonNull Optional<QueryContext> context) {
-    val rangeFilter = (RangeFilterBuilder) stack.peek();
+  public QueryBuilder visitGreaterThan(@NonNull GreaterThanNode node, @NonNull Optional<QueryContext> context) {
+    val rangeFilter = (RangeQueryBuilder) stack.peek();
     checkNotNull(rangeFilter, "Could not find the RangeFilter on the stack");
     rangeFilter.gt(node.getValue());
 
@@ -128,8 +129,8 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   }
 
   @Override
-  public FilterBuilder visitLessEqual(@NonNull LessEqualNode node, @NonNull Optional<QueryContext> context) {
-    val rangeFilter = (RangeFilterBuilder) stack.peek();
+  public QueryBuilder visitLessEqual(@NonNull LessEqualNode node, @NonNull Optional<QueryContext> context) {
+    val rangeFilter = (RangeQueryBuilder) stack.peek();
     checkNotNull(rangeFilter, "Could not find the RangeFilter on the stack");
     rangeFilter.lte(node.getValue());
 
@@ -137,8 +138,8 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   }
 
   @Override
-  public FilterBuilder visitLessThan(@NonNull LessThanNode node, @NonNull Optional<QueryContext> context) {
-    val rangeFilter = (RangeFilterBuilder) stack.peek();
+  public QueryBuilder visitLessThan(@NonNull LessThanNode node, @NonNull Optional<QueryContext> context) {
+    val rangeFilter = (RangeQueryBuilder) stack.peek();
     checkNotNull(rangeFilter, "Could not find the RangeFilter on the stack");
     rangeFilter.lt(node.getValue());
 
@@ -146,26 +147,29 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   }
 
   @Override
-  public FilterBuilder visitNested(@NonNull NestedNode node, @NonNull Optional<QueryContext> context) {
+  public QueryBuilder visitNested(@NonNull NestedNode node, @NonNull Optional<QueryContext> context) {
     log.debug("Visiting Nested: {}", node);
+    val scoreMode = resolveScoreMode(node.getScoreMode());
+    val childQuery = node.getFirstChild().accept(this, context);
 
-    return nestedFilter(node.getPath(), node.getFirstChild().accept(this, context));
+    return nestedQuery(node.getPath(), childQuery, scoreMode);
   }
 
   @Override
-  public FilterBuilder visitNot(@NonNull NotNode node, @NonNull Optional<QueryContext> context) {
+  public QueryBuilder visitNot(@NonNull NotNode node, @NonNull Optional<QueryContext> context) {
     val childrenCount = node.childrenCount();
     checkState(childrenCount == 1, "NotNode can have only one child. Found %s", childrenCount);
 
-    return notFilter(node.getFirstChild().accept(this, context));
+    // TODO: Rework AST to eliminate NotNode
+    return boolQuery().mustNot(node.getFirstChild().accept(this, context));
   }
 
   @Override
-  public FilterBuilder visitRange(@NonNull RangeNode node, @NonNull Optional<QueryContext> context) {
+  public QueryBuilder visitRange(@NonNull RangeNode node, @NonNull Optional<QueryContext> context) {
     checkOptional(context);
     checkState(node.childrenCount() > 0, "RangeNode has no children");
 
-    stack.push(rangeFilter(node.getFieldName()));
+    stack.push(rangeQuery(node.getFieldName()));
     for (val child : node.getChildren()) {
       child.accept(this, context);
     }
@@ -174,53 +178,50 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   }
 
   @Override
-  public FilterBuilder visitTerm(@NonNull TermNode node, @NonNull Optional<QueryContext> context) {
+  public QueryBuilder visitTerm(@NonNull TermNode node, @NonNull Optional<QueryContext> context) {
     checkOptional(context);
 
-    FilterBuilder filter;
+    QueryBuilder filter;
     val field = node.getField();
-    val lookupInfo = node.getLookup();
-    if (lookupInfo.isDefine()) {
-      filter = FilterBuilders.termsLookupFilter(field)
-          .lookupCache(false)
-          .lookupIndex(lookupInfo.getIndex())
-          .lookupType(lookupInfo.getType())
-          .lookupPath(lookupInfo.getPath())
-          .lookupId(lookupInfo.getId());
+    val lookupOpt = createTermsLookup(node);
+    if (lookupOpt.isPresent()) {
+      filter = termsLookupQuery(field, lookupOpt.get());
     } else {
       val value = node.getValueNode().getValue();
       log.debug("[visitTerm] Name: {}, Value: {}", field, value);
-      filter = termFilter(field, value);
+      filter = termQuery(field, value);
     }
 
     return createNestedFilter(node, field, filter, context.get().getTypeModel());
   }
 
   @Override
-  public FilterBuilder visitExists(@NonNull ExistsNode node, @NonNull Optional<QueryContext> context) {
+  public QueryBuilder visitExists(@NonNull ExistsNode node, @NonNull Optional<QueryContext> context) {
     checkOptional(context);
     val field = node.getField();
     log.debug("[visitExists] Field: {}", field);
-    val result = existsFilter(field);
+    val result = existsQuery(field);
 
     return createNestedFilter(node, field, result, context.get().getTypeModel());
   }
 
   @Override
-  public FilterBuilder visitMissing(@NonNull MissingNode node, @NonNull Optional<QueryContext> context) {
+  public QueryBuilder visitMissing(@NonNull MissingNode node, @NonNull Optional<QueryContext> context) {
     checkOptional(context);
     val field = node.getField();
     log.debug("[visitMissing] Field: {}", field);
-    val missing = missingFilter(field);
 
-    FilterBuilder result;
+    // TODO: Include in some common bool
+    val missing = boolQuery().mustNot(existsQuery(field));
+
+    QueryBuilder result;
     // It is possible for genes to have no donors aside from a placeholder value.
     // In order to exclude these genes from filters with donors, we require a check for this case.
     // JIRA: DCC-3914 for more information.
     if (context.get().getType() == Type.GENE_CENTRIC && field.startsWith("donor.")) {
-      result = new BoolFilterBuilder()
+      result = boolQuery()
           .must(missing)
-          .mustNot(new TermFilterBuilder("placeholder", true));
+          .mustNot(termQuery("placeholder", true));
     } else {
       result = missing;
     }
@@ -229,38 +230,39 @@ public class FilterBuilderVisitor extends NodeVisitor<FilterBuilder, QueryContex
   }
 
   @Override
-  public FilterBuilder visitTerms(@NonNull TermsNode node, @NonNull Optional<QueryContext> context) {
+  public QueryBuilder visitTerms(@NonNull TermsNode node, @NonNull Optional<QueryContext> context) {
     checkOptional(context);
-    val termsFilter = termsFilter(node.getField(), getValues(node));
+    val termsFilter = termsQuery(node.getField(), getValues(node));
 
     return createNestedFilter(node, node.getField(), termsFilter, context.get().getTypeModel());
   }
 
-  private FilterBuilder[] visitChildren(ExpressionNode node, Optional<QueryContext> context) {
+  private List<QueryBuilder> visitChildren(ExpressionNode node, Optional<QueryContext> context) {
     log.debug("Visiting Bool child: {}", node);
-    val result = Lists.<FilterBuilder> newArrayList();
+    val result = Lists.<QueryBuilder> newArrayList();
     for (val child : node.getChildren()) {
       log.debug("Sub-child: {}", child);
       result.add(child.accept(this, context));
     }
 
-    return result.toArray(new FilterBuilder[result.size()]);
+    return result;
   }
 
   /**
    * Wraps {@code field} in a {@code nested} query if the {@code node} which contains the {@code field} does not have a
    * {@link NestedNode} parent.
    */
-  private FilterBuilder createNestedFilter(ExpressionNode node, String field, FilterBuilder sourceFilter,
+  private QueryBuilder createNestedFilter(ExpressionNode node, String field, QueryBuilder sourceFilter,
       TypeModel typeModel) {
     if (typeModel.isNested(field) && !node.hasNestedParent() && !isNestedAggregationFilter(node)) {
       val nestedPath = typeModel.getNestedPath(field);
       log.debug("[visitTerm] Node '{}' does not have a nested parent. Nesting at path '{}'", node, nestedPath);
 
-      return nestedFilter(nestedPath, sourceFilter);
+      // FIXME: Properly resolve score
+      return nestedQuery(nestedPath, sourceFilter, ScoreMode.Avg);
     }
 
-    return sourceFilter;
+    return sourceFilter.boost(0.0f);
   }
 
   /**

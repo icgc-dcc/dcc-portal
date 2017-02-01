@@ -29,13 +29,8 @@ import static java.util.Collections.singletonMap;
 import static org.dcc.portal.pql.ast.function.FunctionBuilders.facets;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
-import static org.elasticsearch.action.search.SearchType.COUNT;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
-import static org.elasticsearch.action.search.SearchType.SCAN;
-import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
-import static org.elasticsearch.index.query.FilterBuilders.matchAllFilter;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.missing;
@@ -45,7 +40,7 @@ import static org.elasticsearch.search.sort.SortOrder.ASC;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
-import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
+import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
 import static org.icgc.dcc.portal.server.model.IndexType.DONOR;
 import static org.icgc.dcc.portal.server.model.IndexType.DONOR_TEXT;
 import static org.icgc.dcc.portal.server.model.IndexType.FILE_DONOR_TEXT;
@@ -75,15 +70,15 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.NestedQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.stats.Stats;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.icgc.dcc.portal.server.model.EntitySetTermFacet;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
@@ -109,6 +104,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class DonorRepository implements Repository {
 
+  private static final String[] NO_EXCLUDE = null;
   // These are the raw field names from the 'donor-text' type in the main index.
   public static final Map<String, String> DONOR_ID_SEARCH_FIELDS = transformToTextSearchFieldMap(
       "id", "submittedId", "specimenIds", "sampleIds", "submittedSpecimenIds", "submittedSampleIds");
@@ -182,7 +178,6 @@ public class DonorRepository implements Repository {
 
     val request = queryEngine.execute(pql, DONOR_CENTRIC);
     val response = request.getRequestBuilder().execute().actionGet();
-
     return response;
   }
 
@@ -190,9 +185,9 @@ public class DonorRepository implements Repository {
   public SearchResponse findAllCentric(StatementNode pqlAst) {
     val request = queryEngine.execute(pqlAst, DONOR_CENTRIC);
     log.trace("{}", request.getRequestBuilder());
-    val response = request.getRequestBuilder().execute().actionGet();
+    val response = request.getRequestBuilder().get();
 
-    log.trace("{}", response);
+    log.debug("{}", response);
     return response;
   }
 
@@ -200,7 +195,7 @@ public class DonorRepository implements Repository {
     val pqlAst = parse(CONVERTER.convert(query, DONOR_CENTRIC));
     pqlAst.setFacets(facets(facetName));
 
-    val result = queryEngine.execute(pqlAst, DONOR_CENTRIC).getRequestBuilder().setNoFields();
+    val result = queryEngine.execute(pqlAst, DONOR_CENTRIC).getRequestBuilder().setFetchSource(false);
 
     log.debug("projectDonorCountSearch ES query is: '{}'.", result);
     return result;
@@ -222,11 +217,10 @@ public class DonorRepository implements Repository {
 
   public MultiSearchResponse calculatePhenotypeStats(@NonNull final List<UUID> setIds) {
     val multiSearch = client.prepareMultiSearch();
-    val matchAll = matchAllQuery();
 
     for (val setId : setIds) {
       val search = getPhenotypeAnalysisSearchBuilder();
-      search.setQuery(filteredQuery(matchAll, getDonorSetIdFilterBuilder(setId)));
+      search.setQuery(boolQuery().must(matchAllQuery()).filter(getDonorSetIdFilterBuilder(setId)));
 
       // Adding terms_stats facets
       FACETS_FOR_PHENOTYPE.values().stream()
@@ -276,7 +270,7 @@ public class DonorRepository implements Repository {
     for (val agg : aggs.asList()) {
       if (agg instanceof Terms) {
         val entries = ((Terms) agg).getBuckets();
-        val terms = transform(entries, entry -> entry.getKey());
+        val terms = transform(entries, entry -> entry.getKeyAsString());
 
         // Map all term values to zero
         results.put(agg.getName(), toMap(terms, constant(0)));
@@ -299,7 +293,7 @@ public class DonorRepository implements Repository {
 
     // First we populate with the terms facets from the search response
     termsFacet.getBuckets().stream().forEach(entry -> {
-      results.put(entry.getKey(), (int) entry.getDocCount());
+      results.put(entry.getKeyAsString(), (int) entry.getDocCount());
     });
 
     val facetName = termsFacet.getName();
@@ -332,7 +326,7 @@ public class DonorRepository implements Repository {
 
   }
 
-  private static TermsBuilder buildTermsStatsAggsBuilder(final String aggName, final String aggField) {
+  private static TermsAggregationBuilder buildTermsStatsAggsBuilder(final String aggName, final String aggField) {
     return terms(aggName).field("_type").size(MAX_FACET_TERM_COUNT)
         .subAggregation(stats("stats").field(aggField));
   }
@@ -344,9 +338,7 @@ public class DonorRepository implements Repository {
     val searchBuilder = client.prepareSearch(indexName)
         .setTypes(type.getId())
         .setSearchType(QUERY_THEN_FETCH)
-        .setFrom(0)
-        .setSize(0)
-        .addFields(fieldMap.values().stream().toArray(String[]::new));
+        .setSize(0);
 
     for (val name : FACETS_FOR_PHENOTYPE.keySet()) {
       val aggsBuilder = terms(name)
@@ -363,9 +355,9 @@ public class DonorRepository implements Repository {
     return searchBuilder;
   }
 
-  private static FilterBuilder getDonorSetIdFilterBuilder(final UUID donorId) {
+  private static QueryBuilder getDonorSetIdFilterBuilder(final UUID donorId) {
     if (null == donorId) {
-      return matchAllFilter();
+      return matchAllQuery();
     }
 
     val mustFilterFieldName = "_id";
@@ -373,7 +365,7 @@ public class DonorRepository implements Repository {
     // can move the createTermsLookupFilter() routine out of TermsLookupRepository.
     val termsLookupFilter = createTermsLookupFilter(mustFilterFieldName, TermLookupType.DONOR_IDS, donorId);
 
-    return boolFilter().must(termsLookupFilter);
+    return boolQuery().must(termsLookupFilter);
   }
 
   @Override
@@ -393,7 +385,7 @@ public class DonorRepository implements Repository {
     val pql = CONVERTER.convertCount(query, DONOR_CENTRIC);
 
     val request = queryEngine.execute(pql, DONOR_CENTRIC);
-    return request.getRequestBuilder().setSearchType(COUNT).execute().actionGet().getHits().getTotalHits();
+    return request.getRequestBuilder().setSize(0).execute().actionGet().getHits().getTotalHits();
   }
 
   @Override
@@ -409,13 +401,13 @@ public class DonorRepository implements Repository {
     return search.execute().actionGet();
   }
 
-  public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter, int maxUnionCount) {
-    val query = filteredQuery(matchAllQuery(), boolFilter);
+  public SearchResponse donorSearchRequest(final BoolQueryBuilder boolFilter, int maxUnionCount) {
+    val query = boolQuery().must(matchAllQuery()).filter(boolFilter);
     val request = client.prepareSearch(repoIndexName, indexName)
         .setTypes(DONOR_TEXT.getId(), FILE_DONOR_TEXT.getId())
         .setQuery(query)
         .setSize(maxUnionCount)
-        .setNoFields()
+        .setFetchSource(false)
         .setSearchType(SearchType.DEFAULT);
 
     log.debug("Terms Lookup - Donor Search: {}", request);
@@ -429,10 +421,10 @@ public class DonorRepository implements Repository {
    */
   public SearchResponse singleDonorUnion(final String indexTypeName,
       @NonNull final SearchType searchType,
-      @NonNull final BoolFilterBuilder boolFilter, final int max,
+      @NonNull final BoolQueryBuilder boolFilter, final int max,
       @NonNull final String[] fields,
       @NonNull final List<String> sort) {
-    val query = filteredQuery(matchAllQuery(), boolFilter);
+    val query = boolQuery().must(matchAllQuery()).filter(boolFilter);
 
     // Donor type is not analyzed but this works due to terms-lookup on _id field.
     // https://github.com/icgc-dcc/dcc-release/blob/develop/dcc-release-resources/src/main/resources/org/icgc/dcc/release/resources/mappings/donor.mapping.json#L12-L13
@@ -441,7 +433,7 @@ public class DonorRepository implements Repository {
         .setSearchType(searchType)
         .setQuery(query)
         .setSize(max)
-        .addFields(fields);
+        .setFetchSource(fields, NO_EXCLUDE);
 
     sort.forEach(s -> request.addSort(s, ASC));
     log.debug("Union ES Query: {}", request);
@@ -475,8 +467,7 @@ public class DonorRepository implements Repository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
-    val search = client.prepareGet(indexName, IndexType.DONOR.getId(), id)
-        .setFields(getFields(query, EntityType.DONOR));
+    val search = client.prepareGet(indexName, IndexType.DONOR.getId(), id);
     setFetchSourceOfGetRequest(search, query, EntityType.DONOR);
 
     val response = search.execute().actionGet();
@@ -500,15 +491,16 @@ public class DonorRepository implements Repository {
   public SearchResponse getDonorSamplesByProject(String projectId) {
 
     // Only download donor with complete (has submitted molecular data)
-    val donorFilters = FilterBuilders.boolFilter()
-        .must(FilterBuilders.termFilter("_project_id", projectId));
+    val donorFilters = boolQuery()
+        .must(termsQuery("_project_id", projectId));
+
+    String[] includes = { "specimen", "_donor_id", "donor_id", "project._project_id" };
 
     val search = client.prepareSearch(indexName)
         .setTypes(IndexType.DONOR.getId())
         .setSearchType(QUERY_THEN_FETCH)
         .setSize(6000)
-        .setFetchSource("specimen", null)
-        .addFields("_donor_id", "donor_id", "project._project_id")
+        .setFetchSource(includes, NO_EXCLUDE)
         .setPostFilter(donorFilters);
     return search.execute().actionGet();
   }
@@ -521,10 +513,9 @@ public class DonorRepository implements Repository {
     val pql = CONVERTER.convert(query, DONOR_CENTRIC);
     val request = queryEngine.execute(pql, DONOR_CENTRIC);
     val requestBuilder = request.getRequestBuilder()
-        .setSearchType(SCAN)
         .setSize(SCAN_BATCH_SIZE)
         .setScroll(KEEP_ALIVE)
-        .setNoFields();
+        .setFetchSource(false);
 
     SearchResponse response = requestBuilder.execute().actionGet();
     while (true) {
@@ -567,16 +558,17 @@ public class DonorRepository implements Repository {
     final Object[] values = ids.toArray();
     val boolQuery = boolQuery();
 
+    val highlight = new HighlightBuilder();
+    highlight.preTags("").postTags("");
     for (val searchField : fields.keySet()) {
-      boolQuery.should(termsQuery(searchField, values));
-      search.addHighlightedField(searchField);
+      boolQuery.should(termsQuery(TEXT_PREFIX + searchField, values));
+      highlight.field(TEXT_PREFIX + searchField).forceSource(true);
     }
 
     // Set tags to empty strings so we do not have to parse out fragments later.
     search.setQuery(boolQuery)
-        .setHighlighterPreTags("")
-        .setHighlighterPostTags("")
-        .setNoFields();
+        .highlighter(highlight)
+        .setFetchSource(true);
     log.debug("ES query is: '{}'.", search);
 
     val response = search.execute().actionGet();

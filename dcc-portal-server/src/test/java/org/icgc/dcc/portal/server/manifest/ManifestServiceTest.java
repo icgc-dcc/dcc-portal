@@ -19,7 +19,7 @@ package org.icgc.dcc.portal.server.manifest;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.io.Files.getFileExtension;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.dcc.portal.pql.meta.Type.FILE;
 import static org.icgc.dcc.common.core.util.Joiners.DOT;
 import static org.icgc.dcc.common.core.util.Splitters.WHITESPACE;
 import static org.mockito.Matchers.eq;
@@ -43,19 +43,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.IOUtils;
+import org.assertj.core.api.Assertions;
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.manifest.model.Manifest;
 import org.icgc.dcc.portal.server.manifest.model.ManifestFormat;
 import org.icgc.dcc.portal.server.model.Repository;
-import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
-import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
+import org.icgc.dcc.portal.server.repository.BaseElasticsearchTest;
 import org.icgc.dcc.portal.server.repository.FileRepository;
 import org.icgc.dcc.portal.server.repository.ManifestRepository;
 import org.icgc.dcc.portal.server.repository.RepositoryRepository;
 import org.icgc.dcc.portal.server.service.EntitySetService;
 import org.icgc.dcc.portal.server.service.IndexService;
-import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -75,7 +74,7 @@ import lombok.val;
 /**
  * Test suite for {@link ManifestService}.
  */
-public class ManifestServiceTest extends BaseElasticSearchTest {
+public class ManifestServiceTest extends BaseElasticsearchTest {
 
   private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
   private static final ObjectNode EMPTY_FILTER = new FiltersParam("{}").get();
@@ -86,7 +85,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
 
   /**
    * We only have two documents in the test index. See this file for details:
-   * {@link BaseElasticSearchTest.MANIFEST_TEST_DATA}. The following expected values come from the file. Update the
+   * {@link BaseElasticsearchTest.MANIFEST_TEST_DATA}. The following expected values come from the file. Update the
    * values here if the fixture file is changed.
    */
   private final static class ExpectedValues {
@@ -118,8 +117,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
   public TemporaryFolder temp = new TemporaryFolder();
 
   @Before
-  public void setUp() {
-    this.testIndex = TestIndex.REPOSITORY;
+  public void setUpManifestServiceTest() {
 
     val repositories = mock(RepositoryRepository.class);
     val entitySetService = mock(EntitySetService.class);
@@ -137,14 +135,13 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
     when(repositories.findOne(eq(tcgaRepo.getCode()))).thenReturn(tcgaRepo);
 
     // This creates and populates the test index with fixture data.
-    es.execute(createIndexMapping(IndexType.FILE_CENTRIC)
-        .withData(bulkFile(getClass())));
+    prepareIndex(REPOSITORY_INDEX_NAME, FILE);
     service =
         new ManifestService(
             new ServerProperties(),
             repositories,
             mock(ManifestRepository.class),
-            new FileRepository(es.client(), testIndex.getName(), new IndexService()),
+            new FileRepository(client, REPOSITORY_INDEX_NAME, new IndexService()),
             entitySetService);
   }
 
@@ -225,7 +222,7 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
     val expectedRepoType = isXml ? ExpectedValues.REPO_TYPE_FOR_XML : ExpectedValues.REPO_TYPE_FOR_TSV;
     val expectedFileName = buildFileName(expectedRepoCode, expectedRepoType, timestamp);
 
-    assertThat(testFileName).isEqualTo(expectedFileName);
+    Assertions.assertThat(testFileName).isEqualTo(expectedFileName);
   }
 
   @SneakyThrows
@@ -234,20 +231,20 @@ public class ManifestServiceTest extends BaseElasticSearchTest {
 
     val result = doc.getElementsByTagName("Result").item(0);
     val testRecordId = result.getAttributes().getNamedItem("id").getTextContent();
-    assertThat(testRecordId).isEqualTo("1");
+    Assertions.assertThat(testRecordId).isEqualTo("1");
 
     val content = result.getTextContent();
     val testContent = FluentIterable.from(WHITESPACE.splitToList(content))
         .transform(value -> value.trim())
         .filter(value -> !isNullOrEmpty(value))
         .toList();
-    assertThat(testContent).isEqualTo(ExpectedValues.CONTENT_FOR_XML);
+    Assertions.assertThat(testContent).isEqualTo(ExpectedValues.CONTENT_FOR_XML);
   }
 
   private static void validateTsvFile(File file) {
     val testContent = readLinesFromTsvFile(file);
     // The test fixture only contains one record/document for the non-GNOS type, therefore we only assert the first one.
-    assertThat(testContent.get(0)).isEqualTo(ExpectedValues.CONTENT_FOR_TSV);
+    Assertions.assertThat(testContent.get(0)).isEqualTo(ExpectedValues.CONTENT_FOR_TSV);
   }
 
   @SneakyThrows

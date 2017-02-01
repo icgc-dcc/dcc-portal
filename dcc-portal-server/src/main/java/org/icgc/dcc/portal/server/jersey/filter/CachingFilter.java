@@ -30,8 +30,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import lombok.val;
-
 import org.elasticsearch.client.Client;
 import org.icgc.dcc.portal.server.config.ServerProperties.CacheProperties;
 import org.joda.time.DateTime;
@@ -45,6 +43,8 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
+
+import lombok.val;
 
 @Component
 public class CachingFilter implements ContainerRequestFilter, ContainerResponseFilter {
@@ -169,13 +169,13 @@ public class CachingFilter implements ContainerRequestFilter, ContainerResponseF
   private static Date getLastModified(Client client, String indexName) {
     val response = client.prepareSearch(indexName)
         .setTypes(RELEASE_TYPE_NAME)
-        .addField(DATE_FIELD_NAME)
+        .setFetchSource(true)
         .setSize(1)
         .execute()
         .actionGet();
     val hits = response.getHits().getHits();
     checkState(hits.length != 0, "Missing date of release for Last-Modified header");
-    String value = hits[0].field(DATE_FIELD_NAME).getValue();
+    String value = hits[0].sourceAsMap().get(DATE_FIELD_NAME).toString();
     checkNotNull(value, "Missing date of release for Last-Modified header");
 
     return parseIndexDate(value);

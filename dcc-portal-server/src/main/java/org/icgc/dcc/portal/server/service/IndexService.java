@@ -79,7 +79,7 @@ public class IndexService {
       }
     }
 
-    val mappings = indexMetaData.mappings();
+    val mappings = indexMetaData.getMappings();
     log.info("Size of index meta data mappings: {}", mappings.values().size());
     val mappingIterator = mappings.values().iterator();
     val mappingMetaData = mappingIterator.next().value;
@@ -100,10 +100,10 @@ public class IndexService {
       log.info("Cache hit for index name: '{}' with value: '{}'", indexName, realIndex);
     } else {
       log.info("Cache miss for index name: {}", indexName);
-      val aliases = state.getMetaData().getAliases().get(indexName);
+      val aliasesOrIndex = state.getMetaData().getAliasAndIndexLookup().get(indexName);
 
-      if (aliases != null) {
-        realIndex = aliases.iterator().next().key;
+      if (aliasesOrIndex != null) {
+        realIndex = aliasesOrIndex.getIndices().iterator().next().getIndex().getName();
       } else {
         realIndex = indexName;
       }

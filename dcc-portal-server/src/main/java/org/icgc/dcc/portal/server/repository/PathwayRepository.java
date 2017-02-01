@@ -51,7 +51,7 @@ public class PathwayRepository {
 
   public Map<String, Object> findOne(String id, Query query) {
     val search = client.prepareGet(indexName, IndexType.PATHWAY.getId(), id);
-    search.setFields(getFields(query, EntityType.PATHWAY));
+    search.setStoredFields(getFields(query, EntityType.PATHWAY));
     String[] sourceFields = resolveSourceFields(query, EntityType.PATHWAY);
     if (sourceFields != EMPTY_SOURCE_FIELDS) {
       search.setFetchSource(resolveSourceFields(query, EntityType.PATHWAY), EMPTY_SOURCE_FIELDS);

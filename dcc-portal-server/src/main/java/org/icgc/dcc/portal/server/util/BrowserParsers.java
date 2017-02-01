@@ -20,6 +20,8 @@ package org.icgc.dcc.portal.server.util;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Maps.newLinkedHashMap;
+import static java.util.stream.StreamSupport.stream;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 
 import java.io.IOException;
 import java.util.List;
@@ -84,20 +86,20 @@ public final class BrowserParsers {
     int geneId = 1;
     List<Object> genes = newArrayList();
     for (JsonNode hit : response.get("hits").get("hits")) {
-      JsonNode fields = hit.path("fields");
+      JsonNode fields = hit.path("_source");
 
       List<Transcript> transcripts = withTranscripts ? getTranscript(hit) : null;
 
       genes.add(Gene.builder()
           .geneId(geneId)
-          .stableId(fields.path("_gene_id").get(0).asText())
-          .externalName(fields.path("name").get(0).asText())
-          .biotype(fields.path("biotype").get(0).asText())
-          .chromosome(fields.path("chromosome").get(0).asText())
-          .start(fields.path("start").get(0).asLong())
-          .end(fields.path("end").get(0).asLong())
-          .strand(fields.path("strand").get(0).asText())
-          .description(fields.path("description").isMissingNode() ? "" : fields.path("description").get(0).asText())
+          .stableId(fields.path("_gene_id").asText())
+          .externalName(fields.path("name").asText())
+          .biotype(fields.path("biotype").asText())
+          .chromosome(fields.path("chromosome").asText())
+          .start(fields.path("start").asLong())
+          .end(fields.path("end").asLong())
+          .strand(fields.path("strand").asText())
+          .description(fields.path("description").isMissingNode() ? "" : fields.path("description").asText())
           .transcripts(transcripts)
           .build());
 
@@ -118,7 +120,7 @@ public final class BrowserParsers {
     long highestAbsolute = 0l;
     Map<String, Histogram.Bucket> buckets = newHashMap();
     for (val bucket : histogramAggs.getBuckets()) {
-      buckets.put(bucket.getKey(), bucket);
+      buckets.put(String.valueOf(Double.valueOf(bucket.getKeyAsString()).longValue()), bucket);
 
       if (bucket.getDocCount() > highestAbsolute) {
         highestAbsolute = bucket.getDocCount();
@@ -166,7 +168,7 @@ public final class BrowserParsers {
     long highestAbsolute = 0l;
     Map<String, Histogram.Bucket> buckets = newHashMap();
     for (val bucket : histogramAggs.getBuckets()) {
-      buckets.put(bucket.getKey(), bucket);
+      buckets.put(String.valueOf(Double.valueOf(bucket.getKeyAsString()).longValue()), bucket);
 
       if (bucket.getDocCount() > highestAbsolute) {
         highestAbsolute = bucket.getDocCount();
@@ -206,10 +208,24 @@ public final class BrowserParsers {
    * Builds a mutation.
    */
   private static Mutation getMutation(List<String> projectFilters, JsonNode response) throws IOException {
-    JsonNode hit = response.get("fields");
-    val projectKeys = asList(hit.get("ssm_occurrence.project._project_id"));
-    val projectNames = asList(hit.get("ssm_occurrence.project.project_name"));
-    val projectSsmTestedDonorCount = asList(hit.get("ssm_occurrence.project._summary._ssm_tested_donor_count"));
+    JsonNode hit = response.get("_source");
+
+    val ssms = (ArrayNode) hit.path("ssm_occurrence");
+    val projectKeys = stream(ssms.spliterator(), false)
+        .map(ssm -> ssm.path("project"))
+        .map(p -> p.path("_project_id").asText())
+        .collect(toImmutableList());
+
+    val projectNames = stream(ssms.spliterator(), false)
+        .map(ssm -> ssm.path("project"))
+        .map(p -> p.path("project_name").asText())
+        .collect(toImmutableList());
+
+    val projectSsmTestedDonorCount = stream(ssms.spliterator(), false)
+        .map(ssm -> ssm.path("project"))
+        .map(p -> p.path("_summary"))
+        .map(s -> s.get("_ssm_tested_donor_count").asText())
+        .collect(toImmutableList());
 
     val projectIds = getProjectIds(projectFilters, projectKeys, projectNames, projectSsmTestedDonorCount);
 
@@ -243,15 +259,15 @@ public final class BrowserParsers {
 
     // Reference genome allele's accross ssm occurrences are same. This will be changed later so that the Reference
     // Genome Allele is at the source level instead of nested.
-    val refGenAllele = hit.get("reference_genome_allele").get(0).asText();
+    val refGenAllele = hit.get("reference_genome_allele").asText();
 
     val mutation = Mutation.builder()
-        .id(hit.path("_mutation_id").get(0).asText())
-        .chromosome(hit.path("chromosome").get(0).asText())
-        .start(hit.path("chromosome_start").get(0).asLong())
-        .end(hit.path("chromosome_end").get(0).asLong())
-        .mutationType(hit.path("mutation_type").get(0).asText())
-        .mutation(hit.path("mutation").get(0).asText())
+        .id(hit.path("_mutation_id").asText())
+        .chromosome(hit.path("chromosome").asText())
+        .start(hit.path("chromosome_start").asLong())
+        .end(hit.path("chromosome_end").asLong())
+        .mutationType(hit.path("mutation_type").asText())
+        .mutation(hit.path("mutation").asText())
         .refGenAllele(refGenAllele)
         .total(totalNumberOfDonors)
         .projectInfo(projectInfo.build())
@@ -327,10 +343,9 @@ public final class BrowserParsers {
   private static List<Transcript> getTranscript(JsonNode hit) {
     List<Transcript> transcripts = newArrayList();
     Integer transcriptId = 1;
-    val fields = hit.path("fields");
     for (val trans : hit.path("_source").path("transcripts")) {
 
-      List<ExonToTranscript> exonToTranscripts = getExonToTranscripts(fields, trans);
+      List<ExonToTranscript> exonToTranscripts = getExonToTranscripts(hit.path("_source"), trans);
       long transcriptStart = getTranscriptStart(trans);
       long transcriptEnd = getTranscriptEnd(trans);
 
@@ -342,7 +357,7 @@ public final class BrowserParsers {
           .chromosome(trans.path("chromosome").asText())
           .start(transcriptStart)
           .end(transcriptEnd)
-          .strand(fields.path("strand").get(0).asText())
+          .strand(hit.path("_source").path("strand").asText())
           .codingRegionStart(trans.path("coding_region_start").asLong())
           .codingRegionEnd(trans.path("coding_region_end").asLong())
           .cdnaCodingStart(trans.path("cdna_coding_start").asLong())
@@ -373,10 +388,10 @@ public final class BrowserParsers {
           .cdnaEnd(exon.path("cdna_end").asInt())
           .exon(Exon.builder()
               .stableId(trans.path("id").asText() + EXON_ID_SEPERATOR + exonId)
-              .chromosome(fields.path("chromosome").get(0).asText())
+              .chromosome(fields.path("chromosome").asText())
               .start(exon.path("start").asText())
               .end(exon.path("end").asText())
-              .strand(fields.path("strand").get(0).asText())
+              .strand(fields.path("strand").asText())
               .build())
           .build();
 

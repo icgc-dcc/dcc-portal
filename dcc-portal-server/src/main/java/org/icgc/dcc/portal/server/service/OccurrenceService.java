@@ -19,9 +19,7 @@ package org.icgc.dcc.portal.server.service;
 
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Occurrence;
@@ -30,40 +28,18 @@ import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.repository.OccurrenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class OccurrenceService {
 
   private final OccurrenceRepository occurrenceRepository;
-  private final AtomicReference<Map<String, Map<String, Integer>>> projectMutationCache =
-      new AtomicReference<Map<String, Map<String, Integer>>>();
-
-  @Async
-  public void init() {
-    try {
-      val watch = Stopwatch.createStarted();
-      log.info("[init] Initializing donor mutations cache...");
-
-      val donorMutationDistribution = occurrenceRepository.getProjectDonorMutationDistribution();
-      val immutableCopy = Collections.unmodifiableMap(donorMutationDistribution);
-      projectMutationCache.set(immutableCopy);
-
-      log.info("[init] Finished initializing donor mutations cache in {}", watch);
-    } catch (Exception e) {
-      log.error("[init] Error initializing donor mutations cache: {}", e.getMessage());
-    }
-  }
 
   public Occurrences findAll(Query query) {
     val response = occurrenceRepository.findAll(query);
@@ -89,13 +65,8 @@ public class OccurrenceService {
     return new Occurrence(occurrenceRepository.findOne(occurrenceId, query));
   }
 
-  public Map<String, Map<String, Integer>> getProjectMutationDistribution() {
-    val result = projectMutationCache.get();
-
-    if (null == result) {
-      throw new NotAvailableException("The donor mutation cache is currently not available. Please retry later.");
-    }
-
+  public Map<String, Map<String, Long>> getProjectMutationDistribution() {
+    val result = occurrenceRepository.getProjectDonorMutationDistribution();
     return result;
   }
 }

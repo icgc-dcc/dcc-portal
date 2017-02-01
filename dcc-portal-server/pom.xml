@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>4.4.4</version>
+    <version>4.4.4-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -48,6 +48,12 @@
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-servlet</artifactId>
       <version>${jersey.version}</version>
+      <exclusions>
+      	<exclusion>
+      		<groupId>asm</groupId>
+      		<artifactId>asm</artifactId>
+      	</exclusion>
+      </exclusions>
     </dependency>
 
     <!-- DCC -->
@@ -73,6 +79,16 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>dcc-download-client</artifactId>
     </dependency>
+    <dependency>
+	    <groupId>org.icgc.dcc</groupId>
+	    <artifactId>dcc-release-resources</artifactId>
+	    <version>4.3.6</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.icgc.dcc</groupId>
+	    <artifactId>dcc-repository-resources</artifactId>
+	    <version>1.1.4</version>
+	</dependency>
 
     <!-- JDBI -->
     <dependency>
@@ -90,12 +106,26 @@
 
     <!-- Search -->
     <dependency>
-      <groupId>org.elasticsearch</groupId>
-      <artifactId>elasticsearch</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>elasticsearch-shaded</artifactId>
+      <version>${elasticsearch.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-all</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>elasticsearch-test-shaded</artifactId>
+      <version>${elasticsearch.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+
+	<!-- Logging - Elasticsearch dependency -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
     </dependency>
 
     <!-- Servlets -->
@@ -226,6 +256,12 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <version>${spring-boot.version}</version>
       <scope>test</scope>
+      <exclusions>
+      	<exclusion>
+      		<groupId>net.minidev</groupId>
+      		<artifactId>accessors-smart</artifactId>
+      	</exclusion>
+      </exclusions>
     </dependency>
     <!-- Test - Jersey-->
     <dependency>
@@ -245,12 +281,6 @@
       <groupId>dumbster</groupId>
       <artifactId>dumbster</artifactId>
       <version>1.6</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- Test - Elasticsearch -->
-    <dependency>
-      <groupId>com.github.tlrx</groupId>
-      <artifactId>elasticsearch-test</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -325,6 +355,9 @@
   </build>
 
   <properties>
+  	<elasticsearch.version>5.1.2</elasticsearch.version>
+  	<log4j.version>2.6.2</log4j.version>
+  
     <!-- Versions - Spring -->
     <spring-boot.version>1.4.0.RELEASE</spring-boot.version>
     <spring-cloud.version>1.1.3.RELEASE</spring-cloud.version>
@@ -351,7 +384,7 @@
     <logback.version>1.1.7</logback.version>
     
     <!-- Versions - Testing -->
-    <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
+    <elasticsearch-test.version>5.0.0</elasticsearch-test.version>
     <h2.version>1.3.173</h2.version>
 
     <!-- Versions - Spring Boot Maven  -->

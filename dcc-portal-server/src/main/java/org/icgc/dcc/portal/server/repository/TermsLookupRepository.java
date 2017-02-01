@@ -26,7 +26,8 @@ import static org.dcc.portal.pql.meta.TypeModel.DONOR_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.FILE_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.GENE_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.MUTATION_LOOKUP;
-import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
+import static org.elasticsearch.action.support.WriteRequest.RefreshPolicy.IMMEDIATE;
+import static org.elasticsearch.index.query.QueryBuilders.termsLookupQuery;
 import static org.icgc.dcc.portal.server.util.JsonUtils.MAPPER;
 
 import java.util.Collections;
@@ -41,10 +42,10 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.MatchAllQueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermsLookupFilterBuilder;
+import org.elasticsearch.index.query.TermsQueryBuilder;
+import org.elasticsearch.indices.TermsLookup;
 import org.icgc.dcc.portal.server.config.ServerProperties;
 import org.icgc.dcc.portal.server.model.EntitySet.SubType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +71,6 @@ public class TermsLookupRepository {
    */
   public static final String TERMS_LOOKUP_PATH = "values";
   public static final String TERMS_LOOKUP_INDEX_NAME = "terms-lookup";
-
-  private final static MatchAllQueryBuilder MATCH_ALL = QueryBuilders.matchAllQuery();
 
   /**
    * Dependencies.
@@ -156,14 +155,12 @@ public class TermsLookupRepository {
   @SneakyThrows
   private void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
       @NonNull final Map<String, Object> keyValuePairs) {
-    val key = id.toString();
     val request = client.prepareIndex(TERMS_LOOKUP_INDEX_NAME, type.getName())
-        .setId(key)
+        .setId(id.toString())
         .setSource(keyValuePairs)
-        .setRefresh(true);
-
+        .setRefreshPolicy(IMMEDIATE);
     log.trace("{}", request.request());
-    request.execute().get();
+    request.get();
   }
 
   public void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
@@ -183,27 +180,41 @@ public class TermsLookupRepository {
     createTermsLookup(type, id, attributes);
   }
 
-  public static TermsLookupFilterBuilder createTermsLookupFilter(@NonNull String fieldName,
+  public static TermsQueryBuilder createTermsLookupFilter(@NonNull String fieldName,
       @NonNull TermLookupType type, @NonNull UUID id) {
-    val key = id.toString();
-    return termsLookupFilter(fieldName)
-        .lookupCache(false)
-        .lookupId(key)
-        .lookupIndex(TERMS_LOOKUP_INDEX_NAME)
-        .lookupType(type.getName())
-        .lookupPath(TERMS_LOOKUP_PATH);
+    val termsLookup = new TermsLookup(TERMS_LOOKUP_INDEX_NAME, type.getName(), id.toString(), TERMS_LOOKUP_PATH);
+    return termsLookupQuery(fieldName, termsLookup);
   }
 
   public SearchResponse runUnionEsQuery(final String indexTypeName, @NonNull final SearchType searchType,
-      @NonNull final BoolFilterBuilder boolFilter, final int max) {
-    val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
+      @NonNull final BoolQueryBuilder boolFilter, final int max) {
+
+    val query = QueryBuilders.boolQuery().must(boolFilter);
     return execute("Union ES Query", false, (request) -> {
       request
           .setTypes(indexTypeName)
           .setSearchType(searchType)
           .setQuery(query)
           .setSize(max)
-          .setNoFields();
+          .setFetchSource("_id", null);
+
+      if (indexTypeName.equalsIgnoreCase(FILE.getId())) {
+        request.setIndices(repoIndexName);
+      }
+    });
+  }
+
+  public SearchResponse runUnionEsQueryCount(final String indexTypeName, @NonNull final BoolQueryBuilder boolFilter,
+      final int max) {
+
+    val query = QueryBuilders.boolQuery().must(boolFilter);
+    return execute("Union ES Query", false, (request) -> {
+      request
+          .setTypes(indexTypeName)
+          .setSize(0)
+          .setQuery(query)
+          .setSize(max)
+          .setFetchSource(false);
 
       if (indexTypeName.equalsIgnoreCase(FILE.getId())) {
         request.setIndices(repoIndexName);

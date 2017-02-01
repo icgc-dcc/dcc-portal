@@ -17,13 +17,13 @@
 
 package org.icgc.dcc.portal.server.repository;
 
+import static org.apache.commons.lang3.ArrayUtils.addAll;
+import static org.apache.lucene.search.join.ScoreMode.None;
 import static org.elasticsearch.action.search.SearchType.QUERY_AND_FETCH;
-import static org.elasticsearch.index.query.FilterBuilders.andFilter;
-import static org.elasticsearch.index.query.FilterBuilders.nestedFilter;
-import static org.elasticsearch.index.query.FilterBuilders.orFilter;
-import static org.elasticsearch.index.query.FilterBuilders.rangeFilter;
-import static org.elasticsearch.index.query.FilterBuilders.termFilter;
-import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -31,9 +31,7 @@ import java.util.function.Consumer;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.index.query.MatchAllQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +53,9 @@ public class BrowserRepository {
   private static final String GENE = IndexType.GENE_CENTRIC.getId();
   private static final Integer MUTATION_SIZE = 100000;
   private static final Integer GENE_SIZE = 10000;
+  private static final String[] FETCH_SOURCE =
+      { "_gene_id", "name", "biotype", "chromosome", "start", "end", "strand", "description" };
+  private static final String[] NO_EXCLUDE = null;
 
   private final Client client;
   private final String indexName;
@@ -73,20 +74,19 @@ public class BrowserRepository {
         .setTypes(MUTATION)
         .setSearchType(QUERY_AND_FETCH)
         .setPostFilter(filter)
-        .addFields(
-            "_mutation_id",
-            "chromosome",
-            "chromosome_start",
-            "chromosome_end",
-            "mutation_type",
-            "mutation",
-            "reference_genome_allele",
-            "functional_impact_prediction_summary",
-            "ssm_occurrence.project._project_id",
-            "ssm_occurrence.project.project_name",
-            "ssm_occurrence.project._summary._ssm_tested_donor_count")
         .setFetchSource(
             includes(
+                "_mutation_id",
+                "chromosome",
+                "chromosome_start",
+                "chromosome_end",
+                "mutation_type",
+                "mutation",
+                "reference_genome_allele",
+                "functional_impact_prediction_summary",
+                "ssm_occurrence.project._project_id",
+                "ssm_occurrence.project.project_name",
+                "ssm_occurrence.project._summary._ssm_tested_donor_count",
                 "transcript.gene.symbol",
                 "transcript.consequence._transcript_id",
                 "transcript.consequence.consequence_type",
@@ -103,36 +103,28 @@ public class BrowserRepository {
     val request = client.prepareSearch(indexName)
         .setTypes(GENE)
         .setSearchType(QUERY_AND_FETCH)
-        .addFields(
-            "_gene_id",
-            "name",
-            "biotype",
-            "chromosome",
-            "start",
-            "end",
-            "strand",
-            "description")
         .setPostFilter(filter)
         .setFrom(0)
         .setSize(GENE_SIZE);
 
     if (withTranscripts) {
-      request.setFetchSource("transcripts", null);
+      request.setFetchSource(addAll(FETCH_SOURCE, "transcripts"), NO_EXCLUDE);
+    } else {
+      request.setFetchSource(FETCH_SOURCE, NO_EXCLUDE);
     }
 
-    log.debug("Browser Gene Request", request);
+    log.info("Browser Gene Request", request);
     return request.execute().actionGet();
   }
 
   public SearchResponse getGeneHistogram(Long interval, String segmentId, Long start, Long stop,
       List<String> biotypes, List<String> impactFilters) {
-    val filter = getGeneFilter(segmentId, start, stop, biotypes, impactFilters);
+    val query = getGeneFilter(segmentId, start, stop, biotypes, impactFilters);
 
     val histogramAggs = AggregationBuilders.histogram("hf")
         .field("start")
         .interval(interval);
 
-    val query = filteredQuery(new MatchAllQueryBuilder(), filter);
     return execute("Browser Gene Histogram Request", (request) -> request
         .setTypes(GENE)
         .setSearchType(QUERY_AND_FETCH)
@@ -143,13 +135,12 @@ public class BrowserRepository {
 
   public SearchResponse getMutationHistogram(Long interval, String segmentId, Long start, Long stop,
       List<String> consequenceTypes, List<String> projectFilters, List<String> impactFilters) {
-    val filter = getMutationFilter(segmentId, start, stop, consequenceTypes, projectFilters, impactFilters);
+    val query = getMutationFilter(segmentId, start, stop, consequenceTypes, projectFilters, impactFilters);
 
     val histogramAggs = AggregationBuilders.histogram("hf")
         .field("chromosome_start")
         .interval(interval);
 
-    val query = filteredQuery(new MatchAllQueryBuilder(), filter);
     return execute("Browser Mutation Histogram Request", (request) -> request
         .setTypes(MUTATION)
         .setSearchType(QUERY_AND_FETCH)
@@ -163,69 +154,68 @@ public class BrowserRepository {
     val request = client.prepareSearch(indexName);
     customizer.accept(request);
 
-    log.debug("{}: {}", message, request);
+    log.info("{}: {}", message, request);
     return request.execute().actionGet();
   }
 
   /**
    * Builds a FilterBuilder with only the applicable filter values.
    */
-  private static FilterBuilder getMutationFilter(String segmentId, Long start, Long stop, List<String> consequenceTypes,
+  private static QueryBuilder getMutationFilter(String segmentId, Long start, Long stop, List<String> consequenceTypes,
       List<String> projectFilters, List<String> impacts) {
-
-    val filter = andFilter(
-        termFilter("chromosome", segmentId),
-        rangeFilter("chromosome_start").lte(stop),
-        rangeFilter("chromosome_end").gte(start));
+    val andQueryFilter = boolQuery()
+        .must(termQuery("chromosome", segmentId))
+        .must(rangeQuery("chromosome_start").lte(stop))
+        .must(rangeQuery("chromosome_end").gte(start));
 
     if (impacts != null && !impacts.isEmpty()) {
       val impactFilter = getImpactFilterMutation(impacts);
-      filter.add(impactFilter);
+      andQueryFilter.must(impactFilter);
     }
-    
+
     if (consequenceTypes != null) {
       val consequenceFilter = getConsequenceFilter(consequenceTypes);
-      filter.add(consequenceFilter);
+      andQueryFilter.must(consequenceFilter);
     }
 
     if (projectFilters != null) {
       val projectFilter = getProjectFilter(projectFilters);
-      filter.add(projectFilter);
+      andQueryFilter.must(projectFilter);
     }
 
-    return filter;
+    return andQueryFilter;
   }
 
   /**
    * Builds a FilterBuilder with only the applicable filter values.
    */
-  private static FilterBuilder getGeneFilter(String segmentId, Long start, Long stop,
+  private static QueryBuilder getGeneFilter(String segmentId, Long start, Long stop,
       List<String> biotypes, List<String> impacts) {
-    val filter = andFilter(
-        termFilter("chromosome", segmentId),
-        rangeFilter("start").lte(stop),
-        rangeFilter("end").gte(start));
+    val andQueryFilter = boolQuery()
+        .must(termQuery("chromosome", segmentId))
+        .must(rangeQuery("start").lte(stop))
+        .must(rangeQuery("end").gte(start));
 
     if (biotypes != null) {
       val biotypeFilter = getBiotypeFilterBuilder(biotypes);
-      filter.add(biotypeFilter);
-    }
-    
-    if (impacts != null && !impacts.isEmpty()) {
-      val impactFilter = getImpactFilterGene(impacts);
-      filter.add(impactFilter);
+      andQueryFilter.must(biotypeFilter);
     }
 
-    return filter;
+    if (impacts != null && !impacts.isEmpty()) {
+      val impactFilter = getImpactFilterGene(impacts);
+      andQueryFilter.must(impactFilter);
+    }
+
+    return andQueryFilter;
   }
 
   /**
    * Readability method to build list of biotype filters.
    */
-  private static FilterBuilder getBiotypeFilterBuilder(List<String> biotypes) {
-    val biotypeFilter = orFilter();
+  private static QueryBuilder getBiotypeFilterBuilder(List<String> biotypes) {
+    val biotypeFilter = boolQuery();
     for (val biotype : biotypes) {
-      biotypeFilter.add(termFilter("biotype", biotype));
+      biotypeFilter.should(termQuery("biotype", biotype));
     }
 
     return biotypeFilter;
@@ -248,10 +238,10 @@ public class BrowserRepository {
   /**
    * Builds a FilterBuilder for consequence types
    */
-  private static FilterBuilder getConsequenceFilter(List<String> consequenceTypes) {
-    val consequenceFilter = orFilter();
+  private static QueryBuilder getConsequenceFilter(List<String> consequenceTypes) {
+    val consequenceFilter = boolQuery();
     for (val consequenceType : consequenceTypes) {
-      consequenceFilter.add(FilterBuilders.termFilter("transcript.consequence.consequence_type", consequenceType));
+      consequenceFilter.should(termQuery("transcript.consequence.consequence_type", consequenceType));
     }
 
     return consequenceFilter;
@@ -260,43 +250,39 @@ public class BrowserRepository {
   /**
    * Builds a FilterBuilder for project names.
    */
-  private static FilterBuilder getProjectFilter(List<String> projects) {
-    val projectFilter = orFilter();
+  private static QueryBuilder getProjectFilter(List<String> projects) {
+    val projectFilter = boolQuery();
     for (val project : projects) {
-      projectFilter.add(FilterBuilders.termFilter("ssm_occurrence.project.project_name", project));
+      projectFilter.should(termQuery("ssm_occurrence.project.project_name", project));
     }
 
     return projectFilter;
   }
-  
+
   /**
-   * Builds a FilterBuilder for Functional Impact.
-   * This filter is special as Transcripts are nested documents. 
+   * Builds a QueryBuilder for Functional Impact. This filter is special as Transcripts are nested documents.
    */
-  private static FilterBuilder getImpactFilterMutation(List<String> impacts) {
-    val impactFilter = orFilter();
-    for (val impact: impacts) {
-      impactFilter.add(FilterBuilders.termFilter("transcript.functional_impact_prediction_summary", impact));
+  private static QueryBuilder getImpactFilterMutation(List<String> impacts) {
+    val impactOrFilter = boolQuery();
+    for (val impact : impacts) {
+      impactOrFilter.should(termQuery("transcript.functional_impact_prediction_summary", impact));
     }
-    
-    val nested = nestedFilter("transcript", impactFilter);
+
+    val nested = nestedQuery("transcript", impactOrFilter, None);
     return nested;
   }
-  
+
   /**
-   * Builds a FilterBuilder for Functional Impact.
-   * This filter is special as Transcripts are nested documents. 
+   * Builds a FilterBuilder for Functional Impact. This filter is special as Transcripts are nested documents.
    */
-  private static FilterBuilder getImpactFilterGene(List<String> impacts) {
-    val impactFilter = orFilter();
-    for (val impact: impacts) {
-      impactFilter.add(FilterBuilders.termFilter("donor.ssm.consequence.functional_impact_prediction_summary", impact));
+  private static QueryBuilder getImpactFilterGene(List<String> impacts) {
+    val impactOrFilter = boolQuery();
+    for (val impact : impacts) {
+      impactOrFilter.should(termQuery("donor.ssm.consequence.functional_impact_prediction_summary", impact));
     }
-    
-    val nested = nestedFilter("donor.ssm.consequence", impactFilter);
+
+    val nested = nestedQuery("transcript", impactOrFilter, None);
     return nested;
   }
-  
-  
 
 }

@@ -35,7 +35,7 @@ import lombok.NonNull;
 public final class Aggregations {
 
   public static Map<String, Long> getTermsCounts(@NonNull Terms agg) {
-    return agg.getBuckets().stream().collect(toImmutableMap(Bucket::getKey, Bucket::getDocCount));
+    return agg.getBuckets().stream().collect(toImmutableMap(Bucket::getKeyAsString, Bucket::getDocCount));
   }
 
 }

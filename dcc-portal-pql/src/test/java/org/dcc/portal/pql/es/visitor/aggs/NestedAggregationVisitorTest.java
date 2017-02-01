@@ -17,11 +17,11 @@
  */
 package org.dcc.portal.pql.es.visitor.aggs;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.dcc.portal.pql.utils.BaseElasticsearchTest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -40,9 +40,9 @@ public class NestedAggregationVisitorTest extends BaseElasticsearchTest {
   QueryEngine queryEngine;
 
   @Before
-  public void setUp() {
-    es.execute(createIndexMappings(MUTATION_CENTRIC).withData(bulkFile(getClass())));
-    queryEngine = new QueryEngine(es.client(), INDEX_NAME);
+  public void setUpNestedAggregationVisitorTest() {
+    prepareIndex(MUTATION_CENTRIC);
+    queryEngine = new QueryEngine(client, INDEX_NAME);
   }
 
   @Test
@@ -54,26 +54,26 @@ public class NestedAggregationVisitorTest extends BaseElasticsearchTest {
     Terms terms = nested.getAggregations().get("consequenceType");
 
     val missenseAll = terms.getBucketByKey("missense_variant");
-    assertThat(missenseAll.getDocCount()).isEqualTo(5L);
+    Assertions.assertThat(missenseAll.getDocCount()).isEqualTo(5L);
     ReverseNested missenseNested = missenseAll.getAggregations().get("consequenceType");
-    assertThat(missenseNested.getDocCount()).isEqualTo(3L);
+    Assertions.assertThat(missenseNested.getDocCount()).isEqualTo(3L);
 
     val frameshiftAll = terms.getBucketByKey("frameshift_variant");
-    assertThat(frameshiftAll.getDocCount()).isEqualTo(2L);
+    Assertions.assertThat(frameshiftAll.getDocCount()).isEqualTo(2L);
     ReverseNested frameshiftNested = frameshiftAll.getAggregations().get("consequenceType");
-    assertThat(frameshiftNested.getDocCount()).isEqualTo(2L);
+    Assertions.assertThat(frameshiftNested.getDocCount()).isEqualTo(2L);
 
     val intergenicAll = terms.getBucketByKey("intergenic_region");
-    assertThat(intergenicAll.getDocCount()).isEqualTo(2L);
+    Assertions.assertThat(intergenicAll.getDocCount()).isEqualTo(2L);
     ReverseNested intergenicNested = intergenicAll.getAggregations().get("consequenceType");
-    assertThat(intergenicNested.getDocCount()).isEqualTo(1L);
+    Assertions.assertThat(intergenicNested.getDocCount()).isEqualTo(1L);
 
     // Missing
     Global globalMissing = result.getAggregations().get("consequenceType_missing");
     Nested nestedMissing = globalMissing.getAggregations().get("consequenceType_missing");
     Missing termsMissing = nestedMissing.getAggregations().get("consequenceType_missing");
     ReverseNested reverseMissing = termsMissing.getAggregations().get("consequenceType_missing");
-    assertThat(reverseMissing.getDocCount()).isEqualTo(1L);
+    Assertions.assertThat(reverseMissing.getDocCount()).isEqualTo(1L);
   }
 
   @Test
@@ -86,9 +86,9 @@ public class NestedAggregationVisitorTest extends BaseElasticsearchTest {
     Terms terms = nestedFilter.getAggregations().get("consequenceType");
 
     val intergenicAll = terms.getBucketByKey("intergenic_region");
-    assertThat(intergenicAll.getDocCount()).isEqualTo(1L);
+    Assertions.assertThat(intergenicAll.getDocCount()).isEqualTo(1L);
     ReverseNested intergenicNested = intergenicAll.getAggregations().get("consequenceType");
-    assertThat(intergenicNested.getDocCount()).isEqualTo(1L);
+    Assertions.assertThat(intergenicNested.getDocCount()).isEqualTo(1L);
   }
 
   @Test
@@ -102,14 +102,14 @@ public class NestedAggregationVisitorTest extends BaseElasticsearchTest {
     Terms terms = nested.getAggregations().get("platform");
 
     val solidSeq = terms.getBucketByKey("SOLiD sequencing");
-    assertThat(solidSeq.getDocCount()).isEqualTo(2L);
+    Assertions.assertThat(solidSeq.getDocCount()).isEqualTo(2L);
     ReverseNested solidSeqNested = solidSeq.getAggregations().get("platform");
-    assertThat(solidSeqNested.getDocCount()).isEqualTo(1L);
+    Assertions.assertThat(solidSeqNested.getDocCount()).isEqualTo(1L);
 
     val illuminaGa = terms.getBucketByKey("SOLiD sequencing");
-    assertThat(illuminaGa.getDocCount()).isEqualTo(2L);
+    Assertions.assertThat(illuminaGa.getDocCount()).isEqualTo(2L);
     ReverseNested illuminaGaNested = illuminaGa.getAggregations().get("platform");
-    assertThat(illuminaGaNested.getDocCount()).isEqualTo(1L);
+    Assertions.assertThat(illuminaGaNested.getDocCount()).isEqualTo(1L);
   }
 
   private SearchResponse executeQuery(String query) {
