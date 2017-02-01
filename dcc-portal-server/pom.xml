@@ -82,12 +82,12 @@
     <dependency>
 	    <groupId>org.icgc.dcc</groupId>
 	    <artifactId>dcc-release-resources</artifactId>
-	    <version>4.2.5-20161117.210648-8</version>
+	    <version>4.3.6</version>
 	</dependency>
 	<dependency>
 	    <groupId>org.icgc.dcc</groupId>
 	    <artifactId>dcc-repository-resources</artifactId>
-	    <version>1.1.4-20170124.151031-1</version>
+	    <version>1.1.4</version>
 	</dependency>
 
     <!-- JDBI -->
