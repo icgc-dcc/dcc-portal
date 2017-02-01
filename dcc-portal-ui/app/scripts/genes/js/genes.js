@@ -113,6 +113,7 @@
     _ctrl.shouldLimitDisplayProjects = true;
     _ctrl.defaultProjectsLimit = 10;
     _ctrl.isPVLoading = true;
+    _ctrl.isPVInitialLoad = true;
     _ctrl.isGVLoading = true;
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 
@@ -442,6 +443,10 @@
 
     this.resolve = function (ensemblIds) {
       return Restangular.one (apiUrl, ensemblIds).get();
+    };
+
+    this.getAll = () => {
+      return Restangular.one(apiUrl).get().then(x => x.plain());
     };
   });
 

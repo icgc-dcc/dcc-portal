@@ -285,21 +285,21 @@
             <thead>
             <tr>
                 <th rowspan="2">ID</th>
-                <th rowspan="2"><abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+                <th rowspan="2"><abbr data-icgc-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
                     <translate>DNA change</translate></abbr>
                 </th>
                 <th rowspan="2">Type</th>
-                <th rowspan="2"><abbr data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
+                <th rowspan="2"><abbr data-icgc-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
                 </th>
                 <th colspan="2" class="text-center"><translate># Donors affected</translate></th>
             </tr>
             <tr>
                 <th class="text-center">
-                    <abbr data-tooltip="{{'Breakdown of Affected Donors in [[ projectId ]]<br># Donors affected / # SSM tested donors' | translate | subDelimiters:{projectId: DonorCtrl.donor.projectId} }}">
+                    <abbr data-icgc-tooltip="{{'Breakdown of Affected Donors in [[ projectId ]]<br># Donors affected / # SSM tested donors' | translate | subDelimiters:{projectId: DonorCtrl.donor.projectId} }}">
                         {{ DonorCtrl.donor.projectId }}
                     </abbr> <i class="icon-caret-down"></i></th>
                 <th class="text-center">
-                    <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+                    <abbr data-icgc-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
                           data-tooltip-placement="left"><translate>Across all Projects</translate></abbr></th>
             </tr>
             </thead>
@@ -309,7 +309,7 @@
                     <a href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a>
                 </td>
                 <td class="t_cell_line_break">chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
-                <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr>
+                <td><abbr data-icgc-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr>
                 </td>
                 <td>
                     <mutation-consequences items="mutation.consequences"></mutation-consequences>
@@ -340,7 +340,7 @@
                                   class="t_facets__facet__terms__active__term__bar"></span>
                             <span style="position: relative">
                                 <a data-tooltip-placement="left"
-                                   data-tooltip="{{ p.projectName }}"
+                                   data-icgc-tooltip="{{ p.projectName }}"
                                    href="/projects/{{p.term}}">{{p.term}}</a>:
                             <a href='/search?filters={{p.advQuery}}'>
                                 {{p.count | number}}

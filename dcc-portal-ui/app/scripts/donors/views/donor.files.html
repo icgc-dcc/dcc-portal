@@ -41,7 +41,7 @@
     <span class="t_tools">
       <span class="t_tools__tool">
         <i class="icon-file pull-right"
-          data-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
+          data-icgc-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
           data-ng-click="DonorFilesCtrl.export()"></i>
       </span>
     </span>
@@ -60,7 +60,7 @@
       <th style="text-align:center">
         <abbr>
           <i class="icon-chart-bar" 
-            tooltip="{{'BAM & VCF Stats (available only for BAM and VCF Files in AWS and Collaboratory)' | translate}}" tooltip-placement="left">
+            icgc-tooltip="{{'BAM & VCF Stats (available only for BAM and VCF Files in AWS and Collaboratory)' | translate}}" tooltip-placement="left">
           </i>
         </abbr>
       </th>
@@ -70,11 +70,11 @@
         <td style="white-space:nowrap;max-width: 8rem;">
           <i class="{{ row.access === 'open' ? 'icon-lock-open' : 'icon-lock' }}" />
           <a href="{{:: DonorFilesCtrl.dataRepoFileUrl}}{{row.id}}"
-            tooltip="{{DonorFilesCtrl.fileNames(row.fileCopies)}}">
+            icgc-tooltip="{{DonorFilesCtrl.fileNames(row.fileCopies)}}">
             {{row.id}}
           </a>
         </td>
-        <td tooltip="{{ DonorFilesCtrl.repoNamesInTooltip(row.fileCopies)}}">
+        <td icgc-tooltip="{{ DonorFilesCtrl.repoNamesInTooltip(row.fileCopies)}}">
           {{DonorFilesCtrl.repoNames(row.fileCopies)}}
         </td>
         <td>

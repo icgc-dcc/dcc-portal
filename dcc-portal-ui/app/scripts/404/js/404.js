@@ -20,58 +20,34 @@
 angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
   .config(function($stateProvider){
     $stateProvider.state('404', {
-      url: '/404?page&id&url',
+      url: '/404?page&name&id&url',
       templateUrl: '/scripts/404/views/404.html',
       controller: '404Controller as ctrlr'
     });
-  })
-  .constant('REDIRECTS', [
-      {
-        'from': '/icgc-in-the-cloud/guide',
-        'to': 'http://docs.icgc.org/cloud/guide/'
-      }
-    ]
-  );
+  });
 
 (function(){
   angular.module('icgc.404.controllers', [])
-    .controller('404Controller', function($stateParams, Page, $location, $timeout, $window, REDIRECTS){
+    .controller('404Controller', function($stateParams, Page){
       var _ctrl = this;
       _ctrl.info = '';
-      _ctrl.path = $location.path();
-      _ctrl.pathToGoTo;
-      _ctrl.redirect = _.find(REDIRECTS, (redirect) => redirect.from === _ctrl.path);
-      _ctrl.isRedirect = false;
-      _ctrl.timeToRedirect = 5;
-
-      const processRedirect = () => {
-        $timeout(() => {
-          _ctrl.timeToRedirect--;
-          if(_ctrl.timeToRedirect == 0){
-            $window.location.href = _ctrl.pathToGoTo;
-          } else {
-            processRedirect();
-          }
-        },1000);
-      };
-
-      if(_ctrl.redirect){
-        _ctrl.isRedirect = true;
-        _ctrl.pathToGoTo = _ctrl.redirect.to;
-        processRedirect();
-      }
 
       Page.setTitle('404');
       Page.setPage('error');
 
       if($stateParams.page && $stateParams.id && $stateParams.url){
-        _ctrl.info = {page: $stateParams.page, id: $stateParams.id, url: $stateParams.url};
+        _ctrl.info = {name: $stateParams.name, id: $stateParams.id, url: $stateParams.url};
       }
 
       _ctrl.page = $stateParams.page;
       
-      _ctrl.emailSubject = _ctrl.info ? 
-        'ICGC DCC /' + _ctrl.info.page  + '/' + _ctrl.info.id +' Page Not Found' : 
-        'ICGC DCC Page Not Found' ;
+      _ctrl.emailSubject = 'ICGC DCC Page Not Found';
+      _ctrl.emailBody = _ctrl.info ? 
+      `An error occured while accessing ${_ctrl.page} URL.%0A%0A
+      Error Details:%0A
+        Name: ${_ctrl.info.name}%0A
+        Id: ${_ctrl.info.id}%0A
+        Url: ${_ctrl.info.url}` : 
+      `An error occured while accessing ${_ctrl.page} URL.%0A`;
     });
 })();

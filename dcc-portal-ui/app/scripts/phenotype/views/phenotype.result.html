@@ -4,6 +4,7 @@
         <share-button></share-button>
     </span>
 </h3>
+<h5 class="analysis-subtitle"> {{ subtitle }} </h5>
 
 <div data-ng-if="isDeprecated" class="alert-error">
     <i class="icon-attention"></i>
@@ -102,7 +103,7 @@
                 </tr>
                 <tr>
                     <th>
-                        <abbr data-tooltip="{{'Criteria to include donor from your sets in the survival analysis: <br> - donor does not overlap between your selected donor sets <br> - donor has complete data for the purpose of the analysis (event and time-to-event) <br>' | translate}}">
+                        <abbr data-icgc-tooltip="{{'Criteria to include donor from your sets in the survival analysis: <br> - donor does not overlap between your selected donor sets <br> - donor has complete data for the purpose of the analysis (event and time-to-event) <br>' | translate}}">
                             <translate>Donors included in Analysis</translate></abbr>
                     </th>
                     <th

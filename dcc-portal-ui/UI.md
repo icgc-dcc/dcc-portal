@@ -27,24 +27,19 @@ components in order to extend, modify or provide fixes towards the UI.
 refer to the *package.json* file in the current directory to lookup which versions the portal is depending on.
 
 
-* NodeJS with NPM
-* Grunt Tools (NodeJS) for
+* NodeJS with NPM and Yarn
+* Webpack for
  * Development
-    * Connect (Grunt HTTP Server)
-    * Watch (File Watcher) w/LiveReload and SASS Regeneration
+    * Webpack Dev Server
  * JS Linting
-   * JSHint
+   * ESLint
  * Frontend Tests
    * Karma w/PhantomJS
  * Concatenation/Minification/Source Map Generation
-   * Usemin/CSSmin/HTMLmin/Imagemin
-   * Concat
-   * Uglify
-   * Filerev
-   * etc...
-   * Please Refer to the Frontend *Gruntfile.js* for More Details)
-* SASS Preprocessor (w/Compass) - CSS Development
-* Bower (Frontend Library Package Management)
+   * Webpack
+   * Please Refer to the Frontend *webpack.config.dev.js* and *webpack.config.prod.js* for More Details)
+* SASS Preprocessor - CSS Development
+* NPM and Yarn (Package Management)
  
 
 

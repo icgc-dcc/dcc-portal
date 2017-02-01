@@ -124,7 +124,7 @@
                             <span class="t_quick__hit__text__details__label"><translate>File Name</translate></span>
                             <span class="t_quick__hit__text__details__value" data-ng-bind-html="r.fileName[0] | highlight:activeQuery"></span>
                             <span data-ng-if="r.fileName.length > 1" style="cursor:pointer;"
-                              data-tooltip="{{r.fileName | withoutFirst | highlight:activeQuery}}" class="t_quick__hit__text__details__value">...</span>
+                              data-icgc-tooltip="{{r.fileName | withoutFirst | highlight:activeQuery}}" class="t_quick__hit__text__details__value">...</span>
                         </li>
                         <li>
                             <span class="t_quick__hit__text__details__label"><translate>Object ID</translate></span>

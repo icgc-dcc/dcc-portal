@@ -21,7 +21,7 @@
 
             <span data-ng-if="terms.is" data-ng-repeat="termObj in terms.is track by termObj.term">
                 <span data-ng-style="hoverStyle"
-                      data-tooltip="{{ ['pathwayId', 'goTermId', 'curatedSetId'].indexOf(facet) >= 0? (termObj.term | geneSetNameLookup) : (termObj.term | define:term.controlFacet) }}">
+                      data-icgc-tooltip="{{ ['pathwayId', 'goTermId', 'curatedSetId'].indexOf(facet) >= 0? (termObj.term | geneSetNameLookup) : (termObj.term | define:term.controlFacet) }}">
                     {{termObj.term | trans:term.controlFacet}}
                 </span>
                 <span data-ng-if="!$last">,&nbsp;</span>  
@@ -29,7 +29,7 @@
             
             <span data-ng-if="terms.not" data-ng-repeat="termObj in terms.not track by termObj.term">
                 <span data-ng-style="hoverStyle"
-                      data-tooltip="{{ ['pathwayId', 'goTermId', 'curatedSetId'].indexOf(facet) >= 0? (termObj.term | geneSetNameLookup) : (termObj.term | define:term.controlFacet) }}">
+                      data-icgc-tooltip="{{ ['pathwayId', 'goTermId', 'curatedSetId'].indexOf(facet) >= 0? (termObj.term | geneSetNameLookup) : (termObj.term | define:term.controlFacet) }}">
                       {{ resolveGeneSymbols (termObj.controlType, termObj.term) | trans: term.controlFacet }}
                 </span>
                 <span data-ng-if="!$last">,&nbsp;</span>

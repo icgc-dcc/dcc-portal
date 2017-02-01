@@ -251,7 +251,7 @@ angular.module('app.ui.mutation', []).directive('mutationConsequences', function
 });
 //Mike
 angular.module('icgc.ui.popover', [])
-  .directive('popover', function ($sce) {
+  .directive('icgcPopover', function ($sce) {
     return {
       restrict: 'AE',
       transclude: true,
@@ -366,9 +366,8 @@ angular.module('icgc.ui.popover', [])
 angular.module('icgc.ui.copyPaste', [])
   .provider('copyPaste', function () {
     var _provider = this,
-        _zeroClipPath = '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf',
-        _copyPasteConfig = {};
-    
+    _zeroClipPath = require('../assets/ZeroClipboard.swf'),
+    _copyPasteConfig = {};    
     // Getter/Setter for flash fallback
     _provider.zeroClipboardPath = function (path) {
 

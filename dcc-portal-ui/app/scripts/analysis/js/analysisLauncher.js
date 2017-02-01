@@ -28,7 +28,7 @@
    * - phenotype analysis
    */
   module.controller('NewAnalysisController',
-    function($scope, $modal, $location, $timeout, Page, AnalysisService, Restangular, SetService, Extensions, $q, gettextCatalog) {
+    function($scope, $state, $modal, $location, $timeout, Page, AnalysisService, Restangular, SetService, Extensions, $q, gettextCatalog) {
 
     var _this = this,
         _isLaunchingAnalysis = false;
@@ -44,12 +44,19 @@
       gene: null
     };
 
+    $scope.$watch(() => {
+      return $state.params.tool;
+    }, () => {
+      this.selectAnalysisByType($state.params.tool);
+    });
+
     _this.allSets = SetService.getAll();
 
     // Pass-thru
     _this.analysisName = AnalysisService.analysisName;
     _this.analysisDescription = AnalysisService.analysisDescription;
     _this.analysisDemoDescription = AnalysisService.analysisDemoDescription;
+    _this.datasetSelectionInstructions = AnalysisService.datasetSelectionInstructions;
 
     _this.toggle = function(setId) {
       _this.selectedIds = _.xor(_this.selectedIds, [setId]);
@@ -129,6 +136,131 @@
         console.error(`The requested analysis ${type} doesn't exist!`);
       }
     };
+    
+    const CRITERIA_TYPES = {
+      MIN_SETS: 'MIN_SETS',
+    };
+
+    const minSetCriterium = count => ({
+      type: CRITERIA_TYPES.MIN_SETS,
+      test: selectedSets => selectedSets.length >= count,
+      message: gettextCatalog.getString(`At least ${count} sets are required`),
+    });
+    
+    const maxSetCriterium = count => ({
+      test: selectedSets => selectedSets.length <= count,
+      message: gettextCatalog.getString(`Must not exceed ${count} set`),
+    });
+
+    const itemLimitCriterium = (limit, type) => ({
+      test: selectedSets => _.every(selectedSets, set => set.count <= limit),
+      message: gettextCatalog.getString(`Sets cannot contain more than ${limit.toLocaleString()} items`),
+    });
+
+    const itemLimitForSetTypeCriterium = (limit, type) => ({
+      test: selectedSets => _.every(selectedSets, set => (set.type === type ? set.count <= limit : true)),
+      message: gettextCatalog.getString(`${type} sets cannot contain more than ${limit} items`),
+    });
+
+    const setTypesCriterium = (types) => ({
+      test: selectedSets =>  _.every(selectedSets, set => _.includes(types, set.type) ),
+      message: gettextCatalog.getString(`Sets must have type of ${types.join(' or ')}`),
+    });
+
+    const setTypeLimit = (type, limit) => ({
+      test: selectedSets => _.filter(selectedSets, {type: type}).length <= limit,
+      message: gettextCatalog.getString(`There can only be 1 ${type} set`),
+    });
+
+    this.analysesMeta = {
+      enrichment: {
+        type: 'enrichment',
+        strings: AnalysisService.analysesStrings.enrichment,
+        analysisSatisfactionCriteria: [
+          minSetCriterium(1),
+          maxSetCriterium(1),
+          itemLimitCriterium(10000),
+          setTypesCriterium(['gene']),
+        ],
+        launch: selectedSets => launchEnrichment(selectedSets[0]),
+        launchDemo: () => _this.demoEnrichment(),
+        image: require('!raw!../../../styles/images/analysis-enrichment.svg'), 
+      },
+      phenotype: {
+        type: 'phenotype',
+        strings: AnalysisService.analysesStrings.phenotype,
+        analysisSatisfactionCriteria: [
+          minSetCriterium(2),
+          maxSetCriterium(2),
+          setTypesCriterium(['donor']),
+        ],
+        launch: selectedSets => _this.launchPhenotype(selectedSets.map(x => x.id)),
+        launchDemo: () => _this.demoPhenotype(),
+        image: require('!raw!../../../styles/images/analysis-phenotype.svg'), 
+      },
+      set: {
+        type: 'set',
+        strings: AnalysisService.analysesStrings.set,
+        analysisSatisfactionCriteria: [
+          minSetCriterium(2),
+          maxSetCriterium(3),
+          {
+            test: (selectedSets) => _.uniq(selectedSets.map(x => x.type)).length === 1,
+            message: gettextCatalog.getString('Set types must match'),
+          },
+        ],
+        launch: selectedSets => _this.launchSet(selectedSets[0].type, selectedSets.map(x => x.id)),
+        launchDemo: () => _this.demoSetOperation(),
+        image: require('!raw!../../../styles/images/analysis-set.svg'), 
+      },
+      oncogrid: {
+        type: 'oncogrid',
+        strings: AnalysisService.analysesStrings.oncogrid,
+        analysisSatisfactionCriteria: [
+          minSetCriterium(2),
+          maxSetCriterium(2),
+          setTypeLimit('gene', 1),
+          setTypeLimit('donor', 1),
+          setTypesCriterium(['gene', 'donor']),
+          itemLimitForSetTypeCriterium(100, 'gene'),
+          itemLimitForSetTypeCriterium(3000, 'donor'),
+        ],
+        launchDemo: () => _this.demoOncogrid(),
+        launch: selectedSets => _this.launchOncogridAnalysis({
+          donor: _.find(selectedSets, {type: 'donor'}).id,
+          gene: _.find(selectedSets, {type: 'gene'}).id,
+        }),
+        image: require('!raw!../../../styles/images/analysis-oncogrid.svg'), 
+      },
+    };
+
+    _this.addCustomGeneSet = function() {
+      $modal.open({
+        templateUrl: '/scripts/genelist/views/upload.html',
+        controller: 'GeneListController'
+      });
+    };
+
+    _this.selectedAnalysis = undefined;
+    _this.selectedSets = [];
+
+    this.selectAnalysisByType = analysisType => {
+      _this.analysisType = analysisType;
+      _this.selectedAnalysis = _.find(this.analysesMeta, {type: analysisType});
+      $timeout(() => { this.shouldShowSetSelection = !!_this.selectedAnalysis });
+    };
+
+    _this.handleClickAnalysis = analysis => {
+      this.selectAnalysisByType(analysis.type);
+    };
+    _this.handleSetSelectionCancel = () => {
+      $state.go('analysis');
+    };
+    _this.handleSelectedSetsChange = sets => { _this.selectedSets = sets };
+    const doSetsSatisfyCriteria = (sets, criteria) => _.every(criteria || [], criterium => criterium.test(sets))
+    _this.isAnalysisSatisfied = (analysis) => doSetsSatisfyCriteria(_this.selectedSets, analysis.analysisSatisfactionCriteria);
+    const getCriteriaSatisficationMessages = (sets, criteria) => _.reject(criteria || [], criterium => criterium.test(sets)).map(criteria => criteria.message);
+    _this.getCriteriaSatisficationMessage = (analysis) => getCriteriaSatisficationMessages(_this.selectedSets, analysis.analysisSatisfactionCriteria).join('<br>');
 
 
     _this.isLaunchingAnalysis = function() {
@@ -140,7 +272,9 @@
       return _this.selectedForOnco.donor !== null && _this.selectedForOnco.gene !== null;
     };
 
-    function _launchAnalysis(data, resourceName, redirectRootPath) {
+    const markSetIdAsDemo = (setId) => localStorage.setItem('demoIds', JSON.stringify((JSON.parse(localStorage.getItem('demoIds')) || []).concat(setId)));
+
+    function _launchAnalysis(data, resourceName, redirectRootPath, {isDemo}) {
       if (_isLaunchingAnalysis) {
         return;
       }
@@ -154,6 +288,7 @@
           if (!data.id) {
            throw new Error('Could not retrieve analysis data.id', data);
           }
+          if (isDemo) markSetIdAsDemo(data.id);
           $location.path(redirectRootPath + data.id);
         })
         .finally(function() {
@@ -162,23 +297,23 @@
     }
 
     /* Phenotype comparison only takes in donor set ids */
-    _this.launchPhenotype = function(setIds) {
-      return _launchAnalysis(setIds, 'phenotype', 'analysis/view/phenotype/');
+    _this.launchPhenotype = function(setIds, {isDemo} = {isDemo: false}) {
+      return _launchAnalysis(setIds, 'phenotype', 'analysis/view/phenotype/', {isDemo});
     };
 
-    _this.launchSet = function(type, setIds) {
+    _this.launchSet = function(type, setIds, {isDemo} = {isDemo: false}) {
       var payload = {
         lists: setIds,
         type: type.toUpperCase()
       };
-      return _launchAnalysis(payload, 'union', 'analysis/view/set/');
+      return _launchAnalysis(payload, 'union', 'analysis/view/set/', {isDemo});
     };
 
-    _this.launchSurvival = function(setIds) {
-      return _launchAnalysis(setIds, 'survival', 'analysis/view/survival/');
+    _this.launchSurvival = function(setIds, {isDemo} = {isDemo: false}) {
+      return _launchAnalysis(setIds, 'survival', 'analysis/view/survival/', {isDemo});
     };
     
-    _this.launchOncogridAnalysis = function (setIds) {      
+    _this.launchOncogridAnalysis = function (setIds, {isDemo} = {isDemo: false}) {      
       if (_isLaunchingAnalysis) {
         return;
       }
@@ -197,6 +332,7 @@
           if (!data.id) {
             throw new Error('Received invalid response from analysis creation');
           }
+          if (isDemo) markSetIdAsDemo(data.id);
           $location.path('analysis/view/oncogrid/' + data.id);
         })
         .finally(function () {
@@ -255,7 +391,7 @@
           demoSetIds.push(r2.id);
           function proxyLaunch() {
             Page.stopWork();
-            _this.launchPhenotype(demoSetIds);
+            _this.launchPhenotype(demoSetIds, {isDemo: true});
           }
           wait(demoSetIds, 7, proxyLaunch);
         });
@@ -319,7 +455,7 @@
 
             function proxyLaunch() {
               Page.stopWork();
-              _this.launchSet('mutation', demoSetIds);
+              _this.launchSet('mutation', demoSetIds, {isDemo: true});
             }
             wait(demoSetIds, 7, proxyLaunch);
           });
@@ -354,7 +490,7 @@
       SetService.addSet(type, params).then(function(result) {
         function proxyLaunch(sets) {
           Page.stopWork();
-          launchEnrichment(sets[0]);
+          launchEnrichment(sets[0], {isDemo: true});
         }
         wait([result.id], 5, proxyLaunch);
       });
@@ -414,26 +550,19 @@
 
           function proxyLaunch() {
             Page.stopWork();
-            _this.launchOncogridAnalysis({donor: r1.id, gene: r2.id});
+            _this.launchOncogridAnalysis({donor: r1.id, gene: r2.id}, {isDemo: true});
           }
           wait([r1.id, r2.id], 7, proxyLaunch);
       });
     };
 
-    _this.launchEnrichment = function(setId) {
-      var set = _.filter(_this.filteredList, function(set) {
-        return set.id === setId;
-      })[0];
-      launchEnrichment(set);
-    };
-
-    function launchEnrichment(set) {
+    function launchEnrichment(set, {isDemo} = {isDemo: false}) {
       var filters = {
         gene: {}
       };
       filters.gene.id = { is: [Extensions.ENTITY_PREFIX + set.id] };
 
-      $modal.open({
+      const launchModal = $modal.open({
         templateUrl: '/scripts/enrichment/views/enrichment.upload.html',
         controller: 'EnrichmentUploadController',
         resolve: {
@@ -445,6 +574,10 @@
           }
         }
       });
+
+      if (isDemo) {
+        launchModal.result.then(result => markSetIdAsDemo(result.id));
+      }
     }
 
     $scope.$on('$locationChangeSuccess', function() {
@@ -466,5 +599,3 @@
     });
   });
 })();
-
-
