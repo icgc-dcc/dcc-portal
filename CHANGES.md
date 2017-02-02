@@ -3,6 +3,16 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[5.0.1](https://github.com/icgc-dcc/dcc-portal/compare/5.0.0...5.0.1)
+--
+- Fixes conflicting dependencies which caused an error on the releases page
+
+[5.0.0](https://github.com/icgc-dcc/dcc-portal/compare/dcc-portal-4.4.3...5.0.0)
+--
+- Upgrade code to support Elasticsearch 5.1.2
+- Added new dependencies for Elasticsearch 
+- Unit tests have been updated to continue supporting embedded Elasticsearch for testing
+
 [4.4.3](https://github.com/icgc-dcc/dcc-portal/compare/4.4.2...dcc-portal-4.4.3)
 --
 - Factored out restangular from app.js to its own wrapper source file
