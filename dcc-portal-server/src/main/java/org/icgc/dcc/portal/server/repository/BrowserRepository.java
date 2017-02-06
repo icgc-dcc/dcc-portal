@@ -113,7 +113,7 @@ public class BrowserRepository {
       request.setFetchSource(FETCH_SOURCE, NO_EXCLUDE);
     }
 
-    log.info("Browser Gene Request", request);
+    log.debug("Browser Gene Request", request);
     return request.execute().actionGet();
   }
 
@@ -154,7 +154,7 @@ public class BrowserRepository {
     val request = client.prepareSearch(indexName);
     customizer.accept(request);
 
-    log.info("{}: {}", message, request);
+    log.debug("{}: {}", message, request);
     return request.execute().actionGet();
   }
 
