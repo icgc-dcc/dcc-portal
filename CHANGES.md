@@ -3,6 +3,15 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[5.0.3](https://github.com/icgc-dcc/dcc-portal/compare/5.0.2...5.0.3)
+--
+- Fixes NPE in the browser endpoint
+- Less verbose logging in browser repository
+
+[5.0.2](https://github.com/icgc-dcc/dcc-portal/compare/5.0.1...5.0.2)
+--
+- Different DACO user for healthchecks
+
 [5.0.1](https://github.com/icgc-dcc/dcc-portal/compare/5.0.0...5.0.1)
 --
 - Fixes conflicting dependencies which caused an error on the releases page
