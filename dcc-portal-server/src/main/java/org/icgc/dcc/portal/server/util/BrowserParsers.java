@@ -241,12 +241,14 @@ public final class BrowserParsers {
     }
 
     val consequences = ImmutableList.<List<String>> builder();
-    for (val transcript : response.get("_source").get("transcript")) {
-      List<String> consequence = getConsequence(
-          transcript.path("consequence"),
-          transcript.path("gene"));
+    if (!hit.path("transcript").isMissingNode()) {
+      for (val transcript : hit.get("transcript")) {
+        List<String> consequence = getConsequence(
+            transcript.path("consequence"),
+            transcript.path("gene"));
 
-      consequences.add(consequence);
+        consequences.add(consequence);
+      }
     }
 
     List<String> functionalImpact = newArrayList();
