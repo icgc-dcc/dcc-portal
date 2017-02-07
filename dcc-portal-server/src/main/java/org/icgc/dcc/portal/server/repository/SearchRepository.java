@@ -29,6 +29,7 @@ import static org.elasticsearch.index.query.QueryBuilders.prefixQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.elasticsearch.index.query.QueryBuilders.typeQuery;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
@@ -110,7 +111,8 @@ public class SearchRepository {
 
   private static final List<String> PREFIX_QUERY_FIELDS = ImmutableList.of(
       FieldNames.FILE_NAME, FieldNames.INCHIKEY, FieldNames.ID,
-      FieldNames.CHEMBL, FieldNames.DRUG_BANK, FieldNames.ATC_CODES, FieldNames.ATC_LEVEL5_CODES);
+      FieldNames.CHEMBL, FieldNames.DRUG_BANK, FieldNames.ATC_CODES, FieldNames.ATC_LEVEL5_CODES)
+      .stream().map(s -> IndexModel.TEXT_PREFIX + s).collect(toImmutableList()); // Append "text."
 
   private static final Set<String> FIELD_KEYS = ImmutableSet.copyOf(FIELDS_MAPPING.get(EntityType.KEYWORD).values());
   private static final float TIE_BREAKER = 0.7F;

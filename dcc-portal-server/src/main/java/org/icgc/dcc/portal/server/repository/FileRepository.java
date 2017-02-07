@@ -44,8 +44,10 @@ import static org.elasticsearch.search.aggregations.AggregationBuilders.nested;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.sum;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
+import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
 import static org.icgc.dcc.portal.server.model.SearchFieldMapper.searchFieldMapper;
 import static org.icgc.dcc.portal.server.model.TermFacet.repoTermFacet;
 import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.createTermsLookupFilter;
@@ -129,9 +131,11 @@ public class FileRepository {
       "specimen_id", "sample_id", "submitted_specimen_id", "submitted_sample_id",
       "id", "submitted_donor_id",
       "tcga_participant_barcode", "tcga_sample_barcode", "tcga_aliquot_barcode");
+  private static final Set<String> FILE_DONOR_TEXT_FIELDS_RAW =
+      FILE_DONOR_FIELDS.stream().map(f -> TEXT_PREFIX + f).collect(toImmutableSet());
   private static final SearchFieldMapper FILE_DONOR_TEXT_FIELDS = searchFieldMapper()
-      .partialMatchFields(FILE_DONOR_FIELDS)
-      .lowercaseMatchFields(FILE_DONOR_FIELDS)
+      .partialMatchFields(FILE_DONOR_TEXT_FIELDS_RAW)
+      .lowercaseMatchFields(FILE_DONOR_TEXT_FIELDS_RAW)
       .build();
   private static final SelectNode FILE_INFO_FIELDS = select(ImmutableList.of(
       Fields.FILE_UUID,

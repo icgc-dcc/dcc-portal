@@ -28,6 +28,7 @@ import static org.icgc.dcc.common.core.util.Separators.COMMA;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.File.parse;
+import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
 import static org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys.REPO_DONOR_COUNT;
 import static org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys.REPO_SIZE;
 import static org.icgc.dcc.portal.server.util.Collections.isEmpty;
@@ -118,18 +119,18 @@ public class FileService {
 
   private static final Keywords NO_MATCH_KEYWORD_SEARCH_RESULT = new Keywords(emptyList());
   private static final Map<String, String> KEYWORD_SEARCH_TYPE_ENTRY = ImmutableMap.of(
-      "type", "donor");
+      "text.type", "donor");
   private static final Map<String, String> FILE_DONOR_INDEX_TYPE_TO_KEYWORD_FIELD_MAPPING =
       ImmutableMap.<String, String> builder()
-          .put("id", "id")
-          .put("specimen_id", "specimenIds")
-          .put("sample_id", "sampleIds")
-          .put("submitted_donor_id", "submittedId")
-          .put("submitted_specimen_id", "submittedSpecimenIds")
-          .put("submitted_sample_id", "submittedSampleIds")
-          .put("tcga_participant_barcode", "TCGAParticipantBarcode")
-          .put("tcga_sample_barcode", "TCGASampleBarcode")
-          .put("tcga_aliquot_barcode", "TCGAAliquotBarcode")
+          .put("text.id", "id")
+          .put("text.specimen_id", "specimenIds")
+          .put("text.sample_id", "sampleIds")
+          .put("text.submitted_donor_id", "submittedId")
+          .put("text.submitted_specimen_id", "submittedSpecimenIds")
+          .put("text.submitted_sample_id", "submittedSampleIds")
+          .put("text.tcga_participant_barcode", "TCGAParticipantBarcode")
+          .put("text.tcga_sample_barcode", "TCGASampleBarcode")
+          .put("text.tcga_aliquot_barcode", "TCGAAliquotBarcode")
           .build();
 
   /**
@@ -322,11 +323,18 @@ public class FileService {
   }
 
   private static Map<String, Object> toKeywordFieldMap(@NonNull SearchHit hit) {
-    val valueMap = hit.getSource();
-    val commonKeys = intersection(FILE_DONOR_INDEX_TYPE_TO_KEYWORD_FIELD_MAPPING.keySet(), valueMap.keySet());
+    val source = hit.getSource();
+    @SuppressWarnings("unchecked")
+    val valueMap = (Map<String, Object>) source.get("text");
+
+    val cleanedFields = FILE_DONOR_INDEX_TYPE_TO_KEYWORD_FIELD_MAPPING.keySet().stream()
+        .map(f -> f.split("\\.")[1]) // TODO: do better. Related to broken text search: DCCPRTL-235
+        .collect(toImmutableSet());
+
+    val commonKeys = intersection(cleanedFields, valueMap.keySet());
 
     val result = commonKeys.stream().collect(toMap(
-        key -> FILE_DONOR_INDEX_TYPE_TO_KEYWORD_FIELD_MAPPING.get(key),
+        key -> TEXT_PREFIX + key,
         key -> valueMap.get(key)));
     result.putAll(KEYWORD_SEARCH_TYPE_ENTRY);
 
