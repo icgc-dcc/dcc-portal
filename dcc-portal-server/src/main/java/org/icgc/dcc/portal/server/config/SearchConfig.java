@@ -20,8 +20,8 @@ package org.icgc.dcc.portal.server.config;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Maps.newHashMap;
+import static java.net.InetAddress.getByName;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.elasticsearch.common.network.InetAddresses.forString;
 import static org.icgc.dcc.portal.server.config.ServerProperties.ElasticSearchProperties.SNIFF_MODE_KEY;
 import static org.icgc.dcc.portal.server.util.VersionUtils.getApiVersion;
 import static org.icgc.dcc.portal.server.util.VersionUtils.getApplicationVersion;
@@ -70,7 +70,7 @@ public class SearchConfig {
       checkState(InetAddress.getByName(nodeAddress.getHost()).isReachable((int) SECONDS.toMillis(5)));
 
       client.addTransportAddress(new InetSocketTransportAddress(
-          forString(nodeAddress.getHost()),
+          getByName((nodeAddress.getHost())),
           nodeAddress.getPort()));
     }
 
