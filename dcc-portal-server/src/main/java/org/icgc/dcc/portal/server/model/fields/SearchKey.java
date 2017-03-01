@@ -61,11 +61,27 @@ public class SearchKey implements Iterable<SearchField>{
   }
 
   public static SearchKey newSearchKey(@NonNull final String name, @NonNull final SearchField field){
-    return new SearchKey(name, field);
+    return new SearchKey(name, newHashSet(field));
   }
 
   public static SearchKey newSearchKey(@NonNull final String name, @NonNull final SearchField... fields){
     return new SearchKey(name, newHashSet(fields));
+  }
+
+  /**
+   * Creates a map where keys are the child fieldnames, and the values are newly created searchfields,
+   * that contain the absolute fieldname (ie parent_fieldname.child_fieldname)
+   */
+  private static Map<String, SearchField> buildSearchFieldMap(String name, Set<SearchField> fields){
+    val builder = ImmutableMap.<String, SearchField>builder();
+    for (val field : fields){
+      val absoluteFieldName = DEFAULT_JOINER.join(name, field.getName());
+      val boostedValue = field.getBoostedValue();
+      val absoluteField = newBoostedSearchField(absoluteFieldName, boostedValue);
+      val subFieldName = field.getName();
+      builder.put(subFieldName,  absoluteField);
+    }
+    return builder.build();
   }
 
   @Getter
@@ -80,30 +96,7 @@ public class SearchKey implements Iterable<SearchField>{
 
   private SearchKey(@NonNull final String name, @NonNull final Set<SearchField> fields){
     this.name = name;
-    val builder = ImmutableMap.<String, SearchField>builder();
-    for (val field : fields){
-      val absoluteFieldName = DEFAULT_JOINER.join(name, field.getName());
-      val boostedValue = field.getBoostedValue();
-      val absoluteField = newBoostedSearchField(absoluteFieldName, boostedValue);
-      val subFieldName = field.getName();
-      builder.put(subFieldName,  absoluteField);
-    }
-    this.map = builder.build();
-  }
-
-  // update this constructor then,
-  // update comments,
-  // implement iterator,
-  // rename this class to SearchKey since a Key contains SearchField objects. When you create a key with SearchField instance, those instances become children of the parent key, and new SearchField instance are created, where the name changes to the absolute form (parent.child) and inherits the child boostValue
-  private SearchKey(@NonNull final String name, @NonNull final SearchField field){
-    this.name = name;
-    val builder = ImmutableMap.<String, SearchField>builder();
-    val absoluteFieldName = DEFAULT_JOINER.join(name, field.getName());
-    val boostedValue = field.getBoostedValue();
-    val absoluteField = newBoostedSearchField(absoluteFieldName, boostedValue);
-    val subFieldName = field.getName();
-    builder.put(subFieldName, field);
-    this.map = builder.build();
+    this.map = buildSearchFieldMap(name, fields);
   }
 
   public Set<SearchField> getFields(){
