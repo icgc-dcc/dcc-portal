@@ -19,9 +19,9 @@ import static org.icgc.dcc.portal.server.model.fields.SearchField.newBoostedSear
 /**
  * Represents a grouping of SearchFields.
  * This class is responsible for expanding its contained SearchFields to include the SearchKey name.
- * For instance, if the SearckKey name is "text", and the unexpanded SearchFields have the names: "raw", "analyzed", "search"
+ * For instance, if the SearchKey name is "text", and the unexpanded SearchFields have the names: "raw", "analyzed", "search"
  * with boosts of: 2.0, 1.0, 5.0 respectively,
- * then the expanded SearchKeys would  have the names:  "text.raw", "text.analyzer", "text.search"
+ * then the expanded SearchFields would  have the names:  "text.raw", "text.analyzer", "text.search"
  * with boosts of: 2.0, 1.0, 5.0 respectively.
  */
 public class SearchKey implements Iterable<SearchField>{
