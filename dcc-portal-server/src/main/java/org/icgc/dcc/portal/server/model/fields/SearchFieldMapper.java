@@ -45,16 +45,12 @@ import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 @Builder
 public class SearchFieldMapper {
 
-  public static final String EXACT_MATCH_FIELDNAME = "raw";
-  public static final String PARTIAL_MATCH_FIELDNAME= "analyzed";
-  public static final String LOWERCASE_MATCH_FIELDNAME= "search";
-
   /**
    * These suffixes are defined and used in our elasticsearch index models.
    */
-  public static final String EXACT_MATCH_SUFFIX = "."+EXACT_MATCH_FIELDNAME;
-  public static final String PARTIAL_MATCH_SUFFIX = "."+PARTIAL_MATCH_FIELDNAME;
-  public static final String LOWERCASE_MATCH_SUFFIX = "."+LOWERCASE_MATCH_FIELDNAME;
+  public static final String EXACT_MATCH_SUFFIX = ".raw";
+  public static final String PARTIAL_MATCH_SUFFIX = ".analyzed";
+  public static final String LOWERCASE_MATCH_SUFFIX = ".search";
 
 
   Set<String> exactMatchFields;
