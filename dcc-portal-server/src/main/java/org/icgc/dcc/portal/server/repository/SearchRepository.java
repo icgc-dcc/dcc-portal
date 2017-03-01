@@ -167,18 +167,13 @@ public class SearchRepository {
       // .toArray(String[]::new);
       .collect(toImmutableSet());
 
-  private static final List<String> SEARCH_SUFFIXES = ImmutableList.of(
-      boost(LOWERCASE_MATCH_SUFFIX, 2), PARTIAL_MATCH_SUFFIX);
-  private static final List<String> BOOSTED_SEARCH_SUFFIXES = ImmutableList.of(
-      boost(LOWERCASE_MATCH_SUFFIX, 2), boost(PARTIAL_MATCH_SUFFIX, 2));
-
-  private static final Set<SearchField> NORMAL_ANALYZED_FIELDS = ImmutableSet.of(
+  private static final Set<SearchField> NORMAL_SEARCH_FIELDS = ImmutableSet.of(
       newBoostedSearchField(EXACT_MATCH_FIELDNAME, 4),
       newBoostedSearchField(LOWERCASE_MATCH_FIELDNAME, 2),
       newNoneBoostedSearchField(PARTIAL_MATCH_FIELDNAME)
   );
 
-  private static final Set<SearchField> BOOSTED_ANALYZED_FIELDS = ImmutableSet.of(
+  private static final Set<SearchField> BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
       newBoostedSearchField(EXACT_MATCH_FIELDNAME, 4),
       newBoostedSearchField(LOWERCASE_MATCH_FIELDNAME, 2),
       newBoostedSearchField(PARTIAL_MATCH_FIELDNAME, 2)
@@ -312,7 +307,7 @@ public class SearchRepository {
   }
 
   private static SearchKey createSearchKey(String searchFieldName) {
-    return newSearchKey(searchFieldName, NORMAL_ANALYZED_FIELDS);
+    return newSearchKey(searchFieldName, NORMAL_SEARCH_FIELDS);
   }
 
   @NonNull
@@ -336,7 +331,7 @@ public class SearchRepository {
     }
 
     // Don't boost without space or genes won't show when partially matched
-    val geneMutationSearchSubfields = queryString.contains(" ") ? BOOSTED_ANALYZED_FIELDS : NORMAL_ANALYZED_FIELDS;
+    val geneMutationSearchSubfields = queryString.contains(" ") ? BOOSTED_SEARCH_FIELDS : NORMAL_SEARCH_FIELDS;
     keys.add( newSearchKey(FieldNames.GENE_MUTATIONS, geneMutationSearchSubfields) );
 
     // Exact-match search on "id". //TODO: Assuming FieldNames.ID is none boosted
