@@ -17,7 +17,6 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newHashSet;
 import static lombok.AccessLevel.PRIVATE;
@@ -271,7 +270,7 @@ public class SearchRepository {
   private static MultiMatchQueryBuilder createMultiMatchQuery(final String queryString, Set<SearchKey> keys){
     val mmqBuilder = multiMatchQuery(queryString).tieBreaker(TIE_BREAKER);
     for (val key : keys){
-      for (val field : key.getFields()){
+      for (val field : key.getExpandedSearchFields()){
         val fieldName = field.getName();
         val boostValue = field.getBoostedValue();
         mmqBuilder.field(fieldName, boostValue);
