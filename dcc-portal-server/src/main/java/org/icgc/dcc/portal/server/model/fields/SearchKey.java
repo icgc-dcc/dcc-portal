@@ -83,7 +83,7 @@ public class SearchKey implements Iterable<SearchField>{
     val builder = ImmutableMap.<String, SearchField>builder();
     for (val field : fields){
       val absoluteFieldName = DEFAULT_JOINER.join(name, field.getName());
-      val boostedValue = field.getBoostValue();
+      val boostedValue = field.getBoostedValue();
       val absoluteField = newBoostedSearchField(absoluteFieldName, boostedValue);
       val subFieldName = field.getName();
       builder.put(subFieldName,  absoluteField);
@@ -99,7 +99,7 @@ public class SearchKey implements Iterable<SearchField>{
     this.name = name;
     val builder = ImmutableMap.<String, SearchField>builder();
     val absoluteFieldName = DEFAULT_JOINER.join(name, field.getName());
-    val boostedValue = field.getBoostValue();
+    val boostedValue = field.getBoostedValue();
     val absoluteField = newBoostedSearchField(absoluteFieldName, boostedValue);
     val subFieldName = field.getName();
     builder.put(subFieldName, field);

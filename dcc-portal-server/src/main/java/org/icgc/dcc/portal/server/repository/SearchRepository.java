@@ -276,7 +276,7 @@ public class SearchRepository {
     for (val key : keys){
       for (val field : key.getFields()){
         val fieldName = field.getName();
-        val boostValue = field.getBoostValue();
+        val boostValue = field.getBoostedValue();
         mmqBuilder.field(fieldName, boostValue);
       }
     }

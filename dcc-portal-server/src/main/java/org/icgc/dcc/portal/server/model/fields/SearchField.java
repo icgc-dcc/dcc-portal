@@ -1,11 +1,16 @@
 package org.icgc.dcc.portal.server.model.fields;
 
-import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * Represents a field in elasticsearch mapping with a boost value.
  */
+@Value
+@RequiredArgsConstructor(access=PRIVATE)
 public class SearchField {
 
   /**
@@ -20,11 +25,11 @@ public class SearchField {
   /**
    * Factory methods
    */
-  public static SearchField newNoneBoostedSearchField(@NonNull String name){
-    return new SearchField(name);
+  public static SearchField newNoneBoostedSearchField(final String name){
+    return newBoostedSearchField(name, DEFAULT_BOOST_VALUE);
   }
 
-  public static SearchField newBoostedSearchField(@NonNull String name, @NonNull float boostedValue){
+  public static SearchField newBoostedSearchField(final String name, final float boostedValue){
     return new SearchField(name, boostedValue);
   }
 
@@ -36,28 +41,12 @@ public class SearchField {
   }
 
   @NonNull
-  @Getter
   private final String name;
 
   private final float boostedValue;
 
-  private SearchField(final String name, final float boostedValue){
-    this.name = name;
-    this.boostedValue = boostedValue;
-  }
-
-  private SearchField(final String name){
-    this(name, DEFAULT_BOOST_VALUE);
-  }
-
   public boolean isBoosted(){
-    return boostedValue != (float)DEFAULT_BOOST_VALUE; //Explicitly widening conversion from int to float, even though automatically done
+    //Explicitly indicating widening conversion from int to float, so that its obvious
+    return boostedValue != (float)DEFAULT_BOOST_VALUE;
   }
-
-  public float getBoostValue(){
-    return boostedValue;
-  }
-
-
-
 }
