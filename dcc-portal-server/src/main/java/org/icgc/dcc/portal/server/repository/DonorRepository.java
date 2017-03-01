@@ -44,7 +44,7 @@ import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
 import static org.icgc.dcc.portal.server.model.IndexType.DONOR;
 import static org.icgc.dcc.portal.server.model.IndexType.DONOR_TEXT;
 import static org.icgc.dcc.portal.server.model.IndexType.FILE_DONOR_TEXT;
-import static org.icgc.dcc.portal.server.model.SearchFieldMapper.searchFieldMapper;
+import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.searchFieldMapper;
 import static org.icgc.dcc.portal.server.repository.TermsLookupRepository.createTermsLookupFilter;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.isRepositoryDonor;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.setFetchSourceOfGetRequest;

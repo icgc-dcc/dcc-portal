@@ -15,7 +15,18 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.icgc.dcc.portal.server.model;
+package org.icgc.dcc.portal.server.model.fields;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.val;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Maps.uniqueIndex;
@@ -26,18 +37,6 @@ import static java.util.Collections.emptySet;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
 /**
  * This represents a collection of raw field names grouped by the type of search analyzer (or lack of) defined by our
  * elasticsearch data model/mappings.
@@ -46,12 +45,17 @@ import com.google.common.collect.ImmutableMap;
 @Builder
 public class SearchFieldMapper {
 
+  public static final String EXACT_MATCH_FIELDNAME = "raw";
+  public static final String PARTIAL_MATCH_FIELDNAME= "analyzed";
+  public static final String LOWERCASE_MATCH_FIELDNAME= "search";
+
   /**
    * These suffixes are defined and used in our elasticsearch index models.
    */
-  public static final String EXACT_MATCH_SUFFIX = ".raw";
-  public static final String PARTIAL_MATCH_SUFFIX = ".analyzed";
-  public static final String LOWERCASE_MATCH_SUFFIX = ".search";
+  public static final String EXACT_MATCH_SUFFIX = "."+EXACT_MATCH_FIELDNAME;
+  public static final String PARTIAL_MATCH_SUFFIX = "."+PARTIAL_MATCH_FIELDNAME;
+  public static final String LOWERCASE_MATCH_SUFFIX = "."+LOWERCASE_MATCH_FIELDNAME;
+
 
   Set<String> exactMatchFields;
   Set<String> partialMatchFields;
