@@ -53,6 +53,15 @@ public class SearchKey implements Iterable<SearchField>{
 
   private static final Joiner DEFAULT_JOINER = Joiners.DOT;
 
+  @Getter
+  private final String name;
+
+  /**
+   * Map contains mapping of unique subFieldNames (ie "raw", "analyzed", "search", etc)
+   * to absoluteFields which contain the key name (this.name)
+   */
+  private final Map<String, SearchField> map;
+
   /**
    * Factory Methods
    */
@@ -83,16 +92,6 @@ public class SearchKey implements Iterable<SearchField>{
     }
     return builder.build();
   }
-
-  @Getter
-  private final String name;
-
-  /**
-   * Map contains mapping of unique subFieldNames (ie "raw", "analyzed", "search", etc)
-   * to absoluteFields which contain the key name (this.name)
-   */
-  private final Map<String, SearchField> map;
-
 
   private SearchKey(@NonNull final String name, @NonNull final Set<SearchField> fields){
     this.name = name;

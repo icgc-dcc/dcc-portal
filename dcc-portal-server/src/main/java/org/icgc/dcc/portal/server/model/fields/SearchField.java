@@ -13,6 +13,8 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor(access=PRIVATE)
 public class SearchField {
 
+  private static final int DEFAULT_BOOST_VALUE = 1;
+
   /**
    * These field names are defined and used in our elasticsearch index models.
    */
@@ -20,7 +22,10 @@ public class SearchField {
   public static final String LOWERCASE_MATCH_FIELDNAME= "search";
   public static final String PARTIAL_MATCH_FIELDNAME= "analyzed";
 
-  private static final int DEFAULT_BOOST_VALUE = 1;
+  @NonNull
+  private final String name;
+
+  private final float boostedValue;
 
   /**
    * Factory methods
@@ -32,18 +37,6 @@ public class SearchField {
   public static SearchField newBoostedSearchField(final String name, final float boostedValue){
     return new SearchField(name, boostedValue);
   }
-
-  public static void main(String[] args){
-    SearchField f10 = newBoostedSearchField("hey", 1.0f);
-    System.out.println("f10 boosted: "+f10.isBoosted());
-    SearchField f13 = newBoostedSearchField("hey", 1.3f);
-    System.out.println("f13 boosted: "+f13.isBoosted());
-  }
-
-  @NonNull
-  private final String name;
-
-  private final float boostedValue;
 
   public boolean isBoosted(){
     //Explicitly indicating widening conversion from int to float, so that its obvious

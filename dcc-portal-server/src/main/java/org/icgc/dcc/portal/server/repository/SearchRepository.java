@@ -20,7 +20,6 @@ package org.icgc.dcc.portal.server.repository;
 import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newHashSet;
-import static java.lang.String.format;
 import static lombok.AccessLevel.PRIVATE;
 import static org.elasticsearch.action.search.SearchType.DFS_QUERY_THEN_FETCH;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -34,9 +33,6 @@ import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.EXACT_MATCH_SUFFIX;
-import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.LOWERCASE_MATCH_SUFFIX;
-import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.PARTIAL_MATCH_SUFFIX;
-import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.boost;
 import static org.icgc.dcc.portal.server.model.fields.SearchField.newBoostedSearchField;
 import static org.icgc.dcc.portal.server.model.fields.SearchField.newNoneBoostedSearchField;
 import static org.icgc.dcc.portal.server.model.fields.SearchField.EXACT_MATCH_FIELDNAME;
@@ -84,6 +80,18 @@ public class SearchRepository {
    * Constants
    */
   private static final String[] NO_EXCLUDE = null;
+
+  private static final Set<SearchField> NORMAL_SEARCH_FIELDS = ImmutableSet.of(
+      newBoostedSearchField(EXACT_MATCH_FIELDNAME, 4),
+      newBoostedSearchField(LOWERCASE_MATCH_FIELDNAME, 2),
+      newNoneBoostedSearchField(PARTIAL_MATCH_FIELDNAME)
+  );
+
+  private static final Set<SearchField> BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
+      newBoostedSearchField(EXACT_MATCH_FIELDNAME, 4),
+      newBoostedSearchField(LOWERCASE_MATCH_FIELDNAME, 2),
+      newBoostedSearchField(PARTIAL_MATCH_FIELDNAME, 2)
+  );
 
   @NoArgsConstructor(access = PRIVATE)
   private static final class Types {
@@ -167,17 +175,6 @@ public class SearchRepository {
       // .toArray(String[]::new);
       .collect(toImmutableSet());
 
-  private static final Set<SearchField> NORMAL_SEARCH_FIELDS = ImmutableSet.of(
-      newBoostedSearchField(EXACT_MATCH_FIELDNAME, 4),
-      newBoostedSearchField(LOWERCASE_MATCH_FIELDNAME, 2),
-      newNoneBoostedSearchField(PARTIAL_MATCH_FIELDNAME)
-  );
-
-  private static final Set<SearchField> BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
-      newBoostedSearchField(EXACT_MATCH_FIELDNAME, 4),
-      newBoostedSearchField(LOWERCASE_MATCH_FIELDNAME, 2),
-      newBoostedSearchField(PARTIAL_MATCH_FIELDNAME, 2)
-  );
 
   // Instance variables
   private final Client client;
@@ -300,10 +297,6 @@ public class SearchRepository {
   private static boolean shouldProcess(String sourceField) {
     val fieldsToSkip = ImmutableList.of(FieldNames.FILE_NAME, FieldNames.GENE_MUTATIONS);
     return fieldsToSkip.stream().noneMatch(fieldToAvoid -> sourceField.equals(fieldToAvoid));
-  }
-
-  private static List<String> appendSuffixes(String field, List<String> suffixes) {
-    return transform(suffixes, suffix -> field + suffix);
   }
 
   private static SearchKey createSearchKey(String searchFieldName) {
