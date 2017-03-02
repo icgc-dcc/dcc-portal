@@ -185,7 +185,7 @@ public class SearchRepository {
   private String repoIndexName;
 
   @Autowired
-  SearchRepository(Client client, IndexModel indexModel) {
+  SearchRepository(Client client) {
     this.client = client;
   }
 
