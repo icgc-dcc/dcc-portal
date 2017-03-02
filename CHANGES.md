@@ -3,6 +3,14 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[5.0.6](https://github.com/icgc-dcc/dcc-portal/compare/5.0.3...5.0.6)
+--
+- Fixes search issues related to scoring and ranking of results in Elasticsearch 5
+- Bug fix for searching by Object ID
+- Bug fix for text search in repository
+- Support multiple levels of nesting in PQL queries.
+- Minor UI updates and fixes
+
 [5.0.3](https://github.com/icgc-dcc/dcc-portal/compare/5.0.2...5.0.3)
 --
 - Fixes NPE in the browser endpoint
