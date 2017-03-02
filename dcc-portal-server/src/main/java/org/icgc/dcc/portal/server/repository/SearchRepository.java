@@ -185,8 +185,10 @@ public class SearchRepository {
   private String repoIndexName;
 
   @Autowired
-  SearchRepository(Client client) {
+  SearchRepository(Client client, String indexName, String repoIndexName) {
     this.client = client;
+    this.indexName = indexName;
+    this.repoIndexName = repoIndexName;
   }
 
   @NonNull
