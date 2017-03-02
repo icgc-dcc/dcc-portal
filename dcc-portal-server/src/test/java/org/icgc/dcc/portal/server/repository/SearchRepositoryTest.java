@@ -39,7 +39,7 @@ import static org.icgc.dcc.common.core.util.Joiners.DOT;
 //@RunWith(MockitoJUnitRunner.class)
 public class SearchRepositoryTest extends BaseElasticsearchTest {
 
-  private SearchRepository searchRepository = null;
+  protected static final String RELEASE_SCHEMA_JSON_DIR = "org/icgc/dcc/repository/resources/mappings";
   private static final String DEFAULT_TYPE = "";
   private static final String DEFAULT_SORT = "_score";
   private static final String DEFAULT_ORDER = "desc";
@@ -60,6 +60,13 @@ public class SearchRepositoryTest extends BaseElasticsearchTest {
   private static final String REPOSITORY_FIXTURE_FILENAME = DOT.join(SearchRepositoryTest.class.getSimpleName(), "repository.json");
   private static final String RELEASE_FIXTURE_FILENAME = DOT.join(SearchRepositoryTest.class.getSimpleName(), "release.json");
 
+  private SearchRepository searchRepository = null;
+
+  /**
+   * TODO: have to find a way to expandd schemas using JSONSchema library, and then combining
+   * schemas/gene-text.json with mappings/gene-text.json , and then creating the index.
+   */
+
   @Before
   public void setUpProjectRepositoryTest() throws Exception {
     if (searchRepository == null) {
@@ -70,9 +77,23 @@ public class SearchRepositoryTest extends BaseElasticsearchTest {
   }
 
   @Test
-  public void testFindAll() throws Exception {
+  public void testFindAllFileKeyword() throws Exception {
     Query query = Query.builder()
-        .query("4ba8b9ec-5c52-58bd-838e-e2b4cae6a434")
+        .query("305c46a3-a315-5087-ac7b-359350265f62")
+        .from(0)
+        .size(10)
+        .sort(DEFAULT_SORT)
+        .order(DEFAULT_ORDER)
+        .build();
+    SearchResponse response = searchRepository.findAll(query, DEFAULT_TYPE);
+    Assertions.assertThat(response.getHits().getTotalHits()).isLessThanOrEqualTo(5);
+    Assertions.assertThat(response.getHits().getTotalHits()).isGreaterThan(0);
+  }
+
+  @Test
+  public void testFindAllGeneKeyword() throws Exception {
+    Query query = Query.builder()
+        .query("LINC")
         .from(1)
         .size(10)
         .sort(DEFAULT_SORT)
@@ -80,5 +101,6 @@ public class SearchRepositoryTest extends BaseElasticsearchTest {
         .build();
     SearchResponse response = searchRepository.findAll(query, DEFAULT_TYPE);
     Assertions.assertThat(response.getHits().getTotalHits()).isLessThanOrEqualTo(5);
+    Assertions.assertThat(response.getHits().getTotalHits()).isGreaterThan(0);
   }
 }
