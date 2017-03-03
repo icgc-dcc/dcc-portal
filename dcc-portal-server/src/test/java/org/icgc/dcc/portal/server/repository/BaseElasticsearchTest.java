@@ -17,14 +17,16 @@
  */
 package org.icgc.dcc.portal.server.repository;
 
-import static com.google.common.base.Preconditions.checkState;
-import static org.icgc.dcc.common.core.util.Joiners.COMMA;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collection;
-
+import com.carrotsearch.randomizedtesting.annotations.SeedDecorators;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableList;
+import com.google.common.io.Resources;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.dcc.portal.pql.meta.Type;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
@@ -36,17 +38,14 @@ import org.elasticsearch.test.ESIntegTestCase.Scope;
 import org.icgc.dcc.common.es.security.SecurityManagerWorkaroundSeedDecorator;
 import org.junit.Before;
 
-import com.carrotsearch.randomizedtesting.annotations.SeedDecorators;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collection;
 
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static com.google.common.base.Preconditions.checkState;
+import static org.icgc.dcc.common.core.util.Joiners.COMMA;
+import static org.icgc.dcc.portal.server.util.Strings.toStringArray;
 
 @Slf4j
 @SeedDecorators(value = SecurityManagerWorkaroundSeedDecorator.class)
@@ -63,10 +62,10 @@ public class BaseElasticsearchTest extends ESIntegTestCase {
   protected static final String RELEASE_INDEX_NAME = "test-icgc-release";
   protected static final String REPOSITORY_INDEX_NAME = "test-icgc-repository";
   protected static final String SETTINGS_FILE_NAME = "index.settings.json";
-  protected static final String JSON_DIR = "org/icgc/dcc/release/resources/mappings";
+  protected static final String RELEASE_JSON_DIR = "org/icgc/dcc/release/resources/mappings";
   protected static final String REPO_JSON_DIR = "org/icgc/dcc/repository/resources/mappings";
   protected static final String FIXTURES_DIR = "src/test/resources/fixtures";
-  protected static final URL SETTINGS_FILE = getMappingFileUrl(SETTINGS_FILE_NAME);
+  protected static final URL SETTINGS_FILE = getReleaseMappingFileUrl(SETTINGS_FILE_NAME);
 
   protected Client client;
 
@@ -98,7 +97,8 @@ public class BaseElasticsearchTest extends ESIntegTestCase {
     val createBuilder = prepareCreate(indexName, 1, settings);
     for (val typeName : typeNames) {
       log.debug("Creating mapping for type: {}", typeName);
-      createBuilder.addMapping(typeName, mappingSource(typeName));
+      createBuilder.addMapping(typeName,
+          indexName.equals(REPOSITORY_INDEX_NAME) ? repoMappingSource(typeName) : releaseMappingSource(typeName));
     }
 
     val created = createBuilder.execute().actionGet().isAcknowledged();
@@ -106,19 +106,8 @@ public class BaseElasticsearchTest extends ESIntegTestCase {
   }
 
   protected void createIndexMappings(String indexName, Type... typeNames) {
-    val settingsContents = settingsSource(SETTINGS_FILE);
-    val settings = Settings.builder()
-        .loadFromSource(settingsContents);
-
-    val createBuilder = prepareCreate(indexName, 1, settings);
-    for (val typeName : typeNames) {
-      log.debug("Creating mapping for type: {}", typeName);
-      createBuilder.addMapping(typeName.getId(),
-          indexName.equals(REPOSITORY_INDEX_NAME) ? repoMappingSource(typeName) : mappingSource(typeName));
-    }
-
-    val created = createBuilder.execute().actionGet().isAcknowledged();
-    checkState(created, "Failed to create index");
+    val typeStringNamesArray = toStringArray(typeNames, Type::getId);
+    createIndexMappings(indexName, typeStringNamesArray);
   }
 
   @SneakyThrows
@@ -162,8 +151,9 @@ public class BaseElasticsearchTest extends ESIntegTestCase {
         .toString();
   }
 
-  private static URL getMappingFileUrl(String fileName) {
-    return Resources.getResource(JSON_DIR + "/" + fileName);
+  //TODO: need to encapsulate this release and repo business in a class, with the appropriate behavior
+  private static URL getReleaseMappingFileUrl(String fileName) {
+    return Resources.getResource(RELEASE_JSON_DIR + "/" + fileName);
   }
 
   private static URL getRepoMappingFileUrl(String fileName) {
@@ -174,11 +164,15 @@ public class BaseElasticsearchTest extends ESIntegTestCase {
     return mappingSource(getRepoMappingFileUrl(typeName.getId() + ".mapping.json"));
   }
 
-  private static String mappingSource(Type typeName) {
+  private static String repoMappingSource(String typeName) {
+    return mappingSource(getRepoMappingFileUrl(typeName + ".mapping.json"));
+  }
+
+  private static String releaseMappingSource(Type typeName) {
     return mappingSource(mappingFile(typeName));
   }
 
-  private static String mappingSource(String typeName) {
+  private static String releaseMappingSource(String typeName) {
     return mappingSource(mappingFile(typeName));
   }
 
@@ -193,7 +187,7 @@ public class BaseElasticsearchTest extends ESIntegTestCase {
 
   private static URL mappingFile(String typeName) {
     String mappingFileName = typeName + ".mapping.json";
-    return getMappingFileUrl(mappingFileName);
+    return getReleaseMappingFileUrl(mappingFileName);
   }
 
   private static String json(URL url) throws IOException, JsonProcessingException {

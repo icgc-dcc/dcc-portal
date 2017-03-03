@@ -17,10 +17,12 @@
 
 package org.icgc.dcc.portal.server.repository;
 
+import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.dcc.portal.pql.meta.Type;
 import org.elasticsearch.action.search.SearchResponse;
+import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.util.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,18 +45,40 @@ public class SearchRepositoryTest extends BaseElasticsearchTest {
   private static final String DEFAULT_TYPE = "";
   private static final String DEFAULT_SORT = "_score";
   private static final String DEFAULT_ORDER = "desc";
-  private static final Type[] KEYWORD_TYPES_FOR_RELEASE_INDEX = {
-      Type.DONOR_CENTRIC,
-      Type.GENE_CENTRIC,
-      Type.MUTATION_CENTRIC,
-      Type.OBSERVATION_CENTRIC,
-      Type.PROJECT,
-      Type.GENE_SET,
-      Type.DRUG_CENTRIC,
-      Type.DIAGRAM
+
+  private static final IndexType[] RELEASE_INDEX_TYPES = {
+    IndexType.DONOR_TEXT,
+    IndexType.GENE_TEXT,
+    IndexType.MUTATION_TEXT,
+    IndexType.GENESET_TEXT,
+    IndexType.DRUG_TEXT,
+    IndexType.PROJECT_TEXT
   };
-  private static final Type[] KEYWORD_TYPES_FOR_REPOSITORY_INDEX = {
-    Type.FILE
+
+  private static final IndexType[] REPO_INDEX_TYPES= {
+      IndexType.FILE_DONOR_TEXT,
+      IndexType.FILE_TEXT
+  };
+
+  private static final IndexType[] ALL_KEYWORDS_SEARCH_INDEX_TYPES = {
+      IndexType.DONOR_TEXT,
+      IndexType.GENE_TEXT,
+      IndexType.MUTATION_TEXT,
+      IndexType.GENESET_TEXT,
+      IndexType.DRUG_TEXT,
+      IndexType.PROJECT_TEXT,
+      IndexType.FILE_DONOR_TEXT,
+      IndexType.FILE_TEXT
+  };
+
+  private static final IndexType[] DEFAULT_KEYWORDS_SEARCH_INDEX_TYPES = {
+      IndexType.DONOR_TEXT,
+      IndexType.GENE_TEXT,
+      IndexType.MUTATION_TEXT,
+      IndexType.GENESET_TEXT,
+      IndexType.DRUG_TEXT,
+      IndexType.PROJECT_TEXT,
+      IndexType.FILE_TEXT
   };
 
   private static final String REPOSITORY_FIXTURE_FILENAME = DOT.join(SearchRepositoryTest.class.getSimpleName(), "repository.json");
@@ -62,16 +86,17 @@ public class SearchRepositoryTest extends BaseElasticsearchTest {
 
   private SearchRepository searchRepository = null;
 
-  /**
-   * TODO: have to find a way to expandd schemas using JSONSchema library, and then combining
-   * schemas/gene-text.json with mappings/gene-text.json , and then creating the index.
-   */
+  protected void prepareIndex(String indexName, String file, IndexType... indexTypes) {
+    val indexTypeNames = Strings.toStringArray(indexTypes, IndexType::getId);
+    createIndexMappings(indexName, indexTypeNames);
+    loadData(file);
+  }
 
   @Before
   public void setUpProjectRepositoryTest() throws Exception {
     if (searchRepository == null) {
-      prepareIndex(REPOSITORY_INDEX_NAME, REPOSITORY_FIXTURE_FILENAME , KEYWORD_TYPES_FOR_REPOSITORY_INDEX);
-      prepareIndex(RELEASE_INDEX_NAME, RELEASE_FIXTURE_FILENAME, KEYWORD_TYPES_FOR_RELEASE_INDEX);
+      prepareIndex(REPOSITORY_INDEX_NAME, REPOSITORY_FIXTURE_FILENAME , REPO_INDEX_TYPES );
+      prepareIndex(RELEASE_INDEX_NAME, RELEASE_FIXTURE_FILENAME, RELEASE_INDEX_TYPES);
       searchRepository = new SearchRepository(client, RELEASE_INDEX_NAME, REPOSITORY_INDEX_NAME);
     }
   }
