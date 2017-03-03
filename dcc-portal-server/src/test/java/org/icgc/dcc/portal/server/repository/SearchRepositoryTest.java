@@ -38,6 +38,53 @@ import static org.icgc.dcc.common.core.util.Joiners.DOT;
  *
  */
 
+//TODO: get the fixtures for these Keywords. Then can run keyword search properly
+//    DO2
+//    DO22
+//    DO223
+//    DO22362
+//    DO223175
+//
+//    MU12
+//    MU123
+//    MU1233
+//    MU12353445
+//    MU1238875
+//
+//    FI124
+//    FI1240
+//    FI1241
+//    FI12404
+//    FI12405
+//
+//    TTC3
+//    TTC3-AS3
+//    TTC7A
+//    TTC7B
+//    TTN
+//    TTN-AS1
+//
+//    GO:2000020
+//    GO:2000021
+//    GO:2000026
+//    GO:2000027
+//    GO:0000002
+//    GO:0000003
+//    GO:0000009
+//
+//    ZINC000000000226
+//    ZINC000000000652
+//    ZINC000000000075
+//    ZINC000000000346
+//    ZINC000000000504
+//
+//    OV-AU
+//    OV-US
+//    LUSC-CN
+//    LUSC-KR
+//    LUAD-US
+//    LUSC-US
+
 //@RunWith(MockitoJUnitRunner.class)
 public class SearchRepositoryTest extends BaseElasticsearchTest {
 
