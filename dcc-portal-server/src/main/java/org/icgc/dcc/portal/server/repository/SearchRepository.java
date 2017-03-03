@@ -17,6 +17,35 @@
 
 package org.icgc.dcc.portal.server.repository;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexModel;
+import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.fields.SearchField;
+import org.icgc.dcc.portal.server.model.fields.SearchKey;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newHashSet;
 import static lombok.AccessLevel.PRIVATE;
@@ -31,45 +60,14 @@ import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
-import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.EXACT_MATCH_SUFFIX;
-import static org.icgc.dcc.portal.server.model.fields.SearchField.newBoostedSearchField;
-import static org.icgc.dcc.portal.server.model.fields.SearchField.newNoneBoostedSearchField;
 import static org.icgc.dcc.portal.server.model.fields.SearchField.EXACT_MATCH_FIELDNAME;
 import static org.icgc.dcc.portal.server.model.fields.SearchField.LOWERCASE_MATCH_FIELDNAME;
 import static org.icgc.dcc.portal.server.model.fields.SearchField.PARTIAL_MATCH_FIELDNAME;
+import static org.icgc.dcc.portal.server.model.fields.SearchField.newBoostedSearchField;
+import static org.icgc.dcc.portal.server.model.fields.SearchField.newNoneBoostedSearchField;
+import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.EXACT_MATCH_SUFFIX;
 import static org.icgc.dcc.portal.server.model.fields.SearchKey.newSearchKey;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Stream;
-
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.icgc.dcc.portal.server.model.fields.SearchField;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexType;
-import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.fields.SearchKey;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static org.icgc.dcc.portal.server.util.Strings.toStringArray;
 
 @Slf4j
 @Component
@@ -93,7 +91,7 @@ public class SearchRepository {
   );
 
   @NoArgsConstructor(access = PRIVATE)
-  private static final class Types {
+  private static final class TypeNames {
 
     public static final String PATHWAY = "pathway";
     public static final String CURATED_SET = "curated_set";
@@ -137,37 +135,37 @@ public class SearchRepository {
    */
   private static final float TIE_BREAKER = 0.7F;
   private static final List<String> SIMPLE_TERM_FILTER_TYPES = ImmutableList.of(
-      Types.PATHWAY, Types.CURATED_SET, Types.GO_TERM);
+      TypeNames.PATHWAY, TypeNames.CURATED_SET, TypeNames.GO_TERM);
 
   private static final Map<String, IndexType> TYPE_MAPPINGS = ImmutableMap.<String, IndexType> builder()
-      .put(Types.GENE, IndexType.GENE_TEXT)
-      .put(Types.MUTATION, IndexType.MUTATION_TEXT)
-      .put(Types.DONOR, IndexType.DONOR_TEXT)
-      .put(Types.PROJECT, IndexType.PROJECT_TEXT)
-      .put(Types.PATHWAY, IndexType.GENESET_TEXT)
-      .put(Types.GENE_SET, IndexType.GENESET_TEXT)
-      .put(Types.GO_TERM, IndexType.GENESET_TEXT)
-      .put(Types.CURATED_SET, IndexType.GENESET_TEXT)
-      .put(Types.FILE, IndexType.FILE_TEXT)
-      .put(Types.FILE_DONOR, IndexType.FILE_DONOR_TEXT)
-      .put(Types.DRUG, IndexType.DRUG_TEXT)
+      .put(TypeNames.GENE, IndexType.GENE_TEXT)
+      .put(TypeNames.MUTATION, IndexType.MUTATION_TEXT)
+      .put(TypeNames.DONOR, IndexType.DONOR_TEXT)
+      .put(TypeNames.PROJECT, IndexType.PROJECT_TEXT)
+      .put(TypeNames.PATHWAY, IndexType.GENESET_TEXT)
+      .put(TypeNames.GENE_SET, IndexType.GENESET_TEXT)
+      .put(TypeNames.GO_TERM, IndexType.GENESET_TEXT)
+      .put(TypeNames.CURATED_SET, IndexType.GENESET_TEXT)
+      .put(TypeNames.FILE, IndexType.FILE_TEXT)
+      .put(TypeNames.FILE_DONOR, IndexType.FILE_DONOR_TEXT)
+      .put(TypeNames.DRUG, IndexType.DRUG_TEXT)
       .build();
-  private static final Map<String, String> TYPE_ID_MAPPINGS = transformValues(TYPE_MAPPINGS, type -> type.getId());
-  private static final String MUTATION_PREFIX = TYPE_ID_MAPPINGS.get(Types.MUTATION);
+  private static final Map<String, String> TYPE_ID_MAPPINGS = transformValues(TYPE_MAPPINGS, IndexType::getId);
+  private static final String MUTATION_PREFIX = TYPE_ID_MAPPINGS.get(TypeNames.MUTATION);
 
   // private static final String[] MULTIPLE_SEARCH_TYPES = Stream.of(
   private static final Set<String> MULTIPLE_SEARCH_TYPES = Stream.of(
-      Types.GENE,
+      TypeNames.GENE,
       /*
-       * Types.FILE must appear before Types.DONOR for searching file UUID in "file-text" to work. See DCC-3967 and
+       * TypeNames.FILE must appear before TypeNames.DONOR for searching file UUID in "file-text" to work. See DCC-3967 and
        * https://github.com/elastic/elasticsearch/issues/2218 for details.
        */
-      Types.FILE,
-      Types.DONOR,
-      Types.PROJECT,
-      Types.MUTATION,
-      Types.GENE_SET,
-      Types.DRUG)
+      TypeNames.FILE,
+      TypeNames.DONOR,
+      TypeNames.PROJECT,
+      TypeNames.MUTATION,
+      TypeNames.GENE_SET,
+      TypeNames.DRUG)
       .map(t -> TYPE_ID_MAPPINGS.get(t))
       // TODO
       // .distinct()
@@ -219,7 +217,7 @@ public class SearchRepository {
 
   // Helpers
   private static boolean isRepositoryFileRelated(String type) {
-    return type.equals(Types.FILE) || type.equals(Types.FILE_DONOR);
+    return type.equals(TypeNames.FILE) || type.equals(TypeNames.FILE_DONOR);
   }
 
   private SearchRequestBuilder createSearch(String type) {
@@ -229,21 +227,17 @@ public class SearchRepository {
       return client.prepareSearch(repoIndexName);
     }
 
-    if (type.equals(Types.DONOR)) {
+    if (type.equals(TypeNames.DONOR)) {
       return client.prepareSearch(indexName);
     }
 
     return client.prepareSearch(indexName, repoIndexName);
   }
 
-  // Helpers
-  private static String[] toStringArray(Collection<String> source) {
-    return source.stream().toArray(String[]::new);
-  }
 
   private static String[] getSearchTypes(String type) {
-    val result = TYPE_ID_MAPPINGS.containsKey(type) ? newHashSet(TYPE_ID_MAPPINGS.get(type)) : MULTIPLE_SEARCH_TYPES;
-
+    // lombok "val" was making result of type Object, so needed to explicitly define
+    final Set<String> result = TYPE_ID_MAPPINGS.containsKey(type) ? newHashSet(TYPE_ID_MAPPINGS.get(type)) : MULTIPLE_SEARCH_TYPES;
     return toStringArray(result);
   }
 
@@ -256,11 +250,11 @@ public class SearchRepository {
     }
 
     val donor = boolQuery()
-        .must(termQuery(field, Types.DONOR));
+        .must(termQuery(field, TypeNames.DONOR));
     val project = boolQuery()
-        .must(termQuery(field, Types.PROJECT));
+        .must(termQuery(field, TypeNames.PROJECT));
     val others = boolQuery()
-        .mustNot(termsQuery(field, Types.DONOR, Types.PROJECT));
+        .mustNot(termsQuery(field, TypeNames.DONOR, TypeNames.PROJECT));
 
     // FIXME
     return result
