@@ -38,6 +38,10 @@ public class SearchField {
     return new SearchField(name, boostedValue);
   }
 
+  public boolean hasSameNameAs(SearchField field){
+    return name.equals(field.getName());
+  }
+
   public boolean isBoosted(){
     //Explicitly indicating widening conversion from int to float, so that its obvious
     return boostedValue != (float)DEFAULT_BOOST_VALUE;

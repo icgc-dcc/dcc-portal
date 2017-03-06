@@ -17,10 +17,43 @@
 
 package org.icgc.dcc.portal.server.repository;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexModel;
+import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.fields.SearchField;
+import org.icgc.dcc.portal.server.model.fields.SearchKey;
+import org.icgc.dcc.portal.server.model.fields.SearchKeyCreator;
+import org.icgc.dcc.portal.server.model.fields.SpecialSearchKeyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newHashSet;
 import static lombok.AccessLevel.PRIVATE;
 import static org.elasticsearch.action.search.SearchType.DFS_QUERY_THEN_FETCH;
+import static org.elasticsearch.index.query.Operator.OR;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 import static org.elasticsearch.index.query.QueryBuilders.prefixQuery;
@@ -31,45 +64,14 @@ import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
-import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.EXACT_MATCH_SUFFIX;
-import static org.icgc.dcc.portal.server.model.fields.SearchField.newBoostedSearchField;
-import static org.icgc.dcc.portal.server.model.fields.SearchField.newNoneBoostedSearchField;
 import static org.icgc.dcc.portal.server.model.fields.SearchField.EXACT_MATCH_FIELDNAME;
 import static org.icgc.dcc.portal.server.model.fields.SearchField.LOWERCASE_MATCH_FIELDNAME;
 import static org.icgc.dcc.portal.server.model.fields.SearchField.PARTIAL_MATCH_FIELDNAME;
+import static org.icgc.dcc.portal.server.model.fields.SearchField.newBoostedSearchField;
+import static org.icgc.dcc.portal.server.model.fields.SearchField.newNoneBoostedSearchField;
+import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.EXACT_MATCH_SUFFIX;
 import static org.icgc.dcc.portal.server.model.fields.SearchKey.newSearchKey;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Stream;
-
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.icgc.dcc.portal.server.model.fields.SearchField;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.IndexType;
-import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.fields.SearchKey;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static org.icgc.dcc.portal.server.model.fields.SpecialSearchKeyCreator.newSpecialSearchKeyCreator;
 
 @Slf4j
 @Component
@@ -86,11 +88,26 @@ public class SearchRepository {
       newNoneBoostedSearchField(PARTIAL_MATCH_FIELDNAME)
   );
 
+  private static final SearchKeyCreator MULTI_SEARCH_KEY_CREATOR = SearchKeyCreator.builder().searchFields(NORMAL_SEARCH_FIELDS).build();
+
   private static final Set<SearchField> BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
       newBoostedSearchField(EXACT_MATCH_FIELDNAME, 4),
       newBoostedSearchField(LOWERCASE_MATCH_FIELDNAME, 2),
       newBoostedSearchField(PARTIAL_MATCH_FIELDNAME, 2)
   );
+
+
+  /**
+   * DCCPRTL-245 so that lowercase works
+   */
+  private static final Set<SearchField> VINCENT_BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
+      newBoostedSearchField("text.symbol", 4),
+      newBoostedSearchField("id", 4),
+      newBoostedSearchField("text.file_name", 4),
+      newBoostedSearchField("text.project_code", 4)
+  );
+  private static final SearchKeyCreator VINCENT_SEARCH_KEY_CREATOR = newSpecialSearchKeyCreator(NORMAL_SEARCH_FIELDS, VINCENT_BOOSTED_SEARCH_FIELDS);
+
 
   @NoArgsConstructor(access = PRIVATE)
   private static final class Types {
@@ -268,7 +285,9 @@ public class SearchRepository {
   }
 
   private static MultiMatchQueryBuilder createMultiMatchQuery(final String queryString, Set<SearchKey> keys){
-    val mmqBuilder = multiMatchQuery(queryString).tieBreaker(TIE_BREAKER);
+    val mmqBuilder = multiMatchQuery(queryString)
+        .operator(OR)
+        .tieBreaker(TIE_BREAKER);
     for (val key : keys){
       for (val field : key.getExpandedSearchFields()){
         val fieldName = field.getName();
@@ -280,9 +299,10 @@ public class SearchRepository {
   }
 
   private static QueryBuilder getQuery(Query query, String type) {
-    val queryString = query.getQuery();
-    val keys = buildMultiMatchFieldList(FIELD_KEYS, queryString, type);
-    val multiMatchQuery = createMultiMatchQuery(queryString, keys);
+    val queryString = query.getQuery().toLowerCase();
+    val bestMatchKeys = buildMultiMatchFieldList(VINCENT_SEARCH_KEY_CREATOR,FIELD_KEYS, queryString, type);
+    val multiMatchBestQuery = createMultiMatchQuery(queryString, bestMatchKeys);
+
 
     val result = boolQuery();
 
@@ -290,7 +310,8 @@ public class SearchRepository {
       result.should(prefixQuery(field + EXACT_MATCH_SUFFIX, queryString));
     }
 
-    return result.should(multiMatchQuery);
+    return result.should(multiMatchBestQuery);
+//        .should(multiMatchPhraseQuery);
   }
 
   private static boolean shouldProcess(String sourceField) {
@@ -303,7 +324,7 @@ public class SearchRepository {
   }
 
   @NonNull
-  private static Set<SearchKey> buildMultiMatchFieldList(Iterable<String> searchKeyNames, String queryString, String type) {
+  private static Set<SearchKey> buildMultiMatchFieldList(SearchKeyCreator searchKeyCreator, Iterable<String> searchKeyNames, String queryString, String type) {
     val keys = Sets.<SearchKey> newHashSet();
 
     for (val field : searchKeyNames) {
@@ -318,7 +339,7 @@ public class SearchRepository {
         keys.add(newSearchKey(MUTATION_PREFIX, newNoneBoostedSearchField(field)));
 
       } else if (shouldProcess(field)) {
-        keys.add(createSearchKey(field));
+        keys.add(searchKeyCreator.getSearchKey(field));
       }
     }
 
@@ -331,7 +352,7 @@ public class SearchRepository {
 
     if (isRepositoryFileRelated(type)) {
       // For repository file related searches, we want fuzzy search.
-      keys.add(createSearchKey(FieldNames.ID));
+      keys.add(searchKeyCreator.getSearchKey(FieldNames.ID));
     }
 
     return keys;
