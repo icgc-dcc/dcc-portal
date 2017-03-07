@@ -64,7 +64,7 @@ public class SearchKey implements Iterable<SearchField>{
       val unexpandedSearchFieldName = unexpandedSearchField.getName();
       val expandedSearchFieldName = DEFAULT_JOINER.join(name, unexpandedSearchFieldName);
 
-      val expandedSearchField = newBoostedSearchField(expandedSearchFieldName, boostedValue);
+      val expandedSearchField = newBoostedSearchField(boostedValue,expandedSearchFieldName);
       builder.put(unexpandedSearchFieldName,  expandedSearchField);
     }
     return builder.build();

@@ -1,8 +1,10 @@
 package org.icgc.dcc.portal.server.model.fields;
 
+import com.google.common.base.Joiner;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.icgc.dcc.common.core.util.Joiners;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -14,6 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class SearchField {
 
   private static final int DEFAULT_BOOST_VALUE = 1;
+  private static final Joiner DEFAULT_JOINER = Joiners.DOT;
 
   /**
    * These field names are defined and used in our elasticsearch index models.
@@ -31,11 +34,23 @@ public class SearchField {
    * Factory methods
    */
   public static SearchField newNoneBoostedSearchField(final String name){
-    return newBoostedSearchField(name, DEFAULT_BOOST_VALUE);
+    return newBoostedSearchField(DEFAULT_BOOST_VALUE, name);
   }
 
-  public static SearchField newBoostedSearchField(final String name, final float boostedValue){
+  public static SearchField newNoneBoostedSearchField(final String ... names){
+    return newNoneBoostedSearchField(DEFAULT_JOINER.join(names));
+  }
+
+  public static SearchField newBoostedSearchField(final float boostedValue, final String name){
     return new SearchField(name, boostedValue);
+  }
+
+  public static SearchField newBoostedSearchField(final float boostedValue, final String ... names){
+    return newBoostedSearchField(boostedValue, DEFAULT_JOINER.join(names));
+  }
+
+  public boolean hasSameNameAs(SearchField field){
+    return name.equals(field.getName());
   }
 
   public boolean isBoosted(){
