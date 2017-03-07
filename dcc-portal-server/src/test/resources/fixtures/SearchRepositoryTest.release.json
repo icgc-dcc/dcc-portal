@@ -1,0 +1,164 @@
+{ "index": { "_index": "test-icgc-release", "_type": "gene-text", "_id": "ENSG00000226935" } }
+{
+  "text": {
+    "name": "long intergenic non-protein coding RNA 161",
+    "symbol": "LINC00161",
+    "synonyms": [
+      "C21orf100",
+      "NCRNA00161"
+    ],
+    "id": "ENSG00000226935",
+    "uniprotkbSwissprot": [],
+    "omimGene": [],
+    "entrezGene": [
+      "118421"
+    ],
+    "hgnc": [
+      "17138"
+    ],
+    "ensemblTranscriptId": null,
+    "ensemblTranslationId": null,
+    "type": "gene"
+  }
+}
+{ "index" : { "_index": "icgc23-69", "_type": "donor-text", "_id": "DO223677"}}
+{
+  "text": {
+    "_summary": {
+      "_state": "pending"
+    },
+    "id": "DO223677",
+    "projectId": "LGG-US",
+    "submittedId": "TCGA-P5-A735",
+    "specimenIds": [
+      "SP131015",
+      "SP131014"
+    ],
+    "submittedSpecimenIds": [
+      "TCGA-P5-A735-10A",
+      "TCGA-P5-A735-01A"
+    ],
+    "sampleIds": [
+      "SA565425",
+      "SA565426",
+      "SA565424",
+      "SA565420",
+      "SA565421",
+      "SA565422",
+      "SA565417",
+      "SA565423",
+      "SA565419",
+      "SA565398",
+      "SA565418"
+    ],
+    "submittedSampleIds": [
+      "TCGA-P5-A735-10A-01D-A329-08",
+      "TCGA-P5-A735-10A-01W-A35U-08",
+      "TCGA-P5-A735-10A-01D-A328-01",
+      "TCGA-P5-A735-01A-11R-A32L-13",
+      "TCGA-P5-A735-01A-11R-A32Q-07",
+      "TCGA-P5-A735-01A-11R-A360-13",
+      "TCGA-P5-A735-01A-11D-A32A-01",
+      "TCGA-P5-A735-01A-11W-A35V-08",
+      "TCGA-P5-A735-01A-11D-A32C-05",
+      "TCGA-P5-A735-01A-21-A44D-20",
+      "TCGA-P5-A735-01A-11D-A32B-08"
+    ],
+    "type": "donor"
+  }
+}
+
+{ "index" : { "_index": "icgc23-69", "_type": "donor-text", "_id": "DO50170"}}
+{
+  "text": {
+    "_summary": {
+      "_state": "live"
+    },
+    "id": "DO50170",
+    "projectId": "LGG-US",
+    "submittedId": "TCGA-QH-A6CW",
+    "specimenIds": [
+      "SP110413",
+      "SP110412"
+    ],
+    "submittedSpecimenIds": [
+      "TCGA-QH-A6CW-10B",
+      "TCGA-QH-A6CW-01A"
+    ],
+    "sampleIds": [
+      "SA527157",
+      "SA527158",
+      "SA527156",
+      "SA527153",
+      "SA527154",
+      "SA536493",
+      "SA527152",
+      "SA527155",
+      "SA527149",
+      "SA527150"
+    ],
+    "submittedSampleIds": [
+      "TCGA-QH-A6CW-10B-01D-A329-08",
+      "TCGA-QH-A6CW-10B-01W-A35U-08",
+      "TCGA-QH-A6CW-10B-01D-A328-01",
+      "TCGA-QH-A6CW-01A-11R-A32L-13",
+      "TCGA-QH-A6CW-01A-11R-A32Q-07",
+      "TCGA-QH-A6CW-01A-21-A44C-20",
+      "TCGA-QH-A6CW-01A-11D-A32C-05",
+      "TCGA-QH-A6CW-01A-11W-A35V-08",
+      "TCGA-QH-A6CW-01A-11D-A32A-01",
+      "TCGA-QH-A6CW-01A-11D-A32B-08"
+    ],
+    "type": "donor"
+  }
+}
+
+{ "index" :{ "_index": "icgc23-69", "_type": "donor-text", "_id": "DO22362"}}
+{
+  "text": {
+    "_summary": {
+      "_state": "live"
+    },
+    "id": "DO22362",
+    "projectId": "LGG-US",
+    "submittedId": "TCGA-FG-8187",
+    "specimenIds": [
+      "SP48150",
+      "SP48147"
+    ],
+    "submittedSpecimenIds": [
+      "TCGA-FG-8187-10A",
+      "TCGA-FG-8187-01A"
+    ],
+    "sampleIds": [
+      "SA262261",
+      "SA262267",
+      "SA527569",
+      "SA262273",
+      "SA262243",
+      "SA262222",
+      "SA262249",
+      "SA497712",
+      "SA262228",
+      "SA262235",
+      "SA527563",
+      "SA262254"
+    ],
+    "submittedSampleIds": [
+      "TCGA-FG-8187-10A-01W-2277-08",
+      "TCGA-FG-8187-10A-01D-2252-01",
+      "TCGA-FG-8187-10A-01D-A38T-08",
+      "TCGA-FG-8187-10A-01D-2253-08",
+      "TCGA-FG-8187-01A-11R-2255-13",
+      "TCGA-FG-8187-01A-11D-2252-01",
+      "TCGA-FG-8187-01A-11R-2256-07",
+      "TCGA-FG-8187-01A-21-A29X-20",
+      "TCGA-FG-8187-01A-11D-2254-05",
+      "TCGA-FG-8187-01A-11D-2253-08",
+      "TCGA-FG-8187-01A-11D-A38T-08",
+      "TCGA-FG-8187-01A-11W-2277-08"
+    ],
+    "type": "donor"
+  }
+}
+
