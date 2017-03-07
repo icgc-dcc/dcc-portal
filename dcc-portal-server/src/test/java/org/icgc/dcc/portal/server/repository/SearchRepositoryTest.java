@@ -38,7 +38,7 @@ import static org.icgc.dcc.common.core.util.Joiners.DOT;
  *
  */
 
-//TODO: get the fixtures for these Keywords. Then can run keyword search properly
+//TODO [DCCPRTL-247]: get the fixtures for these Keywords. Then can run keyword search properly
 //    DO2
 //    DO22
 //    DO223

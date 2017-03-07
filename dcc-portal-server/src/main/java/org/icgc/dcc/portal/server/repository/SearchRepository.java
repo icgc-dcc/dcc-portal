@@ -309,7 +309,6 @@ public class SearchRepository {
     }
 
     return result.should(multiMatchBestQuery);
-//        .should(multiMatchPhraseQuery);
   }
 
   private static boolean shouldProcess(String sourceField) {
