@@ -93,16 +93,21 @@ public class SearchRepository {
   /**
    * DCCPRTL-245 so that lowercase works
    */
-  private static final Set<String> VINCENT_BOOSTED_SEARCH_FIELD_NAMES = ImmutableSet.of(
+  private static final Set<String> SPECIAL_BOOSTED_SEARCH_FIELD_NAMES = ImmutableSet.of(
       "text.symbol",
-      "id",
+      "text.id",
+      "text.data_bundle_id",
+      "text.donor_id",
+      "text.object_id",
       "text.file_name",
       "text.project_code"
   );
 
-  private static final SearchField VINCENT_UNEXPANDED_BOOSTED_SEARCH_FIELD =
-      newBoostedSearchField(4, LOWERCASE_MATCH_FIELDNAME);
-
+  private static final Set<SearchField> SPECIAL_BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
+      newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
+      newBoostedSearchField(4, LOWERCASE_MATCH_FIELDNAME),
+      newBoostedSearchField(2, PARTIAL_MATCH_FIELDNAME)
+  );
 
 
   @NoArgsConstructor(access = PRIVATE)
@@ -221,6 +226,7 @@ public class SearchRepository {
         .setQuery(filteredQuery)
         .setPostFilter(getPostFilter(type));
 
+
     log.debug("ES search query is: {}", search);
     val response = search.execute().actionGet();
     log.debug("ES search result is: {}", response);
@@ -313,8 +319,16 @@ public class SearchRepository {
     return fieldsToSkip.stream().noneMatch(sourceField::equals);
   }
 
+  private static boolean isSpecialSearchFieldName(String searchFieldName){
+    return SPECIAL_BOOSTED_SEARCH_FIELD_NAMES.contains(searchFieldName);
+  }
+
   private static SearchKey createSearchKey(String searchFieldName) {
-    return newSearchKey(searchFieldName, NORMAL_SEARCH_FIELDS);
+    if(isSpecialSearchFieldName(searchFieldName)){
+      return newSearchKey(searchFieldName, SPECIAL_BOOSTED_SEARCH_FIELDS);
+    } else {
+      return newSearchKey(searchFieldName, NORMAL_SEARCH_FIELDS);
+    }
   }
 
   @NonNull
