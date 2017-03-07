@@ -20,7 +20,6 @@ package org.icgc.dcc.portal.server.repository;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +36,6 @@ import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.fields.SearchField;
 import org.icgc.dcc.portal.server.model.fields.SearchKey;
-import org.icgc.dcc.portal.server.model.fields.SearchKeyCreator;
-import org.icgc.dcc.portal.server.model.fields.SpecialSearchKeyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -71,7 +68,6 @@ import static org.icgc.dcc.portal.server.model.fields.SearchField.newBoostedSear
 import static org.icgc.dcc.portal.server.model.fields.SearchField.newNoneBoostedSearchField;
 import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.EXACT_MATCH_SUFFIX;
 import static org.icgc.dcc.portal.server.model.fields.SearchKey.newSearchKey;
-import static org.icgc.dcc.portal.server.model.fields.SpecialSearchKeyCreator.newSpecialSearchKeyCreator;
 
 @Slf4j
 @Component
@@ -83,30 +79,30 @@ public class SearchRepository {
   private static final String[] NO_EXCLUDE = null;
 
   private static final Set<SearchField> NORMAL_SEARCH_FIELDS = ImmutableSet.of(
-      newBoostedSearchField(EXACT_MATCH_FIELDNAME, 4),
-      newBoostedSearchField(LOWERCASE_MATCH_FIELDNAME, 2),
+      newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
+      newBoostedSearchField(2, LOWERCASE_MATCH_FIELDNAME),
       newNoneBoostedSearchField(PARTIAL_MATCH_FIELDNAME)
   );
 
-  private static final SearchKeyCreator MULTI_SEARCH_KEY_CREATOR = SearchKeyCreator.builder().searchFields(NORMAL_SEARCH_FIELDS).build();
-
   private static final Set<SearchField> BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
-      newBoostedSearchField(EXACT_MATCH_FIELDNAME, 4),
-      newBoostedSearchField(LOWERCASE_MATCH_FIELDNAME, 2),
-      newBoostedSearchField(PARTIAL_MATCH_FIELDNAME, 2)
+      newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
+      newBoostedSearchField(2, LOWERCASE_MATCH_FIELDNAME),
+      newBoostedSearchField(2, PARTIAL_MATCH_FIELDNAME)
   );
-
 
   /**
    * DCCPRTL-245 so that lowercase works
    */
-  private static final Set<SearchField> VINCENT_BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
-      newBoostedSearchField("text.symbol", 4),
-      newBoostedSearchField("id", 4),
-      newBoostedSearchField("text.file_name", 4),
-      newBoostedSearchField("text.project_code", 4)
+  private static final Set<String> VINCENT_BOOSTED_SEARCH_FIELD_NAMES = ImmutableSet.of(
+      "text.symbol",
+      "id",
+      "text.file_name",
+      "text.project_code"
   );
-  private static final SearchKeyCreator VINCENT_SEARCH_KEY_CREATOR = newSpecialSearchKeyCreator(NORMAL_SEARCH_FIELDS, VINCENT_BOOSTED_SEARCH_FIELDS);
+
+  private static final SearchField VINCENT_UNEXPANDED_BOOSTED_SEARCH_FIELD =
+      newBoostedSearchField(4, LOWERCASE_MATCH_FIELDNAME);
+
 
 
   @NoArgsConstructor(access = PRIVATE)
@@ -257,7 +253,7 @@ public class SearchRepository {
   }
 
   private static String[] getSearchTypes(String type) {
-    val result = TYPE_ID_MAPPINGS.containsKey(type) ? newHashSet(TYPE_ID_MAPPINGS.get(type)) : MULTIPLE_SEARCH_TYPES;
+    Set<String> result = TYPE_ID_MAPPINGS.containsKey(type) ? newHashSet(TYPE_ID_MAPPINGS.get(type)) : MULTIPLE_SEARCH_TYPES;
 
     return toStringArray(result);
   }
@@ -284,24 +280,22 @@ public class SearchRepository {
         .should(others);
   }
 
-  private static MultiMatchQueryBuilder createMultiMatchQuery(final String queryString, Set<SearchKey> keys){
+  private static MultiMatchQueryBuilder createMultiMatchQuery(final String queryString, Set<SearchField> expandedSearchFields){
     val mmqBuilder = multiMatchQuery(queryString)
         .operator(OR)
         .tieBreaker(TIE_BREAKER);
-    for (val key : keys){
-      for (val field : key.getExpandedSearchFields()){
-        val fieldName = field.getName();
-        val boostValue = field.getBoostedValue();
+    for (val expandedSearchField : expandedSearchFields){
+        val fieldName = expandedSearchField.getName();
+        val boostValue = expandedSearchField.getBoostedValue();
         mmqBuilder.field(fieldName, boostValue);
-      }
     }
     return mmqBuilder;
   }
 
   private static QueryBuilder getQuery(Query query, String type) {
-    val queryString = query.getQuery().toLowerCase();
-    val bestMatchKeys = buildMultiMatchFieldList(VINCENT_SEARCH_KEY_CREATOR,FIELD_KEYS, queryString, type);
-    val multiMatchBestQuery = createMultiMatchQuery(queryString, bestMatchKeys);
+    val queryString = query.getQuery();
+    val bestMatchSearchFields = buildMultiMatchFieldList(FIELD_KEYS, queryString, type);
+    val multiMatchBestQuery = createMultiMatchQuery(queryString, bestMatchSearchFields);
 
 
     val result = boolQuery();
@@ -316,7 +310,7 @@ public class SearchRepository {
 
   private static boolean shouldProcess(String sourceField) {
     val fieldsToSkip = ImmutableList.of(FieldNames.FILE_NAME, FieldNames.GENE_MUTATIONS);
-    return fieldsToSkip.stream().noneMatch(fieldToAvoid -> sourceField.equals(fieldToAvoid));
+    return fieldsToSkip.stream().noneMatch(sourceField::equals);
   }
 
   private static SearchKey createSearchKey(String searchFieldName) {
@@ -324,38 +318,41 @@ public class SearchRepository {
   }
 
   @NonNull
-  private static Set<SearchKey> buildMultiMatchFieldList(SearchKeyCreator searchKeyCreator, Iterable<String> searchKeyNames, String queryString, String type) {
-    val keys = Sets.<SearchKey> newHashSet();
+  private static Set<SearchField> buildMultiMatchFieldList(Iterable<String> searchKeyNames, String queryString, String type) {
+    val expandedSearchFields = ImmutableSet.<SearchField> builder();
 
-    for (val field : searchKeyNames) {
+    for (val searchKeyName : searchKeyNames) {
       // Exact match searchKeyNames (DCC-2324)
-      if (field.equals("start")) {
+      if (searchKeyName.equals("start")) {
         // TODO: Investigate and see if we still need this in the ES version wer're using.
         /*
          * NOTE: This is a work around quirky ES issue. We need to prefix the document type here to prevent
          * NumberFormatException, it appears that ES cannot determine what type 'start' is. This is for ES 0.9, later
          * versions may not have this problem.
          */
-        keys.add(newSearchKey(MUTATION_PREFIX, newNoneBoostedSearchField(field)));
-
-      } else if (shouldProcess(field)) {
-        keys.add(searchKeyCreator.getSearchKey(field));
+        expandedSearchFields.add(newNoneBoostedSearchField(MUTATION_PREFIX, searchKeyName));
+      } else if (shouldProcess(searchKeyName)) {
+        val searchKey = createSearchKey(searchKeyName);
+        expandedSearchFields.addAll(searchKey.getExpandedSearchFields());
       }
     }
 
     // Don't boost without space or genes won't show when partially matched
     val geneMutationSearchSubfields = queryString.contains(" ") ? BOOSTED_SEARCH_FIELDS : NORMAL_SEARCH_FIELDS;
-    keys.add( newSearchKey(FieldNames.GENE_MUTATIONS, geneMutationSearchSubfields) );
+    val geneSearchKey = newSearchKey(FieldNames.GENE_MUTATIONS, geneMutationSearchSubfields) ;
+    expandedSearchFields.addAll(geneSearchKey.getExpandedSearchFields());
 
     // Exact-match search on "id". //TODO: Assuming FieldNames.ID is none boosted
-    keys.add(newSearchKey(FieldNames.ID, newNoneBoostedSearchField(EXACT_MATCH_FIELDNAME)));
+    val idSearchKey = newSearchKey(FieldNames.ID, newNoneBoostedSearchField(EXACT_MATCH_FIELDNAME));
+    expandedSearchFields.addAll(idSearchKey.getExpandedSearchFields());
 
     if (isRepositoryFileRelated(type)) {
       // For repository file related searches, we want fuzzy search.
-      keys.add(searchKeyCreator.getSearchKey(FieldNames.ID));
+      val repoSearchKey = createSearchKey(FieldNames.ID);
+      expandedSearchFields.addAll(repoSearchKey.getExpandedSearchFields());
     }
 
-    return keys;
+    return expandedSearchFields.build();
   }
 
 }
