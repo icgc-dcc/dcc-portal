@@ -640,6 +640,9 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
             }
           }),
           dataAdapter: new IcgcGeneAdapter(defaultGeneAdapterOptions),
+          handlers: {
+            load: (isLoading) => !isLoading && scope.$apply(() => scope.isGvLoading = false),
+          },
         });
         genomeViewer.addTrack(tracks.icgcGeneTrack);
 
@@ -707,6 +710,9 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
             }
           }),
           dataAdapter: new IcgcMutationAdapter(defaultMutationAdapterOptions),
+          handlers: {
+            load: (isLoading) => !isLoading && scope.$apply(() => scope.isGvLoading = false),
+          },
         });
 
         genomeViewer.addTrack(tracks.icgcMutationsTrack);
