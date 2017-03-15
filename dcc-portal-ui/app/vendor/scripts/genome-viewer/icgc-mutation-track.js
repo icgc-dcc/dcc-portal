@@ -42,6 +42,10 @@ function IcgcMutationTrack(args) {
   _.extend(this, args);
 }
 
+IcgcMutationTrack.prototype.setLoading = function (loadState) {
+  Track.prototype.setLoading.call(this, loadState);
+  this.trigger('load', loadState);
+};
 
 IcgcMutationTrack.prototype.updateHeight = function () {
   //this._updateHeight();

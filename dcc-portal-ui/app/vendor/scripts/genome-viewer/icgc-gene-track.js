@@ -42,6 +42,11 @@ function IcgcGeneTrack(args) {
 
 IcgcGeneTrack.prototype = new Track({});
 
+IcgcGeneTrack.prototype.setLoading = function (loadState) {
+  Track.prototype.setLoading.call(this, loadState);
+  this.trigger('load', loadState);
+};
+
 IcgcGeneTrack.prototype.updateHeight = function () {
   //this._updateHeight();
   if (this.histogram) {
