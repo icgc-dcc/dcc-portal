@@ -21,36 +21,89 @@
 /* globals GeneRenderer: false, FeatureRenderer: false, IcgcMutationTrack: false, IcgcMutationAdapter: false  */
 /* globals GENE_BIOTYPE_COLORS: false, GENE_BIOTYPE_COLORS: false */
 
-angular.module('icgc.modules.genomeviewer', ['icgc.modules.genomeviewer.header', 'icgc.modules.genomeviewer.service'])
-  .constant('gvConstants',  {
-    CHROMOSOME_LIMIT_MAP: {
-      1: 249250621,
-      2: 243199373,
-      3: 198022430,
-      4: 191154276,
-      5: 180915260,
-      6: 171115067,
-      7: 159138663,
-      8: 146364022,
-      9: 141213431,
-      10: 135534747,
-      11: 135006516,
-      12: 133851895,
-      13: 115169878,
-      14: 107349540,
-      15: 102531392,
-      16: 90354753,
-      17: 81195210,
-      18: 78077248,
-      19: 59128983,
-      20: 63025520,
-      21: 48129895,
-      22: 51304566,
-      X: 155270560,
-      Y: 59373566,
-      MT: 16569
+const GV_CONSTANTS = {
+  CHROMOSOME_LIMIT_MAP: {
+    1: 249250621,
+    2: 243199373,
+    3: 198022430,
+    4: 191154276,
+    5: 180915260,
+    6: 171115067,
+    7: 159138663,
+    8: 146364022,
+    9: 141213431,
+    10: 135534747,
+    11: 135006516,
+    12: 133851895,
+    13: 115169878,
+    14: 107349540,
+    15: 102531392,
+    16: 90354753,
+    17: 81195210,
+    18: 78077248,
+    19: 59128983,
+    20: 63025520,
+    21: 48129895,
+    22: 51304566,
+    X: 155270560,
+    Y: 59373566,
+    MT: 16569
+  }
+};
+
+const defaultMutationAdapterOptions = {
+  resource: 'mutation',
+  multiRegions: true,
+  histogramMultiRegions: false,
+  chromosomeLimitMap: GV_CONSTANTS.CHROMOSOME_LIMIT_MAP,
+  featureCache: {
+    chunkSize: 10000
+  }
+};
+
+const defaultGeneAdapterOptions = {
+  resource: 'gene',
+  chromosomeLimitMap: GV_CONSTANTS.CHROMOSOME_LIMIT_MAP,
+  multiRegions: true,
+  histogramMultiRegions: false,
+  /* TODO: use BASE_URL */
+  cacheConfig: {
+    chunkSize: 100000
+  }
+};
+
+const defaultGeneViewerOptions = {
+  cellBaseVersion: 'v3',
+  sidePanel: false,
+  drawNavigationBar: false,
+  navigationBarConfig: {
+    componentsConfig: {
+      restoreDefaultRegionButton:false,
+      regionHistoryButton:false,
+      speciesButton:false,
+      chromosomesButton:false,
+      windowSizeControl:false,
+      positionControl:false,
+      searchControl:false
     }
-  });
+  },
+  drawKaryotypePanel: true,
+  drawChromosomePanel: true,
+  drawRegionOverviewPanel: true,
+  karyotypePanelConfig: {
+    hidden:true,
+    collapsed: false,
+    collapsible: false
+  },
+  chromosomePanelConfig: {
+    collapsed: false,
+    collapsible: false
+  },
+  version: 'Powered by <a target="_blank" href="http://www.genomemaps.org/">Genome Maps</a>'
+};
+
+angular.module('icgc.modules.genomeviewer', ['icgc.modules.genomeviewer.header', 'icgc.modules.genomeviewer.service'])
+  .constant('gvConstants', GV_CONSTANTS);
 
 /**
 genome-viewer.js roughly line 25612 setWidth subtracts 18 for windows scrollbars.
@@ -170,42 +223,19 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
         regionObj.end = parseInt(regionObj.end, 10);
         var species = availableSpecies.vertebrates[0];
         genomeViewer = genomeViewer || new GenomeViewer({
-            cellBaseHost: GMService.getConfiguration().cellBaseHost,
-            cellBaseVersion: 'v3',
+            ...defaultGeneViewerOptions,
             target: 'genome-viewer',
+            cellBaseHost: GMService.getConfiguration().cellBaseHost,
             width: getWidth(element.width()),
             availableSpecies: availableSpecies,
             species: species,
             region: regionObj,
             defaultRegion: regionObj,
-            sidePanel: false,
-            drawNavigationBar: false,
-            navigationBarConfig: {
-              componentsConfig: {
-                restoreDefaultRegionButton:false,
-                regionHistoryButton:false,
-                speciesButton:false,
-                chromosomesButton:false,
-                windowSizeControl:false,
-                positionControl:false,
-                searchControl:false
-              }
-            },
-            drawKaryotypePanel: true,
-            drawChromosomePanel: true,
-            drawRegionOverviewPanel: true,
-            karyotypePanelConfig: {
-              hidden:true,
-              collapsed: false,
-              collapsible: false
-            },
             chromosomePanelConfig: {
               hidden:true,
               collapsed: false,
               collapsible: false
             },
-            version: 'Powered by ' +
-            '<a target="_blank" href="http://www.genomemaps.org/">Genome Maps</a>'
           });
         window.gv = genomeViewer;
 
@@ -271,17 +301,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
           height: 100,
           autoHeight: false,
           renderer: icgcGeneOverviewRenderer,
-          dataAdapter: new IcgcGeneAdapter({
-            resource: 'gene',
-            chromosomeLimitMap: gvConstants.CHROMOSOME_LIMIT_MAP,
-            multiRegions: true,
-            histogramMultiRegions: false,
-            /* TODO: use BASE_URL */
-            //uriTemplate: 'https://dcc.icgc.org/api/browser/gene?segment={region}&resource=gene',
-            cacheConfig: {
-              chunkSize: 100000
-            }
-          })
+          dataAdapter: new IcgcGeneAdapter(defaultGeneAdapterOptions)
         });
         genomeViewer.addOverviewTrack(tracks.icgcGeneOverviewTrack);
 
@@ -303,16 +323,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
               }
             }
           }),
-          dataAdapter: new IcgcGeneAdapter({
-            resource: 'gene',
-            chromosomeLimitMap: gvConstants.CHROMOSOME_LIMIT_MAP,
-            multiRegions: true,
-            histogramMultiRegions: false,
-            /* TODO: use BASE_URL */
-            cacheConfig: {
-              chunkSize: 100000
-            }
-          })
+          dataAdapter: new IcgcGeneAdapter(defaultGeneAdapterOptions)
         });
 
         genomeViewer.addTrack(tracks.icgcGeneTrack);
@@ -373,15 +384,7 @@ angular.module('icgc.modules.genomeviewer').directive('genomeViewer', function (
             }
           }
         }),
-          dataAdapter: new IcgcMutationAdapter({
-            resource: 'mutation',
-            multiRegions: true,
-            histogramMultiRegions: false,
-            chromosomeLimitMap: gvConstants.CHROMOSOME_LIMIT_MAP,
-            featureCache: {
-              chunkSize: 10000
-            }
-          })
+          dataAdapter: new IcgcMutationAdapter(defaultMutationAdapterOptions),
         });
 
         genomeViewer.addTrack(tracks.icgcMutationsTrack);
@@ -493,40 +496,14 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
         regionObj.end = parseInt(regionObj.end, 10);
         var species = availableSpecies.vertebrates[0];
         genomeViewer = genomeViewer || new GenomeViewer({
-            cellBaseHost: GMService.getConfiguration().cellBaseHost,
-            cellBaseVersion: 'v3',
+            ...defaultGeneViewerOptions,
             target: 'gv-application',
+            cellBaseHost: GMService.getConfiguration().cellBaseHost,
             width: getWidth(element.width()),
             availableSpecies: availableSpecies,
             species: species,
             region: regionObj,
             defaultRegion: regionObj,
-            sidePanel: false,
-            drawNavigationBar: false,
-            navigationBarConfig: {
-            componentsConfig: {
-              restoreDefaultRegionButton:false,
-              regionHistoryButton:false,
-              speciesButton:false,
-              chromosomesButton:false,
-              windowSizeControl:false,
-              positionControl:false,
-              searchControl:false
-            }
-          },
-            drawKaryotypePanel: false,
-            drawChromosomePanel: false,
-            drawRegionOverviewPanel: true,
-            karyotypePanelConfig: {
-              collapsed: false,
-              collapsible: false
-            },
-            chromosomePanelConfig: {
-              collapsed: false,
-              collapsible: false
-            },
-            version: gettextCatalog.getString('Powered by' +
-              ' <a target="_blank" href="http://www.genomemaps.org/">Genome Maps</a>')
           });
         window.gv = genomeViewer;
 
@@ -662,16 +639,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
               }
             }
           }),
-          dataAdapter: new IcgcGeneAdapter({
-            resource: 'gene',
-            chromosomeLimitMap: gvConstants.CHROMOSOME_LIMIT_MAP,
-            multiRegions: true,
-            histogramMultiRegions: false,
-            featureCache: {
-              chunkSize: 100000
-            }
-          })
-
+          dataAdapter: new IcgcGeneAdapter(defaultGeneAdapterOptions),
         });
         genomeViewer.addTrack(tracks.icgcGeneTrack);
 
@@ -738,15 +706,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
               }
             }
           }),
-          dataAdapter: new IcgcMutationAdapter({
-            resource: 'mutation',
-            chromosomeLimitMap: gvConstants.CHROMOSOME_LIMIT_MAP,
-            multiRegions: true,
-            histogramMultiRegions: false,
-            featureCache: {
-              chunkSize: 10000
-            }
-          })
+          dataAdapter: new IcgcMutationAdapter(defaultMutationAdapterOptions),
         });
 
         genomeViewer.addTrack(tracks.icgcMutationsTrack);
