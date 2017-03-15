@@ -24,9 +24,8 @@
 'use strict';
 
 function IcgcGeneTrack(args) {
-  Track.call(this, args);
   // Using Underscore 'extend' function to extend and add Backbone Events
-  _.extend(this, Backbone.Events);
+  Track.call(this, _.extend({}, Backbone.Events, args));
 
   //set default args
 
