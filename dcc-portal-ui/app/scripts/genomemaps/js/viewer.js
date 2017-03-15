@@ -491,6 +491,7 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
 
       require.ensure([], require => {
         require('~/scripts/genome-viewer.js');
+        var region = attrs.region;
       function setup(regionObj) {
         regionObj.start = parseInt(regionObj.start, 10);
         regionObj.end = parseInt(regionObj.end, 10);
@@ -786,7 +787,11 @@ angular.module('icgc.modules.genomeviewer').directive('gvembed', function (GMSer
         }
       }
 
-      attrs.$observe('region', update);
+      attrs.$observe('region', function (newRegion) {
+        if (newRegion !== region) {
+          update();
+        }
+      });
       update();
 
       });
