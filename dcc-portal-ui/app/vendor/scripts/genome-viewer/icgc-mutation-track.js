@@ -26,9 +26,8 @@
 IcgcMutationTrack.prototype = new Track({});
 
 function IcgcMutationTrack(args) {
-  Track.call(this, args);
   // Using Underscore 'extend' function to extend and add Backbone Events
-  _.extend(this, Backbone.Events);
+  Track.call(this, _.extend({}, Backbone.Events, args));
 
   //set default args
 
@@ -43,6 +42,10 @@ function IcgcMutationTrack(args) {
   _.extend(this, args);
 }
 
+IcgcMutationTrack.prototype.setLoading = function (loadState) {
+  Track.prototype.setLoading.call(this, loadState);
+  this.trigger('load', loadState);
+};
 
 IcgcMutationTrack.prototype.updateHeight = function () {
   //this._updateHeight();
