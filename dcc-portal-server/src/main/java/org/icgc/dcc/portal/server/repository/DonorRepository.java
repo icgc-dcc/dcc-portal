@@ -518,19 +518,13 @@ public class DonorRepository implements Repository {
         .setFetchSource(false);
 
     SearchResponse response = requestBuilder.execute().actionGet();
-    while (true) {
-      response = client.prepareSearchScroll(response.getScrollId())
-          .setScroll(KEEP_ALIVE)
-          .execute().actionGet();
-
+    while (hasHits(response)) {
       for (SearchHit hit : response.getHits()) {
         donorIds.add(hit.getId());
       }
-
-      val finished = !hasHits(response);
-      if (finished) {
-        break;
-      }
+      response = client.prepareSearchScroll(response.getScrollId())
+          .setScroll(KEEP_ALIVE)
+          .execute().actionGet();
     }
 
     return donorIds;
