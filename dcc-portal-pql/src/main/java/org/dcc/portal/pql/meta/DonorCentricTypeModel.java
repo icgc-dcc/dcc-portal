@@ -268,7 +268,8 @@ public class DonorCentricTypeModel extends TypeModel {
         long_("total_read_count"),
         string("variation_calling_algorithm"),
         string("verification_platform"),
-        string("verification_status", "mutation.verificationStatus"));
+        string("verification_status", "mutation.verificationStatus"),
+        string("_study", "mutation.study"));
   }
 
   private static ObjectFieldModel initProject() {

@@ -48,7 +48,8 @@ public class MutationCentricTypeModel extends TypeModel {
       "platform",
       "verificationStatus",
       "functionalImpact",
-      "sequencingStrategy");
+      "sequencingStrategy",
+      "study");
 
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "id",
@@ -104,6 +105,7 @@ public class MutationCentricTypeModel extends TypeModel {
         .add(string("reference_genome_allele", "referenceGenomeAllele"))
         .add(defineSsmOccurrence())
         .add(defineTranscript())
+        .add(string("_study", "study"))
         // .add(string("platform", "platform"))
         // .add(arrayOfStrings("verification_status", "verificationStatus"))
         // .add(arrayOfStrings("sequencing_strategy", "sequencingStrategy"))
