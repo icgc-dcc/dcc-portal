@@ -105,7 +105,8 @@ public class CreateEsAstVisitorTest {
     assertThat(((TermsAggregationNode) result.getChild(1)).getFieldName()).isEqualTo("chromosome_end");
 
     result = (AggregationsNode) visit(facetsAll());
-    assertThat(result.childrenCount()).isEqualTo(6);
+    assertThat(((TermsAggregationNode) result.getChild(6)).getFieldName()).isEqualTo("_study");
+    assertThat(result.childrenCount()).isEqualTo(7);
   }
 
   @Test
