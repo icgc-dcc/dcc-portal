@@ -49,7 +49,8 @@ public class MutationCentricTypeModel extends TypeModel {
       "verificationStatus",
       "functionalImpact",
       "sequencingStrategy",
-      "study");
+      "study",
+      "chromosome");
 
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "id",

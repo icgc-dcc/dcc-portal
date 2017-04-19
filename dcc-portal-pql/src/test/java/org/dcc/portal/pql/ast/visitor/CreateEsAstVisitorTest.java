@@ -106,7 +106,7 @@ public class CreateEsAstVisitorTest {
 
     result = (AggregationsNode) visit(facetsAll());
     assertThat(((TermsAggregationNode) result.getChild(6)).getFieldName()).isEqualTo("_study");
-    assertThat(result.childrenCount()).isEqualTo(7);
+    assertThat(result.childrenCount()).isEqualTo(8);
   }
 
   @Test
