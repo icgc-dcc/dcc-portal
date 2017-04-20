@@ -92,12 +92,7 @@
     this.sort = (chromosomes) => {
       const terms = Object.keys(lookup);
       return _.sortBy(chromosomes,
-        (c) => {
-          if(!_.includes(terms, c.term)) {
-            return chromosomes.length;
-          }
-          return _.indexOf(terms, c.term);
-      });
+        (c) => !_.includes(terms, c.term) ? chromosomes.length : _.indexOf(terms, c.term));
     };
 
   });
