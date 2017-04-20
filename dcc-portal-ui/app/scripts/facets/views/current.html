@@ -21,7 +21,7 @@
                         <span data-ng-switch-when="curatedSetId"><translate>Curated Gene Set</translate></span>
                         <span data-ng-switch-when="donorId"><translate>Donor</translate></span>
                         <span data-ng-switch-when="location">{{typeName | readable }} Location</span>
-                        <span data-ng-switch-default="">{{facet | trans}}</span>
+                        <span data-ng-switch-default="">{{facet | trans: typeName }}</span>
                     </span>
 
                     <span class="t_current__or">{{ prepositionBuilder(typeName, facet, terms) }}</span>

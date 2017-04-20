@@ -214,6 +214,19 @@
         if (data.hasOwnProperty('facets')) {
           var precedence = Consequence.precedence();
 
+          for (var facet in data.facets) {
+            if (data.facets.hasOwnProperty(facet) && data.facets[facet].missing) {
+              var f = data.facets[facet];
+              if (f.hasOwnProperty('terms')) {
+                f.terms.push({term: '_missing', count: f.missing});
+              } else {
+                f.terms = [
+                  {term: '_missing', count: f.missing}
+                ];
+              }
+            }
+          }
+
           if (data.facets.hasOwnProperty('consequenceType') &&
             data.facets.consequenceType.hasOwnProperty('terms')) {
             data.facets.consequenceType.terms = data.facets.consequenceType.terms.sort(function (a, b) {
