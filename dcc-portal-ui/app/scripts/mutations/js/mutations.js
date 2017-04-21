@@ -214,18 +214,15 @@
         if (data.hasOwnProperty('facets')) {
           var precedence = Consequence.precedence();
 
-          for (var facet in data.facets) {
-            if (data.facets.hasOwnProperty(facet) && data.facets[facet].missing) {
-              var f = data.facets[facet];
-              if (f.hasOwnProperty('terms')) {
-                f.terms.push({term: '_missing', count: f.missing});
+          _.map(data.facets, (facet) => {
+            if(facet.missing) {
+              if(facet.terms) {
+                facet.terms.push({term: '_missing', count: facet.missing});
               } else {
-                f.terms = [
-                  {term: '_missing', count: f.missing}
-                ];
+                facet.terms = [{term: '_missing', count: facet.missing}];
               }
             }
-          }
+          });
 
           if (data.facets.hasOwnProperty('consequenceType') &&
             data.facets.consequenceType.hasOwnProperty('terms')) {
