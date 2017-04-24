@@ -166,13 +166,9 @@ angular-xeditable@^0.4.0:
     jquery "^1.11.1"
     moment "^2.5.0"
 
-angular@1.5.7:
+angular@1.5.7, angular@~1.x:
   version "1.5.7"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.5.7.tgz#4ecefd0c7134b72757ba3b41bba3a1e4d5eff5ac"
-
-angular@~1.x:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.0.tgz#16c5edebd0a342046bd5281cca2decf04c40df76"
 
 angularjs-toaster@2.0.0:
   version "2.0.0"
@@ -1113,13 +1109,9 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-bootstrap@3.3.6:
+bootstrap@3.3.6, bootstrap@^3.1.1:
   version "3.3.6"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.6.tgz#8de8f749dc8a743f2ac5b510d988371e3daa6589"
-
-bootstrap@^3.1.1:
-  version "3.3.7"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
 
 brace-expansion@^1.0.0:
   version "1.1.6"
@@ -1743,11 +1735,7 @@ custom-event@~1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/custom-event/-/custom-event-1.0.1.tgz#5d02a46850adf1b4a317946a3928fccb5bfd0425"
 
-d3@3:
-  version "3.5.17"
-  resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.17.tgz#bc46748004378b21a360c9fc7cf5231790762fb8"
-
-d3@3.5.6:
+d3@3, d3@3.5.6:
   version "3.5.6"
   resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.6.tgz#9451c651ca733fb9672c81fb7f2655164a73a42d"
 
