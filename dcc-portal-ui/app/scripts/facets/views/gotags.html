@@ -21,7 +21,7 @@
 
                 <span class="t_facets__facet__terms__active__term__label__text">
                     <i class="icon-ok"></i>
-                    <span data-tooltip="{{ item | geneSetNameLookup }}"
+                    <span data-icgc-tooltip="{{ item | geneSetNameLookup }}"
                           data-tooltip-placement="top">{{item}}
                     </span>
                 </span>
@@ -49,7 +49,7 @@
                 class="t_facets__facet__terms__active__term__label {{activeClass}}"
                 data-ng-mouseover="toggleRemove=true"
                 data-ng-mouseleave="toggleRemove=false">
-                <span class="t_facets__facet__terms__active__term__label__text" data-tooltip="{{item.name}}" data-tooltip-placement="overflow">
+                <span class="t_facets__facet__terms__active__term__label__text" data-icgc-tooltip="{{item.name}}" data-tooltip-placement="overflow">
                     <i class="{{ toggleRemove === true? 'icon-cancel':'icon-ok'}}"></i> {{ item.name }}
                 </span>
                 <span class="t_facets__facet__terms__active__term__count">
@@ -62,7 +62,7 @@
                 data-ng-if="actives.indexOf(item.id) < 0"
                 data-ng-click="addTerm({'type':type, 'facetName': facetName, 'id':item.id})"
                 class="t_facets__facet__terms__inactive__term">
-                <span class="t_facets__facet__terms__inactive__term__label" data-tooltip="{{item.name}}" data-tooltip-placement="overflow">
+                <span class="t_facets__facet__terms__inactive__term__label" data-icgc-tooltip="{{item.name}}" data-tooltip-placement="overflow">
                     <i class="icon-check-empty"></i> {{item.name}}
                 </span>
                 <span class="t_facets__facet__terms__inactive__term__count">

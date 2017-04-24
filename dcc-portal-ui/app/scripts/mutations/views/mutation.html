@@ -36,7 +36,7 @@
             </tr>
             <tr>
                 <th><translate>Type</translate></th>
-                <td><abbr data-tooltip="{{ MutationCtrl.mutation.type | define }}">
+                <td><abbr data-icgc-tooltip="{{ MutationCtrl.mutation.type | define }}">
                     {{ MutationCtrl.mutation.type}}</abbr></td>
             </tr>
             <tr>
@@ -83,7 +83,7 @@
             <tr>
                 <th><translate>Gene</translate></th>
                 <th><translate>AA Change</translate></th>
-                <th><abbr data-tooltip="{{'SO term: consequence_type' | translate}}"><translate>Consequence</translate></abbr></th>
+                <th><abbr data-icgc-tooltip="{{'SO term: consequence_type' | translate}}"><translate>Consequence</translate></abbr></th>
                 <th><translate>Coding DNA Change</translate></th>
                 <th><translate>Strand</translate></th>
                 <th><translate>Transcript(s)</translate></th>
@@ -101,7 +101,7 @@
                     <span class="t_impact_{{consequence.uiFunctionalImpact | lowercase }}"
                         data-ng-bind-html="consequence.uiAAMutation | highlight: MutationCtrl.tableFilter.consequences"></span>
                 </td>
-                <td><abbr data-tooltip="{{'SO term: [[ consequenceType ]]' | translate | subDelimiters:{consequenceType: consequence.uiType} }}">
+                <td><abbr data-icgc-tooltip="{{'SO term: [[ consequenceType ]]' | translate | subDelimiters:{consequenceType: consequence.uiType} }}">
                     <span data-ng-bind-html="consequence.uiTypeFiltered | highlight: MutationCtrl.tableFilter.consequences"></span></abbr>
                 </td>
                 <td>
@@ -216,7 +216,7 @@
                 <th style="cursor: pointer" 
                     data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
                     <abbr 
-                        data-tooltip="{{'Breakdown of Donors affected by [[ mutationId ]] <br># Donors where [[ mutationId ]] observed / # SSM tested Donors' | translate | subDelimiters:{mutationId: MutationCtrl.mutation.id} }}"
+                        data-icgc-tooltip="{{'Breakdown of Donors affected by [[ mutationId ]] <br># Donors where [[ mutationId ]] observed / # SSM tested Donors' | translate | subDelimiters:{mutationId: MutationCtrl.mutation.id} }}"
                         data-tooltip-placement="left">
                     <translate># Donors affected</translate></abbr>
                     <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
@@ -228,7 +228,7 @@
                 filter: MutationCtrl.tableFilter.projects |
                 orderBy:'uiPercentAffected/100':sortProjectsDescendingly |
                 limitTo: MutationCtrl.defaultProjectsRowLimit : ((MutationCtrl.currentProjectsPage-1) * MutationCtrl.defaultProjectsRowLimit)) track by project.uiId">
-                <td><a data-tooltip="{{ project.uiName }}" 
+                <td><a data-icgc-tooltip="{{ project.uiName }}" 
                     data-ng-href="/projects/{{project.uiId}}"
                     data-ng-bind-html="project.uiId | highlight: MutationCtrl.tableFilter.projects">
                 </a></td>

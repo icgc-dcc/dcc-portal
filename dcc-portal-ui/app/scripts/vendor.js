@@ -25,6 +25,7 @@ require('angular-drag-and-drop-lists');
 require('expose?ZeroClipboard!zeroclipboard');
 require('angular-gettext');
 require('angular-xeditable');
+require('angular-bind-html-compile-ci-dev');
 
 // Other App Dependencies
 require('expose?Highcharts!highcharts');

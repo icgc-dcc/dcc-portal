@@ -18,7 +18,7 @@
 package org.icgc.dcc.portal.server.manifest.model;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-import static org.elasticsearch.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
 
 import java.util.List;
@@ -30,9 +30,9 @@ import org.icgc.dcc.portal.server.util.ObjectNodeDeserializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 

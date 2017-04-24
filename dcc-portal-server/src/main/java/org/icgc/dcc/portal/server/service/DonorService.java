@@ -1,31 +1,5 @@
 package org.icgc.dcc.portal.server.service;
 
-import com.google.common.collect.*;
-import lombok.Cleanup;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.dcc.portal.pql.meta.DonorCentricTypeModel.Fields;
-import org.elasticsearch.action.search.MultiSearchResponse;
-import org.elasticsearch.action.search.SearchResponse;
-import org.icgc.dcc.portal.server.model.*;
-import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
-import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
-import org.icgc.dcc.portal.server.repository.DonorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.supercsv.io.CsvMapWriter;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.StreamingOutput;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.util.*;
-
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
@@ -34,6 +8,7 @@ import static java.util.stream.Collectors.toMap;
 import static java.util.stream.IntStream.range;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
+import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
 import static org.icgc.dcc.portal.server.repository.DonorRepository.DONOR_ID_SEARCH_FIELDS;
 import static org.icgc.dcc.portal.server.repository.DonorRepository.FILE_DONOR_ID_SEARCH_FIELDS;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
@@ -41,9 +16,53 @@ import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.StreamingOutput;
+
+import org.dcc.portal.pql.meta.DonorCentricTypeModel.Fields;
+import org.elasticsearch.action.search.MultiSearchResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.icgc.dcc.portal.server.model.Donor;
+import org.icgc.dcc.portal.server.model.Donors;
+import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.Pagination;
+import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.TermFacet;
+import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
+import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
+import org.icgc.dcc.portal.server.repository.DonorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.supercsv.io.CsvMapWriter;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Ordering;
+
+import lombok.Cleanup;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired }) )
+@RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class DonorService {
 
   private final DonorRepository donorRepository;
@@ -99,7 +118,7 @@ public class DonorService {
       val matchedDonor = hit.getId();
 
       for (val searchEntry : fields.entrySet()) {
-        val keys = highlightedFields.get(searchEntry.getKey());
+        val keys = highlightedFields.get(TEXT_PREFIX + searchEntry.getKey());
         if (keys != null) {
           val field = searchEntry.getValue();
 

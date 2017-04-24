@@ -20,20 +20,21 @@ package org.dcc.portal.pql.es.ast;
 import java.util.Map;
 import java.util.Optional;
 
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.Value;
-
 import org.dcc.portal.pql.es.model.Order;
 import org.dcc.portal.pql.es.visitor.NodeVisitor;
 
 import com.google.common.collect.Maps;
+
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class SortNode extends ExpressionNode {
 
   Map<String, Order> fields = Maps.newLinkedHashMap();
+  Map<String, String> nestedPaths = Maps.newHashMap();
 
   @Override
   public <T, A> T accept(@NonNull NodeVisitor<T, A> visitor, @NonNull Optional<A> context) {
@@ -42,6 +43,10 @@ public class SortNode extends ExpressionNode {
 
   public void addField(@NonNull String field, @NonNull Order order) {
     fields.put(field, order);
+  }
+
+  public void addNestedPath(@NonNull String field, @NonNull String path) {
+    nestedPaths.put(field, path);
   }
 
 }

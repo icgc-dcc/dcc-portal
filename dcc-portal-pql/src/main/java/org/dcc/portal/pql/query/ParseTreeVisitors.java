@@ -19,18 +19,19 @@ package org.dcc.portal.pql.query;
 
 import static com.google.common.base.Preconditions.checkState;
 import static lombok.AccessLevel.PRIVATE;
+import static org.icgc.dcc.common.core.util.Joiners.DOT;
 
 import java.util.List;
-
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
 
 import org.dcc.portal.pql.es.model.Order;
 import org.dcc.portal.pql.meta.TypeModel;
 import org.icgc.dcc.portal.pql.antlr4.PqlParser.OrderContext;
 
 import com.google.common.base.Splitter;
+
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.val;
 
 @NoArgsConstructor(access = PRIVATE)
 public class ParseTreeVisitors {
@@ -78,8 +79,8 @@ public class ParseTreeVisitors {
     if (noPrefixAndPrefixFromTypeModel) {
       return alias;
     }
-
-    return components.get(1);
+    
+    return DOT.join(components.listIterator(1));
   }
 
 }

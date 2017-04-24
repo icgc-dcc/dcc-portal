@@ -21,7 +21,6 @@ import static lombok.AccessLevel.PRIVATE;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.facet.Facet;
 import org.icgc.dcc.portal.server.model.Universe;
 
 import lombok.NoArgsConstructor;

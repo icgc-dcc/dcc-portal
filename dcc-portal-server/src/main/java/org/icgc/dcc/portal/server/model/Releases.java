@@ -17,18 +17,18 @@
 
 package org.icgc.dcc.portal.server.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.val;
-
 import org.elasticsearch.search.SearchHits;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.val;
 
 @EqualsAndHashCode(callSuper = false)
 @ToString
@@ -44,8 +44,8 @@ public class Releases extends Paginated {
     val releases = ImmutableList.<Release> builder();
     for (val hit : hits) {
       val fieldMap = Maps.<String, Object> newHashMap();
-      for (val field : hit.getFields().entrySet()) {
-        fieldMap.put(field.getKey(), field.getValue().getValue());
+      for (val field : hit.getSource().entrySet()) {
+        fieldMap.put(field.getKey(), field.getValue());
       }
       releases.add(new Release(fieldMap));
     }

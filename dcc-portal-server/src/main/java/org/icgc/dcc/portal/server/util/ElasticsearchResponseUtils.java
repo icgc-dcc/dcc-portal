@@ -169,9 +169,7 @@ public final class ElasticsearchResponseUtils {
   }
 
   public static Map<String, Object> createResponseMap(GetResponse response, Query query, EntityType entityType) {
-    val map = createMapFromGetFields(response.getFields());
-    map.putAll(processSource(response.getSource(), query, entityType));
-
+    val map = processSource(response.getSource(), query, entityType);
     return map;
   }
 

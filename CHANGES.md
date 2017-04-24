@@ -3,6 +3,42 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[5.0.6](https://github.com/icgc-dcc/dcc-portal/compare/5.0.3...5.0.6)
+--
+- Fixes search issues related to scoring and ranking of results in Elasticsearch 5
+- Bug fix for searching by Object ID
+- Bug fix for text search in repository
+- Support multiple levels of nesting in PQL queries.
+- Minor UI updates and fixes
+
+[5.0.3](https://github.com/icgc-dcc/dcc-portal/compare/5.0.2...5.0.3)
+--
+- Fixes NPE in the browser endpoint
+- Less verbose logging in browser repository
+
+[5.0.2](https://github.com/icgc-dcc/dcc-portal/compare/5.0.1...5.0.2)
+--
+- Different DACO user for healthchecks
+
+[5.0.1](https://github.com/icgc-dcc/dcc-portal/compare/5.0.0...5.0.1)
+--
+- Fixes conflicting dependencies which caused an error on the releases page
+
+[5.0.0](https://github.com/icgc-dcc/dcc-portal/compare/dcc-portal-4.4.3...5.0.0)
+--
+- Upgrade code to support Elasticsearch 5.1.2
+- Added new dependencies for Elasticsearch 
+- Unit tests have been updated to continue supporting embedded Elasticsearch for testing
+
+[4.4.3](https://github.com/icgc-dcc/dcc-portal/compare/4.4.2...dcc-portal-4.4.3)
+--
+- Factored out restangular from app.js to its own wrapper source file
+- Updated 404 page redirect functionality
+- Fixes to facet colours
+- Changed share link popover, new look, new size, much smaller
+- Fixed byte conversion to use base 10 instead of base 2
+- Created a compounds index page, uses client side filtering
+
 [4.4.2](https://github.com/icgc-dcc/dcc-portal/compare/4.4.1...4.4.2)
 --
 - Migrated from Lodash 3 to 4

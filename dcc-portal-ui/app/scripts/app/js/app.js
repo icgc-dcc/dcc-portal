@@ -193,6 +193,9 @@
 
     // angular plugins
     'restangular',
+
+    'ui.bootstrap.popover',
+    'ui.bootstrap.tpls',
     'ui.scrollpoint',
     'ui.bootstrap.modal',
     'ui.bootstrap.position',
@@ -210,6 +213,7 @@
     'dndLists',
     'gettext',
     'xeditable',
+    'angular-bind-html-compile',
 
 
     // 3rd party
@@ -350,6 +354,8 @@
           console.error(error.stack);
         }
       });
+
+      $rootScope._ = require('lodash');
 
       $rootScope.$on('$stateNotFound', function() {
         const redirect = getRedirectObject($location.url());

@@ -146,7 +146,7 @@ public class SurvivalAnalyzer {
     for (int i = 0; i < donors.length; i++) {
       val donor = donors[i];
       time[i] = diseaseFree ? getDiseaseTime(donor) : getOverallTime(donor);
-      censured[i] = censuredTerms.contains(donor.field(censuredField).<String> getValue());
+      censured[i] = censuredTerms.contains(donor.sourceAsMap().get(censuredField).toString());
     }
 
     val intervals = new ArrayList<Interval>();
@@ -200,7 +200,7 @@ public class SurvivalAnalyzer {
 
       val donor = new DonorValue(
           donors[i].getId(),
-          donors[i].field(censuredField).getValue(),
+          donors[i].sourceAsMap().get(censuredField).toString(),
           time[i]);
       currentInterval.addDonor(donor);
 
@@ -214,12 +214,12 @@ public class SurvivalAnalyzer {
   }
 
   private static boolean hasData(SearchHit donor) {
-    val statusOptional = Optional.ofNullable(donor.field("donor_vital_status"));
+    val statusOptional = Optional.ofNullable(donor.sourceAsMap().get("donor_vital_status"));
     if (!statusOptional.isPresent()) {
       return false;
     }
 
-    val status = statusOptional.get().<String> getValue();
+    val status = statusOptional.get().toString();
     if (!status.equalsIgnoreCase("alive") && !status.equalsIgnoreCase("deceased")) {
       return false;
     }
@@ -229,13 +229,13 @@ public class SurvivalAnalyzer {
   }
 
   private static Integer getOverallTime(SearchHit donor) {
-    val survivalOptional = Optional.ofNullable(donor.field("donor_survival_time"));
-    val intervalOptional = Optional.ofNullable(donor.field("donor_interval_of_last_followup"));
+    val survivalOptional = Optional.ofNullable((Integer) donor.sourceAsMap().get("donor_survival_time"));
+    val intervalOptional = Optional.ofNullable((Integer) donor.sourceAsMap().get("donor_interval_of_last_followup"));
 
     if (survivalOptional.isPresent()) {
-      return survivalOptional.get().<Integer> getValue();
+      return survivalOptional.get();
     } else if (intervalOptional.isPresent()) {
-      return intervalOptional.get().<Integer> getValue();
+      return intervalOptional.get();
     } else {
       return -1;
     }
@@ -243,11 +243,15 @@ public class SurvivalAnalyzer {
 
   private static Integer getDiseaseTime(SearchHit donor) {
     val censuredTime = DISEASE_FREE_SORT.get(0);
-    return donor.field(censuredTime).getValue();
+    return (Integer) donor.sourceAsMap().get(censuredTime);
   }
 
   private static boolean hasDiseaseStatusData(SearchHit donor) {
-    return donor.fields().keySet().containsAll(DISEASE_FREE_FIELDS);
+    for (val field : DISEASE_FREE_FIELDS) {
+      if (donor.sourceAsMap().get(field) == null) return false;
+    }
+
+    return true;
   }
 
   private static Map<UUID, UnionUnit> getEntitySetMap(List<UUID> sets) {

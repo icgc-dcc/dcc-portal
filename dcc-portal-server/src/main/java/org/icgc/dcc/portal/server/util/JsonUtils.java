@@ -30,11 +30,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
-
 import org.icgc.dcc.portal.server.service.BadRequestException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,8 +37,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
+
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class JsonUtils {
@@ -56,7 +57,8 @@ public final class JsonUtils {
       .enable(INDENT_OUTPUT)
       .configure(ALLOW_UNQUOTED_FIELD_NAMES, true)
       .configure(ALLOW_SINGLE_QUOTES, true)
-      .configure(ALLOW_COMMENTS, true);
+      .configure(ALLOW_COMMENTS, true)
+      .registerModule(new GuavaModule());
 
   public static void moveField(ObjectNode objectNode, String fromFieldName, String toFieldName) {
     if (objectNode.has(fromFieldName)) {

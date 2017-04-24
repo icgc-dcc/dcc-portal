@@ -17,19 +17,19 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.dcc.portal.pql.meta.Type.PROJECT;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
 import java.util.Map;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.test.TestIndex;
 import org.junit.Before;
@@ -39,7 +39,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-public class ProjectRepositoryTest extends BaseElasticSearchTest {
+public class ProjectRepositoryTest extends BaseElasticsearchTest {
 
   private static final String DEFAULT_SORT = "totalDonorCount";
   private static final String DEFAULT_ORDER = "desc";
@@ -51,15 +51,10 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
   ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.PROJECT);
 
   @Before
-  public void setUp() throws Exception {
-    this.testIndex = TestIndex.RELEASE;
-    es.execute(createIndexMapping(IndexType.PROJECT)
-        .withData(bulkFile(getClass()))
-        // This is needed because the ProjectRepository now does a 'secondary' search on icgc-repository index.
-        .withData(MANIFEST_TEST_DATA));
-
+  public void setUpProjectRepositoryTest() throws Exception {
+    prepareIndex(RELEASE_INDEX_NAME, PROJECT);
     projectRepository =
-        new ProjectRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()),
+        new ProjectRepository(client, new QueryEngine(client, RELEASE_INDEX_NAME),
             TestIndex.RELEASE.getName(), TestIndex.REPOSITORY.getName());
   }
 
@@ -67,7 +62,7 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
   public void testFindAll() throws Exception {
     Query query = Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).build();
     SearchResponse response = projectRepository.findAll(query);
-    assertThat(response.getHits().getTotalHits()).isEqualTo(3);
+    Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(3);
   }
 
   @Test
@@ -80,12 +75,13 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = projectRepository.findAll(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(3);
-    assertThat(hits.getHits().length).isEqualTo(3);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(3);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(3);
 
     for (SearchHit hit : hits) {
-      assertThat(hit.fields().keySet().size()).isEqualTo(2);
-      assertThat(hit.fields().keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("name"), FIELDS.get("primarySite")));
+      Assertions.assertThat(hit.sourceAsMap().keySet().size()).isEqualTo(2);
+      Assertions.assertThat(hit.sourceAsMap().keySet())
+          .isEqualTo(Sets.newHashSet(FIELDS.get("name"), FIELDS.get("primarySite")));
     }
   }
 
@@ -97,11 +93,12 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = projectRepository.findAll(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(2);
-    assertThat(hits.getHits().length).isEqualTo(2);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(2);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(2);
 
     for (SearchHit hit : hits) {
-      assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isIn(Lists.newArrayList("OV-AU", "PACA-AU"));
+      Assertions.assertThat(cast(hit.sourceAsMap().get(FIELDS.get("id"))))
+          .isIn(Lists.newArrayList("OV-AU", "PACA-AU"));
     }
   }
 
@@ -113,11 +110,12 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = projectRepository.findAll(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(1);
-    assertThat(hits.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
     for (SearchHit hit : hits) {
-      assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isNotIn(Lists.newArrayList("OV-AU", "PACA-AU"));
+      Assertions.assertThat(cast(hit.sourceAsMap().get(FIELDS.get("id"))))
+          .isNotIn(Lists.newArrayList("OV-AU", "PACA-AU"));
     }
   }
 
@@ -125,7 +123,7 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
   public void testCount() throws Exception {
     Query query = Query.builder().build();
     long response = projectRepository.count(query);
-    assertThat(response).isEqualTo(3);
+    Assertions.assertThat(response).isEqualTo(3);
   }
 
   @Test
@@ -133,7 +131,7 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
     FiltersParam filter = new FiltersParam(FILTER);
     Query query = Query.builder().filters(filter.get()).build();
     long response = projectRepository.count(query);
-    assertThat(response).isEqualTo(2);
+    Assertions.assertThat(response).isEqualTo(2);
   }
 
   @Test
@@ -141,7 +139,7 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
     String id = "PEME-CA";
     Query query = Query.builder().build();
     Map<String, Object> response = projectRepository.findOne(id, query);
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
   }
 
   @Test
@@ -149,18 +147,10 @@ public class ProjectRepositoryTest extends BaseElasticSearchTest {
     String id = "PEME-CA";
     Query query = Query.builder().fields(Lists.newArrayList("id", "name")).build();
     Map<String, Object> response = projectRepository.findOne(id, query);
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
-    assertThat(response.keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("name")));
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
+    Assertions.assertThat(response.keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("name")));
   }
 
-  // FIXME
-  // @Test(expected = WebApplicationException.class)
-  public void testFind404() throws Exception {
-    Query query = Query.builder().build();
-    projectRepository.findOne(MISSING_ID, query);
-  }
-
-  @Override
   protected Object cast(Object object) {
     return object;
   }

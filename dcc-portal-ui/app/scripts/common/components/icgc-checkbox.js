@@ -1,7 +1,8 @@
 import _ from 'lodash';
-const ngModule = angular.module('app.common.components', []);
 
-ngModule.component('icgcCheckbox', {
+angular
+.module('app.common.components')
+.component('icgcCheckbox', {
     template: `
       <i
         class="{{vm.classes}}"

@@ -20,16 +20,11 @@ package org.dcc.portal.pql.query;
 import static org.dcc.portal.pql.es.utils.Visitors.createAggregationBuilderVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.createQueryBuilderVisitor;
 import static org.dcc.portal.pql.es.utils.Visitors.filterBuilderVisitor;
-import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
-import static org.elasticsearch.action.search.SearchType.COUNT;
+import static org.elasticsearch.search.sort.SortBuilders.fieldSort;
+import static org.elasticsearch.search.sort.SortBuilders.scoreSort;
 
 import java.util.Collection;
 import java.util.Optional;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 import org.dcc.portal.pql.es.ast.CountNode;
 import org.dcc.portal.pql.es.ast.ExpressionNode;
@@ -45,11 +40,19 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.search.sort.SortOrder;
 
+import com.google.common.collect.Lists;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @RequiredArgsConstructor
 public class EsRequestBuilder {
 
   private static final String[] NO_EXCLUDE = null;
+  private static final String SCORE_FIELD = "_score";
 
   @NonNull
   private final Client client;
@@ -60,6 +63,8 @@ public class EsRequestBuilder {
         .prepareSearch(queryContext.getIndex())
         .setTypes(queryContext.getType().getId());
 
+    val sourceFields = Lists.<String> newArrayList();
+
     for (val child : esAst.getChildren()) {
       if (child instanceof FilterNode) {
         result.setPostFilter(toBuilder(child, filterBuilderVisitor(), queryContext));
@@ -69,10 +74,10 @@ public class EsRequestBuilder {
         addAggregations(result, child, queryContext);
       } else if (child instanceof FieldsNode) {
         val fields = ((FieldsNode) child).getFields();
-        result.addFields(toStringArray(fields));
+        sourceFields.addAll(fields);
       } else if (child instanceof SourceNode) {
         val includeFields = ((SourceNode) child).getFields();
-        result.setFetchSource(toStringArray(includeFields), NO_EXCLUDE);
+        sourceFields.addAll(includeFields);
       } else if (child instanceof LimitNode) {
         val limit = (LimitNode) child;
         result.setFrom(limit.getFrom())
@@ -84,9 +89,13 @@ public class EsRequestBuilder {
       }
     }
 
+    if (!sourceFields.isEmpty()) {
+      result.setFetchSource(toStringArray(sourceFields), NO_EXCLUDE);
+    }
+
     if (containsCount) {
       log.debug("Setting search type to COUNT");
-      result.setSearchType(COUNT);
+      result.setSize(0);
     }
 
     return result;
@@ -109,18 +118,22 @@ public class EsRequestBuilder {
   }
 
   private static void addSorts(SearchRequestBuilder builder, SortNode sorts, QueryContext context) {
-    // TODO: Temporary solution to the sorting issue on the donor tab when sorting by primary site or project.
-    // JIRA: DCC-3791
-    val type = context.getType();
-    val isDonorCentric = (type == DONOR_CENTRIC);
-    val prefix = type.getId();
+    val nestedPaths = sorts.getNestedPaths();
 
     for (val sort : sorts.getFields().entrySet()) {
       val fieldName = sort.getKey();
-      val qualifiedName = (isDonorCentric && fieldName.startsWith("project.")) ? (prefix + "." + fieldName) : fieldName;
       val sortOrder = SortOrder.valueOf(sort.getValue().toString());
 
-      builder.addSort(qualifiedName, sortOrder);
+      if (fieldName.equals(SCORE_FIELD)) {
+        builder.addSort(scoreSort().order(sortOrder));
+      } else {
+        val sortBuilder = fieldSort(fieldName).order(sortOrder);
+        if (nestedPaths.containsKey(fieldName)) {
+          sortBuilder.setNestedPath(nestedPaths.get(fieldName));
+        }
+
+        builder.addSort(sortBuilder);
+      }
     }
   }
 

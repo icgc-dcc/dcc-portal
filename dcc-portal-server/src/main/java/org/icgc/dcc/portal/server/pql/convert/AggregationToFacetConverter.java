@@ -78,7 +78,7 @@ public class AggregationToFacetConverter {
     long total = 0;
     for (val bucket : termsAgg.getBuckets()) {
       val docsCount = resolveDocCount(termAggName, bucket);
-      terms.add(new Term(bucket.getKey(), docsCount));
+      terms.add(new Term(bucket.getKeyAsString(), docsCount));
       total += docsCount;
     }
 

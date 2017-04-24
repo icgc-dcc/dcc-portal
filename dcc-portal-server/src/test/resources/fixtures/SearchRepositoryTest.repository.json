@@ -1,0 +1,31 @@
+{ "index": { "_index": "test-icgc-repository", "_type": "file-text", "_id": "FI499174" } }
+{
+  "text": {
+    "type": "file",
+    "id": "FI499174",
+    "object_id": "305c46a3-a315-5087-ac7b-359350265f62",
+    "file_name": [
+      "C500.TCGA-E7-A5KF-10A-01D-A289-08.4_gdc_realn.bam"
+    ],
+    "data_type": "Aligned Reads",
+    "donor_id": [
+      "DO44038"
+    ],
+    "project_code": [
+      "BLCA-US"
+    ],
+    "data_bundle_id": "0b7cac62-5e4e-4dcd-bc25-4a1174d561ab",
+    "sample_id": [
+      "SA490912"
+    ],
+    "specimen_id": [
+      "SP96014"
+    ],
+    "submitted_specimen_id": [
+      "812a4414-ea20-4e81-9ea6-4cca1e9daa9b"
+    ],
+    "submitted_sample_id": [
+      "54eb4888-8dc8-4179-9a6b-8ee660542e63"
+    ]
+  }
+}

@@ -32,7 +32,7 @@
 
   var module = angular.module('icgc.enrichment.controllers', []);
   module.controller('EnrichmentUploadController',
-    function($scope, $modalInstance, $location, Restangular, LocationService, Extensions, geneLimit, filters, afterSave) {
+    function($scope, $modalInstance, $location, Restangular, LocationService, Extensions, geneLimit, filters) {
 
     var _launchingEnrichmentUpload = false;
 
@@ -127,10 +127,7 @@
       // to start the redirection
       promise.then(function(result) {
         var id = result.id;
-        $modalInstance.dismiss('cancel');
-        if (afterSave) {
-          afterSave(result);
-        }
+        $modalInstance.close(result);
         $location.path('/analysis/view/enrichment/' + id).search({});
       })
       .finally(function() {

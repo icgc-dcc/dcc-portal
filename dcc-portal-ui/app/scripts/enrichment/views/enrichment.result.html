@@ -33,8 +33,8 @@
                     <th class="text-right"><translate># Gene sets in Universe</translate></th>
                     <th class="text-right"><translate># Gene sets in overlap</translate></th>
                     <th class="text-right"><translate># Genes in Universe</translate></th>
-                    <th class="text-right" data-tooltip="{{TooltipText.ENRICHMENT.OVERVIEW_GENES_OVERLAP}}"><abbr><translate># Genes in overlap</translate></abbr></th>
-                    <th class="text-right" data-tooltip="{{TooltipText.ENRICHMENT.INPUT_GENES}}"><abbr><translate># Input genes</translate></abbr></th>
+                    <th class="text-right" data-icgc-tooltip="{{TooltipText.ENRICHMENT.OVERVIEW_GENES_OVERLAP}}"><abbr><translate># Genes in overlap</translate></abbr></th>
+                    <th class="text-right" data-icgc-tooltip="{{TooltipText.ENRICHMENT.INPUT_GENES}}"><abbr><translate># Input genes</translate></abbr></th>
                 </tr>
             </thead>
             <tbody>
@@ -93,13 +93,13 @@
                     <translate has-markup>Top <strong>{{item.params.maxGeneSetCount | number}}</strong> gene sets out of <strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched gene sets with FDR &le; <strong>{{item.params.fdr}}</strong></translate>
                 </span>
                 <span data-ng-if="item.params.maxGeneSetCount >= item.overview.overlapFdrGeneSetCount && item.results.length > 0">
-                    <translate has-markup><strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched gene sets with <abbr data-tooltip="{{TooltipText.ENRICHMENT.FDR}}">FDR</abbr> &le; <strong>{{item.params.fdr}}</strong></translate>
+                    <translate has-markup><strong>{{item.overview.overlapFdrGeneSetCount | number}}</strong> enriched gene sets with <abbr data-icgc-tooltip="{{TooltipText.ENRICHMENT.FDR}}">FDR</abbr> &le; <strong>{{item.params.fdr}}</strong></translate>
                 </span>            
           
                 <span class="t_tools" data-ng-if="item.results.length > 0">
                     <span class="t_tools__tool"
                         data-tooltip-placement="left"
-                        data-tooltip="{{'Export Table as TSV' | translate}}"
+                        data-icgc-tooltip="{{'Export Table as TSV' | translate}}"
                         data-ng-click="exportEnrichment(item.id)"><i class="icon-file"></i></span>
                 </span>
             </span>
@@ -109,21 +109,21 @@
                     <tr>
                         <th>ID</th>
                         <th><translate>Name</translate></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES}}"><abbr><translate># Genes</translate></abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES_OVERLAP}}"><abbr><translate># Genes in overlap</translate></abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_DONORS}}"><abbr><translate># Donors affected</translate></abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_MUTATIONS}}"><abbr><translate># Mutations</translate></abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_EXPECTED}}"><abbr><translate>Expected</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES}}"><abbr><translate># Genes</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES_OVERLAP}}"><abbr><translate># Genes in overlap</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_DONORS}}"><abbr><translate># Donors affected</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_MUTATIONS}}"><abbr><translate># Mutations</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_EXPECTED}}"><abbr><translate>Expected</translate></abbr></th>
                         <th style="cursor: pointer"
                             data-ng-click="predicate='pvalue'; reverse=!reverse">
-                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_PVALUE}}"><translate>P-Value</translate></abbr>
+                            <abbr data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_PVALUE}}"><translate>P-Value</translate></abbr>
                             <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='pvalue'" class="icon-sort"></i>
                             <i data-ng-if="predicate=='pvalue'&& !reverse" class="icon-sort-up"></i>
                             <i data-ng-if="predicate=='pvalue'&& reverse" class="icon-sort-down"></i>
                         </th>
                         <th style="cursor: pointer"
                             data-ng-click="predicate='adjustedPValue'; reverse=!reverse">
-                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}"><translate>Adjusted P-Value</translate></abbr>
+                            <abbr data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}"><translate>Adjusted P-Value</translate></abbr>
                             <i style="color:hsl(0,0%,80%)" data-ng-if="predicate!='adjustedPValue'" class="icon-sort"></i>
                             <i data-ng-if="predicate=='adjustedPValue'&&!reverse" class="icon-sort-up"></i>
                             <i data-ng-if="predicate=='adjustedPValue'&&reverse" class="icon-sort-down"></i>
