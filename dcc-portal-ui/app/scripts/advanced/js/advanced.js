@@ -764,8 +764,8 @@ angular.module('icgc.advanced.controllers', [
 
   })
   .service('AdvancedGeneService', // Advanced Gene Service
-    function(Page, LocationService, Genes, Projects, Donors, Chromosome,
-      AdvancedSearchTabs, FiltersUtil, Extensions, ProjectCache, $q) {
+    function(Page, LocationService, Genes, Projects, Donors, AdvancedSearchTabs,
+      FiltersUtil, Extensions, ProjectCache, $q) {
 
       var _ASGeneService = this;
 
@@ -952,7 +952,7 @@ angular.module('icgc.advanced.controllers', [
         Genes.getList(params).then(function (facetGeneList) {
           _ASGeneService.isLoading = false;
           _ASGeneService.genes = facetGeneList.plain(); // Build the partial object
-          _ASGeneService.genes.facets.chromosome.terms = Chromosome.sort(_ASGeneService.genes.facets.chromosome.terms);
+
           deferred.resolve();
         });
 
