@@ -2,8 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 
-before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
+install: "mvn -pl dcc-portal-pql,dcc-portal-server install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
 
 script: "mvn -pl dcc-portal-pql,dcc-portal-server cobertura:cobertura -Denforcer.fail=false"
 
