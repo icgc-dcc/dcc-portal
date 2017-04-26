@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>5.0.11-SNAPSHOT</version>
+    <version>5.0.12-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -354,6 +354,18 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <formats>
+            <format>html</format>
+            <format>xml</format>
+          </formats>
+          <check />
+        </configuration>
       </plugin>
     </plugins>
   </build>
