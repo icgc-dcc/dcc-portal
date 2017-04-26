@@ -40,3 +40,7 @@ Change log for the user-facing system modules may be found [here](CHANGES.md).
 ## Copyright and License
 
 * [License](LICENSE.md)
+
+## Acknowledgements
+
+We want to thank JetBrains for their support and for creating phenomenal tools that empower our developers.
