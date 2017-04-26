@@ -2,7 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 
-install: "mvn -pl dcc-portal-pql,dcc-portal-server install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
+install: true
 
 script: "mvn -pl dcc-portal-pql,dcc-portal-server cobertura:cobertura -Denforcer.fail=false"
 
