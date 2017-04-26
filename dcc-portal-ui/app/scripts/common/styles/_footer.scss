@@ -10,12 +10,37 @@ footer {
   position: relative;
   z-index: 100;
   
-  .clear-fix {
+  .clearfix {
     @include clearfix();
   }
   
   .footer-caption {
     margin-top: 1rem;
+    position: relative;
+
+    div {
+      &:first-child {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        position:absolute;
+        top:7px;
+        right:0;
+
+        a {
+          margin-left:4px;
+          display:flex;
+          flex-direction:row;
+          justify-content:center;
+          align-items:center;
+
+          img {
+            margin-top: -7px;
+          }
+        }
+      }
+    }
   }
 
   a {
