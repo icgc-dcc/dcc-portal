@@ -12,6 +12,9 @@ footer {
   
   .clearfix {
     @include clearfix();
+    display:flex;
+    flex-direction:row;
+    justify-content: space-around;
   }
   
   .footer-caption {
