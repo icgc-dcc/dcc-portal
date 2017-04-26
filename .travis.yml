@@ -2,7 +2,9 @@ language: java
 jdk:
   - oraclejdk8
 
-script: "mvn -pl !dcc-portal-ui cobertura:cobertura -Denforcer.fail=false"
+
+
+script: "mvn -pl dcc-portal-pql,dcc-portal-server cobertura:cobertura -Denforcer.fail=false"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
