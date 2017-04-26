@@ -2,6 +2,9 @@ language: java
 jdk:
   - oraclejdk8
 
+git:
+  depth: 250
+
 install: true
 
 script: "mvn -pl dcc-portal-pql,dcc-portal-server cobertura:cobertura -Denforcer.fail=false"
