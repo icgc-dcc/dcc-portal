@@ -1345,7 +1345,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
         .map('externalDbIds.uniprotkb_swissprot')
         .flatten()
         .compact()
-        .fromPairs()
+        .zipObject()
         .mapValues(function () {
           return true;
         })
@@ -1378,14 +1378,11 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       });
     };
     _pathwayDataService.getGeneOverlapExistsHashUsingDbIds = function (geneOverlapExistsHash, annotatedHighlights) {
-      var geneCount = 0;
       var geneOverlapExistsHashUsingDbIds = Object.assign({}, geneOverlapExistsHash);
 
       if (geneOverlapExistsHash && annotatedHighlights) {
         _.forEach(annotatedHighlights, function (annotatedHighlight) {
           if (angular.isDefined(geneOverlapExistsHashUsingDbIds[annotatedHighlight.uniprotId])) {
-            geneCount++;
-
             _.forEach(annotatedHighlight.dbIds, function (dbID) {
               // Swap in Reactome keys but maintain the id we use this to determine overlaps in O(1)
               // later... The dbID is used as a reference to the reactome SVG nodes...

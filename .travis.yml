@@ -1,0 +1,10 @@
+language: java
+jdk:
+  - oraclejdk8
+
+install: true
+
+script: "mvn -pl dcc-portal-pql,dcc-portal-server cobertura:cobertura -Denforcer.fail=false"
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
