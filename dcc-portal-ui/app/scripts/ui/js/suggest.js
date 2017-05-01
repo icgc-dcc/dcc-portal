@@ -90,7 +90,7 @@ angular.module('icgc.ui.suggest').controller('suggestController',
   };
 
   $scope.badgeStyleClass = function (type) {
-    var definedType = _.contains (['pathway', 'go_term', 'curated_set'], type) ? 'geneset' : type;
+    var definedType = _.includes (['pathway', 'go_term', 'curated_set'], type) ? 'geneset' : type;
     return 't_badge t_badge__' + definedType;
   };
 
@@ -214,7 +214,7 @@ angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $docu
         function url(item) {
           var resourceType = item.type;
 
-          if (_.contains (['curated_set', 'go_term', 'pathway'], resourceType)) {
+          if (_.includes (['curated_set', 'go_term', 'pathway'], resourceType)) {
             resourceType = 'geneset';
           } else if ('file' === resourceType) {
             return dataRepoFileUrl + item.id;

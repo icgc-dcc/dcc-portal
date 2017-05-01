@@ -86,20 +86,14 @@
     this.projectSNP = function() {
       return 'http://www.ncbi.nlm.nih.gov/SNP/';
     };
-    this.projectTCGA = function() {
-      return 'http://cancergenome.nih.gov/';
-    };
+    this.projectGDCLegacy = () => 'https://gdc-portal.nci.nih.gov/legacy-archive';
     this.projectGEO = function() {
       return 'http://www.ncbi.nlm.nih.gov/geo/';
     };
     this.projectEGA = function() {
       return 'https://ega-archive.org/';
     };
-    this.projectCGHub = function(diseasesCode) {
-      return 'https://browser.cghub.ucsc.edu/search/?disease_abbr=' + diseasesCode;
-    };
-
-
+    this.projectGDCActive = () => 'https://gdc-portal.nci.nih.gov';
   });
 
 

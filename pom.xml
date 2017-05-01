@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>4.3.25-SNAPSHOT</version>
+  <version>5.0.14-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -25,6 +25,11 @@
     <repository>
       <id>dcc-releases</id>
       <url>https://artifacts.oicr.on.ca/artifactory/dcc-release</url>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+    <repository>
+      <id>dcc-dependencies</id>
+      <url>https://artifacts.oicr.on.ca/artifactory/dcc-dependencies</url>
     </repository>
   </repositories>
 
@@ -46,25 +51,34 @@
         <artifactId>dcc-download-client</artifactId>
         <version>${dcc-download.version}</version>
       </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>dcc-downloader-client</artifactId>
-        <version>${dcc-downloader.version}</version>
-      </dependency>
 
-      <!-- Test -->
+    <dependency>
+    	<groupId>org.icgc.dcc</groupId>
+    	<artifactId>elasticsearch-plugins-shaded</artifactId>
+    	<version>5.1.2</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.icgc.dcc</groupId>
+	    <artifactId>elasticsearch-shaded</artifactId>
+	    <version>5.1.2</version>
+	</dependency>
       <dependency>
         <groupId>com.github.tlrx</groupId>
         <artifactId>elasticsearch-test</artifactId>
         <version>${elasticsearch-test.version}</version>
         <scope>test</scope>
       </dependency>
-
+      
+    <!-- Logging required for Elasticsearch -->
       <dependency>
-        <groupId>org.codehaus.groovy</groupId>
-        <artifactId>groovy-all</artifactId>
-        <version>${groovy.version}</version>
-        <scope>test</scope>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -84,23 +98,17 @@
       <version>${dcc-release.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>dcc-repository-resources</artifactId>
-      <version>${dcc-repository.version}</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>4.3.6</dcc-common.version>
-    <dcc-download.version>4.3.9</dcc-download.version>
-    <dcc-release.version>4.1.4</dcc-release.version>
-    <dcc-repository.version>1.0.0</dcc-repository.version>
+    <dcc-common.version>4.3.11</dcc-common.version>
+    <dcc-download.version>4.3.11</dcc-download.version>
+    <dcc-release.version>4.3.6</dcc-release.version>
 
-    <elasticsearch-test.version>1.2.1</elasticsearch-test.version>
-    <groovy.version>2.3.5</groovy.version>
+    <dcc-repository.version>1.1.4</dcc-repository.version>
+	<junit.version>4.11</junit.version>
+    <log4j.version>2.6.2</log4j.version>
   </properties>
 
 </project>

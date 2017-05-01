@@ -23,11 +23,13 @@
   /**
    * Controls list of existing analysis (bench)
    */
-  module.controller('AnalysisListController', function($window, $location, AnalysisService, gettextCatalog) {
+  module.controller('AnalysisListController', function($window, $location, AnalysisService, gettextCatalog, ) {
     var _this = this;
 
     var REMOVE_ONE = gettextCatalog.getString('Are you sure you want to remove this analysis?');
     var REMOVE_ALL = gettextCatalog.getString('Are you sure you want to remove all analysis?');
+
+    this.getDemoIds = () => JSON.parse(localStorage.getItem('demoIds')) || [];
 
     _this.newAnalysis = function() {
       $location.path('analysis').search({});
@@ -95,6 +97,7 @@
     };
 
     _this.analysisList = AnalysisService.getAll();
+    this.analysesStrings = AnalysisService.analysesStrings;
   });
 
 })();

@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.service;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.apache.lucene.search.join.ScoreMode.Avg;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
 import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_CHROMOSOME;
 import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_CHROMOSOME_END;
@@ -25,11 +26,13 @@ import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_CHROMOSOME_STAR
 import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_OBSERVATION_PROJECT;
 import static org.icgc.dcc.common.core.model.FieldNames.MUTATION_OCCURRENCES;
 import static org.icgc.dcc.common.core.model.FieldNames.PROJECT_ID;
-import lombok.val;
+
+import java.util.Map;
 
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.script.Script;
+import org.elasticsearch.script.ScriptType;
 import org.icgc.dcc.portal.server.model.AlleleMutation;
 import org.icgc.dcc.portal.server.model.Beacon;
 import org.icgc.dcc.portal.server.model.BeaconInfo;
@@ -42,6 +45,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.ImmutableMap;
+
+import lombok.val;
 
 /**
  * The Beacon searches the dataset for mutation in a given position and chromosome. The result is null if no mutations
@@ -72,7 +77,8 @@ public class BeaconService {
     this.client = client;
   }
 
-  public Beacon query(String chromosome, int position, String reference, AlleleMutation alleleMutation, String dataset) {
+  public Beacon query(String chromosome, int position, String reference, AlleleMutation alleleMutation,
+      String dataset) {
     String allele = alleleMutation.getMutation();
 
     val search = client.prepareSearch(index)
@@ -87,7 +93,8 @@ public class BeaconService {
     if (!isNullOrEmpty(dataset)) boolQuery
         .must(QueryBuilders.nestedQuery(MUTATION_OCCURRENCES,
             QueryBuilders.termQuery(MUTATION_OCCURRENCES + '.' + MUTATION_OBSERVATION_PROJECT + '.' + PROJECT_ID,
-                dataset)));
+                dataset),
+            Avg));
     search.setQuery(boolQuery);
 
     val params = new ImmutableMap.Builder<String, Object>()
@@ -96,13 +103,13 @@ public class BeaconService {
         .put("position", position).build();
 
     search.addScriptField("result",
-        allele.contains(">") ? generateInsertionOrDeletionScriptField() : generateDefaultScriptField(), params);
+        allele.contains(">") ? generateInsertionOrDeletionScriptField(params) : generateDefaultScriptField(params));
 
-    val filter = FilterBuilders.scriptFilter(
-        "m = doc['mutation'].value;"
-            + "length = m.substring(m.indexOf('>')+1,m.length()).length();"
-            + "position <= doc['chromosome_start'].value+length"
-        ).addParam("position", position);
+    val filter = QueryBuilders.scriptQuery(
+        new Script(ScriptType.INLINE, "painless", "def m = doc['mutation'].value; if (m == null) return false;"
+            + "int length = m.substring(m.indexOf('>')+1,m.length()).length();"
+            + "params.position <= doc['chromosome_start'].value+length",
+            ImmutableMap.of("position", position)));
     search.setPostFilter(filter);
 
     val hits = search.execute().actionGet().getHits();
@@ -121,17 +128,20 @@ public class BeaconService {
     return createBeaconResponse(finalResult, chromosome, position, reference, allele, dataset);
   }
 
-  private String generateDefaultScriptField() {
-    return "m = doc['mutation'].value;"
-        + "offset = position - doc['chromosome_start'].value;"
+  private Script generateDefaultScriptField(Map<String, Object> params) {
+    val scriptString = "def m = doc['mutation'].value; "
+        + "int offset = (int) params.position - (int) doc['chromosome_start'].value;"
         + "int begin = m.indexOf('>') + 1 + offset;"
-        + "int end = Math.min(begin + allelelength, m.length());"
+        + "int i = begin + params.allelelength; int j = m.length();"
+        + "int end = i < j ? i : j;"
         + "m = m.substring(begin,end);"
-        + "m==allele";
+        + "m==params.allele";
+    return new Script(ScriptType.INLINE, "painless", scriptString, params);
   }
 
-  private String generateInsertionOrDeletionScriptField() {
-    return "doc['mutation'].value == allele";
+  private Script generateInsertionOrDeletionScriptField(Map<String, Object> params) {
+    val scriptString = "doc['mutation'].value == allele";
+    return new Script(ScriptType.INLINE, "painless", scriptString, params);
   }
 
   private Beacon createBeaconResponse(String exists, String chromosome, int position, String reference, String allele,

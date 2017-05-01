@@ -17,9 +17,11 @@
  */
 package org.dcc.portal.pql.es.visitor;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.query.EsRequestBuilder;
 import org.dcc.portal.pql.query.QueryContext;
@@ -28,18 +30,15 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 public class DonorScoreQueryTest extends BaseElasticsearchTest {
 
   private EsRequestBuilder visitor;
 
   @Before
-  public void setUp() {
-    es.execute(createIndexMappings(DONOR_CENTRIC).withData(bulkFile(getClass())));
-    visitor = new EsRequestBuilder(es.client());
+  public void setUpDonorScoreQueryTest() {
+    prepareIndex(DONOR_CENTRIC);
+    visitor = new EsRequestBuilder(client);
     queryContext = new QueryContext(INDEX_NAME, DONOR_CENTRIC);
   }
 
@@ -48,19 +47,19 @@ public class DonorScoreQueryTest extends BaseElasticsearchTest {
     val result = executeQuery("select(ageAtDiagnosis)");
     val hits = result.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(9);
-    assertThat(hits.getMaxScore()).isEqualTo(3f);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(9);
+    Assertions.assertThat(hits.getMaxScore()).isEqualTo(3f);
 
     // 3.0 - 1 hit 1.0 - 5 hits 0.0 - 3 hits
     val topHit = hits.getAt(0);
-    assertThat(topHit.getId()).isEqualTo("DO2");
-    assertThat(topHit.getScore()).isEqualTo(3f);
+    Assertions.assertThat(topHit.getId()).isEqualTo("DO2");
+    Assertions.assertThat(topHit.getScore()).isEqualTo(3f);
 
     val lastOneScoreHit = hits.getAt(5);
-    assertThat(lastOneScoreHit.getScore()).isEqualTo(1f);
+    Assertions.assertThat(lastOneScoreHit.getScore()).isEqualTo(1f);
 
     val firstZeroScoreHit = hits.getAt(6);
-    assertThat(firstZeroScoreHit.getScore()).isEqualTo(0f);
+    Assertions.assertThat(firstZeroScoreHit.getScore()).isEqualTo(0f);
   }
 
   private SearchResponse executeQuery(String query) {

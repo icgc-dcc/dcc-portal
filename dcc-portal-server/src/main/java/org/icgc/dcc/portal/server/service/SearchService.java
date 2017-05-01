@@ -53,7 +53,7 @@ public class SearchService {
       val fieldMap = createResponseMap(hit, query, EntityType.KEYWORD);
       val keyword = new Keyword(fieldMap);
 
-      if (keyword.getType().equals(DONOR_TYPE)) {
+      if (keyword.getType() != null && keyword.getType().equals(DONOR_TYPE)) {
         val donorId = keyword.getId();
 
         donors.add(donorId);

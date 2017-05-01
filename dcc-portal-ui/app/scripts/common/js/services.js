@@ -183,6 +183,10 @@
         href: href ('advanced'),
         title: gettextCatalog.getString('Advanced Search')
       },
+      compoundIndex: {
+        href: href ('compound-index'),
+        title: gettextCatalog.getString('Compounds')
+      },
       dataAnalysis: {
         href: href ('analysis'), // DCC-4594 default is launch analysis
         title: gettextCatalog.getString('Data Analysis')

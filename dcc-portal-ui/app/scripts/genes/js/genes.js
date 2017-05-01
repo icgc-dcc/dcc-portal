@@ -112,7 +112,9 @@
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
     _ctrl.defaultProjectsLimit = 10;
-
+    _ctrl.isPVLoading = true;
+    _ctrl.isPVInitialLoad = true;
+    _ctrl.isGVLoading = true;
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 
     _ctrl.gene = gene;
@@ -154,7 +156,7 @@
         include: ['facets'],
         filters: _ctrl.gene.advQuery
       }).then(function(data) {
-        var ids = _.pluck(data.facets.projectId.terms, 'term');
+        var ids = _.map(data.facets.projectId.terms, 'term');
 
         if (_.isEmpty(ids)) {
           return [];
@@ -173,10 +175,10 @@
           return;
         }
 
-        mutationPromise = Projects.one(_.pluck(projects.hits, 'id').join(','))
+        mutationPromise = Projects.one(_.map(projects.hits, 'id').join(','))
           .handler.one('mutations', 'counts').get({filters: _ctrl.gene.advQuery });
 
-        donorPromise = Projects.one(_.pluck(projects.hits, 'id').join(','))
+        donorPromise = Projects.one(_.map(projects.hits, 'id').join(','))
           .handler.one('donors', 'counts').get({filters: _ctrl.gene.advQuery });
 
         mutationPromise.then(function(projectMutations) {
@@ -441,6 +443,10 @@
 
     this.resolve = function (ensemblIds) {
       return Restangular.one (apiUrl, ensemblIds).get();
+    };
+
+    this.getAll = () => {
+      return Restangular.one(apiUrl).get().then(x => x.plain());
     };
   });
 

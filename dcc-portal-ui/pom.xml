@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>4.3.25-SNAPSHOT</version>
+    <version>5.0.14-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -105,20 +105,6 @@
             </configuration>
           </execution>
           <execution>
-            <id>bower-install</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>npm</executable>
-              <arguments>
-                <argument>run</argument>
-                <argument>bower</argument>
-              </arguments>
-            </configuration>
-          </execution>
-          <execution>
             <id>npm-test</id>
             <phase>compile</phase>
             <goals>
@@ -158,11 +144,6 @@
             <goals>
               <goal>jar</goal>
             </goals>
-            <configuration>
-              <excludes>
-                <exclude>app/bower_components/**</exclude>
-              </excludes>
-            </configuration>
           </execution>
         </executions>
       </plugin>

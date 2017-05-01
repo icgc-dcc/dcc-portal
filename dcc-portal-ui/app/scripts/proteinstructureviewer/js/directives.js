@@ -162,7 +162,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
     return {
       restrict: 'E',
       replace: true,
-      scope: {'highlightMarker': '&', 'transcript': '='},
+      scope: {'highlightMarker': '&', 'transcript': '=', 'isPvLoading': '=', 'isInitialLoad': '='},
       template: `
         <div class="protein-structure-viewer-diagram">
           <button
@@ -199,6 +199,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
         if (selectedMutation) {
           selectedMutation = selectedMutation();
         }
+        
         const drawChart = (mutations, transcript) => {
           scope.mutations = mutations;
           const element = jQuery(iElement).get()[0];
@@ -290,6 +291,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
 
         scope.$watch('transcript', function (transcript) {
           scope.transcript = transcript;
+          scope.isPvLoading = true;
           refresh(transcript);
         });
         

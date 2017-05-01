@@ -28,8 +28,6 @@ import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 import java.util.List;
 import java.util.Map;
 
-import lombok.val;
-
 import org.dcc.portal.pql.meta.field.ArrayFieldModel;
 import org.dcc.portal.pql.meta.field.FieldModel;
 import org.dcc.portal.pql.meta.field.ObjectFieldModel;
@@ -38,10 +36,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import lombok.val;
+
 public class GeneCentricTypeModel extends TypeModel {
 
   private final static String TYPE_PREFIX = "gene";
-  private static final List<String> AVAILABLE_FACETS = ImmutableList.of("type");
+  private static final List<String> AVAILABLE_FACETS = ImmutableList.of("type", "chromosome");
 
   // Including real fields, not aliases. Because after the AST is built by PqlParseTreeVisitor includes are resolved to
   // the real fields
@@ -98,7 +98,7 @@ public class GeneCentricTypeModel extends TypeModel {
         .add(arrayOfStrings("synonyms", "synonyms"))
         .add(defineExternalDbIds())
         .add(defineSummary())
-        .add(arrayOfObjects("project", "projects", object()))
+        .add(arrayOfObjects("gene_centric_project", "projects", object()))
         .add(arrayOfStrings("pathway", ImmutableSet.of("pathways", "pathwayId", "gene.pathwayId")))
         .add(arrayOfStrings("curated_set", ImmutableSet.of("curatedSetId", "gene.curatedSetId")))
         .add(arrayOfStrings("drug", "gene.compoundId"))

@@ -26,7 +26,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.json'],
-    modulesDirectories: ['node_modules', 'bower_components'],
   },
   resolveLoader: {
     root: paths.ownNodeModules,
@@ -65,7 +64,7 @@ module.exports = {
       {
         test: /\.js$/,
         include: paths.appSrc,
-        exclude: [paths.bowerModules, paths.internalVendorModules],
+        exclude: [paths.internalVendorModules],
         loaders: ['babel?' + JSON.stringify(require('./babel.dev'))],
       },
       {
@@ -89,7 +88,7 @@ module.exports = {
         loader: 'json'
       },
       {
-        test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
+        test: /\.(swf|jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'file',
         query: {

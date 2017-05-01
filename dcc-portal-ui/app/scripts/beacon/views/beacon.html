@@ -1,5 +1,5 @@
 <div class="h1-wrap">
-    <h1 data-ui-scrollfix="79" class="sticky-scrollfix">
+    <h1 data-ui-scrollpoint="79" class="sticky-scrollfix">
     <i class="t_badge t_badge_icon t_badge__search"><i class="icon-fire"></i></i><translate>ICGC GA4GH Beacon</translate>
 </h1>
 </div>
@@ -31,38 +31,38 @@
             </tr>
             <tr>
                 <td align="right">
-                  <span><abbr data-tooltip="{{'1-based start position in chromosome' | translate}}"><translate>Position</translate></abbr> *</span>
+                  <span><abbr data-icgc-tooltip="{{'1-based start position in chromosome' | translate}}"><translate>Position</translate></abbr> *</span>
                 </td>
                 <td>
                     <input search-on-enter tabindex="3" data-ng-class="{'invalid': invalidParams.isPosition}"
                            placeholder="{{'e.g. 29885594' | translate}}" type="text" integer-validator data-ng-model="params.position"
                            data-ng-change="checkParams();">
-                           <i data-tooltip="{{ 'Must be less than Chromosome [[char]] \'s length: [[length]] ' | translate | subDelimiters:{char: params.chr, length: lengths[params.chr]} }}"
+                           <i data-icgc-tooltip="{{ 'Must be less than Chromosome [[char]] \'s length: [[length]] ' | translate | subDelimiters:{char: params.chr, length: lengths[params.chr]} }}"
                               data-tooltip-placement="right" class="invalid-icon icon-attention"
                               data-ng-if="invalidParams.isPosition"></i>
                 </td>
             </tr>
             <tr>
                 <td align="right">
-                  <span><abbr data-tooltip="{{'Genome ID: Currently only GRCh37' | translate}}"><translate>Reference</translate></abbr> *</span>
+                  <span><abbr data-icgc-tooltip="{{'Genome ID: Currently only GRCh37' | translate}}"><translate>Reference</translate></abbr> *</span>
                 </td>
                 <td>
                     <input search-on-enter tabindex="4" data-ng-class="{'invalid': invalidParams.isReference}"
                            type="text" placeholder="{{'e.g. GRCh37' | translate}}" data-ng-model="params.reference"
                            data-ng-change="checkParams();">
-                           <i data-tooltip="{{'Currently only GRCh37' | translate}}" data-tooltip-placement="right"
+                           <i data-icgc-tooltip="{{'Currently only GRCh37' | translate}}" data-tooltip-placement="right"
                               class="invalid-icon icon-attention" data-ng-if="invalidParams.isReference"></i>
                 </td>
             </tr>
             <tr>
                 <td align="right">
-                  <span><abbr data-tooltip="{{'One or more of: A, C, T, G or an indel' | translate}}"><translate>Mutated Allele(s)</translate></abbr> *</span>
+                  <span><abbr data-icgc-tooltip="{{'One or more of: A, C, T, G or an indel' | translate}}"><translate>Mutated Allele(s)</translate></abbr> *</span>
                 </td>
                 <td>
                     <input search-on-enter tabindex="5" data-ng-class="{'invalid': invalidParams.isAllele}" allele-validator
                            placeholder="{{'e.g. C, TTACG, GG' | translate}}" type="text" data-ng-model="params.allele"
                            data-ng-change="checkParams();">
-                           <i data-tooltip="{{'Must be of form [ACTG]+ or an indel' | translate}}" data-tooltip-placement="right"
+                           <i data-icgc-tooltip="{{'Must be of form [ACTG]+ or an indel' | translate}}" data-tooltip-placement="right"
                               class="invalid-icon icon-attention" data-ng-if="invalidParams.isAllele"></i>
                 </td>
             </tr>

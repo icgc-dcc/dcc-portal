@@ -1,0 +1,40 @@
+.set-selection-component {
+  .set-name-wrapper {
+    .icon-pencil {
+      opacity: 0;
+    }
+    &:hover .icon-pencil{
+      opacity: 1;
+    }
+  }
+
+  .is-selected > td {
+    background-color: #FFFFBE;
+    color: #000;
+  }
+
+  .is-selected.is-not-compatible > td {
+    background-color: #ffdddd;
+    color: #8a1d00;
+  }
+  .table {
+    margin-top: 10px;
+  }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .btn:not(:last-child) {
+      margin-right: 12px;
+    }
+  }
+}
+
+set-tools, [set-tools] {
+  .t_tools__tool, a.t_tools__tool {
+    color: #ccc;
+    &:hover {
+      color: #e9931c;
+    }
+  }
+}

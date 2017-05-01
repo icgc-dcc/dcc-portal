@@ -1,9 +1,9 @@
 <div class="h1-wrap">
-    <h1 data-ui-scrollfix=79><span class="t_badge t_badge__mutation"></span>
+    <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__mutation"></span>
         {{ MutationCtrl.mutation.id }}</h1>
 </div>
 <div data-scroll-spy="">
-<aside data-ui-scrollfix=79 class="t_sidenav">
+<aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
             <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a>
@@ -36,7 +36,7 @@
             </tr>
             <tr>
                 <th><translate>Type</translate></th>
-                <td><abbr data-tooltip="{{ MutationCtrl.mutation.type | define }}">
+                <td><abbr data-icgc-tooltip="{{ MutationCtrl.mutation.type | define }}">
                     {{ MutationCtrl.mutation.type}}</abbr></td>
             </tr>
             <tr>
@@ -83,7 +83,7 @@
             <tr>
                 <th><translate>Gene</translate></th>
                 <th><translate>AA Change</translate></th>
-                <th><abbr data-tooltip="{{'SO term: consequence_type' | translate}}"><translate>Consequence</translate></abbr></th>
+                <th><abbr data-icgc-tooltip="{{'SO term: consequence_type' | translate}}"><translate>Consequence</translate></abbr></th>
                 <th><translate>Coding DNA Change</translate></th>
                 <th><translate>Strand</translate></th>
                 <th><translate>Transcript(s)</translate></th>
@@ -101,7 +101,7 @@
                     <span class="t_impact_{{consequence.uiFunctionalImpact | lowercase }}"
                         data-ng-bind-html="consequence.uiAAMutation | highlight: MutationCtrl.tableFilter.consequences"></span>
                 </td>
-                <td><abbr data-tooltip="{{'SO term: [[ consequenceType ]]' | translate | subDelimiters:{consequenceType: consequence.uiType} }}">
+                <td><abbr data-icgc-tooltip="{{'SO term: [[ consequenceType ]]' | translate | subDelimiters:{consequenceType: consequence.uiType} }}">
                     <span data-ng-bind-html="consequence.uiTypeFiltered | highlight: MutationCtrl.tableFilter.consequences"></span></abbr>
                 </td>
                 <td>
@@ -179,7 +179,7 @@
                 <strong>{{MutationCtrl.mutation.affectedDonorCountTotal | number}}</strong>
             </a>
             <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">distinct donors across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(MutationCtrl.projects|pluck:"id").join("\",\"")}}"]}}}'>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(MutationCtrl.projects|_:"map":"id").join("\",\"")}}"]}}}'>
                 <strong>{{MutationCtrl.mutation.affectedProjectCount | number}}</strong>
             </a>
             <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">cancer projects</translate>
@@ -216,7 +216,7 @@
                 <th style="cursor: pointer" 
                     data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
                     <abbr 
-                        data-tooltip="{{'Breakdown of Donors affected by [[ mutationId ]] <br># Donors where [[ mutationId ]] observed / # SSM tested Donors' | translate | subDelimiters:{mutationId: MutationCtrl.mutation.id} }}"
+                        data-icgc-tooltip="{{'Breakdown of Donors affected by [[ mutationId ]] <br># Donors where [[ mutationId ]] observed / # SSM tested Donors' | translate | subDelimiters:{mutationId: MutationCtrl.mutation.id} }}"
                         data-tooltip-placement="left">
                     <translate># Donors affected</translate></abbr>
                     <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
@@ -228,7 +228,7 @@
                 filter: MutationCtrl.tableFilter.projects |
                 orderBy:'uiPercentAffected/100':sortProjectsDescendingly |
                 limitTo: MutationCtrl.defaultProjectsRowLimit : ((MutationCtrl.currentProjectsPage-1) * MutationCtrl.defaultProjectsRowLimit)) track by project.uiId">
-                <td><a data-tooltip="{{ project.uiName }}" 
+                <td><a data-icgc-tooltip="{{ project.uiName }}" 
                     data-ng-href="/projects/{{project.uiId}}"
                     data-ng-bind-html="project.uiId | highlight: MutationCtrl.tableFilter.projects">
                 </a></td>
@@ -296,35 +296,52 @@
     </div>
 </section>
 <section id="protein">
+    <div class="empty" data-ng-if="MutationCtrl.isPVInitialLoad && MutationCtrl.mutation.uiProteinTranscript.length">
+        <h3>
+            <i class="icon-spinner icon-spin"></i>Loading Protein...
+        </h3>
+    </div>
     <div data-ng-if="!MutationCtrl.mutation.uiProteinTranscript.length" class="empty">
         <h3><translate>No protein coding transcript is affected by this mutation in CDS region.</translate></h3>
     </div>
     <div data-ng-if="MutationCtrl.mutation.uiProteinTranscript.length">
-        <h3><translate>Protein</translate></h3>
+        <h3 data-ng-if="!MutationCtrl.isPVInitialLoad"><translate>Protein</translate></h3>
 
         <form data-ng-init="transcript = MutationCtrl.mutation.uiProteinTranscript[0]">
-            <strong><translate>Transcript:</translate> </strong>
-            <select data-ng-model="transcript"
+            <div data-ng-show="!MutationCtrl.isPVInitialLoad">
+                <strong><translate>Transcript:</translate> </strong>
+                <select data-ng-model="transcript"
                     data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)'  for t in MutationCtrl.mutation.uiProteinTranscript"></select>
+                <span data-ng-if="MutationCtrl.isPVLoading"><i class="icon-spinner icon-spin"></i></span>
+            </div>
             <proteinstructure transcript="transcript" highlight-marker="MutationCtrl.mutation.id"
-                              data-value-height="200"></proteinstructure>
-
+                data-value-height="200"
+                data-is-initial-load="MutationCtrl.isPVInitialLoad"
+                data-is-pv-loading="MutationCtrl.isPVLoading"
+                data-ng-style="{'opacity': MutationCtrl.isPVLoading ? '0.5' : '1'}"></proteinstructure>
         </form>
     </div>
 </section>
 <section id="genomic">
-    <h3>
+    <div class="empty" data-ng-if="MutationCtrl.isGVLoading">
+        <h3>
+            <i class="icon-spinner icon-spin"></i>Loading Genomic Context...
+        </h3>
+    </div>
+    <h3 data-ng-if="!MutationCtrl.isGVLoading">
         <translate>Genomic Context</translate>
         <span data-open-in-list='/m?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}'
               data-type="viewer"></span>
     </h3>
 
-    <div class="t_gv__navbar">
+    <div class="t_gv__navbar" data-ng-if="!MutationCtrl.isGVLoading">
        <span data-gv-header data-options="MutationCtrl.gvOptions"></span>
        <span class="pull-right gv-navbar-zoom"></span>
     </div>
     <gvembed
-            region="{{MutationCtrl.mutation.chromosome}}:{{MutationCtrl.mutation.start}}-{{MutationCtrl.mutation.end}}"></gvembed>
+        region="{{MutationCtrl.mutation.chromosome}}:{{MutationCtrl.mutation.start}}-{{MutationCtrl.mutation.end}}"
+        data-is-gv-loading="MutationCtrl.isGVLoading"
+        data-ng-style="{'visibility': MutationCtrl.isGVLoading ? 'hidden' : 'visible'}"></gvembed>
 </section>
 </article>
 </div>

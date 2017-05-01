@@ -16,24 +16,24 @@
       <span><translate>Type or copy-and-paste a list of {{ params.entityType | _:'capitalize'}} IDs</translate></span>
 
       <span class="pull-right" data-tooltip-placement="left"
-        tooltip="<li>{{ params.entityType | _:'capitalize' }} identifier: ICGC ID for {{ params.entityType | _:'capitalize' }}. E.g. MU123</li>
+        icgc-tooltip="<li>{{ params.entityType | _:'capitalize' }} identifier: ICGC ID for {{ params.entityType | _:'capitalize' }}. E.g. MU123</li>
           <li>Delimiters between {{ params.entityType }} identifiers: comma, space or one {{ params.entityType }} per line</li>
           <li>If you upload a file, the file format should be a text file (.txt, .csv, .tsv)</li>" has-markup>
         <a href="">
           <i class="fa fa-question-circle legend-icon"></i>
         </a>
       </span>
-      <div class="set-input">
-        <textarea rows="4"
-          placeholder="{{ params.entityType === 'file' ? 'e.g. FI123' : 'e.g. MU123' }}"
-          data-autofocus data-ng-model="params.entityIds"
-          data-ng-change="verifyInput()">
-        </textarea>
-        <i class="icon-cancel"
-          data-ng-if="params.entityIds"
-          data-ng-click="clear()"></i>
-      </div>
+      <textarea rows="4"
+        placeholder="{{ params.entityType === 'file' ? 'e.g. FI123' : 'e.g. MU123' }}"
+        data-autofocus data-ng-model="params.entityIds"
+        data-ng-change="verifyInput()">
+      </textarea>
     </div>
+    <div>
+      <button class="t_button pull-right"
+        data-ng-click="resetAll()"><translate>Clear</translate></button>
+    </div>
+    <br>
     <div>
       <div><translate>Or choose a file to upload</translate></div>
       <span class="t_button btn-file">

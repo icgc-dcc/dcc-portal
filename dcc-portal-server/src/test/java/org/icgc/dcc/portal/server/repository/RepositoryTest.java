@@ -17,8 +17,8 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import org.icgc.dcc.portal.server.model.IndexType;
-import org.icgc.dcc.portal.server.test.TestIndex;
+import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,19 +28,17 @@ import lombok.extern.slf4j.Slf4j;
 
 @Ignore
 @Slf4j
-public class RepositoryTest extends BaseElasticSearchTest {
+public class RepositoryTest extends BaseElasticsearchTest {
 
   @Before
-  public void setUp() throws Exception {
-    this.testIndex = TestIndex.RELEASE;
-    es.execute(
-        createIndexMappings(IndexType.GENE, IndexType.GENE_CENTRIC)
-            .withData(bulkFile("GeneRepositoryTest.json")));
+  public void setUpRepositoryTest() throws Exception {
+    prepareIndex(RELEASE_INDEX_NAME, GENE_CENTRIC);
+    loadData("GeneRepositoryTest.json");
   }
 
   @Test
   public void test() throws Exception {
-    val result = es.client().prepareSearch(testIndex.getName()).setTypes("gene-centric").execute().actionGet();
+    val result = client.prepareSearch(RELEASE_INDEX_NAME).setTypes("gene-centric").execute().actionGet();
     log.info("Result: {}", result);
   }
 

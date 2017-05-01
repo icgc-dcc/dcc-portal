@@ -29,11 +29,11 @@ import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
 
 import java.util.List;
 
-import lombok.val;
-
 import org.dcc.portal.pql.meta.field.FieldModel;
 
 import com.google.common.collect.ImmutableList;
+
+import lombok.val;
 
 public class GeneSetTypeModel extends TypeModel {
 
@@ -89,7 +89,7 @@ public class GeneSetTypeModel extends TypeModel {
     fields.add(object("_summary",
         long_("_gene_count", "geneCount")));
 
-    fields.add(object("pathway",
+    fields.add(object("gene_set_pathway",
         bool("diagrammed", "diagrammed"),
         arrayOfObjects("hierarchy", "hierarchy", object(
             string("id")))));
