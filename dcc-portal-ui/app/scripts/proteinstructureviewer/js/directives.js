@@ -272,6 +272,9 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
             },
             onProteinMouseout: hideTooltip,
           });
+
+          scope.isInitialLoad = false;
+          scope.isPvLoading = false;
         };
 
         function refresh(transcript) {
@@ -296,7 +299,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
         });
         
         jQuery(window).resize(function() {
-          // refresh(scope.transcript);
+          refresh(scope.transcript);
         });
         
         scope.$on('$destroy', function () {
