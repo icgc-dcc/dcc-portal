@@ -111,9 +111,8 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
       var filters = LocationService.filters();
       var result = _(mutations.hits)
         .map(hit => ({
-            mutation: hit, 
-            transcript: _.find(hit.transcripts, {id: transcriptId}),
-            
+            mutation: hit,
+            transcript: _.find(hit.transcripts, {id: transcriptId})
           }))
         .filter( m => m.transcript !== undefined && m.transcript !== null )
         .map( m => mapToResult(m) )
@@ -133,10 +132,7 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
         x: start,
         donors: d.mutation.affectedDonorCountTotal,
         id: d.mutation.id,
-        impact: ({
-          // High: 'HIGH',
-          // Low: 'MODERATE'
-        })[d.transcript.functionalImpact] || 'Unknown'
+        impact: d.transcript.functionalImpact || 'Unknown'
       };
       
       return m;
@@ -244,6 +240,8 @@ import lolliplot from '@oncojs/lolliplot/dist/lib';
             domainWidth: transcript.lengthAminoAcid,
             hideStats: true,
             mutationId: selectedMutation,
+            hasCustomMutationColor: true,
+            getMutationColor : (d) => ({High: '#D44', Low:'#4D4', Unknown: '#bbb'})[d.impact],
             onMutationClick: (data) => {
               $location.path('/mutations/' + data.id);
             },
