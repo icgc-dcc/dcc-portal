@@ -2310,6 +2310,111 @@
         "value": 90
     },
     {
+        "group": "GBM-CN",
+        "index": 4,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 5,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 6,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 7,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 8,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 9,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 10,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 11,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 12,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 13,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 14,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 15,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 16,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 17,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 18,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 19,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 20,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 21,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 22,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 23,
+        "value": 0
+    },
+    {
+        "group": "GBM-CN",
+        "index": 24,
+        "value": 80
+    },
+    {
         "group": "GBM-US",
         "index": 4,
         "value": 0
@@ -3885,6 +3990,111 @@
         "value": 260
     },
     {
+        "group": "LMS-FR",
+        "index": 4,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 5,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 6,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 7,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 8,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 9,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 10,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 11,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 12,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 13,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 14,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 15,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 16,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 17,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 18,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 19,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 20,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 21,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 22,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 23,
+        "value": 0
+    },
+    {
+        "group": "LMS-FR",
+        "index": 24,
+        "value": 67
+    },
+    {
         "group": "LUAD-US",
         "index": 4,
         "value": 0
@@ -4618,6 +4828,111 @@
         "group": "NBL-US",
         "index": 24,
         "value": 448
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 4,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 5,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 6,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 7,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 8,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 9,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 10,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 11,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 12,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 13,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 14,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 15,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 16,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 17,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 18,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 19,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 20,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 21,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 22,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 23,
+        "value": 0
+    },
+    {
+        "group": "NKTL-SG",
+        "index": 24,
+        "value": 23
     },
     {
         "group": "ORCA-IN",
@@ -5880,6 +6195,111 @@
         "value": 125
     },
     {
+        "group": "PRAD-FR",
+        "index": 4,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 5,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 6,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 7,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 8,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 9,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 10,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 11,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 12,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 13,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 14,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 15,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 16,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 17,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 18,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 19,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 20,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 21,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 22,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 23,
+        "value": 0
+    },
+    {
+        "group": "PRAD-FR",
+        "index": 24,
+        "value": 25
+    },
+    {
         "group": "PRAD-UK",
         "index": 4,
         "value": 0
@@ -6720,6 +7140,111 @@
         "value": 433
     },
     {
+        "group": "THCA-CN",
+        "index": 4,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 5,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 6,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 7,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 8,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 9,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 10,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 11,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 12,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 13,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 14,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 15,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 16,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 17,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 18,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 19,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 20,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 21,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 22,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 23,
+        "value": 0
+    },
+    {
+        "group": "THCA-CN",
+        "index": 24,
+        "value": 50
+    },
+    {
         "group": "THCA-SA",
         "index": 4,
         "value": 0
@@ -7033,6 +7558,111 @@
         "group": "UCEC-US",
         "index": 24,
         "value": 513
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 4,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 5,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 6,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 7,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 8,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 9,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 10,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 11,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 12,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 13,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 14,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 15,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 16,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 17,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 18,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 19,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 20,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 21,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 22,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 23,
+        "value": 0
+    },
+    {
+        "group": "UTCA-FR",
+        "index": 24,
+        "value": 7
     },
     {
         "group": "WT-US",
