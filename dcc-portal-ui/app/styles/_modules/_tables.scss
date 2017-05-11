@@ -101,9 +101,7 @@ $table-th-fixed-width: 200px;
     &.table-condensed{
 
       td{
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        word-break: normal;
+        word-break: break-word;
       }
     }
   }
