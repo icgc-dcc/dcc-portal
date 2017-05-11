@@ -102,6 +102,10 @@ $table-th-fixed-width: 200px;
 
       td{
         word-break: break-word;
+
+        &:first-child {
+          white-space: nowrap;
+        }
       }
     }
   }
