@@ -228,7 +228,7 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
     }
   })
   .service('CompoundsService', function($rootScope, $q, Gene, Mutations, Page, FilterService, $location,
-                                        Restangular, CompoundsServiceConstants, Extensions, $state) {
+  Restangular, CompoundsServiceConstants, Extensions, $state, Genes) {
 
     function _arrayOrEmptyArray(arr) {
       return angular.isArray(arr) ?  arr : [];
@@ -467,17 +467,15 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
 
             var params = _getResultsCompoundGenesFilter(limit);
 
-            Restangular
-              .one('genes')
-              .get(params)
+            Genes.getAll(params)
               .then(function (geneList) {
-                var geneListResults = _.get(geneList, 'hits', false);
+                var geneListResults = geneList;
 
                 if (!geneListResults) {
                   deferred.resolve(_compoundTargetedGenes);
                 }
 
-                if (geneList.pagination.total !==  _compoundEntity.genes.length) {
+                if (geneList.length !== _compoundEntity.genes.length) {
 
                   // Validate genes against current Filters
                   var validGenes = _.map(geneListResults, 'id');
