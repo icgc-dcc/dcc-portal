@@ -468,8 +468,8 @@ angular.module('icgc.compounds.services', ['icgc.genes.models'])
             var params = _getResultsCompoundGenesFilter(limit);
 
             Genes.getAll(params)
-              .then(function (geneList) {
-                var geneListResults = geneList;
+              .then((geneList) => {
+                const geneListResults = geneList;
 
                 if (!geneListResults) {
                   deferred.resolve(_compoundTargetedGenes);
