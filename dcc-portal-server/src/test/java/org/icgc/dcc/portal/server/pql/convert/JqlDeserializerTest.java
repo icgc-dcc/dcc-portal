@@ -102,6 +102,35 @@ public class JqlDeserializerTest {
   }
 
   @Test
+  public void multiIdTest() {
+    val result = convert("{mutation:{id:{is:['MU123'], not:['MU109']}}}");
+    assertThat(result.getEntityValues().size()).isEqualTo(1);
+
+    val mutationValues = result.getEntityValues().get("mutation");
+    assertThat(mutationValues.size()).isEqualTo(2);
+
+    val is = Iterables.get(mutationValues, 0);
+    assertThat(is.getOperation()).isEqualTo(Operation.IS);
+
+    val isValue = Iterables.get(mutationValues, 0).getValue();
+    assertThat(isValue.isArray()).isTrue();
+
+    val isArrayValues = (JqlArrayValue) isValue;
+    assertThat(isArrayValues.get()).containsExactly("MU123");
+
+    val not = Iterables.get(mutationValues, 1);
+    assertThat(not.getOperation()).isEqualTo(Operation.NOT);
+
+    val notValue = Iterables.get(mutationValues, 1).getValue();
+    assertThat(notValue.isArray()).isTrue();
+
+    val notArrayValues = (JqlArrayValue) notValue;
+    assertThat(notArrayValues.get()).containsExactly("MU109");
+
+
+  }
+
+  @Test
   public void removeEmptyFilterValueTest() {
     assertThat(convert("{donor:{id:{is:[]}}}").getEntityValues()).isEmpty();
     assertThat(convert("{donor:{id:{is:''}}}").getEntityValues()).isEmpty();

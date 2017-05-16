@@ -47,6 +47,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -77,56 +79,53 @@ public class JqlFiltersDeserializer extends JsonDeserializer<JqlFilters> {
 
     val nodeFields = node.fields();
     while (nodeFields.hasNext()) {
-      elements.putAll(parseType(nodeFields.next()));
+      elements.putAll(parseNode(nodeFields.next()));
     }
 
     return new JqlFilters(elements.build());
   }
 
-  private static Map<String, List<JqlField>> parseType(Entry<String, JsonNode> entry) {
+  private static Map<String, List<JqlField>> parseNode(Entry<String, JsonNode> entry) {
     val type = entry.getKey();
     log.debug("Parsing fields for type '{}'. Fields: {}", type, entry.getValue());
 
     val typeFieldsBuilder = new ImmutableList.Builder<JqlField>();
     val nodeFields = entry.getValue().fields();
     while (nodeFields.hasNext()) {
-      val jqlField = parseField(type, nodeFields.next());
-      if (jqlField.isPresent()) {
-        typeFieldsBuilder.add(jqlField.get());
-      }
+        val nodeField = nodeFields.next();
+        val nodeFieldName = nodeField.getKey();
+        val nodeFieldValue = nodeField.getValue();
+        val nodeChildFields = nodeFieldValue.fields();
+
+        log.debug("Parsing field {} - {}", nodeFieldName, nodeFieldValue);
+
+        if (nodeFieldName.startsWith("has")) {
+          typeFieldsBuilder.add(parseHasOperationField(type, nodeFieldName, nodeFieldValue).get());
+        }
+
+        while(nodeChildFields.hasNext()) {
+          val nodeChildField = nodeChildFields.next();
+          final JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
+          ObjectNode node = nodeFactory.objectNode();
+          node.set(nodeChildField.getKey(), nodeChildField.getValue());
+
+          try {
+            val value = parseValue(node);
+            if(hasValue(value)){
+              typeFieldsBuilder.add(Optional.of(new JqlField(nodeFieldName, parseOperation(node), value, type)).get());
+            }
+
+          } catch (NullPointerException e) {
+            throw new SemanticException("Invalid input value or structure: %s", node);
+          }
+
+        }
 
     }
 
     val typeFields = typeFieldsBuilder.build();
 
     return typeFields.isEmpty() ? emptyMap() : singletonMap(type, typeFields);
-  }
-
-  private static Optional<JqlField> parseField(String type, Entry<String, JsonNode> next) {
-    val fieldName = next.getKey();
-    val fieldValue = next.getValue();
-    log.debug("Parsing field {} - {}", fieldName, fieldValue);
-
-    if (fieldName.startsWith("has")) {
-      return parseHasOperationField(type, fieldName, fieldValue);
-    }
-
-    /*
-     * In the case of an empty value "{}", just ignore.
-     */
-    if (!fieldValue.fields().hasNext()) {
-      return Optional.empty();
-    }
-
-    try {
-      val value = parseValue(fieldValue);
-
-      return hasValue(value) ? Optional.of(new JqlField(fieldName, parseOperation(fieldValue), value, type)) : Optional
-          .empty();
-    } catch (NullPointerException e) {
-      throw new SemanticException("Invalid input value or structure: %s", fieldValue);
-    }
-
   }
 
   private static Optional<JqlField> parseHasOperationField(String type, String fieldName, JsonNode fieldValue) {
@@ -207,7 +206,7 @@ public class JqlFiltersDeserializer extends JsonDeserializer<JqlFilters> {
 
   private static void validateOperation(JsonNode fieldValue) {
     log.debug("Validating operation for {}", fieldValue);
-    checkSemantic(fieldValue.size() == 1, "More than one operation detected. %s", fieldValue);
+    checkSemantic(fieldValue.size() <= 2, "More than one operation detected. %s", fieldValue);
     val operation = getFirstFieldName(fieldValue);
     checkSemantic(Operation.operations().contains(operation), "Invalid operation '%s'", operation);
   }
