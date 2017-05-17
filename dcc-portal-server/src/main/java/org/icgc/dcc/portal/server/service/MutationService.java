@@ -6,16 +6,19 @@ import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flatternMap;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.action.search.MultiSearchResponse;
+import org.icgc.dcc.common.core.util.stream.Collectors;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Mutation;
 import org.icgc.dcc.portal.server.model.Mutations;
@@ -143,6 +146,7 @@ public class MutationService {
     return new Mutation(mutationRepository.findOne(mutationId, query));
   }
 
+  @SuppressWarnings("unchecked")
   public Mutations protein(Query query) {
     log.info("{}", query);
 
@@ -155,31 +159,41 @@ public class MutationService {
       val map = Maps.<String, Object> newHashMap();
       val transcripts = Lists.<Map<String, Object>> newArrayList();
 
-      map.put("_mutation_id", hit.getFields().get("_mutation_id").getValue());
-      map.put("mutation", hit.getFields().get("mutation").getValue());
-      map.put("_summary._affected_donor_count", hit.getFields().get("_summary._affected_donor_count").getValue());
-      /*
-       * map.put("functional_impact_prediction_summary", hit.getFields().get("functional_impact_prediction_summary")
-       * .getValues());
-       */
+      val hitSource = flatternMap(hit.getSource());
+      map.put("_mutation_id", hitSource.get("_mutation_id"));
+      map.put("mutation", hitSource.get("mutation"));
+      map.put("_summary._affected_donor_count", hitSource.get("_summary._affected_donor_count"));
 
-      List<Object> transcriptIds = hit.getFields().get("transcript.id").getValues();
-      val predictionSummary = hit.getFields().get("transcript.functional_impact_prediction_summary").getValues();
+      val nestedTranscripts = ((List<Map<String, Object>>) hitSource.get("transcript")).stream()
+          .filter(t -> t.get("id") != null) // This is to filter out fake transcripts.
+          .collect(toImmutableList());
+
+      List<String> transcriptIds = nestedTranscripts.stream()
+          .map(t -> (String) t.get("id"))
+          .collect(toImmutableList());
+
+      val predictionSummary = nestedTranscripts.stream()
+          .map(t -> t.get("functional_impact_prediction_summary").toString())
+          .collect(toImmutableList());
+
+      Map<String, String> aaMutations = nestedTranscripts.stream()
+          .map(t -> new SimpleImmutableEntry<String, String>(t.get("id").toString(),
+              ((Map<String, Object>) t.get("consequence")).get("aa_mutation").toString()))
+          .collect(Collectors.toImmutableMap(SimpleImmutableEntry::getKey, SimpleImmutableEntry::getValue));
 
       for (int i = 0; i < transcriptIds.size(); ++i) {
-        val transcript = Maps.<String, Object> newHashMap();
+        val id = transcriptIds.get(i);
+        val aminoAcidChange = aaMutations.get(id);
 
-        transcript.put("id", transcriptIds.get(i));
-        transcript.put("functional_impact_prediction_summary", predictionSummary.get(i));
+        if (!aminoAcidChange.isEmpty()) {
+          val transcript = Maps.<String, Object> newHashMap();
+          transcript.put("id", id);
+          transcript.put("functional_impact_prediction_summary", predictionSummary.get(i));
 
-        val consequence = Maps.<String, Object> newHashMap();
-        List<Object> aminoAcidChange = hit.getFields().get("transcript.consequence.aa_mutation").getValues();
-        val mutationString = aminoAcidChange.get(i).toString();
-
-        // Only add to results if not empty.
-        if (!mutationString.isEmpty()) {
-          consequence.put("aa_mutation", mutationString);
+          val consequence = Maps.<String, Object> newHashMap();
+          consequence.put("aa_mutation", aaMutations.get(id));
           transcript.put("consequence", consequence);
+
           transcripts.add(transcript);
         }
       }

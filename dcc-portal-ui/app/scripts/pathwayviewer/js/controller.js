@@ -140,7 +140,7 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
           subPathwayColor: config.subPathwayColor
         });
 
-        this.renderer.renderCompartments(_.where(model.getNodes(),{type:'RenderableCompartment', hasClass:true}));
+        this.renderer.renderCompartments(_.filter(model.getNodes(),{type:'RenderableCompartment', hasClass:true}));
         this.renderer.renderEdges(this.rendererUtils.generateLines(model));
         this.renderer.renderNodes(_.filter(model.getNodes(),
           function(n){return n.type!=='RenderableCompartment'}));
@@ -150,7 +150,7 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
         if(zoomedOnElements[0] && zoomedOnElements[0].length !== 0){
 
           var subPathwayReactions = _.filter(model.getReactions(),
-            function(n){return _.contains(zoomedOnElements,n.reactomeId)});
+            function(n){return _.includes(zoomedOnElements,n.reactomeId)});
           var renderer = this.renderer;
 
           pathwayBox = {height:0,width:0,minHeight:10000,minWidth:10000};
@@ -245,7 +245,7 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
 
             // Only highlight overlaps it if it's part of the pathway we're zooming in on
             // And only hide parts of it we are zooming in on a pathway
-            if((nodesInPathway.length !== 0 && ! _.contains(nodesInPathway,dbId))){
+            if((nodesInPathway.length !== 0 && ! _.includes(nodesInPathway,dbId))){
               delete overlaps[dbId];
             }
         });
@@ -265,7 +265,7 @@ angular.module('icgc.pathwayviewer.directives.controller', ['icgc.pathwayviewer.
               return rawHighlight.dbIds
                 .filter(function (dbId) {
                   return nodesInPathway.length === 0 ||
-                    (_.contains(nodesInPathway, dbId) && highlightValue >= 0);
+                    (_.includes(nodesInPathway, dbId) && highlightValue >= 0);
                 })
                 .map(function (dbId) {
                   return {

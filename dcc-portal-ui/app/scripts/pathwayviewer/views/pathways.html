@@ -1,6 +1,6 @@
 
 <div id="pathways">
-  <h1 data-ui-scrollfix="79"><i class="t_badge t_badge_icon"><i class="icon-spread"></i></i><translate>Pathway Viewer</translate></h1>
+  <h1 data-ui-scrollpoint="79"><i class="t_badge t_badge_icon"><i class="icon-spread"></i></i><translate>Pathway Viewer</translate></h1>
   <div class="content-body">
     <aside>
       <div>
@@ -20,7 +20,7 @@
                     <span style="font-size: 1.2rem" data-ng-bind="pw.geneSetId"></span>
                   </div>
                   <div class="item-pval">
-                    <abbrev data-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}" data-ng-bind="pw.adjustedPValue.toExponential(2)"></abbrev>
+                    <abbrev data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}" data-ng-bind="pw.adjustedPValue.toExponential(2)"></abbrev>
                   </div>
                 </div>
                   <ul>
@@ -53,16 +53,16 @@
                     <tr>
                         <th><translate>ID</translate></th>
                         <th><translate>Name</translate></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES}}"><abbr><translate># Genes</translate></abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES_OVERLAP}}"><abbr><translate># Genes in overlap</translate></abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_DONORS}}"><abbr><translate># Donors affected</translate></abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_MUTATIONS}}"><abbr><translate># Mutations</translate></abbr></th>
-                        <th data-tooltip="{{TooltipText.ENRICHMENT.GENESET_EXPECTED}}"><abbr><translate>Expected</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES}}"><abbr><translate># Genes</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_GENES_OVERLAP}}"><abbr><translate># Genes in overlap</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_DONORS}}"><abbr><translate># Donors affected</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_MUTATIONS}}"><abbr><translate># Mutations</translate></abbr></th>
+                        <th data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_EXPECTED}}"><abbr><translate>Expected</translate></abbr></th>
                         <th>
-                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_PVALUE}}"><translate>P-Value</translate></abbr>
+                            <abbr data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_PVALUE}}"><translate>P-Value</translate></abbr>
                         </th>
                         <th>
-                            <abbr data-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}"><translate>Adjusted P-Value</translate></abbr>
+                            <abbr data-icgc-tooltip="{{TooltipText.ENRICHMENT.GENESET_ADJUSTED_PVALUE}}"><translate>Adjusted P-Value</translate></abbr>
        
                         </th>
                     </tr>
@@ -105,7 +105,7 @@
         <div data-ng-if="pathway">
             <h3 class="spinner-container" data-ng-if="!pathway.xml">
                 <i class="icon-spinner icon-spin"></i>
-                <translate>Fetching Pathway Viewer...</translate>
+                <translate>Loading Pathway Viewer...</translate>
             </h3>
             <div data-ng-if="pathway.xml">
                 <h4>

@@ -140,7 +140,7 @@ public class UISearchResource extends Resource {
 
   @Path("/projects/donor-mutation-counts")
   @GET
-  public Map<String, Map<String, Integer>> getProjectDonorMutation() {
+  public Map<String, Map<String, Long>> getProjectDonorMutation() {
     return occurrenceService.getProjectMutationDistribution();
   }
 
@@ -155,6 +155,12 @@ public class UISearchResource extends Resource {
     val content = CharStreams.toString(new InputStreamReader(inputStream, UTF_8));
 
     return ImmutableMap.of("data", content);
+  }
+
+  @Path("/gene-symbols")
+  @GET
+  public Map<String, String> ensemblIdGeneSymbolMappings() {
+    return geneService.getEnsemblIdGeneSymbolMap();
   }
 
   @Path("/gene-symbols/{" + API_GENE_PARAM + "}")

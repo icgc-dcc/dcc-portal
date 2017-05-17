@@ -7,7 +7,10 @@ import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_UNIPROT_IDS;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
+import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
+import static org.icgc.dcc.portal.server.repository.GeneRepository.GENE_ID_RESPONSE_SOURCE;
 import static org.icgc.dcc.portal.server.repository.GeneRepository.GENE_ID_SEARCH_FIELDS;
+import static org.icgc.dcc.portal.server.repository.GeneRepository.TEXT_PATH;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
@@ -19,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.elasticsearch.action.search.MultiSearchResponse;
-import org.elasticsearch.common.lang3.tuple.Pair;
 import org.elasticsearch.search.SearchHit;
+import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Gene;
 import org.icgc.dcc.portal.server.model.Genes;
-import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Pagination;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
@@ -147,14 +150,14 @@ public class GeneService {
     // Organize the results into the categories
     // Note: it may be possible that a uniprot id can be matched to multiple genes
     for (val hit : response.getHits()) {
-      val fields = hit.getFields();
+      val source = hit.getSource();
       val highlightedFields = hit.getHighlightFields();
       val matchedGene = geneText2Gene(hit);
 
       // Check which search field got the "hit"
       for (val searchField : GENE_ID_SEARCH_FIELDS.entrySet()) {
 
-        if (highlightedFields.containsKey(searchField.getKey())) {
+        if (highlightedFields.containsKey(TEXT_PREFIX + searchField.getKey())) {
 
           val field = searchField.getValue();
 
@@ -162,17 +165,29 @@ public class GeneService {
           // Because we need to group by the inpu, we need to figure out which one of the uniprot ids
           // was in the input identifiers - this requires us to normalize to lower case to make the comparisons
           if (field.equals(GENE_UNIPROT_IDS)) {
-            val keys = fields.get(searchField.getKey()).getValues();
+            val cleanedKey = searchField.getKey().substring(0, searchField.getKey().lastIndexOf(".search"));
+            val textSource = source.get(TEXT_PATH);
 
-            for (val key : keys) {
-              if (ids.contains(key.toString().toLowerCase())) {
-                result.get(field).put(getString(key), matchedGene);
+            if (textSource instanceof Map<?, ?>) {
+              val keys = ((Map<?, ?>) textSource).get(cleanedKey);
+              if (keys instanceof List<?>) {
+                for (val key : (List<?>) keys) {
+                  if (ids.contains(key.toString().toLowerCase())) {
+                    result.get(field).put(getString(key), matchedGene);
+                  }
+                }
               }
             }
+
           } else {
-            val key = getString(fields.get(searchField.getKey()).getValues());
-            result.get(field).put(key, matchedGene);
+            val keys = highlightedFields.get(TEXT_PREFIX + searchField.getKey());
+            if (keys != null) {
+              for (val key : keys.getFragments()) {
+                result.get(field).put(key.toString(), matchedGene);
+              }
+            }
           }
+
         }
       }
     }
@@ -298,7 +313,8 @@ public class GeneService {
     val fieldMap = createResponseMap(hit, Query.builder().build(), EntityType.GENE);
     Map<String, Object> geneMap = Maps.newHashMap();
     fieldMap.forEach((k, v) -> {
-      geneMap.put(GENE_ID_SEARCH_FIELDS.get(k), v);
+      // Strip text prefix as we construct map for gene POJO.
+      geneMap.put(GENE_ID_RESPONSE_SOURCE.get(k.substring(TEXT_PREFIX.length())), v);
     });
 
     return new Gene(geneMap);

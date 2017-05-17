@@ -37,7 +37,7 @@ public class ICGCHealthIndicator extends AbstractHealthIndicator {
   /**
    * Constants.
    */
-  private static final String DACO_ENABLED_CUD_USER = "btiernay";
+  private static final String DACO_ENABLED_CUD_USER = "dandric";
 
   /**
    * Dependencies

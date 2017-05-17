@@ -72,7 +72,7 @@ import {ensureArray, ensureString, partiallyContainsIgnoringCase} from '../../co
 
 
       $scope.badgeStyleClass = function (type) {
-        var definedType = _.contains (['pathway', 'go_term', 'curated_set'], type) ? 'geneset' : type;
+        var definedType = _.includes (['pathway', 'go_term', 'curated_set'], type) ? 'geneset' : type;
         return 't_badge t_badge__' + definedType;
       };
 

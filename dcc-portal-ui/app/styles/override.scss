@@ -156,3 +156,8 @@ textarea {
 body.modal-open {
    overflow: visible;
 }
+
+.popover.ng-animate{
+   transition: opacity .01s ease;
+   opacity: 0 !important;
+}

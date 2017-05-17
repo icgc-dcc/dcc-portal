@@ -1,4 +1,4 @@
-<div class="btn-group entity-search pull-right">
+<div class="btn-group entity-search">
   <button type="button" class="btn t_button" data-ng-click="$ctrl.clickEvent()" data-capitalize="true">
     Upload {{ $ctrl.entityType }} Set
   </button>
@@ -16,7 +16,7 @@
       <a href="" 
         data-ng-click="$ctrl.selectEvent(set);" 
         data-ng-class="{selected: set.selected}"
-        data-tooltip="{{ set.name }}">
+        data-icgc-tooltip="{{ set.name }}">
         <div>
           <div>
             <span>

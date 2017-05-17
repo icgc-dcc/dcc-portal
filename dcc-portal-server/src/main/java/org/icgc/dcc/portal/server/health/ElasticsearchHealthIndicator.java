@@ -1,9 +1,9 @@
 package org.icgc.dcc.portal.server.health;
 
-import static org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus.RED;
+import static org.elasticsearch.cluster.health.ClusterHealthStatus.RED;
 
-import org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.cluster.health.ClusterHealthStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health.Builder;

@@ -100,10 +100,18 @@
 /* Entity saved set list facet */
 
 .entity-search{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding-left: .5rem;
+
   button, ul{
     font-size: 100%;
   }
   button{
+    &:first-child{
+      flex:1;
+    }
     &:focus, &:active, &:focus:active{
       color: $white;
       outline: none;

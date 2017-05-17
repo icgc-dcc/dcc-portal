@@ -17,18 +17,14 @@
 
 package org.icgc.dcc.portal.server.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.common.collect.ImmutableList;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
-import org.elasticsearch.common.text.Text;
-import org.elasticsearch.search.facet.terms.TermsFacet;
-
-import java.util.List;
-
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.ImmutableList;
+
+import lombok.NonNull;
+import lombok.Value;
 
 @Value
 @JsonInclude(NON_EMPTY)
@@ -49,29 +45,8 @@ public class TermFacet {
     return new TermFacet(total, missing, terms);
   }
 
-  // FIXME: Temporary work around until PQL, we need emulate a term facet from ES aggregations
-  // private TermFacet(long total, long missing, ImmutableList<Term> terms) {
-  // this.type = "terms";
-  // this.other = -1L;
-  // this.total = total;
-  // this.missing = missing;
-  // this.terms = terms;
-  // }
-
-  public static TermFacet of(TermsFacet facet) {
-    return new TermFacet(facet);
-  }
-
   public static TermFacet of(long total, long missing, @NonNull ImmutableList<Term> terms) {
     return new TermFacet(total, missing, terms);
-  }
-
-  private TermFacet(TermsFacet facet) {
-    this.type = facet.getType();
-    this.missing = facet.getMissingCount();
-    this.total = facet.getTotalCount();
-    this.other = facet.getOtherCount();
-    this.terms = buildTerms(facet.getEntries(), facet.getMissingCount());
   }
 
   private TermFacet(long total, long missing, ImmutableList<Term> terms) {
@@ -82,22 +57,12 @@ public class TermFacet {
     this.terms = terms;
   }
 
-  private ImmutableList<Term> buildTerms(List<? extends TermsFacet.Entry> entries, Long missing) {
-    val lst = ImmutableList.<Term> builder();
-    for (val entry : entries) {
-      Text name = entry.getTerm();
-      long value = entry.getCount();
-      Term term = new Term(name.string(), value);
-      lst.add(term);
-    }
-    return lst.build();
-  }
-
   @Value
   public static class Term {
 
     String term;
     Long count;
+
   }
 
 }

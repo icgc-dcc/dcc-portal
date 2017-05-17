@@ -6,18 +6,18 @@
       <i data-ng-show="params.user.daco"
       class="icon-shield data-available"
          data-tooltip-placement="bottom"
-         data-tooltip="{{'DACO Access Authorized' | translate}}"></i>
+         data-icgc-tooltip="{{'DACO Access Authorized' | translate}}"></i>
       <i data-ng-hide="params.user.daco"
          class="icon-shield data-missing"
          data-tooltip-placement="bottom"
-         data-tooltip="{{'DACO Access Unauthorized' | translate}}"></i>
+         data-icgc-tooltip="{{'DACO Access Unauthorized' | translate}}"></i>
        <i data-ng-show="params.user.cloudAccess"
           class="icon-cloud-1 data-available"
-          data-tooltip="{{'Cloud Access Authorized' | translate}}"
+          data-icgc-tooltip="{{'Cloud Access Authorized' | translate}}"
           data-tooltip-placement="bottom"></i>
        <i data-ng-show="! params.user.cloudAccess"
           class="icon-cloud-1 data-missing"
-          data-tooltip="{{'Cloud Access Unauthorized' | translate}}"
+          data-icgc-tooltip="{{'Cloud Access Unauthorized' | translate}}"
           data-tooltip-placement="bottom"></i>
 
       <span data-ng-bind="params.user.email"></span>
@@ -25,7 +25,7 @@
         <li class="tool-item" data-ng-show="params.user.daco && params.showCollaboratoryToken" >
           <a href=""
             data-ng-click="openTokenManagerPopup()"
-            data-tooltip="{{'Manage your ICGC access tokens' | translate}}"
+            data-icgc-tooltip="{{'Manage your ICGC access tokens' | translate}}"
             class="tool-bttn"
             data-tooltip-placement="bottom">
               <i class="icon-key"></i><translate>Token Manager</translate>

@@ -1,5 +1,5 @@
 <div class="h1-wrap">
-    <h1 data-ui-scrollfix="79">
+    <h1 data-ui-scrollpoint="79">
         <span class="t_badge t_badge_icon t_badge__data_repositories">
           <span class="icon-download-cloud" />
         </span>
@@ -214,7 +214,7 @@
             <div class="clearfix"></div>
 
             <span class="action-toolbar pull-right">
-              <span class="action-item">
+              <span class="action-item" style="font-weight: 300;">
                   <i class="icon-floppy"></i><a href="" data-ng-click="ExternalRepoController.saveDonorSet('donor', ExternalRepoController.summary.donorCount)"><translate>Save Donor Set</translate></a>
               </span>
               <span class="action-item">
@@ -233,7 +233,7 @@
                 <span class="t_tools">
                     <span class="t_tools__tool">
                         <i class="icon-file pull-right"
-                           data-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
+                           data-icgc-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
                            data-ng-click="ExternalRepoController.export()"></i>
                     </span>
                 </span>
@@ -262,7 +262,7 @@
                     <th style="text-align:center">
                       <abbr>
                         <i class="icon-chart-bar" 
-                          tooltip="{{'BAM & VCF Stats (available only for BAM and VCF Files in AWS and Collaboratory)' | translate}}" tooltip-placement="left">
+                          icgc-tooltip="{{'BAM & VCF Stats (available only for BAM and VCF Files in AWS and Collaboratory)' | translate}}" tooltip-placement="left">
                         </i>
                       </abbr>
                     </th>
@@ -284,22 +284,23 @@
                     <td style="white-space:nowrap;max-width: 8rem; font-size: {{ row.fileId.length > 100? '0.75rem' : ' inherit' }}">
                        <i class="{{ row.access === 'open' ? 'icon-lock-open' : 'icon-lock' }}" />
                        <a href="{{:: ExternalRepoController.dataRepoFileUrl }}{{ row.id }}"
-                        tooltip="{{ ExternalRepoController.fileNames (row.fileCopies) }}"
+                        icgc-tooltip="{{ ExternalRepoController.fileNames (row.fileCopies) }}"
                         ng-bind="row.id" />
                     </td>
 
                     <td ng-init="donorData = ExternalRepoController.donorInfo (row.donors)">
-                      <a data-ng-if="row.donors.length < 2" href="{{ donorData.href }}" tooltip="{{ donorData.tooltip }}"
+                      <a data-ng-if="row.donors.length < 2" href="{{ donorData.href }}" icgc-tooltip="{{ donorData.tooltip }}"
                         ng-bind="donorData.text" />
-                      <a data-ng-if="row.donors.length >= 2" href="" data-ng-click="ExternalRepoController.viewFileInSearch(row.id, row.donors.length)" tooltip="{{ donorData.tooltip }}"
+                      <a data-ng-if="row.donors.length >= 2" href="" data-ng-click="ExternalRepoController.viewFileInSearch(row.id, row.donors.length)" icgc-tooltip="{{ donorData.tooltip }}"
                         ng-bind="donorData.text" />
                     </td>
 
-                    <td tooltip="{{ ExternalRepoController.repoNamesInTooltip (row.fileCopies) }}"
-                      ng-bind="(row.fileCopies | _:'map':'repo.name' | _:'unique').join(', ')" />
 
+                    <td icgc-tooltip="{{ ExternalRepoController.repoNamesInTooltip (row.fileCopies) }}"
+                      ng-bind="(row.fileCopies | _:'map':'repo.name' | _:'uniq').join(', ')" />
+                    
                     <td ng-init="ProjectData = ExternalRepoController.buildProjectInfo (row.donors)">
-                      <a href="{{ ProjectData.href }}" tooltip="{{ ProjectData.tooltip }}"
+                      <a href="{{ ProjectData.href }}" icgc-tooltip="{{ ProjectData.tooltip }}"
                         ng-bind="ProjectData.text" />
                     </td>
 

@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.portal.server.service;
 
+import static org.apache.lucene.search.join.ScoreMode.Avg;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
@@ -39,8 +40,8 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.icgc.dcc.common.core.util.Joiners;
 import org.icgc.dcc.portal.server.model.DiagramProtein;
-import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexModel;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.repository.DiagramRepository;
 import org.icgc.dcc.portal.server.repository.MutationRepository;
@@ -58,7 +59,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired }) )
+@RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class DiagramService {
 
   @NonNull
@@ -181,7 +182,7 @@ public class DiagramService {
     }
     query.must(termsQuery(consequenceTypeFullPath, CONSEQUENCE_TYPES));
 
-    val nestedQuery = QueryBuilders.nestedQuery(MUTATION_TRANSCRIPTS, query);
+    val nestedQuery = QueryBuilders.nestedQuery(MUTATION_TRANSCRIPTS, query, Avg);
     return boolQuery().must(nestedQuery);
   }
 }

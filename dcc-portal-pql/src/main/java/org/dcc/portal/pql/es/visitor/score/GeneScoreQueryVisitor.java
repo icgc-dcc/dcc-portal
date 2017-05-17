@@ -21,7 +21,7 @@ import org.dcc.portal.pql.meta.IndexModel;
 
 public class GeneScoreQueryVisitor extends ScoreQueryVisitor {
 
-  public static final String SCRIPT = "x = doc['donor._summary._ssm_count']; x.empty || x.value < 1 ? 0 : 1";
+  public static final String SCRIPT = "def x = doc['donor._summary._ssm_count']; x.empty || x.value < 1 ? 0 : 1";
   private static final String PATH = "donor";
 
   public GeneScoreQueryVisitor() {

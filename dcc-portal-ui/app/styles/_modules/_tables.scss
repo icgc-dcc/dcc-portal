@@ -39,8 +39,10 @@ $table-th-fixed-width: 200px;
     tr {
       vertical-align: top;
 
-      &:nth-child(odd) {
-        background: $greyLightest;
+      &:nth-child(odd):not(.is-selected) {
+        td, th {
+          background: $greyLightest;
+        }
       }
     }
 
@@ -99,9 +101,11 @@ $table-th-fixed-width: 200px;
     &.table-condensed{
 
       td{
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        word-break: normal;
+        word-break: break-word;
+
+        &:first-child {
+          white-space: nowrap;
+        }
       }
     }
   }

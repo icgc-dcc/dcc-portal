@@ -3,8 +3,13 @@
 Parent project of the portal modules
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/29bb5857a70d4861b46cbcc94d569009)](https://www.codacy.com/app/icgc-dcc/dcc-portal?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=icgc-dcc/dcc-portal&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/icgc-dcc/dcc-portal.svg?branch=develop)](https://travis-ci.org/icgc-dcc/dcc-portal)
+[![codecov](https://codecov.io/gh/icgc-dcc/dcc-portal/branch/develop/graph/badge.svg)](https://codecov.io/gh/icgc-dcc/dcc-portal)
+
 
 ## Build
+
+First, follow the instructions for setting up the UI [here](dcc-portal-ui/README.md#setup).
 
 To compile, test and package the system, execute the following from the root of the repository:
 
@@ -38,3 +43,8 @@ Change log for the user-facing system modules may be found [here](CHANGES.md).
 ## Copyright and License
 
 * [License](LICENSE.md)
+
+## Acknowledgements
+
+We want to thank JetBrains for their support and for creating phenomenal tools that empower our developers.
+<img src="https://github.com/icgc-dcc/dcc-portal/blob/develop/jetbrains-logo.png" alt="JetBrains" width="100px">

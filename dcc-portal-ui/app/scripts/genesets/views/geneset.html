@@ -15,11 +15,11 @@
   ~ WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 <div class="h1-wrap">
-    <h1 data-ui-scrollfix=79><span class="t_badge t_badge__geneset"></span>
+    <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__geneset"></span>
         {{ GeneSetCtrl.geneSet.id }}</h1>
 </div>
 <div data-scroll-spy="">
-<aside data-ui-scrollfix=79 class="t_sidenav">
+<aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
             <li data-spy="summary" class="t_subnav__items__item current">
@@ -187,7 +187,7 @@
 </section>
 <section id="projects"
          data-ng-class="{'loading': !GeneSetCtrl.geneSet.projects, 'empty': GeneSetCtrl.geneSet.projects.length == 0}">
-    <h3 data-ng-if="!GeneSetCtrl.geneSet.projects"><i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate></h3>
+    <h3 data-ng-if="!GeneSetCtrl.geneSet.projects"><i class="icon-spinner icon-spin"></i> <translate>Loading Donors...</translate></h3>
 
     <h3 data-ng-if="GeneSetCtrl.geneSet.projects.length == 0"><translate>No Donors Affected.</translate></h3>
 
@@ -204,7 +204,7 @@
             <a data-ng-href='/search/m?filters={{GeneSetCtrl.baseAdvQuery}}'>
                 <strong>{{GeneSetCtrl.totalMutations | number}}</strong></a>
             <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">mutations across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|pluck:"id").join("\",\"")}}"]}}}'>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|_:"map":"id").join("\",\"")}}"]}}}'>
                 <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong></a>
             <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">projects</translate>
             <br>
@@ -217,7 +217,7 @@
                 <strong>{{GeneSetCtrl.geneSet.geneCount}}</strong>
             </a>
             <translate translate-comment="'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects">genes in this gene set affected by mutations across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|pluck:"id").join("\",\"")}}"]}}}'>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|_:"map":"id").join("\",\"")}}"]}}}'>
                 <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong>
             </a>
             <translate translate-comment="'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects">cancer projects</translate>
@@ -258,14 +258,14 @@
                 <th><translate>Tumour Subtype</translate></th>
                 <th style="cursor: pointer" 
                     data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
-                    <abbr data-tooltip="{{'Number of Donors where a Gene involved in the Gene Set contains SSM' | translate}}">
+                    <abbr data-icgc-tooltip="{{'Number of Donors where a Gene involved in the Gene Set contains SSM' | translate}}">
                     <translate># Donors affected</translate>
                     <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
                 </abbr>
                 </th>
-                <th><abbr data-tooltip="{{'Number of SSM observed in [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
+                <th><abbr data-icgc-tooltip="{{'Number of SSM observed in [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
                           data-tooltip-placement="left"><translate># Mutations</translate></abbr></th>
-                <th><abbr data-tooltip="{{'Number of Genes affected by [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
+                <th><abbr data-icgc-tooltip="{{'Number of Genes affected by [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
                           data-tooltip-placement="left"><translate># Genes</translate></abbr></th>
             </tr>
             </thead>
@@ -274,7 +274,7 @@
                 filter: GeneSetCtrl.tableFilter.projects | 
                 orderBy:'uiAffectedDonorPercentage/100':sortProjectsDescendingly | 
                 limitTo: GeneSetCtrl.defaultCancerRowLimit : ((GeneSetCtrl.currentCancerPage-1) * GeneSetCtrl.defaultCancerRowLimit)) track by project.uiId">
-                <td><a data-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">
+                <td><a data-icgc-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">
                     <span data-ng-bind-html="project.uiId | highlight: GeneSetCtrl.tableFilter.projects"></span>
                 </a></td>
                 <td><span data-ng-bind-html="project.uiPrimarySite | highlight: GeneSetCtrl.tableFilter.projects"></span></td>
@@ -362,7 +362,7 @@
     data-ng-class="{'loading': !GeneSetGenesCtrl.genes.hits, 'empty': GeneSetGenesCtrl.genes.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!GeneSetGenesCtrl.genes.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutated Genes...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutated Genes...</translate>
     </h3>
 
     <h3 data-ng-if="GeneSetGenesCtrl.genes.hits.length == 0">
@@ -391,12 +391,12 @@
             <tr>
                 <th><translate>Symbol</translate></th>
                 <th><translate>Name</translate></th>
-                <th><abbr data-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}"><translate>Location</translate></abbr></th>
+                <th><abbr data-icgc-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}"><translate>Location</translate></abbr></th>
                 <th><translate>Type</translate></th>
-                <th><abbr data-tooltip="{{'Number of Donors where a Gene involved in the Gene Set contains SSM' | translate}}">#
+                <th><abbr data-icgc-tooltip="{{'Number of Donors where a Gene involved in the Gene Set contains SSM' | translate}}">#
                     <translate>Donors affected</translate></abbr> <i class="icon-sort-down"></i></th>
                 <th class="text-center">
-                    <abbr data-tooltip="{{'Number of SSM in the Gene' | translate}}" data-tooltip-placement="left"><translate># Mutations</translate></abbr>
+                    <abbr data-icgc-tooltip="{{'Number of SSM in the Gene' | translate}}" data-tooltip-placement="left"><translate># Mutations</translate></abbr>
                 </th>
             </tr>
             </thead>
@@ -466,7 +466,7 @@
          data-ng-class="{'loading': !GeneSetCtrl.pathway.xml, 'empty': GeneSetCtrl.pathway.xml}">
     <h3 data-ng-if="!GeneSetCtrl.pathway.xml">
         <i class="icon-spinner icon-spin"></i>
-        <translate>Fetching Pathway Viewer...</translate>
+        <translate>Loading Pathway Viewer...</translate>
     </h3>
     <div data-ng-if="GeneSetCtrl.pathway.xml">
         <h3><translate>Pathway Viewer</translate></h3>
@@ -487,7 +487,7 @@
     data-ng-class="{'loading': !GeneSetMutationsCtrl.mutations.hits, 'empty': GeneSetMutationsCtrl.mutations.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!GeneSetMutationsCtrl.mutations.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="GeneSetMutationsCtrl.mutations.hits.length == 0">
@@ -514,15 +514,15 @@
             <tr>
                 <th>ID</th>
                 <th>
-                    <abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+                    <abbr data-icgc-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
                         <translate>DNA change</translate></abbr>
                 </th>
                 <th><translate>Type</translate></th>
                 <th>
-                    <abbr data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
+                    <abbr data-icgc-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
                 </th>
                 <th class="text-center">
-                    <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+                    <abbr data-icgc-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
                           data-tooltip-placement="left"><translate># Donors affected</translate></abbr></th>
                 </th>
             </tr>
@@ -531,7 +531,7 @@
             <tr data-ng-repeat="mutation in GeneSetMutationsCtrl.mutations.hits track by mutation.id">
                 <td><a data-ui-sref="mutation({id:mutation.id})">{{mutation.id}}</a></td>
                 <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
-                <td><abbr data-tooltip="{{ mutation.type | define }}">{{mutation.type}}</abbr></td>
+                <td><abbr data-icgc-tooltip="{{ mutation.type | define }}">{{mutation.type}}</abbr></td>
                 <td>
                     <mutation-consequences data-items="mutation.consequences"></mutation-consequences>
                 </td>
@@ -544,7 +544,7 @@
                                   class="t_facets__facet__terms__active__term__bar"></span>
                             <span style="position: relative">
                                 <a data-tooltip-placement="left"
-                                   data-tooltip="{{ p.projectName }}"
+                                   data-icgc-tooltip="{{ p.projectName }}"
                                    href="/projects/{{p.term}}">{{p.term}}</a>
                             <a href='/search?filters={{p.advQuery}}'>
                                 {{p.count | number}}
@@ -597,7 +597,7 @@
     data-ng-class="{'loading': !GeneSetDonorsCtrl.donors.hits, 'empty': GeneSetDonorsCtrl.donors.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!GeneSetDonorsCtrl.donors.hits">
-        <i class="icon-spinner icon-spin"></i> <translate>Fetching Donors...</translate>
+        <i class="icon-spinner icon-spin"></i> <translate>Loading Donors...</translate>
     </h3>
 
     <h3 data-ng-if="GeneSetDonorsCtrl.donors.hits.length == 0">
@@ -626,31 +626,31 @@
                 <th rowspan="2">ID</th>
                 <th rowspan="2"><translate>Site</translate></th>
                 <th rowspan="2"><translate>Gender</translate></th>
-                <th rowspan="2" class="text-center"><abbr data-tooltip="{{'Age at Diagnosis' | translate}}"><translate>Age</translate></abbr></th>
-                <th rowspan="2"><abbr data-tooltip="{{'Tumour Stage at Diagnosis' | translate}}"><translate>Stage</translate></abbr></th>
+                <th rowspan="2" class="text-center"><abbr data-icgc-tooltip="{{'Age at Diagnosis' | translate}}"><translate>Age</translate></abbr></th>
+                <th rowspan="2"><abbr data-icgc-tooltip="{{'Tumour Stage at Diagnosis' | translate}}"><translate>Stage</translate></abbr></th>
                 <th rowspan="2" class="text-center">
-                    <abbr data-tooltip="{{'Survival Time in days' | translate}}"><translate has-markup>Survival<br>(days)</translate></abbr>
+                    <abbr data-icgc-tooltip="{{'Survival Time in days' | translate}}"><translate has-markup>Survival<br>(days)</translate></abbr>
                 </th>
-                <th rowspan="2"><abbr data-tooltip="{{'Experimental analysis performed' | translate}}"><translate>Analysis</translate></abbr></th>
+                <th rowspan="2"><abbr data-icgc-tooltip="{{'Experimental analysis performed' | translate}}"><translate>Analysis</translate></abbr></th>
                 <th colspan="11" class="text-center"><translate>Available Data Types:</translate></th>
-                <th rowspan="2" data-tooltip="{{'Number of SSM' | translate}}"><abbr><translate># Mutations</translate></abbr></th>
+                <th rowspan="2" data-icgc-tooltip="{{'Number of SSM' | translate}}"><abbr><translate># Mutations</translate></abbr></th>
                 <th rowspan="2">
-                    <abbr data-tooltip="{{'Number of Genes with SSM' | translate}}"
+                    <abbr data-icgc-tooltip="{{'Number of Genes with SSM' | translate}}"
                           data-tooltip-placement="left"><translate># Genes</translate> <i class="icon-caret-down"></i></abbr>
                 </th>
             </tr>
             <tr>
-                <th data-tooltip="{{ 'ssm' | datatype }}"><abbr class="tiny-header">SSM</abbr></th>
-                <th data-tooltip="{{ 'cnsm' | datatype }}"><abbr class="tiny-header">CNSM</abbr></th>
-                <th data-tooltip="{{ 'stsm' | datatype }}"><abbr class="tiny-header">StSM</abbr></th>
-                <th data-tooltip="{{ 'sgv' | datatype }}"><abbr class="tiny-header">SGV</abbr></th>
-                <th data-tooltip="{{ 'meth_array' | datatype }}"><abbr class="tiny-header">METH-A</abbr></th>
-                <th data-tooltip="{{ 'meth_seq' | datatype }}"><abbr class="tiny-header">METH-S</abbr></th>
-                <th data-tooltip="{{ 'exp_array' | datatype }}"><abbr class="tiny-header">EXP-A</abbr></th>
-                <th data-tooltip="{{ 'exp_seq' | datatype }}"><abbr class="tiny-header">EXP-S</abbr></th>
-                <th data-tooltip="{{ 'pexp' | datatype }}"><abbr class="tiny-header">PEXP</abbr></th>
-                <th data-tooltip="{{ 'mirna_seq' | datatype }}"><abbr class="tiny-header">miRNA-S</abbr></th>
-                <th data-tooltip="{{ 'jcn' | datatype }}"><abbr class="tiny-header">JCN</abbr></th>
+                <th data-icgc-tooltip="{{ 'ssm' | datatype }}"><abbr class="tiny-header">SSM</abbr></th>
+                <th data-icgc-tooltip="{{ 'cnsm' | datatype }}"><abbr class="tiny-header">CNSM</abbr></th>
+                <th data-icgc-tooltip="{{ 'stsm' | datatype }}"><abbr class="tiny-header">StSM</abbr></th>
+                <th data-icgc-tooltip="{{ 'sgv' | datatype }}"><abbr class="tiny-header">SGV</abbr></th>
+                <th data-icgc-tooltip="{{ 'meth_array' | datatype }}"><abbr class="tiny-header">METH-A</abbr></th>
+                <th data-icgc-tooltip="{{ 'meth_seq' | datatype }}"><abbr class="tiny-header">METH-S</abbr></th>
+                <th data-icgc-tooltip="{{ 'exp_array' | datatype }}"><abbr class="tiny-header">EXP-A</abbr></th>
+                <th data-icgc-tooltip="{{ 'exp_seq' | datatype }}"><abbr class="tiny-header">EXP-S</abbr></th>
+                <th data-icgc-tooltip="{{ 'pexp' | datatype }}"><abbr class="tiny-header">PEXP</abbr></th>
+                <th data-icgc-tooltip="{{ 'mirna_seq' | datatype }}"><abbr class="tiny-header">miRNA-S</abbr></th>
+                <th data-icgc-tooltip="{{ 'jcn' | datatype }}"><abbr class="tiny-header">JCN</abbr></th>
             </tr>
             </thead>
             <tbody>

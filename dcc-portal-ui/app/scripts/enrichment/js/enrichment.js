@@ -127,7 +127,7 @@
       // to start the redirection
       promise.then(function(result) {
         var id = result.id;
-        $modalInstance.dismiss('cancel');
+        $modalInstance.close(result);
         $location.path('/analysis/view/enrichment/' + id).search({});
       })
       .finally(function() {
@@ -171,7 +171,8 @@
       restrict: 'E',
       scope: {
         item: '=',
-        callingContext: '@'
+        callingContext: '@',
+        subtitle: '<',
       },
       templateUrl: '/scripts/enrichment/views/enrichment.result.html',
       link: function($scope) {

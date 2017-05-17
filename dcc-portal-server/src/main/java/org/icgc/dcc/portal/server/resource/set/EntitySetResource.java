@@ -250,6 +250,7 @@ public class EntitySetResource extends Resource {
   @ApiOperation(value = "Creates an entity set from an Repository Browser query.", response = EntitySet.class)
   public Response createExternalSet(
       @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition setDefinition) {
+    checkRequest(setDefinition == null, "The Entity Set definition cannot be null.");
     if (setDefinition.getType() == Type.FILE) {
       val newSet = service.createFileEntitySet(setDefinition);
       return newSetResponse(newSet);

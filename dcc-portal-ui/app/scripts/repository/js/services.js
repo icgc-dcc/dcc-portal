@@ -356,11 +356,11 @@
 
       if (dirLevel > 0) {
         files = $filter('orderBy')(files, 'name');
-        firstSort = _.pluck(files, 'name');
+        firstSort = _.map(files, 'name');
         files = $filter('orderBy')(files, logicalSort);
       } else {
-        files = $filter('orderBy')(files, 'date', 'reverse');
-        firstSort = _.pluck(files, 'name');
+        files = $filter('orderBy')(files, 'date', 'desc');
+        firstSort = _.map(files, 'name');
         files = $filter('orderBy')(files, logicalSort);
       }
 

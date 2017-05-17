@@ -18,7 +18,10 @@
 package org.icgc.dcc.portal.server.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,17 +31,21 @@ import org.elasticsearch.action.search.MultiSearchRequestBuilder;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.Query.QueryBuilder;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
 import org.icgc.dcc.portal.server.util.JsonUtils;
-import org.mockito.Spy;
+import org.junit.After;
+import org.junit.Before;
+import org.mockito.MockitoAnnotations;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -49,9 +56,7 @@ import lombok.val;
 
 public class BaseRepositoryIntegrationTest {
 
-  @Spy
-  final TransportClient client = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost",
-      9300));
+  TransportClient client;
 
   private static String DONOR_FILTER = "{'donor':{'gender':{'is':['male']},'availableDataTypes':{'is':['cnsm']}}}";
 
@@ -93,6 +98,19 @@ public class BaseRepositoryIntegrationTest {
 
   protected static String MUTATION_PROJECT_FILTER_TEMPLATE =
       "{mutation:{id:{is:['%s']}},donor:{projectId:{is:['%s']}}}";
+
+  @Before
+  @SuppressWarnings("resource")
+  public void setUp() throws UnknownHostException {
+    client = spy(new PreBuiltTransportClient(Settings.EMPTY)
+        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300)));
+    MockitoAnnotations.initMocks(this);
+  }
+
+  @After
+  public void tearDown() {
+    client.close();
+  }
 
   private static List<String> generateFilters() {
     val generatedFilters = Lists.<String> newArrayList();
@@ -279,11 +297,11 @@ public class BaseRepositoryIntegrationTest {
     val queries = Maps.<String, Query> newLinkedHashMap();
 
     for (val entry : termsAggs.getBuckets()) { // Facet Values
-      val updateNode = buildFilterNode(termsAggs.getName(), entry.getKey(), entityType.getId());
+      val updateNode = buildFilterNode(termsAggs.getName(), entry.getKeyAsString(), entityType.getId());
       val filter = JsonUtils.merge(new FiltersParam(f).get(), updateNode);
       val query = query(sort).filters(filter).build();
 
-      queries.put(entry.getKey(), query);
+      queries.put(entry.getKeyAsString(), query);
     }
 
     return queries;

@@ -18,7 +18,6 @@
 package org.icgc.dcc.portal.server.config;
 
 import org.icgc.dcc.portal.server.service.GeneService;
-import org.icgc.dcc.portal.server.service.OccurrenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
@@ -35,8 +34,6 @@ public class ServiceConfig {
    */
 
   @Autowired
-  private OccurrenceService occurrenceService;
-  @Autowired
   private GeneService geneService;
 
   /**
@@ -47,7 +44,6 @@ public class ServiceConfig {
   @EventListener(ApplicationReadyEvent.class)
   public void init() {
     log.info("Initializing services...");
-    occurrenceService.init();
     geneService.init();
   }
 

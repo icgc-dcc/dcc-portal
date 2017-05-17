@@ -17,41 +17,50 @@
 
 package org.dcc.portal.pql.utils;
 
-import static com.github.tlrx.elasticsearch.test.EsSetup.createIndex;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.google.common.base.Preconditions.checkState;
 import static org.dcc.portal.pql.utils.Tests.createEsAst;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.utils.EsAstTransformer;
 import org.dcc.portal.pql.meta.Type;
 import org.dcc.portal.pql.query.QueryContext;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.common.settings.ImmutableSettings;
-import org.junit.After;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.painless.PainlessPlugin;
+import org.elasticsearch.plugins.Plugin;
+import org.elasticsearch.test.ESIntegTestCase;
+import org.elasticsearch.test.ESIntegTestCase.ClusterScope;
+import org.elasticsearch.test.ESIntegTestCase.Scope;
+import org.icgc.dcc.common.es.security.SecurityManagerWorkaroundSeedDecorator;
 import org.junit.Before;
 
+import com.carrotsearch.randomizedtesting.annotations.SeedDecorators;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.tlrx.elasticsearch.test.EsSetup;
-import com.github.tlrx.elasticsearch.test.provider.JSONProvider;
-import com.github.tlrx.elasticsearch.test.request.CreateIndex;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-public class BaseElasticsearchTest {
+@Slf4j
+@SeedDecorators(value = SecurityManagerWorkaroundSeedDecorator.class)
+@ClusterScope(scope = Scope.TEST, numDataNodes = 1, maxNumDataNodes = 1, supportsDedicatedMasters = false, transportClientRatio = 0.0)
+public class BaseElasticsearchTest extends ESIntegTestCase {
+
+  private static final ObjectMapper MAPPER = new ObjectMapper();
+  private static final ObjectReader READER = MAPPER.reader(ObjectNode.class);
 
   /**
    * Test configuration.
@@ -62,51 +71,70 @@ public class BaseElasticsearchTest {
   protected static final String FIXTURES_DIR = "src/test/resources/fixtures";
   protected static final URL SETTINGS_FILE = getMappingFileUrl(SETTINGS_FILE_NAME);
 
-  @SneakyThrows
-  private static URL getMappingFileUrl(String fileName) {
-    return Resources.getResource(JSON_DIR + "/" + fileName);
-  }
-
-  /**
-   * Test data.
-   */
-  protected static final String MISSING_ID = "@@@@@@@@@@@";
-
-  /**
-   * ES facade.
-   */
-  protected EsSetup es;
-
   /**
    * Parser's setup
    */
   protected QueryContext queryContext;
   protected EsAstTransformer esAstTransformator = new EsAstTransformer();
 
+  protected Client client;
+
   @Before
-  public void before() {
-    val settings = ImmutableSettings.settingsBuilder().put("script.groovy.sandbox.enabled", true).build();
-    es = new EsSetup(settings);
+  public void setUpBaseElasticsearchTest() {
+    client = client();
   }
 
-  @After
-  public void after() {
-    es.terminate();
+  @Override
+  protected Collection<Class<? extends Plugin>> nodePlugins() {
+    return ImmutableList.of(PainlessPlugin.class);
   }
 
-  protected static CreateIndex createIndexMappings(Type... typeNames) {
-    CreateIndex request = createIndex(INDEX_NAME)
-        .withSettings(settingsSource(SETTINGS_FILE));
+  protected void prepareIndex(Type... typeNames) {
+    createIndexMappings(typeNames);
+    loadData(getClass());
+  }
 
-    for (Type typeName : typeNames) {
-      request = request.withMapping(typeName.getId(), mappingSource(typeName));
+  protected void createIndexMappings(Type... typeNames) {
+    val settingsContents = settingsSource(SETTINGS_FILE);
+    val settings = Settings.builder()
+        .loadFromSource(settingsContents);
+
+    val createBuilder = prepareCreate(INDEX_NAME, 1, settings);
+    for (val typeName : typeNames) {
+      log.debug("Creating mapping for type: {}", typeName);
+      createBuilder.addMapping(typeName.getId(), mappingSource(typeName));
+
     }
 
-    return request;
+    val created = createBuilder.execute().actionGet().isAcknowledged();
+    checkState(created, "Failed to create index");
   }
 
-  protected static BulkJSONProvider bulkFile(Class<?> testClass) {
-    return new BulkJSONProvider(new File(FIXTURES_DIR, testClass.getSimpleName() + ".txt"));
+  @SneakyThrows
+  protected void loadData(Class<?> testClass) {
+    val dataFile = new File(FIXTURES_DIR, testClass.getSimpleName() + ".txt");
+    val iterator = READER.readValues(dataFile);
+
+    while (iterator.hasNext()) {
+      val docMetadata = (ObjectNode) iterator.next();
+      val indexMetadata = docMetadata.get("index");
+      val indexName = indexMetadata.get("_index").textValue();
+      val indexType = indexMetadata.get("_type").textValue();
+      val indexId = indexMetadata.get("_id").textValue();
+      checkState(iterator.hasNext(), "Incorrect format of input test data file. Expected data after document metadata");
+      val doc = (ObjectNode) iterator.next();
+      val indexRequest = client.prepareIndex(indexName, indexType, indexId).setSource(doc.toString());
+      indexRandom(true, indexRequest);
+    }
+  }
+
+  protected void createTermsLookupType() {
+    val created = prepareCreate("terms-lookup").execute().actionGet().isAcknowledged();
+    checkState(created, "Failed to create terms-lookup mapping");
+  }
+
+  private static URL getMappingFileUrl(String fileName) {
+    return Resources.getResource(JSON_DIR + "/" + fileName);
   }
 
   @SneakyThrows
@@ -137,37 +165,7 @@ public class BaseElasticsearchTest {
   }
 
   private static ObjectNode objectNode(URL url) throws IOException, JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
-    return (ObjectNode) mapper.readTree(url);
-  }
-
-  /**
-   * {@link JSONProvider} implementation that can read formatted concatenated Elasticsearch bulk load files as specified
-   * in http://www.elasticsearch.org/guide/reference/api/bulk/.
-   */
-  @RequiredArgsConstructor
-  protected static class BulkJSONProvider implements JSONProvider {
-
-    @NonNull
-    private final File file;
-
-    @Override
-    @SneakyThrows
-    public String toJson() {
-      // Normalize to non-pretty printed in memory representation
-      ObjectReader reader = new ObjectMapper().reader(JsonNode.class);
-      MappingIterator<JsonNode> iterator = reader.readValues(file);
-
-      StringBuilder builder = new StringBuilder();
-      while (iterator.hasNext()) {
-        // Write non-pretty printed
-        JsonNode jsonNode = iterator.nextValue();
-        builder.append(jsonNode);
-        builder.append("\n");
-      }
-
-      return builder.toString();
-    }
+    return (ObjectNode) MAPPER.readTree(url);
   }
 
   protected ExpressionNode createTree(String query) {
@@ -180,11 +178,11 @@ public class BaseElasticsearchTest {
     for (val hit : response.getHits()) {
       resopnseIds.add(hit.getId());
     }
-    assertThat(resopnseIds).containsOnly(ids);
+    Assertions.assertThat(resopnseIds).containsOnly(ids);
   }
 
   public static void assertTotalHitsCount(SearchResponse response, int expectedCount) {
-    assertThat(response.getHits().getTotalHits()).isEqualTo(expectedCount);
+    Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(expectedCount);
   }
 
 }

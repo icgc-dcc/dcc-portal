@@ -18,14 +18,13 @@
 package org.dcc.portal.pql.query;
 
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dcc.portal.pql.utils.BaseElasticsearchTest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.junit.Before;
 import org.junit.Test;
-
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EsRequestBuilderTest_Donor extends BaseElasticsearchTest {
@@ -33,10 +32,10 @@ public class EsRequestBuilderTest_Donor extends BaseElasticsearchTest {
   QueryEngine queryEngine;
 
   @Before
-  public void setUp() {
-    es.execute(createIndexMappings(DONOR_CENTRIC).withData(bulkFile(getClass())));
+  public void setUpEsRequestBuilderTestDonor() {
+    prepareIndex(DONOR_CENTRIC);
     queryContext = new QueryContext(INDEX_NAME, DONOR_CENTRIC);
-    queryEngine = new QueryEngine(es.client(), INDEX_NAME);
+    queryEngine = new QueryEngine(client, INDEX_NAME);
   }
 
   @Test
