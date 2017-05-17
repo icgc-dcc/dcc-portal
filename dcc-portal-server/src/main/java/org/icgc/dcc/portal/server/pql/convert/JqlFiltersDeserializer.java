@@ -105,7 +105,7 @@ public class JqlFiltersDeserializer extends JsonDeserializer<JqlFilters> {
 
         while(nodeChildFields.hasNext()) {
           val nodeChildField = nodeChildFields.next();
-          final JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
+          val nodeFactory = JsonNodeFactory.instance;
           ObjectNode node = nodeFactory.objectNode();
           node.set(nodeChildField.getKey(), nodeChildField.getValue());
 
@@ -124,7 +124,6 @@ public class JqlFiltersDeserializer extends JsonDeserializer<JqlFilters> {
     }
 
     val typeFields = typeFieldsBuilder.build();
-
     return typeFields.isEmpty() ? emptyMap() : singletonMap(type, typeFields);
   }
 
@@ -206,7 +205,7 @@ public class JqlFiltersDeserializer extends JsonDeserializer<JqlFilters> {
 
   private static void validateOperation(JsonNode fieldValue) {
     log.debug("Validating operation for {}", fieldValue);
-    checkSemantic(fieldValue.size() <= 2, "More than one operation detected. %s", fieldValue);
+    checkSemantic(fieldValue.size() <= 2, "More than two operations detected. %s", fieldValue);
     val operation = getFirstFieldName(fieldValue);
     checkSemantic(Operation.operations().contains(operation), "Invalid operation '%s'", operation);
   }

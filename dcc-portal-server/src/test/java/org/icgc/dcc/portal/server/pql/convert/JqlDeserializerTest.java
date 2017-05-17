@@ -126,8 +126,6 @@ public class JqlDeserializerTest {
 
     val notArrayValues = (JqlArrayValue) notValue;
     assertThat(notArrayValues.get()).containsExactly("MU109");
-
-
   }
 
   @Test
