@@ -318,7 +318,10 @@
         cancelInFlightAggregationAjax();
         if (stopIfNoHits (data)) {return}
 
-        var mutationFilter = {
+        const geneSSMFilter = {
+          gene: {
+            curatedSetId: {is: ['GS1']}
+          },
           mutation: {
             functionalImpact: {is: ['High']}
           }
@@ -326,7 +329,7 @@
 
         Projects.several (_ctrl.projectIds.join()).get ('genes', {
           include: 'projects',
-          filters: mutationFilter,
+          filters: geneSSMFilter,
           size: 20
         }).then (function (genes) {
           // About to launch a new ajax getting project aggregation data. Cancel any active call.
@@ -340,7 +343,7 @@
           _ctrl.isLoadingData = true;
 
           geneDonorCountsRestangular
-            .get ({'filters': mutationFilter})
+            .get ({'filters': geneSSMFilter})
             .then (function (geneProjectFacets) {
 
               genes.hits.forEach (function (gene) {
