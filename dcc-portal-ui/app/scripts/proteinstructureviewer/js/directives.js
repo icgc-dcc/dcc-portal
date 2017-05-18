@@ -14,6 +14,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import lolliplot from '@oncojs/lolliplot/dist/lib';
 
 (function () {
   'use strict';
@@ -74,8 +75,12 @@
       domainCount = sortedDomains.length;
       for (d = 0; d < domainCount; d++) {
         domain = sortedDomains[d];
-        transformedDomains.push({id: domain.hitName, start: domain.start, stop: domain.end,
-          description: domain.description});
+        transformedDomains.push({
+          id: domain.hitName,
+          start: domain.start,
+          end: domain.end,
+          description: domain.description
+        });
       }
 
       return transformedDomains;
@@ -106,7 +111,7 @@
       var filters = LocationService.filters();
       var result = _(mutations.hits)
         .map(hit => ({
-            mutation: hit, 
+            mutation: hit,
             transcript: _.find(hit.transcripts, {id: transcriptId})
           }))
         .filter( m => m.transcript !== undefined && m.transcript !== null )
@@ -122,13 +127,13 @@
      */
     function mapToResult(d) {
       var start = d.transcript.consequence.aaMutation.replace(/[^\d]/g, '');
-        var m = {
-          id: d.transcript.consequence.aaMutation,
-          position: start,
-          value: d.mutation.affectedDonorCountTotal,
-          ref: d.mutation.id,
-          functionalImpact: d.transcript.functionalImpact || 'Unknown'
-        };
+      var m = {
+        consequence: d.transcript.consequence.aaMutation,
+        x: start,
+        donors: d.mutation.affectedDonorCountTotal,
+        id: d.mutation.id,
+        impact: d.transcript.functionalImpact || 'Unknown'
+      };
       
       return m;
     }
@@ -154,116 +159,128 @@
       restrict: 'E',
       replace: true,
       scope: {'highlightMarker': '&', 'transcript': '=', 'isPvLoading': '=', 'isInitialLoad': '='},
-      template: '<div class="protein-structure-viewer-diagram"></div>',
+      template: `
+        <div class="protein-structure-viewer-diagram">
+          <button
+            class="btn btn-default"
+            ng-class="{disabled: !canUndo()}"
+            data-tooltip="Reset"
+            ng-click="handleClickReset()"
+            style="
+              position: absolute;
+              right: 0;
+              top: -37px;
+            "
+          >
+            <i class="icon-undo"></i>
+          </button>
+        </div>
+      `,
       link: function (scope, iElement) {
-        var options, selectedMutation;
-        options = iElement.data();
+        var selectedMutation;
+        let chart;
+
+        scope.handleClickReset = () => {
+          chart.reset();
+        };
+
+        scope.canUndo = () => {
+          if (chart) {
+            const {min, max, domain} = chart.store.getState();
+            return !(min === 0 && max === domain);
+          }
+        };
+
         selectedMutation = scope.$eval('highlightMarker');
         if (selectedMutation) {
           selectedMutation = selectedMutation();
         }
+        
+        const drawChart = (mutations, transcript) => {
+          scope.mutations = mutations;
+          const element = jQuery(iElement).get()[0];
+          const chartData = {};
+
+          // Ideally, we need to merge domains that overlap. This is based on pfam curation
+          // rules that indicate only domains in the same family can overlap. Our strategy is
+          // simple: when we find two domains that overlap, at all, we replace them by the larger
+          // until we are done.
+          chartData.proteins = transformDomains(transcript.domains);
+
+          // Now reformat the mutations as required. Yes, it would be better to provide an
+          // iterator function for these, and for the domains too, for that matter, but this
+          // will do for now.
+          chartData.mutations = transformMutations(mutations, transcript.id);
+
+          const markerClassFn = function(d) {
+            var style;
+            style = getOverallFunctionalImpact(d);
+            if (selectedMutation) {
+              if( d.ref === selectedMutation) {
+                style = style + ' selected';
+              } else {
+                style = style + ' fade';
+              }
+            }
+            return style;
+          };
+
+          const hideTooltip = () => scope.$emit('tooltip::hide');
+
+          if (chart) {
+            chart.remove();
+          }
+
+          chart = lolliplot({
+            d3: require('d3'),
+            width: jQuery('.protein-structure-viewer-diagram').width(),
+            element,
+            animate: false,
+            data: chartData,
+            domainWidth: transcript.lengthAminoAcid,
+            hideStats: true,
+            mutationId: selectedMutation,
+            hasCustomMutationColor: true,
+            getMutationColor : (d) => ({High: '#D44', Low:'#4D4', Unknown: '#bbb'})[d.impact],
+            onMutationClick: (data) => {
+              $location.path('/mutations/' + data.id);
+            },
+            onMutationMouseover: (data, event) => {
+              scope.$emit('tooltip::show', {
+                element: angular.element(event.target),
+                text: gettextCatalog.getString('Mutation ID') + ': ' + data.id + '<br>' +
+                  gettextCatalog.getString('Number of donors') + ': ' + data.donors + '<br>' +
+                  gettextCatalog.getString('Amino acid change') + ': ' + data.consequence + '<br>' +
+                  gettextCatalog.getString('Functional Impact') + ': ' + data.impact,
+                placement: 'top',
+              });
+            },
+            onMutationMouseout: hideTooltip,
+            onProteinMouseover: (data, event) => {
+              scope.$emit('tooltip::show', {
+                elementPosition: {
+                  width: 0,
+                  height: 0,
+                  top: event.target.getBoundingClientRect().top + document.body.scrollTop,
+                  left: event.pageX,
+                },
+                text: `${data.id} : ${data.description}`,
+                placement: 'top'
+              });
+            },
+            onProteinMouseout: hideTooltip,
+          });
+
+          scope.isInitialLoad = false;
+          scope.isPvLoading = false;
+        };
 
         function refresh(transcript) {
-          var element, chartData;
-
-          if (transcript && transcript.id) {
-
-            Protein.init(transcript.id).get().then(function (mutations) {
-              scope.mutations = mutations;
-
-
-              element = jQuery(iElement).get()[0];
-
-              chartData = {};
-              chartData.start = 1;
-              chartData.stop = transcript.lengthAminoAcid;
-
-              // Ideally, we need to merge domains that overlap. This is based on pfam curation
-              // rules that indicate only domains in the same family can overlap. Our strategy is
-              // simple: when we find two domains that overlap, at all, we replace them by the larger
-              // until we are done.
-              chartData.domains = transformDomains(transcript.domains);
-
-              // Now reformat the mutations as required. Yes, it would be better to provide an
-              // iterator function for these, and for the domains too, for that matter, but this
-              // will do for now.
-              chartData.mutations = transformMutations(mutations, transcript.id);
-
-              options.tooltipShowFunc = function(elem, d, options, isDomain) {
-                var getLabel = function(){
-
-                  if(isDomain) {
-                    return d.id + ': ' + d.description;
-                  }
-
-                  var FI = getOverallFunctionalImpact(d);
-                  return gettextCatalog.getString('Mutation ID') + ': ' + d.ref + '<br>' +
-                         gettextCatalog.getString('Number of donors') + ': ' + d.value + '<br>' +
-                         gettextCatalog.getString('Amino acid change') + ': ' + d.id + '<br>' +
-                         gettextCatalog.getString('Functional Impact') + ': ' + FI;
-                };
-
-                var position = null;
-
-                if(isDomain){
-                  // The domain svg element consits of a group of text and rect. Since the text
-                  // can extend the rect which we care about it, get the first child (rect)
-                  var actualElement = angular.element(angular.element(elem).context.firstChild);
-
-                  // Use the width/height of the rect and the CTM of the svg container plus the
-                  // x and y position of the rect within the svg container to find the left/right values
-                  position = {
-                    width: actualElement.prop('width').baseVal.value,
-                    height: actualElement.prop('height').baseVal.value,
-                    left: elem.getScreenCTM().e + actualElement.prop('x').baseVal.value,
-                    top: elem.getScreenCTM().f + $window.pageYOffset + actualElement.prop('y').baseVal.value
-                  };
-
-                }
-
-                scope.$emit('tooltip::show', {
-                  element: angular.element(elem),
-                  text: getLabel(),
-                  placement: options.placement,
-                  elementPosition: isDomain?position:null
-                });
-              };
-
-              options.tooltipHideFunc = function() {
-                scope.$emit('tooltip::hide');
-              };
-
-              options.markerClassFn = function(d) {
-                var style;
-                style = getOverallFunctionalImpact(d);
-                if (selectedMutation) {
-                  if( d.ref === selectedMutation) {
-                    style = style + ' selected';
-                  } else {
-                    style = style + ' fade';
-                  }
-                }
-                return style;
-              };
-
-              options.markerUrlFn = function (d) {
-                $location.path('/mutations/' + d.ref);
-              };
-
-             options.displayWidth = jQuery('.protein-structure-viewer-diagram').width() - 100;
-
-              var chart = chartmaker.chart(options, chartData);
-              if (chartData.mutations.length > 0) {
-                chart.display(element);
-                scope.isInitialLoad = false;
-                scope.isPvLoading = false;
-              } else {
-                chart.displayError(element, gettextCatalog.getString('No Mutation occurs in coding region of this Gene.'));
-                scope.isInitialLoad = false;
-                scope.isPvLoading = false;
-              }
-            });
+          if (!transcript || !transcript.id) {
+            console.warn('Aborting refresh due to missing transcript');
+            return;
           }
+          Protein.init(transcript.id).get().then((mutations) => drawChart(mutations, transcript));
         }
 
 
