@@ -69,6 +69,15 @@ public class Jql2PqlConverterTest {
   }
 
   @Test
+  public void fieldsWithIsNotFilpostterTest() {
+    val query = Query.builder()
+            .fields(ImmutableList.of("id", "age"))
+            .filters(new FiltersParam("{donor:{id:{is:['DO1', 'DO3'], not:['DO2']}}}").get())
+            .build();
+    assertResponse(query, "select(id,age),in(donor.id,'DO1','DO3'),not(in(donor.id,'DO2'))");
+  }
+
+  @Test
   public void allFieldsTest() {
     val query = Query.builder()
         .build();
