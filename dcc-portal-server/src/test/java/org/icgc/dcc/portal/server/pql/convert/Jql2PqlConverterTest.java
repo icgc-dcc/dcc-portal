@@ -118,11 +118,11 @@ public class Jql2PqlConverterTest {
   }
 
   @Test
-  public void SSMDonorTest() {
+  public void ssmDonorTest() {
     val query = Query.builder()
             .filters(new FiltersParam("{donor:{availableDataTypes:{is:['CNSM']},hasSSMType:true}}").get())
             .build();
-    assertResponse(query, "select(*),in(donor.availableDataTypes,'CNSM'),eq(donor.availableDataTypes,'SSM')");
+    assertResponse(query, "select(*),in(donor.availableDataTypes,'CNSM'),eq(donor.availableDataTypes,'ssm')");
   }
 
   @Test
