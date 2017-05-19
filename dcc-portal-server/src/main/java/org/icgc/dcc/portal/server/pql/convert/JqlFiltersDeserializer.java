@@ -130,6 +130,9 @@ public class JqlFiltersDeserializer extends JsonDeserializer<JqlFilters> {
   private static Optional<JqlField> parseHasOperationField(String type, String fieldName, JsonNode fieldValue) {
     val value = parseSingleValue(fieldValue);
     if (hasValue(value)) {
+      if(fieldName.equals("hasSSMType")) {
+        return Optional.of(new JqlField("availableDataTypes", Operation.IS, new JqlSingleValue("SSM"), type));
+      }
       return Optional.of(new JqlField(fieldName, Operation.HAS, value, type));
     }
 
