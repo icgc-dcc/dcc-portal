@@ -131,7 +131,7 @@ public class JqlFiltersDeserializer extends JsonDeserializer<JqlFilters> {
     val value = parseSingleValue(fieldValue);
     if (hasValue(value)) {
       if(fieldName.equals("hasSSMType")) {
-        return Optional.of(new JqlField("availableDataTypes", Operation.IS, new JqlSingleValue("SSM"), type));
+        return Optional.of(new JqlField("availableDataTypes", Operation.IS, new JqlSingleValue("ssm"), type));
       }
       return Optional.of(new JqlField(fieldName, Operation.HAS, value, type));
     }

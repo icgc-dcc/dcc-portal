@@ -72,7 +72,7 @@ angular.module('icgc.advanced.controllers', [
           _serviceMap = {},
           _filterService = LocationService.getFilterService();
       
-      const ssmFilter = {'donor':{'availableDataTypes':{'is':['ssm']}}};
+      const ssmFilter = {'donor':{'hasSSMType':true}};
 
       _controller.SSMDonorCount = 0;
 
@@ -83,12 +83,12 @@ angular.module('icgc.advanced.controllers', [
       _controller.fetchSSMDonorCount = async (filters) => {
         filters = deepmerge(filters, ssmFilter);
         _controller.SSMDonorCount = await AdvancedDonorService.getSSMDonorCount(filters);
-      }
+      };
 
       _controller.SSMDonorCountQuery = () => {
         var filters = deepmerge(_.cloneDeep(_locationFilterCache.filters()), ssmFilter);
         return `/search?filters=${angular.toJson(filters)}`;
-      }
+      };
       
       // NOTE: using IDs instead of storing references to entities b/c pagination results in new objects  
       this.selectedEntityIdsMap = {};
