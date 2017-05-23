@@ -56,7 +56,7 @@ angular.module('app.common.components')
       : searchableJsonpaths
         ? (row, rowIndex, array) => {
           const searchTargets = _.flattenDeep(searchableJsonpaths.map((path) => jp({ json: row, path })));
-          return _.some(searchTargets, target => target && containsString(target, filter))
+          return _.some(searchTargets, target => target && containsString(target, filter));
         }
         : filter
     );
