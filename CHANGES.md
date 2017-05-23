@@ -3,6 +3,18 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[5.0.14](https://github.com/icgc-dcc/dcc-portal/compare/5.0.6...5.0.14)
+--
+- Added unit testing for SearchRepository
+- Moved to using OnoJS version of the Pathway Viewer
+- Bug fixes and improvements to the Genome Viewer, specifically related to backbone events
+- Updated team credits
+- Added chromosome facet
+- General UI touchups
+- Added support for travic-ci builds and cobertura test reporting
+- Updated project history
+- OncoGrid being pulled from npm rather than static file
+
 [5.0.6](https://github.com/icgc-dcc/dcc-portal/compare/5.0.3...5.0.6)
 --
 - Fixes search issues related to scoring and ranking of results in Elasticsearch 5

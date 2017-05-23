@@ -63,6 +63,3 @@ require('expose?lineD3!imports?this=>window!exports?lineD3!../vendor/scripts/vcf
 
 // Highcharts Rounded Corners
 require('../vendor/scripts/highcharts-rounded-corners.js');
-
-// OncoGrid
-require('script!../vendor/scripts/oncogrid/oncogrid-debug.js');

@@ -763,9 +763,9 @@ angular.module('icgc.advanced.controllers', [
     };
 
   })
-  .service('AdvancedGeneService', // Advanced Donor Service
+  .service('AdvancedGeneService', // Advanced Gene Service
     function(Page, LocationService, Genes, Projects, Donors, AdvancedSearchTabs,
-             FiltersUtil, Extensions, ProjectCache, $q) {
+      FiltersUtil, Extensions, ProjectCache, $q) {
 
       var _ASGeneService = this;
 
@@ -964,7 +964,7 @@ angular.module('icgc.advanced.controllers', [
       };
   })
   .service('AdvancedMutationService', function (Page, LocationService, HighchartsService, Mutations,
-    Occurrences, Projects, Donors, AdvancedSearchTabs, Extensions, ProjectCache, $q, $filter) {
+    Occurrences, Projects, Donors, Chromosome, AdvancedSearchTabs, Extensions, ProjectCache, $q, $filter) {
 
     var _ASMutationService = this,
         _projectCachePromise = ProjectCache.getData();
@@ -1191,6 +1191,7 @@ angular.module('icgc.advanced.controllers', [
             _initFacets(mutationsFacetsList.facets);
 
             _ASMutationService.mutations = mutationsFacetsList.plain(); // Build partial object
+            _ASMutationService.mutations.facets.chromosome.terms = Chromosome.sort(_ASMutationService.mutations.facets.chromosome.terms);
 
             deferred.resolve();
           });

@@ -110,7 +110,7 @@
       const _service = this;
       _service.setName = '';
 
-      const updateSetName = (filters) => {
+      const updateSetName = () => {
         return SetNameService.getSetFilters()
           .then((filters) => SetNameService.getSetName(filters))
           .then((setName) => {_service.setName = setName});
@@ -149,31 +149,54 @@
           });
       };
 
+      const getSetObject = (setId, entityType, entityId, filterType) => ({
+        filters: _.merge({donor: {id: {is: [`ES:${setId}`]}}}, {[entityType]: { id: { [filterType]: [entityId] } }}),
+        isTransient: true,
+        type: 'donor',
+      });
+
       _service.launchSurvivalAnalysis = async (entityType, entityId, entitySymbol, filters, projectId) => {
 
-        const isGene = _.isEqual(entityType, 'gene');
-        const type = 'donor';
-        const projectCode = projectId || '';
+        const isGene = _.isEqual(entityType, 'gene'),
+          type = 'donor',
+          projectCode = projectId || '';
 
-        let donorSet1, donorSet2;
+        /* FIXME: This will be a workaround since currently we dont support
+        ** IS and NOT in the filters query for the same entity type.
+        ** For the workaround we are first creating a dummy donor set(initialSet)
+        ** without the entity ID(entityId) we are runing analysis on,
+        ** therefore the _.remove method.
+        ** Once given the set ID for the dummy set, we then create two sets.
+        ** One containing IS filter and the other one with NOT filter.
+        ** This will make sure that we get correct data to run analysis on.
+        **/
+
+        _.remove(_.get(filters, `${entityType}.id.is`), entityId);
+
+        let initialDonorSet, donorSet1, donorSet2;
+
+        initialDonorSet = {
+          filters,
+          isTransient: true,
+          type,
+          name: 'dummy Donor Set'
+        };
+
+        const initialSet = await SetService.addSet(type, initialDonorSet);
 
         Page.startWork();
 
-        await updateSetName(filters);
+        await updateSetName();
 
         _service.setName = _.includes(_service.setName, 'All') ? '' : _service.setName;
 
         donorSet1 = {
-          filters: isGene ? _.merge(_.cloneDeep(filters), {gene: { id: { is: [entityId] } }}) : _.merge(_.cloneDeep(filters), {mutation: { id: { is: [entityId] } }}),
-          isTransient: true,
-          type,
+          ...getSetObject(initialSet.id, entityType, entityId, 'is'),
           name: isGene ? `${entitySymbol} Mutated Donors ${projectCode} ${_service.setName}` : `Donors with mutation ${entitySymbol} ${projectCode} ${_service.setName}`
         };
 
         donorSet2 = {
-          filters: isGene ? _.merge(_.cloneDeep(filters), {gene: { id: { not: [entityId] } }}) : _.merge(_.cloneDeep(filters), {mutation: { id: { not: [entityId] } }}),
-          isTransient: true,
-          type,
+          ...getSetObject(initialSet.id, entityType, entityId, 'not'),
           name: isGene ? `${entitySymbol} Not Mutated Donors ${projectCode} ${_service.setName}` : `Donors without mutation ${entitySymbol} ${projectCode} ${_service.setName}`
         };
 
