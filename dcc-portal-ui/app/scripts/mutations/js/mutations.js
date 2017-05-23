@@ -43,7 +43,7 @@
 
   var module = angular.module('icgc.mutations.controllers', ['icgc.mutations.models']);
 
-  module.controller('MutationCtrl', function (HighchartsService, Page, Genes, mutation, $filter) {
+  module.controller('MutationCtrl', function (HighchartsService, Page, Genes, mutation, $filter, PCAWG) {
     var _ctrl = this, projects;
     Page.setTitle(mutation.id);
     Page.setPage('entity');
@@ -177,6 +177,10 @@
         });
       });
     }
+
+    _ctrl.isPCAWG = function(mutation) {
+      return _.some(mutation.studies, PCAWG.isPCAWGStudy);
+    };
   });
 })();
 

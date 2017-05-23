@@ -76,7 +76,8 @@ public class MutationCentricTypeModel extends TypeModel {
       "functionalImpact",
       // "functionalImpactNested",
       "mutation.location",
-      "sequencingStrategy"
+      "sequencingStrategy",
+      "study"
   // "sequencingStrategyNested"
   );
 
