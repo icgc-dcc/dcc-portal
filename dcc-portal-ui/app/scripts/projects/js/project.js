@@ -16,7 +16,7 @@
  */
 
 (function () {
-  var module = angular.module('icgc.project', ['icgc.project.donor', 'icgc.project.gene', 'icgc.project.mutation']);;
+  var module = angular.module('icgc.project', ['icgc.project.donor', 'icgc.project.gene', 'icgc.project.mutation']);
 
     module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page, PubMed, project,
     Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState, SetService, Restangular, 
