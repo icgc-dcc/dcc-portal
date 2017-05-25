@@ -17,7 +17,6 @@
 
 var module = angular.module('icgc.project.mutation', []);
 
-
 module.controller('ProjectMutationsCtrl', function ($scope, HighchartsService,
   Projects, Donors, LocationService, ProjectCache, $stateParams, LoadState) {
 

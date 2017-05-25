@@ -17,15 +17,14 @@
 
 var module = angular.module('icgc.project.donor', []);
 
-
 module.controller('ProjectDonorsCtrl', function ($scope, HighchartsService,
   Projects, Donors, LocationService, $stateParams, LoadState) {
+
   var _ctrl = this,
     _projectId = $stateParams.id || null,
     project = Projects.one(_projectId),
-    FilterService = LocationService.getFilterService();
-
-  var loadState = new LoadState({ scope: $scope });
+    FilterService = LocationService.getFilterService(),
+    loadState = new LoadState({ scope: $scope });
 
   function success(donors) {
     if (donors.hasOwnProperty('hits')) {
