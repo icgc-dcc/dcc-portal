@@ -15,72 +15,69 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function () {
-  'use strict';
-
-  var module = angular.module('icgc.project.donor', []);
+var module = angular.module('icgc.project.donor', []);
 
 
-  module.controller('ProjectDonorsCtrl', function ($scope, HighchartsService, Projects, Donors, LocationService, $stateParams, LoadState) {
-    var _ctrl = this,
-        _projectId = $stateParams.id || null,
-        project = Projects.one(_projectId),
-        FilterService = LocationService.getFilterService();
+module.controller('ProjectDonorsCtrl', function ($scope, HighchartsService,
+  Projects, Donors, LocationService, $stateParams, LoadState) {
+  var _ctrl = this,
+    _projectId = $stateParams.id || null,
+    project = Projects.one(_projectId),
+    FilterService = LocationService.getFilterService();
 
-    var loadState = new LoadState({ scope: $scope });
+  var loadState = new LoadState({ scope: $scope });
 
-    function success(donors) {
-      if (donors.hasOwnProperty('hits')) {
-        _ctrl.donors = donors;
-        _ctrl.donors.advQuery = LocationService.mergeIntoFilters({donor: {projectId: {is: [project.id]}}});
+  function success(donors) {
+    if (donors.hasOwnProperty('hits')) {
+      _ctrl.donors = donors;
+      _ctrl.donors.advQuery = LocationService.mergeIntoFilters({ donor: { projectId: { is: [project.id] } } });
 
-        _ctrl.donors.hits.forEach(function (donor) {
-          donor.advQuery = LocationService.mergeIntoFilters({donor: {id: {is: [donor.id]}}});
+      _ctrl.donors.hits.forEach(function (donor) {
+        donor.advQuery = LocationService.mergeIntoFilters({ donor: { id: { is: [donor.id] } } });
+      });
+      Donors
+        .one(_.map(donors.hits, 'id').join(',')).handler.all('mutations')
+        .one('counts').get({ filters: LocationService.filters() }).then(function (data) {
+          _ctrl.mutationCounts = data;
         });
-        Donors
-          .one(_.map(donors.hits, 'id').join(',')).handler.all('mutations')
-          .one('counts').get({filters: LocationService.filters()}).then(function (data) {
-            _ctrl.mutationCounts = data;
-          });
 
-        _ctrl.bar = HighchartsService.bar({
-          hits: _ctrl.donors.hits,
-          xAxis: 'id',
-          yValue: 'ssmAffectedGenes'
-        });
-      }
+      _ctrl.bar = HighchartsService.bar({
+        hits: _ctrl.donors.hits,
+        xAxis: 'id',
+        yValue: 'ssmAffectedGenes'
+      });
     }
+  }
 
-    function refresh() {
+  function refresh() {
 
-      var params = LocationService.getPaginationParams('donors');
+    var params = LocationService.getPaginationParams('donors');
 
-      loadState.loadWhile(
-        Projects.one(_projectId).getDonors({
-          from: params.from,
-          size: params.size,
-          sort: params.sort,
-          order: params.order,
-          filters: LocationService.filters()
-        }).then(success)
-      );
+    loadState.loadWhile(
+      Projects.one(_projectId).getDonors({
+        from: params.from,
+        size: params.size,
+        sort: params.sort,
+        order: params.order,
+        filters: LocationService.filters()
+      }).then(success)
+    );
+  }
+
+  $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function (e, filterObj) {
+
+    if (filterObj.currentPath.indexOf('/projects/' + _projectId) < 0) {
+      return;
     }
-
-    $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
-
-      if (filterObj.currentPath.indexOf('/projects/' + _projectId) < 0) {
-        return;
-      }
-
-      refresh();
-    });
-
-    $scope.$on('$locationChangeSuccess', function (event, dest) {
-      if (dest.indexOf('/projects/' + project.id) !== -1) {
-        refresh();
-      }
-    });
 
     refresh();
   });
-})();
+
+  $scope.$on('$locationChangeSuccess', function (event, dest) {
+    if (dest.indexOf('/projects/' + project.id) !== -1) {
+      refresh();
+    }
+  });
+
+  refresh();
+});

@@ -15,118 +15,113 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function () {
-  'use strict';
-  
-  var module = angular.module('icgc.project.gene', []);
+var module = angular.module('icgc.project.gene', []);
 
-  module.controller('ProjectGeneCtrl',
-    function($scope, HighchartsService, Projects, Donors, LocationService, ProjectCache, $stateParams, LoadState) {
-    var _ctrl = this,
-        _projectId = $stateParams.id || null,
-        project = Projects.one(_projectId),
-        FilterService = LocationService.getFilterService();
+module.controller('ProjectGeneCtrl', function ($scope, HighchartsService,
+  Projects, Donors, LocationService, ProjectCache, $stateParams, LoadState) {
+  var _ctrl = this,
+    _projectId = $stateParams.id || null,
+    project = Projects.one(_projectId),
+    FilterService = LocationService.getFilterService();
 
-    var loadState = new LoadState({scope: $scope});
+  var loadState = new LoadState({ scope: $scope });
 
-    function success(genes) {
-      if (genes.hasOwnProperty('hits') ) {
-        var projectCachePromise = ProjectCache.getData();
-        var geneIds = _.map(genes.hits, 'id').join(',');
-        _ctrl.genes = genes;
+  function success(genes) {
+    if (genes.hasOwnProperty('hits')) {
+      var projectCachePromise = ProjectCache.getData();
+      var geneIds = _.map(genes.hits, 'id').join(',');
+      _ctrl.genes = genes;
 
-        if (_.isEmpty(_ctrl.genes.hits)) {
-          return;
-        }
+      if (_.isEmpty(_ctrl.genes.hits)) {
+        return;
+      }
 
-        Projects.one(_projectId).get().then(function (data) {
-          var project = data;
-          genes.advQuery = LocationService.mergeIntoFilters({donor: {projectId: {is: [project.id]}}});
+      Projects.one(_projectId).get().then(function (data) {
+        var project = data;
+        genes.advQuery = LocationService.mergeIntoFilters({ donor: { projectId: { is: [project.id] } } });
 
-          // Get Mutations counts
-          Projects.one(_projectId).handler
-            .one('genes', geneIds)
-            .one('mutations', 'counts').get({
-              filters: LocationService.filters()
-            }).then(function (data) {
-              _ctrl.mutationCounts = data;
-            });
+        // Get Mutations counts
+        Projects.one(_projectId).handler
+          .one('genes', geneIds)
+          .one('mutations', 'counts').get({
+            filters: LocationService.filters()
+          }).then(function (data) {
+            _ctrl.mutationCounts = data;
+          });
 
-          // Need to get SSM Test Donor counts from projects
-          Projects.getList().then(function (projects) {
-            _ctrl.genes.hits.forEach(function (gene) {
-              gene.uiAffectedDonorPercentage = gene.affectedDonorCountFiltered / project.ssmTestedDonorCount;
+        // Need to get SSM Test Donor counts from projects
+        Projects.getList().then(function (projects) {
+          _ctrl.genes.hits.forEach(function (gene) {
+            gene.uiAffectedDonorPercentage = gene.affectedDonorCountFiltered / project.ssmTestedDonorCount;
 
-              gene.advQuery =
-              LocationService.mergeIntoFilters({donor: {projectId: {is: [project.id]}}, gene: {id: {is: [gene.id]}}});
+            gene.advQuery =
+              LocationService.mergeIntoFilters({ donor: { projectId: { is: [project.id] } }, gene: { id: { is: [gene.id] } } });
 
-              gene.advQueryAll = LocationService.mergeIntoFilters({gene: {id: {is: [gene.id]}}});
+            gene.advQueryAll = LocationService.mergeIntoFilters({ gene: { id: { is: [gene.id] } } });
 
-              Donors.getList({size: 0, include: 'facets', filters: gene.advQueryAll}).then(function (data) {
-                gene.uiDonors = data.facets.projectId.terms;
-                gene.uiDonors.forEach(function (facet) {
-                  var p = _.find(projects.hits, function (item) {
-                    return item.id === facet.term;
-                  });
-
-                  facet.advQuery = LocationService.mergeIntoFilters({
-                      donor: {projectId: {is: [facet.term]}},
-                      gene: {id: {is: [gene.id]}}
-                    }
-                  );
-
-                  projectCachePromise.then(function(lookup) {
-                    facet.projectName = lookup[facet.term] || facet.term;
-                  });
-
-                  facet.countTotal = p.ssmTestedDonorCount;
-                  facet.percentage = facet.count / p.ssmTestedDonorCount;
+            Donors.getList({ size: 0, include: 'facets', filters: gene.advQueryAll }).then(function (data) {
+              gene.uiDonors = data.facets.projectId.terms;
+              gene.uiDonors.forEach(function (facet) {
+                var p = _.find(projects.hits, function (item) {
+                  return item.id === facet.term;
                 });
+
+                facet.advQuery = LocationService.mergeIntoFilters({
+                  donor: { projectId: { is: [facet.term] } },
+                  gene: { id: { is: [gene.id] } }
+                }
+                );
+
+                projectCachePromise.then(function (lookup) {
+                  facet.projectName = lookup[facet.term] || facet.term;
+                });
+
+                facet.countTotal = p.ssmTestedDonorCount;
+                facet.percentage = facet.count / p.ssmTestedDonorCount;
               });
             });
+          });
 
-            _ctrl.bar = HighchartsService.bar({
-              hits: _ctrl.genes.hits,
-              xAxis: 'symbol',
-              yValue: 'uiAffectedDonorPercentage'
-            });
+          _ctrl.bar = HighchartsService.bar({
+            hits: _ctrl.genes.hits,
+            xAxis: 'symbol',
+            yValue: 'uiAffectedDonorPercentage'
           });
         });
-      }
-    }
-
-    function refresh() {
-
-      var params = LocationService.getPaginationParams('genes');
-        
-      loadState.loadWhile(
-        Projects.one(_projectId).getGenes({
-          from: params.from,
-          size: params.size,
-          sort: params.sort,
-          order: params.order,
-          filters: LocationService.filters()
-        }).then(success)
-      );
-    }
-
-
-      $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
-
-        if (filterObj.currentPath.indexOf('/projects/' + project.id) < 0) {
-          return;
-        }
-
-        refresh();
       });
+    }
+  }
 
-      $scope.$on('$locationChangeSuccess', function (event, dest) {
-        if (dest.indexOf('/projects/' + project.id) !== -1) {
-          refresh();
-        }
-      });
+  function refresh() {
+
+    var params = LocationService.getPaginationParams('genes');
+
+    loadState.loadWhile(
+      Projects.one(_projectId).getGenes({
+        from: params.from,
+        size: params.size,
+        sort: params.sort,
+        order: params.order,
+        filters: LocationService.filters()
+      }).then(success)
+    );
+  }
+
+
+  $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function (e, filterObj) {
+
+    if (filterObj.currentPath.indexOf('/projects/' + project.id) < 0) {
+      return;
+    }
 
     refresh();
   });
 
-})();
+  $scope.$on('$locationChangeSuccess', function (event, dest) {
+    if (dest.indexOf('/projects/' + project.id) !== -1) {
+      refresh();
+    }
+  });
+
+  refresh();
+});
