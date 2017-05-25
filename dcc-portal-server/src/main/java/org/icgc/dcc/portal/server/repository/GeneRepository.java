@@ -165,7 +165,7 @@ public class GeneRepository implements Repository {
     val map = Maps.<String, String> newLinkedHashMap();
     for (val hit : response.getHits()) {
       String id = hit.getId();
-      String symbol = hit.getFields().get(symbolFieldName).getValue();
+      String symbol = hit.sourceAsMap().get(symbolFieldName).toString();
 
       map.put(id, symbol);
     }
