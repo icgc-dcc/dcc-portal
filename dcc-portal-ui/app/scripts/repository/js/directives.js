@@ -149,7 +149,7 @@
         };
 
         scope.toggleChart = function(event, chartId) {
-          var elem = event.target;
+          var elem = event.currentTarget;
           if ($(elem).hasClass('selected')) {
             return;
           }

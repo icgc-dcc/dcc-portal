@@ -211,10 +211,6 @@ function svgToPngDataUri(svg, {width, height}) {
         return _.includes(state.disabledDataSets, dataSet);
       };
 
-      this.toggleDataSet = function (dataSet) {
-        updateState({disabledDataSets: _.xor(state.disabledDataSets, [dataSet])});
-      };
-
       this.$onInit = function () {
         updateState({disabledDataSets: ctrl.initialDisabledDataSets});
       };
