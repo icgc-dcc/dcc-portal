@@ -222,6 +222,11 @@
           type: type,
           facet: facet
         });
+      } else if (type === 'donor' && facet === 'hasSSMType') {
+        Facets.removeFacet({
+          type: type,
+          facet: facet
+        });
       } else {
         if ('file' === type && 'donorId' === facet &&
           _.endsWith ((term || '').toLowerCase(), ' donor set')) {
