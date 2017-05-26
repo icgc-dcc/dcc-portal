@@ -93,10 +93,10 @@
                             {{gene.affectedDonorCountFiltered | number}}
                         </a>
                         /
-                        <a href='/search?filters={"gene":{"id":{"is":["{{gene.id}}"]}},"donor":{"availableDataTypes":{"is":["ssm"]}}}'>
-                            {{gene.affectedDonorCountTotal | number}}
+                        <a href='{{ AdvancedCtrl.SSMDonorCountQuery() }}'>
+                            {{AdvancedCtrl.SSMDonorCount | number}}
                         </a>
-                        <em>({{gene.affectedDonorCountFiltered/gene.affectedDonorCountTotal *
+                        <em>({{gene.affectedDonorCountFiltered/AdvancedCtrl.SSMDonorCount *
                             100 | number:2}}%)</em>
                         </span>
                         <span style="position: relative" data-ng-if="gene.affectedDonorCountFiltered === 0">0</span>
