@@ -203,6 +203,13 @@
           facet: 'hasCompound'
         });
       }
+
+      if (type === 'donor' && facet === 'donorId') {
+        Facets.removeFacet({
+          type: type,
+          facet: 'hasSSMType'
+        });
+      }
     };
 
     /**
