@@ -203,6 +203,13 @@
           facet: 'hasCompound'
         });
       }
+
+      if (type === 'donor' && facet === 'donorId') {
+        Facets.removeFacet({
+          type: type,
+          facet: 'hasSSMType'
+        });
+      }
     };
 
     /**
@@ -211,6 +218,11 @@
      */
     $scope.removeTerm = function (type, facet, term) {
       if (type === 'gene' && (facet === 'hasPathway' || facet === 'hasCompound')) {
+        Facets.removeFacet({
+          type: type,
+          facet: facet
+        });
+      } else if (type === 'donor' && facet === 'hasSSMType') {
         Facets.removeFacet({
           type: type,
           facet: facet
