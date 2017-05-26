@@ -58,6 +58,7 @@ public abstract class TypeModel {
   public static final String HAS_GO_TERM = "hasGoTerm";
   public static final String HAS_CURATED_SET = "hasCuratedSet";
   public static final String HAS_COMPOUND = "hasCompound";
+  public static final String HAS_SSM_TYPE = "hasSSMType";
 
   public static final String GENE_PATHWAY_ID = "gene.pathwayId";
   public static final String GENE_SET_ID = "gene.geneSetId";
@@ -93,6 +94,7 @@ public abstract class TypeModel {
       HAS_GO_TERM,
       HAS_CURATED_SET,
       HAS_COMPOUND,
+      HAS_SSM_TYPE,
       GENE_CURATED_SET_ID,
       GENE_LOCATION,
       MUTATION_LOCATION);

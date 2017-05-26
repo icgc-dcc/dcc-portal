@@ -71,10 +71,9 @@ public class Jql2PqlConverterTest {
   @Test
   public void fieldsWithIsNotFilpostterTest() {
     val query = Query.builder()
-            .fields(ImmutableList.of("id", "age"))
             .filters(new FiltersParam("{donor:{id:{is:['DO1', 'DO3'], not:['DO2']}}}").get())
             .build();
-    assertResponse(query, "select(id,age),in(donor.id,'DO1','DO3'),not(in(donor.id,'DO2'))");
+    assertResponse(query, "select(*),in(donor.id,'DO1','DO3'),not(in(donor.id,'DO2'))");
   }
 
   @Test
@@ -116,6 +115,14 @@ public class Jql2PqlConverterTest {
         .filters(new FiltersParam("{donor:{hasPathway:true}}").get())
         .build();
     assertResponse(query, "select(*),exists(gene.pathwayId)");
+  }
+
+  @Test
+  public void ssmDonorTest() {
+    val query = Query.builder()
+            .filters(new FiltersParam("{donor:{availableDataTypes:{is:['CNSM']},hasSSMType:true}}").get())
+            .build();
+    assertResponse(query, "select(*),in(donor.availableDataTypes,'CNSM'),eq(donor.availableDataTypes,'ssm')");
   }
 
   @Test
