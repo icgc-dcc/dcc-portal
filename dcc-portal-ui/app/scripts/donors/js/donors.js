@@ -213,6 +213,8 @@
         Restangular.one('ui').one('search').one('donor-mutations').get({
           from: params.from,
           size: params.size,
+          sort: params.sort,
+          order: params.order,
           filters: filters,
           donorId: d.id,
           include: 'consequences'

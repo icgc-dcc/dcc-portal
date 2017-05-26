@@ -98,12 +98,14 @@ public class UISearchResource extends Resource {
       @ApiParam(value = "Filter the search results") @QueryParam("filters") @DefaultValue(DEFAULT_FILTERS) FiltersParam filters,
       @ApiParam(value = "The donor to search for ") @QueryParam("donorId") String donorId,
       @ApiParam(value = "From") @QueryParam("from") @DefaultValue("1") IntParam from,
-      @ApiParam(value = "Size") @QueryParam("size") @DefaultValue("10") IntParam size) {
+      @ApiParam(value = "Size") @QueryParam("size") @DefaultValue("10") IntParam size,
+      @ApiParam(value = "Sort") @QueryParam("sort") @DefaultValue(DEFAULT_SORT) String sort,
+      @ApiParam(value = "Order", allowableValues = "asc,desc") @QueryParam("order") @DefaultValue(DEFAULT_ORDER) String order) {
 
     checkRequest(isNullOrEmpty(donorId), "donorId query param is required.");
 
     val query =
-        Query.builder().filters(filters.get()).sort("_score").from(from.get()).size(size.get()).order(DEFAULT_ORDER)
+        Query.builder().filters(filters.get()).sort(sort).from(from.get()).size(size.get()).order(order)
             .includes(ImmutableList.of("consequences")).build();
 
     return mutationService.findMutationsByDonor(query, donorId);

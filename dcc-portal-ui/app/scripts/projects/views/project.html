@@ -391,10 +391,16 @@
                 </th>
             </tr>
             <tr>
-                <th class="text-center">
+                <th class="text-center"
+                    data-sortable
+                    data-type="genes"
+                    data-field="affectedDonorCountFiltered"
+                    data-active="true"
+                    data-reversed="true">
                     <abbr data-icgc-tooltip="Breakdown of Affected Donors in {{ ProjectCtrl.project.id }}<br># Donors where Gene is mutated / # SSM tested donors">
                         <translate>in</translate> {{ProjectCtrl.project.id}}
-                    </abbr> <i class="icon-caret-down"></i></th>
+                    </abbr>
+                </th>
                 <th class="text-center">
                     <abbr data-icgc-tooltip="{{'# Donors where gene contains SSM filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
                           tooltip-placement="left"><translate>Across all Projects</translate></abbr></th>
@@ -464,35 +470,35 @@
 
         <table class="hidden" id="{{ProjectCtrl.project.id}}_genes">
             <thead>
-            <tr>
-                <th><translate>Symbol</translate></th>
-                <th><translate>Name</translate></th>
-                <th><translate>Location</translate></th>
-                <th><translate>Type</translate></th>
-                <th><translate>Number of donors from the current project with the current gene mutated</translate></th>
-                <th><translate>Total number of SSM-tested donors from the current project</translate></th>
-                <th><translate>Percentage of affected donors</translate></th>
-                <th><translate>Donors affected by Gene in all projects</translate></th>
-                <th><translate>Mutations</translate></th>
-            </tr>
+                <tr>
+                    <th><translate>Symbol</translate></th>
+                    <th><translate>Name</translate></th>
+                    <th><translate>Location</translate></th>
+                    <th><translate>Type</translate></th>
+                    <th><translate>Number of donors from the current project with the current gene mutated</translate></th>
+                    <th><translate>Total number of SSM-tested donors from the current project</translate></th>
+                    <th><translate>Percentage of affected donors</translate></th>
+                    <th><translate>Donors affected by Gene in all projects</translate></th>
+                    <th><translate>Mutations</translate></th>
+                </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="gene in ProjectGeneCtrl.genes.hits">
-                <td>{{gene.symbol}}</td>
-                <td>{{gene.name}}</td>
-                <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
-                <td>{{gene.type}}</td>
-                <td>{{gene.affectedDonorCountFiltered}}</td>
-                <td>{{ProjectCtrl.project.ssmTestedDonorCount}}</td>
-                <td>{{gene.affectedDonorCountFiltered / ProjectCtrl.project.ssmTestedDonorCount}}</td>
-                <td>
-                    <div data-ng-repeat="p in gene.uiDonors | orderBy:'percentage':true">
-                        {{p.term}}:{{p.count}}/{{p.countTotal}}
-                        <div data-ng-if="!$last">|</div>
-                    </div>
-                </td>
-                <td>{{ProjectGeneCtrl.mutationCounts[ProjectCtrl.project.id][gene.id]}}</td>
-            </tr>
+                <tr data-ng-repeat="gene in ProjectGeneCtrl.genes.hits">
+                    <td>{{gene.symbol}}</td>
+                    <td>{{gene.name}}</td>
+                    <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
+                    <td>{{gene.type}}</td>
+                    <td>{{gene.affectedDonorCountFiltered}}</td>
+                    <td>{{ProjectCtrl.project.ssmTestedDonorCount}}</td>
+                    <td>{{gene.affectedDonorCountFiltered / ProjectCtrl.project.ssmTestedDonorCount}}</td>
+                    <td>
+                        <div data-ng-repeat="p in gene.uiDonors | orderBy:'percentage':true">
+                            {{p.term}}:{{p.count}}/{{p.countTotal}}
+                            <div data-ng-if="!$last">|</div>
+                        </div>
+                    </td>
+                    <td>{{ProjectGeneCtrl.mutationCounts[ProjectCtrl.project.id][gene.id]}}</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -551,8 +557,15 @@
             </tr>
             <tr>
                 <th class="text-center"
-                    data-icgc-tooltip="Breakdown of Affected Donors in {{ ProjectCtrl.project.id }}<br># Donors affected / # SSM tested donors">
-                    <abbr><translate>in</translate> {{ProjectCtrl.project.id}}</abbr> <i class="icon-caret-down"></i></th>
+                    data-sortable
+                    data-type="mutations"
+                    data-field="affectedDonorCountFiltered"
+                    data-active="true"
+                    data-reversed="true">
+                    <abbr data-icgc-tooltip="Breakdown of Affected Donors in {{ ProjectCtrl.project.id }}<br># Donors affected / # SSM tested donors">
+                        <translate>in</translate> {{ProjectCtrl.project.id}}
+                    </abbr>
+                </th>
                 <th class="text-center">
                     <abbr data-icgc-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}'"
                           data-tooltip-placement="left"><translate>Across all Project</translate></abbr></th>
@@ -693,8 +706,15 @@
                 <th rowspan="2"><abbr data-icgc-tooltip="{{'Experimental analysis performed' | translate}}"><translate>Analysis</translate></abbr></th>
                 <th colspan="11" class="text-center"><translate>Available Data Types:</translate></th>
                 <th rowspan="2" data-icgc-tooltip="{{'Number of SSM' | translate}}"><abbr><translate># Mutations</translate></abbr></th>
-                <th rowspan="2">
-                    <abbr data-icgc-tooltip="{{'Number of Genes with SSM' | translate}}" data-tooltip-placement="left"><translate># Genes</translate> <i class="icon-caret-down"></i></abbr>
+                <th rowspan="2"
+                    data-sortable
+                    data-type="donors"
+                    data-field="ssmAffectedGenes"
+                    data-active="true"
+                    data-reversed="true">
+                    <abbr data-icgc-tooltip="{{'Number of Genes with SSM' | translate}}" data-tooltip-placement="left">
+                        <translate># Genes</translate>
+                    </abbr>
                 </th>
             </tr>
             <tr>
