@@ -77,7 +77,7 @@
           }
 
           // Remap gene ontologies
-          if (uiFacetKey === 'hasPathway' || uiFacetKey === 'hasCompound') {
+          if (uiFacetKey === 'hasPathway' || uiFacetKey === 'hasCompound' || uiFacetKey === 'hasSSMType') {
             var uiTerm;
             if (uiFacetKey === 'hasPathway') {
               uiTerm = 'Reactome Pathways';
@@ -85,6 +85,9 @@
             } else if (uiFacetKey === 'hasCompound') {
               uiTerm = 'ZINC Compounds';
               uiFacetKey = 'compoundId';
+            } else if (uiFacetKey === 'hasSSMType') {
+              uiTerm = 'SSM Tested';
+              uiFacetKey = 'donorId';
             }
 
             if (_.has(facetFilters, 'not')) { 

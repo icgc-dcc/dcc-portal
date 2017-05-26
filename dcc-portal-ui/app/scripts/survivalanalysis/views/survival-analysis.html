@@ -55,19 +55,8 @@
     <li
       class="set"
       ng-repeat="dataSet in ctrl.dataSets"
-      ng-class="{
-        disabled: ctrl.isDataSetDisabled(dataSet) || !dataSet.donors.length,
-        interactable: dataSet.donors.length,
-        }"
       ng-style="{color: ctrl.palette[$index % ctrl.palette.length]}"
-      ng-click="ctrl.toggleDataSet(dataSet)"
     >
-      <i
-        ng-class="{
-          'icon-check': !ctrl.isDataSetDisabled(dataSet) && dataSet.donors.length,
-          'icon-check-empty': ctrl.isDataSetDisabled(dataSet) && dataSet.donors.length,
-        }"
-      ></i>
       <span ng-bind-html="ctrl.SetOperationService.getSetShortHand(dataSet, ctrl.dataSets)"></span>
       (N =
       <span ng-style="{

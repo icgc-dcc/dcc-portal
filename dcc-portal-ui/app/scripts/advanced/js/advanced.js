@@ -19,6 +19,7 @@
 
 import './entityset.persistence.dropdown/entityset.persistence.dropdown.js';
 import './entityset.persistence.modals';
+import deepmerge from 'deepmerge';
 
 angular.module('icgc.advanced', [
   'icgc.advanced.controllers',
@@ -70,10 +71,24 @@ angular.module('icgc.advanced.controllers', [
           dataRepoUrl = dataRepoRouteInfo.href,
           _serviceMap = {},
           _filterService = LocationService.getFilterService();
+      
+      const ssmFilter = {'donor':{'hasSSMType':true}};
+
+      _controller.SSMDonorCount = 0;
 
       _locationFilterCache = _filterService.getCachedFiltersFactory();
 
       var _isInAdvancedSearchCtrl = true;
+
+      _controller.fetchSSMDonorCount = async (filters) => {
+        filters = deepmerge(filters, ssmFilter);
+        _controller.SSMDonorCount = await AdvancedDonorService.getSSMDonorCount(filters);
+      };
+
+      _controller.SSMDonorCountQuery = () => {
+        var filters = deepmerge(_.cloneDeep(_locationFilterCache.filters()), ssmFilter);
+        return `/search?filters=${angular.toJson(filters)}`;
+      };
       
       // NOTE: using IDs instead of storing references to entities b/c pagination results in new objects  
       this.selectedEntityIdsMap = {};
@@ -266,6 +281,8 @@ angular.module('icgc.advanced.controllers', [
         }
 
         _controller.hasGeneFilter = angular.isObject(filters) ?  filters.hasOwnProperty('gene') : false;
+
+        _controller.fetchSSMDonorCount(filters);
       }
 
       function _renderTab(tab, forceFullRefresh) {
@@ -756,7 +773,7 @@ angular.module('icgc.advanced.controllers', [
       return deferred.promise;
     };
 
-
+    _ASDonorService.getSSMDonorCount = (filters) => Donors.handler.one('count').get({filters});
 
     _ASDonorService.renderBodyTab = function () {
         _initDonors().then(_processDonorHits);
