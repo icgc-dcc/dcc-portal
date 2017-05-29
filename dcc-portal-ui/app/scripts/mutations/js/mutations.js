@@ -179,7 +179,7 @@
     }
 
     _ctrl.isPCAWG = function(mutation) {
-      return _.some(mutation.studies, PCAWG.isPCAWGStudy);
+      return _.some(mutation.study, PCAWG.isPCAWGStudy);
     };
   });
 })();
