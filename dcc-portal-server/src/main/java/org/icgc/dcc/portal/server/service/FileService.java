@@ -296,6 +296,7 @@ public class FileService {
     val row = ImmutableMap.<String, String> builder();
     val study = file.getStudy();
     val strategy = file.getDataCategorization().getExperimentalStrategy();
+    val dataType = file.getDataCategorization().getDataType();
 
     row.put(Fields.DONOR_ID,
         toSummarizedString(fieldToSet(file.getDonors(), Donor::getDonorId)));
@@ -307,7 +308,7 @@ public class FileService {
     row.put(Fields.FILE_ID, file.getId());
     row.put(Fields.REPO_NAME, fieldToCSV(file.getFileCopies(), FileCopy::getRepoName));
     row.put(Fields.STUDY, study != null ? study.stream().distinct().collect(joining(COMMA)) : "");
-    row.put(Fields.DATA_TYPE, file.getDataCategorization().getDataType());
+    row.put(Fields.DATA_TYPE, dataType != null? dataType : "");
     row.put(Fields.EXPERIMENTAL_STRATEGY, strategy != null ? strategy : "");
     row.put(Fields.FILE_FORMAT, fieldToCSV(file.getFileCopies(), FileCopy::getFileFormat));
 
