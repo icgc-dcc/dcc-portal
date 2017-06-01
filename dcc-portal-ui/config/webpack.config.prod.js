@@ -109,6 +109,8 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin([
+      {from: 'app/robots.txt', to: paths.appBuild + '/robots.txt'},
+      {from: 'app/sitemap.xml', to: paths.appBuild + '/sitemap.xml'},
       {from: 'app/favicon.ico', to: paths.appBuild + '/favicon.ico'},
       {from: 'app/styles/fonts', to: paths.appBuild + '/styles/fonts'},
       {from: 'app/styles/images', to: paths.appBuild + '/styles/images'},
