@@ -107,7 +107,6 @@ public class MutationCentricTypeModel extends TypeModel {
         .add(string("reference_genome_allele", "referenceGenomeAllele"))
         .add(defineSsmOccurrence())
         .add(defineTranscript())
-        .add(string("_study", "study"))
         // .add(string("platform", "platform"))
         // .add(arrayOfStrings("verification_status", "verificationStatus"))
         // .add(arrayOfStrings("sequencing_strategy", "sequencingStrategy"))
@@ -165,7 +164,8 @@ public class MutationCentricTypeModel extends TypeModel {
             nestedArrayOfObjects("observation", object(
                 string("platform", "platform"),
                 string("verification_status", "verificationStatus"),
-                string("sequencing_strategy", "sequencingStrategy")))));
+                string("sequencing_strategy", "sequencingStrategy"),
+                string("_study", "study")))));
   }
 
   private static ObjectFieldModel defineProject() {
