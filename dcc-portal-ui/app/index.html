@@ -122,17 +122,17 @@
         </svg>
     </div>
 </div>
-<div class="wrap light ng-cloak">
+<div class="wrap light ng-cloak" style="height:100%;overflow:hidden;">
     <login data-ng-if="AppCtrl.authEnabled && !AppCtrl.mirror.enabled"></login>
     <header data-ng-controller="MainHeaderController as controller"
       data-ng-include="'/scripts/common/views/header.html'">
     </header>
-    <div class="content transition-fade" data-ui-view></div>
+    <div class="content transition-fade" style="height:89%;" data-ui-view></div>
     <div class="push"></div>
 </div>
-<footer class="ng-cloak" data-ng-controller="FooterCtrl as FooterCtrl" data-ng-init="COPYRIGHT_YEAR = 'COPYRIGHT_YEAR'">
+<!--<footer class="ng-cloak" data-ng-controller="FooterCtrl as FooterCtrl" data-ng-init="COPYRIGHT_YEAR = 'COPYRIGHT_YEAR'">
     <div data-ng-include="'/scripts/common/views/footer.html'"></div>
-</footer>
+</footer>-->
 <tooltip-control></tooltip-control>
 
 <!-- inject develop enviroment configuration (if applicable) -->

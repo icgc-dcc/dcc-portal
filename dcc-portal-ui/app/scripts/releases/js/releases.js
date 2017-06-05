@@ -89,6 +89,23 @@
     Releases.getCurrent().then(successR);
     Projects.getList().then(successP);
     Settings.get().then(successSettings);
+
+    angular.element('.search_header').bind('mousewheel DOMMouseScroll', function(e){
+      const element = angular.element('#scroll-section');
+      const delta = e.originalEvent.wheelDelta || -(e.originalEvent.detail*20);
+      const height = element.height();
+      const outerHeight = element.outerHeight();
+      const parentHeight = angular.element('.home-landing').height();
+      if (outerHeight === parentHeight) {
+        if(!element.scrollTop()) {
+          angular.element('#scroll-section').height(height - delta);
+        }
+        const top = element.scrollTop() - delta;
+        element.scrollTop(top);
+      } else {
+        angular.element('#scroll-section').height(height - delta);
+      }
+    });
   });
 })();
 

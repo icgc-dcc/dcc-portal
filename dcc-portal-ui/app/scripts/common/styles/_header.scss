@@ -424,7 +424,7 @@ header {
     }
 
     #brand {
-      display: block;
+      display: none;
       width: 100%;
       margin: 0;
 
@@ -447,7 +447,7 @@ header {
   }
 
   .t_nav__pages {
-    margin: 0.5rem 0rem;
+    padding-top: 0.7rem;
     display:block;
     width: 100%;
     .t_nav__items__item {

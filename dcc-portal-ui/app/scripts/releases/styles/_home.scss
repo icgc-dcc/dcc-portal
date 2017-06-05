@@ -1,21 +1,29 @@
 #home-page {
   .home-landing {
-    section {
-      border: none;
-      padding: 1rem;
-      position: relative;
+    // section {
+    //   border: none;
+    //   padding: 1rem;
+    //   position: relative;
   
-      @include breakpoint($break-landscape) {
-        @include float-span(4);
-      }
+    //   @include breakpoint($break-landscape) {
+    //     @include float-span(4);
+    //   }
       
-      &.sidebar {
-        .list {
-          height: 11.5rem;
-        }
-      }
+    //   &.sidebar {
+    //     .list {
+    //       height: 11.5rem;
+    //     }
+    //   }
+    // }
+    .clearfix {
+      width: calc(100% + 30px);
+      overflow-y: scroll;
     }
-    
+
+    #scroll-section{
+      width: calc(100% + 30px);
+      padding-right: 30px;
+    }
     
     .summary-table-container {
       margin-top: -2rem;
