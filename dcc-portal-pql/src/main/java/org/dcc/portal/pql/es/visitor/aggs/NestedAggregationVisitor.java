@@ -40,6 +40,7 @@ public class NestedAggregationVisitor extends NodeVisitor<ExpressionNode, TypeMo
       "transcript.consequence.consequence_type",
       "ssm_occurrence.observation.platform",
       "ssm_occurrence.observation.verification_status",
+      "ssm_occurrence.observation._study",
       "transcript.functional_impact_prediction_summary",
       "ssm_occurrence.observation.sequencing_strategy",
       "file_copies.file_format",
