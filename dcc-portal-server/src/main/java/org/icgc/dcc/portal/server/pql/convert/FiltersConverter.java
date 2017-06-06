@@ -112,7 +112,8 @@ public class FiltersConverter {
       "functionalImpact",
       "platform",
       "sequencingStrategy",
-      "verificationStatus");
+      "verificationStatus",
+      "study");
 
   /**
    * @see GeneFacetFilters
