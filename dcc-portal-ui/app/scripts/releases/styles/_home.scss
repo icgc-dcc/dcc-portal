@@ -1,6 +1,6 @@
   @keyframes load_up{
-    from{height:0px;min-height:0px;}
-    to{height:94px;min-height:94px;}
+    from{height:100%;}
+    to{height:calc(100% - 90px);}
 }
 #home-page {
   .wrap.light {
@@ -26,21 +26,24 @@
     //     }
     //   }
     // }
-    #sticky-search-parent {
-      min-height: calc(100% - 80%);
-      max-height: calc(100% - 55%);
+    #bg {
+      background-image: url('http://www.insight.mrc.ac.uk/files/2014/11/bg-dna-home.jpg');
+      width:100%;
+      height:100%;
+      opacity: 0.6;
     }
-    #scroll-section {
-      height:94px;
-      min-height:94px;
-      animation:load_up 1s ease;
+    #height_animation {
+      height:calc(100% - 90px);
+      // min-height:94px;
+      animation:load_up 0.6s ease-out;
     }
   .clearfix {
-      width: calc(100% + 30px);
+      // width: calc(100% + 30px);
       overflow-y: scroll;
+      overflow-x: hidden;
     }
 
-    #scroll-section{
+    #scroll-section, #scroll-listen-pad{
       width: calc(100% + 30px);
       padding-right: 30px;
     }

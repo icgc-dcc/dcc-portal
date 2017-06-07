@@ -93,43 +93,27 @@
     let delta = 0;
     const scrollPad = angular.element('#scroll-listen-pad');
     const scrollContent = angular.element('#scroll-section');
-
-    function changeHeight(height, delta){
-      scrollContent.height(height + delta);
-      // const parentHeight = scrollContent.parent().height();
-      // const top = parseInt(angular.element('#sticky-search').css('top'));
-      // if(height < parentHeight && height > (parentHeight/2)) {
-      //     angular.element('#sticky-search-parent').height(angular.element('#sticky-search-parent').height() - delta);
-      //     if(top >= (angular.element('#sticky-search-parent').height()/2)) {
-      //       angular.element('#sticky-search').css('top', `${top-delta}px`);
-      //     }
-      //     console.log('min-height',angular.element('#sticky-search-parent').css('min-height'));
-      //     console.log('height',angular.element('#sticky-search-parent').height());
-      // }
-    }
+    const search = angular.element('#sticky-search');
+    const searchHeight = angular.element('#sticky-search').height();
+    const stickySearchParentHeight = angular.element('#sticky-search-parent').height();
+    let top = parseInt(search.css('top'));
     
     scrollPad.on('scroll', function(e){
       delta = scrollPad.scrollTop() - delta;
+      scrollContent.scrollTop(scrollContent.scrollTop() + delta);
 
-      const height = scrollContent.height();
-      const outerHeight = scrollContent.outerHeight();
-      const parentHeight = scrollContent.parent().height();
+      if((top+(searchHeight/2)) > (stickySearchParentHeight/2) && angular.element('#actual_scroll').position().top < 100) {
+        search.css('top', `${top - delta}px`);
+        top = parseInt(search.css('top'));
+      }
 
-      if (outerHeight === parentHeight) {
-        if(!scrollContent.scrollTop()) {
-          changeHeight(height, delta);
-        }
-        scrollContent.scrollTop(scrollContent.scrollTop() + delta);
-      } else {
-        changeHeight(height, delta);
-        // if(outerHeight < parentHeight && outerHeight > (parentHeight/2)) {
-        //   angular.element('#sticky-search-parent').height(angular.element('#sticky-search-parent').height() - delta);
-        //   console.log('min-height',angular.element('#sticky-search-parent').css('min-height'));
-        //   console.log('height',angular.element('#sticky-search-parent').height());
-        // }
+      if(angular.element('#actual_scroll').position().top >= 0 && angular.element('#actual_scroll').position().top < 100 && (top+(searchHeight/2)) <= (stickySearchParentHeight/2)) {
+        search.css('top', `${top - delta}px`);
+        top = parseInt(search.css('top'));
       }
       delta = scrollPad.scrollTop();
     });
+
   });
 })();
 
