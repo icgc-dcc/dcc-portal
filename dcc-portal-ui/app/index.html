@@ -122,12 +122,12 @@
         </svg>
     </div>
 </div>
-<div class="wrap light ng-cloak" style="height:100%;overflow:hidden;">
+<div class="wrap light ng-cloak" >
     <login data-ng-if="AppCtrl.authEnabled && !AppCtrl.mirror.enabled"></login>
     <header data-ng-controller="MainHeaderController as controller"
       data-ng-include="'/scripts/common/views/header.html'">
     </header>
-    <div class="content transition-fade" style="height:89%;" data-ui-view></div>
+    <div class="content transition-fade" data-ui-view></div>
     <div class="push"></div>
 </div>
 <!--<footer class="ng-cloak" data-ng-controller="FooterCtrl as FooterCtrl" data-ng-init="COPYRIGHT_YEAR = 'COPYRIGHT_YEAR'">

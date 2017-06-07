@@ -7,7 +7,7 @@ header {
   border-bottom: 1px solid $greyLighter;
   background: $greyLightestEver;
 
-  margin-bottom: 1rem;
+  // margin-bottom: 1rem;
   padding: .4rem 2rem;
 
   position: relative;
@@ -95,6 +95,7 @@ header {
 
 #home-page{
   header{
+    height:73px;
     .header-country{
 
       .mirror-portal-flag{

@@ -1,4 +1,15 @@
+  @keyframes load_up{
+    from{height:0px;min-height:0px;}
+    to{height:94px;min-height:94px;}
+}
 #home-page {
+  .wrap.light {
+    height:100%;
+    overflow:hidden;
+  }
+  .content.transition-fade {
+    height: calc(100% - 73px);
+  }
   .home-landing {
     // section {
     //   border: none;
@@ -15,7 +26,16 @@
     //     }
     //   }
     // }
-    .clearfix {
+    #sticky-search-parent {
+      min-height: calc(100% - 80%);
+      max-height: calc(100% - 55%);
+    }
+    #scroll-section {
+      height:94px;
+      min-height:94px;
+      animation:load_up 1s ease;
+    }
+  .clearfix {
       width: calc(100% + 30px);
       overflow-y: scroll;
     }

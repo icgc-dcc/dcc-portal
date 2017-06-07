@@ -90,21 +90,45 @@
     Projects.getList().then(successP);
     Settings.get().then(successSettings);
 
-    angular.element('.search_header').bind('mousewheel DOMMouseScroll', function(e){
-      const element = angular.element('#scroll-section');
-      const delta = e.originalEvent.wheelDelta || -(e.originalEvent.detail*20);
-      const height = element.height();
-      const outerHeight = element.outerHeight();
-      const parentHeight = angular.element('.home-landing').height();
+    let delta = 0;
+    const scrollPad = angular.element('#scroll-listen-pad');
+    const scrollContent = angular.element('#scroll-section');
+
+    function changeHeight(height, delta){
+      scrollContent.height(height + delta);
+      // const parentHeight = scrollContent.parent().height();
+      // const top = parseInt(angular.element('#sticky-search').css('top'));
+      // if(height < parentHeight && height > (parentHeight/2)) {
+      //     angular.element('#sticky-search-parent').height(angular.element('#sticky-search-parent').height() - delta);
+      //     if(top >= (angular.element('#sticky-search-parent').height()/2)) {
+      //       angular.element('#sticky-search').css('top', `${top-delta}px`);
+      //     }
+      //     console.log('min-height',angular.element('#sticky-search-parent').css('min-height'));
+      //     console.log('height',angular.element('#sticky-search-parent').height());
+      // }
+    }
+    
+    scrollPad.on('scroll', function(e){
+      delta = scrollPad.scrollTop() - delta;
+
+      const height = scrollContent.height();
+      const outerHeight = scrollContent.outerHeight();
+      const parentHeight = scrollContent.parent().height();
+
       if (outerHeight === parentHeight) {
-        if(!element.scrollTop()) {
-          angular.element('#scroll-section').height(height - delta);
+        if(!scrollContent.scrollTop()) {
+          changeHeight(height, delta);
         }
-        const top = element.scrollTop() - delta;
-        element.scrollTop(top);
+        scrollContent.scrollTop(scrollContent.scrollTop() + delta);
       } else {
-        angular.element('#scroll-section').height(height - delta);
+        changeHeight(height, delta);
+        // if(outerHeight < parentHeight && outerHeight > (parentHeight/2)) {
+        //   angular.element('#sticky-search-parent').height(angular.element('#sticky-search-parent').height() - delta);
+        //   console.log('min-height',angular.element('#sticky-search-parent').css('min-height'));
+        //   console.log('height',angular.element('#sticky-search-parent').height());
+        // }
       }
+      delta = scrollPad.scrollTop();
     });
   });
 })();

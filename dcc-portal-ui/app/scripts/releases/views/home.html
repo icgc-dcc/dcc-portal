@@ -1,7 +1,7 @@
-<article class="full home-landing" style="height:100%;position:relative;">
-    <div class="clearfix" style="height:45%;background:white;z-index:9;position:absolute;top:0;">
-        <div style="position:absolute;top:20%;left:10%;display:flex;flex-direction:column;align-items:center;justify-content:center;" id="sticky-search">
-            <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;width:100%;">
+<article class="full home-landing" style="height:100%;position:relative;overflow-y:scroll;">
+    <div class="clearfix" style="height:45%;min-height:20%;max-height:45%;background:white;z-index:9;position:absolute;top:0;" id="sticky-search-parent">
+        <div style="position:absolute;top:50%;left:10%;" id="sticky-search">
+            <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
                 <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
                     <div style="display:flex;flex-direction:column;align-items:center;padding-right:1rem;">
                         <span style="font-size:4rem;font-weight:700;color: #283E5D;">ICGC</span>
@@ -14,7 +14,7 @@
                 <div>
                     <form class="t_suggest">
                         <input class="t_suggest__input"
-                            style="margin-top:0;width:600px;"
+                            style="margin-top:0;width:900px;"
                             placeholder="{{'e.g. BRAF, KRAS G12D, DO35100, MU7870, FI998, apoptosis, Cancer Gene Census, imatinib, GO:0016049' | translate}}"
                             autofocus="true"
                             data-suggest/>
@@ -25,15 +25,9 @@
                     </form>
                 </div>
             </div>
-            <div style="text-align:center;">
-                <h3><translate>Data Release</translate> {{ ReleaseCtrl.release.releaseNumber }}</h3>
-                <h3 class="subhead">{{ ReleaseCtrl.applicationReleaseDate }}</h3>
-            </div>
         </div>
-        <div class="search_header" style="height:100%;overflow-y:scroll;">
-            <div style="height:1000px;">
-                
-            </div>
+        <div id="scroll-listen-pad" style="height:100%;overflow-y:scroll;">
+            <div style="height:10000px;"></div>
         </div>
     </div>
     <!--<section>
@@ -140,37 +134,50 @@
             </p>
         </div>
     </section>-->
-    <section style="position:absolute;bottom:0;height:80px;min-height:80px;max-height:100%;overflow:scroll;" id="scroll-section">
-        <div style="width:100%;">
-            <div style="display:flex; flex-direction:row;justify-content:space-between;width:100%;">
-                <div>
-                    <span style="text-transform: uppercase;">Projects</span>
-                    <div>
-                        <span>{{ReleaseCtrl.release.projectCount | number}}</span>
+    <div style="height:100%;overflow:scroll;" id="scroll-section-parent">
+        <div style="position:absolute;bottom:0;max-height:100%;overflow:scroll;" id="scroll-section">
+            <div style="display:flex;width:100%;padding:0 1rem;background:#fafafa;">
+                <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;flex:1;">
+                    <h3 style="margin:0;font-size:1.4rem; text-transform:uppercase;">Data Portal Summary</h3>
+                    <a href="http://docs.icgc.org/dictionary/release-{{ ReleaseCtrl.release.releaseNumber }}/" target="_blank">
+                        <span>
+                            <translate>Data Release</translate> {{ ReleaseCtrl.release.releaseNumber }} - {{ ReleaseCtrl.applicationReleaseDate }}
+                        </span>
+                    </a>
+                </div>
+                <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;flex:1;">
+                    <span style="text-transform: uppercase;font-size:14px;">Projects</span>
+                    <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;font-size:2.0rem;font-weight:300;">
+                        <i style="color:#666" class="fa fa-bars"></i>
+                        <span style="margin-left:10px;">{{ReleaseCtrl.release.projectCount | number}}</span>
                     </div>
                 </div>
-                <div>
-                    <span style="text-transform: uppercase;">Primary Sites</span>
-                    <div>
-                        <span>{{ReleaseCtrl.release.primarySiteCount | number}}</span>
+                <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;flex:1;">
+                    <span style="text-transform: uppercase;font-size:14px;">Primary Sites</span>
+                    <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;font-size:2.0rem;font-weight:300;">
+                        <i style="color:#666" class="fa fa-user"></i>
+                        <span style="margin-left:10px;">{{ReleaseCtrl.release.primarySiteCount | number}}</span>
                     </div>
                 </div>
-                <div>
-                    <span style="text-transform: uppercase;">Donors</span>
-                    <div>
-                        <span>{{ReleaseCtrl.release.donorCount | number}}</span>
+                <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1rem;text-align:center;flex:1;">
+                    <span style="text-transform: uppercase;font-size:14px;">Donors</span>
+                    <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;font-size:2.0rem;font-weight:300;">
+                        <i style="color:#666" class="fa fa-users"></i>
+                        <span style="margin-left:10px;">{{ReleaseCtrl.release.donorCount | number}}</span>
                     </div>
                 </div>
-                <div>
-                    <span style="text-transform: uppercase;">Mutations</span>
-                    <div>
-                        <span>{{ReleaseCtrl.release.ssmCount | number}}</span>
+                <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1rem;text-align:center;flex:1;">
+                    <span style="text-transform: uppercase;font-size:14px;">Mutations</span>
+                    <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;font-size:2.0rem;font-weight:300;">
+                        <svg width="32px" height="39px" viewBox="0 0 50 61" version="1.1"><g id="_chromosome_Artboard2" transform="matrix(1,0,0,1,-13.0762,-25.3313)"><rect x="13.076" y="25.331" width="49.436" height="60.014" style="fill: none;"></rect><clipPath id="_chromosome_clip1"><rect x="13.076" y="25.331" width="49.436" height="60.014"></rect></clipPath><g clip-path="url(#_chromosome_clip1)"><g id="_chromosome_Artboard1" transform="matrix(0.883405,0,0,0.977528,-5.46554,-0.724775)"><rect x="6.187" y="0.741" width="86.92" height="100.687" style="fill: none;"></rect><g transform="matrix(0.954869,0.549419,-0.45922,0.651811,52.7591,3.11315)"><path d="M35.59,62.37C35.516,60.327 33.125,58.362 29.935,57.311C33.125,56.26 35.516,54.296 35.59,52.255C35.595,52.124 35.59,29.335 35.586,29.254C35.417,26.172 33.68,24.257 31.052,24.257C28.409,24.257 26.671,26.182 26.515,29.284C26.514,29.322 26.513,29.334 26.525,38.605L26.546,53.866C26.547,54.701 25.696,55.713 25.067,56.326C24.438,55.715 23.588,54.704 23.588,53.864L23.608,38.597C23.622,29.326 23.621,29.309 23.619,29.267C23.464,26.169 21.726,24.23 19.083,24.23C16.457,24.23 14.719,26.12 14.551,29.197C14.545,29.282 14.54,52.022 14.546,52.149C14.622,54.254 17.157,56.222 20.488,57.218C17.156,58.244 14.622,60.263 14.547,62.365C14.54,62.537 14.545,92.761 14.551,92.868C14.719,95.95 16.458,97.865 19.083,97.865C21.726,97.865 23.464,95.941 23.619,92.838C23.62,92.8 23.622,92.766 23.592,63.979L23.589,60.753C23.588,59.92 24.439,58.906 25.068,58.292C25.697,58.906 26.548,59.92 26.547,60.753L26.545,63.979C26.512,92.766 26.515,92.8 26.517,92.843C26.671,95.942 28.409,97.865 31.052,97.865C33.678,97.865 35.416,95.95 35.586,92.873C35.593,92.765 35.598,62.54 35.59,62.37ZM16.023,31.867L22.098,31.867L22.098,32.856L16.023,32.856L16.023,31.867ZM16.023,39.778L22.098,39.778L22.098,42.321L16.023,42.321L16.023,39.778ZM16.023,47.267L16.023,44.865L22.098,44.865L22.098,47.267L16.023,47.267ZM22.239,91.343L16.164,91.343L16.164,89.789L22.239,89.789L22.239,91.343ZM22.239,88.658L16.164,88.658L16.164,87.671L22.239,87.671L22.239,88.658ZM22.239,86.117L16.164,86.117L16.164,84.138L22.239,84.138L22.239,86.117ZM22.239,79.194L16.164,79.194L16.164,78.205L22.239,78.205L22.239,79.194ZM22.239,74.25L16.164,74.25L16.164,72.271L22.239,72.271L22.239,74.25ZM22.239,69.729L16.164,69.729L16.164,67.186L22.239,67.186L22.239,69.729ZM22.239,64.784L16.164,64.784L16.164,62.806L22.239,62.806L22.239,64.784ZM34.09,37.64C34.091,39.846 34.091,42.216 34.091,44.392L28.035,44.392L28.026,38.603C28.026,38.278 28.026,37.957 28.025,37.64L34.09,37.64ZM28.053,36.139C28.053,35.884 28.053,35.635 28.053,35.389L34.055,35.389C34.055,35.387 34.055,35.385 34.055,35.384C34.055,35.384 34.066,35.389 34.055,35.389C34.055,35.635 34.055,35.887 34.055,36.139L28.053,36.139ZM31.052,25.758C33.614,25.758 34.028,28.26 34.085,29.31C34.088,29.4 34.088,31.267 34.089,33.895C34.077,33.895 34.066,33.888 34.055,33.888L28.02,33.888C28.016,31.23 28.013,29.433 28.013,29.357C28.068,28.274 28.472,25.758 31.052,25.758ZM34.106,91.203L28.172,91.203L28.172,89.648L34.106,89.648L34.106,91.203ZM34.106,88.658L28.172,88.658L28.172,87.671L34.106,87.671L34.106,88.658ZM34.106,86.117L28.172,86.117L28.172,84.138L34.106,84.138L34.106,86.117ZM34.106,79.194L28.172,79.194L28.172,78.205L34.106,78.205L34.106,79.194ZM34.106,74.25L28.172,74.25L28.172,72.271L34.106,72.271L34.106,74.25ZM34.106,69.729L28.172,69.729L28.172,67.186L34.106,67.186L34.106,69.729ZM34.106,64.784L28.172,64.784L28.172,62.806L34.106,62.806L34.106,64.784Z" style="fill: rgb(102, 102, 102);"></path></g></g></g></g></svg>
+                        <span style="margin-left:10px;">{{ReleaseCtrl.release.ssmCount | number}}</span>
                     </div>
                 </div>
-                <div>
-                    <span style="text-transform: uppercase;">Genes</span>
-                    <div>
-                        <span>{{ReleaseCtrl.release.mutatedGeneCount | number}}</span>
+                <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1rem;text-align:center;flex:1;">
+                    <span style="text-transform: uppercase;font-size:14px;">Genes</span>
+                    <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;font-size:2.0rem;font-weight:300;">
+                        <svg width="20px" height="35px" viewBox="0 0 20 35" version="1.1" style="fill-rule: evenodd; clip-rule: evenodd; stroke-linejoin: round; stroke-miterlimit: 1.41421;"><g id="_db_helix_clip1_Artboard2" transform="matrix(1,0,0,1,-2.10153,-2.12636)"><rect x="2.102" y="2.126" width="19.321" height="34.955" style="fill: none;"></rect><clipPath id="_db_helix_clip1"><rect x="2.102" y="2.126" width="19.321" height="34.955"></rect></clipPath><g clip-path="url(#_db_helix_clip1)"><g id="_db_helix_clip1_Artboard1" transform="matrix(1,0,0,1,-20.1958,-12.2937)"><rect x="20.196" y="12.294" width="24.75" height="41.611" style="fill: none;"></rect><path d="M41,32C41,28.517 39.007,25.495 36.104,24C39.007,22.505 41,19.483 41,16C41,15.448 40.553,15 40,15C39.447,15 39,15.448 39,16C39,19.86 35.859,23 32,23C29.627,23 27.53,21.811 26.264,20L30,20C30.552,20 31,19.552 31,19C31,18.448 30.552,18 30,18L25.295,18C25.105,17.366 25,16.695 25,16C25,15.448 24.552,15 24,15C23.448,15 23,15.448 23,16C23,19.483 24.994,22.505 27.896,24C24.994,25.495 23,28.517 23,32C23,35.483 24.993,38.505 27.896,40C24.993,41.495 23,44.517 23,48C23,48.553 23.448,49 24,49C24.552,49 25,48.553 25,48C25,44.141 28.14,41 32,41C34.372,41 36.47,42.189 37.736,44L33,44C32.448,44 32,44.447 32,45C32,45.553 32.448,46 33,46L38.705,46C38.895,46.635 39,47.305 39,48C39,48.553 39.447,49 40,49C40.553,49 41,48.553 41,48C41,44.517 39.007,41.495 36.104,40C39.007,38.505 41,35.483 41,32ZM32,39C29.215,39 26.812,37.36 25.685,35L32,35C32.552,35 33,34.553 33,34C33,33.447 32.552,33 32,33L25.08,33C25.033,32.672 25,32.34 25,32C25,31.66 25.033,31.328 25.08,31L29,31C29.552,31 30,30.552 30,30C30,29.448 29.552,29 29,29L25.685,29C26.811,26.639 29.215,25 32,25C34.372,25 36.47,26.189 37.736,28L35,28C34.447,28 34,28.448 34,29C34,29.552 34.447,30 35,30L38.705,30C38.895,30.634 39,31.305 39,32C39,35.859 35.859,39 32,39Z" style="fill: rgb(102, 102, 102); fill-rule: nonzero;"></path></g></g></g></svg>
+                        <span style="margin-left:10px;">{{ReleaseCtrl.release.mutatedGeneCount | number}}</span>
                     </div>
                 </div>
             </div>
@@ -231,5 +238,5 @@ Suspendisse tempor accumsan mi a elementum. Praesent magna nibh (6), dictum maxi
 Pellentesque ac rhoncus metus, eleifend porttitor orci. Nulla facilisi.
             </div>
         </div>
-    </section>
+    </div>
 </article>
