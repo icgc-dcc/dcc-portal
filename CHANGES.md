@@ -3,6 +3,10 @@ ICGC DCC - Portal - Change Log
 
 Change log for the DCC Data Portal.
 
+[5.1.0](https://github.com/icgc-dcc/dcc-portal/compare/5.0.14...5.1.0)
+--
+ - Added PCAWG support: data model, API, and UI.
+
 [5.0.14](https://github.com/icgc-dcc/dcc-portal/compare/5.0.6...5.0.14)
 --
 - Added unit testing for SearchRepository
