@@ -58,6 +58,9 @@
       '3prime_overlapping_ncrna': '3\' Overlapping ncRNA',
       'Mt_rRNA': 'Mt rRNA',
 
+      // Capitalize PCAWG
+      'pcawg': 'PCAWG',
+
       // Facet Titles
       'id': gettextCatalog.getString('Project'),
       'projectId': gettextCatalog.getString('Project'),

@@ -46,6 +46,8 @@
      this.translate = function(id, type) {
        if (!id) { return '' }
        if (id === '_missing') { return 'No Data' }
+       if (id === 'study' && type === 'mutation') { return 'Mutation from Study' }
+       if (id === 'studies' && type === 'donor') { return 'Donor from Study' }
 
        return getTranslatorModule(type).translate(id) || humanReadable(id);
      };
