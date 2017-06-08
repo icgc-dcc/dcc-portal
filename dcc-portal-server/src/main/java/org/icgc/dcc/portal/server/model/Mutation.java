@@ -85,6 +85,8 @@ public class Mutation {
   List<Consequence> consequences;
   @ApiModelProperty(value = "Functional Impact Prediction Summary")
   List<String> functionalImpact;
+  @ApiModelProperty(value = "Study")
+  List<String> study;
 
   @SuppressWarnings("unchecked")
   @JsonCreator
@@ -110,6 +112,7 @@ public class Mutation {
     transcripts = buildTranscripts((List<Map<String, Object>>) fieldMap.get("transcript"));
     consequences = buildConsequences((List<Map<String, Object>>) fieldMap.get("consequences"));
     functionalImpact = collectFunctionalImpacts((List<Map<String, Object>>) fieldMap.get("transcript"));
+    study = (List<String>) fieldMap.get(fields.get("study"));
   }
 
   private List<EmbOccurrence> buildOccurrences(List<Map<String, Object>> occurrences) {

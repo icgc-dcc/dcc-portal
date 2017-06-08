@@ -77,7 +77,7 @@ public class Observation {
     rawDataRepository = (String) fieldMap.get(fields.get("rawDataRepository"));
     sequencingStrategy = (String) fieldMap.get(fields.get("sequencingStrategy"));
     totalReadCount = (Integer) fieldMap.get(fields.get("totalReadCount"));
-    variationCallingAlgorithm = (String) fieldMap.get(fields.get("variation_callingAlgorithm"));
+    variationCallingAlgorithm = (String) fieldMap.get(fields.get("variationCallingAlgorithm"));
     verificationStatus = (String) fieldMap.get(fields.get("verificationStatus"));
   }
 }

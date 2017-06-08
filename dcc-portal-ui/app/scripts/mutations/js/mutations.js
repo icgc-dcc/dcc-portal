@@ -43,7 +43,7 @@
 
   var module = angular.module('icgc.mutations.controllers', ['icgc.mutations.models']);
 
-  module.controller('MutationCtrl', function (HighchartsService, Page, Genes, mutation, $filter) {
+  module.controller('MutationCtrl', function (HighchartsService, Page, Genes, mutation, $filter, PCAWG) {
     var _ctrl = this, projects;
     Page.setTitle(mutation.id);
     Page.setPage('entity');
@@ -177,6 +177,10 @@
         });
       });
     }
+
+    _ctrl.isPCAWG = function(mutation) {
+      return _.some(mutation.study, PCAWG.isPCAWGStudy);
+    };
   });
 })();
 
@@ -213,6 +217,16 @@
       return this.handler.get('', angular.extend(defaults, params)).then(function (data) {
         if (data.hasOwnProperty('facets')) {
           var precedence = Consequence.precedence();
+
+          _.map(data.facets, (facet) => {
+            if(facet.missing) {
+              if(facet.terms) {
+                facet.terms.push({term: '_missing', count: facet.missing});
+              } else {
+                facet.terms = [{term: '_missing', count: facet.missing}];
+              }
+            }
+          });
 
           if (data.facets.hasOwnProperty('consequenceType') &&
             data.facets.consequenceType.hasOwnProperty('terms')) {

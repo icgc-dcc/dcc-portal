@@ -74,7 +74,7 @@ public class AggregationToFacetConverterTest extends BaseElasticsearchTest {
     Assertions.assertThat(response).hasSize(1);
     val termFacet = response.get(AGG_NAME);
     Assertions.assertThat(termFacet.getType()).isEqualTo("terms");
-    Assertions.assertThat(termFacet.getMissing()).isEqualTo(0L);
+    Assertions.assertThat(termFacet.getMissing()).isEqualTo(1L);
     Assertions.assertThat(termFacet.getOther()).isEqualTo(0L);
     Assertions.assertThat(termFacet.getTotal()).isEqualTo(6L);
 

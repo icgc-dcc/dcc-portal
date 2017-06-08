@@ -191,7 +191,8 @@ public class GeneCentricTypeModel extends TypeModel {
     val element = object(
         string("platform", "mutation.platform"),
         string("sequencing_strategy", "mutation.sequencingStrategy"),
-        string("verification_status", "mutation.verificationStatus"));
+        string("verification_status", "mutation.verificationStatus"),
+        string("_study", "mutation.study"));
 
     return nestedArrayOfObjects("observation", element);
   }

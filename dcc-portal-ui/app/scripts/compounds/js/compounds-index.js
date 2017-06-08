@@ -246,7 +246,7 @@ angular.module('icgc.compounds.index', [])
         },
         {
           id: 'geneCount',
-          heading: '# Targed Genes',
+          heading: '# Targeted Genes',
           classes: 'text-right',
           isSortable: true,
           sortFunction: (row) => row.genes.length,
