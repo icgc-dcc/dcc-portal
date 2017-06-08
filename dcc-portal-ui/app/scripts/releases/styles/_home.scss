@@ -28,6 +28,8 @@
     // }
     #bg {
       background-image: url('http://www.insight.mrc.ac.uk/files/2014/11/bg-dna-home.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
       width:100%;
       height:100%;
       opacity: 0.6;

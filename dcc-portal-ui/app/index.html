@@ -130,9 +130,12 @@
     <div class="content transition-fade" data-ui-view></div>
     <div class="push"></div>
 </div>
-<!--<footer class="ng-cloak" data-ng-controller="FooterCtrl as FooterCtrl" data-ng-init="COPYRIGHT_YEAR = 'COPYRIGHT_YEAR'">
+<footer class="ng-cloak" 
+    data-ng-controller="FooterCtrl as FooterCtrl" 
+    data-ng-init="COPYRIGHT_YEAR = 'COPYRIGHT_YEAR'"
+    data-ng-if="AppCtrl.Page.page() !== 'home'">
     <div data-ng-include="'/scripts/common/views/footer.html'"></div>
-</footer>-->
+</footer>
 <tooltip-control></tooltip-control>
 
 <!-- inject develop enviroment configuration (if applicable) -->

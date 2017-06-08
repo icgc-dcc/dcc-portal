@@ -97,18 +97,20 @@
     const searchHeight = angular.element('#sticky-search').height();
     const stickySearchParentHeight = angular.element('#sticky-search-parent').height();
     let top = parseInt(search.css('top'));
+    const maximumTop = stickySearchParentHeight + (searchHeight/2);
+    const minimumTop = (stickySearchParentHeight/2) + (searchHeight/2);
     
     scrollPad.on('scroll', function(e){
       delta = scrollPad.scrollTop() - delta;
       scrollContent.scrollTop(scrollContent.scrollTop() + delta);
 
       if((top+(searchHeight/2)) > (stickySearchParentHeight/2) && angular.element('#actual_scroll').position().top < 100) {
-        search.css('top', `${top - delta}px`);
+        search.css('top', `${Math.max(minimumTop, top + delta)}px`);
         top = parseInt(search.css('top'));
       }
 
       if(angular.element('#actual_scroll').position().top >= 0 && angular.element('#actual_scroll').position().top < 100 && (top+(searchHeight/2)) <= (stickySearchParentHeight/2)) {
-        search.css('top', `${top - delta}px`);
+        search.css('top', `${Math.min(maximumTop, top - delta)}px`);
         top = parseInt(search.css('top'));
       }
       delta = scrollPad.scrollTop();

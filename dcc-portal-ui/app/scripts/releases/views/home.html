@@ -183,30 +183,33 @@
                     </div>
                 </div>
             </div>
-            <div style="margin:1rem;">
-                <div style="display:flex;padding:1rem;">
-                    <div style="flex:1;padding:1rem;">
-                        <div class="text-left">
-                            <a href="/pcawg" style="background:none"><img id="#pcawg-logo" src="styles/images/PCAWG-final-small.png"></a>
-                        </div>
-                        <div>
-                            <translate has-markup>
-                                The <a href="/pcawg">Pancancer Analysis of Whole Genomes</a> (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from the International Cancer Genome Consortium.
-                            </translate>
+            <div style="">
+                <div style="display:flex;">
+                    <div style="flex:1;background:#fafafa;transform:skewX(-12deg);border-right:1px solid #e6e6e6;border-bottom:1px solid #e6e6e6;">
+                        <div style="padding:1rem;transform:skewX(12deg);">
+                            <div class="text-left">
+                                <a href="/pcawg" style="background:none"><img id="#pcawg-logo" src="styles/images/PCAWG-final-small.png"></a>
+                            </div>
+                            <div>
+                                <translate has-markup>
+                                    The <a href="/pcawg">Pancancer Analysis of Whole Genomes</a> (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from the International Cancer Genome Consortium.
+                                </translate>
+                            </div>
                         </div>
                     </div>
-                    <div style="flex:1;padding:1rem;">
-                        <div class="text-left">
-                            <a href="/pcawg" style="background:none"><img id="#pcawg-logo" src="styles/images/PCAWG-final-small.png"></a>
+                    <div style="flex:1;padding:1rem;border-top:1px solid #e6e6e6;">
+                        <div class="text-right">
+                            <a href="/icgc-in-the-cloud" title="Go to ICGC in the Cloud Home">
+                                <img alt="ICGC in the Cloud Logo" src="/scripts/repositories/images/home/ICGC_cloud_logo.png" />
+                            </a>
                         </div>
                         <div>
-                            <translate has-markup>
-                                The <a href="/pcawg">Pancancer Analysis of Whole Genomes</a> (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from the International Cancer Genome Consortium.
-                            </translate>
+                            <translate>ICGC data is now available on commercial and academic compute cloud.</translate>
+                            <a href="/icgc-in-the-cloud"><translate>Read more...</translate></a>
                         </div>
                     </div>
                 </div>
-                <div style="display:flex;padding:1rem;">
+                <div style="display:flex;">
                     <div style="flex:1;padding:1rem;">
                         <div class="text-left">
                             <a href="/pcawg" style="background:none"><img id="#pcawg-logo" src="styles/images/PCAWG-final-small.png"></a>
@@ -217,18 +220,26 @@
                             </translate>
                         </div>
                     </div>
-                    <div style="flex:1;padding:1rem;">
-                        <div class="text-left">
-                            <a href="/pcawg" style="background:none"><img id="#pcawg-logo" src="styles/images/PCAWG-final-small.png"></a>
-                        </div>
-                        <div>
-                            <translate has-markup>
-                                The <a href="/pcawg">Pancancer Analysis of Whole Genomes</a> (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from the International Cancer Genome Consortium.
-                            </translate>
+                    <div style="flex:1.065;background:#fafafa;transform:skewX(12deg);border-left:1px solid #e6e6e6;">
+                        <div style="padding:2rem;transform:skewX(-12deg);">
+                            <div class="text-right">
+                                <a href="/pcawg" style="background:none"><img id="#pcawg-logo" src="styles/images/PCAWG-final-small.png"></a>
+                            </div>
+                            <div>
+                                <translate has-markup>
+                                    The <a href="/pcawg">Pancancer Analysis of Whole Genomes</a> (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from the International Cancer Genome Consortium.
+                                </translate>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <footer class="ng-cloak" 
+                data-ng-controller="FooterCtrl as FooterCtrl" 
+                data-ng-init="COPYRIGHT_YEAR = 'COPYRIGHT_YEAR'"
+                data-ng-if="AppCtrl.Page.page() === 'home'">
+                <div data-ng-include="'/scripts/common/views/footer.html'"></div>
+            </footer>
         </div>
     </div>
 </article>
