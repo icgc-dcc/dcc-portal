@@ -128,8 +128,8 @@ $foregroundRed: #ff654b;
 
 .t_facets__facet__terms__inactive__term__count,
 .t_facets__facet__terms__active__term__count {
-  position: relative;
-  float: right;
+  position: absolute;
+  right: 0;
 }
 
 .t_facets__facet__terms__inactive__term__count {
