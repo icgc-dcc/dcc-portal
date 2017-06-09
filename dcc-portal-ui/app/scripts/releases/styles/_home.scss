@@ -26,6 +26,18 @@
     //     }
     //   }
     // }
+    #sticky-search-parent{
+      height:30%;
+      width:100%;
+      position:absolute;
+      top:0;
+    }
+    #scroll-listen-pad {
+      height:100%;overflow-y:scroll;overflow-x:hidden;
+    }
+    #scroll-listen-pad div {
+      height: 10000px;
+    }
     #bg {
       background-image: url('http://www.insight.mrc.ac.uk/files/2014/11/bg-dna-home.jpg');
       background-repeat: no-repeat;
