@@ -90,7 +90,8 @@
     Projects.getList().then(successP);
     Settings.get().then(successSettings);
 
-    let delta = 0;
+    let delta = 0, delta2 = 0;
+    let moveFlag = false;
     const scrollPad = angular.element('#scroll-listen-pad');
     const scrollContent = angular.element('#scroll-section');
     const search = angular.element('#sticky-search');
@@ -100,20 +101,37 @@
     const maximumTop = stickySearchParentHeight - (searchHeight/2);
     const minimumTop = (stickySearchParentHeight/2) - (searchHeight/2);
 
-    scrollPad.on('scroll', function(e){
+    function moveSearch(d){
+      if(top > minimumTop && angular.element('#actual_scroll').position().top < 100 && d > 0) {
+        search.css('top', `${Math.max(minimumTop, top - d)}px`);
+        top = parseInt(search.css('top'));
+      }
+
+      if(top < maximumTop && d < 0 && angular.element('#actual_scroll').position().top >= 0) {
+        search.css('top', `${Math.min(maximumTop, top - d)}px`);
+        top = parseInt(search.css('top'));
+      }
+    } 
+
+    function scroll(e) {
       delta = scrollPad.scrollTop() - delta;
       scrollContent.scrollTop(scrollContent.scrollTop() + delta);
-
-      if(top > minimumTop && angular.element('#actual_scroll').position().top < 100 && delta > 0) {
-        search.css('top', `${Math.max(minimumTop, top - delta)}px`);
-        top = parseInt(search.css('top'));
-      }
-
-      if(top < maximumTop && delta < 0 && angular.element('#actual_scroll').position().top >= 0) {
-        search.css('top', `${Math.min(maximumTop, top - delta)}px`);
-        top = parseInt(search.css('top'));
-      }
+      moveSearch(delta);
       delta = scrollPad.scrollTop();
+    }
+
+    scrollPad.on('scroll', function(e){
+      moveFlag = true;
+      scroll(e);
+    });
+
+    scrollContent.on('scroll', function(e){
+      if(!moveFlag) {
+        delta2 = scrollContent.scrollTop() - delta2;
+        moveSearch(delta2);
+        delta2 = scrollContent.scrollTop();
+      }
+      moveFlag = false;
     });
 
   });
