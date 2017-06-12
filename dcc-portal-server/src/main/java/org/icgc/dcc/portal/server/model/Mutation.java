@@ -17,6 +17,7 @@
 
 package org.icgc.dcc.portal.server.model;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
@@ -26,6 +27,7 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getStri
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,6 +39,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Value;
 import lombok.val;
+import org.icgc.dcc.common.core.util.stream.Collectors;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -112,7 +115,7 @@ public class Mutation {
     transcripts = buildTranscripts((List<Map<String, Object>>) fieldMap.get("transcript"));
     consequences = buildConsequences((List<Map<String, Object>>) fieldMap.get("consequences"));
     functionalImpact = collectFunctionalImpacts((List<Map<String, Object>>) fieldMap.get("transcript"));
-    study = (List<String>) fieldMap.get(fields.get("study"));
+    study = collectStudies((List<Map<String, Object>>) fieldMap.get("ssm_occurrence"));
   }
 
   private List<EmbOccurrence> buildOccurrences(List<Map<String, Object>> occurrences) {
@@ -193,6 +196,26 @@ public class Mutation {
     }
 
     return newHashSet(list);
+  }
+
+  private static List<String> collectStudies(List<Map<String, Object>> occurrences) {
+    if (occurrences == null) {
+      return newArrayList();
+    }
+
+    val obs = occurrences.stream()
+        .flatMap(occ -> ((List<Map<String, Object>>) occ.get("observation")).stream())
+        .filter(Objects::nonNull)
+        .collect(toImmutableList());
+
+
+    val study = obs.stream()
+        .filter(o -> o.containsKey("_study"))
+        .map(o -> (String) o.get("_study"))
+        .filter(Objects::nonNull)
+        .collect(toImmutableList());
+
+    return study;
   }
 
 }
