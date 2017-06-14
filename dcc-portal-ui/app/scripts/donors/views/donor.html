@@ -1,10 +1,3 @@
-<div class="h1-wrap">
-    <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__donor"></span>
-        {{ DonorCtrl.donor.id }}
-        <pcawg-badge data-ng-if="DonorCtrl.isPCAWG(DonorCtrl.donor)"></pcawg-badge>
-    </h1>
-</div>
-
 <span data-ng-if="DonorCtrl.isPendingDonor">
   <section>
     <i class="icon-attention or icon-attention-1"></i>
@@ -22,6 +15,12 @@
 <aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
+            <li class="t_subnav__items__item">
+                <h1><span class="t_badge t_badge__donor"></span>
+                    {{ DonorCtrl.donor.id }}<br/>
+                    <pcawg-badge data-ng-if="DonorCtrl.isPCAWG(DonorCtrl.donor)"></pcawg-badge>
+                </h1>
+            </li>
             <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
             <li data-spy="clinical" class="t_subnav__items__item"><a data-scrollto href="#clinical"><translate>Clinical Data</translate></a></li>
             <li data-spy="mutations" class="t_subnav__items__item" data-ng-if="DonorCtrl.donor.state==='live'"><a data-scrollto href="#mutations"><translate>Mutations</translate></a></li>

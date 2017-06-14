@@ -39,10 +39,11 @@
 
   var module = angular.module('icgc.releases.controllers', ['icgc.releases.models']);
 
-  module.controller('ReleaseCtrl', function (Page, HighchartsService, Releases, Projects, Settings, gettextCatalog) {
+  module.controller('ReleaseCtrl', function (Page, HighchartsService, Releases, Projects, Settings, gettextCatalog, $timeout) {
     var _ctrl = this;
     Page.setTitle(gettextCatalog.getString('Welcome'));
     Page.setPage('home');
+    Page.startWork();
 
     _ctrl.routeToProjectPageWithLiveDonorStateFilter = function () {
       var liveDonorStateFilter = {
@@ -96,10 +97,14 @@
     const scrollContent = angular.element('#scroll-section');
     const search = angular.element('#sticky-search');
     const searchHeight = angular.element('#sticky-search').height();
-    const stickySearchParentHeight = angular.element('#sticky-search-parent').height();
-    let top = parseInt(search.css('top'));
-    const maximumTop = stickySearchParentHeight - (searchHeight/2);
-    const minimumTop = (stickySearchParentHeight/2) - (searchHeight/2);
+    let stickySearchParentHeight, maximumTop, minimumTop, top;
+    $timeout( function(){
+      stickySearchParentHeight = angular.element('#sticky-search-parent').height();
+      maximumTop = stickySearchParentHeight - (searchHeight/2);
+      minimumTop = (stickySearchParentHeight/2) - (searchHeight/2);
+      top = parseInt(search.css('top'));
+      Page.stopWork();
+    }, 0 ); 
 
     function moveSearch(d){
       if(top > minimumTop && angular.element('#actual_scroll').position().top < 100 && d > 0) {

@@ -160,6 +160,7 @@ ol {
 }
 
 .h1-wrap {
+  display: none;
   height: 5rem;
   h1 {
     display: flex;
@@ -186,7 +187,7 @@ h1.sticky-scrollfix {
 }
 
 aside.ui-scrollpoint {
-  top: 5rem;
+  top: 0rem;
   section {
     background: transparent;
   }

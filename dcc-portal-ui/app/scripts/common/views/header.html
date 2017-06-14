@@ -1,56 +1,60 @@
 <div class="header-container">
-<h1 id="brand" class="animated fadeInDownEnter">
-  <a href="/">
-    <img src="/styles/images/icgc-logo.png">
-    <translate has-markup><span id="icgc">ICGC</span> Data Portal</translate>
-  </a>
-  <div class="header-country" data-ng-if="controller.mirror.enabled">
-    <a href="#" class="mirror-portal-flag">
-      <span class="flag-icon flag-icon-{{controller.mirror.countryCode}}"></span>
-      <span class="flag-text">
-        {{controller.mirror.name | trans}}<br/>
-        Mirror
-      </span>
+  <h1 id="brand" class="animated fadeInDownEnter" style="margin-bottom: 0;">
+    <a href="/">
+      <img src="/styles/images/icgc-logo.png">
+      <translate has-markup><span id="icgc">ICGC</span> Data Portal</translate>
     </a>
-    <a href="//dcc.icgc.org" class="mirror-portal-original">
-      <span class="flag-icon flag-icon-icgc"></span>
-      <span class="flag-text">
-        Official<br/>
-        Portal
-      </span>
-    </a>
-  </div>  
-</h1>
-
-<nav class="t_nav t_nav__pages">
-  <ul class="t_nav__items">
-    <li ng-repeat="item in controller.menuItems"
-      class="t_nav__items__item {{:: item.styleClass }}">
-      <a href="{{:: item.href }}" icgc-tooltip="{{:: item.title }}">
-        <span class="t_nav__items__item__icon">
-          <i class="{{:: item.icon }}" />
+    <div class="header-country" data-ng-if="controller.mirror.enabled">
+      <a href="#" class="mirror-portal-flag">
+        <span class="flag-icon flag-icon-{{controller.mirror.countryCode}}"></span>
+        <span class="flag-text">
+          {{controller.mirror.name | trans}}<br/>
+          Mirror
         </span>
-        <span class="t_nav__items__item__title" ng-bind=":: item.title" />
       </a>
-    </li>
-  </ul>
-</nav>
+      <a href="//dcc.icgc.org" class="mirror-portal-original">
+        <span class="flag-icon flag-icon-icgc"></span>
+        <span class="flag-text">
+          Official<br/>
+          Portal
+        </span>
+      </a>
+    </div>  
+  </h1>
 
-<nav class="t_nav t_nav__actions">
+  <nav class="t_nav t_nav__pages">
     <ul class="t_nav__items">
-        <li data-ng-if="['q','home'].indexOf(page) === -1"
-            class="t_nav__items__item  t_nav__items__item__search">
-            <form class="t_suggest t_suggest__header">
-                <input class="t_suggest__input"
-                  placeholder="{{'Quick Search' | translate}}"
-                  data-suggest/>
-                <i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search"></i>
-                <i class="t_suggest__embedded t_suggest__embedded__right icon-spin icon-spinner"
-                   data-ng-show='isBusy'></i>
-                <i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel"
-                   data-ng-click="o.open=false;query='';quick()" data-ng-show='query && !isBusy'></i>
-            </form>
-        </li>
+      <li ng-repeat="item in controller.menuItems"
+        class="t_nav__items__item {{:: item.styleClass }}">
+        <a href="{{:: item.href }}"
+          icgc-tooltip="{{:: item.title }}"
+          tooltip-placement="bottom">
+          <span class="t_nav__items__item__icon">
+            <i class="{{:: item.icon }}" />
+          </span>
+          <span class="t_nav__items__item__title" ng-bind=":: item.title" />
+        </a>
+      </li>
     </ul>
-</nav>
+  </nav>
+
+  <nav class="t_nav t_nav__actions">
+      <ul class="t_nav__items">
+          <li data-ng-if="['q','home'].indexOf(page) === -1"
+              class="t_nav__items__item  t_nav__items__item__search">
+              <form class="t_suggest t_suggest__header">
+                  <input class="t_suggest__input"
+                    placeholder="{{'Quick Search' | translate}}"
+                    data-suggest/>
+                  <i class="t_suggest__embedded t_suggest__embedded__left t_suggest__embedded__search icon-search"></i>
+                  <i class="t_suggest__embedded t_suggest__embedded__right icon-spin icon-spinner"
+                    data-ng-show='isBusy'></i>
+                  <i class="t_suggest__embedded t_suggest__embedded__right t_suggest__embedded__clear icon-cancel"
+                    data-ng-click="o.open=false;query='';quick()" data-ng-show='query && !isBusy'></i>
+              </form>
+          </li>
+      </ul>
+  </nav>
+
+  <login data-ng-if="AppCtrl.authEnabled && !AppCtrl.mirror.enabled"></login>
 </div>

@@ -1,7 +1,10 @@
 header {
 
   .header-container {
-    display: table;
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
   }
   border-bottom: 1px solid $greyLighter;
@@ -95,7 +98,7 @@ header {
 
 #home-page{
   header{
-    height:73px;
+    height:43px;
     .header-country{
 
       .mirror-portal-flag{
@@ -126,7 +129,6 @@ header {
 @media screen and (min-width: 721px) and (max-width: 950px) {
   header {
     .header-container {
-      display: block;
       #brand {
         width: 100%;
         display: block;
@@ -169,7 +171,6 @@ header {
   header {
     padding: 0 0;
     .header-container {
-      display: block;
 
       #brand {
         display: block;
@@ -420,10 +421,6 @@ header {
     text-align: center;
     padding: 0;
 
-    .header-container {
-      display: block;
-    }
-
     #brand {
       display: none;
       width: 100%;
@@ -482,24 +479,49 @@ header {
     display: none;
   }
   .t_nav__items__item__projects a {
-    background: $orangeLight;
-    color: $white;
+    background: #fafafa;
+    color: $orangeLight;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
   .t_nav__items__item__advanced a {
-    background: $blue;
-    color: $white;
+    background: #fafafa;
+    color: $blue;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
   .t_nav__items__item__analysis a {
-    background: $mauve;
-    color: $white;
+    background: #fafafa;
+    color: $mauve;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
   .t_nav__items__item__download a {
-    background: $cyan;
-    color: $white;
+    background: #fafafa;
+    color: $cyan;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
   .t_nav__items__item__data_repositories a {
-    background: $repositories;
-    color: $white;
+    background: #fafafa;
+    color: $repositories;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
 }
 
