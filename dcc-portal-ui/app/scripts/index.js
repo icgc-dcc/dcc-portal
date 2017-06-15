@@ -52,7 +52,6 @@ require('./pathwayviewer/js/services.js');
 require('./pathwayviewer/js/controller.js');
 require('./pathwayviewer/js/directive.js');
 require('./keyword/js/keyword.js');
-require('./releases/js/home.js');
 require('./releases/js/releases.js');
 require('./projects/js/project.js');
 require('./projects/js/project.donor.js');

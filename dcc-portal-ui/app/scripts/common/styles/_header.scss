@@ -16,7 +16,7 @@ header {
   position: relative;
 
   #brand {
-    width: 27%;
+    flex: 1;
     white-space: nowrap;
 
     display: table-cell;
@@ -231,14 +231,14 @@ header {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
-  width: 38%;
+  flex: 1;
 }
 
 .t_nav__actions {
   display: table-cell;
   text-align: right;
   margin-right: 0;
-  width: 27%;
+  flex: 1;
 }
 
 .t_nav__items {
@@ -274,7 +274,7 @@ header {
 
   &.t_nav__items__item__home a {
     color: $orange;
-    border: .3rem solid $orange;
+    border: .2rem solid $orange;
   }
 
   &.t_nav__items__item__home a:hover {
@@ -284,7 +284,7 @@ header {
 
   &.t_nav__items__item__projects a {
     color: $orangeLight;
-    border: .3rem solid $orangeLight;
+    border: .2rem solid $orangeLight;
   }
 
   &.t_nav__items__item__projects a:hover {
@@ -294,7 +294,7 @@ header {
 
   &.t_nav__items__item__advanced a {
     color: $blue;
-    border: .3rem solid $blue;
+    border: .2rem solid $blue;
   }
 
   &.t_nav__items__item__advanced a:hover {
@@ -304,7 +304,7 @@ header {
 
   &.t_nav__items__item__analysis a {
     color: $mauve;
-    border: .3rem solid $mauve;
+    border: .2rem solid $mauve;
   }
 
   &.t_nav__items__item__analysis a:hover {
@@ -314,7 +314,7 @@ header {
 
   &.t_nav__items__item__data_repositories a {
     color: $repositories;
-    border: .3rem solid $repositories;
+    border: .2rem solid $repositories;
   }
 
   &.t_nav__items__item__data_repositories a:hover {
@@ -324,7 +324,7 @@ header {
 
   &.t_nav__items__item__download a {
     color: $cyan;
-    border: .3rem solid $cyan;
+    border: .2rem solid $cyan;
   }
 
   &.t_nav__items__item__download a:hover {
@@ -334,7 +334,7 @@ header {
 
   &.t_nav__items__item__search a {
     background: $greyLight;
-    border: .3rem solid $greyLight;
+    border: .2rem solid $greyLight;
     .icon-search {
       padding: 1rem;
     }
@@ -447,7 +447,7 @@ header {
   .t_nav__pages {
     padding-top: 0.7rem;
     display:block;
-    width: 100%;
+    flex: 1;
     .t_nav__items__item {
       text-align: left;
       margin: 0;

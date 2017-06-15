@@ -52,8 +52,9 @@
             </a>
           </div>
           <div class="logged-in" data-ng-show="params.user.token && !params.user.verifying">
-            <a data-ng-click="params.user.menu = !params.user.menu" href="">
+            <a data-ng-click="params.user.menu = !params.user.menu" href="" style="color: {{ params.user.daco && params.user.cloudAccess ? 'green' : 'red' }};">
               <i class="fa fa-user-circle-o"></i>
+              <span data-ng-bind="params.user.email"></span>
             </a>
           </div>
         </li>
