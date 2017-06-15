@@ -58,6 +58,8 @@
       _ctrl.currentCancerPage = 1;
       _ctrl.defaultCancerRowLimit = 10;
       _ctrl.rowSizes = [10, 25, 50];
+      _ctrl.pathway = {}; // initialize pathway object
+      _ctrl.pathway.loading = true;
 
       Page.setTitle(geneSet.id);
       Page.setPage('entity');
@@ -185,12 +187,10 @@
   
         // 4) if it's a reactome pathway, get diagram
         if(_ctrl.geneSet.source === 'Reactome' && _ctrl.uiParentPathways[0]) {
-          _ctrl.pathway = {}; // initialize pathway object
-
           PathwayDataService.getPathwayData(geneSet.id, null)
             .then(function (pathwayData) {
               _ctrl.pathway = _.pick(pathwayData, 'xml', 'zooms', 'mutationHighlights', 'drugHighlights');
-
+            _ctrl.pathway.loading = false;
               // Wait before rendering legend, 
               // Same approach taken in the pathway viewer page. 
               setTimeout(function () {
@@ -203,6 +203,7 @@
               mutationHighlights: [],
               drugHighlights: []
             };
+            _ctrl.pathway.loading = false;
           });
         }
 
