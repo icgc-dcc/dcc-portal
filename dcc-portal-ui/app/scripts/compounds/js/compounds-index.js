@@ -96,7 +96,6 @@ angular.module('icgc.compounds.index', [])
                 placeholder="e.g. leukemia, ovarian"
               ></input>
             </collapsible-wrapper>
-
             <collapsible-wrapper
               title="'Class'"
             >
@@ -117,14 +116,51 @@ angular.module('icgc.compounds.index', [])
               ></togglable-term>
 
             </collapsible-wrapper>
+            <!-- terms data-type="compound"
+              data-facet-name="class"
+              data-label="{{'Class' | translate}}"
+              data-facet="vm.compounds.facet.class" /-->
           </aside>
           <article>
+            <div class="t_current">
+              <ul>
+                <li>
+                  <button type="button" class="t_button t_current__remove_all" data-ng-click="vm.removeAllFilters()">
+                      <i class="icon-undo"></i>
+                  </button>
+                  <share-button></share-button>
+                </li>
+                <li data-ng-repeat="(key, value) in vm.filters track by key" class="t_facets__facet" data-ng-if="value.length">
+                  <span class="t_facets__facet__label"
+                    data-ng-mouseenter="hoverStyle={'text-decoration':'line-through'}; $event.stopPropagation();"
+                    data-ng-mouseleave="hoverStyle={}; $event.stopPropagation()"
+                    data-ng-click="removeFacet(typeName, facet)">
+                    {{key}}
+                  </span>
+                  <span class="t_current__or">{{ _.isArray(value) && value.length > 1 ? 'IN' : 'IS' }}</span>
+                  <ul class="t_facets__facet__terms">
+                    <li class="t_facets__facet__terms__term" data-ng-if="!_.isArray(value)">
+                      <span class="t_facets__facet__terms__active__term__label"
+                        data-ng-style="hoverStyle">
+                        {{ value }}
+                      </span>
+                    </li>
+                    <li data-ng-if="_.isArray(value)"
+                      data-ng-repeat="(key, term) in value track by key" class="t_facets__facet__terms__term">
+                      <span class="t_facets__facet__terms__active__term__label"
+                        data-ng-style="hoverStyle">
+                          {{ term }}
+                      </span>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
             <section ng-class="{loading: vm.isLoading}">
               <h3 ng-if="vm.isLoading">
                   <i class="icon-spinner icon-spin"></i> <translate>Loading Compounds...</translate>
               </h3>
               <div ng-if="!vm.isLoading">
-                <share-button></share-button>
                 <paginated-table
                   rows="(vm.filteredCompounds) || vm.compounds"
                   searchable-jsonpaths="[
@@ -241,7 +277,7 @@ angular.module('icgc.compounds.index', [])
           dataFormat: (cell, row, array, extraData) => {
             const { tableFilter } = extraData;
             const content = { fda: 'FDA', world: 'World' }[cell];
-            return highlightFn(content, tableFilter)
+            return highlightFn(content, tableFilter);
           }
         },
         {
@@ -318,7 +354,13 @@ angular.module('icgc.compounds.index', [])
         $location.replace();
         $location.search(getCombinedState());
       };
+
+      this.removeAllFilters = () => {
+        this.filters = _.clone(defaultFiltersState);
+        this.tableState = _.clone(defaultTableState);
+        this.handleFiltersChange(this.filters);
+        this.handlePaginatedTableChange(this.tableState);
+      };
     },
     controllerAs: 'vm',
-  })
-  ;
+  });
