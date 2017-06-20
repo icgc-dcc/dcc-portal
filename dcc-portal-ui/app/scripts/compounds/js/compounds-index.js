@@ -57,7 +57,7 @@ angular.module('icgc.compounds.index', [])
               <input
                 class="t_input__block"
                 type="search"
-                ng-model="vm.filters.name"
+                ng-model="vm.filters.compoundName"
                 ng-change="vm.handleFiltersChange(vm.filters)"
                 placeholder="e.g. Aspirin, ZINC00003376543"
               >
@@ -80,7 +80,7 @@ angular.module('icgc.compounds.index', [])
             >
               <input
                 class="t_input__block"
-                ng-model="vm.filters.atc"
+                ng-model="vm.filters.compoundAtc"
                 ng-change="vm.handleFiltersChange(vm.filters)"
                 placeholder="e.g. L01X1, kinase inhibitors"
               ></input>
@@ -91,7 +91,7 @@ angular.module('icgc.compounds.index', [])
             >
               <input
                 class="t_input__block"
-                ng-model="vm.filters.clinicalTrialCondition"
+                ng-model="vm.filters.compoundCTC"
                 ng-change="vm.handleFiltersChange(vm.filters)"
                 placeholder="e.g. leukemia, ovarian"
               ></input>
@@ -101,15 +101,12 @@ angular.module('icgc.compounds.index', [])
             >
 
               <togglable-term
-                ng-repeat="term in vm.getSortedTerms({
-                  terms: [
+                ng-repeat="term in [
                     {code: 'fda', title: 'FDA'},
                     {code: 'world', title: 'World'},
-                  ],
-                  facet: vm.filters.drugClass
-                })"
-                on-click="vm.toggleFacetContent('drugClass', term.code)"
-                is-active="vm.filters.drugClass.includes(term.code)"
+                ]"
+                on-click="vm.toggleFacetContent('compoundDrugClass', term.code)"
+                is-active="vm.filters.compoundDrugClass.includes(term.code)"
                 label="term.title"
                 items-affected-by-facet="vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length"
                 items-affected-by-term="_.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: term.code}).length"
@@ -122,7 +119,7 @@ angular.module('icgc.compounds.index', [])
               data-facet="vm.compounds.facet.class" /-->
           </aside>
           <article>
-            <div class="t_current">
+            <div class="t_current" data-ng-if="!_.isEmpty(vm.filters)">
               <ul>
                 <li>
                   <button type="button" class="t_button t_current__remove_all" data-ng-click="vm.removeAllFilters()">
@@ -130,29 +127,36 @@ angular.module('icgc.compounds.index', [])
                   </button>
                   <share-button></share-button>
                 </li>
-                <li data-ng-repeat="(key, value) in vm.filters track by key" class="t_facets__facet" data-ng-if="value.length">
+                <li class="t_facets__facet"
+                  data-ng-repeat="(key, value) in vm.filters track by key"
+                  data-ng-if="value.length">
                   <span class="t_facets__facet__label"
                     data-ng-mouseenter="hoverStyle={'text-decoration':'line-through'}; $event.stopPropagation();"
                     data-ng-mouseleave="hoverStyle={}; $event.stopPropagation()"
-                    data-ng-click="removeFacet(typeName, facet)">
-                    {{key}}
+                    data-ng-click="vm.removeFilter(key)">
+                    {{ key | trans }}
                   </span>
-                  <span class="t_current__or">{{ _.isArray(value) && value.length > 1 ? 'IN' : 'IS' }}</span>
+                  <span class="t_current__or">{{ _.isArray(value) && value.length > 1 ? 'IN (' : 'IS' }}</span>
                   <ul class="t_facets__facet__terms">
                     <li class="t_facets__facet__terms__term" data-ng-if="!_.isArray(value)">
                       <span class="t_facets__facet__terms__active__term__label"
-                        data-ng-style="hoverStyle">
-                        {{ value }}
+                        data-ng-style="hoverStyle"
+                        data-ng-click="vm.removeFilter(key, value)">
+                        {{ value | _:'upperFirst' }}
                       </span>
                     </li>
                     <li data-ng-if="_.isArray(value)"
-                      data-ng-repeat="(key, term) in value track by key" class="t_facets__facet__terms__term">
+                      data-ng-repeat="(index, term) in value track by index" class="t_facets__facet__terms__term">
                       <span class="t_facets__facet__terms__active__term__label"
-                        data-ng-style="hoverStyle">
-                          {{ term }}
+                        data-ng-style="hoverStyle"
+                        data-ng-click="vm.removeFilter(key, term)">
+                          {{ term | _:'upperFirst' }}
                       </span>
+                      <span data-ng-if="!$last" class="t_current__or">,&nbsp;</span>
+                      <span data-ng-if="$last && value.length > 1" class="t_current__or">)</span>
                     </li>
                   </ul>
+                  <span data-ng-if="!$last" class="t_current__and"> AND </span>
                 </li>
               </ul>
             </div>
@@ -213,11 +217,11 @@ angular.module('icgc.compounds.index', [])
       this.$onChanges = update;
 
       const defaultFiltersState = {
-        name: '',
+        compoundName: '',
         gene: '',
-        atc: '',
-        clinicalTrialCondition: '',
-        drugClass: [],
+        compoundAtc: '',
+        compoundCTC: '',
+        compoundDrugClass: [],
       };
 
       const defaultTableState = {
@@ -228,7 +232,7 @@ angular.module('icgc.compounds.index', [])
         tableFilter: '',
       };
 
-      this.filters = _.defaults(_.pick($location.search(), filterParams), defaultFiltersState);
+      this.filters = _.defaults(_.pick($location.search(), filterParams), {});
       this.tableState = _.mapValues(_.defaults(_.pick($location.search(), paginatedTableParams), defaultTableState), (value, key) => _.isNumber(defaultTableState[key]) ? _.toNumber(value) : value);
 
       this.columns = [
@@ -318,25 +322,21 @@ angular.module('icgc.compounds.index', [])
       };
 
       this.getFilteredCompounds = (compounds, filters) => {
-        const nameRegex = new RegExp(filters.name, 'i');
-        const atcRegex = new RegExp(filters.atc, 'i');
+        const nameRegex = new RegExp(filters.compoundName, 'i');
+        const atcRegex = new RegExp(filters.compoundAtc, 'i');
         const geneRegex = new RegExp(filters.gene, 'i');
-        const clinicalTrialConditionRegex = new RegExp(filters.clinicalTrialCondition, 'i');
+        const clinicalTrialConditionRegex = new RegExp(filters.compoundCTC, 'i');
 
         return _.filter(compounds, (compound) => {
           return _.every([
-            filters.name ? (compound.name.match(nameRegex) || compound.zincId.match(nameRegex)) : true,
+            filters.compoundName ? (compound.name.match(nameRegex) || compound.zincId.match(nameRegex)) : true,
             filters.gene ? (_.some(compound.genes, item => _.some(_.map(item, (value, key) => (value.match(geneRegex) || (key === 'ensemblGeneId' && this.geneSymbols && this.geneSymbols[value] && this.geneSymbols[value].match(geneRegex))))))) : true,
-            filters.atc ? (_.some(compound.atcCodes, item => _.some(_.values(item).map(value => value.match(atcRegex))))) : true,
-            filters.clinicalTrialCondition ? (_.some(_.flattenDeep(compound.trials.map(trial => trial.conditions.map(_.values))), str => str.match(clinicalTrialConditionRegex))) : true,
-            filters.drugClass && filters.drugClass.length ? filters.drugClass.includes(compound.drugClass) : true,
+            filters.compoundAtc ? (_.some(compound.atcCodes, item => _.some(_.values(item).map(value => value.match(atcRegex))))) : true,
+            filters.compoundCTC ? (_.some(_.flattenDeep(compound.trials.map(trial => trial.conditions.map(_.values))), str => str.match(clinicalTrialConditionRegex))) : true,
+            filters.compoundDrugClass && filters.compoundDrugClass.length ? filters.compoundDrugClass.includes(compound.drugClass) : true,
           ]);
         });
       };
-
-      this.getSortedTerms = memoize(({terms, facet}) => {
-        return _.orderBy(terms, term => !facet.includes(term.code));
-      }, {normalizer: (args) => JSON.stringify(args)});
 
       const getCombinedState = () => Object.assign({},
         _.omitBy(this.filters, (value, key) => _.isEqual(defaultFiltersState[key], value)),
@@ -355,8 +355,17 @@ angular.module('icgc.compounds.index', [])
         $location.search(getCombinedState());
       };
 
+      this.removeFilter = (key, value) => {console.log(key, value);
+        if(key === 'compoundDrugClass' && value && this.filters[key].length > 1) {
+          _.remove(this.filters[key], (v) => v === value);
+        } else {
+          delete this.filters[key];
+        }
+        this.handleFiltersChange(this.filters);
+      };
+
       this.removeAllFilters = () => {
-        this.filters = _.clone(defaultFiltersState);
+        this.filters = {};
         this.tableState = _.clone(defaultTableState);
         this.handleFiltersChange(this.filters);
         this.handlePaginatedTableChange(this.tableState);

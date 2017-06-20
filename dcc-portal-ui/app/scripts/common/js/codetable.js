@@ -96,7 +96,13 @@
       'pending': gettextCatalog.getString('Absent from DCC'),
 
       // Experimental Strategies
-      'miRNA-Seq': 'miRNA-Seq'
+      'miRNA-Seq': 'miRNA-Seq',
+
+      //Compounds page
+      'compoundName': 'Compound',
+      'compoundAtc' : 'ATC',
+      'compoundCTC': 'CTC',
+      'compoundDrugClass': 'Drug Class',
     };
 
     var tooltipLookup = {
