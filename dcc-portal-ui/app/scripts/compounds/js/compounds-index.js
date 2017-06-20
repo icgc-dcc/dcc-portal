@@ -113,10 +113,6 @@ angular.module('icgc.compounds.index', [])
               ></togglable-term>
 
             </collapsible-wrapper>
-            <!-- terms data-type="compound"
-              data-facet-name="class"
-              data-label="{{'Class' | translate}}"
-              data-facet="vm.compounds.facet.class" /-->
           </aside>
           <article>
             <div class="t_current" data-ng-if="!_.isEmpty(vm.filters)">
@@ -355,7 +351,7 @@ angular.module('icgc.compounds.index', [])
         $location.search(getCombinedState());
       };
 
-      this.removeFilter = (key, value) => {console.log(key, value);
+      this.removeFilter = (key, value) => {
         if(key === 'compoundDrugClass' && value && this.filters[key].length > 1) {
           _.remove(this.filters[key], (v) => v === value);
         } else {
