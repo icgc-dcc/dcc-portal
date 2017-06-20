@@ -244,7 +244,7 @@ angular.module('icgc.compounds.index', [])
           dataFormat: (cell, row, array, extraData) => {
             const { tableFilter } = extraData;
             const unformattedContent = `${row.name} (${row.zincId})`;
-            const content = [tableFilter, this.filters.name]
+            const content = [tableFilter, this.filters.compoundName]
               .sort((a, b) => b.length - a.length)
               .filter(Boolean)
               .reduce((content, query) => highlightFn(content, query), unformattedContent) || unformattedContent;
@@ -262,7 +262,7 @@ angular.module('icgc.compounds.index', [])
           dataFormat: (cell, row, array, extraData) => {
             const { tableFilter } = extraData;
             const unformattedContent = _.map(row.atcCodes, 'description').join(', ');
-            const content = [tableFilter, this.filters.atc]
+            const content = [tableFilter, this.filters.compoundAtc]
               .sort((a, b) => b.length - a.length)
               .filter(Boolean)
               .reduce((content, query) => highlightFn(content, query), unformattedContent) || unformattedContent;

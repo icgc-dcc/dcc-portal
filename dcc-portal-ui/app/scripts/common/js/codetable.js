@@ -98,7 +98,7 @@
       // Experimental Strategies
       'miRNA-Seq': 'miRNA-Seq',
 
-      //Compounds page
+      // Compounds page
       'compoundName': 'Compound',
       'compoundAtc' : 'ATC',
       'compoundCTC': 'CTC',
