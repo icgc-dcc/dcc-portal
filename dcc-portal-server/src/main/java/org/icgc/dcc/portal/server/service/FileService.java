@@ -303,6 +303,12 @@ public class FileService {
 
     row.put(Fields.DONOR_ID,
         toSummarizedString(fieldToSet(file.getDonors(), Donor::getDonorId)));
+    row.put(Fields.SPECIMEN_ID,
+        toSummarizedString(fieldToSet(file.getDonors(), donor -> Integer.toString(donor.getSpecimenId().size()))));
+    row.put(Fields.SPECIMEN_TYPE,
+        toSummarizedString(fieldToSet(file.getDonors(), donor -> Integer.toString(donor.getSpecimenType().size()))));
+    row.put(Fields.SAMPLE_ID,
+        toSummarizedString(fieldToSet(file.getDonors(), donor -> Integer.toString(donor.getSampleId().size()))));
     row.put(Fields.PROJECT_CODE,
         toSummarizedString(fieldToSet(file.getDonors(), Donor::getProjectCode)));
     row.put(Fields.FILE_SIZE,
