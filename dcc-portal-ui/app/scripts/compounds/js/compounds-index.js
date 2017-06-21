@@ -340,6 +340,11 @@ angular.module('icgc.compounds.index', [])
       );
 
       this.handleFiltersChange = (filters) => {
+        _.each(filters, (value, key) => {
+          if(_.isEmpty(value)) {
+            delete filters[key];
+          }
+        });
         this.filteredCompounds = this.getFilteredCompounds(this.compounds, filters);
         $location.replace();
         $location.search(getCombinedState());
