@@ -3,11 +3,11 @@ import memoize from 'memoizee';
 import { highlightFn } from '../../common/js/common';
 
 const filterParams = [
-  'name',
+  'compoundName',
   'gene',
-  'atc',
-  'clinicalTrialCondition',
-  'drugClass',
+  'compoundAtc',
+  'compoundCTC',
+  'compoundDrugClass',
 ];
 
 const paginatedTableParams = [
