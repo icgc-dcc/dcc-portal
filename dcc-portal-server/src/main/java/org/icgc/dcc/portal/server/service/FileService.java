@@ -39,7 +39,6 @@ import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
