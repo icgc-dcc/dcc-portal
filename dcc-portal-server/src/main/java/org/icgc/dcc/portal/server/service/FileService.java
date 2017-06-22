@@ -306,7 +306,7 @@ public class FileService {
     row.put(Fields.PROJECT_CODE,
         toSummarizedString(fieldToSet(file.getDonors(), Donor::getProjectCode)));
     row.put(Fields.FILE_NAME,
-            String.valueOf(file.getFileCopies().get(0).getFileName()));
+        String.valueOf(file.getFileCopies().get(0).getFileName()));
     row.put(Fields.FILE_SIZE,
         String.valueOf(file.getFileCopies().stream().mapToLong(FileCopy::getFileSize).average().orElse(0)));
     row.put(Fields.ACCESS, file.getAccess());
