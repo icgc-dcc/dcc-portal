@@ -1,4 +1,4 @@
-<article class="full home-landing" style="height:100%;position:relative;overflow-y:scroll;overflow-x:hidden;">
+<article class="full home-landing" style="height:100%;position:relative;overflow-x:hidden;">
     <div id="bg"></div>
     <div id="sticky-search-parent">
         <div id="scroll-listen-pad">
@@ -188,25 +188,42 @@
                     <div style="flex:1;padding:1rem;border-top:1px solid #e6e6e6;">
                         <div style="padding:1rem;">
                             <div class="text-left">
-                                <a href="/pcawg" style="background:none"><img id="#pcawg-logo" src="styles/images/PCAWG-final-small.png" height="50px"></a>
+                                <h1>
+                                    <span
+                                        class="t_badge t_badge_icon t_badge__projects"
+                                        style="margin:0;">
+                                        <i class="icon-list"></i>
+                                    </span>
+                                    <translate><span>Projects</span></translate>
+                                </h1>
                             </div>
-                            <div class="text-left" style="padding-right:10rem;">
-                                <translate has-markup>
-                                    The <a href="/pcawg">Pancancer Analysis of Whole Genomes</a> (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from the International Cancer Genome Consortium.
-                                </translate>
+                            <div class="text-left">
+                                <p>
+                                    A Cancer Project is characterized by a catalogue of genomic abnormalities (somatic mutations, abnormal expression of genes, epigenetic modifications) affecting Donors.
+                                    The Cancer Projects page provides the list of all the Cancer Projects involved in the International Cancer Genome Consortium (ICGC). 
+                                    Users can use filters to narrow down to projects of interest then navigate through the portal to get more information about the Donors, Genes, Mutations and Files.
+                                    The Cancer Projects page also provide some visualizations such as the the top mutated cancer genes across the ICGC projects, the donor distribution (number of cases for each primary site and project) and the number of somatic mutations in donor's exomes across cancer projects. 
+                                </p>
                             </div>
                         </div>
                     </div>
                     <div style="flex:1;padding:1rem;border-top:1px solid #e6e6e6;">
-                        <div style="padding:1rem;border-left:1px solid #e6e6e6">
+                        <div style="padding:1rem;">
                             <div class="text-right">
-                                <a href="/icgc-in-the-cloud" title="Go to ICGC in the Cloud Home">
-                                    <img alt="ICGC in the Cloud Logo" src="/scripts/repositories/images/home/ICGC_cloud_logo.png" height="50px" />
-                                </a>
+                                <h1>
+                                    <span
+                                        class="t_badge t_badge_icon t_badge__advanced"
+                                        style="margin:0;">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                    <translate><span>Search</span></translate>
+                                </h1>
                             </div>
-                            <div class="text-right" style="padding-left:10rem;">
-                                <translate>The ICGC has joined forces with commercial and academic compute cloud partners to remove many of the barriers that prevent researchers from using the ICGC's vast genomic database. The large size of the ICGC datasets means that they can take months to download and analysing them requires computing power that many research groups do not have.</translate>
-                                <a href="/icgc-in-the-cloud"><translate>Read more...</translate></a>
+                            <div class="text-right">
+                                <p>
+                                    The Advanced Search page allow users to explore the ICGC harmonized data through 3 interdependent and ranked lists: Donors, Genes and Mutations. Users can use filters on Donors, Genes and Mutations to narrow down his search.
+                                    The Advanced Search page provides links to various analyses / visualizations that can be run based on the data of interest: Oncogrid, Enrichment Analysis, Save/edit sets, Genome Browser, Download Donor Data, View Data Files.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -215,25 +232,78 @@
                     <div style="flex:1;padding:1rem;">
                         <div style="padding:2rem;">
                             <div class="text-right">
-                                <a href="/pcawg" style="background:none"><img id="#pcawg-logo" src="styles/images/PCAWG-final-small.png" height="50px"></a>
+                                <h1>
+                                    <span class="t_badge t_badge_icon t_badge__analysis">
+                                        <i class="icon-beaker"></i>
+                                    </span>
+                                    <translate><span>Analysis</span></translate>
+                                </h1>
                             </div>
-                            <div class="text-right" style="padding-left:10rem;">
-                                <translate has-markup>
-                                    The <a href="/pcawg">Pancancer Analysis of Whole Genomes</a> (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from the International Cancer Genome Consortium.
-                                </translate>
+                            <div class="text-left">
+                                <p>
+                                    The Data Analysis page allows users to launch various analyses using donor, gene, mutation or file sets created based on Data Portal search. The Data Analysis page provides analysis tools such as:
+                                </p>
+                                <ul style="list-style-type:disc;">
+                                    <li>
+                                        <span>
+                                            Enrichment Analysis: identify statistically significantly over-represented groups of gene sets when comparing user input genes and genes from a chosen background.
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span>
+                                            Set Operation: Set Operations on donor, gene, mutation or file sets from ICGC data.
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span>
+                                            Oncogrid: Oncogrid view of mutation frequency.
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span>
+                                            Cohort Comparison: Survival plots for 2 custom cohorts and phenotype comparison.
+                                        </span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                     <div style="flex:1;padding:1rem;">
-                        <div style="padding:2rem 2rem 2rem 4rem;border-left:1px solid #e6e6e6">
+                        <div style="padding:2rem 2rem 2rem 4rem;">
                             <div class="text-left">
-                                <a href="/pcawg" style="background:none"><img id="#pcawg-logo" src="styles/images/PCAWG-final-small.png" height="50px"></a>
+                                <h1>
+                                    <span class="t_badge t_badge_icon t_badge__download">
+                                        <i class="icon-database"></i>
+                                    </span>
+                                    <translate><span>Releases</span></translate>
+                                </h1>
                             </div>
-                            <div class="text-left" style="padding-right:10rem;">
-                                <translate has-markup>
-                                    The <a href="/pcawg">Pancancer Analysis of Whole Genomes</a> (PCAWG) study is an international collaboration to identify common patterns of mutation in more than 2,800 cancer whole genomes from the International Cancer Genome Consortium.
-                                </translate>
+                            <div class="text-right" >
+                                <p>
+                                    A DCC data release is a curated data set produced from clinical and experimental data submitted through the ICGC Data Submission site. Such data releases happen on average three times a year and are cumulative in nature. Each release is denoted by a number, such as ICGC 20 or Release 20.
+                                    The DCC Data Releases page is where you can browse and download archive data files for every DCC data release in the past. 
+                                </p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; padding:0 2rem;">
+                    <div style="text-align:center">
+                        <div>
+                            <h1>
+                                <span
+                                class="t_badge t_badge_icon t_badge__data_repositories"
+                                style="margin:0;">
+                                    <i class="icon-download-cloud"></i>
+                                </span>
+                                Files
+                            </h1>
+                        </div>
+                        <div>
+                            <p>
+                                The ICGC Portal is a search tool aggregating metadata about clinical, raw and experimental data. The data is actually housed on separate repositories belonging to ICGC member projects (e.g. Collaboratory - Toronto, GDC - Chicago, PCAWG - London...). The Data Repositories page allows users to browse the federated metadata, providing diverse filters to help refine searches. Once the user gets the list of files of interest, he can download a manifest that can be used with the icgc-get download tool to download the actual files stored on the various repositories or he can get the manifests used by the repository-specific download clients. 
+                                This page also provides visualization such BAM or VCF statistics.
+                            </p>
                         </div>
                     </div>
                 </div>
