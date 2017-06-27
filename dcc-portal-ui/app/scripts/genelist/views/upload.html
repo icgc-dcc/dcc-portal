@@ -90,7 +90,9 @@
                               <i class="{{ expanded? 'icon-caret-down':'icon-caret-left'}}"></i>
                           </a>
                       </span>
-                      <span data-toolbar data-dl="genelist"></span>
+                      <span data-toolbar
+                        data-entity="genelist"
+                        data-json="{{ out.uiResult }}"></span>
                   </span>
                   <div data-ng-show="expanded">
                       <table class="table table-info" id="genelist">

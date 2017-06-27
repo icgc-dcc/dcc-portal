@@ -16,7 +16,9 @@
     <translate>
         Showing <strong id="projects-project-count">{{ ProjectsCtrl.projects.hits.length }}</strong> projects
     </translate>
-    <span data-toolbar data-dl="projects"></span>
+    <span data-toolbar 
+        data-entity="projects"
+        data-json="{{ ProjectsCtrl.projects.hits }}"></span>
     <span class="pull-right action-toolbar">
         <span class="action-item" style="margin-top:5px;">
             <i class="icon-download-cloud"></i>

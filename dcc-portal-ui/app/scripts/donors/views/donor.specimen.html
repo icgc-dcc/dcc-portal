@@ -135,7 +135,8 @@
                     data-row-limit="DonorSpecimenCtrl.defaultSpecimenRowLimit">
                 </data-table-row-counts>
                 <span data-toolbar
-                      data-dl="{{DonorCtrl.donor.id}}_specimen"></span>
+                      data-entity="{{DonorCtrl.donor.id}}_specimen"
+                      data-json="{{ DonorSpecimenCtrl.uiSpecimenSamples }}"></span>
                 <table-filter data-filter-model="DonorSpecimenCtrl.tableFilter.specimenSamples"
                     data-current-page="DonorSpecimenCtrl.currentSpecimenPage"></table-filter>
             </span>

@@ -236,7 +236,10 @@
                 data-current-page="GeneCtrl.currentProjectsPage"
                 data-row-limit="GeneCtrl.defaultProjectsRowLimit">
             </data-table-row-counts>
-            <span data-toolbar data-dl="{{GeneCtrl.gene.id}}_distribution"></span>
+            <span
+                data-toolbar
+                data-entity="{{GeneCtrl.gene.id}}_distribution"
+                data-json="{{ GeneCtrl.gene.uiProjects }}"></span>
             <table-filter data-class="small-filter"
                 data-filter-model="GeneCtrl.tableFilter.projects"
                 data-current-page="GeneCtrl.currentProjectsPage"></table-filter>
@@ -417,7 +420,9 @@
         </div>
         <span class="t_table_top">
             <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneMutationsCtrl.mutations.pagination"></span>
-            <span data-toolbar data-dl="{{GeneCtrl.gene.id}}_mutations"></span>
+            <span data-toolbar
+            data-entity="{{GeneCtrl.gene.id}}_mutations"
+            data-json="{{ GeneMutationsCtrl.mutations.hits }}"></span>
         </span>
         <table class="table table-bordered table-striped table-condensed">
             <thead>

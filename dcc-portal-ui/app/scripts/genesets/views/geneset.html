@@ -243,7 +243,9 @@
                 data-current-page="GeneSetCtrl.currentCancerPage"
                 data-row-limit="GeneSetCtrl.defaultCancerRowLimit">
             </data-table-row-counts>
-            <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_distribution"></span>
+            <span data-toolbar 
+                data-entity="{{GeneSetCtrl.geneSet.id}}_distribution"
+                data-json="{{ GeneSetCtrl.geneSet.uiProjects }}"></span>
              <table-filter data-class="small-filter" 
                 data-filter-model="GeneSetCtrl.tableFilter.projects"
                 data-current-page="GeneSetCtrl.currentCancerPage"></table-filter>
@@ -384,7 +386,9 @@
         </div>
         <div class="t_table_top">
             <span data-table-counts data-label="{{'genes' | translate}}" data-page="GeneSetGenesCtrl.genes.pagination"></span>
-            <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_genes"></span>
+            <span data-toolbar 
+                data-entity="{{GeneSetCtrl.geneSet.id}}_genes"
+                data-json="{{ GeneSetGenesCtrl.genes.hits }}"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -507,7 +511,9 @@
 
         <div class="t_table_top">
             <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneSetMutationsCtrl.mutations.pagination"></span>
-            <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_mutations"></span>
+            <span data-toolbar 
+                data-entity="{{GeneSetCtrl.geneSet.id}}_mutations"
+                data-json="{{ GeneSetMutationsCtrl.mutations.hits }}"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -618,7 +624,9 @@
 
         <div class="t_table_top">
             <span data-table-counts data-label="{{'donors' | translate}}" data-page="GeneSetDonorsCtrl.donors.pagination"></span>
-            <span data-toolbar data-dl="{{GeneSetCtrl.geneSet.id}}_donors"></span>
+            <span data-toolbar 
+                data-entity="{{GeneSetCtrl.geneSet.id}}_donors"
+                data-json="{{ GeneSetDonorsCtrl.donors.hits track }}"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>

@@ -279,7 +279,10 @@
 
         <div class="t_table_top">
             <span data-table-counts data-label="{{'mutations' | translate}}" data-page="DonorMutationsCtrl.mutations.pagination"></span>
-            <span data-toolbar data-dl="{{DonorCtrl.donor.id}}_mutations"></span>
+            <span
+                data-toolbar
+                data-entity="{{DonorCtrl.donor.id}}_mutations"
+                data-json="{{ DonorMutationsCtrl.mutations.hits }}"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>

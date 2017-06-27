@@ -86,7 +86,10 @@
               <i class="{{ expanded? 'icon-caret-down' : 'icon-caret-left' }}"></i>
             </a>
           </span>
-          <span data-toolbar data-dl="donorset"></span>
+          <span
+            data-toolbar
+            data-entity="donorset"
+            data-json="{{ out.donorSet }}"></span>
         </span>
 
         <div data-ng-show="expanded">
