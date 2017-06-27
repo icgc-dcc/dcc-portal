@@ -47,7 +47,7 @@ angular.module('icgc.ui.toolbar', [])
             filename;
 
           const delimiter = '\t',
-            sanitizedId = scope.entity.replace(':', '\\:');;
+            sanitizedId = scope.entity.replace(':', '\\:');
 
           // i.e. mutation_2012_04_02_20_56_33.tsv
           filename = scope.entity + '_' + $filter('date')(new Date(), 'yyyy_MM_dd_hh_mm_ss') + '.' + type;
