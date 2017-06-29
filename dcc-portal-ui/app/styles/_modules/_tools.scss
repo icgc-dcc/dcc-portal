@@ -23,15 +23,20 @@
 
 .t_tools__tool, a.t_tools__tool, a.t_tools__tool:visited {
   color: $orangeLight;
+  fill: $orangeLight;
   margin-left: .5rem;
 
   transition: color .5s, border .5s;
 
   &:hover {
     cursor: pointer;
-    color: $orange;
     background: transparent;
     text-decoration: none;
+  }
+
+  .t_tools_tool_json {
+    width: 22px;
+    vertical-align: sub;
   }
   
   .text-label {
