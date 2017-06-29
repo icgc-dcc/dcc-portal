@@ -159,7 +159,10 @@
         return -p.percentAffected;
       }),
       xAxis: 'id',
-      yValue: 'percentAffected'
+      yValue: 'percentAffected',
+      options: {
+        linkBase: '/projects/'
+      }
     });
 
     function getUiConsequencesJSON(consequences){

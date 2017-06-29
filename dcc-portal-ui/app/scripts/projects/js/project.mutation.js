@@ -80,7 +80,10 @@ module.controller('ProjectMutationsCtrl', function ($scope, HighchartsService,
       _ctrl.bar = HighchartsService.bar({
         hits: _ctrl.mutations.hits,
         xAxis: 'id',
-        yValue: 'affectedDonorCountFiltered'
+        yValue: 'affectedDonorCountFiltered',
+        options: {
+          linkBase: '/mutations/'
+        }
       });
     }
   }

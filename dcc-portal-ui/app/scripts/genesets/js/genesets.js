@@ -164,7 +164,10 @@
                 return -p.uiAffectedDonorPercentage;
               }), 10),
               xAxis: 'id',
-              yValue: 'uiAffectedDonorPercentage'
+              yValue: 'uiAffectedDonorPercentage',
+              options: {
+                linkBase: '/projects/'
+              }
             });
           });
 
@@ -179,7 +182,10 @@
                 return -p.uiAffectedGenePercentage;
               }),10),
               xAxis: 'id',
-              yValue: 'uiAffectedGenePercentage'
+              yValue: 'uiAffectedGenePercentage',
+              options: {
+                linkBase: '/projects/'
+              }
             });
           });
 

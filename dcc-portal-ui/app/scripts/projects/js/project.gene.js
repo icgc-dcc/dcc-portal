@@ -85,7 +85,10 @@ module.controller('ProjectGeneCtrl', function ($scope, HighchartsService,
           _ctrl.bar = HighchartsService.bar({
             hits: _ctrl.genes.hits,
             xAxis: 'symbol',
-            yValue: 'uiAffectedDonorPercentage'
+            yValue: 'uiAffectedDonorPercentage',
+            options: {
+              linkBase: '/genes/'
+            }
           });
         });
       });
