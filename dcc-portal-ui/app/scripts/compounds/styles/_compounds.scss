@@ -48,9 +48,13 @@
   }
 
   .term {
-    &__label, &__count {
+    &__label {
       position: relative;
       z-index: 1;
+    }
+    &__count {
+      position: absolute;
+      right: 0;
     }
   }
 }
