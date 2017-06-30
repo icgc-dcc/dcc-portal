@@ -35,7 +35,4 @@ public final class MediaTypes {
   public static final String GZIP = "application/x-gzip";
   public static final MediaType GZIP_TYPE = new MediaType("application", "x-gzip");
 
-  public static final String JSON = "application/json";
-  public static final MediaType JSON_TYPE = new MediaType("application", "json");
-
 }

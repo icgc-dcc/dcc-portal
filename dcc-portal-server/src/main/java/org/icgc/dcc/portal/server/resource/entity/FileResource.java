@@ -40,7 +40,6 @@ import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_FIELD;
 import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_VALUE;
 import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
-import static org.icgc.dcc.portal.server.util.MediaTypes.JSON;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -161,7 +160,7 @@ public class FileResource extends Resource {
   @GET
   @Timed
   @Path("/export")
-  @Produces({TEXT_TSV, JSON})
+  @Produces({TEXT_TSV, APPLICATION_JSON})
   @ApiOperation(value = "Exports repository file listings to a TSV or a JSON file.", response = File.class)
   public Response getExport(
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
@@ -171,7 +170,7 @@ public class FileResource extends Resource {
         outputStream -> fileService.exportFiles(outputStream, query(filtersParam), type);
 
     // Make this similar to client-side export naming format
-    val fileName = String.format("repository_%s.tsv", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())));
+    val fileName = String.format("repository_%s.%s", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())), type);
 
     return ok(outputGenerator).header(CONTENT_DISPOSITION,
         type(TYPE_ATTACHMENT).fileName(fileName).creationDate(new Date()).build()).build();
@@ -179,7 +178,7 @@ public class FileResource extends Resource {
 
   @GET
   @Path("/export/{setId}")
-  @Produces({TEXT_TSV, JSON})
+  @Produces({TEXT_TSV, APPLICATION_JSON})
   public Response getExport(
     @ApiParam(value = "Set Id", required = true) @PathParam("setId") String setId,
     @ApiParam(value = API_TYPE_VALUE) @QueryParam(API_TYPE_PARAM) @DefaultValue(DEFAULT_TYPE) String type) {
@@ -187,7 +186,7 @@ public class FileResource extends Resource {
     final StreamingOutput outputGenerator =
         outputStream -> fileService.exportFiles(outputStream, setId, type);
 
-    val fileName = String.format("repository_%s.tsv", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())));
+    val fileName = String.format("repository_%s.%s", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())), type);
 
     return ok(outputGenerator).header(CONTENT_DISPOSITION,
         type(TYPE_ATTACHMENT).fileName(fileName).creationDate(new Date()).build()).build();
