@@ -69,6 +69,7 @@ public abstract class Resource {
    */
   protected static final String DEFAULT_FIELDS = "";
   protected static final String DEFAULT_FILTERS = "{}";
+  protected static final String DEFAULT_TYPE = "tsv";
   protected static final String DEFAULT_FACETS = "true";
   protected static final String DEFAULT_SIZE = "10";
   protected static final String DEFAULT_FROM = "1";
