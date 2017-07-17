@@ -465,12 +465,12 @@
     </div>
 </section>
 <section id="pathway" data-ng-if="GeneSetCtrl.geneSet.source === 'Reactome'"
-         data-ng-class="{'loading': !GeneSetCtrl.pathway.xml, 'empty': GeneSetCtrl.pathway.xml}">
-    <h3 data-ng-if="!GeneSetCtrl.pathway.xml">
+         data-ng-class="{'loading': GeneSetCtrl.pathway.loading, 'empty': GeneSetCtrl.pathway.xml}">
+    <h3 data-ng-if="GeneSetCtrl.pathway.loading">
         <i class="icon-spinner icon-spin"></i>
         <translate>Loading Pathway Viewer...</translate>
     </h3>
-    <div data-ng-if="GeneSetCtrl.pathway.xml">
+    <div data-ng-if="GeneSetCtrl.pathway.xml && !GeneSetCtrl.pathway.loading">
         <h3><translate>Pathway Viewer</translate></h3>
         <h4 data-ng-if="GeneSetCtrl.pathway.xml"><translate>Drag and scroll to explore the pathway. Double click to reset the view.</translate></h4>
         <pathway-viewer data-items="GeneSetCtrl.pathway.xml"
@@ -480,7 +480,7 @@
         </pathway-viewer>
         <small><translate>Data Source:</translate> <a href="http://www.reactome.org/"><translate>Reactome</translate></a></small>
     </div>
-    <h3 data-ng-if="!GeneSetCtrl.pathway">
+    <h3 data-ng-if="!GeneSetCtrl.pathway.xml && !GeneSetCtrl.pathway.loading">
         <translate>No Pathway Diagram Found.</translate>
     </h3>
 </section>
