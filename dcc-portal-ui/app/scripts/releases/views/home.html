@@ -140,12 +140,10 @@
         <div id="actual_scroll" style="background:white;">
             <div style="display:flex;width:100%;padding:0 1rem;background:#fafafa;border-top:1px solid #e6e6e6;">
                 <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;flex:1;">
-                    <h3 style="margin:0;font-size:1.4rem; text-transform:uppercase;">Data Portal Summary</h3>
-                    <a href="http://docs.icgc.org/dictionary/release-{{ ReleaseCtrl.release.releaseNumber }}/" target="_blank">
-                        <span>
-                            <translate>Data Release</translate> {{ ReleaseCtrl.release.releaseNumber }} - {{ ReleaseCtrl.applicationReleaseDate }}
-                        </span>
-                    </a>
+                    <h3 style="margin:0;font-size:1.4rem; text-transform:uppercase;"><translate>Data Release</translate> {{ ReleaseCtrl.release.releaseNumber }}</h3>
+                    <span>
+                        {{ ReleaseCtrl.applicationReleaseDate }}
+                    </span>
                 </div>
                 <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;flex:1;">
                     <span style="text-transform: uppercase;font-size:14px;">Projects</span>

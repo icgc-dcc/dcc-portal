@@ -38,30 +38,22 @@
         </li>
       </ul>
    </span>-->
-    <ul class="toolbar">
-        <li class="tool-item tool-item-single">
-          <div data-ng-show="params.user.verifying">
-            <span>
-              <i class="icon-spinner icon-spin"></i> Verifying
-            </span>
-          </div>
-          <div class="logged-out" data-ng-hide="params.user.token || params.user.verifying">
-            <a data-ng-click="openLoginPopup()" href="">
-              <i class="fa fa-user-circle-o"></i>
-              <translate>Login</translate>
-            </a>
-          </div>
-          <div class="logged-in" data-ng-show="params.user.token && !params.user.verifying">
-            <a data-ng-click="params.user.menu = !params.user.menu" href="" style="color: {{ params.user.daco && params.user.cloudAccess ? 'green' : 'red' }};">
-              <i class="fa fa-user-circle-o"></i>
-              <span data-ng-bind="params.user.email"></span>
-            </a>
-          </div>
-        </li>
-    </ul>
-    <div class="menu" data-ng-show="params.user.token && !params.user.verifying && params.user.menu">
-      <div class="inner">
-        <div style="display:flex;flex-direction:row;justify-content:space-between;align-content:center;padding:1rem 1rem 0.5rem;">
+  <ul class="toolbar">
+    <li class="tool-item tool-item-single">
+      <div data-ng-show="params.user.verifying">
+        <span>
+          <i class="icon-spinner icon-spin"></i> Verifying
+        </span>
+      </div>
+      <div class="logged-out" data-ng-hide="params.user.token || params.user.verifying">
+        <a data-ng-click="openLoginPopup()" href="">
+          <i class="fa fa-user-circle-o"></i>
+          <translate>Login</translate>
+        </a>
+      </div>
+      <div class="logged-in" data-ng-show="params.user.token && !params.user.verifying">
+        <a href="" style="color: {{ params.user.daco && params.user.cloudAccess ? 'green' : 'red' }};">
+          <i class="fa fa-user-circle-o"></i>
           <i data-ng-show="params.user.daco"
             class="icon-shield data-available"
             data-tooltip-placement="left"
@@ -78,25 +70,29 @@
             class="icon-cloud-1 data-missing"
             data-icgc-tooltip="{{'Cloud Access Unauthorized' | translate}}"
             data-tooltip-placement="left"></i>
-        </div>
-        <div style="display:flex;flex-direction:row;justify-content:center;align-content:center;padding: 0rem 1rem 0.5rem; border-bottom: 2px solid #fafafa">
-          <span data-ng-bind="params.user.email"></span>
-        </div>
-        <div style="display:flex;flex-direction:row;justify-content:center;align-content:center;padding-top:0.5rem;" data-ng-show="params.user.daco && params.showCollaboratoryToken">
-          <a href=""
-            data-ng-click="openTokenManagerPopup()"
-            data-icgc-tooltip="{{'Manage your ICGC access tokens' | translate}}"
-            class="tool-bttn"
-            data-tooltip-placement="bottom"
-            style="width:100%;padding:0.5rem 0;">
-            <i class="icon-key"></i><translate>Token Manager</translate>
-          </a>
-        </div>
-        <div style="display:flex;flex-direction:row;justify-content:center;align-content:center;padding:0.5rem 0;">
-          <a href="" data-ng-click="logout()" class="tool-bttn" style="width:100%;padding:0.5rem 0;">
-            <i class="icon-logout"></i><translate>Logout</translate>
-          </a>
+        </a>
+        <div class="menu" data-ng-show="params.user.token && !params.user.verifying">
+          <div class="inner">
+            <div style="padding: 0rem 1rem 0.5rem; border-bottom: 2px solid #fafafa">
+              <span data-ng-bind="params.user.email"></span>
+            </div>
+            <div class="light" style="display:flex;flex-direction:row;justify-content:center;align-content:center;text-align:center;padding-top:0.5rem;" data-ng-show="params.user.daco && params.showCollaboratoryToken">
+              <a href=""
+                data-ng-click="openTokenManagerPopup()"
+                data-icgc-tooltip="{{'Manage your ICGC access tokens' | translate}}"
+                class="tool-bttn"
+                data-tooltip-placement="bottom">
+                <i class="icon-key"></i><translate>Token Manager</translate>
+              </a>
+            </div>
+            <div class="light" style="display:flex;flex-direction:row;justify-content:center;align-content:center;text-align:center;padding:0.5rem 0;">
+              <a href="" data-ng-click="logout()" class="tool-bttn">
+                <i class="icon-logout"></i><translate>Logout</translate>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </li>
+  </ul>
 </div>

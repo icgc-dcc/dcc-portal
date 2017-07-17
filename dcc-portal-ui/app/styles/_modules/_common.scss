@@ -41,7 +41,7 @@ pre {
 
 article {
   border: {
-    // top: 1px solid $greyLight;
+    top: 1px solid $greyLight;
     left: 1px solid $greyLight;
   }
 }
@@ -160,8 +160,8 @@ ol {
 }
 
 .h1-wrap {
-  display: none;
   height: 5rem;
+  margin-top: 1rem;
   h1 {
     display: flex;
     align-items: center;
