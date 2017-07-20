@@ -229,25 +229,25 @@ angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $docu
         if (scope.active > -1) {
           selected = scope.results.hits[scope.active];
           $location.path(url(selected)).search({});
-          track('suggest', {
+          track('search', {
             action: 'goto',
-            label: selected,
+            label: `${selected.type} / ${selected.id}`,
           });
         } else {
           // If there is only one hit just go to the page
           if (scope.results && scope.results.hits.length === 1) {
             item = scope.results.hits[0];
             $location.path(url(item)).search({});
-            track('suggest', {
+            track('search', {
               action: 'goto',
-              label: item,
+              label: `${item.type} / ${item.id}`,
             });
             // Otherwise make a search
           } else {
             $location.path('/q').search({q: scope.query});
-            track('suggest', {
+            track('search', {
               action: 'goto',
-              label: `search: ${scope.query}`,
+              label: `search / ${scope.query}`,
             });
           }
         }
