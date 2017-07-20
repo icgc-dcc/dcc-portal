@@ -361,6 +361,8 @@ angular.module('icgc.ui.suggest').directive('tagsPopup', function (Extensions) {
         }
         scope.addTerm(item);
       };
+
+      scope.track = track;
     }
   };
 });
