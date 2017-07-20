@@ -1,16 +1,17 @@
 const { mixpanel, ga } = global;
+const _ = require('lodash');
 
-const track = (eventCategory, { action, label, ...otherProperties }) => {
+const track = (eventCategory, { action, label, value, ...otherProperties }) => {
   if (mixpanel) {
-    mixpanel.track(eventCategory, { action, label, ...otherProperties });
+    mixpanel.track(eventCategory, _.omitBy({ action, label, value, ...otherProperties }, _.isNil));
   }
   if (ga) {
-    ga('send', {
+    ga('send', _.omitBy({
         hitType: 'event',
         eventCategory: eventCategory,
         eventAction: action,
         eventLabel: label,
-    });
+    }, _.isNil));
   }
 };
 
