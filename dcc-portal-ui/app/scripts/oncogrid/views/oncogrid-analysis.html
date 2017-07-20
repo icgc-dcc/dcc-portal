@@ -33,7 +33,7 @@
                 <i class="icon-file" data-icgc-tooltip="{{'Export as TSV' | translate}}" data-ng-click="exportSet(item.donorSet)"></i>
               </span>
               <span class="t_tools__tool" data-ng-if="ICGC_SETTINGS.downloadEnabled">
-                <i data-icgc-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="OncoCtrl.downloadDonorData(item.donorSet)"></i>
+                <i data-icgc-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="OncoCtrl.downloadDonorData(item.donorSet); track('download-donor-data', { action: 'click', label: 'oncogrid' });"></i>
               </span>
               <a class="t_tools__tool"
                 data-icgc-tooltip="{{'View in Data Repositores' | translate}}" href="{{repoLink}}">

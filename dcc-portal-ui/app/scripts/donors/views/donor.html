@@ -146,7 +146,7 @@
         </table>
 
         <div>
-            <button class="t_button" type="button" data-ng-click="DonorCtrl.downloadDonorData()" data-ng-disabled="!ICGC_SETTINGS.downloadEnabled">
+            <button class="t_button" type="button" data-ng-click="DonorCtrl.downloadDonorData(); track('download-donor-data', { action: 'click', label: 'donor page' });" data-ng-disabled="!ICGC_SETTINGS.downloadEnabled">
                 <i class="icon-download"></i>
                 <span> <translate>Download Donor Data</translate></span>
             </button>
