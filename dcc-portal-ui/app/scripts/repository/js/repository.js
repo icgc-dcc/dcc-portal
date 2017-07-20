@@ -67,11 +67,14 @@ import './file-finder';
     _ctrl.isChrome = /Chrome/.test($window.navigator.userAgent);
 
     _ctrl.fileQuery = '';
+
+    const trackFileQuery = _.debounce(() => track('file-repo', { action: 'query', label: _ctrl.fileQuery }), 500);
     _ctrl.handleFileQueryKeyup = ($event) => {
       if (event.keyCode === 27) {
         _ctrl.fileQuery = '';
         $event.currentTarget.blur();
       }
+      trackFileQuery();
     };
 
     function buildBreadcrumbs() {

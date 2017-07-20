@@ -87,7 +87,11 @@
                 <tr data-ng-repeat="file in ICGCRepoController.files">
                     <td data-ng-if="file.type=='f'">
                         <i class="icon-file"></i>
-                        <a target="_self" href="{{ICGCRepoController.API.BASE_URL}}/download?fn={{file.name}}">{{ file.baseName }}</a>
+                        <a
+                            target="_self"
+                            href="{{ICGCRepoController.API.BASE_URL}}/download?fn={{file.name}}"
+                            ng-click="track('file-repo', { action: 'click-file', label: file.baseName })"
+                        >{{ file.baseName }}</a>
                     </td>
                     <td data-ng-if="file.type=='d'"
                         data-ng-style="deprecatedReleases.indexOf(file.baseName) >= 0?{'text-decoration':'line-through'}:{}">
