@@ -445,7 +445,7 @@
 
     $locationProvider.html5Mode(true);
 
-    AngularyticsProvider.setEventHandlers(['Google']);
+    AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
 
 
     $stateProvider.state(
