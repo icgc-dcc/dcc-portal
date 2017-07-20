@@ -46,6 +46,7 @@ angular.module('icgc.ui.table.size').controller('tableSizeController', function 
     so.size = $scope.selectedSize;
     so.from = 1;
 
+    track('set-pagination-size', {value: $scope.selectedSize});
     LocationService.setJsonParam($scope.type, so);
   };
 });
@@ -58,9 +59,15 @@ angular.module('icgc.ui.table.size').directive('tableSize', function (gettextCat
       currentSize: '@'
     },
     replace: true,
-    template: '<span>' + gettextCatalog.getString('Showing') + ' <select data-ng-options="size for size in sizes"' +
-      ' data-ng-model="selectedSize" data-ng-change="changeSize()"></select> '+ 
-      gettextCatalog.getString('rows') + '</span>',
+    template: 
+      `<span> ${gettextCatalog.getString('Showing')}
+        <select
+          data-ng-options="size for size in sizes"
+          data-ng-model="selectedSize"
+          data-ng-change="changeSize()"
+        ></select>
+          ${gettextCatalog.getString('rows')}
+      </span>`,
     controller: 'tableSizeController'
   };
 });
