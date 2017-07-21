@@ -39,7 +39,7 @@
     };
 
     $scope.uploadEntityFn = () => {
-      track('upload', { action: 'open', label: $scope.type });
+      global.track('upload', { action: 'open', label: $scope.type });
       if($scope.type === 'donor' || $scope.type === 'file-donor'){
         return $scope.uploadDonorSet();
       }

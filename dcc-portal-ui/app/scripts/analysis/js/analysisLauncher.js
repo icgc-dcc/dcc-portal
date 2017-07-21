@@ -298,12 +298,12 @@
 
     /* Phenotype comparison only takes in donor set ids */
     _this.launchPhenotype = function(setIds, {isDemo} = {isDemo: false}) {
-      track('analysis', { action: 'launch', label: 'phenotype' });
+      global.track('analysis', { action: 'launch', label: 'phenotype' });
       return _launchAnalysis(setIds, 'phenotype', 'analysis/view/phenotype/', {isDemo});
     };
 
     _this.launchSet = function(type, setIds, {isDemo} = {isDemo: false}) {
-      track('analysis', { action: 'launch', label: 'set' });
+      global.track('analysis', { action: 'launch', label: 'set' });
       var payload = {
         lists: setIds,
         type: type.toUpperCase()
@@ -316,7 +316,7 @@
     };
     
     _this.launchOncogridAnalysis = function (setIds, {isDemo} = {isDemo: false}) {      
-      track('analysis', { action: 'launch', label: 'oncogrid' });
+      global.track('analysis', { action: 'launch', label: 'oncogrid' });
       if (_isLaunchingAnalysis) {
         return;
       }
@@ -366,7 +366,7 @@
     }
 
     _this.demoPhenotype = function() {
-      track('analysis', { action: 'demo', label: 'phenotype' });
+      global.track('analysis', { action: 'demo', label: 'phenotype' });
       var p1, p2, type = 'donor';
       p1 = {
         filters: {
@@ -404,7 +404,7 @@
     };
 
     _this.demoSetOperation = function() {
-      track('analysis', { action: 'demo', label: 'set' });
+      global.track('analysis', { action: 'demo', label: 'set' });
       var p1, p2, p3, type = 'mutation';
       p1 = {
         filters: {
@@ -470,7 +470,7 @@
     };
 
     _this.demoEnrichment = function() {
-      track('analysis', { action: 'demo', label: 'enrichment' });
+      global.track('analysis', { action: 'demo', label: 'enrichment' });
       var filters, type, params;
       filters = {
         gene: {
@@ -503,7 +503,7 @@
     };
     
     _this.demoOncogrid = function () {
-      track('analysis', { action: 'demo', label: 'oncogrid' });
+      global.track('analysis', { action: 'demo', label: 'oncogrid' });
       var donorSetParams = {
         filters: {
           donor:{
@@ -564,7 +564,7 @@
     };
 
     function launchEnrichment(set, {isDemo} = {isDemo: false}) {
-      track('analysis', { action: 'launch', label: 'enrichment' });
+      global.track('analysis', { action: 'launch', label: 'enrichment' });
 
       var filters = {
         gene: {}
