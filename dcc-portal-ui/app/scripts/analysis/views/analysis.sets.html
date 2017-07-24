@@ -87,7 +87,7 @@
                                 <i class="icon-file" data-icgc-tooltip="{{'Export as TSV' | translate}}" data-ng-click="SavedSetController.exportSet(item.id)"></i>
                             </span>
                             <span class="t_tools__tool" data-ng-if="ICGC_SETTINGS.downloadEnabled && item.type==='donor'">
-                                <i data-icgc-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="SavedSetController.downloadDonorData(item.id)"></i>
+                                <i data-icgc-tooltip="{{'Download Donor Data' | translate}}" class="icon-download" data-ng-click="SavedSetController.downloadDonorData(item.id); track('download-donor-data', { action: 'click', label: 'set analysis' });"></i>
                             </span>
                             <a data-ng-if="item.type==='donor' || item.type==='file'" class="t_tools__tool"
                               data-icgc-tooltip="{{'View in [[:: dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: SavedSetController.dataRepoTitle} }}" href="{{item.repoLink}}">

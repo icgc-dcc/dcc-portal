@@ -96,7 +96,7 @@
         Showing
         <select
           ng-model="vm.itemsPerPage"
-          ng-change="vm.handleItemsPerPageChange(vm.itemsPerPage)"
+          ng-change="vm.handleItemsPerPageChange(vm.itemsPerPage); track('set-pagination-size', {value: vm.itemsPerPage});"
           ng-options="size for size in vm.itemsPerPageOptions"
         ></select>
         rows

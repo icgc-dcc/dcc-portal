@@ -428,6 +428,7 @@ angular.module('icgc.ui.copyPaste', [])
                 onCopy: '&',
                 onError: '&',
                 copyData: '=',
+                copyAnalyticsTag: '@',
                 onCopyFocusOn: '@',
                 onCopySuccessMessage: '@',
                 onHoverMessage: '@'
@@ -636,6 +637,8 @@ angular.module('icgc.ui.copyPaste', [])
                 _targetElement.on('click', function (event) {
                     
                     event.stopPropagation();
+
+                    track('copy-to-clip', {action: 'click', label: scope.copyAnalyticsTag});
 
                     try {
                       _copyText(scope.copyData);

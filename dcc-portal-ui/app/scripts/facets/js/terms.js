@@ -95,7 +95,7 @@
     }
 
     $scope.displayLimit = 5;
-
+    $scope.track = global.track;
     $scope.addTerm = function (term) {
       Facets.addTerm({
         type: $scope.type,
