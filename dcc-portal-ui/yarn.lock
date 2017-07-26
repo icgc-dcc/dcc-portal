@@ -3143,7 +3143,7 @@ header-case@^1.0.0:
     upper-case "^1.1.3"
 
 highcharts@5.0.0:
-  version v5.0.0
+  version "5.0.0"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-5.0.0.tgz#fcce444ee4301ea1bd0acd36b34b3103b7c26915"
 
 hoek@2.x.x:
@@ -4343,6 +4343,10 @@ ng-annotate@1.2.1:
 ng-infinite-scroll@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/ng-infinite-scroll/-/ng-infinite-scroll-1.2.0.tgz#6dad57a036488963b31b631ded0b9baddaa9f931"
+
+ngl@^0.10.4:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/ngl/-/ngl-0.10.4.tgz#118562f3344b8dbbd730411e82d4b5cc2229a8e8"
 
 no-case@^2.2.0:
   version "2.3.0"
