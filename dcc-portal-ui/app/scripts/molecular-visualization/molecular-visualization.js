@@ -11,6 +11,14 @@ angular.module('icgc.molecular.visualization', [])
       <div class="not-found-message" ng-if="vm.hasNoResult">
         No matching structure found
       </div>
+      <div ng-if="vm.pdbIds.length">
+        <select
+          ng-options="id for id in vm.pdbIds"
+          ng-model="vm.pdbIdOnDisplay"
+          ng-change="vm.handleChangePdbId(vm.pdbIdOnDisplay)"
+        >
+        </select>
+      </div>
       <div
         class="viewport"
         style="width: 100%; height: 400px;"
@@ -22,25 +30,43 @@ angular.module('icgc.molecular.visualization', [])
       uniprotId: '<',
     },
     controller: function ($scope, $element, LoadState, $timeout) {
-      var loadState = new LoadState();
+      const loadState = new LoadState();
       this.loadState = loadState;
+      this.pdbIds = [];
+      this.pdbIdOnDisplay;
+      let currentStructure;
+
       require.ensure([], (require) => {
         const NGL = require('ngl');
-        var stage = new NGL.Stage($element.find('.viewport').get(0), {
+        let stage = new NGL.Stage($element.find('.viewport').get(0), {
           backgroundColor: 'white',
         });
 
         stage.spinAnimation.angle = 0;
         stage.setSpin(true);
 
+        const loadStructure = async (pdbId) => {
+          this.pdbIdOnDisplay = pdbId;
+          stage.setSpin(false);
+          currentStructure && stage.removeComponent(currentStructure);
+          currentStructure = await stage.loadFile(`rcsb://${pdbId}`, {
+            defaultRepresentation: true,
+          });
+          startSpin();
+          stage.autoView(1);
+        };
+
+        this.handleChangePdbId = (pdbId) => {
+          loadStructure(pdbId);
+        };
+
         const uniprotId = this.uniprotId[0];
         loadState.loadWhile(
           getPdbIds(uniprotId)
             .then(async (pdbIds) => {
               if (pdbIds[0]) {
-                await stage.loadFile(`rcsb://${pdbIds[0]}`, {
-                  defaultRepresentation: true,
-                });
+                this.pdbIds = pdbIds;
+                await loadStructure(pdbIds[0]);
                 startSpin();
               } else {
                 this.hasNoResult = true;
