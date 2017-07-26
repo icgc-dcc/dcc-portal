@@ -5,8 +5,8 @@ require('./molecular-visualization.scss');
 angular.module('icgc.molecular.visualization', [])
   .component('molecularVisualization', {
     template: `
-      <div class="loading-message" ng-show="true || vm.loadState.isLoading">
-        ...
+      <div class="loading-message" ng-show="vm.loadState.isLoading">
+        <i>.</i><i>.</i><i>.</i><i>.</i>
       </div>
       <div class="viewport" style="width: 100%; height: 400px;"></div>
     `,
