@@ -1,7 +1,7 @@
 molecular-visualization {
   display: block;
   position: relative;
-  min-height: 200px;
+  min-height: 100px;
   .loading-message {
     position: absolute;
     width: 100%;
@@ -22,6 +22,9 @@ molecular-visualization {
         animation-delay: #{$i * 0.1}s;
       }
     }
+  }
+  .not-found-message {
+    color: #999;
   }
 }
 
