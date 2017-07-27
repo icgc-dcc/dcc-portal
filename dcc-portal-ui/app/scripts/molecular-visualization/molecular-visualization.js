@@ -20,8 +20,16 @@ angular.module('icgc.molecular.visualization', [])
           ng-options="id for id in vm.pdbIds"
           ng-model="vm.pdbIdOnDisplay"
           ng-change="vm.handleChangePdbId(vm.pdbIdOnDisplay)"
+          ng-disabled="vm.pdbIds.length"
         >
         </select>
+        <a
+          ng-href="https://www.rcsb.org/pdb/explore/explore.do?structureId={{ vm.pdbIdOnDisplay }}"
+          target="_blank"
+          title="View structure {{ vm.pdbIdOnDisplay }} at RSCB PDB"
+        >
+          <i class="icon-external-link"></i>
+        </a>
         <div
           class="fullscreen-button fa fa-arrows-alt"
           ng-click="vm.handleClickFullscreen()"
@@ -30,7 +38,9 @@ angular.module('icgc.molecular.visualization', [])
 
       <div
         class="viewport"
-        style="width: 100%; height: 400px;"
+        ng-class="{
+          'should-show': (vm.pdbIdOnDisplay && !vm.loadState.isLoading)
+        }"
         ng-mouseenter="vm.handleMouseEnter()"
         ng-mouseleave="vm.handleMouseLeave()"
       ></div>
