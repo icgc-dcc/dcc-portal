@@ -22,8 +22,8 @@ angular.module('icgc.molecular.visualization', [])
       <div
         class="viewport"
         style="width: 100%; height: 400px;"
-        ng-mouseenter="vm.onMouseEnter()"
-        ng-mouseleave="vm.onMouseLeave()"
+        ng-mouseenter="vm.handleMouseEnter()"
+        ng-mouseleave="vm.handleMouseLeave()"
       ></div>
     `,
     bindings: {
@@ -98,11 +98,11 @@ angular.module('icgc.molecular.visualization', [])
         };
 
         let interactionTimeout;
-        this.onMouseEnter = () => {
+        this.handleMouseEnter = () => {
           $timeout.cancel(interactionTimeout);
           stopSpin();
         };
-        this.onMouseLeave = () => {
+        this.handleMouseLeave = () => {
           interactionTimeout = $timeout(startSpin, 0.3 * 1000);
         };
       });
