@@ -40,8 +40,7 @@ public class CmsAuthService {
   @NonNull
   private final CMSClient cmsClient;
 
-  @Getter(lazy = true)
-  private final String sessionName = initSessionName();
+  private String sessionName;
 
   public User getUserInfo(@NonNull String sessionId) {
     val result = cmsClient.getUserInfo(sessionId);
@@ -50,9 +49,21 @@ public class CmsAuthService {
     return result;
   }
 
+  public String getSessionName() {
+    if (sessionName == null) {
+      sessionName = initSessionName();
+    }
+    return sessionName;
+  }
+
+  public void refreshSessionName() {
+    log.info("Refreshing ICGC session cookie to CMS.");
+    sessionName = initSessionName();
+  }
+
   private String initSessionName() {
     val result = cmsClient.getSessionName();
-    log.debug("Initializing ICGC session cookie name to '{}'", result);
+    log.info("Initializing ICGC session cookie name to '{}'", result);
 
     return result;
   }
