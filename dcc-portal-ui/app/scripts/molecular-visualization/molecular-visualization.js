@@ -11,14 +11,23 @@ angular.module('icgc.molecular.visualization', [])
       <div class="not-found-message" ng-if="vm.hasNoResult">
         No matching structure found
       </div>
-      <div ng-if="vm.pdbIds.length">
+      <div
+        class="controls"
+        ng-if="vm.pdbIds.length"
+      >
         <select
+          class="pdb-options"
           ng-options="id for id in vm.pdbIds"
           ng-model="vm.pdbIdOnDisplay"
           ng-change="vm.handleChangePdbId(vm.pdbIdOnDisplay)"
         >
         </select>
+        <div
+          class="fullscreen-button fa fa-arrows-alt"
+          ng-click="vm.handleClickFullscreen()"
+        ></div>
       </div>
+
       <div
         class="viewport"
         style="width: 100%; height: 400px;"
@@ -104,6 +113,10 @@ angular.module('icgc.molecular.visualization', [])
         };
         this.handleMouseLeave = () => {
           interactionTimeout = $timeout(startSpin, 0.3 * 1000);
+        };
+
+        this.handleClickFullscreen = () => {
+          stage.toggleFullscreen();
         };
       });
 

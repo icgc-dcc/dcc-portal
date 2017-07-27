@@ -26,6 +26,26 @@ molecular-visualization {
   .not-found-message {
     color: #999;
   }
+  .controls {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    .fullscreen-button {
+      margin-left: auto;
+    }
+  }
+  .fullscreen-button {
+    padding: 5px;
+    transition: 0.1s all;
+    cursor: pointer;
+    &:hover {
+      color: #d87f05;
+      transform: scale(1.1);
+    }
+  }
 }
 
 @keyframes pulsate {
