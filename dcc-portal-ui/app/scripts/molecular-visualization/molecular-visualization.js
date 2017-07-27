@@ -52,7 +52,6 @@ angular.module('icgc.molecular.visualization', [])
       const loadState = new LoadState();
       this.loadState = loadState;
       this.pdbIds = [];
-      this.pdbIdOnDisplay;
       let currentStructure;
 
       require.ensure([], (require) => {
@@ -67,7 +66,7 @@ angular.module('icgc.molecular.visualization', [])
         const loadStructure = async (pdbId) => {
           this.pdbIdOnDisplay = pdbId;
           stage.setSpin(false);
-          currentStructure && stage.removeComponent(currentStructure);
+          stage.removeComponent(currentStructure);
           currentStructure = await stage.loadFile(`rcsb://${pdbId}`, {
             defaultRepresentation: true,
           });
