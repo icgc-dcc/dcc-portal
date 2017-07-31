@@ -46,7 +46,7 @@ angular.module('icgc.ui.table.size').controller('tableSizeController', function 
     so.size = $scope.selectedSize;
     so.from = 1;
 
-    global.track('set-pagination-size', {value: $scope.selectedSize});
+    global.track('set-pagination-size', { value: $scope.selectedSize, label: $scope.selectedSize });
     LocationService.setJsonParam($scope.type, so);
   };
 });
