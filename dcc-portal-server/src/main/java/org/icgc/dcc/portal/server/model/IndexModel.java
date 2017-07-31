@@ -336,6 +336,10 @@ public class IndexModel {
       .put("data_type", "text.data_type")
       .put("project_code", "text.project_code")
       .put("data_bundle_id", "text.data_bundle_id")
+      .put("sample_id", "text.sample_id")
+      .put("specimen_id", "text.specimen_id")
+      .put("submitted_specimen_id", "text.submitted_specimen_id")
+      .put("submitted_sample_id", "text.submitted_sample_id")
 
       // Drug-text
       .putAll(DRUG_KEYWORD_FIELDS)
