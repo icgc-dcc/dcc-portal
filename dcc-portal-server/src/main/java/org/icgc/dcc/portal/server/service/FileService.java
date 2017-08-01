@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.portal.server.service;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
@@ -49,6 +50,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.dcc.portal.pql.meta.FileTypeModel.Fields;
 import org.dcc.portal.pql.meta.IndexModel;
 import org.elasticsearch.action.search.SearchResponse;
@@ -92,8 +94,7 @@ public class FileService {
    * Constants.
    */
   private static final String UTF_8 = StandardCharsets.UTF_8.name();
-
-  private static final ObjectMapper MAPPER = new ObjectMapper();
+  private static final ObjectMapper NON_NULL_MAPPER = new ObjectMapper().setSerializationInclusion(NON_NULL);
 
   private static final Map<String, String> DATA_TABLE_EXPORT_MAP = ImmutableMap.<String, String> builder()
       .put(Fields.ACCESS, "Access")
@@ -268,7 +269,7 @@ public class FileService {
 
       val files = convertHitsToRepoFiles(response.getHits(), query);
       if("json".equals(type)) {
-        MAPPER.writeValue(output, files);
+        NON_NULL_MAPPER.writeValue(output, files);
       } else {
         for (val file : files) {
           writer.write(toRowMap(file), keys);
@@ -359,7 +360,6 @@ public class FileService {
   }
 
   private static List<File> convertHitsToRepoFiles(SearchHits hits, Query query) {
-
     return Stream.of(hits.getHits())
         .map(hit -> createResponseMap(hit, query, EntityType.FILE))
         .map(File::parse)
