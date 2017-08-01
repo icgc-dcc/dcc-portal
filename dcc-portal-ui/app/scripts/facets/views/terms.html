@@ -28,7 +28,7 @@
                 data-ng-mouseenter="mouseOver($event)"
                 data-ng-mouseleave="mouseLeave($event)"
                 data-ng-repeat="item in actives | orderBy:'-count'"
-                data-ng-click="removeTerm(item.term)">
+                data-ng-click="removeTerm(item.term); track('term', {action: 'remove', label: label + ' / ' + item.label})">
                 <span data-ng-hide="hideCount" data-ng-style="bar(item.count)"
                       class="t_facets__facet__terms__active__term__bar {{activeClass + '__bar'}}" ></span>
                 <span class="t_facets__facet__terms__active__term__label__text">
@@ -61,7 +61,7 @@
                 <span class="t_facets__facet__terms__inactive__term__label"
                       data-icgc-tooltip="{{ item.tooltip }}"
                       data-tooltip-placement="{{ defined? 'right':'overflow'}}"
-                      data-ng-click="addTerm(item.term)">
+                      data-ng-click="addTerm(item.term); track('term', {action: 'add', label: label + ' / ' + item.label})">
                     <i style='color:{{ sites[item.term] }}' class="icon-check-empty t_impact_{{item.term | lowercase}}"></i>
                     <span ng-if='iconClass (item.term)' class='{{ iconClass (item.term) }}' />
                     {{item.label}}

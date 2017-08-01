@@ -357,6 +357,8 @@
 
       $rootScope._ = require('lodash');
 
+      $rootScope.track = require('../../common/js/track');
+
       $rootScope.$on('$stateNotFound', function() {
         const redirect = getRedirectObject($location.url());
         $state.go(redirect.state, {page: redirect.page}, {location: false});
@@ -445,7 +447,7 @@
 
     $locationProvider.html5Mode(true);
 
-    AngularyticsProvider.setEventHandlers(['Google']);
+    AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
 
 
     $stateProvider.state(

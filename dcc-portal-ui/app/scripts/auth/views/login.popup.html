@@ -58,7 +58,7 @@
     </div>
     <div class="modal-footer">
         <button class="t_button" data-ng-click="closeLoginPopup();reset()"><translate>Cancel</translate></button>
-        <button class="t_button" data-ng-click="tryLogin()"
+        <button class="t_button" data-ng-click="tryLogin(); track('login', { action: 'click', label: 'provider: ' + params.provider });"
                 data-ng-disabled="params.provider=='openid'&&!openIDUrl||params.provider=='verisign'&&!verisignUsername||connecting">
             <span ng-hide="connecting"><i class="icon-login"></i><translate>Login</translate></span>
             <span ng-show="connecting"><i class="icon-spin icon-spinner"></i><translate>Connecting...</translate></span>

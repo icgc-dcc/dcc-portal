@@ -37,8 +37,17 @@
     <section class="text-center" data-ng-controller="ReleaseCtrl as ReleaseCtrl">
         <h3><translate>Data Release</translate> {{ ReleaseCtrl.release.releaseNumber }}</h3>
         <h3 class="subhead">{{ ReleaseCtrl.applicationReleaseDate }}</h3>
-        <donut home=true items='ReleaseCtrl.donut' inner-label='Donors' outer-label='Donors'
-               heading="{{'Donor Distribution by Primary Site' | translate}}" height="325" should-show-no-data-message="false"></donut>
+        <donut
+            home=true
+            items='ReleaseCtrl.donut'
+            inner-label='Donors'
+            outer-label='Donors'
+            heading="{{'Donor Distribution by Primary Site' | translate}}"
+            height="325"
+            should-show-no-data-message="false"
+            ng-mouseenter="track('donut', { action: 'mouseenter' })"
+            ng-click="track('donut', { action: 'click' })"
+        ></donut>
 
         <div class="summary-table-container">
             <table class="table table-striped table-bordered table-hover table-condensed">
@@ -88,17 +97,26 @@
         <h4><translate>Example Queries</translate></h4>
         <ol class="list">
             <li>
-                <a href='/search/m?filters={"gene":{"id":{"is":["ENSG00000157764"]}},"mutation":{"consequenceType":{"is":["missense_variant"]}},"donor":{"primarySite":{"is":["Colorectal"]}}}'>
+                <a
+                    href='/search/m?filters={"gene":{"id":{"is":["ENSG00000157764"]}},"mutation":{"consequenceType":{"is":["missense_variant"]}},"donor":{"primarySite":{"is":["Colorectal"]}}}'
+                    ng-click="track('tutorial', { action: 'click', label: 'BRAF missense mutations' })"
+                >
                     <translate>BRAF missense mutations in colorectal cancer</translate>
                 </a>
             </li>
             <li>
-                <a href='/search/g?filters={"mutation":{"functionalImpact":{"is":["High"]}}, "donor":{"projectId":{"is":["MALY-DE"]}, "tumourStageAtDiagnosis":{"is":["III"]}}}'>
+                <a
+                    href='/search/g?filters={"mutation":{"functionalImpact":{"is":["High"]}}, "donor":{"projectId":{"is":["MALY-DE"]}, "tumourStageAtDiagnosis":{"is":["III"]}}}'
+                    ng-click="track('tutorial', { action: 'click', label: 'Most frequently mutated genes' })"
+                >
                     <translate>Most frequently mutated genes by high impact mutations in stage III malignant lymphoma</translate>
                 </a>
             </li>
             <li>
-                <a href='/search?filters={"donor":{"primarySite":{"is":["Brain"]}, "availableDataTypes":{"is":["meth_array", "meth_seq"]}},"mutation":{"consequenceType":{"is":["frameshift_variant"]}}}'>
+                <a
+                    href='/search?filters={"donor":{"primarySite":{"is":["Brain"]}, "availableDataTypes":{"is":["meth_array", "meth_seq"]}},"mutation":{"consequenceType":{"is":["frameshift_variant"]}}}'
+                    ng-click="track('tutorial', { action: 'click', label: 'Brain cancer donors' })"
+                >
                     <translate>Brain cancer donors with frameshift mutations and having methylation data available</translate>
                 </a>
             </li>

@@ -15,8 +15,6 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import deepmerge from 'deepmerge';
-
 (function () {
   'use strict';
 
@@ -41,6 +39,7 @@ import deepmerge from 'deepmerge';
     };
 
     $scope.uploadEntityFn = () => {
+      global.track('upload', { action: 'open', label: $scope.type });
       if($scope.type === 'donor' || $scope.type === 'file-donor'){
         return $scope.uploadDonorSet();
       }

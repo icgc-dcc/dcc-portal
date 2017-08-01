@@ -33,8 +33,15 @@
           <p>
             <translate>The available repositories below are restricted by your search filter:</translate>
           </p>
-          <label class="no-select text-right" ng-show="repos.length > 1">
-            <input ng-model="shouldDeduplicate" type="checkbox"/>
+          <label
+            class="no-select text-right"
+            ng-show="repos.length > 1"
+          >
+            <input
+              ng-model="shouldDeduplicate"
+              type="checkbox"
+              ng-change="track('generate-manifest', {action: 'click', label: 'set dedupe', value: shouldDeduplicate})"
+            />
             <translate>Remove duplicate files</translate>
           </label>
         </div>
@@ -212,14 +219,14 @@
     </div>
 
     <div class="modal-footer">
-      <button class="t_button" data-ng-click="cancel();"><translate>Cancel</translate></button>
-      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i><translate>Generate</translate></button>
+      <button class="t_button" data-ng-click="cancel(); track('cancel-generate-manifest', { action: 'click' })"><translate>Cancel</translate></button>
+      <button class="t_button" data-ng-click="download(); track('generate-manifest', { action: 'click' })"><i class="icon-download"></i><translate>Generate</translate></button>
       <button
         class="t_button"
         data-ng-repeat="repoData in repos"
         data-ng-if="repos.length === 1 && repoData.hasManifest"
         data-ng-disabled="repoData.manifestID || repoData.isGeneratingManifestID"
-        data-ng-click="(!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
+        data-ng-click="track('create-manifest-id', { action: 'click', label: repoData.repoName }); (!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
       >
         <translate>Manifest ID</translate>
       </button>

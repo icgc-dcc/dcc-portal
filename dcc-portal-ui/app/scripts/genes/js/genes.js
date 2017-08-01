@@ -202,7 +202,10 @@
               return -p.uiAffectedDonorPercentage;
             }),10),
             xAxis: 'id',
-            yValue: 'uiAffectedDonorPercentage'
+            yValue: 'uiAffectedDonorPercentage',
+            options: {
+              linkBase: '/projects/'
+            }
           });
           _ctrl.totalDonors = projectDonors.Total;
         }).then(function(){
@@ -319,7 +322,10 @@
           _ctrl.bar = HighchartsService.bar({
             hits: _ctrl.mutations.hits,
             xAxis: 'id',
-            yValue: 'affectedDonorCountFiltered'
+            yValue: 'affectedDonorCountFiltered',
+            options: {
+              linkBase: '/mutations/'
+            }
           });
         }
       }

@@ -43,7 +43,10 @@ module.controller('ProjectDonorsCtrl', function ($scope, HighchartsService,
       _ctrl.bar = HighchartsService.bar({
         hits: _ctrl.donors.hits,
         xAxis: 'id',
-        yValue: 'ssmAffectedGenes'
+        yValue: 'ssmAffectedGenes',
+        options: {
+          linkBase: '/donors/'
+        }
       });
     }
   }

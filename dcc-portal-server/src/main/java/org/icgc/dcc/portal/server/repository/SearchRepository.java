@@ -228,7 +228,6 @@ public class SearchRepository {
         .setQuery(filteredQuery)
         .setPostFilter(getPostFilter(type));
 
-
     log.debug("ES search query is: {}", search);
     val response = search.execute().actionGet();
     log.debug("ES search result is: {}", response);

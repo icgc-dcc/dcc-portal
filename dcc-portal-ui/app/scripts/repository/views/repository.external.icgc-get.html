@@ -25,14 +25,17 @@
           <div class="input-group clipboard-group" ng-if="vm.manifestId">
             <input
               class="manifest-id form-control input-sm code text-center"
-              onClick="this.select()"
+              onClick="this.select() || track('icgc-get-id', { action: 'click' })"
               size="38"
               type="text"
               value="{{vm.manifestId}}"
             >
             <span class="input-group-btn">
-              <button class="btn btn-default btn-sm" type="button"
+              <button
+                  class="btn btn-default btn-sm"
+                  type="button"
                   data-copy-to-clip
+                  data-copy-analytics-tag="icgc-get-manifest-id"
                   data-copy-data="vm.manifestId"
                   data-show-copy-tips="true"
                   data-prompt-on-copy="false"
