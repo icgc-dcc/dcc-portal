@@ -32,6 +32,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.SearchHit;
 import org.icgc.dcc.portal.server.model.SurvivalAnalysis;
 import org.icgc.dcc.portal.server.model.SurvivalAnalysis.Result;
@@ -52,6 +53,7 @@ import lombok.Value;
 import lombok.val;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SurvivalAnalyzer {
 
@@ -72,6 +74,7 @@ public class SurvivalAnalyzer {
       .add("disease_status_last_followup")
       .addAll(DISEASE_FREE_SORT)
       .build();
+  private final static float Z = 1.96f;
 
   /**
    * Dependencies.
@@ -179,7 +182,6 @@ public class SurvivalAnalyzer {
     currentInterval.setCumulativeSurvival(cumulativeSurvival);
 
     for (int i = 0; i < time.length; i++) {
-
       long t = time[i];
 
       // If we have moved past the current interval compute the cumulative survival and adjust the # at risk
@@ -207,6 +209,27 @@ public class SurvivalAnalyzer {
       if (!censured[i]) {
         currentInterval.incDied();
       }
+
+      float sigma = 0.0f;
+      float c1 = 1.0f;
+      float c2 = 1.0f;
+
+      float _atRisk = time.length;
+      for (int j = 0; j < i && j < intervals.size(); j++) {
+        val died = (float) intervals.get(j).died;
+        sigma += died / (_atRisk * (_atRisk - died));
+        _atRisk -= died;
+      }
+      float variance = sigma / (float) Math.pow(Math.log10(cumulativeSurvival), 2);
+      if (!Float.isNaN(variance) && Float.isFinite(variance) && variance != 0.0f) {
+        float firstTerm = (float) Math.log10(-1.0 * Math.log10(cumulativeSurvival));
+        float secondTerm = (float) (Z * Math.sqrt(variance));
+        c1 = (float) Math.exp(-1 * Math.exp(firstTerm - secondTerm));
+        c2 = (float) Math.exp(-1 * Math.exp(firstTerm + secondTerm));
+      }
+      currentInterval.setUpperConfidence(c1);
+      currentInterval.setLowerConfidence(c2);
+      log.info("{} {} {}", cumulativeSurvival, c1, c2);
     }
     currentInterval.setCumulativeSurvival(cumulativeSurvival);
 
@@ -282,6 +305,8 @@ public class SurvivalAnalyzer {
     private int died;
     private List<DonorValue> donors = new ArrayList<>();
     private float cumulativeSurvival;
+    private float upperConfidence;
+    private float lowerConfidence;
 
     void incDied() {
       died++;
