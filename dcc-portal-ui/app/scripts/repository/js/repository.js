@@ -878,8 +878,8 @@ import './file-finder';
     /**
      * Export table
      */
-    _ctrl.export = function() {
-      ExternalRepoService.export (FilterService.filters());
+    _ctrl.export = function(type) {
+      ExternalRepoService.export (FilterService.filters(), type);
     };
 
     /**

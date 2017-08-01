@@ -194,7 +194,9 @@
     <br>
     <div data-ng-class="wide"> 
         <h3><translate>Gender Comparison</translate></h3>
-        <span data-toolbar data-dl="phenotype-gender"></span>
+        <span data-toolbar 
+            data-entity="phenotype-gender"
+            data-json="gender.uiTable"></span>
     </div>
 
     <div data-ng-class="wide"> 
@@ -264,7 +266,9 @@
     <br>
     <div data-ng-class="wide">
         <h3><translate>Vital Status Comparison</translate></h3>
-        <span data-toolbar data-dl="phenotype-vital-status"></span>
+        <span data-toolbar 
+            data-entity="phenotype-vital-status"
+            data-json="{{ vital.uiTable }}"></span>
     </div>
     <div data-ng-class="wide"> 
         <table class="table"> 
@@ -334,7 +338,9 @@
     <br>
     <div data-ng-class="wide">
         <h3><translate>Age at Diagnosis Comparison</translate></h3>
-        <span data-toolbar data-dl="phenotype-age"></span>
+        <span data-toolbar 
+            data-entity="phenotype-age"
+            data-json="{{ age.uiTable }}"></span>
     </div>
     <div data-ng-class="wide"> 
         <table class="table"> 

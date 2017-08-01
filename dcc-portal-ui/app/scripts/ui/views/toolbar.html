@@ -1,7 +1,15 @@
 <span class="t_tools">
     <span class="t_tools__tool"
           data-tooltip-placement="left"
+          data-icgc-tooltip="{{'Export Table as JSON' | translate}}"
+          data-ng-click="downloadInit('json')">
+          <img
+            class="t_tools_tool_json"
+            src="/styles/images/json-export.svg">
+    </span>
+    <span class="t_tools__tool"
+          data-tooltip-placement="left"
           data-icgc-tooltip="{{'Export Table as TSV' | translate}}"
-          data-ng-click="downloadHTMLTable(dl, 'tsv')"><i
-          class="icon-file"></i></span>
+          data-ng-click="downloadInit('tsv')"><i
+          class="fa fa-file-text-o"></i></span>
 </span>

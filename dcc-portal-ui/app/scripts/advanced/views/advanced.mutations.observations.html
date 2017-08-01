@@ -11,7 +11,10 @@
     <div class="t_table_top">
         <span data-table-counts data-label="{{'mutation occurrences' | translate}}"
               data-page="AdvancedCtrl.Mutation.occurrences.pagination"></span>
-        <span data-toolbar data-dl="occurrences"></span>
+        <span
+            data-toolbar
+            data-entity="occurrences"
+            data-json="{{ AdvancedCtrl.Mutation.occurrences.hits }}"></span>
     </div>
     <table class="table table-bordered table-striped table-condensed">
         <thead>

@@ -74,6 +74,8 @@ import org.supercsv.io.CsvMapWriter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -90,6 +92,8 @@ public class FileService {
    * Constants.
    */
   private static final String UTF_8 = StandardCharsets.UTF_8.name();
+
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
   private static final Map<String, String> DATA_TABLE_EXPORT_MAP = ImmutableMap.<String, String> builder()
       .put(Fields.ACCESS, "Access")
@@ -202,14 +206,14 @@ public class FileService {
     return fileRepository.getRepoStats(repoName);
   }
 
-  public void exportFiles(OutputStream output, Query query) {
+  public void exportFiles(OutputStream output, Query query, String type) {
     val prepResponse = fileRepository.findAll(query, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
-    exportFiles(output, prepResponse, query, DATA_TABLE_MAPPING_KEYS);
+    exportFiles(output, prepResponse, query, DATA_TABLE_MAPPING_KEYS, type);
   }
 
-  public void exportFiles(OutputStream output, String setId) {
+  public void exportFiles(OutputStream output, String setId, String type) {
     val prepResponse = fileRepository.findAll(setId, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
-    exportFiles(output, prepResponse, new Query(), DATA_TABLE_MAPPING_KEYS);
+    exportFiles(output, prepResponse, new Query(), DATA_TABLE_MAPPING_KEYS, type);
   }
 
   public Map<String, Map<String, Long>> getUniqueFileAggregations(UniqueSummaryQuery summary) {
@@ -250,7 +254,7 @@ public class FileService {
   }
 
   @SneakyThrows
-  private void exportFiles(OutputStream output, SearchResponse response, Query query, String[] keys) {
+  private void exportFiles(OutputStream output, SearchResponse response, Query query, String[] keys, String type) {
     @Cleanup
     val writer = new CsvMapWriter(new BufferedWriter(new OutputStreamWriter(output, UTF_8)), TAB_PREFERENCE);
     writer.writeHeader(toArray(DATA_TABLE_EXPORT_MAP.values(), String.class));
@@ -263,8 +267,12 @@ public class FileService {
       }
 
       val files = convertHitsToRepoFiles(response.getHits(), query);
-      for (val file : files) {
-        writer.write(toRowMap(file), keys);
+      if("json".equals(type)) {
+        MAPPER.writeValue(output, files);
+      } else {
+        for (val file : files) {
+          writer.write(toRowMap(file), keys);
+        }
       }
 
       scrollId = response.getScrollId();

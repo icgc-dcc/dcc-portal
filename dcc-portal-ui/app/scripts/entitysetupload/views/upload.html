@@ -60,7 +60,9 @@
               <i class="{{ expanded? 'icon-caret-down' : 'icon-caret-left' }}"></i>
             </a>
           </span>
-          <span data-toolbar data-dl="{{params.entityType}}set"></span>
+          <span data-toolbar
+            data-entity="{{params.entityType}}set"
+            data-json="{{ params.entityIdsArray }}"></span>
         </span>
         <div data-ng-show="expanded">
           <table class="table table-info" id="{{params.entityType}}set">

@@ -234,10 +234,20 @@
             <div class="t_table_top">
                 <span data-table-counts data-label="{{'files' | translate}}" data-page="ExternalRepoController.files.pagination"></span>
                 <span class="t_tools">
-                    <span class="t_tools__tool">
-                        <i class="icon-file pull-right"
-                           data-icgc-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
-                           data-ng-click="ExternalRepoController.export()"></i>
+                    <span class="t_tools__tool"
+                          data-tooltip-placement="left"
+                          data-icgc-tooltip="{{'Export Table as JSON' | translate}}"
+                          data-ng-click="ExternalRepoController.export('json')">
+                          <img
+                            class="t_tools_tool_json"
+                            src="/styles/images/json-export.svg">
+                    </span>
+                    <span 
+                      class="t_tools__tool"
+                      data-icgc-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
+                      data-ng-click="ExternalRepoController.export('tsv')"
+                    >
+                        <i class="fa fa-file-text-o"></i>
                     </span>
                 </span>
             </div>

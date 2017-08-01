@@ -29,9 +29,13 @@
 
   &:hover {
     cursor: pointer;
-    color: $orange;
     background: transparent;
     text-decoration: none;
+  }
+
+  .t_tools_tool_json {
+    width: 22px;
+    vertical-align: sub;
   }
   
   .text-label {

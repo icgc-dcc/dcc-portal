@@ -79,6 +79,8 @@ public final class Resources {
   public static final String API_FIELD_VALUE = "Select fields returned";
   public static final String API_FILTER_PARAM = "filters";
   public static final String API_FILTER_VALUE = "Filter the search results";
+  public static final String API_TYPE_PARAM = "type";
+  public static final String API_TYPE_VALUE = "Type of file export";
   public static final String API_SCORE_FILTERS_PARAM = "scoreFilters";
   public static final String API_SCORE_FILTER_VALUE = "Used to filter scoring differently from results";
   public static final String API_ANALYSIS_VALUE = "Analysis";
