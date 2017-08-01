@@ -220,12 +220,12 @@ public class SurvivalAnalyzer {
         sigma += died / (_atRisk * (_atRisk - died));
         _atRisk -= died;
       }
-      float variance = sigma / (float) Math.pow(Math.log10(cumulativeSurvival), 2);
-      if (!Float.isNaN(variance) && Float.isFinite(variance) && variance != 0.0f) {
-        float firstTerm = (float) Math.log10(-1.0 * Math.log10(cumulativeSurvival));
-        float secondTerm = (float) (Z * Math.sqrt(variance));
-        c1 = (float) Math.exp(-1 * Math.exp(firstTerm - secondTerm));
-        c2 = (float) Math.exp(-1 * Math.exp(firstTerm + secondTerm));
+
+      float standardError = (float) Math.sqrt( sigma / (float) Math.pow(Math.log10(cumulativeSurvival), 2) );
+      if (!Float.isNaN(standardError) && Float.isFinite(standardError) && standardError != 0.0f) {
+        val A = (float) 1.96 * standardError;
+        c1 = (float) Math.pow(cumulativeSurvival, Math.exp((double) A));
+        c2 =(float) Math.pow(cumulativeSurvival, Math.exp(-1.0 * A));
       }
       currentInterval.setUpperConfidence(c1);
       currentInterval.setLowerConfidence(c2);
