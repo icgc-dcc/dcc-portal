@@ -168,6 +168,43 @@ $foregroundRed: #ff654b;
   color: $greyLight;
 }
 
+.t_sh__toggle {
+  .select-all, .select-none {
+    color: #e9931c;
+    cursor: pointer;
+  }
+  .select-wrapper {
+    padding-left: 0.8em;
+  }
+}
+
+.hover-hitarea{
+  display: inline-block;
+  .hover-target, &.hover-target {
+    display: inline-block;
+    position: relative;
+    * {
+      position: relative;
+    }
+    &:before {
+      content: ' ';
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 100%;
+      transition: 0.15s transform ease, 0.3s filter ease-in 0.25s;
+      top: 0;
+      border-radius: 3px;
+      background: rgba(218, 242, 251, 0.42);
+      transform: scaleX(0) scaleY(0) translateZ(0);
+      filter: blur(0);
+    }
+  }
+  &:hover .hover-target:before, &.hover-target:hover:before {
+    transform: scaleX(1.2) scaleY(1) translateZ(0);
+    filter: blur(2px);
+  }
+}
 /************************************************
  *   Labels
  ***********************************************/
