@@ -61,17 +61,9 @@ import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
 import org.icgc.dcc.common.core.util.stream.Collectors;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.File;
+import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.model.File.Donor;
 import org.icgc.dcc.portal.server.model.File.FileCopy;
-import org.icgc.dcc.portal.server.model.Files;
-import org.icgc.dcc.portal.server.model.Keyword;
-import org.icgc.dcc.portal.server.model.Keywords;
-import org.icgc.dcc.portal.server.model.Pagination;
-import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.TermFacet;
-import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.repository.FileRepository;
 import org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys;
@@ -106,7 +98,11 @@ public class FileService {
   private static final Map<String, String> DATA_TABLE_EXPORT_MAP = ImmutableMap.<String, String> builder()
       .put(Fields.ACCESS, "Access")
       .put(Fields.FILE_ID, "File ID")
+      .put(Fields.FILE_NAME, "File Name")
       .put(Fields.DONOR_ID, "ICGC Donor")
+      .put(Fields.SPECIMEN_ID, "Specimen ID")
+      .put(Fields.SPECIMEN_TYPE, "Specimen Type")
+      .put(Fields.SAMPLE_ID, "Sample ID")
       .put(Fields.REPO_NAME, "Repository")
       .put(Fields.PROJECT_CODE, "Project")
       .put(Fields.STUDY, "Study")
@@ -308,8 +304,16 @@ public class FileService {
 
     row.put(Fields.DONOR_ID,
         toSummarizedString(fieldToSet(file.getDonors(), Donor::getDonorId)));
+    row.put(Fields.SPECIMEN_ID,
+        toSummarizedString(listToSet(file.getDonors(), Donor::getSpecimenId)));
+    row.put(Fields.SPECIMEN_TYPE,
+        toSummarizedString(listToSet(file.getDonors(), Donor::getSpecimenType)));
+    row.put(Fields.SAMPLE_ID,
+        toSummarizedString(listToSet(file.getDonors(), Donor::getSampleId)));
     row.put(Fields.PROJECT_CODE,
         toSummarizedString(fieldToSet(file.getDonors(), Donor::getProjectCode)));
+    row.put(Fields.FILE_NAME,
+        String.valueOf(file.getFileCopies().get(0).getFileName()));
     row.put(Fields.FILE_SIZE,
         String.valueOf(file.getFileCopies().stream().mapToLong(FileCopy::getFileSize).average().orElse(0)));
     row.put(Fields.ACCESS, file.getAccess());
@@ -321,6 +325,10 @@ public class FileService {
     row.put(Fields.FILE_FORMAT, fieldToCSV(file.getFileCopies(), FileCopy::getFileFormat));
 
     return row.build();
+  }
+
+  private static Collection<Object> listToSet(List<Donor> list, Function<Donor, List<String>> mapper) {
+    return list.stream().map(mapper).flatMap(Collection::stream).collect(toImmutableSet());
   }
 
   private static Collection<Object> fieldToSet(List<Donor> list, Function<Donor, String> mapper) {
