@@ -5,6 +5,7 @@
         "flowtype"
     ],
     "globals": {
+        "track": false,
         "invariant": true,
         "$icgcApp": false,
         "ZeroClipboard": false,

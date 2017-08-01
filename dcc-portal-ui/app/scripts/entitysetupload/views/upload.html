@@ -38,8 +38,12 @@
       <div><translate>Or choose a file to upload</translate></div>
       <span class="t_button btn-file">
         <translate>Browse</translate> 
-        <input type="file" accept=".tsv,.csv,text/*" 
-          data-file-upload="params.uploadedFile">
+        <input
+          type="file"
+          accept=".tsv,.csv,text/*" 
+          data-file-upload="params.uploadedFile"
+          ng-click="track('upload', { action: 'select file', label: params.entityType })"
+        >
       </span>
       <span style="margin-left: 5px">{{ params.fileName }}</span>
     </div>

@@ -1,5 +1,6 @@
 require('../styles/styles.scss');
 
+global.track = require('./common/js/track.js');
 require('./app/js/app.js');
 require('./common/js/common.js');
 require('./common/js/services.js');

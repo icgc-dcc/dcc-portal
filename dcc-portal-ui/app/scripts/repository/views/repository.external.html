@@ -144,11 +144,14 @@
                     </button>
                 </div>
                 <div class="quarter" data-ng-if="ExternalRepoController.showIcgcGet">
-                  <button class="t_button" data-ng-click="ExternalRepoController.downloadManifest()">
+                  <button class="t_button" data-ng-click="ExternalRepoController.downloadManifest() || track('manifests-button', { action: 'click' })">
                     <i class="icon-file"></i>Manifests
                   </button>
 
-                  <button class="t_button" data-ng-click="ExternalRepoController.showIcgcGetModal()">
+                  <button
+                    class="t_button"
+                    data-ng-click="ExternalRepoController.showIcgcGetModal() || track('icgc-get-button', { action: 'click' })"
+                  >
                     <img src="/styles/images/icgc-get-white.svg" style="width: 16px; margin-bottom: -3px;">
                     <span>icgc-get</span>
                   </button>

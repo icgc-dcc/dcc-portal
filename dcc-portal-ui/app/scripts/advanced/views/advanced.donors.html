@@ -76,7 +76,13 @@
                </span>
                <span class="action-item" data-ng-if="ICGC_SETTINGS.downloadEnabled">
                    <span>
-                      <i class="icon-download"></i><a href="" data-ng-click="AdvancedCtrl.downloadDonorData()"><translate>Download Donor Data</translate></a>
+                      <i class="icon-download"></i>
+                      <a
+                        href=""
+                        data-ng-click="AdvancedCtrl.downloadDonorData(); track('download-donor-data', { action: 'click' });"
+                      >
+                        <translate>Download Donor Data</translate>
+                      </a>
                    </span>
                </span>
                <span class="action-item">
