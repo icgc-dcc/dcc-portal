@@ -67,7 +67,13 @@
             <span class="action-toolbar pull-right">
                 <span class="action-item">
                     <i class="icon-grid"></i>
-                    <a href="#" data-ng-click="AdvancedCtrl.oncogridAnalysis()">
+                    <a
+                        href="#"
+                        data-ng-click="
+                            AdvancedCtrl.oncogridAnalysis();
+                            track('advanced-search-links', { action: 'click-oncogrid' });
+                        "
+                    >
                         <translate>OncoGrid</translate>
                     </a>
                </span>
@@ -88,7 +94,13 @@
                <span class="action-item">
                    <span>
                       <i class="icon-download-cloud"></i><span>
-                      <a href="" data-ng-click="AdvancedCtrl.viewExternalDonors(AdvancedCtrl.Donor.donors.pagination.total)">
+                      <a
+                        href=""
+                        data-ng-click="
+                            AdvancedCtrl.viewExternalDonors(AdvancedCtrl.Donor.donors.pagination.total);
+                            track('advanced-search-links', { action: 'click-view-in-repo' });
+                        "
+                      >
                       <translate>View in</translate> {{:: AdvancedCtrl.dataRepoTitle }}</a></span>
                    </span>
                </span>

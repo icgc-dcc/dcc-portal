@@ -9,15 +9,24 @@
         <span class="action-toolbar pull-right">
             <span class="action-item">
                 <i class="icon-grid"></i>
-                <a href="#" data-ng-click="AdvancedCtrl.oncogridAnalysis()">
+                <a
+                    href="#"
+                    data-ng-click="
+                        AdvancedCtrl.oncogridAnalysis();
+                        track('advanced-search-links', { action: 'click-oncogrid' });
+                    "
+                >
                     <translate>OncoGrid</translate>
                 </a>
             </span>
             <span class="action-item">
-               <i class="icon-beaker"></i><a href="" data-ng-click="AdvancedCtrl.enrichmentAnalysis(AdvancedCtrl.Gene.genes.pagination.total)"><translate>Enrichment Analysis</translate></a>
+               <i class="icon-beaker"></i><a href="" data-ng-click="
+                AdvancedCtrl.enrichmentAnalysis(AdvancedCtrl.Gene.genes.pagination.total);
+                track('advanced-search-links', { action: 'click-enrichment' });
+                "><translate>Enrichment Analysis</translate></a>
             </span>
             <span class="action-item">
-               <i class="icon-chart"></i><a href="/browser/g?filters={{AdvancedCtrl.Location.filters()}}"><translate>Genome Viewer</translate></a>
+               <i class="icon-chart"></i><a href="/browser/g?filters={{AdvancedCtrl.Location.filters()}}" ng-click="track('advanced-search-links', { action: 'click-genome-viewer' });"><translate>Genome Viewer</translate></a>
             </span>
             <span class="action-item">
                 <entityset-persistence-dropdown
