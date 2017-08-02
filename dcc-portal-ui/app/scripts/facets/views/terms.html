@@ -5,7 +5,10 @@
             {{ label  }}
         </span>
         <span data-ng-if="actives.length" class="t_facets__facet__terms__inactive__reset t_tools">
-            <span data-ng-click="removeFacet()" class="t_tools__tool"><i class="icon-undo"></i></span>
+            <span
+                data-ng-click="removeFacet();  track('term', {action: 'reset-facet', label: label});"
+                class="t_tools__tool"
+            ><i class="icon-undo"></i></span>
         </span>
         <span class="t_tools t_facets_facet_search_icon" 
             data-ng-show="(inactives.length > (searchIconShowLimit || 5)) && !collapsed">
@@ -53,7 +56,7 @@
             >
                 <span
                     class="select-wrapper select-none pull-left hover-hitarea"
-                    ng-click="removeTerms(actives)"
+                    ng-click="removeTerms(actives); track('term', {action: 'select-none', label: label});"
                 ><span class="hover-target"><span>Select none</span></span></span>
             </li>
         </ul>
@@ -83,7 +86,7 @@
                     <span
                         class="select-all hover-hitarea"
                         ng-show="inactives.length"
-                        ng-click="addTerms(inactives | filter: search.query)"
+                        ng-click="addTerms(inactives | filter: search.query);  track('term', {action: 'select-all', label: label});"
                     >
                         <span
                             class="hover-target"
