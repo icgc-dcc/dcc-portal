@@ -24,22 +24,18 @@
         var survivalData = responses.survivalData.plain().results;
         var setsMeta = responses.setsMeta.plain();
 
-        var processGraphData = (graphType) => {
-          return survivalData.map((dataSet) => {
-            var donors = _.flatten(dataSet[graphType].map((interval) => {
-              return interval.donors.map((donor) => {
-                return _.extend({}, donor, {
-                  survivalEstimate: interval.cumulativeSurvival
-                });
-              });
-            }));
-
-            return {
-              meta: _.find(setsMeta, {id: dataSet.id}),
-              donors: donors
-            };
-          });
-        };
+        var processGraphData = (graphType) => 
+          survivalData.map((dataSet) => ({
+            meta: _.find(setsMeta, {id: dataSet.id}),
+            donors: _.flatten(dataSet[graphType].map((interval) => 
+              interval.donors.map((donor) => 
+                _.extend({}, donor, {
+                  survivalEstimate: interval.cumulativeSurvival,
+                  confidenceInterval: [interval.lowerConfidence, interval.upperConfidence]
+                })
+              )
+            ))
+          }));
         var overallStats = isNaN(responses.survivalData.overallStats.pvalue) ? 
           undefined : responses.survivalData.overallStats;
         var diseaseFreeStats = isNaN(responses.survivalData.diseaseFreeStats.pvalue) ? 
