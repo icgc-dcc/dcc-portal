@@ -88,6 +88,7 @@ function svgToPngDataUri(svg, {width, height}) {
           xDomain: state.xDomain,
           height: isFullScreen() && ( window.innerHeight - 100 ),
           getSetSymbol: SetOperationService.getSetShortHandSVG,
+          shouldShowConfidenceIntervals: true,
           onMouseEnterDonor: function (event, donor) {
             $scope.$apply(function () {
               ctrl.tooltipParams = {
