@@ -92,31 +92,45 @@ public class KaplanMeier {
       if (!censured[i]) {
         currentInterval.incDied();
       }
-
-      float sigma = 0.0f;
-      float c1 = 1.0f;
-      float c2 = 1.0f;
-
-      float _atRisk = time.length;
-      for (int j = 0; j < i && j < intervals.size(); j++) {
-        val died = (float) intervals.get(j).died;
-        sigma += died / (_atRisk * (_atRisk - died));
-        _atRisk -= died;
-      }
-
-      float standardError = (float) Math.sqrt( sigma / (float) Math.pow(Math.log10(cumulativeSurvival), 2) );
-      if (!Float.isNaN(standardError) && Float.isFinite(standardError) && standardError != 0.0f) {
-        val A = (float) 1.96 * standardError;
-        c1 = (float) Math.pow(cumulativeSurvival, Math.exp((double) A));
-        c2 =(float) Math.pow(cumulativeSurvival, Math.exp(-1.0 * A));
-      }
-      currentInterval.setUpperConfidence(c1);
-      currentInterval.setLowerConfidence(c2);
-      log.info("{} {} {}", cumulativeSurvival, c1, c2);
     }
     currentInterval.setCumulativeSurvival(cumulativeSurvival);
 
+    confidenceIntervals(intervals, size);
     return intervals;
+  }
+
+  private static void confidenceIntervals(List<Interval> intervals, int numDonors) {
+    for (int i = 0; i< intervals.size(); i++) {
+      val interval = intervals.get(i);
+      if (interval.getCumulativeSurvival() <= 0f) {
+        interval.setUpperConfidence(0f);
+        interval.setLowerConfidence(0f);
+      } else if (interval.getCumulativeSurvival() >= 1f) {
+        interval.setUpperConfidence(1f);
+        interval.setLowerConfidence(1f);
+      } else {
+        double loglog = Math.log( -1.0 * Math.log(interval.cumulativeSurvival));
+
+        int atRisk = numDonors;
+        double sigma = 0.0;
+        for(int j = 0; j < i; j++) {
+          val sigmaInterval = intervals.get(j);
+          val died = (double) sigmaInterval.getDied();
+          sigma += died / (atRisk * (atRisk - died));
+          atRisk -= died;
+        }
+
+        double variance = sigma / Math.pow(Math.log(interval.getCumulativeSurvival()), 2);
+
+        val c1 = loglog + (1.96 * Math.sqrt(variance));
+        val c2 = loglog - (1.96 * Math.sqrt(variance));
+
+        interval.setUpperConfidence((float) Math.exp( -1.0 * Math.exp(c1)));
+        interval.setLowerConfidence((float) Math.exp( -1.0 * Math.exp(c2)));
+
+        log.info("{} {} {}", interval.getCumulativeSurvival(), interval.getLowerConfidence(), interval.getUpperConfidence());
+      }
+    }
   }
 
   @Data
