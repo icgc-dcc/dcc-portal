@@ -13,7 +13,12 @@
     <button
       data-icgc-tooltip="Fullscreen"
       class="btn btn-default"
-      ng-click="ctrl.isFullScreen() ? ctrl.handleClickExitFullScreen() : ctrl.handleClickEnterFullScreen()"
+      ng-click="
+        ctrl.isFullScreen()
+          ? ctrl.handleClickExitFullScreen()
+          : ctrl.handleClickEnterFullScreen();
+         $root.track('survival-controls', {action: 'toggle-fullscreen', value: ctrl.isFullScreen()});
+       "
     >
       <i ng-if="!ctrl.isFullScreen()" class="fa fa-expand"></i>
       <i ng-if="ctrl.isFullScreen()" class="fa fa-compress"></i>
@@ -23,7 +28,10 @@
       <button
         data-icgc-tooltip="Export CSV"
         class="btn btn-default"
-        ng-click="ctrl.onClickExportCsv()"
+        ng-click="
+          ctrl.onClickExportCsv();
+          $root.track('survival-controls', {action: 'export-csv'});
+        "
       >
         <i class="fa fa-file-text-o"></i>
       </button>
@@ -31,7 +39,10 @@
       <button
         data-icgc-tooltip="Export SVG"
         class="btn btn-default composite-button"
-        ng-click="ctrl.handleClickExportSvg()"
+        ng-click="
+          ctrl.handleClickExportSvg();
+          $root.track('survival-controls', {action: 'export-svg'});
+        "
       >
         <i class="fa fa-file-image-o icon"></i>
         <span class="sub">SVG</span>
@@ -41,7 +52,10 @@
         ng-if="ctrl.doesSupportPngExport"
         data-icgc-tooltip="Export PNG"
         class="btn btn-default composite-button"
-        ng-click="ctrl.handleClickExportPng()"
+        ng-click="
+          ctrl.handleClickExportPng();
+          $root.track('survival-controls', {action: 'export-png'});
+        "
       >
         <i class="fa fa-file-image-o icon"></i>
         <span class="sub">PNG</span>

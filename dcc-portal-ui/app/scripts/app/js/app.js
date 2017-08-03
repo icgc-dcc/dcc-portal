@@ -359,6 +359,13 @@
 
       $rootScope.track = require('../../common/js/track');
 
+      const trackTimeouts = {};
+      $rootScope.delayedTrack = (eventCategory, properties, delay) =>
+        trackTimeouts[`${eventCategory}->${JSON.stringify(_.pick(properties, ['action', 'label']))}`] = setTimeout(() =>
+          track(eventCategory, properties), delay);
+      $rootScope.clearDelayedTrack = (eventCategory, properties) =>
+        clearTimeout(trackTimeouts[`${eventCategory}->${JSON.stringify(_.pick(properties, ['action', 'label']))}`]);
+
       $rootScope.$on('$stateNotFound', function() {
         const redirect = getRedirectObject($location.url());
         $state.go(redirect.state, {page: redirect.page}, {location: false});
