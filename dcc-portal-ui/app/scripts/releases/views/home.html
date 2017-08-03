@@ -45,7 +45,8 @@
             heading="{{'Donor Distribution by Primary Site' | translate}}"
             height="325"
             should-show-no-data-message="false"
-            ng-mouseenter="track('donut', { action: 'mouseenter' })"
+            ng-mouseenter="delayedTrack('donut', { action: 'hover' }, 1000)"
+            ng-mouseleave="clearDelayedTrack('donut', { action: 'hover' })"
             ng-click="track('donut', { action: 'click' })"
         ></donut>
 
