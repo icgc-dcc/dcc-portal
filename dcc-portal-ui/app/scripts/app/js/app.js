@@ -261,6 +261,7 @@
     'icgc.survival',
     'icgc.404',
     'icgc.301',
+    'icgc.molecular.visualization',
 
     // old
     'app.ui',
