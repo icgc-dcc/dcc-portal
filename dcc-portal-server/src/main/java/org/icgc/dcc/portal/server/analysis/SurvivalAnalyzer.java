@@ -18,9 +18,12 @@
 package org.icgc.dcc.portal.server.analysis;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.BaseEntitySet.Type.DONOR;
+import static org.icgc.dcc.portal.server.analysis.KaplanMeier.Interval;
+import static org.icgc.dcc.portal.server.analysis.KaplanMeier.DonorValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +34,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.SearchHit;
@@ -46,10 +50,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
-import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.val;
 
 @Service
@@ -74,7 +76,6 @@ public class SurvivalAnalyzer {
       .add("disease_status_last_followup")
       .addAll(DISEASE_FREE_SORT)
       .build();
-  private final static float Z = 1.96f;
 
   /**
    * Dependencies.
@@ -125,7 +126,7 @@ public class SurvivalAnalyzer {
   }
 
   private Entry<Integer, List<Interval>> runAnalysis(UnionUnit unionunit, boolean diseaseFree,
-      Predicate<SearchHit> filter) {
+                                                                 Predicate<SearchHit> filter) {
     val sort = diseaseFree ? DISEASE_FREE_SORT : OVERALL_SORT;
     val fields = diseaseFree ? DISEASE_FREE_FIELDS : OVERALL_FIELDS;
 
@@ -142,98 +143,18 @@ public class SurvivalAnalyzer {
     val censuredTerms = diseaseFree ? DISEASE_FREE : OVERALL;
     val censuredField = diseaseFree ? DISEASE_FREE_FIELDS.get(0) : OVERALL_FIELDS.get(0);
     Arrays.asList(donors).sort(comparing(x -> diseaseFree ? getDiseaseTime(x) : getOverallTime(x)));
+    val donorValues = Arrays.stream(donors)
+        .map( d ->
+            new DonorValue(
+              d.getId(),
+              d.getSource().get(censuredField).toString(),
+              diseaseFree ? getDiseaseTime(d) : getOverallTime(d),
+              !censuredTerms.contains(d.sourceAsMap().get(censuredField).toString())
+            )
+        )
+        .collect(toList());
 
-    int[] time = new int[donors.length];
-    boolean[] censured = new boolean[donors.length];
-
-    for (int i = 0; i < donors.length; i++) {
-      val donor = donors[i];
-      time[i] = diseaseFree ? getDiseaseTime(donor) : getOverallTime(donor);
-      censured[i] = censuredTerms.contains(donor.sourceAsMap().get(censuredField).toString());
-    }
-
-    val intervals = new ArrayList<Interval>();
-    int startTime = 0;
-    int endTime = 0;
-
-    for (int i = 0; i < time.length; i++) {
-      endTime = time[i];
-      if (!censured[i] && endTime > startTime) {
-        intervals.add(new Interval(startTime, endTime));
-        startTime = endTime;
-      }
-    }
-    if (endTime > startTime) {
-      intervals.add(new Interval(startTime, endTime));
-    }
-
-    // init variables. Initially everyone is at risk, and the cumulative survival is 1
-    float atRisk = time.length;
-    float cumulativeSurvival = 1;
-    val intervalIter = intervals.iterator();
-
-    // Guard with short return if no intervals in iterator.
-    if (!intervalIter.hasNext()) {
-      return intervals;
-    }
-
-    // This implementation later mutates this reference.
-    Interval currentInterval = intervalIter.next();
-    currentInterval.setCumulativeSurvival(cumulativeSurvival);
-
-    for (int i = 0; i < time.length; i++) {
-      long t = time[i];
-
-      // If we have moved past the current interval compute the cumulative survival and adjust the # at risk
-      // for the start of the next interval.
-      if (t > currentInterval.getEnd()) {
-        atRisk -= currentInterval.getCensured();
-        float survivors = atRisk - currentInterval.getDied();
-        float tmp = survivors / atRisk;
-        cumulativeSurvival *= tmp;
-
-        // Skip to the next interval
-        atRisk -= currentInterval.getDied();
-        while (intervalIter.hasNext() && t > currentInterval.getEnd()) {
-          currentInterval = intervalIter.next();
-          currentInterval.setCumulativeSurvival(cumulativeSurvival);
-        }
-      }
-
-      val donor = new DonorValue(
-          donors[i].getId(),
-          donors[i].sourceAsMap().get(censuredField).toString(),
-          time[i]);
-      currentInterval.addDonor(donor);
-
-      if (!censured[i]) {
-        currentInterval.incDied();
-      }
-
-      float sigma = 0.0f;
-      float c1 = 1.0f;
-      float c2 = 1.0f;
-
-      float _atRisk = time.length;
-      for (int j = 0; j < i && j < intervals.size(); j++) {
-        val died = (float) intervals.get(j).died;
-        sigma += died / (_atRisk * (_atRisk - died));
-        _atRisk -= died;
-      }
-
-      float standardError = (float) Math.sqrt( sigma / (float) Math.pow(Math.log10(cumulativeSurvival), 2) );
-      if (!Float.isNaN(standardError) && Float.isFinite(standardError) && standardError != 0.0f) {
-        val A = (float) 1.96 * standardError;
-        c1 = (float) Math.pow(cumulativeSurvival, Math.exp((double) A));
-        c2 =(float) Math.pow(cumulativeSurvival, Math.exp(-1.0 * A));
-      }
-      currentInterval.setUpperConfidence(c1);
-      currentInterval.setLowerConfidence(c2);
-      log.info("{} {} {}", cumulativeSurvival, c1, c2);
-    }
-    currentInterval.setCumulativeSurvival(cumulativeSurvival);
-
-    return intervals;
+    return KaplanMeier.compute(donorValues);
   }
 
   private static boolean hasData(SearchHit donor) {
@@ -295,44 +216,6 @@ public class SurvivalAnalyzer {
     return Arrays.stream(hits)
         .filter(predicate)
         .toArray(SearchHit[]::new);
-  }
-
-  @Data
-  public static class Interval {
-
-    private final int start;
-    private final int end;
-    private int died;
-    private List<DonorValue> donors = new ArrayList<>();
-    private float cumulativeSurvival;
-    private float upperConfidence;
-    private float lowerConfidence;
-
-    void incDied() {
-      died++;
-    }
-
-    void addDonor(DonorValue donor) {
-      donors.add(donor);
-    }
-
-    int getCensured() {
-      int sum = 0;
-      for (val donor : donors) {
-        sum += donor.getStatus().equalsIgnoreCase("alive") ? 1 : 0;
-      }
-      return sum;
-    }
-
-  }
-
-  @Value
-  protected static class DonorValue {
-
-    String id;
-    String status;
-    int time;
-
   }
 
 }
