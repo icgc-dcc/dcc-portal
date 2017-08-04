@@ -39,20 +39,7 @@ public class KaplanMeier {
       censured[i] = !donor.isDeceased();
     }
 
-    val intervals = new ArrayList<Interval>();
-    int startTime = 0;
-    int endTime = 0;
-
-    for (int i = 0; i < time.length; i++) {
-      endTime = time[i];
-      if (!censured[i] && endTime > startTime) {
-        intervals.add(new Interval(startTime, endTime));
-        startTime = endTime;
-      }
-    }
-    if (endTime > startTime) {
-      intervals.add(new Interval(startTime, endTime));
-    }
+    val intervals = createIntervals(time, censured);
 
     // init variables. Initially everyone is at risk, and the cumulative survival is 1
     float atRisk = time.length;
@@ -131,6 +118,24 @@ public class KaplanMeier {
         log.debug("{} {} {}", interval.getCumulativeSurvival(), interval.getLowerConfidence(), interval.getUpperConfidence());
       }
     }
+  }
+
+  private static List<Interval> createIntervals(int[] time, boolean[] censured) {
+    val intervals = new ArrayList<Interval>();
+    int startTime = 0;
+    int endTime = 0;
+
+    for (int i = 0; i < time.length; i++) {
+      endTime = time[i];
+      if (!censured[i] && endTime > startTime) {
+        intervals.add(new Interval(startTime, endTime));
+        startTime = endTime;
+      }
+    }
+    if (endTime > startTime) {
+      intervals.add(new Interval(startTime, endTime));
+    }
+    return intervals;
   }
 
   @Data

@@ -34,7 +34,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.SearchHit;
