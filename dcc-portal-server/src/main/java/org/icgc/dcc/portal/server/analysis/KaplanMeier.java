@@ -125,10 +125,10 @@ public class KaplanMeier {
         val c1 = loglog + (1.96 * Math.sqrt(variance));
         val c2 = loglog - (1.96 * Math.sqrt(variance));
 
-        interval.setUpperConfidence((float) Math.exp( -1.0 * Math.exp(c1)));
-        interval.setLowerConfidence((float) Math.exp( -1.0 * Math.exp(c2)));
+        interval.setUpperConfidence((float) Math.exp( -1.0 * Math.exp(c2)));
+        interval.setLowerConfidence((float) Math.exp( -1.0 * Math.exp(c1)));
 
-        log.info("{} {} {}", interval.getCumulativeSurvival(), interval.getLowerConfidence(), interval.getUpperConfidence());
+        log.debug("{} {} {}", interval.getCumulativeSurvival(), interval.getLowerConfidence(), interval.getUpperConfidence());
       }
     }
   }
