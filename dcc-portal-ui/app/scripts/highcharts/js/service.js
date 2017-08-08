@@ -64,7 +64,7 @@ const primarySiteColours = {
   'Kidney': PRIMARY_SITE_PALETTE.BLUE_2_DARK,
   'Head and neck': Color(PRIMARY_SITE_PALETTE.RED_DARK).rotate(-30).toString(),
   'Brain': PRIMARY_SITE_PALETTE.PURPLE_DARK,
-  'Blood': PRIMARY_SITE_PALETTE.ORANGE_2_DARK,
+  'Blood': Color(PRIMARY_SITE_PALETTE.ORANGE_2_DARK).rotate(20).toString(),
   'Prostate': PRIMARY_SITE_PALETTE.GREEN_DARK,
   'Ovary': PRIMARY_SITE_PALETTE.BLUE_LIGHT,
   'Lung': PRIMARY_SITE_PALETTE.ORANGE_LIGHT,
@@ -235,7 +235,7 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
           y: count,
           type: type,
           facet: outerFacet,
-          color: Highcharts.Color(_this.getPrimarySiteColourForTerm(iName)).brighten(0.2).get()
+          color: Color(_this.getPrimarySiteColourForTerm(iName)).rotate(-5).lighten(0.3).toString(),
         });
       }
     }
