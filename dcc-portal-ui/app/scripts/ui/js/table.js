@@ -298,7 +298,7 @@ angular.module('icgc.ui.table.pagination', [])
 
 
 
-angular.module('icgc.ui.table.sortable', []).directive('sortable', function ($location, LocationService) {
+angular.module('icgc.ui.table.sortable', []).directive('sortable', function ($location, LocationService, $rootScope) {
   return {
     restrict: 'A',
     scope: {
@@ -351,6 +351,11 @@ angular.module('icgc.ui.table.sortable', []).directive('sortable', function ($lo
         if (so.from) {
           so.from = 1;
         }
+
+        $rootScope.track('sort', {
+          action: 'click',
+          label: `${scope.type}->${scope.field}->reversed: ${scope.reversed}`,
+        });
 
         LocationService.setJsonParam(scope.type, so);
       };
