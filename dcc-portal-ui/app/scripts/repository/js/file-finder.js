@@ -23,6 +23,7 @@ ngModule.component('fileFinder', {
               target="_self"
               href="{{:: vm.ApiBaseurl}}/download?fn={{:: result.original.name}}"
               ng-bind-html=":: result.string"
+              ng-click="$root.track('file-repo', { action: 'click-file', label: result.original.name })"
             ></a>
             <a
               ng-if="result.original.type === 'd'"
