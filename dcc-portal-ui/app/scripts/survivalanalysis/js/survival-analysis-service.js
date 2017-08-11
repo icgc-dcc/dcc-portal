@@ -105,6 +105,55 @@
 
     });
 
+  module.service('CohortAnalysisCreationService', function (
+    SetService,
+    SetNameService,
+    LocationService,
+    Restangular
+  ) {
+
+    const createComplementarySet = (originalSetId, subsetId, { name }) => SetService.addDerivedSet('DONOR', {
+      name,
+      union: [{
+        intersection: [ originalSetId ],
+        exclusions: [ subsetId ],
+      }],
+    });
+
+    const bisectDonorSet = async (donorSetId, bisectingFilter) => {
+      const filterName = await SetNameService.getSetName(bisectingFilter);
+      const setA = await SetService.addSet('donor', {
+        name: `Set with ${filterName}`,
+        filters: _.merge({donor: {id: {is: [`ES:${donorSetId}`]}}}, bisectingFilter),
+        isTransient: true,
+        type: 'donor',
+      });
+      const setB = await createComplementarySet(donorSetId, setA.id, { name: `Set without ${filterName}`});
+      return [setA, setB];
+    };
+
+    const bisectDonorSetAndRunAnalysis = (donorSetId, bisectingFilter) => 
+      bisectDonorSet(donorSetId, bisectingFilter)
+        .then(([setA, setB]) => launchCohortAnalysis([setA.id, setB.id]));
+
+    const launchCohortAnalysis = (setIds) =>
+      Restangular
+        .one('analysis')
+        .post('phenotype', setIds, {}, {'Content-Type': 'application/json'})
+        .then((data) => {
+          if (!data.id) {
+            throw new Error('Could not retrieve analysis data id', data);
+          }
+          LocationService.goToPath('analysis/view/phenotype/' + data.id);
+        });
+
+    _.extend(this, {
+      bisectDonorSet,
+      bisectDonorSetAndRunAnalysis,
+    });
+
+  });
+
   module.service('SurvivalAnalysisLaunchService', function(SetService, Restangular, LocationService,
     SetNameService, $timeout, $location, Page){
       const _service = this;
