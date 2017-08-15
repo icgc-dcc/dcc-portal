@@ -109,6 +109,7 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin([
+      {from: 'app/_redirects', to: paths.appBuild + '/_redirects'},
       {from: 'app/robots.txt', to: paths.appBuild + '/robots.txt'},
       {from: 'app/sitemap.xml', to: paths.appBuild + '/sitemap.xml'},
       {from: 'app/favicon.ico', to: paths.appBuild + '/favicon.ico'},
