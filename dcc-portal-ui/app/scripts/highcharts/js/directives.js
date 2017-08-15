@@ -135,12 +135,6 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
 
       var chartsDefaults = {
         credits: {enabled: false},
-        // too many items, use monochrome scheme
-        ...($scope.items.length > 20
-          ? {
-            colors: ['#5DA5DA', '#B9E1FF', '#86c3de', '#65c4fb']
-          }
-          : {}),
         chart: {
           renderTo: $element[0],
           type: 'pie',
