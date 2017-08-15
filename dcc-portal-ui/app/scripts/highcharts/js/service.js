@@ -22,16 +22,6 @@ import Color from 'color';
 
 angular.module('highcharts.services', []);
 
-const primarySiteColors = [
-  '#1693C0', '#24B2E5',
-  '#E9931C', '#EDA94A',
-  '#166AA2', '#1C87CE',
-  '#D33682', '#DC609C',
-  '#6D72C5', '#9295D3',
-  '#CE6503', '#FB7E09',
-  '#1A9900', '#2C0'
-];
-
 const BASE_PALETTE = {
   BLUE: '#5DA5DA',
   ORANGE: '#FAA43A',
