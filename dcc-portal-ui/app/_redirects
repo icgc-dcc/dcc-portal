@@ -1,0 +1,2 @@
+# Proxy API requests for static hosts
+/api/*      https://dcc.icgc.org/:splat     200
