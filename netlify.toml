@@ -1,4 +1,4 @@
 [build]
   base    = "dcc-portal-ui"
-  publish = "target/classes/app"
+  publish = "dcc-portal-ui/target/classes/app"
   command = "npm run build"
