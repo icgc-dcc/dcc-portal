@@ -615,7 +615,7 @@ angular.module('highcharts.directives')
 
 
 
-angular.module('highcharts.directives').directive('bar', function ($location, highchartsService) {
+angular.module('highcharts.directives').directive('bar', function ($location, highchartsService, $rootScope) {
   return {
     restrict: 'E',
     replace: true,
@@ -740,9 +740,18 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
                     text: getLabel(),
                     sticky:true
                   });
+                  $rootScope.delayedTrack(
+                    'viz-filter',
+                    { action: 'hover', label: `${$attrs.heading}->${event.target.category}` },
+                    600
+                  );
                 },
-                mouseOut: function () {
+                mouseOut: function (event) {
                   $scope.$emit('tooltip::hide');
+                  $rootScope.clearDelayedTrack(
+                    'viz-filter',
+                    { action: 'hover', label: `${$attrs.heading}->${event.target.category}` },
+                  );
                 }
               }
             }
