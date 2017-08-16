@@ -234,10 +234,10 @@ angular.module('highcharts.directives').directive('pie', function (
                     );
                   },
                   click: function (event) {
-                    $rootScope.track('viz-filter', { action: 'click', label: `${$scope.heading}->${event.target.term || event.target.name}` });
+                    $rootScope.track('viz-filter', { action: 'click', label: `${$scope.heading}->${event.point.term || event.point.name}` });
                     $rootScope.clearDelayedTrack(
                       'viz-filter',
-                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` }
+                      { action: 'hover', label: `${$scope.heading}->${event.point.term || event.point.name}` }
                     );
                   }
                 }
