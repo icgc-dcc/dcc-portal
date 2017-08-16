@@ -55,7 +55,10 @@
             </div>
         </div>
         <div class="more-graphs-wrap">
-            <span data-ng-click="donorExpand=!donorExpand" class="more-graphs t_tools__tool">
+            <span
+                data-ng-click="donorExpand=!donorExpand; track('viz-filter-show-more', { action: 'click' })"
+                class="more-graphs t_tools__tool"
+            >
                 <span data-ng-if="!donorExpand"><i class="icon-angle-down"></i> <translate>Show More</translate></span>
                 <span data-ng-if="donorExpand"><i class="icon-angle-up"></i> <translate>Show Less</translate></span>
             </span>
