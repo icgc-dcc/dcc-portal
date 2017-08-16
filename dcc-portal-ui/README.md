@@ -12,7 +12,7 @@ Then execute:
 nvm install 6
 nvm use 6
 ```
-  
+
 Next, install `npm` dependencies:
 
 ```shell
