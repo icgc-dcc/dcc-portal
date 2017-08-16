@@ -51,8 +51,13 @@ angular.module('highcharts.directives', [])
 
   });
 
-angular.module('highcharts.directives').directive('pie', function (Facets, $filter, ValueTranslator,
-                                                                   highchartsService) {
+angular.module('highcharts.directives').directive('pie', function (
+  Facets,
+  $filter,
+  ValueTranslator,
+  highchartsService,
+  $rootScope
+) {
   function ensureArray (array) {
     return _.isArray (array) ? array : [];
   }
@@ -62,15 +67,22 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
     restrict: 'E',
     replace: true,
     scope: {
+      heading: '@',
       items: '=',
       groupPercent: '@',
       shouldShowNoDataMessage: '@',
       configOverrides: '&'
     },
-    template: '<span style="margin: 0 auto">not working</span>',
+    template: `
+      <span
+        style="margin: 0 auto"
+      >not working</span>
+    `,
     link: function ($scope, $element, $attrs) {
       // Defaults to 5%
       $scope.groupPercent = $scope.groupPercent || 5;
+      $scope.log = console.log.bind(console)
+      $scope.window = window;
 
       var enrichDatum = function (datum) {
         datum.term = datum.name;
@@ -88,7 +100,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
         var firstItem = _.head (items);
 
         return {
-          name: 'Others (' + count + ' ' + $attrs.heading + 's)',
+          name: 'Others (' + count + ' ' + $scope.heading + 's)',
           color: '#999',
           y: _.sumBy (items, 'y'),
           type: firstItem.type,
@@ -145,7 +157,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
           width: $attrs.width || null
         },
         title: {
-          text: $attrs.heading,
+          text: $scope.heading,
           margin: 5,
           style: {
             fontSize: '1.25rem'
@@ -207,9 +219,26 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
                       placement: 'top',
                       sticky: true
                     });
+
+                    $rootScope.delayedTrack(
+                      'viz-filter',
+                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` },
+                      600
+                    );
                   },
-                  mouseOut: function () {
+                  mouseOut: function (event) {
                     $scope.$emit('tooltip::hide');
+                    $rootScope.clearDelayedTrack(
+                      'viz-filter',
+                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` }
+                    );
+                  },
+                  click: function (event) {
+                    $rootScope.track('viz-filter', { action: 'click', label: `${$scope.heading}->${event.target.term || event.target.name}` });
+                    $rootScope.clearDelayedTrack(
+                      'viz-filter',
+                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` }
+                    );
                   }
                 }
               }
