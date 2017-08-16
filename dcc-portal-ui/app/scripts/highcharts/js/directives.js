@@ -620,12 +620,19 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
     restrict: 'E',
     replace: true,
     scope: {
+      heading: '@',
       items: '=',
       shouldShowNoDataMessage: '@',
       configOverrides: '&',
       onRender: '&'
     },
-    template: '<div id="container" style="margin: 0 auto">not working</div>',
+    template: `
+      <div
+        id="container"
+        style="margin: 0 auto"
+        ng-click="$root.track('viz-filter', {action: 'click', label: heading })"
+      >not working</div>
+    `,
     link: function ($scope, $element, $attrs) {
       var c, renderChart, chartsDefaults;
 
