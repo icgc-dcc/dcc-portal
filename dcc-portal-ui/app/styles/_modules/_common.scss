@@ -41,8 +41,8 @@ pre {
 
 article {
   border: {
-    top: 1px solid $greyLight;
-    left: 1px solid $greyLight;
+    // top: 1px solid $greyLight;
+    // left: 1px solid $greyLight;
   }
 }
 
@@ -52,7 +52,6 @@ section {
   box-shadow: none;
   background: $white;
   border-radius: 0;
-  border-bottom: 1px solid $greyLight;
 
   a {
     text-indent: initial;
@@ -212,7 +211,8 @@ h3:hover {
 
   .t_facets_container{
     position: relative;
-    border-right: 1px solid #cccccc
+    border-right: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
   }
 }
 
