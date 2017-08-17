@@ -81,8 +81,6 @@ angular.module('highcharts.directives').directive('pie', function (
     link: function ($scope, $element, $attrs) {
       // Defaults to 5%
       $scope.groupPercent = $scope.groupPercent || 5;
-      $scope.log = console.log.bind(console)
-      $scope.window = window;
 
       var enrichDatum = function (datum) {
         datum.term = datum.name;
