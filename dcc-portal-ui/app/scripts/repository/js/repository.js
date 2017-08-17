@@ -387,7 +387,7 @@ import './file-finder';
       jQuery('.btn-group.open').trigger('click');
     };
 
-    $scope.download = function() {
+    $scope.downloadManifest = function() {
       if (_.isEmpty($scope.selectedFiles)) {
         var filters = FilterService.filters();
 
