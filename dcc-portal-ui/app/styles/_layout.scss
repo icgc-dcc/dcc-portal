@@ -110,7 +110,7 @@ article {
   width: calc(100% - 200px);
   float: right;
   @include breakpoint($break-widescreen) {
-    width: calc(100% - 200px);
+    width: calc(100% - 220px);
   }
 }
 
