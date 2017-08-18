@@ -35,16 +35,12 @@
                     <span data-ng-if="!defined">
                         <i style='color:{{sites[item.term]}}' class="icon-ok t_impact_{{ item.term | lowercase }}"></i>
                         <span ng-if='iconClass (item.term)' class='{{ iconClass (item.term) }}' />
-                        <span data-tooltip={{item.term}} data-tooltip-placement="overflow">
                         {{ item.label }}
-                        </span>
                     </span>
                     <span data-ng-if="defined">
                         <i class="icon-ok"></i>
                         <span ng-if='iconClass (item.term)' class='{{ iconClass (item.term) }}' />
-                        <span data-icgc-tooltip="{{ item.tooltip }}">
                         {{ item.label }}
-                        </span>
                     </span>
                 </span>
                 <span data-ng-hide="hideCount" class="t_facets__facet__terms__active__term__count">{{item.count | number}}</span>
@@ -59,8 +55,6 @@
 
                 <span data-ng-hide="hideCount" data-ng-style="bar(item.count)" class="t_facets__facet__terms__inactive__term__bar"></span>
                 <span class="t_facets__facet__terms__inactive__term__label"
-                      data-icgc-tooltip="{{ item.tooltip }}"
-                      data-tooltip-placement="{{ defined? 'right':'overflow'}}"
                       data-ng-click="addTerm(item.term); track('term', {action: 'add', label: label + ' / ' + item.label})">
                     <i style='color:{{ sites[item.term] }}' class="icon-check-empty t_impact_{{item.term | lowercase}}"></i>
                     <span ng-if='iconClass (item.term)' class='{{ iconClass (item.term) }}' />

@@ -95,8 +95,17 @@ $foregroundRed: #ff654b;
     max-width: 200%;
     overflow: visible;
     z-index: 100;
-    background: #fff;
-    box-shadow: 3px 0 0px 3px rgba(255,255,255,1);
+  }
+}
+
+.t_facets__facet__terms__active__term__label:hover .t_facets__facet__terms__active__term__label__text {
+  &:hover {
+    max-width: 200%;
+    overflow: visible;
+    z-index: 100;
+    background: lighten($cyan, 47);
+    box-shadow: 3px 0 0px 3px lighten($cyan, 47);
+    text-decoration: line-through;
   }
 }
 
@@ -108,6 +117,8 @@ $foregroundRed: #ff654b;
 
   &:hover {
     color: $orange;
+    background: #fff;
+    box-shadow: 3px 0 0px 3px #fff;
   }
 }
 

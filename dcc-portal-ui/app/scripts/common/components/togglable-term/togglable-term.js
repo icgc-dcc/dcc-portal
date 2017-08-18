@@ -30,8 +30,6 @@ angular
         ></span>
         <span
           class="term__label t_facets__facet__terms__inactive__term__label"
-          data-tooltip="{{ vm.label }}"
-          data-tooltip-placement="overflow"
         > 
           <i
             class="term__label__icon"
