@@ -90,13 +90,21 @@ $foregroundRed: #ff654b;
   .t_facets__facet__not & {
     color: $foregroundRed;
   }
+
+  &:hover {
+    max-width: 200%;
+    overflow: visible;
+    z-index: 100;
+    background: #fff;
+    box-shadow: 3px 0 0px 3px rgba(255,255,255,1);
+  }
 }
 
 .t_facets__facet__terms__inactive__term__label {
   padding-left: .5rem;
   color: $blue;
   cursor: pointer;
-  transition: .5s color;
+  transition: .5s color, 0.2s max-width;
 
   &:hover {
     color: $orange;
@@ -130,6 +138,7 @@ $foregroundRed: #ff654b;
 .t_facets__facet__terms__active__term__count {
   position: absolute;
   right: 0;
+  top: 0;
 }
 
 .t_facets__facet__terms__inactive__term__count {
