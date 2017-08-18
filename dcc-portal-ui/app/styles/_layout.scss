@@ -188,6 +188,10 @@ section {
   flex-direction: row;
 }
 
+.align-flex-end {
+  align-items: flex-end;
+}
+
 .flex-column {
   @extend .flex;
   flex-direction: column;

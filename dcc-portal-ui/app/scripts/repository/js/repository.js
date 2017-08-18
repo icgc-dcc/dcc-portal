@@ -265,7 +265,7 @@ import './file-finder';
 
   module.controller('ExternalFileDownloadController',
     function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params, Restangular, $filter, RepositoryService) {
+      Extensions, params, Restangular, $filter, RepositoryService, $timeout) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
@@ -288,6 +288,40 @@ import './file-finder';
 
     $scope.handleNumberTweenEnd = function (tween) {
       jQuery(tween.elem).closest('td').removeClass('tweening');
+    };
+
+    $scope.isGeneratingIcgcGetId = false;
+    $scope.icgcGetId = null;
+    let abortGenerateIcgcGetId = false;
+
+    const generateIcgcGetId = (repoOrder) => {
+      $scope.isGeneratingIcgcGetId = true;
+      $timeout(() => {
+        if (abortGenerateIcgcGetId) {
+          abortGenerateIcgcGetId = false;
+        } else {
+          $scope.isGeneratingIcgcGetId = false;
+          $scope.icgcGetId = '594ae01c-52e3-4488-9602-ec2a3f416dd9';
+        }
+      }, 1500);
+    };
+
+    $scope.$watchGroup(
+      [
+        () => $scope.shouldDeduplicate,
+        () => $scope.repos && $scope.repos.map(x => x.repoName).join(),
+      ],
+      ([shouldDeduplicate, repos], [oldShouldDeduplicate, oldRepos]) => {
+        console.log({shouldDeduplicate, oldShouldDeduplicate, repos});
+        if ($scope.isGeneratingIcgcGetId) {
+          abortGenerateIcgcGetId = true;
+        }
+        $scope.icgcGetId = '';
+        $scope.isGeneratingIcgcGetId = false;
+    });
+
+    $scope.handleClickGenerateIcgcGetId = () => {
+      generateIcgcGetId($scope.repos);
     };
 
     var p = {};
