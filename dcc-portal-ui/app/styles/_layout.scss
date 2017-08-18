@@ -101,11 +101,17 @@ footer, .push {
 aside.t_sidebar, aside.t_sidenav {
   width: 200px;
   float: left;
+  @include breakpoint($break-widescreen) {
+    width: 220px;
+  }
 }
 
 article {
   width: calc(100% - 200px);
   float: right;
+  @include breakpoint($break-widescreen) {
+    width: calc(100% - 200px);
+  }
 }
 
 section {
