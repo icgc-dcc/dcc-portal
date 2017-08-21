@@ -214,9 +214,12 @@
           cancel();
           track('cancel-generate-manifest', { action: 'click' });
         "
+        ng-class="{
+          'cancel-button': !icgcGetId
+        }"
         style="
-          margin-left: 0;
           margin-right: auto;
+          margin-left: 0;
         "
       >
         <translate ng-if="!icgcGetId">Cancel</translate>
