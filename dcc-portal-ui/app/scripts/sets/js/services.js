@@ -627,9 +627,19 @@ import { getDefaultSetSortOrder } from './getDefaultSetSortOrder';
       var promises = _(filters).map(function (filter, filterKey) {
         return _.map(filter, function (facet, facetKey) {
           return facet.is.map(function (value) {
-            return { term: value.term, facetName: value.controlFacet, facetGroup: filterKey + facetKey, operator: 'is' };
+            return {
+              term: (_.isNil(value.term) ? value : value.term),
+              facetName: facetKey,
+              facetGroup: filterKey + facetKey,
+              operator: 'is',
+            };
           }).concat((facet.not || []).map(function (value) {
-            return { term: value.term, facetName: value.controlFacet, facetGroup: filterKey + facetKey, operator: 'not' };
+            return {
+              term: (_.isNil(value.term) ? value : value.term),
+              facetName: facetKey,
+              facetGroup: filterKey + facetKey,
+              operator: 'not',
+            };
           }));
         });
       })
