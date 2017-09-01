@@ -229,7 +229,7 @@
         ng-if="!icgcGetId"
         class="t_button no-animate"
         data-ng-click="
-          !icgcGetId && handleClickGenerateIcgcGetId();
+          !icgcGetId && handleClickGenerateIcgcGetId(repos);
           icgcGetId && 
           track('generate-icgc-get-id', { action: 'click' });
         ">

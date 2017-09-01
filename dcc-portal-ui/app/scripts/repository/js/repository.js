@@ -294,16 +294,28 @@ import './file-finder';
     $scope.icgcGetId = null;
     let abortGenerateIcgcGetId = false;
 
-    const generateIcgcGetId = (repoOrder) => {
+    const generateIcgcGetId = (repos) => {
       $scope.isGeneratingIcgcGetId = true;
-      $timeout(() => {
-        if (abortGenerateIcgcGetId) {
-          abortGenerateIcgcGetId = false;
-        } else {
-          $scope.isGeneratingIcgcGetId = false;
-          $scope.icgcGetId = '594ae01c-52e3-4488-9602-ec2a3f416dd9';
-        }
-      }, 1500);
+      const repoCodes = repos.map(repo => repo.repoCode);
+
+      var params = {
+        format: 'files',
+        repos: repoCodes,
+        filters: FilterService.filters()
+      };
+
+      ExternalRepoService.createManifest(params)
+        .then(function (id) {
+          if (abortGenerateIcgcGetId) {
+            abortGenerateIcgcGetId = false;
+          } else if (!id) {
+            $scope.isGeneratingIcgcGetId = false;
+            throw new Error('No Manifest UUID is returned from API call.');
+          } else {
+            $scope.isGeneratingIcgcGetId = false;
+            $scope.icgcGetId = id;
+          }
+      });
     };
 
     $scope.$watchGroup(
@@ -312,7 +324,6 @@ import './file-finder';
         () => $scope.repos && $scope.repos.map(x => x.repoName).join(),
       ],
       ([shouldDeduplicate, repos], [oldShouldDeduplicate, oldRepos]) => {
-        console.log({shouldDeduplicate, oldShouldDeduplicate, repos});
         if ($scope.isGeneratingIcgcGetId) {
           abortGenerateIcgcGetId = true;
         }
