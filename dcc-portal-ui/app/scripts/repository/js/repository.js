@@ -301,7 +301,9 @@ import './file-finder';
       var params = {
         format: 'files',
         repos: repoCodes,
-        filters: FilterService.filters()
+        filters: $scope.selectedFiles
+          ? _.merge(FilterService.filters(), {file:{id:{is:$scope.selectedFiles}}})
+          : FilterService.filters(),
       };
 
       ExternalRepoService.createManifest(params)
