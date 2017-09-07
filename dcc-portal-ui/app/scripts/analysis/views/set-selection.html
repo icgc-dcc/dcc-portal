@@ -44,7 +44,7 @@
                   <td
                     class="text-center"
                     ng-click="(vm.isSetCompatible(item) || vm.isSetSelected(item)) && vm.handleClickItem(item)"
-                    tooltip="{{vm.getSetCompatibilityMessage(item)}}"
+                    icgc-tooltip="{{vm.getSetCompatibilityMessage(item)}}"
                     tooltip-placement="right"
                     style="
                       width: 2rem;
@@ -82,7 +82,7 @@
                         {{ item.name }}
                     </span>
                     <i
-                        tooltip="{{'Rename set' | translate}}"
+                        icgc-tooltip="{{'Rename set' | translate}}"
                         class="icon-pencil"
                         ng-click="itemNameForm.$show()"
                         ng-hide="itemNameForm.$visible"
@@ -96,7 +96,7 @@
       </table>
       <br>
       <div
-        tooltip=""
+        icgc-tooltip=""
         class="actions"
       >
         <button
@@ -105,14 +105,14 @@
         > Cancel </button>
         <button
             class="demo btn btn-default btn-xs"
-            tooltip="{{analysis.strings.demoDescription}}"
+            icgc-tooltip="{{analysis.strings.demoDescription}}"
             ng-click="vm.handleClickLaunchDemo()"
         > Demo </button>
         <button
           class="t_button"
           ng-disabled="!vm.isAnalysisRunnable()"
           ng-click="vm.handleClickLaunch(vm.selectedSets)"
-          tooltip="{{vm.getAnalysisSatifactionMessage()}}"
+          icgc-tooltip="{{vm.getAnalysisSatifactionMessage()}}"
         >
             <span ng-if="vm.isLaunchingAnalysis"><i class="icon-spinner icon-spin"></i></span>
             <translate>Run</translate>
