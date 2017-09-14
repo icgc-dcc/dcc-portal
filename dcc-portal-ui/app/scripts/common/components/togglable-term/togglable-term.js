@@ -20,7 +20,7 @@ angular
         't_facets__facet__terms__active__term__label': vm.isActive,
         't_facets__facet__terms__inactive__term': !vm.isActive,
       }"
-      ng-click="vm.onClick()"
+      ng-click="vm.onClick(); track('term', {action: 'toggle', label: vm.label})"
       style="padding: 0; position: relative;"
     >
         <ng-transclude></ng-transclude>
@@ -30,8 +30,6 @@ angular
         ></span>
         <span
           class="term__label t_facets__facet__terms__inactive__term__label"
-          data-tooltip="{{ vm.label }}"
-          data-tooltip-placement="overflow"
         > 
           <i
             class="term__label__icon"

@@ -17,6 +17,7 @@
  */
 package org.icgc.dcc.portal.server.service;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
@@ -49,6 +50,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.dcc.portal.pql.meta.FileTypeModel.Fields;
 import org.dcc.portal.pql.meta.IndexModel;
 import org.elasticsearch.action.search.SearchResponse;
@@ -61,17 +63,9 @@ import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
 import org.icgc.dcc.common.core.util.stream.Collectors;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.File;
+import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.model.File.Donor;
 import org.icgc.dcc.portal.server.model.File.FileCopy;
-import org.icgc.dcc.portal.server.model.Files;
-import org.icgc.dcc.portal.server.model.Keyword;
-import org.icgc.dcc.portal.server.model.Keywords;
-import org.icgc.dcc.portal.server.model.Pagination;
-import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.TermFacet;
-import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.repository.FileRepository;
 import org.icgc.dcc.portal.server.repository.FileRepository.CustomAggregationKeys;
@@ -81,6 +75,8 @@ import org.supercsv.io.CsvMapWriter;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Cleanup;
 import lombok.NonNull;
@@ -98,11 +94,16 @@ public class FileService {
    * Constants.
    */
   private static final String UTF_8 = StandardCharsets.UTF_8.name();
+  private static final ObjectMapper NON_NULL_MAPPER = new ObjectMapper().setSerializationInclusion(NON_NULL);
 
   private static final Map<String, String> DATA_TABLE_EXPORT_MAP = ImmutableMap.<String, String> builder()
       .put(Fields.ACCESS, "Access")
       .put(Fields.FILE_ID, "File ID")
+      .put(Fields.FILE_NAME, "File Name")
       .put(Fields.DONOR_ID, "ICGC Donor")
+      .put(Fields.SPECIMEN_ID, "Specimen ID")
+      .put(Fields.SPECIMEN_TYPE, "Specimen Type")
+      .put(Fields.SAMPLE_ID, "Sample ID")
       .put(Fields.REPO_NAME, "Repository")
       .put(Fields.PROJECT_CODE, "Project")
       .put(Fields.STUDY, "Study")
@@ -206,14 +207,14 @@ public class FileService {
     return fileRepository.getRepoStats(repoName);
   }
 
-  public void exportFiles(OutputStream output, Query query) {
+  public void exportFiles(OutputStream output, Query query, String type) {
     val prepResponse = fileRepository.findAll(query, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
-    exportFiles(output, prepResponse, query, DATA_TABLE_MAPPING_KEYS);
+    exportFiles(output, prepResponse, query, DATA_TABLE_MAPPING_KEYS, type);
   }
 
-  public void exportFiles(OutputStream output, String setId) {
+  public void exportFiles(OutputStream output, String setId, String type) {
     val prepResponse = fileRepository.findAll(setId, DATA_TABLE_EXPORT_MAP_FIELD_ARRAY);
-    exportFiles(output, prepResponse, new Query(), DATA_TABLE_MAPPING_KEYS);
+    exportFiles(output, prepResponse, new Query(), DATA_TABLE_MAPPING_KEYS, type);
   }
 
   public Map<String, Map<String, Long>> getUniqueFileAggregations(UniqueSummaryQuery summary) {
@@ -254,7 +255,7 @@ public class FileService {
   }
 
   @SneakyThrows
-  private void exportFiles(OutputStream output, SearchResponse response, Query query, String[] keys) {
+  private void exportFiles(OutputStream output, SearchResponse response, Query query, String[] keys, String type) {
     @Cleanup
     val writer = new CsvMapWriter(new BufferedWriter(new OutputStreamWriter(output, UTF_8)), TAB_PREFERENCE);
     writer.writeHeader(toArray(DATA_TABLE_EXPORT_MAP.values(), String.class));
@@ -267,8 +268,12 @@ public class FileService {
       }
 
       val files = convertHitsToRepoFiles(response.getHits(), query);
-      for (val file : files) {
-        writer.write(toRowMap(file), keys);
+      if("json".equals(type)) {
+        NON_NULL_MAPPER.writeValue(output, files);
+      } else {
+        for (val file : files) {
+          writer.write(toRowMap(file), keys);
+        }
       }
 
       scrollId = response.getScrollId();
@@ -300,8 +305,16 @@ public class FileService {
 
     row.put(Fields.DONOR_ID,
         toSummarizedString(fieldToSet(file.getDonors(), Donor::getDonorId)));
+    row.put(Fields.SPECIMEN_ID,
+        toSummarizedString(listToSet(file.getDonors(), Donor::getSpecimenId)));
+    row.put(Fields.SPECIMEN_TYPE,
+        toSummarizedString(listToSet(file.getDonors(), Donor::getSpecimenType)));
+    row.put(Fields.SAMPLE_ID,
+        toSummarizedString(listToSet(file.getDonors(), Donor::getSampleId)));
     row.put(Fields.PROJECT_CODE,
         toSummarizedString(fieldToSet(file.getDonors(), Donor::getProjectCode)));
+    row.put(Fields.FILE_NAME,
+        String.valueOf(file.getFileCopies().get(0).getFileName()));
     row.put(Fields.FILE_SIZE,
         String.valueOf(file.getFileCopies().stream().mapToLong(FileCopy::getFileSize).average().orElse(0)));
     row.put(Fields.ACCESS, file.getAccess());
@@ -313,6 +326,10 @@ public class FileService {
     row.put(Fields.FILE_FORMAT, fieldToCSV(file.getFileCopies(), FileCopy::getFileFormat));
 
     return row.build();
+  }
+
+  private static Collection<Object> listToSet(List<Donor> list, Function<Donor, List<String>> mapper) {
+    return list.stream().map(mapper).flatMap(Collection::stream).collect(toImmutableSet());
   }
 
   private static Collection<Object> fieldToSet(List<Donor> list, Function<Donor, String> mapper) {
@@ -343,7 +360,6 @@ public class FileService {
   }
 
   private static List<File> convertHitsToRepoFiles(SearchHits hits, Query query) {
-
     return Stream.of(hits.getHits())
         .map(hit -> createResponseMap(hit, query, EntityType.FILE))
         .map(File::parse)

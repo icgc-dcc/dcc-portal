@@ -3,18 +3,44 @@
     float: left;
   }
   overflow: hidden;
+  max-height: 1000px;
+  transition: 0.5s max-height ease-in-out;
 }
 
 .graphs-collapsed {
-  max-height: 150px;
+  max-height: 186px;
+  & + .more-graphs-wrap {
+    .teaser-coverup {
+      transform: scaleY(1);
+    }
+    .more-graphs:hover + .teaser-coverup {
+      transform: scaleY(0.3);
+    }
+  }
 }
 
 .more-graphs-wrap {
   position: absolute;
   left: 0;
-  bottom: -1.5rem;
+  bottom: -0.5rem;
   text-align: center;
   width: 100%;
+  .more-graphs {
+    position: relative;
+    z-index: 101;
+  }
+  .teaser-coverup {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 70px;
+    background-image: linear-gradient(to top, white 40%, transparent);
+    bottom: 21px;
+    z-index: 100;
+    transform-origin: bottom;
+    transform: scaleY(0);
+    transition: 0.5s transform ease;
+  }
 }
 
 .more-graphs {

@@ -31,7 +31,7 @@
                             class="t_facets__facet__terms__term">
                             <span class="t_facets__facet__terms__active__term__label {{ activeClass({type:typeName, facet:facet}) }}"
                                   data-ng-style="hoverStyle"
-                                  data-ng-click="removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
+                                  data-ng-click="track('term', {action: 'remove', label: termObj.controlFacet + ' / ' + termObj.controlTerm}); removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
                                   data-icgc-tooltip="{{ termObj.term | geneSetNameLookup | define:termObj.controlFacet }}">
                                   {{ resolveDisplayName (termObj) | trans:termObj.controlFacet }}
                             </span>
@@ -46,7 +46,7 @@
                             class="t_facets__facet__terms__term">
                             <span class="t_facets__facet__terms__active__term__label {{ activeClass({type:typeName, facet:facet}) }}"
                                   data-ng-style="hoverStyle"
-                                  data-ng-click="removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
+                                  data-ng-click="track('term', {action: 'remove', label: termObj.controlFacet + ' / ' + termObj.controlTerm}); removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
                                   data-icgc-tooltip="{{ termObj.term | geneSetNameLookup | define:termObj.controlFacet }}">
                                   {{ resolveDisplayName (termObj) | trans:termObj.controlFacet }}
                             </span>

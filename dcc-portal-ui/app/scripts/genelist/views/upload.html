@@ -54,7 +54,13 @@
            <div>
                <div><translate>Or choose a file to upload</translate></div>
                <span class="t_button btn-file">
-                   <translate>Browse</translate> <input type="file" accept=".tsv,.csv,text/*" data-file-upload="params.myFile">
+                   <translate>Browse</translate>
+                   <input
+                        type="file"
+                        accept=".tsv,.csv,text/*"
+                        data-file-upload="params.myFile"
+                        ng-click="track('upload', { action: 'select file', label: 'genes' })"
+                    >
                </span>
                {{params.fileName}}
            </div>
@@ -90,7 +96,9 @@
                               <i class="{{ expanded? 'icon-caret-down':'icon-caret-left'}}"></i>
                           </a>
                       </span>
-                      <span data-toolbar data-dl="genelist"></span>
+                      <span data-toolbar
+                        data-entity="genelist"
+                        data-json="{{ out.uiResult }}"></span>
                   </span>
                   <div data-ng-show="expanded">
                       <table class="table table-info" id="genelist">

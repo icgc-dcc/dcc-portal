@@ -367,7 +367,9 @@
         </div>
         <div class="t_table_top">
             <span data-table-counts data-label="{{'genes' | translate}}" data-page="ProjectGeneCtrl.genes.pagination"></span>
-            <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_genes">
+            <span data-toolbar 
+                data-entity="{{ProjectCtrl.project.id}}_genes"
+                data-json="{{ ProjectGeneCtrl.genes.hits }}">
             </span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
@@ -530,7 +532,9 @@
 
         <div class="t_table_top">
             <span data-table-counts data-label="{{'mutations' | translate}}" data-page="ProjectMutationsCtrl.mutations.pagination"></span>
-            <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_mutations"></span>
+            <span data-toolbar 
+                data-entity="{{ProjectCtrl.project.id}}_mutations"
+                data-json="{{ ProjectMutationsCtrl.mutations.hits }}"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
@@ -690,7 +694,9 @@
 
         <div class="t_table_top">
             <span data-table-counts data-label="{{'donors' | translate}}" data-page="ProjectDonorsCtrl.donors.pagination"></span>
-            <span data-toolbar data-dl="{{ProjectCtrl.project.id}}_donors"></span>
+            <span data-toolbar 
+                data-entity="{{ProjectCtrl.project.id}}_donors"
+                data-json="{{ ProjectDonorsCtrl.donors.hits }}"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>

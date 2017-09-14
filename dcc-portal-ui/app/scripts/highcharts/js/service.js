@@ -18,7 +18,58 @@
 
 'use strict';
 
+import Color from 'color';
+
 angular.module('highcharts.services', []);
+
+const BASE_PALETTE = {
+  BLUE: '#5DA5DA',
+  ORANGE: '#FAA43A',
+  GREEN: '#60BD68',
+  PURPLE: '#B276B2',
+  RED: '#F15854',
+};
+
+const PRIMARY_SITE_PALETTE = {
+  BLUE_LIGHT: BASE_PALETTE.BLUE,
+  BLUE_DARK: Color(BASE_PALETTE.BLUE).darken(0.2).toString(),
+  BLUE_2_LIGHT: Color(BASE_PALETTE.BLUE).rotate(-20).toString(),
+  BLUE_2_DARK: Color(BASE_PALETTE.BLUE).rotate(-20).darken(0.2).toString(),
+  ORANGE_LIGHT: BASE_PALETTE.ORANGE,
+  ORANGE_DARK: Color(BASE_PALETTE.ORANGE).darken(0.2).toString(),
+  ORANGE_2_LIGHT: Color(BASE_PALETTE.ORANGE).rotate(-20).toString(),
+  ORANGE_2_DARK: Color(BASE_PALETTE.ORANGE).rotate(-20).darken(0.2).toString(),
+  RED_LIGHT: BASE_PALETTE.RED,
+  RED_DARK: Color(BASE_PALETTE.RED).darken(0.2).toString(),
+  PURPLE: BASE_PALETTE.PURPLE,
+  PURPLE_DARK: Color(BASE_PALETTE.PURPLE).darken(0.2).toString(),
+  GREEN_LIGHT: BASE_PALETTE.GREEN,
+  GREEN_DARK: Color(BASE_PALETTE.GREEN).darken(0.2).toString(),
+};
+
+// this colouring scheme follows a even/odd sequence for picking colours
+const primarySiteColours = {
+  'Liver': PRIMARY_SITE_PALETTE.BLUE_DARK,
+  'Pancreas': PRIMARY_SITE_PALETTE.ORANGE_DARK,
+  'Kidney': PRIMARY_SITE_PALETTE.BLUE_2_DARK,
+  'Head and neck': Color(PRIMARY_SITE_PALETTE.RED_DARK).rotate(-30).toString(),
+  'Brain': PRIMARY_SITE_PALETTE.PURPLE_DARK,
+  'Blood': Color(PRIMARY_SITE_PALETTE.ORANGE_2_DARK).rotate(20).toString(),
+  'Prostate': PRIMARY_SITE_PALETTE.GREEN_DARK,
+  'Ovary': PRIMARY_SITE_PALETTE.BLUE_LIGHT,
+  'Lung': PRIMARY_SITE_PALETTE.ORANGE_LIGHT,
+  'Colorectal': PRIMARY_SITE_PALETTE.BLUE_2_LIGHT,
+  'Breast': Color(PRIMARY_SITE_PALETTE.RED_LIGHT).rotate(-20).toString(),
+  'Uterus': PRIMARY_SITE_PALETTE.PURPLE_LIGHT,
+  'Stomach': PRIMARY_SITE_PALETTE.ORANGE_2_LIGHT,
+  'Esophagus': PRIMARY_SITE_PALETTE.GREEN_LIGHT,
+  'Skin': PRIMARY_SITE_PALETTE.BLUE_DARK,
+  'Cervix': PRIMARY_SITE_PALETTE.ORANGE_DARK,
+  'Bone': PRIMARY_SITE_PALETTE.BLUE_2_DARK,
+  'Bladder': PRIMARY_SITE_PALETTE.RED_DARK,
+  'Mesenchymal': PRIMARY_SITE_PALETTE.PURPLE_DARK,
+  'Nervous System': PRIMARY_SITE_PALETTE.ORANGE_2_DARK,
+};
 
 angular.module('highcharts.services').service('HighchartsService', function ($q, LocationService) {
   var _this = this;
@@ -28,13 +79,8 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
       backgroundColor: 'transparent'
     },
     colors: [
-      '#1693C0', '#24B2E5',
-      '#E9931C', '#EDA94A',
-      '#166AA2', '#1C87CE',
-      '#D33682', '#DC609C',
-      '#6D72C5', '#9295D3',
-      '#CE6503', '#FB7E09',
-      '#1A9900', '#2C0'
+      ...Object.values(BASE_PALETTE),
+      ...Object.values(BASE_PALETTE).map(color => Color(color).rotate(-20).toString()),
     ],
     lang: {
       thousandsSep: ','
@@ -88,33 +134,10 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
 
   this.colours = Highcharts.getOptions().colors;
 
-  // this colouring scheme follows a even/odd sequence for picking colours
-  this.primarySiteColours = {
-    'Liver': this.colours[0],
-    'Pancreas': this.colours[2],
-    'Kidney': this.colours[4],
-    'Head and neck': this.colours[6],
-    'Brain': this.colours[8],
-    'Blood': this.colours[10],
-    'Prostate': this.colours[12],
-    'Ovary': this.colours[1],
-    'Lung': this.colours[3],
-    'Colorectal': this.colours[5],
-    'Breast': this.colours[7],
-    'Uterus': this.colours[9],
-    'Stomach': this.colours[11],
-    'Esophagus': this.colours[13],
-    'Skin': this.colours[0],
-    'Cervix': this.colours[2],
-    'Bone': this.colours[4],
-    'Bladder': this.colours[6],
-    'Mesenchymal': this.colours[8],
-    'Nervous System': this.colours[10]
-  };
-
+  this.primarySiteColours = primarySiteColours;
   // we need this to be able to quickily figure out the next colour in our sequence of colours
   // for non-harcoded projects that might come from the portal rest call
-  this.primarySiteColours._length = _.size(this.primarySiteColours);
+  primarySiteColours._length = _.size(primarySiteColours);
 
   // WORKAROUND: getPrimarySiteColourForTerm is a fallback method used to return a colour of an unknown and
   // non-harcoded (*sigh*) project that may be added to the data portal
@@ -123,7 +146,7 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
   // distinct colours for specific projects.
   this.getPrimarySiteColourForTerm = function(term) {
 
-    var primaryColours = _this.primarySiteColours,
+    var primaryColours = primarySiteColours,
         colours = _this.colours,
         colourLength = colours.length,
         currentPrimaryColoursLength = primaryColours._length,
@@ -202,7 +225,7 @@ angular.module('highcharts.services').service('HighchartsService', function ($q,
           y: count,
           type: type,
           facet: outerFacet,
-          color: Highcharts.Color(_this.getPrimarySiteColourForTerm(iName)).brighten(0.2).get()
+          color: Color(_this.getPrimarySiteColourForTerm(iName)).rotate(-5).lighten(0.3).toString(),
         });
       }
     }

@@ -86,9 +86,27 @@ $foregroundRed: #ff654b;
   text-overflow: ellipsis;
   vertical-align: middle;
   line-height: 1rem;
+  transition: .5s color, 0.2s max-width;
 
   .t_facets__facet__not & {
     color: $foregroundRed;
+  }
+
+  &:hover {
+    max-width: 150%;
+    overflow: visible;
+    z-index: 100;
+  }
+}
+
+.t_facets__facet__terms__active__term__label:hover .t_facets__facet__terms__active__term__label__text {
+  &:hover {
+    max-width: 110%;
+    overflow: visible;
+    z-index: 100;
+    background: lighten($cyan, 47);
+    box-shadow: 3px 0 0px 3px lighten($cyan, 47);
+    text-decoration: line-through;
   }
 }
 
@@ -96,10 +114,12 @@ $foregroundRed: #ff654b;
   padding-left: .5rem;
   color: $blue;
   cursor: pointer;
-  transition: .5s color;
+  transition: .5s color, 0.2s max-width;
 
   &:hover {
     color: $orange;
+    background: #fff;
+    box-shadow: 3px 0 0px 3px #fff;
   }
 }
 
@@ -130,6 +150,7 @@ $foregroundRed: #ff654b;
 .t_facets__facet__terms__active__term__count {
   position: absolute;
   right: 0;
+  top: 0;
 }
 
 .t_facets__facet__terms__inactive__term__count {

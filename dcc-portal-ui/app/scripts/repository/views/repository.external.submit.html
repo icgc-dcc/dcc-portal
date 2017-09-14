@@ -1,6 +1,6 @@
 <div class="modal-content download-manifests light">
     <div class="modal-header clearfix">
-      <h3 class="pull-left"><translate>Generate manifest(s)</translate></h3>
+      <h3 class="pull-left"><i class="icon-download" style="color: #666;"></i><translate>Download Files</translate></h3>
       <button class="pull-right t_button" data-ng-click="cancel()"><i
               class="icon-cancel"></i>
       </button>
@@ -8,35 +8,31 @@
 
     <div class="modal-body">
       <div class="modal-info-wrapper">
-        <img class="modal-info-figure" src="/styles/images/checklist.svg" />
         <div class="modal-info">
           <p>
-            <translate>
-              A manifest is a text file passed to download clients in order to download selected files of interest.
-            </translate>
+            <translate>For instructions on obtaining access, see the <a href="http://docs.icgc.org/cloud/repositories/" target="_blank" external-link>Repositories documentation</a>.</translate>
           </p>
-          <p ng-if="repos.length > 1">
-            <translate>
-              Some files may be stored in multiple repositories. When "Remove duplicate files" is checked, duplicates from repositories lower in the list will not be included, and a manifest containing unique files from all repositories will be generated. You may drag rows to reorder the list to affect the generated manifest.
-            </translate>
-          </p>
-          <p>
-            <translate translate-comment="See the User Guide for more information on manifest files">See the</translate>
-            <a href="http://docs.icgc.org/cloud/guide/#manifest-command" target="_blank" class="light" external-link>
-              <translate translate-comment="See the User Guide for more information on manifest files">User Guide</translate>
-            </a>
-            <translate translate-comment="See the User Guide for more information on manifest files">for more information on manifest files</translate>
-          </p>
-          <p>
-            <translate>For information on how to obtain access, see the <a href="http://docs.icgc.org/cloud/repositories/" target="_blank" external-link>Repositories documentation</a>.</translate>
-          </p>
-          <p>
-            <translate>The available repositories below are restricted by your search filter:</translate>
-          </p>
-          <label class="no-select text-right" ng-show="repos.length > 1">
-            <input ng-model="shouldDeduplicate" type="checkbox"/>
-            <translate>Remove duplicate files</translate>
-          </label>
+          <div class="flex-row">
+            <small><translate>The available repositories below are restricted by your search filter</translate></small>
+            <label
+              class="no-select text-right"
+              ng-show="repos.length > 1"
+              style="margin-left: auto;"
+            >
+              <input
+                ng-model="shouldDeduplicate"
+                type="checkbox"
+                ng-change="track('generate-manifest', {action: 'click', label: 'set dedupe', value: shouldDeduplicate})"
+              />
+              <translate>Remove duplicate files</translate>
+              <i
+                class="fa fa-info-circle"
+                style="color: #b1b1b1;"
+                icgc-tooltip="{{'<div class=\'tooltip-contents\'><p>Some files may be stored in multiple repositories.</p> <p>When &quot;Remove duplicate files&quot; is checked, duplicates from repositories lower in the list will not be included, and a manifest containing unique files from all repositories will be generated.</p> <p>You may drag rows to reorder the list to affect the generated manifest.</p></div>' | translate}}"
+                tooltip-placement="left"
+              ></i>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -212,14 +208,60 @@
     </div>
 
     <div class="modal-footer">
-      <button class="t_button" data-ng-click="cancel();"><translate>Cancel</translate></button>
-      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i><translate>Generate</translate></button>
+      <button
+        class="t_button"
+        data-ng-click="
+          cancel();
+          track('cancel-generate-manifest', { action: 'click' });
+        "
+      >
+        <translate>Cancel</translate>
+      </button>
+      <button
+        class="t_button"
+        data-ng-click="
+          track('generate-icgc-get-id', { action: 'click' });
+        ">
+        <translate>Generate icgc-get ID</translate>
+      </button>
+      <a
+        href="http://docs.icgc.org/cloud/icgc-get/"
+        target="_blank"
+        style="margin-left: 4px;"
+      >
+        <i
+          class="fa fa-question-circle"
+          style="cursor: pointer;"
+          icgc-tooltip="{{'<div class=\'tooltip-contents\'>icgc-get is a universal download client for accessing ICGC data residing in various data repositories. <br/><small><em>Click to see the User Guide for more information</em></small></div>' | translate}}"
+        ></i>
+      </a>
+      <button
+        class="t_button"
+        ng-click="
+          downloadManifest();
+          track('generate-manifest', { action: 'click' });
+        "
+      >
+        <i class="icon-download"></i><translate>Generate Manifest</translate>
+      </button>
+      <a
+        href="http://docs.icgc.org/cloud/guide/#manifest-command"
+        target="_blank"
+        style="margin-left: 4px;"
+      >
+        <i
+          class="fa fa-question-circle"
+          style="cursor: pointer;"
+          icgc-tooltip="{{'<div class=\'tooltip-contents\'>A manifest is a text file passed to download clients in order to download selected files of interest. <br/><small><em>Click to see the User Guide for more information</em></small></div>' | translate}}"
+        ></i>
+      </a>
+      
       <button
         class="t_button"
         data-ng-repeat="repoData in repos"
         data-ng-if="repos.length === 1 && repoData.hasManifest"
         data-ng-disabled="repoData.manifestID || repoData.isGeneratingManifestID"
-        data-ng-click="(!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
+        data-ng-click="track('create-manifest-id', { action: 'click', label: repoData.repoName }); (!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
       >
         <translate>Manifest ID</translate>
       </button>

@@ -97,19 +97,20 @@ footer, .push {
 }*/
 
 
-aside {
-  @include clearfix();
-  @include grid-span(2, 1);
-
-  &.t_sidebar{
-    @include grid-span(2.2, 1);
+aside.t_sidebar, aside.t_sidenav {
+  width: 200px;
+  float: left;
+  @include breakpoint($break-widescreen) {
+    width: 220px;
   }
 }
 
 article {
-  @include clearfix();
-  @include grid-span(10, 3);
-  margin-right: 0;
+  width: calc(100% - 200px);
+  float: right;
+  @include breakpoint($break-widescreen) {
+    width: calc(100% - 220px);
+  }
 }
 
 section {

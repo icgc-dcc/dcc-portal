@@ -76,7 +76,9 @@
                 data-current-page="MutationCtrl.currentConsequencesPage"
                 data-row-limit="MutationCtrl.defaultConsequencesRowLimit">
             </data-table-row-counts>
-            <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_consequence"></span>
+            <span data-toolbar 
+                data-entity="{{MutationCtrl.mutation.id}}_consequence"
+                data-json="{{ MutationCtrl.uiConsequences }}"></span>
             <table-filter data-class="small-filter"
                 data-filter-model="MutationCtrl.tableFilter.consequences"
                 data-current-page="MutationCtrl.currentConsequencesPage"></table-filter>
@@ -203,7 +205,9 @@
                 data-current-page="MutationCtrl.currentProjectsPage"
                 data-row-limit="MutationCtrl.defaultProjectsRowLimit">
             </data-table-row-counts>
-            <span data-toolbar data-dl="{{MutationCtrl.mutation.id}}_distribution"></span>
+            <span data-toolbar 
+                data-entity="{{MutationCtrl.mutation.id}}_distribution"
+                data-json="{{ MutationCtrl.uiProjects }}"></span>
             <table-filter data-class="small-filter"
                 data-filter-model="MutationCtrl.tableFilter.projects"
                 data-current-page="MutationCtrl.currentProjectsPage"></table-filter>

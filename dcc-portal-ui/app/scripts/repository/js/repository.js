@@ -67,11 +67,14 @@ import './file-finder';
     _ctrl.isChrome = /Chrome/.test($window.navigator.userAgent);
 
     _ctrl.fileQuery = '';
+
+    const trackFileQuery = _.debounce(() => track('file-repo', { action: 'query', label: _ctrl.fileQuery }), 500);
     _ctrl.handleFileQueryKeyup = ($event) => {
       if (event.keyCode === 27) {
         _ctrl.fileQuery = '';
         $event.currentTarget.blur();
       }
+      trackFileQuery();
     };
 
     function buildBreadcrumbs() {
@@ -384,7 +387,7 @@ import './file-finder';
       jQuery('.btn-group.open').trigger('click');
     };
 
-    $scope.download = function() {
+    $scope.downloadManifest = function() {
       if (_.isEmpty($scope.selectedFiles)) {
         var filters = FilterService.filters();
 
@@ -875,8 +878,8 @@ import './file-finder';
     /**
      * Export table
      */
-    _ctrl.export = function() {
-      ExternalRepoService.export (FilterService.filters());
+    _ctrl.export = function(type) {
+      ExternalRepoService.export (FilterService.filters(), type);
     };
 
     /**

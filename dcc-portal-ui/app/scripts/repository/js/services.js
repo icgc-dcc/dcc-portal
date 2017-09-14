@@ -214,9 +214,8 @@
       $window.location.href = _srv.getManifestUrlByFileIds(ids, repos, unique);
     };
 
-    _srv.export = function (filters) {
-      $window.location.href = API.BASE_URL + '/' + REPO_API_PATH +
-        '/export?filters=' + uriString (filters);
+    _srv.export = function (filters, type) {
+      $window.location.href = `${API.BASE_URL}/${REPO_API_PATH}/export?type=${type}&filters=${uriString (filters)}`;
     };
 
     _srv.createManifest = function (params) {

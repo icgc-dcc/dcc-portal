@@ -55,10 +55,14 @@
             </div>
         </div>
         <div class="more-graphs-wrap">
-            <span data-ng-click="donorExpand=!donorExpand" class="more-graphs t_tools__tool">
+            <span
+                data-ng-click="donorExpand=!donorExpand; track('viz-filter-show-more', { action: 'click' })"
+                class="more-graphs t_tools__tool"
+            >
                 <span data-ng-if="!donorExpand"><i class="icon-angle-down"></i> <translate>Show More</translate></span>
                 <span data-ng-if="donorExpand"><i class="icon-angle-up"></i> <translate>Show Less</translate></span>
             </span>
+            <div class="teaser-coverup"></div>
         </div>
     </section>
     <section>
@@ -67,7 +71,13 @@
             <span class="action-toolbar pull-right">
                 <span class="action-item">
                     <i class="icon-grid"></i>
-                    <a href="#" data-ng-click="AdvancedCtrl.oncogridAnalysis()">
+                    <a
+                        href="#"
+                        data-ng-click="
+                            AdvancedCtrl.oncogridAnalysis();
+                            track('advanced-search-links', { action: 'click-oncogrid' });
+                        "
+                    >
                         <translate>OncoGrid</translate>
                     </a>
                </span>
@@ -76,13 +86,25 @@
                </span>
                <span class="action-item" data-ng-if="ICGC_SETTINGS.downloadEnabled">
                    <span>
-                      <i class="icon-download"></i><a href="" data-ng-click="AdvancedCtrl.downloadDonorData()"><translate>Download Donor Data</translate></a>
+                      <i class="icon-download"></i>
+                      <a
+                        href=""
+                        data-ng-click="AdvancedCtrl.downloadDonorData(); track('download-donor-data', { action: 'click' });"
+                      >
+                        <translate>Download Donor Data</translate>
+                      </a>
                    </span>
                </span>
                <span class="action-item">
                    <span>
                       <i class="icon-download-cloud"></i><span>
-                      <a href="" data-ng-click="AdvancedCtrl.viewExternalDonors(AdvancedCtrl.Donor.donors.pagination.total)">
+                      <a
+                        href=""
+                        data-ng-click="
+                            AdvancedCtrl.viewExternalDonors(AdvancedCtrl.Donor.donors.pagination.total);
+                            track('advanced-search-links', { action: 'click-view-in-repo' });
+                        "
+                      >
                       <translate>View in</translate> {{:: AdvancedCtrl.dataRepoTitle }}</a></span>
                    </span>
                </span>
@@ -100,7 +122,10 @@
 
         <div class="t_table_top">
             <span data-table-counts data-label="{{'donors' | translate}}" data-page="AdvancedCtrl.Donor.donors.pagination"></span>
-            <span data-toolbar data-dl="donors"></span>
+            <span 
+                data-toolbar 
+                data-entity="donors"
+                data-json="{{ AdvancedCtrl.Donor.donors.hits }}"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>

@@ -114,7 +114,7 @@
   </div>
 </aside>
 
-<article style="position: relative; margin-right: 1px;">
+<article style="position: relative;">
     <current></current>
     <div data-ng-if="ExternalRepoController.loadState.isLoading" class="loading loading-text no-animate">
       <h3><i class="icon-spinner icon-spin"></i>
@@ -144,11 +144,14 @@
                     </button>
                 </div>
                 <div class="quarter" data-ng-if="ExternalRepoController.showIcgcGet">
-                  <button class="t_button" data-ng-click="ExternalRepoController.downloadManifest()">
+                  <button class="t_button" data-ng-click="ExternalRepoController.downloadManifest() || track('manifests-button', { action: 'click' })">
                     <i class="icon-file"></i>Manifests
                   </button>
 
-                  <button class="t_button" data-ng-click="ExternalRepoController.showIcgcGetModal()">
+                  <button
+                    class="t_button"
+                    data-ng-click="ExternalRepoController.showIcgcGetModal() || track('icgc-get-button', { action: 'click' })"
+                  >
                     <img src="/styles/images/icgc-get-white.svg" style="width: 16px; margin-bottom: -3px;">
                     <span>icgc-get</span>
                   </button>
@@ -231,10 +234,20 @@
             <div class="t_table_top">
                 <span data-table-counts data-label="{{'files' | translate}}" data-page="ExternalRepoController.files.pagination"></span>
                 <span class="t_tools">
-                    <span class="t_tools__tool">
-                        <i class="icon-file pull-right"
-                           data-icgc-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
-                           data-ng-click="ExternalRepoController.export()"></i>
+                    <span class="t_tools__tool"
+                          data-tooltip-placement="left"
+                          data-icgc-tooltip="{{'Export Table as JSON' | translate}}"
+                          data-ng-click="ExternalRepoController.export('json')">
+                          <img
+                            class="t_tools_tool_json"
+                            src="/styles/images/json-export.svg">
+                    </span>
+                    <span 
+                      class="t_tools__tool"
+                      data-icgc-tooltip="{{'Export table as TSV' | translate}}" data-tooltip-placement="left"
+                      data-ng-click="ExternalRepoController.export('tsv')"
+                    >
+                        <i class="fa fa-file-text-o"></i>
                     </span>
                 </span>
             </div>
