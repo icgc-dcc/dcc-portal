@@ -1,19 +1,22 @@
 header {
 
   .header-container {
-    display: table;
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
   }
   border-bottom: 1px solid $greyLighter;
   background: $greyLightestEver;
 
-  margin-bottom: 1rem;
+  // margin-bottom: 1rem;
   padding: .4rem 2rem;
 
   position: relative;
 
   #brand {
-    width: 27%;
+    flex: 1;
     white-space: nowrap;
 
     display: table-cell;
@@ -95,6 +98,7 @@ header {
 
 #home-page{
   header{
+    height:43px;
     .header-country{
 
       .mirror-portal-flag{
@@ -125,7 +129,6 @@ header {
 @media screen and (min-width: 721px) and (max-width: 950px) {
   header {
     .header-container {
-      display: block;
       #brand {
         width: 100%;
         display: block;
@@ -168,7 +171,6 @@ header {
   header {
     padding: 0 0;
     .header-container {
-      display: block;
 
       #brand {
         display: block;
@@ -229,14 +231,14 @@ header {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
-  width: 38%;
+  flex: 1;
 }
 
 .t_nav__actions {
   display: table-cell;
   text-align: right;
   margin-right: 0;
-  width: 27%;
+  flex: 1;
 }
 
 .t_nav__items {
@@ -272,7 +274,7 @@ header {
 
   &.t_nav__items__item__home a {
     color: $orange;
-    border: .3rem solid $orange;
+    border: .2rem solid $orange;
   }
 
   &.t_nav__items__item__home a:hover {
@@ -282,7 +284,7 @@ header {
 
   &.t_nav__items__item__projects a {
     color: $orangeLight;
-    border: .3rem solid $orangeLight;
+    border: .2rem solid $orangeLight;
   }
 
   &.t_nav__items__item__projects a:hover {
@@ -292,7 +294,7 @@ header {
 
   &.t_nav__items__item__advanced a {
     color: $blue;
-    border: .3rem solid $blue;
+    border: .2rem solid $blue;
   }
 
   &.t_nav__items__item__advanced a:hover {
@@ -302,7 +304,7 @@ header {
 
   &.t_nav__items__item__analysis a {
     color: $mauve;
-    border: .3rem solid $mauve;
+    border: .2rem solid $mauve;
   }
 
   &.t_nav__items__item__analysis a:hover {
@@ -312,7 +314,7 @@ header {
 
   &.t_nav__items__item__data_repositories a {
     color: $repositories;
-    border: .3rem solid $repositories;
+    border: .2rem solid $repositories;
   }
 
   &.t_nav__items__item__data_repositories a:hover {
@@ -322,7 +324,7 @@ header {
 
   &.t_nav__items__item__download a {
     color: $cyan;
-    border: .3rem solid $cyan;
+    border: .2rem solid $cyan;
   }
 
   &.t_nav__items__item__download a:hover {
@@ -332,7 +334,7 @@ header {
 
   &.t_nav__items__item__search a {
     background: $greyLight;
-    border: .3rem solid $greyLight;
+    border: .2rem solid $greyLight;
     .icon-search {
       padding: 1rem;
     }
@@ -419,12 +421,8 @@ header {
     text-align: center;
     padding: 0;
 
-    .header-container {
-      display: block;
-    }
-
     #brand {
-      display: block;
+      display: none;
       width: 100%;
       margin: 0;
 
@@ -447,9 +445,9 @@ header {
   }
 
   .t_nav__pages {
-    margin: 0.5rem 0rem;
+    padding-top: 0.7rem;
     display:block;
-    width: 100%;
+    flex: 1;
     .t_nav__items__item {
       text-align: left;
       margin: 0;
@@ -458,6 +456,10 @@ header {
       }
       a {
         padding-right: 1rem;
+
+        span {
+          font-weight: bold;
+        }
       }
 
     }
@@ -481,24 +483,49 @@ header {
     display: none;
   }
   .t_nav__items__item__projects a {
-    background: $orangeLight;
-    color: $white;
+    background: #fafafa;
+    color: $orangeLight;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
   .t_nav__items__item__advanced a {
-    background: $blue;
-    color: $white;
+    background: #fafafa;
+    color: $blue;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
   .t_nav__items__item__analysis a {
-    background: $mauve;
-    color: $white;
+    background: #fafafa;
+    color: $mauve;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
   .t_nav__items__item__download a {
-    background: $cyan;
-    color: $white;
+    background: #fafafa;
+    color: $cyan;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
   .t_nav__items__item__data_repositories a {
-    background: $repositories;
-    color: $white;
+    background: #fafafa;
+    color: $repositories;
+    border: none;
+
+    i {
+      padding: 0;
+    }
   }
 }
 

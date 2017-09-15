@@ -39,10 +39,11 @@
 
   var module = angular.module('icgc.releases.controllers', ['icgc.releases.models']);
 
-  module.controller('ReleaseCtrl', function (Page, HighchartsService, Releases, Projects, Settings, gettextCatalog) {
+  module.controller('ReleaseCtrl', function (Page, HighchartsService, Releases, Projects, Settings, gettextCatalog, $timeout) {
     var _ctrl = this;
     Page.setTitle(gettextCatalog.getString('Welcome'));
     Page.setPage('home');
+    Page.startWork();
 
     _ctrl.routeToProjectPageWithLiveDonorStateFilter = function () {
       var liveDonorStateFilter = {
@@ -89,6 +90,55 @@
     Releases.getCurrent().then(successR);
     Projects.getList().then(successP);
     Settings.get().then(successSettings);
+
+    let delta = 0, delta2 = 0;
+    let moveFlag = false;
+    const scrollPad = angular.element('#scroll-listen-pad');
+    const scrollContent = angular.element('#scroll-section');
+    const search = angular.element('#sticky-search');
+    const searchHeight = angular.element('#sticky-search').height();
+    let stickySearchParentHeight, maximumTop, minimumTop, top;
+    $timeout( function(){
+      stickySearchParentHeight = angular.element('#sticky-search-parent').height();
+      maximumTop = stickySearchParentHeight - (searchHeight/2);
+      minimumTop = (stickySearchParentHeight/2) - (searchHeight/2);
+      top = parseInt(search.css('top'));
+      Page.stopWork();
+    }, 0 ); 
+
+    function moveSearch(d){
+      if(top > minimumTop && angular.element('#actual_scroll').position().top < 100 && d > 0) {
+        search.css('top', `${Math.max(minimumTop, top - d)}px`);
+        top = parseInt(search.css('top'));
+      }
+
+      if(top < maximumTop && d < 0 && angular.element('#actual_scroll').position().top >= 0) {
+        search.css('top', `${Math.min(maximumTop, top - d)}px`);
+        top = parseInt(search.css('top'));
+      }
+    } 
+
+    function scroll(e) {
+      delta = scrollPad.scrollTop() - delta;
+      scrollContent.scrollTop(scrollContent.scrollTop() + delta);
+      moveSearch(delta);
+      delta = scrollPad.scrollTop();
+    }
+
+    scrollPad.on('scroll', function(e){
+      moveFlag = true;
+      scroll(e);
+    });
+
+    scrollContent.on('scroll', function(e){
+      if(!moveFlag) {
+        delta2 = scrollContent.scrollTop() - delta2;
+        moveSearch(delta2);
+        delta2 = scrollContent.scrollTop();
+      }
+      moveFlag = false;
+    });
+
   });
 })();
 

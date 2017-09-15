@@ -177,11 +177,11 @@
       },
       projects: {
         href: href ('projects'),
-        title: gettextCatalog.getString('Cancer Projects')
+        title: gettextCatalog.getString('Projects')
       },
       advancedSearch: {
         href: href ('advanced'),
-        title: gettextCatalog.getString('Advanced Search')
+        title: gettextCatalog.getString('Search')
       },
       compoundIndex: {
         href: href ('compound-index'),
@@ -189,15 +189,15 @@
       },
       dataAnalysis: {
         href: href ('analysis'), // DCC-4594 default is launch analysis
-        title: gettextCatalog.getString('Data Analysis')
+        title: gettextCatalog.getString('Analysis')
       },
       dataReleases: {
         href: href ('dataReleases'),
-        title: gettextCatalog.getString('DCC Data Releases')
+        title: gettextCatalog.getString('Releases')
       },
       dataRepositories: {
         href: href ('dataRepositories'),
-        title: gettextCatalog.getString('Data Repositories')
+        title: gettextCatalog.getString('Files')
       },
       pcawg: {
         href: href ('pancancer'),

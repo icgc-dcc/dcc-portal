@@ -160,6 +160,7 @@ ol {
 
 .h1-wrap {
   height: 5rem;
+  margin-top: 1rem;
   h1 {
     display: flex;
     align-items: center;
@@ -185,7 +186,7 @@ h1.sticky-scrollfix {
 }
 
 aside.ui-scrollpoint {
-  top: 5rem;
+  top: 0rem;
   section {
     background: transparent;
   }

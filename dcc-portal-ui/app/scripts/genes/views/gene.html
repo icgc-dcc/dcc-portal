@@ -1,11 +1,13 @@
-<div class="h1-wrap">
-    <h1 data-ui-scrollpoint=79 ><span class="t_badge t_badge__gene"></span>
-        {{ GeneCtrl.gene.symbol }}</h1>
-</div>
 <div data-scroll-spy="">
 <aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
+            <li class="t_subnav__items__item">
+                <h1>
+                    <span class="t_badge t_badge__gene"></span>
+                    {{ GeneCtrl.gene.symbol }}
+                </h1>
+            </li>
             <li data-spy="summary" class="t_subnav__items__item current">
                 <a data-scrollto href="#summary">
                     <translate>Summary</translate>

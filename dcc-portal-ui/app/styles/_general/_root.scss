@@ -32,7 +32,6 @@ html {
   font-family: $sans-stack;
   font-size: .7rem;
   line-height: 1.618rem;
-  overflow-y: scroll;
 
   @include breakpoint($break-laptop) {
     font-size: .8rem;

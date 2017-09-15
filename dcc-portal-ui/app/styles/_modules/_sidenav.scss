@@ -47,6 +47,24 @@
   .t_subnav__items__item {
     padding: .5rem 0;
 
+    h1 {
+      font-size: 2rem;
+
+      span {
+        color: $white;
+
+        &.t_badge {
+          padding-top: 0;
+          padding-bottom: 0;
+          margin: 0;
+        }
+        
+        &.badge {
+          margin-left: 0;
+        }
+      }
+    }
+
     a, span {
       font: {
         size: 1.3rem;

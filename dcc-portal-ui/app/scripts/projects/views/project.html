@@ -1,11 +1,5 @@
 
 <span data-ng-if="ProjectCtrl.isPendingDonor">
-  <div class="h1-wrap">
-      <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__project"></span>
-          {{ProjectCtrl.project.id}}
-      </h1>
-  </div>
-
   <section>
     <i class="icon-attention or icon-attention-1"></i>
     <translate>No data for this project has been submitted directly to ICGC DCC yet.</translate>
@@ -29,6 +23,12 @@
 <aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
+            <li class="t_subnav__items__item">
+                <h1>
+                    <span class="t_badge t_badge__project"></span>
+                    {{ProjectCtrl.project.id}}
+                </h1>
+            </li>
             <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
             <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="genes" class="t_subnav__items__item"><a data-scrollto href="#genes"><translate>Mutated Genes</translate></a></li>
             <li data-ng-if="ProjectCtrl.project.state === 'live'" data-spy="mutations" class="t_subnav__items__item"><a data-scrollto href="#mutations"><translate>Mutations</translate></a></li>
