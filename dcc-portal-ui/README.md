@@ -2,6 +2,8 @@
 
 ## Setup
 
+Note: Python __2.7__ is required until either node-gyp [drops their dependency](https://github.com/nodejs/node-gyp/pull/1092)), or we move off of node-sass.
+
 Install the following:
 - [nvm](http://docs.icgc.org/software/development/setup/#nvm)
 - [yarn](http://docs.icgc.org/software/development/setup/#yarn)
