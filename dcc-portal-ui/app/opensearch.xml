@@ -1,0 +1,11 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>ICGC Data Portal</ShortName>
+<Description>
+    The ICGC Data Portal provides tools for visualizing, querying and downloading the data released quarterly by the consortium's member projects.
+</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16" type="image/x-icon">
+https://dcc.icgc.org/favicon.ico
+</Image>
+<Url type="text/html" method="get" template="https://dcc.icgc.org/q?q={searchTerms}"/>
+</OpenSearchDescription>
