@@ -96,21 +96,22 @@
 
     $scope.displayLimit = 5;
     $scope.track = global.track;
-    $scope.addTerm = function (term) {
-      Facets.addTerm({
+    $scope.addTerms = (facetItems) => {
+      const terms = facetItems.map(x => x.term);
+      Facets.addTerms(terms.map( term => ({
         type: $scope.type,
         facet: $scope.facetName,
         term: term
-      });
+      })));
       onChange();
     };
-
-    $scope.removeTerm = function (term) {
-      Facets.removeTerm({
+    $scope.removeTerms = (facetItems) => {
+      const terms = facetItems.map(x => x.term);
+      Facets.removeTerms(terms.map( term => ({
         type: $scope.type,
         facet: $scope.facetName,
         term: term
-      });
+      })));
       onChange();
     };
 

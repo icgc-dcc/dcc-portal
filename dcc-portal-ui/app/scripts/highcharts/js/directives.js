@@ -51,8 +51,13 @@ angular.module('highcharts.directives', [])
 
   });
 
-angular.module('highcharts.directives').directive('pie', function (Facets, $filter, ValueTranslator,
-                                                                   highchartsService) {
+angular.module('highcharts.directives').directive('pie', function (
+  Facets,
+  $filter,
+  ValueTranslator,
+  highchartsService,
+  $rootScope
+) {
   function ensureArray (array) {
     return _.isArray (array) ? array : [];
   }
@@ -62,12 +67,17 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
     restrict: 'E',
     replace: true,
     scope: {
+      heading: '@',
       items: '=',
       groupPercent: '@',
       shouldShowNoDataMessage: '@',
       configOverrides: '&'
     },
-    template: '<span style="margin: 0 auto">not working</span>',
+    template: `
+      <span
+        style="margin: 0 auto"
+      >not working</span>
+    `,
     link: function ($scope, $element, $attrs) {
       // Defaults to 5%
       $scope.groupPercent = $scope.groupPercent || 5;
@@ -88,7 +98,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
         var firstItem = _.head (items);
 
         return {
-          name: 'Others (' + count + ' ' + $attrs.heading + 's)',
+          name: 'Others (' + count + ' ' + $scope.heading + 's)',
           color: '#999',
           y: _.sumBy (items, 'y'),
           type: firstItem.type,
@@ -145,7 +155,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
           width: $attrs.width || null
         },
         title: {
-          text: $attrs.heading,
+          text: $scope.heading,
           margin: 5,
           style: {
             fontSize: '1.25rem'
@@ -207,9 +217,26 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
                       placement: 'top',
                       sticky: true
                     });
+
+                    $rootScope.delayedTrack(
+                      'viz-filter',
+                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` },
+                      600
+                    );
                   },
-                  mouseOut: function () {
+                  mouseOut: function (event) {
                     $scope.$emit('tooltip::hide');
+                    $rootScope.clearDelayedTrack(
+                      'viz-filter',
+                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` }
+                    );
+                  },
+                  click: function (event) {
+                    $rootScope.track('viz-filter', { action: 'click', label: `${$scope.heading}->${event.point.term || event.point.name}` });
+                    $rootScope.clearDelayedTrack(
+                      'viz-filter',
+                      { action: 'hover', label: `${$scope.heading}->${event.point.term || event.point.name}` }
+                    );
                   }
                 }
               }
@@ -586,17 +613,24 @@ angular.module('highcharts.directives')
 
 
 
-angular.module('highcharts.directives').directive('bar', function ($location, highchartsService) {
+angular.module('highcharts.directives').directive('bar', function ($location, highchartsService, $rootScope) {
   return {
     restrict: 'E',
     replace: true,
     scope: {
+      heading: '@',
       items: '=',
       shouldShowNoDataMessage: '@',
       configOverrides: '&',
       onRender: '&'
     },
-    template: '<div id="container" style="margin: 0 auto">not working</div>',
+    template: `
+      <div
+        id="container"
+        style="margin: 0 auto"
+        ng-click="$root.track('viz-filter', {action: 'click', label: heading })"
+      >not working</div>
+    `,
     link: function ($scope, $element, $attrs) {
       var c, renderChart, chartsDefaults;
 
@@ -711,9 +745,18 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
                     text: getLabel(),
                     sticky:true
                   });
+                  $rootScope.delayedTrack(
+                    'viz-filter',
+                    { action: 'hover', label: `${$attrs.heading}->${event.target.category}` },
+                    600
+                  );
                 },
-                mouseOut: function () {
+                mouseOut: function (event) {
                   $scope.$emit('tooltip::hide');
+                  $rootScope.clearDelayedTrack(
+                    'viz-filter',
+                    { action: 'hover', label: `${$attrs.heading}->${event.target.category}` },
+                  );
                 }
               }
             }

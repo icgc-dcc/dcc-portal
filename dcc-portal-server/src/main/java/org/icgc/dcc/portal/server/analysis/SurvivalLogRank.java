@@ -22,8 +22,8 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
-import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.Interval;
-import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.DonorValue;
+import org.icgc.dcc.portal.server.analysis.KaplanMeier.DonorValue;
+import org.icgc.dcc.portal.server.analysis.KaplanMeier.Interval;
 
 import java.util.List;
 import java.util.SortedMap;

@@ -21,7 +21,8 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.assertj.core.data.Offset;
-import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.Interval;
+import static org.icgc.dcc.portal.server.analysis.KaplanMeier.DonorValue;
+import static org.icgc.dcc.portal.server.analysis.KaplanMeier.Interval;
 import org.junit.Test;
 
 import lombok.val;
@@ -108,12 +109,12 @@ public class SurvivalLogRankTest {
     assertThat(stats.getPValue()).isLessThan(0.001);
   }
 
-  private SurvivalAnalyzer.DonorValue cAt(int time) {
-    return new SurvivalAnalyzer.DonorValue("1", "alive", time);
+  private DonorValue cAt(int time) {
+    return new DonorValue("1", "alive", time, false);
   }
 
-  private SurvivalAnalyzer.DonorValue dAt(int time) {
-    return new SurvivalAnalyzer.DonorValue("1", "deceased", time);
+  private DonorValue dAt(int time) {
+    return new DonorValue("1", "deceased", time, true);
   }
 
 }
