@@ -23,6 +23,7 @@ import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
+import static org.dcc.portal.pql.meta.field.BooleanFieldModel.bool;
 
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,8 @@ public class MutationCentricTypeModel extends TypeModel {
       "functionalImpact",
       "sequencingStrategy",
       "study",
-      "chromosome");
+      "chromosome",
+      "coding");
 
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "id",
@@ -139,7 +141,9 @@ public class MutationCentricTypeModel extends TypeModel {
         object(
             string("id", "transcriptId"),
             string("functional_impact_prediction_summary", "functionalImpact"),
-            object("consequence", string("consequence_type", "consequenceType")),
+            object("consequence",
+                string("consequence_type", "consequenceType"),
+                bool("coding", "coding")),
             object("gene",
                 identifiableString("_gene_id", "gene.id"),
                 string("biotype", "gene.type"),

@@ -24,6 +24,7 @@ import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
+import static org.dcc.portal.pql.meta.field.BooleanFieldModel.bool;
 
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ import lombok.val;
 public class GeneCentricTypeModel extends TypeModel {
 
   private final static String TYPE_PREFIX = "gene";
-  private static final List<String> AVAILABLE_FACETS = ImmutableList.of("type", "chromosome");
+  private static final List<String> AVAILABLE_FACETS = ImmutableList.of("type", "chromosome", "mutation.coding");
 
   // Including real fields, not aliases. Because after the AST is built by PqlParseTreeVisitor includes are resolved to
   // the real fields
@@ -182,7 +183,8 @@ public class GeneCentricTypeModel extends TypeModel {
   private static ArrayFieldModel defineConsequence() {
     val element = object(
         string("consequence_type", "mutation.consequenceType"),
-        string("functional_impact_prediction_summary", "mutation.functionalImpact"));
+        string("functional_impact_prediction_summary", "mutation.functionalImpact"),
+        bool("coding", "mutation.coding"));
 
     return nestedArrayOfObjects("consequence", element);
   }
