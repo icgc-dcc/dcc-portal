@@ -8,11 +8,16 @@
   dependencies:
     deep-freeze "0.0.1"
 
-"@oncojs/survivalplot@0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@oncojs/survivalplot/-/survivalplot-0.3.3.tgz#b1d79d1bf199642f0ab7b366799c040538934867"
+"@oncojs/survivalplot@0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@oncojs/survivalplot/-/survivalplot-0.7.1.tgz#f81a6b186cefd3b17316d982a5ed6246d384c606"
   dependencies:
     d3 "3"
+    lodash.defaultsdeep "^4.6.0"
+    lodash.groupby "^4.6.0"
+    lodash.inrange "^3.3.6"
+    lodash.uniqby "^4.7.0"
+    lodash.uniqueid "^4.0.1"
 
 Base64@~0.2.0:
   version "0.2.1"
@@ -1755,13 +1760,13 @@ custom-event@~1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/custom-event/-/custom-event-1.0.1.tgz#5d02a46850adf1b4a317946a3928fccb5bfd0425"
 
-d3@3, d3@3.5.6:
-  version "3.5.6"
-  resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.6.tgz#9451c651ca733fb9672c81fb7f2655164a73a42d"
-
-d3@3.5.17:
+d3@3, d3@3.5.17:
   version "3.5.17"
   resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.17.tgz#bc46748004378b21a360c9fc7cf5231790762fb8"
+
+d3@3.5.6:
+  version "3.5.6"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.6.tgz#9451c651ca733fb9672c81fb7f2655164a73a42d"
 
 d@1:
   version "1.0.0"
@@ -3569,9 +3574,21 @@ lodash.deburr@^3.0.0:
   dependencies:
     lodash._root "^3.0.0"
 
+lodash.defaultsdeep@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.defaultsdeep/-/lodash.defaultsdeep-4.6.0.tgz#bec1024f85b1bd96cbea405b23c14ad6443a6f81"
+
+lodash.groupby@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.groupby/-/lodash.groupby-4.6.0.tgz#0b08a1dcf68397c397855c3239783832df7403d1"
+
 lodash.indexof@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/lodash.indexof/-/lodash.indexof-4.0.5.tgz#53714adc2cddd6ed87638f893aa9b6c24e31ef3c"
+
+lodash.inrange@^3.3.6:
+  version "3.3.6"
+  resolved "https://registry.yarnpkg.com/lodash.inrange/-/lodash.inrange-3.3.6.tgz#dfdfe915f6e30e8056293707e2395dab88ea128d"
 
 lodash.isarray@~2.4.1:
   version "2.4.1"
@@ -3590,6 +3607,14 @@ lodash.pickby@^4.0.0:
 lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
+
+lodash.uniqby@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/lodash.uniqby/-/lodash.uniqby-4.7.0.tgz#d99c07a669e9e6d24e1362dfe266c67616af1302"
+
+lodash.uniqueid@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.uniqueid/-/lodash.uniqueid-4.0.1.tgz#3268f26a7c88e4f4b1758d679271814e31fa5b26"
 
 lodash.values@^4.3.0:
   version "4.3.0"
