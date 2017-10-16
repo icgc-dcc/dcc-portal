@@ -137,15 +137,27 @@ public class DonorService {
     return findAllCentric(query, false);
   }
 
+  public SearchResponse findAllCentric(String pql) {
+    return donorRepository.findAllCentric(parse(pql));
+  }
+
+  @NonNull
+  public Donors findAllCentric(Query query, String pql) {
+    log.debug("PQL of findAllCentric is: {}", pql);
+    return buildDonors(findAllCentric(pql), query);
+  }
+
+  public String getPQL(Query query, boolean facetsOnly) {
+    return facetsOnly ?
+        QUERY_CONVERTER.convertCount(query, DONOR_CENTRIC) :
+        QUERY_CONVERTER.convert(query, DONOR_CENTRIC);
+  }
+
   @NonNull
   public Donors findAllCentric(Query query, boolean facetsOnly) {
-    val pql =
-        facetsOnly ? QUERY_CONVERTER.convertCount(query, DONOR_CENTRIC) : QUERY_CONVERTER.convert(query, DONOR_CENTRIC);
-    log.debug("PQL of findAllCentric is: {}", pql);
+    val pql = getPQL(query, facetsOnly);
 
-    val pqlAst = parse(pql);
-
-    return buildDonors(donorRepository.findAllCentric(pqlAst), query);
+    return findAllCentric(query, pql);
   }
 
   @NonNull

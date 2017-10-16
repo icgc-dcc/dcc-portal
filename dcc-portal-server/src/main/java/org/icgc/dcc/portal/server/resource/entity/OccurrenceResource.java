@@ -68,6 +68,19 @@ public class OccurrenceResource extends Resource {
 
   }
 
+  @GET
+  @Timed
+  @Path("/pql")
+  @ApiOperation(value = "String")
+  public String findPQL(
+      @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql
+  ) {
+
+    log.debug(PQL_TEMPLATE,  pql);
+
+    return occurrenceService.findAllCentric(pql).toString();
+  }
+
   @Path("/count")
   @GET
   @Timed
