@@ -174,6 +174,7 @@ public class GeneCentricTypeModel extends TypeModel {
         string("chromosome", "mutation.chromosome"),
         long_("chromosome_end", "mutation.end"),
         long_("chromosome_start", "mutation.start"),
+        bool("coding", "mutation.coding"),
         defineConsequence(),
         defineObservation());
 
@@ -183,8 +184,7 @@ public class GeneCentricTypeModel extends TypeModel {
   private static ArrayFieldModel defineConsequence() {
     val element = object(
         string("consequence_type", "mutation.consequenceType"),
-        string("functional_impact_prediction_summary", "mutation.functionalImpact"),
-        bool("coding", "mutation.coding"));
+        string("functional_impact_prediction_summary", "mutation.functionalImpact"));
 
     return nestedArrayOfObjects("consequence", element);
   }

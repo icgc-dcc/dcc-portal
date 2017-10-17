@@ -125,6 +125,7 @@ public class MutationCentricTypeModel extends TypeModel {
         .add(string(MUTATION_LOCATION, MUTATION_LOCATION))
 
         .add(string(SCORE, ImmutableSet.of(SCORE, "affectedDonorCountFiltered")))
+        .add(bool("coding", "coding"))
         .build();
   }
 
@@ -142,8 +143,7 @@ public class MutationCentricTypeModel extends TypeModel {
             string("id", "transcriptId"),
             string("functional_impact_prediction_summary", "functionalImpact"),
             object("consequence",
-                string("consequence_type", "consequenceType"),
-                bool("coding", "coding")),
+                string("consequence_type", "consequenceType")),
             object("gene",
                 identifiableString("_gene_id", "gene.id"),
                 string("biotype", "gene.type"),

@@ -237,10 +237,10 @@ public class DonorCentricTypeModel extends TypeModel {
             "consequence",
             object(
                 string("consequence_type", "mutation.consequenceType"),
-                string("functional_impact_prediction_summary", "mutation.functionalImpact"),
-                bool("coding", "mutation.coding"))),
+                string("functional_impact_prediction_summary", "mutation.functionalImpact"))),
         string("mutation_type", "mutation.type"),
-        nestedArrayOfObjects("observation", initObservation()));
+        nestedArrayOfObjects("observation", initObservation()),
+        bool("coding", "mutation.coding"));
   }
 
   private static ObjectFieldModel initObservation() {
