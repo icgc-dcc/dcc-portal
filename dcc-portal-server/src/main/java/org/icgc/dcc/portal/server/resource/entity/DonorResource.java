@@ -18,44 +18,7 @@
 package org.icgc.dcc.portal.server.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.icgc.dcc.portal.server.resource.Resources.AFFECTED_BY_THE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_DONOR_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_DONOR_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FACETS_ONLY_DESCRIPTION;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FACETS_ONLY_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_GENE_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_INCLUDE_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_INCLUDE_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_MUTATION_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_MUTATION_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_ALLOW;
-import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_ORDER_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_ALLOW;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_PARAM;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SIZE_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_FIELD;
-import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_VALUE;
-import static org.icgc.dcc.portal.server.resource.Resources.DONOR;
-import static org.icgc.dcc.portal.server.resource.Resources.FIND_BY_ID;
-import static org.icgc.dcc.portal.server.resource.Resources.FIND_BY_ID_ERROR;
-import static org.icgc.dcc.portal.server.resource.Resources.FOR_THE;
-import static org.icgc.dcc.portal.server.resource.Resources.GENE;
-import static org.icgc.dcc.portal.server.resource.Resources.GROUPED_BY;
-import static org.icgc.dcc.portal.server.resource.Resources.MULTIPLE_IDS;
-import static org.icgc.dcc.portal.server.resource.Resources.MUTATION;
-import static org.icgc.dcc.portal.server.resource.Resources.NOT_FOUND;
-import static org.icgc.dcc.portal.server.resource.Resources.RETURNS_COUNT;
-import static org.icgc.dcc.portal.server.resource.Resources.RETURNS_LIST;
-import static org.icgc.dcc.portal.server.resource.Resources.S;
-import static org.icgc.dcc.portal.server.resource.Resources.TOTAL;
+import static org.icgc.dcc.portal.server.resource.Resources.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -130,6 +93,19 @@ public class DonorResource extends Resource {
     val query = query(fields, include, filters, from, size, sort, order);
 
     return donorService.findAllCentric(query, facetsOnly);
+  }
+
+  @GET
+  @Timed
+  @Path("/pql")
+  @ApiOperation(value = "String")
+  public String findPQL(
+      @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql
+  ) {
+
+    log.debug(PQL_TEMPLATE,  pql);
+
+    return donorService.findAllCentric(pql).toString();
   }
 
   @Path("/count")

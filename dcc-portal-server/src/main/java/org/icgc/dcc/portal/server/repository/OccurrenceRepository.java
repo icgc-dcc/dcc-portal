@@ -58,6 +58,7 @@ import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 
 import java.util.Map;
 
+import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -149,6 +150,14 @@ public class OccurrenceRepository {
     log.debug("Response: {}", response);
 
     return response;
+  }
+
+
+  @NonNull
+  public SearchResponse findAllCentric(StatementNode pqlAst) {
+    val search = queryEngine.execute(pqlAst, OBSERVATION_CENTRIC);
+    log.debug("Request : {}", search.getRequestBuilder());
+    return search.getRequestBuilder().get();
   }
 
   public long count(Query query) {
