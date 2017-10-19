@@ -42,7 +42,7 @@ import lombok.val;
 public class GeneCentricTypeModel extends TypeModel {
 
   private final static String TYPE_PREFIX = "gene";
-  private static final List<String> AVAILABLE_FACETS = ImmutableList.of("type", "chromosome", "mutation.coding");
+  private static final List<String> AVAILABLE_FACETS = ImmutableList.of("type", "chromosome", "mutation.genomic_region");
 
   // Including real fields, not aliases. Because after the AST is built by PqlParseTreeVisitor includes are resolved to
   // the real fields
@@ -174,7 +174,7 @@ public class GeneCentricTypeModel extends TypeModel {
         string("chromosome", "mutation.chromosome"),
         long_("chromosome_end", "mutation.end"),
         long_("chromosome_start", "mutation.start"),
-        bool("coding", "mutation.coding"),
+        bool("genomic_region", "mutation.genomic_region"),
         defineConsequence(),
         defineObservation());
 

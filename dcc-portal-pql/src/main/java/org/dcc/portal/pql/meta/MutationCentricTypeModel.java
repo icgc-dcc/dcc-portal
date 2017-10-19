@@ -52,7 +52,7 @@ public class MutationCentricTypeModel extends TypeModel {
       "sequencingStrategy",
       "study",
       "chromosome",
-      "coding");
+      "genomic_region");
 
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "id",
@@ -125,7 +125,7 @@ public class MutationCentricTypeModel extends TypeModel {
         .add(string(MUTATION_LOCATION, MUTATION_LOCATION))
 
         .add(string(SCORE, ImmutableSet.of(SCORE, "affectedDonorCountFiltered")))
-        .add(bool("coding", "coding"))
+        .add(bool("genomic_region", "genomic_region"))
         .build();
   }
 

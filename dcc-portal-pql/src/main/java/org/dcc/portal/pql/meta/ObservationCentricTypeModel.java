@@ -44,7 +44,7 @@ public class ObservationCentricTypeModel extends TypeModel {
 
   private final static String TYPE_PREFIX = "observation";
   private static final List<String> INCLUDE_FIELDS =
-      ImmutableList.of("ssm.gene.consequence", "ssm.observation", "ssm.gene", "mutation.coding");
+      ImmutableList.of("ssm.gene.consequence", "ssm.observation", "ssm.gene", "mutation.genomic_region");
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "chromosome",
       "donor.primarySite",
@@ -134,7 +134,7 @@ public class ObservationCentricTypeModel extends TypeModel {
         nestedArrayOfObjects("consequence", "consequences", object(
             string("consequence_type", "mutation.consequenceType"),
             string("functional_impact_prediction_summary", "mutation.functionalImpact"))),
-        bool("coding", "mutation.coding")
+        bool("genomic_region", "mutation.genomic_region")
         ));
   }
 
