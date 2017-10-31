@@ -105,8 +105,6 @@
            </tr>
 
             <tr class="extras" data-ng-repeat-end>
-              <td colspan="6" class="text-right">
-             </td>
            </tr>
 
            <tr class="dndPlaceholder">
@@ -238,6 +236,8 @@
         </div>
       </div>
       <a
+      data-ng-repeat="repoData in repos"
+      data-ng-if="repos.length === 1 && repoData.hasManifest"
       href="http://docs.icgc.org/cloud/guide/#installation"
       target="_blank"
       style="margin-left: 4px;"
