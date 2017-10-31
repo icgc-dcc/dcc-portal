@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.elasticsearch.action.search.MultiSearchResponse;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Gene;
@@ -245,6 +246,11 @@ public class GeneService {
     genes.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
 
     return genes;
+  }
+
+  @NonNull
+  public SearchResponse findAllCentric(String pql) {
+    return geneRepository.findAllCentric(parse(pql));
   }
 
   public long count(Query query) {

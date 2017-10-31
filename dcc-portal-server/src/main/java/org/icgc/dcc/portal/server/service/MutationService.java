@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.action.search.MultiSearchResponse;
+import org.elasticsearch.action.search.SearchResponse;
 import org.icgc.dcc.common.core.util.stream.Collectors;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Mutation;
@@ -83,6 +84,10 @@ public class MutationService {
     mutations.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
 
     return mutations;
+  }
+
+  public SearchResponse findAllCentric(String pql) {
+    return mutationRepository.findAllCentric(parse(pql));
   }
 
   public Mutations findMutationsByDonor(Query query, String donorId) {

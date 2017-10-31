@@ -17,10 +17,12 @@
 
 package org.icgc.dcc.portal.server.service;
 
+import static org.dcc.portal.pql.query.PqlParser.parse;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
 import java.util.Map;
 
+import org.elasticsearch.action.search.SearchResponse;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Occurrence;
 import org.icgc.dcc.portal.server.model.Occurrences;
@@ -56,6 +58,12 @@ public class OccurrenceService {
 
     return occurrences;
   }
+
+  public SearchResponse findAllCentric(String pql) {
+    return occurrenceRepository.findAllCentric(parse(pql));
+  }
+
+
 
   public long count(Query query) {
     return occurrenceRepository.count(query);
