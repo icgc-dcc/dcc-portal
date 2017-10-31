@@ -458,6 +458,7 @@ import './file-finder';
     $scope.createManifestId = function (repoName, repoData) {
 
       repoData.isGeneratingManifestID = true;
+      $scope.isGeneratingManifestID = true;
       repoData.manifestID = false;
 
       var selectedFiles = $scope.selectedFiles;
@@ -481,7 +482,9 @@ import './file-finder';
           throw new Error('No Manifest UUID is returned from API call.');
         }
         repoData.isGeneratingManifestID = false;
+        $scope.isGeneratingManifestID = false;
         repoData.manifestID = id;
+        $scope.manifestID = id;
      });
     };
 

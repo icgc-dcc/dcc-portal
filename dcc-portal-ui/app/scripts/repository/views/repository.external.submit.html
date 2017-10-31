@@ -104,92 +104,7 @@
 
            </tr>
 
-            <tr class="extras" data-ng-repeat-end data-ng-if="
-              repoData.isGeneratingManifestID ||
-              repoData.isGeneratingManifestShortUrl ||
-              repoData.manifestID ||
-              repoData.shortUrl"
-            >
-              <td colspan="6" class="text-right">
-                <div class="spinner-container" data-ng-if="repoData.isGeneratingManifestShortUrl || repoData.isGeneratingManifestID">
-                  <i class="icon-spinner icon-spin"></i>
-                </div>
-
-                <div class="container-fluid">
-
-                  <div class="row" data-ng-if="repoData.shortUrl">
-                    <div class="col-sm-3">
-                      <translate>Manifest URL</translate>
-                    </div>
-                    <div class="col-sm-9 text-left">
-                      <input
-                        onClick="this.select()"
-                        size="18"
-                        type="text"
-                        value="{{repoData.shortUrl}}"
-                      />
-                      <span
-                          class="clip-icon"
-                          style="cursor: pointer;"
-                          data-copy-to-clip
-                          data-copy-data="repoData.shortUrl"
-                          data-show-copy-tips="true"
-                          data-prompt-on-copy="false"
-                          data-on-copy-success-message="{{'Copied!' | translate}}"
-                          data-on-hover-message="{{'Copy icgc-get ID to clipboard' | translate}}"
-                        >
-                          <span class="icon-clippy"></span>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="row" data-ng-if-start="repoData.manifestID">
-                    <div class="col-sm-3">
-                      <translate>Manifest ID</translate>
-                    </div>
-                    <div class="col-md-5 text-left">
-                      
-                      <div class="manifest" data-ng-if="repoData.hasManifest">
-                        <div class="input-group clipboard-group">
-                          <input
-                            class="manifest-id form-control input-sm code text-center"
-                            onClick="this.select()"
-                            size="38"
-                            type="text"
-                            value="{{repoData.manifestID}}"
-                          />
-                          <span class="input-group-btn">
-                            <button class="btn btn-default btn-sm" type="button"
-                                data-copy-to-clip
-                                data-copy-data="repoData.manifestID"
-                                data-show-copy-tips="true"
-                                data-prompt-on-copy="false"
-                                data-on-copy-success-message="{{'Copied!' | translate}}"
-                                data-on-hover-message="{{'Copy to clipboard' | translate}}"
-                                >
-                                <i class="icon-clippy"></i>
-                            </button>
-                            
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row" data-ng-if-end>
-                    <div class="col-sm-3">
-                      <translate>Usage example</translate>
-                    </div>
-                    <div class="col-sm-9 text-left">
-                      <code class="inline-code">
-                        {{ 'bin/icgc-storage-client manifest --manifest ' + repoData.manifestID }}
-                      </code>
-                    </div>
-                  </div>
-
-                </div>
-
-             </td>
+            <tr class="extras" data-ng-repeat-end>
            </tr>
 
            <tr class="dndPlaceholder">
@@ -208,6 +123,8 @@
     </div>
 
     <div class="modal-footer">
+
+      <!-- ICGC-GET -->
       <button
         ng-if="!icgcGetId"
         class="t_button no-animate"
@@ -268,6 +185,71 @@
           icgc-tooltip="{{'<div class=\'tooltip-contents\'>icgc-get is a universal download client for accessing ICGC data residing in various data repositories. <br/><small><em>Click to see the User Guide for more information</em> <i class=\'fa fa-external-link\'></i></small></div>' | translate}}"
         ></i>
       </a>
+
+      <!-- ICGC Storage Manifest ID -->
+      <button
+        class="t_button"
+        data-ng-repeat="repoData in repos"
+        data-ng-if="repos.length === 1 && repoData.hasManifest && !manifestID"
+        data-ng-click="track('create-manifest-id', { action: 'click', label: repoData.repoName }); (!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
+      >
+        <span ng-show="!isGeneratingManifestID && !manifestID">
+          <translate>Manifest ID</translate>
+        </span>
+        <span ng-show="isGeneratingManifestID">
+          <translate>Generating Manifest ID</translate> <i class="fa fa-spin fa-spinner"></i>
+        </span>
+      </button>
+      </a>
+      <div ng-if="manifestID" class="text-left">
+        <span class="button-label">Your manifest ID is:</span>
+        <div class="flex-row align-flex-end">
+          <button
+            class="t_button icgc-get-id"
+            data-ng-click="
+              track('copy-manifest-id', { action: 'click' });
+            "
+            data-copy-to-clip
+            data-copy-analytics-tag="icgc-manifest-id"
+            data-copy-data="manifestID"
+            data-show-copy-tips="true"
+            data-prompt-on-copy="false"
+            data-on-copy-success-message="Copied!"
+            data-on-hover-message="Copy to clipboard"
+          >
+              {{ manifestID }}
+          </button>
+          <button
+              style="border-radius: 0 3px 3px 0;"
+              class="btn btn-default btn-sm"
+              type="button"
+              data-copy-to-clip
+              data-copy-analytics-tag="icgc-get-manifest-id"
+              data-copy-data="icgcGetId"
+              data-show-copy-tips="true"
+              data-prompt-on-copy="false"
+              data-on-copy-success-message="Copied!"
+              data-on-hover-message="Copy to clipboard"
+          >
+              <i class="icon-clippy"></i>
+          </button>
+        </div>
+      </div>
+      <a
+      data-ng-repeat="repoData in repos"
+      data-ng-if="repos.length === 1 && repoData.hasManifest"
+      href="http://docs.icgc.org/cloud/guide/#installation"
+      target="_blank"
+      style="margin-left: 4px;"
+      >
+        <i
+          class="fa fa-question-circle"
+          style="cursor: pointer;"
+          icgc-tooltip="{{'<div class=\'tooltip-contents\'>A manifest ID can be used by the ICGC Storage client. <br/><small><em>Click to see the User Guide for more information</em> <i class=\'fa fa-external-link\'></i></small></div>' | translate}}"
+        ></i>
+      </a>
+
+      <!-- MANIFEST DOWNLOAD -->
       <button
         class="t_button"
         ng-click="
@@ -275,7 +257,7 @@
           track('generate-manifest', { action: 'click' });
         "
       >
-        <i class="icon-download"></i><translate>Generate Manifest</translate>
+        <i class="icon-download"></i><translate>Download Manifest</translate>
       </button>
       <a
         href="http://docs.icgc.org/cloud/guide/#manifest-command"
@@ -289,49 +271,35 @@
         ></i>
       </a>
       
-      <button
-        class="t_button"
-        data-ng-repeat="repoData in repos"
-        data-ng-if="repos.length === 1 && repoData.hasManifest"
-        data-ng-disabled="repoData.manifestID || repoData.isGeneratingManifestID"
-        data-ng-click="track('create-manifest-id', { action: 'click', label: repoData.repoName }); (!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
-      >
-        <translate>Manifest ID</translate>
-      </button>
     </div>
-    <div class="more-info" ng-if="icgcGetId">
+
+    <div class="more-info" data-ng-if="manifestID">
       <div>
-        <!--
-        Your file selection icgc-get manifest ID is:
-        <div class="input-group clipboard-group" ng-if="icgcGetId">
-          <input
-            class="manifest-id form-control input-sm code text-center"
-            onClick="this.select() || track('icgc-get-id', { action: 'click' })"
-            size="38"
-            type="text"
-            value="{{icgcGetId}}"
-          >
-          <span class="input-group-btn">
-            <button
-                class="btn btn-default btn-sm"
-                type="button"
-                data-copy-to-clip
-                data-copy-analytics-tag="icgc-get-manifest-id"
-                data-copy-data="icgcGetId"
-                data-show-copy-tips="true"
-                data-prompt-on-copy="false"
-                data-on-copy-success-message="Copied!"
-                data-on-hover-message="Copy to clipboard"
-                >
-                <i class="icon-clippy"></i>
-            </button>
-          </span>
+        <div>
+          <translate>For downloading files only from AWS-Virginia or Collaboratory, you can use the ICGC Storage Client:</translate>
+        </div>
+        <code
+          ng-class="{ 'text-center': isGeneratingManifestID }"
+          class="code"
+          data-copy-to-clip
+          data-copy-analytics-tag="generate-manifest-id"
+          data-copy-data="'bin/icgc-storage-client manifest --manifest ' + manifestID"
+          data-show-copy-tips="true"
+          data-prompt-on-copy="false"
+          data-on-copy-success-message="Copied!"
+          data-on-hover-message="Copy to clipboard"
+        >
+          <span>bin/icgc-storage-client manifest --manifest {{manifestID}}</span>
           <i
             class="icon-spin icon-spinner"
-            ng-class="{ 'hidden': !isGeneratingIcgcGetId }"
+            ng-class="{ 'hidden': !isGeneratingManifestID }"
           ></i>
-        </div>
-        -->
+        </code>
+      </div>
+    </div>
+
+    <div class="more-info" ng-if="icgcGetId">
+      <div>
         <div>
           <translate>To download your current file selection, execute the following command:</translate>
         </div>
