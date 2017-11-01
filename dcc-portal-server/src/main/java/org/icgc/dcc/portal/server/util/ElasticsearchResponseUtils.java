@@ -26,6 +26,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static lombok.AccessLevel.PRIVATE;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -139,11 +140,11 @@ public final class ElasticsearchResponseUtils {
     return defaultValue;
   }
 
-  private static void processConsequences(Map<String, Object> map, Query query) {
-    if (query.hasInclude("consequences")) {
+  private static void processConsequences(Map<String, Object> map, Collection<String> includes) {
+    if (includes != null && includes.contains("consequences")) {
       log.debug("Copying transcripts to consequences...");
       map.put("consequences", map.get("transcript"));
-      if (!query.hasInclude("transcripts")) {
+      if (includes == null || !includes.contains("transcripts")) {
         log.debug("Removing transcripts...");
         map.remove("transcript");
       }
@@ -169,15 +170,20 @@ public final class ElasticsearchResponseUtils {
   }
 
   public static Map<String, Object> createResponseMap(GetResponse response, Query query, EntityType entityType) {
-    val map = processSource(response.getSource(), query, entityType);
+    val map = processSource(response.getSource(), query.getIncludes(), entityType);
     return map;
   }
 
   public static Map<String, Object> createResponseMap(SearchHit response, Query query, EntityType entityType) {
-    val map = createMapFromSearchFields(response.getFields());
-    map.putAll(processSource(response.getSource(), query, entityType));
+    return createResponseMap(response, query.getIncludes(), entityType);
+  }
 
-    return map;
+  public static Map<String, Object> createResponseMap(SearchHit response,
+      Collection<String> includes, EntityType entityType) {
+      val map = createMapFromSearchFields(response.getFields());
+      map.putAll(processSource(response.getSource(),includes, entityType));
+
+      return map;
   }
 
   public static void checkResponseState(String id, GetResponse response, EntityType entityType) {
@@ -201,13 +207,14 @@ public final class ElasticsearchResponseUtils {
     throw new WebApplicationException(status(NOT_FOUND).entity(message).build());
   }
 
-  private static Map<String, Object> processSource(Map<String, Object> source, Query query, EntityType entityType) {
+  private static Map<String, Object> processSource(Map<String, Object> source,
+      Collection<String> includes, EntityType entityType) {
     if (source == null) {
       return emptyMap();
     }
 
-    val result = flatternMap(source, query, entityType);
-    processConsequences(result, query);
+    val result = flatternMap(source, includes, entityType);
+    processConsequences(result, includes);
 
     return result;
   }
@@ -220,25 +227,26 @@ public final class ElasticsearchResponseUtils {
     return flatternMap(Optional.empty(), source, null, null);
   }
 
-  public static Map<String, Object> flatternMap(Map<String, Object> source, Query query, EntityType entityType) {
+  public static Map<String, Object> flatternMap(Map<String, Object> source,
+      Collection<String> includes, EntityType entityType) {
     if (source == null) {
       return emptyMap();
     }
 
-    return flatternMap(Optional.empty(), source, entityType, query);
+    return flatternMap(Optional.empty(), source, entityType, includes);
   }
 
   @SuppressWarnings("unchecked")
   private static Map<String, Object> flatternMap(Optional<String> prefix, Map<String, Object> source,
       EntityType entityType,
-      Query query) {
+      Collection<String> includes) {
     val result = Maps.<String, Object> newHashMap();
 
     for (val entry : source.entrySet()) {
       val fieldName = resolvePrefix(prefix, entry.getKey());
-      if (entry.getValue() instanceof Map && !isSkip(fieldName, query, entityType)) {
+      if (entry.getValue() instanceof Map && !isSkip(fieldName, includes, entityType)) {
         result.putAll(
-            flatternMap(Optional.of(entry.getKey()), (Map<String, Object>) entry.getValue(), entityType, query));
+            flatternMap(Optional.of(entry.getKey()), (Map<String, Object>) entry.getValue(), entityType, includes));
       } else {
         result.put(fieldName, entry.getValue());
       }
@@ -251,12 +259,13 @@ public final class ElasticsearchResponseUtils {
    * Some fields are maps and the client expects them to be a map. This methods resolves those maps and prevents them
    * from been 'flattern' further
    */
-  private static boolean isSkip(String fieldName, Query query, EntityType entityType) {
-    if (entityType == null || query == null) {
+  private static boolean isSkip(String fieldName, Collection<String> includes,
+      EntityType entityType) {
+    if (entityType == null || includes == null) {
       return false;
     }
 
-    return (FIELDS_MAPPING.get(entityType).containsValue(fieldName) || query.hasInclude(fieldName));
+    return (FIELDS_MAPPING.get(entityType).containsValue(fieldName) || includes.contains(fieldName));
   }
 
   private static String resolvePrefix(Optional<String> prefix, String field) {
