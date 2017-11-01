@@ -265,7 +265,7 @@ import './file-finder';
 
   module.controller('ExternalFileDownloadController',
     function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params, Restangular, $filter, RepositoryService) {
+      Extensions, params, Restangular, $filter, RepositoryService, $timeout) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
@@ -288,6 +288,53 @@ import './file-finder';
 
     $scope.handleNumberTweenEnd = function (tween) {
       jQuery(tween.elem).closest('td').removeClass('tweening');
+    };
+
+    $scope.isGeneratingIcgcGetId = false;
+    $scope.icgcGetId = null;
+    let abortGenerateIcgcGetId = false;
+
+    const generateIcgcGetId = (repos) => {
+      $scope.isGeneratingIcgcGetId = true;
+      const repoCodes = repos.map(repo => repo.repoCode);
+
+      var params = {
+        format: 'files',
+        repos: repoCodes,
+        filters: $scope.selectedFiles
+          ? _.merge(FilterService.filters(), {file:{id:{is:$scope.selectedFiles}}})
+          : FilterService.filters(),
+      };
+
+      ExternalRepoService.createManifest(params)
+        .then(function (id) {
+          if (abortGenerateIcgcGetId) {
+            abortGenerateIcgcGetId = false;
+          } else if (!id) {
+            $scope.isGeneratingIcgcGetId = false;
+            throw new Error('No Manifest UUID is returned from API call.');
+          } else {
+            $scope.isGeneratingIcgcGetId = false;
+            $scope.icgcGetId = id;
+          }
+      });
+    };
+
+    $scope.$watchGroup(
+      [
+        () => $scope.shouldDeduplicate,
+        () => $scope.repos && $scope.repos.map(x => x.repoName).join(),
+      ],
+      ([shouldDeduplicate, repos], [oldShouldDeduplicate, oldRepos]) => {
+        if ($scope.isGeneratingIcgcGetId) {
+          abortGenerateIcgcGetId = true;
+        }
+        $scope.icgcGetId = '';
+        $scope.isGeneratingIcgcGetId = false;
+    });
+
+    $scope.handleClickGenerateIcgcGetId = () => {
+      generateIcgcGetId($scope.repos);
     };
 
     var p = {};
@@ -411,6 +458,7 @@ import './file-finder';
     $scope.createManifestId = function (repoName, repoData) {
 
       repoData.isGeneratingManifestID = true;
+      $scope.isGeneratingManifestID = true;
       repoData.manifestID = false;
 
       var selectedFiles = $scope.selectedFiles;
@@ -434,7 +482,9 @@ import './file-finder';
           throw new Error('No Manifest UUID is returned from API call.');
         }
         repoData.isGeneratingManifestID = false;
+        $scope.isGeneratingManifestID = false;
         repoData.manifestID = id;
+        $scope.manifestID = id;
      });
     };
 
