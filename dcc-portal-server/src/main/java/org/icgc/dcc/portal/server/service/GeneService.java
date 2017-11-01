@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
+import static org.hibernate.validator.internal.util.CollectionHelper.newArrayList;
 import static org.icgc.dcc.common.core.model.FieldNames.GENE_UNIPROT_IDS;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
 import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
@@ -16,13 +17,12 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getStri
 import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.dcc.portal.pql.ast.StatementNode;
+import org.dcc.portal.pql.ast.Type;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -203,6 +203,38 @@ public class GeneService {
 
   @NonNull
   public Genes findAllCentric(Query query, boolean facetsOnly) {
+    val pql =
+        facetsOnly ? QUERY_CONVERTER.convertCount(query, GENE_CENTRIC) : QUERY_CONVERTER.convert(query, GENE_CENTRIC);
+    log.debug("PQL of findAllCentric is: {}", pql);
+
+    val pqlAst = parse(pql);
+    val response = geneRepository.findAllCentric(pqlAst);
+    log.debug("Response: {}", response);
+
+    val hits = response.getHits();
+
+    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), query);
+    return buildGenes(response, getProjectIds(query), query.getIncludes(), includeScore(query), pagination);
+  }
+
+  public Genes findAllCentric(String pqlString) {
+    val pql = parse(pqlString);
+    val response = geneRepository.findAllCentric(pql);
+    val hits = response.getHits();
+    val projectIds = getProjectIds(pql);
+
+    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), pql);
+    return buildGenes(response, projectIds, Collections.emptyList(), includeScore(pql), pagination);
+  }
+
+  boolean includeScore(StatementNode pql) {
+    return !pql.hasSelect() || pql.getSelect().contains("affectedDonorCountFiltered");
+  }
+  boolean includeScore(Query query) {
+    return !query.hasFields() || query.getFields().contains("affectedDonorCountFiltered");
+  }
+
+  List getProjectIds(Query query) {
     val projectIds = Lists.<String> newArrayList();
 
     // Get a list of projectId to filter the projects sub-object in the gene model
@@ -217,21 +249,30 @@ public class GeneService {
     if (path.path("is").isTextual()) {
       projectIds.add(String.valueOf(path.get("is")).replaceAll("\"", ""));
     }
+    return projectIds;
+  }
 
-    val pql =
-        facetsOnly ? QUERY_CONVERTER.convertCount(query, GENE_CENTRIC) : QUERY_CONVERTER.convert(query, GENE_CENTRIC);
-    log.debug("PQL of findAllCentric is: {}", pql);
+  List getProjectIds(StatementNode pql) {
+    if (!pql.hasFilters()) {
+      return Collections.emptyList();
+    }
 
-    val pqlAst = parse(pql);
-    val response = geneRepository.findAllCentric(pqlAst);
+    // find matches for "donor.projectId" ... figure out how...
+
+    val projectIds = newArrayList();
+
+
+    return projectIds;
+  }
+
+  @NonNull
+  public Genes buildGenes(SearchResponse response, List projectIds, List<String> includes, boolean includeScore, Pagination pagination) {
     log.debug("Response: {}", response);
-
     val hits = response.getHits();
-    val includeScore = !query.hasFields() || query.getFields().contains("affectedDonorCountFiltered");
     val list = ImmutableList.<Gene> builder();
 
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, EntityType.GENE);
+      val fieldMap = createResponseMap(hit, includes, EntityType.GENE);
 
       if (includeScore) {
         fieldMap.put("_score", hit.getScore());
@@ -243,14 +284,9 @@ public class GeneService {
 
     val genes = new Genes(list.build());
     genes.addFacets(AGGS_TO_FACETS_CONVERTER.convert(response.getAggregations()));
-    genes.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
+    genes.setPagination(pagination);
 
     return genes;
-  }
-
-  @NonNull
-  public SearchResponse findAllCentric(String pql) {
-    return geneRepository.findAllCentric(parse(pql));
   }
 
   public long count(Query query) {

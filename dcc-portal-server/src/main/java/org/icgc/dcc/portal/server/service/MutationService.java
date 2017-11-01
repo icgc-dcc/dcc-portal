@@ -11,12 +11,10 @@ import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 
+import java.util.*;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
+import org.dcc.portal.pql.ast.StatementNode;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.icgc.dcc.common.core.util.stream.Collectors;
@@ -65,29 +63,46 @@ public class MutationService {
 
     val pqlAst = parse(pql);
     val response = mutationRepository.findAllCentric(pqlAst);
-
     val hits = response.getHits();
 
     // Include _score if either: no custom fields or custom fields include affectedDonorCountFiltered
-    val includeScore = !query.hasFields() || query.getFields().contains("affectedDonorCountFiltered");
 
+    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), query);
+    return buildMutations(response, query.getIncludes(), includeScore(query), pagination);
+  }
+
+  private Mutations buildMutations(SearchResponse response, List<String> includes,  boolean includeScore,
+            Pagination pagination) {
+    val hits = response.getHits();
     val list = ImmutableList.<Mutation> builder();
 
     for (val hit : hits) {
-      val map = createResponseMap(hit, query, EntityType.MUTATION);
+      val map = createResponseMap(hit, includes, EntityType.MUTATION);
       if (includeScore) map.put("_score", hit.getScore());
       list.add(new Mutation(map));
     }
 
     val mutations = new Mutations(list.build());
     mutations.addFacets(AGGS_TO_FACETS_CONVERTER.convert(response.getAggregations()));
-    mutations.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
+    mutations.setPagination(pagination);
 
     return mutations;
   }
 
-  public SearchResponse findAllCentric(String pql) {
-    return mutationRepository.findAllCentric(parse(pql));
+  public Mutations findAllCentric(String pqlString) {
+    val pql = parse(pqlString);
+    val response = mutationRepository.findAllCentric(pql);
+    val hits = response.getHits();
+    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), pql);
+    return buildMutations(response, Collections.emptyList(), includeScore(pql), pagination);
+  }
+
+  boolean includeScore(Query query) {
+    return !query.hasFields() || query.getFields().contains("affectedDonorCountFiltered");
+  }
+
+  boolean includeScore(StatementNode pql) {
+    return !pql.hasSelect() || pql.getSelect().contains("affectedDonorCountFiltered");
   }
 
   public Mutations findMutationsByDonor(Query query, String donorId) {

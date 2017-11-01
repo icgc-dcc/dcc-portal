@@ -20,6 +20,8 @@ package org.icgc.dcc.portal.server.service;
 import static org.dcc.portal.pql.query.PqlParser.parse;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.action.search.SearchResponse;
@@ -46,22 +48,33 @@ public class OccurrenceService {
   public Occurrences findAll(Query query) {
     val response = occurrenceRepository.findAll(query);
     val hits = response.getHits();
-    val list = ImmutableList.<Occurrence> builder();
+    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), query);
+    return buildOccurences(response, query.getIncludes(), pagination);
+  }
 
+  public Occurrences findAllCentric(String pqlString) {
+    val pql = parse(pqlString);
+    val response = occurrenceRepository.findAllCentric(pql);
+    val hits = response.getHits();
+    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), pql);
+    return buildOccurences(response, Collections.emptyList(), pagination);
+  }
+
+
+  public Occurrences buildOccurences(SearchResponse response, List<String> includes, Pagination pagination) {
+    val list = ImmutableList.<Occurrence> builder();
+    val hits = response.getHits();
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, EntityType.OCCURRENCE);
+      val fieldMap = createResponseMap(hit, includes, EntityType.OCCURRENCE);
       list.add(new Occurrence(fieldMap));
     }
 
     val occurrences = new Occurrences(list.build());
-    occurrences.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
+    occurrences.setPagination(pagination);
 
     return occurrences;
   }
 
-  public SearchResponse findAllCentric(String pql) {
-    return occurrenceRepository.findAllCentric(parse(pql));
-  }
 
 
 

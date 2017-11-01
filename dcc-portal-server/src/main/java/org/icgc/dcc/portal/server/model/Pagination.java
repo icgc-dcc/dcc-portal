@@ -22,6 +22,9 @@ import lombok.Value;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.val;
+import org.dcc.portal.pql.ast.StatementNode;
+import org.elasticsearch.search.SearchHits;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -48,6 +51,31 @@ public class Pagination {
     return new Pagination(count, total, query);
   }
 
+  public static Pagination of(@NonNull Integer count, @NonNull Long total, StatementNode pqlStatement) {
+    Integer from = 1;
+    Integer size = 20000;
+    String sort = "";
+    String order = "";
+
+    if (pqlStatement.hasLimit() ) {
+      val limit = pqlStatement.getLimit();
+      from = limit.getFrom();
+      size = limit.getSize();
+    }
+
+    if (pqlStatement.hasSort()) {
+      val fields = pqlStatement.getSort().getFields();
+      val names = fields.keySet().asList();
+      if (!names.isEmpty()) {
+        sort = names.get(0);
+        order = fields.get(sort).getSign().equals("+") ? "asc" : "desc";
+      }
+    }
+
+    return Pagination.of(count, total, size, from, sort, order);
+  }
+
+
   public static Pagination of(int count, long total, int size, int from, @NonNull String sort, @NonNull String order) {
     return new Pagination(count, total, size, from, sort, order);
   }
@@ -55,6 +83,8 @@ public class Pagination {
   private Pagination(Integer count, Long total, Query query) {
     this(count, total, query.getSize(), query.getFrom(), query.getSort(), query.getOrder().toString());
   }
+
+
 
   private Pagination(int count, long total, int size, int from, String sort, String order) {
     this.count = count;

@@ -160,7 +160,10 @@ public class DonorService {
   public Donors findAllCentric(String pql, Collection<String> includes) {
     StatementNode p = parse(pql);
     val response = donorRepository.findAllCentric(p);
-    val pagination = getPagination(response.getHits(), p);
+    val hits = response.getHits();
+    val count = hits.getHits().length;
+    val total = hits.getTotalHits();
+    val pagination = Pagination.of(count, total, p);
 
     val includeScore = !p.hasSelect() || p.getSelect().contains("ssmAffectedGenes");
 
@@ -168,32 +171,6 @@ public class DonorService {
       return donors;
   }
 
-  private Pagination getPagination(SearchHits hits, StatementNode pqlStatement) {
-
-    val count = hits.getHits().length;
-    val total = hits.getTotalHits();
-    Integer from = 1;
-    Integer size = 20000;
-    String sort = "";
-    String order = "";
-
-    if (pqlStatement.hasLimit() ) {
-      val limit = pqlStatement.getLimit();
-      from = limit.getFrom();
-      size = limit.getSize();
-    }
-
-    if (pqlStatement.hasSort()) {
-      val fields = pqlStatement.getSort().getFields();
-      val names = fields.keySet().asList();
-      if (!names.isEmpty()) {
-          sort = names.get(0);
-          order = fields.get(sort).getSign().equals("+") ? "asc" : "desc";
-      }
-    }
-
-    return Pagination.of(count, total, size, from, sort, order);
-  }
 
 
   public String getPQL(Query query, boolean facetsOnly) {
