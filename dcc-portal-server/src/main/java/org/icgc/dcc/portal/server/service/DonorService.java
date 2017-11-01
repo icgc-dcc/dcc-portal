@@ -3,6 +3,7 @@ package org.icgc.dcc.portal.server.service;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
+import static java.util.Collections.replaceAll;
 import static java.util.Collections.sort;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.IntStream.range;
@@ -21,18 +22,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
+import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.meta.DonorCentricTypeModel.Fields;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.Donor;
 import org.icgc.dcc.portal.server.model.Donors;
 import org.icgc.dcc.portal.server.model.EntityType;
@@ -73,10 +72,18 @@ public class DonorService {
   private Donors buildDonors(SearchResponse response, Query query) {
     val hits = response.getHits();
     val includeScore = !query.hasFields() || query.getFields().contains("ssmAffectedGenes");
+    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), query);
+    return buildDonors(response, includeScore, query.getIncludes(), pagination );
+  }
+
+
+  private Donors buildDonors(SearchResponse response, boolean includeScore, Collection<String> includes,
+      Pagination pagination) {
+    val hits = response.getHits();
     val list = ImmutableList.<Donor> builder();
 
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, EntityType.DONOR);
+      val fieldMap = createResponseMap(hit, includes, EntityType.DONOR);
 
       if (includeScore) {
         fieldMap.put("_score", hit.getScore());
@@ -87,7 +94,7 @@ public class DonorService {
 
     val donors = new Donors(list.build());
     donors.addFacets(AGGS_TO_FACETS_CONVERTER.convert(response.getAggregations()));
-    donors.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
+    donors.setPagination(pagination);
 
     return donors;
   }
@@ -137,15 +144,57 @@ public class DonorService {
     return findAllCentric(query, false);
   }
 
-  public SearchResponse findAllCentric(String pql) {
-    return donorRepository.findAllCentric(parse(pql));
+  @NonNull
+  public Donors findAllCentric(Query query, boolean facetsOnly) {
+    val pql = getPQL(query, facetsOnly);
+
+    return findAllCentric(pql, query.getIncludes());
   }
 
   @NonNull
   public Donors findAllCentric(Query query, String pql) {
     log.debug("PQL of findAllCentric is: {}", pql);
-    return buildDonors(findAllCentric(pql), query);
+    return findAllCentric(pql, query.getIncludes());
   }
+
+  public Donors findAllCentric(String pql, Collection<String> includes) {
+    StatementNode p = parse(pql);
+    val response = donorRepository.findAllCentric(p);
+    val pagination = getPagination(response.getHits(), p);
+
+    val includeScore = !p.hasSelect() || p.getSelect().contains("ssmAffectedGenes");
+
+      val donors = buildDonors(response, includeScore, includes, pagination);
+      return donors;
+  }
+
+  private Pagination getPagination(SearchHits hits, StatementNode pqlStatement) {
+
+    val count = hits.getHits().length;
+    val total = hits.getTotalHits();
+    Integer from = 1;
+    Integer size = 20000;
+    String sort = "";
+    String order = "";
+
+    if (pqlStatement.hasLimit() ) {
+      val limit = pqlStatement.getLimit();
+      from = limit.getFrom();
+      size = limit.getSize();
+    }
+
+    if (pqlStatement.hasSort()) {
+      val fields = pqlStatement.getSort().getFields();
+      val names = fields.keySet().asList();
+      if (!names.isEmpty()) {
+          sort = names.get(0);
+          order = fields.get(sort).getSign().equals("+") ? "asc" : "desc";
+      }
+    }
+
+    return Pagination.of(count, total, size, from, sort, order);
+  }
+
 
   public String getPQL(Query query, boolean facetsOnly) {
     return facetsOnly ?
@@ -153,12 +202,6 @@ public class DonorService {
         QUERY_CONVERTER.convert(query, DONOR_CENTRIC);
   }
 
-  @NonNull
-  public Donors findAllCentric(Query query, boolean facetsOnly) {
-    val pql = getPQL(query, facetsOnly);
-
-    return findAllCentric(query, pql);
-  }
 
   @NonNull
   public Map<String, TermFacet> projectDonorCount(List<String> geneIds, List<Query> queries) {
