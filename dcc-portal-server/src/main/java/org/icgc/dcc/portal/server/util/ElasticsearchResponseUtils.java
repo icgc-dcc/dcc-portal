@@ -213,31 +213,31 @@ public final class ElasticsearchResponseUtils {
       return emptyMap();
     }
 
-    val result = flatternMap(source, includes, entityType);
+    val result = flattenMap(source, includes, entityType);
     processConsequences(result, includes);
 
     return result;
   }
 
-  public static Map<String, Object> flatternMap(Map<String, Object> source) {
+  public static Map<String, Object> flattenMap(Map<String, Object> source) {
     if (source == null) {
       return emptyMap();
     }
 
-    return flatternMap(Optional.empty(), source, null, null);
+    return flattenMap(Optional.empty(), source, null, null);
   }
 
-  public static Map<String, Object> flatternMap(Map<String, Object> source,
+  public static Map<String, Object> flattenMap(Map<String, Object> source,
       Collection<String> includes, EntityType entityType) {
     if (source == null) {
       return emptyMap();
     }
 
-    return flatternMap(Optional.empty(), source, entityType, includes);
+    return flattenMap(Optional.empty(), source, entityType, includes);
   }
 
   @SuppressWarnings("unchecked")
-  private static Map<String, Object> flatternMap(Optional<String> prefix, Map<String, Object> source,
+  private static Map<String, Object> flattenMap(Optional<String> prefix, Map<String, Object> source,
       EntityType entityType,
       Collection<String> includes) {
     val result = Maps.<String, Object> newHashMap();
@@ -246,7 +246,7 @@ public final class ElasticsearchResponseUtils {
       val fieldName = resolvePrefix(prefix, entry.getKey());
       if (entry.getValue() instanceof Map && !isSkip(fieldName, includes, entityType)) {
         result.putAll(
-            flatternMap(Optional.of(entry.getKey()), (Map<String, Object>) entry.getValue(), entityType, includes));
+            flattenMap(Optional.of(entry.getKey()), (Map<String, Object>) entry.getValue(), entityType, includes));
       } else {
         result.put(fieldName, entry.getValue());
       }
@@ -256,8 +256,9 @@ public final class ElasticsearchResponseUtils {
   }
 
   /**
-   * Some fields are maps and the client expects them to be a map. This methods resolves those maps and prevents them
-   * from been 'flattern' further
+   * Some fields are maps and the client expects them to be a map.
+   * 
+   * This method returns true if fieldName refers to a map that should not be flattened.
    */
   private static boolean isSkip(String fieldName, Collection<String> includes,
       EntityType entityType) {

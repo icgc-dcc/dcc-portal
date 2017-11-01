@@ -6,7 +6,7 @@ import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flatternMap;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flattenMap;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
@@ -164,7 +164,7 @@ public class MutationService {
       val map = Maps.<String, Object> newHashMap();
       val transcripts = Lists.<Map<String, Object>> newArrayList();
 
-      val hitSource = flatternMap(hit.getSource());
+      val hitSource = flattenMap(hit.getSource());
       map.put("_mutation_id", hitSource.get("_mutation_id"));
       map.put("mutation", hitSource.get("mutation"));
       map.put("_summary._affected_donor_count", hitSource.get("_summary._affected_donor_count"));
