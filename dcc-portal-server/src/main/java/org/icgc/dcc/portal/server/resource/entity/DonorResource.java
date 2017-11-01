@@ -18,11 +18,12 @@
 package org.icgc.dcc.portal.server.resource.entity;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static org.icgc.dcc.portal.server.resource.Resources.*;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -31,6 +32,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.Donor;
 import org.icgc.dcc.portal.server.model.Donors;
 import org.icgc.dcc.portal.server.model.Genes;
@@ -57,6 +61,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 @Component
 @Slf4j
@@ -94,7 +99,7 @@ public class DonorResource extends Resource {
 
     return donorService.findAllCentric(query, facetsOnly);
   }
-
+  
   @GET
   @Timed
   @Path("/pql")
@@ -107,6 +112,63 @@ public class DonorResource extends Resource {
 
     return donorService.findAllCentric(pql).toString();
   }
+
+  @GET
+  @Timed
+  @Path("/tsv")
+  @Produces(TEXT_PLAIN)
+  @ApiOperation(value = "String")
+  public String findValue(
+      @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql
+  ) {
+    
+            log.debug(PQL_TEMPLATE,  pql);
+    
+            return toTSV(donorService.findAllCentric(pql));
+      }
+
+      public String toTSV(SearchResponse response) {
+        // grab all the key fields from the first response we get
+        // assume that they are representative of the rest of our headings?
+        val keys=new ArrayList<Object>();
+        keys.addAll(response.getHits().getHits()[0].sourceAsMap().keySet());
+
+        Map<String, SearchHits> x = response.getHits().getHits()[0].getInnerHits();
+        if (x !=null) {
+
+        }
+        val headings=keys.stream().map(this::asString).filter(s->!s.startsWith("_")).collect(Collectors.toList());
+
+        val result = new StringBuilder(StringUtils.join(headings ,"\t"));
+        result.append("\n");
+
+            for( val h: response.getHits()) {
+            result.append(toTSV(h, headings ));
+            result.append("\n");
+          }
+
+            return result.toString();
+      }
+
+
+      public String toTSV(SearchHit hit, List<String> keys) {
+        val result=new StringBuilder();
+        for(val k: keys) {
+            if (k.startsWith(("_"))) {
+              continue;
+            }
+            result.append(asString(hit.sourceAsMap().get(k)));
+            result.append("\t");
+          }
+        return result.toString();
+      }
+
+      private String asString(Object o) {
+        if (o == null) {
+          return "";
+        }
+        return o.toString();
+      }
 
   @Path("/count")
   @GET
