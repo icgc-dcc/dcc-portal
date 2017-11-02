@@ -21,6 +21,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.icgc.dcc.portal.server.resource.Resources.*;
 import static org.icgc.dcc.portal.server.resource.Resources.API_QUERY_PARAM;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +109,7 @@ public class GeneResource extends Resource {
 
     log.debug(PQL_TEMPLATE,  pql);
 
-    return geneService.findAllCentric(pql);
+    return geneService.findAllCentric(pql, Collections.emptyList());
   }
 
   @Path("/count")

@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
+import java.util.Collections;
 import java.util.List;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -71,14 +72,14 @@ public class OccurrenceResource extends Resource {
   @GET
   @Timed
   @Path("/pql")
-  @ApiOperation(value = "String")
-  public String findPQL(
+  @ApiOperation(value = RETURNS_LIST + OCCURRENCE + S, response = Projects.class)
+  public  Occurrences findPQL(
       @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql
   ) {
 
     log.debug(PQL_TEMPLATE,  pql);
 
-    return occurrenceService.findAllCentric(pql).toString();
+    return occurrenceService.findAllCentric(pql, Collections.emptyList());
   }
 
   @Path("/count")

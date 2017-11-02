@@ -25,11 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Occurrence;
-import org.icgc.dcc.portal.server.model.Occurrences;
-import org.icgc.dcc.portal.server.model.Pagination;
-import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.repository.OccurrenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,36 +43,29 @@ public class OccurrenceService {
 
   public Occurrences findAll(Query query) {
     val response = occurrenceRepository.findAll(query);
-    val hits = response.getHits();
-    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), query);
-    return buildOccurences(response, query.getIncludes(), pagination);
+    return buildOccurences(response, query.getIncludes(), PaginationRequest.of(query));
   }
 
-  public Occurrences findAllCentric(String pqlString) {
+  public Occurrences findAllCentric(String pqlString, List<String> fieldsNotToFlatten) {
     val pql = parse(pqlString);
     val response = occurrenceRepository.findAllCentric(pql);
-    val hits = response.getHits();
-    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), pql);
-    return buildOccurences(response, Collections.emptyList(), pagination);
+    return buildOccurences(response, fieldsNotToFlatten,PaginationRequest.of(pql));
   }
 
-
-  public Occurrences buildOccurences(SearchResponse response, List<String> includes, Pagination pagination) {
+  public Occurrences buildOccurences(SearchResponse response, List<String> fieldsToNotFlatten,
+      PaginationRequest pagination) {
     val list = ImmutableList.<Occurrence> builder();
     val hits = response.getHits();
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, includes, EntityType.OCCURRENCE);
+      val fieldMap = createResponseMap(hit, fieldsToNotFlatten, EntityType.OCCURRENCE);
       list.add(new Occurrence(fieldMap));
     }
 
     val occurrences = new Occurrences(list.build());
-    occurrences.setPagination(pagination);
+    occurrences.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), pagination));
 
     return occurrences;
   }
-
-
-
 
   public long count(Query query) {
     return occurrenceRepository.count(query);

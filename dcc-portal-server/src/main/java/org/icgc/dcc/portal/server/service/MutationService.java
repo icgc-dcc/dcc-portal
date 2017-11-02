@@ -18,11 +18,7 @@ import org.dcc.portal.pql.ast.StatementNode;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.icgc.dcc.common.core.util.stream.Collectors;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Mutation;
-import org.icgc.dcc.portal.server.model.Mutations;
-import org.icgc.dcc.portal.server.model.Pagination;
-import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.server.repository.MutationRepository;
@@ -43,9 +39,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class MutationService {
-
   private static final AggregationToFacetConverter AGGS_TO_FACETS_CONVERTER = AggregationToFacetConverter.getInstance();
   private static final Jql2PqlConverter QUERY_CONVERTER = Jql2PqlConverter.getInstance();
+  private static final String INCLUDE_SCORE_FIELD = "affectedDonorCountFiltered";
 
   private final MutationRepository mutationRepository;
 
@@ -56,53 +52,45 @@ public class MutationService {
 
   @NonNull
   public Mutations findAllCentric(Query query, boolean facetsOnly) {
-    val pql =
-        facetsOnly ? QUERY_CONVERTER.convertCount(query, MUTATION_CENTRIC) : QUERY_CONVERTER.convert(query,
-            MUTATION_CENTRIC);
-    log.debug("PQL of findAllCentric is: {}", pql);
-
-    val pqlAst = parse(pql);
-    val response = mutationRepository.findAllCentric(pqlAst);
-    val hits = response.getHits();
-
-    // Include _score if either: no custom fields or custom fields include affectedDonorCountFiltered
-
-    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), query);
-    return buildMutations(response, query.getIncludes(), includeScore(query), pagination);
+    val pqlString = getPQLString(query, facetsOnly);
+    return findAllCentric(pqlString, query.getIncludes());
   }
 
-  private Mutations buildMutations(SearchResponse response, List<String> includes,  boolean includeScore,
-            Pagination pagination) {
+  @NonNull
+  public String getPQLString(Query query, boolean facetsOnly) {
+    return facetsOnly ?
+        QUERY_CONVERTER.convertCount(query, MUTATION_CENTRIC) :
+        QUERY_CONVERTER.convert(query, MUTATION_CENTRIC);
+  }
+
+  public Mutations findAllCentric(String pqlString, List<String> fieldsToNotFlattten) {
+    log.debug("PQL of findAllCentric is: {}", pqlString);
+    val pql = parse(pqlString);
+    val response = mutationRepository.findAllCentric(pql);
+    val includeScore = hasField(pql, INCLUDE_SCORE_FIELD);
+    return buildMutations(response, fieldsToNotFlattten, includeScore, PaginationRequest.of(pql));
+  }
+
+  private Mutations buildMutations(SearchResponse response, List<String> fieldsToNotFlatten,
+      boolean includeScore, PaginationRequest request) {
     val hits = response.getHits();
     val list = ImmutableList.<Mutation> builder();
 
     for (val hit : hits) {
-      val map = createResponseMap(hit, includes, EntityType.MUTATION);
+      val map = createResponseMap(hit, fieldsToNotFlatten, EntityType.MUTATION);
       if (includeScore) map.put("_score", hit.getScore());
       list.add(new Mutation(map));
     }
 
     val mutations = new Mutations(list.build());
     mutations.addFacets(AGGS_TO_FACETS_CONVERTER.convert(response.getAggregations()));
-    mutations.setPagination(pagination);
+    mutations.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), request));
 
     return mutations;
   }
 
-  public Mutations findAllCentric(String pqlString) {
-    val pql = parse(pqlString);
-    val response = mutationRepository.findAllCentric(pql);
-    val hits = response.getHits();
-    val pagination = Pagination.of(hits.getHits().length, hits.getTotalHits(), pql);
-    return buildMutations(response, Collections.emptyList(), includeScore(pql), pagination);
-  }
-
-  boolean includeScore(Query query) {
-    return !query.hasFields() || query.getFields().contains("affectedDonorCountFiltered");
-  }
-
-  boolean includeScore(StatementNode pql) {
-    return !pql.hasSelect() || pql.getSelect().contains("affectedDonorCountFiltered");
+  boolean hasField(StatementNode pql, String field) {
+    return !pql.hasSelect() || pql.getSelect().contains(field);
   }
 
   public Mutations findMutationsByDonor(Query query, String donorId) {

@@ -21,6 +21,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.icgc.dcc.portal.server.resource.Resources.*;
 import static org.icgc.dcc.portal.server.resource.Resources.API_QUERY_PARAM;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.service.DonorService;
 import org.icgc.dcc.portal.server.service.GeneService;
 import org.icgc.dcc.portal.server.service.MutationService;
+
 import org.icgc.dcc.portal.server.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -98,14 +100,15 @@ public class MutationResource extends Resource {
   @GET
   @Timed
   @Path("/pql")
-  @ApiOperation(value = "String")
-  public String findPQL(
+
+  @ApiOperation(value = RETURNS_LIST + MUTATION + S, response = Mutation.class)
+  public Mutations findPQL(
       @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql
   ) {
 
     log.debug(PQL_TEMPLATE,  pql);
 
-    return mutationService.findAllCentric(pql).toString();
+    return mutationService.findAllCentric(pql, Collections.emptyList());
   }
 
   @Path("/count")
