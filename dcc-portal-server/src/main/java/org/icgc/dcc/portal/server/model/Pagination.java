@@ -48,9 +48,6 @@ public class Pagination {
     return new Pagination(count, total, request);
   }
 
-//  public static Pagination of(int count, long total, int size, int from, @NonNull String sort, @NonNull String order) {
-//    return new Pagination(count, total, size, from, sort, order);
-//  }
 
   private Pagination(int count, long total, PaginationRequest request) {
     this.request=request;

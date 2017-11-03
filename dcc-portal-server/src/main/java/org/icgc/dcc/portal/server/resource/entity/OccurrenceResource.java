@@ -51,7 +51,7 @@ public class OccurrenceResource extends Resource {
 
   @GET
   @Timed
-  @ApiOperation(value = RETURNS_LIST + OCCURRENCE + S, response = Projects.class)
+  @ApiOperation(value = RETURNS_LIST + OCCURRENCE + S, response = Occurrence.class)
   public Occurrences findAll(
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,
       @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include,
@@ -72,7 +72,7 @@ public class OccurrenceResource extends Resource {
   @GET
   @Timed
   @Path("/pql")
-  @ApiOperation(value = RETURNS_LIST + OCCURRENCE + S, response = Projects.class)
+  @ApiOperation(value = RETURNS_LIST + OCCURRENCE + S, response = Occurrence.class)
   public  Occurrences findPQL(
       @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql
   ) {
