@@ -46,9 +46,9 @@ public class OccurrenceService {
     return buildOccurences(response, query.getIncludes(), PaginationRequest.of(query));
   }
 
-  public Occurrences findAllCentric(String pqlString, List<String> fieldsNotToFlatten) {
+  public Occurrences findAll(String pqlString, List<String> fieldsNotToFlatten) {
+    val response = occurrenceRepository.findAll(pqlString);
     val pql = parse(pqlString);
-    val response = occurrenceRepository.findAllCentric(pql);
     return buildOccurences(response, fieldsNotToFlatten,PaginationRequest.of(pql));
   }
 

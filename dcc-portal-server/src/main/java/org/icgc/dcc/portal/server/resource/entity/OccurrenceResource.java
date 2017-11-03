@@ -79,7 +79,7 @@ public class OccurrenceResource extends Resource {
 
     log.debug(PQL_TEMPLATE,  pql);
 
-    return occurrenceService.findAllCentric(pql, Collections.emptyList());
+    return occurrenceService.findAll(pql, Collections.emptyList());
   }
 
   @Path("/count")

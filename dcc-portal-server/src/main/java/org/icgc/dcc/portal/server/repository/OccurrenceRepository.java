@@ -60,6 +60,7 @@ import java.util.Map;
 
 import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.query.QueryEngine;
+import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
@@ -133,32 +134,32 @@ public class OccurrenceRepository {
     this.queryEngine = new QueryEngine(client, indexName);
   }
 
-  SearchRequestBuilder buildFindAllRequest(Query query) {
-    val pql = PQL_CONVERTER.convert(query, OBSERVATION_CENTRIC);
-    log.debug("JQL filter is: '{}'; PQL is: '{}'.", query.getFilters(), pql);
-
-    val request = queryEngine.execute(pql, OBSERVATION_CENTRIC)
-        .getRequestBuilder();
-    log.debug("Request: {}", request);
-
-    return request;
+  public SearchResponse findAll(Query query) {
+    val pqlString = PQL_CONVERTER.convert(query, OBSERVATION_CENTRIC);
+    log.debug("JQL filter is: '{}'; PQL is: '{}'.", query.getFilters(), pqlString);
+    return findAll(pqlString);
   }
 
-  public SearchResponse findAll(Query query) {
-    val request = buildFindAllRequest(query);
+  public SearchResponse findAll(String pqlString) {
+    val request = buildFindAllRequest(pqlString);
     val response = request.execute().actionGet();
     log.debug("Response: {}", response);
-
     return response;
   }
 
-
-  @NonNull
-  public SearchResponse findAllCentric(StatementNode pqlAst) {
-    val search = queryEngine.execute(pqlAst, OBSERVATION_CENTRIC);
-    log.debug("Request : {}", search.getRequestBuilder());
-    return search.getRequestBuilder().get();
+  public SearchRequestBuilder buildFindAllRequest(Query query) {
+    val pqlString = PQL_CONVERTER.convert(query, OBSERVATION_CENTRIC);
+    log.debug("JQL filter is: '{}'; PQL is: '{}'.", query.getFilters(), pqlString);
+    return buildFindAllRequest(pqlString);
   }
+
+  public SearchRequestBuilder buildFindAllRequest(String pqlString) {
+    val request = queryEngine.execute(pqlString, OBSERVATION_CENTRIC)
+        .getRequestBuilder();
+    log.debug("Request: {}", request);
+    return request;
+  }
+
 
   public long count(Query query) {
     val pql = PQL_CONVERTER.convertCount(query, OBSERVATION_CENTRIC);
