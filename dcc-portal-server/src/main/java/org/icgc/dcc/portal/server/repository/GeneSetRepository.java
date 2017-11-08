@@ -28,7 +28,7 @@ import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.setFetchSourceOfGetRequest;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
-import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flatternMap;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flattenMap;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
@@ -94,7 +94,7 @@ public class GeneSetRepository {
     val map = Maps.<String, Integer> newLinkedHashMap();
     for (val hit : response.getHits()) {
       val id = hit.getId();
-      val sourceMap = flatternMap(hit.getSource());
+      val sourceMap = flattenMap(hit.getSource());
       val count = (Integer) sourceMap.get(fieldName);
 
       map.put(id, count);

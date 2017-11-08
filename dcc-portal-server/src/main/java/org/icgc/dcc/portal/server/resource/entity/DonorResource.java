@@ -20,6 +20,7 @@ package org.icgc.dcc.portal.server.resource.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.icgc.dcc.portal.server.resource.Resources.*;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,14 +99,13 @@ public class DonorResource extends Resource {
   @GET
   @Timed
   @Path("/pql")
-  @ApiOperation(value = "String")
-  public String findPQL(
-      @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql
-  ) {
+  @ApiOperation(value = RETURNS_LIST + DONOR + S, response = Donors.class)
+  public Donors findPQL(
+      @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql) {
 
     log.debug(PQL_TEMPLATE,  pql);
 
-    return donorService.findAllCentric(pql).toString();
+    return donorService.findAllCentric(pql, Collections.emptyList());
   }
 
   @Path("/count")

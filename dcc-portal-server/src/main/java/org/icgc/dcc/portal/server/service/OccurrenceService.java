@@ -20,14 +20,12 @@ package org.icgc.dcc.portal.server.service;
 import static org.dcc.portal.pql.query.PqlParser.parse;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Occurrence;
-import org.icgc.dcc.portal.server.model.Occurrences;
-import org.icgc.dcc.portal.server.model.Pagination;
-import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.repository.OccurrenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,25 +43,29 @@ public class OccurrenceService {
 
   public Occurrences findAll(Query query) {
     val response = occurrenceRepository.findAll(query);
-    val hits = response.getHits();
-    val list = ImmutableList.<Occurrence> builder();
+    return buildOccurences(response, query.getIncludes(), PaginationRequest.of(query));
+  }
 
+  public Occurrences findAll(String pqlString, List<String> fieldsNotToFlatten) {
+    val response = occurrenceRepository.findAll(pqlString);
+    val pql = parse(pqlString);
+    return buildOccurences(response, fieldsNotToFlatten,PaginationRequest.of(pql));
+  }
+
+  public Occurrences buildOccurences(SearchResponse response, List<String> fieldsToNotFlatten,
+      PaginationRequest pagination) {
+    val list = ImmutableList.<Occurrence> builder();
+    val hits = response.getHits();
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, EntityType.OCCURRENCE);
+      val fieldMap = createResponseMap(hit, fieldsToNotFlatten, EntityType.OCCURRENCE);
       list.add(new Occurrence(fieldMap));
     }
 
     val occurrences = new Occurrences(list.build());
-    occurrences.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
+    occurrences.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), pagination));
 
     return occurrences;
   }
-
-  public SearchResponse findAllCentric(String pql) {
-    return occurrenceRepository.findAllCentric(parse(pql));
-  }
-
-
 
   public long count(Query query) {
     return occurrenceRepository.count(query);
