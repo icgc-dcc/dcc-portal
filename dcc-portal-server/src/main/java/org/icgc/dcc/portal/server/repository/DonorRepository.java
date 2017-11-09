@@ -506,12 +506,14 @@ public class DonorRepository implements Repository {
   }
 
   public Set<String> findIds(Query query) {
+    val pqlString = CONVERTER.convert(query, DONOR_CENTRIC);
+    return findIds(pqlString);
+  }
 
+    public Set<String> findIds(String pqlString) {
     // TODO: Now assume 5000 ids at least
     Set<String> donorIds = newHashSetWithExpectedSize(5000);
-
-    val pql = CONVERTER.convert(query, DONOR_CENTRIC);
-    val request = queryEngine.execute(pql, DONOR_CENTRIC);
+    val request = queryEngine.execute(pqlString, DONOR_CENTRIC);
     val requestBuilder = request.getRequestBuilder()
         .setSize(SCAN_BATCH_SIZE)
         .setScroll(KEEP_ALIVE)

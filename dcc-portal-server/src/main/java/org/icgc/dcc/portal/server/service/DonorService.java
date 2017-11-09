@@ -226,6 +226,10 @@ public class DonorService {
     return donorRepository.findIds(query);
   }
 
+  public Set<String> findIds(String pql) {
+    return donorRepository.findIds(pql);
+  }
+
   public Donors getDonorAndSampleByProject(String projectId) {
     val query = new Query()
         .setSort("_id")
