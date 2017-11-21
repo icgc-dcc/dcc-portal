@@ -163,7 +163,7 @@
                                 data-current-page="CompoundCtrl.currentGenesPage"
                                 data-row-limit="CompoundCtrl.defaultGenesRowLimit">
                             </data-table-row-counts>
-                            <span class="t_tools" data-toolbar="" data-entity="compound_mutated_genes">
+                            <span class="t_tools" data-toolbar="" data-entity="compound_mutated_genes" data-json="{{CompoundCtrl.getTargetedCompoundGenes()}}">
                                 <span class="t_tools__tool" data-tooltip-placement="left" data-icgc-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
                             <table-filter data-class="small-filter"
@@ -266,7 +266,7 @@
                                 data-current-page="CompoundCtrl.currentClinicalTrailsPage"
                                 data-row-limit="CompoundCtrl.defaultClinicalTrialsRowLimit">
                             </data-table-row-counts>
-                            <span class="t_tools" data-toolbar="" data-entity="compound_trials">
+                            <span class="t_tools" data-toolbar="" data-entity="compound_trials" data-json="{{compound.trials}}">
                             <span class="t_tools__tool" data-tooltip-placement="left" data-icgc-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
                             <table-filter data-class="small-filter"
