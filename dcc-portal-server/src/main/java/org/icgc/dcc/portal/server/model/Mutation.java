@@ -20,6 +20,7 @@ package org.icgc.dcc.portal.server.model;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
@@ -213,7 +214,7 @@ public class Mutation {
         .filter(o -> o.containsKey("_study"))
         .map(o -> (String) o.get("_study"))
         .filter(Objects::nonNull)
-        .collect(toImmutableList());
+        .collect(toImmutableSet()).asList();
 
     return study;
   }
