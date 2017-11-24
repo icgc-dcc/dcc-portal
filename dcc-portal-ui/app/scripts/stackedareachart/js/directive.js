@@ -40,7 +40,9 @@
       21: 'May-16',
       22: 'August-16',
       23: 'Dec-16',
-      24: 'May-17'
+      24: 'May-17',
+      25: 'June-17',
+      26: 'Nov-17'
     };
 
   module.directive('donorHistory', function ($location, HighchartsService, gettextCatalog) {
@@ -82,7 +84,7 @@
           yaxis:{label: gettextCatalog.getString('# of Donors'),ticks:8},
           xaxis: {
             label: gettextCatalog.getString('Release'),
-            ticksValueRange: [4, 24],
+            ticksValueRange: [4, 26],
             secondaryLabel: function(data){return releaseDates[data]}
           },
           onClick: function(project){
