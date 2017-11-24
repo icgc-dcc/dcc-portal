@@ -200,7 +200,12 @@ public class GeneService {
   @NonNull
   public Genes findAllCentric(Query query, boolean facetsOnly) {
     val pqlString = getPQLString(query, facetsOnly);
-    return findAllCentric(pqlString, query.getIncludes());
+    val genes= findAllCentric(pqlString, query.getIncludes());
+
+    val p = genes.getPagination();
+    genes.setPagination(Pagination.of(p.getCount(),p.getTotal(),query));
+
+    return genes;
   }
 
   public String getPQLString(Query query, boolean facetsOnly) {

@@ -72,18 +72,23 @@ public class DonorService {
   @NonNull
   public Donors findAllCentric(Query query, boolean facetsOnly) {
     val pqlString = getPQL(query, facetsOnly);
+    val donors =  findAllCentric(pqlString, query.getIncludes());
 
-    return findAllCentric(pqlString, query.getIncludes());
+    val p = donors.getPagination();
+    donors.setPagination(Pagination.of(p.getCount(),p.getTotal(),query));
+
+    return donors;
   }
 
   @NonNull
   public Donors findAllCentric(Query query, String pqlString) {
-    log.debug("PQL of findAllCentric is: {}", pqlString);
+
     return findAllCentric(pqlString, query.getIncludes());
   }
 
   public Donors findAllCentric(String pqlString, Collection<String> includes) {
     StatementNode pql = parse(pqlString);
+    log.error("PQL of findAllCentric is: {}", pqlString);
     val response = donorRepository.findAllCentric(pql);
 
     val includeScore = hasField(pql, INCLUDE_SCORE_STRING);

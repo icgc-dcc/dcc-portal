@@ -53,7 +53,12 @@ public class MutationService {
   @NonNull
   public Mutations findAllCentric(Query query, boolean facetsOnly) {
     val pqlString = getPQLString(query, facetsOnly);
-    return findAllCentric(pqlString, query.getIncludes());
+    val mutations = findAllCentric(pqlString, query.getIncludes());
+
+    val p = mutations.getPagination();
+    mutations.setPagination(Pagination.of(p.getCount(),p.getTotal(),query));
+
+    return mutations;
   }
 
   @NonNull

@@ -17,6 +17,7 @@
 
 package org.icgc.dcc.portal.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NonNull;
 import lombok.Value;
 
@@ -29,6 +30,7 @@ import org.elasticsearch.search.SearchHits;
 @Value
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Pagination {
+  @JsonIgnore
   PaginationRequest request;
   @ApiModelProperty(value = "Reqeusted total number of records to return", required = true)
   Integer count;
@@ -56,6 +58,20 @@ public class Pagination {
 
     this.page = request.size <= 1 ? request.from : (request.from / request.size) + 1;
     this.pages = request.size <= 1 ? total : (total + request.size - 1) / request.size;
+  }
+
+  public Integer getSize() {
+    return request.size;
+  }
+  public Integer getFrom() {
+    return request.from;
+  }
+  public String getSort() {
+    return request.sort;
+  }
+  public String getOrder() {
+    return request.order;
+
   }
 
 }
