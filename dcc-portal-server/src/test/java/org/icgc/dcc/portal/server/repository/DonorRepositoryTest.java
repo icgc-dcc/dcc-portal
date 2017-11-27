@@ -87,7 +87,7 @@ public class DonorRepositoryTest extends BaseElasticsearchTest {
 
     for (SearchHit hit : hits) {
       Assertions.assertThat(hit.getSource().keySet().size()).isEqualTo(2);
-      val flatMap = ElasticsearchResponseUtils.flatternMap(hit.getSource(), query, EntityType.DONOR);
+      val flatMap = ElasticsearchResponseUtils.flattenMap(hit.getSource(), query.getIncludes(), EntityType.DONOR);
       Assertions.assertThat(flatMap.keySet())
           .isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("primarySite")));
     }

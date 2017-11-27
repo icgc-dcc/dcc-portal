@@ -21,6 +21,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.icgc.dcc.portal.server.resource.Resources.*;
 import static org.icgc.dcc.portal.server.resource.Resources.API_QUERY_PARAM;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,14 +102,14 @@ public class GeneResource extends Resource {
   @GET
   @Timed
   @Path("/pql")
-  @ApiOperation(value = "String")
-  public String findPQL(
+  @ApiOperation(value = RETURNS_LIST + GENE + S, response = Genes.class)
+  public Genes findPQL(
       @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql
   ) {
 
     log.debug(PQL_TEMPLATE,  pql);
 
-    return geneService.findAllCentric(pql).toString();
+    return geneService.findAllCentric(pql, Collections.emptyList());
   }
 
   @Path("/count")

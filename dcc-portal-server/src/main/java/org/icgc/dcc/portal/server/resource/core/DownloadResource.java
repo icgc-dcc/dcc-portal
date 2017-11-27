@@ -153,6 +153,37 @@ public class DownloadResource extends Resource {
 
     return new JobInfo(downloadId);
   }
+  @GET
+  @Timed
+  @Path("/submitPQL")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation("Submit job to request archive generation")
+  public JobInfo submitPQLJob(
+    @Auth(required = false) User user,
+    @ApiParam(value = "PQL query", required = false) @QueryParam("pql") @DefaultValue("{}") String pqlString,
+    @ApiParam(value = "Archive param") @QueryParam("info") @DefaultValue("") String info) {
+    ensureServiceRunning();
+    val donorIds = resolveDonorIds(pqlString);
+
+     val uiInfo = JobUiInfo.builder()
+       .controlled(isAuthorized(user))
+       .user(getUserId(user))
+       .build();
+    String downloadId = null;
+
+    try {
+      downloadId = downloadClient.submitJob(
+        donorIds,
+        resolveDownloadDataTypes(user, info),
+        uiInfo);
+    } catch (Exception e) {
+      log.error("Job submission failed.", e);
+    }
+    checkRequest(downloadId == null, "Failed to submit download.");
+
+    return new JobInfo(downloadId);
+  }
+
 
   @GET
   @Timed
@@ -165,6 +196,26 @@ public class DownloadResource extends Resource {
     // Work out the query for that returns only donor ids that matches the filter conditions
     val donorIds = donorService.findIds(Query.builder().filters(filters.get()).build());
     checkRequest(donorIds.isEmpty(), "No donors found for query '%s'", filters.get());
+
+    val sizes = downloadClient.getSizes(donorIds);
+    val dataTypeSizes = DownloadResources.normalizeSizes(sizes);
+    val allowedDataTypes = resolveAllowedDataTypes(user);
+    val allowedDataTypeSizes = getAllowedDataTypeSizes(dataTypeSizes, allowedDataTypes);
+
+    return singletonMap("fileSize", createGetDataSizeResponse(allowedDataTypeSizes));
+  }
+
+  @GET
+  @Timed
+  @Path("/sizePQL")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation("Get download size by type subject to the supplied filter condition(s)")
+  public Map<String, Object> getDataTypeSizePerFileTypeFromPQL(
+    @Auth(required = false) User user,
+    @ApiParam(value = "Filter the search donors") @QueryParam("pql") @DefaultValue("{}") String pql) {
+
+    val donorIds = donorService.findIds(pql);
+    checkRequest(donorIds.isEmpty(), "No donors found for pql '%s'", pql);
 
     val sizes = downloadClient.getSizes(donorIds);
     val dataTypeSizes = DownloadResources.normalizeSizes(sizes);
@@ -269,6 +320,17 @@ public class DownloadResource extends Resource {
     val donorIds = donorService.findIds(Query.builder().filters(filters.get()).build());
     if (donorIds.isEmpty()) {
       log.error("No donor ids found for filter: {}", filters);
+      throw new NotFoundException("No donor found", "download");
+    }
+    log.info("Number of donors to be retrieved: {}", donorIds.size());
+
+    return donorIds;
+  }
+
+  private Set<String> resolveDonorIds(String pqlString) {
+    val donorIds = donorService.findIds(pqlString);
+    if (donorIds.isEmpty()) {
+      log.error("No donor ids found for PQL: {}", pqlString);
       throw new NotFoundException("No donor found", "download");
     }
     log.info("Number of donors to be retrieved: {}", donorIds.size());
