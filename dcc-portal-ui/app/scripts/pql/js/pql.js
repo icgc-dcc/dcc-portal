@@ -95,7 +95,7 @@ require('./pql.scss');
       switch(searchTab) {
         case 'gene':
         params.queryType='GENE_CENTRIC';
-        _.merge(params, parsePaginationParams('donors'));
+        _.merge(params, parsePaginationParams('genes'));
         break;
         case 'mutation':
         params.queryType='MUTATION_CENTRIC';
