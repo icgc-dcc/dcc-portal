@@ -227,6 +227,7 @@
     // new
     'icgc.ui',
     'icgc.share',
+    'icgc.pql',
     'icgc.facets',
     'icgc.projects',
     'icgc.donors',

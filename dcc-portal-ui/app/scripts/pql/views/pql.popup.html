@@ -1,0 +1,39 @@
+  <div class="pql-popover" style="width:500px;padding-bottom:0">
+    <div id="inputBox">
+      <textarea id="pqlQueryHolder"
+      ng-if="pqlCtrl.query"
+      class="pql-query-holder input-block-level" 
+      rows="5"
+      cols="40"
+      readonly
+      >{{pqlCtrl.query}}</textarea>
+      <span
+      ng-if="pqlCtrl.query"
+      class="clip-icon"
+      data-copy-to-clip
+      data-copy-data="pqlCtrl.query"
+      data-show-copy-tips="true"
+      data-prompt-on-copy="false"
+      data-on-hover-message="{{'Click to copy' | translate}}"
+      data-on-copy-success-message="{{'PQL Query copied!' | translate}}"
+      data-on-copy-focus-on="#shortURLInput"
+      >
+        <span class="icon-clippy"></span>
+      </span>
+
+      
+      <span 
+      ng-if="!pqlCtrl.query"
+      class="loading loading-icon">
+        <i class="icon-spinner icon-spin"></i>
+      </span>
+      <small
+      ng-if="!pqlCtrl.query"
+      class="loading-text"
+      >
+        <translate>Loading...</translate>
+      </small>
+    </div>
+  </div>
+
+  
