@@ -141,16 +141,16 @@ require('./share.scss');
     };
 
     const bodyClickListener = function (e) {
-      $($element).each(function () {
-        if ((!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0)) {
+      jQuery($element).each(function () {
+        if ((!jQuery(this).is(e.target) && jQuery(this).has(e.target).length === 0 && jQuery('.popover').has(e.target).length === 0)) {
           _ctrl.popoverIsOpen = false;
         }
       });
     };
 
-    $('body').on('click', bodyClickListener);
+    jQuery('body').on('click', bodyClickListener);
     $scope.$on('$destroy', () => {
-      $('body').off('click', bodyClickListener);
+      jQuery('body').off('click', bodyClickListener);
     });
   });
 })();

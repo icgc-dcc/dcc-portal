@@ -2,13 +2,28 @@
   <div class="share-popover" style="width:195px;padding-bottom:0">
     <small class="input-header"><translate>Link to this {{entityType}}:</translate></small>
     <div id="inputBox">
-    </div>
-    <input id="shortURLInput" 
+
+      <input id="shortURLInput" 
+        ng-if="!shareCtrl.changedUrl"
+        class="short-url-input input-block-level" 
+        type="text" 
+        value={{shareCtrl.shortUrl}} 
+      />
+      <span
       ng-if="!shareCtrl.changedUrl"
-      class="short-url-input input-block-level" 
-      type="text" 
-      value={{shareCtrl.shortUrl}} 
-    />
+      class="clip-icon"
+      data-copy-to-clip
+      data-copy-data="shareCtrl.shortUrl"
+      data-show-copy-tips="true"
+      data-prompt-on-copy="false"
+      data-on-hover-message="{{'Click to copy' | translate}}"
+      data-on-copy-success-message="{{'Share Link copied!' | translate}}"
+      data-on-copy-focus-on="#shortURLInput"
+      >
+      <span class="icon-clippy"></span>
+    </span>
+
+    
     <span 
       ng-if="shareCtrl.changedUrl"
       class="loading loading-icon">
@@ -17,21 +32,8 @@
     <small
       ng-if="shareCtrl.changedUrl"
       class="loading-text"
-    >Loading...</small>
-    
-    <span
-       ng-if="!shareCtrl.changedUrl"
-       class="clip-icon"
-       data-copy-to-clip
-       data-copy-data="shareCtrl.shortUrl"
-       data-show-copy-tips="true"
-       data-prompt-on-copy="false"
-       data-on-hover-message="{{'Click to copy' | translate}}"
-       data-on-copy-success-message="{{'Share Link copied!' | translate}}"
-       data-on-copy-focus-on="#shortURLInput"
-    >
-    <span class="icon-clippy"></span>
-    </span>
+    ><translate>Loading...</translate></small>
+    </div>
   </div>
 
   
