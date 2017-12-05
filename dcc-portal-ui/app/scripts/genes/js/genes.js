@@ -156,6 +156,7 @@
         include: ['facets'],
         filters: _ctrl.gene.advQuery
       }).then(function(data) {
+        _ctrl.donorFacets = data.facets;
         var ids = _.map(data.facets.projectId.terms, 'term');
 
         if (_.isEmpty(ids)) {

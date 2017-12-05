@@ -1,518 +1,537 @@
 <div class="h1-wrap">
-    <h1 data-ui-scrollpoint=79 ><span class="t_badge t_badge__gene"></span>
-        {{ GeneCtrl.gene.symbol }}</h1>
+  <h1 data-ui-scrollpoint=105 ><span class="t_badge t_badge__gene"></span>
+    {{ GeneCtrl.gene.symbol }}</h1>
 </div>
 <div data-scroll-spy="">
-<aside data-ui-scrollpoint=79 class="t_sidenav">
-    <section>
-        <ul class="t_subnav__items">
-            <li data-spy="summary" class="t_subnav__items__item current">
-                <a data-scrollto href="#summary">
-                    <translate>Summary</translate>
-                </a>
-            </li>
-            <li data-spy="projects" class="t_subnav__items__item">
-                <a data-scrollto href="#projects">
-                    <translate>Cancer Distribution</translate>
-                </a>
-            </li>
-            <li data-spy="protein" class="t_subnav__items__item">
-                <a data-scrollto href="#protein">
-                    <translate>Protein</translate>
-                </a>
-            </li>
-            <li data-spy="genomic" class="t_subnav__items__item">
-                <a data-scrollto href="#genomic" >
-                    <translate>Genomic Context</translate>
-                </a>
-            </li>
-            <li data-spy="mutations" class="t_subnav__items__item">
-                <a data-scrollto href="#mutations" >
-                    <translate>Mutations</translate>
-                </a>
-            </li>
-            <li data-spy="compounds" class="t_subnav__items__item">
-                <a data-scrollto href="#compounds">
-                    <translate>Compounds</translate>
-                </a>
-            </li>
+<aside class="t_sidebar">
+  <section>
+    <ul class="t_subnav__items">
+      <li data-spy="summary" class="t_subnav__items__item current">
+        <a data-scrollto href="#summary">
+          <translate>Summary</translate>
+        </a>
+      </li>
+      <li data-spy="projects" class="t_subnav__items__item">
+        <a data-scrollto href="#projects">
+          <translate>Cancer Distribution</translate>
+        </a>
+      </li>
+      <li data-spy="protein" class="t_subnav__items__item">
+        <a data-scrollto href="#protein">
+          <translate>Protein</translate>
+        </a>
+      </li>
+      <li data-spy="genomic" class="t_subnav__items__item">
+        <a data-scrollto href="#genomic" >
+          <translate>Genomic Context</translate>
+        </a>
+      </li>
+      <li data-spy="mutations" class="t_subnav__items__item">
+        <a data-scrollto href="#mutations" >
+          <translate>Mutations</translate>
+        </a>
+      </li>
+      <li data-spy="compounds" class="t_subnav__items__item">
+        <a data-scrollto href="#compounds">
+          <translate>Compounds</translate>
+        </a>
+      </li>
 
-            <li><br></li>
-            <li class="t_subnav__items__item" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0">
-                <span><translate>Page Filters</translate></span>
-            </li>
-            <li class="t_subnav__items__box" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0">
-                <ul class="t_facets">
-                    <terms data-type="mutation"
-                           data-facet-name="functionalImpact"
-                           data-hide-count="true"
-                           data-label="{{'Mutation Impact' | translate}}"
-                           data-facet="GeneCtrl.mutationFacets.functionalImpact"
-                    ></terms>
-                </ul>
-            </li>
+      <li><br></li>
+      <li class="t_subnav__items__item" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0">
+        <span><translate>Quick Filters</translate></span>
+      </li>
+    </ul>
+  </section>
+  <ul class="t_subnav__items__box" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0">
+      <ul class="t_facets">
+          <terms data-type="donor"
+                data-facet-name="projectId"
+                data-hide-count="true"
+                data-label="{{'Project' | translate}}"
+                data-facet="GeneCtrl.donorFacets.projectId"
+          ></terms>
         </ul>
-    </section>
+    <ul class="t_facets">
+      <terms data-type="donor"
+            data-facet-name="primarySite"
+            data-hide-count="true"
+            data-label="{{'Primary Site' | translate}}"
+            data-facet="GeneCtrl.donorFacets.primarySite"
+      ></terms>
+    </ul>
+    <ul class="t_facets">
+      <terms data-type="mutation"
+            data-facet-name="functionalImpact"
+            data-hide-count="true"
+            data-label="{{'Mutation Impact' | translate}}"
+            data-facet="GeneCtrl.mutationFacets.functionalImpact"
+      ></terms>
+    </ul>
+  </ul>
 </aside>
 <article fix-scroll>
+<section id="advanced" class="">
+  <current></current>
+</section>
 <section id="summary" class="dynamic-height">
-    <div class="wide">
-        <h3><translate>Summary</translate></h3>
-        <table class="table table-info">
-            <tr>
-                <th><translate>Symbol</translate></th>
-                <td>{{ GeneCtrl.gene.symbol }}</td>
-            </tr>
-            <tr>
-                <th><translate>Name</translate></th>
-                <td>{{ GeneCtrl.gene.name }}</td>
-            </tr>
-            <tr>
-                <th><translate>Synonyms</translate></th>
-                <td>
-                    {{ GeneCtrl.gene.synonyms.join(', ') }}
-                    <span data-ng-if="!GeneCtrl.gene.synonyms.length">--</span>
-                </td>
-            </tr>
-            <tr>
-                <th><translate>Type</translate></th>
-                <td>{{ GeneCtrl.gene.type | trans}}</td>
-            </tr>
-            <tr>
-                <th><translate>Location</translate></th>
-                <td>chr{{ GeneCtrl.gene.chromosome}}:{{ GeneCtrl.gene.start }}-{{ GeneCtrl.gene.end }} (GRCh37)</td>
-            </tr>
-            <tr>
-                <th><translate>Strand</translate></th>
-                <td>
-                    <i data-ng-class="{true:'icon-plus', false:'icon-minus'}[GeneCtrl.gene.strand===1]"></i>
-                </td>
-            </tr>
-            <tr>
-                <th><translate>Description</translate></th>
-                <td>
-                    <hide-text text="{{ GeneCtrl.gene.description }}" data-class="table-text-wrap"></hide-text>
-                </td>
-            </tr>
-        </table>
+  <div class="wide">
+    <h3><translate>Summary</translate></h3>
+    <table class="table table-info">
+      <tr>
+        <th><translate>Symbol</translate></th>
+        <td>{{ GeneCtrl.gene.symbol }}</td>
+      </tr>
+      <tr>
+        <th><translate>Name</translate></th>
+        <td>{{ GeneCtrl.gene.name }}</td>
+      </tr>
+      <tr>
+        <th><translate>Synonyms</translate></th>
+        <td>
+          {{ GeneCtrl.gene.synonyms.join(', ') }}
+          <span data-ng-if="!GeneCtrl.gene.synonyms.length">--</span>
+        </td>
+      </tr>
+      <tr>
+        <th><translate>Type</translate></th>
+        <td>{{ GeneCtrl.gene.type | trans}}</td>
+      </tr>
+      <tr>
+        <th><translate>Location</translate></th>
+        <td>chr{{ GeneCtrl.gene.chromosome}}:{{ GeneCtrl.gene.start }}-{{ GeneCtrl.gene.end }} (GRCh37)</td>
+      </tr>
+      <tr>
+        <th><translate>Strand</translate></th>
+        <td>
+          <i data-ng-class="{true:'icon-plus', false:'icon-minus'}[GeneCtrl.gene.strand===1]"></i>
+        </td>
+      </tr>
+      <tr>
+        <th><translate>Description</translate></th>
+        <td>
+          <hide-text text="{{ GeneCtrl.gene.description }}" data-class="table-text-wrap"></hide-text>
+        </td>
+      </tr>
+    </table>
 
-        <h3><translate>Annotation</translate></h3>
-        <table class="table table-info">
-            <tr>
-                <th><translate>Reactome Pathways</translate></th>
-                <td>
-                    <hide-list data-items="GeneCtrl.uiGeneSets.pathwayList"
-                        data-display-limit="5"
-                        data-template-name="template/geneGeneSetList.html">
-                    </hide-list>
-                </td>
-            </tr>
-            <tr>
-                <th><translate>GO Terms</translate></th>
-                <td>
-                    <hide-list data-items="GeneCtrl.uiGeneSets.goList"
-                        data-display-limit="5"
-                        data-template-name="template/geneGeneSetList.html">
-                    </hide-list>
-                </td>
-            </tr>
-            <tr>
-                <th><translate>Curated Gene Set</translate></th>
-                <td>
-                    <hide-list data-items="GeneCtrl.uiGeneSets.curatedList"
-                        data-display-limit="5"
-                        data-template-name="template/geneGeneSetList.html">
-                    </hide-list>
-                </td>
-            </tr>
-        </table>
+    <h3><translate>Annotation</translate></h3>
+    <table class="table table-info">
+      <tr>
+        <th><translate>Reactome Pathways</translate></th>
+        <td>
+          <hide-list data-items="GeneCtrl.uiGeneSets.pathwayList"
+            data-display-limit="5"
+            data-template-name="template/geneGeneSetList.html">
+          </hide-list>
+        </td>
+      </tr>
+      <tr>
+        <th><translate>GO Terms</translate></th>
+        <td>
+          <hide-list data-items="GeneCtrl.uiGeneSets.goList"
+            data-display-limit="5"
+            data-template-name="template/geneGeneSetList.html">
+          </hide-list>
+        </td>
+      </tr>
+      <tr>
+        <th><translate>Curated Gene Set</translate></th>
+        <td>
+          <hide-list data-items="GeneCtrl.uiGeneSets.curatedList"
+            data-display-limit="5"
+            data-template-name="template/geneGeneSetList.html">
+          </hide-list>
+        </td>
+      </tr>
+    </table>
 
-    </div>
-    <div class="narrow omega">
-        <h3><translate>External References</translate></h3>
-        <table class="table table-info">
-            <tr>
-                <th><translate>HGNC Gene</translate></th>
-                <td>
-                    <ul>
-                        <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['hgnc']">
-                            <a data-ng-href="{{GeneCtrl.ExternalLinks.geneHGNC(id)}}" target="_blank">
-                                <i class="icon-external-link"></i> {{ id }}</a>
-                        </li>
-                    </ul>
-                    <span data-ng-if="GeneCtrl.hasNoExternal('hgnc')">--</span>
-                </td>
-            </tr>
-            <tr>
-                <th><translate>Ensembl (release 75)</translate></th>
-                <td>
-                    <a data-ng-href="{{GeneCtrl.ExternalLinks.geneEnsembl(GeneCtrl.gene.id)}}" target="_blank">
-                        <i class="icon-external-link"></i> {{ GeneCtrl.gene.id }}</a>
-                </td>
-            </tr>
-            <tr>
-                <th>COSMIC</th>
-                <td>
-                    <a data-ng-href="{{GeneCtrl.ExternalLinks.geneCOSMIC(GeneCtrl.gene.symbol)}}" target="_blank">
-                        <i class="icon-external-link"></i> {{ GeneCtrl.gene.symbol }}</a>
-                </td>
-            </tr>
-            <tr>
-                <th><translate>Entrez Gene</translate></th>
-                <td>
-                    <ul>
-                        <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['entrez_gene']">
-                            <a data-ng-href="{{GeneCtrl.ExternalLinks.geneEntrez(id)}}" target="_blank">
-                                <i class="icon-external-link"></i> {{ id }}</a>
-                        </li>
-                    </ul>
-                    <span data-ng-if="GeneCtrl.hasNoExternal('entrez_gene')">--</span>
-                </td>
-            </tr>
-            <tr>
-                <th>OMIM</th>
-                <td>
-                    <ul>
-                        <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['omim_gene']">
-                            <a data-ng-href="{{GeneCtrl.ExternalLinks.geneOMIM(id)}}" target="_blankc">
-                                <i class="icon-external-link"></i> {{ id }}</a>
-                        </li>
-                    </ul>
-                    <span data-ng-if="GeneCtrl.hasNoExternal('omim_gene')">--</span>
-                </td>
-            </tr>
-            <tr>
-                <th>UniProtKB/Swiss-Prot</th>
-                <td>
-                    <ul>
-                        <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['uniprotkb_swissprot']">
-                            <a data-ng-href="{{GeneCtrl.ExternalLinks.geneUniProt(id)}}" target="_blank">
-                                <i class="icon-external-link"></i> {{ id }}</a>
-                        </li>
-                    </ul>
-                    <span data-ng-if="GeneCtrl.hasNoExternal('uniprotkb_swissprot')">--</span>
-                </td>
-            </tr>
-        </table>
-    </div>
+  </div>
+  <div class="narrow omega">
+    <h3><translate>External References</translate></h3>
+    <table class="table table-info">
+      <tr>
+        <th><translate>HGNC Gene</translate></th>
+        <td>
+          <ul>
+            <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['hgnc']">
+              <a data-ng-href="{{GeneCtrl.ExternalLinks.geneHGNC(id)}}" target="_blank">
+                <i class="icon-external-link"></i> {{ id }}</a>
+            </li>
+          </ul>
+          <span data-ng-if="GeneCtrl.hasNoExternal('hgnc')">--</span>
+        </td>
+      </tr>
+      <tr>
+        <th><translate>Ensembl (release 75)</translate></th>
+        <td>
+          <a data-ng-href="{{GeneCtrl.ExternalLinks.geneEnsembl(GeneCtrl.gene.id)}}" target="_blank">
+            <i class="icon-external-link"></i> {{ GeneCtrl.gene.id }}</a>
+        </td>
+      </tr>
+      <tr>
+        <th>COSMIC</th>
+        <td>
+          <a data-ng-href="{{GeneCtrl.ExternalLinks.geneCOSMIC(GeneCtrl.gene.symbol)}}" target="_blank">
+            <i class="icon-external-link"></i> {{ GeneCtrl.gene.symbol }}</a>
+        </td>
+      </tr>
+      <tr>
+        <th><translate>Entrez Gene</translate></th>
+        <td>
+          <ul>
+            <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['entrez_gene']">
+              <a data-ng-href="{{GeneCtrl.ExternalLinks.geneEntrez(id)}}" target="_blank">
+                <i class="icon-external-link"></i> {{ id }}</a>
+            </li>
+          </ul>
+          <span data-ng-if="GeneCtrl.hasNoExternal('entrez_gene')">--</span>
+        </td>
+      </tr>
+      <tr>
+        <th>OMIM</th>
+        <td>
+          <ul>
+            <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['omim_gene']">
+              <a data-ng-href="{{GeneCtrl.ExternalLinks.geneOMIM(id)}}" target="_blankc">
+                <i class="icon-external-link"></i> {{ id }}</a>
+            </li>
+          </ul>
+          <span data-ng-if="GeneCtrl.hasNoExternal('omim_gene')">--</span>
+        </td>
+      </tr>
+      <tr>
+        <th>UniProtKB/Swiss-Prot</th>
+        <td>
+          <ul>
+            <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['uniprotkb_swissprot']">
+              <a data-ng-href="{{GeneCtrl.ExternalLinks.geneUniProt(id)}}" target="_blank">
+                <i class="icon-external-link"></i> {{ id }}</a>
+            </li>
+          </ul>
+          <span data-ng-if="GeneCtrl.hasNoExternal('uniprotkb_swissprot')">--</span>
+        </td>
+      </tr>
+    </table>
+  </div>
 </section>
 <section id="projects" class="dynamic-height"
-         data-ng-class="{'loading': !GeneCtrl.gene.projects.hits, 'empty': GeneCtrl.gene.projects.length == 0}">
-    <h3 data-ng-if="!GeneCtrl.gene.projects.hits"><i class="icon-spinner icon-spin"></i><translate>Loading Donors...</translate></h3>
+     data-ng-class="{'loading': !GeneCtrl.gene.projects.hits, 'empty': GeneCtrl.gene.projects.length == 0}">
+  <h3 data-ng-if="!GeneCtrl.gene.projects.hits"><i class="icon-spinner icon-spin"></i><translate>Loading Donors...</translate></h3>
 
-    <h3 data-ng-if="GeneCtrl.gene.projects.hits.length == 0"><translate>No Donors Affected.</translate></h3>
+  <h3 data-ng-if="GeneCtrl.gene.projects.hits.length == 0"><translate>No Donors Affected.</translate></h3>
 
-    <div data-ng-if="GeneCtrl.gene.projects.hits.length > 0">
-        <h3>
-            <translate>Cancer Distribution</translate>
-            <span data-open-in-list='?filters={{GeneCtrl.gene.advQuery}}' data-type="donor"></span>
-        </h3>
+  <div data-ng-if="GeneCtrl.gene.projects.hits.length > 0">
+    <h3>
+      <translate>Cancer Distribution</translate>
+      <span data-open-in-list='?filters={{GeneCtrl.gene.advQuery}}' data-type="donor"></span>
+    </h3>
 
-        <h4 class="subhead">
-            <a data-ng-href='/search?filters={{GeneCtrl.gene.advQuery}}'>
-                <strong>{{GeneCtrl.totalDonors | number}}</strong>
-            </a>
-            <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">donors affected by</translate>
-            <a data-ng-href='/search/m?filters={{GeneCtrl.gene.advQuery}}'>
-                <strong>{{GeneCtrl.totalMutations | number}}</strong>
-            </a>
-            <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">mutations across</translate>
-            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneCtrl.gene.projects.hits|_:"map":"id").join("\",\"")}}"]}}}'>
-                <strong>{{GeneCtrl.gene.projects.hits.length | number}}</strong>
-            </a>
-            <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">projects</translate>
-        </h4>
+    <h4 class="subhead">
+      <a data-ng-href='/search?filters={{GeneCtrl.gene.advQuery}}'>
+        <strong>{{GeneCtrl.totalDonors | number}}</strong>
+      </a>
+      <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">donors affected by</translate>
+      <a data-ng-href='/search/m?filters={{GeneCtrl.gene.advQuery}}'>
+        <strong>{{GeneCtrl.totalMutations | number}}</strong>
+      </a>
+      <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">mutations across</translate>
+      <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneCtrl.gene.projects.hits|_:"map":"id").join("\",\"")}}"]}}}'>
+        <strong>{{GeneCtrl.gene.projects.hits.length | number}}</strong>
+      </a>
+      <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">projects</translate>
+    </h4>
 
-        <div data-ng-if="GeneCtrl.bar.hasData" class="clearfix">
-            <bar class="wide" height=200 items="GeneCtrl.bar" heading=""
-                 ylabel="{{'% of Donors Affected' | translate}}"
-                 format="percentage"></bar>
-        </div>
-        <span class="t_table_top">
-            <data-table-row-counts
-                data-data="GeneCtrl.gene.uiProjects"
-                data-filter="GeneCtrl.tableFilter.projects"
-                data-label="{{'projects' | translate}}"
-                data-current-page="GeneCtrl.currentProjectsPage"
-                data-row-limit="GeneCtrl.defaultProjectsRowLimit">
-            </data-table-row-counts>
-            <span
-                data-toolbar
-                data-entity="{{GeneCtrl.gene.id}}_distribution"
-                data-json="{{ GeneCtrl.gene.uiProjects }}"></span>
-            <table-filter data-class="small-filter"
-                data-filter-model="GeneCtrl.tableFilter.projects"
-                data-current-page="GeneCtrl.currentProjectsPage"></table-filter>
-        </span>
-        <table class="table table-bordered table-striped table-condensed"
-            data-ng-init="sortProjectsDescendingly = true;">
-            <thead>
-            <tr>
-                <th><translate>Project</translate></th>
-                <th><translate>Site</translate></th>
-                <th><translate>Tumour Type</translate></th>
-                <th><translate>Tumour Subtype</translate></th>
-                <th style="cursor: pointer"
-                    data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
-                    <abbr data-icgc-tooltip="{{'# donors in current project with [[geneSymbol]] affected by SSM / # SSM-tested donors in current project' | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}">
-                    <translate># Donors affected</translate></abbr>
-                    <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
-                </th>
-                <th><abbr data-icgc-tooltip="{{'Number of SSM observed in [[ geneSymbol ]]'  | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}"
-                          data-tooltip-placement="left"><translate># Mutations</translate></abbr></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="project in (GeneCtrl.gene.uiProjects | 
-                filter: GeneCtrl.tableFilter.projects | 
-                orderBy:'uiAffectedDonorPercentage/100':sortProjectsDescendingly | 
-                limitTo: GeneCtrl.defaultProjectsRowLimit : ((GeneCtrl.currentProjectsPage-1) * GeneCtrl.defaultProjectsRowLimit)) track by project.uiId"
-                data-ng-if="project.uiFilteredDonorCount > 0">
-                <td><a data-icgc-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">
-                    <span data-ng-bind-html="project.uiId | highlight: GeneCtrl.tableFilter.projects"></span>
-                </a></td>
-                <td><span data-ng-bind-html="project.uiPrimarySite | highlight: GeneCtrl.tableFilter.projects"></span></td>
-                <td><span data-ng-bind-html="project.uiTumourType | highlight: GeneCtrl.tableFilter.projects"></span></td>
-                <td><span data-ng-bind-html="project.uiTumourSubtype | highlight: GeneCtrl.tableFilter.projects"></span></td>
-                <td class="text-right" style="position: relative; display: block">
-
-                        <span data-ng-style="{width:project.uiAffectedDonorPercentage+'%'}"
-                          class="t_facets__facet__terms__active__term__bar"></span>
-                        <span style="position: relative">
-                        <a data-ng-href='/search?filters={{project.uiAdvQuery}}'
-                            data-ng-bind-html="project.uiFilteredDonorCount | highlight: GeneCtrl.tableFilter.projects">
-                        </a>
-                        /
-                        <a 
-                            data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{ project.uiId }}"]},"availableDataTypes":{"is":["ssm"]}}}'
-                            data-ng-bind-html="project.uiSSMTestedDonorCount | highlight: GeneCtrl.tableFilter.projects">                        
-                        </a>
-                        <em data-ng-bind-html="'('+ project.uiAffectedDonorPercentage + '%)' | highlight: GeneCtrl.tableFilter.projects"></em>
-                        </span>
-
-                </td>
-                <td class="text-right">
-                    <span data-ng-if="project.uiMutationCount==null"><i class="icon-spinner icon-spin"></i></span>
-                    <span data-ng-if="project.uiMutationCount === 0">--</span>
-                    <a data-ng-if="project.uiMutationCount > '0'"
-                       data-ng-href='/search/m?filters={{project.uiAdvQuery}}'
-                       data-ng-bind-html="project.uiMutationCount | highlight: GeneCtrl.tableFilter.projects ">
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <pagination-client-side 
-            data-data="GeneCtrl.gene.uiProjects"
-            data-filter="GeneCtrl.tableFilter.projects"
-            data-row-limit="GeneCtrl.defaultProjectsRowLimit"
-            data-row-sizes="GeneCtrl.rowSizes"
-            data-current-page="GeneCtrl.currentProjectsPage"></pagination-client-side>
-        
-        <table class="hidden" id="{{GeneCtrl.gene.id}}_distribution">
-            <thead>
-            <tr>
-                <th><translate>Project</translate></th>
-                <th><translate>Site</translate></th>
-                <th><translate>Tumour Type</translate></th>
-                <th><translate>Tumour Subtype</translate></th>
-                <th>
-                    <translate>Number of donors with the current gene containing simple somatic mutations in the current project</translate>
-                </th>
-                <th><translate>Number of SSM-tested donors in the current project</translate></th>
-                <th><translate>Percentage of donors with the current gene</translate></th>
-                <th><translate>Mutations</translate></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="project in GeneCtrl.gene.projects.hits | orderBy:'summary.uiAffectedDonorPercentage':true">
-                <td>{{project.name}}</td>
-                <td>{{project.primarySite}}</td>
-                <td>{{project.tumourType}}</td>
-                <td>{{project.tumourSubtype}}</td>
-                <td>{{project.affectedDonorCount}}</td>
-                <td>{{project.ssmTestedDonorCount}}</td>
-                <td>{{project.uiAffectedDonorPercentage}}</td>
-                <td>{{project.mutationCount}}</td>
-            </tr>
-            </tbody>
-        </table>
+    <div data-ng-if="GeneCtrl.bar.hasData" class="clearfix">
+      <bar class="wide" height=200 items="GeneCtrl.bar" heading=""
+         ylabel="{{'% of Donors Affected' | translate}}"
+         format="percentage"></bar>
     </div>
+    <span class="t_table_top">
+      <data-table-row-counts
+        data-data="GeneCtrl.gene.uiProjects"
+        data-filter="GeneCtrl.tableFilter.projects"
+        data-label="{{'projects' | translate}}"
+        data-current-page="GeneCtrl.currentProjectsPage"
+        data-row-limit="GeneCtrl.defaultProjectsRowLimit">
+      </data-table-row-counts>
+      <span
+        data-toolbar
+        data-entity="{{GeneCtrl.gene.id}}_distribution"
+        data-json="{{ GeneCtrl.gene.uiProjects }}"></span>
+      <table-filter data-class="small-filter"
+        data-filter-model="GeneCtrl.tableFilter.projects"
+        data-current-page="GeneCtrl.currentProjectsPage"></table-filter>
+    </span>
+    <table class="table table-bordered table-striped table-condensed"
+      data-ng-init="sortProjectsDescendingly = true;">
+      <thead>
+      <tr>
+        <th><translate>Project</translate></th>
+        <th><translate>Site</translate></th>
+        <th><translate>Tumour Type</translate></th>
+        <th><translate>Tumour Subtype</translate></th>
+        <th style="cursor: pointer"
+          data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
+          <abbr data-icgc-tooltip="{{'# donors in current project with [[geneSymbol]] affected by SSM / # SSM-tested donors in current project' | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}">
+          <translate># Donors affected</translate></abbr>
+          <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+        </th>
+        <th><abbr data-icgc-tooltip="{{'Number of SSM observed in [[ geneSymbol ]]'  | translate | subDelimiters:{geneSymbol: GeneCtrl.gene.symbol} }}"
+              data-tooltip-placement="left"><translate># Mutations</translate></abbr></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr data-ng-repeat="project in (GeneCtrl.gene.uiProjects | 
+        filter: GeneCtrl.tableFilter.projects | 
+        orderBy:'uiAffectedDonorPercentage/100':sortProjectsDescendingly | 
+        limitTo: GeneCtrl.defaultProjectsRowLimit : ((GeneCtrl.currentProjectsPage-1) * GeneCtrl.defaultProjectsRowLimit)) track by project.uiId"
+        data-ng-if="project.uiFilteredDonorCount > 0">
+        <td><a data-icgc-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">
+          <span data-ng-bind-html="project.uiId | highlight: GeneCtrl.tableFilter.projects"></span>
+        </a></td>
+        <td><span data-ng-bind-html="project.uiPrimarySite | highlight: GeneCtrl.tableFilter.projects"></span></td>
+        <td><span data-ng-bind-html="project.uiTumourType | highlight: GeneCtrl.tableFilter.projects"></span></td>
+        <td><span data-ng-bind-html="project.uiTumourSubtype | highlight: GeneCtrl.tableFilter.projects"></span></td>
+        <td class="text-right" style="position: relative; display: block">
+
+            <span data-ng-style="{width:project.uiAffectedDonorPercentage+'%'}"
+              class="t_facets__facet__terms__active__term__bar"></span>
+            <span style="position: relative">
+            <a data-ng-href='/search?filters={{project.uiAdvQuery}}'
+              data-ng-bind-html="project.uiFilteredDonorCount | highlight: GeneCtrl.tableFilter.projects">
+            </a>
+            /
+            <a 
+              data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{ project.uiId }}"]},"availableDataTypes":{"is":["ssm"]}}}'
+              data-ng-bind-html="project.uiSSMTestedDonorCount | highlight: GeneCtrl.tableFilter.projects">            
+            </a>
+            <em data-ng-bind-html="'('+ project.uiAffectedDonorPercentage + '%)' | highlight: GeneCtrl.tableFilter.projects"></em>
+            </span>
+
+        </td>
+        <td class="text-right">
+          <span data-ng-if="project.uiMutationCount==null"><i class="icon-spinner icon-spin"></i></span>
+          <span data-ng-if="project.uiMutationCount === 0">--</span>
+          <a data-ng-if="project.uiMutationCount > '0'"
+             data-ng-href='/search/m?filters={{project.uiAdvQuery}}'
+             data-ng-bind-html="project.uiMutationCount | highlight: GeneCtrl.tableFilter.projects ">
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <pagination-client-side 
+      data-data="GeneCtrl.gene.uiProjects"
+      data-filter="GeneCtrl.tableFilter.projects"
+      data-row-limit="GeneCtrl.defaultProjectsRowLimit"
+      data-row-sizes="GeneCtrl.rowSizes"
+      data-current-page="GeneCtrl.currentProjectsPage"></pagination-client-side>
+    
+    <table class="hidden" id="{{GeneCtrl.gene.id}}_distribution">
+      <thead>
+      <tr>
+        <th><translate>Project</translate></th>
+        <th><translate>Site</translate></th>
+        <th><translate>Tumour Type</translate></th>
+        <th><translate>Tumour Subtype</translate></th>
+        <th>
+          <translate>Number of donors with the current gene containing simple somatic mutations in the current project</translate>
+        </th>
+        <th><translate>Number of SSM-tested donors in the current project</translate></th>
+        <th><translate>Percentage of donors with the current gene</translate></th>
+        <th><translate>Mutations</translate></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr data-ng-repeat="project in GeneCtrl.gene.projects.hits | orderBy:'summary.uiAffectedDonorPercentage':true">
+        <td>{{project.name}}</td>
+        <td>{{project.primarySite}}</td>
+        <td>{{project.tumourType}}</td>
+        <td>{{project.tumourSubtype}}</td>
+        <td>{{project.affectedDonorCount}}</td>
+        <td>{{project.ssmTestedDonorCount}}</td>
+        <td>{{project.uiAffectedDonorPercentage}}</td>
+        <td>{{project.mutationCount}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 <section id="protein" class="dynamic-height">
-    <div class="empty" data-ng-if="GeneCtrl.isPVInitialLoad && GeneCtrl.gene.uiProteinTranscript.length">
-        <h3>
-            <i class="icon-spinner icon-spin"></i>Loading Protein...
-        </h3>
-    </div>
-    <div data-ng-if="!GeneCtrl.gene.uiProteinTranscript.length" class="empty">
-        <h3 data-ng-if="GeneCtrl.gene.affectedTranscriptIds.length">
-            <translate>No Protein Coding Transcript Found.</translate>
-        </h3>
-        <h3 data-ng-if="!GeneCtrl.gene.affectedTranscriptIds.length">
-            <translate>No Mutation occurs in coding region of this Gene.</translate>
-        </h3>
-    </div>
-    <div data-ng-if="GeneCtrl.gene.uiProteinTranscript.length"
-         data-ng-init="sorted = (GeneCtrl.gene.uiProteinTranscript | orderBy:'+name')">
-        <h3 data-ng-if="!GeneCtrl.isPVInitialLoad"><translate>Protein</translate></h3>
+  <div class="empty" data-ng-if="GeneCtrl.isPVInitialLoad && GeneCtrl.gene.uiProteinTranscript.length">
+    <h3>
+      <i class="icon-spinner icon-spin"></i>Loading Protein...
+    </h3>
+  </div>
+  <div data-ng-if="!GeneCtrl.gene.uiProteinTranscript.length" class="empty">
+    <h3 data-ng-if="GeneCtrl.gene.affectedTranscriptIds.length">
+      <translate>No Protein Coding Transcript Found.</translate>
+    </h3>
+    <h3 data-ng-if="!GeneCtrl.gene.affectedTranscriptIds.length">
+      <translate>No Mutation occurs in coding region of this Gene.</translate>
+    </h3>
+  </div>
+  <div data-ng-if="GeneCtrl.gene.uiProteinTranscript.length"
+     data-ng-init="sorted = (GeneCtrl.gene.uiProteinTranscript | orderBy:'+name')">
+    <h3 data-ng-if="!GeneCtrl.isPVInitialLoad"><translate>Protein</translate></h3>
 
-        <form data-ng-init="transcript = sorted[0]" data-ng-show="GeneCtrl.gene.uiProteinTranscript.length > 0">
-            <div data-ng-show="!GeneCtrl.isPVInitialLoad">
-                <span><strong><translate>Transcript:</translate> </strong>
-                <select data-ng-model="transcript"
-                    data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)' for t in sorted"></select>
-                <span data-ng-if="GeneCtrl.isPVLoading"><i class="icon-spinner icon-spin"></i></span>
-            </div>
-            <proteinstructure transcript="transcript" 
-                data-value-height="200" 
-                data-is-initial-load="GeneCtrl.isPVInitialLoad"
-                data-is-pv-loading="GeneCtrl.isPVLoading"
-                data-ng-style="{'opacity': GeneCtrl.isPVLoading ? '0.3' : '1'}"></proteinstructure>
-          </span>
-        </form>
-    </div>
+    <form data-ng-init="transcript = sorted[0]" data-ng-show="GeneCtrl.gene.uiProteinTranscript.length > 0">
+      <div data-ng-show="!GeneCtrl.isPVInitialLoad">
+        <span><strong><translate>Transcript:</translate> </strong>
+        <select data-ng-model="transcript"
+          data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)' for t in sorted"></select>
+        <span data-ng-if="GeneCtrl.isPVLoading"><i class="icon-spinner icon-spin"></i></span>
+      </div>
+      <proteinstructure transcript="transcript" 
+        data-value-height="200" 
+        data-is-initial-load="GeneCtrl.isPVInitialLoad"
+        data-is-pv-loading="GeneCtrl.isPVLoading"
+        data-ng-style="{'opacity': GeneCtrl.isPVLoading ? '0.3' : '1'}"></proteinstructure>
+      </span>
+    </form>
+  </div>
 </section>
 <section id="genomic" class="dynamic-height" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
-    <div class="empty" data-ng-if="GeneCtrl.isGVLoading">
-        <h3>
-            <i class="icon-spinner icon-spin"></i>Loading Genomic Context...
-        </h3>
-    </div>
-    <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
-        <translate>Genomic Context</translate>
-        <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
+  <div class="empty" data-ng-if="GeneCtrl.isGVLoading">
+    <h3>
+      <i class="icon-spinner icon-spin"></i>Loading Genomic Context...
     </h3>
-    <h3 data-ng-if="!GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
-        <translate>No Genomic Context available.</translate>
-    </h3>
+  </div>
+  <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
+    <translate>Genomic Context</translate>
+    <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
+  </h3>
+  <h3 data-ng-if="!GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
+    <translate>No Genomic Context available.</translate>
+  </h3>
 
-    <div data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading" class="t_gv__navbar">
-       <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
-       <span class="pull-right gv-navbar-zoom"></span>
-    </div>
-    <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" 
-        region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"
-        data-is-gv-loading="GeneCtrl.isGVLoading"
-        data-ng-style="{'visibility': GeneCtrl.isGVLoading ? 'hidden' : 'visible'}"></gvembed>
+  <div data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading" class="t_gv__navbar">
+     <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
+     <span class="pull-right gv-navbar-zoom"></span>
+  </div>
+  <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" 
+    region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"
+    data-is-gv-loading="GeneCtrl.isGVLoading"
+    data-ng-style="{'visibility': GeneCtrl.isGVLoading ? 'hidden' : 'visible'}"></gvembed>
 </section>
 <section id="mutations" class="dynamic-height"
-         data-ng-controller="GeneMutationsCtrl as GeneMutationsCtrl"
-         data-ng-class="{'loading': !GeneMutationsCtrl.mutations.hits, 'empty': GeneMutationsCtrl.mutations.hits.length == 0}">
-    <h3 data-ng-if="!GeneMutationsCtrl.mutations.hits">
-        <i class="icon-spinner icon-spin"></i><translate>Loading Mutations...</translate>
+     data-ng-controller="GeneMutationsCtrl as GeneMutationsCtrl"
+     data-ng-class="{'loading': !GeneMutationsCtrl.mutations.hits, 'empty': GeneMutationsCtrl.mutations.hits.length == 0}">
+  <h3 data-ng-if="!GeneMutationsCtrl.mutations.hits">
+    <i class="icon-spinner icon-spin"></i><translate>Loading Mutations...</translate>
+  </h3>
+
+  <h3 data-ng-if="GeneMutationsCtrl.mutations.hits.length == 0">
+    <translate>No Mutations Found.</translate>
+  </h3>
+
+  <div data-ng-if="GeneMutationsCtrl.mutations.hits.length > 0">
+    <h3>
+      <translate>Most Frequent Mutations</translate>
+      <span data-open-in-list='/m?filters={{GeneCtrl.gene.advQuery}}'></span>
     </h3>
 
-    <h3 data-ng-if="GeneMutationsCtrl.mutations.hits.length == 0">
-        <translate>No Mutations Found.</translate>
-    </h3>
-
-    <div data-ng-if="GeneMutationsCtrl.mutations.hits.length > 0">
-        <h3>
-            <translate>Most Frequent Mutations</translate>
-            <span data-open-in-list='/m?filters={{GeneCtrl.gene.advQuery}}'></span>
-        </h3>
-
-        <div data-ng-if="GeneMutationsCtrl.bar.hasData" class="clearfix">
-            <bar class="wide" height=200 items="GeneMutationsCtrl.bar" heading=""
-                 ylabel="{{'Donors affected' | translate}}"></bar>
-        </div>
-        <span class="t_table_top">
-            <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneMutationsCtrl.mutations.pagination"></span>
-            <span data-toolbar
-            data-entity="{{GeneCtrl.gene.id}}_mutations"
-            data-json="{{ GeneMutationsCtrl.mutations.hits }}"></span>
-        </span>
-        <table class="table table-bordered table-striped table-condensed">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>
-                    <abbr data-icgc-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
-                        <translate>DNA change</translate>
-                    </abbr>
-                </th>
-                <th><translate>Type</translate></th>
-                <th><abbr
-                        data-icgc-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
-                </th>
-                <th class="text-center">
-                    <abbr data-icgc-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
-                          data-tooltip-placement="left"><translate># Donors affected</translate></abbr></th>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits track by mutation.id">
-                <td><a data-ng-href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a></td>
-                <td data-icgc-tooltip="chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}"
-                    data-tooltip-placement="top">
-                    <span style="text-overflow:ellipsis;width:11em;display:block;overflow:hidden;">
-                        chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}
-                    </span>
-                </td>
-                <td><abbr data-icgc-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
-                <td style="max-width: 20rem; white-space: normal">
-                    <mutation-consequences data-ng-if="mutation.consequences"
-                                           items="mutation.consequences"></mutation-consequences>
-
-                <td class="text-right" style="white-space: nowrap">
-                    <ul data-hide-sum-list="{{mutation.uiDonors}}"
-                        data-link='/search?filters={{mutation.advQuery}}'>
-                        <li data-ng-repeat="p in list | orderBy:'percentage':true"
-                            style="position: relative">
-                            <span data-ng-style="{width:p.percentage * 100+'%'}"
-                                  class="t_facets__facet__terms__active__term__bar"></span>
-                            <span style="position: relative">
-                                <a data-tooltip-placement="left"
-                                   data-icgc-tooltip="{{ p.projectName }}"
-                                   href="/projects/{{p.term}}">{{p.term}}</a>
-                            <a href='/search?filters={{p.advQuery}}'>
-                                {{p.count | number}}
-                            </a>/
-                            <a href='/search?filters={"donor":{"projectId":{"is":["{{p.term}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
-                                {{p.countTotal | number}}
-                            </a>
-                            <em>({{p.percentage * 100 | number:2}}%)</em>
-                            </span>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <pagination-controls data-type="mutations" data-data="GeneMutationsCtrl.mutations"></pagination-controls>
-
-        <table class="hidden" id="{{GeneCtrl.gene.id}}_mutations">
-            <thead>
-            <tr>
-                <th><translate>Mutation ID</translate></th>
-                <th><translate>Genomic DNA Change</translate></th>
-                <th><translate>Type</translate></th>
-                <th><translate>Consequences</translate></th>
-                <th><translate>Donors by Project</translate></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits">
-                <td>{{mutation.id}}</td>
-                <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
-                <td>{{mutation.type}}</td>
-                <td>
-                    <mutation-consequences items="mutation.consequences"></mutation-consequences>
-                </td>
-                <td>
-                    <div data-ng-repeat="p in mutation.uiDonors | orderBy:'percentage':true">
-                        <div>{{p.term}}:{{p.count}}/{{p.countTotal}}</div>
-                        <div data-ng-if="!$last">|</div>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div data-ng-if="GeneMutationsCtrl.bar.hasData" class="clearfix">
+      <bar class="wide" height=200 items="GeneMutationsCtrl.bar" heading=""
+         ylabel="{{'Donors affected' | translate}}"></bar>
     </div>
+    <span class="t_table_top">
+      <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneMutationsCtrl.mutations.pagination"></span>
+      <span data-toolbar
+      data-entity="{{GeneCtrl.gene.id}}_mutations"
+      data-json="{{ GeneMutationsCtrl.mutations.hits }}"></span>
+    </span>
+    <table class="table table-bordered table-striped table-condensed">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>
+          <abbr data-icgc-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+            <translate>DNA change</translate>
+          </abbr>
+        </th>
+        <th><translate>Type</translate></th>
+        <th><abbr
+            data-icgc-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
+        </th>
+        <th class="text-center">
+          <abbr data-icgc-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+              data-tooltip-placement="left"><translate># Donors affected</translate></abbr></th>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits track by mutation.id">
+        <td><a data-ng-href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a></td>
+        <td data-icgc-tooltip="chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}"
+          data-tooltip-placement="top">
+          <span style="text-overflow:ellipsis;width:11em;display:block;overflow:hidden;">
+            chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}
+          </span>
+        </td>
+        <td><abbr data-icgc-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr></td>
+        <td style="max-width: 20rem; white-space: normal">
+          <mutation-consequences data-ng-if="mutation.consequences"
+                       items="mutation.consequences"></mutation-consequences>
+
+        <td class="text-right" style="white-space: nowrap">
+          <ul data-hide-sum-list="{{mutation.uiDonors}}"
+            data-link='/search?filters={{mutation.advQuery}}'>
+            <li data-ng-repeat="p in list | orderBy:'percentage':true"
+              style="position: relative">
+              <span data-ng-style="{width:p.percentage * 100+'%'}"
+                  class="t_facets__facet__terms__active__term__bar"></span>
+              <span style="position: relative">
+                <a data-tooltip-placement="left"
+                   data-icgc-tooltip="{{ p.projectName }}"
+                   href="/projects/{{p.term}}">{{p.term}}</a>
+              <a href='/search?filters={{p.advQuery}}'>
+                {{p.count | number}}
+              </a>/
+              <a href='/search?filters={"donor":{"projectId":{"is":["{{p.term}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
+                {{p.countTotal | number}}
+              </a>
+              <em>({{p.percentage * 100 | number:2}}%)</em>
+              </span>
+            </li>
+          </ul>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <pagination-controls data-type="mutations" data-data="GeneMutationsCtrl.mutations"></pagination-controls>
+
+    <table class="hidden" id="{{GeneCtrl.gene.id}}_mutations">
+      <thead>
+      <tr>
+        <th><translate>Mutation ID</translate></th>
+        <th><translate>Genomic DNA Change</translate></th>
+        <th><translate>Type</translate></th>
+        <th><translate>Consequences</translate></th>
+        <th><translate>Donors by Project</translate></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr data-ng-repeat="mutation in GeneMutationsCtrl.mutations.hits">
+        <td>{{mutation.id}}</td>
+        <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
+        <td>{{mutation.type}}</td>
+        <td>
+          <mutation-consequences items="mutation.consequences"></mutation-consequences>
+        </td>
+        <td>
+          <div data-ng-repeat="p in mutation.uiDonors | orderBy:'percentage':true">
+            <div>{{p.term}}:{{p.count}}/{{p.countTotal}}</div>
+            <div data-ng-if="!$last">|</div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
 <section id="compounds" class="dynamic-height"
@@ -520,92 +539,92 @@
   ng-class="{ 'loading': GeneCompoundsCtrl.compounds === undefined, 'empty': GeneCompoundsCtrl.compoundslength === 0 }">
 
   <h3 ng-if="GeneCompoundsCtrl.compounds === undefined">
-    <i class="icon-spinner icon-spin" /><translate>Loading Compounds...</translate>
+  <i class="icon-spinner icon-spin" /><translate>Loading Compounds...</translate>
   </h3>
 
   <h3 ng-if="GeneCompoundsCtrl.compounds.length === 0">
-    <translate>No Target Compounds Found.</translate>
+  <translate>No Target Compounds Found.</translate>
   </h3>
 
   <div ng-if="GeneCompoundsCtrl.compounds.length > 0">
-    <h3><translate>Targeting Compounds</translate></h3>
+  <h3><translate>Targeting Compounds</translate></h3>
 
-    <span class="t_table_top">
-        <data-table-row-counts
-            data-data="GeneCompoundsCtrl.uiCompounds"
-            data-filter="GeneCompoundsCtrl.tableFilter.compounds"
-            data-label="{{'compounds' | translate}}"
-            data-current-page="GeneCompoundsCtrl.currentCompoundsPage"
-            data-row-limit="GeneCompoundsCtrl.defaultCompoundsRowLimit">
-        </data-table-row-counts>
-    </span>
-    
-    <table-filter data-class="small-filter"
-        data-filter-model="GeneCompoundsCtrl.tableFilter.compounds"
-        data-current-page="GeneCompoundsCtrl.currentCompoundsPage"></table-filter>
-    <span ng-init="sortField = 'uiFullName'; sortDescendingly = false;" />
+  <span class="t_table_top">
+    <data-table-row-counts
+      data-data="GeneCompoundsCtrl.uiCompounds"
+      data-filter="GeneCompoundsCtrl.tableFilter.compounds"
+      data-label="{{'compounds' | translate}}"
+      data-current-page="GeneCompoundsCtrl.currentCompoundsPage"
+      data-row-limit="GeneCompoundsCtrl.defaultCompoundsRowLimit">
+    </data-table-row-counts>
+  </span>
+  
+  <table-filter data-class="small-filter"
+    data-filter-model="GeneCompoundsCtrl.tableFilter.compounds"
+    data-current-page="GeneCompoundsCtrl.currentCompoundsPage"></table-filter>
+  <span ng-init="sortField = 'uiFullName'; sortDescendingly = false;" />
 
-    <table class="table table-bordered table-striped table-condensed">
-        <thead>
-        <tr>
-            <th style="cursor: pointer"
-              ng-click="sortField = 'uiFullName'; sortDescendingly = ! sortDescendingly">
-              <translate>Name</translate>
-              <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'uiFullName'" class="icon-sort" />
-              <i ng-if="sortField === 'uiFullName'"
-                class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
-            </th>
-            <th><translate>ATC Level 4 Description</translate></th>
-            <th style="cursor: pointer"
-                ng-click="sortField = 'uiDrugClass'; sortDescendingly = ! sortDescendingly">
-                <translate>Compound Class</translate>
-                <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'uiDrugClass'" class="icon-sort" />
-                <i ng-if="sortField === 'uiDrugClass'"
-                   class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
-            </th>
-            <th style="cursor: pointer"
-              ng-click="sortField = 'cancerTrialCount'; sortDescendingly = ! sortDescendingly">
-              <translate># Clinical Trials</translate>
-              <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'cancerTrialCount'" class="icon-sort" />
-              <i ng-if="sortField === 'cancerTrialCount'"
-                class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="compound in (GeneCompoundsCtrl.uiCompounds |
-                filter: GeneCompoundsCtrl.tableFilter.compounds |
-                orderBy:sortField:sortDescendingly |
-                limitTo: GeneCompoundsCtrl.defaultCompoundsRowLimit : ((GeneCompoundsCtrl.currentCompoundsPage-1) * GeneCompoundsCtrl.defaultCompoundsRowLimit))">
-                <td>
-                    <a href="{{ GeneCompoundsCtrl.compoundUrl }}{{ compound.uiZincId }}">
-                        <span
-                            data-ng-bind-html="compound.uiFullName | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
-                    </a>
-                </td>
-                <td>
-                    <span 
-                        data-ng-bind-html="compound.uiDescription | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
-                </td>
-                <td>
-                    <span data-ng-bind-html="compound.uiDrugClass | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
-                </td>
-                <td class="text-right">
-                    <a href="/compound/{{compound.uiZincId}}#trials">
-                        <span 
-                            data-ng-bind-html="compound.uiCancerTrials | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+    <tr>
+      <th style="cursor: pointer"
+        ng-click="sortField = 'uiFullName'; sortDescendingly = ! sortDescendingly">
+        <translate>Name</translate>
+        <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'uiFullName'" class="icon-sort" />
+        <i ng-if="sortField === 'uiFullName'"
+        class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+      </th>
+      <th><translate>ATC Level 4 Description</translate></th>
+      <th style="cursor: pointer"
+        ng-click="sortField = 'uiDrugClass'; sortDescendingly = ! sortDescendingly">
+        <translate>Compound Class</translate>
+        <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'uiDrugClass'" class="icon-sort" />
+        <i ng-if="sortField === 'uiDrugClass'"
+           class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+      </th>
+      <th style="cursor: pointer"
+        ng-click="sortField = 'cancerTrialCount'; sortDescendingly = ! sortDescendingly">
+        <translate># Clinical Trials</translate>
+        <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'cancerTrialCount'" class="icon-sort" />
+        <i ng-if="sortField === 'cancerTrialCount'"
+        class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="compound in (GeneCompoundsCtrl.uiCompounds |
+        filter: GeneCompoundsCtrl.tableFilter.compounds |
+        orderBy:sortField:sortDescendingly |
+        limitTo: GeneCompoundsCtrl.defaultCompoundsRowLimit : ((GeneCompoundsCtrl.currentCompoundsPage-1) * GeneCompoundsCtrl.defaultCompoundsRowLimit))">
+        <td>
+          <a href="{{ GeneCompoundsCtrl.compoundUrl }}{{ compound.uiZincId }}">
+            <span
+              data-ng-bind-html="compound.uiFullName | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
+          </a>
+        </td>
+        <td>
+          <span 
+            data-ng-bind-html="compound.uiDescription | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
+        </td>
+        <td>
+          <span data-ng-bind-html="compound.uiDrugClass | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
+        </td>
+        <td class="text-right">
+          <a href="/compound/{{compound.uiZincId}}#trials">
+            <span 
+              data-ng-bind-html="compound.uiCancerTrials | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <pagination-client-side 
-        data-data="GeneCompoundsCtrl.uiCompounds"
-        data-filter="GeneCompoundsCtrl.tableFilter.compounds"
-        data-row-limit="GeneCompoundsCtrl.defaultCompoundsRowLimit"
-        data-row-sizes="GeneCompoundsCtrl.rowSizes"
-        data-current-page="GeneCompoundsCtrl.currentCompoundsPage"></pagination-client-side>
+  <pagination-client-side 
+    data-data="GeneCompoundsCtrl.uiCompounds"
+    data-filter="GeneCompoundsCtrl.tableFilter.compounds"
+    data-row-limit="GeneCompoundsCtrl.defaultCompoundsRowLimit"
+    data-row-sizes="GeneCompoundsCtrl.rowSizes"
+    data-current-page="GeneCompoundsCtrl.currentCompoundsPage"></pagination-client-side>
 
   </div>
 
