@@ -1,141 +1,136 @@
 <div class="h1-wrap">
     <h1 data-ui-scrollpoint=79>
         <span class="t_badge t_badge_icon t_badge__download">
-          <span class="icon-database" />
+            <span class="icon-database" />
         </span>
         {{:: ICGCRepoController.dataReleasesTitle }}
     </h1>
 </div>
 
 <div>
-<section style="padding-top:0">
-    <div data-ng-repeat="file in ICGCRepoController.textFiles | filter:{name:'notice.txt'}" class="alert alert-error">
-       <div marked="file.textContent" class="release_notice"></div>
-    </div>
+    <section style="padding-top:0">
+        <div data-ng-repeat="file in ICGCRepoController.textFiles | filter:{name:'notice.txt'}" class="alert alert-error">
+            <div marked="file.textContent" class="release_notice"></div>
+        </div>
 
-    <section class="alert alert-warning" data-ng-if="ICGCRepoController.downloadEnabled === false">
-        <translate>
-            {{:: ICGCRepoController.dataReleasesTitle }} section is currently unavailable due to maintenance.
-        </translate><br>
-        <translate>
-            Please contact <a href="mailto:dcc-support@icgc.org">support</a> if you require assistance.
-        </translate>
-    </section>
-
-    <div class="wide" data-ng-if="ICGCRepoController.downloadEnabled === true">
-        <span data-ng-init="predicate='name'"></span>
-        <span data-ng-init="reverse=false"></span>
-
-        <section class="loading" data-ng-if="! ICGCRepoController.files">
-            <h3><i class="icon-spin icon-spinner"></i><translate>Loading...</translate></h3>
+        <section class="alert alert-warning" data-ng-if="ICGCRepoController.downloadEnabled === false">
+            <translate>
+                {{:: ICGCRepoController.dataReleasesTitle }} section is currently unavailable due to maintenance.
+            </translate>
+            <br>
+            <translate>
+                Please contact
+                <a href="mailto:dcc-support@icgc.org">support</a> if you require assistance.
+            </translate>
         </section>
 
-        <div data-ng-if="ICGCRepoController.files" ng-init="releaseUrl = ICGCRepoController.dataReleasesUrl;">
-            <div class="file-path-container">
-                <ul class="breadcrumb">
-                    <li><a href="{{:: releaseUrl }}"><i class="icon-database"></i>DCC</a></li>
-                    <li data-ng-repeat="p in ICGCRepoController.slugs">
-                        <a data-ng-if="!$last"
-                        data-ng-style="deprecatedReleases.indexOf(p.name) >= 0?{'text-decoration':'line-through'}:{}"
-                        href="{{:: releaseUrl }}/{{ p.url }}">{{ p.name }}</a>
-                        <span data-ng-if="$last"
-                            data-ng-style="deprecatedReleases.indexOf(p.name) >= 0?{'text-decoration':'line-through'}:{}">{{ p.name }}</span>
-                    </li>
-                    <li>
-                        <span class="file-query-wrapper">
-                            <input
-                                type="text" class="form-control file-query-input"
-                                autofocus
-                                spellcheck="false"
-                                ng-model="ICGCRepoController.fileQuery"
-                                placeholder="Filter by file name..."
-                                ng-keyup="ICGCRepoController.handleFileQueryKeyup($event)"
-                                size="2"
-                            />
-                            <i
-                                style="position: absolute; top: 0; right: 3px; cursor: pointer;"
-                                class="icon-cancel ng-hide"
-                                data-ng-click="ICGCRepoController.fileQuery = ''"
-                                data-ng-show="ICGCRepoController.fileQuery"
-                            ></i>
-                        </span>
-                    </li>
-                </ul>
-                <span class="file-character-warning"
-                    data-ng-style="{visibility : (ICGCRepoController.fileQuery.length && ICGCRepoController.fileQuery.length < 2) ? 'visible' : 'hidden'}">Enter at least 2 characters to apply filter</span>
+        <div class="wide" data-ng-if="ICGCRepoController.downloadEnabled === true">
+            <span data-ng-init="predicate='name'"></span>
+            <span data-ng-init="reverse=false"></span>
+
+            <section class="loading" data-ng-if="! ICGCRepoController.files">
+                <h3>
+                    <i class="icon-spin icon-spinner"></i>
+                    <translate>Loading...</translate>
+                </h3>
+            </section>
+
+            <div data-ng-if="ICGCRepoController.files" ng-init="releaseUrl = ICGCRepoController.dataReleasesUrl;">
+                <div class="file-path-container">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{{:: releaseUrl }}">
+                                <i class="icon-database"></i>DCC</a>
+                        </li>
+                        <li data-ng-repeat="p in ICGCRepoController.slugs">
+                            <a data-ng-if="!$last" data-ng-style="deprecatedReleases.indexOf(p.name) >= 0?{'text-decoration':'line-through'}:{}" href="{{:: releaseUrl }}/{{ p.url }}">{{ p.name }}</a>
+                            <span data-ng-if="$last" data-ng-style="deprecatedReleases.indexOf(p.name) >= 0?{'text-decoration':'line-through'}:{}">{{ p.name }}</span>
+                        </li>
+                        <li>
+                            <span class="file-query-wrapper">
+                                <input type="text" class="form-control file-query-input" autofocus spellcheck="false" ng-model="ICGCRepoController.fileQuery"
+                                    placeholder="Filter by file name..." ng-keyup="ICGCRepoController.handleFileQueryKeyup($event)"
+                                    size="2" />
+                                <i style="position: absolute; top: 0; right: 3px; cursor: pointer;" class="icon-cancel ng-hide" data-ng-click="ICGCRepoController.fileQuery = ''"
+                                    data-ng-show="ICGCRepoController.fileQuery"></i>
+                            </span>
+                        </li>
+                    </ul>
+                    <span class="file-character-warning" data-ng-style="{visibility : (ICGCRepoController.fileQuery.length && ICGCRepoController.fileQuery.length < 2) ? 'visible' : 'hidden'}">Enter at least 2 characters to apply filter</span>
+                </div>
+                <file-finder ng-show="ICGCRepoController.fileQuery.length >= 2" query="ICGCRepoController.slugs.slice(-1)[0].url + ICGCRepoController.fileQuery">
+
+                </file-finder>
+
+                <table ng-show="!ICGCRepoController.fileQuery || !ICGCRepoController.fileQuery.length || ICGCRepoController.fileQuery.length < 2"
+                    class="table" style="font-size: 1.1rem">
+                    <thead>
+                        <tr>
+                            <th>
+                                <translate>Name</translate>
+                            </th>
+                            <th class="text-right">
+                                <translate>File Size</translate>
+                            </th>
+                            <th class="text-right">
+                                <translate>Date</translate>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="file in ICGCRepoController.files">
+                            <td data-ng-if="file.type=='f'">
+                                <i class="icon-file"></i>
+                                <a target="_self" href="{{ICGCRepoController.API.BASE_URL}}/download?fn={{file.name}}" ng-click="track('file-repo', { action: 'click-file', label: file.baseName })">{{ file.baseName }}</a>
+                            </td>
+                            <td data-ng-if="file.type=='d'" data-ng-style="deprecatedReleases.indexOf(file.baseName) >= 0?{'text-decoration':'line-through'}:{}">
+                                <i class="icon-folder-open"></i>
+                                <a data-ng-if="file.translation" href="{{:: releaseUrl }}{{ file.name }}">[{{ file.baseName }}] {{ file.translation }}</a>
+                                <a data-ng-if="!file.translation" href="{{:: releaseUrl }}{{ file.name }}">{{ file.baseName }}</a>
+                            </td>
+                            <td data-ng-if="file.type=='f'" class="text-right">{{ file.size | bytes }}</td>
+                            <td data-ng-if="file.type=='d'" class="text-right">--</td>
+                            <td class="text-right">{{ file.date | date }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <file-finder
-                ng-show="ICGCRepoController.fileQuery.length >= 2"
-                query="ICGCRepoController.slugs.slice(-1)[0].url + ICGCRepoController.fileQuery"
-            >
 
-            </file-finder>
-
-            <table
-                ng-show="!ICGCRepoController.fileQuery || !ICGCRepoController.fileQuery.length || ICGCRepoController.fileQuery.length < 2"
-                class="table"
-                style="font-size: 1.1rem"
-            >
-                <thead>
-                <tr>
-                    <th><translate>Name</translate></th>
-                    <th class="text-right"><translate>File Size</translate></th>
-                    <th class="text-right"><translate>Date</translate></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="file in ICGCRepoController.files">
-                    <td data-ng-if="file.type=='f'">
-                        <i class="icon-file"></i>
-                        <a
-                            target="_self"
-                            href="{{ICGCRepoController.API.BASE_URL}}/download?fn={{file.name}}"
-                            ng-click="track('file-repo', { action: 'click-file', label: file.baseName })"
-                        >{{ file.baseName }}</a>
-                    </td>
-                    <td data-ng-if="file.type=='d'"
-                        data-ng-style="deprecatedReleases.indexOf(file.baseName) >= 0?{'text-decoration':'line-through'}:{}">
-                        <i class="icon-folder-open"></i>
-                        <a data-ng-if="file.translation" href="{{:: releaseUrl }}{{ file.name }}">[{{ file.baseName }}] {{ file.translation }}</a>
-                        <a data-ng-if="!file.translation" href="{{:: releaseUrl }}{{ file.name }}">{{ file.baseName }}</a>
-                    </td>
-                    <td data-ng-if="file.type=='f'" class="text-right">{{ file.size | bytes }}</td>
-                    <td data-ng-if="file.type=='d'" class="text-right">--</td>
-                    <td class="text-right">{{ file.date | date }}</td>
-                </tr>
-                </tbody>
-            </table>
+            <div ng-show="!ICGCRepoController.fileQuery || !ICGCRepoController.fileQuery.length || ICGCRepoController.fileQuery.length < 2">
+                <br>
+                <div data-ng-repeat="file in ICGCRepoController.textFiles | filter:{name : 'README'}">
+                    <div class="well well-small">
+                        <div>
+                            <a target="_self" href="{{ICGCRepoController.API.BASE_URL}}/download?fn={{file.name}}">
+                                <i class="icon-file"></i>{{file.baseName}}</a>
+                        </div>
+                        <hr>
+                        <div class="markdown-wrapper">
+                            <div marked="file.textContent" class="markdown-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div ng-show="!ICGCRepoController.fileQuery || !ICGCRepoController.fileQuery.length || ICGCRepoController.fileQuery.length < 2">
-           <br>
-           <div data-ng-repeat="file in ICGCRepoController.textFiles | filter:{name : '!notice.txt'}">
-               <div class="well well-small">
-                   <div><a target="_self" href="{{ICGCRepoController.API.BASE_URL}}/download?fn={{file.name}}"><i class="icon-file"></i>{{file.baseName}}</a></div>
-                   <hr>
-                   <div class="markdown-wrapper" >
-                       <div marked="file.textContent" class="markdown-container"></div>
-                   </div>
-               </div>
-           </div>
+        <div class="narrow omega" data-ng-if="ICGCRepoController.downloadEnabled">
+            <div data-ng-if="ICGCRepoController.isSafari && !ICGCRepoController.isChrome" class="alert alert-info" style="margin:0 0 16px;">
+                <a href="#" class="close pull-right" style="cursor:pointer;" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>
+                    <span>Using Safari browser?</span>
+                </strong>
+                <br> We know that users have problems downloading gzip files from the download server. The downloaded files only
+                contain file headers. To fix the problem please either use any other browser or disable the "Open 'safe'
+                files after downloading" option in Safari browser as described in
+                <a href="https://discussions.apple.com/thread/2297632?tstart=0" target="_blank">this article</a>.
+            </div>
+            <p style="margin-top:0;">
+                <span>
+                    <a href="http://docs.icgc.org/portal/repositories/#having-trouble-downloading-a-file-from-dcc-repository" target="_blank">
+                        <i class="icon-external-link"></i>
+                        <translate>Having trouble downloading?</translate>
+                    </a>
+                </span>
+                <p/>
         </div>
-    </div>
-    <div class="narrow omega" data-ng-if="ICGCRepoController.downloadEnabled">
-         <div data-ng-if="ICGCRepoController.isSafari && !ICGCRepoController.isChrome" 
-            class="alert alert-info" 
-            style="margin:0 0 16px;">
-            <a href="#" class="close pull-right" style="cursor:pointer;" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong><span>Using Safari browser?</span></strong><br>
-            We know that users have problems downloading gzip files from the download server.
-            The downloaded files only contain file headers. To fix the problem please either use any other browser or disable the "Open 'safe' files after downloading" option in Safari browser as described in <a href="https://discussions.apple.com/thread/2297632?tstart=0" target="_blank">this article</a>.
-        </div>
-        <p style="margin-top:0;">
-            <span>
-                <a href="http://docs.icgc.org/portal/repositories/#having-trouble-downloading-a-file-from-dcc-repository" target="_blank">
-                    <i class="icon-external-link"></i> <translate>Having trouble downloading?</translate>
-                </a>
-            </span>
-        <p/>
-    </div>
-</section>
+    </section>
 </div>
