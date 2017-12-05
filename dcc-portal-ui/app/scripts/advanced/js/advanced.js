@@ -159,12 +159,12 @@ angular.module('icgc.advanced.controllers', [
         }
       });
 
-      _controller.donorDataTypeChartConfig = _controller.createChartConfig('donor', 'availableDataTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
-      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig('donor', 'analysisTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value;});
+      _controller.donorDataTypeChartConfig = _controller.createChartConfig('donor', 'availableDataTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value});
+      _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig('donor', 'analysisTypes', function () { return this.value > 1000 ? `${this.value / 1000}K` : this.value});
       _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig('mutation', 'consequenceType', function () { 
         if(this.value > 1000000){ return `${this.value / 1000000}M`}
         else if(this.value > 1000){ return `${this.value / 1000}K`}
-        else{ return this.value;}
+        else{ return this.value}
       });
 
       // to check if a set was previously selected and if its still in effect
@@ -914,26 +914,27 @@ angular.module('icgc.advanced.controllers', [
       var params = LocationService.getJqlParam('genes'),
           filters = _locationFilterCache.filters() || {},
           deferred = $q.defer();
-
+      
       _ASGeneService.isLoading = true;
-
+      
       Genes.getList(params).then(function(hitsGenesList) {
-
+        
         _ASGeneService.genes.hits = hitsGenesList.hits;
         _ASGeneService.genes.pagination = hitsGenesList.pagination;
         _ASGeneService.hitsLoaded = true;
-
+        
         _ASGeneService.genes.hits.forEach(function (gene) {
-
+          
           gene.embedQuery = LocationService.merge(filters, {gene: {id: {is: [gene.id]}}}, 'facet');
-
+          
           // Remove gene entity set because gene id is the key
           if (gene.embedQuery.hasOwnProperty('gene')) {
             var geneFilters = gene.embedQuery.gene;
             delete geneFilters[Extensions.ENTITY];
           }
-
-          // Proper encode
+          
+            // Proper encode
+          gene.embedFilters = encodeURIComponent(JSON.stringify(filters));
           gene.embedQuery = encodeURIComponent(JSON.stringify(gene.embedQuery));
 
         });
