@@ -62,8 +62,8 @@
   <translate  translate-comment="'N' donors affected by 'N' mutations across 'N' projects">projects</translate>
   </h4>
 
-  <div data-ng-if="GeneCtrl.bar.hasData" class="clearfix">
-  <bar class="wide" height=200 items="GeneCtrl.bar" heading=""
+  <div data-ng-if="GeneCtrl.bar.hasData && GeneCtrl.activeTab==='relations'" class="clearfix">
+  <bar class="wide-with-aside" height=200 items="GeneCtrl.bar" heading=""
       ylabel="{{'% of Donors Affected' | translate}}"
       format="percentage"></bar>
   </div>
@@ -198,8 +198,8 @@
   <span data-open-in-list='/m?filters={{GeneCtrl.gene.advQuery}}'></span>
   </h3>
 
-  <div data-ng-if="GeneMutationsCtrl.bar.hasData" class="clearfix">
-  <bar class="wide" height=200 items="GeneMutationsCtrl.bar" heading=""
+  <div data-ng-if="GeneMutationsCtrl.bar.hasData && GeneCtrl.activeTab==='relations'" class="clearfix">
+  <bar class="wide-with-aside" height=200 items="GeneMutationsCtrl.bar" heading=""
       ylabel="{{'Donors affected' | translate}}"></bar>
   </div>
   <span class="t_table_top">
