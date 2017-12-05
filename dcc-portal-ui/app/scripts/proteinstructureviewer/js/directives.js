@@ -250,7 +250,7 @@
                 $location.path('/mutations/' + d.ref);
               };
 
-             options.displayWidth = jQuery('.protein-structure-viewer-diagram').width() - 100;
+             options.displayWidth = jQuery('.protein-structure-viewer-diagram').width() - 50;
 
               var chart = chartmaker.chart(options, chartData);
               if (chartData.mutations.length > 0) {
@@ -278,6 +278,13 @@
           scope.isPvLoading = true;
           refresh(transcript);
         });
+
+        // Watch size of parent wrapper of the visualization, 
+        //  need to update graph width when it is hidden/shown in a tab
+        scope.$watch(
+          function() {return jQuery('.protein-structure-viewer-diagram').width()},
+          function() {refresh(scope.transcript)}
+        );
         
         jQuery(window).resize(function() {
           refresh(scope.transcript);
