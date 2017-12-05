@@ -58,6 +58,8 @@
       _ctrl.currentCancerPage = 1;
       _ctrl.defaultCancerRowLimit = 10;
       _ctrl.rowSizes = [10, 25, 50];
+      _ctrl.pathway = {}; // initialize pathway object
+      _ctrl.pathway.loading = true;
 
       Page.setTitle(geneSet.id);
       Page.setPage('entity');
@@ -119,7 +121,7 @@
             return;
           }
 
-          ids = _.pluck(projects.hits, 'id');
+          ids = _.map(projects.hits, 'id');
           mutationPromise = GeneSetService.getProjectMutations(ids, mergedGeneSetFilter);
 
           mutationPromise.then(function(projectMutations) {
@@ -143,7 +145,7 @@
             return;
           }
 
-          ids = _.pluck(projects.hits, 'id');
+          ids = _.map(projects.hits, 'id');
 
           donorPromise = GeneSetService.getProjectDonors(ids, mergedGeneSetFilter);
           genePromise = GeneSetService.getProjectGenes(ids, mergedGeneSetFilter);
@@ -162,7 +164,10 @@
                 return -p.uiAffectedDonorPercentage;
               }), 10),
               xAxis: 'id',
-              yValue: 'uiAffectedDonorPercentage'
+              yValue: 'uiAffectedDonorPercentage',
+              options: {
+                linkBase: '/projects/'
+              }
             });
           });
 
@@ -177,7 +182,10 @@
                 return -p.uiAffectedGenePercentage;
               }),10),
               xAxis: 'id',
-              yValue: 'uiAffectedGenePercentage'
+              yValue: 'uiAffectedGenePercentage',
+              options: {
+                linkBase: '/projects/'
+              }
             });
           });
 
@@ -185,12 +193,10 @@
   
         // 4) if it's a reactome pathway, get diagram
         if(_ctrl.geneSet.source === 'Reactome' && _ctrl.uiParentPathways[0]) {
-          _ctrl.pathway = {}; // initialize pathway object
-
           PathwayDataService.getPathwayData(geneSet.id, null)
             .then(function (pathwayData) {
               _ctrl.pathway = _.pick(pathwayData, 'xml', 'zooms', 'mutationHighlights', 'drugHighlights');
-
+            _ctrl.pathway.loading = false;
               // Wait before rendering legend, 
               // Same approach taken in the pathway viewer page. 
               setTimeout(function () {
@@ -203,6 +209,7 @@
               mutationHighlights: [],
               drugHighlights: []
             };
+            _ctrl.pathway.loading = false;
           });
         }
 
@@ -246,14 +253,6 @@
         }
       });
 
-      // $scope.$watch(function(){
-      //   return _ctrl.tableFilter.projects;
-      // }, function(newVal){
-      //   if(newVal){
-      //     _ctrl.currentCancerPage = 1;
-      //   }
-      // });
-
       refresh();
     });
 
@@ -270,7 +269,7 @@
           return;
         }
 
-        Genes.one(_.pluck(_ctrl.genes.hits, 'id').join(',')).handler.one('mutations',
+        Genes.one(_.map(_ctrl.genes.hits, 'id').join(',')).handler.one('mutations',
           'counts').get({filters: mergedGeneSetFilter}).then(function (data) {
             _ctrl.genes.hits.forEach(function (g) {
 
@@ -283,7 +282,7 @@
               });
             });
             // Timeout so that our scroll function gets called after render. 
-            $timeout(function() {$scope.fixScroll();},0);
+            $timeout(function() {$scope.fixScroll()},0);
           });
       }
     }
@@ -366,7 +365,7 @@
                 });
               }
               // Timeout so that our scroll function gets called after render. 
-              $timeout(function() {$scope.fixScroll();},0);            
+              $timeout(function() {$scope.fixScroll()},0);            
             });
           });
         });
@@ -415,7 +414,7 @@
           return;
         }
 
-        Donors.one(_.pluck(_ctrl.donors.hits, 'id').join(',')).handler.one('mutations', 'counts').get({
+        Donors.one(_.map(_ctrl.donors.hits, 'id').join(',')).handler.one('mutations', 'counts').get({
           filters: mergedGeneSetFilter
         }).then(function (data) {
           _ctrl.donors.hits.forEach(function (d) {

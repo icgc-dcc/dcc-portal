@@ -139,7 +139,7 @@
 
         chart.append('rect')
           .classed('chart-focus', true)
-          .attr('x', function() { return idx*config.projectWidth; })
+          .attr('x', function() { return idx*config.projectWidth })
           .attr('y', 0)
           .attr('width', config.projectWidth)
           .attr('height', config.chartHeight)
@@ -176,7 +176,7 @@
         .attr('width', config.projectWidth)
         .attr('height', config.chartHeight)
         .style('stroke', '#DDD')
-        .style('fill', function(d) { return d.fill; })
+        .style('fill', function(d) { return d.fill })
         .style('opacity', 0.75);
 
       // Non interactive points

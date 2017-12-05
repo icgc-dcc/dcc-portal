@@ -160,13 +160,13 @@
     };
 
     _srv.mapOccurences = function(occurrences, donors, genes) {
-      var donorIds = _.map(donors, function (g) { return g.id; });
-      var geneIds = _.map(genes, function (d) { return d.id; });
+      var donorIds = _.map(donors, function (g) { return g.id });
+      var geneIds = _.map(genes, function (d) { return d.id });
 
       var geneIdToSymbol = {};
-      _(genes).forEach(function(g) {
+      _.forEach(genes, function(g) {
         geneIdToSymbol[g.id] = g.symbol;
-      }).value();
+      });
 
       function validOnco(o) {
         return geneIds.indexOf(o.geneId) >= 0 && donorIds.indexOf(o.donorId) >= 0 && o.functionalImpact === 'High';
@@ -274,7 +274,7 @@
       var expanded = [];
       var precedence = Consequence.precedence();
 
-      _(o.genes).forEach(function (g) {
+      _.forEach(o.genes, function (g) {
         var ret = _.clone(o);
         ret.geneId = g.geneId;
 
@@ -286,13 +286,13 @@
           return index;
         });
 
-        ret.consequence = _(consequences).filter(function (d) { return d.functionalImpact === 'High'; } ).value()[0];
+        ret.consequence = _(consequences).filter(function (d) { return d.functionalImpact === 'High' } ).value()[0];
         if (ret.consequence === undefined) {
           ret.consequence = {functionalImpact: null, consequenceType: null};
         }
 
         expanded.push(ret);
-      }).value();
+      });
 
       return expanded;
     }

@@ -79,6 +79,10 @@ public final class Resources {
   public static final String API_FIELD_VALUE = "Select fields returned";
   public static final String API_FILTER_PARAM = "filters";
   public static final String API_FILTER_VALUE = "Filter the search results";
+  public static final String API_TYPE_PARAM = "type";
+  public static final String API_TYPE_VALUE = "Type of file export";
+  public static final String API_QUERY_VALUE = "PQL Query";
+  public static final String API_QUERY_PARAM = "query";
   public static final String API_SCORE_FILTERS_PARAM = "scoreFilters";
   public static final String API_SCORE_FILTER_VALUE = "Used to filter scoring differently from results";
   public static final String API_ANALYSIS_VALUE = "Analysis";
@@ -102,6 +106,8 @@ public final class Resources {
 
   public static final String API_ENTITY_SET_DEFINITION_VALUE = "Entity Set Definition";
   public static final String API_ENTITY_SET_DEFINITION_PARAM = "entitySetDefinition";
+  public static final String API_ENTITY_SET_UPDATE_NAME = "Entity Set Name";
+  public static final String API_ENTITY_SET_UPDATE_PARAM = "name";
   public static final String API_SET_ANALYSIS_DEFINITION_VALUE = "Set Analysis Definition";
 
   public static final String API_ASYNC = "Asyncronous API Request";

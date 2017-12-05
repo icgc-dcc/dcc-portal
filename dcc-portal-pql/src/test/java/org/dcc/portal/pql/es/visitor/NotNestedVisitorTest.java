@@ -17,9 +17,10 @@
  */
 package org.dcc.portal.pql.es.visitor;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.dcc.portal.pql.meta.Type.DONOR_CENTRIC;
+import lombok.val;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.es.ast.ExpressionNode;
 import org.dcc.portal.pql.es.ast.NestedNode;
 import org.dcc.portal.pql.es.ast.filter.FilterNode;
@@ -34,8 +35,6 @@ import org.dcc.portal.pql.utils.BaseElasticsearchTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import lombok.val;
-
 public class NotNestedVisitorTest extends BaseElasticsearchTest {
 
   QueryContext context = new QueryContext("", Type.DONOR_CENTRIC);
@@ -43,9 +42,9 @@ public class NotNestedVisitorTest extends BaseElasticsearchTest {
   private EsRequestBuilder esVisitor;
 
   @Before
-  public void setUp() {
-    es.execute(createIndexMappings(DONOR_CENTRIC).withData(bulkFile(getClass())));
-    esVisitor = new EsRequestBuilder(es.client());
+  public void setUpNotNestedVisitorTest() {
+    prepareIndex(DONOR_CENTRIC);
+    esVisitor = new EsRequestBuilder(client);
     queryContext = new QueryContext(INDEX_NAME, DONOR_CENTRIC);
   }
 
@@ -70,38 +69,38 @@ public class NotNestedVisitorTest extends BaseElasticsearchTest {
 
     // Rigorously test structure, a brittle test here is a good thing.
     val queryNode = esAst.getFirstChild();
-    assertThat(queryNode).isInstanceOf(QueryNode.class);
+    Assertions.assertThat(queryNode).isInstanceOf(QueryNode.class);
     val nestedNode = queryNode.getFirstChild();
-    assertThat(nestedNode).isInstanceOf(NestedNode.class);
+    Assertions.assertThat(nestedNode).isInstanceOf(NestedNode.class);
     val functionNode = nestedNode.getFirstChild();
-    assertThat(functionNode).isInstanceOf(FunctionScoreNode.class);
+    Assertions.assertThat(functionNode).isInstanceOf(FunctionScoreNode.class);
     val filterNode = functionNode.getFirstChild();
-    assertThat(filterNode).isInstanceOf(FilterNode.class);
+    Assertions.assertThat(filterNode).isInstanceOf(FilterNode.class);
     val notNode = filterNode.getFirstChild();
-    assertThat(notNode).isInstanceOf(NotNode.class);
+    Assertions.assertThat(notNode).isInstanceOf(NotNode.class);
     val termNode = notNode.getFirstChild();
-    assertThat(termNode).isInstanceOf(TermNode.class);
+    Assertions.assertThat(termNode).isInstanceOf(TermNode.class);
 
     val lookup = ((TermNode) termNode).getLookup();
-    assertThat(lookup.getType()).isEqualTo("gene-ids");
-    assertThat(lookup.getId()).isEqualTo("63b0a76f-4cd1-4d8d-8fab-43cfaa7629f9");
+    Assertions.assertThat(lookup.getType()).isEqualTo("gene-ids");
+    Assertions.assertThat(lookup.getId()).isEqualTo("63b0a76f-4cd1-4d8d-8fab-43cfaa7629f9");
 
     val request = esVisitor.buildSearchRequest(esAst, context);
     val source = request.toString();
-    assertThat(source).contains("\"index\" : \"terms-lookup\"");
+    Assertions.assertThat(source).contains("\"index\" : \"terms-lookup\"");
   }
 
   private void runTests(String query, int children) {
     ExpressionNode esAst = createTree(query);
-    assertThat(esAst.childrenCount()).isEqualTo(children);
-    assertThat(esAst.getFirstChild()).isInstanceOf(QueryNode.class);
+    Assertions.assertThat(esAst.childrenCount()).isEqualTo(children);
+    Assertions.assertThat(esAst.getFirstChild()).isInstanceOf(QueryNode.class);
 
     esAst = esAstTransformator.process(esAst, queryContext);
     val request = esVisitor.buildSearchRequest(esAst, context);
     val source = request.toString();
 
     // Ensure we generated a match_all for lone not node for scoring.
-    assertThat(source).contains("match_all");
+    Assertions.assertThat(source).contains("match_all");
   }
 
 }

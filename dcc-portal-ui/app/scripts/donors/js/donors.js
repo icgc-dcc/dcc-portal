@@ -43,7 +43,7 @@
   var module = angular.module('icgc.donors.controllers', ['icgc.donors.models']);
 
   module.controller('DonorCtrl', function ($scope, $modal, Page, donor, Projects, Mutations,
-    Settings, ExternalRepoService, PCAWG, RouteInfoService) {
+    ExternalRepoService, PCAWG, RouteInfoService) {
 
     var _ctrl = this, promise;
     var dataRepoRoutInfo = RouteInfoService.get ('dataRepositories');
@@ -53,11 +53,11 @@
     Page.setPage('entity');
 
     _ctrl.hasSupplementalFiles = function(donor) {
-      return donor.family || donor.exposure || donor.therapy;
+      return donor.biomarker || donor.family || donor.exposure || donor.surgery || donor.therapy;
     };
 
     _ctrl.isPCAWG = function(donor) {
-      return _.any(donor.studies, PCAWG.isPCAWGStudy);
+      return _.some(donor.studies, PCAWG.isPCAWGStudy);
     };
 
     _ctrl.donor = donor;
@@ -128,10 +128,6 @@
       };
       Mutations.getList(params).then(function (d) {
         _ctrl.mutationFacets = d.facets;
-      });
-
-      Settings.get().then(function(settings) {
-        _ctrl.downloadEnabled = settings.downloadEnabled || false;
       });
     }
 
@@ -217,18 +213,12 @@
         Restangular.one('ui').one('search').one('donor-mutations').get({
           from: params.from,
           size: params.size,
+          sort: params.sort,
+          order: params.order,
           filters: filters,
           donorId: d.id,
           include: 'consequences'
         }).then(success);
-
-        /*
-        Donors.one().getMutations({
-          include: 'consequences',
-          filters: LocationService.filters(),
-          scoreFilters: {donor: {projectId: {is: donor.projectId }}}
-        }).then(success);
-        */
       });
     }
 
@@ -259,7 +249,7 @@
         return false;
       }
 
-      return _.any(_.pluck(specimen.samples, 'study'), PCAWG.isPCAWGStudy);
+      return _.some(_.map(specimen.samples, 'study'), PCAWG.isPCAWGStudy);
     };
 
     _ctrl.setActive = function (id) {
@@ -394,7 +384,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     function tooltipList (objects, property, oneItemHandler) {
       var uniqueItems = _(objects)
         .map (property)
-        .unique();
+        .uniq();
 
       if (uniqueItems.size() < 2) {
         return _.isFunction (oneItemHandler) ? oneItemHandler() :
@@ -409,7 +399,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     function uniquelyConcat (fileCopies, property) {
       return _(fileCopies)
         .map (property)
-        .unique()
+        .uniq()
         .join(commaAndSpace);
     }
 
@@ -433,7 +423,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
 
     _ctrl.fileAverageSize = function (fileCopies) {
       var count = _.size (fileCopies);
-      return (count > 0) ? _.sum (fileCopies, 'fileSize') / count : 0;
+      return (count > 0) ? _.sumBy (fileCopies, 'fileSize') / count : 0;
     };
 
     _ctrl.export = function() {
@@ -442,11 +432,11 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     };
 
     _ctrl.removeCityFromRepoName = function(repoName) {
-      if (_.contains(repoName, 'CGHub')) {
+      if (_.includes(repoName, 'CGHub')) {
         return 'CGHub';
       }
 
-      if (_.contains (repoName, 'TCGA DCC')) {
+      if (_.includes (repoName, 'TCGA DCC')) {
         return 'TCGA DCC';
       }
 
@@ -488,7 +478,7 @@ module.controller('DonorFilesCtrl', function ($scope, $rootScope, $modal, $state
     _ctrl.getFiles = function (){
       var promise, 
         params = {},
-        filesParam = LocationService.getJsonParam ('files');
+        filesParam = LocationService.getJqlParam ('files');
 
       // Default
       params.from = 1;

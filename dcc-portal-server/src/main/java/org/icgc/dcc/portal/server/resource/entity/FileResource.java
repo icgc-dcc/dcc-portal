@@ -25,6 +25,8 @@ import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FIELD_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FILTER_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_TYPE_PARAM;
+import static org.icgc.dcc.portal.server.resource.Resources.API_TYPE_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_FROM_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_INCLUDE_PARAM;
@@ -158,16 +160,17 @@ public class FileResource extends Resource {
   @GET
   @Timed
   @Path("/export")
-  @Produces(TEXT_TSV)
-  @ApiOperation(value = "Exports repository file listings to a TSV file.", response = File.class)
+  @Produces({TEXT_TSV, APPLICATION_JSON})
+  @ApiOperation(value = "Exports repository file listings to a TSV or a JSON file.", response = File.class)
   public Response getExport(
-      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam) {
+      @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
+      @ApiParam(value = API_TYPE_VALUE) @QueryParam(API_TYPE_PARAM) @DefaultValue(DEFAULT_TYPE) String type) {
 
     final StreamingOutput outputGenerator =
-        outputStream -> fileService.exportFiles(outputStream, query(filtersParam));
+        outputStream -> fileService.exportFiles(outputStream, query(filtersParam), type);
 
     // Make this similar to client-side export naming format
-    val fileName = String.format("repository_%s.tsv", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())));
+    val fileName = String.format("repository_%s.%s", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())), type);
 
     return ok(outputGenerator).header(CONTENT_DISPOSITION,
         type(TYPE_ATTACHMENT).fileName(fileName).creationDate(new Date()).build()).build();
@@ -175,13 +178,15 @@ public class FileResource extends Resource {
 
   @GET
   @Path("/export/{setId}")
-  @Produces(TEXT_TSV)
-  public Response getExport(@ApiParam(value = "Set Id", required = true) @PathParam("setId") String setId) {
+  @Produces({TEXT_TSV, APPLICATION_JSON})
+  public Response getExport(
+    @ApiParam(value = "Set Id", required = true) @PathParam("setId") String setId,
+    @ApiParam(value = API_TYPE_VALUE) @QueryParam(API_TYPE_PARAM) @DefaultValue(DEFAULT_TYPE) String type) {
 
     final StreamingOutput outputGenerator =
-        outputStream -> fileService.exportFiles(outputStream, setId);
+        outputStream -> fileService.exportFiles(outputStream, setId, type);
 
-    val fileName = String.format("repository_%s.tsv", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())));
+    val fileName = String.format("repository_%s.%s", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())), type);
 
     return ok(outputGenerator).header(CONTENT_DISPOSITION,
         type(TYPE_ATTACHMENT).fileName(fileName).creationDate(new Date()).build()).build();
@@ -226,6 +231,8 @@ public class FileResource extends Resource {
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
   public Map<String, Map<String, Long>> getManifestSummary(UniqueSummaryQuery summary) {
+    checkRequest(summary == null, "Request body cannot be null or empty.");
+    checkRequest(summary.getQuery() == null, "Query field in request body cannot be null or empty.");
     return fileService.getUniqueFileAggregations(summary);
   }
 

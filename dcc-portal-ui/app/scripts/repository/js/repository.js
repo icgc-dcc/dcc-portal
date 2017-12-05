@@ -15,17 +15,14 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import {ensureArray, ensureString} from '../../common/js/ensure-input';
+import './file-finder';
+
 (function() {
   'use strict';
 
-  function ensureArray (array) {
-    return _.isArray (array) ? array : [];
-  }
   var isEmptyArray = _.flow (ensureArray, _.isEmpty);
 
-  function ensureString (string) {
-    return _.isString (string) ? string.trim() : '';
-  }
   var isEmptyString = _.flow (ensureString, _.isEmpty);
 
   function ensureObject (o) {
@@ -40,15 +37,18 @@
   var toJson = angular.toJson;
   var commaAndSpace = ', ';
 
-  var module = angular.module('icgc.repository.controllers', ['icgc.repository.services']);
+  var module = angular.module('icgc.repository.controllers', [
+    'icgc.repository.services',
+    'file-finder',
+    ]);
 
   var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto', 'PDC - Chicago'];
 
   /**
    * ICGC static repository controller
    */
-  module.controller('ICGCRepoController', function($scope, $stateParams, Restangular, RepositoryService,
-    ProjectCache, API, Settings, Page, RouteInfoService) {
+  module.controller('ICGCRepoController', function($scope, $stateParams, $window, Restangular, 
+    FileService, ProjectCache, API, Settings, Page, RouteInfoService) {
     var _ctrl = this;
     var dataReleasesRouteInfo = RouteInfoService.get ('dataReleases');
 
@@ -62,6 +62,20 @@
     _ctrl.downloadEnabled = true;
     _ctrl.dataReleasesTitle = dataReleasesRouteInfo.title;
     _ctrl.dataReleasesUrl = dataReleasesRouteInfo.href;
+
+    _ctrl.isSafari = /Safari/.test($window.navigator.userAgent);
+    _ctrl.isChrome = /Chrome/.test($window.navigator.userAgent);
+
+    _ctrl.fileQuery = '';
+
+    const trackFileQuery = _.debounce(() => track('file-repo', { action: 'query', label: _ctrl.fileQuery }), 500);
+    _ctrl.handleFileQueryKeyup = ($event) => {
+      if (event.keyCode === 27) {
+        _ctrl.fileQuery = '';
+        $event.currentTarget.blur();
+      }
+      trackFileQuery();
+    };
 
     function buildBreadcrumbs() {
       var i, s, slug, url;
@@ -99,7 +113,7 @@
 
       // Check file extension
       extension = file.name.split('.').pop();
-      if (_.contains(['txt', 'md'], extension.toLowerCase())) {
+      if (_.includes(['txt', 'md'], extension.toLowerCase())) {
         file.isText = true;
       } else {
         file.isText = false;
@@ -107,12 +121,12 @@
     }
 
     function getFiles() {
-      RepositoryService.folder(_ctrl.path).then(function (response) {
+      FileService.folder(_ctrl.path).then(function (response) {
         var files = response;
 
         files.forEach(annotate);
 
-        _ctrl.files = RepositoryService.sortFiles(files, _ctrl.slugs.length);
+        _ctrl.files = FileService.sortFiles(files, _ctrl.slugs.length);
 
 
         // Grab text file (markdown)
@@ -251,7 +265,7 @@
 
   module.controller('ExternalFileDownloadController',
     function ($scope, $location, $window, $document, $modalInstance, ExternalRepoService, SetService, FilterService,
-      Extensions, params, Restangular, $filter) {
+      Extensions, params, Restangular, $filter, RepositoryService, $timeout) {
 
     $scope.selectedFiles = params.selectedFiles;
     $scope.cancel = function() {
@@ -264,7 +278,7 @@
     $scope.summary = {};
 
     $scope.getRepoFieldValue = function (repoName, fieldName) {
-      var repoData = $scope.shouldDeduplicate ? $scope.summary[repoName] : _.findWhere($scope.repos, { repoName: repoName });
+      var repoData = $scope.shouldDeduplicate ? $scope.summary[repoName] : _.find($scope.repos, { repoName: repoName });
       return repoData && repoData[fieldName];
     };
 
@@ -274,6 +288,53 @@
 
     $scope.handleNumberTweenEnd = function (tween) {
       jQuery(tween.elem).closest('td').removeClass('tweening');
+    };
+
+    $scope.isGeneratingIcgcGetId = false;
+    $scope.icgcGetId = null;
+    let abortGenerateIcgcGetId = false;
+
+    const generateIcgcGetId = (repos) => {
+      $scope.isGeneratingIcgcGetId = true;
+      const repoCodes = repos.map(repo => repo.repoCode);
+
+      var params = {
+        format: 'files',
+        repos: repoCodes,
+        filters: $scope.selectedFiles
+          ? _.merge(FilterService.filters(), {file:{id:{is:$scope.selectedFiles}}})
+          : FilterService.filters(),
+      };
+
+      ExternalRepoService.createManifest(params)
+        .then(function (id) {
+          if (abortGenerateIcgcGetId) {
+            abortGenerateIcgcGetId = false;
+          } else if (!id) {
+            $scope.isGeneratingIcgcGetId = false;
+            throw new Error('No Manifest UUID is returned from API call.');
+          } else {
+            $scope.isGeneratingIcgcGetId = false;
+            $scope.icgcGetId = id;
+          }
+      });
+    };
+
+    $scope.$watchGroup(
+      [
+        () => $scope.shouldDeduplicate,
+        () => $scope.repos && $scope.repos.map(x => x.repoName).join(),
+      ],
+      ([shouldDeduplicate, repos], [oldShouldDeduplicate, oldRepos]) => {
+        if ($scope.isGeneratingIcgcGetId) {
+          abortGenerateIcgcGetId = true;
+        }
+        $scope.icgcGetId = '';
+        $scope.isGeneratingIcgcGetId = false;
+    });
+
+    $scope.handleClickGenerateIcgcGetId = () => {
+      generateIcgcGetId($scope.repos);
     };
 
     var p = {};
@@ -288,10 +349,13 @@
     p.include = 'facets';
 
     function findRepoData(list, term) {
-      return _.find(list, function(t) { return t.term === term; }).count || 0;
+      return _.find(list, function(t) { return t.term === term }).count || 0;
     }
 
-    ExternalRepoService.getList (p).then (function (data) {
+    Promise.all([
+      ExternalRepoService.getList(p),
+      RepositoryService.getRepos(),
+    ]).then(function ([data, reposFromService]) {
       var facets = data.termFacets;
       var activeRepos = [];
 
@@ -303,9 +367,10 @@
       var repos = {};
       facets.repoName.terms.forEach(function(term) {
         var repoName = term.term;
+        const repo = _.find(reposFromService, {name: repoName});
 
         // Restrict to active repos if it is available
-        if (!_.isEmpty(activeRepos) && !_.contains(activeRepos, repoName)) {
+        if (!_.isEmpty(activeRepos) && !_.includes(activeRepos, repoName)) {
           return;
         }
 
@@ -314,12 +379,12 @@
         }
 
         repos[repoName].repoName = repoName;
-        repos[repoName].repoCode = ExternalRepoService.getRepoCodeFromName(repoName);
+        repos[repoName].repoCode = repo.code;
         repos[repoName].fileSize = findRepoData(facets.repositorySizes.terms, repoName);
         repos[repoName].donorCount = findRepoData(facets.repositoryDonors.terms, repoName);
         repos[repoName].fileCount = term.count;
-        repos[repoName].hasManifest = _.includes(cloudRepos, repoName);
-        repos[repoName].isCloud = _.includes(cloudRepos, repoName);
+        repos[repoName].hasManifest = RepositoryService.isCloudRepo(repo);
+        repos[repoName].isCloud = RepositoryService.isCloudRepo(repo);
       });
 
       $scope.repos = _(repos).values().sortBy('fileSize').value().reverse();
@@ -369,7 +434,7 @@
       jQuery('.btn-group.open').trigger('click');
     };
 
-    $scope.download = function() {
+    $scope.downloadManifest = function() {
       if (_.isEmpty($scope.selectedFiles)) {
         var filters = FilterService.filters();
 
@@ -393,6 +458,7 @@
     $scope.createManifestId = function (repoName, repoData) {
 
       repoData.isGeneratingManifestID = true;
+      $scope.isGeneratingManifestID = true;
       repoData.manifestID = false;
 
       var selectedFiles = $scope.selectedFiles;
@@ -413,11 +479,12 @@
 
       ExternalRepoService.createManifest(params).then(function (id) {
         if (! id) {
-          console.log('No Manifest UUID is returned from API call.');
-          return;
+          throw new Error('No Manifest UUID is returned from API call.');
         }
         repoData.isGeneratingManifestID = false;
+        $scope.isGeneratingManifestID = false;
         repoData.manifestID = id;
+        $scope.manifestID = id;
      });
     };
 
@@ -596,8 +663,8 @@
     this.countryName = CodeTable.countryName;
 
     this.awsOrCollab = function(fileCopies) {
-       return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
-         _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
+       return _.includes(_.map(fileCopies, 'repoCode'), 'aws-virginia') ||
+         _.includes(_.map(fileCopies, 'repoCode'), 'collaboratory');
     };
 
     function getUiDonorInfoJSON(donors){
@@ -644,6 +711,8 @@
     var projectMap = {};
     var _ctrl = this;
 
+    this.handleOperationSuccess = () => { this.selectedFiles = [] };
+
     _ctrl.showIcgcGet = PortalFeature.get('ICGC_GET');
     _ctrl.selectedFiles = [];
     _ctrl.summary = {};
@@ -682,7 +751,7 @@
         maxPadding: 0.01,
         labels: {
           formatter: function () {
-            return this.value / 1000 + 'k';
+            return this.value > 1000 ? this.value / 1000 + 'k' : this.value ;
           }
         },
         lineWidth: 1,
@@ -721,10 +790,23 @@
       }
     };
 
+    _ctrl.donorSetsForRepo = () => 
+      _.map(_.cloneDeep(SetService.getAllDonorSets()), (set) => {
+        set.repoFilters = {};
+        set.repoFilters.file = {};
+        set.repoFilters.file.donorId = set.advFilters.donor.id;
+        return set;
+      });
+
+    // Adding filters for repository to the donor set
+    _ctrl.donorSets = _ctrl.donorSetsForRepo();
+
+    _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
+
     function toSummarizedString (values, name) {
       var size = _.size (values);
       return (size > 1) ? '' + size + ' ' + name + 's' :
-        _.first (values);
+        _.head (values);
     }
 
     function createFilter (category, ids) {
@@ -734,7 +816,7 @@
     function buildDataInfo (data, property, paths, category, toolTip) {
       var ids = _(ensureArray (data))
         .map (property)
-        .unique()
+        .uniq()
         .value();
 
       return isEmptyArray (ids) ? {} : {
@@ -742,7 +824,7 @@
         tooltip: toolTip (ids),
         href: _.size (ids) > 1 ?
           paths.many + createFilter (category, ids) :
-          paths.one + _.first (ids)
+          paths.one + _.head (ids)
       };
     }
 
@@ -770,7 +852,7 @@
 
     _ctrl.buildProjectInfo = function (donors) {
       var toolTipMaker = function (ids) {
-        return _.size (ids) === 1 ? _.get (projectMap, _.first (ids), '') : '';
+        return _.size (ids) === 1 ? _.get (projectMap, _.head (ids), '') : '';
       };
       return buildDataInfo (donors, 'projectCode', {one: '/projects/', many: '/projects?filters='},
         'project', toolTipMaker);
@@ -779,16 +861,13 @@
     function uniquelyConcat (fileCopies, property) {
       return _(fileCopies)
         .map (property)
-        .unique()
+        .uniq()
         .join(commaAndSpace);
     }
 
     /**
      * Tablular display
      */
-    _ctrl.repoNames = function (fileCopies) {
-      return uniquelyConcat (fileCopies, 'repoName');
-    };
 
     _ctrl.fileFormats = function (fileCopies) {
       return uniquelyConcat (fileCopies, 'fileFormat');
@@ -797,7 +876,7 @@
     function tooltipList (objects, property, oneItemHandler) {
       var uniqueItems = _(objects)
         .map (property)
-        .unique();
+        .uniq();
 
       if (uniqueItems.size() < 2) {
         return _.isFunction (oneItemHandler) ? oneItemHandler() :
@@ -816,28 +895,28 @@
     };
 
     _ctrl.repoNamesInTooltip = function (fileCopies) {
-      return tooltipList (fileCopies, 'repoName', '');
+      return tooltipList (fileCopies, 'repo.name', '');
     };
 
     _ctrl.awsOrCollab = function(fileCopies) {
-       return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
-         _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
+       return _.includes(_.map(fileCopies, 'repoCode'), 'aws-virginia') ||
+         _.includes(_.map(fileCopies, 'repoCode'), 'collaboratory');
     };
 
     _ctrl.fileAverageSize = function (fileCopies) {
       var count = _.size (fileCopies);
-      return (count > 0) ? _.sum (fileCopies, 'fileSize') / count : 0;
+      return (count > 0) ? _.sumBy (fileCopies, 'fileSize') / count : 0;
     };
 
     _ctrl.flagIconClass = function (projectCode) {
       var defaultValue = '';
       var last3 = _.takeRight (ensureString (projectCode), 3);
 
-      if (_.size (last3) < 3 || _.first (last3) !== '-') {
+      if (_.size (last3) < 3 || _.head (last3) !== '-') {
         return defaultValue;
       }
 
-      var last2 = _.rest (last3).join ('');
+      var last2 = _.tail (last3).join ('');
 
       return 'flag flag-' + CodeTable.translateCountryCode (last2.toLowerCase());
     };
@@ -849,8 +928,8 @@
     /**
      * Export table
      */
-    _ctrl.export = function() {
-      ExternalRepoService.export (FilterService.filters());
+    _ctrl.export = function(type) {
+      ExternalRepoService.export (FilterService.filters(), type);
     };
 
     /**
@@ -958,19 +1037,9 @@
       });
     };
     
-    _ctrl.isSelected = function (row) {
-      return _.contains (_ctrl.selectedFiles, row.id);
-    };
+    _ctrl.isSelected = (row) => _ctrl.selectedFiles.includes(row.id);
 
-    _ctrl.toggleRow = function (row) {
-      if (_ctrl.isSelected (row) === true) {
-        _.remove (_ctrl.selectedFiles, function (r) {
-          return r === row.id;
-        });
-      } else {
-        _ctrl.selectedFiles.push (row.id);
-      }
-    };
+    _ctrl.toggleRow = (row) => { _ctrl.selectedFiles = _.xor(_ctrl.selectedFiles, [row.id]) };
 
     /**
      * Undo user selected files
@@ -984,11 +1053,11 @@
     };
 
     function removeCityFromRepoName (repoName) {
-      if (_.contains (repoName, 'CGHub')) {
+      if (_.includes (repoName, 'CGHub')) {
         return 'CGHub';
       }
 
-      if (_.contains (repoName, 'TCGA DCC')) {
+      if (_.includes (repoName, 'TCGA DCC')) {
         return 'TCGA DCC';
       }
 
@@ -1032,7 +1101,7 @@
 
     function refresh() {
       var params = {};
-      var filesParam = LocationService.getJsonParam ('files');
+      var filesParam = LocationService.getJqlParam ('files');
 
       // Default
       params.size = 25;
@@ -1079,7 +1148,18 @@
       loadState.loadWhile([listRequest, summaryRequest, metaDataRequeset, cacheReqeust]);
     }
 
+    // to check if a set was previously selected and if its still in effect
+    const updateSetSelection = (entity, entitySets) => {
+      let filters = FilterService.filters();
+
+      entitySets.forEach( (set) =>
+        set.selected = filters.file && filters.file[entity] &&  _.includes(filters.file[entity].is, `ES:${set.id}`)
+      );
+    };
+
     refresh();
+    updateSetSelection('donorId', _ctrl.donorSets);
+    updateSetSelection('id', _ctrl.fileSets);
 
     // Pagination watcher, gets destroyed with scope.
     $scope.$watch(function() {
@@ -1101,11 +1181,13 @@
       else {
         refresh();
       }
+      updateSetSelection('donorId', _ctrl.donorSets);
+      updateSetSelection('id', _ctrl.fileSets);
     });
 
     // Remove any pagination on facet change: see DCC-4589
     $scope.$on(FacetConstants.EVENTS.FACET_STATUS_CHANGE, function() {
-      var filesParam = LocationService.getJsonParam('files');
+      var filesParam = LocationService.getJqlParam('files');
       if (!_.isEmpty(filesParam)) {
         var newParam = {
           from: 1,
@@ -1113,6 +1195,11 @@
           };
         LocationService.setJsonParam('files', newParam);
       }
+    });
+
+    $rootScope.$on(SetService.setServiceConstants.SET_EVENTS.SET_CHANGE_EVENT, () => {
+      _ctrl.donorSets = _ctrl.donorSetsForRepo();
+      _ctrl.fileSets = _.cloneDeep(SetService.getAllFileSets());
     });
 
   });

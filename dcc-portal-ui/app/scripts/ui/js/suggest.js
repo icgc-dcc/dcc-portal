@@ -17,6 +17,8 @@
 
 'use strict';
 
+import {ensureArray, ensureString, partiallyContainsIgnoringCase} from '../../common/js/ensure-input';
+
 angular.module('icgc.ui.suggest', ['ngSanitize', 'icgc.common.text.utils']);
 
 angular.module('icgc.ui.suggest').controller('suggestController',
@@ -88,38 +90,9 @@ angular.module('icgc.ui.suggest').controller('suggestController',
   };
 
   $scope.badgeStyleClass = function (type) {
-    var definedType = _.contains (['pathway', 'go_term', 'curated_set'], type) ? 'geneset' : type;
+    var definedType = _.includes (['pathway', 'go_term', 'curated_set'], type) ? 'geneset' : type;
     return 't_badge t_badge__' + definedType;
   };
-
-  function ensureArray (array) {
-    return _.isArray (array) ? array : [];
-  }
-  function ensureString (string) {
-    return _.isString (string) ? string.trim() : '';
-  }
-
-  function words (phrase) {
-    return _.words (phrase, /[^, ]+/g);
-  }
-
-  function partiallyContainsIgnoringCase (phrase, keyword) {
-    if (_.isEmpty (phrase)) {
-      return false;
-    }
-
-    var phrase2 = phrase.toUpperCase();
-    var keyword2 = keyword.toUpperCase();
-
-    var tokens = [keyword2].concat (words (keyword2));
-    var matchKeyword = _(tokens)
-      .unique()
-      .find (function (token) {
-        return _.contains (phrase2, token);
-      });
-
-    return ! _.isUndefined (matchKeyword);
-  }
 
   var maxAbrigementLength = 80;
   var abridger = Abridger.of (maxAbrigementLength);
@@ -241,7 +214,7 @@ angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $docu
         function url(item) {
           var resourceType = item.type;
 
-          if (_.contains (['curated_set', 'go_term', 'pathway'], resourceType)) {
+          if (_.includes (['curated_set', 'go_term', 'pathway'], resourceType)) {
             resourceType = 'geneset';
           } else if ('file' === resourceType) {
             return dataRepoFileUrl + item.id;
@@ -256,14 +229,26 @@ angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $docu
         if (scope.active > -1) {
           selected = scope.results.hits[scope.active];
           $location.path(url(selected)).search({});
+          track('search', {
+            action: 'goto',
+            label: `${selected.type} / ${selected.id}`,
+          });
         } else {
           // If there is only one hit just go to the page
           if (scope.results && scope.results.hits.length === 1) {
             item = scope.results.hits[0];
             $location.path(url(item)).search({});
+            track('search', {
+              action: 'goto',
+              label: `${item.type} / ${item.id}`,
+            });
             // Otherwise make a search
           } else {
             $location.path('/q').search({q: scope.query});
+            track('search', {
+              action: 'goto',
+              label: `search / ${scope.query}`,
+            });
           }
         }
       }
@@ -286,7 +271,7 @@ angular.module('icgc.ui.suggest').directive('suggest', function ($compile, $docu
           if (suggest === 'tags') {
             addId();
           } else {
-            goTo(e);
+            goTo();
           }
         }
 
@@ -370,13 +355,14 @@ angular.module('icgc.ui.suggest').directive('tagsPopup', function (Extensions) {
       };
 
       scope.click = function (item) {
-        console.info(item);
         scope.query = '';
         if (scope.entitySetSearch) {
           item.id = Extensions.ENTITY_PREFIX + item.id;
         }
         scope.addTerm(item);
       };
+
+      scope.track = track;
     }
   };
 });

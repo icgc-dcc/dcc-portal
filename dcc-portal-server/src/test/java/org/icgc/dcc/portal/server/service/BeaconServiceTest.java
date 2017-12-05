@@ -17,54 +17,51 @@
 
 package org.icgc.dcc.portal.server.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import org.assertj.core.api.Assertions;
 import org.icgc.dcc.portal.server.model.AlleleMutation;
 import org.icgc.dcc.portal.server.model.Beacon;
-import org.icgc.dcc.portal.server.model.IndexType;
-import org.icgc.dcc.portal.server.repository.BaseElasticSearchTest;
-import org.icgc.dcc.portal.server.test.TestIndex;
+import org.icgc.dcc.portal.server.repository.BaseElasticsearchTest;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BeaconServiceTest extends BaseElasticSearchTest {
+import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
+
+public class BeaconServiceTest extends BaseElasticsearchTest {
 
   private BeaconService service;
 
   @Before
-  public void setUp() throws Exception {
-    this.testIndex = TestIndex.RELEASE;
-    es.execute(
-        createIndexMappings(IndexType.MUTATION_CENTRIC)
-            .withData(bulkFile("BeaconServiceTest.json")));
-    service = new BeaconService(es.client(), testIndex.getName());
+  public void setUpBeaconServiceTest() throws Exception {
+    prepareIndex(RELEASE_INDEX_NAME, MUTATION_CENTRIC);
+    loadData("BeaconServiceTest.json");
+    service = new BeaconService(client(), RELEASE_INDEX_NAME);
   }
 
   @Test
   public void testSuccesfullyFound() {
     Beacon result = service.query("19", 1207014, "GRCh37", new AlleleMutation("-", "T", "T"), "");
-    assertThat(result.getResponse().exists).isEqualTo("true");
+    Assertions.assertThat(result.getResponse().exists).isEqualTo("true");
   }
 
   @Test
   public void testWrongAlleleFound() {
     Beacon result = service.query("19", 1207014, "GRCh37", new AlleleMutation("-", "C", "C"), "");
-    assertThat(result.getResponse().exists).isEqualTo("false");
+    Assertions.assertThat(result.getResponse().exists).isEqualTo("false");
   }
 
   @Test
   public void testNothingFound() {
     Beacon result = service.query("11", 11111, "GRCh37", new AlleleMutation("-", "T", "T"), "");
-    assertThat(result.getResponse().exists).isEqualTo("null");
+    Assertions.assertThat(result.getResponse().exists).isEqualTo("null");
   }
 
   @Test
   public void testSpecificDataset() {
     Beacon result = service.query("11", 11111, "GRCh37", new AlleleMutation("-", "T", "T"), "53049.0");
-    assertThat(result.getResponse().exists).isEqualTo("null");
+    Assertions.assertThat(result.getResponse().exists).isEqualTo("null");
 
     result = service.query("11", 1207014, "GRCh37", new AlleleMutation("-", "T", "T"), "MADE-UP");
-    assertThat(result.getResponse().exists).isEqualTo("null");
+    Assertions.assertThat(result.getResponse().exists).isEqualTo("null");
   }
 
 }

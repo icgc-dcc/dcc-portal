@@ -16,7 +16,7 @@
  */
 
 
-
+import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
 
 (function($) {
   'use strict';
@@ -37,7 +37,8 @@
       controller: 'PathwayViewerCtrl',
       templateUrl: 'scripts/pathwayviewer/views/viewer.html',
       link: function ($scope, element, attrs, pathwayViewerCtrl) {
-        var showingLegend = false,
+        var controller,
+            showingLegend = false,
             rendered = false,
             zoomedOn = $scope.zooms || [''],
             xml = $scope.items,
@@ -121,10 +122,8 @@
               .attr('preserveAspectRatio', 'xMidYMid')
               .attr('style', 'padding-top:20px')
               .append('g');
-          var infoRenderer = new pathwayViewerCtrl.Renderer(infoSvg, {
-            onClick: null, urlPath: $location.url(), overlapColor: '#ff9900',
-            mutationHighlightColor: '#9b315b', drugHighlightColor: 'navy',
-            strokeColor: '#696969'
+          var infoRenderer = new Renderer(infoSvg, {
+            urlPath: $location.url(),
           });
 
           node.size={width:120-padding*2,height:60-padding*2};
@@ -132,7 +131,7 @@
           infoRenderer.renderNodes([node]);
 
           if(isClickableNode){
-            var model = new pathwayViewerCtrl.PathwayModel();
+            var model = new PathwayModel();
             model.nodes = [node];
             
             infoRenderer.highlightEntity(
@@ -147,8 +146,8 @@
         var controllerSettings = {
           width: 500,
           height: 350,
-          container: '#pathway-viewer-mini',
-          onClick: function (d) {
+          containerNode: document.getElementById('pathway-viewer-mini'),
+          onNodeClick: function (d3Event, d, svg) {
             var mutationCount = '*',
               drugCount = '*',
               druggableGenesList = [],
@@ -170,7 +169,6 @@
             showInfo();
 
             if (overlaps && node.isPartOfPathway) {
-              //console.log('Overlapping!!' , d.reactomeId, overlaps);
               _.keys(overlaps).forEach(function(dbId) {
                 if (dbId === d.reactomeId) {
                   var overlappingGene = overlaps[dbId];
@@ -179,7 +177,6 @@
                 }
               });
 
-              //console.log('OVERLAPPPING!!!', overlappingGenesList);
               $scope.overlappingGenesList = overlappingGenesList;
               $scope.overlappingGenesMap = overlappingGenesMap;
             }
@@ -188,7 +185,7 @@
             if(mutationHighlights && node.isPartOfPathway){
               mutationHighlights.forEach(function (mutationHighlight) {
 
-                if(_.contains(mutationHighlight.dbIds,d.reactomeId)){
+                if(_.includes(mutationHighlight.dbIds,d.reactomeId)){
 
                   if(!mutationHighlight.advQuery){
                     return;
@@ -214,7 +211,7 @@
             // Create list of uniprot ids if we have any
             if(drugHighlights && node.isPartOfPathway){
               drugHighlights.forEach(function (drugHighlight) {
-                if(_.contains(drugHighlight.dbIds,d.reactomeId)){
+                if(_.includes(drugHighlight.dbIds,d.reactomeId)){
                   druggableGenesList.push({
                     symbol: drugHighlight.geneSymbol,
                     id: drugHighlight.geneId,
@@ -229,13 +226,13 @@
             }
 
             var annotatedGeneIds = _.union(
-              _.pluck(mutatedGenesList, 'id'),
-              _.pluck(druggableGenesList, 'id')
+              _.map(mutatedGenesList, 'id'),
+              _.map(druggableGenesList, 'id')
             );
 
             annotatedGeneIds.forEach(function (geneId) {
-              var mutatedGene = _.find(mutatedGenesList, function(o) { return o.id === geneId; });
-              var druggableGene = _.find(druggableGenesList, function(o) { return o.id === geneId; });
+              var mutatedGene = _.find(mutatedGenesList, function(o) { return o.id === geneId });
+              var druggableGene = _.find(druggableGenesList, function(o) { return o.id === geneId });
               
               annotatedGenesList.push({
                 id: geneId,
@@ -256,16 +253,7 @@
             );
           },
           urlPath: $location.url(),
-          strokeColor: '#696969',
-          mutationHighlightColor: '#9b315b',
-          drugHighlightColor: 'navy',
-          overlapColor: '#ff9900',
-          initScaleFactor: 0.90,
-          subPathwayColor: 'navy'
         };
-
-        var controller = new pathwayViewerCtrl.ReactomePathway(controllerSettings);
-
 
         $('.pathway-info-controller').on('click',function(){
           hideInfo();
@@ -344,7 +332,15 @@
             return;
           }else if(!rendered){
             $('.pathwaysvg').remove();
-            controller.render(xml,zoomedOn);
+            
+            controllerSettings.model = new PathwayModel(xml);
+            controller = new ReactomePathway(controllerSettings);
+            controller.render(zoomedOn);
+
+            d3.select('.pathway-legend-content').append(function(){
+              return controller.getLegendSVGElement(270, 671);
+            }).attr('class', 'pathway-legend-svg');
+
             rendered = true;
           }else{
             hideInfo();
@@ -405,11 +401,6 @@
 
           overlaps = newValue;
           handleRender();
-        });
-
-        // Render legend last to ensure all dependencies are initialized. Timeout of 0 does not work in firefox.
-        $scope.$on(PathwaysConstants.EVENTS.MODEL_READY_EVENT, function() {
-            controller.renderLegend(270, 671);
         });
 
         // Needed to fix url paths for SVGs on url change due to <base> tag required by angular

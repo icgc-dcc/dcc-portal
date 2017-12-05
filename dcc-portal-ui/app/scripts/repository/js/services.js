@@ -31,7 +31,7 @@
 
   var module = angular.module('icgc.repository.services', []);
 
-  module.service ('ExternalRepoService', function ($window, $q, Restangular, API, HighchartsService) {
+  module.service ('ExternalRepoService', function ($window, $q, Restangular, API, HighchartsService, RepositoryService) {
 
     // Initial values until the call to getRepoMap() returns.
     var _srv = this,
@@ -100,7 +100,12 @@
         .customPOST(params, undefined, undefined, {'Content-Type': 'application/json'});
     };
 
-    _srv.getList = function (params) {
+    const hydrateFileCopies = (copies, repoCodeMap) => copies.map(copy => ({
+      ...copy,
+      repo: repoCodeMap[copy.repoCode],
+    }));
+
+    _srv.getList = async function (params) {
       var defaults = {
         size: 10,
         from:1
@@ -124,7 +129,7 @@
           'TCGA DCC - Bethesda'
       ];
 
-      return Restangular.one (REPO_API_PATH).get (angular.extend (defaults, params)).then(function (data) {
+      const filesRequest = Restangular.one(REPO_API_PATH).get(angular.extend (defaults, params)).then((data) => {
         if (data.termFacets.hasOwnProperty('repoName') && data.termFacets.repoName.hasOwnProperty('terms')) {
           data.termFacets.repoName.terms = data.termFacets.repoName.terms.sort(function (a, b) {
             return precedence.indexOf(a.term) - precedence.indexOf(b.term);
@@ -133,6 +138,19 @@
 
         return data;
       });
+
+      const [filesResponse, repoCodeMap] = [
+        await filesRequest,
+        await RepositoryService.getRepoCodeMap(),
+      ];
+
+      return {
+        ...filesResponse,
+        hits: filesResponse.hits.map(hit => ({
+          ...hit,
+          fileCopies: hydrateFileCopies(hit.fileCopies, repoCodeMap),
+        }))
+      };
     };
 
     _srv.getRelevantRepos = function (filters) {
@@ -196,9 +214,8 @@
       $window.location.href = _srv.getManifestUrlByFileIds(ids, repos, unique);
     };
 
-    _srv.export = function (filters) {
-      $window.location.href = API.BASE_URL + '/' + REPO_API_PATH +
-        '/export?filters=' + uriString (filters);
+    _srv.export = function (filters, type) {
+      $window.location.href = `${API.BASE_URL}/${REPO_API_PATH}/export?type=${type}&filters=${uriString (filters)}`;
     };
 
     _srv.createManifest = function (params) {
@@ -229,13 +246,19 @@
       return Restangular.one (REPO_API_PATH).one('metadata').get ({});
     };
 
-    _srv.getFileInfo = function (id) {
-      return Restangular.one (REPO_API_PATH, id).get();
+    _srv.getFileInfo = async function (id) {
+      const [fileInfo, repoCodeMap] = [
+        await Restangular.one(REPO_API_PATH, id).get().then(x => x.plain()),
+        await RepositoryService.getRepoCodeMap(),
+      ];
+      return {
+        ...fileInfo,
+        fileCopies: hydrateFileCopies(fileInfo.fileCopies, repoCodeMap),
+      };
     };
 
     function _shortenRepoName (name) {
       return name;
-      // return name.slice(0, 5);
     }
 
     _srv.createFacetCharts = function (facets) {
@@ -270,11 +293,20 @@
   });
 
 
-  module.service('RepositoryService', function ($filter, RestangularNoCache) {
+  module.service('FileService', function ($filter, RestangularNoCache) {
 
     this.folder = function (path) {
       return RestangularNoCache.one('download/info' + path)
               .get();
+    };
+
+    this.getAllFiles = () => {
+      return RestangularNoCache.one('download/info')
+        .get({
+          fields: 'name,type',
+          recursive: true,
+          flatten: true,
+        });
     };
 
     this.getStatus = function () {
@@ -323,11 +355,11 @@
 
       if (dirLevel > 0) {
         files = $filter('orderBy')(files, 'name');
-        firstSort = _.pluck(files, 'name');
+        firstSort = _.map(files, 'name');
         files = $filter('orderBy')(files, logicalSort);
       } else {
-        files = $filter('orderBy')(files, 'date', 'reverse');
-        firstSort = _.pluck(files, 'name');
+        files = $filter('orderBy')(files, 'date', 'desc');
+        firstSort = _.map(files, 'name');
         files = $filter('orderBy')(files, logicalSort);
       }
 

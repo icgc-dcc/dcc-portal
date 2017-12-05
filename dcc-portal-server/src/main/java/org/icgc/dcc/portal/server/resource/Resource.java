@@ -69,6 +69,8 @@ public abstract class Resource {
    */
   protected static final String DEFAULT_FIELDS = "";
   protected static final String DEFAULT_FILTERS = "{}";
+  protected static final String DEFAULT_QUERY = "select(*)";
+  protected static final String DEFAULT_TYPE = "tsv";
   protected static final String DEFAULT_FACETS = "true";
   protected static final String DEFAULT_SIZE = "10";
   protected static final String DEFAULT_FROM = "1";
@@ -84,6 +86,7 @@ public abstract class Resource {
   /**
    * Logging template constants.
    */
+  protected static final String PQL_TEMPLATE = "PQL query = '{}'";
   protected static final String COUNT_TEMPLATE = "Request for a count of {} with filters '{}'";
   protected static final String FIND_ALL_TEMPLATE =
       "Request for '{}' {} from index '{}', sorted by '{}' in '{}' order with filters '{}'";

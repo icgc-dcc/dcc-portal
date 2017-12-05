@@ -114,19 +114,19 @@
 
     var stack = d3.layout.stack()
       .offset(config.offset)
-      .values(function(d) { return d.values; })
-      .x(function(d) { return d.index; })
-      .y(function(d) { return d.value; });
+      .values(function(d) { return d.values })
+      .x(function(d) { return d.index })
+      .y(function(d) { return d.value });
 
     var nest = d3.nest()
-      .key(function(d) { return d.group; });
+      .key(function(d) { return d.group });
 
     var x = this.x, y=this.y;
     var area = d3.svg.area()
       .interpolate('linear')
-      .x(function(d) { return x(d.index); })
-      .y0(function(d) { return y(d.y0); })
-      .y1(function(d) { return y(d.y0 + d.y); });
+      .x(function(d) { return x(d.index) })
+      .y0(function(d) { return y(d.y0) })
+      .y1(function(d) { return y(d.y0 + d.y) });
 
     var input = ['Area','Line'];
 
@@ -142,11 +142,11 @@
 
     var layers = stack(nest.entries(data));
 
-    this.y.domain([0, d3.max(data, function(d) { return d.y+d.y0; })]);
+    this.y.domain([0, d3.max(data, function(d) { return d.y+d.y0 })]);
 
     var line = d3.svg.line()
-      .x(function(d) { return x(d.index); })
-      .y(function(d) { return y(d.value); });
+      .x(function(d) { return x(d.index) })
+      .y(function(d) { return y(d.value) });
 
     var project = svg.selectAll('.layer-project')
       .data(layers)
@@ -160,8 +160,8 @@
       .style('fill','none')
       .attr({
         'class':'stackedareahint',
-        'x1' : function(d){ return d;},
-        'x2' : function(d){ return d;},
+        'x1' : function(d){ return d},
+        'x2' : function(d){ return d},
         'y1' : 0,
         'y2' : height,
         'shape-rendering' : 'crispEdges',
@@ -187,10 +187,10 @@
       });
     var xReverser = this.xReverser;
     project.append('path')
-      .attr('d', function(d) { return area(d.values); })
+      .attr('d', function(d) { return area(d.values) })
       .attr('stroke', '#FFF')
       .attr('stroke-width', '0.5px')
-      .style('fill', function(d) { return colour(d.values[0].colourKey); })
+      .style('fill', function(d) { return colour(d.values[0].colourKey) })
       .style('sharp-rengering','crispEdges')
       .on('mousemove', function(d) {
             var coords = d3.mouse(this);
@@ -220,7 +220,7 @@
           })
       .on('mouseover', function(data){
             project.selectAll('path')
-                .transition().duration(100).style('opacity',function(d){return d.key === data.key?'1':'0.1';});
+                .transition().duration(100).style('opacity',function(d){return d.key === data.key?'1':'0.1'});
           });
 
     svg.append('g')
@@ -260,25 +260,25 @@
       .style('text-anchor', 'middle')
       .text(config.xaxis.label);
 
-    var change = function changeView(view){
+    var change = function (view){
       if(view === 'Line'){
         graphTitle.text(config.graphTitles[1]);
-        y.domain([0, d3.max(data, function(d) { return d.value; })]);
+        y.domain([0, d3.max(data, function(d) { return d.value })]);
         svg.select('.stackedarea.y.axis').transition().duration(500).call(yAxis);
         project.selectAll('path').transition().duration(500)
-          .attr('d', function(d){return line(d.values);})
+          .attr('d', function(d){return line(d.values)})
           .style('fill','none')
-          .attr('stroke', function(d) {return colour(d.values[0].colourKey); })
+          .attr('stroke', function(d) {return colour(d.values[0].colourKey) })
           .attr('class','line')
           .attr('stroke-width','3px');
 
       }else if(view ==='Area'){
         graphTitle.text(config.graphTitles[0]);
-        y.domain([0, d3.max(data, function(d) { return d.y+d.y0; })]);
+        y.domain([0, d3.max(data, function(d) { return d.y+d.y0 })]);
         svg.select('.stackedarea.y.axis').transition().duration(500).call(yAxis);
         project.selectAll('path').transition().duration(500)
-          .attr('d', function(d) { return area(d.values); }).transition()
-          .style('fill', function(d) {return colour(d.values[0].colourKey); })
+          .attr('d', function(d) { return area(d.values) }).transition()
+          .style('fill', function(d) {return colour(d.values[0].colourKey) })
           .attr('stroke', '#FFF')
           .attr('class','')
           .attr('stroke-width','0.5px');
@@ -288,7 +288,7 @@
     form.selectAll('label')
       .data(input).enter()
       .append('label')
-      .text(function(d) {return d;})
+      .text(function(d) {return d})
       .style('margin-left','15px')
       .insert('input')
       .style('margin','5px')
@@ -296,12 +296,12 @@
         type: 'radio',
         class: 'shape',
         name: 'mode',
-        value: function(d, i) {return i;}
+        value: function(d, i) {return i}
       })
       .on('change',function(e){
           change(e);
         })
-      .property('checked', function(d, i) {return i===0;});
+      .property('checked', function(d, i) {return i===0});
   };
 
   StackedAreaChart.prototype.destroy = function(){

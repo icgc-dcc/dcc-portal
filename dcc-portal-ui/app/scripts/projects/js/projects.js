@@ -18,7 +18,7 @@
 (function () {
   'use strict';
 
-  var module = angular.module('icgc.projects', ['icgc.projects.controllers', 'ui.router']);
+  var module = angular.module('icgc.projects', ['icgc.project', 'icgc.projects.controllers', 'ui.router']);
 
   module.config(function ($stateProvider) {
     $stateProvider.state('projects', {
@@ -202,7 +202,7 @@
         bar.total = 0;
         bar.stack = [];
 
-        gene.uiFIProjects.sort(function(a, b) { return a.count - b.count; }).forEach(function(p) {
+        gene.uiFIProjects.sort(function(a, b) { return a.count - b.count }).forEach(function(p) {
           bar.stack.push({
             name: p.id,
             y0: bar.total,
@@ -216,7 +216,7 @@
         });
         list.push(bar);
       });
-      return list.sort(function(a, b) { return b.total - a.total; });
+      return list.sort(function(a, b) { return b.total - a.total });
     }
 
     _ctrl.donutChartSubTitle = function () {
@@ -281,7 +281,7 @@
       if (data.hasOwnProperty('hits')) {
         var totalDonors = 0, ssmTotalDonors = 0;
 
-        _ctrl.projectIds = _.pluck (data.hits, 'id');
+        _ctrl.projectIds = _.map (data.hits, 'id');
 
         data.hits.forEach(function (p) {
           totalDonors += p.totalDonorCount;
@@ -291,7 +291,7 @@
         var totalRowProjectIds = hasQueryFilter() ? _ctrl.projectIds : undefined;
         _ctrl.totals = _.map (_ctrl.fieldKeys, function (fieldKey) {
           return {
-            total: _.sum (data.hits, fieldKey),
+            total: _.sumBy (data.hits, fieldKey),
             sref: $scope.toAdvancedSearch (fieldKey, totalRowProjectIds)
           };
         });
@@ -316,9 +316,12 @@
         });
 
         cancelInFlightAggregationAjax();
-        if (stopIfNoHits (data)) {return;}
+        if (stopIfNoHits (data)) {return}
 
-        var mutationFilter = {
+        const geneSSMFilter = {
+          gene: {
+            curatedSetId: {is: ['GS1']}
+          },
           mutation: {
             functionalImpact: {is: ['High']}
           }
@@ -326,15 +329,13 @@
 
         Projects.several (_ctrl.projectIds.join()).get ('genes', {
           include: 'projects',
-          filters: mutationFilter,
+          filters: geneSSMFilter,
           size: 20
         }).then (function (genes) {
           // About to launch a new ajax getting project aggregation data. Cancel any active call.
           cancelInFlightAggregationAjax();
 
-          if (stopIfNoHits (genes)) {return;}
-
-          Page.stopWork();
+          if (stopIfNoHits (genes)) {return}
 
           geneDonorCountsRestangular = Restangular
             .one('ui/search/gene-project-donor-counts/' + _.map(genes.hits, 'id').join(','));
@@ -342,7 +343,7 @@
           _ctrl.isLoadingData = true;
 
           geneDonorCountsRestangular
-            .get ({'filters': mutationFilter})
+            .get ({'filters': geneSSMFilter})
             .then (function (geneProjectFacets) {
 
               genes.hits.forEach (function (gene) {
@@ -390,8 +391,8 @@
     }
 
     function refresh() {
-      Page.startWork();
-      
+      _ctrl.isLoadingData = true;
+
       // Needs to first grab every single project for projectIdLookupMap. Otherwise could be missing from map.
       Projects.getList({from: 1, size:100, filters:{}}).then(function(data) {
         _ctrl.projectIDLookupMap = _.mapKeys(data.hits, function(project) {
@@ -409,452 +410,14 @@
       return _.isEmpty (countryCode) ? defaultValue : 'flag flag-' + countryCode;
     };
 
+    _ctrl.viewInRepositories = () => {
+      LocationService.goToPath('/repositories', `filters={"file":{ "projectCode":{"is":[${ _.map(_ctrl.projects.hits, _.bind((project) => `"${project.id}"`, [])) }]}}}`);
+    };
+
     $scope.$on('$locationChangeSuccess', function (event, dest) {
       if (dest.match(new RegExp('^' + window.location.protocol + '//' + window.location.host + '/projects'))) {
         // NOTE: need to defer this call till next tick due to this running before filters are updated
         setTimeout(refresh);
-      }
-    });
-
-    refresh();
-  });
-
-  module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page, PubMed, project,
-    Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState, SetService, Restangular) {
-    var _ctrl = this;
-
-    Page.setTitle(project.id);
-    Page.setPage('entity');
-    
-    var loadState = new LoadState();
-
-    $scope.registerLoadState = loadState.addContributingLoadState;
-    $scope.deregisterLoadState = loadState.removeContributingLoadState;
-
-    _ctrl.loadState = loadState;
-
-    var dataRepoRouteInfo = RouteInfoService.get ('dataRepositories');
-    var dataRepoUrl = dataRepoRouteInfo.href;
-
-    var dataReleasesRouteInfo = RouteInfoService.get ('dataReleases');
-
-    _ctrl.dataRepoTitle = dataRepoRouteInfo.title;
-    _ctrl.dataReleasesTitle = dataReleasesRouteInfo.title;
-    _ctrl.dataReleasesUrl = dataReleasesRouteInfo.href;
-
-    _ctrl.hasExp = !_.isEmpty(project.experimentalAnalysisPerformedSampleCounts);
-    _ctrl.isPCAWG = PCAWG.isPCAWGStudy;
-
-    _ctrl.project = project;
-    _ctrl.ExternalLinks = ExternalLinks;
-
-    _ctrl.isPendingDonor = _.isUndefined (_.get(project, 'primarySite'));
-
-    var projectFilter = {
-      file: {
-        projectCode: {
-          is: [project.id]
-        }
-      }
-    };
-
-    _ctrl.urlToExternalRepository = function () {
-      return dataRepoUrl + '?filters=' + angular.toJson (projectFilter);
-    };
-
-    if (!_ctrl.project.hasOwnProperty('uiPublicationList')) {
-      _ctrl.project.uiPublicationList = [];
-    }
-
-    function success(data) {
-      _ctrl.project.uiPublicationList.push(data);
-    }
-
-    if (_ctrl.project.hasOwnProperty('pubmedIds')) {
-      _ctrl.project.pubmedIds.forEach(function (pmid) {
-        PubMed.get(pmid).then(success);
-      });
-    }
-
-    _ctrl.downloadSample = function () {
-      $window.location.href = API.BASE_URL + '/projects/' + project.id + '/samples';
-    };
-
-    function createSets() {
-      var filter = {
-        donor: {
-          projectId: {
-            is: [project.id]
-          }
-        }
-      };
-
-      var donorParams = {
-        filters: filter,
-        size: 3000,
-        isTransient: true,
-        name: project.id +  ' Donors',
-        sortBy: 'ssmAffectedGenes',
-        sortOrder: 'DESCENDING',
-      };
-
-      var geneParams = {
-        filters: filter,
-        size: 50,
-        isTransient: true,
-        name: 'Top 50 ' + project.id + ' Mutated Genes',
-        sortBy: 'affectedDonorCountFiltered',
-        sortOrder: 'DESCENDING',
-      };
-
-      return {
-        donorSet: SetService.createEntitySet('donor', donorParams),
-        geneSet: SetService.createEntitySet('gene', geneParams)
-      };
-    }
-
-    function createOncoGrid(sets) {
-      var payload = {
-        donorSet: sets.donorSet,
-        geneSet: sets.geneSet
-      };
-      
-      return Restangular
-        .one('analysis')
-        .post('oncogrid', payload, {}, { 'Content-Type': 'application/json' })
-        .then(function (data) {
-          if (!data.id) {
-            throw new Error('Received invalid response from analysis creation');
-          }
-          $location.path('analysis/view/oncogrid/' + data.id);
-        });
-    }
-
-    _ctrl.openOncogrid = function() {
-      var sets = createSets();
-      $q.all(sets).then(function(response) {
-        createOncoGrid({donorSet: response.donorSet.id, geneSet: response.geneSet.id});
-      });
-    };
-
-    function refresh() {
-      var params = {
-        filters: {donor: {projectId: {is: [project.id]}}},
-        size: 0,
-        include: ['facets']
-      };
-
-      // Get mutation impact for side panel
-      var fetchAndUpdateMutations = Mutations.getList(params).then(function (d) {
-        _ctrl.mutationFacets = d.facets;
-      });
-
-      // Get study facets for summay section
-      var fetchAndUpdateStudies = Donors.getList(params).then(function(d) {
-        _ctrl.studies = d.facets.studies.terms || [];
-
-        // Remove no-data term
-        _.remove(_ctrl.studies, function(t) {
-          return t.term === '_missing';
-        });
-
-        // Link back to adv page
-        _ctrl.studies.forEach(function(t) {
-          t.advQuery = {
-            donor: {
-              projectId: {is: [project.id]},
-              studies: {is: [t.term]}
-            }
-          };
-
-        });
-      });
-
-      loadState.loadWhile($q.all([ fetchAndUpdateMutations, fetchAndUpdateStudies ]));
-    }
-
-    $scope.$on('$locationChangeSuccess', function (event, dest) {
-      if (dest.indexOf('projects') !== -1) {
-        refresh();
-      }
-    });
-
-    $scope.$watch(function () {
-      return loadState.isLoading;
-    }, function(isLoading){
-      if (isLoading === false && $location.hash()) {
-        $window.scrollToSelector('#' + $location.hash(), {offset: 30, speed: 800});
-      }
-    });
-
-    refresh();
-
-  });
-
-  module.controller('ProjectGeneCtrl',
-    function($scope, HighchartsService, Projects, Donors, LocationService, ProjectCache, $stateParams, LoadState) {
-    var _ctrl = this,
-        _projectId = $stateParams.id || null,
-        project = Projects.one(_projectId),
-        FilterService = LocationService.getFilterService();
-
-    var loadState = new LoadState({scope: $scope});
-
-    function success(genes) {
-      if (genes.hasOwnProperty('hits') ) {
-        var projectCachePromise = ProjectCache.getData();
-        var geneIds = _.pluck(genes.hits, 'id').join(',');
-        _ctrl.genes = genes;
-
-        if (_.isEmpty(_ctrl.genes.hits)) {
-          return;
-        }
-
-        Projects.one(_projectId).get().then(function (data) {
-          var project = data;
-          genes.advQuery = LocationService.mergeIntoFilters({donor: {projectId: {is: [project.id]}}});
-
-          // Get Mutations counts
-          Projects.one(_projectId).handler
-            .one('genes', geneIds)
-            .one('mutations', 'counts').get({
-              filters: LocationService.filters()
-            }).then(function (data) {
-              _ctrl.mutationCounts = data;
-            });
-
-          // Need to get SSM Test Donor counts from projects
-          Projects.getList().then(function (projects) {
-            _ctrl.genes.hits.forEach(function (gene) {
-              gene.uiAffectedDonorPercentage = gene.affectedDonorCountFiltered / project.ssmTestedDonorCount;
-
-              gene.advQuery =
-              LocationService.mergeIntoFilters({donor: {projectId: {is: [project.id]}}, gene: {id: {is: [gene.id]}}});
-
-              gene.advQueryAll = LocationService.mergeIntoFilters({gene: {id: {is: [gene.id]}}});
-
-              Donors.getList({size: 0, include: 'facets', filters: gene.advQueryAll}).then(function (data) {
-                gene.uiDonors = data.facets.projectId.terms;
-                gene.uiDonors.forEach(function (facet) {
-                  var p = _.find(projects.hits, function (item) {
-                    return item.id === facet.term;
-                  });
-
-                  facet.advQuery = LocationService.mergeIntoFilters({
-                      donor: {projectId: {is: [facet.term]}},
-                      gene: {id: {is: [gene.id]}}
-                    }
-                  );
-
-                  projectCachePromise.then(function(lookup) {
-                    facet.projectName = lookup[facet.term] || facet.term;
-                  });
-
-                  facet.countTotal = p.ssmTestedDonorCount;
-                  facet.percentage = facet.count / p.ssmTestedDonorCount;
-                });
-              });
-            });
-
-            _ctrl.bar = HighchartsService.bar({
-              hits: _ctrl.genes.hits,
-              xAxis: 'symbol',
-              yValue: 'uiAffectedDonorPercentage'
-            });
-          });
-        });
-      }
-    }
-
-    function refresh() {
-
-      var params = LocationService.getPaginationParams('genes');
-        
-      loadState.loadWhile(
-        Projects.one(_projectId).getGenes({
-          from: params.from,
-          size: params.size,
-          filters: LocationService.filters()
-        }).then(success)
-      );
-    }
-
-
-      $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
-
-        if (filterObj.currentPath.indexOf('/projects/' + project.id) < 0) {
-          return;
-        }
-
-        refresh();
-      });
-
-      $scope.$on('$locationChangeSuccess', function (event, dest) {
-        if (dest.indexOf('/projects/' + project.id) !== -1) {
-          refresh();
-        }
-      });
-
-    refresh();
-  });
-
-  module.controller('ProjectMutationsCtrl',
-    function ($scope, HighchartsService, Projects, Donors, LocationService, ProjectCache, $stateParams, LoadState) {
-
-    var _ctrl = this,
-        _projectId = $stateParams.id || null,
-        project = Projects.one(_projectId),
-        FilterService = LocationService.getFilterService();
-
-    var loadState = new LoadState({ scope: $scope });
-
-    function success(mutations) {
-      if (mutations.hasOwnProperty('hits')) {
-        var projectCachePromise = ProjectCache.getData();
-
-        _ctrl.mutations = mutations;
-
-        if ( _.isEmpty(_ctrl.mutations.hits)) {
-          return;
-        }
-
-        mutations.advQuery = LocationService.mergeIntoFilters({donor: {projectId: {is: [project.id]}}});
-
-        // Need to get SSM Test Donor counts from projects
-        Projects.getList().then(function (projects) {
-          _ctrl.mutations.hits.forEach(function (mutation) {
-
-            mutation.advQuery = LocationService.mergeIntoFilters({
-              donor: {projectId: {is: [project.id]}},
-              mutation: {id: {is: [mutation.id]}}
-            });
-
-            mutation.advQueryAll = LocationService.mergeIntoFilters({mutation: {id: {is: [mutation.id]}}});
-
-            Donors.getList({
-              size: 0,
-              include: 'facets',
-              filters: mutation.advQueryAll
-              //filters: {mutation: {id: {is: mutation.id}}}
-            }).then(function (data) {
-              mutation.uiDonors = data.facets.projectId.terms;
-              mutation.uiDonors.forEach(function (facet) {
-                var p = _.find(projects.hits, function (item) {
-                  return item.id === facet.term;
-                });
-
-                facet.advQuery = LocationService.mergeIntoFilters({
-                  donor: {projectId: {is: [facet.term]}},
-                  mutation: {id: {is: [mutation.id]}}
-                });
-
-                projectCachePromise.then(function(lookup) {
-                  facet.projectName = lookup[facet.term] || facet.term;
-                });
-
-                facet.countTotal = p.ssmTestedDonorCount;
-                facet.percentage = facet.count / p.ssmTestedDonorCount;
-              });
-            });
-          });
-        });
-
-        _ctrl.bar = HighchartsService.bar({
-          hits: _ctrl.mutations.hits,
-          xAxis: 'id',
-          yValue: 'affectedDonorCountFiltered'
-        });
-      }
-    }
-
-    function refresh() {
-
-      var params = LocationService.getPaginationParams('mutations');
-
-      loadState.loadWhile(
-        project.getMutations({
-          from: params.from,
-          size: params.size,
-          include: 'consequences', 
-          filters: LocationService.filters()
-        }).then(success)
-      );
-    }
-
-    $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
-
-      if (filterObj.currentPath.indexOf('/projects/' + _projectId) < 0) {
-        return;
-      }
-
-      refresh();
-    });
-
-    $scope.$on('$locationChangeSuccess', function (event, dest) {
-      if (dest.indexOf('/projects/' + project.id) !== -1) {
-        refresh();
-      }
-    });
-
-    refresh();
-  });
-
-  module.controller('ProjectDonorsCtrl', function ($scope, HighchartsService, Projects,
-                                                   Donors, LocationService, $stateParams, LoadState) {
-    var _ctrl = this,
-        _projectId = $stateParams.id || null,
-        project = Projects.one(_projectId),
-        FilterService = LocationService.getFilterService();
-
-    var loadState = new LoadState({ scope: $scope });
-
-    function success(donors) {
-      if (donors.hasOwnProperty('hits')) {
-        _ctrl.donors = donors;
-        _ctrl.donors.advQuery = LocationService.mergeIntoFilters({donor: {projectId: {is: [project.id]}}});
-
-        _ctrl.donors.hits.forEach(function (donor) {
-          donor.advQuery = LocationService.mergeIntoFilters({donor: {id: {is: [donor.id]}}});
-        });
-        Donors
-          .one(_.pluck(donors.hits, 'id').join(',')).handler.all('mutations')
-          .one('counts').get({filters: LocationService.filters()}).then(function (data) {
-            _ctrl.mutationCounts = data;
-          });
-
-        _ctrl.bar = HighchartsService.bar({
-          hits: _ctrl.donors.hits,
-          xAxis: 'id',
-          yValue: 'ssmAffectedGenes'
-        });
-      }
-    }
-
-    function refresh() {
-
-      var params = LocationService.getPaginationParams('donors');
-
-      loadState.loadWhile(
-        Projects.one(_projectId).getDonors({
-          from: params.from,
-          size: params.size,
-          filters: LocationService.filters()
-        }).then(success)
-      );
-    }
-
-    $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(e, filterObj) {
-
-      if (filterObj.currentPath.indexOf('/projects/' + _projectId) < 0) {
-        return;
-      }
-
-      refresh();
-    });
-
-    $scope.$on('$locationChangeSuccess', function (event, dest) {
-      if (dest.indexOf('/projects/' + project.id) !== -1) {
-        refresh();
       }
     });
 
@@ -989,7 +552,7 @@
       pub.journal = get('FullJournalName');
       pub.issue = get('Issue');
       pub.pubdate = get('PubDate');
-      pub.authors = _.pluck(_.find(json.Item, function (o) {
+      pub.authors = _.map(_.find(json.Item, function (o) {
         return o._Name === 'AuthorList';
       }).Item, '__text');
       pub.refCount = parseInt(get('PmcRefCount'), 10);

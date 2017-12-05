@@ -54,6 +54,7 @@ import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.security.AuthService;
+import org.icgc.dcc.portal.server.service.BadRequestException;
 import org.icgc.dcc.portal.server.service.CmsAuthService;
 import org.icgc.dcc.portal.server.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +124,7 @@ public class AuthResource extends Resource {
     val cookies = requestHeaders.getCookies();
     val sessionToken = getCookieValue(cookies.get(AuthProperties.SESSION_TOKEN_NAME));
     val cudToken = getCookieValue(cookies.get(CrowdProperties.CUD_TOKEN_NAME));
-    val cmsToken = getCookieValue(cookies.get(cmsService.getSessionName()));
+    val cmsToken = getCmsCookie(cookies);
     log.info("Received an authorization request. Session token: '{}'. CUD token: '{}', CMS token: {}",
         sessionToken, cudToken, cmsToken);
 
@@ -144,6 +145,7 @@ public class AuthResource extends Resource {
       val tokenUserEntry = resolveIcgcUser(cudToken, cmsToken);
       val token = tokenUserEntry.getKey();
       val icgcUser = tokenUserEntry.getValue();
+      log.debug("Resolved ICGC user: {}", icgcUser);
 
       val userType = resolveUserType(cudToken, cmsToken);
       val userId = icgcUser.getUserName();
@@ -216,6 +218,15 @@ public class AuthResource extends Resource {
     return createLogoutResponse(NOT_MODIFIED, "Did not find a user to log out");
   }
 
+  private String getCmsCookie(Map<String, javax.ws.rs.core.Cookie> cookies) {
+    String cmsToken = getCookieValue(cookies.get(cmsService.getSessionName()));
+    if (cmsToken == null) {
+      cmsService.refreshSessionName();
+      cmsToken = getCookieValue(cookies.get(cmsService.getSessionName()));
+    }
+    return cmsToken;
+  }
+
   private SimpleImmutableEntry<String, org.icgc.dcc.common.client.api.cud.User> resolveIcgcUser(String cudToken,
       String cmsToken) {
     org.icgc.dcc.common.client.api.cud.User user = null;
@@ -244,7 +255,7 @@ public class AuthResource extends Resource {
   /**
    * Gets already authenticated user.
    * 
-   * @throws AuthenticationException
+   * @throws org.icgc.dcc.portal.server.security.AuthenticationException
    */
   private User getAuthenticatedUser(String sessionToken) {
     val token = stringToUuid(sessionToken);
@@ -262,9 +273,9 @@ public class AuthResource extends Resource {
   }
 
   /**
-   * Create a valid session user or throws {@link AuthenticationException} in case of failure.
+   * Create a valid session user or throws {@link org.icgc.dcc.portal.server.security.AuthenticationException} in case of failure.
    * 
-   * @throws AuthenticationException
+   * @throws org.icgc.dcc.portal.server.security.AuthenticationException
    */
   private User createUser(UserType userType, String userId, String userEmail, String cudToken) {
     val sessionToken = randomUUID();
@@ -340,10 +351,15 @@ public class AuthResource extends Resource {
    * @return sessionToken or <tt>null</tt> if no token found
    */
   private static UUID getSessionToken(HttpServletRequest request) {
-    for (val cookie : request.getCookies()) {
-      if (isSessionTokenCookie(cookie)) {
-        return stringToUuid(cookie.getValue());
+    val cookies = request.getCookies();
+    if (cookies != null) {
+      for (val cookie : cookies) {
+        if (isSessionTokenCookie(cookie)) {
+          return stringToUuid(cookie.getValue());
+        }
       }
+    } else {
+      throw new BadRequestException("Cookies must be set for this resource.");
     }
 
     return null;

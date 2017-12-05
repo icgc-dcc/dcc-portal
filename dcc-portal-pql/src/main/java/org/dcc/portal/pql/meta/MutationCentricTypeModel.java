@@ -48,7 +48,9 @@ public class MutationCentricTypeModel extends TypeModel {
       "platform",
       "verificationStatus",
       "functionalImpact",
-      "sequencingStrategy");
+      "sequencingStrategy",
+      "study",
+      "chromosome");
 
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "id",
@@ -74,9 +76,10 @@ public class MutationCentricTypeModel extends TypeModel {
       "functionalImpact",
       // "functionalImpactNested",
       "mutation.location",
-      "sequencingStrategy"
-      // "sequencingStrategyNested"
-      );
+      "sequencingStrategy",
+  // "sequencingStrategyNested"
+      "study"
+  );
 
   public MutationCentricTypeModel() {
     super(defineFields(), defineInternalAliases(), PUBLIC_FIELDS, INCLUDE_FIELDS);
@@ -161,7 +164,8 @@ public class MutationCentricTypeModel extends TypeModel {
             nestedArrayOfObjects("observation", object(
                 string("platform", "platform"),
                 string("verification_status", "verificationStatus"),
-                string("sequencing_strategy", "sequencingStrategy")))));
+                string("sequencing_strategy", "sequencingStrategy"),
+                string("_study", "study")))));
   }
 
   private static ObjectFieldModel defineProject() {

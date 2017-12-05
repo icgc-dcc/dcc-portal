@@ -34,9 +34,6 @@ import java.util.UUID;
 
 import javax.ws.rs.core.Cookie;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 import org.icgc.dcc.common.core.json.Jackson;
 import org.icgc.dcc.download.client.impl.HttpDownloadClient;
 import org.icgc.dcc.download.core.jwt.JwtService;
@@ -57,6 +54,7 @@ import org.icgc.dcc.portal.server.service.DonorService;
 import org.icgc.dcc.portal.server.service.ForbiddenAccessException;
 import org.icgc.dcc.portal.server.service.NotFoundException;
 import org.icgc.dcc.portal.server.service.SessionService;
+import org.icgc.dcc.portal.server.test.ResourceTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,7 +67,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.sun.jersey.api.client.ClientResponse;
-import org.icgc.dcc.portal.server.test.ResourceTest;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RunWith(MockitoJUnitRunner.class)
@@ -314,7 +314,7 @@ public class DownloadResourceTest extends ResourceTest {
         new DownloadFile("/path/ssm.open.TST1-CA.tsv.gz", DownloadFileType.FILE, 1, 1),
         new DownloadFile("/path/ssm.controlled.TST1-CA.tsv.gz", DownloadFileType.FILE, 1, 1));
 
-    when(downloadClient.listFiles("/path")).thenReturn(downloadFiles);
+    when(downloadClient.listFiles("/path", false)).thenReturn(downloadFiles);
 
     val response = client()
         .resource(RESOURCE + "/info/path")
@@ -330,11 +330,12 @@ public class DownloadResourceTest extends ResourceTest {
 
   @Test
   public void testListDirectory_controlled() throws Exception {
+    val file1 = new DownloadFile("/path/ssm.open.TST1-CA.tsv.gz", DownloadFileType.FILE, 1, 1);
+    val file2 = new DownloadFile("/path/ssm.controlled.TST1-CA.tsv.gz", DownloadFileType.FILE, 1, 1);
     val downloadFiles = ImmutableList.of(
-        new DownloadFile("/path/ssm.open.TST1-CA.tsv.gz", DownloadFileType.FILE, 1, 1),
-        new DownloadFile("/path/ssm.controlled.TST1-CA.tsv.gz", DownloadFileType.FILE, 1, 1));
+        file1, file2);
 
-    when(downloadClient.listFiles("/path")).thenReturn(downloadFiles);
+    when(downloadClient.listFiles("/path", false)).thenReturn(downloadFiles);
 
     val response = client()
         .resource(RESOURCE + "/info/path")

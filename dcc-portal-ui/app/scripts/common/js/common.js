@@ -15,10 +15,39 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require('../components');
+
+export const highlightFn = function (text, search, hide) {
+  text = text || '';
+  hide = hide || false;
+  if (search) {
+    text = angular.isArray(text) ? text.join(', ') : text.toString();
+    // Shrink extra spaces, restrict to alpha-numeric chars and a few other special chars
+    search = search.toString().replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9:,\s\-_\.]/g, '').split(' ');
+    for (var i = 0; i < search.length; ++i) {
+      text = text.replace(new RegExp(search[i] + '(?![^<]*>)', 'gi'), '^$&$');
+    }
+
+    // if match return text
+    if (text.indexOf('^') !== -1) {
+      return text.replace(/\^/g, '<span class="match">').replace(/\$/g, '</span>');
+    } else { // no match
+      if (hide) {
+        return '';
+      } // hide
+    }
+  }
+
+  // return base text if no match and not hiding
+  return text;
+};
+
 (function () {
   'use strict';
 
+
   var module = angular.module('app.common', [
+    'app.common.components',
     'app.common.services',
     'app.common.header',
     'app.common.footer',
@@ -56,13 +85,16 @@
     };
   });
 
+  module.filter('to_trusted', function($sce) {
+      return (text) => $sce.trustAsHtml(text) ;
+  });
 
 
   module.filter('sum', function () {
     return function (items, param) {
       var ret = null;
       if (angular.isArray(items)) {
-        ret = _.reduce(_.pluck(items, param), function (sum, num) {
+        ret = _.reduce(_.map(items, param), function (sum, num) {
           return sum + num;
         });
       }
@@ -71,10 +103,12 @@
   });
 
   module.filter('_', function () {
+    var _ = require('lodash');
     return function () {
       var input = arguments[0];
       var method = arguments[1];
       invariant(_.isString(method), 'The first argument must be a string that specifies a lodash method name');
+      invariant(_[method], `_.${method} does not exist`);
       var args = Array.prototype.slice.call(arguments, 2);
       return _[method].apply(null, [input].concat(args));
     };
@@ -109,32 +143,7 @@
   });
 
 
-  module.filter('highlight', function () {
-    return function (text, search, hide) {
-      text = text || '';
-      hide = hide || false;
-      if (search) {
-        text = angular.isArray(text) ? text.join(', ') : text.toString();
-        // Shrink extra spaces, restrict to alpha-numeric chars and a few other special chars
-        search = search.toString().replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9:,\s\-_\.]/g, '').split(' ');
-        for (var i = 0; i < search.length; ++i) {
-          text = text.replace(new RegExp(search[i], 'gi'), '^$&$');
-        }
-
-        // if match return text
-        if (text.indexOf('^') !== -1) {
-          return text.replace(/\^/g, '<span class="match">').replace(/\$/g, '</span>');
-        } else { // no match
-          if (hide) {
-            return '';
-          } // hide
-        }
-      }
-
-      // return base text if no match and not hiding
-      return text;
-    };
-  });
+  module.filter('highlight', () => highlightFn);
 
   module.factory('debounce', function ($timeout, $q) {
     return function (func, wait, immediate) {
@@ -183,7 +192,7 @@
         selfLoadState.isLoading = val;
       },
       addContributingLoadState: function (loadState) {
-        if (_.contains(contributingLoadStates, loadState)) {
+        if (_.includes(contributingLoadStates, loadState)) {
           console.warn('load state is already in contributing loadStates, this shouldnt happen');
           return;
         }
@@ -254,6 +263,10 @@
   });
 
 
+  /**
+   * Filter for converting bytes to human readable form truncated at 2 decimal places. 
+   * Uses bases 10 rather than base 2. So 'TB' rather than TiB.
+   */
   module.filter('bytes', function () {
     return function (input) {
       var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'],
@@ -261,13 +274,13 @@
         bytes = input,
         precision = 2;
 
-      if (bytes <= 1024) {
+      if (bytes <= 1000) {
         precision = 0;
       }
 
-      while (bytes >= 1024) {
+      while (bytes >= 1000) {
         postTxt++;
-        bytes = bytes / 1024;
+        bytes /= 1000;
       }
 
       return Number(bytes).toFixed(precision) + ' ' + sizes[postTxt];
@@ -309,9 +322,7 @@
       var acc = [];
 
       function page(params) {
-        console.log(resource.route + ' ' + JSON.stringify(params));
         return resource.get('', params).then(function (data) {
-          console.log(data.plain());
           acc = acc.concat(data.hits);
           var pagination = data.pagination;
           if (pagination.page < pagination.pages) {
@@ -393,5 +404,8 @@
       return string.replace(new RegExp(pattern, 'g'), replacement);
     };
   });
+
+  module.directive('ngLazyShow', require('./lazy-show'));
+  module.filter('pluralize', () => (...args) => require('pluralize')(...args));
 
 })();

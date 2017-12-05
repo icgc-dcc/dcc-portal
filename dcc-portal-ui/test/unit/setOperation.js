@@ -14,11 +14,12 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+const strip = require('strip');
 
 describe('Test SetOperationService', function() {
   var SetOperationService;
 
-  beforeEach(module('icgc'));
+  beforeEach(angular.mock.module('icgc'));
 
   beforeEach(inject(function ($httpBackend, $q, $rootScope, _SetOperationService_) {
     window._gaq = [];
@@ -33,8 +34,8 @@ describe('Test SetOperationService', function() {
   });
 
   it('Test set operation alias', function() {
-     expect(SetOperationService.getSetShortHand('a', ['b', 'a', 'c'])).toEqual('S2');
-     expect(SetOperationService.getSetShortHand('a', ['a', 'b', 'c'])).toEqual('S1');
+     expect(strip(SetOperationService.getSetShortHand('a', ['b', 'a', 'c']))).toEqual('S2');
+     expect(strip(SetOperationService.getSetShortHand('a', ['a', 'b', 'c']))).toEqual('S1');
   });
 
 });

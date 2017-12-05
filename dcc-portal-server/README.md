@@ -18,7 +18,9 @@ Administration is available at:
   
 ## Development
 
-The Portal Server is built with maven:
+*Pre-build:* maven is an obvious pre-requisite, but also make sure to install [yarn](https://yarnpkg.com/en/docs/install).
+
+*Build:* The Portal Server is built with maven:
 
 ```shell
 cd dcc-portal/dcc-portal-server
@@ -28,11 +30,16 @@ mvn -am
 ## Running
 
 ### Command-line
+
+The following commands assume the current directory is the root directory, `dcc-portal`.
+
 To run a basic test setup, execute the following:
 
 ```shell
 mvn -pl dcc-portal-server spring-boot:run -Drun.profiles=test
 ```
+
+Note that you may need to tweak `application.yml` to point to various systems for this to work.
 
 To run a basic development setup, execute the following supplying information about the config server:
 
@@ -58,7 +65,7 @@ the dcc-portal-ui as a module.*
 
 ## Configuration
 
-To configure the portal for running, the `elastic` and `icgc` portions of the `settings.yml` file
+To configure the portal for running, the `elastic` and `icgc` portions of the `application.yml` file
 to be used must be set.
 
 The `elastic` portion of the configuration must point to an existing and running elasticsearch index. 

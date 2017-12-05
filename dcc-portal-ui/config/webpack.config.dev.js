@@ -5,7 +5,8 @@ var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 var paths = require('./paths');
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: process.env.SOURCE_MAP ? process.env.SOURCE_MAP : 'eval-source-map',
+  cache: true,
   context: path.resolve(__dirname, '../app/scripts'),
   entry: {
     app: [
@@ -21,11 +22,10 @@ module.exports = {
     path: paths.appBuild,
     pathinfo: true,
     filename: 'static/js/[name].js',
-    publicPath: '/'
+    publicPath: 'http://local.dcc.icgc.org:9000/',
   },
   resolve: {
     extensions: ['', '.js', '.json'],
-    modulesDirectories: ['node_modules', 'bower_components'],
   },
   resolveLoader: {
     root: paths.ownNodeModules,
@@ -39,22 +39,32 @@ module.exports = {
         include: paths.appSrc,
       }
     ],
+    noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
       {
-        test: /index.html$/,
+        test: /\.html$/,
         loader: 'raw',
       },
       {
         test: /index.html$/,
         loader: 'string-replace',
         query: {
-          search: '\<portal-settings\>\<\/portal-settings\>',
-          replace: `<script>window.ICGC_SETTINGS = ${JSON.stringify(require('./ICGC_SETTINGS.dev.js'))}</script>`,
+          multiple: [
+            {
+              search: '\<portal-settings\>\<\/portal-settings\>',
+              replace: `<script>window.ICGC_SETTINGS = ${JSON.stringify(require('./ICGC_SETTINGS.dev.js'))}</script>`
+            },
+            {
+              search: '\'COPYRIGHT_YEAR\'',
+              replace: new Date().getUTCFullYear()
+            },
+          ]
         }
       },
       {
         test: /\.js$/,
         include: paths.appSrc,
+        exclude: [paths.internalVendorModules],
         loaders: ['babel?' + JSON.stringify(require('./babel.dev'))],
       },
       {
@@ -65,7 +75,12 @@ module.exports = {
       {
         test: /\.scss$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loaders: ['style', 'css?sourceMap', 'sass?sourceMap']
+        loaders: [
+          'style',
+          'css?sourceMap&-autoprefixer',
+          'postcss',
+          'sass?sourceMap'
+        ]
       },
       {
         test: /\.json$/,
@@ -73,7 +88,7 @@ module.exports = {
         loader: 'json'
       },
       {
-        test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
+        test: /\.(swf|jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'file',
         query: {
@@ -94,6 +109,11 @@ module.exports = {
   eslint: {
     configFile: path.join(__dirname, 'eslint.js'),
     useEslintrc: false
+  },
+  postcss: function() {
+    return [
+      require('autoprefixer'),
+    ];
   },
   plugins: [
     new HtmlWebpackPlugin({

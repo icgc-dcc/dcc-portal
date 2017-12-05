@@ -55,7 +55,7 @@
             $scope.activeTokens = data.tokens;
 
             // Give this a slight delay to make viewers aware that UI is updating
-            $timeout(function() { $scope.processing = false; }, 250);
+            $timeout(function() { $scope.processing = false }, 250);
          });
 
          TokenService.getScopes().then(function(data) {
@@ -72,11 +72,11 @@
       }
 
       $scope.isActive = function (s) {
-         return _.contains($scope.selected, s);
+         return _.includes($scope.selected, s);
       };
 
       $scope.toggleScope = function (s) {
-         if (_.contains($scope.selected, s)) {
+         if (_.includes($scope.selected, s)) {
             _.remove($scope.selected, s);
          } else {
             $scope.selected.push(s);
@@ -92,9 +92,13 @@
 
       $scope.createToken = function () {
          $scope.processing = true;
-         TokenService.createToken($scope.selected, $scope.tokenDescription).then(function () {
-            refresh();
-         });
+         $scope.errorCreatingToken = false;
+         TokenService.createToken($scope.selected, $scope.tokenDescription)
+            .then(
+                () => refresh(),
+                () => { $scope.errorCreatingToken = true }
+            )
+            .finally(() => { $scope.processing = false });
       };
 
       $scope.cancel = function () {
@@ -122,7 +126,7 @@
       };
 
       this.createToken = function (scopes, desc) {
-         var scopeStr = _.pluck(scopes, 'name').join(' ');
+         var scopeStr = _.map(scopes, 'name').join(' ');
          return RestangularNoCache.one('settings')
             .post('tokens', 'scope=' + scopeStr + '&desc=' + desc, {}, {
             'Accept': 'text/plain'

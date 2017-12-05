@@ -32,6 +32,7 @@
 
     $stateProvider.state ('dataRepositories', {
       url: '/repositories?filters',
+      reloadOnSearch: false,
       templateUrl: '/scripts/repository/views/repository.external.html',
       controller: 'ExternalRepoController as ExternalRepoController'
     });

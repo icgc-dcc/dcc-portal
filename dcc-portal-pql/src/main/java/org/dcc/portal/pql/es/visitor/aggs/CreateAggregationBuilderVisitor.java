@@ -34,17 +34,17 @@ import org.dcc.portal.pql.es.ast.aggs.TermsAggregationNode;
 import org.dcc.portal.pql.es.utils.Visitors;
 import org.dcc.portal.pql.es.visitor.NodeVisitor;
 import org.dcc.portal.pql.query.QueryContext;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 
 @Slf4j
-public class CreateAggregationBuilderVisitor extends NodeVisitor<AbstractAggregationBuilder, QueryContext> {
+public class CreateAggregationBuilderVisitor extends NodeVisitor<AggregationBuilder, QueryContext> {
 
   private static int DEFAULT_FACETS_SIZE = 1000;
 
   @Override
-  public AbstractAggregationBuilder visitTermsAggregation(TermsAggregationNode node, Optional<QueryContext> context) {
+  public AggregationBuilder visitTermsAggregation(TermsAggregationNode node, Optional<QueryContext> context) {
     checkOptional(context);
 
     val fieldName = node.getFieldName();
@@ -61,7 +61,7 @@ public class CreateAggregationBuilderVisitor extends NodeVisitor<AbstractAggrega
   }
 
   @Override
-  public AbstractAggregationBuilder visitMissingAggregation(MissingAggregationNode node, Optional<QueryContext> context) {
+  public AggregationBuilder visitMissingAggregation(MissingAggregationNode node, Optional<QueryContext> context) {
     checkOptional(context);
     val fieldName = node.getFieldName();
     val result = AggregationBuilders
@@ -76,32 +76,31 @@ public class CreateAggregationBuilderVisitor extends NodeVisitor<AbstractAggrega
   }
 
   @Override
-  public AbstractAggregationBuilder visitFilterAggregation(FilterAggregationNode node, Optional<QueryContext> context) {
+  public AggregationBuilder visitFilterAggregation(FilterAggregationNode node, Optional<QueryContext> context) {
     checkOptional(context);
     log.debug("Visiting FilterAggregationNode: \n{}", node);
     log.debug("Filters: {}", node.getFilters());
 
-    val result = AggregationBuilders.filter(node.getAggregationName())
-        .filter(resolveFilters(node, context))
+    val result = AggregationBuilders
+        .filter(node.getAggregationName(), resolveFilters(node, context))
         .subAggregation(node.getFirstChild().accept(this, context));
 
     return resolveGlobal(result, node, node.getAggregationName());
   }
 
   @Override
-  public AbstractAggregationBuilder visitNestedAggregation(NestedAggregationNode node, Optional<QueryContext> context) {
+  public AggregationBuilder visitNestedAggregation(NestedAggregationNode node, Optional<QueryContext> context) {
     log.debug("Visiting NestedAggregationNode: \n{}", node);
     val subAggregation = node.getFirstChild().accept(this, context);
 
-    val result = AggregationBuilders.nested(node.getAggregationName())
-        .path(node.getPath())
+    val result = AggregationBuilders.nested(node.getAggregationName(), node.getPath())
         .subAggregation(subAggregation);
 
     return resolveGlobal(result, node, node.getAggregationName());
   }
 
   @Override
-  public AbstractAggregationBuilder visitReverseNestedAggregation(ReverseNestedAggregationNode node,
+  public AggregationBuilder visitReverseNestedAggregation(ReverseNestedAggregationNode node,
       Optional<QueryContext> context) {
 
     return AggregationBuilders.reverseNested(node.getAggregationName());
@@ -111,11 +110,11 @@ public class CreateAggregationBuilderVisitor extends NodeVisitor<AbstractAggrega
     return node.getParent() instanceof AggregationsNode;
   }
 
-  private static FilterBuilder resolveFilters(FilterAggregationNode parent, Optional<QueryContext> context) {
+  private static QueryBuilder resolveFilters(FilterAggregationNode parent, Optional<QueryContext> context) {
     return parent.getFilters().accept(Visitors.filterBuilderVisitor(), context);
   }
 
-  private static AbstractAggregationBuilder resolveGlobal(AbstractAggregationBuilder builder, ExpressionNode node,
+  private static AggregationBuilder resolveGlobal(AggregationBuilder builder, ExpressionNode node,
       String aggregationName) {
     if (isGlobal(node)) {
       return AggregationBuilders.global(aggregationName)

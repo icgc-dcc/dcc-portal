@@ -65,7 +65,7 @@ public class NestedNode extends ExpressionNode {
   public static enum ScoreMode implements Identifiable {
     AVG,
     TOTAL,
-    SUM,
+    MIN,
     MAX,
     NONE;
 

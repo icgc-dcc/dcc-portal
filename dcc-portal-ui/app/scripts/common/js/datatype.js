@@ -53,7 +53,7 @@
     };
 
     this.precedence = function() {
-      return _.pluck(data, 'id');
+      return _.map(data, 'id');
     };
 
     this.translate = function(id) {

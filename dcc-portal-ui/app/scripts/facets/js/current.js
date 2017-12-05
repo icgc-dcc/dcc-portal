@@ -53,26 +53,24 @@
     $scope.inPluralForm = function (terms) {
       var filters = _.get (terms, 'is', _.get (terms, 'not', []));
 
-      if (_.isEmpty (filters)) {return false;}
-      if (_.size (filters) > 1) {return true;}
+      if (_.isEmpty (filters)) {return false}
+      if (_.size (filters) > 1) {return true}
 
-      var filter = _.first (filters);
+      var filter = _.head (filters);
 
       return (_.get(filter, 'controlTerm', '').startsWith(Extensions.ENTITY_PREFIX));
     };
     
     $scope.isNot = function(terms) {
       var currentFilters = LocationService.filters();
-      if (terms.facet === 'id') {
-        return _.has(currentFilters, terms.type+'.'+terms.facet+'.not');
-      } else if (terms.type === 'go_term') {
+      if (terms.type === 'go_term') {
         return _.has(currentFilters, ['gene',terms.facet,'not']);
       } else {
         return _.has(currentFilters, terms.type+'.'+terms.facet+'.not');
       }
     };
     
-    $scope.activeClass = function(terms) {     
+    $scope.activeClass = function(terms) {
       return $scope.isNot(terms) ? 't_facets__facet__not' : '';
     };
 
@@ -83,13 +81,14 @@
       } else if (_.has(filters, 'gene.id.is')) {
         activeGeneIds = getActiveIds(filters, 'id', 'is');
       }
-      
-      if (_.isEmpty (activeGeneIds)) {
+
+      const filteredGeneIds = _.filter(activeGeneIds, (id) => _.includes(id, 'ENSG'));
+      if (_.isEmpty (filteredGeneIds)) {
         $scope.ensemblIdGeneSymbolMap = {};
         return;
       }
 
-      GeneSymbols.resolve (activeGeneIds).then (function (ensemblIdGeneSymbolMap) {
+      GeneSymbols.resolve (filteredGeneIds).then (function (ensemblIdGeneSymbolMap) {
         $scope.ensemblIdGeneSymbolMap = ensemblIdGeneSymbolMap.plain();
       });
     }
@@ -176,7 +175,7 @@
       });
 
       // Remove secondary facet - entity
-      if (_.contains(['gene', 'donor', 'mutation'], type) === true && facet === 'id') {
+      if (_.includes(['gene', 'donor', 'mutation'], type) === true && facet === 'id') {
         Facets.removeFacet({
           type: type,
           facet: Extensions.ENTITY
@@ -204,6 +203,13 @@
           facet: 'hasCompound'
         });
       }
+
+      if (type === 'donor' && facet === 'donorId') {
+        Facets.removeFacet({
+          type: type,
+          facet: 'hasSSMType'
+        });
+      }
     };
 
     /**
@@ -212,6 +218,11 @@
      */
     $scope.removeTerm = function (type, facet, term) {
       if (type === 'gene' && (facet === 'hasPathway' || facet === 'hasCompound')) {
+        Facets.removeFacet({
+          type: type,
+          facet: facet
+        });
+      } else if (type === 'donor' && facet === 'hasSSMType') {
         Facets.removeFacet({
           type: type,
           facet: facet

@@ -2,7 +2,7 @@
 <article class="full" data-infinite-scroll="next()" data-infinite-scroll-disabled='isBusy || limit'
          data-infinite-scroll-distance='1'>
     <div style="height: 12rem;">
-        <div class="clearfix sug-wrap" data-ui-scrollfix=400>
+        <div class="clearfix sug-wrap" data-ui-scrollpoint=400>
             <form class="t_suggest">
                 <input
                         class="t_suggest__input"
@@ -124,7 +124,7 @@
                             <span class="t_quick__hit__text__details__label"><translate>File Name</translate></span>
                             <span class="t_quick__hit__text__details__value" data-ng-bind-html="r.fileName[0] | highlight:activeQuery"></span>
                             <span data-ng-if="r.fileName.length > 1" style="cursor:pointer;"
-                              data-tooltip="{{r.fileName | withoutFirst | highlight:activeQuery}}" class="t_quick__hit__text__details__value">...</span>
+                              data-icgc-tooltip="{{r.fileName | withoutFirst | highlight:activeQuery}}" class="t_quick__hit__text__details__value">...</span>
                         </li>
                         <li>
                             <span class="t_quick__hit__text__details__label"><translate>Object ID</translate></span>
@@ -278,7 +278,7 @@
         <div data-ng-if='isBusy' style="text-align: center; padding-top: 1rem">
             <i class="icon-spin icon-spinner"></i>
         </div>
-        <div data-ng-if="limit && !isBusy && !isFinished" class="results_show_more_bar" data-type="button"
+        <div data-ng-if="limit && !isBusy && !isFinished && results.hits.length" class="results_show_more_bar" data-type="button"
              data-ng-click="next()">
             <i class="icon-double-angle-down"></i> <translate>Show more results</translate>
         </div>

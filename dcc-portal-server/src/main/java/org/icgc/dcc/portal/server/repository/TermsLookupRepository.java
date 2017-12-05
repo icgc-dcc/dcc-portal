@@ -26,20 +26,11 @@ import static org.dcc.portal.pql.meta.TypeModel.DONOR_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.FILE_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.GENE_LOOKUP;
 import static org.dcc.portal.pql.meta.TypeModel.MUTATION_LOOKUP;
-import static org.elasticsearch.index.query.FilterBuilders.termsLookupFilter;
-import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
-import static org.elasticsearch.search.sort.SortOrder.ASC;
-import static org.icgc.dcc.portal.server.model.IndexType.DONOR;
-import static org.icgc.dcc.portal.server.model.IndexType.DONOR_TEXT;
-import static org.icgc.dcc.portal.server.model.IndexType.FILE_DONOR_TEXT;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.toBoolFilterFrom;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.toDonorBoolFilter;
+import static org.elasticsearch.action.support.WriteRequest.RefreshPolicy.IMMEDIATE;
+import static org.elasticsearch.index.query.QueryBuilders.termsLookupQuery;
 import static org.icgc.dcc.portal.server.util.JsonUtils.MAPPER;
-import static org.icgc.dcc.portal.server.util.SearchResponses.getHitIdsSet;
-import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -51,14 +42,12 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.MatchAllQueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermsLookupFilterBuilder;
+import org.elasticsearch.index.query.TermsQueryBuilder;
+import org.elasticsearch.indices.TermsLookup;
 import org.icgc.dcc.portal.server.config.ServerProperties;
-import org.icgc.dcc.portal.server.model.BaseEntitySet;
 import org.icgc.dcc.portal.server.model.EntitySet.SubType;
-import org.icgc.dcc.portal.server.model.UnionUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -82,8 +71,6 @@ public class TermsLookupRepository {
    */
   public static final String TERMS_LOOKUP_PATH = "values";
   public static final String TERMS_LOOKUP_INDEX_NAME = "terms-lookup";
-
-  private final static MatchAllQueryBuilder MATCH_ALL = QueryBuilders.matchAllQuery();
 
   /**
    * Dependencies.
@@ -168,20 +155,17 @@ public class TermsLookupRepository {
   @SneakyThrows
   private void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
       @NonNull final Map<String, Object> keyValuePairs) {
-    client.prepareIndex(TERMS_LOOKUP_INDEX_NAME, type.getName())
+    val request = client.prepareIndex(TERMS_LOOKUP_INDEX_NAME, type.getName())
         .setId(id.toString())
-        .setSource(keyValuePairs).execute().get();
+        .setSource(keyValuePairs)
+        .setRefreshPolicy(IMMEDIATE);
+    log.trace("{}", request.request());
+    request.get();
   }
 
   public void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
       @NonNull final Iterable<String> values) {
     createTermsLookup(type, id, Collections.singletonMap(TERMS_LOOKUP_PATH, (Object) values));
-  }
-
-  public void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
-      @NonNull final Iterable<String> values, @NonNull final Map<String, Object> additionalAttributes) {
-    additionalAttributes.put(TERMS_LOOKUP_PATH, values);
-    createTermsLookup(type, id, additionalAttributes);
   }
 
   public void createTermsLookup(@NonNull final TermLookupType type, @NonNull final UUID id,
@@ -196,27 +180,23 @@ public class TermsLookupRepository {
     createTermsLookup(type, id, attributes);
   }
 
-  public static TermsLookupFilterBuilder createTermsLookupFilter(@NonNull String fieldName,
+  public static TermsQueryBuilder createTermsLookupFilter(@NonNull String fieldName,
       @NonNull TermLookupType type, @NonNull UUID id) {
-    val key = id.toString();
-    return termsLookupFilter(fieldName)
-        // .cacheKey(key)
-        .lookupId(key)
-        .lookupIndex(TERMS_LOOKUP_INDEX_NAME)
-        .lookupType(type.getName())
-        .lookupPath(TERMS_LOOKUP_PATH);
+    val termsLookup = new TermsLookup(TERMS_LOOKUP_INDEX_NAME, type.getName(), id.toString(), TERMS_LOOKUP_PATH);
+    return termsLookupQuery(fieldName, termsLookup);
   }
 
   public SearchResponse runUnionEsQuery(final String indexTypeName, @NonNull final SearchType searchType,
-      @NonNull final BoolFilterBuilder boolFilter, final int max) {
-    val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
+      @NonNull final BoolQueryBuilder boolFilter, final int max) {
+
+    val query = QueryBuilders.boolQuery().must(boolFilter);
     return execute("Union ES Query", false, (request) -> {
       request
           .setTypes(indexTypeName)
           .setSearchType(searchType)
           .setQuery(query)
           .setSize(max)
-          .setNoFields();
+          .setFetchSource("_id", null);
 
       if (indexTypeName.equalsIgnoreCase(FILE.getId())) {
         request.setIndices(repoIndexName);
@@ -224,83 +204,22 @@ public class TermsLookupRepository {
     });
   }
 
-  /**
-   * Special case for Survival Analysis, the fields selected for return are the only ones we currently care about.
-   */
-  public SearchResponse singleUnion(final String indexTypeName,
-      @NonNull final SearchType searchType,
-      @NonNull final BoolFilterBuilder boolFilter, final int max,
-      @NonNull final String[] fields,
-      @NonNull final List<String> sort) {
-    val query = filteredQuery(MATCH_ALL, boolFilter);
+  public SearchResponse runUnionEsQueryCount(final String indexTypeName, @NonNull final BoolQueryBuilder boolFilter,
+      final int max) {
 
-    // Donor type is not analyzed but this works due to terms-lookup on _id field.
-    // https://github.com/icgc-dcc/dcc-release/blob/develop/dcc-release-resources/src/main/resources/org/icgc/dcc/release/resources/mappings/donor.mapping.json#L12-L13
+    val query = QueryBuilders.boolQuery().must(boolFilter);
     return execute("Union ES Query", false, (request) -> {
       request
-          .setTypes(DONOR.getId())
-          .setSearchType(searchType)
+          .setTypes(indexTypeName)
+          .setSize(0)
           .setQuery(query)
           .setSize(max)
-          .addFields(fields);
+          .setFetchSource(false);
 
-      sort.forEach(s -> request.addSort(s, ASC));
+      if (indexTypeName.equalsIgnoreCase(FILE.getId())) {
+        request.setIndices(repoIndexName);
+      }
     });
-  }
-
-  public SearchResponse donorSearchRequest(final BoolFilterBuilder boolFilter) {
-    val query = QueryBuilders.filteredQuery(MATCH_ALL, boolFilter);
-    return execute("Terms Lookup - Donor Search", true, (request) -> request
-        .setTypes(DONOR_TEXT.getId(), FILE_DONOR_TEXT.getId())
-        .setQuery(query)
-        .setSize(maxUnionCount)
-        .setNoFields()
-        .setSearchType(SearchType.DEFAULT));
-  }
-
-  public long getUnionCount(
-      final UnionUnit unionDefinition,
-      final BaseEntitySet.Type entityType) {
-
-    val response = runUnionEsQuery(
-        entityType.getIndexTypeName(),
-        SearchType.COUNT,
-        toBoolFilterFrom(unionDefinition, entityType),
-        maxUnionCount);
-
-    val count = getCountFrom(response, maxUnionCount);
-    log.debug("Total hits: {}", count);
-
-    return count;
-  }
-
-  public SearchResponse getDonorUnion(final Iterable<UnionUnit> definitions) {
-    val boolFilter = toBoolFilterFrom(definitions, BaseEntitySet.Type.DONOR);
-    val response = donorSearchRequest(boolFilter);
-
-    return response;
-  }
-
-  public long getDonorCount(final UnionUnit unionDefinition) {
-    val boolFilter = toDonorBoolFilter(unionDefinition);
-    val response = donorSearchRequest(boolFilter);
-
-    return getHitIdsSet(response).size();
-  }
-
-  public String getRepoName(@NonNull String setId) {
-    val response = client.prepareGet(TERMS_LOOKUP_INDEX_NAME, TermLookupType.FILE_IDS.getName(), setId)
-        .setFields("repo")
-        .execute()
-        .actionGet();
-
-    val field = response.getField("repo");
-    return field.getValue().toString();
-  }
-
-  private long getCountFrom(@NonNull final SearchResponse response, final long max) {
-    val result = getTotalHitCount(response);
-    return min(max, result);
   }
 
   private String createSettings() {

@@ -55,5 +55,6 @@ webpack(config).run(function(err, stats) {
       '  ' + chalk.dim(asset.folder + path.sep) + chalk.cyan(asset.name)
     );
   });
+  fs.writeFileSync(paths.appBuild + '/webpack-stats.json', JSON.stringify(stats.toJson(), null, '    '));
   console.log();
 });

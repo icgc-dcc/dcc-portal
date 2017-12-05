@@ -1,6 +1,6 @@
 <div class="modal-content download-manifests light">
     <div class="modal-header clearfix">
-      <h3 class="pull-left"><translate>Generate manifest(s)</translate></h3>
+      <h3 class="pull-left"><i class="icon-download" style="color: #666;"></i><translate>Download Files</translate></h3>
       <button class="pull-right t_button" data-ng-click="cancel()"><i
               class="icon-cancel"></i>
       </button>
@@ -8,33 +8,31 @@
 
     <div class="modal-body">
       <div class="modal-info-wrapper">
-        <img class="modal-info-figure" src="/styles/images/checklist.svg" />
         <div class="modal-info">
           <p>
-            <translate>
-              A manifest is a text file passed to download clients in order to download selected files of interest.
-            </translate>
+            <translate>For instructions on obtaining access, see the <a href="http://docs.icgc.org/cloud/repositories/" target="_blank" external-link>Repositories documentation</a>.</translate>
           </p>
-          <p ng-if="repos.length > 1">
-            <translate>
-              Some files may be stored in multiple repositories. When "Remove duplicate files" is checked, duplicates from repositories lower in the list will not be included, and a manifest containing unique files from all repositories will be generated. You may drag rows to reorder the list to affect the generated manifest.
-            </translate>
-          </p>
-          <p>
-            <translate translate-comment="See the User Guide for more information on manifest files">See the</translate>
-            <a href="http://docs.icgc.org/cloud/guide/#manifest-command" target="_blank" class="light">
-              <translate translate-comment="See the User Guide for more information on manifest files">User Guide</translate>
-              <i class="icon-external-link"></i>
-            </a>
-            <translate translate-comment="See the User Guide for more information on manifest files">for more information on manifest files</translate>
-          </p>
-          <p>
-            <translate>The available repositories below are restricted by your search filter:</translate>
-          </p>
-          <label class="no-select text-right" ng-show="repos.length > 1">
-            <input ng-model="shouldDeduplicate" type="checkbox"/>
-            <translate>Remove duplicate files</translate>
-          </label>
+          <div class="flex-row">
+            <small><translate>The available repositories below are restricted by your search filter</translate></small>
+            <label
+              class="no-select text-right"
+              ng-show="repos.length > 1"
+              style="margin-left: auto; cursor: pointer;"
+            >
+              <input
+                ng-model="shouldDeduplicate"
+                type="checkbox"
+                ng-change="track('generate-manifest', {action: 'click', label: 'set dedupe', value: shouldDeduplicate})"
+              />
+              <translate>Remove duplicate files</translate>
+              <i
+                class="fa fa-info-circle"
+                style="color: #b1b1b1;"
+                icgc-tooltip="{{'<div class=\'tooltip-contents\'><p>Some files may be stored in multiple repositories.</p> <p>When &quot;Remove duplicate files&quot; is checked, duplicates from repositories lower in the list will not be included, and a manifest containing unique files from all repositories will be generated.</p> <p>You may drag rows to reorder the list to affect the generated manifest.</p></div>' | translate}}"
+                tooltip-placement="left"
+              ></i>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -106,92 +104,7 @@
 
            </tr>
 
-            <tr class="extras" data-ng-repeat-end data-ng-if="
-              repoData.isGeneratingManifestID ||
-              repoData.isGeneratingManifestShortUrl ||
-              repoData.manifestID ||
-              repoData.shortUrl"
-            >
-              <td colspan="6" class="text-right">
-                <div class="spinner-container" data-ng-if="repoData.isGeneratingManifestShortUrl || repoData.isGeneratingManifestID">
-                  <i class="icon-spinner icon-spin"></i>
-                </div>
-
-                <div class="container-fluid">
-
-                  <div class="row" data-ng-if="repoData.shortUrl">
-                    <div class="col-sm-3">
-                      <translate>Manifest URL</translate>
-                    </div>
-                    <div class="col-sm-9 text-left">
-                      <input
-                        onClick="this.select()"
-                        size="18"
-                        type="text"
-                        value="{{repoData.shortUrl}}"
-                      />
-                      <span
-                          class="clip-icon"
-                          style="cursor: pointer;"
-                          data-copy-to-clip
-                          data-copy-data="repoData.shortUrl"
-                          data-show-copy-tips="true"
-                          data-prompt-on-copy="false"
-                          data-on-copy-success-message="{{'Copied!' | translate}}"
-                          data-on-hover-message="{{'Copy to clipboard' | translate}}"
-                        >
-                          <span class="icon-clippy"></span>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="row" data-ng-if-start="repoData.manifestID">
-                    <div class="col-sm-3">
-                      <translate>Manifest ID</translate>
-                    </div>
-                    <div class="col-md-5 text-left">
-                      
-                      <div class="manifest" data-ng-if="repoData.hasManifest">
-                        <div class="input-group clipboard-group">
-                          <input
-                            class="manifest-id form-control input-sm code text-center"
-                            onClick="this.select()"
-                            size="38"
-                            type="text"
-                            value="{{repoData.manifestID}}"
-                          />
-                          <span class="input-group-btn">
-                            <button class="btn btn-default btn-sm" type="button"
-                                data-copy-to-clip
-                                data-copy-data="repoData.manifestID"
-                                data-show-copy-tips="true"
-                                data-prompt-on-copy="false"
-                                data-on-copy-success-message="{{'Copied!' | translate}}"
-                                data-on-hover-message="{{'Copy to clipboard' | translate}}"
-                                >
-                                <i class="icon-clippy"></i>
-                            </button>
-                            
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row" data-ng-if-end>
-                    <div class="col-sm-3">
-                      <translate>Usage example</translate>
-                    </div>
-                    <div class="col-sm-9 text-left">
-                      <code class="inline-code">
-                        {{ 'bin/icgc-storage-client manifest --manifest ' + repoData.manifestID }}
-                      </code>
-                    </div>
-                  </div>
-
-                </div>
-
-             </td>
+            <tr class="extras" data-ng-repeat-end>
            </tr>
 
            <tr class="dndPlaceholder">
@@ -210,16 +123,209 @@
     </div>
 
     <div class="modal-footer">
-      <button class="t_button" data-ng-click="cancel();"><translate>Cancel</translate></button>
-      <button class="t_button" data-ng-click="download()"><i class="icon-download"></i><translate>Generate</translate></button>
+
+      <!-- ICGC-GET -->
+      <button
+        ng-if="!icgcGetId"
+        class="t_button no-animate"
+        data-ng-click="
+          !icgcGetId && handleClickGenerateIcgcGetId(repos);
+          icgcGetId && 
+          track('generate-icgc-get-id', { action: 'click' });
+        ">
+        <span ng-show="!isGeneratingIcgcGetId && !icgcGetId">
+          <translate>Generate icgc-get ID</translate>
+        </span>
+        <span ng-show="isGeneratingIcgcGetId">
+          <translate>Generating icgc-get ID</translate> <i class="fa fa-spin fa-spinner"></i>
+        </span>
+      </button>
+      <div ng-if="icgcGetId" class="text-left">
+        <span class="button-label">Your icgc-get manifest ID is:</span>
+        <div class="flex-row align-flex-end">
+          <button
+            class="t_button icgc-get-id"
+            data-ng-click="
+              track('copy-icgc-get-id', { action: 'click' });
+            "
+            data-copy-to-clip
+            data-copy-analytics-tag="icgc-get-manifest-id"
+            data-copy-data="icgcGetId"
+            data-show-copy-tips="true"
+            data-prompt-on-copy="false"
+            data-on-copy-success-message="Copied!"
+            data-on-hover-message="Copy to clipboard"
+          >
+              {{ icgcGetId }}
+          </button>
+          <button
+              style="border-radius: 0 3px 3px 0;"
+              class="btn btn-default btn-sm"
+              type="button"
+              data-copy-to-clip
+              data-copy-analytics-tag="icgc-get-manifest-id"
+              data-copy-data="icgcGetId"
+              data-show-copy-tips="true"
+              data-prompt-on-copy="false"
+              data-on-copy-success-message="Copied!"
+              data-on-hover-message="Copy to clipboard"
+          >
+              <i class="icon-clippy"></i>
+          </button>
+        </div>
+      </div>
+      <a
+        href="http://docs.icgc.org/cloud/icgc-get/"
+        target="_blank"
+        style="margin-left: 4px;"
+      >
+        <i
+          class="fa fa-question-circle"
+          style="cursor: pointer;"
+          icgc-tooltip="{{'<div class=\'tooltip-contents\'>icgc-get is a universal download client for accessing ICGC data residing in various data repositories. <br/><small><em>Click to see the User Guide for more information</em> <i class=\'fa fa-external-link\'></i></small></div>' | translate}}"
+        ></i>
+      </a>
+
+      <!-- ICGC Storage Manifest ID -->
       <button
         class="t_button"
         data-ng-repeat="repoData in repos"
-        data-ng-if="repos.length === 1 && repoData.hasManifest"
-        data-ng-disabled="repoData.manifestID || repoData.isGeneratingManifestID"
-        data-ng-click="(!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
+        data-ng-if="repos.length === 1 && repoData.hasManifest && !manifestID"
+        data-ng-click="track('create-manifest-id', { action: 'click', label: repoData.repoName }); (!repoData.manifestID && !repoData.isGeneratingManifestID) && createManifestId(repoData.repoName, repoData)"
       >
-        <translate>Manifest ID</translate>
+        <span ng-show="!isGeneratingManifestID && !manifestID">
+          <translate>Manifest ID</translate>
+        </span>
+        <span ng-show="isGeneratingManifestID">
+          <translate>Generating Manifest ID</translate> <i class="fa fa-spin fa-spinner"></i>
+        </span>
       </button>
+      </a>
+      <div ng-if="manifestID" class="text-left">
+        <span class="button-label">Your manifest ID is:</span>
+        <div class="flex-row align-flex-end">
+          <button
+            class="t_button icgc-get-id"
+            data-ng-click="
+              track('copy-manifest-id', { action: 'click' });
+            "
+            data-copy-to-clip
+            data-copy-analytics-tag="icgc-manifest-id"
+            data-copy-data="manifestID"
+            data-show-copy-tips="true"
+            data-prompt-on-copy="false"
+            data-on-copy-success-message="Copied!"
+            data-on-hover-message="Copy to clipboard"
+          >
+              {{ manifestID }}
+          </button>
+          <button
+              style="border-radius: 0 3px 3px 0;"
+              class="btn btn-default btn-sm"
+              type="button"
+              data-copy-to-clip
+              data-copy-analytics-tag="icgc-get-manifest-id"
+              data-copy-data="icgcGetId"
+              data-show-copy-tips="true"
+              data-prompt-on-copy="false"
+              data-on-copy-success-message="Copied!"
+              data-on-hover-message="Copy to clipboard"
+          >
+              <i class="icon-clippy"></i>
+          </button>
+        </div>
+      </div>
+      <a
+      data-ng-repeat="repoData in repos"
+      data-ng-if="repos.length === 1 && repoData.hasManifest"
+      href="http://docs.icgc.org/cloud/guide/#installation"
+      target="_blank"
+      style="margin-left: 4px;"
+      >
+        <i
+          class="fa fa-question-circle"
+          style="cursor: pointer;"
+          icgc-tooltip="{{'<div class=\'tooltip-contents\'>A manifest ID can be used by the ICGC Storage client. <br/><small><em>Click to see the User Guide for more information</em> <i class=\'fa fa-external-link\'></i></small></div>' | translate}}"
+        ></i>
+      </a>
+
+      <!-- MANIFEST DOWNLOAD -->
+      <button
+        class="t_button"
+        ng-click="
+          downloadManifest();
+          track('generate-manifest', { action: 'click' });
+        "
+      >
+        <i class="icon-download"></i><translate>Download Manifest</translate>
+      </button>
+      <a
+        href="http://docs.icgc.org/cloud/guide/#manifest-command"
+        target="_blank"
+        style="margin-left: 4px;"
+      >
+        <i
+          class="fa fa-question-circle"
+          style="cursor: pointer;"
+          icgc-tooltip="{{'<div class=\'tooltip-contents\'>A manifest is a text file passed to download clients to download selected files of interest. <br/><small><em>Click to see the User Guide for more information</em> <i class=\'fa fa-external-link\'></i></small></div>' | translate}}"
+        ></i>
+      </a>
+      
+    </div>
+
+    <div class="more-info" data-ng-if="manifestID">
+      <div>
+        <div>
+          <translate>For downloading files only from AWS-Virginia or Collaboratory, you can use the ICGC Storage Client:</translate>
+        </div>
+        <code
+          ng-class="{ 'text-center': isGeneratingManifestID }"
+          class="code"
+          data-copy-to-clip
+          data-copy-analytics-tag="generate-manifest-id"
+          data-copy-data="'bin/icgc-storage-client manifest --manifest ' + manifestID"
+          data-show-copy-tips="true"
+          data-prompt-on-copy="false"
+          data-on-copy-success-message="Copied!"
+          data-on-hover-message="Copy to clipboard"
+        >
+          <span>bin/icgc-storage-client manifest --manifest {{manifestID}}</span>
+          <i
+            class="icon-spin icon-spinner"
+            ng-class="{ 'hidden': !isGeneratingManifestID }"
+          ></i>
+        </code>
+      </div>
+    </div>
+
+    <div class="more-info" ng-if="icgcGetId">
+      <div>
+        <div>
+          <translate>To download your current file selection, execute the following command:</translate>
+        </div>
+        <code
+          ng-class="{ 'text-center': isGeneratingIcgcGetId }"
+          class="code"
+          data-copy-to-clip
+          data-copy-analytics-tag="icgc-get-manifest-id"
+          data-copy-data="'./icgc-get download -m ' + icgcGetId"
+          data-show-copy-tips="true"
+          data-prompt-on-copy="false"
+          data-on-copy-success-message="Copied!"
+          data-on-hover-message="Copy to clipboard"
+        >
+          <span>./icgc-get download -m {{icgcGetId}}</span>
+          <i
+            class="icon-spin icon-spinner"
+            ng-class="{ 'hidden': !isGeneratingIcgcGetId }"
+          ></i>
+        </code>
+
+        <div ng-if="shouldDeduplicate" class="deduplication-warning">
+          <em>
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;The repository order displayed above will overwrite the default order configured in icgc-get.
+          </em>
+        </div>
+      </div>
     </div>
 </div>

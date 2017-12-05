@@ -1,7 +1,224 @@
 ICGC DCC - Portal - Change Log
 ===
 
-Change log for the DCC Data Portal
+Change log for the DCC Data Portal.
+
+[5.1.6](https://github.com/icgc-dcc/dcc-portal/compare/5.1.0...5.1.6)
+--
+ - Stacked bar charts are clickable
+ - Compounds page displays query
+ - Pathway viewer fails gracefully on a 404 from diagram endpoint
+ - Fixes alignment issues with facets
+ - Fixes weird jitter on window resize in firefox (font/animation related)
+
+[5.1.0](https://github.com/icgc-dcc/dcc-portal/compare/5.0.14...5.1.0)
+--
+ - Added PCAWG support: data model, API, and UI.
+
+[5.0.14](https://github.com/icgc-dcc/dcc-portal/compare/5.0.6...5.0.14)
+--
+- Added unit testing for SearchRepository
+- Moved to using OnoJS version of the Pathway Viewer
+- Bug fixes and improvements to the Genome Viewer, specifically related to backbone events
+- Updated team credits
+- Added chromosome facet
+- General UI touchups
+- Added support for travic-ci builds and cobertura test reporting
+- Updated project history
+- OncoGrid being pulled from npm rather than static file
+
+[5.0.6](https://github.com/icgc-dcc/dcc-portal/compare/5.0.3...5.0.6)
+--
+- Fixes search issues related to scoring and ranking of results in Elasticsearch 5
+- Bug fix for searching by Object ID
+- Bug fix for text search in repository
+- Support multiple levels of nesting in PQL queries.
+- Minor UI updates and fixes
+
+[5.0.3](https://github.com/icgc-dcc/dcc-portal/compare/5.0.2...5.0.3)
+--
+- Fixes NPE in the browser endpoint
+- Less verbose logging in browser repository
+
+[5.0.2](https://github.com/icgc-dcc/dcc-portal/compare/5.0.1...5.0.2)
+--
+- Different DACO user for healthchecks
+
+[5.0.1](https://github.com/icgc-dcc/dcc-portal/compare/5.0.0...5.0.1)
+--
+- Fixes conflicting dependencies which caused an error on the releases page
+
+[5.0.0](https://github.com/icgc-dcc/dcc-portal/compare/dcc-portal-4.4.3...5.0.0)
+--
+- Upgrade code to support Elasticsearch 5.1.2
+- Added new dependencies for Elasticsearch 
+- Unit tests have been updated to continue supporting embedded Elasticsearch for testing
+
+[4.4.3](https://github.com/icgc-dcc/dcc-portal/compare/4.4.2...dcc-portal-4.4.3)
+--
+- Factored out restangular from app.js to its own wrapper source file
+- Updated 404 page redirect functionality
+- Fixes to facet colours
+- Changed share link popover, new look, new size, much smaller
+- Fixed byte conversion to use base 10 instead of base 2
+- Created a compounds index page, uses client side filtering
+
+[4.4.2](https://github.com/icgc-dcc/dcc-portal/compare/4.4.1...4.4.2)
+--
+- Migrated from Lodash 3 to 4
+- Redesign of Launch Analysis page
+- Added UI redirect feature
+- Removed unused grunt config
+- Added loading indicator for protein viewer
+- Minor styling adjustments to 404 page for consistency
+- Refreshed team page
+
+[4.4.1](https://github.com/icgc-dcc/dcc-portal/compare/4.4.0...4.4.1)
+--
+- Analysis Page: Show survival title on side by side
+- API: Adds exception and exception mapper for download files not found
+- API: Added null check for type in keywords search
+- Site: Account for th in alternating rows for Chrome bug with alternating table row background colours
+- Site: Made loading indicators consistent
+
+[4.4.0](https://github.com/icgc-dcc/dcc-portal/compare/4.3.27...4.4.0)
+--
+- Shrink hit area to select set from row to checkbox cell
+- Added trailing newline to all exported TSVs
+- Fixed rendering offset with genome viewer
+- Add check for for empty set definition
+- Fixed swapped date and size in recursive download dir listing
+- Added temporary workaround for Chrome bug with alternating table row background colours
+- Release page now requires at least 2 characters for filtering by file name
+
+[4.3.27](https://github.com/icgc-dcc/dcc-portal/compare/4.3.26...4.3.27)
+--
+- Project Page: TCGA and CGHub links update
+- Edit Set Dialog: Thousand separator in title, reword modal title. right align items
+- Updated Collab / PCAWG repo links in about pages
+- Site: Improved error dialog contents and added email link
+- GV: Increase genome browser minTranscriptRegionSize to 500k
+- GV: Added loading indicator
+- AS / Repository Browser: Added facet filter
+- AS / Repository Browser: Removed entity set save option
+- Fix: Added missing file entity sets in the backend
+- Incorporate the name of the tab into the 'Save/Edit Results' verbiage
+
+[4.3.26](https://github.com/icgc-dcc/dcc-portal/compare/4.3.25...4.3.26)
+--
+- Fixed bad dcc-commons version conflict with download server.
+
+[4.3.25](https://github.com/icgc-dcc/dcc-portal/compare/4.3.24...4.3.25)
+--
+- Advanced Search: Added ability to add to and remove from saved sets from search results
+- Advanced Search: Added ability to filter results by saved sets
+- Repository Browser: Added ability to filter results by saved sets
+- Tokens: Added `portal.export` scope description
+- Releases: Added message for Safari users regarding concatenated gzip files
+- Site: Fixed Firefox font weighting in links
+- Site: Changes to browser version check and message
+
+
+[4.3.24](https://github.com/icgc-dcc/dcc-portal/compare/4.3.23...4.3.24)
+--
+- Feature: Added support for recursive download file listing in endpoint in DCC Data Releases
+- Enhancement: Added instructions in Repository Browser modals
+- Enhancement: Added polyfill.io for older browsers
+- Enhancement: Added compression to API endpoints
+- Fix: Remove one-time binding for Enrichment Analysis
+- Build: Using `yarn` for dependency management
+- Build: Make eslint extension agnostic
+- Refactor: A bit of cleanup for gene set logic
+
+[4.3.23](https://github.com/icgc-dcc/dcc-portal/compare/4.3.22...4.3.23)
+--
+- Bugfix: Race condition with cleanup in Saved Results
+- Bugfix: Deactivating infinite scroll if there are no results
+- Bugfix: Creating custom gene set should show up right away in the table
+- Bugfix: Adds null check for returned entity set in phenotype analyzer
+- Bugfix: Update copyright year on build
+- Bugfix: Display only specific user token if user has multiple accounts
+
+[4.3.22](https://github.com/icgc-dcc/dcc-portal/compare/4.3.21...4.3.22)
+--
+- Site: Remove uppercase transform and separator on action toolbar
+- Site: Help icon changed to question circle icon
+- Sets: Getting the set name based on the filter
+- Sets: Names now includes filter values
+- Entity Tables: Text wrapping long set name into new lines
+- Launch Cohort Analysis from AS and Project page
+- AS: Resetting the tables pagination on filter change based on the tab
+- AS: Added OncoGrid to AS page for Donors and Genes tables.
+- Token Manager: Conditionally show “days” in “Expires in” column
+- OncoGrid: Adding mutation ID to crosshair tooltip
+- OncoGrid: Fixed regression for set name change with demo	
+- Survival Analysis: Show overall and disease free survival graphs side
+- Donor: Add biomarker and surgery to model
+- Genome Viewer: Account for zoom when getting start and end of mutation track
+
+[4.3.21](https://github.com/icgc-dcc/dcc-portal/compare/4.3.20...4.3.21)
+--
+- Add oncogrid to advanced search 
+- Survival layout improvements
+- Files endpoint can use field param
+- Legend on OncoGrid
+- Have webpack dev server proxy to production api based on process.env
+- Fix scrolling on pagination
+- Handle error when creating token
+- Add message for expired tokens instead of showing negative time 
+- Reset pagination on filter change / pagination change
+- Fix: A "id" to field mapping for file search
+- Add "View in Data Repository" link in Projects page
+- Add ‘drag to zoom’ prompt in Survival Analysis
+- Fix: Missing version from oncogrid analysis table schema
+- `RepositorySearchService` refactoring in UI to use new `/repositories` endpoint
+- Fix: Add guard against no intervals in survival analysis
+- Change header to "Mutation ID" instead of "ID" in AS mutation TSV download
+- Fix: On auth server failure, portal will return a 502 bad gateway
+- Don't destroy and recreate analysis results when switching tabs
+- Add other useful npm scripts to readme
+- Improvements to protein response, api, and code.
+- Remove unused UI code and files
+- Move genome-viewer dependencies to own module and lazy load on demand
+
+[4.3.20](https://github.com/icgc-dcc/dcc-portal/compare/4.3.19...4.3.20)
+--
+- Removed notes from saved sets
+- Removed primary load indicator when refreshing Advanced Search or Projects page
+- Bugfix: Saving sets in different tabs overwrite sets saved in other tabs
+- Bugfix: Uploading donor set in Repository Browser uses correct prefix
+- Improvement: Prevent hard page refresh on filter change in Repository Browser
+- Improvement: Changing query in AS should reset pagination
+- Use subscripts on set identifiers
+- Allow updating set names
+- Enforce npm / node versions in build
+- Elliding sequences in Gene page when too long
+- Additional parameter checking in REST endpoints
+- `TermsLookupService` refactoring
+- Fixed display of Analysis Result page
+- Fixed Collaboratory button URL
+- Fixed border rendering in AS hits table
+
+[4.3.19](https://github.com/icgc-dcc/dcc-portal/compare/4.3.18...4.3.19)
+--
+- Remove “notes” from saved sets
+- Null check for cookies before attempting to get session token
+- More information in exception emails
+- Null check on donorIds for processing a donor set
+- Bubbles up a 403 from the auth server on bad token scope
+
+[4.3.18](https://github.com/icgc-dcc/dcc-portal/compare/4.3.17...4.3.18)
+--
+- Added support for injecting settings into <portal-settings></portal-settings> as window.ICGC_SETTINGS js object
+- Added support for externalizign Google Analytics account ID
+- Removed grunt
+- Oncogrid zoom selection fix for right to left
+- Showing loading blocks for Projects Details tab
+- Added back publications section
+- Refactoring of `IndexModel` to be leaner and more cohesive
+- Server FindBug fixes and improvements to code clarity
+- Fixed JS errors on tooltips
+- Migrated jQuery from Bower to NPM
 
 [4.3.17](https://github.com/icgc-dcc/dcc-portal/compare/4.3.16...4.3.17)
 --

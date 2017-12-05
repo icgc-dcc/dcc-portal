@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-import org.icgc.dcc.portal.server.analysis.SurvivalAnalyzer.Interval;
+import org.icgc.dcc.portal.server.analysis.KaplanMeier;
 import org.icgc.dcc.portal.server.analysis.SurvivalLogRank;
 
 import java.util.Date;
@@ -80,8 +80,8 @@ public class SurvivalAnalysis implements Identifiable<UUID> {
   public class Result {
 
     UUID id;
-    List<Interval> overall;
-    List<Interval> diseaseFree;
+    List<KaplanMeier.Interval> overall;
+    List<KaplanMeier.Interval> diseaseFree;
 
   }
 

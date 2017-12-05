@@ -7,7 +7,7 @@ var paths = require('./paths');
 
 module.exports = {
   bail: true,
-  devtool: 'source-map',
+  devtool: 'eval',
   entry: {
     app: [
       require.resolve('./polyfills'),
@@ -23,7 +23,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.json'],
-    modulesDirectories: ['node_modules', 'bower_components'],
   },
   resolveLoader: {
     root: paths.ownNodeModules,
@@ -37,22 +36,41 @@ module.exports = {
         include: paths.appSrc
       }
     ],
+    noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
+      {
+        test: /\.html$/,
+        loader: 'raw',
+      },
+      {
+        test: /index.html$/,
+        loader: 'string-replace',
+        query: {
+          multiple: [
+            {
+              search: '\'COPYRIGHT_YEAR\'',
+              replace: new Date().getUTCFullYear()
+            },
+          ]
+        }
+      },
       {
         test: /\.js$/,
         include: paths.appSrc,
+        exclude: [paths.internalVendorModules],
         loader: 'ng-annotate',
       },
       {
         test: /\.js$/,
         include: paths.appSrc,
+        exclude: [paths.internalVendorModules],
         loader: 'babel',
         query: require('./babel.prod'),
       },
       {
         test: /\.scss$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: ExtractTextPlugin.extract('style', 'css!sass'),
+        loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss!sass'),
       },
       {
         test: /\.json$/,
@@ -60,7 +78,7 @@ module.exports = {
         loader: 'json'
       },
       {
-        test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
+        test: /\.(swf|jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'file',
         query: {
@@ -84,8 +102,17 @@ module.exports = {
     configFile: path.join(__dirname, 'eslint.js'),
     useEslintrc: false
   },
+  postcss: function() {
+    return [
+      require('autoprefixer'),
+    ];
+  },
   plugins: [
     new CopyWebpackPlugin([
+      {from: 'app/_redirects', to: paths.appBuild},
+      {from: 'app/robots.txt', to: paths.appBuild + '/robots.txt'},
+      {from: 'app/sitemap.xml', to: paths.appBuild + '/sitemap.xml'},
+      {from: 'app/opensearch.xml', to: paths.appBuild + '/opensearch.xml'},
       {from: 'app/favicon.ico', to: paths.appBuild + '/favicon.ico'},
       {from: 'app/styles/fonts', to: paths.appBuild + '/styles/fonts'},
       {from: 'app/styles/images', to: paths.appBuild + '/styles/images'},

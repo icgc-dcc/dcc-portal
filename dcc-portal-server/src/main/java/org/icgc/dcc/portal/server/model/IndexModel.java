@@ -1,15 +1,12 @@
 package org.icgc.dcc.portal.server.model;
 
 import static com.google.common.base.Preconditions.checkState;
-import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
-import static org.dcc.portal.pql.meta.IndexModel.getFileTypeModel;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dcc.portal.pql.meta.FileTypeModel;
 import org.dcc.portal.pql.meta.TypeModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import lombok.val;
 
@@ -36,35 +32,7 @@ public class IndexModel {
   public static final int MAX_FACET_TERM_COUNT = 1024;
   public static final String IS = "is";
   public static final String ALL = "all";
-
-  private static final TypeModel REPO_FILE_TYPE_MODEL = getFileTypeModel();
-
-  // These names are used by the client
-  private static final List<String> FILE_CLIENT_FIELD_ALIAS_MAPPING = ImmutableList.of(
-      FileTypeModel.Fields.ID,
-      FileTypeModel.Fields.REPO_NAME,
-      FileTypeModel.Fields.REPO_CODE,
-      FileTypeModel.Fields.FILE_NAME,
-      FileTypeModel.Fields.FILE_SIZE,
-      FileTypeModel.Fields.PROJECT_CODE,
-      FileTypeModel.Fields.PRIMARY_SITE,
-      FileTypeModel.Fields.STUDY,
-      FileTypeModel.Fields.DONOR_STUDY,
-      FileTypeModel.Fields.DATA_TYPE,
-      FileTypeModel.Fields.EXPERIMENTAL_STRATEGY,
-      FileTypeModel.Fields.FILE_FORMAT,
-      FileTypeModel.Fields.ACCESS,
-      FileTypeModel.Fields.DONOR_ID,
-      FileTypeModel.Fields.SUBMITTED_DONOR_ID,
-      FileTypeModel.Fields.SPECIMEN_ID,
-      FileTypeModel.Fields.SPECIMEN_TYPE,
-      FileTypeModel.Fields.SAMPLE_ID,
-      FileTypeModel.Fields.PROGRAM,
-      FileTypeModel.Fields.ANALYSIS_SOFTWARE);
-  private static final ImmutableMap<String, String> FILE_FIELDS_MAPPING = ImmutableMap
-      .<String, String> builder()
-      .putAll(Maps.toMap(FILE_CLIENT_FIELD_ALIAS_MAPPING, alias -> REPO_FILE_TYPE_MODEL.getField(alias)))
-      .build();
+  public static final String TEXT_PREFIX = "text.";
 
   private static final ImmutableMap<String, String> FAMILY_FIELDS_MAPPING =
       new ImmutableMap.Builder<String, String>()
@@ -315,59 +283,63 @@ public class IndexModel {
       "inchikey", "drug_class", "atc_codes_code", "atc_codes_description", "atc_level5_codes",
       "trials_description", "trials_conditions_name", "external_references_drugbank", "external_references_chembl")
       .stream().collect(
-          toMap(field -> IndexType.DRUG_TEXT.id + "." + field, identity()));
+          toMap(field -> IndexType.DRUG_TEXT.id + "." + field, field -> "text." + field));
 
   private static final ImmutableMap<String, String> KEYWORD_FIELDS_MAPPING = ImmutableMap.<String, String> builder()
       // Common
-      .put("id", "id")
-      .put("type", "type")
+      .put("id", "text.id")
+      .put("type", "text.type")
 
       // Gene and project and pathway
-      .put("name", "name")
+      .put("name", "text.name")
 
       // Gene
-      .put("symbol", "symbol")
-      .put("ensemblTranscriptId", "ensemblTranscriptId")
-      .put("ensemblTranslationId", "ensemblTranslationId")
-      .put("synonyms", "synonyms")
-      .put("uniprotkbSwissprot", "uniprotkbSwissprot")
-      .put("omimGene", "omimGene")
-      .put("entrezGene", "entrezGene")
-      .put("hgnc", "hgnc")
+      .put("symbol", "text.symbol")
+      .put("ensemblTranscriptId", "text.ensemblTranscriptId")
+      .put("ensemblTranslationId", "text.ensemblTranslationId")
+      .put("synonyms", "text.synonyms")
+      .put("uniprotkbSwissprot", "text.uniprotkbSwissprot")
+      .put("omimGene", "text.omimGene")
+      .put("entrezGene", "text.entrezGene")
+      .put("hgnc", "text.hgnc")
 
       // Mutation
-      .put("mutation", "mutation")
-      .put("geneMutations", "geneMutations")
-      .put("start", "start")
+      .put("mutation", "text.mutation")
+      .put("geneMutations", "text.geneMutations")
+      .put("start", "text.start")
 
       // Project
-      .put("tumourType", "tumourType")
-      .put("tumourSubtype", "tumourSubtype")
-      .put("primarySite", "primarySite")
+      .put("tumourType", "text.tumourType")
+      .put("tumourSubtype", "text.tumourSubtype")
+      .put("primarySite", "text.primarySite")
 
       // Donor
-      .put("specimenIds", "specimenIds")
-      .put("submittedSpecimenIds", "submittedSpecimenIds")
-      .put("sampleIds", "sampleIds")
-      .put("submittedSampleIds", "submittedSampleIds")
-      .put("projectId", "projectId")
+      .put("specimenIds", "text.specimenIds")
+      .put("submittedSpecimenIds", "text.submittedSpecimenIds")
+      .put("sampleIds", "text.sampleIds")
+      .put("submittedSampleIds", "text.submittedSampleIds")
+      .put("projectId", "text.projectId")
 
       // Donor-file, these are derived from file
-      .put("submittedId", "submittedId")
-      .put("TCGAParticipantBarcode", "TCGAParticipantBarcode")
-      .put("TCGASampleBarcode", "TCGASampleBarcode")
-      .put("TCGAAliquotBarcode", "TCGAAliquotBarcode")
+      .put("submittedId", "text.submittedId")
+      .put("TCGAParticipantBarcode", "text.TCGAParticipantBarcode")
+      .put("TCGASampleBarcode", "text.TCGASampleBarcode")
+      .put("TCGAAliquotBarcode", "text.TCGAAliquotBarcode")
 
       // GO Term
-      .put("altIds", "altIds")
+      .put("altIds", "text.altIds")
 
       // File Repo
-      .put("file_name", "file_name")
-      .put("donor_id", "donor_id")
-      .put("object_id", "object_id")
-      .put("data_type", "data_type")
-      .put("project_code", "project_code")
-      .put("data_bundle_id", "data_bundle_id")
+      .put("file_name", "text.file_name")
+      .put("donor_id", "text.donor_id")
+      .put("object_id", "text.object_id")
+      .put("data_type", "text.data_type")
+      .put("project_code", "text.project_code")
+      .put("data_bundle_id", "text.data_bundle_id")
+      .put("sample_id", "text.sample_id")
+      .put("specimen_id", "text.specimen_id")
+      .put("submitted_specimen_id", "text.submitted_specimen_id")
+      .put("submitted_sample_id", "text.submitted_sample_id")
 
       // Drug-text
       .putAll(DRUG_KEYWORD_FIELDS)
@@ -390,6 +362,23 @@ public class IndexModel {
           .put("geneCount", "gene_count")
           .build();
 
+  private static final ImmutableMap<String, String> BIOMARKER_FIELDS_MAPPING =
+      ImmutableMap.<String, String> builder()
+          .put("specimenId", "specimen_id")
+          .put("biomarkerName", "biomarker_name")
+          .put("biomarkerThreshold", "biomarker_threshold")
+          .put("biomarkerPositive", "biomarker_positive")
+          .build();
+
+  private static final ImmutableMap<String, String> SURGERY_FIELDS_MAPPING =
+      ImmutableMap.<String, String> builder()
+          .put("specimenId", "specimen_id")
+          .put("procedureInterval", "procedure_interval")
+          .put("procedureType", "procedure_type")
+          .put("procedureSite", "procedure_site")
+          .put("resectionStatus", "resection_status")
+          .build();
+
   private static final ImmutableMap<EntityType, TypeModel> TYPE_MODEL_BY_ENTITY =
       ImmutableMap.<EntityType, TypeModel> builder()
           .put(EntityType.DONOR, org.dcc.portal.pql.meta.IndexModel.getDonorCentricTypeModel())
@@ -398,6 +387,7 @@ public class IndexModel {
           .put(EntityType.GENE, org.dcc.portal.pql.meta.IndexModel.getGeneCentricTypeModel())
           .put(EntityType.GENE_SET, org.dcc.portal.pql.meta.IndexModel.getGeneSetTypeModel())
           .put(EntityType.PROJECT, org.dcc.portal.pql.meta.IndexModel.getProjectTypeModel())
+          .put(EntityType.FILE, org.dcc.portal.pql.meta.IndexModel.getFileTypeModel())
           .build();
 
   public static final EnumMap<EntityType, ImmutableMap<String, String>> FIELDS_MAPPING =
@@ -410,6 +400,8 @@ public class IndexModel {
     FIELDS_MAPPING.put(EntityType.FAMILY, FAMILY_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.EXPOSURE, EXPOSURE_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.THERAPY, THERAPY_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.BIOMARKER, BIOMARKER_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.SURGERY, SURGERY_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.SAMPLE, SAMPLE_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.SEQ_DATA, RAWSEQDATA_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.GENE, createFieldsMapping(EntityType.GENE));
@@ -426,7 +418,7 @@ public class IndexModel {
     FIELDS_MAPPING.put(EntityType.PATHWAY, PATHWAY_FIELDS_MAPPING);
     FIELDS_MAPPING.put(EntityType.GENE_SET, createFieldsMapping(EntityType.GENE_SET));
     FIELDS_MAPPING.put(EntityType.DIAGRAM, DIAGRAM_FIELDS_MAPPING);
-    FIELDS_MAPPING.put(EntityType.FILE, FILE_FIELDS_MAPPING);
+    FIELDS_MAPPING.put(EntityType.FILE, createFieldsMapping(EntityType.FILE));
   }
 
   @Autowired

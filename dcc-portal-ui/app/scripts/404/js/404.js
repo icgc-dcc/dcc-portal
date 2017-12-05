@@ -1,5 +1,5 @@
 /*
- * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ * Copyright 2017(c) The Ontario Institute for Cancer Research. All rights reserved.
  *
  * This program and the accompanying materials are made available under the terms of the GNU Public
  * License v3.0. You should have received a copy of the GNU General Public License along with this
@@ -20,7 +20,7 @@
 angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
   .config(function($stateProvider){
     $stateProvider.state('404', {
-      url: '/404?page&id&url',
+      url: '/404?page&name&id&url',
       templateUrl: '/scripts/404/views/404.html',
       controller: '404Controller as ctrlr'
     });
@@ -36,13 +36,18 @@ angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
       Page.setPage('error');
 
       if($stateParams.page && $stateParams.id && $stateParams.url){
-        _ctrl.info = {page: $stateParams.page, id: $stateParams.id, url: $stateParams.url};
+        _ctrl.info = {name: $stateParams.name, id: $stateParams.id, url: $stateParams.url};
       }
 
       _ctrl.page = $stateParams.page;
       
-      _ctrl.emailSubject = _ctrl.info ? 
-        'ICGC DCC /' + _ctrl.info.page  + '/' + _ctrl.info.id +' Page Not Found' : 
-        'ICGC DCC Page Not Found' ;
+      _ctrl.emailSubject = 'ICGC DCC Page Not Found';
+      _ctrl.emailBody = _ctrl.info ? 
+      `An error occured while accessing ${_ctrl.page} URL.%0A%0A
+      Error Details:%0A
+        Name: ${_ctrl.info.name}%0A
+        Id: ${_ctrl.info.id}%0A
+        Url: ${_ctrl.info.url}` : 
+      `An error occured while accessing ${_ctrl.page} URL.%0A`;
     });
 })();

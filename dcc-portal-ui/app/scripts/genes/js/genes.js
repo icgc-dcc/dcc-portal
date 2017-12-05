@@ -68,7 +68,7 @@
       var observers = elements.map(function (element) {
         var observer = new MutationObserver(function (mutations) {
           var shouldScroll = mutations.reduce(function (isSignificantMutation, mutation) {
-            return isSignificantMutation || checkMutationSignificance(mutation);
+            return isSignificantMutation || checkMutationSignificance();
           });
           if (shouldScroll) {
             scrollToCurrent();
@@ -112,7 +112,9 @@
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
     _ctrl.defaultProjectsLimit = 10;
-
+    _ctrl.isPVLoading = true;
+    _ctrl.isPVInitialLoad = true;
+    _ctrl.isGVLoading = true;
     _ctrl.gvOptions = {location: false, panels: false, zoom: 50};
 
     _ctrl.gene = gene;
@@ -154,7 +156,7 @@
         include: ['facets'],
         filters: _ctrl.gene.advQuery
       }).then(function(data) {
-        var ids = _.pluck(data.facets.projectId.terms, 'term');
+        var ids = _.map(data.facets.projectId.terms, 'term');
 
         if (_.isEmpty(ids)) {
           return [];
@@ -173,10 +175,10 @@
           return;
         }
 
-        mutationPromise = Projects.one(_.pluck(projects.hits, 'id').join(','))
+        mutationPromise = Projects.one(_.map(projects.hits, 'id').join(','))
           .handler.one('mutations', 'counts').get({filters: _ctrl.gene.advQuery });
 
-        donorPromise = Projects.one(_.pluck(projects.hits, 'id').join(','))
+        donorPromise = Projects.one(_.map(projects.hits, 'id').join(','))
           .handler.one('donors', 'counts').get({filters: _ctrl.gene.advQuery });
 
         mutationPromise.then(function(projectMutations) {
@@ -200,7 +202,10 @@
               return -p.uiAffectedDonorPercentage;
             }),10),
             xAxis: 'id',
-            yValue: 'uiAffectedDonorPercentage'
+            yValue: 'uiAffectedDonorPercentage',
+            options: {
+              linkBase: '/projects/'
+            }
           });
           _ctrl.totalDonors = projectDonors.Total;
         }).then(function(){
@@ -317,7 +322,10 @@
           _ctrl.bar = HighchartsService.bar({
             hits: _ctrl.mutations.hits,
             xAxis: 'id',
-            yValue: 'affectedDonorCountFiltered'
+            yValue: 'affectedDonorCountFiltered',
+            options: {
+              linkBase: '/mutations/'
+            }
           });
         }
       }
@@ -366,7 +374,7 @@
       _this.uiCompounds = getUiCompoundsJSON(_this.compounds);
 
     }, function (error) {
-      console.log ('Error getting compounds related to the geneId', error);
+      throw new Error('Error getting compounds related to the geneId', error);
     });
 
     function getUiCompoundsJSON(compounds){
@@ -441,6 +449,10 @@
 
     this.resolve = function (ensemblIds) {
       return Restangular.one (apiUrl, ensemblIds).get();
+    };
+
+    this.getAll = () => {
+      return Restangular.one(apiUrl).get().then(x => x.plain());
     };
   });
 

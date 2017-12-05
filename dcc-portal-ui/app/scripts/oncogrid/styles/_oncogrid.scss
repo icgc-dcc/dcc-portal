@@ -210,11 +210,16 @@ $pcawgColor: #e9931c;
     }
     
     .og-label-text-font {
-      font-size: 0.5rem;
+      font-size: 0.7rem;
     }
 
     .og-track-label {
-      font-size: 0.5rem;
+      font-size: 0.7rem;
+    }
+
+    .og-legend-group-label{
+      fill: blue;
+      font-size: 0.9rem;
     }
 
     .og-sortable-rect {
@@ -366,4 +371,13 @@ $pcawgColor: #e9931c;
       }
   }
 
+}
+
+.og-crosshair-tooltip{
+  div{
+    display: table-row;
+  } 
+  span{
+    display: table-cell;
+  }
 }

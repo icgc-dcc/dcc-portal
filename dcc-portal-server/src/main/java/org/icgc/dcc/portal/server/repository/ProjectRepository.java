@@ -5,10 +5,10 @@ import static org.dcc.portal.pql.meta.Type.PROJECT;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.isRepositoryDonorInProject;
-import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.setFetchSourceOfGetRequest;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.dcc.portal.pql.query.QueryEngine;
@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Lists;
+
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ProjectRepository {
 
+  private static final String[] NO_EXCLUDE = null;
   private static final String TYPE_ID = IndexType.PROJECT.getId();
   private static final Map<String, String> FIELD_MAP = FIELDS_MAPPING.get(EntityType.PROJECT);
 
@@ -62,9 +65,10 @@ public class ProjectRepository {
   }
 
   public Map<String, Object> findOne(String id, Query query) {
+    val sourceFields = Lists.<String> newArrayList(getFields(query, EntityType.PROJECT));
+
     val search = client.prepareGet(indexName, TYPE_ID, id)
-        .setFields(getFields(query, EntityType.PROJECT));
-    setFetchSourceOfGetRequest(search, query, EntityType.PROJECT);
+        .setFetchSource(toStringArray(sourceFields), NO_EXCLUDE);
 
     val response = search.execute().actionGet();
 
@@ -82,4 +86,9 @@ public class ProjectRepository {
 
     return singletonMap(FIELD_MAP.get("id"), id);
   }
+
+  private static String[] toStringArray(Collection<String> source) {
+    return source.stream().toArray(String[]::new);
+  }
+
 }

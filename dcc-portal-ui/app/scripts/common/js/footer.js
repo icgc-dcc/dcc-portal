@@ -32,15 +32,13 @@
       _ctrl.portalCommit = data.portalCommit;
     });
 
-    _ctrl.mainItems = _.map (['home', 'projects', 'advancedSearch', 'dataAnalysis',
+    _ctrl.mainItems = _.map (['home', 'projects', 'advancedSearch', 'compoundIndex', 'dataAnalysis',
       'dataReleases', 'dataRepositories', 'pcawg'], RouteInfoService.get);
 
    var cloudLinks = [
             {'link': '/icgc-in-the-cloud', 'title': gettextCatalog.getString('About')},
             {'link': '/icgc-in-the-cloud/aws', 'title': gettextCatalog.getString('Amazon')},
-            {'link': '/icgc-in-the-cloud/collaboratory', 'title': gettextCatalog.getString('Collaboratory')}//,
-            //{'link': '/icgc-in-the-cloud/guide', 'title': 'User Guide'}
-
+            {'link': '/icgc-in-the-cloud/collaboratory', 'title': gettextCatalog.getString('Collaboratory')}
           ];
 
     $scope.portalFeature = PortalFeature;

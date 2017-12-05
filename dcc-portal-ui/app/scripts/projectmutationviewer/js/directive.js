@@ -96,7 +96,7 @@
               var mutationCount = projectData[donorKey];
 
               mutationCount = mutationCount / 30; // As per equation in DCC-2612
-              totalMutations += projectData[donorKey]; //mutationCount; //projectData[donorKey];
+              totalMutations += projectData[donorKey];
 
               mean += mutationCount;
               points.push( mutationCount );
@@ -146,7 +146,7 @@
           });
 
           $scope.showPlot = showPlot;
-          if (! showPlot) {return;}
+          if (! showPlot) {return}
 
           if (newData && !chart) {
             chart = new dcc.ProjectMutationChart (transform ($scope.items), config);

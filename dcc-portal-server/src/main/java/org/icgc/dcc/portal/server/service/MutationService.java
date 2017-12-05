@@ -1,45 +1,47 @@
 package org.icgc.dcc.portal.server.service;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.elasticsearch.action.search.MultiSearchResponse;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Mutation;
-import org.icgc.dcc.portal.server.model.Mutations;
-import org.icgc.dcc.portal.server.model.Pagination;
-import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
-import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
-import org.icgc.dcc.portal.server.repository.MutationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.stream.IntStream.range;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
-import static org.icgc.dcc.portal.server.util.SearchResponses.*;
+import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flattenMap;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getNestedCounts;
+import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
+
+import java.util.*;
+import java.util.AbstractMap.SimpleImmutableEntry;
+
+import org.dcc.portal.pql.ast.StatementNode;
+import org.elasticsearch.action.search.MultiSearchResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.icgc.dcc.common.core.util.stream.Collectors;
+import org.icgc.dcc.portal.server.model.*;
+import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
+import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
+import org.icgc.dcc.portal.server.repository.MutationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class MutationService {
-
   private static final AggregationToFacetConverter AGGS_TO_FACETS_CONVERTER = AggregationToFacetConverter.getInstance();
   private static final Jql2PqlConverter QUERY_CONVERTER = Jql2PqlConverter.getInstance();
+  private static final String INCLUDE_SCORE_FIELD = "affectedDonorCountFiltered";
 
   private final MutationRepository mutationRepository;
 
@@ -50,32 +52,50 @@ public class MutationService {
 
   @NonNull
   public Mutations findAllCentric(Query query, boolean facetsOnly) {
-    val pql =
-        facetsOnly ? QUERY_CONVERTER.convertCount(query, MUTATION_CENTRIC) : QUERY_CONVERTER.convert(query,
-            MUTATION_CENTRIC);
-    log.debug("PQL of findAllCentric is: {}", pql);
+    val pqlString = getPQLString(query, facetsOnly);
+    val mutations = findAllCentric(pqlString, query.getIncludes());
 
-    val pqlAst = parse(pql);
-    val response = mutationRepository.findAllCentric(pqlAst);
+    val p = mutations.getPagination();
+    mutations.setPagination(Pagination.of(p.getCount(),p.getTotal(),query));
 
+    return mutations;
+  }
+
+  @NonNull
+  public String getPQLString(Query query, boolean facetsOnly) {
+    return facetsOnly ?
+        QUERY_CONVERTER.convertCount(query, MUTATION_CENTRIC) :
+        QUERY_CONVERTER.convert(query, MUTATION_CENTRIC);
+  }
+
+  public Mutations findAllCentric(String pqlString, List<String> fieldsToNotFlattten) {
+    log.debug("PQL of findAllCentric is: {}", pqlString);
+    val pql = parse(pqlString);
+    val response = mutationRepository.findAllCentric(pql);
+    val includeScore = hasField(pql, INCLUDE_SCORE_FIELD);
+    return buildMutations(response, fieldsToNotFlattten, includeScore, PaginationRequest.of(pql));
+  }
+
+  private Mutations buildMutations(SearchResponse response, List<String> fieldsToNotFlatten,
+      boolean includeScore, PaginationRequest request) {
     val hits = response.getHits();
-
-    // Include _score if either: no custom fields or custom fields include affectedDonorCountFiltered
-    val includeScore = !query.hasFields() || query.getFields().contains("affectedDonorCountFiltered");
-
     val list = ImmutableList.<Mutation> builder();
 
     for (val hit : hits) {
-      val map = createResponseMap(hit, query, EntityType.MUTATION);
+      val map = createResponseMap(hit, fieldsToNotFlatten, EntityType.MUTATION);
       if (includeScore) map.put("_score", hit.getScore());
       list.add(new Mutation(map));
     }
 
     val mutations = new Mutations(list.build());
     mutations.addFacets(AGGS_TO_FACETS_CONVERTER.convert(response.getAggregations()));
-    mutations.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
+    mutations.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), request));
 
     return mutations;
+  }
+
+  boolean hasField(StatementNode pql, String field) {
+    return !pql.hasSelect() || pql.getSelect().contains(field);
   }
 
   public Mutations findMutationsByDonor(Query query, String donorId) {
@@ -139,6 +159,7 @@ public class MutationService {
     return new Mutation(mutationRepository.findOne(mutationId, query));
   }
 
+  @SuppressWarnings("unchecked")
   public Mutations protein(Query query) {
     log.info("{}", query);
 
@@ -151,29 +172,43 @@ public class MutationService {
       val map = Maps.<String, Object> newHashMap();
       val transcripts = Lists.<Map<String, Object>> newArrayList();
 
-      map.put("_mutation_id", hit.getFields().get("_mutation_id").getValue());
-      map.put("mutation", hit.getFields().get("mutation").getValue());
-      map.put("_summary._affected_donor_count", hit.getFields().get("_summary._affected_donor_count").getValue());
-      /*
-       * map.put("functional_impact_prediction_summary", hit.getFields().get("functional_impact_prediction_summary")
-       * .getValues());
-       */
+      val hitSource = flattenMap(hit.getSource());
+      map.put("_mutation_id", hitSource.get("_mutation_id"));
+      map.put("mutation", hitSource.get("mutation"));
+      map.put("_summary._affected_donor_count", hitSource.get("_summary._affected_donor_count"));
 
-      List<Object> transcriptIds = hit.getFields().get("transcript.id").getValues();
-      val predictionSummary = hit.getFields().get("transcript.functional_impact_prediction_summary").getValues();
+      val nestedTranscripts = ((List<Map<String, Object>>) hitSource.get("transcript")).stream()
+          .filter(t -> t.get("id") != null) // This is to filter out fake transcripts.
+          .collect(toImmutableList());
+
+      List<String> transcriptIds = nestedTranscripts.stream()
+          .map(t -> (String) t.get("id"))
+          .collect(toImmutableList());
+
+      val predictionSummary = nestedTranscripts.stream()
+          .map(t -> t.get("functional_impact_prediction_summary").toString())
+          .collect(toImmutableList());
+
+      Map<String, String> aaMutations = nestedTranscripts.stream()
+          .map(t -> new SimpleImmutableEntry<String, String>(t.get("id").toString(),
+              ((Map<String, Object>) t.get("consequence")).get("aa_mutation").toString()))
+          .collect(Collectors.toImmutableMap(SimpleImmutableEntry::getKey, SimpleImmutableEntry::getValue));
 
       for (int i = 0; i < transcriptIds.size(); ++i) {
-        val transcript = Maps.<String, Object> newHashMap();
+        val id = transcriptIds.get(i);
+        val aminoAcidChange = aaMutations.get(id);
 
-        transcript.put("id", transcriptIds.get(i));
-        transcript.put("functional_impact_prediction_summary", predictionSummary.get(i));
+        if (!aminoAcidChange.isEmpty()) {
+          val transcript = Maps.<String, Object> newHashMap();
+          transcript.put("id", id);
+          transcript.put("functional_impact_prediction_summary", predictionSummary.get(i));
 
-        val consequence = Maps.<String, Object> newHashMap();
-        List<Object> f3 = hit.getFields().get("transcript.consequence.aa_mutation").getValues();
-        consequence.put("aa_mutation", f3.get(i).toString());
-        transcript.put("consequence", consequence);
+          val consequence = Maps.<String, Object> newHashMap();
+          consequence.put("aa_mutation", aaMutations.get(id));
+          transcript.put("consequence", consequence);
 
-        transcripts.add(transcript);
+          transcripts.add(transcript);
+        }
       }
 
       map.put("transcript", transcripts);

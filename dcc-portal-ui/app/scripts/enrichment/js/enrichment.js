@@ -92,7 +92,7 @@
           'filters=' + JSON.stringify(LocationService.filters()) + '&' ;
       }
 
-      geneSortParam = LocationService.getJsonParam('genes');
+      geneSortParam = LocationService.getJqlParam('genes');
 
       if (!_.isEmpty(geneSortParam)) {
         var sort, order;
@@ -127,7 +127,7 @@
       // to start the redirection
       promise.then(function(result) {
         var id = result.id;
-        $modalInstance.dismiss('cancel');
+        $modalInstance.close(result);
         $location.path('/analysis/view/enrichment/' + id).search({});
       })
       .finally(function() {
@@ -171,12 +171,11 @@
       restrict: 'E',
       scope: {
         item: '=',
-        callingContext: '@'
+        callingContext: '@',
+        subtitle: '<',
       },
       templateUrl: '/scripts/enrichment/views/enrichment.result.html',
       link: function($scope) {
-       
-        // $scope.predicate = 'adjustedPValue';
         $scope.predicate = 'pvalue';
         $scope.reverse = false;
 
@@ -215,15 +214,6 @@
               $scope.isDeprecated = true;
             } else {
               $scope.isDeprecated = false;
-            }
-
-            // FIXME: Deprecate analyses with old Reactome (REACT_XXX) IDs.
-            // We should remove this when release 20 goes live, as all existing analyses will be
-            // depreated and any new ones will be on the new Reactome IDs
-            if (enrichment.results) {
-              if (_.startsWith( _.first(enrichment.results).geneSetId, 'REACT_') === true) {
-                $scope.isDeprecated = true;
-              }
             }
 
           });
@@ -423,10 +413,8 @@
 
       // Add universe type specific conditions
       if (universe.type === 'go_term') {
-        // filters.gene.goTermId = { 'all': [row.geneSetId] };
         filters.gene.goTermId = { 'is': [row.geneSetId] };
       } else if (universe.type === 'pathway') {
-        // filters.gene.pathwayId = { 'all': [row.geneSetId] };
         filters.gene.pathwayId = { 'is': [row.geneSetId] };
       }
       return filters;

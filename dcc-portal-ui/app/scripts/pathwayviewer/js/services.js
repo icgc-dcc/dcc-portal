@@ -182,7 +182,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       };
 
       PathwayModel.prototype.getNodesByReactomeId = function (reactomeId) {
-        return _.where(this.nodes, {reactomeId: reactomeId});
+        return _.filter(this.nodes, {reactomeId: reactomeId});
       };
 
       PathwayModel.prototype.getNodes = function () {
@@ -207,7 +207,10 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       };
 
       PathwayModel.prototype.getNodesInReaction = function (reaction){
-        return _.map(reaction.nodes, function(node){ return this.getNodeById(node.id);}, this);
+        return _.map(
+          reaction.nodes,
+          _.bind(function(node){ return this.getNodeById(node.id)}, this)
+        );
       };
 
     }
@@ -244,14 +247,14 @@ angular.module('icgc.pathwayviewer.directives.services', [])
         var markers = ['Output','Activator','ProcessNode','RenderableInteraction','GeneArrow','Catalyst',
           'Catalyst-legend','Activator-legend','Output-legend','Inhibitor','Inhibitor-legend'];
         var isBaseMarker = function(type){
-          return _.contains(['Output','Activator','Catalyst','Inhibitor'],type); // Part of subpathway reactions
+          return _.includes(['Output','Activator','Catalyst','Inhibitor'],type); // Part of subpathway reactions
         };
         var filled = function(type){
-          return _.contains(['Output','RenderableInteraction','Output-legend','GeneArrow'],type);
+          return _.includes(['Output','RenderableInteraction','Output-legend','GeneArrow'],type);
         };
-        var isCircular = function(type){return _.contains(['Catalyst','Catalyst-legend'],type);};
-        var shifted = function(type){return _.contains(['Catalyst','Activator'],type);};
-        var isLinear = function(type){return _.contains(['Inhibitor','Inhibitor-legend'],type);};
+        var isCircular = function(type){return _.includes(['Catalyst','Catalyst-legend'],type)};
+        var shifted = function(type){return _.includes(['Catalyst','Activator'],type)};
+        var isLinear = function(type){return _.includes(['Inhibitor','Inhibitor-legend'],type)};
 
         var circle = {
           'element':'circle',
@@ -402,20 +405,20 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           'class': function (d) {
             return d.type + ' compartment'+d.reactomeId;
           },
-          'x': function (d) {return d.position.x;},
-          'y': function (d) {return d.position.y;},
-          'width': function (d) {return d.size.width;},
-          'height': function (d) {return d.size.height;},
+          'x': function (d) {return d.position.x},
+          'y': function (d) {return d.position.y},
+          'width': function (d) {return d.size.width},
+          'height': function (d) {return d.size.height},
           rx: 3,
           ry: 3
         });
 
         this.svg.selectAll('.RenderableCompartmentText').data(compartments).enter().append('foreignObject').attr({
-          'class':function(d){return d.type+'Text RenderableCompartmentText';},
-          'x':function(d){return d.text.position.x;},
-          'y':function(d){return d.text.position.y;},
-          'width':function(d){return d.size.width;},
-          'height':function(d){return d.size.height;},
+          'class':function(d){return d.type+'Text RenderableCompartmentText'},
+          'x':function(d){return d.text.position.x},
+          'y':function(d){return d.text.position.y},
+          'width':function(d){return d.size.width},
+          'height':function(d){return d.size.height},
           'pointer-events':'none',
           'fill':'none'
         }).append('xhtml:body')
@@ -432,9 +435,9 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       Renderer.prototype.renderNodes = function (nodes) {
         var svg = this.svg, config = this.config;
         // Split into normal rectangles and octagons based on node type
-        var octs = _.filter(nodes,function(n){return n.type === 'RenderableComplex';});
-        var rects = _.filter(nodes,function(n){return n.type !== 'RenderableComplex';});
-        var crossed = _.filter(nodes, function(n){return n.crossed === true;});
+        var octs = _.filter(nodes,function(n){return n.type === 'RenderableComplex'});
+        var rects = _.filter(nodes,function(n){return n.type !== 'RenderableComplex'});
+        var crossed = _.filter(nodes, function(n){return n.crossed === true});
 
         var pointMapToString = function(map) {
           var val = '';
@@ -472,7 +475,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
         // Render all complexes as octagons
         svg.selectAll('.RenderableOct').data(octs).enter().append('polygon')
           .attr({
-            'class': function(d){return 'pathway-node RenderableOct RenderableComplex entity'+d.id;},
+            'class': function(d){return 'pathway-node RenderableOct RenderableComplex entity'+d.id},
             'filter': function (d) {
               if (d.grayed) {
                 return (typeof config.urlPath==='undefined') ? '' : 'url(\''+config.urlPath+'#grayscale\')';
@@ -494,7 +497,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
 
         // Render all other normal rectangular nodes after octagons
         svg.selectAll('.RenderableRect').data(rects).enter().append('rect').attr({
-          'class': function (d) {return 'pathway-node RenderableRect ' + d.type + ' entity'+d.id;},
+          'class': function (d) {return 'pathway-node RenderableRect ' + d.type + ' entity'+d.id},
           'filter': function (d) {
             if (d.grayed) {
               return (typeof config.urlPath==='undefined') ? '' : 'url(\''+config.urlPath+'#grayscale\')';
@@ -502,10 +505,10 @@ angular.module('icgc.pathwayviewer.directives.services', [])
               return '';
             }
           },
-          'x': function (d) {return d.position.x;},
-          'y': function (d) {return d.position.y;},
-          'width': function (d) {return d.size.width;},
-          'height': function (d) {return d.size.height;},
+          'x': function (d) {return d.position.x},
+          'y': function (d) {return d.position.y},
+          'width': function (d) {return d.size.width},
+          'height': function (d) {return d.size.height},
           'rx': function (d) {
             switch (d.type) {
               case 'RenderableGene':
@@ -541,7 +544,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
               return '';
             }
           },
-          'pointer-events':function(d){return d.type==='RenderableGene'?'none':'';}
+          'pointer-events':function(d){return d.type==='RenderableGene'?'none':''}
         }).on('mouseover', function (d) {
           d.oldColor = d3.rgb(d3.select(this).style('fill'));
           d3.select(this).style('fill', d.oldColor.brighter(0.25));
@@ -554,7 +557,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           'fill': 'none',
           'stroke': 'red',
           'stroke-width': '2',
-          'points': function(d) {return getCrossMap(+d.position.x, +d.position.y, +d.size.width, +d.size.height);}
+          'points': function(d) {return getCrossMap(+d.position.x, +d.position.y, +d.size.width, +d.size.height)}
         });
 
         svg.selectAll('.crossed').data(crossed).enter().append('polyline').attr({
@@ -569,11 +572,11 @@ angular.module('icgc.pathwayviewer.directives.services', [])
 
         // Add a foreignObject to contain all text so that warpping is done for us
         svg.selectAll('.RenderableText').data(nodes).enter().append('foreignObject').attr({
-          'class':function(d){return d.type+'Text RenderableText';},
-          'x':function(d){return d.position.x;},
-          'y':function(d){return d.position.y;},
-          'width':function(d){return d.size.width;},
-          'height':function(d){return d.size.height;},
+          'class':function(d){return d.type+'Text RenderableText'},
+          'x':function(d){return d.position.x},
+          'y':function(d){return d.position.y},
+          'width':function(d){return d.size.width},
+          'height':function(d){return d.size.height},
           'pointer-events':'none',
           'fill':'none'
         }).append('xhtml:body')
@@ -597,14 +600,14 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           });
 
         // if it's a gene, we have to add a sepcial array in the top right corner
-        var genes =  _.where(nodes,{type : 'RenderableGene'});
+        var genes =  _.filter(nodes,{type : 'RenderableGene'});
 
         svg.selectAll('.RenderableGeneArrow').data(genes).enter().append('line').attr({
           'class':'RenderableGeneArrow',
-          'x1':function(d){return (+d.position.x)+(+d.size.width) - 0.5;},
-          'y1':function(d){return (+d.position.y) +1;},
-          'x2':function(d){return (+d.position.x)+(+d.size.width)  + 5.5;},
-          'y2':function(d){return (+d.position.y) + 1;},
+          'x1':function(d){return (+d.position.x)+(+d.size.width) - 0.5},
+          'y1':function(d){return (+d.position.y) +1},
+          'x2':function(d){return (+d.position.x)+(+d.size.width)  + 5.5},
+          'y2':function(d){return (+d.position.y) + 1},
         }).attr('stroke','black')
           .attr('marker-end','url("' + config.urlPath + '#GeneArrow")');
 
@@ -618,10 +621,10 @@ angular.module('icgc.pathwayviewer.directives.services', [])
 
         // In the odd case that there are layers of the same node/reaction, order things so that the
         // edges with markers (arrow heads, etc.) are on top.
-        edges = _.sortBy(edges,function(n){return n.marked?1:0;});
+        edges = _.sortBy(edges,function(n){return n.marked?1:0});
 
-        var isStartMarker = function(type){return _.contains(['FlowLine','RenderableInteraction'],type);};
-        var isLink = function(type) { return _.contains(['EntitySetAndMemberLink', 'EntitySetAndEntitySetLink'],type);};
+        var isStartMarker = function(type){return _.includes(['FlowLine','RenderableInteraction'],type)};
+        var isLink = function(type) { return _.includes(['EntitySetAndMemberLink', 'EntitySetAndEntitySetLink'],type)};
 
         svg.selectAll('line').data(edges).enter().append('line').attr({
           'class':function(d){
@@ -638,10 +641,10 @@ angular.module('icgc.pathwayviewer.directives.services', [])
               return '';
             }
           },
-          'x1':function(d){return d.x1;},
-          'y1':function(d){return d.y1;},
-          'x2':function(d){return d.x2;},
-          'y2':function(d){return d.y2;},
+          'x1':function(d){return d.x1},
+          'y1':function(d){return d.y1},
+          'x2':function(d){return d.x2},
+          'y2':function(d){return d.y2},
           'stroke': config.strokeColor
         }).attr({
           'marker-start':function(d){
@@ -667,34 +670,31 @@ angular.module('icgc.pathwayviewer.directives.services', [])
         if(legend){
           svg.selectAll('.pathway-legend-line').data(labels).enter().append('line').attr({
             'class':'pathway-legend-line',
-            'x1':function(d){return (+d.x)-30;},
-            'y1':function(d){return d.y;},
-            'x2':function(d){return (+d.x)+30;},
-            'y2':function(d){return d.y;},
+            'x1':function(d){return (+d.x)-30},
+            'y1':function(d){return d.y},
+            'x2':function(d){return (+d.x)+30},
+            'y2':function(d){return d.y},
             'stroke':config.strokeColor
           });
         }
 
         svg.selectAll('.RenderableReactionLabel').data(labels).enter().append('rect')
           .attr({
-            'class':function(d){return 'RenderableReactionLabel reaction'+d.id;},
-            'x':function(d){return +d.x - (size/2);},
-            'y':function(d){return +d.y - (size/2);},
-            'rx':function(d){return _.contains(circular,d.reactionType)?(size/2):'';},
-            'ry':function(d){return _.contains(circular,d.reactionType)?(size/2):'';},
+            'class':function(d){return 'RenderableReactionLabel reaction'+d.id},
+            'x':function(d){return +d.x - (size/2)},
+            'y':function(d){return +d.y - (size/2)},
+            'rx':function(d){return _.includes(circular,d.reactionType)?(size/2):''},
+            'ry':function(d){return _.includes(circular,d.reactionType)?(size/2):''},
             'width':size,
             'height':size,
             'stroke':config.strokeColor
-          }).style('fill',function(d){return _.contains(filled,d.reactionType)?config.strokeColor:'white';})
-          .on('mouseover',function(d){
-            console.log(d.description);
-          });
+          }).style('fill',function(d){return _.includes(filled,d.reactionType)?config.strokeColor:'white'});
 
         svg.selectAll('.ReactionLabelText').data(labels).enter().append('text')
           .attr({
             'class':'ReactionLabelText',
-            'x':function(d){return +d.x - (size/4);},
-            'y':function(d){return +d.y + (size/4);},
+            'x':function(d){return +d.x - (size/4)},
+            'y':function(d){return +d.y + (size/4)},
             'font-weight':'bold',
             'font-size':'8px',
             'fill':config.strokeColor
@@ -745,8 +745,6 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           var nodes = model.getNodesByReactomeId(id);
 
           nodes.forEach(function (node) {
-            //console.warn('Overlap found for node: ', node);
-
             var svgNode = svg.selectAll('.entity'+node.id);
 
             svgNode
@@ -918,7 +916,7 @@ angular.module('icgc.pathwayviewer.directives.services', [])
 
         // Make sure arrow heads aren't added to special dashed lines
         var isArrowHeadLine = function(type){
-          return !_.contains(['entitysetandmemberlink','entitysetandentitysetlink','missing'],type);
+          return !_.includes(['entitysetandmemberlink','entitysetandentitysetlink','missing'],type);
         };
 
         // Adds a line to the lines array gives an array of points and description of the line
@@ -1006,8 +1004,8 @@ angular.module('icgc.pathwayviewer.directives.services', [])
             addedTypes.push(getNodeLines(reaction, node, id, reaction.class, reaction.failedReaction));
           });
 
-          var hasInputs = _.contains(addedTypes,'Input');
-          var hasOutputs =  _.contains(addedTypes,'Output');
+          var hasInputs = _.includes(addedTypes,'Input');
+          var hasOutputs =  _.includes(addedTypes,'Output');
 
           // If it doesn't have human-curated input lines, "snap" line to first input node, if it has one
           if(!hasInputs && getFirstInputNode(reaction.nodes)){
@@ -1068,7 +1066,6 @@ angular.module('icgc.pathwayviewer.directives.services', [])
             reactomeId: _getIDForType(type),
             text:{content:type,position:{x:x,y:y}}
           };
-          //console.log(node);
 
           nodes.push(node);
 
@@ -1381,14 +1378,11 @@ angular.module('icgc.pathwayviewer.directives.services', [])
       });
     };
     _pathwayDataService.getGeneOverlapExistsHashUsingDbIds = function (geneOverlapExistsHash, annotatedHighlights) {
-      var geneCount = 0;
       var geneOverlapExistsHashUsingDbIds = Object.assign({}, geneOverlapExistsHash);
 
       if (geneOverlapExistsHash && annotatedHighlights) {
         _.forEach(annotatedHighlights, function (annotatedHighlight) {
           if (angular.isDefined(geneOverlapExistsHashUsingDbIds[annotatedHighlight.uniprotId])) {
-            geneCount++;
-
             _.forEach(annotatedHighlight.dbIds, function (dbID) {
               // Swap in Reactome keys but maintain the id we use this to determine overlaps in O(1)
               // later... The dbID is used as a reference to the reactome SVG nodes...
@@ -1402,7 +1396,6 @@ angular.module('icgc.pathwayviewer.directives.services', [])
           }
         });
       }
-      console.log(geneCount + ' Overlapped genes validated! ');
       return geneOverlapExistsHashUsingDbIds;
     };
 

@@ -21,7 +21,10 @@
   var module = angular.module('icgc.facets.terms', ['icgc.facets.helpers']);
 
   module.controller('termsCtrl', 
-    function ($scope, $filter, Facets, HighchartsService, ProjectCache, ValueTranslator) {
+    function ($scope, $filter, Facets, HighchartsService, ProjectCache, ValueTranslator, LocationService) {
+ 
+      $scope.resetPaginationOnChange = _.isUndefined($scope.resetPaginationOnChange) ? true : $scope.resetPaginationOnChange;  
+      $scope.search = {};
 
     // Translation on UI is slow, do in here
     function addTranslations (terms, facetName, missingText) {
@@ -35,7 +38,7 @@
           term.label = missingText;
         }
 
-        if (_.contains (['projectId', 'projectCode'], facetName)) {
+        if (_.includes (['projectId', 'projectCode'], facetName)) {
           ProjectCache.getData().then (function (cache) {
             term.tooltip = cache[termName];
           });
@@ -85,22 +88,31 @@
       $scope.displayLimit = $scope.expanded === true? $scope.inactives.length : 5;
     }
 
+    function onChange() {
+      if ($scope.resetPaginationOnChange) {
+        LocationService.goToFirstPage($scope.type + 's');
+      }
+    }
+
     $scope.displayLimit = 5;
-
-    $scope.addTerm = function (term) {
-      Facets.addTerm({
+    $scope.track = global.track;
+    $scope.addTerms = (facetItems) => {
+      const terms = facetItems.map(x => x.term);
+      Facets.addTerms(terms.map( term => ({
         type: $scope.type,
         facet: $scope.facetName,
         term: term
-      });
+      })));
+      onChange();
     };
-
-    $scope.removeTerm = function (term) {
-      Facets.removeTerm({
+    $scope.removeTerms = (facetItems) => {
+      const terms = facetItems.map(x => x.term);
+      Facets.removeTerms(terms.map( term => ({
         type: $scope.type,
         facet: $scope.facetName,
         term: term
-      });
+      })));
+      onChange();
     };
 
     $scope.removeFacet = function () {
@@ -108,6 +120,7 @@
         type: $scope.type,
         facet: $scope.facetName
       });
+      onChange();
     };
     
     $scope.notFacet = function() {
@@ -115,6 +128,7 @@
         type: $scope.type,
         facet: $scope.facetName
       });
+      onChange();
     };
 
     $scope.isFacet = function() {
@@ -122,6 +136,7 @@
         type: $scope.type,
         facet: $scope.facetName
       });
+      onChange();
     };
     
     $scope.bar = function (count) {
@@ -165,7 +180,12 @@
         collapsed: '@',
 
         iconGetter: '&iconGetter',
-        showWhenEmpty: '<'
+        showWhenEmpty: '<',
+
+        resetPaginationOnChange: '<',
+
+        //Search Config
+        searchIconShowLimit : '@'
       },
       transclude: true,
       templateUrl: '/scripts/facets/views/terms.html',

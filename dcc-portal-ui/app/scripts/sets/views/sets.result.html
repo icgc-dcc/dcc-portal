@@ -4,9 +4,10 @@
         <share-button></share-button>
     </span>
 </h3>
+<h5 class="analysis-subtitle"> {{ subtitle }} </h5>
 
 <div data-ng-if="!item || item.state === 'IN_PROGRESS'">
-    <h1 class="text-center"><i class="icon-spinner icon-spin" style="font-size:5rem"></i></h1>
+    <span class="text-center"><i class="icon-spinner icon-spin"></i> Loading Analysis...</span>
 </div>
 <div data-ng-if="isDeprecated" class="alert-error">
     <i class="icon-attention"></i>
@@ -34,7 +35,9 @@
             </thead>
             <tbody>
                 <tr data-ng-repeat="item in setList">
-                    <td>{{getSetShortHand(item, setList)}}</td>
+                    <td>
+                        <span data-ng-bind-html="getSetShortHand(item, setList)"></span>
+                    </td>
                     <td>{{setMap[item].name}}</td>
                     <td class="text-right">
                         <a data-ng-if="setType !== 'file'" href="{{setMap[item].advLink}}">{{setMap[item].count | number}}</a>
@@ -78,18 +81,18 @@
                         <span style="float:left; font-size:1.25rem">
                             <span class="t_tools__tool" data-ng-if="item.count > 0">
                                 <i class="icon-floppy" 
-                                  data-tooltip="{{'Save as new set' | translate}}" 
+                                  data-icgc-tooltip="{{'Save as new set' | translate}}" 
                                   data-ng-click="calculateUnion(item); saveDerivedSet()"></i>
                                 <i class="icon-file" 
-                                  data-tooltip="{{'Export as TSV' | translate}}" 
+                                  data-icgc-tooltip="{{'Export as TSV' | translate}}" 
                                   data-ng-click="export(item)"></i>
                             </span>
                             <span class="t_tools__tool" data-ng-if="item.count > 0 && (setType === 'donor' || setType === 'file')">
                               <i data-ng-if="downloadsEnabled && setType === 'donor'" 
                                 class="icon-download" 
-                                data-tooltip="{{'Download Donor Data' | translate}}" 
+                                data-icgc-tooltip="{{'Download Donor Data' | translate}}" 
                                 data-ng-click="downloadDerivedSet(item)"></i>
-                              <i class="icon-download-cloud" data-tooltip="{{'View in [[:: dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: dataRepoTitle} }}" data-ng-click="viewInExternal(item)"></i>
+                              <i class="icon-download-cloud" data-icgc-tooltip="{{'View in [[:: dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: dataRepoTitle} }}" data-ng-click="viewInExternal(item)"></i>
                             </span>
                         </span>
                     </td>
@@ -105,18 +108,18 @@
                         <span style="float:left; font-size:1.25rem" data-ng-show="selectedTotalCount > 0 && selectedTotalCount <= unionMaxLimit">
                             <span class="t_tools__tool">
                                 <i class="icon-floppy" 
-                                  data-tooltip="{{'Save as new set' | translate}}" 
+                                  data-icgc-tooltip="{{'Save as new set' | translate}}" 
                                   data-ng-click="calculateUnion(); saveDerivedSet()"></i>
                                 <i class="icon-file" 
-                                  data-tooltip="{{'Export' | translate}}" 
+                                  data-icgc-tooltip="{{'Export' | translate}}" 
                                   data-ng-click="export()"></i>
                             </span>
                             <span class="t_tools__tool" data-ng-if="setType === 'donor' || setType === 'file'">
                               <i data-ng-if="downloadsEnabled && setType === 'donor'" 
                                 class="icon-download" 
-                                data-tooltip="{{'Download Donor Data' | translate}}" 
+                                data-icgc-tooltip="{{'Download Donor Data' | translate}}" 
                                 data-ng-click="downloadDerivedSet()"></i>
-                              <i class="icon-download-cloud" data-tooltip="{{'View in [[:: dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: dataRepoTitle} }}" data-ng-click="viewInExternal()"></i>
+                              <i class="icon-download-cloud" data-icgc-tooltip="{{'View in [[:: dataRepoTitle ]]' | translate | subDelimiters:{dataRepoTitle: dataRepoTitle} }}" data-ng-click="viewInExternal()"></i>
                             </span>
                         </span>
                         <br>

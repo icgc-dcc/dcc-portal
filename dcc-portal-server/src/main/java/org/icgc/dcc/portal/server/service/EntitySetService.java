@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Math.min;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static lombok.AccessLevel.PRIVATE;
+import org.springframework.beans.factory.annotation.Value;
 import static org.supercsv.prefs.CsvPreference.TAB_PREFERENCE;
 
 import java.io.IOException;
@@ -91,6 +92,9 @@ public class EntitySetService {
   private final ServerProperties properties;
   @NonNull
   private final QueryEngine queryEngine;
+  @NonNull
+  @Value("#{repoIndexName}")
+  private final String repoIndexName;
 
   private final Jql2PqlConverter converter = Jql2PqlConverter.getInstance();
 
@@ -117,6 +121,35 @@ public class EntitySetService {
     }
 
     return list;
+  }
+
+  public EntitySet updateEntitySet(@NonNull final UUID entitySetId, @NonNull final String newName) {
+    val entitySet = repository.find(entitySetId);
+    if (null == entitySet) {
+      log.error("No list is found for id: '{}'.", entitySetId);
+      return null;
+    }
+
+    log.debug("Found entity set for update: '{}'.", entitySet);
+    val updatedSet =
+        new EntitySet(entitySet.getId(), entitySet.getState(), entitySet.getCount(), newName,
+            entitySet.getDescription(), entitySet.getType(),
+            entitySet.getVersion());
+
+    val updateCount = repository.update(updatedSet, updatedSet.getVersion());
+    return updateCount == 1 ? updatedSet : null;
+  }
+
+  public EntitySet updateEntitySet(@NonNull final UUID entitySetId,
+      @NonNull final EntitySetDefinition entitySetDefinition) {
+    materializeList(entitySetId, entitySetDefinition);
+    return getEntitySet(entitySetId);
+  }
+
+  public EntitySet updateEntitySet(@NonNull final UUID entitySetId,
+      @NonNull final DerivedEntitySetDefinition entitySetDefinition) {
+    analyzer.combineLists(entitySetId, entitySetDefinition);
+    return getEntitySet(entitySetId);
   }
 
   public EntitySet createEntitySet(@NonNull final EntitySetDefinition entitySetDefinition, boolean async) {
@@ -314,6 +347,8 @@ public class EntitySetService {
       return Type.GENE_CENTRIC;
     } else if (entityType == BaseEntitySet.Type.MUTATION) {
       return Type.MUTATION_CENTRIC;
+    } else if (entityType == BaseEntitySet.Type.FILE) {
+      return Type.FILE;
     }
 
     log.error("No mapping for enum value '{}' of BaseEntitySet.Type.", entityType);
@@ -338,10 +373,12 @@ public class EntitySetService {
 
     val type = getRepositoryByEntityType(definition.getType());
     val pql = converter.convert(query, type);
-    val request = queryEngine.execute(pql, type);
-    return request.getRequestBuilder()
-        .setSize(max)
-        .execute().actionGet();
+    val request = queryEngine.execute(pql, type).getRequestBuilder().setSize(max);
+
+    if (type == Type.FILE) {
+      request.setIndices(repoIndexName);
+    }
+    return request.get();
   }
 
   @PostConstruct

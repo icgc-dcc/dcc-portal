@@ -26,9 +26,8 @@
 IcgcMutationTrack.prototype = new Track({});
 
 function IcgcMutationTrack(args) {
-  Track.call(this, args);
   // Using Underscore 'extend' function to extend and add Backbone Events
-  _.extend(this, Backbone.Events);
+  Track.call(this, _.extend({}, Backbone.Events, args));
 
   //set default args
 
@@ -43,6 +42,10 @@ function IcgcMutationTrack(args) {
   _.extend(this, args);
 }
 
+IcgcMutationTrack.prototype.setLoading = function (loadState) {
+  Track.prototype.setLoading.call(this, loadState);
+  this.trigger('load', loadState);
+};
 
 IcgcMutationTrack.prototype.updateHeight = function () {
   //this._updateHeight();
@@ -99,11 +102,21 @@ IcgcMutationTrack.prototype.initializeDom = function(targetId) {
   this.updateHeight();
 };
 
+function getSvgCanvasOffset(icgcMutationTrack) {
+  if (!window.GENOME_VIEWER_PIXELBASE_DOES_NOT_ACCOUNT_FOR_ZOOM) {
+    console.warn(`Was genome-viewer updated?
+      This method currently assumes pixelBase does not account for zoom (zoom is different from zoomMultiplier).
+      If pixelBase now accounts for zoom, remove "/ Math.min(window.gv.zoom, 1)"
+    `);
+  }
+  return (icgcMutationTrack.width * 3 / 2) / icgcMutationTrack.pixelBase / Math.min(window.gv.zoom, 1);
+};
+
 IcgcMutationTrack.prototype.render = function (targetId) {
   var _this = this;
   _this.initializeDom(targetId);
 
-  _this.svgCanvasOffset = (_this.width * 3 / 2) / _this.pixelBase;
+  _this.svgCanvasOffset = getSvgCanvasOffset(this);
   _this.svgCanvasLeftLimit = _this.region.start - _this.svgCanvasOffset * 2;
   _this.svgCanvasRightLimit = _this.region.start + _this.svgCanvasOffset * 2;
 
@@ -147,6 +160,7 @@ IcgcMutationTrack.prototype.clean = function() {
 };
 
 IcgcMutationTrack.prototype.draw = function () {
+  this.svgCanvasOffset = getSvgCanvasOffset(this);
   this.svgCanvasLeftLimit = this.region.start - this.svgCanvasOffset * 2;
   this.svgCanvasRightLimit = this.region.start + this.svgCanvasOffset * 2;
 
@@ -170,6 +184,7 @@ IcgcMutationTrack.prototype.draw = function () {
 IcgcMutationTrack.prototype.move = function (disp) {
   var _this = this;
   _this.region.center();
+  _this.svgCanvasOffset = getSvgCanvasOffset(this);
   var pixelDisplacement = disp * _this.pixelBase;
   this.pixelPosition -= pixelDisplacement;
 

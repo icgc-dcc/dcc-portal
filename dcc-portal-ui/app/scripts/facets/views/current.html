@@ -21,7 +21,7 @@
                         <span data-ng-switch-when="curatedSetId"><translate>Curated Gene Set</translate></span>
                         <span data-ng-switch-when="donorId"><translate>Donor</translate></span>
                         <span data-ng-switch-when="location">{{typeName | readable }} Location</span>
-                        <span data-ng-switch-default="">{{facet | trans}}</span>
+                        <span data-ng-switch-default="">{{facet | trans: typeName }}</span>
                     </span>
 
                     <span class="t_current__or">{{ prepositionBuilder(typeName, facet, terms) }}</span>
@@ -31,8 +31,8 @@
                             class="t_facets__facet__terms__term">
                             <span class="t_facets__facet__terms__active__term__label {{ activeClass({type:typeName, facet:facet}) }}"
                                   data-ng-style="hoverStyle"
-                                  data-ng-click="removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
-                                  data-tooltip="{{ termObj.term | geneSetNameLookup | define:termObj.controlFacet }}">
+                                  data-ng-click="track('term', {action: 'remove', label: termObj.controlFacet + ' / ' + termObj.controlTerm}); removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
+                                  data-icgc-tooltip="{{ termObj.term | geneSetNameLookup | define:termObj.controlFacet }}">
                                   {{ resolveDisplayName (termObj) | trans:termObj.controlFacet }}
                             </span>
                             <span data-ng-if="!$last" class="t_current__or">,&nbsp;</span>
@@ -46,8 +46,8 @@
                             class="t_facets__facet__terms__term">
                             <span class="t_facets__facet__terms__active__term__label {{ activeClass({type:typeName, facet:facet}) }}"
                                   data-ng-style="hoverStyle"
-                                  data-ng-click="removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
-                                  data-tooltip="{{ termObj.term | geneSetNameLookup | define:termObj.controlFacet }}">
+                                  data-ng-click="track('term', {action: 'remove', label: termObj.controlFacet + ' / ' + termObj.controlTerm}); removeTerm(termObj.controlType, termObj.controlFacet, termObj.controlTerm)"
+                                  data-icgc-tooltip="{{ termObj.term | geneSetNameLookup | define:termObj.controlFacet }}">
                                   {{ resolveDisplayName (termObj) | trans:termObj.controlFacet }}
                             </span>
                             <span data-ng-if="!$last" class="t_current__or">,&nbsp;</span>

@@ -177,8 +177,8 @@
 
   var module = angular.module('icgc.genelist.controllers', []);
 
-  module.controller('GeneListController', function($scope, $timeout, $location, $modalInstance,
-    GeneSetVerificationService, LocationService, SetService, Page) {
+  module.controller('GeneListController', function($scope, $rootScope, $timeout, $location,
+    $modalInstance, GeneSetVerificationService, LocationService, SetService, Page) {
 
     var verifyPromise = null;
     var delay = 1000;
@@ -193,7 +193,6 @@
 
     // Fields needed for saving into custom gene set
     $scope.params.setName = '';
-    $scope.params.setDescription = '';
 
 
     $scope.params.savedSets = SetService.getAllGeneSets();
@@ -245,7 +244,6 @@
         var setParams = {};
         setParams.type = 'gene';
         setParams.name = $scope.params.setName;
-        setParams.description = $scope.params.setDescription;
         setParams.size = $scope.out.validIds.length;
         setParams.filters = {
           gene: {
@@ -254,7 +252,7 @@
             }
           }
         };
-        SetService.addSet(setParams.type, setParams).then(function(){
+        SetService.addSet(setParams.type, setParams).then((set) => {
           $modalInstance.close();
         });
         return;
@@ -305,7 +303,7 @@
       $scope.params.selectedSavedSet = -1;
     };
 
-    $scope.resetCustomInput = function() {
+    $scope.resetAll = function() {
       $scope.params.state = '';
       $scope.params.fileName = null;
       $scope.params.rawText = '';

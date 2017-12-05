@@ -25,9 +25,13 @@ import static org.icgc.dcc.portal.server.resource.Resources.API_ASYNC;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_DEFINITION_VALUE;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_ID_PARAM;
 import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_ID_VALUE;
+import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_UPDATE_NAME;
+import static org.icgc.dcc.portal.server.resource.Resources.API_ENTITY_SET_UPDATE_PARAM;
 import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -35,8 +39,10 @@ import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -48,6 +54,7 @@ import org.icgc.dcc.portal.server.model.BaseEntitySet.Type;
 import org.icgc.dcc.portal.server.model.DerivedEntitySetDefinition;
 import org.icgc.dcc.portal.server.model.EntitySet;
 import org.icgc.dcc.portal.server.model.EntitySetDefinition;
+import org.icgc.dcc.portal.server.model.UnionUnit;
 import org.icgc.dcc.portal.server.model.param.UUIDSetParam;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.service.BadRequestException;
@@ -55,6 +62,8 @@ import org.icgc.dcc.portal.server.service.EntitySetService;
 import org.icgc.dcc.portal.server.service.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.google.common.collect.ImmutableSet;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -87,27 +96,6 @@ public class EntitySetResource extends Resource {
   private final EntitySetService service;
 
   @GET
-  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}")
-  @Produces(APPLICATION_JSON)
-  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
-  public EntitySet getSet(
-      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
-      @ApiParam(value = "Include items in the response?", required = true) @QueryParam("includeItems") @DefaultValue("false") final boolean includeItems) {
-    val entitySet = service.getEntitySet(entitySetId);
-    if (entitySet == null) {
-      log.warn("getSetsByIds returns empty. The entitySetId '{}' is most likely invalid.", entitySetId);
-      throw new NotFoundException(entitySetId.toString(), API_ENTITY_SET_ID_VALUE);
-    }
-
-    if (includeItems) {
-      val items = service.getSetItems(entitySet);
-      entitySet.setItems(items);
-    }
-
-    return entitySet;
-  }
-
-  @GET
   @Path("/sets/{" + API_ENTITY_SET_ID_PARAM + "}")
   @Produces(APPLICATION_JSON)
   @ApiOperation(value = "Retrieves a list of entity sets by their IDs.", response = EntitySet.class, responseContainer = "List")
@@ -124,6 +112,111 @@ public class EntitySetResource extends Resource {
     log.debug("Received a getSets request for these lists: '{}'", setIds);
 
     return getSetsByIds(setIds);
+  }
+
+  @GET
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
+  public EntitySet getSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
+      @ApiParam(value = "Include items in the response?", required = true) @QueryParam("includeItems") @DefaultValue("false") final boolean includeItems) {
+    val entitySet = this.getEntitySet(entitySetId);
+
+    if (includeItems) {
+      val items = service.getSetItems(entitySet);
+      entitySet.setItems(items);
+    }
+
+    return entitySet;
+  }
+
+  /**
+   * Updates an entityset.
+   * 
+   * @param entitySetId path param holding the set id to update.
+   * @param setDefinition definition of the set with updated info.
+   * @return updated entityset.
+   */
+  @PUT
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
+  public EntitySet updateSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
+      @ApiParam(value = API_ENTITY_SET_UPDATE_NAME) @FormParam(API_ENTITY_SET_UPDATE_PARAM) final String newName) {
+    val updatedSet = service.updateEntitySet(entitySetId, newName);
+    if (updatedSet == null) {
+      log.warn("updateEntitySet returns empty. The entitySetId '{}' is most likely invalid.", updatedSet);
+      throw new NotFoundException(entitySetId.toString(), API_ENTITY_SET_ID_VALUE);
+    }
+
+    return updatedSet;
+  }
+
+  /**
+   * Updates an entityset.
+   * 
+   * @param entitySetId path param holding the set id to update.
+   * @param setDefinition definition of the set with updated info.
+   * @return updated entityset.
+   */
+  @POST
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}/unions")
+  @Consumes(APPLICATION_JSON)
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
+  public EntitySet addToSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition) {
+
+    val currentSet = this.getEntitySet(entitySetId);
+    val modifierSet = createModifierSet(modifierSetDefinition);
+    UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(modifierSet.getId()), Collections.emptySet());
+    UnionUnit unionUnit2 = new UnionUnit(ImmutableSet.of(currentSet.getId()), Collections.emptySet());
+    DerivedEntitySetDefinition derivedSetDefinition =
+        new DerivedEntitySetDefinition(Arrays.asList(unionUnit1, unionUnit2), currentSet.getName(),
+            currentSet.getDescription(), currentSet.getType(), false);
+    service.updateEntitySet(entitySetId, derivedSetDefinition);
+
+    return this.getEntitySet(entitySetId);
+  }
+
+  public EntitySet createModifierSet(final EntitySetDefinition modifierSetDefinition) {
+    return modifierSetDefinition.getType() == Type.FILE ? service
+        .createFileEntitySet(modifierSetDefinition) : service.createEntitySet(modifierSetDefinition, false);
+  }
+
+  /**
+   * Updates an entityset.
+   * 
+   * @param entitySetId path param holding the set id to update.
+   * @param setDefinition definition of the set with updated info.
+   * @return updated entityset.
+   */
+  /**
+   * @param entitySetId
+   * @param modifierSetDefinition
+   * @return
+   */
+  @POST
+  @Path("/{" + API_ENTITY_SET_ID_PARAM + "}/differences")
+  @Consumes(APPLICATION_JSON)
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(value = "Retrieves an entity set by its ID.", response = EntitySet.class)
+  public EntitySet removeFromSet(
+      @ApiParam(value = API_ENTITY_SET_ID_VALUE, required = true) @PathParam(API_ENTITY_SET_ID_PARAM) final UUID entitySetId,
+      @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition modifierSetDefinition) {
+
+    val currentSet = this.getEntitySet(entitySetId);
+    val modifierSet = createModifierSet(modifierSetDefinition);
+    UnionUnit unionUnit1 = new UnionUnit(ImmutableSet.of(currentSet.getId()), ImmutableSet.of(modifierSet.getId()));
+    DerivedEntitySetDefinition derivedSetDefinition =
+        new DerivedEntitySetDefinition(Arrays.asList(unionUnit1), currentSet.getName(),
+            currentSet.getDescription(), currentSet.getType(), false);
+    service.updateEntitySet(entitySetId, derivedSetDefinition);
+
+    return this.getEntitySet(entitySetId);
   }
 
   /**
@@ -157,6 +250,7 @@ public class EntitySetResource extends Resource {
   @ApiOperation(value = "Creates an entity set from an Repository Browser query.", response = EntitySet.class)
   public Response createExternalSet(
       @ApiParam(value = API_ENTITY_SET_DEFINITION_VALUE) final EntitySetDefinition setDefinition) {
+    checkRequest(setDefinition == null, "The Entity Set definition cannot be null.");
     if (setDefinition.getType() == Type.FILE) {
       val newSet = service.createFileEntitySet(setDefinition);
       return newSetResponse(newSet);
@@ -248,6 +342,16 @@ public class EntitySetResource extends Resource {
     return Response.status(CREATED)
         .entity(newSet)
         .build();
+  }
+
+  private EntitySet getEntitySet(UUID entitySetId) {
+    val entitySet = service.getEntitySet(entitySetId);
+    if (entitySet == null) {
+      log.warn("getEntitySet for the updated set returns empty. The entitySetId '{}' is most likely invalid.",
+          entitySetId);
+      throw new NotFoundException(entitySetId.toString(), API_ENTITY_SET_ID_VALUE);
+    }
+    return entitySet;
   }
 
 }

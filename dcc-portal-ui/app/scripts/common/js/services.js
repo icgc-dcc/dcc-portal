@@ -143,7 +143,7 @@
     };
   });
 
-  module.service('Settings', function (RestangularNoCache) {
+  module.service('Settings', function () {
     Object.freeze(window.ICGC_SETTINGS);
     this.get = () => Promise.resolve(window.ICGC_SETTINGS);
   });
@@ -182,6 +182,10 @@
       advancedSearch: {
         href: href ('advanced'),
         title: gettextCatalog.getString('Advanced Search')
+      },
+      compoundIndex: {
+        href: href ('compound-index'),
+        title: gettextCatalog.getString('Compounds')
       },
       dataAnalysis: {
         href: href ('analysis'), // DCC-4594 default is launch analysis
@@ -325,6 +329,25 @@
       }
 
     };
-  });
 
+    this.exportDataUri = (name, uri) => {
+      if (navigator.msSaveOrOpenBlob) {
+        navigator.msSaveOrOpenBlob(uriToBlob(uri), name);
+      } else {
+        var saveLink = document.createElement('a');
+        var downloadSupported = 'download' in saveLink;
+        if (downloadSupported) {
+          saveLink.download = name;
+          saveLink.href = uri;
+          saveLink.style.display = 'none';
+          document.body.appendChild(saveLink);
+          saveLink.click();
+          document.body.removeChild(saveLink);
+        }
+        else {
+          window.open(uri, '_temp', 'menubar=no,toolbar=no,status=no');
+        }
+      }
+    };
+  });
 })();

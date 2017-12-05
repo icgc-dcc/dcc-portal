@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
+import java.util.Collections;
 import java.util.List;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -50,7 +51,7 @@ public class OccurrenceResource extends Resource {
 
   @GET
   @Timed
-  @ApiOperation(value = RETURNS_LIST + OCCURRENCE + S, response = Projects.class)
+  @ApiOperation(value = RETURNS_LIST + OCCURRENCE + S, response = Occurrence.class)
   public Occurrences findAll(
       @ApiParam(value = API_FIELD_VALUE, allowMultiple = true) @QueryParam(API_FIELD_PARAM) List<String> fields,
       @ApiParam(value = API_INCLUDE_VALUE, allowMultiple = true) @QueryParam(API_INCLUDE_PARAM) List<String> include,
@@ -66,6 +67,19 @@ public class OccurrenceResource extends Resource {
     return occurrenceService.findAll(query().fields(fields).filters(filters).includes(include)
         .from(from.get()).size(size.get()).sort(sort).order(order).build());
 
+  }
+
+  @GET
+  @Timed
+  @Path("/pql")
+  @ApiOperation(value = RETURNS_LIST + OCCURRENCE + S, response = Occurrence.class)
+  public  Occurrences findPQL(
+      @ApiParam(value = API_QUERY_VALUE) @QueryParam(API_QUERY_PARAM) @DefaultValue(DEFAULT_QUERY) String pql
+  ) {
+
+    log.debug(PQL_TEMPLATE,  pql);
+
+    return occurrenceService.findAll(pql, Collections.emptyList());
   }
 
   @Path("/count")

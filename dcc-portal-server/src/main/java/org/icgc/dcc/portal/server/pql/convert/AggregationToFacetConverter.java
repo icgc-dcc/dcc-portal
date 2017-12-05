@@ -78,7 +78,7 @@ public class AggregationToFacetConverter {
     long total = 0;
     for (val bucket : termsAgg.getBuckets()) {
       val docsCount = resolveDocCount(termAggName, bucket);
-      terms.add(new Term(bucket.getKey(), docsCount));
+      terms.add(new Term(bucket.getKeyAsString(), docsCount));
       total += docsCount;
     }
 
@@ -88,13 +88,28 @@ public class AggregationToFacetConverter {
     return TermFacet.of(total, resolveMissingDocCount(missingAggName, missingAgg), terms.build());
   }
 
-  private static long resolveMissingDocCount(String missingAggName, Missing missingAgg) {
-    val aggregations = missingAgg.getAggregations();
-    if (hasAggregations(aggregations)) {
-      return 0L;
+  private static long resolveMissingDocCount(String missingAggName, Aggregation aggs) {
+    if (aggs instanceof Missing) {
+      val missing = (Missing) aggs;
+
+      val aggregations = missing.getAggregations();
+      if (hasAggregations(aggregations)) {
+        return 0L;
+      }
+
+      return missing.getDocCount();
+    } else if (aggs instanceof ReverseNested) {
+      val reverseNested = (ReverseNested) aggs;
+
+      val aggregations = reverseNested.getAggregations();
+      if (hasAggregations(aggregations)) {
+        return 0L;
+      }
+
+      return reverseNested.getDocCount();
     }
 
-    return missingAgg.getDocCount();
+    return 0L;
   }
 
   private static boolean hasAggregations(Aggregations aggregations) {
@@ -120,8 +135,8 @@ public class AggregationToFacetConverter {
     return (Terms) resolveCommonAggregations(aggregation);
   }
 
-  private static Missing findMissingAggregation(Aggregation aggregation) {
-    return (Missing) resolveCommonAggregations(aggregation);
+  private static Aggregation findMissingAggregation(Aggregation aggregation) {
+    return resolveCommonAggregations(aggregation);
   }
 
   private static Aggregation resolveCommonAggregations(Aggregation aggregation) {
@@ -137,7 +152,13 @@ public class AggregationToFacetConverter {
       val agg = (Nested) aggregation;
 
       return resolveCommonAggregations(getSubaggregation(agg.getAggregations()));
-    } else if (aggregation instanceof Missing || aggregation instanceof Terms) {
+    } else if (aggregation instanceof Missing) {
+      val missing = (Missing) aggregation;
+      if (missing.getAggregations() != null && !missing.getAggregations().asList().isEmpty()) {
+        return missing.getAggregations().asList().get(0);
+      }
+      return aggregation;
+    } else if (aggregation instanceof Terms) {
       return aggregation;
     }
 

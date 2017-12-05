@@ -1,5 +1,5 @@
 <div class="h1-wrap">
-    <h1 data-ui-scrollfix=79><span class="t_badge t_badge__donor"></span>
+    <h1 data-ui-scrollpoint=79><span class="t_badge t_badge__donor"></span>
         {{ DonorCtrl.donor.id }}
         <pcawg-badge data-ng-if="DonorCtrl.isPCAWG(DonorCtrl.donor)"></pcawg-badge>
     </h1>
@@ -19,7 +19,7 @@
 
 <span data-ng-if="!DonorCtrl.isPendingDonor">
 <div data-scroll-spy="">
-<aside data-ui-scrollfix=79 class="t_sidenav">
+<aside data-ui-scrollpoint=79 class="t_sidenav">
     <section>
         <ul class="t_subnav__items">
             <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
@@ -37,7 +37,8 @@
                            data-facet-name="functionalImpact"
                            data-hide-count="true"
                            data-label="{{'Mutation Impact' | translate}}"
-                           data-facet="DonorCtrl.mutationFacets.functionalImpact"></terms>
+                           data-facet="DonorCtrl.mutationFacets.functionalImpact"
+                    ></terms>
                 </ul>
             </li>
         </ul>
@@ -145,12 +146,12 @@
         </table>
 
         <div>
-            <button class="t_button" type="button" data-ng-click="DonorCtrl.downloadDonorData()" data-ng-disabled="!DonorCtrl.downloadEnabled">
+            <button class="t_button" type="button" data-ng-click="DonorCtrl.downloadDonorData(); track('download-donor-data', { action: 'click', label: 'donor page' });" data-ng-disabled="!ICGC_SETTINGS.downloadEnabled">
                 <i class="icon-download"></i>
                 <span> <translate>Download Donor Data</translate></span>
             </button>
             <br>
-            <span data-ng-if="!DonorCtrl.downloadEnabled" class="alert-warning"><translate>Data download is currently unavailable.</translate></span>
+            <span data-ng-if="!ICGC_SETTINGS.downloadEnabled" class="alert-warning"><translate>Data download is currently unavailable.</translate></span>
         </div>
 
     </div>
@@ -243,9 +244,11 @@
     <div data-ng-init="supplementalCollapsed=true">
        <span data-ng-show="DonorCtrl.hasSupplementalFiles(DonorCtrl.donor)">
            <a href="" data-ng-click="supplementalCollapsed=!supplementalCollapsed">
-               <translate>Supplemental files</translate>:
+               <translate>Supplemental data</translate>:
+               {{ DonorCtrl.donor.biomarker? " " + DonorCtrl.donor.biomarker.length + " Biomarker, " : "" }}
                {{ DonorCtrl.donor.family? " " + DonorCtrl.donor.family.length + " Family, " : "" }}
                {{ DonorCtrl.donor.exposure? " " + DonorCtrl.donor.exposure.length + " Exposure, " : "" }}
+               {{ DonorCtrl.donor.surgery? " " + DonorCtrl.donor.surgery.length + " Surgery, " : "" }}
                {{ DonorCtrl.donor.therapy? " " + DonorCtrl.donor.therapy.length + " Therapy" : "" }}
                <i class="icon-caret-left" data-ng-if="supplementalCollapsed===true"></i>
                <i class="icon-caret-down" data-ng-if="supplementalCollapsed===false"></i>
@@ -261,7 +264,7 @@
          data-ng-if="DonorCtrl.donor.state === 'live'"
          data-ng-controller="DonorMutationsCtrl as DonorMutationsCtrl"
          data-ng-class="{'loading': !DonorMutationsCtrl.mutations.hits, 'empty': DonorMutationsCtrl.mutations.hits.length == 0}">
-    <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits"><i class="icon-spinner icon-spin"></i> <translate>Fetching Mutations...</translate>
+    <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits"><i class="icon-spinner icon-spin"></i> <translate>Loading Mutations...</translate>
     </h3>
 
     <h3 data-ng-if="DonorMutationsCtrl.mutations.hits.length == 0"><translate>No Mutations Reported.</translate></h3>
@@ -276,27 +279,36 @@
 
         <div class="t_table_top">
             <span data-table-counts data-label="{{'mutations' | translate}}" data-page="DonorMutationsCtrl.mutations.pagination"></span>
-            <span data-toolbar data-dl="{{DonorCtrl.donor.id}}_mutations"></span>
+            <span
+                data-toolbar
+                data-entity="{{DonorCtrl.donor.id}}_mutations"
+                data-json="{{ DonorMutationsCtrl.mutations.hits }}"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
             <tr>
                 <th rowspan="2">ID</th>
-                <th rowspan="2"><abbr data-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+                <th rowspan="2"><abbr data-icgc-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
                     <translate>DNA change</translate></abbr>
                 </th>
                 <th rowspan="2">Type</th>
-                <th rowspan="2"><abbr data-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
+                <th rowspan="2"><abbr data-icgc-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}"><translate>Consequences</translate></abbr>
                 </th>
                 <th colspan="2" class="text-center"><translate># Donors affected</translate></th>
             </tr>
             <tr>
-                <th class="text-center">
-                    <abbr data-tooltip="{{'Breakdown of Affected Donors in [[ projectId ]]<br># Donors affected / # SSM tested donors' | translate | subDelimiters:{projectId: DonorCtrl.donor.projectId} }}">
+                <th class="text-center"
+                    data-sortable
+                    data-type="mutations"
+                    data-field="_score"
+                    data-active="true"
+                    data-reversed="true">
+                    <abbr data-icgc-tooltip="{{'Breakdown of Affected Donors in [[ projectId ]]<br># Donors affected / # SSM tested donors' | translate | subDelimiters:{projectId: DonorCtrl.donor.projectId} }}">
                         {{ DonorCtrl.donor.projectId }}
-                    </abbr> <i class="icon-caret-down"></i></th>
+                    </abbr>
+                </th>
                 <th class="text-center">
-                    <abbr data-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+                    <abbr data-icgc-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
                           data-tooltip-placement="left"><translate>Across all Projects</translate></abbr></th>
             </tr>
             </thead>
@@ -306,12 +318,12 @@
                     <a href="/mutations/{{ mutation.id }}">{{ mutation.id }}</a>
                 </td>
                 <td class="t_cell_line_break">chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
-                <td><abbr data-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr>
+                <td><abbr data-icgc-tooltip="{{ mutation.type | define }}">{{ mutation.type }}</abbr>
                 </td>
                 <td>
                     <mutation-consequences items="mutation.consequences"></mutation-consequences>
                 </td>
-                <td class="text-right" style="position: relative; display: block;white-space: nowrap">
+                <td class="text-right" style="position: relative; white-space: nowrap">
                         <span data-ng-style="{width:mutation.affectedDonorCountFiltered/DonorCtrl.donor.ssmTestedDonorCount * 100+'%'}"
                           class="t_facets__facet__terms__active__term__bar"></span>
                     <span style="position: relative">
@@ -337,7 +349,7 @@
                                   class="t_facets__facet__terms__active__term__bar"></span>
                             <span style="position: relative">
                                 <a data-tooltip-placement="left"
-                                   data-tooltip="{{ p.projectName }}"
+                                   data-icgc-tooltip="{{ p.projectName }}"
                                    href="/projects/{{p.term}}">{{p.term}}</a>:
                             <a href='/search?filters={{p.advQuery}}'>
                                 {{p.count | number}}
@@ -410,7 +422,7 @@
 
     <h3 data-ng-if="!DonorFilesCtrl.files.hits">
         <i class="icon-spinner icon-spin"></i>
-        <translate>Fetching Files...</translate>
+        <translate>Loading Files...</translate>
     </h3>
 
     <h3 data-ng-if="DonorFilesCtrl.files.hits.length == 0"><translate>No Files Found.</translate></h3>

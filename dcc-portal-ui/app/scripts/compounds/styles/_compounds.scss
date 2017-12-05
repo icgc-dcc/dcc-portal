@@ -1,11 +1,60 @@
 .sortable {
-
   &:hover {
     cursor: pointer;
   }
-
   .icon-sort {
     color: hsl(0,0%,80%);
   }
+}
 
+.pagination {
+  > .active > a,
+  > .active > span {
+    &,
+    &:hover,
+    &:focus {
+      z-index: 2;
+      color: $pagination-active-color;
+      background-color: $pagination-active-bg;
+      border-color: $pagination-active-border;
+      cursor: default;
+    }
+  }
+
+  > .disabled {
+    > span,
+    > span:hover,
+    > span:focus,
+    > a,
+    > a:hover,
+    > a:focus {
+      color: $pagination-disabled-color;
+      background-color: $pagination-disabled-bg;
+      border-color: $pagination-disabled-border;
+      cursor: $cursor-disabled;
+    }
+  }
+}
+
+.compound-index {
+  collapsible-wrapper {
+    .t_input__block {
+      margin: 0.5rem;
+      width: calc(100% - 1rem);
+    }
+  }
+  .sticky {
+    top: 60px;
+  }
+
+  .term {
+    &__label {
+      position: relative;
+      z-index: 1;
+    }
+    &__count {
+      position: absolute;
+      right: 0;
+    }
+  }
 }

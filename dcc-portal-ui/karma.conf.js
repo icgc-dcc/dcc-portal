@@ -4,9 +4,14 @@ var webpackProdConfig = require('./config/webpack.config.prod.js');
 
 var webpackTestConfig = Object.assign({}, webpackProdConfig, {
   entry: {},
+  devtool: 'cheap-source-map',
   // Note: plugins that are currently unsupported by karma-webpack need to be removed
   // https://github.com/webpack/karma-webpack/issues/149
-  plugins: webpackProdConfig.plugins.filter(x => !_.includes(['CommonsChunkPlugin'], x.constructor.name))
+  plugins: webpackProdConfig.plugins.filter(x => !_.includes([
+    'CommonsChunkPlugin',
+    // Note: not able to exclude test files from uglification due to https://github.com/webpack/webpack/issues/1079
+    'UglifyJsPlugin',
+    ], x.constructor.name))
 });
 
 module.exports = function(config){
@@ -18,24 +23,24 @@ module.exports = function(config){
     // files to include, ordered by dependencies
     files : [
       './node_modules/es6-shim/es6-shim.js',
+      './node_modules/lodash-migrate/dist/lodash-migrate.js',
       'app/scripts/vendor.js',
       'app/scripts/index.js',
       // === Test, mock files ===
-      'app/bower_components/angular-mocks/angular-mocks.js',
+      './node_modules/angular-mocks/angular-mocks.js',
       {pattern: 'test/unit/**/*.js', watched: false},
     ],
 
     preprocessors: {
       'app/scripts/vendor.js': ['webpack'],
       'app/scripts/index.js': ['webpack'],
-      'test/unit/**/*.js': ['babel'],
+      'test/unit/**/*.js': ['webpack'],
     },
 
     // files to exclude
     exclude : [
         'app/lib/angular/angular-loader.js'
       , 'app/lib/angular/*.min.js'
-      , 'app/lib/angular/angular-scenario.js'
     ],
 
     singleRun: true,

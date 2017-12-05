@@ -60,6 +60,7 @@ public class TokenService {
   private static final String DEFAULT_SCOPE_DESCRIPTION = EMPTY_STRING;
   private static final Map<String, String> SCOPE_DESCRIPTIONS = ImmutableMap.<String, String> builder()
       .put("portal.download", "Allows secure downloads from the Data Portal")
+      .put("portal.export", "Allows to download controlled export data from the download server")
       .put("aws.upload", "Allows uploads to AWS S3")
       .put("aws.download", "Allows secure downloads from AWS S3")
       .put("collab.upload", "Allows uploads to the Collaboratory cloud")
@@ -86,7 +87,8 @@ public class TokenService {
   }
 
   public Tokens list(@NonNull User user) {
-    return client.listTokens(user.getOpenIDIdentifier());
+    // See getUserScopes(User) method commends on why user's email is used.
+    return client.listTokens(user.getEmailAddress());
   }
 
   public void delete(@NonNull String tokenId) {
@@ -103,12 +105,17 @@ public class TokenService {
   }
 
   public AccessTokenScopes getUserScopes(User user) {
-    if (user.getOpenIDIdentifier() == null) {
+    // In ICGC a CUD user's name and email do not match.
+    // When using the ICGC API CUD users are always identified by user name
+    // On the DCC Portal _all_ users are identified by their emails. For this reason we always user users's email when
+    // communicating with the Auth server.
+    val userId = user.getEmailAddress();
+    if (userId == null) {
       log.warn("User has no OpenID but trying to access tokens: {}", user);
       return new AccessTokenScopes(emptySet());
     }
 
-    val userScopes = client.getUserScopes(user.getOpenIDIdentifier());
+    val userScopes = client.getUserScopes(userId);
     val scopesResult = ImmutableSet.<AccessTokenScope> builder();
 
     for (val scope : userScopes.getScopes()) {

@@ -17,32 +17,31 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 
 import java.util.Map;
 
+import org.assertj.core.api.Assertions;
 import org.dcc.portal.pql.query.QueryEngine;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
-import org.icgc.dcc.portal.server.test.TestIndex;
+import org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DonorRepositoryTest extends BaseElasticSearchTest {
+import lombok.val;
+
+//@RunWith(MockitoJUnitRunner.class)
+public class DonorRepositoryTest extends BaseElasticsearchTest {
 
   private static final String DEFAULT_SORT = "ssmAffectedGenes";
   private static final String DEFAULT_ORDER = "desc";
@@ -57,23 +56,19 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
   ImmutableMap<String, String> FIELDS = FIELDS_MAPPING.get(EntityType.DONOR);
 
   @Before
-  public void setUp() throws Exception {
-    this.testIndex = TestIndex.RELEASE;
-
-    es.execute(createIndexMappings(IndexType.DONOR, IndexType.DONOR_CENTRIC)
-        .withData(bulkFile(getClass()))
-        // This is needed because the DonorRepository now does a 'secondary' search on icgc-repository index.
-        .withData(MANIFEST_TEST_DATA));
+  public void setUpDonorRepositoryTest() {
+    createIndexMappings(RELEASE_INDEX_NAME, "donor-centric", "donor");
+    loadData("DonorRepositoryTest.json");
     donorRepository =
-        new DonorRepository(es.client(), new QueryEngine(es.client(), testIndex.getName()), TestIndex.RELEASE.getName(),
-            TestIndex.REPOSITORY.getName());
+        new DonorRepository(client, new QueryEngine(client, RELEASE_INDEX_NAME), RELEASE_INDEX_NAME,
+            REPOSITORY_INDEX_NAME);
   }
 
   @Test
   public void testFindAllCentric() throws Exception {
     Query query = Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).build();
     SearchResponse response = donorRepository.findAllCentric(query);
-    assertThat(response.getHits().getTotalHits()).isEqualTo(9);
+    Assertions.assertThat(response.getHits().getTotalHits()).isEqualTo(9);
   }
 
   @Test
@@ -87,12 +82,14 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = donorRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(9);
-    assertThat(hits.getHits().length).isEqualTo(9);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(9);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(9);
 
     for (SearchHit hit : hits) {
-      assertThat(hit.fields().keySet().size()).isEqualTo(2);
-      assertThat(hit.fields().keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("primarySite")));
+      Assertions.assertThat(hit.getSource().keySet().size()).isEqualTo(2);
+      val flatMap = ElasticsearchResponseUtils.flattenMap(hit.getSource(), query.getIncludes(), EntityType.DONOR);
+      Assertions.assertThat(flatMap.keySet())
+          .isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("primarySite")));
     }
   }
 
@@ -104,11 +101,11 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = donorRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(3);
-    assertThat(hits.getHits().length).isEqualTo(3);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(3);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(3);
 
     for (SearchHit hit : hits) {
-      assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isIn(Lists.newArrayList("DO2", "DO6", "DO7"));
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id")))).isIn(Lists.newArrayList("DO2", "DO6", "DO7"));
     }
   }
 
@@ -120,11 +117,12 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = donorRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(6);
-    assertThat(hits.getHits().length).isEqualTo(6);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(6);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(6);
 
     for (SearchHit hit : hits) {
-      assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isNotIn(Lists.newArrayList("DO2", "DO6", "DO7"));
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id"))))
+          .isNotIn(Lists.newArrayList("DO2", "DO6", "DO7"));
     }
   }
 
@@ -136,11 +134,11 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = donorRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(5);
-    assertThat(hits.getHits().length).isEqualTo(5);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(5);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(5);
 
     for (SearchHit hit : hits) {
-      assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isIn(
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id")))).isIn(
           Lists.newArrayList("DO2", "DO2", "DO9", "DO1", "DO4", "DO8", "DO5"));
     }
   }
@@ -153,11 +151,11 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = donorRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(1);
-    assertThat(hits.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
     for (SearchHit hit : hits) {
-      assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isIn(Lists.newArrayList("DO9"));
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id")))).isIn(Lists.newArrayList("DO9"));
     }
   }
 
@@ -169,11 +167,11 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     SearchResponse response = donorRepository.findAllCentric(query);
     SearchHits hits = response.getHits();
 
-    assertThat(hits.getTotalHits()).isEqualTo(1);
-    assertThat(hits.getHits().length).isEqualTo(1);
+    Assertions.assertThat(hits.getTotalHits()).isEqualTo(1);
+    Assertions.assertThat(hits.getHits().length).isEqualTo(1);
 
     for (SearchHit hit : hits) {
-      assertThat(cast(hit.field(FIELDS.get("id")).getValue())).isIn(Lists.newArrayList("DO2"));
+      Assertions.assertThat(cast(hit.getSource().get(FIELDS.get("id")))).isIn(Lists.newArrayList("DO2"));
     }
   }
 
@@ -181,7 +179,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
   public void testCountIntersection() throws Exception {
     Query query = Query.builder().build();
     long response = donorRepository.count(query);
-    assertThat(response).isEqualTo(9);
+    Assertions.assertThat(response).isEqualTo(9);
   }
 
   @Test
@@ -191,7 +189,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
         Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).filters(filter.get()).build();
     long response = donorRepository.count(query);
 
-    assertThat(response).isEqualTo(5);
+    Assertions.assertThat(response).isEqualTo(5);
   }
 
   @Test
@@ -201,7 +199,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
         Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).filters(filter.get()).build();
     long response = donorRepository.count(query);
 
-    assertThat(response).isEqualTo(1);
+    Assertions.assertThat(response).isEqualTo(1);
   }
 
   @Test
@@ -211,7 +209,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
         Query.builder().from(1).size(10).sort(DEFAULT_SORT).order(DEFAULT_ORDER).filters(filter.get()).build();
     long response = donorRepository.count(query);
 
-    assertThat(response).isEqualTo(1);
+    Assertions.assertThat(response).isEqualTo(1);
   }
 
   @Test
@@ -219,7 +217,7 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     String id = "DO1";
     Query query = Query.builder().build();
     Map<String, Object> response = donorRepository.findOne(id, query);
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
   }
 
   @Test
@@ -227,8 +225,8 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
     String id = "DO1";
     Query query = Query.builder().fields(Lists.newArrayList("id", "primarySite")).build();
     Map<String, Object> response = donorRepository.findOne(id, query);
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
-    assertThat(response.keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("primarySite")));
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
+    Assertions.assertThat(response.keySet()).isEqualTo(Sets.newHashSet(FIELDS.get("id"), FIELDS.get("primarySite")));
   }
 
   @Test
@@ -238,16 +236,16 @@ public class DonorRepositoryTest extends BaseElasticSearchTest {
 
     Map<String, Object> response = donorRepository.findOne(id, query);
 
-    assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
-    assertThat(response.containsKey("specimen")).isFalse();
+    Assertions.assertThat(getString(response.get(FIELDS.get("id")))).isEqualTo(id);
+    Assertions.assertThat(response.containsKey("specimen")).isFalse();
 
     Query queryInclude =
         Query.builder().from(1).size(10).includes(Lists.newArrayList("specimen", "notarealthing")).build();
 
     Map<String, Object> responseInclude = donorRepository.findOne(id, queryInclude);
 
-    assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(id);
-    assertThat(responseInclude.containsKey("specimen")).isTrue();
+    Assertions.assertThat(getString(responseInclude.get(FIELDS.get("id")))).isEqualTo(id);
+    Assertions.assertThat(responseInclude.containsKey("specimen")).isTrue();
   }
 
   @Test(expected = UnsupportedOperationException.class)

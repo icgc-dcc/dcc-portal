@@ -1,5 +1,8 @@
+<div data-ng-if="ProjectsCtrl.isLoadingData" class="loading"><h3><i class="icon-spinner icon-spin"></i>
+    <translate>Loading Summary...</translate>
+</h3></div>
 
-<div data-ng-show="ProjectsCtrl.projects" ng-init="lineHeight = 310">
+<div data-ng-show="ProjectsCtrl.projects && !ProjectsCtrl.isLoadingData" ng-init="lineHeight = 310">
     <section>
         <div class="narrow">
             <div ng-show="! ProjectsCtrl.hasDonutData()" class="text-center">
@@ -26,9 +29,10 @@
                      data-is-loading="ProjectsCtrl.isLoadingData"
                      data-selected="ProjectsCtrl.projectIds"
                      selected-project-count="ProjectsCtrl.numberOfSelectedProjectsInFilter()"
-                     data-title="{{'Top 20 Mutated Genes with High Functional Impact SSMs' | translate}}"
+                     data-title="{{'Top 20 Mutated Cancer Genes with High Functional Impact SSMs' | translate}}"
                      data-y-label="{{'Donors Affected' | translate}}"
-                     data-subtitle="{{ProjectsCtrl.ssmTotalDonors | number}} Unique SSM-Tested Donors">
+                     data-subtitle="{{ProjectsCtrl.ssmTotalDonors | number}} Unique SSM-Tested Donors"
+                     data-current-page="projects">
             </stacked>
         </div>
     </section>

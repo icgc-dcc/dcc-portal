@@ -17,65 +17,101 @@
 
 package org.icgc.dcc.portal.server.repository;
 
-import static com.google.common.collect.Lists.transform;
-import static com.google.common.collect.Maps.transformValues;
-import static com.google.common.collect.Sets.newHashSet;
-import static java.lang.String.format;
-import static lombok.AccessLevel.PRIVATE;
-import static org.elasticsearch.action.search.SearchType.DFS_QUERY_THEN_FETCH;
-import static org.elasticsearch.index.query.FilterBuilders.boolFilter;
-import static org.elasticsearch.index.query.FilterBuilders.termFilter;
-import static org.elasticsearch.index.query.FilterBuilders.termsFilter;
-import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
-import static org.elasticsearch.index.query.QueryBuilders.prefixQuery;
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
-import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
-import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
-import static org.icgc.dcc.portal.server.model.SearchFieldMapper.EXACT_MATCH_SUFFIX;
-import static org.icgc.dcc.portal.server.model.SearchFieldMapper.LOWERCASE_MATCH_SUFFIX;
-import static org.icgc.dcc.portal.server.model.SearchFieldMapper.PARTIAL_MATCH_SUFFIX;
-import static org.icgc.dcc.portal.server.model.SearchFieldMapper.boost;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.icgc.dcc.portal.server.model.EntityType;
+import org.icgc.dcc.portal.server.model.IndexModel;
+import org.icgc.dcc.portal.server.model.IndexType;
+import org.icgc.dcc.portal.server.model.Query;
+import org.icgc.dcc.portal.server.model.fields.SearchField;
+import org.icgc.dcc.portal.server.model.fields.SearchKey;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilteredQueryBuilder;
-import org.elasticsearch.index.query.IndicesFilterBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.TypeFilterBuilder;
-import org.icgc.dcc.portal.server.model.IndexModel;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.IndexType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
-
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static com.google.common.collect.Maps.transformValues;
+import static com.google.common.collect.Sets.newHashSet;
+import static lombok.AccessLevel.PRIVATE;
+import static org.elasticsearch.action.search.SearchType.DFS_QUERY_THEN_FETCH;
+import static org.elasticsearch.index.query.Operator.OR;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
+import static org.elasticsearch.index.query.QueryBuilders.prefixQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
+import static org.elasticsearch.index.query.QueryBuilders.typeQuery;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
+import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
+import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
+import static org.icgc.dcc.portal.server.model.fields.SearchField.EXACT_MATCH_FIELDNAME;
+import static org.icgc.dcc.portal.server.model.fields.SearchField.LOWERCASE_MATCH_FIELDNAME;
+import static org.icgc.dcc.portal.server.model.fields.SearchField.PARTIAL_MATCH_FIELDNAME;
+import static org.icgc.dcc.portal.server.model.fields.SearchField.newBoostedSearchField;
+import static org.icgc.dcc.portal.server.model.fields.SearchField.newNoneBoostedSearchField;
+import static org.icgc.dcc.portal.server.model.fields.SearchFieldMapper.EXACT_MATCH_SUFFIX;
+import static org.icgc.dcc.portal.server.model.fields.SearchKey.newSearchKey;
+import static org.icgc.dcc.portal.server.util.Strings.toStringArray;
 
 @Slf4j
 @Component
 public class SearchRepository {
 
-  // Constants
+  /**
+   * Constants
+   */
+  private static final String[] NO_EXCLUDE = null;
+
+  private static final Set<SearchField> NORMAL_SEARCH_FIELDS = ImmutableSet.of(
+      newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
+      newBoostedSearchField(2, LOWERCASE_MATCH_FIELDNAME),
+      newNoneBoostedSearchField(PARTIAL_MATCH_FIELDNAME)
+  );
+
+  private static final Set<SearchField> BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
+      newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
+      newBoostedSearchField(2, LOWERCASE_MATCH_FIELDNAME),
+      newBoostedSearchField(2, PARTIAL_MATCH_FIELDNAME)
+  );
+
+  /**
+   * DCCPRTL-245 so that lowercase works
+   */
+  private static final Set<String> SPECIAL_BOOSTED_SEARCH_FIELD_NAMES = ImmutableSet.of(
+      "text.symbol",
+      "text.id",
+      "text.data_bundle_id",
+      "text.donor_id",
+      "text.object_id",
+      "text.file_name",
+      "text.project_code"
+  );
+
+  private static final Set<SearchField> SPECIAL_BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
+      newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
+      newBoostedSearchField(4, LOWERCASE_MATCH_FIELDNAME),
+      newBoostedSearchField(2, PARTIAL_MATCH_FIELDNAME)
+  );
+
+
   @NoArgsConstructor(access = PRIVATE)
-  private static final class Types {
+  private static final class TypeNames {
 
     public static final String PATHWAY = "pathway";
     public static final String CURATED_SET = "curated_set";
@@ -109,52 +145,53 @@ public class SearchRepository {
 
   private static final List<String> PREFIX_QUERY_FIELDS = ImmutableList.of(
       FieldNames.FILE_NAME, FieldNames.INCHIKEY, FieldNames.ID,
-      FieldNames.CHEMBL, FieldNames.DRUG_BANK, FieldNames.ATC_CODES, FieldNames.ATC_LEVEL5_CODES);
+      FieldNames.CHEMBL, FieldNames.DRUG_BANK, FieldNames.ATC_CODES, FieldNames.ATC_LEVEL5_CODES)
+      .stream().map(s -> IndexModel.TEXT_PREFIX + s).collect(toImmutableList()); // Append "text."
 
-  private static final Set<String> FIELD_KEYS = FIELDS_MAPPING.get(EntityType.KEYWORD).keySet();
+  private static final Set<String> FIELD_KEYS = ImmutableSet.copyOf(FIELDS_MAPPING.get(EntityType.KEYWORD).values());
+
+  /**
+   * TODO: [DCCPRTL-242] Need to investigate if this is a correct value
+   */
   private static final float TIE_BREAKER = 0.7F;
   private static final List<String> SIMPLE_TERM_FILTER_TYPES = ImmutableList.of(
-      Types.PATHWAY, Types.CURATED_SET, Types.GO_TERM);
+      TypeNames.PATHWAY, TypeNames.CURATED_SET, TypeNames.GO_TERM);
 
   private static final Map<String, IndexType> TYPE_MAPPINGS = ImmutableMap.<String, IndexType> builder()
-      .put(Types.GENE, IndexType.GENE_TEXT)
-      .put(Types.MUTATION, IndexType.MUTATION_TEXT)
-      .put(Types.DONOR, IndexType.DONOR_TEXT)
-      .put(Types.PROJECT, IndexType.PROJECT_TEXT)
-      .put(Types.PATHWAY, IndexType.GENESET_TEXT)
-      .put(Types.GENE_SET, IndexType.GENESET_TEXT)
-      .put(Types.GO_TERM, IndexType.GENESET_TEXT)
-      .put(Types.CURATED_SET, IndexType.GENESET_TEXT)
-      .put(Types.FILE, IndexType.FILE_TEXT)
-      .put(Types.FILE_DONOR, IndexType.FILE_DONOR_TEXT)
-      .put(Types.DRUG, IndexType.DRUG_TEXT)
+      .put(TypeNames.GENE, IndexType.GENE_TEXT)
+      .put(TypeNames.MUTATION, IndexType.MUTATION_TEXT)
+      .put(TypeNames.DONOR, IndexType.DONOR_TEXT)
+      .put(TypeNames.PROJECT, IndexType.PROJECT_TEXT)
+      .put(TypeNames.PATHWAY, IndexType.GENESET_TEXT)
+      .put(TypeNames.GENE_SET, IndexType.GENESET_TEXT)
+      .put(TypeNames.GO_TERM, IndexType.GENESET_TEXT)
+      .put(TypeNames.CURATED_SET, IndexType.GENESET_TEXT)
+      .put(TypeNames.FILE, IndexType.FILE_TEXT)
+      .put(TypeNames.FILE_DONOR, IndexType.FILE_DONOR_TEXT)
+      .put(TypeNames.DRUG, IndexType.DRUG_TEXT)
       .build();
-  private static final Map<String, String> TYPE_ID_MAPPINGS = transformValues(TYPE_MAPPINGS, type -> type.getId());
-  private static final String MUTATION_PREFIX = TYPE_ID_MAPPINGS.get(Types.MUTATION);
+  private static final Map<String, String> TYPE_ID_MAPPINGS = transformValues(TYPE_MAPPINGS, IndexType::getId);
+  private static final String MUTATION_PREFIX = TYPE_ID_MAPPINGS.get(TypeNames.MUTATION);
 
   // private static final String[] MULTIPLE_SEARCH_TYPES = Stream.of(
   private static final Set<String> MULTIPLE_SEARCH_TYPES = Stream.of(
-      Types.GENE,
+      TypeNames.GENE,
       /*
-       * Types.FILE must appear before Types.DONOR for searching file UUID in "file-text" to work. See DCC-3967 and
+       * TypeNames.FILE must appear before TypeNames.DONOR for searching file UUID in "file-text" to work. See DCC-3967 and
        * https://github.com/elastic/elasticsearch/issues/2218 for details.
        */
-      Types.FILE,
-      Types.DONOR,
-      Types.PROJECT,
-      Types.MUTATION,
-      Types.GENE_SET,
-      Types.DRUG)
+      TypeNames.FILE,
+      TypeNames.DONOR,
+      TypeNames.PROJECT,
+      TypeNames.MUTATION,
+      TypeNames.GENE_SET,
+      TypeNames.DRUG)
       .map(t -> TYPE_ID_MAPPINGS.get(t))
       // TODO
       // .distinct()
       // .toArray(String[]::new);
       .collect(toImmutableSet());
 
-  private static final List<String> SEARCH_SUFFIXES = ImmutableList.of(
-      boost(LOWERCASE_MATCH_SUFFIX, 2), PARTIAL_MATCH_SUFFIX);
-  private static final List<String> BOOSTED_SEARCH_SUFFIXES = ImmutableList.of(
-      boost(LOWERCASE_MATCH_SUFFIX, 2), boost(PARTIAL_MATCH_SUFFIX, 2));
 
   // Instance variables
   private final Client client;
@@ -166,26 +203,28 @@ public class SearchRepository {
   private String repoIndexName;
 
   @Autowired
-  SearchRepository(Client client, IndexModel indexModel) {
+  SearchRepository(Client client, String indexName, String repoIndexName) {
     this.client = client;
+    this.indexName = indexName;
+    this.repoIndexName = repoIndexName;
   }
 
   @NonNull
+  @SuppressWarnings("deprecation")
   public SearchResponse findAll(Query query, String type) {
     log.debug("Requested search type is: '{}'.", type);
 
-    val typeFilterBuilder = new TypeFilterBuilder("donor-text");
-    val typeBoolFilter = new BoolFilterBuilder().mustNot(typeFilterBuilder);
-    val indicesFilterBuilder = new IndicesFilterBuilder(typeBoolFilter, repoIndexName);
+    val typeBoolFilter = boolQuery().mustNot(typeQuery("donor-text"));
+    val indicesFilterBuilder = QueryBuilders.indicesQuery(typeBoolFilter, repoIndexName);
+    val filteredQuery = boolQuery().must(getQuery(query, type)).filter(indicesFilterBuilder);
 
-    val filteredQuery = new FilteredQueryBuilder(getQuery(query, type), indicesFilterBuilder);
-
+    val sourceFields = getFields(query, EntityType.KEYWORD);
     val search = createSearch(type)
         .setSearchType(DFS_QUERY_THEN_FETCH)
         .setFrom(query.getFrom())
         .setSize(query.getSize())
         .setTypes(getSearchTypes(type))
-        .addFields(getFields(query, EntityType.KEYWORD))
+        .setFetchSource(sourceFields, NO_EXCLUDE)
         .setQuery(filteredQuery)
         .setPostFilter(getPostFilter(type));
 
@@ -198,7 +237,7 @@ public class SearchRepository {
 
   // Helpers
   private static boolean isRepositoryFileRelated(String type) {
-    return type.equals(Types.FILE) || type.equals(Types.FILE_DONOR);
+    return type.equals(TypeNames.FILE) || type.equals(TypeNames.FILE_DONOR);
   }
 
   private SearchRequestBuilder createSearch(String type) {
@@ -208,39 +247,34 @@ public class SearchRepository {
       return client.prepareSearch(repoIndexName);
     }
 
-    if (type.equals(Types.DONOR)) {
+    if (type.equals(TypeNames.DONOR)) {
       return client.prepareSearch(indexName);
     }
 
     return client.prepareSearch(indexName, repoIndexName);
   }
 
-  // Helpers
-  private static String[] toStringArray(Collection<String> source) {
-    return source.stream().toArray(String[]::new);
-  }
 
   private static String[] getSearchTypes(String type) {
-    val result = TYPE_ID_MAPPINGS.containsKey(type) ? newHashSet(TYPE_ID_MAPPINGS.get(type)) : MULTIPLE_SEARCH_TYPES;
-
+    // lombok "val" was making result of type Object, so needed to explicitly define
+    final Set<String> result = TYPE_ID_MAPPINGS.containsKey(type) ? newHashSet(TYPE_ID_MAPPINGS.get(type)) : MULTIPLE_SEARCH_TYPES;
     return toStringArray(result);
-    // return TYPE_ID_MAPPINGS.containsKey(type) ? new String[] { TYPE_ID_MAPPINGS.get(type) } : MULTIPLE_SEARCH_TYPES;
   }
 
-  private static FilterBuilder getPostFilter(String type) {
-    val field = "type";
-    val result = boolFilter();
+  private static QueryBuilder getPostFilter(String type) {
+    val field = "text.type";
+    val result = boolQuery();
 
     if (SIMPLE_TERM_FILTER_TYPES.contains(type)) {
-      return result.must(termFilter(field, type));
+      return result.must(termQuery(field, type));
     }
 
-    val donor = boolFilter()
-        .must(termFilter(field, Types.DONOR));
-    val project = boolFilter()
-        .must(termFilter(field, Types.PROJECT));
-    val others = boolFilter()
-        .mustNot(termsFilter(field, Types.DONOR, Types.PROJECT));
+    val donor = boolQuery()
+        .must(termQuery(field, TypeNames.DONOR));
+    val project = boolQuery()
+        .must(termQuery(field, TypeNames.PROJECT));
+    val others = boolQuery()
+        .mustNot(termsQuery(field, TypeNames.DONOR, TypeNames.PROJECT));
 
     // FIXME
     return result
@@ -249,10 +283,23 @@ public class SearchRepository {
         .should(others);
   }
 
+  private static MultiMatchQueryBuilder createMultiMatchQuery(final String queryString, Set<SearchField> expandedSearchFields){
+    val mmqBuilder = multiMatchQuery(queryString)
+        .operator(OR)
+        .tieBreaker(TIE_BREAKER);
+    for (val expandedSearchField : expandedSearchFields){
+        val fieldName = expandedSearchField.getName();
+        val boostValue = expandedSearchField.getBoostedValue();
+        mmqBuilder.field(fieldName, boostValue);
+    }
+    return mmqBuilder;
+  }
+
   private static QueryBuilder getQuery(Query query, String type) {
     val queryString = query.getQuery();
-    val keys = buildMultiMatchFieldList(FIELD_KEYS, queryString, type);
-    val multiMatchQuery = multiMatchQuery(queryString, toStringArray(keys)).tieBreaker(TIE_BREAKER);
+    val bestMatchSearchFields = buildMultiMatchFieldList(FIELD_KEYS, queryString, type);
+    val multiMatchBestQuery = createMultiMatchQuery(queryString, bestMatchSearchFields);
+
 
     val result = boolQuery();
 
@@ -260,55 +307,62 @@ public class SearchRepository {
       result.should(prefixQuery(field + EXACT_MATCH_SUFFIX, queryString));
     }
 
-    return result.should(multiMatchQuery);
+    return result.should(multiMatchBestQuery);
   }
 
   private static boolean shouldProcess(String sourceField) {
     val fieldsToSkip = ImmutableList.of(FieldNames.FILE_NAME, FieldNames.GENE_MUTATIONS);
-    return fieldsToSkip.stream().noneMatch(fieldToAvoid -> sourceField.equals(fieldToAvoid));
+    return fieldsToSkip.stream().noneMatch(sourceField::equals);
   }
 
-  private static List<String> appendSuffixes(String field, List<String> suffixes) {
-    return transform(suffixes, suffix -> field + suffix);
+  private static boolean isSpecialSearchFieldName(String searchFieldName){
+    return SPECIAL_BOOSTED_SEARCH_FIELD_NAMES.contains(searchFieldName);
   }
 
-  private static List<String> appendSearchSuffixes(String field) {
-    return appendSuffixes(field, SEARCH_SUFFIXES);
+  private static SearchKey createSearchKey(String searchFieldName) {
+    if(isSpecialSearchFieldName(searchFieldName)){
+      return newSearchKey(searchFieldName, SPECIAL_BOOSTED_SEARCH_FIELDS);
+    } else {
+      return newSearchKey(searchFieldName, NORMAL_SEARCH_FIELDS);
+    }
   }
 
   @NonNull
-  private static Set<String> buildMultiMatchFieldList(Iterable<String> fields, String queryString, String type) {
-    val keys = Sets.<String> newHashSet();
+  private static Set<SearchField> buildMultiMatchFieldList(Iterable<String> searchKeyNames, String queryString, String type) {
+    val expandedSearchFields = ImmutableSet.<SearchField> builder();
 
-    for (val field : fields) {
-      // Exact match fields (DCC-2324)
-      if (field.equals("start")) {
+    for (val searchKeyName : searchKeyNames) {
+      // Exact match searchKeyNames (DCC-2324)
+      if (searchKeyName.equals("start")) {
         // TODO: Investigate and see if we still need this in the ES version wer're using.
         /*
          * NOTE: This is a work around quirky ES issue. We need to prefix the document type here to prevent
          * NumberFormatException, it appears that ES cannot determine what type 'start' is. This is for ES 0.9, later
          * versions may not have this problem.
          */
-        keys.add(format("%s.%s", MUTATION_PREFIX, field));
-
-      } else if (shouldProcess(field)) {
-        keys.addAll(appendSearchSuffixes(field));
+        expandedSearchFields.add(newNoneBoostedSearchField(MUTATION_PREFIX, searchKeyName));
+      } else if (shouldProcess(searchKeyName)) {
+        val searchKey = createSearchKey(searchKeyName);
+        expandedSearchFields.addAll(searchKey.getExpandedSearchFields());
       }
     }
 
     // Don't boost without space or genes won't show when partially matched
-    val geneMutationSearchSuffixes = queryString.contains(" ") ? BOOSTED_SEARCH_SUFFIXES : SEARCH_SUFFIXES;
-    keys.addAll(appendSuffixes(FieldNames.GENE_MUTATIONS, geneMutationSearchSuffixes));
+    val geneMutationSearchSubfields = queryString.contains(" ") ? BOOSTED_SEARCH_FIELDS : NORMAL_SEARCH_FIELDS;
+    val geneSearchKey = newSearchKey(FieldNames.GENE_MUTATIONS, geneMutationSearchSubfields) ;
+    expandedSearchFields.addAll(geneSearchKey.getExpandedSearchFields());
 
-    // Exact-match search on "id".
-    keys.add(FieldNames.ID);
+    // Exact-match search on "id". //TODO: Assuming FieldNames.ID is none boosted
+    val idSearchKey = newSearchKey(FieldNames.ID, newNoneBoostedSearchField(EXACT_MATCH_FIELDNAME));
+    expandedSearchFields.addAll(idSearchKey.getExpandedSearchFields());
 
     if (isRepositoryFileRelated(type)) {
       // For repository file related searches, we want fuzzy search.
-      keys.addAll(appendSearchSuffixes(FieldNames.ID));
+      val repoSearchKey = createSearchKey(FieldNames.ID);
+      expandedSearchFields.addAll(repoSearchKey.getExpandedSearchFields());
     }
 
-    return keys;
+    return expandedSearchFields.build();
   }
 
 }

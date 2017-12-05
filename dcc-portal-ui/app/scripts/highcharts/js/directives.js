@@ -51,8 +51,13 @@ angular.module('highcharts.directives', [])
 
   });
 
-angular.module('highcharts.directives').directive('pie', function (Facets, $filter, ValueTranslator,
-                                                                   highchartsService) {
+angular.module('highcharts.directives').directive('pie', function (
+  Facets,
+  $filter,
+  ValueTranslator,
+  highchartsService,
+  $rootScope
+) {
   function ensureArray (array) {
     return _.isArray (array) ? array : [];
   }
@@ -62,12 +67,17 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
     restrict: 'E',
     replace: true,
     scope: {
+      heading: '@',
       items: '=',
       groupPercent: '@',
       shouldShowNoDataMessage: '@',
       configOverrides: '&'
     },
-    template: '<span style="margin: 0 auto">not working</span>',
+    template: `
+      <span
+        style="margin: 0 auto"
+      >not working</span>
+    `,
     link: function ($scope, $element, $attrs) {
       // Defaults to 5%
       $scope.groupPercent = $scope.groupPercent || 5;
@@ -85,12 +95,12 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
           return items.map (enrichDatum);
         }
 
-        var firstItem = _.first (items);
+        var firstItem = _.head (items);
 
         return {
-          name: 'Others (' + count + ' ' + $attrs.heading + 's)',
+          name: 'Others (' + count + ' ' + $scope.heading + 's)',
           color: '#999',
-          y: _.sum (items, 'y'),
+          y: _.sumBy (items, 'y'),
           type: firstItem.type,
           facet: firstItem.facet,
           term: _.map (items, 'name')
@@ -104,7 +114,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
 
         // Separates data into two groups, one with a defined 'name' attribute & one without.
         var separated = _.partition (data, 'name');
-        var withName = _.first (separated);
+        var withName = _.head (separated);
         var withoutName = _.last (separated).map (function (datum) {
           datum.color = '#E0E0E0';
           datum.term = null;
@@ -112,7 +122,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
           return datum;
         });
 
-        var max = _.max (withName, function (datum) {
+        var max = _.maxBy (withName, function (datum) {
           return datum.y;
         });
 
@@ -122,7 +132,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
 
         // Further seperation per the rule of isBelowGroupPercent()
         separated = _.partition (withName, isBelowGroupPercent);
-        var belowGroupPercent = _.first (separated);
+        var belowGroupPercent = _.head (separated);
         var regular = _.last (separated);
 
         // Combines all the groups into one collection.
@@ -145,7 +155,7 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
           width: $attrs.width || null
         },
         title: {
-          text: $attrs.heading,
+          text: $scope.heading,
           margin: 5,
           style: {
             fontSize: '1.25rem'
@@ -207,9 +217,26 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
                       placement: 'top',
                       sticky: true
                     });
+
+                    $rootScope.delayedTrack(
+                      'viz-filter',
+                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` },
+                      600
+                    );
                   },
-                  mouseOut: function () {
+                  mouseOut: function (event) {
                     $scope.$emit('tooltip::hide');
+                    $rootScope.clearDelayedTrack(
+                      'viz-filter',
+                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` }
+                    );
+                  },
+                  click: function (event) {
+                    $rootScope.track('viz-filter', { action: 'click', label: `${$scope.heading}->${event.point.term || event.point.name}` });
+                    $rootScope.clearDelayedTrack(
+                      'viz-filter',
+                      { action: 'hover', label: `${$scope.heading}->${event.point.term || event.point.name}` }
+                    );
                   }
                 }
               }
@@ -235,7 +262,6 @@ angular.module('highcharts.directives').directive('pie', function (Facets, $filt
         $scope.configOverrides());
 
       $scope.$watch('items', function (newValue) {
-        // if (!newValue || angular.equals(newValue, oldValue)) {
         if (!newValue) {
           return;
         }
@@ -449,7 +475,6 @@ angular.module('highcharts.directives')
           width: $attrs.width || null
         },
         /* D3 cat 10 */
-        //colors: ['#1f77b4', '#ff7f0e', '#2ca02c'],
         colors: $scope.colours || ['#1f77b4', '#ff7f0e', '#2ca02c'],
         title: {
           text: $attrs.heading || '',
@@ -481,7 +506,6 @@ angular.module('highcharts.directives')
         },
         yAxis: {
           min: 0,
-          // max: 1.0,
           showFirstLabel: true,
           showLastLabel: true,
           title: {
@@ -589,17 +613,24 @@ angular.module('highcharts.directives')
 
 
 
-angular.module('highcharts.directives').directive('bar', function ($location, highchartsService) {
+angular.module('highcharts.directives').directive('bar', function ($location, highchartsService, $rootScope) {
   return {
     restrict: 'E',
     replace: true,
     scope: {
+      heading: '@',
       items: '=',
       shouldShowNoDataMessage: '@',
       configOverrides: '&',
       onRender: '&'
     },
-    template: '<div id="container" style="margin: 0 auto">not working</div>',
+    template: `
+      <div
+        id="container"
+        style="margin: 0 auto"
+        ng-click="$root.track('viz-filter', {action: 'click', label: heading })"
+      >not working</div>
+    `,
     link: function ($scope, $element, $attrs) {
       var c, renderChart, chartsDefaults;
 
@@ -652,7 +683,6 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
           enabled: false,
         },
         yAxis: {
-          //allowDecimals:false,
           min: 0,
           showFirstLabel: true,
           showLastLabel: true,
@@ -715,9 +745,18 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
                     text: getLabel(),
                     sticky:true
                   });
+                  $rootScope.delayedTrack(
+                    'viz-filter',
+                    { action: 'hover', label: `${$attrs.heading}->${event.target.category}` },
+                    600
+                  );
                 },
-                mouseOut: function () {
+                mouseOut: function (event) {
                   $scope.$emit('tooltip::hide');
+                  $rootScope.clearDelayedTrack(
+                    'viz-filter',
+                    { action: 'hover', label: `${$attrs.heading}->${event.target.category}` },
+                  );
                 }
               }
             }
@@ -766,147 +805,3 @@ angular.module('highcharts.directives').directive('bar', function ($location, hi
     }
   };
 });
-
-//angular.module('highcharts.directives').directive('stacked', function ($location) {
-//  return {
-//    restrict: 'E',
-//    replace: true,
-//    scope: {
-//      items: '=',
-//      subTitle: '@'
-//    },
-//    template: '<div id="container" style="margin: 0 auto">not working</div>',
-//    link: function ($scope, $element, $attrs) {
-//      var c, chartsDefaults;
-//
-//      function renderChart(settings) {
-//        if (c) {
-//          c.destroy();
-//        }
-//        c = new Highcharts.Chart(settings);
-//        if (!settings.xAxis.categories) {
-//          c.showLoading('<i class="icon-spinner icon-spin"></i> Loading...');
-//        }
-//        if (settings.xAxis.categories && settings.xAxis.categories.length === 0) {
-//          c.showLoading('No Data');
-//        }
-//      }
-//
-//      chartsDefaults = {
-//        credits: {enabled: false},
-//        loading: {
-//          style: {
-//            backgroundColor: null
-//          },
-//          labelStyle: {
-//            fontSize: '1.25rem'
-//          }
-//        },
-//        chart: {
-//          zoomType: 'x',
-//          renderTo: $element[0],
-//          type: 'column',
-//          height: $attrs.height || null,
-//          width: $attrs.width || null
-//        },
-//        subtitle: {
-//          text: '',
-//          style: {
-//            color: 'hsl(0, 0%, 60%)'
-//          }
-//        },
-//        title: {
-//          text: 'Top 20 Mutated Genes with High Functional Impact SSMs',
-//          style: {
-//            fontSize: '1.25rem'
-//          }
-//        },
-//        xAxis: {
-//          labels: {
-//            rotation: -45,
-//            align: 'right',
-//            x: 5
-//          },
-//          categories: []
-//        },
-//        yAxis: {
-//          allowDecimals: false,
-//          min: 0,
-//          title: {
-//            text: 'Donors Affected',
-//            margin: 15,
-//            style: {
-//              color: 'hsl(0, 0%, 60%)',
-//              fontSize: '0.75rem',
-//              fontWeight: '300'
-//            }
-//          },
-//          labels: {
-//            enabled: true,
-//            formatter: function () {
-//              return this.value;
-//            }
-//          }
-//        },
-//        tooltip: {
-//          formatter: function () {
-//            var donors = this.y;
-//
-//            return '<div class="tooltip-inner" style="opacity:0.9">' +
-//                   '<strong>' + this.series.name + '</strong><br/>' +
-//                   donors + ' ' + ' donors affected' +
-//                   '</div>';
-//          }
-//        },
-//        plotOptions: {
-//          column: {
-//            cursor: 'pointer',
-//            stacking: 'normal',
-//            borderWidth: 0,
-//            dataLabels: {
-//              enabled: false
-//            },
-//            events: {
-//              click: function (e) {
-//                $location.path('/genes/' + e.point.gene_id).search({});
-//                $scope.$apply();
-//              }
-//            }
-//          }
-//        }
-//      };
-//
-//      $scope.$watch('items', function (newValue) {
-//        var deepCopy, newSettings, dataCopy;
-//        if (!newValue) {
-//          return;
-//        }
-//
-//        // We need deep copy in order to NOT override original chart object.
-//        // This allows us to override chart data member and still the keep
-//        // our original renderTo will be the same
-//        deepCopy = true;
-//        newSettings = {};
-//        dataCopy = {};
-//
-//        jQuery.extend(deepCopy, newSettings, chartsDefaults);
-//
-//        // Highcharts seem to change the internals, so we want to make
-//        // a deep copy to prevent angular watchers from firing over and over
-//        jQuery.extend(true, dataCopy, newValue);
-//
-//        newSettings.xAxis.categories = dataCopy.x;
-//        newSettings.series = dataCopy.s;
-//        newSettings.subtitle.text = $scope.subTitle;
-//
-//        renderChart(newSettings);
-//      }, true);
-//
-//      renderChart(chartsDefaults);
-//
-//      $scope.$on('$destroy', function () {
-//        c.destroy();
-//      });
-//    }
-//  };
-//});

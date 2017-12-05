@@ -72,7 +72,7 @@
       });
 
       return promise.then(function(data) {
-        var ids = _.pluck(data.facets.projectId.terms, 'term');
+        var ids = _.map(data.facets.projectId.terms, 'term');
 
         if (_.isEmpty(ids)) {
           return [];

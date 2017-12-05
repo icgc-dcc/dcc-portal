@@ -22,7 +22,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.net.HttpHeaders.RANGE;
 import static java.util.Collections.singletonMap;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.download.core.request.Redirects.getDynamicFileRedirect;
 import static org.icgc.dcc.download.core.request.Redirects.getStaticFileRedirect;
@@ -31,10 +30,8 @@ import static org.icgc.dcc.portal.server.download.DownloadResources.getAllowedDa
 import static org.icgc.dcc.portal.server.util.JsonUtils.parseDownloadDataTypeNames;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -49,7 +46,6 @@ import javax.ws.rs.core.Response;
 import org.icgc.dcc.common.core.model.DownloadDataType;
 import org.icgc.dcc.download.client.DownloadClient;
 import org.icgc.dcc.download.core.jwt.JwtService;
-import org.icgc.dcc.download.core.model.DownloadFile;
 import org.icgc.dcc.download.core.model.JobUiInfo;
 import org.icgc.dcc.download.core.response.JobResponse;
 import org.icgc.dcc.portal.server.config.ServerProperties.DownloadProperties;
@@ -57,10 +53,10 @@ import org.icgc.dcc.portal.server.download.DownloadDataTypes;
 import org.icgc.dcc.portal.server.download.DownloadResources;
 import org.icgc.dcc.portal.server.download.JobInfo;
 import org.icgc.dcc.portal.server.download.ServiceStatus;
-import org.icgc.dcc.portal.server.model.FileInfo;
 import org.icgc.dcc.portal.server.model.Query;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
+import org.icgc.dcc.portal.server.model.param.SetParam;
 import org.icgc.dcc.portal.server.resource.Resource;
 import org.icgc.dcc.portal.server.security.jersey.Auth;
 import org.icgc.dcc.portal.server.service.DonorService;
@@ -70,6 +66,7 @@ import org.icgc.dcc.portal.server.service.ServiceUnavailableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.Sets;
 import com.yammer.metrics.annotation.Timed;
 
@@ -156,6 +153,37 @@ public class DownloadResource extends Resource {
 
     return new JobInfo(downloadId);
   }
+  @GET
+  @Timed
+  @Path("/submitPQL")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation("Submit job to request archive generation")
+  public JobInfo submitPQLJob(
+    @Auth(required = false) User user,
+    @ApiParam(value = "PQL query", required = false) @QueryParam("pql") @DefaultValue("{}") String pqlString,
+    @ApiParam(value = "Archive param") @QueryParam("info") @DefaultValue("") String info) {
+    ensureServiceRunning();
+    val donorIds = resolveDonorIds(pqlString);
+
+     val uiInfo = JobUiInfo.builder()
+       .controlled(isAuthorized(user))
+       .user(getUserId(user))
+       .build();
+    String downloadId = null;
+
+    try {
+      downloadId = downloadClient.submitJob(
+        donorIds,
+        resolveDownloadDataTypes(user, info),
+        uiInfo);
+    } catch (Exception e) {
+      log.error("Job submission failed.", e);
+    }
+    checkRequest(downloadId == null, "Failed to submit download.");
+
+    return new JobInfo(downloadId);
+  }
+
 
   @GET
   @Timed
@@ -179,24 +207,45 @@ public class DownloadResource extends Resource {
 
   @GET
   @Timed
+  @Path("/sizePQL")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation("Get download size by type subject to the supplied filter condition(s)")
+  public Map<String, Object> getDataTypeSizePerFileTypeFromPQL(
+    @Auth(required = false) User user,
+    @ApiParam(value = "Filter the search donors") @QueryParam("pql") @DefaultValue("{}") String pql) {
+
+    val donorIds = donorService.findIds(pql);
+    checkRequest(donorIds.isEmpty(), "No donors found for pql '%s'", pql);
+
+    val sizes = downloadClient.getSizes(donorIds);
+    val dataTypeSizes = DownloadResources.normalizeSizes(sizes);
+    val allowedDataTypes = resolveAllowedDataTypes(user);
+    val allowedDataTypeSizes = getAllowedDataTypeSizes(dataTypeSizes, allowedDataTypes);
+
+    return singletonMap("fileSize", createGetDataSizeResponse(allowedDataTypeSizes));
+  }
+
+  @GET
+  @Timed
   @Path("/info{dir:.*}")
   @Produces(APPLICATION_JSON)
   @ApiOperation("Get file info under the specified directory")
-  public List<FileInfo> listDirectory(
+  public ArrayNode listDirectory(
       @Auth(required = false) User user,
-      @ApiParam(value = "listing of the specified directory under the download relative directory", required = false) @PathParam("dir") String dir)
+      @ApiParam(value = "Listing of the specified directory under the download relative directory", required = false) @PathParam("dir") String dir,
+      @ApiParam(value = "Field names to include") @QueryParam("fields") @DefaultValue("") SetParam fields,
+      @ApiParam(value = "Perform listing recursively?") @QueryParam("recursive") @DefaultValue("false") boolean recursive,
+      @ApiParam(value = "Flatten tree into list?") @QueryParam("flatten") @DefaultValue("false") boolean flatten)
       throws IOException {
     ensureServiceRunning();
-    val files = downloadClient.listFiles(dir);
+    val files = downloadClient.listFiles(dir, recursive);
     if (files == null) {
       throwNotFoundException(dir);
     }
     val authorized = isAuthorized(user);
 
-    return files.stream()
-        .filter(filterFiles(authorized))
-        .map(file -> new FileInfo(file.getName(), file.getType().getSymbol(), file.getSize(), file.getDate()))
-        .collect(toImmutableList());
+    val mapper = new DownloadFileListMapper(fields.get(), authorized, flatten);
+    return mapper.map(files);
   }
 
   @ApiOperation("Get archive based by type subject to the supplied filter condition(s)")
@@ -278,6 +327,17 @@ public class DownloadResource extends Resource {
     return donorIds;
   }
 
+  private Set<String> resolveDonorIds(String pqlString) {
+    val donorIds = donorService.findIds(pqlString);
+    if (donorIds.isEmpty()) {
+      log.error("No donor ids found for PQL: {}", pqlString);
+      throw new NotFoundException("No donor found", "download");
+    }
+    log.info("Number of donors to be retrieved: {}", donorIds.size());
+
+    return donorIds;
+  }
+
   private Set<DownloadDataType> resolveAllowedDataTypes(User user) {
     return isAuthorized(user) ? DownloadDataTypes.CONTROLLED_DATA_TYPES : DownloadDataTypes.PUBLIC_DATA_TYPES;
   }
@@ -310,14 +370,6 @@ public class DownloadResource extends Resource {
       log.warn("User {} was trying to download forbidden archive: {}", userId, job);
       throw new ForbiddenAccessException("Unauthorized access", "download");
     }
-  }
-
-  private static Predicate<? super DownloadFile> filterFiles(final boolean authorized) {
-    return file -> {
-      String fileName = file.getName();
-
-      return authorized ? !fileName.contains("open") : !fileName.contains("controlled");
-    };
   }
 
   private static String getUserId(User user) {

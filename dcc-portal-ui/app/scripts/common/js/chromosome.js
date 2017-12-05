@@ -84,6 +84,17 @@
       return true;
     };
 
+    /**
+     * Sorts given Chromosomes Array by the order
+     * that is present in lookup variable
+     */
+
+    this.sort = (chromosomes) => {
+      const terms = Object.keys(lookup);
+      return _.sortBy(chromosomes,
+        (c) => !_.includes(terms, c.term) ? chromosomes.length : _.indexOf(terms, c.term));
+    };
+
   });
 
 })();

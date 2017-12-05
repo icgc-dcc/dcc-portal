@@ -203,7 +203,7 @@
         // during the materialization process; all the params (i.e. 'select', 'facets', 'limit', 'sort') are omitted.
         buildFilters: function () {
           var filterOnlyActions = _.remove (actions, function (action) {
-            return _.contains (filterModifiers, action.func);
+            return _.includes (filterModifiers, action.func);
           });
 
           filterOnlyActions.push ({func: buildFilterOnlyPql, args: []});

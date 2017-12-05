@@ -18,18 +18,21 @@
 package org.icgc.dcc.portal.server.repository;
 
 import static com.google.common.collect.Lists.transform;
+import static com.google.common.collect.Maps.immutableEntry;
 import static org.dcc.portal.pql.meta.Type.GENE_CENTRIC;
-import static org.elasticsearch.action.search.SearchType.COUNT;
 import static org.elasticsearch.action.search.SearchType.QUERY_THEN_FETCH;
-import static org.elasticsearch.action.search.SearchType.SCAN;
-import static org.elasticsearch.index.query.FilterBuilders.termFilter;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.filter;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.nested;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
+import static org.elasticsearch.search.sort.FieldSortBuilder.DOC_FIELD_NAME;
+import static org.elasticsearch.search.sort.SortOrder.ASC;
+import static org.icgc.dcc.common.core.json.Jackson.DEFAULT;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableMap;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.model.IndexModel.MAX_FACET_TERM_COUNT;
+import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
 import static org.icgc.dcc.portal.server.model.IndexModel.getFields;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.checkResponseState;
 import static org.icgc.dcc.portal.server.util.Filters.andFilter;
@@ -37,9 +40,11 @@ import static org.icgc.dcc.portal.server.util.Filters.geneSetFilter;
 import static org.icgc.dcc.portal.server.util.Filters.inputGeneSetFilter;
 import static org.icgc.dcc.portal.server.util.SearchResponses.hasHits;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -54,6 +59,7 @@ import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.Query;
@@ -63,6 +69,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
@@ -78,18 +85,32 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class GeneRepository implements Repository {
 
+  private static final String[] NO_EXCLUDE = null;
   private static final IndexType CENTRIC_TYPE = IndexType.GENE_CENTRIC;
   private static final String GENE_TEXT = IndexType.GENE_TEXT.getId();
-  private static final TimeValue KEEP_ALIVE = new TimeValue(10000);
+  private static final TimeValue KEEP_ALIVE = new TimeValue(120000);
   private static final String GENE_SYMBOL_FIELD_NAME = "symbol";
   private static final String ENSEMBL_ID_FIELD_NAME = "id";
-  private static final String[] GENE_SYMBOL_ENSEMBL_ID_FIELDS = { GENE_SYMBOL_FIELD_NAME, ENSEMBL_ID_FIELD_NAME };
+  private static final String[] GENE_SYMBOL_ENSEMBL_ID_FIELDS =
+      { TEXT_PREFIX + GENE_SYMBOL_FIELD_NAME, TEXT_PREFIX + ENSEMBL_ID_FIELD_NAME };
+  public static final String TEXT_PATH = "text";
+  public static final Map<String, String> GENE_ID_SEARCH_FIELDS = ImmutableMap.of(
+      "id.search", "_gene_id",
+      "symbol.search", "symbol",
+      "uniprotkbSwissprot.search", "external_db_ids.uniprotkb_swissprot");
 
-  public static final Map<String, String> GENE_ID_SEARCH_FIELDS =
-      ImmutableMap.<String, String> of("id.search", "_gene_id",
-          "symbol.search", "symbol",
-          "uniprotkbSwissprot.search", "external_db_ids.uniprotkb_swissprot");
+  // This is currently needed due to the change from fields to source in the move from ES 1.4.4 -> 5.0.x
+  public static final Map<String, String> GENE_ID_RESPONSE_SOURCE = GENE_ID_SEARCH_FIELDS.entrySet().stream()
+      .map(e -> {
+        int i = e.getKey().lastIndexOf(".search");
+        String cleanedKey = i > 0 ? e.getKey().substring(0, i) : e.getKey();
+        return immutableEntry(cleanedKey, e.getValue());
+      })
+      .collect(toImmutableMap(Entry::getKey, Entry::getValue));
 
+  /**
+   * Dependencies.
+   */
   private final Client client;
   private final String indexName;
 
@@ -118,7 +139,7 @@ public class GeneRepository implements Repository {
       search.getRequestBuilder().setSize(limit.intValue());
     }
 
-    log.info(" find all centric {}", search);
+    log.debug(" find all centric {}", search);
 
     return search.getRequestBuilder().execute().actionGet();
   }
@@ -138,13 +159,13 @@ public class GeneRepository implements Repository {
     val pql = converter.convert(query, GENE_CENTRIC);
     val response = queryEngine.execute(pql, GENE_CENTRIC).getRequestBuilder()
         .setSize(maxGenes)
-        .addField(symbolFieldName)
+        .setFetchSource(symbolFieldName, null)
         .execute().actionGet();
 
     val map = Maps.<String, String> newLinkedHashMap();
     for (val hit : response.getHits()) {
       String id = hit.getId();
-      String symbol = hit.getFields().get(symbolFieldName).getValue();
+      String symbol = hit.sourceAsMap().get(symbolFieldName).toString();
 
       map.put(id, symbol);
     }
@@ -176,7 +197,7 @@ public class GeneRepository implements Repository {
           .addAggregation(terms(universeAggName).field(universeAggName).size(50000));
     }
 
-    search.getRequestBuilder().setSearchType(COUNT);
+    search.getRequestBuilder().setSize(0);
     return search.getRequestBuilder().execute().actionGet();
   }
 
@@ -281,15 +302,18 @@ public class GeneRepository implements Repository {
         .setSearchType(QUERY_THEN_FETCH)
         .setSize(5000);
 
+    val highlight = new HighlightBuilder().preTags("").postTags("");
+    val includes = Lists.<String> newArrayList();
+
     for (val searchField : GENE_ID_SEARCH_FIELDS.keySet()) {
-      boolQuery.should(termsQuery(searchField, input.toArray()));
-
-      search.addHighlightedField(searchField);
-      search.addField(searchField);
+      boolQuery.should(termsQuery(TEXT_PREFIX + searchField, input.toArray()));
+      highlight.field(TEXT_PREFIX + searchField).forceSource(true);
+      includes.add(TEXT_PREFIX + searchField.substring(0, searchField.lastIndexOf(".search")));
     }
-
+    search.setFetchSource(toStringArray(includes), NO_EXCLUDE);
+    search.highlighter(highlight);
     search.setQuery(boolQuery);
-    log.info("Search is {}", search);
+    log.debug("Search is {}", search);
 
     return search.execute().actionGet();
   }
@@ -312,10 +336,8 @@ public class GeneRepository implements Repository {
           .setTypes(CENTRIC_TYPE.getId())
           .setSearchType(QUERY_THEN_FETCH)
           .setSize(0)
-          .addAggregation(nested(rootAgg)
-              .path(ssmConsequence)
-              .subAggregation(filter(filteredAgg)
-                  .filter(termFilter(geneIdField, geneId))
+          .addAggregation(nested(rootAgg, ssmConsequence)
+              .subAggregation(filter(filteredAgg, termsQuery(geneIdField, geneId))
                   .subAggregation(terms(aggName)
                       .size(MAX_FACET_TERM_COUNT)
                       .field(transcriptField))));
@@ -325,8 +347,7 @@ public class GeneRepository implements Repository {
     val filteredAggs = (Filter) nestedAggs.getAggregations().get(filteredAgg);
     val aggs = (Terms) filteredAggs.getAggregations().get(aggName);
 
-    val aggsTransform = transform(aggs.getBuckets(), bucket -> bucket.getKeyAsText().toString());
-
+    val aggsTransform = transform(aggs.getBuckets(), bucket -> bucket.getKeyAsString());
     return aggsTransform;
   }
 
@@ -342,10 +363,9 @@ public class GeneRepository implements Repository {
       }
 
       for (val hit : response.getHits()) {
-        val values = hit.getFields();
-        val ensemblId = values.get(ENSEMBL_ID_FIELD_NAME).getValue().toString();
-        val geneSymbol = values.get(GENE_SYMBOL_FIELD_NAME).getValue().toString();
-
+        val values = DEFAULT.convertValue(hit.getSource(), JsonNode.class);
+        val ensemblId = values.path(TEXT_PATH).path(ENSEMBL_ID_FIELD_NAME).asText();
+        val geneSymbol = values.path(TEXT_PATH).path(GENE_SYMBOL_FIELD_NAME).asText();
         result.put(geneSymbol, ensemblId);
       }
 
@@ -369,10 +389,10 @@ public class GeneRepository implements Repository {
     val batchSize = 5000;
 
     return searchGenes(GENE_TEXT, "prepareScrollSearch", request -> {
-      request.setSearchType(SCAN)
+      request.addSort(DOC_FIELD_NAME, ASC)
           .setSize(batchSize)
           .setScroll(KEEP_ALIVE)
-          .addFields(fields);
+          .setFetchSource(fields, NO_EXCLUDE);
     });
   }
 
@@ -380,6 +400,10 @@ public class GeneRepository implements Repository {
     return client.prepareSearchScroll(scrollId)
         .setScroll(KEEP_ALIVE)
         .execute().actionGet();
+  }
+
+  private static String[] toStringArray(Collection<String> source) {
+    return source.stream().toArray(String[]::new);
   }
 
 }

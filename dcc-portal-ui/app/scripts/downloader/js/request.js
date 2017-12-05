@@ -118,7 +118,7 @@
       $scope.dlTotal = 0;
 
       // Compute the total number of donors
-      Donors.handler.get('count', {filters: filters}).then(function (data) {
+      Donors.handler.get('count', {filters: filters}).then( (data) => {
         $scope.totalDonor = data;
       });
 
@@ -133,13 +133,12 @@
 
         // Re-order it based on importance
         $scope.params.dataTypes = $filter('orderBy')($scope.params.dataTypes, sortFunc);
-
-        $scope.params.processing = false;
-      },function (error) {        
+      }, (error) => {
         if(error.status === 503){
-          $scope.params.processing = false;
           $scope.params.downloadEnabled = false;
-        }         
+        }
+      }).finally(() => {
+          $scope.params.processing = false;
       });
     };
 

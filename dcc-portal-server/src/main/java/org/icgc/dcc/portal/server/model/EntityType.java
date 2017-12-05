@@ -49,7 +49,10 @@ public enum EntityType {
   DIAGRAM("diagram"),
   FAMILY(""),
   EXPOSURE(""),
-  THERAPY("");
+  THERAPY(""),
+  BIOMARKER("biomarker"),
+  SURGERY("surgery");
 
   private final String id;
+
 }

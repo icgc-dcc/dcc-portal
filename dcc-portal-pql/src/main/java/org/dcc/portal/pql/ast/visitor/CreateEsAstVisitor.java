@@ -22,9 +22,6 @@ import static org.dcc.portal.pql.query.ParseTreeVisitors.getField;
 import java.util.List;
 import java.util.Optional;
 
-import lombok.NonNull;
-import lombok.val;
-
 import org.dcc.portal.pql.ast.PqlNode;
 import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.ast.filter.AndNode;
@@ -67,6 +64,9 @@ import org.dcc.portal.pql.es.ast.query.QueryNode;
 import org.dcc.portal.pql.meta.TypeModel;
 
 import com.google.common.collect.Lists;
+
+import lombok.NonNull;
+import lombok.val;
 
 public class CreateEsAstVisitor extends PqlNodeVisitor<ExpressionNode, TypeModel> {
 
@@ -140,7 +140,12 @@ public class CreateEsAstVisitor extends PqlNodeVisitor<ExpressionNode, TypeModel
     val typeModel = context.get();
     val result = new org.dcc.portal.pql.es.ast.SortNode();
     for (val entry : node.getFields().entrySet()) {
-      result.addField(getField(entry.getKey(), typeModel), entry.getValue());
+      val field = getField(entry.getKey(), typeModel);
+
+      result.addField(field, entry.getValue());
+      if (typeModel.isNested(entry.getKey())) {
+        result.addNestedPath(field, typeModel.getNestedPath(entry.getKey()));
+      }
     }
 
     return result;

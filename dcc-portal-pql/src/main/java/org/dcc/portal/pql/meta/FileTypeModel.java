@@ -150,6 +150,7 @@ public class FileTypeModel extends TypeModel {
 
     public static final String ID = "id";
     public static final String FILE_UUID = "fileUuid";
+    public static final String OBJECT_ID = "objectId";
     public static final String FILE_OBJECT_ID = "fileObjectId";
     public static final String FILE_ID = "fileId";
     public static final String ACCESS = "access";
@@ -235,7 +236,7 @@ public class FileTypeModel extends TypeModel {
     // Main mapping
     private static final List<FieldModel> MAPPINGS = ImmutableList.<FieldModel> builder()
         .add(identifiableString("id", ImmutableSet.of(ID, FILE_ID, "file.id")))
-        .add(string("object_id", ImmutableSet.of(FILE_OBJECT_ID, FILE_UUID)))
+        .add(string("object_id", ImmutableSet.of(FILE_OBJECT_ID, FILE_UUID, OBJECT_ID)))
         .add(string("access", ACCESS))
         .add(string("study", STUDY))
         .add(dataCategorization())
@@ -249,7 +250,9 @@ public class FileTypeModel extends TypeModel {
 
   // Used for select(*) - default projection
   public static final List<String> PUBLIC_FIELDS = ImmutableList.of(
+      Fields.OBJECT_ID,
       Fields.FILE_UUID,
+      Fields.ID,
       Fields.FILE_ID,
       Fields.FILE_COPIES,
       Fields.DONORS,

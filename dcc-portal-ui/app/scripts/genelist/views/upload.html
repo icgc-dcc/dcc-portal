@@ -8,7 +8,7 @@
     </div>
 
     <!-- body -->
-    <div class="modal-body" style="margin:0; max-height:40rem; overflow-y: scroll">
+    <div class="modal-body set-upload">
 
        <!-- By ID -->
        <div data-ng-if="params.inputMethod === 'id'">
@@ -18,52 +18,49 @@
                    <div><translate>Name</translate>:</div>
                    <input type="text" tabindex=1 data-ng-model="params.setName" maxlength="32" data-select-on-click data-autofocus></input>
                </div>
-               <div>
-                   <div><translate>Note:</translate></div>
-                   <textarea cols="40" rows="2"
-                       tabindex=2
-                       data-ng-model="params.setDescription"
-                       placeholder="{{'(Optional)' | translate}}" maxlength="256" data-select-on-click></textarea>
-               </div>
-               <div class="clearfix"/>
+               <div class="clearfix"></div>
                <span><translate>Type or copy-and-paste a list of genes</translate></span>
                <span class="pull-right"
-                  data-tooltip="{{'- Gene identifier: Symbol or Ensembl ID or UniProtKB-SwissProt ID <br> - Delimiters between gene identifiers: comma, space or one gene per line <br> - If you upload a file, format file is text file (.txt, .csv, .tsv)' | translate}}"
+                  data-icgc-tooltip="{{'- Gene identifier: Symbol or Ensembl ID or UniProtKB-SwissProt ID <br> - Delimiters between gene identifiers: comma, space or one gene per line <br> - If you upload a file, format file is text file (.txt, .csv, .tsv)' | translate}}"
                   data-tooltip-placement="left">
-                  <a href=""><i class="icon-help"></i></a>
+                  <a href=""><i class="fa fa-question-circle legend-icon"></i></a>
                </span>
-
                <textarea
-                   rows="3"
-                   tabindex=3
-                   placeholder="{{'e.g. TTN, ENSG00000151952, Q9Y5I3' | translate}}"
-                   data-ng-model="params.rawText" data-ng-change="updateGenelist()">
+                 rows="3"
+                 tabindex=3
+                 placeholder="{{'e.g. TTN, ENSG00000151952, Q9Y5I3' | translate}}"
+                 data-ng-model="params.rawText" data-ng-change="updateGenelist()">
                </textarea>
-
            </div>
-
 
            <div style="padding:0.25rem" data-ng-if="analysisMode===false">
                <span><translate>Type or copy-and-paste a list of genes</translate></span>
                <span class="pull-right"
-                  data-tooltip="{{'- Gene identifier: Symbol or Ensembl ID or UniProtKB-SwissProt ID <br> - Delimiters between gene identifiers: comma, space or one gene per line <br> - If you upload a file, format file is text file (.txt, .csv, .tsv)' | translate}}"
+                  data-icgc-tooltip="{{'- Gene identifier: Symbol or Ensembl ID or UniProtKB-SwissProt ID <br> - Delimiters between gene identifiers: comma, space or one gene per line <br> - If you upload a file, format file is text file (.txt, .csv, .tsv)' | translate}}"
                   data-tooltip-placement="left">
-                  <a href=""><i class="icon-help"></i></a>
+                  <a href=""><i class="fa fa-question-circle legend-icon"></i></a>
                </span>
                <textarea
-                   rows="4"
-                   placeholder="{{'e.g. TTN, ENSG00000151952, Q9Y5I3' | translate}}"
-                   data-autofocus data-ng-model="params.rawText" data-ng-change="updateGenelist()">
+                 rows="4"
+                 placeholder="{{'e.g. TTN, ENSG00000151952, Q9Y5I3' | translate}}"
+                 data-autofocus data-ng-model="params.rawText" data-ng-change="updateGenelist()">
                </textarea>
            </div>
            <div>
-               <button class="t_button pull-right" data-ng-click="resetCustomInput()"><translate>Clear</translate></button>
+               <button class="t_button pull-right"
+                 data-ng-click="resetAll()"><translate>Clear</translate></button>
            </div>
            <br>
            <div>
                <div><translate>Or choose a file to upload</translate></div>
                <span class="t_button btn-file">
-                   <translate>Browse</translate> <input type="file" accept=".tsv,.csv,text/*" data-file-upload="params.myFile">
+                   <translate>Browse</translate>
+                   <input
+                        type="file"
+                        accept=".tsv,.csv,text/*"
+                        data-file-upload="params.myFile"
+                        ng-click="track('upload', { action: 'select file', label: 'genes' })"
+                    >
                </span>
                {{params.fileName}}
            </div>
@@ -99,7 +96,9 @@
                               <i class="{{ expanded? 'icon-caret-down':'icon-caret-left'}}"></i>
                           </a>
                       </span>
-                      <span data-toolbar data-dl="genelist"></span>
+                      <span data-toolbar
+                        data-entity="genelist"
+                        data-json="{{ out.uiResult }}"></span>
                   </span>
                   <div data-ng-show="expanded">
                       <table class="table table-info" id="genelist">

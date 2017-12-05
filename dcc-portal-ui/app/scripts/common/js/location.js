@@ -111,7 +111,7 @@
         $location.hash(inlineAnchorID);
         $anchorScroll(inlineAnchorID);
       },
-      getJsonParam: function (param) {
+      getJqlParam: function (param) {
         
         try {
           return angular.fromJson(this.search()[param]) || {};
@@ -139,7 +139,10 @@
         $location.search(s);
       },
       getPaginationParams: function(dataType){
-        return _.defaults({}, this.getJsonParam(dataType), {from: 1, size: 10});
+        return _.defaults({}, this.getJqlParam(dataType), {from: 1, size: 10});
+      },
+      goToFirstPage: function(param) {
+        this.setJsonParam(param, _.extend(this.getJqlParam(param), {from: 1}));
       },
       goToPath: function(path, search, hash) {
         var searchParams = search || {},

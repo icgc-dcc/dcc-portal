@@ -1,12 +1,12 @@
 <div data-ng-init="compound = CompoundCtrl.getCompound()">
     <div class="h1-wrap">
-        <h1 data-ui-scrollfix="79">
+        <h1 data-ui-scrollpoint="79">
             <span class="t_badge t_badge__compound"></span>
             <span data-ng-bind=":: compound.name"></span>
         </h1>
     </div>
     <div data-scroll-spy="">
-        <aside data-ui-scrollfix="79" class="t_sidenav">
+        <aside data-ui-scrollpoint="79" class="t_sidenav">
             <section>
                 <ul class="t_subnav__items">
                     <li data-spy="summary" class="t_subnav__items__item current"><a data-scrollto href="#summary"><translate>Summary</translate></a></li>
@@ -22,7 +22,8 @@
                                    data-facet-name="functionalImpact"
                                    data-hide-count="true"
                                    data-label="{{'Mutation Impact' | translate}}"
-                                   data-facet=" CompoundCtrl.getMutationImpactFacets().functionalImpact"></terms>
+                                   data-facet=" CompoundCtrl.getMutationImpactFacets().functionalImpact"
+                            ></terms>
                         </ul>
                     </li>
                 </ul>
@@ -126,7 +127,7 @@
                     <h3><translate>Molecule</translate></h3>
                     <div style="border: solid 1px #ccc; text-align: center; ">
                        <a href="{{compound.imageURL}}" class="no-style" target="_blank">
-                           <img src="{{compound.imageURL}}" data-ng-if="compound.imageURL" style="max-width: 100%" />
+                           <img ng-src="{{compound.imageURL}}" data-ng-if="compound.imageURL" style="max-width: 100%" />
                        </a>
                     </div>
                 </div>
@@ -143,9 +144,8 @@
                               <a href="/search/g?filters={{CompoundCtrl.getFilter()}}">
                                   Advanced Search
                               </a>
-                                |
                               <a href="/browser/g?filters={{CompoundCtrl.getFilter()}}">
-                                  Genome Viewer
+                                  <i class="icon-chart"></i>Genome Viewer
                               </a>
                             </translate>
                         </span>
@@ -163,8 +163,8 @@
                                 data-current-page="CompoundCtrl.currentGenesPage"
                                 data-row-limit="CompoundCtrl.defaultGenesRowLimit">
                             </data-table-row-counts>
-                            <span class="t_tools" data-toolbar="" data-dl="compound_mutated_genes">
-                                <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
+                            <span class="t_tools" data-toolbar="" data-entity="compound_mutated_genes" data-json="{{CompoundCtrl.getTargetedCompoundGenes()}}">
+                                <span class="t_tools__tool" data-tooltip-placement="left" data-icgc-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
                             <table-filter data-class="small-filter"
                                 data-filter-model="CompoundCtrl.tableFilter.targetedGenes"
@@ -174,26 +174,28 @@
                             <translate>No targeted genes found.</translate>
                         </span>
                     </div>
-                    <h3 data-ng-if="! CompoundCtrl.getTargetedCompoundGenes()">
-                        <i class="icon-spinner icon-spin"></i> <translate>Fetching targeted genes...</translate>
-                    </h3>
+                    <div class="empty" data-ng-if="! CompoundCtrl.getTargetedCompoundGenes()">
+                        <h3>
+                            <i class="icon-spinner icon-spin"></i> <translate>Loading targeted genes...</translate>
+                        </h3>
+                    </div>
                     <table class="table table-info" data-ng-if="CompoundCtrl.getTargetedCompoundGenes().length > 0">
                         <tbody>
                             <tr>
                                 <th><translate>Symbol</translate></th>
                                 <th><translate>Name</translate></th>
                                 <th>
-                                    <abbr data-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}">
+                                    <abbr data-icgc-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}">
                                         <translate>Location</translate>
                                     </abbr>
                                 </th>
                                 <th><translate>Type</translate></th>
                                 <th>
-                                    <abbr data-tooltip="{{'Number of Donors where a Gene involved in the Gene Set can be targeted by the compound' | translate}}">#
+                                    <abbr data-icgc-tooltip="{{'Number of Donors where a Gene involved in the Gene Set can be targeted by the compound' | translate}}">#
                                         <translate>Donors affected</translate></abbr><i class="icon-sort-down"></i>
                                 </th>
                                 <th>
-                                    <abbr data-tooltip="{{'Number of Mutations of gene observed' | translate}}" data-tooltip-placement="left"><translate># Mutations</translate></abbr>
+                                    <abbr data-icgc-tooltip="{{'Number of Mutations of gene observed' | translate}}" data-tooltip-placement="left"><translate># Mutations</translate></abbr>
                                 </th>
                             </tr>
                             <tr data-ng-repeat="gene in (CompoundCtrl.getTargetedCompoundGenes() |
@@ -203,7 +205,7 @@
                                 <td data-ng-bind-html="gene.uiName | highlight: CompoundCtrl.tableFilter.targetedGenes"></td>
                                 <td data-ng-bind-html="gene.uiLocation | highlight: CompoundCtrl.tableFilter.targetedGenes"></td>
                                 <td data-ng-bind-html="gene.uiType | highlight: CompoundCtrl.tableFilter.targetedGenes"></td>
-                                <td class="text-right" style="display:block; position: relative; white-space: nowrap">
+                                <td class="text-right" style="position: relative; white-space: nowrap">
                                      <span data-ng-style="{width: gene.uiAffectedDonorCountTotalPercentage}"
                                            class="t_facets__facet__terms__active__term__bar">
                                      </span>
@@ -264,8 +266,8 @@
                                 data-current-page="CompoundCtrl.currentClinicalTrailsPage"
                                 data-row-limit="CompoundCtrl.defaultClinicalTrialsRowLimit">
                             </data-table-row-counts>
-                            <span class="t_tools" data-toolbar="" data-dl="compound_trials">
-                            <span class="t_tools__tool" data-tooltip-placement="left" data-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
+                            <span class="t_tools" data-toolbar="" data-entity="compound_trials" data-json="{{compound.trials}}">
+                            <span class="t_tools__tool" data-tooltip-placement="left" data-icgc-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')"><i class="icon-file"></i></span>
                             </span>
                             <table-filter data-class="small-filter"
                                 data-filter-model="CompoundCtrl.tableFilter.clinicalTrials"
@@ -344,7 +346,11 @@
                                     </ul>
                                 </td>
                                 <td data-ng-bind-html="trial.uiStartDate | highlight: CompoundCtrl.tableFilter.clinicalTrials" style="width:6rem; white-space: nowrap;"></td>
-                                <td data-ng-bind-html="trial.uiPhaseName | highlight: CompoundCtrl.tableFilter.clinicalTrials"></td>
+                                <td>
+                                    <div data-ng-repeat="phase in trial.uiPhaseName">
+                                        <span data-ng-bind-html="phase | highlight: CompoundCtrl.tableFilter.clinicalTrials"></span>
+                                    </div>
+                                </td>
                                 <td class="text-wrap" data-ng-bind-html="trial.uiStatusName | highlight: CompoundCtrl.tableFilter.clinicalTrials"></td>
                             </tr>
                         </tbody>

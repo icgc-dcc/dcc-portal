@@ -112,7 +112,8 @@ public class ObservationCentricTypeModel extends TypeModel {
     return nestedArrayOfObjects("observation", "observation", object(
         string("platform", "mutation.platform"),
         string("sequencing_strategy", "mutation.sequencingStrategy"),
-        string("verification_status", "mutation.verificationStatus")));
+        string("verification_status", "mutation.verificationStatus"),
+        string("_study", "mutation.study")));
   }
 
   private static ArrayFieldModel defineSsmGene() {
@@ -136,7 +137,7 @@ public class ObservationCentricTypeModel extends TypeModel {
   }
 
   private static ObjectFieldModel defineProject() {
-    return nestedObject("project",
+    return nestedObject("observation_project",
         string("_project_id", ImmutableSet.of("donor.projectId", "projectId")),
         string("primary_site", "donor.primarySite"));
   }

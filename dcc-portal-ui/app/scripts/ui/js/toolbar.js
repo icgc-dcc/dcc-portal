@@ -17,61 +17,64 @@
 
 'use strict';
 
-angular.module('icgc.ui.toolbar', []).directive('toolbar', function ($filter, $timeout, Page) {
-  return {
-    restrict: 'A',
-    replace: true,
-    scope: {
-      dl: '@'
-    },
-    templateUrl: '/scripts/ui/views/toolbar.html',
-    link: function (scope) {
+angular.module('icgc.ui.toolbar', [])
+  .directive('toolbar', function ($filter, $timeout, Page) {
+    return {
+      restrict: 'A',
+      replace: true,
+      scope: {
+        entity: '@',
+        json: '@'
+      },
+      templateUrl: '/scripts/ui/views/toolbar.html',
+      link: function (scope) {
 
-      scope.downloadHTMLTable = function(id, type) {
-        Page.startExport();
+        scope.downloadInit = (type) => {
+          Page.startExport();
 
-        // There is probably a nicer way to do this..
-        // Basically we need to trigger an $apply cycle to generate the hidden table to download,
-        // but without clobbering ourselves by calling apply inside apply.
-        $timeout(function() {
-          scope.downloadHTMLTable2(id, type);
-          Page.stopExport();
-        }, 1, true);
+          // There is probably a nicer way to do this..
+          // Basically we need to trigger an $apply cycle to generate the hidden table to download,
+          // but without clobbering ourselves by calling apply inside apply.
+          $timeout(() => {
+            scope.download(type);
+            Page.stopExport();
+          }, 1, true);
 
-      };
+        };
 
-      scope.downloadHTMLTable2 = function (id, type) {
-        var tableData, delimiter, filename;
+        scope.download = (type) => {
+          let data,
+            filename;
 
-        // i.e. mutation_2012_04_02_20_56_33.tsv
-        filename = id + '_' + $filter('date')(new Date(), 'yyyy_MM_dd_hh_mm_ss') + '.' + type;
+          const delimiter = '\t',
+            sanitizedId = scope.entity.replace(':', '\\:');
 
-        if (type && type === 'tsv') {
-          delimiter = '\t';
-        } else {
-          delimiter = ',';
-        }
+          // i.e. mutation_2012_04_02_20_56_33.tsv
+          filename = scope.entity + '_' + $filter('date')(new Date(), 'yyyy_MM_dd_hh_mm_ss') + '.' + type;
 
-        var sanitizedId = id.replace(':', '\\:');
-        tableData = jQuery('#' + sanitizedId).table2CSV({
-          delivery: 'value',
-          separator: delimiter
-        });
+          if (type && type === 'tsv') {
+            data = jQuery('#' + sanitizedId).table2CSV({
+              delivery: 'value',
+              separator: delimiter
+            }) + '\n';
+          } else {
+            data = scope.json;
+          }
 
-        if (window.Blob && window.File) {
-          saveAs(new Blob([tableData], {type: 'text/plain;charset=ascii'}), filename);
-        } else {
-          // Fallback (IE and other browsers that lack support), create a form and
-          // submit a post request to bounce the download content against the server
-          jQuery('<form method="POST" id="htmlDownload" action="/api/v1/ui/echo" style="display:none">' +
-                 '<input type="hidden" name="fileName" value="' + filename + '"/>' +
-                 '<input type="hidden" name="text" value="' + tableData + '"/>' +
-                 '<input type="submit" value="Submit"/>' +
-                 '</form>').appendTo('body');
-          jQuery('#htmlDownload').submit();
-          jQuery('#htmlDownload').remove();
-        }
-      };
-    }
-  };
-});
+          if (window.Blob && window.File) {
+            saveAs(new Blob([data], {type: 'text/plain;charset=ascii'}), filename);
+          } else {
+            // Fallback (IE and other browsers that lack support), create a form and
+            // submit a post request to bounce the download content against the server
+            jQuery('<form method="POST" id="htmlDownload" action="/api/v1/ui/echo" style="display:none">' +
+                  '<input type="hidden" name="fileName" value="' + filename + '"/>' +
+                  '<input type="hidden" name="text" value="' + data + '"/>' +
+                  '<input type="submit" value="Submit"/>' +
+                  '</form>').appendTo('body');
+            jQuery('#htmlDownload').submit();
+            jQuery('#htmlDownload').remove();
+          }
+        };
+      }
+    };
+  });

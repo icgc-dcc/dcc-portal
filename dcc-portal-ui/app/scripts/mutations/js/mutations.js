@@ -43,7 +43,7 @@
 
   var module = angular.module('icgc.mutations.controllers', ['icgc.mutations.models']);
 
-  module.controller('MutationCtrl', function (HighchartsService, Page, Genes, mutation, $filter) {
+  module.controller('MutationCtrl', function (HighchartsService, Page, Genes, mutation, $filter, PCAWG) {
     var _ctrl = this, projects;
     Page.setTitle(mutation.id);
     Page.setPage('entity');
@@ -52,6 +52,9 @@
 
     _ctrl.mutation = mutation;
     _ctrl.mutation.uiProteinTranscript = [];
+    _ctrl.isPVLoading = true;
+    _ctrl.isPVInitialLoad = true;
+    _ctrl.isGVLoading = true;
 
     // Defaults for client side pagination 
     _ctrl.currentProjectsPage = 1;
@@ -102,16 +105,14 @@
 
     if (mutation.functionalImpact.indexOf('High') > 0) {
       mutation.displayedFunctionalImpact = 'High';
-    } else if (mutation.functionalImpact.indexOf('High') > 0) {
+    } else if (mutation.functionalImpact.indexOf('Low') > 0) {
       mutation.displayedFunctionalImpact = 'Low';
     } else {
       mutation.displayedFunctionalImpact = 'Unknown';
     }
 
-    console.log(_ctrl.uiProjects);
-
     if (_ctrl.mutation.hasOwnProperty('consequences') && _ctrl.mutation.consequences.length) {
-      var affectedGeneIds = _.filter(_.pluck(_ctrl.mutation.consequences, 'geneAffectedId'), function (d) {
+      var affectedGeneIds = _.filter(_.map(_ctrl.mutation.consequences, 'geneAffectedId'), function (d) {
         return !_.isUndefined(d);
       });
 
@@ -122,7 +123,7 @@
           include: 'transcripts',
           size: 100
         }).then(function (genes) {
-          var geneTranscripts = _.pluck(genes.hits, 'transcripts');
+          var geneTranscripts = _.map(genes.hits, 'transcripts');
           var mergedTranscripts = [];
           geneTranscripts.forEach(function (t) {
             mergedTranscripts = mergedTranscripts.concat(t);
@@ -158,7 +159,10 @@
         return -p.percentAffected;
       }),
       xAxis: 'id',
-      yValue: 'percentAffected'
+      yValue: 'percentAffected',
+      options: {
+        linkBase: '/projects/'
+      }
     });
 
     function getUiConsequencesJSON(consequences){
@@ -176,6 +180,10 @@
         });
       });
     }
+
+    _ctrl.isPCAWG = function(mutation) {
+      return _.some(mutation.study, PCAWG.isPCAWGStudy);
+    };
   });
 })();
 
@@ -212,6 +220,16 @@
       return this.handler.get('', angular.extend(defaults, params)).then(function (data) {
         if (data.hasOwnProperty('facets')) {
           var precedence = Consequence.precedence();
+
+          _.map(data.facets, (facet) => {
+            if(facet.missing) {
+              if(facet.terms) {
+                facet.terms.push({term: '_missing', count: facet.missing});
+              } else {
+                facet.terms = [{term: '_missing', count: facet.missing}];
+              }
+            }
+          });
 
           if (data.facets.hasOwnProperty('consequenceType') &&
             data.facets.consequenceType.hasOwnProperty('terms')) {

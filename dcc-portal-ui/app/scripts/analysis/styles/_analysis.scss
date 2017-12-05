@@ -1,7 +1,154 @@
+@import "./setSelection";
+
+.analysis-tool-selection {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .analysis-tool {
+    width: calc(50% - 50px);
+    margin-bottom: 3em;
+  }
+}
+
+$condensedWidth: 180px;
+
+.analysis-tool {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: rgba(0,0,0,0.87);
+  position: relative;
+  z-index: 2;
+  perspective: 1000px;
+
+  .analysis-tool {
+    margin-top: 40px;
+  }
+
+  &__image-wrapper {
+    width: $condensedWidth;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+
+  &__image, svg {
+    width: 100%;
+    max-width: calc(100% - 40px);
+    max-height: calc(100% - 20px);
+  }
+
+  &__heading {
+    font-size: 20px;
+    font-weight: 500;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0;
+  }
+
+  &__description {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    .demo {
+      margin-left: 12px;
+    }
+  }
+
+  &--enrichment {
+    svg {
+      fill: #9b315b;
+      height: 100px;
+      width: auto;
+    }
+  }
+
+  &--phenotype {
+    svg {
+      width: 62%;
+    }
+    .person-fg {
+      fill: #0099e3;
+    }
+    .person-bg {
+      fill: #C20127;
+    }
+  }
+
+  &--set {
+    svg {
+      width: 62%;
+    }
+    path {
+      stroke: #ffffff;
+      stroke-width: 5px;
+    }
+    #top-right {
+      fill: rgba(166, 28, 133, 0.7);
+    }
+    #bottom {
+      fill: rgba(255, 148, 1, 0.7);
+    }
+    #top-left, #top-left-diff {
+      fill: rgba(#0099e3, 0.7)
+      
+    }
+  }
+
+  &--oncogrid {
+    svg {
+      width: 65%;
+    }
+    .st0 {
+      fill: rgba(155, 49, 91, 0.84);
+    }
+  }
+}
+
+.set-selection-screen {
+  display: flex;
+  flex-direction: row;
+  .sets-container {
+    flex-grow: 1;
+  }
+  .analysis-tool {
+    align-items: flex-start;
+    &__image-wrapper {
+      margin-top: 31px;
+    }
+  }
+}
+
+.sets-container {
+  .close-btn {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 15px;
+    transition: 0.1s ease;
+    &:hover {
+      background: #eee;
+    }
+  }
+}
+
 .analysis {
-   display: table;
    width: 100%;
    padding:0px;
+   position: relative;
+   perspective: 1000px;
 
    &:before{
      display: none;
@@ -11,142 +158,8 @@
       margin-top: 0;
    }
 
-   .analysis-tiles {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-   }
-
-   .analysis-tile-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      justify-content: space-between;
-
-      transition: all 0.15s $inExpo;
-
-      &:hover {
-         background-color: $selection;
-         box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.07);
-      }
-
-      .tile-extra-container {
-         width: 100%;
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         padding-top: 0.5rem;
-         padding-bottom: 0.5rem;
-         cursor: pointer;
-         margin-left: -1rem;
-         margin-right: -1rem;
-         background-color: #fff;
-
-         transition: all 0.15s ease;
-         transition-delay: 0;
-         position: relative;
-         overflow: hidden;
-         &:after {
-            content: ' ';
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #9b315b;
-            transform: translateX(100%);
-            transition: transform 0.2s $outQuad;
-            transition-delay: 0;
-         }
-         .tile-extra {
-            z-index: 10;
-         }
-         &:hover {
-            .demo-title, .demo-description {
-               transition-delay: 0.3s;
-            }
-            .demo-title {
-               color: #fff;
-            }
-            .demo-description {
-               color: #e3e3e3;
-            }
-            &:after {
-               transition-delay: 0.2s;
-               transform: translateX(0);
-            }
-         }
-      }
-
-      .demo-title, .demo-description {
-         transition: all 0.15s ease;
-         transition-delay: 0;
-      }
-
-      .demo-title {
-         font-size: 13px;
-         font-weight: 600;
-         color: #F38721;
-         margin-bottom: 0.2em;
-      }
-
-      .demo-description {
-         line-height: 1.5;
-         font-size: 11px;
-         color: #99adb3;
-      }
-
-      .analysis-tile, .tile-extra {
-         max-width: 24rem;
-         margin: 0 1rem;
-      }
-
-      .analysis-tile {
-         transition: color .5s, background .5s;
-         margin-bottom: 1rem;
-
-         &.in-progress {
-           &:hover {
-             color: $grey;
-           }
-         }
-
-         .analysis-title {
-           font-size: 22px;
-           font-weight: 600;
-           color: #811D52;
-           -webkit-font-smoothing: antialiased;
-         }
-
-         .analysis-tile-detail {
-            font-size: 14px;
-            line-height: 1.6;
-         }
-      }
-   }
-
-   .analysis-suggestions {
-      margin-top: 1.5rem;
-
-      .cta {
-         display: inline-block;
-         padding: 1rem;
-
-         .cta-detail, .cta-title {
-            color: #9b315b;
-         }
-
-         .cta-title {
-            font-weight: 500;
-            font-size: 22px;
-         }
-      }
-
-   }
-
    .sidepanel {
+      display: inline-block;
       position: relative;
       vertical-align: top;
       margin-right: 1rem;
@@ -158,7 +171,7 @@
         position: absolute;
         top: 100%;
         right: 0;
-        width: 5px;
+        width: 1px;
         height: 62px;
         background-image: linear-gradient(to bottom, transparent, #fff), linear-gradient(to right, transparent, rgba(0,0,0,0.2));
       }
@@ -168,10 +181,7 @@
    }
 
    .content {
-      //float: left;
-      //clear: right;
-      display: table-cell;
-      //width: 76%;
+      display: inline-block;
       
       min-height: 20rem; // Prevent complete collapse when switching content
 

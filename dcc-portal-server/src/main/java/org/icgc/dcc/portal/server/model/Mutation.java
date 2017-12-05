@@ -17,7 +17,10 @@
 
 package org.icgc.dcc.portal.server.model;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableSet;
 import static org.icgc.dcc.portal.server.model.IndexModel.FIELDS_MAPPING;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getLong;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
@@ -25,6 +28,7 @@ import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getStri
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,6 +40,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Value;
 import lombok.val;
+import org.icgc.dcc.common.core.util.stream.Collectors;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -84,6 +89,8 @@ public class Mutation {
   List<Consequence> consequences;
   @ApiModelProperty(value = "Functional Impact Prediction Summary")
   List<String> functionalImpact;
+  @ApiModelProperty(value = "Study")
+  List<String> study;
 
   @SuppressWarnings("unchecked")
   @JsonCreator
@@ -108,7 +115,8 @@ public class Mutation {
     occurrences = buildOccurrences((List<Map<String, Object>>) fieldMap.get("ssm_occurrence"));
     transcripts = buildTranscripts((List<Map<String, Object>>) fieldMap.get("transcript"));
     consequences = buildConsequences((List<Map<String, Object>>) fieldMap.get("consequences"));
-    functionalImpact = (List<String>) fieldMap.get(fields.get("functionalImpact"));
+    functionalImpact = collectFunctionalImpacts((List<Map<String, Object>>) fieldMap.get("transcript"));
+    study = collectStudies((List<Map<String, Object>>) fieldMap.get("ssm_occurrence"));
   }
 
   private List<EmbOccurrence> buildOccurrences(List<Map<String, Object>> occurrences) {
@@ -177,12 +185,38 @@ public class Mutation {
     return lst;
   }
 
+  private static List<String> collectFunctionalImpacts(List<Map<String, Object>> transcripts) {
+    return transcripts == null ? null : transcripts.stream()
+        .map(t -> t.get("functional_impact_prediction_summary").toString())
+        .collect(toImmutableList());
+  }
+
   private static Collection<String> unique(List<String> list) {
     if (list == null) {
       return null;
     }
 
     return newHashSet(list);
+  }
+
+  private static List<String> collectStudies(List<Map<String, Object>> occurrences) {
+    if (occurrences == null) {
+      return newArrayList();
+    }
+
+    val obs = occurrences.stream()
+        .flatMap(occ -> ((List<Map<String, Object>>) occ.get("observation")).stream())
+        .filter(Objects::nonNull)
+        .collect(toImmutableList());
+
+
+    val study = obs.stream()
+        .filter(o -> o.containsKey("_study"))
+        .map(o -> (String) o.get("_study"))
+        .filter(Objects::nonNull)
+        .collect(toImmutableSet()).asList();
+
+    return study;
   }
 
 }

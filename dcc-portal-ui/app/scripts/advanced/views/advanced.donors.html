@@ -3,120 +3,194 @@
 </h3></div>
 <div data-ng-if="AdvancedCtrl.Donor.donors.hits.length == 0 && AdvancedCtrl.Donor.hitsLoaded && ! AdvancedCtrl.Donor.isLoading" class="empty loading-text"><h3><translate>No Donors Found.</translate></h3></div>
 <div data-ng-show="AdvancedCtrl.Donor.donors.hits.length && AdvancedCtrl.Donor.hitsLoaded && ! AdvancedCtrl.Donor.isLoading">
-    <section style="position: relative">
+    <section class="graphs-container" style="position:relative;">
         <div data-ng-class="{'graphs-collapsed': !donorExpand}" class="graphs">
-            <pie items='AdvancedCtrl.Donor.pieProjectId' heading="{{'Project' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195" group-percent="3"
+            <div class="row">
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieProjectId' heading="{{'Project' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195" group-percent="3"
                  height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.piePrimarySite' heading="{{'Primary Site' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.piePrimarySite' heading="{{'Primary Site' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                    height="150"></pie>
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieGender' heading="{{'Gender' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                    height="150"></pie>
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieTumourStage' heading="{{'Tumour Stage' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                    height="150"></pie>
+            </div>
+            <div class="row">
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieVitalStatus' heading="{{'Vital Status' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
                  height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieGender' heading="{{'Gender' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
-                 height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieTumourStage' heading="{{'Tumour Stage' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
-                 height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieVitalStatus' heading="{{'Vital Status' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
-                 height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieStatusFollowup' heading="{{'Disease Status' | translate}}" label="{{'Donors' | translate}}" type="pie"
-                 width="195" height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieRelapseType' heading="{{'Relapse Type' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
-                 height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieAge' heading="{{'Age' | translate}}" label="{{'Donors' | translate}}" type="pie"
-                 width="195" height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieDataTypes' heading="{{'Data Types' | translate}}" label="{{'Donors' | translate}}" type="pie"
-                 width="195" height="150"></pie>
-            <pie items='AdvancedCtrl.Donor.pieAnalysisTypes' heading="{{'Analysis Types' | translate}}" label="{{'Donors' | translate}}" type="pie"
-                 width="195" height="150"></pie>
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieStatusFollowup' heading="{{'Disease Status' | translate}}" label="{{'Donors' | translate}}" type="pie"
+                    width="195" height="150"></pie>
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieRelapseType' heading="{{'Relapse Type' | translate}}" label="{{'Donors' | translate}}" type="pie" width="195"
+                    height="150"></pie>
+                <pie class="col-md-3 col-sm-6" items='AdvancedCtrl.Donor.pieAge' heading="{{'Age' | translate}}" label="{{'Donors' | translate}}" type="pie"
+                    width="195" height="150"></pie>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <span class="col-md-6 col-sm-12">
+                    <bar
+                        config-overrides="AdvancedCtrl.donorDataTypeChartConfig"
+                        items="AdvancedCtrl.Donor.barDataTypes"
+                        heading="{{'Data Types' | translate}}"
+                        ylabel="{{'# of Donors' | translate}}"
+                        type="bar"
+                        width="390"
+                        height="150"
+                        style="padding-left: 25px;"
+                        >
+                    </bar>
+                </span>
+                <span class="col-md-6 col-sm-12">
+                    <bar
+                        config-overrides="AdvancedCtrl.donorAnalysisTypeChartConfig"
+                        items="AdvancedCtrl.Donor.barAnalysisTypes"
+                        heading="{{'Analysis Types' | translate}}"
+                        ylabel="{{'# of Donors' | translate}}"
+                        type="bar"
+                        width="390"
+                        height="150"
+                        style="padding-left: 25px;"
+                        >
+                    </bar>
+                </span>
+            </div>
         </div>
         <div class="more-graphs-wrap">
-            <span data-ng-click="donorExpand=!donorExpand" class="more-graphs t_tools__tool">
+            <span
+                data-ng-click="donorExpand=!donorExpand; track('viz-filter-show-more', { action: 'click' })"
+                class="more-graphs t_tools__tool"
+            >
                 <span data-ng-if="!donorExpand"><i class="icon-angle-down"></i> <translate>Show More</translate></span>
                 <span data-ng-if="donorExpand"><i class="icon-angle-up"></i> <translate>Show Less</translate></span>
             </span>
+            <div class="teaser-coverup"></div>
         </div>
     </section>
     <section>
         <h3>
             <translate>Donors</translate>
             <span class="action-toolbar pull-right">
-               <span class="action-item">
-                   <i class="icon-floppy"></i><a href="" data-ng-click="AdvancedCtrl.saveSet('donor', AdvancedCtrl.Donor.donors.pagination.total)"><translate>Save Donor Set</translate></a>
+                <span class="action-item">
+                    <i class="icon-grid"></i>
+                    <a
+                        href="#"
+                        data-ng-click="
+                            AdvancedCtrl.oncogridAnalysis();
+                            track('advanced-search-links', { action: 'click-oncogrid' });
+                        "
+                    >
+                        <translate>OncoGrid</translate>
+                    </a>
                </span>
-               <span class="action-item" data-ng-if="!AdvancedCtrl.downloadEnabled">
+               <span class="action-item" data-ng-if="!ICGC_SETTINGS.downloadEnabled">
                    <i class="icon-download"></i><span><translate has-markup>Data download is<br> currently unavailable</translate></span>
                </span>
-               <span class="action-item" data-ng-if="AdvancedCtrl.downloadEnabled">
+               <span class="action-item" data-ng-if="ICGC_SETTINGS.downloadEnabled">
                    <span>
-                      <i class="icon-download"></i><a href="" data-ng-click="AdvancedCtrl.downloadDonorData()"><translate>Download Donor Data</translate></a>
+                      <i class="icon-download"></i>
+                      <a
+                        href=""
+                        data-ng-click="AdvancedCtrl.downloadDonorData(); track('download-donor-data', { action: 'click' });"
+                      >
+                        <translate>Download Donor Data</translate>
+                      </a>
                    </span>
                </span>
                <span class="action-item">
                    <span>
                       <i class="icon-download-cloud"></i><span>
-                      <a href="" data-ng-click="AdvancedCtrl.viewExternalDonors(AdvancedCtrl.Donor.donors.pagination.total)">
+                      <a
+                        href=""
+                        data-ng-click="
+                            AdvancedCtrl.viewExternalDonors(AdvancedCtrl.Donor.donors.pagination.total);
+                            track('advanced-search-links', { action: 'click-view-in-repo' });
+                        "
+                      >
                       <translate>View in</translate> {{:: AdvancedCtrl.dataRepoTitle }}</a></span>
                    </span>
+               </span>
+               <span class="action-item">
+                    <entityset-persistence-dropdown
+                        selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.donor"
+                        entity-type="'donor'"
+                        set-total-count="AdvancedCtrl.Donor.donors.pagination.total"
+                        set-limit="ICGC_SETTINGS.maxNumberOfHits"
+                        on-operation-success="AdvancedCtrl.handleOperationSuccess('donor')"
+                    ></entityset-persistence-dropdown>
                </span>
             </span>
         </h3>
 
         <div class="t_table_top">
             <span data-table-counts data-label="{{'donors' | translate}}" data-page="AdvancedCtrl.Donor.donors.pagination"></span>
-            <span data-toolbar data-dl="donors"></span>
+            <span 
+                data-toolbar 
+                data-entity="donors"
+                data-json="{{ AdvancedCtrl.Donor.donors.hits }}"></span>
         </div>
         <table class="table table-bordered table-striped table-condensed">
             <thead>
             <tr>
+                <th rowspan="2"></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="id">ID
                 </th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="projectId"><translate>Project</translate></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="primarySite"><translate>Site</translate></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="gender"><translate>Gender</translate></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="ageAtDiagnosis" class="text-center">
-                    <abbr data-tooltip="{{'Age at Diagnosis' | translate}}"><translate>Age</translate></abbr>
+                    <abbr data-icgc-tooltip="{{'Age at Diagnosis' | translate}}"><translate>Age</translate></abbr>
                 </th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="tumourStageAtDiagnosis">
-                    <abbr data-tooltip="{{'Tumour Stage at Diagnosis' | translate}}"><translate>Stage</translate></abbr></th>
+                    <abbr data-icgc-tooltip="{{'Tumour Stage at Diagnosis' | translate}}"><translate>Stage</translate></abbr></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="survivalTime" class="text-center">
-                    <abbr data-tooltip="{{'Survival Time in days' | translate}}"><translate has-markup>Survival<br>(days)</translate></abbr>
+                    <abbr data-icgc-tooltip="{{'Survival Time in days' | translate}}"><translate has-markup>Survival<br>(days)</translate></abbr>
                 </th>
                 <th colspan="11" class="text-center"><translate>Available Data Types:</translate></th>
                 <th rowspan="2">
-                    <abbr data-tooltip="{{'Number of SSM<br>Filtered by Current Search Criteria' | translate}}"><translate># Mutations</translate></abbr></th>
+                    <abbr data-icgc-tooltip="{{'Number of SSM<br>Filtered by Current Search Criteria' | translate}}"><translate># Mutations</translate></abbr></th>
                 <th rowspan="2" data-sortable data-type="donors" data-field="ssmAffectedGenes" data-active="true"
                     data-reversed="true">
-                    <abbr data-tooltip="{{'Number of Genes with SSM<br>Filtered by Current Search Criteria' | translate}}"
+                    <abbr data-icgc-tooltip="{{'Number of Genes with SSM<br>Filtered by Current Search Criteria' | translate}}"
                           data-tooltip-placement="left"><translate># Genes</translate></abbr>
                 </th>
             </tr>
             <tr>
                 <th class="text-center" data-type="donors" data-field="ssmCount"><abbr
-                        data-tooltip="{{ 'ssm' | datatype }}" class="tiny-header">SSM</abbr></th>
+                        data-icgc-tooltip="{{ 'ssm' | datatype }}" class="tiny-header">SSM</abbr></th>
                 <th class="text-center" data-type="donors" data-field="cnsmExists"><abbr
-                        data-tooltip="{{ 'cnsm' | datatype }}" class="tiny-header">CNSM</abbr></th>
+                        data-icgc-tooltip="{{ 'cnsm' | datatype }}" class="tiny-header">CNSM</abbr></th>
                 <th class="text-center" data-type="donors" data-field="stsmExists"><abbr
-                        data-tooltip="{{ 'stsm' | datatype}}" class="tiny-header">StSM</abbr></th>
+                        data-icgc-tooltip="{{ 'stsm' | datatype}}" class="tiny-header">StSM</abbr></th>
                 <th class="text-center" data-type="donors" data-field="sgvExists"><abbr
-                        data-tooltip="{{ 'sgv' | datatype}}" class="tiny-header">SGV</abbr></th>
+                        data-icgc-tooltip="{{ 'sgv' | datatype}}" class="tiny-header">SGV</abbr></th>
                 <th class="text-center" data-type="donors" data-field="methArrayExists"><abbr
-                        data-tooltip="{{ 'meth_array' | datatype}}" class="tiny-header">METH-A</abbr></th>
+                        data-icgc-tooltip="{{ 'meth_array' | datatype}}" class="tiny-header">METH-A</abbr></th>
                 <th class="text-center" data-type="donors" data-field="methSeqExists"><abbr
-                        data-tooltip="{{ 'meth_seq' | datatype}}" class="tiny-header">METH-S</abbr></th>
+                        data-icgc-tooltip="{{ 'meth_seq' | datatype}}" class="tiny-header">METH-S</abbr></th>
                 <th class="text-center" data-type="donors" data-field="expArrayExists"><abbr
-                        data-tooltip="{{ 'exp_array' | datatype}}" class="tiny-header">EXP-A</abbr></th>
+                        data-icgc-tooltip="{{ 'exp_array' | datatype}}" class="tiny-header">EXP-A</abbr></th>
                 <th class="text-center" data-type="donors" data-field="expSeqExists"><abbr
-                        data-tooltip="{{ 'exp_seq' | datatype}}" class="tiny-header">EXP-S</abbr></th>
+                        data-icgc-tooltip="{{ 'exp_seq' | datatype}}" class="tiny-header">EXP-S</abbr></th>
                 <th class="text-center" data-type="donors" data-field="pexpExists"><abbr
-                        data-tooltip="{{ 'pexp' | datatype}}" class="tiny-header">PEXP</abbr></th>
+                        data-icgc-tooltip="{{ 'pexp' | datatype}}" class="tiny-header">PEXP</abbr></th>
                 <th class="text-center" data-type="donors" data-field="mirnaSeqExists"><abbr
-                        tooltip="{{ 'mirna_seq' | datatype}}" class="tiny-header">miRNA-S</abbr></th>
+                        icgc-tooltip="{{ 'mirna_seq' | datatype}}" class="tiny-header">miRNA-S</abbr></th>
                 <th class="text-center" data-type="donors" data-field="jcnExists"><abbr
-                        data-tooltip="{{ 'jcn' | datatype}}" class="tiny-header">JCN</abbr></th>
+                        data-icgc-tooltip="{{ 'jcn' | datatype}}" class="tiny-header">JCN</abbr></th>
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="donor in AdvancedCtrl.Donor.donors.hits track by donor.id">
+            <tr
+                ng-class="{
+                    'is-selected': AdvancedCtrl.isEntitySelected('donor', donor)
+                }"
+                data-ng-repeat="donor in AdvancedCtrl.Donor.donors.hits track by donor.id"
+            >
+                <td ng-click="AdvancedCtrl.toggleSelectedEntity('donor', donor)">
+                    <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('donor', donor)"></icgc-checkbox>
+                </td>
                 <td><a href="/donors/{{ donor.id }}">{{ donor.id }}</a></td>
                 <td>
-                    <a data-tooltip="{{ donor.projectName }}" data-tooltip-placement="top" href="/projects/{{ donor.projectId }}">
+                    <a data-icgc-tooltip="{{ donor.projectName }}" data-tooltip-placement="top" href="/projects/{{ donor.projectId }}">
                         {{ donor.projectId }}
                     </a>
                 </td>

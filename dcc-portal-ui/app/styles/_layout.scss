@@ -98,15 +98,20 @@ footer, .push {
 }*/
 
 
-aside {
-  @include clearfix();
-  @include grid-span(2.2, 1);
+aside.t_sidebar, aside.t_sidenav {
+  width: 200px;
+  float: left;
+  @include breakpoint($break-widescreen) {
+    width: 220px;
+  }
 }
 
 article {
-  @include clearfix();
-  @include grid-span(10, 3);
-  margin-right: 0;
+  width: calc(100% - 200px);
+  float: right;
+  @include breakpoint($break-widescreen) {
+    width: calc(100% - 220px);
+  }
 }
 
 section {
@@ -183,6 +188,10 @@ section {
   flex-direction: row;
 }
 
+.align-flex-end {
+  align-items: flex-end;
+}
+
 .flex-column {
   @extend .flex;
   flex-direction: column;
@@ -191,4 +200,20 @@ section {
 .flex-center {
   justify-content: center;
   align-items: center;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  &--with-defaults {
+    background: white;
+    box-shadow: 3px 2px 1px 0px rgba(0,0,0,0.1);
+  }
+  &--secondary {
+    top: 60px;
+  }
+}
+
+.flex-grow {
+  flex-grow: 1;
 }

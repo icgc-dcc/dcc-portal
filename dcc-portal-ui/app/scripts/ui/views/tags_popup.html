@@ -8,7 +8,7 @@
             data-ng-mouseout="mouseout($index)"
             data-ng-class="{'active':r.active}"
             data-ng-switch="r.type"
-            data-ng-click="click(r)"
+            data-ng-click="click(r); track('search-result', { action: 'click', label: r.type + ' ' + r.id });"
             class="t_suggest_flyout__hits__hit">
             <td class="t_suggest_flyout__hits__hit__type">
                 <span class="{{ badgeStyleClass (r.type) }}"></span>
@@ -86,7 +86,7 @@
             data-ng-mouseout="mouseout($index)"
             data-ng-class="{'active':r.active}"
             data-ng-switch="r.type"
-            data-ng-click="click(r)"
+            data-ng-click="click(r);  track('search-result', { action: 'click', label: r })"
             class="t_suggest_flyout__hits__hit">
             <td class="t_suggest_flyout__hits__hit__type">
                 <span class="t_badge t_badge__file"></span>

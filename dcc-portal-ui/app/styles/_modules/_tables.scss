@@ -39,8 +39,10 @@ $table-th-fixed-width: 200px;
     tr {
       vertical-align: top;
 
-      &:nth-child(odd) {
-        background: $greyLightest;
+      &:nth-child(odd):not(.is-selected) {
+        td, th {
+          background: $greyLightest;
+        }
       }
     }
 
@@ -68,17 +70,11 @@ $table-th-fixed-width: 200px;
     }
   }
 
-  td {
- //   overflow: hidden;
- //   text-overflow: ellipsis;
-  }
-
   th {
     font-size: 1rem;
     font-weight: 300;
     color: $black;
     text-overflow: normal;
-    //border: 1px solid $greyLighter;
   }
 
   // Table with icon check-boxes
@@ -105,9 +101,11 @@ $table-th-fixed-width: 200px;
     &.table-condensed{
 
       td{
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        word-break: normal;
+        word-break: break-word;
+
+        &:first-child {
+          white-space: nowrap;
+        }
       }
     }
   }
@@ -128,6 +126,11 @@ $table-th-fixed-width: 200px;
           border-top: 1px solid $greyLighter;
        }
     }
+  }
+
+  .is-selected > td {
+    transition: 0.1s;
+    background-color: #ffffbe;
   }
 }
 

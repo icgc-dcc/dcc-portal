@@ -1,4 +1,6 @@
-.popover.pop-below {
+.icgc-popover.popover {
+  border: 0;
+  box-shadow: none;
   .popover-outer-container {
     top: 2.7rem;
     left: -25.5rem;
@@ -32,4 +34,12 @@
     font-size: 12px;
     line-height: 20px;
   }
+}
+
+.tooltip-contents {
+  width: 25em;
+  font-size: 12px;
+  padding: 0 6px;
+  font-weight: 400;
+  color: #666;
 }

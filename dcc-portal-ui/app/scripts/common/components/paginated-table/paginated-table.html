@@ -1,0 +1,114 @@
+<div>
+  <div class="t_table_top">
+    <span>
+
+      <span>
+        Showing
+          <span ng-show="vm.filteredRows().length > vm.itemsPerPage">
+            <strong>{{vm.itemsPerPage * (vm.currentPageNumber - 1) + 1}}</strong>
+            -
+            <strong>{{vm.itemsPerPage * vm.currentPageNumber}}</strong>
+            of
+          </span>
+          <strong>{{ vm.filteredRows().length.toLocaleString() }}</strong>
+        {{ (vm.itemTypeName || 'result') | pluralize : vm.filteredRows().length }}
+      </span>
+
+      <span
+        ng-if="vm.shouldExportCSV"
+        class="t_tools"
+        data-toolbar=""
+        data-dl="compound_mutated_genes"
+      >
+          <span
+            class="t_tools__tool"
+            tooltip-placement="left"
+            tooltip="{{'Export Table as TSV' | translate}}"
+          ><i class="icon-file"></i></span>
+      </span>
+
+      <table-filter
+        class="small-filter"
+        filter-model="vm.tableFilter"
+        on-change="vm.handleFilterChange"
+      ></table-filter>
+
+    </span>
+    <span data-ng-if="CompoundCtrl.getTargetedCompoundGenes() &&  CompoundCtrl.getTargetedCompoundGenes().length === 0">
+        <translate>No targeted genes found.</translate>
+    </span>
+  </div>
+
+  <table class="table">
+    <thead
+      ng-class="{
+        'sticky': vm.stickyHeader,
+        'sticky--with-defaults': vm.stickyHeader,
+      }"
+    >
+      <th
+        ng-repeat="column in vm.columns"
+        ng-click="vm.handleClickTableHead(column)"
+        ng-style="{
+          cursor: column.isSortable ? 'pointer' : 'default'
+        }"
+      >
+        <span bind-html-compile="column.headingFormat ? column.headingFormat(column.heading) : column.heading"></span>
+        <i
+          ng-if="column.isSortable"
+          ng-class="{
+            'icon-sort': !vm.isSortingOnColumn(column),
+            'icon-sort-up': vm.isSortingOnColumn(column) && vm.sortOrder === 'asc',
+            'icon-sort-down': vm.isSortingOnColumn(column) && vm.sortOrder === 'desc',
+          }"
+          ng-style="{
+            color: vm.isSortingOnColumn(column) ? 'inherit' : 'hsl(0, 0%, 80%)'
+          }"
+          class="pull-right"
+          style="margin-right: 0.5rem;"
+        ></i>
+      </th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in vm.currentPage()">
+        <td
+          ng-repeat="column in vm.columns"
+          style="{{column.style}}"
+          class="{{column.classes}}"
+          bind-html-compile="
+            column.dataFormat
+              ? column.dataFormat(row[column.field], row, vm.columns, {tableFilter: vm.tableFilter})
+              : row[column.field]
+          "
+        >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="table-container" ng-transclude></div>
+
+  <div
+    ng-if="vm.filteredRows().length > vm.itemsPerPage"
+    style="margin-top: 1rem"
+  >
+      <span>
+        Showing
+        <select
+          ng-model="vm.itemsPerPage"
+          ng-change="vm.handleItemsPerPageChange(vm.itemsPerPage); track('set-pagination-size', {value: vm.itemsPerPage});"
+          ng-options="size for size in vm.itemsPerPageOptions"
+        ></select>
+        rows
+      </span>
+
+      <pagination
+        total-items="vm.filteredRows().length"
+        ng-model="vm.currentPageNumber"
+        items-per-page="vm.itemsPerPage"
+        max-size="5"
+        rotate="true"
+        class="pagination-sm pull-right"
+      ></pagination>
+  </div>
+</div>

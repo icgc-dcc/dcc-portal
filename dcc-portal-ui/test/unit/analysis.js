@@ -21,10 +21,10 @@
 describe('Test AnalysisService', function() {
 
   var AnalysisService, httpMock;
-  beforeEach(module('icgc'));
+  beforeEach(angular.mock.module('icgc'));
 
   beforeEach(inject(function ($httpBackend, $q, $rootScope, _AnalysisService_) {
-    window._gaq = [];
+    window.ga = function () {};
     httpMock = $httpBackend;
     AnalysisService = _AnalysisService_;
 

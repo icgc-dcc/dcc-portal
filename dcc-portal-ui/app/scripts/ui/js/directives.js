@@ -35,7 +35,8 @@ angular.module('icgc.ui', [
   'icgc.ui.popover',
   'icgc.ui.numberTween',
   'icgc.ui.iobio',
-  'icgc.ui.loader'
+  'icgc.ui.loader',
+  'icgc.ui.splitButtons'
 ]);
 
 
@@ -250,7 +251,7 @@ angular.module('app.ui.mutation', []).directive('mutationConsequences', function
 });
 //Mike
 angular.module('icgc.ui.popover', [])
-  .directive('popover', function ($sce) {
+  .directive('icgcPopover', function ($sce) {
     return {
       restrict: 'AE',
       transclude: true,
@@ -365,9 +366,8 @@ angular.module('icgc.ui.popover', [])
 angular.module('icgc.ui.copyPaste', [])
   .provider('copyPaste', function () {
     var _provider = this,
-        _zeroClipPath = '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf',
-        _copyPasteConfig = {};
-    
+    _zeroClipPath = require('../assets/ZeroClipboard.swf'),
+    _copyPasteConfig = {};    
     // Getter/Setter for flash fallback
     _provider.zeroClipboardPath = function (path) {
 
@@ -428,6 +428,7 @@ angular.module('icgc.ui.copyPaste', [])
                 onCopy: '&',
                 onError: '&',
                 copyData: '=',
+                copyAnalyticsTag: '@',
                 onCopyFocusOn: '@',
                 onCopySuccessMessage: '@',
                 onHoverMessage: '@'
@@ -515,7 +516,7 @@ angular.module('icgc.ui.copyPaste', [])
                              '-' + pasteCommandAlphaKey + ' to paste.';
                     }
                   }
-                  else if (isSuccess) {
+                  else {
                     msg = 'Press' + copyPasteCommandKey + '-' + copyCommandAlphaKey +
                     ' to copy and ' + copyPasteCommandKey + '-' +
                     pasteCommandAlphaKey + ' to paste.';
@@ -636,6 +637,8 @@ angular.module('icgc.ui.copyPaste', [])
                 _targetElement.on('click', function (event) {
                     
                     event.stopPropagation();
+
+                    track('copy-to-clip', {action: 'click', label: scope.copyAnalyticsTag});
 
                     try {
                       _copyText(scope.copyData);
@@ -853,7 +856,7 @@ angular.module('icgc.ui.iobio', [])
         function uniquelyConcat (fileCopies, property) {
           return _(fileCopies)
             .map (property)
-            .unique()
+            .uniq()
             .join(', ');
         }
 
@@ -862,8 +865,8 @@ angular.module('icgc.ui.iobio', [])
         };
 
         _ctrl.awsOrCollab = function(fileCopies) {
-          return _.includes(_.pluck(fileCopies, 'repoCode'), 'aws-virginia') ||
-            _.includes(_.pluck(fileCopies, 'repoCode'), 'collaboratory');
+          return _.includes(_.map(fileCopies, 'repoCode'), 'aws-virginia') ||
+            _.includes(_.map(fileCopies, 'repoCode'), 'collaboratory');
         };
 
         _ctrl.showIobioModal = function(objectId, objectName, name) {
@@ -886,7 +889,7 @@ angular.module('icgc.ui.iobio', [])
               }
             }
           }).opened.then(function() {
-            setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
+            setTimeout(function() { $rootScope.$broadcast('bamready.event', {})}, 300);
 
           });
         };
@@ -911,7 +914,7 @@ angular.module('icgc.ui.iobio', [])
               }
             }
           }).opened.then(function() {
-            setTimeout(function() { $rootScope.$broadcast('bamready.event', {});}, 300);
+            setTimeout(function() { $rootScope.$broadcast('bamready.event', {})}, 300);
           });
         };
 
@@ -921,9 +924,9 @@ angular.module('icgc.ui.iobio', [])
               return fCopy.repoCode === 'aws-virginia' || fCopy.repoCode === 'collaboratory';
             });
 
-            return _.pluck(fCopies, 'fileName')[0];
+            return _.map(fCopies, 'fileName')[0];
           } catch (err) {
-            console.log(err);
+            console.error(err);
             return 'Could Not Retrieve File Name';
           }
         };
@@ -938,4 +941,16 @@ angular.module('icgc.ui.loader', [])
         {{ ['&#9724;&#9724;&#9724;','&#9724;&#9724;&#9724;', '&#9724;&#9724;', '&#9724;'] | _:'sample' }}
       </span>`,
       replace: true
+  });
+
+angular.module('icgc.ui.splitButtons', [])
+  .component('entitySetFacet', {
+    templateUrl: '/scripts/ui/views/entity-set-facet.html',
+    bindings: {
+      entityType: '@',
+      entitySet: '=',
+      clickEvent: '<',
+      selectEvent: '<'
+    },
+    replace: true
   });
