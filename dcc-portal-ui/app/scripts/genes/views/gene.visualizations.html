@@ -1,4 +1,4 @@
-<section id="protein" class="dynamic-height">
+<section data-ng-if="GeneCtrl.activeTab==='visualizations'" id="protein" class="dynamic-height">
     <div class="empty" data-ng-if="GeneCtrl.isPVInitialLoad && GeneCtrl.gene.uiProteinTranscript.length">
       <h3>
         <i class="icon-spinner icon-spin"></i>Loading Protein...

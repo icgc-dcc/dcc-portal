@@ -279,13 +279,6 @@
           refresh(transcript);
         });
 
-        // Watch size of parent wrapper of the visualization, 
-        //  need to update graph width when it is hidden/shown in a tab
-        scope.$watch(
-          function() {return jQuery('.protein-structure-viewer-diagram').width()},
-          function() {refresh(scope.transcript)}
-        );
-        
         jQuery(window).resize(function() {
           refresh(scope.transcript);
         });
