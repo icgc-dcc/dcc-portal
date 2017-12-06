@@ -125,13 +125,6 @@ section {
   }
 }
 
-.wide-with-aside {
-  @include breakpoint($break-landscape) {
-    @include float-span(7);
-  }
-}
-
-
 .quarter {
   @include breakpoint($break-landscape) {
     @include float-span(3);
