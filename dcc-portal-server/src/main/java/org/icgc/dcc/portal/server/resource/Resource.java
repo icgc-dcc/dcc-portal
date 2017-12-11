@@ -77,6 +77,7 @@ public abstract class Resource {
   protected static final String DEFAULT_SORT = "_score";
   protected static final String DEFAULT_ORDER = "desc";
   protected static final String DEFAULT_MIN_SCORE = "0";
+  protected static final String DEFAULT_QUERY_TYPE="DONOR_CENTRIC";
 
   protected static final String DEFAULT_PROJECT_SORT = "totalLiveDonorCount";
   protected static final String DEFAULT_OCCURRENCE_SORT = "donorId";
