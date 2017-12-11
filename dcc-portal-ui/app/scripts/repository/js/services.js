@@ -130,10 +130,25 @@
       ];
 
       const filesRequest = Restangular.one(REPO_API_PATH).get(angular.extend (defaults, params)).then((data) => {
+        
         if (data.termFacets.hasOwnProperty('repoName') && data.termFacets.repoName.hasOwnProperty('terms')) {
           data.termFacets.repoName.terms = data.termFacets.repoName.terms.sort(function (a, b) {
             return precedence.indexOf(a.term) - precedence.indexOf(b.term);
           });
+        }
+        
+        // Add "No Data" Option to Facets with missing data values
+        for (var facet in data.termFacets) {
+          if (data.termFacets.hasOwnProperty(facet) && data.termFacets[facet].missing) {
+            var f = data.termFacets[facet];
+            if (f.hasOwnProperty('terms')) {
+              f.terms.push({term: '_missing', count: f.missing});
+            } else {
+              f.terms = [
+                {term: '_missing', count: f.missing}
+              ];
+            }
+          }
         }
 
         return data;
