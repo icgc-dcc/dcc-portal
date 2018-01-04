@@ -1,8 +1,9 @@
-.share-popover{
-    
-    .input-header{
-        color: #888;
-    }
+.pql-popover-content{
+    max-width:500px;
+}
+
+.pql-popover{
+
     .loading-text{
         font-size: 14px;
         margin: 0px;
@@ -16,10 +17,12 @@
     .input-block-level{
         font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
         font-size: 12px;
-        padding:4px;
-        width:100%;
+        padding: 4px;
+        width: 93%;
+        resize: vertical;
     }
     .icon-clippy{
-        font-size:x-large;
+        font-size: x-large;
     }
+    
 }
