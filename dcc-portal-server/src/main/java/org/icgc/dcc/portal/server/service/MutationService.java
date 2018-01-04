@@ -5,6 +5,7 @@ import static java.util.stream.IntStream.range;
 import static org.dcc.portal.pql.meta.Type.MUTATION_CENTRIC;
 import static org.dcc.portal.pql.query.PqlParser.parse;
 import static org.icgc.dcc.common.core.util.stream.Collectors.toImmutableList;
+import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.hasField;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.flattenMap;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
@@ -14,7 +15,6 @@ import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 import java.util.*;
 import java.util.AbstractMap.SimpleImmutableEntry;
 
-import org.dcc.portal.pql.ast.StatementNode;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.icgc.dcc.common.core.util.stream.Collectors;
@@ -92,10 +92,6 @@ public class MutationService {
     mutations.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), request));
 
     return mutations;
-  }
-
-  boolean hasField(StatementNode pql, String field) {
-    return !pql.hasSelect() || pql.getSelect().contains(field);
   }
 
   public Mutations findMutationsByDonor(Query query, String donorId) {

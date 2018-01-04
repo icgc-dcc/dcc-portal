@@ -3,7 +3,6 @@ package org.icgc.dcc.portal.server.service;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
-import static java.util.Collections.replaceAll;
 import static java.util.Collections.sort;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.IntStream.range;
@@ -31,11 +30,11 @@ import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.meta.DonorCentricTypeModel.Fields;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.search.SearchHits;
 import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.server.repository.DonorRepository;
+import org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvMapWriter;
@@ -88,14 +87,13 @@ public class DonorService {
 
   public Donors findAllCentric(String pqlString, Collection<String> includes) {
     StatementNode pql = parse(pqlString);
-    log.error("PQL of findAllCentric is: {}", pqlString);
+    log.info("PQL of findAllCentric is: {}", pqlString);
     val response = donorRepository.findAllCentric(pql);
 
-    val includeScore = hasField(pql, INCLUDE_SCORE_STRING);
+    val includeScore = ElasticsearchRequestUtils.hasField(pql, INCLUDE_SCORE_STRING);
     val donors = buildDonors(response, includeScore, includes, PaginationRequest.of(pql));
     return donors;
   }
-
 
   public String getPQL(Query query, boolean facetsOnly) {
     return facetsOnly ?
@@ -110,10 +108,6 @@ public class DonorService {
 
   boolean hasField(Query query, String field) {
     return !query.hasFields() || query.getFields().contains(field);
-  }
-
-  boolean hasField(StatementNode pql, String field) {
-    return !pql.hasSelect() || pql.getSelect().contains(field);
   }
 
   private Donors buildDonors(SearchResponse response, boolean includeScore,
