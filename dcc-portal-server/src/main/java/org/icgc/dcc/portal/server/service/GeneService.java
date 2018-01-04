@@ -12,6 +12,7 @@ import static org.icgc.dcc.portal.server.model.IndexModel.TEXT_PREFIX;
 import static org.icgc.dcc.portal.server.repository.GeneRepository.GENE_ID_RESPONSE_SOURCE;
 import static org.icgc.dcc.portal.server.repository.GeneRepository.GENE_ID_SEARCH_FIELDS;
 import static org.icgc.dcc.portal.server.repository.GeneRepository.TEXT_PATH;
+import static org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils.hasField;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.createResponseMap;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 import static org.icgc.dcc.portal.server.util.SearchResponses.getCounts;
@@ -30,6 +31,7 @@ import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.server.repository.GeneRepository;
+import org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,7 @@ public class GeneService {
   private static final AggregationToFacetConverter AGGS_TO_FACETS_CONVERTER = AggregationToFacetConverter.getInstance();
   private static final Jql2PqlConverter QUERY_CONVERTER = Jql2PqlConverter.getInstance();
   private static final String INCLUDE_SCORE_FIELD = "affectedDonorCountFiltered";
+  private static final String INCLUDE_ALL = "*";
   /**
    * Dependencies.
    */
@@ -226,12 +229,6 @@ public class GeneService {
     return buildGenes(response, projectIds, fieldsNotToFlatten, includeScore,
         PaginationRequest.of(pql));
   }
-
-
-  boolean hasField(StatementNode pql, String field) {
-    return !pql.hasSelect() || pql.getSelect().contains(field);
-  }
-
 
   private List getProjectIds(StatementNode pql) {
     if (!pql.hasFilters()) {

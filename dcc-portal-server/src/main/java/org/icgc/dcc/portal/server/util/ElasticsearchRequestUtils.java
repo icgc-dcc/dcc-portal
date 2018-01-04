@@ -32,6 +32,7 @@ import static org.icgc.dcc.portal.server.util.SearchResponses.getTotalHitCount;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.meta.FileTypeModel.Fields;
 import org.dcc.portal.pql.meta.IndexModel;
 import org.dcc.portal.pql.meta.TypeModel;
@@ -59,6 +60,7 @@ public class ElasticsearchRequestUtils {
   private static final String FILE_INDEX_TYPE = FILE.getId();
   private static final TypeModel TYPE_MODEL = IndexModel.getFileTypeModel();
   private final static String FIELD_NAME = "_id";
+  private static final String INCLUDE_ALL = "*";
 
   public static final String[] EMPTY_SOURCE_FIELDS = null;
 
@@ -158,6 +160,12 @@ public class ElasticsearchRequestUtils {
       boolFilter.mustNot(mustNotTerms);
     }
     return boolFilter;
+  }
+
+  public static boolean hasField(StatementNode pql, String field) {
+    // Assumption: Only one SelectNode in PQL statement.
+    return pql.hasSelect() &&
+        (pql.getSelect().get(0).getFields().contains(INCLUDE_ALL) || pql.getSelect().get(0).getFields().contains(field));
   }
 
   private static boolean isRepositoryDonorExecute(Client client, String fieldAlias, String value,
