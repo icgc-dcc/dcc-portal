@@ -20,6 +20,7 @@ package org.dcc.portal.pql.meta;
 import static org.dcc.portal.pql.meta.field.ArrayFieldModel.arrayOfStrings;
 import static org.dcc.portal.pql.meta.field.ArrayFieldModel.nestedArrayOfObjects;
 import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
+import static org.dcc.portal.pql.meta.field.ObjectFieldModel.nestedObject;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
@@ -41,7 +42,11 @@ public class MutationCentricTypeModel extends TypeModel {
 
   // Including real fields, not aliases. Because after the AST is built by PqlParseTreeVisitor includes are resolved to
   // the real fields
-  private static final List<String> INCLUDE_FIELDS = ImmutableList.of("transcript", "ssm_occurrence");
+  private static final List<String> INCLUDE_FIELDS = ImmutableList.of(
+      "transcript",
+      "ssm_occurrence"
+  );
+
   private static final List<String> AVAILABLE_FACETS = ImmutableList.of(
       "type",
       "consequenceType",
@@ -78,7 +83,13 @@ public class MutationCentricTypeModel extends TypeModel {
       "mutation.location",
       "sequencingStrategy",
   // "sequencingStrategyNested"
-      "study"
+      "study",
+      // Start annotation data fields
+      "external_db_ids",
+      "description",
+      "clinical_significance",
+      "clinical_evidence"
+      // End annotation data fields
   );
 
   public MutationCentricTypeModel() {
@@ -123,7 +134,30 @@ public class MutationCentricTypeModel extends TypeModel {
         .add(string(MUTATION_LOCATION, MUTATION_LOCATION))
 
         .add(string(SCORE, ImmutableSet.of(SCORE, "affectedDonorCountFiltered")))
+
+        // Start annotation data fields
+        .add(defineExternalIds())
+        .add(string("description", "description"))
+        .add(defineClinicalSignificance())
+        .add(defineClinicalEvidence())
+        // End annotation data fields
         .build();
+  }
+
+  private static ObjectFieldModel defineExternalIds() {
+    return object("external_db_ids", "external_db_ids",
+            long_("clinvar"),
+            long_("civic"));
+  }
+
+  private static ObjectFieldModel defineClinicalSignificance() {
+    return object("clinical_significance", "clinical_significance",
+        nestedObject("clinvar"));
+  }
+
+  private static ObjectFieldModel defineClinicalEvidence() {
+    return object("clinical_evidence", "clinical_evidence",
+            nestedArrayOfObjects("civic", nestedObject("civic")));
   }
 
   private static ObjectFieldModel defineSummary() {
