@@ -19,6 +19,11 @@
                         <translate>Consequences</translate>
                     </a>
                 </li>
+                <li data-spy="clinicalEvidence" class="t_subnav__items__item">
+                    <a data-scrollto href="#clinicalEvidence">
+                        <translate>Clinical Evidence</translate>
+                    </a>
+                </li>
                 <li data-spy="donors" class="t_subnav__items__item">
                     <a data-scrollto href="#donors">
                         <translate>Cancer Distribution</translate>
@@ -126,6 +131,7 @@
                 </table>
             </div>
         </section>
+
         <section id="transcripts" data-ng-class="{'loading': !MutationCtrl.mutation.transcripts, 'empty': MutationCtrl.mutation.transcripts.length == 0}">
             <h3 data-ng-if="MutationCtrl.mutation.transcripts.length == 0">
                 <translate>No Consequences Found.</translate>
@@ -244,6 +250,79 @@
 
             </div>
         </section>
+
+        <section id="clinicalEvidence" data-ng-class="{'loading': !MutationCtrl.mutation.clinical_evidence.civic, 'null': MutationCtrl.mutation.clinical_evidence.civic == null}">
+            <h3 data-ng-if="MutationCtrl.mutation.clinical_evidence.civic == null">
+                <translate>No Clinical Evidence Found.</translate>
+            </h3>
+
+            <div data-ng-if="MutationCtrl.mutation.clinical_evidence.civic.length > 0">
+                <h3>
+                    <translate>Clinical Evidence</translate>
+                </h3>
+
+                <table class="table table-bordered table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>
+                                <translate>Disease</translate>
+                            </th>
+                            <th>
+                                <translate>Drug(s)</translate>
+                            </th>
+                            <th>
+                                <translate>Description</translate>
+                            </th>
+                            <th>
+                                <translate>Evidence Level</translate>
+                            </th>
+                            <th>
+                                <translate>Evidence Type</translate>
+                            </th>
+                            <th>
+                                <translate>Clinical Impact</translate>
+                            </th>
+                            <th>
+                                <translate>Evidence Direction</translate>
+                            </th>
+                            <th>
+                                <translate>PubmedID</translate>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="civic in (MutationCtrl.mutation.clinical_evidence.civic |
+                            limitTo: MutationCtrl.defaultClinicalEvidenceRowLimit : ((MutationCtrl.currentClinicalEvidencePage-1) * MutationCtrl.defaultClinicalEvidenceRowLimit))">
+                            <td>
+                                <span data-ng-bind-html="civic.disease"></span>
+                            </td>
+                            <td>
+                                <span data-ng-bind-html="civic.drugs"></span>
+                            </td>
+                            <td>
+                                <span data-ng-bind-html="civic.variantSummary"></span>
+                            </td>
+                            <td>
+                                <span data-ng-bind-html="civic.evidenceLevel"></span>
+                            </td>
+                            <td>
+                                <span data-ng-bind-html="civic.evidenceType"></span>
+                            </td>
+                            <td>
+                                <span data-ng-bind-html="civic.clinicalImpact"></span>
+                            </td>
+                            <td>
+                                <span data-ng-bind-html="civic.evidenceDirection"></span>
+                            </td>
+                            <td>
+                                <span data-ng-bind-html="civic.evidenceDirection"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <section id="donors" data-ng-class="{'loading': !MutationCtrl.projects, 'empty': MutationCtrl.projects.length == 0}" fix-scroll>
             <h3 data-ng-if="MutationCtrl.projects.length == 0">
                 <translate>No Cancer Projects affected by this Mutation</translate>
