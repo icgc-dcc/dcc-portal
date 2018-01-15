@@ -87,7 +87,7 @@
     _ctrl.projects = [];
     _ctrl.uiConsequences = getUiConsequencesJSON(_ctrl.mutation.consequences);
     _ctrl.uiEvidenceItems = getUiEvidenceItems(
-      _ctrl.mutation.clinical_evidence.civic
+      _ctrl.mutation.clinical_evidence.civic || []
     );
 
     if (_ctrl.mutation.hasOwnProperty("occurrences")) {
