@@ -232,6 +232,8 @@
     }
 
     function getUiEvidenceItems(evidenceItems) {
+      // Used to append data to evidence level making
+      // it much easier to filter on
       const evidenceLevelTransform = function(level) {
         switch (level) {
           case "A":
