@@ -257,7 +257,7 @@
           {
             uiDisease: evidenceItems.disease,
             uiDrugs: evidenceItems.drugs,
-            uiVariantSummary: evidenceItems.variantSummary,
+            uiEvidenceStatement: evidenceItems.evidenceStatement,
             uiEvidenceLevel: evidenceLevelTransform(
               evidenceItems.evidenceLevel
             ),

@@ -328,7 +328,7 @@
                                 <span data-ng-bind-html="evidenceItem.uiDrugs | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
                             </td>
                             <td>
-                                <span data-ng-bind-html="evidenceItem.uiVariantSummary | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
+                                <span data-ng-bind-html="evidenceItem.uiEvidenceStatement | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
                             </td>
                             <td>
                                 <span data-ng-bind-html="evidenceItem.uiEvidenceLevel | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
@@ -385,7 +385,7 @@
                         <tr data-ng-repeat="civic in (MutationCtrl.mutation.clinical_evidence.civic)">
                             <td>{{civic.disease}}</td>
                             <td>{{civic.drugs}}</td>
-                            <td>{{civic.variantSummary}}</td>
+                            <td>{{civic.evidenceStatement}}</td>
                             <td>{{civic.evidenceLevel}}</td>
                             <td>{{civic.evidenceType}}</td>
                             <td>{{civic.clinicalImpact}}</td>
