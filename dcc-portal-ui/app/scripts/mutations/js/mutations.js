@@ -86,6 +86,9 @@
     projects = {};
     _ctrl.projects = [];
     _ctrl.uiConsequences = getUiConsequencesJSON(_ctrl.mutation.consequences);
+    _ctrl.uiEvidenceItems = getUiEvidenceItems(
+      _ctrl.mutation.clinical_evidence.civic
+    );
 
     if (_ctrl.mutation.hasOwnProperty("occurrences")) {
       _ctrl.mutation.occurrences.forEach(function(occurrence) {
@@ -223,6 +226,24 @@
             uiCDSMutation: consequence.cdsMutation,
             uiGeneStrand: consequence.geneStrand,
             uiTranscriptsAffected: consequence.transcriptsAffected
+          }
+        );
+      });
+    }
+
+    function getUiEvidenceItems(evidenceItems) {
+      return evidenceItems.map(function(evidenceItems) {
+        return _.extend(
+          {},
+          {
+            uiDisease: evidenceItems.disease,
+            uiDrugs: evidenceItems.drugs,
+            uiVariantSummary: evidenceItems.variantSummary,
+            uiEvidenceLevel: evidenceItems.evidenceLevel,
+            uiEvidenceType: evidenceItems.evidenceType,
+            uiClinicalImpact: evidenceItems.clinicalImpact,
+            uiEvidenceDirection: evidenceItems.evidenceDirection,
+            uiPubmedID: evidenceItems.pubmedID
           }
         );
       });
