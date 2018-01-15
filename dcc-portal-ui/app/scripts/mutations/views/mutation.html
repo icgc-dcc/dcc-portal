@@ -38,12 +38,11 @@
         </section>
     </aside>
     <article>
-        <section id="summary">
-            <h3>
-                <translate>Summary</translate>
-            </h3>
-
+        <section id="summary" class="dynamic-height">
             <div class="wide">
+                <h3>
+                    <translate>Summary</translate>
+                </h3>
                 <table class="table table-info">
                     <tr>
                         <th>ID</th>
@@ -100,6 +99,28 @@
                         </th>
                         <td>
                             {{MutationCtrl.mutation.description}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div ng-if="MutationCtrl.mutation.external_db_ids.clinvar != null || MutationCtrl.mutation.external_db_ids.civic != null"
+                class="narrow omega">
+                <h3>
+                    <translate>External References</translate>
+                </h3>
+                <table class="table table-info">
+                    <tr data-ng-if="MutationCtrl.mutation.external_db_ids.clinvar != null">
+                        <th>ClinVar</th>
+                        <td>
+                            <a data-ng-href="https://www.ncbi.nlm.nih.gov/clinvar/variation/{{MutationCtrl.mutation.external_db_ids.clinvar}}" target="_blank">
+                                <i class="icon-external-link"></i>{{MutationCtrl.mutation.external_db_ids.clinvar}}</a>
+                        </td>
+                    </tr>
+                    <tr data-ng-if="MutationCtrl.mutation.external_db_ids.civic != null">
+                        <th>Civic</th>
+                        <td>
+                            <a data-ng-href="{{MutationCtrl.mutation.clinical_evidence.civic[0].variantCivicUrl}}" target="_blank">
+                                <i class="icon-external-link"></i>{{MutationCtrl.mutation.external_db_ids.civic}}</a>
                         </td>
                     </tr>
                 </table>
