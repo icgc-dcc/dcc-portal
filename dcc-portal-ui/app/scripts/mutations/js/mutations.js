@@ -232,6 +232,23 @@
     }
 
     function getUiEvidenceItems(evidenceItems) {
+      const evidenceLevelTransform = function(level) {
+        switch (level) {
+          case "A":
+            return "A - Validated";
+          case "B":
+            return "B - Clinical";
+          case "C":
+            return "C - Case";
+          case "D":
+            return "D - Preclinical";
+          case "E":
+            return "E - Inferential";
+          default:
+            return level;
+        }
+      };
+
       return evidenceItems.map(function(evidenceItems) {
         return _.extend(
           {},
@@ -239,7 +256,9 @@
             uiDisease: evidenceItems.disease,
             uiDrugs: evidenceItems.drugs,
             uiVariantSummary: evidenceItems.variantSummary,
-            uiEvidenceLevel: evidenceItems.evidenceLevel,
+            uiEvidenceLevel: evidenceLevelTransform(
+              evidenceItems.evidenceLevel
+            ),
             uiEvidenceType: evidenceItems.evidenceType,
             uiClinicalImpact: evidenceItems.clinicalImpact,
             uiEvidenceDirection: evidenceItems.evidenceDirection,
