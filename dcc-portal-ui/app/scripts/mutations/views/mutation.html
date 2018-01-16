@@ -338,7 +338,8 @@
                                 <span data-ng-bind-html="evidenceItem.uiDrugs | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
                             </td>
                             <td>
-                                <span data-ng-bind-html="evidenceItem.uiEvidenceStatement | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
+                                <hide-text text="{{evidenceItem.uiEvidenceStatement}}" data-highlight-filter="MutationCtrl.tableFilter.clinicalEvidence"
+                                    data-class="table-text-wrap"></hide-text>
                             </td>
                             <td>
                                 <span data-ng-bind-html="evidenceItem.uiEvidenceLevel | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
