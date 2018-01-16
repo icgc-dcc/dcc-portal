@@ -103,7 +103,7 @@
                             <translate>Description</translate>
                         </th>
                         <td>
-                            {{MutationCtrl.mutation.description}}
+                            <hide-text text="{{MutationCtrl.mutation.description}}" data-class="table-text-wrap"></hide-text>
                         </td>
                     </tr>
                 </table>
@@ -344,7 +344,7 @@
                             </td>
                             <td>
                                 <hide-text text="{{evidenceItem.uiEvidenceStatement}}" data-highlight-filter="MutationCtrl.tableFilter.clinicalEvidence"
-                                    data-class="table-text-wrap"></hide-text>
+                                    data-class="table-text-wrap" data-text-limit="100"></hide-text>
                             </td>
                             <td>
                                 <span data-ng-bind-html="evidenceItem.uiEvidenceLevel | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
