@@ -277,41 +277,48 @@
                     <table-filter data-class="small-filter" data-filter-model="MutationCtrl.tableFilter.clinicalEvidence" data-current-page="MutationCtrl.currentClinicalEvidencePage"></table-filter>
                 </span>
 
-                <table class="table table-bordered table-striped table-condensed">
+                <table class="table table-bordered table-striped table-condensed" data-ng-init="sort = MutationCtrl.evItemsSorter('uiEvidenceLevel');">
                     <thead>
                         <tr>
-                            <th>
+                            <th data-ng-click="sort = MutationCtrl.evItemsSorter('uiDisease', sort);">
                                 <abbr data-icgc-tooltip="{{'Disease/disease subtype associated with an event and its clinical implication. Disease state provided by http://disease-ontology.org/.' | translate}}">
                                     <translate>Disease</translate>
+                                    <i class="{{ MutationCtrl.evItemSortIcon('uiDisease', sort) }}" />
                                 </abbr>
                             </th>
-                            <th>
+                            <th data-ng-click="sort = MutationCtrl.evItemsSorter('uiDrugs', sort);">
                                 <abbr data-icgc-tooltip="{{'Indication of drug therapy for an event' | translate}}">
                                     <translate>Drug(s)</translate>
+                                    <i class="{{ MutationCtrl.evItemSortIcon('uiDrugs', sort) }}" />
+                                </abbr>
                             </th>
                             <th>
                                 <abbr data-icgc-tooltip="{{'Summary of an events potential clinical interpretations' | translate}}">
                                     <translate>Description</translate>
                                 </abbr>
                             </th>
-                            <th>
+                            <th data-ng-click="sort = MutationCtrl.evItemsSorter('uiEvidenceLevel', sort);">
                                 <abbr data-icgc-tooltip="{{'Categorization of evidence style associated to an event. A = Validated association, B = Clinical evidence, C = Case study, D = Preclinical, E = Inferential' | translate}}">
                                     <translate>Evidence Level</translate>
+                                    <i class="{{ MutationCtrl.evItemSortIcon('uiEvidenceLevel', sort) }}" />
                                 </abbr>
                             </th>
-                            <th>
+                            <th data-ng-click="sort = MutationCtrl.evItemsSorter('uiEvidenceType', sort);">
                                 <abbr data-icgc-tooltip="{{'Categorization of clinical action or relevance implicated by this event.' | translate}}">
                                     <translate>Evidence Type</translate>
+                                    <i class="{{ MutationCtrl.evItemSortIcon('uiEvidenceType', sort) }}" />
                                 </abbr>
                             </th>
-                            <th>
+                            <th data-ng-click="sort = MutationCtrl.evItemsSorter('uiClinicalImpact', sort);">
                                 <abbr data-icgc-tooltip="{{'The association with diagnostic/prognostic end point or treatment.' | translate}}">
                                     <translate>Clinical Impact</translate>
+                                    <i class="{{ MutationCtrl.evItemSortIcon('uiClinicalImpact', sort) }}" />
                                 </abbr>
                             </th>
-                            <th>
+                            <th data-ng-click="sort = MutationCtrl.evItemsSorter('uiEvidenceDirection', sort);">
                                 <abbr data-icgc-tooltip="{{'An indicator of whether the evidence statement supports or refutes the clinical significance of an event.' | translate}}">
                                     <translate>Evidence Direction</translate>
+                                    <i class="{{ MutationCtrl.evItemSortIcon('uiEvidenceDirection', sort) }}" />
                                 </abbr>
                             </th>
                             <th>
@@ -321,6 +328,7 @@
                     </thead>
                     <tbody>
                         <tr data-ng-repeat="evidenceItem in (MutationCtrl.uiEvidenceItems |
+                            orderBy: sort.col : (sort.dir === 'asc') |
                             filter: MutationCtrl.tableFilter.clinicalEvidence |
                             limitTo: MutationCtrl.defaultClinicalEvidenceRowLimit : ((MutationCtrl.currentClinicalEvidencePage-1) * MutationCtrl.defaultClinicalEvidenceRowLimit))">
                             <td>

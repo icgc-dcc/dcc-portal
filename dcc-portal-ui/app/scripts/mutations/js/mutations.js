@@ -90,6 +90,46 @@
       _ctrl.mutation.clinical_evidence.civic || []
     );
 
+    // Sort functions for evidence items
+    _ctrl.evItemsSorter = function(nextCol, sort) {
+      var defaultSort = {
+        col: nextCol,
+        dir: "desc"
+      };
+
+      // If sort is undefined return default sort
+      if (typeof sort == "undefined") {
+        return defaultSort;
+      }
+
+      // Changing sort direction on same column ...
+      if (nextCol === sort.col) {
+        return {
+          col: nextCol,
+          dir: sort.dir === "asc" ? "desc" : "asc"
+        };
+      }
+
+      // New column sort is the default
+      return {
+        col: nextCol,
+        dir: "desc"
+      };
+    };
+
+    _ctrl.evItemSortIcon = function(thisCol, sort) {
+      var isOrderingCol = thisCol === sort.col;
+
+      if (isOrderingCol && sort.dir === "desc") {
+        return "icon-sort-down";
+      } else if (isOrderingCol && sort.dir === "asc") {
+        return "icon-sort-up";
+      }
+
+      // Defaul is sideways icon idicating no sort on the column
+      return "icon-sort";
+    };
+
     if (_ctrl.mutation.hasOwnProperty("occurrences")) {
       _ctrl.mutation.occurrences.forEach(function(occurrence) {
         if (projects.hasOwnProperty(occurrence.projectId)) {
