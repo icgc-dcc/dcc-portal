@@ -304,7 +304,8 @@
             uiEvidenceType: evidenceItems.evidenceType,
             uiClinicalImpact: evidenceItems.clinicalImpact,
             uiEvidenceDirection: evidenceItems.evidenceDirection,
-            uiPubmedID: evidenceItems.pubmedID
+            uiPubmedID: evidenceItems.pubmedID,
+            doid: evidenceItems.doid
           }
         );
       });

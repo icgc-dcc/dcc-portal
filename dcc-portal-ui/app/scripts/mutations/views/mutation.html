@@ -332,7 +332,10 @@
                             filter: MutationCtrl.tableFilter.clinicalEvidence |
                             limitTo: MutationCtrl.defaultClinicalEvidenceRowLimit : ((MutationCtrl.currentClinicalEvidencePage-1) * MutationCtrl.defaultClinicalEvidenceRowLimit))">
                             <td>
-                                <span data-ng-bind-html="evidenceItem.uiDisease | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
+                                <a data-ng-href="http://disease-ontology.org/term/DOID:{{evidenceItem.doid}}" target="_blank">
+                                    <i class="icon-external-link"></i>
+                                    <span data-ng-bind-html="evidenceItem.uiDisease | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
+                                </a>
                             </td>
                             <td>
                                 <span data-ng-bind-html="evidenceItem.uiDrugs | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
@@ -354,7 +357,10 @@
                                 <span data-ng-bind-html="evidenceItem.uiEvidenceDirection | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
                             </td>
                             <td>
-                                <span data-ng-bind-html="evidenceItem.uiPubmedID | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
+                                <a data-ng-href="https://www.ncbi.nlm.nih.gov/pubmed/{{evidenceItem.uiPubmedID}}" target="_blank">
+                                    <i class="icon-external-link"></i>
+                                    <span data-ng-bind-html="evidenceItem.uiPubmedID | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
