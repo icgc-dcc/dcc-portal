@@ -296,7 +296,10 @@
           {},
           {
             uiDisease: evidenceItems.disease,
-            uiDrugs: evidenceItems.drugs,
+            uiDrugs:
+              evidenceItems.drugs.length > 0
+                ? evidenceItems.drugs.split(/,\s*(?![^()]*\))/)
+                : [],
             uiEvidenceStatement: evidenceItems.evidenceStatement,
             uiEvidenceLevel: evidenceLevelTransform(
               evidenceItems.evidenceLevel

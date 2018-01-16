@@ -338,7 +338,9 @@
                                 </a>
                             </td>
                             <td>
-                                <span data-ng-bind-html="evidenceItem.uiDrugs | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
+                                <hide-list data-ng-if="evidenceItem.uiDrugs" data-items='evidenceItem.uiDrugs' data-template-name="template/mutationDrugList.html"
+                                    data-highlight-filter="MutationCtrl.tableFilter.clinicalEvidence">
+                                </hide-list>
                             </td>
                             <td>
                                 <hide-text text="{{evidenceItem.uiEvidenceStatement}}" data-highlight-filter="MutationCtrl.tableFilter.clinicalEvidence"
