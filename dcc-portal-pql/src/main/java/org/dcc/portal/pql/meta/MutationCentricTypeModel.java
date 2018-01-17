@@ -17,6 +17,7 @@
  */
 package org.dcc.portal.pql.meta;
 
+import static org.dcc.portal.pql.meta.field.ArrayFieldModel.arrayOfObjects;
 import static org.dcc.portal.pql.meta.field.ArrayFieldModel.arrayOfStrings;
 import static org.dcc.portal.pql.meta.field.ArrayFieldModel.nestedArrayOfObjects;
 import static org.dcc.portal.pql.meta.field.LongFieldModel.long_;
@@ -55,7 +56,9 @@ public class MutationCentricTypeModel extends TypeModel {
       "functionalImpact",
       "sequencingStrategy",
       "study",
-      "chromosome");
+      "chromosome",
+      "clinvarClinicalSignificance",
+      "civicEvidenceLevel");
 
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "id",
@@ -152,12 +155,16 @@ public class MutationCentricTypeModel extends TypeModel {
 
   private static ObjectFieldModel defineClinicalSignificance() {
     return object("clinical_significance", "clinical_significance",
-        nestedObject("clinvar"));
+            object("clinvar",
+              string("clinicalSignificance", "clinvarClinicalSignificance")
+            ));
   }
 
   private static ObjectFieldModel defineClinicalEvidence() {
     return object("clinical_evidence", "clinical_evidence",
-            nestedArrayOfObjects("civic", nestedObject("civic")));
+            arrayOfObjects("civic", object(
+              string("evidenceLevel", "civicEvidenceLevel")
+            )));
   }
 
   private static ObjectFieldModel defineSummary() {

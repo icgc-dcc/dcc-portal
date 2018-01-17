@@ -105,7 +105,16 @@ public class ObservationCentricTypeModel extends TypeModel {
         string("chromosome", ImmutableSet.of("mutation.chromosome", "chromosome")),
         long_("chromosome_start", ImmutableSet.of("mutation.start", "start")),
         long_("chromosome_end", ImmutableSet.of("mutation.end", "end")),
-        string("mutation", "mutation"));
+        string("mutation", "mutation"),
+        object("clinical_significance",
+          object("clinvar",
+            string("clinicalSignificance", "mutation.clinvarClinicalSignificance")
+        )),
+        object("clinical_evidence",
+                nestedArrayOfObjects("civic", object(
+                        string("evidenceLevel", "mutation.civicEvidenceLevel")
+        ))
+    ));
   }
 
   private static ArrayFieldModel defineSsmObservation() {

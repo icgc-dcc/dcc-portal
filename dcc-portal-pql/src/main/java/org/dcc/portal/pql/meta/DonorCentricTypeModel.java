@@ -238,6 +238,14 @@ public class DonorCentricTypeModel extends TypeModel {
                 string("consequence_type", "mutation.consequenceType"),
                 string("functional_impact_prediction_summary", "mutation.functionalImpact"))),
         string("mutation_type", "mutation.type"),
+        object("clinical_significance",
+                object("clinvar",
+                        string("clinicalSignificance", "mutation.clinvarClinicalSignificance")
+                )),
+        object("clinical_evidence",
+            nestedArrayOfObjects("civic", object(
+                  string("evidenceLevel", "mutation.civicEvidenceLevel")
+        ))),
         nestedArrayOfObjects("observation", initObservation()));
   }
 
