@@ -15,37 +15,71 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function () {
-  'use strict';
+(function() {
+  "use strict";
 
-  var module = angular.module('icgc.facets.terms', ['icgc.facets.helpers']);
+  var module = angular.module("icgc.facets.terms", ["icgc.facets.helpers"]);
 
-  module.controller('termsCtrl', 
-    function ($scope, $filter, Facets, HighchartsService, ProjectCache, ValueTranslator, LocationService) {
- 
-      $scope.resetPaginationOnChange = _.isUndefined($scope.resetPaginationOnChange) ? true : $scope.resetPaginationOnChange;  
-      $scope.search = {};
+  module.controller("termsCtrl", function(
+    $scope,
+    $filter,
+    Facets,
+    HighchartsService,
+    ProjectCache,
+    ValueTranslator,
+    LocationService
+  ) {
+    $scope.resetPaginationOnChange = _.isUndefined(
+      $scope.resetPaginationOnChange
+    )
+      ? true
+      : $scope.resetPaginationOnChange;
+    $scope.search = {};
 
     // Translation on UI is slow, do in here
-    function addTranslations (terms, facetName, missingText) {
+    function addTranslations(terms, facetName, missingText) {
       var t = ValueTranslator;
 
-      terms.forEach (function (term) {
+      terms.forEach(function(term) {
         var termName = term.term;
-        term.label = t.translate (termName, facetName);
+        term.label = t.translate(termName, facetName);
 
-        if (termName === '_missing' && missingText) {
+        if (termName === "_missing" && missingText) {
           term.label = missingText;
         }
 
-        if (_.includes (['projectId', 'projectCode'], facetName)) {
-          ProjectCache.getData().then (function (cache) {
+        if (_.includes(["projectId", "projectCode"], facetName)) {
+          ProjectCache.getData().then(function(cache) {
             term.tooltip = cache[termName];
           });
         } else {
-          term.tooltip = t.tooltip (termName, facetName);
+          term.tooltip = t.tooltip(termName, facetName);
+        }
+
+        // Relabel civic evidence levels to custom mapping
+        if (facetName === "civicEvidenceLevel") {
+          term.label = evidenceLevelTransform(term.label);
         }
       });
+    }
+
+    // Used to append data to evidence level making
+    // it much easier to filter on
+    function evidenceLevelTransform(level) {
+      switch (level) {
+        case "A":
+          return "A - Validated";
+        case "B":
+          return "B - Clinical";
+        case "C":
+          return "C - Case";
+        case "D":
+          return "D - Preclinical";
+        case "E":
+          return "E - Inferential";
+        default:
+          return level;
+      }
     }
 
     function splitTerms() {
@@ -53,76 +87,79 @@
       var terms = $scope.facet.terms;
       var missingText = $scope.missingText;
 
-      var actives = Facets.getActiveTerms ({
+      var actives = Facets.getActiveTerms({
         type: $scope.type,
         facet: facetName,
         terms: terms
       });
 
-      var params = {type: $scope.type,facet: $scope.facetName};
+      var params = { type: $scope.type, facet: $scope.facetName };
       $scope.isNot = Facets.isNot(params);
-      $scope.activeClass = Facets.isNot(params) ? 
-        't_facets__facet__not' : '';
+      $scope.activeClass = Facets.isNot(params) ? "t_facets__facet__not" : "";
 
       $scope.actives = actives;
-      addTranslations (actives, facetName, missingText);
+      addTranslations(actives, facetName, missingText);
 
-      var inactives = Facets.getInactiveTerms ({
+      var inactives = Facets.getInactiveTerms({
         actives: actives,
         terms: terms
       });
 
       $scope.inactives = inactives;
-      addTranslations (inactives, facetName, missingText);
+      addTranslations(inactives, facetName, missingText);
     }
 
     function refresh() {
       if ($scope.facet) {
         splitTerms();
       }
-      
-      var params = {type: $scope.type,facet: $scope.facetName};
+
+      var params = { type: $scope.type, facet: $scope.facetName };
       $scope.isNot = Facets.isNot(params);
-      $scope.activeClass = Facets.isNot(params) ? 
-        't_facets__facet__not' : '';
-      $scope.displayLimit = $scope.expanded === true? $scope.inactives.length : 5;
+      $scope.activeClass = Facets.isNot(params) ? "t_facets__facet__not" : "";
+      $scope.displayLimit =
+        $scope.expanded === true ? $scope.inactives.length : 5;
     }
 
     function onChange() {
       if ($scope.resetPaginationOnChange) {
-        LocationService.goToFirstPage($scope.type + 's');
+        LocationService.goToFirstPage($scope.type + "s");
       }
     }
 
     $scope.displayLimit = 5;
     $scope.track = global.track;
-    $scope.addTerms = (facetItems) => {
+    $scope.addTerms = facetItems => {
       const terms = facetItems.map(x => x.term);
-      Facets.addTerms(terms.map( term => ({
-        type: $scope.type,
-        facet: $scope.facetName,
-        term: term
-      })));
+      Facets.addTerms(
+        terms.map(term => ({
+          type: $scope.type,
+          facet: $scope.facetName,
+          term: term
+        }))
+      );
       onChange();
     };
-    $scope.removeTerms = (facetItems) => {
+    $scope.removeTerms = facetItems => {
       const terms = facetItems.map(x => x.term);
-      Facets.removeTerms(terms.map( term => ({
-        type: $scope.type,
-        facet: $scope.facetName,
-        term: term
-      })));
+      Facets.removeTerms(
+        terms.map(term => ({
+          type: $scope.type,
+          facet: $scope.facetName,
+          term: term
+        }))
+      );
       onChange();
     };
 
-    $scope.removeFacet = function () {
+    $scope.removeFacet = function() {
       Facets.removeFacet({
         type: $scope.type,
         facet: $scope.facetName
       });
       onChange();
     };
-    
+
     $scope.notFacet = function() {
       Facets.notFacet({
         type: $scope.type,
@@ -138,75 +175,87 @@
       });
       onChange();
     };
-    
-    $scope.bar = function (count) {
-      return {width: (count / ($scope.facet.total + $scope.facet.missing) * 100) + '%'};
+
+    $scope.bar = function(count) {
+      return {
+        width: count / ($scope.facet.total + $scope.facet.missing) * 100 + "%"
+      };
     };
 
-    $scope.iconClass = function (data) {
+    $scope.iconClass = function(data) {
       var f = $scope.iconGetter();
-      return _.isFunction (f) ? f (data) : '';
+      return _.isFunction(f) ? f(data) : "";
     };
 
     $scope.toggle = function() {
       $scope.expanded = !$scope.expanded;
       if (!$scope.collapsed) {
-        $scope.displayLimit = $scope.expanded === true? $scope.inactives.length : 5;
+        $scope.displayLimit =
+          $scope.expanded === true ? $scope.inactives.length : 5;
       }
     };
 
     $scope.sites = HighchartsService.primarySiteColours;
 
     refresh();
-    $scope.$watch('facet', refresh);
+    $scope.$watch("facet", refresh);
   });
 
-  module.directive('terms', function () {
+  module.directive("terms", function() {
     return {
-      restrict: 'E',
+      restrict: "E",
       scope: {
         // Routing
-        type: '@',
-        facetName: '@',
+        type: "@",
+        facetName: "@",
 
         // Label
-        label: '@',
-        hideCount: '=',
-        hideText: '@',
-        missingText: '@',
+        label: "@",
+        hideCount: "=",
+        hideText: "@",
+        missingText: "@",
 
-        facet: '=',
-        defined: '@',
-        collapsed: '@',
+        facet: "=",
+        defined: "@",
+        collapsed: "@",
 
-        iconGetter: '&iconGetter',
-        showWhenEmpty: '<',
+        iconGetter: "&iconGetter",
+        showWhenEmpty: "<",
 
-        resetPaginationOnChange: '<',
+        resetPaginationOnChange: "<",
 
         //Search Config
-        searchIconShowLimit : '@'
+        searchIconShowLimit: "@"
       },
       transclude: true,
-      templateUrl: '/scripts/facets/views/terms.html',
-      controller: 'termsCtrl'
+      templateUrl: "/scripts/facets/views/terms.html",
+      controller: "termsCtrl"
     };
   });
 
-  module.directive('activeTerm', function () {
+  module.directive("activeTerm", function() {
     return {
-      restrict: 'A',
+      restrict: "A",
       //require: '^terms',
-      link: function (scope, element) {
-
-        scope.mouseOver = function () {
-          element.find('i').removeClass('icon-ok').addClass('icon-cancel');
-          element.find('.t_facets__facet__terms__active__term__label__text span').css({textDecoration: 'line-through'});
+      link: function(scope, element) {
+        scope.mouseOver = function() {
+          element
+            .find("i")
+            .removeClass("icon-ok")
+            .addClass("icon-cancel");
+          element
+            .find(".t_facets__facet__terms__active__term__label__text span")
+            .css({ textDecoration: "line-through" });
         };
 
-        scope.mouseLeave = function () {
-          element.find('i').removeClass('icon-cancel').addClass('icon-ok');
-          element.find('.t_facets__facet__terms__active__term__label__text span').css({textDecoration: 'none'});
+        scope.mouseLeave = function() {
+          element
+            .find("i")
+            .removeClass("icon-cancel")
+            .addClass("icon-ok");
+          element
+            .find(".t_facets__facet__terms__active__term__label__text span")
+            .css({ textDecoration: "none" });
         };
       }
     };
