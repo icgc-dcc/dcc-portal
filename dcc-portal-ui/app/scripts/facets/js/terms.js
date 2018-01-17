@@ -58,7 +58,9 @@
 
         // Relabel civic evidence levels to custom mapping
         if (facetName === "civicEvidenceLevel") {
-          term.label = evidenceLevelTransform(term.label);
+          var transformedLevel = evidenceLevelTransform(term.label);
+          term.label = transformedLevel;
+          term.tooltip = transformedLevel;
         }
       });
     }
