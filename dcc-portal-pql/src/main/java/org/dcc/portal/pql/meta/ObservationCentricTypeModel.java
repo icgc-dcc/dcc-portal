@@ -109,7 +109,12 @@ public class ObservationCentricTypeModel extends TypeModel {
         object("clinical_significance",
           object("clinvar",
             string("clinicalSignificance", "mutation.clinvarClinicalSignificance")
-        )));
+        )),
+        object("clinical_evidence",
+                nestedArrayOfObjects("civic", object(
+                        string("evidenceLevel", "mutation.civicEvidenceLevel")
+        ))
+    ));
   }
 
   private static ArrayFieldModel defineSsmObservation() {

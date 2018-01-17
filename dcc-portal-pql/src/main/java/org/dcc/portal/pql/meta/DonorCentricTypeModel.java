@@ -242,6 +242,10 @@ public class DonorCentricTypeModel extends TypeModel {
                 object("clinvar",
                         string("clinicalSignificance", "mutation.clinvarClinicalSignificance")
                 )),
+        object("clinical_evidence",
+            nestedArrayOfObjects("civic", object(
+                  string("evidenceLevel", "mutation.civicEvidenceLevel")
+        ))),
         nestedArrayOfObjects("observation", initObservation()));
   }
 

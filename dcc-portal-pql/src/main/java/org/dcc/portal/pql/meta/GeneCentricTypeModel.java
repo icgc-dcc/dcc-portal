@@ -177,6 +177,10 @@ public class GeneCentricTypeModel extends TypeModel {
           object("clinvar",
             string("clinicalSignificance", "mutation.clinvarClinicalSignificance")
           )),
+        object("clinical_evidence",
+                nestedArrayOfObjects("civic", object(
+                        string("evidenceLevel", "mutation.civicEvidenceLevel")
+                ))),
         defineConsequence(),
         defineObservation());
 
