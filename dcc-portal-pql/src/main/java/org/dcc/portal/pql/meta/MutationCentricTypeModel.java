@@ -55,7 +55,8 @@ public class MutationCentricTypeModel extends TypeModel {
       "functionalImpact",
       "sequencingStrategy",
       "study",
-      "chromosome");
+      "chromosome",
+      "clinvarClinicalSignificance");
 
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "id",
@@ -152,7 +153,9 @@ public class MutationCentricTypeModel extends TypeModel {
 
   private static ObjectFieldModel defineClinicalSignificance() {
     return object("clinical_significance", "clinical_significance",
-        nestedObject("clinvar"));
+            object("clinvar",
+              string("clinicalSignificance", "clinvarClinicalSignificance")
+            ));
   }
 
   private static ObjectFieldModel defineClinicalEvidence() {

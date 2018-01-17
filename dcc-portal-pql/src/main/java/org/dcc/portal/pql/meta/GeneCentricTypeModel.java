@@ -173,6 +173,10 @@ public class GeneCentricTypeModel extends TypeModel {
         string("chromosome", "mutation.chromosome"),
         long_("chromosome_end", "mutation.end"),
         long_("chromosome_start", "mutation.start"),
+        object("clinical_significance",
+          object("clinvar",
+            string("clinicalSignificance", "mutation.clinvarClinicalSignificance")
+          )),
         defineConsequence(),
         defineObservation());
 
