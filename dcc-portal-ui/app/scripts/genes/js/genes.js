@@ -121,6 +121,7 @@
 
   module.controller("GeneCtrl", function(
     $scope,
+    $modal,
     HighchartsService,
     Page,
     Projects,
@@ -161,6 +162,15 @@
 
     _ctrl.hasNoExternal = function(dbId) {
       return _.get(_ctrl.gene, ["externalDbIds", dbId], []).length === 0;
+    };
+
+    // Temp
+    _ctrl.openMutationModal = function() {
+      $modal.open({
+        templateUrl:
+          "/scripts/mutations/views/mutations.evidenceItemsModal.html",
+        controller: "EvidenceItemModalCtrl"
+      });
     };
 
     function extractAndSort(list, type) {

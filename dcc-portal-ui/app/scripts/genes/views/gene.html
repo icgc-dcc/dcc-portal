@@ -542,7 +542,7 @@
                                 <span data-ng-if="!mutation.uiClinicalEvidenceCounts || mutation.uiClinicalEvidenceCounts[0] == 0">--</span>
                             </td>
                             <td>
-                                <span data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[1] > 0">{{mutation.uiClinicalEvidenceCounts[1]}}</span>
+                                <span data-ng-click="GeneCtrl.openMutationModal()" data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[1] > 0">{{mutation.uiClinicalEvidenceCounts[1]}}</span>
                                 <span data-ng-if="!mutation.uiClinicalEvidenceCounts || mutation.uiClinicalEvidenceCounts[1] == 0">--</span>
                             </td>
                             <td>

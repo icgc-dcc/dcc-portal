@@ -297,6 +297,14 @@
       return _.some(mutation.study, PCAWG.isPCAWGStudy);
     };
   });
+
+  module.controller("EvidenceItemModalCtrl", function($scope, $modalInstance) {
+    $scope.params = {};
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss("cancel");
+    };
+  });
 })();
 
 (function() {
