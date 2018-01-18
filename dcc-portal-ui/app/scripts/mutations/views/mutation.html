@@ -332,10 +332,11 @@
                             filter: MutationCtrl.tableFilter.clinicalEvidence |
                             limitTo: MutationCtrl.defaultClinicalEvidenceRowLimit : ((MutationCtrl.currentClinicalEvidencePage-1) * MutationCtrl.defaultClinicalEvidenceRowLimit))">
                             <td>
-                                <a data-ng-href="http://disease-ontology.org/term/DOID:{{evidenceItem.doid}}" target="_blank">
+                                <a data-ng-if="evidenceItem.doid.length > 0" data-ng-href="http://disease-ontology.org/term/DOID:{{evidenceItem.doid}}" target="_blank">
                                     <i class="icon-external-link"></i>
                                     <span data-ng-bind-html="evidenceItem.uiDisease | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
                                 </a>
+                                <span data-ng-if="evidenceItem.doid.length == 0" data-ng-bind-html="evidenceItem.uiDisease | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
                             </td>
                             <td>
                                 <hide-list data-ng-if="evidenceItem.uiDrugs" data-items='evidenceItem.uiDrugs' data-template-name="template/mutationDrugList.html"
