@@ -272,25 +272,6 @@
     }
 
     function getUiEvidenceItems(evidenceItems) {
-      // Used to append data to evidence level making
-      // it much easier to filter on
-      const evidenceLevelTransform = function(level) {
-        switch (level) {
-          case "A":
-            return "A - Validated";
-          case "B":
-            return "B - Clinical";
-          case "C":
-            return "C - Case";
-          case "D":
-            return "D - Preclinical";
-          case "E":
-            return "E - Inferential";
-          default:
-            return level;
-        }
-      };
-
       return evidenceItems.map(function(evidenceItems) {
         return _.extend(
           {},
@@ -301,9 +282,7 @@
                 ? evidenceItems.drugs.split(/,\s*(?![^()]*\))/)
                 : [],
             uiEvidenceStatement: evidenceItems.evidenceStatement,
-            uiEvidenceLevel: evidenceLevelTransform(
-              evidenceItems.evidenceLevel
-            ),
+            uiEvidenceLevel: evidenceItems.evidenceLevel,
             uiEvidenceType: evidenceItems.evidenceType,
             uiClinicalImpact: evidenceItems.clinicalImpact,
             uiEvidenceDirection: evidenceItems.evidenceDirection,

@@ -55,33 +55,7 @@
         } else {
           term.tooltip = t.tooltip(termName, facetName);
         }
-
-        // Relabel civic evidence levels to custom mapping
-        if (facetName === "civicEvidenceLevel") {
-          var transformedLevel = evidenceLevelTransform(term.label);
-          term.label = transformedLevel;
-          term.tooltip = transformedLevel;
-        }
       });
-    }
-
-    // Used to append data to evidence level making
-    // it much easier to filter on
-    function evidenceLevelTransform(level) {
-      switch (level) {
-        case "A":
-          return "A - Validated";
-        case "B":
-          return "B - Clinical";
-        case "C":
-          return "C - Case";
-        case "D":
-          return "D - Preclinical";
-        case "E":
-          return "E - Inferential";
-        default:
-          return level;
-      }
     }
 
     function splitTerms() {
