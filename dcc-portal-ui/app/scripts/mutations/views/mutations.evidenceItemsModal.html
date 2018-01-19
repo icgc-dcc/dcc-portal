@@ -2,7 +2,9 @@
   <!-- header -->
   <div class="modal-header clearfix">
     <h3 class="pull-left">
-      <translate>Showing {{params.evidenceItemsCount}} CIVIC curated {{params.level}} evidence records for {{params.mutationId}}</translate>
+      <translate>Showing {{params.evidenceItemsCount}} CIVIC curated {{params.level}} evidence records for
+        <a data-ng-href="/mutations/{{ params.mutationId }}">{{ params.mutationId }}</a>
+      </translate>
     </h3>
 
     <button class="pull-right t_button" data-ng-click="cancel()">
