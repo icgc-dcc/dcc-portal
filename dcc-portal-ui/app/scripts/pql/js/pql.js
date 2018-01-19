@@ -81,7 +81,6 @@ require('./pql.scss');
      * return: Promise with result of Restangular request to get PQL
      */
     this.getPQL = function () {
-
       const filters = FilterService.filters();
       const params = {
         queryType: 'DONOR_CENTRIC',
@@ -91,8 +90,12 @@ require('./pql.scss');
         filters: filters,
       };
 
-      const searchTab = $state.current.data.tab;
+      const searchTab = $state.current.name === 'dataRepositories' ? 'file' : $state.current.data.tab;
       switch(searchTab) {
+        case 'file':
+        params.queryType='FILE';
+        _.merge(params, parsePaginationParams('file'));
+        break;
         case 'gene':
         params.queryType='GENE_CENTRIC';
         _.merge(params, parsePaginationParams('genes'));
