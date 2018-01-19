@@ -298,8 +298,33 @@
     };
   });
 
-  module.controller("EvidenceItemModalCtrl", function($scope, $modalInstance) {
+  module.controller("EvidenceItemModalCtrl", function(
+    $scope,
+    $modalInstance,
+    mutation,
+    levelFilter
+  ) {
     $scope.params = {};
+    $scope.params.mutationId = mutation.id;
+
+    // Filter to only relevant level
+    $scope.params.evidenceItems = levelFilter
+      ? mutation.clinical_evidence.civic.filter(
+          item => item.evidenceLevel === levelFilter
+        )
+      : mutation.clinical_evidence.civic;
+
+    // Fix drugs to be a list
+    $scope.params.evidenceItems = $scope.params.evidenceItems.map(item => {
+      item.drugs =
+        item.drugs.length > 0 && typeof item.drugs === "string"
+          ? item.drugs.split(/,\s*(?![^()]*\))/)
+          : [];
+      return item;
+    });
+
+    $scope.params.evidenceItemsCount = $scope.params.evidenceItems.length;
+    $scope.params.level = levelFilter[0];
 
     $scope.cancel = function() {
       $modalInstance.dismiss("cancel");

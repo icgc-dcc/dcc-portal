@@ -538,23 +538,23 @@
                                 {{ mutation.clinical_significance.clinvar.clinicalSignificance }}
                             </td>
                             <td>
-                                <span data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[0] > 0">{{mutation.uiClinicalEvidenceCounts[0]}}</span>
+                                <span class="link" data-ng-click="GeneCtrl.openMutationModal(mutation, 'A - Validated')" data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[0] > 0">{{mutation.uiClinicalEvidenceCounts[0]}}</span>
                                 <span data-ng-if="!mutation.uiClinicalEvidenceCounts || mutation.uiClinicalEvidenceCounts[0] == 0">--</span>
                             </td>
                             <td>
-                                <span data-ng-click="GeneCtrl.openMutationModal()" data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[1] > 0">{{mutation.uiClinicalEvidenceCounts[1]}}</span>
+                                <span class="link" data-ng-click="GeneCtrl.openMutationModal(mutation, 'B - Clinical')" data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[1] > 0">{{mutation.uiClinicalEvidenceCounts[1]}}</span>
                                 <span data-ng-if="!mutation.uiClinicalEvidenceCounts || mutation.uiClinicalEvidenceCounts[1] == 0">--</span>
                             </td>
                             <td>
-                                <span data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[2] > 0">{{mutation.uiClinicalEvidenceCounts[2]}}</span>
+                                <span class="link" data-ng-click="GeneCtrl.openMutationModal(mutation, 'C - Case')" data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[2] > 0">{{mutation.uiClinicalEvidenceCounts[2]}}</span>
                                 <span data-ng-if="!mutation.uiClinicalEvidenceCounts || mutation.uiClinicalEvidenceCounts[2] == 0">--</span>
                             </td>
                             <td>
-                                <span data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[3] > 0">{{mutation.uiClinicalEvidenceCounts[3]}}</span>
+                                <span class="link" data-ng-click="GeneCtrl.openMutationModal(mutation, 'D - Preclinical')" data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[3] > 0">{{mutation.uiClinicalEvidenceCounts[3]}}</span>
                                 <span data-ng-if="!mutation.uiClinicalEvidenceCounts || mutation.uiClinicalEvidenceCounts[3] == 0">--</span>
                             </td>
                             <td>
-                                <span data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[4] > 0">{{mutation.uiClinicalEvidenceCounts[4]}}</span>
+                                <span class="link" data-ng-click="GeneCtrl.openMutationModal(mutation, 'B - Clinical')" data-ng-if="mutation.uiClinicalEvidenceCounts && mutation.uiClinicalEvidenceCounts[4] > 0">{{mutation.uiClinicalEvidenceCounts[4]}}</span>
                                 <span data-ng-if="!mutation.uiClinicalEvidenceCounts || mutation.uiClinicalEvidenceCounts[4] == 0">--</span>
                             </td>
                             <td class="text-right" style="white-space: nowrap">

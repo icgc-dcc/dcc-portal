@@ -165,11 +165,16 @@
     };
 
     // Temp
-    _ctrl.openMutationModal = function() {
+    _ctrl.openMutationModal = function(mutation, levelFilter) {
       $modal.open({
         templateUrl:
           "/scripts/mutations/views/mutations.evidenceItemsModal.html",
-        controller: "EvidenceItemModalCtrl"
+        controller: "EvidenceItemModalCtrl",
+        size: "lg",
+        resolve: {
+          mutation: () => mutation,
+          levelFilter: () => levelFilter
+        }
       });
     };
 
