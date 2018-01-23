@@ -130,6 +130,44 @@
       return "icon-sort";
     };
 
+    // Append manual text to description
+    if (_ctrl.mutation.description) {
+      _ctrl.mutation.description += " [provided by CIVIC, Jan 2018]";
+    }
+
+    // Append manual text to clinical significance
+    if (_ctrl.mutation.clinical_significance.clinvar) {
+      const parseDate = date => {
+        if (date) {
+          const months = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+          ];
+          const dateObj = new Date(
+            _ctrl.mutation.clinical_significance.clinvar.lastEvaluated
+          );
+          return months[dateObj.getMonth()] + " " + dateObj.getFullYear();
+        }
+
+        return "Jan 2018";
+      };
+      const date = parseDate(
+        _ctrl.mutation.clinical_significance.clinvar.lastEvaluated
+      );
+      _ctrl.mutation.clinical_significance.clinvar.clinicalSignificance +=
+        " [provided by Clinvar, " + date + "]";
+    }
+
     if (_ctrl.mutation.hasOwnProperty("occurrences")) {
       _ctrl.mutation.occurrences.forEach(function(occurrence) {
         if (projects.hasOwnProperty(occurrence.projectId)) {

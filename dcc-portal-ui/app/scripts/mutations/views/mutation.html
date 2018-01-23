@@ -360,7 +360,7 @@
                                 <span data-ng-bind-html="evidenceItem.uiEvidenceDirection | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
                             </td>
                             <td>
-                                <a data-ng-href="https://www.ncbi.nlm.nih.gov/pubmed/{{evidenceItem.uiPubmedID}}" target="_blank">
+                                <a class="pubmed-link" data-ng-href="https://www.ncbi.nlm.nih.gov/pubmed/{{evidenceItem.uiPubmedID}}" target="_blank">
                                     <i class="icon-external-link"></i>
                                     <span data-ng-bind-html="evidenceItem.uiPubmedID | highlight: MutationCtrl.tableFilter.clinicalEvidence"></span>
                                 </a>

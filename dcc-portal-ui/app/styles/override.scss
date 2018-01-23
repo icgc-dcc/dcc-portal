@@ -17,147 +17,148 @@
 
 /* Bootstrap fixed table text alignment in their 3.0 versions, in the meantime ... */
 .table .text-left {
-    text-align: left;
+  text-align: left;
 }
 
 .table .text-right {
-    text-align: right;
+  text-align: right;
 }
 
 .table .text-center {
-    text-align: center;
+  text-align: center;
 }
 
 .table .text-vert-middle {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .modal-header {
-   padding: 10px;
+  padding: 10px;
 }
 
 .modal-footer {
-   padding: 10px;
+  padding: 10px;
 }
 
 .modal-header h3 {
-   margin: 0
+  margin: 0;
 }
-
 
 /* For file dialogs */
 .btn-file {
-    position: relative;
-    overflow: hidden;
-    font-size: 1.0rem;
+  position: relative;
+  overflow: hidden;
+  font-size: 1rem;
 }
 
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    //font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
+.btn-file input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  //font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
 }
-
 
 textarea {
-   display: block;
-   width: 100%;
-   margin: 0.2rem;
+  display: block;
+  width: 100%;
+  margin: 0.2rem;
 }
 
 .alert-warning {
-   color: #c09853;
-   background-color: #fcf8e3
+  color: #c09853;
+  background-color: #fcf8e3;
 }
 
 .alert-warning h4 {
-   color: #c09853;
+  color: #c09853;
 }
-
-
 
 /* Style showdown markup */
 .alert-error .release_notice * {
-   color: rgb(220, 50, 47) !important;
+  color: rgb(220, 50, 47) !important;
 }
 
 .markdown-wrapper td,
 .markdown-wrapper th {
-   border: 1px solid rgb(230, 230, 230);
-   text-align: left;
-   padding: .2rem .4rem;
-   line-height: 1rem;
+  border: 1px solid rgb(230, 230, 230);
+  text-align: left;
+  padding: 0.2rem 0.4rem;
+  line-height: 1rem;
 }
 
 .markdown-wrapper p,
-.release_notice p{
-   margin-top: 0.5rem;
-   margin-bottom: 1.0rem;
+.release_notice p {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .markdown-wrapper h1,
 .release_notice h1 {
-   margin-top: 0.5rem;
-   margin-bottom: 0.5rem;
-   font-size: 2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
 }
 
 .markdown-wrapper h2,
 .release_notice h2 {
-   margin-top: 0.5rem;
-   margin-bottom: 0.5rem;
-   font-size: 1.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
 }
 
 .markdown-wrapper h3,
 .release_notice h3 {
-   margin-top: 0.5rem;
-   margin-bottom: 0.5rem;
-   font-size: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
 }
-
-
 
 /* A slimmer pagination control */
 .pagination {
-    margin-top: 0px;
-    margin-bottom: 5px;
-    line-height: 20px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  line-height: 20px;
 }
 
-.pagination >li>a {
-    padding: 0px 12px;
+.pagination > li > a {
+  padding: 0px 12px;
 }
 
-.pagination >li>a {
-    cursor: pointer;
+.pagination > li > a {
+  cursor: pointer;
 }
 
 /*** SUGGEST MATCH ***/
 .match {
-    font-weight: bold;
+  font-weight: bold;
 }
-
 
 /**
  * Fix modal jumps when opening dialog
  * See: http://stackoverflow.com/questions/21604674/bootstrap-modal-background-jumps-to-top-on-toggle
  */
 body.modal-open {
-   overflow: visible;
+  overflow: visible;
 }
 
-.popover.ng-animate{
-   transition: opacity .01s ease;
-   opacity: 0 !important;
+.popover.ng-animate {
+  transition: opacity 0.01s ease;
+  opacity: 0 !important;
+}
+
+/*** Pubmed Column Width Fix ***/
+.pubmed-link {
+  @include breakpoint($break-laptop) {
+    display: block;
+    min-width: 75px;
+  }
 }
