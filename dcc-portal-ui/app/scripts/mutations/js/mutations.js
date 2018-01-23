@@ -345,12 +345,25 @@
     $scope.params = {};
     $scope.params.mutationId = mutation.id;
 
-    // Filter to only relevant level
+    // Filter to only relevant level if level provided, otherwise
+    // show all evidence items sorted by evidence level
     $scope.params.evidenceItems = levelFilter
       ? mutation.clinical_evidence.civic.filter(
           item => item.evidenceLevel === levelFilter
         )
-      : mutation.clinical_evidence.civic;
+      : mutation.clinical_evidence.civic.sort((a, b) => {
+          const levelA = a.evidenceLevel[0];
+          const levelB = b.evidenceLevel[0];
+          if (levelA < levelB) {
+            return -1;
+          }
+          if (levelA > levelB) {
+            return 1;
+          }
+
+          // names must be equal
+          return 0;
+        });
 
     // Fix drugs to be a list
     $scope.params.evidenceItems = $scope.params.evidenceItems.map(item => {
@@ -362,7 +375,7 @@
     });
 
     $scope.params.evidenceItemsCount = $scope.params.evidenceItems.length;
-    $scope.params.level = levelFilter[0];
+    $scope.params.level = levelFilter ? levelFilter[0] : "";
 
     $scope.cancel = function() {
       $modalInstance.dismiss("cancel");

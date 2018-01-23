@@ -164,7 +164,7 @@
       return _.get(_ctrl.gene, ["externalDbIds", dbId], []).length === 0;
     };
 
-    // Temp
+    // Opens mutation modal on click
     _ctrl.openMutationModal = function(mutation, levelFilter) {
       $modal.open({
         templateUrl:
