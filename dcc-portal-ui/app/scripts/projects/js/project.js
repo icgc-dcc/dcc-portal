@@ -219,7 +219,7 @@ module.controller("ProjectCtrl", function(
     $modal.open({
       templateUrl: "/scripts/mutations/views/mutations.evidenceItemsModal.html",
       controller: "EvidenceItemModalCtrl",
-      size: "lg",
+      size: "mutation",
       resolve: {
         mutation: () => mutation,
         levelFilter: () => null

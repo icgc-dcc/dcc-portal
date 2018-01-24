@@ -165,3 +165,12 @@ body.modal-open {
     min-width: 84px;
   }
 }
+
+.modal-mutation {
+  @include breakpoint($screen-md) {
+    width: 920px;
+  }
+  @include breakpoint($break-widescreen) {
+    width: $modal-xl;
+  }
+}

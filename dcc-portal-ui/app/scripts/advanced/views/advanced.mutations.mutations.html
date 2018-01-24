@@ -52,7 +52,7 @@
             </th>
             <th rowspan="2">
                 <abbr data-icgc-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutation' | translate }}" data-tooltip-placement="left"
-                    style="display:block;padding-left:2px;">
+                    style="display:block;">
                     <i class="icon-team">
                     </i>
                 </abbr>
@@ -128,7 +128,7 @@
                 <span data-ng-if="mutation.clinical_evidence.civic == null" style="display:block; text-align:center;">--</span>
             </td>
             <td>
-                <i class="icon-team phenotype-analysis" style="padding-left:2px;" data-ng-click="AdvancedCtrl.launchSurvivalAnalysis('mutation', mutation.id, mutation.id)"></i>
+                <i class="icon-team phenotype-analysis" data-ng-click="AdvancedCtrl.launchSurvivalAnalysis('mutation', mutation.id, mutation.id)"></i>
             </td>
         </tr>
     </tbody>
