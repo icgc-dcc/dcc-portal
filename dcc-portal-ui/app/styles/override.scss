@@ -157,7 +157,7 @@ body.modal-open {
 
 /*** Pubmed Column Width Fix ***/
 .pubmed-link {
-  @include breakpoint($break-laptop) {
+  @include breakpoint($screen-md) {
     display: block;
     min-width: 75px;
   }
