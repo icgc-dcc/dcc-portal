@@ -161,4 +161,7 @@ body.modal-open {
     display: block;
     min-width: 75px;
   }
+  @include breakpoint($break-widescreen) {
+    min-width: 84px;
+  }
 }
