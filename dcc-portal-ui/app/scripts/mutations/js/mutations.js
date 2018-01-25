@@ -213,9 +213,9 @@
       });
     }
 
-    if (mutation.functionalImpact.indexOf("High") > 0) {
+    if (mutation.functionalImpact.indexOf("High") !== -1) {
       mutation.displayedFunctionalImpact = "High";
-    } else if (mutation.functionalImpact.indexOf("Low") > 0) {
+    } else if (mutation.functionalImpact.indexOf("Low") !== -1) {
       mutation.displayedFunctionalImpact = "Low";
     } else {
       mutation.displayedFunctionalImpact = "Unknown";
