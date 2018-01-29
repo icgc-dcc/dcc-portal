@@ -1,0 +1,57 @@
+<section data-ng-if="GeneCtrl.activeTab==='visualizations'" id="protein" class="dynamic-height">
+  <div class="empty" data-ng-if="GeneCtrl.isPVInitialLoad && GeneCtrl.gene.uiProteinTranscript.length">
+    <h3>
+      <i class="icon-spinner icon-spin"></i>Loading Protein...
+    </h3>
+  </div>
+  <div data-ng-if="!GeneCtrl.gene.uiProteinTranscript.length" class="empty">
+    <h3 data-ng-if="GeneCtrl.gene.affectedTranscriptIds.length">
+      <translate>No Protein Coding Transcript Found.</translate>
+    </h3>
+    <h3 data-ng-if="!GeneCtrl.gene.affectedTranscriptIds.length">
+      <translate>No Mutation occurs in coding region of this Gene.</translate>
+    </h3>
+  </div>
+  <div data-ng-if="GeneCtrl.gene.uiProteinTranscript.length"
+      data-ng-init="sorted = (GeneCtrl.gene.uiProteinTranscript | orderBy:'+name')">
+    <h3 data-ng-if="!GeneCtrl.isPVInitialLoad"><translate>Protein</translate></h3>
+
+    <form data-ng-init="transcript = sorted[0]" data-ng-show="GeneCtrl.gene.uiProteinTranscript.length > 0">
+      <div data-ng-show="!GeneCtrl.isPVInitialLoad">
+        <span><strong><translate>Transcript:</translate> </strong>
+        <select data-ng-model="transcript"
+          data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)' for t in sorted"></select>
+        <span data-ng-if="GeneCtrl.isPVLoading"><i class="icon-spinner icon-spin"></i></span>
+      </div>
+      <proteinstructure transcript="transcript" 
+        data-value-height="200" 
+        data-is-initial-load="GeneCtrl.isPVInitialLoad"
+        data-is-pv-loading="GeneCtrl.isPVLoading"
+        data-ng-style="{'opacity': GeneCtrl.isPVLoading ? '0.3' : '1'}"></proteinstructure>
+      </span>
+    </form>
+  </div>
+</section>
+<section data-ng-if="GeneCtrl.activeTab==='visualizations'" id="genomic" class="dynamic-height" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
+  <div class="empty" data-ng-if="GeneCtrl.isGVLoading">
+    <h3>
+      <i class="icon-spinner icon-spin"></i>Loading Genomic Context...
+    </h3>
+  </div>
+  <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
+    <translate>Genomic Context</translate>
+    <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
+  </h3>
+  <h3 data-ng-if="!GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
+    <translate>No Genomic Context available.</translate>
+  </h3>
+
+  <div data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading" class="t_gv__navbar">
+      <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
+      <span class="pull-right gv-navbar-zoom"></span>
+  </div>
+  <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" 
+    region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"
+    data-is-gv-loading="GeneCtrl.isGVLoading"
+    data-ng-style="{'visibility': GeneCtrl.isGVLoading ? 'hidden' : 'visible'}"></gvembed>
+</section>

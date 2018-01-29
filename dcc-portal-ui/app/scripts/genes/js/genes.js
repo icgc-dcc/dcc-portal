@@ -19,20 +19,35 @@
   'use strict';
 
   var module = angular.module('icgc.genes', ['icgc.genes.controllers', 'ui.router', 'app.common']);
+  var stateResolver = {
+    gene: ['$stateParams', 'Genes', 
+    function ($stateParams, Genes) {
+      return Genes.one($stateParams.id).get({include: ['projects', 'transcripts']}).then(function(gene) {
+        return gene;
+      });
+    }]
+  };
 
   module.config(function ($stateProvider) {
     $stateProvider.state('gene', {
       url: '/genes/:id',
       templateUrl: 'scripts/genes/views/gene.html',
       controller: 'GeneCtrl as GeneCtrl',
-      resolve: {
-        gene: ['$stateParams', 'Genes', 
-        function ($stateParams, Genes) {
-          return Genes.one($stateParams.id).get({include: ['projects', 'transcripts']}).then(function(gene) {
-            return gene;
-          });
-        }]
-      }
+      reloadOnSearch: false,
+      data: {tab:'summary'},
+      resolve: stateResolver
+    });
+    $stateProvider.state('gene.relations', {
+      url: '/relations',
+      reloadOnSearch: false,
+      data: {tab:'relations'},
+      resolve: stateResolver
+    });
+    $stateProvider.state('gene.visualizations', {
+      url: '/visualizations',
+      reloadOnSearch: false,
+      data: {tab:'visualizations'},
+      resolve: stateResolver
     });
   });
 })();
@@ -102,12 +117,14 @@
   'use strict';
   var module = angular.module('icgc.genes.controllers', ['icgc.genes.models']);
 
-  module.controller('GeneCtrl', function ($scope, HighchartsService, Page, Projects, Mutations,
-    LocationService, Donors, Genes, GMService, Restangular, ExternalLinks, gene, $filter) {
+  module.controller('GeneCtrl', function ($scope, $state, HighchartsService, Page, Projects, Mutations,
+    LocationService, Donors, Genes, GMService, Restangular, ExternalLinks, gene, FilterService, $filter) {
 
     var _ctrl = this;
     Page.setTitle(gene.id);
     Page.setPage('entity');
+
+    _ctrl.activeTab = $state.current.data.tab;//FilterService.filters() ? 'relations' : 'summary';
 
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
@@ -156,6 +173,7 @@
         include: ['facets'],
         filters: _ctrl.gene.advQuery
       }).then(function(data) {
+        _ctrl.donorFacets = data.facets;
         var ids = _.map(data.facets.projectId.terms, 'term');
 
         if (_.isEmpty(ids)) {
