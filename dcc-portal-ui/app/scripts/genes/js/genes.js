@@ -16,43 +16,39 @@
  */
 
 (function() {
-  "use strict";
+  'use strict';
 
-  var module = angular.module("icgc.genes", [
-    "icgc.genes.controllers",
-    "ui.router",
-    "app.common"
-  ]);
+  var module = angular.module('icgc.genes', ['icgc.genes.controllers', 'ui.router', 'app.common']);
 
   module.config(function($stateProvider) {
-    $stateProvider.state("gene", {
-      url: "/genes/:id",
-      templateUrl: "scripts/genes/views/gene.html",
-      controller: "GeneCtrl as GeneCtrl",
+    $stateProvider.state('gene', {
+      url: '/genes/:id',
+      templateUrl: 'scripts/genes/views/gene.html',
+      controller: 'GeneCtrl as GeneCtrl',
       resolve: {
         gene: [
-          "$stateParams",
-          "Genes",
+          '$stateParams',
+          'Genes',
           function($stateParams, Genes) {
             return Genes.one($stateParams.id)
-              .get({ include: ["projects", "transcripts"] })
+              .get({ include: ['projects', 'transcripts'] })
               .then(function(gene) {
                 return gene;
               });
-          }
-        ]
-      }
+          },
+        ],
+      },
     });
   });
 })();
 
 (function() {
-  "use strict";
+  'use strict';
 
-  var module = angular.module("app.common");
+  var module = angular.module('app.common');
 
   // @bob what should the module be called? - chang
-  module.directive("fixScroll", function($timeout) {
+  module.directive('fixScroll', function($timeout) {
     /**
      * Our function for keeping the page on the current section.
      */
@@ -62,10 +58,10 @@
       // We do not want to immediately scroll away from the controls on page load.
       // Timeout of zero is used to ensure scroll happens after render.
       $timeout(function() {
-        jQuery("body,html").stop(true, true);
+        jQuery('body,html').stop(true, true);
         var offset = jQuery(target).offset();
         var to = offset.top - 40;
-        jQuery("body,html").animate({ scrollTop: to }, 200);
+        jQuery('body,html').animate({ scrollTop: to }, 200);
       });
     }
 
@@ -76,10 +72,7 @@
     function createMutationObservers(elements) {
       var observers = elements.map(function(element) {
         var observer = new MutationObserver(function(mutations) {
-          var shouldScroll = mutations.reduce(function(
-            isSignificantMutation,
-            mutation
-          ) {
+          var shouldScroll = mutations.reduce(function(isSignificantMutation, mutation) {
             return isSignificantMutation || checkMutationSignificance();
           });
           if (shouldScroll) {
@@ -90,7 +83,7 @@
         observer.observe(element, {
           attributes: true,
           childList: true,
-          characterData: true
+          characterData: true,
         });
         return observer;
       });
@@ -99,27 +92,25 @@
     }
 
     return {
-      restrict: "A",
+      restrict: 'A',
       link: function(scope, $element) {
         if (jQuery(window.location.hash).length) {
-          var mutationObservers = createMutationObservers(
-            $element.find(".dynamic-height").get()
-          );
-          scope.$on("$destroy", function() {
+          var mutationObservers = createMutationObservers($element.find('.dynamic-height').get());
+          scope.$on('$destroy', function() {
             mutationObservers.forEach(function(observer) {
               observer.disconnect();
             });
           });
         }
-      }
+      },
     };
   });
 })();
 (function() {
-  "use strict";
-  var module = angular.module("icgc.genes.controllers", ["icgc.genes.models"]);
+  'use strict';
+  var module = angular.module('icgc.genes.controllers', ['icgc.genes.models']);
 
-  module.controller("GeneCtrl", function(
+  module.controller('GeneCtrl', function(
     $scope,
     $modal,
     HighchartsService,
@@ -133,11 +124,11 @@
     Restangular,
     ExternalLinks,
     gene,
-    $filter
+    $filter,
   ) {
     var _ctrl = this;
     Page.setTitle(gene.id);
-    Page.setPage("entity");
+    Page.setPage('entity');
 
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
@@ -151,9 +142,7 @@
     _ctrl.gene.uiProteinTranscript = [];
     _ctrl.gene.fprojects = [];
     _ctrl.totalDonors = 0;
-    _ctrl.gene.hasGVChromosome = GMService.isValidChromosome(
-      _ctrl.gene.chromosome
-    );
+    _ctrl.gene.hasGVChromosome = GMService.isValidChromosome(_ctrl.gene.chromosome);
 
     // Defaults for client side pagination
     _ctrl.currentProjectsPage = 1;
@@ -161,26 +150,25 @@
     _ctrl.rowSizes = [10, 25, 50];
 
     _ctrl.hasNoExternal = function(dbId) {
-      return _.get(_ctrl.gene, ["externalDbIds", dbId], []).length === 0;
+      return _.get(_ctrl.gene, ['externalDbIds', dbId], []).length === 0;
     };
 
     // Opens mutation modal on click
     _ctrl.openMutationModal = function(mutation, levelFilter) {
       $modal.open({
-        templateUrl:
-          "/scripts/mutations/views/mutations.evidenceItemsModal.html",
-        controller: "EvidenceItemModalCtrl",
-        size: "mutation",
+        templateUrl: '/scripts/mutations/views/mutations.evidenceItemsModal.html',
+        controller: 'EvidenceItemModalCtrl',
+        size: 'mutation',
         resolve: {
           mutation: () => mutation,
-          levelFilter: () => levelFilter
-        }
+          levelFilter: () => levelFilter,
+        },
       });
     };
 
     function extractAndSort(list, type) {
       var filtered = _.filter(list, function(set) {
-        return set.type === type && set.annotation === "direct";
+        return set.type === type && set.annotation === 'direct';
       });
       return _.sortBy(filtered, function(set) {
         return set.name;
@@ -189,32 +177,29 @@
 
     // Extract to make it easier to handle on the view
     _ctrl.uiGeneSets = {};
-    _ctrl.uiGeneSets.pathwayList = extractAndSort(_ctrl.gene.sets, "pathway");
-    _ctrl.uiGeneSets.goList = extractAndSort(_ctrl.gene.sets, "go_term");
-    _ctrl.uiGeneSets.curatedList = extractAndSort(
-      _ctrl.gene.sets,
-      "curated_set"
-    );
+    _ctrl.uiGeneSets.pathwayList = extractAndSort(_ctrl.gene.sets, 'pathway');
+    _ctrl.uiGeneSets.goList = extractAndSort(_ctrl.gene.sets, 'go_term');
+    _ctrl.uiGeneSets.curatedList = extractAndSort(_ctrl.gene.sets, 'curated_set');
 
     function refresh() {
       _ctrl.gene.advQuery = LocationService.mergeIntoFilters({
-        gene: { id: { is: [_ctrl.gene.id] } }
+        gene: { id: { is: [_ctrl.gene.id] } },
       });
 
       var geneProjectPromise = Donors.getList({
         size: 0,
         from: 1,
-        include: ["facets"],
-        filters: _ctrl.gene.advQuery
+        include: ['facets'],
+        filters: _ctrl.gene.advQuery,
       }).then(function(data) {
-        var ids = _.map(data.facets.projectId.terms, "term");
+        var ids = _.map(data.facets.projectId.terms, 'term');
 
         if (_.isEmpty(ids)) {
           return [];
         }
 
         return Projects.getList({
-          filters: { project: { id: { is: ids } } }
+          filters: { project: { id: { is: ids } } },
         });
       });
 
@@ -226,12 +211,12 @@
           return;
         }
 
-        mutationPromise = Projects.one(_.map(projects.hits, "id").join(","))
-          .handler.one("mutations", "counts")
+        mutationPromise = Projects.one(_.map(projects.hits, 'id').join(','))
+          .handler.one('mutations', 'counts')
           .get({ filters: _ctrl.gene.advQuery });
 
-        donorPromise = Projects.one(_.map(projects.hits, "id").join(","))
-          .handler.one("donors", "counts")
+        donorPromise = Projects.one(_.map(projects.hits, 'id').join(','))
+          .handler.one('donors', 'counts')
           .get({ filters: _ctrl.gene.advQuery });
 
         mutationPromise.then(function(projectMutations) {
@@ -245,11 +230,10 @@
           .then(function(projectDonors) {
             projects.hits.forEach(function(proj) {
               proj.filteredDonorCount = projectDonors[proj.id];
-              proj.uiAffectedDonorPercentage =
-                proj.filteredDonorCount / proj.ssmTestedDonorCount;
+              proj.uiAffectedDonorPercentage = proj.filteredDonorCount / proj.ssmTestedDonorCount;
               proj.advQuery = LocationService.mergeIntoFilters({
                 gene: { id: { is: [_ctrl.gene.id] } },
-                donor: { projectId: { is: [proj.id] } }
+                donor: { projectId: { is: [proj.id] } },
               });
             });
             _ctrl.bar = HighchartsService.bar({
@@ -257,13 +241,13 @@
                 _.sortBy(projects.hits, function(p) {
                   return -p.uiAffectedDonorPercentage;
                 }),
-                10
+                10,
               ),
-              xAxis: "id",
-              yValue: "uiAffectedDonorPercentage",
+              xAxis: 'id',
+              yValue: 'uiAffectedDonorPercentage',
               options: {
-                linkBase: "/projects/"
-              }
+                linkBase: '/projects/',
+              },
             });
             _ctrl.totalDonors = projectDonors.Total;
           })
@@ -276,7 +260,7 @@
       var params = {
         filters: { gene: { id: { is: [_ctrl.gene.id] } } },
         size: 0,
-        include: ["facets"]
+        include: ['facets'],
       };
 
       Mutations.getList(params).then(function(d) {
@@ -284,21 +268,19 @@
       });
     }
 
-    if (_ctrl.gene.hasOwnProperty("transcripts")) {
+    if (_ctrl.gene.hasOwnProperty('transcripts')) {
       var geneTranscriptPromie = Genes.one(_ctrl.gene.id)
-        .handler.one("affected-transcripts")
+        .handler.one('affected-transcripts')
         .get({});
 
       geneTranscriptPromie.then(function(data) {
-        var affectedTranscriptIds = Restangular.stripRestangular(data)[
-          _ctrl.gene.id
-        ];
+        var affectedTranscriptIds = Restangular.stripRestangular(data)[_ctrl.gene.id];
 
         _ctrl.gene.transcripts.forEach(function(transcript) {
           var hasProteinCoding, isAffected;
 
           // 1) Check if transcript has protein_coding
-          hasProteinCoding = transcript.type === "protein_coding";
+          hasProteinCoding = transcript.type === 'protein_coding';
 
           // 2) Check if transcript is affected
           isAffected = affectedTranscriptIds.indexOf(transcript.id) !== -1;
@@ -318,26 +300,24 @@
           {
             uiId: project.id,
             uiName: project.name,
-            uiFilteredDonorCount: $filter("number")(project.filteredDonorCount),
+            uiFilteredDonorCount: $filter('number')(project.filteredDonorCount),
             uiPrimarySite: project.primarySite,
             uiTumourType: project.tumourType,
             uiTumourSubtype: project.tumourSubtype,
-            uiAffectedDonorPercentage: $filter("number")(
+            uiAffectedDonorPercentage: $filter('number')(
               project.uiAffectedDonorPercentage * 100,
-              2
+              2,
             ),
             uiAdvQuery: project.advQuery,
-            uiSSMTestedDonorCount: $filter("number")(
-              project.ssmTestedDonorCount
-            ),
-            uiMutationCount: $filter("number")(project.mutationCount)
-          }
+            uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
+            uiMutationCount: $filter('number')(project.mutationCount),
+          },
         );
       });
     }
 
-    $scope.$on("$locationChangeSuccess", function(event, dest) {
-      if (dest.indexOf("genes") !== -1) {
+    $scope.$on('$locationChangeSuccess', function(event, dest) {
+      if (dest.indexOf('genes') !== -1) {
         refresh();
       }
     });
@@ -345,19 +325,19 @@
     refresh();
   });
 
-  module.controller("GeneMutationsCtrl", function(
+  module.controller('GeneMutationsCtrl', function(
     $scope,
     HighchartsService,
     LocationService,
     Genes,
     Projects,
     Donors,
-    ProjectCache
+    ProjectCache,
   ) {
     var _ctrl = this;
 
     function success(mutations) {
-      if (mutations.hasOwnProperty("hits")) {
+      if (mutations.hasOwnProperty('hits')) {
         var projectCachePromise = ProjectCache.getData();
 
         _ctrl.mutations = mutations;
@@ -369,30 +349,30 @@
               var counts = civicData.reduce(
                 function(prev, curr) {
                   switch (curr.evidenceLevel) {
-                    case "A - Validated":
+                    case 'A - Validated':
                       prev[0]++;
                       break;
-                    case "B - Clinical":
+                    case 'B - Clinical':
                       prev[1]++;
                       break;
-                    case "C - Case":
+                    case 'C - Case':
                       prev[2]++;
                       break;
-                    case "D - Preclinical":
+                    case 'D - Preclinical':
                       prev[3]++;
                       break;
-                    case "E - Inferential":
+                    case 'E - Inferential':
                       prev[4]++;
                       break;
                   }
                   return prev;
                 },
-                [0, 0, 0, 0, 0]
+                [0, 0, 0, 0, 0],
               );
               return counts;
             };
             mutation.uiClinicalEvidenceCounts = countClinicalEvidence(
-              mutation.clinical_evidence.civic
+              mutation.clinical_evidence.civic,
             );
             return mutation;
           }
@@ -404,13 +384,13 @@
         Projects.getList().then(function(projects) {
           _ctrl.mutations.hits.forEach(function(mutation) {
             mutation.advQuery = LocationService.mergeIntoFilters({
-              mutation: { id: { is: [mutation.id] } }
+              mutation: { id: { is: [mutation.id] } },
             });
 
             Donors.getList({
               size: 0,
-              include: "facets",
-              filters: mutation.advQuery
+              include: 'facets',
+              filters: mutation.advQuery,
             }).then(function(data) {
               mutation.uiDonors = data.facets.projectId.terms;
 
@@ -422,7 +402,7 @@
 
                   facet.advQuery = LocationService.mergeIntoFilters({
                     mutation: { id: { is: [mutation.id] } },
-                    donor: { projectId: { is: [facet.term] } }
+                    donor: { projectId: { is: [facet.term] } },
                   });
 
                   projectCachePromise.then(function(lookup) {
@@ -439,30 +419,30 @@
 
         _ctrl.bar = HighchartsService.bar({
           hits: _ctrl.mutations.hits,
-          xAxis: "id",
-          yValue: "affectedDonorCountFiltered",
+          xAxis: 'id',
+          yValue: 'affectedDonorCountFiltered',
           options: {
-            linkBase: "/mutations/"
-          }
+            linkBase: '/mutations/',
+          },
         });
       }
     }
 
     function refresh() {
-      var params = LocationService.getPaginationParams("mutations");
+      var params = LocationService.getPaginationParams('mutations');
 
       Genes.one()
         .getMutations({
-          include: "consequences",
+          include: 'consequences',
           from: params.from,
           size: params.size,
-          filters: LocationService.filters()
+          filters: LocationService.filters(),
         })
         .then(success);
     }
 
-    $scope.$on("$locationChangeSuccess", function(event, dest) {
-      if (dest.indexOf("genes") !== -1) {
+    $scope.$on('$locationChangeSuccess', function(event, dest) {
+      if (dest.indexOf('genes') !== -1) {
         refresh();
       }
     });
@@ -470,11 +450,11 @@
     refresh();
   });
 
-  module.controller("GeneCompoundsCtrl", function(
+  module.controller('GeneCompoundsCtrl', function(
     $stateParams,
     CompoundsService,
     RouteInfoService,
-    $filter
+    $filter,
   ) {
     var geneId = $stateParams.id;
     var _this = this;
@@ -484,10 +464,10 @@
     _this.defaultCompoundsRowLimit = 10;
     _this.rowSizes = [10, 25, 50];
 
-    this.compoundUrl = RouteInfoService.get("drugCompound").href;
+    this.compoundUrl = RouteInfoService.get('drugCompound').href;
     this.concatAtcDescriptions = function(compound) {
-      var codes = _.map(_.get(compound, "atcCodes", []), "description");
-      return _.isEmpty(codes) ? "--" : codes.join(", ");
+      var codes = _.map(_.get(compound, 'atcCodes', []), 'description');
+      return _.isEmpty(codes) ? '--' : codes.join(', ');
     };
 
     CompoundsService.getCompoundsByGeneId(geneId).then(
@@ -498,8 +478,8 @@
         _this.uiCompounds = getUiCompoundsJSON(_this.compounds);
       },
       function(error) {
-        throw new Error("Error getting compounds related to the geneId", error);
-      }
+        throw new Error('Error getting compounds related to the geneId', error);
+      },
     );
 
     function getUiCompoundsJSON(compounds) {
@@ -509,12 +489,12 @@
           {
             uiZincId: compound.zincId,
             uiName: compound.name,
-            uiFullName: compound.name + " (" + compound.zincId + ")",
+            uiFullName: compound.name + ' (' + compound.zincId + ')',
             uiDescription: _this.concatAtcDescriptions(compound),
-            uiDrugClass: $filter("formatCompoundClass")(compound.drugClass),
+            uiDrugClass: $filter('formatCompoundClass')(compound.drugClass),
             cancerTrialCount: compound.cancerTrialCount,
-            uiCancerTrials: $filter("number")(compound.cancerTrialCount)
-          }
+            uiCancerTrials: $filter('number')(compound.cancerTrialCount),
+          },
         );
       });
     }
@@ -522,26 +502,21 @@
 })();
 
 (function() {
-  "use strict";
+  'use strict';
 
-  var module = angular.module("icgc.genes.models", []);
+  var module = angular.module('icgc.genes.models', []);
 
-  module.service("Genes", function(
-    Restangular,
-    LocationService,
-    Gene,
-    ApiService
-  ) {
-    this.handler = Restangular.all("genes");
+  module.service('Genes', function(Restangular, LocationService, Gene, ApiService) {
+    this.handler = Restangular.all('genes');
 
     this.getList = function(params) {
       var defaults = {
         size: 10,
         from: 1,
-        filters: LocationService.filters()
+        filters: LocationService.filters(),
       };
 
-      return this.handler.get("", angular.extend(defaults, params));
+      return this.handler.get('', angular.extend(defaults, params));
     };
 
     this.getAll = function(params) {
@@ -553,12 +528,12 @@
     };
   });
 
-  module.service("Gene", function(Restangular) {
+  module.service('Gene', function(Restangular) {
     var _this = this;
     this.handler = {};
 
     this.init = function(id) {
-      this.handler = Restangular.one("genes", id);
+      this.handler = Restangular.one('genes', id);
       return _this;
     };
 
@@ -571,14 +546,12 @@
     this.getMutations = function(params) {
       var defaults = {};
 
-      return this.handler
-        .one("mutations", "")
-        .get(angular.extend(defaults, params));
+      return this.handler.one('mutations', '').get(angular.extend(defaults, params));
     };
   });
 
-  module.service("GeneSymbols", function(Restangular) {
-    var apiUrl = "ui/search/gene-symbols";
+  module.service('GeneSymbols', function(Restangular) {
+    var apiUrl = 'ui/search/gene-symbols';
 
     this.resolve = function(ensemblIds) {
       return Restangular.one(apiUrl, ensemblIds).get();
