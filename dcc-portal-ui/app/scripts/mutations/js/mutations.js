@@ -15,36 +15,52 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function () {
+(function() {
   'use strict';
 
-  var module = angular.module('icgc.mutations', ['icgc.mutations.controllers', 'icgc.mutations.services', 'ui.router']);
+  var module = angular.module('icgc.mutations', [
+    'icgc.mutations.controllers',
+    'icgc.mutations.services',
+    'ui.router',
+  ]);
 
-  module.config(function ($stateProvider) {
+  module.config(function($stateProvider) {
     $stateProvider.state('mutation', {
       url: '/mutations/:id',
       templateUrl: 'scripts/mutations/views/mutation.html',
       controller: 'MutationCtrl as MutationCtrl',
       resolve: {
-        mutation: ['$stateParams', 'Mutations', 
-          function ($stateParams, Mutations) {
-          return Mutations.one($stateParams.id).get({ include: ['occurrences', 'transcripts', 'consequences'] }).then(
-            function(mutation){
-              return mutation;
-            });
-        }]
-      }
+        mutation: [
+          '$stateParams',
+          'Mutations',
+          function($stateParams, Mutations) {
+            return Mutations.one($stateParams.id)
+              .get({ include: ['occurrences', 'transcripts', 'consequences'] })
+              .then(function(mutation) {
+                return mutation;
+              });
+          },
+        ],
+      },
     });
   });
 })();
 
-(function () {
+(function() {
   'use strict';
 
   var module = angular.module('icgc.mutations.controllers', ['icgc.mutations.models']);
 
-  module.controller('MutationCtrl', function (HighchartsService, Page, Genes, mutation, $filter, PCAWG) {
-    var _ctrl = this, projects;
+  module.controller('MutationCtrl', function(
+    HighchartsService,
+    Page,
+    Genes,
+    mutation,
+    $filter,
+    PCAWG,
+  ) {
+    var _ctrl = this,
+      projects;
     Page.setTitle(mutation.id);
     Page.setPage('entity');
 
@@ -56,7 +72,7 @@
     _ctrl.isPVInitialLoad = true;
     _ctrl.isGVLoading = true;
 
-    // Defaults for client side pagination 
+    // Defaults for client side pagination
     _ctrl.currentProjectsPage = 1;
     _ctrl.defaultProjectsRowLimit = 10;
     _ctrl.currentConsequencesPage = 1;
@@ -68,7 +84,7 @@
     _ctrl.uiConsequences = getUiConsequencesJSON(_ctrl.mutation.consequences);
 
     if (_ctrl.mutation.hasOwnProperty('occurrences')) {
-      _ctrl.mutation.occurrences.forEach(function (occurrence) {
+      _ctrl.mutation.occurrences.forEach(function(occurrence) {
         if (projects.hasOwnProperty(occurrence.projectId)) {
           projects[occurrence.projectId].affectedDonorCount++;
         } else {
@@ -85,34 +101,39 @@
         _ctrl.projects.push(project);
       }
     }
-    
+
     _ctrl.uiProjects = getUiProjects(_ctrl.projects);
 
     function getUiProjects(projects) {
-      return projects.map(function(project){
-        return _.extend({}, {
-          uiId: project.id,
-          uiName: project.name,
-          uiPrimarySite: project.primarySite,
-          uiTumourType: project.tumourType,
-          uiTumourSubtype: project.tumourSubtype,
-          uiPercentAffected: $filter('number')(project.percentAffected*100,2),
-          uiAffectedDonorCount: $filter('number')(project.affectedDonorCount),
-          uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount)
-        });
+      return projects.map(function(project) {
+        return _.extend(
+          {},
+          {
+            uiId: project.id,
+            uiName: project.name,
+            uiPrimarySite: project.primarySite,
+            uiTumourType: project.tumourType,
+            uiTumourSubtype: project.tumourSubtype,
+            uiPercentAffected: $filter('number')(project.percentAffected * 100, 2),
+            uiAffectedDonorCount: $filter('number')(project.affectedDonorCount),
+            uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
+          },
+        );
       });
     }
 
-    if (mutation.functionalImpact.indexOf('High') > 0) {
+    if (mutation.functionalImpact.indexOf('High') !== -1) {
       mutation.displayedFunctionalImpact = 'High';
-    } else if (mutation.functionalImpact.indexOf('Low') > 0) {
+    } else if (mutation.functionalImpact.indexOf('Low') !== -1) {
       mutation.displayedFunctionalImpact = 'Low';
     } else {
       mutation.displayedFunctionalImpact = 'Unknown';
     }
 
     if (_ctrl.mutation.hasOwnProperty('consequences') && _ctrl.mutation.consequences.length) {
-      var affectedGeneIds = _.filter(_.map(_ctrl.mutation.consequences, 'geneAffectedId'), function (d) {
+      var affectedGeneIds = _.filter(_.map(_ctrl.mutation.consequences, 'geneAffectedId'), function(
+        d,
+      ) {
         return !_.isUndefined(d);
       });
 
@@ -121,16 +142,16 @@
           filters: { gene: { id: { is: affectedGeneIds } } },
           field: [],
           include: 'transcripts',
-          size: 100
-        }).then(function (genes) {
+          size: 100,
+        }).then(function(genes) {
           var geneTranscripts = _.map(genes.hits, 'transcripts');
           var mergedTranscripts = [];
-          geneTranscripts.forEach(function (t) {
+          geneTranscripts.forEach(function(t) {
             mergedTranscripts = mergedTranscripts.concat(t);
           });
 
           // Using mutation transcripts to check conditions
-          _ctrl.mutation.transcripts.forEach(function (transcript) {
+          _ctrl.mutation.transcripts.forEach(function(transcript) {
             var hasProteinCoding, aaMutation, hasAaMutation;
 
             // 1) Check if transcript has protein_coding
@@ -138,46 +159,55 @@
 
             // 2) Has aaMutation
             aaMutation = transcript.consequence.aaMutation;
-            hasAaMutation = aaMutation && aaMutation !== '' && aaMutation !== '-999' && aaMutation !== '--';
+            hasAaMutation =
+              aaMutation && aaMutation !== '' && aaMutation !== '-999' && aaMutation !== '--';
 
             if (hasProteinCoding && hasAaMutation) {
               // Need to use gene transcripts here to get domains
-              _ctrl.mutation.uiProteinTranscript.push(_.find(mergedTranscripts, function (t) {
-                return t.id === transcript.id;
-              }));
+              _ctrl.mutation.uiProteinTranscript.push(
+                _.find(mergedTranscripts, function(t) {
+                  return t.id === transcript.id;
+                }),
+              );
             }
           });
-          _ctrl.mutation.uiProteinTranscript = _.sortBy(_ctrl.mutation.uiProteinTranscript, function (t) {
-            return t.name;
-          });
+          _ctrl.mutation.uiProteinTranscript = _.sortBy(
+            _ctrl.mutation.uiProteinTranscript,
+            function(t) {
+              return t.name;
+            },
+          );
         });
       }
     }
 
     _ctrl.bar = HighchartsService.bar({
-      hits: _.sortBy(_ctrl.projects, function (p) {
+      hits: _.sortBy(_ctrl.projects, function(p) {
         return -p.percentAffected;
       }),
       xAxis: 'id',
       yValue: 'percentAffected',
       options: {
-        linkBase: '/projects/'
-      }
+        linkBase: '/projects/',
+      },
     });
 
-    function getUiConsequencesJSON(consequences){
-      return consequences.map(function(consequence){
-        return _.extend({}, {
-          uiGeneAffectedId: consequence.geneAffectedId,
-          uiAffectedSymbol: consequence.geneAffectedSymbol,
-          uiFunctionalImpact: consequence.functionalImpact,
-          uiAAMutation: consequence.aaMutation,
-          uiType: consequence.type,
-          uiTypeFiltered: $filter('trans')(consequence.type),
-          uiCDSMutation: consequence.cdsMutation,
-          uiGeneStrand: consequence.geneStrand,
-          uiTranscriptsAffected: consequence.transcriptsAffected
-        });
+    function getUiConsequencesJSON(consequences) {
+      return consequences.map(function(consequence) {
+        return _.extend(
+          {},
+          {
+            uiGeneAffectedId: consequence.geneAffectedId,
+            uiAffectedSymbol: consequence.geneAffectedSymbol,
+            uiFunctionalImpact: consequence.functionalImpact,
+            uiAAMutation: consequence.aaMutation,
+            uiType: consequence.type,
+            uiTypeFiltered: $filter('trans')(consequence.type),
+            uiCDSMutation: consequence.cdsMutation,
+            uiGeneStrand: consequence.geneStrand,
+            uiTranscriptsAffected: consequence.transcriptsAffected,
+          },
+        );
       });
     }
 
@@ -187,59 +217,68 @@
   });
 })();
 
-(function () {
+(function() {
   'use strict';
 
   var module = angular.module('icgc.mutations.services', []);
 
-  module.constant('ImpactOrder', [
-    'High',
-    'Medium',
-    'Low',
-    'Unknown',
-    '_missing'
-  ]);
-
+  module.constant('ImpactOrder', ['High', 'Medium', 'Low', 'Unknown', '_missing']);
 })();
 
-(function () {
+(function() {
   'use strict';
 
   var module = angular.module('icgc.mutations.models', []);
 
-  module.service('Mutations', function (Restangular, FilterService, Mutation, Consequence, ImpactOrder) {
+  module.service('Mutations', function(
+    Restangular,
+    FilterService,
+    Mutation,
+    Consequence,
+    ImpactOrder,
+  ) {
     this.handler = Restangular.all('mutations');
 
-    this.getList = function (params) {
+    this.getList = function(params) {
       var defaults = {
         size: 10,
         from: 1,
-        filters: FilterService.filters()
+        filters: FilterService.filters(),
       };
 
-      return this.handler.get('', angular.extend(defaults, params)).then(function (data) {
+      return this.handler.get('', angular.extend(defaults, params)).then(function(data) {
         if (data.hasOwnProperty('facets')) {
           var precedence = Consequence.precedence();
 
-          _.map(data.facets, (facet) => {
-            if(facet.missing) {
-              if(facet.terms) {
-                facet.terms.push({term: '_missing', count: facet.missing});
+          _.map(data.facets, facet => {
+            if (facet.missing) {
+              if (facet.terms) {
+                facet.terms.push({ term: '_missing', count: facet.missing });
               } else {
-                facet.terms = [{term: '_missing', count: facet.missing}];
+                facet.terms = [{ term: '_missing', count: facet.missing }];
               }
             }
           });
 
-          if (data.facets.hasOwnProperty('consequenceType') &&
-            data.facets.consequenceType.hasOwnProperty('terms')) {
-            data.facets.consequenceType.terms = data.facets.consequenceType.terms.sort(function (a, b) {
+          if (
+            data.facets.hasOwnProperty('consequenceType') &&
+            data.facets.consequenceType.hasOwnProperty('terms')
+          ) {
+            data.facets.consequenceType.terms = data.facets.consequenceType.terms.sort(function(
+              a,
+              b,
+            ) {
               return precedence.indexOf(a.term) - precedence.indexOf(b.term);
             });
           }
-          if (data.facets.hasOwnProperty('functionalImpact') &&
-            data.facets.functionalImpact.hasOwnProperty('terms')) {
-            data.facets.functionalImpact.terms = data.facets.functionalImpact.terms.sort(function (a, b) {
+          if (
+            data.facets.hasOwnProperty('functionalImpact') &&
+            data.facets.functionalImpact.hasOwnProperty('terms')
+          ) {
+            data.facets.functionalImpact.terms = data.facets.functionalImpact.terms.sort(function(
+              a,
+              b,
+            ) {
               return ImpactOrder.indexOf(a.term) - ImpactOrder.indexOf(b.term);
             });
           }
@@ -249,115 +288,115 @@
       });
     };
 
-    this.one = function (id) {
+    this.one = function(id) {
       return id ? Mutation.init(id) : Mutation;
     };
   });
 
-  module.service('Mutation', function (Restangular) {
+  module.service('Mutation', function(Restangular) {
     var _this = this;
     this.handler = {};
 
-    this.init = function (id) {
+    this.init = function(id) {
       this.handler = Restangular.one('mutations', id);
       return _this;
     };
 
-    this.get = function (params) {
+    this.get = function(params) {
       var defaults = {};
 
       return this.handler.get(angular.extend(defaults, params));
     };
   });
 
-  module.service('Occurrences', function (Restangular, FilterService, Occurrence, ApiService) {
+  module.service('Occurrences', function(Restangular, FilterService, Occurrence, ApiService) {
     this.handler = Restangular.all('occurrences');
 
-    this.getList = function (params) {
+    this.getList = function(params) {
       var defaults = {
         size: 10,
         from: 1,
-        filters: FilterService.filters()
+        filters: FilterService.filters(),
       };
 
       return this.handler.get('', angular.extend(defaults, params));
     };
 
-    this.getAll = function (params) {
+    this.getAll = function(params) {
       return ApiService.getAll(this.handler, params);
     };
 
-    this.one = function (id) {
+    this.one = function(id) {
       return id ? Occurrence.init(id) : Occurrence;
     };
   });
 
-  module.service('Occurrence', function (Restangular) {
+  module.service('Occurrence', function(Restangular) {
     var _this = this;
     this.handler = {};
 
-    this.init = function (id) {
+    this.init = function(id) {
       this.handler = Restangular.one('occurrences', id);
       return _this;
     };
 
-    this.get = function (params) {
+    this.get = function(params) {
       var defaults = {};
 
       return this.handler.get(angular.extend(defaults, params));
     };
   });
 
-  module.service('Transcripts', function (Restangular, FilterService, Transcript) {
+  module.service('Transcripts', function(Restangular, FilterService, Transcript) {
     this.handler = Restangular.all('occurrences');
 
-    this.getList = function (params) {
+    this.getList = function(params) {
       var defaults = {
         size: 10,
         from: 1,
-        filters: FilterService.filters()
+        filters: FilterService.filters(),
       };
 
       return this.handler.get('', angular.extend(defaults, params));
     };
 
-    this.one = function (id) {
+    this.one = function(id) {
       return id ? Transcript.init(id) : Transcript;
     };
   });
 
-  module.service('Transcript', function (Restangular) {
+  module.service('Transcript', function(Restangular) {
     var _this = this;
     this.handler = {};
 
-    this.init = function (id) {
+    this.init = function(id) {
       this.handler = Restangular.one('transcripts', id);
       return _this;
     };
 
-    this.get = function (params) {
+    this.get = function(params) {
       var defaults = {};
 
       return this.handler.get(angular.extend(defaults, params));
     };
 
-    this.getMutations = function (params) {
+    this.getMutations = function(params) {
       var defaults = {};
 
       return this.handler.one('mutations', '').get(angular.extend(defaults, params));
     };
   });
 
-  module.service('Protein', function (Restangular) {
+  module.service('Protein', function(Restangular) {
     var _this = this;
     this.handler = {};
 
-    this.init = function (id) {
+    this.init = function(id) {
       this.handler = Restangular.one('protein', id);
       return _this;
     };
 
-    this.get = function (params) {
+    this.get = function(params) {
       var defaults = {};
 
       return this.handler.get(angular.extend(defaults, params));
