@@ -68,7 +68,8 @@ public class DonorCentricTypeModel extends TypeModel {
       "analysisTypes",
       "projectName",
       "studies",
-      "state");
+      "state",
+      "mutation.genomic_region");
 
   private final static List<String> PUBLIC_FIELDS = ImmutableList.of(
       "id",
@@ -238,7 +239,8 @@ public class DonorCentricTypeModel extends TypeModel {
                 string("consequence_type", "mutation.consequenceType"),
                 string("functional_impact_prediction_summary", "mutation.functionalImpact"))),
         string("mutation_type", "mutation.type"),
-        nestedArrayOfObjects("observation", initObservation()));
+        nestedArrayOfObjects("observation", initObservation()),
+        bool("genomic_region", "mutation.genomic_region"));
   }
 
   private static ObjectFieldModel initObservation() {

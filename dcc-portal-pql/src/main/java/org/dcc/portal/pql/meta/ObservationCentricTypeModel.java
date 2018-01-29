@@ -25,6 +25,7 @@ import static org.dcc.portal.pql.meta.field.ObjectFieldModel.nestedObject;
 import static org.dcc.portal.pql.meta.field.ObjectFieldModel.object;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.identifiableString;
 import static org.dcc.portal.pql.meta.field.StringFieldModel.string;
+import static org.dcc.portal.pql.meta.field.BooleanFieldModel.bool;
 
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class ObservationCentricTypeModel extends TypeModel {
 
   private final static String TYPE_PREFIX = "observation";
   private static final List<String> INCLUDE_FIELDS =
-      ImmutableList.of("ssm.gene.consequence", "ssm.observation", "ssm.gene");
+      ImmutableList.of("ssm.gene.consequence", "ssm.observation", "ssm.gene", "mutation.genomic_region");
   private static final List<String> PUBLIC_FIELDS = ImmutableList.of(
       "chromosome",
       "donor.primarySite",
@@ -132,7 +133,8 @@ public class ObservationCentricTypeModel extends TypeModel {
             arrayOfStrings("molecular_function")),
         nestedArrayOfObjects("consequence", "consequences", object(
             string("consequence_type", "mutation.consequenceType"),
-            string("functional_impact_prediction_summary", "mutation.functionalImpact")))
+            string("functional_impact_prediction_summary", "mutation.functionalImpact"))),
+        bool("genomic_region", "mutation.genomic_region")
         ));
   }
 
