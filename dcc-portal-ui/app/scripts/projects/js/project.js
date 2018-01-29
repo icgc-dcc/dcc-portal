@@ -15,11 +15,33 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var module = angular.module('icgc.project', ['icgc.project.donor', 'icgc.project.gene', 'icgc.project.mutation']);
+var module = angular.module('icgc.project', [
+  'icgc.project.donor',
+  'icgc.project.gene',
+  'icgc.project.mutation',
+]);
 
-module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page, PubMed, project,
-  Donors, Mutations, API, ExternalLinks, PCAWG, RouteInfoService, LoadState, SetService, Restangular,
-  LocationService, SurvivalAnalysisLaunchService) {
+module.controller('ProjectCtrl', function(
+  $scope,
+  $window,
+  $q,
+  $location,
+  $modal,
+  Page,
+  PubMed,
+  project,
+  Donors,
+  Mutations,
+  API,
+  ExternalLinks,
+  PCAWG,
+  RouteInfoService,
+  LoadState,
+  SetService,
+  Restangular,
+  LocationService,
+  SurvivalAnalysisLaunchService,
+) {
   var _ctrl = this;
 
   Page.setTitle(project.id);
@@ -52,12 +74,12 @@ module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page,
   var projectFilter = {
     file: {
       projectCode: {
-        is: [project.id]
-      }
-    }
+        is: [project.id],
+      },
+    },
   };
 
-  _ctrl.urlToExternalRepository = function () {
+  _ctrl.urlToExternalRepository = function() {
     return dataRepoUrl + '?filters=' + angular.toJson(projectFilter);
   };
 
@@ -70,12 +92,12 @@ module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page,
   }
 
   if (_ctrl.project.hasOwnProperty('pubmedIds')) {
-    _ctrl.project.pubmedIds.forEach(function (pmid) {
+    _ctrl.project.pubmedIds.forEach(function(pmid) {
       PubMed.get(pmid).then(success);
     });
   }
 
-  _ctrl.downloadSample = function () {
+  _ctrl.downloadSample = function() {
     $window.location.href = API.BASE_URL + '/projects/' + project.id + '/samples';
   };
 
@@ -83,9 +105,9 @@ module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page,
     var filter = {
       donor: {
         projectId: {
-          is: [project.id]
-        }
-      }
+          is: [project.id],
+        },
+      },
     };
 
     var donorParams = {
@@ -108,20 +130,19 @@ module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page,
 
     return {
       donorSet: SetService.createEntitySet('donor', donorParams),
-      geneSet: SetService.createEntitySet('gene', geneParams)
+      geneSet: SetService.createEntitySet('gene', geneParams),
     };
   }
 
   function createOncoGrid(sets) {
     var payload = {
       donorSet: sets.donorSet,
-      geneSet: sets.geneSet
+      geneSet: sets.geneSet,
     };
 
-    return Restangular
-      .one('analysis')
+    return Restangular.one('analysis')
       .post('oncogrid', payload, {}, { 'Content-Type': 'application/json' })
-      .then(function (data) {
+      .then(function(data) {
         if (!data.id) {
           throw new Error('Received invalid response from analysis creation');
         }
@@ -129,10 +150,13 @@ module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page,
       });
   }
 
-  _ctrl.openOncogrid = function () {
+  _ctrl.openOncogrid = function() {
     var sets = createSets();
-    $q.all(sets).then(function (response) {
-      createOncoGrid({ donorSet: response.donorSet.id, geneSet: response.geneSet.id });
+    $q.all(sets).then(function(response) {
+      createOncoGrid({
+        donorSet: response.donorSet.id,
+        geneSet: response.geneSet.id,
+      });
     });
   };
 
@@ -140,32 +164,31 @@ module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page,
     var params = {
       filters: { donor: { projectId: { is: [project.id] } } },
       size: 0,
-      include: ['facets']
+      include: ['facets'],
     };
 
     // Get mutation impact for side panel
-    var fetchAndUpdateMutations = Mutations.getList(params).then(function (d) {
+    var fetchAndUpdateMutations = Mutations.getList(params).then(function(d) {
       _ctrl.mutationFacets = d.facets;
     });
 
     // Get study facets for summay section
-    var fetchAndUpdateStudies = Donors.getList(params).then(function (d) {
+    var fetchAndUpdateStudies = Donors.getList(params).then(function(d) {
       _ctrl.studies = d.facets.studies.terms || [];
 
       // Remove no-data term
-      _.remove(_ctrl.studies, function (t) {
+      _.remove(_ctrl.studies, function(t) {
         return t.term === '_missing';
       });
 
       // Link back to adv page
-      _ctrl.studies.forEach(function (t) {
+      _ctrl.studies.forEach(function(t) {
         t.advQuery = {
           donor: {
             projectId: { is: [project.id] },
-            studies: { is: [t.term] }
-          }
+            studies: { is: [t.term] },
+          },
         };
-
       });
     });
 
@@ -173,27 +196,53 @@ module.controller('ProjectCtrl', function ($scope, $window, $q, $location, Page,
   }
 
   /**
-  * Run Survival/Phenotypw analysis
-  */
+   * Run Survival/Phenotypw analysis
+   */
   _ctrl.launchSurvivalAnalysis = (entityType, entityId, entitySymbol) => {
-    var filters = _.merge(_.cloneDeep(LocationService.filters()), { donor: { projectId: { is: [project.id] } } });
-    SurvivalAnalysisLaunchService.launchSurvivalAnalysis(entityType, entityId, entitySymbol, filters, project.id);
+    var filters = _.merge(_.cloneDeep(LocationService.filters()), {
+      donor: { projectId: { is: [project.id] } },
+    });
+    SurvivalAnalysisLaunchService.launchSurvivalAnalysis(
+      entityType,
+      entityId,
+      entitySymbol,
+      filters,
+      project.id,
+    );
   };
 
-  $scope.$on('$locationChangeSuccess', function (event, dest) {
+  // Opens mutation modal on click
+  _ctrl.openMutationModal = function(mutation) {
+    $modal.open({
+      templateUrl: '/scripts/mutations/views/mutations.evidenceItemsModal.html',
+      controller: 'EvidenceItemModalCtrl',
+      size: 'mutation',
+      resolve: {
+        mutation: () => mutation,
+        levelFilter: () => null,
+      },
+    });
+  };
+
+  $scope.$on('$locationChangeSuccess', function(event, dest) {
     if (dest.indexOf('projects') !== -1) {
       refresh();
     }
   });
 
-  $scope.$watch(function () {
-    return loadState.isLoading;
-  }, function (isLoading) {
-    if (isLoading === false && $location.hash()) {
-      $window.scrollToSelector('#' + $location.hash(), { offset: 30, speed: 800 });
-    }
-  });
+  $scope.$watch(
+    function() {
+      return loadState.isLoading;
+    },
+    function(isLoading) {
+      if (isLoading === false && $location.hash()) {
+        $window.scrollToSelector('#' + $location.hash(), {
+          offset: 30,
+          speed: 800,
+        });
+      }
+    },
+  );
 
   refresh();
-
 });

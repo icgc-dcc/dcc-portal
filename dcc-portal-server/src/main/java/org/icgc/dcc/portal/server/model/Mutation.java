@@ -91,6 +91,14 @@ public class Mutation {
   List<String> functionalImpact;
   @ApiModelProperty(value = "Study")
   List<String> study;
+  @ApiModelProperty(value = "External DB IDS")
+  Map<String, Object> external_db_ids;
+  @ApiModelProperty(value = "Description")
+  String description;
+  @ApiModelProperty(value = "Clinical Significance")
+  Map<String, Object> clinical_significance;
+  @ApiModelProperty(value = "Clinical Evidence")
+  Map<String, Object> clinical_evidence;
 
   @SuppressWarnings("unchecked")
   @JsonCreator
@@ -117,6 +125,12 @@ public class Mutation {
     consequences = buildConsequences((List<Map<String, Object>>) fieldMap.get("consequences"));
     functionalImpact = collectFunctionalImpacts((List<Map<String, Object>>) fieldMap.get("transcript"));
     study = collectStudies((List<Map<String, Object>>) fieldMap.get("ssm_occurrence"));
+    // Start annotation data fields
+    external_db_ids = (Map<String, Object>) fieldMap.get("external_db_ids");
+    description = getString(fieldMap.get(fields.get("description")));
+    clinical_significance = (Map<String, Object>) fieldMap.get("clinical_significance");
+    clinical_evidence = (Map<String, Object>) fieldMap.get("clinical_evidence");
+    // End annotation data fields
   }
 
   private List<EmbOccurrence> buildOccurrences(List<Map<String, Object>> occurrences) {

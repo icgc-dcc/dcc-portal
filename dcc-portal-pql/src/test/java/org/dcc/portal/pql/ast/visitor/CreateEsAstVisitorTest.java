@@ -106,7 +106,7 @@ public class CreateEsAstVisitorTest {
 
     result = (AggregationsNode) visit(facetsAll());
     assertThat(((TermsAggregationNode) result.getChild(6)).getFieldName()).isEqualTo("ssm_occurrence.observation._study");
-    assertThat(result.childrenCount()).isEqualTo(8);
+    assertThat(result.childrenCount()).isEqualTo(10);
   }
 
   @Test

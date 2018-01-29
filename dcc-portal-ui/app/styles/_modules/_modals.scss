@@ -33,8 +33,13 @@
 }
 */
 
-.set-upload{
-  margin:0; 
-  max-height:40rem; 
+.set-upload {
+  margin: 0;
+  max-height: 40rem;
+  overflow-y: scroll;
+}
+
+.mutation-modal {
+  max-height: 40rem;
   overflow-y: scroll;
 }

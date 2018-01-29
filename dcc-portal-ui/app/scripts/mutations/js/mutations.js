@@ -77,11 +77,88 @@
     _ctrl.defaultProjectsRowLimit = 10;
     _ctrl.currentConsequencesPage = 1;
     _ctrl.defaultConsequencesRowLimit = 10;
+    _ctrl.currentClinicalEvidencePage = 1;
+    _ctrl.defaultClinicalEvidenceRowLimit = 10;
     _ctrl.rowSizes = [10, 25, 50];
 
     projects = {};
     _ctrl.projects = [];
     _ctrl.uiConsequences = getUiConsequencesJSON(_ctrl.mutation.consequences);
+    _ctrl.uiEvidenceItems = getUiEvidenceItems(_ctrl.mutation.clinical_evidence.civic || []);
+
+    // Sort functions for evidence items
+    _ctrl.evItemsSorter = function(nextCol, sort) {
+      var defaultSort = {
+        col: nextCol,
+        dir: 'desc',
+      };
+
+      // If sort is undefined return default sort
+      if (typeof sort == 'undefined') {
+        return defaultSort;
+      }
+
+      // Changing sort direction on same column ...
+      if (nextCol === sort.col) {
+        return {
+          col: nextCol,
+          dir: sort.dir === 'asc' ? 'desc' : 'asc',
+        };
+      }
+
+      // New column sort is the default
+      return {
+        col: nextCol,
+        dir: 'desc',
+      };
+    };
+
+    _ctrl.evItemSortIcon = function(thisCol, sort) {
+      var isOrderingCol = thisCol === sort.col;
+
+      if (isOrderingCol && sort.dir === 'desc') {
+        return 'icon-sort-down';
+      } else if (isOrderingCol && sort.dir === 'asc') {
+        return 'icon-sort-up';
+      }
+
+      // Defaul is sideways icon idicating no sort on the column
+      return 'icon-sort';
+    };
+
+    // Append manual text to description
+    if (_ctrl.mutation.description) {
+      _ctrl.mutation.description += ' [provided by CIVIC, Jan 2018]';
+    }
+
+    // Append manual text to clinical significance
+    if (_ctrl.mutation.clinical_significance.clinvar) {
+      const parseDate = date => {
+        if (date) {
+          const months = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+          ];
+          const dateObj = new Date(_ctrl.mutation.clinical_significance.clinvar.lastEvaluated);
+          return months[dateObj.getMonth()] + ' ' + dateObj.getFullYear();
+        }
+
+        return 'Jan 2018';
+      };
+      const date = parseDate(_ctrl.mutation.clinical_significance.clinvar.lastEvaluated);
+      _ctrl.mutation.clinical_significance.clinvar.clinicalSignificance +=
+        ' [provided by Clinvar, ' + date + ']';
+    }
 
     if (_ctrl.mutation.hasOwnProperty('occurrences')) {
       _ctrl.mutation.occurrences.forEach(function(occurrence) {
@@ -211,8 +288,72 @@
       });
     }
 
+    function getUiEvidenceItems(evidenceItems) {
+      return evidenceItems.map(function(evidenceItems) {
+        return _.extend(
+          {},
+          {
+            uiDisease: evidenceItems.disease,
+            uiDrugs:
+              evidenceItems.drugs.length > 0 ? evidenceItems.drugs.split(/,\s*(?![^()]*\))/) : [],
+            uiEvidenceStatement: evidenceItems.evidenceStatement,
+            uiEvidenceLevel: evidenceItems.evidenceLevel,
+            uiEvidenceType: evidenceItems.evidenceType,
+            uiClinicalImpact: evidenceItems.clinicalImpact,
+            uiEvidenceDirection: evidenceItems.evidenceDirection,
+            uiPubmedID: evidenceItems.pubmedID,
+            doid: evidenceItems.doid,
+          },
+        );
+      });
+    }
+
     _ctrl.isPCAWG = function(mutation) {
       return _.some(mutation.study, PCAWG.isPCAWGStudy);
+    };
+  });
+
+  module.controller('EvidenceItemModalCtrl', function(
+    $scope,
+    $modalInstance,
+    mutation,
+    levelFilter,
+  ) {
+    $scope.params = {};
+    $scope.params.mutationId = mutation.id;
+
+    // Filter to only relevant level if level provided, otherwise
+    // show all evidence items sorted by evidence level
+    $scope.params.evidenceItems = levelFilter
+      ? mutation.clinical_evidence.civic.filter(item => item.evidenceLevel === levelFilter)
+      : mutation.clinical_evidence.civic.sort((a, b) => {
+          const levelA = a.evidenceLevel[0];
+          const levelB = b.evidenceLevel[0];
+          if (levelA < levelB) {
+            return -1;
+          }
+          if (levelA > levelB) {
+            return 1;
+          }
+
+          // names must be equal
+          return 0;
+        });
+
+    // Fix drugs to be a list
+    $scope.params.evidenceItems = $scope.params.evidenceItems.map(item => {
+      item.drugs =
+        item.drugs.length > 0 && typeof item.drugs === 'string'
+          ? item.drugs.split(/,\s*(?![^()]*\))/)
+          : [];
+      return item;
+    });
+
+    $scope.params.evidenceItemsCount = $scope.params.evidenceItems.length;
+    $scope.params.level = levelFilter ? levelFilter[0] : '';
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
     };
   });
 })();
