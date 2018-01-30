@@ -36,6 +36,5 @@
     controller: 'OncoLolliplotController',
     scope: { transcript: '=' },
     templateUrl: '/scripts/oncololliplot/views/lolliplot.html',
-    link: ($scope, $element) => {},
   }));
 })();
