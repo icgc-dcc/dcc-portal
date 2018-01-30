@@ -423,6 +423,12 @@
                     </span>
                 </form>
             </div>
+            <div data-ng-if="GeneCtrl.gene.uiProteinTranscript.length" data-ng-init="sorted = (GeneCtrl.gene.uiProteinTranscript | orderBy:'+name')">
+                <h3 data-ng-if="!GeneCtrl.isPVInitialLoad">
+                    <translate>New Protein</translate>
+                </h3>
+                <onco-lolliplot transcript="transcript"></onco-lolliplot>
+            </div>
         </section>
         <section id="genomic" class="dynamic-height" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
             <div class="empty" data-ng-if="GeneCtrl.isGVLoading">
