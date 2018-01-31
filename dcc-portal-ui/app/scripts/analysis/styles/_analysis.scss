@@ -1,4 +1,4 @@
-@import "./setSelection";
+@import './setSelection';
 
 .analysis-tool-selection {
   position: relative;
@@ -9,6 +9,9 @@
     width: calc(50% - 50px);
     margin-bottom: 3em;
   }
+  .analysis-tool-full-width {
+    width: calc(100% - 50px);
+  }
 }
 
 $condensedWidth: 180px;
@@ -17,7 +20,7 @@ $condensedWidth: 180px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  color: rgba(0,0,0,0.87);
+  color: rgba(0, 0, 0, 0.87);
   position: relative;
   z-index: 2;
   perspective: 1000px;
@@ -35,7 +38,8 @@ $condensedWidth: 180px;
     flex-grow: 0;
   }
 
-  &__image, svg {
+  &__image,
+  svg {
     width: 100%;
     max-width: calc(100% - 40px);
     max-height: calc(100% - 20px);
@@ -76,7 +80,7 @@ $condensedWidth: 180px;
       fill: #0099e3;
     }
     .person-bg {
-      fill: #C20127;
+      fill: #c20127;
     }
   }
 
@@ -94,9 +98,9 @@ $condensedWidth: 180px;
     #bottom {
       fill: rgba(255, 148, 1, 0.7);
     }
-    #top-left, #top-left-diff {
-      fill: rgba(#0099e3, 0.7)
-      
+    #top-left,
+    #top-left-diff {
+      fill: rgba(#0099e3, 0.7);
     }
   }
 
@@ -145,56 +149,54 @@ $condensedWidth: 180px;
 }
 
 .analysis {
-   width: 100%;
-   padding:0px;
-   position: relative;
-   perspective: 1000px;
+  width: 100%;
+  padding: 0px;
+  position: relative;
+  perspective: 1000px;
 
-   &:before{
-     display: none;
-   }
-   
-   h3 {
-      margin-top: 0;
-   }
+  &:before {
+    display: none;
+  }
 
-   .sidepanel {
-      display: inline-block;
-      position: relative;
-      vertical-align: top;
-      margin-right: 1rem;
-      min-width: 17rem;
-      max-width: 19rem;
-      &:before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 1px;
-        height: 62px;
-        background-image: linear-gradient(to bottom, transparent, #fff), linear-gradient(to right, transparent, rgba(0,0,0,0.2));
-      }
-      .delete-button {
-        margin: 12px;
-      }
-   }
+  h3 {
+    margin-top: 0;
+  }
 
-   .content {
-      display: inline-block;
-      
-      min-height: 20rem; // Prevent complete collapse when switching content
+  .sidepanel {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    margin-right: 1rem;
+    min-width: 17rem;
+    max-width: 19rem;
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 1px;
+      height: 62px;
+      background-image: linear-gradient(to bottom, transparent, #fff),
+        linear-gradient(to right, transparent, rgba(0, 0, 0, 0.2));
+    }
+    .delete-button {
+      margin: 12px;
+    }
+  }
 
-      &.analysis-content {
-         width: 75%;
-      }
-   }
+  .content {
+    display: inline-block;
 
+    min-height: 20rem; // Prevent complete collapse when switching content
 
+    &.analysis-content {
+      width: 75%;
+    }
+  }
 
-
-   // Smaller sub heading lines
-   .multi-line-heading {
-      line-height: 1.5rem;
-   }
+  // Smaller sub heading lines
+  .multi-line-heading {
+    line-height: 1.5rem;
+  }
 }
