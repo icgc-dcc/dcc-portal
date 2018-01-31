@@ -11,6 +11,7 @@
   }
   .analysis-tool-full-width {
     width: calc(100% - 50px);
+    margin: 0 auto 3em;
   }
 }
 
@@ -110,6 +111,24 @@ $condensedWidth: 180px;
     }
     .st0 {
       fill: rgba(155, 49, 91, 0.84);
+    }
+  }
+
+  &--jupyter {
+    $jupyter-bkg: #f2f2f2;
+    background: rgba($jupyter-bkg, 0.5);
+    padding: 25px;
+
+    @include breakpoint($break-widescreen) {
+      padding: 25px 100px;
+    }
+
+    .analysis-tool__image-wrapper {
+      width: 256px;
+    }
+
+    .analysis-tool__column--text {
+      padding: 0 25px;
     }
   }
 }
