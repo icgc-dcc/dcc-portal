@@ -193,3 +193,8 @@ spring.mvc.favicon.enabled: false
 # Locale (DCC-5255)
 spring.mvc.locale: en_CA
 spring.mvc.locale-resolver: fixed
+
+# Jupyter Notebooks
+jupyter:
+  enabled: true
+  url: "https://jupyterhub.cancercollaboratory.org:8000"
