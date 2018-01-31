@@ -28,9 +28,6 @@
     ];
 
     Promise.all(importDependencies).then(([React, ReactDOM, { Lolliplot, Backbone, Minimap }]) => {
-      console.log(React);
-      console.log(Lolliplot);
-
       // Do the things here
       const transcript = $scope.transcript;
       console.log('Transcript: ', transcript);
