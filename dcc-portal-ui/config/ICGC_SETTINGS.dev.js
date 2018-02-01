@@ -23,6 +23,6 @@ module.exports = {
   },
   jupyter: {
     enabled: true,
-    url: 'https://jupyterhub.cancercollaboratory.org:8000',
+    url: 'https://jupyterhub.cancercollaboratory.org',
   },
 };

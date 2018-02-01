@@ -119,10 +119,6 @@ $condensedWidth: 180px;
     background: rgba($jupyter-bkg, 0.5);
     padding: 25px;
 
-    @include breakpoint($break-widescreen) {
-      padding: 25px 100px;
-    }
-
     .analysis-tool__image-wrapper {
       width: 256px;
     }
@@ -131,9 +127,47 @@ $condensedWidth: 180px;
       padding: 0 25px;
     }
 
-    .powered-by {
-      font-size: 0.875rem;
-      vertical-align: middle;
+    .analysis-tool__actions {
+      a,
+      a:visited,
+      a:active {
+        color: #fafafa;
+      }
+    }
+
+    .powered-by-text {
+      @include breakpoint($break-widescreen) {
+        display: none;
+      }
+
+      span {
+        font-size: 0.875rem;
+        vertical-align: middle;
+      }
+    }
+
+    .powered-by-logo {
+      display: none;
+
+      @include breakpoint($break-widescreen) {
+        display: block;
+        padding: 0 0 8px 25px;
+        border-left: 1px solid rgba(0, 0, 0, 0.2);
+
+        .text,
+        img {
+          display: block;
+        }
+
+        .text {
+          font-size: 0.875rem;
+          margin-bottom: 0.5rem;
+        }
+
+        img {
+          width: 175px;
+        }
+      }
     }
   }
 }
