@@ -21,20 +21,16 @@
   let module = angular.module('icgc.oncololliplot.controllers', []);
 
   module.controller('OncoLolliplotController', ($scope, $element, OncoLolliplotService) => {
-    const importDependencies = [
-      import('react'),
-      import('react-dom'),
-      import('@oncojs/react-lolliplot/dist/lib'),
-    ];
+    const importDependencies = [import('react'), import('react-dom'), import('./Lolliplot')];
 
-    Promise.all(importDependencies).then(([React, ReactDOM, { Lolliplot, Backbone, Minimap }]) => {
+    Promise.all(importDependencies).then(([React, ReactDOM, Lolliplot]) => {
       // Do the things here
-      const transcript = $scope.transcript;
-      console.log('Transcript: ', transcript);
+      console.log('Transcript: ', $scope.transcript);
 
-      // Testing React
-      const TestComponent = () => <h2>LOLLIPLOT HERE - RENDERED WITH REACT!</h2>;
-      ReactDOM.render(TestComponent(), document.getElementById('onco-lolliplot-container'));
+      ReactDOM.render(
+        <Lolliplot d3={d3} data={$scope.transcript} />,
+        document.getElementById('onco-lolliplot-container')
+      );
     });
   });
 })();
