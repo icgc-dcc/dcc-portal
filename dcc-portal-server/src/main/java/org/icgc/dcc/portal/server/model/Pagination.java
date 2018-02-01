@@ -17,55 +17,61 @@
 
 package org.icgc.dcc.portal.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NonNull;
 import lombok.Value;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.val;
+import org.dcc.portal.pql.ast.StatementNode;
+import org.elasticsearch.search.SearchHits;
 
 @Value
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Pagination {
-
+  @JsonIgnore
+  PaginationRequest request;
   @ApiModelProperty(value = "Reqeusted total number of records to return", required = true)
   Integer count;
   @ApiModelProperty(value = "Actual total number of matching records", required = true)
   Long total;
-  @ApiModelProperty(value = "Number of records to return in this batch", required = true)
-  Integer size;
-  @ApiModelProperty(value = "The index of the first record in this batch", required = true)
-  Integer from;
   @ApiModelProperty(value = "Page number of this batch", required = true)
   Integer page;
   @ApiModelProperty(value = "Number of pages of this record set", required = true)
   Long pages;
-  @ApiModelProperty(value = "Name of the column to sort this record set", required = true)
-  String sort;
-  @ApiModelProperty(value = "Sorting order (e.g. asc or desc)", required = true)
-  String order;
+
 
   public static Pagination of(@NonNull Integer count, @NonNull Long total, @NonNull Query query) {
-    return new Pagination(count, total, query);
+    return new Pagination(count, total, PaginationRequest.of(query));
   }
 
-  public static Pagination of(int count, long total, int size, int from, @NonNull String sort, @NonNull String order) {
-    return new Pagination(count, total, size, from, sort, order);
+  public static Pagination of(@NonNull Integer count, @NonNull Long total, PaginationRequest request) {
+    return new Pagination(count, total, request);
   }
 
-  private Pagination(Integer count, Long total, Query query) {
-    this(count, total, query.getSize(), query.getFrom(), query.getSort(), query.getOrder().toString());
-  }
 
-  private Pagination(int count, long total, int size, int from, String sort, String order) {
+  private Pagination(int count, long total, PaginationRequest request) {
+    this.request=request;
     this.count = count;
     this.total = total;
-    this.size = size;
-    this.from = from + 1;
-    this.sort = sort;
-    this.order = order.toLowerCase();
 
-    this.page = size <= 1 ? from : (from / size) + 1;
-    this.pages = size <= 1 ? total : (total + size - 1) / size;
+    this.page = request.size <= 1 ? request.from : (request.from / request.size) + 1;
+    this.pages = request.size <= 1 ? total : (total + request.size - 1) / request.size;
+  }
+
+  public Integer getSize() {
+    return request.size;
+  }
+  public Integer getFrom() {
+    return request.from;
+  }
+  public String getSort() {
+    return request.sort;
+  }
+  public String getOrder() {
+    return request.order;
+
   }
 
 }

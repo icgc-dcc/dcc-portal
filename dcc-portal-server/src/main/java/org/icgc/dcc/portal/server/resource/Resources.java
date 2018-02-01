@@ -81,6 +81,8 @@ public final class Resources {
   public static final String API_FILTER_VALUE = "Filter the search results";
   public static final String API_TYPE_PARAM = "type";
   public static final String API_TYPE_VALUE = "Type of file export";
+  public static final String API_QUERY_TYPE_PARAM="queryType";
+  public static final String API_QUERY_TYPE_VALUE="Query Type";
   public static final String API_QUERY_VALUE = "PQL Query";
   public static final String API_QUERY_PARAM = "query";
   public static final String API_SCORE_FILTERS_PARAM = "scoreFilters";

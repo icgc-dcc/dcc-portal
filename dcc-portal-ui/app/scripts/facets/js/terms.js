@@ -15,35 +15,43 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function () {
+(function() {
   'use strict';
 
   var module = angular.module('icgc.facets.terms', ['icgc.facets.helpers']);
 
-  module.controller('termsCtrl', 
-    function ($scope, $filter, Facets, HighchartsService, ProjectCache, ValueTranslator, LocationService) {
- 
-      $scope.resetPaginationOnChange = _.isUndefined($scope.resetPaginationOnChange) ? true : $scope.resetPaginationOnChange;  
-      $scope.search = {};
+  module.controller('termsCtrl', function(
+    $scope,
+    $filter,
+    Facets,
+    HighchartsService,
+    ProjectCache,
+    ValueTranslator,
+    LocationService,
+  ) {
+    $scope.resetPaginationOnChange = _.isUndefined($scope.resetPaginationOnChange)
+      ? true
+      : $scope.resetPaginationOnChange;
+    $scope.search = {};
 
     // Translation on UI is slow, do in here
-    function addTranslations (terms, facetName, missingText) {
+    function addTranslations(terms, facetName, missingText) {
       var t = ValueTranslator;
 
-      terms.forEach (function (term) {
+      terms.forEach(function(term) {
         var termName = term.term;
-        term.label = t.translate (termName, facetName);
+        term.label = t.translate(termName, facetName);
 
         if (termName === '_missing' && missingText) {
           term.label = missingText;
         }
 
-        if (_.includes (['projectId', 'projectCode'], facetName)) {
-          ProjectCache.getData().then (function (cache) {
+        if (_.includes(['projectId', 'projectCode'], facetName)) {
+          ProjectCache.getData().then(function(cache) {
             term.tooltip = cache[termName];
           });
         } else {
-          term.tooltip = t.tooltip (termName, facetName);
+          term.tooltip = t.tooltip(termName, facetName);
         }
       });
     }
@@ -53,39 +61,37 @@
       var terms = $scope.facet.terms;
       var missingText = $scope.missingText;
 
-      var actives = Facets.getActiveTerms ({
+      var actives = Facets.getActiveTerms({
         type: $scope.type,
         facet: facetName,
-        terms: terms
+        terms: terms,
       });
 
-      var params = {type: $scope.type,facet: $scope.facetName};
+      var params = { type: $scope.type, facet: $scope.facetName };
       $scope.isNot = Facets.isNot(params);
-      $scope.activeClass = Facets.isNot(params) ? 
-        't_facets__facet__not' : '';
+      $scope.activeClass = Facets.isNot(params) ? 't_facets__facet__not' : '';
 
       $scope.actives = actives;
-      addTranslations (actives, facetName, missingText);
+      addTranslations(actives, facetName, missingText);
 
-      var inactives = Facets.getInactiveTerms ({
+      var inactives = Facets.getInactiveTerms({
         actives: actives,
-        terms: terms
+        terms: terms,
       });
 
       $scope.inactives = inactives;
-      addTranslations (inactives, facetName, missingText);
+      addTranslations(inactives, facetName, missingText);
     }
 
     function refresh() {
       if ($scope.facet) {
         splitTerms();
       }
-      
-      var params = {type: $scope.type,facet: $scope.facetName};
+
+      var params = { type: $scope.type, facet: $scope.facetName };
       $scope.isNot = Facets.isNot(params);
-      $scope.activeClass = Facets.isNot(params) ? 
-        't_facets__facet__not' : '';
-      $scope.displayLimit = $scope.expanded === true? $scope.inactives.length : 5;
+      $scope.activeClass = Facets.isNot(params) ? 't_facets__facet__not' : '';
+      $scope.displayLimit = $scope.expanded === true ? $scope.inactives.length : 5;
     }
 
     function onChange() {
@@ -96,37 +102,41 @@
 
     $scope.displayLimit = 5;
     $scope.track = global.track;
-    $scope.addTerms = (facetItems) => {
+    $scope.addTerms = facetItems => {
       const terms = facetItems.map(x => x.term);
-      Facets.addTerms(terms.map( term => ({
-        type: $scope.type,
-        facet: $scope.facetName,
-        term: term
-      })));
+      Facets.addTerms(
+        terms.map(term => ({
+          type: $scope.type,
+          facet: $scope.facetName,
+          term: term,
+        })),
+      );
       onChange();
     };
-    $scope.removeTerms = (facetItems) => {
+    $scope.removeTerms = facetItems => {
       const terms = facetItems.map(x => x.term);
-      Facets.removeTerms(terms.map( term => ({
-        type: $scope.type,
-        facet: $scope.facetName,
-        term: term
-      })));
+      Facets.removeTerms(
+        terms.map(term => ({
+          type: $scope.type,
+          facet: $scope.facetName,
+          term: term,
+        })),
+      );
       onChange();
     };
 
-    $scope.removeFacet = function () {
+    $scope.removeFacet = function() {
       Facets.removeFacet({
         type: $scope.type,
-        facet: $scope.facetName
+        facet: $scope.facetName,
       });
       onChange();
     };
-    
+
     $scope.notFacet = function() {
       Facets.notFacet({
         type: $scope.type,
-        facet: $scope.facetName
+        facet: $scope.facetName,
       });
       onChange();
     };
@@ -134,24 +144,26 @@
     $scope.isFacet = function() {
       Facets.isFacet({
         type: $scope.type,
-        facet: $scope.facetName
+        facet: $scope.facetName,
       });
       onChange();
     };
-    
-    $scope.bar = function (count) {
-      return {width: (count / ($scope.facet.total + $scope.facet.missing) * 100) + '%'};
+
+    $scope.bar = function(count) {
+      return {
+        width: count / ($scope.facet.total + $scope.facet.missing) * 100 + '%',
+      };
     };
 
-    $scope.iconClass = function (data) {
+    $scope.iconClass = function(data) {
       var f = $scope.iconGetter();
-      return _.isFunction (f) ? f (data) : '';
+      return _.isFunction(f) ? f(data) : '';
     };
 
     $scope.toggle = function() {
       $scope.expanded = !$scope.expanded;
       if (!$scope.collapsed) {
-        $scope.displayLimit = $scope.expanded === true? $scope.inactives.length : 5;
+        $scope.displayLimit = $scope.expanded === true ? $scope.inactives.length : 5;
       }
     };
 
@@ -161,7 +173,7 @@
     $scope.$watch('facet', refresh);
   });
 
-  module.directive('terms', function () {
+  module.directive('terms', function() {
     return {
       restrict: 'E',
       scope: {
@@ -185,30 +197,39 @@
         resetPaginationOnChange: '<',
 
         //Search Config
-        searchIconShowLimit : '@'
+        searchIconShowLimit: '@',
       },
       transclude: true,
       templateUrl: '/scripts/facets/views/terms.html',
-      controller: 'termsCtrl'
+      controller: 'termsCtrl',
     };
   });
 
-  module.directive('activeTerm', function () {
+  module.directive('activeTerm', function() {
     return {
       restrict: 'A',
       //require: '^terms',
-      link: function (scope, element) {
-
-        scope.mouseOver = function () {
-          element.find('i').removeClass('icon-ok').addClass('icon-cancel');
-          element.find('.t_facets__facet__terms__active__term__label__text span').css({textDecoration: 'line-through'});
+      link: function(scope, element) {
+        scope.mouseOver = function() {
+          element
+            .find('i')
+            .removeClass('icon-ok')
+            .addClass('icon-cancel');
+          element
+            .find('.t_facets__facet__terms__active__term__label__text span')
+            .css({ textDecoration: 'line-through' });
         };
 
-        scope.mouseLeave = function () {
-          element.find('i').removeClass('icon-cancel').addClass('icon-ok');
-          element.find('.t_facets__facet__terms__active__term__label__text span').css({textDecoration: 'none'});
+        scope.mouseLeave = function() {
+          element
+            .find('i')
+            .removeClass('icon-cancel')
+            .addClass('icon-ok');
+          element
+            .find('.t_facets__facet__terms__active__term__label__text span')
+            .css({ textDecoration: 'none' });
         };
-      }
+      },
     };
   });
 })();

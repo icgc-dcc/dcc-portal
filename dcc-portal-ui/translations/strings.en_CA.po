@@ -157,7 +157,7 @@ msgstr ""
 msgid "# of Donors Affected"
 msgstr ""
 
-#. openIDUrl would be a login provider such as Google, yahoo or ICGC
+#. openIDUrl would be a login provider such as Google or ICGC
 #: app/scripts/auth/js/auth.js:215
 msgid "${openIDUrl} is not a known provider"
 msgstr ""
@@ -1120,7 +1120,7 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr ""
 
-#. openIDUrl would be a login provider such as Google, yahoo or ICGC
+#. openIDUrl would be a login provider such as Google or ICGC
 #: app/scripts/auth/js/auth.js:218
 msgid "Could not connect to ${openIDUrl}"
 msgstr ""
@@ -4680,7 +4680,7 @@ msgid ""
 "projects"
 msgstr ""
 
-#. {{params.provider}} comes out to be either ICGC, Google or Yahoo
+#. {{params.provider}} comes out to be either ICGC or Google
 #: app/scripts/auth/views/login.popup.html:47
 msgid ""
 "Sign in using <strong style=\"text-transform: capitalize\">{{params."

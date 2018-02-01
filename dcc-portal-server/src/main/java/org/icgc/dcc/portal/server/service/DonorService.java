@@ -21,27 +21,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
+import org.dcc.portal.pql.ast.StatementNode;
 import org.dcc.portal.pql.meta.DonorCentricTypeModel.Fields;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
-import org.icgc.dcc.portal.server.model.Donor;
-import org.icgc.dcc.portal.server.model.Donors;
-import org.icgc.dcc.portal.server.model.EntityType;
-import org.icgc.dcc.portal.server.model.Pagination;
-import org.icgc.dcc.portal.server.model.Query;
-import org.icgc.dcc.portal.server.model.TermFacet;
+import org.icgc.dcc.portal.server.model.*;
 import org.icgc.dcc.portal.server.pql.convert.AggregationToFacetConverter;
 import org.icgc.dcc.portal.server.pql.convert.Jql2PqlConverter;
 import org.icgc.dcc.portal.server.repository.DonorRepository;
+import org.icgc.dcc.portal.server.util.ElasticsearchRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvMapWriter;
@@ -69,14 +62,61 @@ public class DonorService {
 
   private static final AggregationToFacetConverter AGGS_TO_FACETS_CONVERTER = AggregationToFacetConverter.getInstance();
   private static final Jql2PqlConverter QUERY_CONVERTER = Jql2PqlConverter.getInstance();
+  private static final String INCLUDE_SCORE_STRING = "ssmAffectedGenes";
+  @NonNull
+  public Donors findAllCentric(Query query) {
+    return findAllCentric(query, false);
+  }
+
+  @NonNull
+  public Donors findAllCentric(Query query, boolean facetsOnly) {
+    val pqlString = getPQL(query, facetsOnly);
+    val donors =  findAllCentric(pqlString, query.getIncludes());
+
+    val p = donors.getPagination();
+    donors.setPagination(Pagination.of(p.getCount(),p.getTotal(),query));
+
+    return donors;
+  }
+
+  @NonNull
+  public Donors findAllCentric(Query query, String pqlString) {
+
+    return findAllCentric(pqlString, query.getIncludes());
+  }
+
+  public Donors findAllCentric(String pqlString, Collection<String> includes) {
+    StatementNode pql = parse(pqlString);
+    log.info("PQL of findAllCentric is: {}", pqlString);
+    val response = donorRepository.findAllCentric(pql);
+
+    val includeScore = ElasticsearchRequestUtils.hasField(pql, INCLUDE_SCORE_STRING);
+    val donors = buildDonors(response, includeScore, includes, PaginationRequest.of(pql));
+    return donors;
+  }
+
+  public String getPQL(Query query, boolean facetsOnly) {
+    return facetsOnly ?
+        QUERY_CONVERTER.convertCount(query, DONOR_CENTRIC) :
+        QUERY_CONVERTER.convert(query, DONOR_CENTRIC);
+  }
 
   private Donors buildDonors(SearchResponse response, Query query) {
+    val includeScore = hasField(query, INCLUDE_SCORE_STRING);
+    return buildDonors(response, includeScore, query.getIncludes(), PaginationRequest.of(query) );
+  }
+
+  boolean hasField(Query query, String field) {
+    return !query.hasFields() || query.getFields().contains(field);
+  }
+
+  private Donors buildDonors(SearchResponse response, boolean includeScore,
+      Collection<String> fieldsToNotFlatten, PaginationRequest request) {
     val hits = response.getHits();
-    val includeScore = !query.hasFields() || query.getFields().contains("ssmAffectedGenes");
     val list = ImmutableList.<Donor> builder();
 
     for (val hit : hits) {
-      val fieldMap = createResponseMap(hit, query, EntityType.DONOR);
+      val fieldMap = createResponseMap(hit, fieldsToNotFlatten, EntityType.DONOR);
 
       if (includeScore) {
         fieldMap.put("_score", hit.getScore());
@@ -87,7 +127,8 @@ public class DonorService {
 
     val donors = new Donors(list.build());
     donors.addFacets(AGGS_TO_FACETS_CONVERTER.convert(response.getAggregations()));
-    donors.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), query));
+
+    donors.setPagination(Pagination.of(hits.getHits().length, hits.getTotalHits(), request));
 
     return donors;
   }
@@ -132,33 +173,7 @@ public class DonorService {
     return result;
   }
 
-  @NonNull
-  public Donors findAllCentric(Query query) {
-    return findAllCentric(query, false);
-  }
 
-  public SearchResponse findAllCentric(String pql) {
-    return donorRepository.findAllCentric(parse(pql));
-  }
-
-  @NonNull
-  public Donors findAllCentric(Query query, String pql) {
-    log.debug("PQL of findAllCentric is: {}", pql);
-    return buildDonors(findAllCentric(pql), query);
-  }
-
-  public String getPQL(Query query, boolean facetsOnly) {
-    return facetsOnly ?
-        QUERY_CONVERTER.convertCount(query, DONOR_CENTRIC) :
-        QUERY_CONVERTER.convert(query, DONOR_CENTRIC);
-  }
-
-  @NonNull
-  public Donors findAllCentric(Query query, boolean facetsOnly) {
-    val pql = getPQL(query, facetsOnly);
-
-    return findAllCentric(query, pql);
-  }
 
   @NonNull
   public Map<String, TermFacet> projectDonorCount(List<String> geneIds, List<Query> queries) {
@@ -208,6 +223,10 @@ public class DonorService {
 
   public Set<String> findIds(Query query) {
     return donorRepository.findIds(query);
+  }
+
+  public Set<String> findIds(String pql) {
+    return donorRepository.findIds(pql);
   }
 
   public Donors getDonorAndSampleByProject(String projectId) {

@@ -22,6 +22,7 @@ require('./common/js/pcawg.js');
 require('./common/js/translator.js');
 require('./common/js/abridger.js');
 require('./share/js/share.js');
+require('./pql/js/pql.js');
 require('./ui/js/directives.js');
 require('./ui/js/tpls.js');
 require('./ui/js/suggest.js');
