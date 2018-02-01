@@ -1,10 +1,12 @@
 module.exports = {
   babelrc: false,
   cacheDirectory: true,
-  presets: ['babel-preset-es2015', 'babel-preset-es2016', 'babel-preset-react'].map(
+  presets: ['babel-preset-react', 'babel-preset-es2015', 'babel-preset-es2016'].map(
     require.resolve
   ),
   plugins: [
+    'babel-plugin-syntax-dynamic-import',
+    'babel-plugin-dynamic-import-webpack',
     'babel-plugin-transform-decorators-legacy',
     'babel-plugin-transform-decorators',
     'babel-plugin-transform-class-properties',
@@ -13,8 +15,6 @@ module.exports = {
     'babel-plugin-transform-object-rest-spread',
     'babel-plugin-add-module-exports',
     'babel-plugin-transform-async-to-generator',
-    'babel-plugin-syntax-dynamic-import',
-    'babel-plugin-dynamic-import-webpack',
   ]
     .map(require.resolve)
     .concat([
