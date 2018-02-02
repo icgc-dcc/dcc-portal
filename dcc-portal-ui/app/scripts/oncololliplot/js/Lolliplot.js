@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { object, func, number } from 'prop-types';
+import { object, number } from 'prop-types';
 import { Lolliplot as ReactLolliplot } from '@oncojs/react-lolliplot/dist/lib';
 
 export default class Lolliplot extends Component {
@@ -8,7 +8,7 @@ export default class Lolliplot extends Component {
   static propTypes = {
     d3: object.isRequired,
     transcript: object.isRequired,
-    locationService: func.isRequired,
+    locationService: object.isRequired,
     mutations: object.isRequired,
     displayWidth: number.isRequired,
   };
@@ -23,14 +23,14 @@ export default class Lolliplot extends Component {
   }
 
   initState(props) {
-    const { mutations, transcript, displayWidth } = props;
-    const data = this.processData(mutations, transcript);
+    const { mutations, transcript, displayWidth, locationService } = props;
+    const filters = locationService.filters();
+    const data = this.processData(mutations, transcript, filters);
     return {
       min: 0,
       max: this.getTranscriptMax(transcript),
       domainWidth: this.processDomainWidth(transcript),
       width: displayWidth,
-      highlightedPointId: this.processHighlightedPointId(data),
       data,
       collisions: this.processCollisions(data),
     };
@@ -50,19 +50,15 @@ export default class Lolliplot extends Component {
     return transcript.lengthAminoAcid;
   }
 
-  processHighlightedPointId(data) {
-    console.log('processHighlightedPointId');
-    return 0;
-  }
-
-  processData(mutations, transcript) {
+  processData(mutations, transcript, filters) {
     const transcriptId = transcript.id;
     const result = mutations.hits
       .filter(x => {
         const co = x.transcripts.find(c => c.id === transcriptId);
         return co && this._getAaStart(co.consequence.aaMutation);
       })
-      .map(mutation => this._mapToResult(mutation, transcriptId));
+      .map(mutation => this._mapToResult(mutation, transcriptId))
+      .filter(m => this._filterResults(m, filters));
 
     return result;
   }
@@ -137,6 +133,23 @@ export default class Lolliplot extends Component {
       x: this._getAaStart(transcript.consequence.aaMutation),
       y: mutation.affectedDonorCountTotal,
     };
+  }
+
+  /**
+   * Filters results based on valid start and criteria of filter (fixtures)
+   */
+  _filterResults(m, filters) {
+    if (m.start < 0) return false;
+
+    const fiFilter = _.get(filters, 'mutation.functionalImpact.is');
+    if (fiFilter) {
+      if (fiFilter.indexOf(m.impact) >= 0) {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    return false;
   }
 
   _getAaStart(aaMutation) {
