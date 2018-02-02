@@ -8,7 +8,7 @@ export default class Lolliplot extends Component {
   static propTypes = {
     d3: object.isRequired,
     transcript: object.isRequired,
-    locationService: object.isRequired,
+    filters: object.isRequired,
     mutations: object.isRequired,
     displayWidth: number.isRequired,
   };
@@ -18,13 +18,14 @@ export default class Lolliplot extends Component {
 
     // State
     this.state = this.initState(props);
+  }
 
-    // Binding
+  componentWillReceiveProps(nextProps) {
+    console.log('Next Props: ', nextProps);
   }
 
   initState(props) {
-    const { mutations, transcript, displayWidth, locationService } = props;
-    const filters = locationService.filters();
+    const { mutations, transcript, displayWidth, filters } = props;
     const data = this.processData(mutations, transcript, filters);
     return {
       min: 0,

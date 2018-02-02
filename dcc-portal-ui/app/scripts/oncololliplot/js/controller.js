@@ -20,35 +20,37 @@
 
   let module = angular.module('icgc.oncololliplot.controllers', []);
 
-  module.controller(
-    'OncoLolliplotController',
-    ($scope, $element, OncoLolliplotService, LocationService, Protein) => {
-      const transcript = $scope.transcript;
-      const importDependencies = [
-        import('react'),
-        import('react-dom'),
-        import('./Lolliplot'),
-        Protein.init(transcript.id).get(),
-      ];
+  module.controller('OncoLolliplotController', ($scope, $element, Protein) => {
+    const transcript = $scope.transcript;
+    const importDependencies = [
+      import('react'),
+      import('react-dom'),
+      import('./Lolliplot'),
+      Protein.init(transcript.id).get(),
+    ];
 
-      Promise.all(importDependencies).then(([React, ReactDOM, Lolliplot, mutations]) => {
-        // Do the things here
-        console.log('Transcript: ', transcript);
-        console.log('Protein: ', Protein);
-        console.log('LocationService: ', LocationService);
-        console.log('Mutations: ', mutations);
+    Promise.all(importDependencies).then(([React, ReactDOM, Lolliplot, mutations]) => {
+      // Do the things here
+      console.log('Transcript: ', transcript);
+      console.log('Protein: ', Protein);
+      console.log('Filters: ', $scope.filters);
+      console.log('Mutations: ', mutations);
 
-        ReactDOM.render(
-          <Lolliplot
-            d3={d3}
-            transcript={transcript}
-            locationService={LocationService}
-            mutations={mutations} // will be linked
-            displayWidth={900} // will be linked
-          />,
-          document.getElementById('onco-lolliplot-container')
-        );
+      $scope.$watch('filters', () => {
+        console.log('CHANGE: ', $scope.filters);
       });
-    }
-  );
+
+      ReactDOM.render(
+        <Lolliplot
+          d3={d3}
+          transcript={transcript}
+          filters={$scope.filters} // linked
+          mutations={mutations} // will be linked
+          displayWidth={900} // will be linked
+          scope={$scope}
+        />,
+        document.getElementById('onco-lolliplot-container')
+      );
+    });
+  });
 })();
