@@ -20,17 +20,35 @@
 
   let module = angular.module('icgc.oncololliplot.controllers', []);
 
-  module.controller('OncoLolliplotController', ($scope, $element, OncoLolliplotService) => {
-    const importDependencies = [import('react'), import('react-dom'), import('./Lolliplot')];
+  module.controller(
+    'OncoLolliplotController',
+    ($scope, $element, OncoLolliplotService, LocationService, Protein) => {
+      const transcript = $scope.transcript;
+      const importDependencies = [
+        import('react'),
+        import('react-dom'),
+        import('./Lolliplot'),
+        Protein.init(transcript.id).get(),
+      ];
 
-    Promise.all(importDependencies).then(([React, ReactDOM, Lolliplot]) => {
-      // Do the things here
-      console.log('Transcript: ', $scope.transcript);
+      Promise.all(importDependencies).then(([React, ReactDOM, Lolliplot, mutations]) => {
+        // Do the things here
+        console.log('Transcript: ', transcript);
+        console.log('Protein: ', Protein);
+        console.log('LocationService: ', LocationService);
+        console.log('Mutations: ', mutations);
 
-      ReactDOM.render(
-        <Lolliplot d3={d3} data={$scope.transcript} />,
-        document.getElementById('onco-lolliplot-container')
-      );
-    });
-  });
+        ReactDOM.render(
+          <Lolliplot
+            d3={d3}
+            transcript={transcript}
+            locationService={LocationService}
+            mutations={mutations} // will be linked
+            displayWidth={900} // will be linked
+          />,
+          document.getElementById('onco-lolliplot-container')
+        );
+      });
+    }
+  );
 })();
