@@ -80,8 +80,13 @@ export default class Lolliplot extends Component {
     };
   }
 
-  getPointColor() {
-    console.log('getPointColor');
+  getPointColor(point) {
+    const colourMapping = {
+      low: '#4d4',
+      high: '#d44',
+      unknown: '#bbb',
+    };
+    return colourMapping[point.impact.toLowerCase()];
   }
 
   onPointClick() {
