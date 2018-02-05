@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { object, number } from 'prop-types';
+import { groupBy, pickBy } from 'lodash';
 import { Lolliplot as ReactLolliplot } from '@oncojs/react-lolliplot/dist/lib';
 
 export default class Lolliplot extends Component {
@@ -17,14 +18,14 @@ export default class Lolliplot extends Component {
     super(props);
 
     // State
-    this.state = this.initState(props);
+    this.state = this.stateFromProps(props);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('Next Props: ', nextProps);
+    this.setState(this.stateFromProps(nextProps, this.state));
   }
 
-  initState(props) {
+  stateFromProps(props, oldState = {}) {
     const { mutations, transcript, displayWidth, filters } = props;
     const data = this.processData(mutations, transcript, filters);
     return {
@@ -34,12 +35,8 @@ export default class Lolliplot extends Component {
       width: displayWidth,
       data,
       collisions: this.processCollisions(data),
+      selectedCollisions: oldState.selectedCollisions || null,
     };
-  }
-
-  // State Management
-  stateReducer(state, action, payload) {
-    return state;
   }
 
   // Data Getters and Processing
@@ -65,16 +62,15 @@ export default class Lolliplot extends Component {
   }
 
   processCollisions(data) {
-    console.log('processCollisions');
-    return [];
+    return pickBy(groupBy(data, d => `${d.x},${d.y}`), d => d.length > 1);
   }
 
   // Bound Methods used by Component
-  update(state) {
-    console.log('update');
-    return {
-      ...state,
-    };
+  update(payload) {
+    this.setState({
+      ...this.state,
+      ...payload,
+    });
   }
 
   getPointColor(point) {
@@ -86,16 +82,35 @@ export default class Lolliplot extends Component {
     return colourMapping[point.impact.toLowerCase()];
   }
 
-  onPointClick() {
-    console.log('onPointClick');
+  onPointClick(d) {
+    const collisions = this.state.collisions;
+    if (collisions[`${d.x},${d.y}`]) {
+      this._selectCollisions(collisions[`${d.x},${d.y}`]);
+    } else {
+      window.location = `/mutations/${d.id}`;
+    }
   }
 
-  onPointMouseover() {
-    console.log('onPointMouseover');
+  onPointMouseover({ y: cases = 0, ...d }) {
+    if (this.state.collisions[`${d.x},${cases}`]) {
+      this._setTooltip('There are multiple mutations at this coordinate. Click to view.');
+    } else {
+      this._setTooltip(
+        <span>
+          <div>
+            <b>DNA Change: {d.genomic_dna_change}</b>
+          </div>
+          <div>ID: {d.id}</div>
+          <div>AA Change: {d.aa_change}</div>
+          <div># of Cases: {cases.toLocaleString()}</div>
+          <div>VEP Impact: {d.impact}</div>
+        </span>
+      );
+    }
   }
 
   onPointMouseout() {
-    console.log('onPointMouseout');
+    this._setTooltip(null);
   }
 
   // Private Methods
@@ -157,11 +172,23 @@ export default class Lolliplot extends Component {
     return aaMutation.replace(/[^\d]/g, '');
   }
 
+  _setTooltip(tooltip) {
+    console.log(tooltip);
+  }
+
+  _selectCollisions(collisions) {
+    this.setState({
+      ...this.state,
+      selectedCollisions: collisions,
+    });
+  }
+
   render() {
     return (
       <ReactLolliplot
         {...this.state}
         d3={this.props.d3}
+        update={this.update.bind(this)}
         getPointColor={this.getPointColor.bind(this)}
         onPointClick={this.onPointClick.bind(this)}
         onPointMouseover={this.onPointMouseover.bind(this)}

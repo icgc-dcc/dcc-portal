@@ -36,21 +36,26 @@
       console.log('Filters: ', $scope.filters);
       console.log('Mutations: ', mutations);
 
-      $scope.$watch('filters', () => {
-        console.log('CHANGE: ', $scope.filters);
-      });
+      const renderLolliplot = (_transcript, _filters, _mutations) =>
+        ReactDOM.render(
+          <Lolliplot
+            d3={d3}
+            transcript={_transcript}
+            filters={_filters} // linked
+            mutations={_mutations} // will be linked
+            displayWidth={900} // will be linked
+            scope={$scope}
+          />,
+          document.getElementById('onco-lolliplot-container')
+        );
 
-      ReactDOM.render(
-        <Lolliplot
-          d3={d3}
-          transcript={transcript}
-          filters={$scope.filters} // linked
-          mutations={mutations} // will be linked
-          displayWidth={900} // will be linked
-          scope={$scope}
-        />,
-        document.getElementById('onco-lolliplot-container')
-      );
+      // Initial Render
+      renderLolliplot(transcript, $scope.filters, mutations);
+
+      // Re-render on facet change
+      $scope.$watch('filters', () => {
+        renderLolliplot(transcript, $scope.filters, mutations);
+      });
     });
   });
 })();
