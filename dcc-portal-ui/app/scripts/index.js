@@ -98,7 +98,6 @@ require('./oncogrid/js/controller.js');
 require('./oncogrid/js/service.js');
 require('./oncololliplot/js/directive.js');
 require('./oncololliplot/js/controller.js');
-require('./oncololliplot/js/service.js');
 require('./analysis/js/analysis.js');
 require('./analysis/js/analysisList.js');
 require('./analysis/js/analysisLauncher.js');

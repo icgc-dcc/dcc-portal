@@ -20,35 +20,30 @@
 
   let module = angular.module('icgc.oncololliplot.controllers', []);
 
-  module.controller('OncoLolliplotController', ($scope, $element, Protein) => {
-    const transcript = $scope.transcript;
-    const importDependencies = [
-      import('react'),
-      import('react-dom'),
-      import('./Lolliplot'),
-      Protein.init(transcript.id).get(),
-    ];
+  module.controller('OncoLolliplotController', ($scope, $filter, Protein) => {
+    const transcripts = $scope.transcripts;
+
+    const importDependencies = [import('react'), import('react-dom'), import('./Lolliplot')];
 
     Promise.all(importDependencies).then(([React, ReactDOM, Lolliplot, mutations]) => {
-      const renderLolliplot = (_transcript, _filters, _mutations) =>
+      const renderLolliplot = (_transcripts, _filters, _mutations) =>
         ReactDOM.render(
           <Lolliplot
             d3={d3}
-            transcript={_transcript}
+            transcripts={_transcripts}
             filters={_filters} // linked
-            mutations={_mutations} // will be linked
+            getMutations={transcriptId => Protein.init(transcriptId).get()}
             displayWidth={900} // will be linked
-            scope={$scope}
           />,
           document.getElementById('onco-lolliplot-container')
         );
 
       // Initial Render
-      renderLolliplot(transcript, $scope.filters, mutations);
+      renderLolliplot(transcripts, $scope.filters);
 
       // Re-render on facet change
       $scope.$watch('filters', () => {
-        renderLolliplot(transcript, $scope.filters, mutations);
+        renderLolliplot(transcripts, $scope.filters);
       });
     });
   });

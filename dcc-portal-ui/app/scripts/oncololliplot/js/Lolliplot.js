@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { object, number } from 'prop-types';
+import { func, object, array, number } from 'prop-types';
 import { groupBy, pickBy } from 'lodash';
 import LolliplotChart from './react-components/LolliplotChart';
 
@@ -8,35 +8,86 @@ export default class Lolliplot extends Component {
 
   static propTypes = {
     d3: object.isRequired,
-    transcript: object.isRequired,
+    transcripts: array.isRequired,
     filters: object.isRequired,
-    mutations: object.isRequired,
+    getMutations: func.isRequired,
     displayWidth: number.isRequired,
   };
 
   constructor(props) {
     super(props);
 
+    this.defaultState = {
+      loading: true,
+      mutations: [],
+      transcripts: props.transcripts,
+      selectedTranscript: props.transcripts[0],
+      lolliplotState: {},
+    };
+
     // Init State
-    this.state = this.stateFromProps(props);
+    this.state = this.defaultState;
+  }
+
+  componentDidMount() {
+    // Async load of transcript
+    this.loadTranscript(this.state.selectedTranscript.id);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(this.stateFromProps(nextProps, this.state));
+    const newState = {
+      ...this.state,
+      lolliplotState: this.generateLolliplotState(
+        this.state.lolliplotState,
+        nextProps,
+        this.state.mutations
+      ),
+    };
+    this.setState(newState);
+  }
+
+  /**
+   * Regenerate state with new transcript
+   * @param {object} state
+   * @param {object} props
+   */
+  loadTranscript(transcriptId) {
+    // Set loading to true
+    this._setStatePromise({
+      ...this.state,
+      loading: true,
+    }).then(newState => {
+      // Load new transcript mutations
+      this.props.getMutations(transcriptId).then(mutations => {
+        this.setState({
+          ...newState,
+          loading: false,
+          mutations: mutations.hits,
+          lolliplotState: this.generateLolliplotState(
+            newState.lolliplotState,
+            this.props,
+            mutations.hits
+          ),
+        });
+      });
+    });
   }
 
   /**
    * Generate component state using props passed in from OncoLolliplotController (ng)
-   * @param {object} props
    * @param {object} oldState - if calling a second time and we may want to maintain state
+   * @param {object} props
+   * @param {array} mutations - mutations for selected transcript
    * @returns {object} - new state
    */
-  stateFromProps(props, oldState = {}) {
-    const { mutations, transcript, displayWidth, filters } = props;
+  generateLolliplotState(oldState = {}, props, mutations) {
+    const { transcripts, filters, displayWidth } = props;
+    const transcript = oldState.selectedTranscript || transcripts[0];
     const data = this.processData(mutations, transcript, filters);
+
     return {
-      min: 0,
-      max: props.max || this.processDomainWidth(transcript),
+      min: oldState.min || 0,
+      max: oldState.max || this.processDomainWidth(transcript),
       domainWidth: this.processDomainWidth(transcript),
       width: displayWidth,
       data,
@@ -45,7 +96,9 @@ export default class Lolliplot extends Component {
     };
   }
 
+  //
   /** Data Getters and Processing **/
+  //
 
   /**
    * Get the donain width for the transcript (used for max value on load)
@@ -58,14 +111,14 @@ export default class Lolliplot extends Component {
 
   /**
    * Using provided params, compute data for lolliplot
-   * @param {object} mutations - mutations to be filtered on
+   * @param {array} mutations - mutations to be filtered on
    * @param {object} transcript - selected transcript
    * @param {object} filters - facets selected from outside component
    * @returns {array} - data for lolliplot component
    */
   processData(mutations, transcript, filters) {
     const transcriptId = transcript.id;
-    const result = mutations.hits
+    const result = mutations
       .filter(x => {
         const co = x.transcripts.find(c => c.id === transcriptId);
         return co && this._getAaStart(co.consequence.aaMutation);
@@ -85,16 +138,27 @@ export default class Lolliplot extends Component {
     return pickBy(groupBy(data, d => `${d.x},${d.y}`), d => d.length > 1);
   }
 
-  // Private/Protected Methods
+  //
+  /** Private/Protected Methods **/
+  //
+
+  _setStatePromise(state) {
+    return new Promise(resolve => {
+      this.setState(state, () => resolve(state));
+    });
+  }
 
   /**
    * Update function passed to Lolliplot chart to update chart based on user actions
    * @param {object} payload - new state
    */
-  _update(payload) {
+  _updateLolliplotChartState(payload) {
     this.setState({
       ...this.state,
-      ...payload,
+      lolliplotState: {
+        ...this.state.lolliplotState,
+        ...payload,
+      },
     });
   }
 
@@ -170,13 +234,19 @@ export default class Lolliplot extends Component {
     return m.replace(/[^\d]/g, '');
   }
 
+  _renderLoading() {
+    return <div>Loading ...</div>;
+  }
+
   render() {
-    return (
+    return this.state.loading ? (
+      this._renderLoading()
+    ) : (
       <div>
         <LolliplotChart
-          {...this.state}
+          {...this.state.lolliplotState}
           d3={this.props.d3}
-          update={this._update.bind(this)}
+          update={this._updateLolliplotChartState.bind(this)}
           selectCollisions={this._selectCollisions.bind(this)}
         />
       </div>

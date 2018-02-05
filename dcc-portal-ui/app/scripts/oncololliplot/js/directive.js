@@ -20,7 +20,6 @@
 
   angular.module('icgc.oncololliplot', [
     'icgc.oncololliplot.directives',
-    'icgc.oncololliplot.services',
     'icgc.oncololliplot.controllers',
   ]);
 })();
@@ -30,11 +29,11 @@
 
   let module = angular.module('icgc.oncololliplot.directives', []);
 
-  module.directive('oncoLolliplot', (OncoLolliplotService, LocationService) => ({
+  module.directive('oncoLolliplot', LocationService => ({
     restrict: 'E',
     replace: true,
     controller: 'OncoLolliplotController',
-    scope: { transcript: '=' },
+    scope: { transcripts: '=' },
     templateUrl: '/scripts/oncololliplot/views/lolliplot.html',
     link: (scope, iElement) => {
       // Set inital linked scope properties
