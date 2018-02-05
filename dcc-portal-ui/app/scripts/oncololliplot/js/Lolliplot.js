@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { object, number } from 'prop-types';
 import { groupBy, pickBy } from 'lodash';
-import { Lolliplot as ReactLolliplot } from '@oncojs/react-lolliplot/dist/lib';
+import LolliplotChart from './react-components/LolliplotChart';
 
 export default class Lolliplot extends Component {
   static displayName = 'Lolliplot';
@@ -17,7 +17,7 @@ export default class Lolliplot extends Component {
   constructor(props) {
     super(props);
 
-    // State
+    // Init State
     this.state = this.stateFromProps(props);
   }
 
@@ -25,12 +25,18 @@ export default class Lolliplot extends Component {
     this.setState(this.stateFromProps(nextProps, this.state));
   }
 
+  /**
+   * Generate component state using props passed in from OncoLolliplotController (ng)
+   * @param {object} props
+   * @param {object} oldState - if calling a second time and we may want to maintain state
+   * @returns {object} - new state
+   */
   stateFromProps(props, oldState = {}) {
     const { mutations, transcript, displayWidth, filters } = props;
     const data = this.processData(mutations, transcript, filters);
     return {
       min: 0,
-      max: this.getTranscriptMax(transcript),
+      max: props.max || this.processDomainWidth(transcript),
       domainWidth: this.processDomainWidth(transcript),
       width: displayWidth,
       data,
@@ -39,15 +45,24 @@ export default class Lolliplot extends Component {
     };
   }
 
-  // Data Getters and Processing
-  getTranscriptMax(transcript) {
-    return transcript.lengthAminoAcid;
-  }
+  /** Data Getters and Processing **/
 
+  /**
+   * Get the donain width for the transcript (used for max value on load)
+   * @param {object} transcript - transcript we are getting from
+   * @returns {number} - max length
+   */
   processDomainWidth(transcript) {
     return transcript.lengthAminoAcid;
   }
 
+  /**
+   * Using provided params, compute data for lolliplot
+   * @param {object} mutations - mutations to be filtered on
+   * @param {object} transcript - selected transcript
+   * @param {object} filters - facets selected from outside component
+   * @returns {array} - data for lolliplot component
+   */
   processData(mutations, transcript, filters) {
     const transcriptId = transcript.id;
     const result = mutations.hits
@@ -61,80 +76,55 @@ export default class Lolliplot extends Component {
     return result;
   }
 
+  /**
+   * Process overlapping data points
+   * @param {array} data - data in lolliplot component
+   * @returns {object} - collisions
+   */
   processCollisions(data) {
     return pickBy(groupBy(data, d => `${d.x},${d.y}`), d => d.length > 1);
   }
 
-  // Bound Methods used by Component
-  update(payload) {
+  // Private/Protected Methods
+
+  /**
+   * Update function passed to Lolliplot chart to update chart based on user actions
+   * @param {object} payload - new state
+   */
+  _update(payload) {
     this.setState({
       ...this.state,
       ...payload,
     });
   }
 
-  getPointColor(point) {
-    const colourMapping = {
-      low: '#4d4',
-      high: '#d44',
-      unknown: '#bbb',
-    };
-    return colourMapping[point.impact.toLowerCase()];
+  /**
+   * Set's selected collisions state
+   * @param {object} collisions - new state
+   */
+  _selectCollisions(collisions) {
+    this.setState({
+      ...this.state,
+      selectedCollisions: collisions,
+    });
   }
-
-  onPointClick(d) {
-    const collisions = this.state.collisions;
-    if (collisions[`${d.x},${d.y}`]) {
-      this._selectCollisions(collisions[`${d.x},${d.y}`]);
-    } else {
-      window.location = `/mutations/${d.id}`;
-    }
-  }
-
-  onPointMouseover({ y: cases = 0, ...d }) {
-    if (this.state.collisions[`${d.x},${cases}`]) {
-      this._setTooltip('There are multiple mutations at this coordinate. Click to view.');
-    } else {
-      this._setTooltip(
-        <span>
-          <div>
-            <b>DNA Change: {d.genomic_dna_change}</b>
-          </div>
-          <div>ID: {d.id}</div>
-          <div>AA Change: {d.aa_change}</div>
-          <div># of Cases: {cases.toLocaleString()}</div>
-          <div>VEP Impact: {d.impact}</div>
-        </span>
-      );
-    }
-  }
-
-  onPointMouseout() {
-    this._setTooltip(null);
-  }
-
-  // Private Methods
 
   /**
    * Maps to object for protein viewer
+   * @param {object} - source mutation
+   * @param {string} - selected transcript
+   * @returns {object} - example return object:
+    {
+      aa_change: 'K117N',
+      genomic_dna_change: 'T>G',
+      id: 'MU153141',
+      impact: 'High',
+      x: 117,
+      y: 5,
+    }
    */
   _mapToResult(mutation, transcriptId) {
     const transcript = mutation.transcripts.find(c => c.id === transcriptId);
-
-    // Example Return
-    // {
-    //   aa_change: 'V600E';
-    //   consequence: 'missense';
-    //   genomic_dna_change: 'chr7:g.140753336A>T';
-    //   id: '84aef48f-31e6-52e4-8e05-7d5b9ab15087';
-    //   impact: 'MODERATE';
-    //   polyphen_impact: 'probably_damaging';
-    //   polyphen_score: 0.967;
-    //   sift_impact: 'deleterious';
-    //   sift_score: 0;
-    //   x: 600;
-    //   y: 565;
-    // }
 
     return {
       aa_change: transcript.consequence.aaMutation,
@@ -153,6 +143,9 @@ export default class Lolliplot extends Component {
 
   /**
    * Filters results based on valid start and criteria of filter (fixtures)
+   * @param {object} m - mutation
+   * @param {object} filters - active search fixtures
+   * @returns {boolean} - true/false value for Array.prototype.filter()
    */
   _filterResults(m, filters) {
     if (m.start < 0) return false;
@@ -168,32 +161,25 @@ export default class Lolliplot extends Component {
     return false;
   }
 
-  _getAaStart(aaMutation) {
-    return aaMutation.replace(/[^\d]/g, '');
-  }
-
-  _setTooltip(tooltip) {
-    console.log(tooltip);
-  }
-
-  _selectCollisions(collisions) {
-    this.setState({
-      ...this.state,
-      selectedCollisions: collisions,
-    });
+  /**
+   * Extract mutation start
+   * @param {object} m - mutation
+   * @returns {string} - starting position
+   */
+  _getAaStart(m) {
+    return m.replace(/[^\d]/g, '');
   }
 
   render() {
     return (
-      <ReactLolliplot
-        {...this.state}
-        d3={this.props.d3}
-        update={this.update.bind(this)}
-        getPointColor={this.getPointColor.bind(this)}
-        onPointClick={this.onPointClick.bind(this)}
-        onPointMouseover={this.onPointMouseover.bind(this)}
-        onPointMouseout={this.onPointMouseout.bind(this)}
-      />
+      <div>
+        <LolliplotChart
+          {...this.state}
+          d3={this.props.d3}
+          update={this._update.bind(this)}
+          selectCollisions={this._selectCollisions.bind(this)}
+        />
+      </div>
     );
   }
 }

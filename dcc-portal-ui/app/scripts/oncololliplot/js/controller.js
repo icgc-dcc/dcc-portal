@@ -30,12 +30,6 @@
     ];
 
     Promise.all(importDependencies).then(([React, ReactDOM, Lolliplot, mutations]) => {
-      // Do the things here
-      console.log('Transcript: ', transcript);
-      console.log('Protein: ', Protein);
-      console.log('Filters: ', $scope.filters);
-      console.log('Mutations: ', mutations);
-
       const renderLolliplot = (_transcript, _filters, _mutations) =>
         ReactDOM.render(
           <Lolliplot
