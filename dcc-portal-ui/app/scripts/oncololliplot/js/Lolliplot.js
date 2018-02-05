@@ -38,8 +38,8 @@ export default class Lolliplot extends Component {
     const newState = {
       ...this.state,
       lolliplotState: this.generateLolliplotState(
-        this.state.lolliplotState,
         nextProps,
+        this.state.lolliplotState,
         this.state.mutations
       ),
     };
@@ -64,8 +64,8 @@ export default class Lolliplot extends Component {
           loading: false,
           mutations: mutations.hits,
           lolliplotState: this.generateLolliplotState(
-            newState.lolliplotState,
             this.props,
+            newState.lolliplotState,
             mutations.hits
           ),
         });
@@ -75,12 +75,12 @@ export default class Lolliplot extends Component {
 
   /**
    * Generate component state using props passed in from OncoLolliplotController (ng)
-   * @param {object} oldState - if calling a second time and we may want to maintain state
    * @param {object} props
+   * @param {object} oldState - if calling a second time and we may want to maintain state
    * @param {array} mutations - mutations for selected transcript
    * @returns {object} - new state
    */
-  generateLolliplotState(oldState = {}, props, mutations) {
+  generateLolliplotState(props, oldState = {}, mutations) {
     const { transcripts, filters, displayWidth } = props;
     const transcript = oldState.selectedTranscript || transcripts[0];
     const data = this.processData(mutations, transcript, filters);
