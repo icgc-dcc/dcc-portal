@@ -21,30 +21,56 @@
   let module = angular.module('icgc.oncololliplot.controllers', []);
 
   module.controller('OncoLolliplotController', ($scope, $filter, Protein) => {
-    const transcripts = $scope.transcripts;
+    const importDependencies = [
+      import('react'),
+      import('react-dom'),
+      import('react-redux'),
+      import('./react-components/Lolliplot'),
+      import('./redux/store'),
+      import('./redux/OncoLolliplot/redux'),
+    ];
 
-    const importDependencies = [import('react'), import('react-dom'), import('./Lolliplot')];
+    Promise.all(importDependencies).then(
+      ([
+        React,
+        { render },
+        { Provider },
+        Lolliplot,
+        configureStore,
+        { _defaultState, loadTranscript },
+      ]) => {
+        const mutationService = transcriptId => Protein.init(transcriptId).get();
 
-    Promise.all(importDependencies).then(([React, ReactDOM, Lolliplot, mutations]) => {
-      const renderLolliplot = (_transcripts, _filters, _mutations) =>
-        ReactDOM.render(
-          <Lolliplot
-            d3={d3}
-            transcripts={_transcripts}
-            filters={_filters} // linked
-            getMutations={transcriptId => Protein.init(transcriptId).get()}
-            displayWidth={900} // will be linked
-          />,
+        const intialState = {
+          oncoLolliplot: {
+            ..._defaultState,
+            mutationService,
+            transcripts: $scope.transcripts,
+            selectedTranscript: $scope.transcripts[0],
+            filters: $scope.filters,
+          },
+        };
+
+        // Create redux store
+        const store = configureStore(intialState);
+
+        render(
+          <Provider store={store}>
+            <Lolliplot d3={d3} />
+          </Provider>,
           document.getElementById('onco-lolliplot-container')
         );
 
-      // Initial Render
-      renderLolliplot(transcripts, $scope.filters);
-
-      // Re-render on facet change
-      $scope.$watch('filters', () => {
-        renderLolliplot(transcripts, $scope.filters);
-      });
-    });
+        // Re-render on facet change
+        $scope.$watch('filters', () => {
+          const { oncoLolliplot: { selectedTranscript, mutationService } } = store.getState();
+          loadTranscript(store.dispatch, {
+            selectedTranscript,
+            mutationService,
+            filters: $scope.filters,
+          });
+        });
+      }
+    );
   });
 })();

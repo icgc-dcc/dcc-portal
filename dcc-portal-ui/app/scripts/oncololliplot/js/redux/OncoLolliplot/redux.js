@@ -1,0 +1,108 @@
+/*
+ * Copyright 2018(c) The Ontario Institute for Cancer Research. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the terms of the GNU Public
+ * License v3.0. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+import { emptyActionGenerator, payloadActionGenerator } from '../helpers';
+import { generateLolliplotChartState } from './services';
+
+/*
+* Actions
+*/
+const LOAD_TRANSCRIPT_START = 'oncoLolliplot/LOAD_TRANSCRIPT_START';
+const LOAD_TRANSCRIPT_SUCCESS = 'oncoLolliplot/LOAD_TRANSCRIPT_SUCCESS';
+const LOAD_TRANSCRIPT_FAILURE = 'oncoLolliplot/LOAD_TRANSCRIPT_FAILURE';
+
+const UPDATE_CHART_STATE = 'oncoLolliplot/UPDATE_CHART_STATE';
+
+const fetchMutationsStart = emptyActionGenerator(LOAD_TRANSCRIPT_START);
+const fetchMutationsSuccess = payloadActionGenerator(LOAD_TRANSCRIPT_SUCCESS);
+const fetchMutationsError = payloadActionGenerator(LOAD_TRANSCRIPT_FAILURE);
+
+/*
+* Public non-async actions (mapped to component props)
+*/
+export const updateChartState = payloadActionGenerator(UPDATE_CHART_STATE);
+
+/*
+* Public async thunk actions (mapped to component props)
+*/
+export function loadTranscript(dispatch, { selectedTranscript, mutationService, filters }) {
+  dispatch(fetchMutationsStart());
+
+  return mutationService(selectedTranscript.id)
+    .then(mutations => {
+      const payload = {
+        mutations: mutations.hits,
+        lolliplotState: generateLolliplotChartState(mutations.hits, selectedTranscript, filters),
+      };
+      dispatch(fetchMutationsSuccess(payload));
+    })
+    .catch(error => {
+      dispatch(fetchMutationsError(error));
+    });
+}
+
+/*
+* Reducer
+*/
+
+export const _defaultState = {
+  loading: true,
+  mutations: [],
+  mutationService: null,
+  transcripts: [],
+  selectedTranscript: {},
+  lolliplotState: {},
+  filters: {},
+  displayWidth: 900,
+  error: null,
+};
+
+export const reducer = (state = _defaultState, action) => {
+  switch (action.type) {
+    case LOAD_TRANSCRIPT_START:
+      return {
+        ...state,
+        loading: true,
+      };
+    case LOAD_TRANSCRIPT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        mutations: action.payload.mutations,
+        lolliplotState: {
+          ...state.lolliplotState,
+          ...action.payload.lolliplotState,
+        },
+      };
+    case LOAD_TRANSCRIPT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    case UPDATE_CHART_STATE:
+      return {
+        ...state,
+        lolliplotState: {
+          ...state.lolliplotState,
+          ...action.payload,
+        },
+      };
+    default:
+      return state;
+  }
+};
