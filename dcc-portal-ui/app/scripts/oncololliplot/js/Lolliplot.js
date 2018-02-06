@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { func, object, array, number } from 'prop-types';
 import { groupBy, pickBy } from 'lodash';
 import LolliplotChart from './react-components/LolliplotChart';
+import Toolbar from './react-components/Toolbar';
 
 export default class Lolliplot extends Component {
   static displayName = 'Lolliplot';
@@ -40,7 +41,8 @@ export default class Lolliplot extends Component {
       lolliplotState: this.generateLolliplotState(
         nextProps,
         this.state.lolliplotState,
-        this.state.mutations
+        this.state.mutations,
+        this.state.selectedTranscript
       ),
     };
     this.setState(newState);
@@ -48,17 +50,19 @@ export default class Lolliplot extends Component {
 
   /**
    * Regenerate state with new transcript
-   * @param {object} state
-   * @param {object} props
+   * @param {string} transcriptId
    */
   loadTranscript(transcriptId) {
+    const selectedTranscript = this.state.transcripts.filter(t => t.id === transcriptId)[0];
+
     // Set loading to true
     this._setStatePromise({
       ...this.state,
+      selectedTranscript,
       loading: true,
     }).then(newState => {
       // Load new transcript mutations
-      this.props.getMutations(transcriptId).then(mutations => {
+      this.props.getMutations(selectedTranscript.id).then(mutations => {
         this.setState({
           ...newState,
           loading: false,
@@ -66,7 +70,8 @@ export default class Lolliplot extends Component {
           lolliplotState: this.generateLolliplotState(
             this.props,
             newState.lolliplotState,
-            mutations.hits
+            mutations.hits,
+            selectedTranscript
           ),
         });
       });
@@ -80,9 +85,8 @@ export default class Lolliplot extends Component {
    * @param {array} mutations - mutations for selected transcript
    * @returns {object} - new state
    */
-  generateLolliplotState(props, oldState = {}, mutations) {
-    const { transcripts, filters, displayWidth } = props;
-    const transcript = oldState.selectedTranscript || transcripts[0];
+  generateLolliplotState(props, oldState = {}, mutations, transcript) {
+    const { filters, displayWidth } = props;
     const data = this.processData(mutations, transcript, filters);
 
     return {
@@ -173,6 +177,12 @@ export default class Lolliplot extends Component {
     });
   }
 
+  _selectTranscript(value) {}
+
+  _reset() {
+    console.log(reset);
+  }
+
   /**
    * Maps to object for protein viewer
    * @param {object} - source mutation
@@ -239,12 +249,19 @@ export default class Lolliplot extends Component {
   }
 
   render() {
+    const { lolliplotState, transcripts, selectedTranscript } = this.state;
     return this.state.loading ? (
       this._renderLoading()
     ) : (
       <div>
+        <Toolbar
+          transcripts={transcripts}
+          selectedTranscript={selectedTranscript}
+          selectTranscript={this.loadTranscript.bind(this)}
+          reset={this._reset.bind(this)}
+        />
         <LolliplotChart
-          {...this.state.lolliplotState}
+          {...lolliplotState}
           d3={this.props.d3}
           update={this._updateLolliplotChartState.bind(this)}
           selectCollisions={this._selectCollisions.bind(this)}
