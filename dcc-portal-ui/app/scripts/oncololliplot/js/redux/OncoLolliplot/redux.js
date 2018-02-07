@@ -16,7 +16,7 @@
  */
 
 import { emptyActionGenerator, payloadActionGenerator } from '../helpers';
-import { generateLolliplotChartState } from './services';
+import { generateLolliplotChartState, resetLolliplotChartState } from './services';
 
 /*
 * Actions
@@ -38,14 +38,13 @@ const fetchMutationsError = payloadActionGenerator(LOAD_TRANSCRIPT_FAILURE);
 */
 export const updateChartState = payloadActionGenerator(UPDATE_CHART_STATE);
 export const selectCollisions = payloadActionGenerator(SELECT_COLLISIONS);
-export const reset = payloadActionGenerator(RESET);
+export const reset = emptyActionGenerator(RESET);
 
 /*
 * Public async thunk actions (mapped to component props)
 */
 export function loadTranscript(dispatch, { selectedTranscript, mutationService, filters }) {
   dispatch(fetchMutationsStart());
-  console.log({ selectedTranscript, mutationService, filters });
   return mutationService(selectedTranscript.id)
     .then(mutations => {
       const payload = {
@@ -118,6 +117,10 @@ export const reducer = (state = _defaultState, action) => {
     case RESET:
       return {
         ...state,
+        lolliplotState: {
+          ...state.lolliplotState,
+          ...resetLolliplotChartState(state)
+        },
       }
     default:
       return state;

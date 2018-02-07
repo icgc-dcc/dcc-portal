@@ -21,6 +21,7 @@ const Toolbar = ({ loadTranscript, reset, transcripts, selectedTranscript, mutat
           </option>
         ))}
       </select>
+      <button onClick={reset}>Reset</button>
     </div>
   );
 };

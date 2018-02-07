@@ -37,6 +37,16 @@ export function generateLolliplotChartState(mutations, transcript, filters) {
   };
 }
 
+export function resetLolliplotChartState(state) {
+  const domainWidth = processDomainWidth(state.selectedTranscript);
+
+  return {
+    min: 0,
+    max: domainWidth,
+    domainWidth,
+  };
+}
+
 //
 /** Data Processing **/
 //
