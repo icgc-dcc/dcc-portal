@@ -15,7 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function() {
+(function () {
   'use strict';
 
   angular.module('icgc.oncololliplot', [
@@ -24,7 +24,7 @@
   ]);
 })();
 
-(function() {
+(function () {
   'use strict';
 
   let module = angular.module('icgc.oncololliplot.directives', []);
@@ -39,7 +39,7 @@
       // Set inital linked scope properties
       scope.filters = LocationService.filters();
 
-      // Update variables on change
+      // Update variables on change (will be called on initial load)
       scope.$on('$locationChangeSuccess', () => {
         scope.filters = LocationService.filters();
       });

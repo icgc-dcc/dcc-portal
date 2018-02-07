@@ -15,7 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function() {
+(function () {
   'use strict';
 
   let module = angular.module('icgc.oncololliplot.controllers', []);
@@ -54,14 +54,7 @@
         // Create redux store
         const store = configureStore(intialState);
 
-        render(
-          <Provider store={store}>
-            <Lolliplot d3={d3} />
-          </Provider>,
-          document.getElementById('onco-lolliplot-container')
-        );
-
-        // Re-render on facet change
+        // Update state on filters change
         $scope.$watch('filters', () => {
           const { oncoLolliplot: { selectedTranscript, mutationService } } = store.getState();
           loadTranscript(store.dispatch, {
@@ -70,6 +63,13 @@
             filters: $scope.filters,
           });
         });
+
+        render(
+          <Provider store={store}>
+            <Lolliplot d3={d3} />
+          </Provider>,
+          document.getElementById('onco-lolliplot-container')
+        );
       }
     );
   });

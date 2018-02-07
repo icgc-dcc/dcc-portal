@@ -26,6 +26,8 @@ const LOAD_TRANSCRIPT_SUCCESS = 'oncoLolliplot/LOAD_TRANSCRIPT_SUCCESS';
 const LOAD_TRANSCRIPT_FAILURE = 'oncoLolliplot/LOAD_TRANSCRIPT_FAILURE';
 
 const UPDATE_CHART_STATE = 'oncoLolliplot/UPDATE_CHART_STATE';
+const SELECT_COLLISIONS = 'oncoLolliplot/SELECT_COLLISIONS';
+const RESET = 'oncoLolliplot/RESET';
 
 const fetchMutationsStart = emptyActionGenerator(LOAD_TRANSCRIPT_START);
 const fetchMutationsSuccess = payloadActionGenerator(LOAD_TRANSCRIPT_SUCCESS);
@@ -35,16 +37,19 @@ const fetchMutationsError = payloadActionGenerator(LOAD_TRANSCRIPT_FAILURE);
 * Public non-async actions (mapped to component props)
 */
 export const updateChartState = payloadActionGenerator(UPDATE_CHART_STATE);
+export const selectCollisions = payloadActionGenerator(SELECT_COLLISIONS);
+export const reset = payloadActionGenerator(RESET);
 
 /*
 * Public async thunk actions (mapped to component props)
 */
 export function loadTranscript(dispatch, { selectedTranscript, mutationService, filters }) {
   dispatch(fetchMutationsStart());
-
+  console.log({ selectedTranscript, mutationService, filters });
   return mutationService(selectedTranscript.id)
     .then(mutations => {
       const payload = {
+        selectedTranscript,
         mutations: mutations.hits,
         lolliplotState: generateLolliplotChartState(mutations.hits, selectedTranscript, filters),
       };
@@ -83,6 +88,7 @@ export const reducer = (state = _defaultState, action) => {
         ...state,
         loading: false,
         mutations: action.payload.mutations,
+        selectedTranscript: action.payload.selectedTranscript,
         lolliplotState: {
           ...state.lolliplotState,
           ...action.payload.lolliplotState,
@@ -102,6 +108,17 @@ export const reducer = (state = _defaultState, action) => {
           ...action.payload,
         },
       };
+    case SELECT_COLLISIONS:
+      return {
+        ...state,
+        lolliplotState: {
+          selectedCollisions: action.payload
+        }
+      }
+    case RESET:
+      return {
+        ...state,
+      }
     default:
       return state;
   }
