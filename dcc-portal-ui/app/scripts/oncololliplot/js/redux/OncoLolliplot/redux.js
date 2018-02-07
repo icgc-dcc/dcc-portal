@@ -50,6 +50,7 @@ export function loadTranscript(dispatch, { selectedTranscript, mutationService, 
       const payload = {
         selectedTranscript,
         mutations: mutations.hits,
+        filters: filters,
         lolliplotState: generateLolliplotChartState(mutations.hits, selectedTranscript, filters),
       };
       dispatch(fetchMutationsSuccess(payload));
@@ -88,6 +89,7 @@ export const reducer = (state = _defaultState, action) => {
         loading: false,
         mutations: action.payload.mutations,
         selectedTranscript: action.payload.selectedTranscript,
+        filters: action.payload.filters,
         lolliplotState: {
           ...state.lolliplotState,
           ...action.payload.lolliplotState,
