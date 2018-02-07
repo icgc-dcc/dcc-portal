@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Lolliplot } from '@oncojs/react-lolliplot/dist/lib';
 import { object, array, func, number } from 'prop-types';
+import { setTooltip, clearTooltip } from '../redux/OncoLolliplot/redux';
 
 const LolliplotChart = props => {
-  const { collisions, selectCollisions } = props;
+  const { collisions, selectCollisions, setTooltip, clearTooltip } = props;
 
   const getPointColor = point => {
     const colourMapping = {
@@ -24,28 +26,25 @@ const LolliplotChart = props => {
 
   const onPointMouseover = ({ y: cases = 0, ...d }) => {
     if (collisions[`${d.x},${cases}`]) {
-      _setTooltip('There are multiple mutations at this coordinate. Click to view.');
+      setTooltip({
+        type: 'multi',
+        data: {}
+      })
     } else {
-      _setTooltip(
-        <span>
-          <div>
-            <b>DNA Change: {d.genomic_dna_change}</b>
-          </div>
-          <div>ID: {d.id}</div>
-          <div>AA Change: {d.aa_change}</div>
-          <div># of Cases: {cases.toLocaleString()}</div>
-          <div>VEP Impact: {d.impact}</div>
-        </span>
-      );
+      setTooltip({
+        type: 'single',
+        data: {
+          id: d.id,
+          numDonors: cases.toLocaleString(),
+          aaChange: d.aa_change,
+          functionalImpact: d.impact,
+        }
+      });
     }
   };
 
   const onPointMouseout = () => {
-    _setTooltip(null);
-  };
-
-  const _setTooltip = tooltip => {
-    console.log(tooltip);
+    clearTooltip();
   };
 
   return (
@@ -74,4 +73,11 @@ LolliplotChart.propTypes = {
   update: func.isRequired,
 };
 
-export default LolliplotChart;
+const mapDispatchToProps = dispatch => {
+  return {
+    setTooltip: ({ type, data }) => dispatch(setTooltip({ type, data })),
+    clearTooltip: () => dispatch(clearTooltip()),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(LolliplotChart);

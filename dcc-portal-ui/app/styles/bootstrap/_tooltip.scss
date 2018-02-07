@@ -4,7 +4,7 @@
 
 
 // Base class
-.tooltip {
+%tooltip {
   position: absolute;
   z-index: $zindex-tooltip;
   display: block;
@@ -42,7 +42,7 @@
   border-style: solid;
 }
 // Note: Deprecated .top-left, .top-right, .bottom-left, and .bottom-right as of v3.3.1
-.tooltip {
+%tooltip {
   &.top .tooltip-arrow {
     bottom: 0;
     left: 50%;
@@ -99,4 +99,12 @@
     border-width: 0 $tooltip-arrow-width $tooltip-arrow-width;
     border-bottom-color: $tooltip-arrow-color;
   }
+}
+
+.tooltip {
+  @extend %tooltip;
+}
+
+.lolliplot-tooltip {
+  @extend %tooltip;
 }

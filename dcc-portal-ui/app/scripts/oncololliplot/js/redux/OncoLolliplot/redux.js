@@ -28,6 +28,8 @@ const LOAD_TRANSCRIPT_FAILURE = 'oncoLolliplot/LOAD_TRANSCRIPT_FAILURE';
 const RESIZE_WIDTH = 'oncoLolliplot/RESIZE_WIDTH';
 const UPDATE_CHART_STATE = 'oncoLolliplot/UPDATE_CHART_STATE';
 const SELECT_COLLISIONS = 'oncoLolliplot/SELECT_COLLISIONS';
+const SET_TOOLTIP = 'oncoLolliplot/SET_TOOLTIP';
+const CLEAR_TOOLTIP = 'oncoLolliplot/CLEAR_TOOLTIP';
 const RESET = 'oncoLolliplot/RESET';
 
 const fetchMutationsStart = emptyActionGenerator(LOAD_TRANSCRIPT_START);
@@ -40,6 +42,8 @@ const fetchMutationsError = payloadActionGenerator(LOAD_TRANSCRIPT_FAILURE);
 export const resizeWidth = payloadActionGenerator(RESIZE_WIDTH);
 export const updateChartState = payloadActionGenerator(UPDATE_CHART_STATE);
 export const selectCollisions = payloadActionGenerator(SELECT_COLLISIONS);
+export const setTooltip = payloadActionGenerator(SET_TOOLTIP);
+export const clearTooltip = emptyActionGenerator(CLEAR_TOOLTIP);
 export const reset = emptyActionGenerator(RESET);
 
 /*
@@ -75,6 +79,7 @@ export const _defaultState = {
   lolliplotState: {},
   filters: {},
   displayWidth: 900,
+  tooltip: null,
   error: null,
 };
 
@@ -124,6 +129,16 @@ export const reducer = (state = _defaultState, action) => {
           selectedCollisions: action.payload
         }
       };
+    case SET_TOOLTIP:
+      return {
+        ...state,
+        tooltip: action.payload
+      };
+    case CLEAR_TOOLTIP:
+      return {
+        ...state,
+        tooltip: null
+      }
     case RESET:
       return {
         ...state,
