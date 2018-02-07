@@ -5,7 +5,9 @@ import LolliplotChart from './LolliplotChart';
 import Toolbar from './Toolbar';
 import Tooltip from './Tooltip';
 import TooltipMulti from './TooltipMulti';
-import { updateChartState } from '../redux/OncoLolliplot/redux';
+import Backbone from './Backbone';
+import Overlapping from './Overlapping';
+import { updateChartState, selectCollisions } from '../redux/OncoLolliplot/redux';
 
 class Lolliplot extends Component {
   static displayName = 'Lolliplot';
@@ -72,6 +74,7 @@ class Lolliplot extends Component {
     const {
       d3,
       lolliplotState,
+      proteinTracks,
       displayWidth,
       updateChartState,
       selectCollisions,
@@ -79,21 +82,34 @@ class Lolliplot extends Component {
       loading,
     } = this.props;
 
+    // Temp
+    const expandDomains = true;
+
     return (
       <div onMouseMove={this._onMouseMove.bind(this)} style={{ position: 'relative' }}>
         <Toolbar />
         {loading ?
           this._renderLoading()
-          : <LolliplotChart
-            {...lolliplotState}
-            d3={d3}
-            width={displayWidth}
-            update={updateChartState}
-            selectCollisions={selectCollisions}
-          />}
-        {tooltip ? this._renderTooltip() : null}
-      </div>
-    );
+          : <div>
+            <LolliplotChart
+              {...lolliplotState}
+              d3={d3}
+              width={displayWidth}
+              update={updateChartState}
+              selectCollisions={selectCollisions}
+            />
+            <div style={{ marginTop: '-20px' }}>
+              {proteinTracks.length > 1 ? <Overlapping /> : null}
+              {proteinTracks.slice(0, expandDomains ? Infinity : 1).map((trackData, i) =>
+                <Backbone
+                  key={i}
+                  d3={d3}
+                />
+              )}
+            </div>
+            {tooltip ? this._renderTooltip() : null}
+          </div>}
+      </div>);
   }
 }
 

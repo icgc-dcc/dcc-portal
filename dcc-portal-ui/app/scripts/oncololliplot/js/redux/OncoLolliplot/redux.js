@@ -16,7 +16,7 @@
  */
 
 import { emptyActionGenerator, payloadActionGenerator } from '../helpers';
-import { generateLolliplotChartState, resetLolliplotChartState } from './services';
+import { generateLolliplotChartState, resetLolliplotChartState, separateOverlapping } from './services';
 
 /*
 * Actions
@@ -53,11 +53,13 @@ export function loadTranscript(dispatch, { selectedTranscript, mutationService, 
   dispatch(fetchMutationsStart());
   return mutationService(selectedTranscript.id)
     .then(mutations => {
+      const lolliplotState = generateLolliplotChartState(mutations.hits, selectedTranscript, filters);
       const payload = {
         selectedTranscript,
         mutations: mutations.hits,
         filters: filters,
-        lolliplotState: generateLolliplotChartState(mutations.hits, selectedTranscript, filters),
+        lolliplotState,
+        proteinTracks: separateOverlapping(lolliplotState.data)
       };
       dispatch(fetchMutationsSuccess(payload));
     })
@@ -77,6 +79,7 @@ export const _defaultState = {
   transcripts: [],
   selectedTranscript: {},
   lolliplotState: {},
+  proteinTracks: [],
   filters: {},
   displayWidth: 900,
   tooltip: null,
@@ -97,6 +100,7 @@ export const reducer = (state = _defaultState, action) => {
         mutations: action.payload.mutations,
         selectedTranscript: action.payload.selectedTranscript,
         filters: action.payload.filters,
+        proteinTracks: action.payload.proteinTracks,
         lolliplotState: {
           ...state.lolliplotState,
           ...action.payload.lolliplotState,

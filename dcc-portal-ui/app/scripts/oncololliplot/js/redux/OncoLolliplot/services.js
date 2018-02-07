@@ -47,6 +47,17 @@ export function resetLolliplotChartState(state) {
   };
 }
 
+export function separateOverlapping(domains) {
+  return domains.reduce((acc, d) => {
+    const index = acc.findIndex(level => level.every(l => !overlaps(l, d)));
+
+    if (index > -1) acc[index].push(d);
+    else acc.push([d]);
+
+    return acc;
+  }, []);
+};
+
 //
 /** Data Processing **/
 //
@@ -149,3 +160,10 @@ function filterResults(m, filters) {
 function getAaStart(m) {
   return m.replace(/[^\d]/g, '');
 }
+
+/** TODO */
+function overlaps(a, b) {
+  const first = a.start < b.start ? a : b;
+  const last = first.start === a.start ? b : a;
+  return first.end > last.start;
+};
