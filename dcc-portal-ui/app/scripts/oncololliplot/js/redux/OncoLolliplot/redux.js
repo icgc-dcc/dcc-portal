@@ -25,6 +25,7 @@ const LOAD_TRANSCRIPT_START = 'oncoLolliplot/LOAD_TRANSCRIPT_START';
 const LOAD_TRANSCRIPT_SUCCESS = 'oncoLolliplot/LOAD_TRANSCRIPT_SUCCESS';
 const LOAD_TRANSCRIPT_FAILURE = 'oncoLolliplot/LOAD_TRANSCRIPT_FAILURE';
 
+const RESIZE_WIDTH = 'oncoLolliplot/RESIZE_WIDTH';
 const UPDATE_CHART_STATE = 'oncoLolliplot/UPDATE_CHART_STATE';
 const SELECT_COLLISIONS = 'oncoLolliplot/SELECT_COLLISIONS';
 const RESET = 'oncoLolliplot/RESET';
@@ -36,6 +37,7 @@ const fetchMutationsError = payloadActionGenerator(LOAD_TRANSCRIPT_FAILURE);
 /*
 * Public non-async actions (mapped to component props)
 */
+export const resizeWidth = payloadActionGenerator(RESIZE_WIDTH);
 export const updateChartState = payloadActionGenerator(UPDATE_CHART_STATE);
 export const selectCollisions = payloadActionGenerator(SELECT_COLLISIONS);
 export const reset = emptyActionGenerator(RESET);
@@ -109,13 +111,19 @@ export const reducer = (state = _defaultState, action) => {
           ...action.payload,
         },
       };
+    case RESIZE_WIDTH: {
+      return {
+        ...state,
+        displayWidth: action.payload
+      };
+    }
     case SELECT_COLLISIONS:
       return {
         ...state,
         lolliplotState: {
           selectedCollisions: action.payload
         }
-      }
+      };
     case RESET:
       return {
         ...state,
@@ -123,7 +131,7 @@ export const reducer = (state = _defaultState, action) => {
           ...state.lolliplotState,
           ...resetLolliplotChartState(state)
         },
-      }
+      };
     default:
       return state;
   }

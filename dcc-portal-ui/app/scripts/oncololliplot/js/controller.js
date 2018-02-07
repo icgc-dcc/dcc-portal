@@ -20,7 +20,7 @@
 
   let module = angular.module('icgc.oncololliplot.controllers', []);
 
-  module.controller('OncoLolliplotController', ($scope, $filter, Protein) => {
+  module.controller('OncoLolliplotController', ($scope, $element, $filter, Protein) => {
     const importDependencies = [
       import('react'),
       import('react-dom'),
@@ -37,7 +37,7 @@
         { Provider },
         Lolliplot,
         configureStore,
-        { _defaultState, loadTranscript },
+        { _defaultState, loadTranscript, resizeWidth },
       ]) => {
         const mutationService = transcriptId => Protein.init(transcriptId).get();
 
@@ -48,13 +48,14 @@
             transcripts: $scope.transcripts,
             selectedTranscript: $scope.transcripts[0],
             filters: $scope.filters,
+            displayWidth: $element.width()
           },
         };
 
         // Create redux store
         const store = configureStore(intialState);
 
-        // Update state on filters change
+        // Update state on filters changes
         $scope.$watch('filters', () => {
           const { oncoLolliplot: { selectedTranscript, mutationService } } = store.getState();
           loadTranscript(store.dispatch, {
@@ -62,6 +63,20 @@
             mutationService,
             filters: $scope.filters,
           });
+        });
+
+        $scope.getElementDimensions = function () {
+          return $element.width();
+        };
+
+        $scope.$watch($scope.getElementDimensions, function (newValue, oldValue) {
+          if (Math.abs(oldValue - newValue) > 10) {
+            store.dispatch(resizeWidth(newValue));
+          }
+        }, true);
+
+        $element.bind('resize', function () {
+          $scope.$apply();
         });
 
         render(

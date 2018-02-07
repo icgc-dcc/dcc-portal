@@ -35,7 +35,7 @@
     controller: 'OncoLolliplotController',
     scope: { transcripts: '=' },
     templateUrl: '/scripts/oncololliplot/views/lolliplot.html',
-    link: (scope, iElement) => {
+    link: scope => {
       // Set inital linked scope properties
       scope.filters = LocationService.filters();
 
