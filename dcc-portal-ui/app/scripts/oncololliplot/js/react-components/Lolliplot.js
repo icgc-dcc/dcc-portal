@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import LolliplotChart from './LolliplotChart';
 import Toolbar from './Toolbar';
 import Tooltip from './Tooltip';
-import TooltipMulti from './TooltipMulti';
 import Backbone from './Backbone';
 import Overlapping from './Overlapping';
 import { updateChartState, selectCollisions } from '../redux/OncoLolliplot/redux';
@@ -34,38 +33,6 @@ class Lolliplot extends Component {
     });
   }
 
-  _renderTooltip() {
-    const { tooltip } = this.props;
-    const { cursorPos: { x = 0, y = 0 } } = this.state;
-
-    const baseStyle = {
-      position: 'absolute',
-      display: 'block',
-    }
-
-    switch (tooltip.type) {
-      case 'single':
-        return <Tooltip
-          style={{
-            ...baseStyle,
-            top: y - 21,
-            left: x + 12
-          }}
-          {...tooltip.data}
-        />;
-      case 'multi':
-        return <TooltipMulti
-          style={{
-            ...baseStyle,
-            top: y + 10,
-            left: x + 12
-          }}
-        />;
-      default:
-        return null;
-    }
-  }
-
   _renderLoading() {
     return <div>Loading ...</div>;
   }
@@ -82,8 +49,7 @@ class Lolliplot extends Component {
       loading,
     } = this.props;
 
-    // Temp
-    const expandDomains = true;
+    const { cursorPos } = this.state;
 
     return (
       <div onMouseMove={this._onMouseMove.bind(this)} style={{ position: 'relative' }}>
@@ -101,8 +67,9 @@ class Lolliplot extends Component {
             <Backbone
               d3={d3}
               data={proteinFamilies}
+              style={{ position: 'relative' }}
             />
-            {tooltip ? this._renderTooltip() : null}
+            {tooltip ? <Tooltip cursorPos={cursorPos} /> : null}
           </div>}
       </div>);
   }

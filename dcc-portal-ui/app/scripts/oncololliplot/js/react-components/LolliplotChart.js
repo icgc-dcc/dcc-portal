@@ -27,12 +27,12 @@ const LolliplotChart = props => {
   const onPointMouseover = ({ y: cases = 0, ...d }) => {
     if (collisions[`${d.x},${cases}`]) {
       setTooltip({
-        type: 'multi',
+        type: 'chartMulti',
         data: {}
       })
     } else {
       setTooltip({
-        type: 'single',
+        type: 'chartSingle',
         data: {
           id: d.id,
           numDonors: cases.toLocaleString(),

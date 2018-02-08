@@ -1,13 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Backbone as OncoBackbone } from '@oncojs/react-lolliplot/dist/lib';
-import { updateChartState } from '../redux/OncoLolliplot/redux';
+import { updateChartState, setTooltip, clearTooltip } from '../redux/OncoLolliplot/redux';
 
-const setTooltip = tooltip => {
-  console.log(tooltip);
-}
-
-const Backbone = ({ min, max, d3, domainWidth, displayWidth, updateChartState, data, selectedTranscript }) =>
+const Backbone = ({ min, max, d3, domainWidth, displayWidth, updateChartState, data, selectedTranscript, setTooltip, clearTooltip }) =>
   <OncoBackbone
     d3={d3}
     data={data}
@@ -22,7 +18,7 @@ const Backbone = ({ min, max, d3, domainWidth, displayWidth, updateChartState, d
           min: 0,
           max: selectedTranscript.length_amino_acid,
         });
-        setTooltip(null);
+        clearTooltip();
       } else {
         updateChartState({ min: d.start, max: d.end });
         setTooltip(
@@ -39,27 +35,15 @@ const Backbone = ({ min, max, d3, domainWidth, displayWidth, updateChartState, d
       }
     }}
     onProteinMouseover={d => {
-      setTooltip(
-        <span>
-          <div>
-            <b>{d.id}</b>
-          </div>
-          <div>{d.description}</div>
-          {min === d.start &&
-            max === d.end && (
-              <div>
-                <b>Click to reset zoom</b>
-              </div>
-            )}
-          {(min !== d.start || max !== d.end) && (
-            <div>
-              <b>Click to zoom</b>
-            </div>
-          )}
-        </span>,
-      );
+      setTooltip({
+        type: 'backbone',
+        data: {
+          id: d.id,
+          description: d.description
+        }
+      });
     }}
-    onProteinMouseout={() => setTooltip(null)}
+    onProteinMouseout={() => clearTooltip()}
   />;
 
 const mapStateToProps = state => {
@@ -74,6 +58,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     updateChartState: state => dispatch(updateChartState(state)),
+    setTooltip: ({ type, data }) => dispatch(setTooltip({ type, data })),
+    clearTooltip: () => console.log('bla'), // dispatch(clearTooltip()
   };
 };
 

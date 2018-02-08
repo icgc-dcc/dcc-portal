@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TooltipMulti = ({ style }) =>
+const ChartTooltipMulti = ({ style }) =>
   (<div className="lolliplot-tooltip right in fade" style={style}>
     <div className="tooltip-arrow"></div>
     <div className="tooltip-inner">
@@ -8,6 +8,6 @@ const TooltipMulti = ({ style }) =>
     </div>
   </div>);
 
-TooltipMulti.displayName = 'TooltipMulti';
+ChartTooltipMulti.displayName = 'ChartTooltipMulti';
 
-export default TooltipMulti;
+export default ChartTooltipMulti;
