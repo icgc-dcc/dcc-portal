@@ -35,7 +35,8 @@ export function generateLolliplotChartState(mutations, transcript, filters) {
       max: domainWidth,
       domainWidth,
       data,
-      collisions: processCollisions(data),
+      collisions: {} // no collisions for now
+      // collisions: processCollisions(data),
     },
     proteinFamilies
   };
