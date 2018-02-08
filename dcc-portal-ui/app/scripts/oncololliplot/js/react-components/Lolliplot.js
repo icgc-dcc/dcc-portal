@@ -104,6 +104,7 @@ class Lolliplot extends Component {
                 <Backbone
                   key={i}
                   d3={d3}
+                  data={trackData}
                 />
               )}
             </div>

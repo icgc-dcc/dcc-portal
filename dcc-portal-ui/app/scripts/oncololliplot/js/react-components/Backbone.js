@@ -9,23 +9,22 @@ const setTooltip = tooltip => {
 
 const Backbone = ({ min, max, d3, domainWidth, displayWidth, updateChartState, data, selectedTranscript }) =>
   <OncoBackbone
+    d3={d3}
+    data={data}
     min={min}
     max={max}
-    d3={d3}
     domainWidth={domainWidth}
     width={displayWidth}
     update={updateChartState}
-    data={data}
     onProteinClick={d => {
       if (min === d.start && max === d.end) {
         updateChartState({
-          ...s,
           min: 0,
           max: selectedTranscript.length_amino_acid,
         });
         setTooltip(null);
       } else {
-        updateChartState({ ...s, min: d.start, max: d.end });
+        updateChartState({ min: d.start, max: d.end });
         setTooltip(
           <span>
             <div>
@@ -68,8 +67,7 @@ const mapStateToProps = state => {
     min: state.oncoLolliplot.lolliplotState.min,
     max: state.oncoLolliplot.lolliplotState.max,
     domainWidth: state.oncoLolliplot.lolliplotState.domainWidth,
-    displayWidth: state.oncoLolliplot.lolliplotState.displayWidth,
-    data: state.oncoLolliplot.lolliplotState.data
+    displayWidth: state.oncoLolliplot.displayWidth,
   };
 };
 

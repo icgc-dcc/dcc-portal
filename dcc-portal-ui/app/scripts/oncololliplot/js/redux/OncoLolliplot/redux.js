@@ -53,13 +53,13 @@ export function loadTranscript(dispatch, { selectedTranscript, mutationService, 
   dispatch(fetchMutationsStart());
   return mutationService(selectedTranscript.id)
     .then(mutations => {
-      const lolliplotState = generateLolliplotChartState(mutations.hits, selectedTranscript, filters);
+      const { chartState, proteinTracks } = generateLolliplotChartState(mutations.hits, selectedTranscript, filters);
       const payload = {
         selectedTranscript,
         mutations: mutations.hits,
         filters: filters,
-        lolliplotState,
-        proteinTracks: separateOverlapping(lolliplotState.data)
+        lolliplotState: chartState,
+        proteinTracks
       };
       dispatch(fetchMutationsSuccess(payload));
     })
