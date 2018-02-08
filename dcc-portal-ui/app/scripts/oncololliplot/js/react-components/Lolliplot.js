@@ -74,7 +74,7 @@ class Lolliplot extends Component {
     const {
       d3,
       lolliplotState,
-      proteinTracks,
+      proteinFamilies,
       displayWidth,
       updateChartState,
       selectCollisions,
@@ -98,16 +98,10 @@ class Lolliplot extends Component {
               update={updateChartState}
               selectCollisions={selectCollisions}
             />
-            <div style={{ marginTop: '-20px' }}>
-              {proteinTracks.length > 1 ? <Overlapping /> : null}
-              {proteinTracks.slice(0, expandDomains ? Infinity : 1).map((trackData, i) =>
-                <Backbone
-                  key={i}
-                  d3={d3}
-                  data={trackData}
-                />
-              )}
-            </div>
+            <Backbone
+              d3={d3}
+              data={proteinFamilies}
+            />
             {tooltip ? this._renderTooltip() : null}
           </div>}
       </div>);

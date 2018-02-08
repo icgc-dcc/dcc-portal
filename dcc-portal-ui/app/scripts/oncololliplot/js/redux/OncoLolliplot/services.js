@@ -26,7 +26,7 @@ import { groupBy, pickBy } from 'lodash';
  */
 export function generateLolliplotChartState(mutations, transcript, filters) {
   const data = processData(mutations, transcript, filters);
-  const proteinTracks = processProteins(transcript);
+  const proteinFamilies = processProteins(transcript);
   const domainWidth = processDomainWidth(transcript);
 
   return {
@@ -37,7 +37,7 @@ export function generateLolliplotChartState(mutations, transcript, filters) {
       data,
       collisions: processCollisions(data),
     },
-    proteinTracks
+    proteinFamilies
   };
 }
 
@@ -165,32 +165,11 @@ function processProteins(transcript) {
     {},
   );
 
-  const proteins = (transcript.domains || []).map(protein => ({
+  return (transcript.domains || []).map(protein => ({
     id: protein.hitName,
     start: protein.start,
     end: protein.end,
     description: protein.description,
     getProteinColor: () => colors[protein.hitName],
   }));
-
-  const proteinTracks = separateOverlapping(proteins);
-
-  return proteinTracks;
 }
-
-function separateOverlapping(data) {
-  return data.reduce((acc, d) => {
-    const index = acc.findIndex(level => level.every(l => !overlaps(l, d)));
-
-    if (index > -1) acc[index].push(d);
-    else acc.push([d]);
-
-    return acc;
-  }, []);
-};
-
-function overlaps(a, b) {
-  const first = a.start < b.start ? a : b;
-  const last = first.start === a.start ? b : a;
-  return first.end > last.start;
-};
