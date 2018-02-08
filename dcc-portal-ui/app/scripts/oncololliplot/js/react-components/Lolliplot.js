@@ -69,8 +69,8 @@ class Lolliplot extends Component {
               data={proteinFamilies}
               style={{ position: 'relative' }}
             />
-            {tooltip ? <Tooltip cursorPos={cursorPos} /> : null}
           </div>}
+        {tooltip ? <Tooltip cursorPos={cursorPos} /> : null}
       </div>);
   }
 }

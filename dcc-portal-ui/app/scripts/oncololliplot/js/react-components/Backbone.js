@@ -59,7 +59,7 @@ const mapDispatchToProps = dispatch => {
   return {
     updateChartState: state => dispatch(updateChartState(state)),
     setTooltip: ({ type, data }) => dispatch(setTooltip({ type, data })),
-    clearTooltip: () => console.log('bla'), // dispatch(clearTooltip()
+    clearTooltip: () => dispatch(clearTooltip()),
   };
 };
 
