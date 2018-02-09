@@ -98,6 +98,10 @@ public class ServerProperties {
   @JsonProperty
   Map<String, Boolean> features = newHashMap();
 
+  @Valid
+  @JsonProperty
+  JupyterProperties jupyter = new JupyterProperties();
+
   @Data
   public static class CacheProperties {
 
@@ -415,6 +419,20 @@ public class ServerProperties {
 
     @JsonProperty
     String mavenRepositoryUrl = "https://artifacts.oicr.on.ca/artifactory";
+
+  }
+
+  @Data
+  public static class JupyterProperties {
+
+    /**
+     * Whether to enable Jupyter Notebooks in analysis.
+     */
+    @JsonProperty
+    boolean enabled;
+
+    @JsonProperty
+    String url;
 
   }
 

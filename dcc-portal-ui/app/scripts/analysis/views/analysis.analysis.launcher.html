@@ -1,88 +1,79 @@
 <section>
-<div data-ng-if="!analysisId" data-ng-controller="NewAnalysisController as NAC" class="analysis">
-    <div
-        class="analysis-tool-selection"
-        ng-show="!NAC.shouldShowSetSelection"
-    >
-        <div
-            ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
-            class="analysis-tool analysis-tool--{{analysis.type}}"
-            ng-class="{
+    <div data-ng-if="!analysisId" data-ng-controller="NewAnalysisController as NAC" class="analysis">
+        <div class="analysis-tool-selection" ng-show="!NAC.shouldShowSetSelection">
+            <div ng-repeat="(analysisType, analysis) in NAC.analysesMeta" class="analysis-tool analysis-tool--{{analysis.type}}" ng-class="{
                 'analysis-tool--selected': analysis === NAC.selectedAnalysis,
-            }"
-        >
-            <div
-                class="analysis-tool__image-wrapper"
-                ng-if="analysis.image"
-                ng-bind-html="analysis.image | to_trusted"
-            ></div>
-            <div class="analysis-tool__column--text">
-                <h2 class="analysis-tool__heading">
-                    {{analysis.strings.name}}
-                </h2>
-                <p class="analysis-tool__description">
-                    {{analysis.strings.description}}
-                </p>
-                <div class="analysis-tool__actions">
-                    <button
-                        class="t_button select-btn"
-                        ui-sref="analysis.setSelection({tool: analysis.type})"
-                    >
-                        Select
-                    </button>
-                    <button
-                        class="demo btn btn-default btn-xs"
-                        ng-click="analysis.launchDemo(); $event.stopPropagation(); $event.preventDefault();"
-                    > Demo </button>
-                    <i
-                        class="fa fa-question-circle"
-                        style="color: #b1b1b1; cursor: help;"
-                        tooltip="{{analysis.strings.demoDescription}}"
-                    ></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div
-        class="set-selection-screen"
-        ng-show="NAC.shouldShowSetSelection"
-    >
-        <div
-            ng-repeat="(analysisType, analysis) in NAC.analysesMeta"
-            ng-show="analysis === NAC.selectedAnalysis"
-            class="analysis-tool analysis-tool--{{NAC.selectedAnalysis.type}}"
-        >
-            <div
-                class="analysis-tool__image-wrapper"
-                ng-if="analysis.image"
-                ng-bind-html="analysis.image | to_trusted"
-            ></div>
-        </div>
-        <div
-            class="sets-container "
-        >
-            <div
-                class="set-selection-wrapper wide"
-            >
-                <div style="font-size:1.25rem">
-                    <div>
-                        <strong style="font-size: 22px; color: #333;">{{NAC.selectedAnalysis.strings.name}}</strong></translate>
+            }">
+                <div class="analysis-tool__image-wrapper" ng-if="analysis.image" ng-bind-html="analysis.image | to_trusted"></div>
+                <div class="analysis-tool__column--text">
+                    <h2 class="analysis-tool__heading">
+                        {{analysis.strings.name}}
+                    </h2>
+                    <p class="analysis-tool__description">
+                        {{analysis.strings.description}}
+                    </p>
+                    <div class="analysis-tool__actions">
+                        <button class="t_button select-btn" ui-sref="analysis.setSelection({tool: analysis.type})">
+                            Select
+                        </button>
+                        <button class="demo btn btn-default btn-xs" ng-click="analysis.launchDemo(); $event.stopPropagation(); $event.preventDefault();">
+                            Demo </button>
+                        <i class="fa fa-question-circle" style="color: #b1b1b1; cursor: help;" tooltip="{{analysis.strings.demoDescription}}"></i>
                     </div>
                 </div>
-                <set-selection
-                    sets="NAC.allSets"
-                    description="NAC.selectedAnalysis.strings.description"
-                    selection-instructions="NAC.selectedAnalysis.strings.datasetSelectionInstructions"
-                    is-launching-analysis="NAC.isLaunchingAnalysis()"
-                    set-compatibility-criteria="NAC.selectedAnalysis.setCompatibilityCriteria"
-                    analysis-satisfaction-criteria="NAC.selectedAnalysis.analysisSatisfactionCriteria"
-                    on-click-launch="NAC.selectedAnalysis.launch"
-                    on-click-launch-demo="NAC.selectedAnalysis.launchDemo"
-                    on-click-cancel="NAC.handleSetSelectionCancel()"
-                    on-selected-sets-change="NAC.handleSelectedSetsChange"
-                ></set-selection>
+            </div>
+
+            <div ng-if="jupyterSettings.enabled" class="analysis-tool analysis-tool-full-width analysis-tool--jupyter">
+                <div class="analysis-tool__image-wrapper">
+                    <img class="analysis-tool__image" src="/styles/images/jupyter-hub-logo.svg" />
+                </div>
+                <div class="analysis-tool__column--text">
+                    <h2 class="analysis-tool__heading">
+                        <translate>Jupyter Notebooks
+                            <span class="powered-by-text"> |
+                                <span>Powered by Cancer Genome Collaboratory</span>
+                            </span>
+                        </translate>
+                    </h2>
+                    <p class="analysis-tool__description">
+                        <translate>
+                            The Jupyter Notebook sandbox is provided by ICGC as way of programmatically interacting with, analyzing, and visualizing data.
+                            Users with DACO approval will be able to log in and use the sandbox as a place to experiment and explore.
+                            We recommend users download any notebooks of value and interest as the sandbox will be periodically refreshed to ensure continued
+                            operation for all users.
+                        </translate>
+                    </p>
+                    <div class="analysis-tool__actions">
+                        <a class="t_button select-btn" ng-href="{{jupyterSettings.url}}" target="_blank">
+                            <translate>Launch</translate>
+                        </a>
+                    </div>
+                </div>
+                <div class="powered-by-logo">
+                    <div class="text">Powered by:</div>
+                    <img src="/scripts/repositories/images/home/collab_logo.png" />
+                </div>
+            </div>
+        </div>
+        <div class="set-selection-screen" ng-show="NAC.shouldShowSetSelection">
+            <div ng-repeat="(analysisType, analysis) in NAC.analysesMeta" ng-show="analysis === NAC.selectedAnalysis" class="analysis-tool analysis-tool--{{NAC.selectedAnalysis.type}}">
+                <div class="analysis-tool__image-wrapper" ng-if="analysis.image" ng-bind-html="analysis.image | to_trusted"></div>
+            </div>
+            <div class="sets-container ">
+                <div class="set-selection-wrapper wide">
+                    <div style="font-size:1.25rem">
+                        <div>
+                            <strong style="font-size: 22px; color: #333;">{{NAC.selectedAnalysis.strings.name}}</strong>
+                            </translate>
+                        </div>
+                    </div>
+                    <set-selection sets="NAC.allSets" description="NAC.selectedAnalysis.strings.description" selection-instructions="NAC.selectedAnalysis.strings.datasetSelectionInstructions"
+                        is-launching-analysis="NAC.isLaunchingAnalysis()" set-compatibility-criteria="NAC.selectedAnalysis.setCompatibilityCriteria"
+                        analysis-satisfaction-criteria="NAC.selectedAnalysis.analysisSatisfactionCriteria" on-click-launch="NAC.selectedAnalysis.launch"
+                        on-click-launch-demo="NAC.selectedAnalysis.launchDemo" on-click-cancel="NAC.handleSetSelectionCancel()"
+                        on-selected-sets-change="NAC.handleSelectedSetsChange"></set-selection>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </section>
