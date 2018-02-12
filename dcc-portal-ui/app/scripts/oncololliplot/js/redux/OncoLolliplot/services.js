@@ -163,7 +163,7 @@ function processProteins(transcript) {
   const colors = (transcript.domains || []).reduce(
     (acc, protein, i) => ({
       ...acc,
-      [protein.hitName]: `hsl(${(i * 100) % 360}, 80%, 60%)`,
+      [protein.hitName]: `hsl(${((i + 1) * 100 + 105) % 360}, 70%, 40%)`,
     }),
     {}
   );
