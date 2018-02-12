@@ -5,7 +5,8 @@ import LolliplotChart from './LolliplotChart';
 import Toolbar from './Toolbar';
 import Tooltip from './Tooltip';
 import Backbone from './Backbone';
-import Overlapping from './Overlapping';
+import Minimap from './Minimap';
+import Loading from './Loading';
 import { updateChartState, selectCollisions } from '../redux/OncoLolliplot/redux';
 
 class Lolliplot extends Component {
@@ -33,15 +34,10 @@ class Lolliplot extends Component {
     });
   }
 
-  _renderLoading() {
-    return <div>Loading ...</div>;
-  }
-
   render() {
     const {
       d3,
       lolliplotState,
-      proteinFamilies,
       displayWidth,
       updateChartState,
       selectCollisions,
@@ -53,9 +49,10 @@ class Lolliplot extends Component {
 
     return (
       <div onMouseMove={this._onMouseMove.bind(this)}>
+        <h3>Protein</h3>
         <Toolbar />
         {loading ? (
-          this._renderLoading()
+          <Loading />
         ) : (
           <div>
             <LolliplotChart
@@ -65,7 +62,8 @@ class Lolliplot extends Component {
               update={updateChartState}
               selectCollisions={selectCollisions}
             />
-            <Backbone d3={d3} data={proteinFamilies} />
+            <Backbone d3={d3} />
+            <Minimap d3={d3} />
           </div>
         )}
         {tooltip ? <Tooltip cursorPos={cursorPos} /> : null}

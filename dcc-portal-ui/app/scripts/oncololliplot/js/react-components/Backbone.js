@@ -3,10 +3,21 @@ import { connect } from 'react-redux';
 import { Backbone as OncoBackbone } from '@oncojs/react-lolliplot/dist/lib';
 import { updateChartState, setTooltip, clearTooltip } from '../redux/OncoLolliplot/redux';
 
-const Backbone = ({ min, max, d3, domainWidth, displayWidth, updateChartState, data, selectedTranscript, setTooltip, clearTooltip }) =>
+const Backbone = ({
+  min,
+  max,
+  d3,
+  domainWidth,
+  displayWidth,
+  updateChartState,
+  proteinFamilies,
+  selectedTranscript,
+  setTooltip,
+  clearTooltip,
+}) => (
   <OncoBackbone
     d3={d3}
-    data={data}
+    data={proteinFamilies}
     min={min}
     max={max}
     domainWidth={domainWidth}
@@ -30,7 +41,7 @@ const Backbone = ({ min, max, d3, domainWidth, displayWidth, updateChartState, d
             <div>
               <b>Click to reset zoom</b>
             </div>
-          </span>,
+          </span>
         );
       }
     }}
@@ -39,12 +50,15 @@ const Backbone = ({ min, max, d3, domainWidth, displayWidth, updateChartState, d
         type: 'backbone',
         data: {
           id: d.id,
-          description: d.description
-        }
+          description: d.description,
+        },
       });
     }}
     onProteinMouseout={() => clearTooltip()}
-  />;
+  />
+);
+
+Backbone.displayName = 'Backbone';
 
 const mapStateToProps = state => {
   return {
@@ -52,6 +66,7 @@ const mapStateToProps = state => {
     max: state.oncoLolliplot.lolliplotState.max,
     domainWidth: state.oncoLolliplot.lolliplotState.domainWidth,
     displayWidth: state.oncoLolliplot.displayWidth,
+    proteinFamilies: state.oncoLolliplot.proteinFamilies,
   };
 };
 
