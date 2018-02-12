@@ -21,15 +21,15 @@ class Lolliplot extends Component {
     this.state = {
       cursorPos: {
         x: 0,
-        y: 0
-      }
+        y: 0,
+      },
     };
   }
 
   _onMouseMove(e) {
     this.setState({
       ...this.state,
-      cursorPos: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY }
+      cursorPos: { x: e.nativeEvent.clientX, y: e.nativeEvent.clientY },
     });
   }
 
@@ -52,11 +52,12 @@ class Lolliplot extends Component {
     const { cursorPos } = this.state;
 
     return (
-      <div onMouseMove={this._onMouseMove.bind(this)} style={{ position: 'relative' }}>
+      <div onMouseMove={this._onMouseMove.bind(this)}>
         <Toolbar />
-        {loading ?
+        {loading ? (
           this._renderLoading()
-          : <div>
+        ) : (
+          <div>
             <LolliplotChart
               {...lolliplotState}
               d3={d3}
@@ -64,14 +65,12 @@ class Lolliplot extends Component {
               update={updateChartState}
               selectCollisions={selectCollisions}
             />
-            <Backbone
-              d3={d3}
-              data={proteinFamilies}
-              style={{ position: 'relative' }}
-            />
-          </div>}
+            <Backbone d3={d3} data={proteinFamilies} />
+          </div>
+        )}
         {tooltip ? <Tooltip cursorPos={cursorPos} /> : null}
-      </div>);
+      </div>
+    );
   }
 }
 

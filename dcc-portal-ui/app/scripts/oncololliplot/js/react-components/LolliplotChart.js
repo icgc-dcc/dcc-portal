@@ -28,8 +28,8 @@ const LolliplotChart = props => {
     if (collisions[`${d.x},${cases}`]) {
       setTooltip({
         type: 'chartMulti',
-        data: {}
-      })
+        data: {},
+      });
     } else {
       setTooltip({
         type: 'chartSingle',
@@ -38,7 +38,7 @@ const LolliplotChart = props => {
           numDonors: cases.toLocaleString(),
           aaChange: d.aa_change,
           functionalImpact: d.impact,
-        }
+        },
       });
     }
   };
