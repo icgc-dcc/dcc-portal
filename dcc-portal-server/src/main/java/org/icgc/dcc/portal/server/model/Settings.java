@@ -20,6 +20,7 @@ package org.icgc.dcc.portal.server.model;
 import java.util.Map;
 
 import org.icgc.dcc.portal.server.config.ServerProperties.MirrorProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.JupyterProperties;
 
 import lombok.Builder;
 import lombok.Value;
@@ -66,4 +67,8 @@ public class Settings {
    */
   Map<String, Boolean> featureFlags;
 
+  /**
+   * Jupyter Notebooks
+   */
+  JupyterProperties jupyter;
 }
