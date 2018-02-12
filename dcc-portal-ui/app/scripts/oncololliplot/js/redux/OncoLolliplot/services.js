@@ -35,10 +35,10 @@ export function generateLolliplotChartState(mutations, transcript, filters) {
       max: domainWidth,
       domainWidth,
       data,
-      collisions: {} // no collisions for now
+      collisions: {}, // no collisions for now
       // collisions: processCollisions(data),
     },
-    proteinFamilies
+    proteinFamilies,
   };
 }
 
@@ -155,15 +155,17 @@ function getAaStart(m) {
   return m.replace(/[^\d]/g, '');
 }
 
-/** COMMENTING TODO */
+/** Process proteins for backbone
+ * @param {object} transcript - selected transcript that contains domains
+ * @returns {object} - processed protein domains with colour attached
+ */
 function processProteins(transcript) {
-
   const colors = (transcript.domains || []).reduce(
     (acc, protein, i) => ({
       ...acc,
-      [protein.hitName]: `hsl(${(i * 100) % 360}, 60%, 60%)`,
+      [protein.hitName]: `hsl(${(i * 100) % 360}, 80%, 60%)`,
     }),
-    {},
+    {}
   );
 
   return (transcript.domains || []).map(protein => ({
