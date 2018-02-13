@@ -15,7 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function () {
+(function() {
   'use strict';
 
   let module = angular.module('icgc.oncololliplot.controllers', []);
@@ -48,7 +48,7 @@
             transcripts: $scope.transcripts,
             selectedTranscript: $scope.transcripts[0],
             filters: $scope.filters,
-            displayWidth: $element.width()
+            displayWidth: $element.width(),
           },
         };
 
@@ -65,17 +65,24 @@
           });
         });
 
-        $scope.getElementDimensions = function () {
+        // Get container elem width
+        $scope.getElementDimensions = function() {
           return $element.width();
         };
 
-        $scope.$watch($scope.getElementDimensions, function (newValue, oldValue) {
-          if (Math.abs(oldValue - newValue) > 10) {
-            store.dispatch(resizeWidth(newValue));
-          }
-        }, true);
+        // Dispatch resize event is new width has more than 10px difference
+        $scope.$watch(
+          $scope.getElementDimensions,
+          function(newValue, oldValue) {
+            if (Math.abs(oldValue - newValue) > 10) {
+              store.dispatch(resizeWidth(newValue));
+            }
+          },
+          true
+        );
 
-        $element.bind('resize', function () {
+        // Resize displayWidth on window resize
+        $(window).on('resize', () => {
           $scope.$apply();
         });
 
