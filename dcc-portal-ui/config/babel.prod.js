@@ -14,6 +14,7 @@ module.exports = {
     'babel-plugin-transform-object-rest-spread',
     'babel-plugin-add-module-exports',
     'babel-plugin-transform-async-to-generator',
+    'babel-plugin-transform-react-remove-prop-types',
   ]
     .map(require.resolve)
     .concat([
