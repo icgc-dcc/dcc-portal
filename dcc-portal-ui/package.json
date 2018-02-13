@@ -19,11 +19,14 @@
     "build": "node ./tasks/build.js",
     "start": "node ./tasks/start.js",
     "test": "karma start karma.conf.js",
-    "extract-text": "angular-gettext-cli --files 'app/scripts/**/*.+(html|js)' --dest translations/strings.pot",
-    "compile-text": "angular-gettext-cli --compile --files 'translations/*.po' --dest 'app/scripts/translations/js/translations.js'",
+    "extract-text":
+      "angular-gettext-cli --files 'app/scripts/**/*.+(html|js)' --dest translations/strings.pot",
+    "compile-text":
+      "angular-gettext-cli --compile --files 'translations/*.po' --dest 'app/scripts/translations/js/translations.js'",
     "lint": "eslint -c config/eslint.js --no-eslintrc app/vendor app",
     "lint:fix": "eslint -c config/eslint.js --no-eslintrc --fix app/vendor app",
-    "ensure-versions": "npm run ensure-node-version && npm run ensure-npm-version || (echo 'Please ensure your version of node and npm satisfies' `json -f package.json engines` && exit 10)",
+    "ensure-versions":
+      "npm run ensure-node-version && npm run ensure-npm-version || (echo 'Please ensure your version of node and npm satisfies' `json -f package.json engines` && exit 10)",
     "ensure-node-version": "semver `node -v` -r `json -f package.json engines.node`",
     "ensure-npm-version": "semver `npm -v` -r `json -f package.json engines.npm`"
   },
@@ -168,8 +171,8 @@
     "platform": "1.3.2",
     "pluralize": "3.0.0",
     "prop-types": "^15.6.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
