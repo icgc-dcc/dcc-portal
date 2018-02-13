@@ -554,34 +554,13 @@
             </div>
         </section>
         <section id="protein">
-            <div class="empty" data-ng-if="MutationCtrl.isPVInitialLoad && MutationCtrl.mutation.uiProteinTranscript.length">
-                <h3>
-                    <i class="icon-spinner icon-spin"></i>Loading Protein...
-                </h3>
-            </div>
             <div data-ng-if="!MutationCtrl.mutation.uiProteinTranscript.length" class="empty">
                 <h3>
                     <translate>No protein coding transcript is affected by this mutation in CDS region.</translate>
                 </h3>
             </div>
             <div data-ng-if="MutationCtrl.mutation.uiProteinTranscript.length">
-                <h3 data-ng-if="!MutationCtrl.isPVInitialLoad">
-                    <translate>Protein</translate>
-                </h3>
-
-                <form data-ng-init="transcript = MutationCtrl.mutation.uiProteinTranscript[0]">
-                    <div data-ng-show="!MutationCtrl.isPVInitialLoad">
-                        <strong>
-                            <translate>Transcript:</translate>
-                        </strong>
-                        <select data-ng-model="transcript" data-ng-options="t.name + ' (' + t.lengthAminoAcid + ' aa)'  for t in MutationCtrl.mutation.uiProteinTranscript"></select>
-                        <span data-ng-if="MutationCtrl.isPVLoading">
-                            <i class="icon-spinner icon-spin"></i>
-                        </span>
-                    </div>
-                    <proteinstructure transcript="transcript" highlight-marker="MutationCtrl.mutation.id" data-value-height="200" data-is-initial-load="MutationCtrl.isPVInitialLoad"
-                        data-is-pv-loading="MutationCtrl.isPVLoading" data-ng-style="{'opacity': MutationCtrl.isPVLoading ? '0.5' : '1'}"></proteinstructure>
-                </form>
+                <onco-lolliplot transcripts="MutationCtrl.mutation.uiProteinTranscript"></onco-lolliplot>
             </div>
         </section>
         <section id="genomic">
