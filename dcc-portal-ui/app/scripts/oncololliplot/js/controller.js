@@ -49,6 +49,7 @@
             selectedTranscript: $scope.transcripts[0],
             filters: $scope.filters,
             displayWidth: $element.width(),
+            highlightedPointId: $scope.highlightedPointId,
           },
         };
 

@@ -35,7 +35,15 @@ class Lolliplot extends Component {
   }
 
   render() {
-    const { d3, lolliplotState, displayWidth, updateChartState, tooltip, loading } = this.props;
+    const {
+      d3,
+      lolliplotState,
+      displayWidth,
+      highlightedPointId,
+      updateChartState,
+      tooltip,
+      loading,
+    } = this.props;
 
     const { cursorPos } = this.state;
 
@@ -51,6 +59,7 @@ class Lolliplot extends Component {
               {...lolliplotState}
               d3={d3}
               width={displayWidth}
+              highlightedPointId={highlightedPointId}
               update={updateChartState}
             />
             <Backbone d3={d3} />

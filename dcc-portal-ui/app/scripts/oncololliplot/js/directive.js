@@ -15,7 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function () {
+(function() {
   'use strict';
 
   angular.module('icgc.oncololliplot', [
@@ -24,7 +24,7 @@
   ]);
 })();
 
-(function () {
+(function() {
   'use strict';
 
   let module = angular.module('icgc.oncololliplot.directives', []);
@@ -33,7 +33,7 @@
     restrict: 'E',
     replace: true,
     controller: 'OncoLolliplotController',
-    scope: { transcripts: '=' },
+    scope: { transcripts: '=', highlightedPointId: '=' },
     templateUrl: '/scripts/oncololliplot/views/lolliplot.html',
     link: scope => {
       // Set inital linked scope properties

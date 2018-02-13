@@ -88,6 +88,7 @@ export const _defaultState = {
   proteinFamilies: [],
   filters: {},
   displayWidth: 900,
+  highlightedPointId: null,
   tooltip: null,
   error: null,
 };
