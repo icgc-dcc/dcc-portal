@@ -40,7 +40,7 @@ class Lolliplot extends Component {
     const { cursorPos } = this.state;
 
     return (
-      <div onMouseMove={this._onMouseMove.bind(this)}>
+      <div onMouseMove={this._onMouseMove.bind(this)} style={{ minHeight: '454px' }}>
         <h3>Protein</h3>
         <Toolbar />
         {loading ? (
