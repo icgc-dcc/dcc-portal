@@ -11,7 +11,6 @@ module.exports = {
     'babel-plugin-transform-decorators',
     'babel-plugin-transform-class-properties',
     'babel-plugin-syntax-trailing-function-commas',
-    'babel-plugin-transform-class-properties',
     'babel-plugin-transform-object-rest-spread',
     'babel-plugin-add-module-exports',
     'babel-plugin-transform-async-to-generator',

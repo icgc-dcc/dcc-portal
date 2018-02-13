@@ -10,11 +10,12 @@ module.exports = {
     'babel-plugin-transform-decorators',
     'babel-plugin-transform-class-properties',
     'babel-plugin-syntax-trailing-function-commas',
-    'babel-plugin-transform-class-properties',
     'babel-plugin-transform-object-rest-spread',
     'babel-plugin-add-module-exports',
     'babel-plugin-transform-async-to-generator',
     'babel-plugin-transform-react-remove-prop-types',
+    'babel-plugin-transform-react-constant-elements',
+    'babel-plugin-transform-react-inline-elements',
   ]
     .map(require.resolve)
     .concat([
