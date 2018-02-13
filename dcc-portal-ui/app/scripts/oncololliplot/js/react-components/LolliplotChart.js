@@ -5,7 +5,7 @@ import { object, array, func, number } from 'prop-types';
 import { setTooltip, clearTooltip } from '../redux/OncoLolliplot/redux';
 
 const LolliplotChart = props => {
-  const { collisions, selectCollisions, setTooltip, clearTooltip } = props;
+  const { collisions, setTooltip, clearTooltip } = props;
 
   const getPointColor = point => {
     const colourMapping = {
@@ -17,8 +17,12 @@ const LolliplotChart = props => {
   };
 
   const onPointClick = d => {
-    if (collisions[`${d.x},${d.y}`]) {
-      selectCollisions(collisions[`${d.x},${d.y}`]);
+    const clickedPointCollisions = collisions[`${d.x},${d.y}`];
+
+    if (clickedPointCollisions) {
+      const mutations = JSON.stringify(clickedPointCollisions.map(mutation => mutation.id));
+      const query = `{"mutation":{"id":{"is":${mutations}}}}`;
+      window.location = `/search/m?filters=${encodeURIComponent(query)}`;
     } else {
       window.location = `/mutations/${d.id}`;
     }
@@ -67,8 +71,6 @@ LolliplotChart.propTypes = {
   width: number.isRequired,
   data: array.isRequired,
   collisions: object.isRequired,
-  selectCollisions: func.isRequired,
-  selectedCollisions: array,
   d3: object.isRequired,
   update: func.isRequired,
 };

@@ -16,7 +16,11 @@
  */
 
 import { emptyActionGenerator, payloadActionGenerator } from '../helpers';
-import { generateLolliplotChartState, resetLolliplotChartState, separateOverlapping } from './services';
+import {
+  generateLolliplotChartState,
+  resetLolliplotChartState,
+  separateOverlapping,
+} from './services';
 
 /*
 * Actions
@@ -27,7 +31,6 @@ const LOAD_TRANSCRIPT_FAILURE = 'oncoLolliplot/LOAD_TRANSCRIPT_FAILURE';
 
 const RESIZE_WIDTH = 'oncoLolliplot/RESIZE_WIDTH';
 const UPDATE_CHART_STATE = 'oncoLolliplot/UPDATE_CHART_STATE';
-const SELECT_COLLISIONS = 'oncoLolliplot/SELECT_COLLISIONS';
 const SET_TOOLTIP = 'oncoLolliplot/SET_TOOLTIP';
 const CLEAR_TOOLTIP = 'oncoLolliplot/CLEAR_TOOLTIP';
 const RESET = 'oncoLolliplot/RESET';
@@ -41,7 +44,6 @@ const fetchMutationsError = payloadActionGenerator(LOAD_TRANSCRIPT_FAILURE);
 */
 export const resizeWidth = payloadActionGenerator(RESIZE_WIDTH);
 export const updateChartState = payloadActionGenerator(UPDATE_CHART_STATE);
-export const selectCollisions = payloadActionGenerator(SELECT_COLLISIONS);
 export const setTooltip = payloadActionGenerator(SET_TOOLTIP);
 export const clearTooltip = emptyActionGenerator(CLEAR_TOOLTIP);
 export const reset = emptyActionGenerator(RESET);
@@ -53,13 +55,17 @@ export function loadTranscript(dispatch, { selectedTranscript, mutationService, 
   dispatch(fetchMutationsStart());
   return mutationService(selectedTranscript.id)
     .then(mutations => {
-      const { chartState, proteinFamilies } = generateLolliplotChartState(mutations.hits, selectedTranscript, filters);
+      const { chartState, proteinFamilies } = generateLolliplotChartState(
+        mutations.hits,
+        selectedTranscript,
+        filters
+      );
       const payload = {
         selectedTranscript,
         mutations: mutations.hits,
         filters: filters,
         lolliplotState: chartState,
-        proteinFamilies
+        proteinFamilies,
       };
       dispatch(fetchMutationsSuccess(payload));
     })
@@ -123,32 +129,25 @@ export const reducer = (state = _defaultState, action) => {
     case RESIZE_WIDTH: {
       return {
         ...state,
-        displayWidth: action.payload
+        displayWidth: action.payload,
       };
     }
-    case SELECT_COLLISIONS:
-      return {
-        ...state,
-        lolliplotState: {
-          selectedCollisions: action.payload
-        }
-      };
     case SET_TOOLTIP:
       return {
         ...state,
-        tooltip: action.payload
+        tooltip: action.payload,
       };
     case CLEAR_TOOLTIP:
       return {
         ...state,
-        tooltip: null
-      }
+        tooltip: null,
+      };
     case RESET:
       return {
         ...state,
         lolliplotState: {
           ...state.lolliplotState,
-          ...resetLolliplotChartState(state)
+          ...resetLolliplotChartState(state),
         },
       };
     default:

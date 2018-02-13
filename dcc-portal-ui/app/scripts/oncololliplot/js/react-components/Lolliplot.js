@@ -7,7 +7,7 @@ import Tooltip from './Tooltip';
 import Backbone from './Backbone';
 import Minimap from './Minimap';
 import Loading from './Loading';
-import { updateChartState, selectCollisions } from '../redux/OncoLolliplot/redux';
+import { updateChartState } from '../redux/OncoLolliplot/redux';
 
 class Lolliplot extends Component {
   static displayName = 'Lolliplot';
@@ -35,15 +35,7 @@ class Lolliplot extends Component {
   }
 
   render() {
-    const {
-      d3,
-      lolliplotState,
-      displayWidth,
-      updateChartState,
-      selectCollisions,
-      tooltip,
-      loading,
-    } = this.props;
+    const { d3, lolliplotState, displayWidth, updateChartState, tooltip, loading } = this.props;
 
     const { cursorPos } = this.state;
 
@@ -60,7 +52,6 @@ class Lolliplot extends Component {
               d3={d3}
               width={displayWidth}
               update={updateChartState}
-              selectCollisions={selectCollisions}
             />
             <Backbone d3={d3} />
             <Minimap d3={d3} />
@@ -81,7 +72,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     updateChartState: state => dispatch(updateChartState(state)),
-    selectCollisions: collision => dispatch(selectCollisions(collision)),
   };
 };
 
