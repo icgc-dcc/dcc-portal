@@ -48,7 +48,6 @@ IcgcGeneTrack.prototype.setLoading = function(loadState) {
 };
 
 IcgcGeneTrack.prototype.updateHeight = function() {
-  //this._updateHeight();
   if (this.histogram) {
     this.contentDiv.style.height = this.histogramRenderer.histogramHeight + 5 + 'px';
     this.main.setAttribute('height', this.histogramRenderer.histogramHeight);
@@ -56,7 +55,7 @@ IcgcGeneTrack.prototype.updateHeight = function() {
   }
 
   var renderedHeight = this.svgCanvasFeatures.getBoundingClientRect().height;
-  this.main.setAttribute('height', renderedHeight);
+  if (renderedHeight > 0) this.main.setAttribute('height', renderedHeight);
 
   if (this.resizable) {
     if (this.autoHeight === false) {
@@ -101,8 +100,7 @@ IcgcGeneTrack.prototype.initializeDom = function(targetId) {
     x: -this.pixelPosition,
     width: this.svgCanvasWidth,
   });
-  console.log('IcgcGeneTrack: ', this);
-  // this.updateHeight();
+  this.updateHeight();
 };
 
 IcgcGeneTrack.prototype.clean = function() {
@@ -141,8 +139,8 @@ IcgcGeneTrack.prototype.render = function(targetId) {
       width: _this.width,
       pixelPosition: _this.pixelPosition,
     });
-    _this.updateHeight();
     _this.setLoading(false);
+    _this.updateHeight();
   });
 };
 
