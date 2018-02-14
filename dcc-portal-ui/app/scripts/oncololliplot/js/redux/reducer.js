@@ -1,5 +1,5 @@
 /*
- * Copyright 2016(c) The Ontario Institute for Cancer Research. All rights reserved.
+ * Copyright 2018(c) The Ontario Institute for Cancer Research. All rights reserved.
  *
  * This program and the accompanying materials are made available under the terms of the GNU Public
  * License v3.0. You should have received a copy of the GNU General Public License along with this
@@ -15,36 +15,12 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
-.modal-header {
-  padding: 1rem 2rem;
-  border-bottom: 1px solid $greyLight
-}
-.modal-body {
-  padding: 0 2rem 1rem;
-}
-.modal-footer {
-  padding: 1rem;
-  margin-bottom: 0;
-  text-align: right;
-  background-color: $greyLightest;
-  border-top: 1px solid $greyLight;
-  border-radius: 0 0 6px 6px;
-}
-*/
+import { combineReducers } from 'redux';
 
-.set-upload {
-  margin: 0;
-  max-height: 40rem;
-  overflow-y: scroll;
-}
+import { reducer as oncoLolliplot } from './OncoLolliplot/redux';
 
-.modal-mutation {
-  .modal-header {
-    padding: 15px 15px 10px;
-  }
-  .modal-body {
-    max-height: 40rem;
-    overflow-y: scroll;
-  }
-}
+const reducer = combineReducers({
+  oncoLolliplot,
+});
+
+export default reducer;
