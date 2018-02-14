@@ -638,6 +638,7 @@ var SVG = {
               parent.appendChild( el );
           }
         }
+        console.log('_insert returns: ', el);
         return el;
     },
 
@@ -26783,7 +26784,7 @@ AlignmentTrack.prototype.initializeDom = function (targetId) {
         'x': -this.pixelPosition,
         'width': this.svgCanvasWidth
     });
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 AlignmentTrack.prototype.render = function (targetId) {
