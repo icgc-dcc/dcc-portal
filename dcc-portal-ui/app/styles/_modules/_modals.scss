@@ -39,7 +39,12 @@
   overflow-y: scroll;
 }
 
-.mutation-modal {
-  max-height: 40rem;
-  overflow-y: scroll;
+.modal-mutation {
+  .modal-header {
+    padding: 15px 15px 10px;
+  }
+  .modal-body {
+    max-height: 40rem;
+    overflow-y: scroll;
+  }
 }
