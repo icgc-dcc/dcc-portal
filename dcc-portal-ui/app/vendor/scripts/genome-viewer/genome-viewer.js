@@ -26779,6 +26779,7 @@ AlignmentTrack.prototype.initializeDom = function (targetId) {
         'x': -this.pixelPosition,
         'width': this.svgCanvasWidth
     });
+    console.log('AlignmentTrack: ', this);
     // this.updateHeight();
 };
 
@@ -27083,6 +27084,7 @@ FeatureTrack.prototype.initializeDom = function (targetId) {
         'x': -this.pixelPosition,
         'width': this.svgCanvasWidth
     });
+    console.log('FeatureTrack: ', this);
     // this.updateHeight();
 };
 
@@ -27342,6 +27344,7 @@ GeneTrack.prototype.initializeDom = function(targetId) {
         'x': -this.pixelPosition,
         'width': this.svgCanvasWidth
     });
+    console.log('GeneTrack: ', this);
     // this.updateHeight();
 };
 

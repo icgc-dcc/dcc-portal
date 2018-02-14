@@ -101,6 +101,7 @@ IcgcGeneTrack.prototype.initializeDom = function(targetId) {
     x: -this.pixelPosition,
     width: this.svgCanvasWidth,
   });
+  console.log('IcgcGeneTrack: ', this);
   // this.updateHeight();
 };
 
