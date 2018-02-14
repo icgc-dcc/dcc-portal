@@ -26313,7 +26313,6 @@ Track.prototype = {
         this._updateHeight();
     },
     _updateHeight: function() {
-        console.log('_updateHeight: function()');
         $(this.contentDiv).css({
             'height': this.height + 10
         });
@@ -26757,9 +26756,7 @@ AlignmentTrack.prototype.clean = function () {
 
 AlignmentTrack.prototype.updateHeight = function () {
 //    this._updateHeight();
-    console.log('AlignmentTrack.prototype.updateHeight');
     var renderedHeight = this.svgCanvasFeatures.getBoundingClientRect().height;
-    console.log('AlignmentTrack.prototype.updateHeight renderedHeight: ', renderedHeight);
     this.main.setAttribute('height', renderedHeight);
 };
 
@@ -27036,7 +27033,6 @@ FeatureTrack.prototype.clean = function () {
 
 FeatureTrack.prototype.updateHeight = function () {
     //this._updateHeight();
-    console.log('FeatureTrack.prototype.updateHeight');
     if (this.histogram) {
         this.contentDiv.style.height = this.histogramRenderer.histogramHeight + 5 + 'px';
         this.main.setAttribute('height', this.histogramRenderer.histogramHeight);
@@ -27044,7 +27040,6 @@ FeatureTrack.prototype.updateHeight = function () {
     }
 
     var renderedHeight = this.svgCanvasFeatures.getBoundingClientRect().height;
-    console.log('FeatureTrack.prototype.updateHeight renderedHeight: ', renderedHeight);
     this.main.setAttribute('height', renderedHeight);
 
     if (this.resizable) {
@@ -27296,7 +27291,7 @@ GeneTrack.prototype.clean = function() {
 
 GeneTrack.prototype.updateHeight = function() {
     //    this._updateHeight();
-    console.log('GeneTrack.prototype.updateHeight');
+
     if (this.histogram) {
         this.contentDiv.style.height = this.histogramRenderer.histogramHeight + 5 + 'px';
         this.main.setAttribute('height', this.histogramRenderer.histogramHeight);
@@ -27304,7 +27299,6 @@ GeneTrack.prototype.updateHeight = function() {
     }
 
     var renderedHeight = this.svgCanvasFeatures.getBoundingClientRect().height;
-    console.log('GeneTrack.prototype.updateHeight renderedHeight: ', renderedHeight);
     this.main.setAttribute('height', renderedHeight);
 
     if (this.resizable) {
