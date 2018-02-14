@@ -25895,7 +25895,7 @@ TrackListPanel.prototype = {
     updateHeight: function() {
         for (var i = 0; i < this.tracks.length; i++) {
             var track = this.tracks[i];
-            // track.updateHeight(true);
+            track.updateHeight(true);
         }
     },
 
@@ -26243,10 +26243,9 @@ Track.prototype = {
         this.div.classList.add('hidden');
     },
     show: function() {
-        console.log('SHOW');
         this.visible = true;
         this.div.classList.remove('hidden');
-        // this.updateHeight();
+        this.updateHeight();
     },
     toggle: function() {
         if (this.visible) {
@@ -26819,7 +26818,7 @@ AlignmentTrack.prototype.getDataHandler = function (event) {
         region: this.region,
         trackListPanel: this.trackListPanel
     });
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 
@@ -27045,9 +27044,9 @@ FeatureTrack.prototype.updateHeight = function () {
         return;
     }
 
-    // var renderedHeight = this.svgCanvasFeatures.getBoundingClientRect().height;
+    var renderedHeight = this.svgCanvasFeatures.getBoundingClientRect().height;
     console.log('FeatureTrack.prototype.updateHeight renderedHeight: ', renderedHeight);
-    // this.main.setAttribute('height', renderedHeight);
+    this.main.setAttribute('height', renderedHeight);
 
     if (this.resizable) {
         if (this.autoHeight == false) {
@@ -27066,8 +27065,7 @@ FeatureTrack.prototype.updateHeight = function () {
             }
             var visibleHeight = parseInt(lastContains) + 30;
             this.contentDiv.style.height = visibleHeight + 10 + 'px';
-            console.log('FeatureTrack visibleHeight" ', visibleHeight);
-            // this.main.setAttribute('height', visibleHeight);
+            this.main.setAttribute('height', visibleHeight);
         }
     }
 };
@@ -27091,7 +27089,7 @@ FeatureTrack.prototype.initializeDom = function (targetId) {
         'x': -this.pixelPosition,
         'width': this.svgCanvasWidth
     });
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 FeatureTrack.prototype.render = function (targetId) {
@@ -27126,7 +27124,7 @@ FeatureTrack.prototype.getDataHandler = function (event) {
         species: this.species,
         featureType: this.featureType
     });
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 FeatureTrack.prototype.draw = function () {
@@ -27170,7 +27168,7 @@ FeatureTrack.prototype.draw = function () {
     } else {
 //        this.invalidZoomText.setAttribute("visibility", "visible");
     }
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 
@@ -27240,7 +27238,7 @@ FeatureTrack.prototype.move = function (disp) {
     }
 
     if (this.autoHeight == true) {
-        // this.updateHeight();
+        this.updateHeight();
     }
 };
 
@@ -27351,7 +27349,7 @@ GeneTrack.prototype.initializeDom = function(targetId) {
         'x': -this.pixelPosition,
         'width': this.svgCanvasWidth
     });
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 GeneTrack.prototype.render = function(targetId) {
@@ -27383,7 +27381,7 @@ GeneTrack.prototype.getDataHandler = function(event) {
         pixelPosition: this.pixelPosition
 
     });
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 GeneTrack.prototype.updateTranscriptParams = function() {
@@ -27442,7 +27440,7 @@ GeneTrack.prototype.draw = function() {
     } else {
         //        this.invalidZoomText.setAttribute("visibility", "visible");
     }
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 
@@ -27526,7 +27524,7 @@ GeneTrack.prototype.move = function(disp) {
     }
 
     if (this.autoHeight == true) {
-        // this.updateHeight();
+        this.updateHeight();
     }
 };
 
