@@ -13,7 +13,7 @@ module.exports = {
       require.resolve('webpack-dev-server/client') + '?/',
       require.resolve('webpack/hot/only-dev-server'),
       require.resolve('./polyfills'),
-      path.join(paths.appSrc, 'scripts/index')
+      path.join(paths.appSrc, 'scripts/index'),
     ],
     vendor: path.join(paths.appSrc, 'scripts/vendor'),
   },
@@ -22,6 +22,7 @@ module.exports = {
     path: paths.appBuild,
     pathinfo: true,
     filename: 'static/js/[name].js',
+    chunkFilename: 'static/js/[name].bundle.js',
     publicPath: 'http://local.dcc.icgc.org:9000/',
   },
   resolve: {
@@ -29,7 +30,7 @@ module.exports = {
   },
   resolveLoader: {
     root: paths.ownNodeModules,
-    moduleTemplates: ['*-loader']
+    moduleTemplates: ['*-loader'],
   },
   module: {
     preLoaders: [
@@ -37,7 +38,7 @@ module.exports = {
         test: /\.js$/,
         loader: 'eslint',
         include: paths.appSrc,
-      }
+      },
     ],
     noParse: /node_modules\/lodash\/lodash\.js/,
     loaders: [
@@ -51,15 +52,17 @@ module.exports = {
         query: {
           multiple: [
             {
-              search: '\<portal-settings\>\<\/portal-settings\>',
-              replace: `<script>window.ICGC_SETTINGS = ${JSON.stringify(require('./ICGC_SETTINGS.dev.js'))}</script>`
+              search: '<portal-settings></portal-settings>',
+              replace: `<script>window.ICGC_SETTINGS = ${JSON.stringify(
+                require('./ICGC_SETTINGS.dev.js')
+              )}</script>`,
             },
             {
-              search: '\'COPYRIGHT_YEAR\'',
-              replace: new Date().getUTCFullYear()
+              search: "'COPYRIGHT_YEAR'",
+              replace: new Date().getUTCFullYear(),
             },
-          ]
-        }
+          ],
+        },
       },
       {
         test: /\.js$/,
@@ -70,30 +73,25 @@ module.exports = {
       {
         test: /\.css$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'style!css'
+        loader: 'style!css',
       },
       {
         test: /\.scss$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loaders: [
-          'style',
-          'css?sourceMap&-autoprefixer',
-          'postcss',
-          'sass?sourceMap'
-        ]
+        loaders: ['style', 'css?sourceMap&-autoprefixer', 'postcss', 'sass?sourceMap'],
       },
       {
         test: /\.json$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'json'
+        loader: 'json',
       },
       {
         test: /\.(swf|jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'file',
         query: {
-          name: 'static/media/[path][name].[ext]'
-        }
+          name: 'static/media/[path][name].[ext]',
+        },
       },
       {
         test: /\.(mp4|webm)(\?.*)?$/,
@@ -101,19 +99,17 @@ module.exports = {
         loader: 'url',
         query: {
           limit: 10000,
-          name: 'static/media/[name].[ext]'
-        }
-      }
-    ]
+          name: 'static/media/[name].[ext]',
+        },
+      },
+    ],
   },
   eslint: {
     configFile: path.join(__dirname, 'eslint.js'),
-    useEslintrc: false
+    useEslintrc: false,
   },
   postcss: function() {
-    return [
-      require('autoprefixer'),
-    ];
+    return [require('autoprefixer')];
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -128,6 +124,9 @@ module.exports = {
     // Note: only CSS is currently hot reloaded
     new webpack.HotModuleReplacementPlugin(),
     new CaseSensitivePathsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
-  ]
+    new webpack.optimize.CommonsChunkPlugin(
+      /* chunkName= */ 'vendor',
+      /* filename= */ 'vendor.bundle.js'
+    ),
+  ],
 };

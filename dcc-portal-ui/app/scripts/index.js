@@ -96,6 +96,8 @@ require('./survivalanalysis/js/survival-analysis.js');
 require('./oncogrid/js/directive.js');
 require('./oncogrid/js/controller.js');
 require('./oncogrid/js/service.js');
+require('./oncololliplot/js/directive.js');
+require('./oncololliplot/js/controller.js');
 require('./analysis/js/analysis.js');
 require('./analysis/js/analysisList.js');
 require('./analysis/js/analysisLauncher.js');
@@ -109,4 +111,3 @@ require('./translations/js/translations.js');
 require('./entitysetupload/js/entitysetupload.js');
 require('./404/js/404.js');
 require('./301/js/301.js');
-
