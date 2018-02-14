@@ -638,6 +638,7 @@ var SVG = {
               parent.appendChild( el );
           }
         }
+        console.log('_insert returns: ', el);
         return el;
     },
 
@@ -27036,10 +27037,10 @@ FeatureTrack.prototype.clean = function () {
 
 FeatureTrack.prototype.updateHeight = function () {
     //this._updateHeight();
-    console.log('FeatureTrack.prototype.updateHeight');
     if (this.histogram) {
         this.contentDiv.style.height = this.histogramRenderer.histogramHeight + 5 + 'px';
         this.main.setAttribute('height', this.histogramRenderer.histogramHeight);
+        console.log('this.histogramRenderer.histogramHeight: ', this.histogramRenderer.histogramHeight);
         return;
     }
 
@@ -27296,10 +27297,10 @@ GeneTrack.prototype.clean = function() {
 
 GeneTrack.prototype.updateHeight = function() {
     //    this._updateHeight();
-    console.log('GeneTrack.prototype.updateHeight');
     if (this.histogram) {
         this.contentDiv.style.height = this.histogramRenderer.histogramHeight + 5 + 'px';
         this.main.setAttribute('height', this.histogramRenderer.histogramHeight);
+        console.log('GeneTrack Histagram: ', this.histogramRenderer.histogramHeight);
         return;
     }
 
