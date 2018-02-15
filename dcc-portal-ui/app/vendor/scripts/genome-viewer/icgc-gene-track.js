@@ -42,7 +42,7 @@ function IcgcGeneTrack(args) {
 
 IcgcGeneTrack.prototype = new Track({});
 
-IcgcGeneTrack.prototype.setLoading = function (loadState) {
+IcgcGeneTrack.prototype.setLoading = function(loadState) {
   Track.prototype.setLoading.call(this, loadState);
   this.trigger('load', loadState);
 };
@@ -55,7 +55,7 @@ IcgcGeneTrack.prototype.updateHeight = function() {
   }
 
   var renderedHeight = this.svgCanvasFeatures.getBoundingClientRect().height;
-  if (renderedHeight > 0) this.main.setAttribute('height', renderedHeight);
+  this.main.setAttribute('height', renderedHeight > 0 ? renderedHeight : 1200);
 
   if (this.resizable) {
     if (this.autoHeight === false) {
@@ -65,10 +65,12 @@ IcgcGeneTrack.prototype.updateHeight = function() {
       var width = this.width;
       var lastContains = 0;
       for (var i in this.renderedArea) {
-        if (this.renderedArea[i].contains({
+        if (
+          this.renderedArea[i].contains({
             start: x,
-            end: x + width
-          })) {
+            end: x + width,
+          })
+        ) {
           lastContains = i;
         }
       }
@@ -81,22 +83,22 @@ IcgcGeneTrack.prototype.updateHeight = function() {
 
 IcgcGeneTrack.prototype.setWidth = function(width) {
   this._setWidth(width);
-  this.main.setAttribute("width", this.width);
+  this.main.setAttribute('width', this.width);
 };
 
 IcgcGeneTrack.prototype.initializeDom = function(targetId) {
   this._initializeDom(targetId);
 
   this.main = SVG.addChild(this.contentDiv, 'svg', {
-    'class': 'trackSvg',
-    'x': 0,
-    'y': 0,
-    'width': this.width
+    class: 'trackSvg',
+    x: 0,
+    y: 0,
+    width: this.width,
   });
   this.svgCanvasFeatures = SVG.addChild(this.main, 'svg', {
-    'class': 'features',
-    'x': -this.pixelPosition,
-    'width': this.svgCanvasWidth
+    class: 'features',
+    x: -this.pixelPosition,
+    width: this.svgCanvasWidth,
   });
   this.updateHeight();
 };
@@ -110,15 +112,15 @@ IcgcGeneTrack.prototype.clean = function() {
   this._clean();
 };
 
-IcgcGeneTrack.prototype.render = function (targetId) {
+IcgcGeneTrack.prototype.render = function(targetId) {
   var _this = this;
   this.initializeDom(targetId);
 
-  this.svgCanvasOffset = (this.width * 3 / 2) / this.pixelBase;
+  this.svgCanvasOffset = this.width * 3 / 2 / this.pixelBase;
   this.svgCanvasLeftLimit = this.region.start - this.svgCanvasOffset * 2;
   this.svgCanvasRightLimit = this.region.start + this.svgCanvasOffset * 2;
 
-  this.dataAdapter.on('data:ready', function (event) {
+  this.dataAdapter.on('data:ready', function(event) {
     var features;
     if (event.params.histogram === true) {
       _this.renderer = _this.histogramRenderer;
@@ -135,19 +137,19 @@ IcgcGeneTrack.prototype.render = function (targetId) {
       regionSize: _this.region.length(),
       maxLabelRegionSize: _this.maxLabelRegionSize,
       width: _this.width,
-      pixelPosition: _this.pixelPosition
+      pixelPosition: _this.pixelPosition,
     });
     _this.setLoading(false);
     _this.updateHeight();
   });
 };
 
-IcgcGeneTrack.prototype.updateTranscriptParams = function () {
-    this.transcript = this.region.length() < this.minTranscriptRegionSize;
+IcgcGeneTrack.prototype.updateTranscriptParams = function() {
+  this.transcript = this.region.length() < this.minTranscriptRegionSize;
 };
 
-IcgcGeneTrack.prototype.draw = function () {
-  this.svgCanvasOffset = (this.width * 3 / 2) / this.pixelBase;
+IcgcGeneTrack.prototype.draw = function() {
+  this.svgCanvasOffset = this.width * 3 / 2 / this.pixelBase;
   this.svgCanvasLeftLimit = this.region.start - this.svgCanvasOffset * 2;
   this.svgCanvasRightLimit = this.region.start + this.svgCanvasOffset * 2;
 
@@ -155,7 +157,10 @@ IcgcGeneTrack.prototype.draw = function () {
   this.updateHistogramParams();
   this.clean();
 
-  if (typeof this.visibleRegionSize === 'undefined' || this.region.length() < this.visibleRegionSize) {
+  if (
+    typeof this.visibleRegionSize === 'undefined' ||
+    this.region.length() < this.visibleRegionSize
+  ) {
     this.setLoading(true);
     this.dataAdapter.getData({
       chromosome: this.region.chromosome,
@@ -166,17 +171,16 @@ IcgcGeneTrack.prototype.draw = function () {
       histogramMax: this.histogramMax,
       interval: this.interval,
       transcript: this.transcript,
-      functional_impact: this.functional_impact
+      functional_impact: this.functional_impact,
     });
 
     //this.invalidZoomText.setAttribute('visibility', 'hidden');
   } else {
     //this.invalidZoomText.setAttribute('visibility', 'visible');
   }
-
 };
 
-IcgcGeneTrack.prototype.move = function (disp) {
+IcgcGeneTrack.prototype.move = function(disp) {
   var _this = this;
   //    trackSvg.position = _this.region.center();
   _this.region.center();
@@ -191,7 +195,10 @@ IcgcGeneTrack.prototype.move = function (disp) {
   var virtualEnd = parseInt(this.region.end + this.svgCanvasOffset, 10);
   // check if track is visible in this zoom
 
-  if (typeof this.visibleRegionSize === 'undefined' || this.region.length() < this.visibleRegionSize) {
+  if (
+    typeof this.visibleRegionSize === 'undefined' ||
+    this.region.length() < this.visibleRegionSize
+  ) {
     if (disp > 0 && virtualStart < this.svgCanvasLeftLimit) {
       this.dataAdapter.getData({
         chromosome: _this.region.chromosome,
@@ -200,7 +207,7 @@ IcgcGeneTrack.prototype.move = function (disp) {
         histogram: this.histogram,
         interval: this.interval,
         transcript: this.transcript,
-        functional_impact: this.functional_impact
+        functional_impact: this.functional_impact,
       });
       this.svgCanvasLeftLimit = parseInt(this.svgCanvasLeftLimit - this.svgCanvasOffset, 10);
     }
@@ -213,36 +220,37 @@ IcgcGeneTrack.prototype.move = function (disp) {
         histogram: this.histogram,
         interval: this.interval,
         transcript: this.transcript,
-        functional_impact: this.functional_impact
+        functional_impact: this.functional_impact,
       });
       this.svgCanvasRightLimit = parseInt(this.svgCanvasRightLimit + this.svgCanvasOffset, 10);
     }
   }
-
 };
 
-IcgcGeneTrack.prototype._histogramRendererCheck = function (items) {
+IcgcGeneTrack.prototype._histogramRendererCheck = function(items) {
   //modifies input!
   var arr = [];
   for (var i = 0; i < items.length; i++) {
     var chunk = items[i];
-    arr.push({value: chunk});
+    arr.push({ value: chunk });
   }
   return arr;
 };
 
-
-IcgcGeneTrack.prototype._getFeaturesByChunks = function (response) {
-
+IcgcGeneTrack.prototype._getFeaturesByChunks = function(response) {
   //Returns an array avoiding already drawn features in this.chunksDisplayed
   var chunks = response.items;
   var dataType = response.params.dataType;
   var chromosome = response.params.chromosome;
 
-  var feature, displayed, featureFirstChunk, featureLastChunk, features = [];
+  var feature,
+    displayed,
+    featureFirstChunk,
+    featureLastChunk,
+    features = [];
   for (var i = 0, leni = chunks.length; i < leni; i++) {
-
-    if (this.chunksDisplayed[chunks[i].key + dataType] !== true) {//check if any chunk is already displayed and skip it
+    if (this.chunksDisplayed[chunks[i].key + dataType] !== true) {
+      //check if any chunk is already displayed and skip it
 
       if (_.isUndefined(chunks[i][dataType])) {
         chunks[i][dataType] = [];
