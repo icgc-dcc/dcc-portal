@@ -31,10 +31,12 @@ import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.service.BadRequestException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.base.Strings;
 
+@Ignore
 public class OAuthClientIntegrationTest {
 
   private static final String SERVICE_URL = "http://localhost:8443";

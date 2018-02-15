@@ -19,11 +19,13 @@ package org.icgc.dcc.portal.server.repository;
 
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
+@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class GeneRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
