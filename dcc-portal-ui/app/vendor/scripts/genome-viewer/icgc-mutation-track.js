@@ -42,12 +42,12 @@ function IcgcMutationTrack(args) {
   _.extend(this, args);
 }
 
-IcgcMutationTrack.prototype.setLoading = function(loadState) {
+IcgcMutationTrack.prototype.setLoading = function (loadState) {
   Track.prototype.setLoading.call(this, loadState);
   this.trigger('load', loadState);
 };
 
-IcgcMutationTrack.prototype.updateHeight = function() {
+IcgcMutationTrack.prototype.updateHeight = function () {
   //this._updateHeight();
   if (this.histogram) {
     this.contentDiv.style.height = this.histogramRenderer.histogramHeight + 5 + 'px';
@@ -66,12 +66,10 @@ IcgcMutationTrack.prototype.updateHeight = function() {
       var width = this.width;
       var lastContains = 0;
       for (var i in this.renderedArea) {
-        if (
-          this.renderedArea[i].contains({
+        if (this.renderedArea[i].contains({
             start: x,
-            end: x + width,
-          })
-        ) {
+            end: x + width
+          })) {
           lastContains = i;
         }
       }
@@ -84,25 +82,24 @@ IcgcMutationTrack.prototype.updateHeight = function() {
 
 IcgcMutationTrack.prototype.setWidth = function(width) {
   this._setWidth(width);
-  this.main.setAttribute('width', this.width);
+  this.main.setAttribute("width", this.width);
 };
 
 IcgcMutationTrack.prototype.initializeDom = function(targetId) {
   this._initializeDom(targetId);
 
   this.main = SVG.addChild(this.contentDiv, 'svg', {
-    class: 'trackSvg',
-    x: 0,
-    y: 0,
-    width: this.width,
+    'class': 'trackSvg',
+    'x': 0,
+    'y': 0,
+    'width': this.width
   });
   this.svgCanvasFeatures = SVG.addChild(this.main, 'svg', {
-    class: 'features',
-    x: -this.pixelPosition,
-    width: this.svgCanvasWidth,
+    'class': 'features',
+    'x': -this.pixelPosition,
+    'width': this.svgCanvasWidth
   });
-  console.log('IcgcMutationTrack: ', this);
-  // this.updateHeight();
+  this.updateHeight();
 };
 
 function getSvgCanvasOffset(icgcMutationTrack) {
@@ -112,12 +109,10 @@ function getSvgCanvasOffset(icgcMutationTrack) {
       If pixelBase now accounts for zoom, remove "/ Math.min(window.gv.zoom, 1)"
     `);
   }
-  return (
-    icgcMutationTrack.width * 3 / 2 / icgcMutationTrack.pixelBase / Math.min(window.gv.zoom, 1)
-  );
-}
+  return (icgcMutationTrack.width * 3 / 2) / icgcMutationTrack.pixelBase / Math.min(window.gv.zoom, 1);
+};
 
-IcgcMutationTrack.prototype.render = function(targetId) {
+IcgcMutationTrack.prototype.render = function (targetId) {
   var _this = this;
   _this.initializeDom(targetId);
 
@@ -125,7 +120,7 @@ IcgcMutationTrack.prototype.render = function(targetId) {
   _this.svgCanvasLeftLimit = _this.region.start - _this.svgCanvasOffset * 2;
   _this.svgCanvasRightLimit = _this.region.start + _this.svgCanvasOffset * 2;
 
-  _this.dataAdapter.on('data:ready', function(event) {
+  _this.dataAdapter.on('data:ready', function (event) {
     var features;
     if (event.params.histogram === true) {
       _this.renderer = _this.histogramRenderer;
@@ -144,7 +139,7 @@ IcgcMutationTrack.prototype.render = function(targetId) {
       width: _this.width,
       pixelPosition: _this.pixelPosition,
       resource: _this.resource,
-      species: _this.species,
+      species: _this.species
     });
 
     _this.updateHeight();
@@ -164,7 +159,7 @@ IcgcMutationTrack.prototype.clean = function() {
   this._clean();
 };
 
-IcgcMutationTrack.prototype.draw = function() {
+IcgcMutationTrack.prototype.draw = function () {
   this.svgCanvasOffset = getSvgCanvasOffset(this);
   this.svgCanvasLeftLimit = this.region.start - this.svgCanvasOffset * 2;
   this.svgCanvasRightLimit = this.region.start + this.svgCanvasOffset * 2;
@@ -172,10 +167,7 @@ IcgcMutationTrack.prototype.draw = function() {
   this.updateHistogramParams();
   this.clean();
 
-  if (
-    typeof this.visibleRegionSize === 'undefined' ||
-    this.region.length() < this.visibleRegionSize
-  ) {
+  if (typeof this.visibleRegionSize === 'undefined' || this.region.length() < this.visibleRegionSize) {
     this.setLoading(true);
     this.dataAdapter.getData({
       chromosome: this.region.chromosome,
@@ -183,13 +175,13 @@ IcgcMutationTrack.prototype.draw = function() {
       end: this.region.end + this.svgCanvasOffset * 2,
       histogram: this.histogram,
       interval: this.interval,
-      functional_impact: this.functional_impact,
+      functional_impact: this.functional_impact
     });
   } else {
   }
 };
 
-IcgcMutationTrack.prototype.move = function(disp) {
+IcgcMutationTrack.prototype.move = function (disp) {
   var _this = this;
   _this.region.center();
   _this.svgCanvasOffset = getSvgCanvasOffset(this);
@@ -204,10 +196,7 @@ IcgcMutationTrack.prototype.move = function(disp) {
   var virtualEnd = parseInt(this.region.end + this.svgCanvasOffset);
   // check if track is visible in this zoom
 
-  if (
-    typeof this.visibleRegionSize === 'undefined' ||
-    this.region.length() < this.visibleRegionSize
-  ) {
+  if (typeof this.visibleRegionSize === 'undefined' || this.region.length() < this.visibleRegionSize) {
     if (disp > 0 && virtualStart < this.svgCanvasLeftLimit) {
       this.dataAdapter.getData({
         chromosome: _this.region.chromosome,
@@ -215,7 +204,7 @@ IcgcMutationTrack.prototype.move = function(disp) {
         end: this.svgCanvasLeftLimit,
         histogram: this.histogram,
         interval: this.interval,
-        functional_impact: this.functional_impact,
+        functional_impact: this.functional_impact
       });
       this.svgCanvasLeftLimit = parseInt(this.svgCanvasLeftLimit - this.svgCanvasOffset);
     }
@@ -227,37 +216,36 @@ IcgcMutationTrack.prototype.move = function(disp) {
         end: parseInt(this.svgCanvasRightLimit + this.svgCanvasOffset, 10),
         histogram: this.histogram,
         interval: this.interval,
-        functional_impact: this.functional_impact,
+        functional_impact: this.functional_impact
       });
       this.svgCanvasRightLimit = parseInt(this.svgCanvasRightLimit + this.svgCanvasOffset, 10);
     }
+
   }
+
 };
 
-IcgcMutationTrack.prototype._histogramRendererCheck = function(items) {
+
+IcgcMutationTrack.prototype._histogramRendererCheck = function (items) {
   //modifies input!
   var arr = [];
   for (var i = 0; i < items.length; i++) {
     var chunk = items[i];
-    arr.push({ value: chunk });
+    arr.push({value: chunk});
   }
   return arr;
 };
 
-IcgcMutationTrack.prototype._getFeaturesByChunks = function(response) {
+IcgcMutationTrack.prototype._getFeaturesByChunks = function (response) {
   //Returns an array avoiding already drawn features in this.chunksDisplayed
   var chunks = response.items;
   var dataType = response.params.dataType;
   var chromosome = response.params.chromosome;
 
-  var feature,
-    displayed,
-    featureFirstChunk,
-    featureLastChunk,
-    features = [];
+  var feature, displayed, featureFirstChunk, featureLastChunk, features = [];
   for (var i = 0, leni = chunks.length; i < leni; i++) {
-    if (this.chunksDisplayed[chunks[i].key + dataType] !== true) {
-      //check if any chunk is already displayed and skip it
+
+    if (this.chunksDisplayed[chunks[i].key + dataType] !== true) {//check if any chunk is already displayed and skip it
 
       for (var j = 0, lenj = chunks[i][dataType].length; j < lenj; j++) {
         feature = chunks[i][dataType][j];
@@ -283,51 +271,37 @@ IcgcMutationTrack.prototype._getFeaturesByChunks = function(response) {
   return features;
 };
 
-IcgcMutationTrack.prototype._variantInfo = function(e) {
+IcgcMutationTrack.prototype._variantInfo = function (e) {
   var _this = this;
   var chromosome = e.feature.chromosome;
   var position = e.feature.start;
   var mutation = e.feature.mutation.replace(/>/gi, ':');
-  var url =
-    'http://ws.bioinfo.cipf.es/cellbase/rest/v2/hsa/genomic/variant/' +
-    chromosome +
-    ':' +
-    position +
-    ':' +
-    mutation +
-    '/consequence_type?of=json';
-  var mutationPhenUrl =
-    'http://ws.bioinfo.cipf.es/cellbase/rest/v2/hsa/genomic/variant/' +
-    chromosome +
-    ':' +
-    position +
-    ':' +
-    mutation +
-    '/mutation_phenotype?of=json';
+  var url = 'http://ws.bioinfo.cipf.es/cellbase/rest/v2/hsa/genomic/variant/' + chromosome + ':' +
+    position + ':' + mutation + '/consequence_type?of=json';
+  var mutationPhenUrl = 'http://ws.bioinfo.cipf.es/cellbase/rest/v2/hsa/genomic/variant/' + chromosome +
+    ':' + position + ':' + mutation + '/mutation_phenotype?of=json';
 
-  var consequenceResponse = {},
-    phenotypeResponse = {};
+  var consequenceResponse = {}, phenotypeResponse = {};
   var id = Utils.randomString();
   jQuery.ajax({
     url: url,
     dataType: 'json',
     async: false,
-    success: function(data) {
+    success: function (data) {
       consequenceResponse = data;
-    },
+    }
   });
 
   jQuery.ajax({
     url: mutationPhenUrl,
     dataType: 'json',
     async: false,
-    success: function(data) {
+    success: function (data) {
       phenotypeResponse = data[0];
-    },
+    }
   });
 
-  var table =
-    '<table class="table table-condensed">' +
+  var table = '<table class="table table-condensed">' +
     '<thead><tr></thead>' +
     '<td>Position</td>' +
     '<td>Mutation</td>' +
@@ -344,60 +318,30 @@ IcgcMutationTrack.prototype._variantInfo = function(e) {
   for (var c in consequenceResponse) {
     if (consequenceResponse.hasOwnProperty(c)) {
       var item = consequenceResponse[c];
-      table +=
-        '<tr>' +
-        '<td>' +
-        item.chromosome +
-        ':' +
-        item.position +
-        '</td>' +
-        '<td>' +
-        item.referenceAllele +
-        '>' +
-        item.alternativeAllele +
-        '</td>' +
-        '<td>' +
-        item.geneId +
-        '</td>' +
-        '<td>' +
-        item.featureId +
-        '</td>' +
-        '<td>' +
-        item.featureType +
-        '</td>' +
-        '<td>' +
-        item.featureStart +
-        '-' +
-        item.featureEnd +
-        '</td>' +
-        '<td>' +
-        item.consequenceType +
-        '</td>' +
-        '<td>' +
-        item.consequenceTypeObo +
-        '</td>' +
-        '<td>' +
-        item.aaPosition +
-        '</td>' +
-        '<td>' +
-        item.aminoacidChange +
-        '</td>' +
-        '<td>' +
-        item.codonChange +
-        '</td>' +
+      table += '<tr>' +
+        '<td>' + item.chromosome + ':' + item.position + '</td>' +
+        '<td>' + item.referenceAllele + '>' + item.alternativeAllele + '</td>' +
+        '<td>' + item.geneId + '</td>' +
+        '<td>' + item.featureId + '</td>' +
+        '<td>' + item.featureType + '</td>' +
+        '<td>' + item.featureStart + '-' + item.featureEnd + '</td>' +
+        '<td>' + item.consequenceType + '</td>' +
+        '<td>' + item.consequenceTypeObo + '</td>' +
+        '<td>' + item.aaPosition + '</td>' +
+        '<td>' + item.aminoacidChange + '</td>' +
+        '<td>' + item.codonChange + '</td>' +
         '</tr>';
     }
   }
   table += '</table>';
 
-  var table2 =
-    '<table class="table table-condensed">' +
+  var table2 = '<table class="table table-condensed">' +
     '<thead><tr></thead>' +
     '<td>Position</td>' +
     '<td>Mutation CDS</td>' +
     '<td>Mutation Aa</td>' +
     '<td>Gene name</td>' +
-    //        '<td>Transcript</td>'+
+//        '<td>Transcript</td>'+
     '<td>Primary site</td>' +
     '<td>Site subtype</td>' +
     '<td>Primary histology</td>' +
@@ -410,87 +354,40 @@ IcgcMutationTrack.prototype._variantInfo = function(e) {
   for (var p in phenotypeResponse) {
     if (phenotypeResponse.hasOwnProperty(p)) {
       var item2 = phenotypeResponse[p];
-      table2 +=
-        '<tr>' +
-        '<td>' +
-        item2.chromosome +
-        ':' +
-        item2.start +
-        '-' +
-        item2.end +
-        '</td>' +
-        '<td>' +
-        item2.mutationCds +
-        '</td>' +
-        '<td>' +
-        item2.mutationAa +
-        '</td>' +
-        '<td>' +
-        item2.geneName +
-        '</td>' +
-        //            '<td>'+item2.ensemblTranscript+'</td>'+
-        '<td>' +
-        item2.primarySite +
-        '</td>' +
-        '<td>' +
-        item2.siteSubtype +
-        '</td>' +
-        '<td>' +
-        item2.primaryHistology +
-        '</td>' +
-        '<td>' +
-        item2.mutationDescription +
-        '</td>' +
-        '<td>' +
-        item2.mutationZigosity +
-        '</td>' +
-        '<td>' +
-        item2.primaryHistology +
-        '</td>' +
-        '<td>' +
-        item2.description +
-        '</td>' +
-        '<td>' +
-        item2.source +
-        '</td>' +
+      table2 += '<tr>' +
+        '<td>' + item2.chromosome + ':' + item2.start + '-' + item2.end + '</td>' +
+        '<td>' + item2.mutationCds + '</td>' +
+        '<td>' + item2.mutationAa + '</td>' +
+        '<td>' + item2.geneName + '</td>' +
+//            '<td>'+item2.ensemblTranscript+'</td>'+
+        '<td>' + item2.primarySite + '</td>' +
+        '<td>' + item2.siteSubtype + '</td>' +
+        '<td>' + item2.primaryHistology + '</td>' +
+        '<td>' + item2.mutationDescription + '</td>' +
+        '<td>' + item2.mutationZigosity + '</td>' +
+        '<td>' + item2.primaryHistology + '</td>' +
+        '<td>' + item2.description + '</td>' +
+        '<td>' + item2.source + '</td>' +
         '</tr>';
     }
   }
   table2 += '</table>';
 
   var html =
-    '<div id="mutationModal' +
-    id +
-    '" class="modal hide fade" tabindex="-1" role="dialog"' +
+    '<div id="mutationModal' + id + '" class="modal hide fade" tabindex="-1" role="dialog"' +
     ' aria-labelledby="myModalLabel" aria-hidden="true" style="width:1200px;margin-left:-600px;">' +
     '<div class="modal-header">' +
     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
-    '<h3 id="myModalLabel">Variant - ' +
-    e.feature.id +
-    '</h3>' +
+    '<h3 id="myModalLabel">Variant - ' + e.feature.id + '</h3>' +
     '</div>' +
     '<div class="modal-body">' +
-    '<ul class="nav nav-tabs" id="mutationTabs' +
-    id +
-    '">' +
-    '<li class="active"><a href="#vareffect' +
-    id +
-    '">Variant effect</a></li>' +
-    '<li><a href="#mutphenotype' +
-    id +
-    '">Mutaton phenotype</a></li>' +
+    '<ul class="nav nav-tabs" id="mutationTabs' + id + '">' +
+    '<li class="active"><a href="#vareffect' + id + '">Variant effect</a></li>' +
+    '<li><a href="#mutphenotype' + id + '">Mutaton phenotype</a></li>' +
     '</ul>' +
     '<div class="tab-content">' +
-    '<div class="tab-pane active" id="vareffect' +
-    id +
-    '">' +
-    table +
-    '</div>' +
-    '<div class="tab-pane" id="mutphenotype' +
-    id +
-    '">' +
-    table2 +
-    '</div>' +
+    '<div class="tab-pane active" id="vareffect' + id + '">' + table + '</div>' +
+    '<div class="tab-pane" id="mutphenotype' + id + '">' + table2 + '</div>' +
     '</div>' +
     '</div>' +
     '<div class="modal-footer">' +
@@ -501,7 +398,7 @@ IcgcMutationTrack.prototype._variantInfo = function(e) {
 
   jQuery(_this.modalDiv).html(html);
 
-  jQuery('#mutationTabs' + id + ' a').click(function(e) {
+  jQuery('#mutationTabs' + id + ' a').click(function (e) {
     e.preventDefault();
     jQuery(this).tab('show');
   });

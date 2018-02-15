@@ -26779,8 +26779,7 @@ AlignmentTrack.prototype.initializeDom = function (targetId) {
         'x': -this.pixelPosition,
         'width': this.svgCanvasWidth
     });
-    console.log('AlignmentTrack: ', this);
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 AlignmentTrack.prototype.render = function (targetId) {
@@ -27084,8 +27083,7 @@ FeatureTrack.prototype.initializeDom = function (targetId) {
         'x': -this.pixelPosition,
         'width': this.svgCanvasWidth
     });
-    console.log('FeatureTrack: ', this);
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 FeatureTrack.prototype.render = function (targetId) {
@@ -27344,8 +27342,7 @@ GeneTrack.prototype.initializeDom = function(targetId) {
         'x': -this.pixelPosition,
         'width': this.svgCanvasWidth
     });
-    console.log('GeneTrack: ', this);
-    // this.updateHeight();
+    this.updateHeight();
 };
 
 GeneTrack.prototype.render = function(targetId) {
