@@ -19,14 +19,12 @@ package org.icgc.dcc.portal.server.repository;
 
 import org.icgc.dcc.portal.server.model.EntityType;
 import org.icgc.dcc.portal.server.model.IndexType;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 
 import com.carrotsearch.randomizedtesting.RandomizedRunner;
 
-@Ignore
 @RunWith(RandomizedRunner.class)
 public class DonorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
