@@ -17,7 +17,8 @@
 
 //-----------------------------------------------------------------------------
 // Grid Settings
-*, input[type="search"] {
+*,
+input[type='search'] {
   @include box-sizing(border-box);
 }
 
@@ -40,23 +41,25 @@ $footer-height: 16rem;
 //-----------------------------------------------------------------------------
 // Layout
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
 body {
   @include clearfix();
-
-  // Sets a max width. Site will be fluid until it reaches 1200, then stick there.
-  max-width: 1280px;
   margin: 0;
 
+  &:not(#home-page) {
+    // Sets a max width. Site will be fluid until it reaches 1200, then stick there.
+    max-width: 1280px;
 
-  @include breakpoint($break-tablet) {
-    margin: 0 auto;
-  }
-  @include breakpoint($break-widescreen) {
-    max-width: 1440px;
+    @include breakpoint($break-tablet) {
+      margin: 0 auto;
+    }
+    @include breakpoint($break-widescreen) {
+      max-width: 1440px;
+    }
   }
 }
 
@@ -97,8 +100,8 @@ footer, .push {
   }
 }*/
 
-
-aside.t_sidebar, aside.t_sidenav {
+aside.t_sidebar,
+aside.t_sidenav {
   width: 200px;
   float: left;
   @include breakpoint($break-widescreen) {
@@ -207,7 +210,7 @@ section {
   top: 0;
   &--with-defaults {
     background: white;
-    box-shadow: 3px 2px 1px 0px rgba(0,0,0,0.1);
+    box-shadow: 3px 2px 1px 0px rgba(0, 0, 0, 0.1);
   }
   &--secondary {
     top: 60px;
