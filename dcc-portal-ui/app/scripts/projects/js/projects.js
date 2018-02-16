@@ -15,64 +15,87 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function () {
+(function() {
   'use strict';
 
-  var module = angular.module('icgc.projects', ['icgc.project', 'icgc.projects.controllers', 'ui.router']);
+  var module = angular.module('icgc.projects', [
+    'icgc.project',
+    'icgc.projects.controllers',
+    'ui.router',
+  ]);
 
-  module.config(function ($stateProvider) {
+  module.config(function($stateProvider) {
     $stateProvider.state('projects', {
+      parent: 'app',
       url: '/projects?filters',
       reloadOnSearch: false,
       templateUrl: 'scripts/projects/views/projects.html',
       controller: 'ProjectsCtrl as ProjectsCtrl',
-      data: {tab: 'summary', isProject: true}
+      data: { tab: 'summary', isProject: true },
     });
 
     $stateProvider.state('projects.details', {
       url: '/details',
       reloadOnSearch: false,
-      data: {tab:'details', isProject: true}
+      data: { tab: 'details', isProject: true },
     });
 
     $stateProvider.state('projects.summary', {
       url: '/summary',
       reloadOnSearch: false,
-      data: {tab:'summary', isProject: true}
+      data: { tab: 'summary', isProject: true },
     });
 
     $stateProvider.state('projects.history', {
       url: '/history',
       reloadOnSearch: false,
-      data: {tab:'history', isProject: true}
+      data: { tab: 'history', isProject: true },
     });
 
     $stateProvider.state('project', {
+      parent: 'app',
       url: '/projects/:id',
       templateUrl: 'scripts/projects/views/project.html',
       controller: 'ProjectCtrl as ProjectCtrl',
       resolve: {
-        project: ['$stateParams', 'Projects', 
-        function ($stateParams, Projects) {
-          return Projects.one($stateParams.id).get().then(function(project){
-            return project;
-          });
-        }]
-      }
+        project: [
+          '$stateParams',
+          'Projects',
+          function($stateParams, Projects) {
+            return Projects.one($stateParams.id)
+              .get()
+              .then(function(project) {
+                return project;
+              });
+          },
+        ],
+      },
     });
   });
 })();
 
-(function () {
+(function() {
   'use strict';
 
   var toJson = angular.toJson;
   var module = angular.module('icgc.projects.controllers', ['icgc.projects.models']);
 
-  module.controller('ProjectsCtrl',
-    function ($q, $scope, $state, $filter, ProjectState, Page, Projects, CodeTable,
-               HighchartsService, Donors, Restangular, LocationService, gettextCatalog, $timeout) {
-
+  module.controller('ProjectsCtrl', function(
+    $q,
+    $scope,
+    $state,
+    $filter,
+    ProjectState,
+    Page,
+    Projects,
+    CodeTable,
+    HighchartsService,
+    Donors,
+    Restangular,
+    LocationService,
+    gettextCatalog,
+    $timeout
+  ) {
     var _ctrl = this;
     Page.setTitle(gettextCatalog.getString('Cancer Projects'));
     Page.setPage('projects');
@@ -81,34 +104,36 @@
     _ctrl.state = ProjectState;
     _ctrl.shouldRenderDeferredItems = false;
 
-    _ctrl.setTab = function (tab) {
-        _ctrl.state.setTab(tab);
-      };
+    _ctrl.setTab = function(tab) {
+      _ctrl.state.setTab(tab);
+    };
     _ctrl.setTab($state.current.data.tab);
-
 
     var deferredTimeout;
     function allowRenderDeferredItems() {
       _ctrl.shouldRenderDeferredItems = true;
     }
 
-    $scope.$watch(function () {
-       var currentStateData = angular.isDefined($state.current.data) ? $state.current.data : null;
+    $scope.$watch(
+      function() {
+        var currentStateData = angular.isDefined($state.current.data) ? $state.current.data : null;
 
-      if (! currentStateData ||
-          ! angular.isDefined(currentStateData.isProject) ||
-          ! angular.isDefined(currentStateData.tab)) {
-        return null;
-      }
+        if (
+          !currentStateData ||
+          !angular.isDefined(currentStateData.isProject) ||
+          !angular.isDefined(currentStateData.tab)
+        ) {
+          return null;
+        }
 
         return currentStateData.tab;
       },
-      function (currentTab) {
+      function(currentTab) {
         if (currentTab !== null) {
           _ctrl.setTab(currentTab);
         }
 
-        if ( currentTab === 'details') {
+        if (currentTab === 'details') {
           if (!window.requestIdleCallback) {
             window.clearTimeout(deferredTimeout);
             deferredTimeout = $timeout(allowRenderDeferredItems, 100);
@@ -118,24 +143,25 @@
             });
           }
         }
-      });
+      }
+    );
 
     $scope.countryCode = CodeTable.countryCode;
 
     var pathMapping = {
       ids: 'donor.projectId.is',
       datatype: 'donor.availableDataTypes.is',
-      state: 'donor.state.is'
+      state: 'donor.state.is',
     };
 
-    function ensureObject (o) {
-      return _.isPlainObject (o) ? o : {};
+    function ensureObject(o) {
+      return _.isPlainObject(o) ? o : {};
     }
 
-    var isEmptyObject = _.flow (ensureObject, _.isEmpty);
+    var isEmptyObject = _.flow(ensureObject, _.isEmpty);
 
     function hasQueryFilter() {
-      return (! isEmptyObject (LocationService.filters()));
+      return !isEmptyObject(LocationService.filters());
     }
 
     _ctrl.fieldKeys = [
@@ -151,45 +177,46 @@
       'expSeqTestedDonorCount',
       'pexpTestedDonorCount',
       'mirnaSeqTestedDonorCount',
-      'jcnTestedDonorCount'];
+      'jcnTestedDonorCount',
+    ];
 
     var fieldMapping = {
-      totalLiveDonorCount: {state: 'live'},
+      totalLiveDonorCount: { state: 'live' },
       totalDonorCount: {},
-      ssmTestedDonorCount: {datatype: 'ssm'},
-      cnsmTestedDonorCount: {datatype: 'cnsm'},
-      stsmTestedDonorCount: {datatype: 'stsm'},
-      sgvTestedDonorCount: {datatype: 'sgv'},
-      methArrayTestedDonorCount: {datatype: 'meth_array'},
-      methSeqTestedDonorCount: {datatype: 'meth_seq'},
-      expArrayTestedDonorCount: {datatype: 'exp_array'},
-      expSeqTestedDonorCount: {datatype: 'exp_seq'},
-      pexpTestedDonorCount: {datatype: 'pexp'},
-      mirnaSeqTestedDonorCount: {datatype: 'mirna_seq'},
-      jcnTestedDonorCount: {datatype: 'jcn'}
+      ssmTestedDonorCount: { datatype: 'ssm' },
+      cnsmTestedDonorCount: { datatype: 'cnsm' },
+      stsmTestedDonorCount: { datatype: 'stsm' },
+      sgvTestedDonorCount: { datatype: 'sgv' },
+      methArrayTestedDonorCount: { datatype: 'meth_array' },
+      methSeqTestedDonorCount: { datatype: 'meth_seq' },
+      expArrayTestedDonorCount: { datatype: 'exp_array' },
+      expSeqTestedDonorCount: { datatype: 'exp_seq' },
+      pexpTestedDonorCount: { datatype: 'pexp' },
+      mirnaSeqTestedDonorCount: { datatype: 'mirna_seq' },
+      jcnTestedDonorCount: { datatype: 'jcn' },
     };
 
-    function buildFilter (fieldKey, projectIds) {
-      var filter = _.mapValues (_.clone (_.get (fieldMapping, fieldKey, {})), function (v) {
+    function buildFilter(fieldKey, projectIds) {
+      var filter = _.mapValues(_.clone(_.get(fieldMapping, fieldKey, {})), function(v) {
         return [v];
       });
 
-      if (_.isArray (projectIds) && (! _.isEmpty (projectIds))) {
-        _.assign (filter, {ids: projectIds});
+      if (_.isArray(projectIds) && !_.isEmpty(projectIds)) {
+        _.assign(filter, { ids: projectIds });
       }
 
-      return _.transform (filter, function (result, value, key) {
-        if (_.has (pathMapping, key)) {
+      return _.transform(filter, function(result, value, key) {
+        if (_.has(pathMapping, key)) {
           result = _.set(result, pathMapping[key], value);
         }
       });
     }
 
-    $scope.toAdvancedSearch = function (fieldKey, projectIds) {
+    $scope.toAdvancedSearch = function(fieldKey, projectIds) {
       var filter = {
-        filters: toJson (buildFilter (fieldKey, projectIds))
+        filters: toJson(buildFilter(fieldKey, projectIds)),
       };
-      return 'advanced (' + toJson (filter) + ')';
+      return 'advanced (' + toJson(filter) + ')';
     };
 
     // Transforms data for the stacked bar chart
@@ -202,62 +229,75 @@
         bar.total = 0;
         bar.stack = [];
 
-        gene.uiFIProjects.sort(function(a, b) { return a.count - b.count }).forEach(function(p) {
-          bar.stack.push({
-            name: p.id,
-            y0: bar.total,
-            y1: bar.total + p.count,
-            link: '/genes/' + gene.id,
-            label: p.name,
-            key: gene.symbol, // Parent key
-            colourKey: p.primarySite
+        gene.uiFIProjects
+          .sort(function(a, b) {
+            return a.count - b.count;
+          })
+          .forEach(function(p) {
+            bar.stack.push({
+              name: p.id,
+              y0: bar.total,
+              y1: bar.total + p.count,
+              link: '/genes/' + gene.id,
+              label: p.name,
+              key: gene.symbol, // Parent key
+              colourKey: p.primarySite,
+            });
+            bar.total += p.count;
           });
-          bar.total += p.count;
-        });
         list.push(bar);
       });
-      return list.sort(function(a, b) { return b.total - a.total });
+      return list.sort(function(a, b) {
+        return b.total - a.total;
+      });
     }
 
-    _ctrl.donutChartSubTitle = function () {
-      var formatNumber = $filter ('number');
-      var pluralizer = function (n, singular) {
-        return '' + singular + (n > 1 ?  's' : '');
+    _ctrl.donutChartSubTitle = function() {
+      var formatNumber = $filter('number');
+      var pluralizer = function(n, singular) {
+        return '' + singular + (n > 1 ? 's' : '');
       };
-      var toHumanReadable = function (n, singular) {
-        return '' + formatNumber (n) + ' ' + pluralizer (n, singular);
+      var toHumanReadable = function(n, singular) {
+        return '' + formatNumber(n) + ' ' + pluralizer(n, singular);
       };
 
       /// N Donors across N projects
-      var subtitle = toHumanReadable (_ctrl.totalDonors, gettextCatalog.getString('Donor'));
-      var projects = _.get (_ctrl, 'projects.hits', undefined);
+      var subtitle = toHumanReadable(_ctrl.totalDonors, gettextCatalog.getString('Donor'));
+      var projects = _.get(_ctrl, 'projects.hits', undefined);
 
       /// N Donors across N projects
-      return subtitle + (_.isArray (projects) ?
-          ' ' + gettextCatalog.getString('across') + ' ' + toHumanReadable (projects.length, gettextCatalog.getString('Project')) : '');
-     };
+      return (
+        subtitle +
+        (_.isArray(projects)
+          ? ' ' +
+            gettextCatalog.getString('across') +
+            ' ' +
+            toHumanReadable(projects.length, gettextCatalog.getString('Project'))
+          : '')
+      );
+    };
 
-    _ctrl.hasDonutData = function () {
+    _ctrl.hasDonutData = function() {
       var donutData = _ctrl.donut;
-      var lengths = _.map (['inner', 'outer'], function (key) {
-        return _.get (donutData, [key, 'length'], 0);
+      var lengths = _.map(['inner', 'outer'], function(key) {
+        return _.get(donutData, [key, 'length'], 0);
       });
-      return _.sum (lengths) > 0;
+      return _.sum(lengths) > 0;
     };
 
-    _ctrl.numberOfSelectedProjectsInFilter = function () {
+    _ctrl.numberOfSelectedProjectsInFilter = function() {
       var queryFilter = LocationService.filters();
-      return _.get (queryFilter, 'project.id.is.length', 0);
+      return _.get(queryFilter, 'project.id.is.length', 0);
     };
 
-    function noHitsIn (results) {
-      return 0 === _.get (results, 'hits.length', 0);
+    function noHitsIn(results) {
+      return 0 === _.get(results, 'hits.length', 0);
     }
 
     _ctrl.isLoadingData = false;
 
-    function stopIfNoHits (data) {
-      if (noHitsIn (data)) {
+    function stopIfNoHits(data) {
+      if (noHitsIn(data)) {
         _ctrl.isLoadingData = false;
         _ctrl.stacked = [];
         Page.stopWork();
@@ -269,30 +309,29 @@
 
     var geneDonorCountsRestangular = null;
 
-    function cancelInFlightAggregationAjax () {
-
+    function cancelInFlightAggregationAjax() {
       if (geneDonorCountsRestangular) {
         geneDonorCountsRestangular.cancelRequest();
       }
-
     }
 
-    function success (data) {
+    function success(data) {
       if (data.hasOwnProperty('hits')) {
-        var totalDonors = 0, ssmTotalDonors = 0;
+        var totalDonors = 0,
+          ssmTotalDonors = 0;
 
-        _ctrl.projectIds = _.map (data.hits, 'id');
+        _ctrl.projectIds = _.map(data.hits, 'id');
 
-        data.hits.forEach(function (p) {
+        data.hits.forEach(function(p) {
           totalDonors += p.totalDonorCount;
           ssmTotalDonors += p.ssmTestedDonorCount;
         });
 
         var totalRowProjectIds = hasQueryFilter() ? _ctrl.projectIds : undefined;
-        _ctrl.totals = _.map (_ctrl.fieldKeys, function (fieldKey) {
+        _ctrl.totals = _.map(_ctrl.fieldKeys, function(fieldKey) {
           return {
-            total: _.sumBy (data.hits, fieldKey),
-            sref: $scope.toAdvancedSearch (fieldKey, totalRowProjectIds)
+            total: _.sumBy(data.hits, fieldKey),
+            sref: $scope.toAdvancedSearch(fieldKey, totalRowProjectIds),
           };
         });
 
@@ -305,88 +344,99 @@
           type: 'project',
           innerFacet: 'primarySite',
           outerFacet: 'id',
-          countBy: 'totalDonorCount'
+          countBy: 'totalDonorCount',
         });
 
         // Get project-donor-mutation distribution of exon impacted ssm
-        Restangular.one('ui', '').one('search/projects/donor-mutation-counts', '').get({}).then(function(data) {
-          // Remove restangular attributes to make data easier to parse
-          data = Restangular.stripRestangular(data);
-          _ctrl.distribution = data;
-        });
+        Restangular.one('ui', '')
+          .one('search/projects/donor-mutation-counts', '')
+          .get({})
+          .then(function(data) {
+            // Remove restangular attributes to make data easier to parse
+            data = Restangular.stripRestangular(data);
+            _ctrl.distribution = data;
+          });
 
         cancelInFlightAggregationAjax();
-        if (stopIfNoHits (data)) {return}
+        if (stopIfNoHits(data)) {
+          return;
+        }
 
         const geneSSMFilter = {
           gene: {
-            curatedSetId: {is: ['GS1']}
+            curatedSetId: { is: ['GS1'] },
           },
           mutation: {
-            functionalImpact: {is: ['High']}
-          }
+            functionalImpact: { is: ['High'] },
+          },
         };
 
-        Projects.several (_ctrl.projectIds.join()).get ('genes', {
-          include: 'projects',
-          filters: geneSSMFilter,
-          size: 20
-        }).then (function (genes) {
-          // About to launch a new ajax getting project aggregation data. Cancel any active call.
-          cancelInFlightAggregationAjax();
+        Projects.several(_ctrl.projectIds.join())
+          .get('genes', {
+            include: 'projects',
+            filters: geneSSMFilter,
+            size: 20,
+          })
+          .then(function(genes) {
+            // About to launch a new ajax getting project aggregation data. Cancel any active call.
+            cancelInFlightAggregationAjax();
 
-          if (stopIfNoHits (genes)) {return}
+            if (stopIfNoHits(genes)) {
+              return;
+            }
 
-          geneDonorCountsRestangular = Restangular
-            .one('ui/search/gene-project-donor-counts/' + _.map(genes.hits, 'id').join(','));
+            geneDonorCountsRestangular = Restangular.one(
+              'ui/search/gene-project-donor-counts/' + _.map(genes.hits, 'id').join(',')
+            );
 
-          _ctrl.isLoadingData = true;
+            _ctrl.isLoadingData = true;
 
-          geneDonorCountsRestangular
-            .get ({'filters': geneSSMFilter})
-            .then (function (geneProjectFacets) {
+            geneDonorCountsRestangular
+              .get({ filters: geneSSMFilter })
+              .then(function(geneProjectFacets) {
+                genes.hits.forEach(function(gene) {
+                  var uiFIProjects = [];
 
-              genes.hits.forEach (function (gene) {
-                var uiFIProjects = [];
-
-                geneProjectFacets[gene.id].terms.forEach(function (t) {
-                  var proj = _.find(data.hits, function (p) {
-                    return p.id === t.term;
-                  });
-
-                  if (angular.isDefined(proj)) {
-                    uiFIProjects.push({
-                      id: t.term,
-                      name: proj.name,
-                      primarySite: proj.primarySite,
-                      count: t.count
+                  geneProjectFacets[gene.id].terms.forEach(function(t) {
+                    var proj = _.find(data.hits, function(p) {
+                      return p.id === t.term;
                     });
-                  }
-                });
-                gene.uiFIProjects = uiFIProjects;
-              });
 
-              _ctrl.isLoadingData = false;
-              _ctrl.stacked = transform (genes.hits);
-              geneDonorCountsRestangular = null;
-            });
-        });
+                    if (angular.isDefined(proj)) {
+                      uiFIProjects.push({
+                        id: t.term,
+                        name: proj.name,
+                        primarySite: proj.primarySite,
+                        count: t.count,
+                      });
+                    }
+                  });
+                  gene.uiFIProjects = uiFIProjects;
+                });
+
+                _ctrl.isLoadingData = false;
+                _ctrl.stacked = transform(genes.hits);
+                geneDonorCountsRestangular = null;
+              });
+          });
 
         // Id to primary site
         var id2site = {};
         _ctrl.projects.hits.forEach(function(h) {
-           id2site[h.id] = h.primarySite;
+          id2site[h.id] = h.primarySite;
         });
 
-        Restangular.one('projects/history', '').get({}).then(function(data) {
-          // Remove restangular attributes to make data easier to parse
-          data = Restangular.stripRestangular(data);
-          data.forEach(function(dataPoint) {
-            dataPoint.colourKey = id2site[dataPoint.group];
+        Restangular.one('projects/history', '')
+          .get({})
+          .then(function(data) {
+            // Remove restangular attributes to make data easier to parse
+            data = Restangular.stripRestangular(data);
+            data.forEach(function(dataPoint) {
+              dataPoint.colourKey = id2site[dataPoint.group];
+            });
+
+            _ctrl.donorData = data;
           });
-
-          _ctrl.donorData = data;
-        });
       }
     }
 
@@ -394,28 +444,38 @@
       _ctrl.isLoadingData = true;
 
       // Needs to first grab every single project for projectIdLookupMap. Otherwise could be missing from map.
-      Projects.getList({from: 1, size:100, filters:{}}).then(function(data) {
+      Projects.getList({ from: 1, size: 100, filters: {} }).then(function(data) {
         _ctrl.projectIDLookupMap = _.mapKeys(data.hits, function(project) {
           return project.id;
         });
-        
-        Projects.getList({include: 'facets'}).then(success);
+
+        Projects.getList({ include: 'facets' }).then(success);
       });
     }
 
-    _ctrl.countryIconClass = function (countryName) {
+    _ctrl.countryIconClass = function(countryName) {
       var defaultValue = '';
-      var countryCode = CodeTable.countryCode (countryName);
+      var countryCode = CodeTable.countryCode(countryName);
 
-      return _.isEmpty (countryCode) ? defaultValue : 'flag flag-' + countryCode;
+      return _.isEmpty(countryCode) ? defaultValue : 'flag flag-' + countryCode;
     };
 
     _ctrl.viewInRepositories = () => {
-      LocationService.goToPath('/repositories', `filters={"file":{ "projectCode":{"is":[${ _.map(_ctrl.projects.hits, _.bind((project) => `"${project.id}"`, [])) }]}}}`);
+      LocationService.goToPath(
+        '/repositories',
+        `filters={"file":{ "projectCode":{"is":[${_.map(
+          _ctrl.projects.hits,
+          _.bind(project => `"${project.id}"`, [])
+        )}]}}}`
+      );
     };
 
-    $scope.$on('$locationChangeSuccess', function (event, dest) {
-      if (dest.match(new RegExp('^' + window.location.protocol + '//' + window.location.host + '/projects'))) {
+    $scope.$on('$locationChangeSuccess', function(event, dest) {
+      if (
+        dest.match(
+          new RegExp('^' + window.location.protocol + '//' + window.location.host + '/projects')
+        )
+      ) {
         // NOTE: need to defer this call till next tick due to this running before filters are updated
         setTimeout(refresh);
       }
@@ -423,16 +483,15 @@
 
     refresh();
   });
-
 })();
 
-(function () {
+(function() {
   'use strict';
 
   var module = angular.module('icgc.projects.models', ['restangular', 'icgc.common.location']);
 
-  module.service('Projects', function (Restangular, LocationService, Project) {
-    this.all = function () {
+  module.service('Projects', function(Restangular, LocationService, Project) {
+    this.all = function() {
       return Restangular.all('projects');
     };
 
@@ -440,82 +499,85 @@
       return Restangular.several('projects', list);
     };
 
-
     // Get ALL projects metadata
     this.getMetadata = function() {
       var params = {
         filters: {},
-        size: 100
+        size: 100,
       };
 
-      return this.all().get('', params).then(function(data) {
-        return data;
-      });
+      return this.all()
+        .get('', params)
+        .then(function(data) {
+          return data;
+        });
     };
 
-
-    this.getList = function (params) {
+    this.getList = function(params) {
       var defaults = {
         size: 100,
         from: 1,
-        filters: LocationService.filters()
+        filters: LocationService.filters(),
       };
 
       var liveFilters = angular.extend(defaults, _.cloneDeep(params));
 
-      return this.all().get('', liveFilters).then(function (data) {
-
-        if (data.hasOwnProperty('facets') &&
+      return this.all()
+        .get('', liveFilters)
+        .then(function(data) {
+          if (
+            data.hasOwnProperty('facets') &&
             data.facets.hasOwnProperty('id') &&
-            data.facets.id.hasOwnProperty('terms')) {
-          data.facets.id.terms = data.facets.id.terms.sort(function (a, b) {
-            if (a.term < b.term) {
-              return -1;
-            }
-            if (a.term > b.term) {
-              return 1;
-            }
-            return 0;
-          });
-        }
+            data.facets.id.hasOwnProperty('terms')
+          ) {
+            data.facets.id.terms = data.facets.id.terms.sort(function(a, b) {
+              if (a.term < b.term) {
+                return -1;
+              }
+              if (a.term > b.term) {
+                return 1;
+              }
+              return 0;
+            });
+          }
 
-        return data;
-      });
+          return data;
+        });
     };
 
-    this.one = function (id) {
+    this.one = function(id) {
       return id ? Project.init(id) : Project;
     };
   });
 
-  module.service('Project', function (Restangular) {
+  module.service('Project', function(Restangular) {
     var _this = this;
     this.handler = {};
 
-    this.init = function (id) {
+    this.init = function(id) {
       this.id = id;
       this.handler = Restangular.one('projects', id);
       return _this;
     };
 
-    this.get = function (params) {
+    this.get = function(params) {
       var defaults = {};
 
       return this.handler.get(angular.extend(defaults, params));
     };
 
-    this.getGenes = function (params) {
+    this.getGenes = function(params) {
       var defaults = {
         size: 10,
-        from: 1
+        from: 1,
       };
       return this.handler.one('genes', '').get(angular.extend(defaults, params));
     };
 
-    this.getDonors = function (params) {
+    this.getDonors = function(params) {
       var defaults = {
         size: 10,
-        from: 1
+        from: 1,
       };
 
       var liveFilters = angular.extend(defaults, _.cloneDeep(params));
@@ -523,26 +585,29 @@
       return this.handler.one('donors', '').get(liveFilters);
     };
 
-    this.getMutations = function (params) {
+    this.getMutations = function(params) {
       var defaults = {
         size: 10,
-        from: 1
+        from: 1,
       };
       return this.handler.one('mutations', '').get(angular.extend(defaults, params));
     };
-
   });
 
   module.value('X2JS', new X2JS());
 
-  module.service('PubMed', function (Restangular, X2JS) {
-    this.handler = Restangular.oneUrl('pubmed', 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi');
+  module.service('PubMed', function(Restangular, X2JS) {
+    this.handler = Restangular.oneUrl(
+      'pubmed',
+      'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
+    );
 
     function format(xml) {
-      var pub = {}, json = X2JS.xml2js(xml).eSummaryResult.DocSum;
+      var pub = {},
+        json = X2JS.xml2js(xml).eSummaryResult.DocSum;
 
       function get(field) {
-        return _.find(json.Item, function (o) {
+        return _.find(json.Item, function(o) {
           return o._Name === field;
         }).__text;
       }
@@ -552,40 +617,40 @@
       pub.journal = get('FullJournalName');
       pub.issue = get('Issue');
       pub.pubdate = get('PubDate');
-      pub.authors = _.map(_.find(json.Item, function (o) {
-        return o._Name === 'AuthorList';
-      }).Item, '__text');
+      pub.authors = _.map(
+        _.find(json.Item, function(o) {
+          return o._Name === 'AuthorList';
+        }).Item,
+        '__text'
+      );
       pub.refCount = parseInt(get('PmcRefCount'), 10);
 
       return pub;
     }
 
-    this.get = function (id) {
-      return this.handler.get({db: 'pubmed', id: id}).then(function (data) {
+    this.get = function(id) {
+      return this.handler.get({ db: 'pubmed', id: id }).then(function(data) {
         return format(data);
       });
     };
   });
 
-  module.service('ProjectState', function () {
-
+  module.service('ProjectState', function() {
     this.visitedTab = {};
 
     this.hasVisitedTab = function(tab) {
       return this.visitedTab[tab];
     };
 
-    this.setTab = function (tab) {
+    this.setTab = function(tab) {
       this.tab = tab;
       this.visitedTab[tab] = true;
     };
-    this.getTab = function () {
+    this.getTab = function() {
       return this.tab;
     };
-    this.isTab = function (tab) {
+    this.isTab = function(tab) {
       return this.tab === tab;
     };
-
   });
-
 })();

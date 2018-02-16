@@ -504,7 +504,18 @@ module.config(function(
 
   AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
 
+  if (window.location.pathname === '/') {
+    $stateProvider.state('app', {
+      templateUrl: '/scripts/app/views/home.html',
+    });
+  } else {
+    $stateProvider.state('app', {
+      templateUrl: '/scripts/app/views/rest.html',
+    });
+  }
+
   $stateProvider.state('team', {
+    parent: 'app',
     url: '/team',
     templateUrl: '/scripts/static/views/team.html',
     controller: function(Page, gettextCatalog) {

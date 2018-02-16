@@ -30,6 +30,7 @@ angular
   ])
   .config(function($stateProvider) {
     $stateProvider.state('advanced', {
+      parent: 'app',
       url: '/search?filters',
       data: {
         tab: 'donor',
@@ -85,7 +86,7 @@ angular
       Extensions,
       SurvivalAnalysisLaunchService,
       gettextCatalog,
-      Facets,
+      Facets
     ) {
       var _controller = this,
         dataRepoRouteInfo = RouteInfoService.get('dataRepositories'),
@@ -193,14 +194,14 @@ angular
         'availableDataTypes',
         function() {
           return this.value > 1000 ? `${this.value / 1000}K` : this.value;
-        },
+        }
       );
       _controller.donorAnalysisTypeChartConfig = _controller.createChartConfig(
         'donor',
         'analysisTypes',
         function() {
           return this.value > 1000 ? `${this.value / 1000}K` : this.value;
-        },
+        }
       );
       _controller.mutationConsequenceTypeChartConfig = _controller.createChartConfig(
         'mutation',
@@ -213,7 +214,7 @@ angular
           } else {
             return this.value;
           }
-        },
+        }
       );
 
       // to check if a set was previously selected and if its still in effect
@@ -225,7 +226,7 @@ angular
             (set.selected =
               filters[entity] &&
               filters[entity].id &&
-              _.includes(filters[entity].id.is, `ES:${set.id}`)),
+              _.includes(filters[entity].id.is, `ES:${set.id}`))
         );
       };
 
@@ -403,7 +404,7 @@ angular
               function(concatStr, type) {
                 return concatStr + (queryParams[type] ? type + queryParams[type] : '');
               },
-              '',
+              ''
             );
 
             return str;
@@ -412,12 +413,12 @@ angular
             if (newVal !== oldVal) {
               _renderTab(_controller.getActiveTab(), true);
             }
-          },
+          }
         );
 
         $scope.$on(_filterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, function(
           e,
-          filterObj,
+          filterObj
         ) {
           if (filterObj.currentPath.indexOf('/search') < 0) {
             // Unfortunately this event fired before a state change notification is posted so this
@@ -478,7 +479,7 @@ angular
             if (tab !== null) {
               _controller.setActiveTab(tab);
             }
-          },
+          }
         );
 
         $scope.$watch(
@@ -499,7 +500,7 @@ angular
             if (subTab !== null) {
               _controller.setSubTab(subTab);
             }
-          },
+          }
         );
 
         updateSetSelection('donor', _controller.donorSets);
@@ -668,7 +669,7 @@ angular
           entityType,
           entityId,
           entitySymbol,
-          filters,
+          filters
         );
       };
 
@@ -696,7 +697,7 @@ angular
         AdvancedSearchTabs,
         Extensions,
         $q,
-        $filter,
+        $filter
       ) {
         var _ASDonorService = this;
 
@@ -808,7 +809,7 @@ angular
                 donor.embedQuery = LocationService.merge(
                   filters,
                   { donor: { id: { is: [donor.id] } } },
-                  'facet',
+                  'facet'
                 );
 
                 // Remove donor entity set because donor id is the key
@@ -866,7 +867,7 @@ angular
         _ASDonorService.renderBodyTab = function() {
           _initDonors().then(_processDonorHits);
         };
-      },
+      }
     )
     .service(
       'AdvancedGeneService', // Advanced Gene Service
@@ -880,7 +881,7 @@ angular
         FiltersUtil,
         Extensions,
         ProjectCache,
-        $q,
+        $q
       ) {
         var _ASGeneService = this;
 
@@ -971,7 +972,7 @@ angular
                   }
 
                   gene.uiDonorsLink = LocationService.toURLParam(
-                    LocationService.merge(_f, { gene: { id: { is: [gene.id] } } }, 'facet'),
+                    LocationService.merge(_f, { gene: { id: { is: [gene.id] } } }, 'facet')
                   );
 
                   gene.uiDonors = data.facets.projectId.terms;
@@ -1017,7 +1018,7 @@ angular
                 gene.embedQuery = LocationService.merge(
                   filters,
                   { gene: { id: { is: [gene.id] } } },
-                  'facet',
+                  'facet'
                 );
 
                 // Remove gene entity set because gene id is the key
@@ -1069,7 +1070,7 @@ angular
         _ASGeneService.renderBodyTab = function() {
           _initGenes().then(_processGeneHits);
         };
-      },
+      }
     )
     .service('AdvancedMutationService', function(
       Page,
@@ -1084,7 +1085,7 @@ angular
       Extensions,
       ProjectCache,
       $q,
-      $filter,
+      $filter
     ) {
       var _ASMutationService = this,
         _projectCachePromise = ProjectCache.getData();
@@ -1144,7 +1145,7 @@ angular
               y: consequence.y,
               name: $filter('trans')(consequence.name, 'consequenceType'),
               term: consequence.term ? consequence.term : consequence.name,
-            }),
+            })
           ),
           xAxis: 'name',
           yValue: 'y',
@@ -1211,7 +1212,7 @@ angular
                 }
 
                 mutation.uiDonorsLink = LocationService.toURLParam(
-                  LocationService.merge(_f, { mutation: { id: { is: [mutation.id] } } }, 'facet'),
+                  LocationService.merge(_f, { mutation: { id: { is: [mutation.id] } } }, 'facet')
                 );
                 mutation.uiDonors = data.facets.projectId.terms;
                 mutation.uiDonors.forEach(function(facet) {
@@ -1259,7 +1260,7 @@ angular
               mutation.embedQuery = LocationService.merge(
                 filters,
                 { mutation: { id: { is: [mutation.id] } } },
-                'facet',
+                'facet'
               );
 
               // Remove mutation entity set because mutation id is the key
@@ -1313,7 +1314,7 @@ angular
 
           _ASMutationService.mutations = mutationsFacetsList.plain(); // Build partial object
           _ASMutationService.mutations.facets.chromosome.terms = Chromosome.sort(
-            _ASMutationService.mutations.facets.chromosome.terms,
+            _ASMutationService.mutations.facets.chromosome.terms
           );
 
           deferred.resolve();

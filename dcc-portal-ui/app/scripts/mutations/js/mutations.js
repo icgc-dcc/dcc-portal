@@ -26,6 +26,7 @@
 
   module.config(function($stateProvider) {
     $stateProvider.state('mutation', {
+      parent: 'app',
       url: '/mutations/:id',
       templateUrl: 'scripts/mutations/views/mutation.html',
       controller: 'MutationCtrl as MutationCtrl',
@@ -57,7 +58,7 @@
     Genes,
     mutation,
     $filter,
-    PCAWG,
+    PCAWG
   ) {
     var _ctrl = this,
       projects;
@@ -194,7 +195,7 @@
             uiPercentAffected: $filter('number')(project.percentAffected * 100, 2),
             uiAffectedDonorCount: $filter('number')(project.affectedDonorCount),
             uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
-          },
+          }
         );
       });
     }
@@ -209,7 +210,7 @@
 
     if (_ctrl.mutation.hasOwnProperty('consequences') && _ctrl.mutation.consequences.length) {
       var affectedGeneIds = _.filter(_.map(_ctrl.mutation.consequences, 'geneAffectedId'), function(
-        d,
+        d
       ) {
         return !_.isUndefined(d);
       });
@@ -244,7 +245,7 @@
               _ctrl.mutation.uiProteinTranscript.push(
                 _.find(mergedTranscripts, function(t) {
                   return t.id === transcript.id;
-                }),
+                })
               );
             }
           });
@@ -252,7 +253,7 @@
             _ctrl.mutation.uiProteinTranscript,
             function(t) {
               return t.name;
-            },
+            }
           );
         });
       }
@@ -283,7 +284,7 @@
             uiCDSMutation: consequence.cdsMutation,
             uiGeneStrand: consequence.geneStrand,
             uiTranscriptsAffected: consequence.transcriptsAffected,
-          },
+          }
         );
       });
     }
@@ -303,7 +304,7 @@
             uiEvidenceDirection: evidenceItems.evidenceDirection,
             uiPubmedID: evidenceItems.pubmedID,
             doid: evidenceItems.doid,
-          },
+          }
         );
       });
     }
@@ -317,7 +318,7 @@
     $scope,
     $modalInstance,
     mutation,
-    levelFilter,
+    levelFilter
   ) {
     $scope.params = {};
     $scope.params.mutationId = mutation.id;
@@ -376,7 +377,7 @@
     FilterService,
     Mutation,
     Consequence,
-    ImpactOrder,
+    ImpactOrder
   ) {
     this.handler = Restangular.all('mutations');
 
@@ -407,7 +408,7 @@
           ) {
             data.facets.consequenceType.terms = data.facets.consequenceType.terms.sort(function(
               a,
-              b,
+              b
             ) {
               return precedence.indexOf(a.term) - precedence.indexOf(b.term);
             });
@@ -418,7 +419,7 @@
           ) {
             data.facets.functionalImpact.terms = data.facets.functionalImpact.terms.sort(function(
               a,
-              b,
+              b
             ) {
               return ImpactOrder.indexOf(a.term) - ImpactOrder.indexOf(b.term);
             });

@@ -21,12 +21,16 @@ angular.module('app.downloader', ['app.downloader.services']);
 
 angular.module('app.downloader').config(function($stateProvider) {
   $stateProvider.state('download', {
+    parent: 'app',
     url: '/download/:id',
     templateUrl: '/scripts/downloader/views/downloader.html',
     resolve: {
-      ids: ['$stateParams', function ($stateParams) {
-        return [$stateParams.id];
-      }]
-    }
+      ids: [
+        '$stateParams',
+        function($stateParams) {
+          return [$stateParams.id];
+        },
+      ],
+    },
   });
 });

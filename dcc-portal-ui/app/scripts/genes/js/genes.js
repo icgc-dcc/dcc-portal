@@ -22,6 +22,7 @@
 
   module.config(function($stateProvider) {
     $stateProvider.state('gene', {
+      parent: 'app',
       url: '/genes/:id',
       templateUrl: 'scripts/genes/views/gene.html',
       controller: 'GeneCtrl as GeneCtrl',
@@ -124,7 +125,7 @@
     Restangular,
     ExternalLinks,
     gene,
-    $filter,
+    $filter
   ) {
     var _ctrl = this;
     Page.setTitle(gene.id);
@@ -241,7 +242,7 @@
                 _.sortBy(projects.hits, function(p) {
                   return -p.uiAffectedDonorPercentage;
                 }),
-                10,
+                10
               ),
               xAxis: 'id',
               yValue: 'uiAffectedDonorPercentage',
@@ -306,12 +307,12 @@
             uiTumourSubtype: project.tumourSubtype,
             uiAffectedDonorPercentage: $filter('number')(
               project.uiAffectedDonorPercentage * 100,
-              2,
+              2
             ),
             uiAdvQuery: project.advQuery,
             uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
             uiMutationCount: $filter('number')(project.mutationCount),
-          },
+          }
         );
       });
     }
@@ -332,7 +333,7 @@
     Genes,
     Projects,
     Donors,
-    ProjectCache,
+    ProjectCache
   ) {
     var _ctrl = this;
 
@@ -367,12 +368,12 @@
                   }
                   return prev;
                 },
-                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
               );
               return counts;
             };
             mutation.uiClinicalEvidenceCounts = countClinicalEvidence(
-              mutation.clinical_evidence.civic,
+              mutation.clinical_evidence.civic
             );
             return mutation;
           }
@@ -454,7 +455,7 @@
     $stateParams,
     CompoundsService,
     RouteInfoService,
-    $filter,
+    $filter
   ) {
     var geneId = $stateParams.id;
     var _this = this;
@@ -479,7 +480,7 @@
       },
       function(error) {
         throw new Error('Error getting compounds related to the geneId', error);
-      },
+      }
     );
 
     function getUiCompoundsJSON(compounds) {
@@ -494,7 +495,7 @@
             uiDrugClass: $filter('formatCompoundClass')(compound.drugClass),
             cancerTrialCount: compound.cancerTrialCount,
             uiCancerTrials: $filter('number')(compound.cancerTrialCount),
-          },
+          }
         );
       });
     }
