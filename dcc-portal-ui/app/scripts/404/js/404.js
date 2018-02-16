@@ -17,38 +17,37 @@
 
 'use strict';
 
-angular.module('icgc.404', ['icgc.404.controllers', 'ui.router']).config(function($stateProvider) {
-  $stateProvider.state('404', {
-    parent: 'app',
-    url: '/404?page&name&id&url',
-    templateUrl: '/scripts/404/views/404.html',
-    controller: '404Controller as ctrlr',
+angular.module('icgc.404', ['icgc.404.controllers', 'ui.router'])
+  .config(function($stateProvider){
+    $stateProvider.state('404', {
+      url: '/404?page&name&id&url',
+      templateUrl: '/scripts/404/views/404.html',
+      controller: '404Controller as ctrlr'
+    });
   });
-});
 
-(function() {
-  angular
-    .module('icgc.404.controllers', [])
-    .controller('404Controller', function($stateParams, Page) {
+(function(){
+  angular.module('icgc.404.controllers', [])
+    .controller('404Controller', function($stateParams, Page){
       var _ctrl = this;
       _ctrl.info = '';
 
       Page.setTitle('404');
       Page.setPage('error');
 
-      if ($stateParams.page && $stateParams.id && $stateParams.url) {
-        _ctrl.info = { name: $stateParams.name, id: $stateParams.id, url: $stateParams.url };
+      if($stateParams.page && $stateParams.id && $stateParams.url){
+        _ctrl.info = {name: $stateParams.name, id: $stateParams.id, url: $stateParams.url};
       }
 
       _ctrl.page = $stateParams.page;
-
+      
       _ctrl.emailSubject = 'ICGC DCC Page Not Found';
-      _ctrl.emailBody = _ctrl.info
-        ? `An error occured while accessing ${_ctrl.page} URL.%0A%0A
+      _ctrl.emailBody = _ctrl.info ? 
+      `An error occured while accessing ${_ctrl.page} URL.%0A%0A
       Error Details:%0A
         Name: ${_ctrl.info.name}%0A
         Id: ${_ctrl.info.id}%0A
-        Url: ${_ctrl.info.url}`
-        : `An error occured while accessing ${_ctrl.page} URL.%0A`;
+        Url: ${_ctrl.info.url}` : 
+      `An error occured while accessing ${_ctrl.page} URL.%0A`;
     });
 })();

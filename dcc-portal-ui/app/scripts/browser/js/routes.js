@@ -15,28 +15,27 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function() {
+(function () {
   'use strict';
 
   var module = angular.module('icgc.browser', ['icgc.browser.controllers', 'ui.router']);
 
-  module.config(function($stateProvider) {
+  module.config(function ($stateProvider) {
     $stateProvider.state('browser', {
-      parent: 'app',
       url: '/browser?filters',
       data: {
-        tab: 'genes',
+        tab: 'genes'
       },
       templateUrl: '/scripts/browser/views/browser.html',
-      controller: 'BrowserController',
+      controller: 'BrowserController'
     });
     $stateProvider.state('browser.genes', {
       url: '/g',
-      data: { tab: 'genes' },
+      data: {tab: 'genes'}
     });
     $stateProvider.state('browser.mutations', {
       url: '/m',
-      data: { tab: 'mutations' },
+      data: {tab: 'mutations'}
     });
   });
 })();

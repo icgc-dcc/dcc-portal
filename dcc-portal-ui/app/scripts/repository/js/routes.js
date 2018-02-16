@@ -16,46 +16,41 @@
  */
 
 (function() {
+
   'use strict';
 
-  var module = angular.module('icgc.repository', [
-    'icgc.repository.services',
-    'icgc.repository.controllers',
-    'icgc.repository.directives',
-  ]);
+  var module = angular.module('icgc.repository', ['icgc.repository.services', 'icgc.repository.controllers',
+                                                  'icgc.repository.directives']);
 
-  module.config(function($stateProvider) {
-    $stateProvider.state('dataReleases', {
-      parent: 'app',
+  module.config(function ($stateProvider) {
+
+    $stateProvider.state ('dataReleases', {
       url: '/releases*path',
       templateUrl: '/scripts/repository/views/repository.icgc.html',
-      controller: 'ICGCRepoController as ICGCRepoController',
+      controller: 'ICGCRepoController as ICGCRepoController'
     });
 
-    $stateProvider.state('dataRepositories', {
-      parent: 'app',
+    $stateProvider.state ('dataRepositories', {
       url: '/repositories?filters',
       reloadOnSearch: false,
       templateUrl: '/scripts/repository/views/repository.external.html',
-      controller: 'ExternalRepoController as ExternalRepoController',
+      controller: 'ExternalRepoController as ExternalRepoController'
     });
 
-    $stateProvider.state('dataRepositoryFile', {
-      parent: 'app',
+    $stateProvider.state ('dataRepositoryFile', {
       url: '/repositories/files/:id',
       templateUrl: '/scripts/repository/views/repository.external.file.html',
       controller: 'ExternalFileInfoController as fileCtrlr',
       resolve: {
-        fileInfo: [
-          '$stateParams',
-          'ExternalRepoService',
-          function($stateParams, ExternalRepoService) {
-            return ExternalRepoService.getFileInfo($stateParams.id).then(function(file) {
-              return file;
-            });
-          },
-        ],
-      },
+        fileInfo: ['$stateParams', 'ExternalRepoService', 
+        function ($stateParams, ExternalRepoService) {
+          return ExternalRepoService.getFileInfo($stateParams.id).then(function(file){
+            return file;
+          });
+        }]
+      }
     });
+
   });
+
 })();

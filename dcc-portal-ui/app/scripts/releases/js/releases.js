@@ -15,71 +15,56 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function() {
+(function () {
   'use strict';
 
-  var module = angular.module('icgc.releases', [
-    'icgc.portalfeature',
-    'icgc.releases.controllers',
-    'ui.router',
-  ]);
+  var module = angular.module('icgc.releases', ['icgc.portalfeature','icgc.releases.controllers', 'ui.router']);
 
-  module.config(function($stateProvider) {
-    $stateProvider.state('release', {
-      parent: 'app',
+  module.config(function ($stateProvider) {
+    $stateProvider.state('home', {
       url: '/',
       templateUrl: '/scripts/releases/views/home.html',
       controller: 'ReleaseCtrl as ReleaseCtrl',
       resolve: {
-        release: [
-          'Releases',
-          function(Releases) {
-            return Releases.getCurrent();
-          },
-        ],
-      },
+        release: ['Releases', function (Releases) {
+          return Releases.getCurrent();
+        }]
+      }
     });
   });
 })();
 
-(function() {
+(function () {
   'use strict';
 
   var module = angular.module('icgc.releases.controllers', ['icgc.releases.models']);
 
-  module.controller('ReleaseCtrl', function(
-    Page,
-    HighchartsService,
-    Releases,
-    Projects,
-    Settings,
-    gettextCatalog
-  ) {
+  module.controller('ReleaseCtrl', function (Page, HighchartsService, Releases, Projects, Settings, gettextCatalog) {
     var _ctrl = this;
     Page.setTitle(gettextCatalog.getString('Welcome'));
     Page.setPage('home');
 
-    _ctrl.routeToProjectPageWithLiveDonorStateFilter = function() {
+    _ctrl.routeToProjectPageWithLiveDonorStateFilter = function () {
       var liveDonorStateFilter = {
         project: {
           state: {
-            is: ['live'],
-          },
-        },
+            is: ['live']
+          }
+        }
       };
 
-      return '/projects?filters=' + angular.toJson(liveDonorStateFilter);
+      return '/projects?filters=' + angular.toJson (liveDonorStateFilter);
     };
-    _ctrl.routeToAdvancedSearchPageWithLiveDonorStateFilter = function() {
+    _ctrl.routeToAdvancedSearchPageWithLiveDonorStateFilter = function () {
       var liveDonorStateFilter = {
         donor: {
           state: {
-            is: ['live'],
-          },
-        },
+            is: ['live']
+          }
+        }
       };
 
-      return '/search?filters=' + angular.toJson(liveDonorStateFilter);
+      return '/search?filters=' + angular.toJson (liveDonorStateFilter);
     };
 
     function successP(projects) {
@@ -88,7 +73,7 @@
         type: 'project',
         innerFacet: 'primarySite',
         outerFacet: 'id',
-        countBy: 'totalDonorCount',
+        countBy: 'totalDonorCount'
       });
     }
 
@@ -107,43 +92,43 @@
   });
 })();
 
-(function() {
+(function () {
   'use strict';
 
   var module = angular.module('icgc.releases.models', []);
 
-  module.service('Releases', function(Restangular, LocationService, Release) {
+  module.service('Releases', function (Restangular, LocationService, Release) {
     this.handler = Restangular.all('releases');
 
-    this.getList = function(params) {
+    this.getList = function (params) {
       var defaults = {
         size: 10,
         from: 1,
-        filters: LocationService.filters(),
+        filters: LocationService.filters()
       };
 
       return this.handler.getList(angular.extend(defaults, params));
     };
 
-    this.getCurrent = function(params) {
+    this.getCurrent = function (params) {
       return this.handler.one('current').get(params);
     };
 
-    this.one = function(id) {
+    this.one = function (id) {
       return id ? Release.init(id) : Release;
     };
   });
 
-  module.service('Release', function(Restangular) {
+  module.service('Release', function (Restangular) {
     var _this = this;
     this.handler = {};
 
-    this.init = function(id) {
+    this.init = function (id) {
       this.handler = Restangular.one('releases', id);
       return _this;
     };
 
-    this.get = function(params) {
+    this.get = function (params) {
       var defaults = {};
 
       return this.handler.get(angular.extend(defaults, params));

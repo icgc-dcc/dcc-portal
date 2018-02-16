@@ -17,19 +17,18 @@
 
 'use strict';
 
-angular.module('icgc.301', ['icgc.301.controllers', 'ui.router']).config(function($stateProvider) {
-  $stateProvider.state('301', {
-    parent: 'app',
-    url: '/301?page',
-    templateUrl: '/scripts/404/views/404.html',
-    controller: '301Controller as ctrlr',
+angular.module('icgc.301', ['icgc.301.controllers', 'ui.router'])
+  .config(function($stateProvider){
+    $stateProvider.state('301', {
+      url: '/301?page',
+      templateUrl: '/scripts/404/views/404.html',
+      controller: '301Controller as ctrlr'
+    });
   });
-});
 
-(function() {
-  angular
-    .module('icgc.301.controllers', [])
-    .controller('301Controller', function($stateParams, Page, $timeout, $window, $scope) {
+(function(){
+  angular.module('icgc.301.controllers', [])
+    .controller('301Controller', function($stateParams, Page, $timeout, $window, $scope){
       const _ctrl = this;
       _ctrl.isRedirect = true;
       _ctrl.pathToGoTo = $stateParams.page;
@@ -39,20 +38,20 @@ angular.module('icgc.301', ['icgc.301.controllers', 'ui.router']).config(functio
       Page.setPage('error');
 
       const processRedirect = () => {
-        _ctrl.timer = $timeout(() => {
-          _ctrl.timeToRedirect--;
-          if (_ctrl.timeToRedirect === 0) {
-            $window.location.href = _ctrl.pathToGoTo;
-          } else {
-            processRedirect();
-          }
-        }, 1000);
-      };
+         _ctrl.timer = $timeout(() => {
+           _ctrl.timeToRedirect--;
+           if(_ctrl.timeToRedirect === 0){
+             $window.location.href = _ctrl.pathToGoTo;
+           } else {
+             processRedirect();
+           }
+         },1000);
+       };
 
-      $scope.$on('$destroy', () => {
-        $timeout.cancel(_ctrl.timer);
-      });
+       $scope.$on('$destroy',() => {
+         $timeout.cancel(_ctrl.timer);
+       });
 
-      processRedirect();
+       processRedirect();
     });
 })();

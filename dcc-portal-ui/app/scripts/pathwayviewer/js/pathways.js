@@ -15,85 +15,68 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function() {
+(function () {
   'use strict';
 
   var module = angular.module('icgc.pathways', [
-    'icgc.enrichment.directives',
-    'icgc.sets.services',
+    'icgc.enrichment.directives', 'icgc.sets.services'
   ]);
-
+  
   module
     .constant('PathwaysConstants', {
       EVENTS: {
-        MODEL_READY_EVENT: 'icgc.pathways.ready.event',
-      },
+        MODEL_READY_EVENT: 'icgc.pathways.ready.event'
+      }
     })
-    .config(function($stateProvider) {
+    .config(function ($stateProvider) {
       $stateProvider.state('pathways', {
-        parent: 'app',
         url: '/pathways/:id',
         templateUrl: '/scripts/pathwayviewer/views/pathways.html',
         controller: 'PathwaysController',
         resolve: {
-          EnrichmentData: [
-            '$q',
-            '$stateParams',
-            'Restangular',
-
-            function($q, $stateParams, Restangular) {
+          EnrichmentData: ['$q', '$stateParams', 'Restangular',
+            
+            function ($q, $stateParams, Restangular) {
               var entityID = $stateParams.id,
                 deferred = $q.defer();
-
-              Restangular.one('analysis/enrichment', entityID)
-                .get()
-                .then(
-                  function(rectangularEnrichmentData) {
+              
+              Restangular.one('analysis/enrichment', entityID).get()
+                .then(function (rectangularEnrichmentData) {
                     return deferred.resolve(rectangularEnrichmentData.plain());
                   },
-                  function(response) {
+                  function (response) {
                     return deferred.reject(response);
                   }
                 );
-
+              
               return deferred.promise;
-            },
-          ],
-        },
+            }]
+        }
       });
     });
+  
+  
+  module.controller('PathwaysController', function ($scope, $q, Page, EnrichmentData, Restangular,
+                                                    GeneSetService, GeneSetHierarchy, GeneSets,
+                                                    TooltipText, EnrichmentService, SetService, 
+                                                    PathwaysConstants, RestangularNoCache, PathwayDataService, 
+                                                    gettextCatalog) {
 
-  module.controller('PathwaysController', function(
-    $scope,
-    $q,
-    Page,
-    EnrichmentData,
-    Restangular,
-    GeneSetService,
-    GeneSetHierarchy,
-    GeneSets,
-    TooltipText,
-    EnrichmentService,
-    SetService,
-    PathwaysConstants,
-    RestangularNoCache,
-    PathwayDataService,
-    gettextCatalog
-  ) {
+
     var _selectedPathway = null;
 
     function _resolveEnrichmentData(Id) {
       $scope.analysis.isLoading = true;
 
       SetService.pollingResolveSetFactory(Id, 2000, 10)
-        .setRetrievalEntityFunction(function() {
+        .setRetrievalEntityFunction(function () {
           return RestangularNoCache.one('analysis/enrichment', Id).get();
         })
-        .setResolvedEntityFunction(function(entityData) {
+        .setResolvedEntityFunction(function (entityData) {
           return entityData.state.toUpperCase() === 'FINISHED';
         })
         .resolve()
-        .then(function(entityData) {
+        .then(function (entityData) {
           _initAnalysisScope(entityData);
 
           if (!_selectedPathway) {
@@ -101,28 +84,29 @@
           }
 
           var _updateSelectedPathway = _.head(
-            _.filter(entityData.results, function(pathway) {
+            _.filter(entityData.results, function (pathway) {
               return pathway.geneSetId === _selectedPathway.geneSetId;
             })
           );
 
           _.assign(_selectedPathway, _updateSelectedPathway);
           $scope.analysis.isLoading = false;
+
         });
     }
 
     function _initAnalysisScope(entityRecords) {
       $scope.pathways = entityRecords.results;
       $scope.analysis = {
-        getID: function() {
+        getID: function () {
           return entityRecords.id;
         },
-        getData: function() {
+        getData: function () {
           return entityRecords;
         },
-        getContext: function() {
+        getContext: function () {
           return 'pathways';
-        },
+        }
       };
     }
 
@@ -146,56 +130,50 @@
 
       if (EnrichmentData.state !== 'FINISHED') {
         _resolveEnrichmentData(EnrichmentData.id);
-      } else {
+      }
+      else {
         $scope.analysis.isLoading = false;
       }
+
     }
 
     function _addFilters(pathway) {
+
       if (_.get(pathway, 'geneSetFilters', false)) {
         return;
       }
 
       pathway.geneSetFilters = EnrichmentService.geneSetFilters(EnrichmentData, pathway);
-      pathway.geneSetOverlapFilters = EnrichmentService.geneSetOverlapFilters(
-        EnrichmentData,
-        pathway
-      );
+      pathway.geneSetOverlapFilters = EnrichmentService.geneSetOverlapFilters(EnrichmentData, pathway);
+
     }
 
-    $scope.getSelectedPathway = function() {
+    $scope.getSelectedPathway = function () {
       return _selectedPathway;
     };
 
-    $scope.setSelectedPathway = function(pathway) {
+    $scope.setSelectedPathway = function (pathway) {
       $scope.pathway = {};
 
       _addFilters(pathway);
       _selectedPathway = pathway;
 
       PathwayDataService.getPathwayData(pathway.geneSetId, pathway.geneSetOverlapFilters)
-        .then(function(pathwayData) {
+        .then(function (pathwayData) {
           $scope.geneSet = pathwayData.geneSet;
-          $scope.pathway = _.pick(
-            pathwayData,
-            'xml',
-            'zooms',
-            'mutationHighlights',
-            'drugHighlights',
-            'overlaps'
-          );
+          $scope.pathway = _.pick(pathwayData, 'xml', 'zooms', 'mutationHighlights', 'drugHighlights', 'overlaps');
           $scope.uiParentPathways = pathwayData.uiParentPathways;
 
-          setTimeout(function() {
+          setTimeout(function () {
             $scope.$broadcast(PathwaysConstants.EVENTS.MODEL_READY_EVENT, {});
           }, 100);
         })
-        .catch(function() {
+        .catch(function () {
           $scope.pathway = {
             xml: '',
             zooms: [''],
             mutationHighlights: [],
-            drugHighlights: [],
+            drugHighlights: []
           };
         });
     };

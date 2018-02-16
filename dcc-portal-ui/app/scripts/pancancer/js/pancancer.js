@@ -20,25 +20,25 @@
 
   var module = angular.module('icgc.pancancer', [
     'icgc.pancancer.controllers',
-    'icgc.pancancer.services',
+    'icgc.pancancer.services'
   ]);
 
   module.config(function($stateProvider) {
     $stateProvider.state('pancancer', {
-      parent: 'app',
       url: '/pcawg',
       templateUrl: 'scripts/pancancer/views/pancancer.html',
-      controller: 'PancancerController as PancancerController',
+      controller: 'PancancerController as PancancerController'
     });
 
     $stateProvider.state('pancancer_ack', {
-      parent: 'app',
       url: '/pcawg/nature/commentary/acknowledgements',
       templateUrl: 'scripts/pancancer/views/pancancer.ack.html',
-      controller: 'PancancerAcknowledgementController',
+      controller: 'PancancerAcknowledgementController'
     });
   });
+
 })();
+
 
 (function() {
   'use strict';
@@ -49,20 +49,17 @@
     Page.stopWork();
     Page.setPage('entity');
     Page.setTitle('PCAWG');
-  });
+  }); 
+  
 
-  module.controller('PancancerController', function(
-    $scope,
-    Page,
-    PancancerService,
-    ExternalRepoService,
-    RouteInfoService
-  ) {
+  module.controller('PancancerController',
+    function($scope, Page, PancancerService, ExternalRepoService, RouteInfoService) {
+
     Page.stopWork();
     Page.setPage('entity');
     Page.setTitle('PCAWG');
 
-    $scope.dataRepoUrl = RouteInfoService.get('dataRepositories').href;
+    $scope.dataRepoUrl = RouteInfoService.get ('dataRepositories').href;
 
     function refresh() {
       // Get stats
@@ -86,6 +83,7 @@
 
     refresh();
   });
+
 })();
 
 (function() {
@@ -94,16 +92,17 @@
   var module = angular.module('icgc.pancancer.services', []);
 
   module.service('PancancerService', function(Restangular, PCAWG, HighchartsService) {
+
     function buildRepoFilterStr(datatype) {
       var filters = {
         file: {
-          study: { is: ['PCAWG'] },
-        },
+          study: {is: ['PCAWG']}
+        }
       };
 
       if (angular.isDefined(datatype)) {
         filters.file.dataType = {
-          is: [datatype],
+          is: [datatype]
         };
       }
 
@@ -111,6 +110,7 @@
     }
 
     this.buildRepoFilterStr = buildRepoFilterStr;
+
 
     this.getSiteProjectDonorChart = function(data) {
       var list = [];
@@ -129,27 +129,22 @@
             count: data[siteKey][projKey],
             key: siteKey, // parent key
             colourKey: siteKey,
-            link: '/projects/' + projKey,
+            link: '/projects/' + projKey
           });
         });
 
-        bar.stack
-          .sort(function(a, b) {
-            return b.count - a.count;
-          })
-          .forEach(function(p) {
-            p.y0 = bar.total;
-            p.y1 = bar.total + p.count;
-            bar.total += p.count;
-          });
+        bar.stack.sort(function(a, b) { return b.count - a.count }).forEach(function(p) {
+          p.y0 = bar.total;
+          p.y1 = bar.total + p.count;
+          bar.total += p.count;
+        });
         list.push(bar);
       });
 
       // Sorted
-      return list.sort(function(a, b) {
-        return b.total - a.total;
-      });
+      return list.sort(function(a, b) { return b.total - a.total });
     };
+
 
     this.getPrimarySiteDonorChart = function(data) {
       var list = [];
@@ -158,19 +153,18 @@
         list.push({
           id: d,
           count: data[d],
-          colour: HighchartsService.getPrimarySiteColourForTerm(d),
+          colour: HighchartsService.getPrimarySiteColourForTerm(d)
         });
       });
-      list = _.sortBy(list, function(d) {
-        return -d.count;
-      });
+      list = _.sortBy(list, function(d) { return -d.count });
 
       return HighchartsService.bar({
         hits: list,
         xAxis: 'id',
-        yValue: 'count',
+        yValue: 'count'
       });
     };
+
 
     /**
      * Reorder for UI, the top 5 items are fixed, the remining are appended to the end
@@ -179,6 +173,7 @@
     this.orderDatatypes = function(data) {
       var precedence = PCAWG.precedence();
       var list = [];
+
 
       // Scrub
       data = Restangular.stripRestangular(data);
@@ -192,7 +187,7 @@
           fileCount: +data[key].fileCount,
           fileSize: +data[key].fileSize,
           fileFormat: data[key].dataFormat,
-          filters: buildRepoFilterStr(key),
+          filters: buildRepoFilterStr(key)
         });
       });
 
@@ -200,7 +195,9 @@
       return _.sortBy(list, function(d) {
         return precedence.indexOf(d.name);
       });
+
     };
+
 
     /**
      * Get pancancer statistics - This uses ICGC's external repository end point
@@ -215,7 +212,7 @@
 
     this.getPancancerSummary = function() {
       var param = {
-        filters: { file: { study: { is: ['PCAWG'] } } },
+        filters: {file: { study: {is: ['PCAWG']}}}
       };
       return Restangular.one('repository/files/summary').get(param);
     };

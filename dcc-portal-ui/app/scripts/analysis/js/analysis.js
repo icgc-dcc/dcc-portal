@@ -17,65 +17,67 @@
 
 require('./setSelection');
 
-(function() {
+(function () {
   'use strict';
 
   var module = angular.module('icgc.analysis', [
     'icgc.analysis.setSelection',
     'icgc.analysis.controllers',
     'icgc.share',
-    'ui.router',
+    'ui.router'
   ]);
 
-  module.config(function($stateProvider) {
+  module.config(function ($stateProvider) {
     $stateProvider.state('analysis', {
-      parent: 'app',
       url: '/analysis',
       reloadOnSearch: false,
       templateUrl: 'scripts/analysis/views/analysis.html',
       controller: 'AnalysisController',
       data: {
-        tab: 'analysis',
-      },
+        tab: 'analysis'
+      }
     });
 
     $stateProvider.state('analysis.setSelection', {
       url: '/set-selection/:tool',
       reloadOnSearch: false,
       data: {
-        tab: 'analysis',
-      },
+        tab: 'analysis'
+      }
     });
 
     $stateProvider.state('analysis.sets', {
       url: '/sets',
       reloadOnSearch: false,
-      data: {
-        tab: 'sets',
-      },
+      data : {
+        tab: 'sets'
+      }
     });
 
     // We can't seem to have a single state for /x and /x/y
     $stateProvider.state('analysis.viewhome', {
       url: '/view',
       data: {
-        tab: 'view',
-      },
+        tab: 'view'
+      }
     });
     $stateProvider.state('analysis.view', {
       url: '/view/:type/:id',
       //reloadOnSearch: false,
       data: {
-        tab: 'view',
-      },
+        tab: 'view'
+      }
     });
   });
+
 })();
 
-(function() {
+
+(function () {
   'use strict';
 
   var module = angular.module('icgc.analysis.controllers', ['icgc.analysis.services']);
+
 
   /**
    * Top level set analyses controller
@@ -87,203 +89,166 @@ require('./setSelection');
    */
   module
     .constant('DEFAULT_SELECTED_TAB_CONSTANT', 'analysis')
-    .controller('AnalysisController', function(
-      $scope,
-      $timeout,
-      $state,
-      $location,
-      Page,
-      AnalysisService,
-      DEFAULT_SELECTED_TAB_CONSTANT,
-      gettextCatalog
-    ) {
-      Page.setPage('analysis');
-      Page.setTitle(gettextCatalog.getString('Analysis'));
+    .controller('AnalysisController', function ($scope, $timeout, $state, $location, Page,
+                                                AnalysisService, DEFAULT_SELECTED_TAB_CONSTANT, gettextCatalog) {
 
+    Page.setPage('analysis');
+    Page.setTitle(gettextCatalog.getString('Analysis'));
+
+
+    $scope.currentTab = $state.current.data.tab || DEFAULT_SELECTED_TAB_CONSTANT;
+    $scope.savedAnalyses = AnalysisService.getAll();
+
+    $scope.AnalysisService = AnalysisService;
+
+    $scope.$watch(function () {
+      return $state.current.data && $state.current.data.tab;
+    }, function () {
       $scope.currentTab = $state.current.data.tab || DEFAULT_SELECTED_TAB_CONSTANT;
-      $scope.savedAnalyses = AnalysisService.getAll();
+    });
 
-      $scope.AnalysisService = AnalysisService;
+    $scope.$watch(function() {
+      return $state.params;
+    }, function() {
+      $scope.analysisId = $state.params.id;
+      $scope.analysisType = $state.params.type === 'set'? 'union' : $state.params.type;
+      init();
+    });
 
-      $scope.$watch(
-        function() {
-          return $state.current.data && $state.current.data.tab;
-        },
-        function() {
-          $scope.currentTab = $state.current.data.tab || DEFAULT_SELECTED_TAB_CONSTANT;
-        }
-      );
+    $scope.newAnalysis = function() {
 
-      $scope.$watch(
-        function() {
-          return $state.params;
-        },
-        function() {
-          $scope.analysisId = $state.params.id;
-          $scope.analysisType = $state.params.type === 'set' ? 'union' : $state.params.type;
-          init();
-        }
-      );
+      if ($scope.analysisId !== undefined) {
+        $location.path('analysis');
+      } else {
+        $scope.$broadcast('analysis::reload', {});
+      }
+    };
 
-      $scope.newAnalysis = function() {
-        if ($scope.analysisId !== undefined) {
-          $location.path('analysis');
-        } else {
-          $scope.$broadcast('analysis::reload', {});
-        }
-      };
+    var analysisPromise;
+    var pollTimeout;
 
-      var analysisPromise;
-      var pollTimeout;
 
-      function wait(id, type) {
-        $scope.error = null;
+    function wait(id, type) {
+      $scope.error = null;
 
-        var promise = AnalysisService.getAnalysis(id, type);
-        promise.then(
-          function(data) {
-            var rate = 1000;
+      var promise = AnalysisService.getAnalysis(id, type);
+      promise.then(function(data) {
+        var rate = 1000;
 
-            if (data.state !== 'FINISHED') {
-              $scope.analysisResult = data;
+        if (data.state !== 'FINISHED') {
+          $scope.analysisResult = data;
 
-              if (data.state === 'POST_PROCESSING') {
-                rate = 4000;
-              }
-              pollTimeout = $timeout(function() {
-                wait(id, type);
-              }, rate);
-            } else if (data.state === 'FINISHED') {
-              $scope.analysisResult = data;
-            }
-          },
-          function() {
-            $scope.error = true;
+          if (data.state === 'POST_PROCESSING') {
+            rate = 4000;
           }
-        );
+          pollTimeout = $timeout(function() {
+            wait(id, type);
+          }, rate);
+        } else if (data.state === 'FINISHED') {
+          $scope.analysisResult = data;
+        }
+      }, function() {
+        $scope.error = true;
+      });
+    }
+
+    function init() {
+      $timeout.cancel(pollTimeout);
+      $scope.error = null;
+      $scope.analysisResult = undefined;
+
+      if (! $scope.analysisId || ! $scope.analysisType) {
+        return;
       }
 
-      function init() {
-        $timeout.cancel(pollTimeout);
-        $scope.error = null;
-        $scope.analysisResult = undefined;
+      var id = $scope.analysisId, type = $scope.analysisType;
+      var promise = AnalysisService.getAnalysis(id, type);
 
-        if (!$scope.analysisId || !$scope.analysisType) {
+      promise.then(function(data) {
+        if (! _.isEmpty(data)) {
+          AnalysisService.addAnalysis(data, type);
+        } else {
+          $scope.error = true;
           return;
         }
 
-        var id = $scope.analysisId,
-          type = $scope.analysisType;
-        var promise = AnalysisService.getAnalysis(id, type);
+        if (data.state === 'FINISHED') {
+          $scope.analysisResult = undefined;
+          $timeout(function() {
+            $scope.analysisResult = data;
+          }, 150);
+          return;
+        }
 
-        promise.then(
-          function(data) {
-            if (!_.isEmpty(data)) {
-              AnalysisService.addAnalysis(data, type);
-            } else {
-              $scope.error = true;
-              return;
-            }
+        // Kick off polling if not finished
+        wait(id, type);
 
-            if (data.state === 'FINISHED') {
-              $scope.analysisResult = undefined;
-              $timeout(function() {
-                $scope.analysisResult = data;
-              }, 150);
-              return;
-            }
-
-            // Kick off polling if not finished
-            wait(id, type);
-          },
-          function() {
-            $scope.error = true;
-          }
-        );
-      }
-
-      $scope.$on('$locationChangeStart', function() {
-        // Cancel any remaining polling requests
-        $timeout.cancel(pollTimeout);
+      }, function() {
+        $scope.error = true;
       });
+    }
 
-      // Clea up
-      $scope.$on('destroy', function() {
-        $timeout.cancel(analysisPromise);
-      });
+
+    $scope.$on('$locationChangeStart', function() {
+      // Cancel any remaining polling requests
+      $timeout.cancel(pollTimeout);
     });
+
+    // Clea up
+    $scope.$on('destroy', function() {
+      $timeout.cancel(analysisPromise);
+    });
+
+  });
+
 })();
 
-(function() {
+
+
+(function () {
   'use strict';
 
   var module = angular.module('icgc.analysis.services', ['restangular']);
 
-  module.service('AnalysisService', function(
-    RestangularNoCache,
-    localStorageService,
-    gettextCatalog
-  ) {
+  module.service('AnalysisService', function(RestangularNoCache, localStorageService, gettextCatalog) {
     var ANALYSIS_ENTITY = 'analysis';
     var analysisList = [];
     var analysesStrings = {
       set: {
         name: gettextCatalog.getString('Set Operations'),
-        description: gettextCatalog.getString(
-          'Display Venn diagram and find intersection or union,' +
-            ' etc. of your sets of the same type.'
-        ),
-        demoDescription: gettextCatalog.getString(
-          'Demo showing high impact mutations in brain cancers across GBM-US, LGG-US, and PCBA-DE.'
-        ),
-        datasetSelectionInstructions: gettextCatalog.getString(
-          'Select 2 or 3 sets of the same type.'
-        ),
+        description: gettextCatalog.getString('Display Venn diagram and find intersection or union,' + 
+          ' etc. of your sets of the same type.'),
+        demoDescription: gettextCatalog.getString('Demo showing high impact mutations in brain cancers across GBM-US, LGG-US, and PCBA-DE.'),
+        datasetSelectionInstructions: gettextCatalog.getString('Select 2 or 3 sets of the same type.'),
       },
-      get union() {
+      get union () {
         return this.set;
       },
       enrichment: {
         name: gettextCatalog.getString('Enrichment Analysis'),
-        description: gettextCatalog.getString(
-          'Find over-represented groups of gene sets (e.g. Reactome pathways) that are of statstical significance when comparing with your gene set.'
-        ),
-        demoDescription: gettextCatalog.getString(
-          'Demo showing top 50 genes in Cancer Gene Census.'
-        ),
-        datasetSelectionInstructions: gettextCatalog.getString(
-          'Select the gene set you want to analyze. <small>(Maximum 10,000 genes)</small>'
-        ),
+        description: gettextCatalog.getString('Find over-represented groups of gene sets (e.g. Reactome pathways) that are of statstical significance when comparing with your gene set.'),
+        demoDescription: gettextCatalog.getString('Demo showing top 50 genes in Cancer Gene Census.'),
+        datasetSelectionInstructions: gettextCatalog.getString('Select the gene set you want to analyze. <small>(Maximum 10,000 genes)</small>'),
       },
       phenotype: {
         name: gettextCatalog.getString('Cohort Comparison'),
-        description: gettextCatalog.getString(
-          'Display the survival analysis of your donor sets and compare ' +
-            ' characteristics such as gender, vital status and age at diagnosis between your donor sets.'
-        ),
-        demoDescription: gettextCatalog.getString(
-          'Demo showing donors with pancreatic cancer with and without mutations in the gene KRAS.'
-        ),
+        description: gettextCatalog.getString('Display the survival analysis of your donor sets and compare ' +
+        ' characteristics such as gender, vital status and age at diagnosis between your donor sets.'),
+        demoDescription: gettextCatalog.getString('Demo showing donors with pancreatic cancer with and without mutations in the gene KRAS.'),
         datasetSelectionInstructions: gettextCatalog.getString('Select 2 donor sets.'),
       },
       oncogrid: {
         name: gettextCatalog.getString('OncoGrid'),
-        description: gettextCatalog.getString(
-          'Visualize genetic alterations affecting a set of donors.'
-        ),
-        demoDescription: gettextCatalog.getString(
-          'Demo showing top 75 donors and genes for PCAWG liver projects.'
-        ),
-        datasetSelectionInstructions: gettextCatalog.getString(
-          '<em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(3000 donors maximum)</small>.</em>'
-        ),
-      },
+        description: gettextCatalog.getString('Visualize genetic alterations affecting a set of donors.'),
+        demoDescription: gettextCatalog.getString('Demo showing top 75 donors and genes for PCAWG liver projects.'),
+        datasetSelectionInstructions: gettextCatalog.getString('<em>Select 1 Gene set <small>(100 genes maximum)</small> and 1 Donor set <small>(3000 donors maximum)</small>.</em>'),
+      }
     };
 
     this.analysesStrings = analysesStrings;
 
     this.getAnalysis = function(id, type) {
-      return RestangularNoCache.one('analysis/' + type, id).get();
+      return RestangularNoCache.one('analysis/' + type , id).get();
     };
 
     this.getAll = function() {
@@ -307,8 +272,8 @@ require('./setSelection');
       return _.get(analysesStrings[type], 'description', '???d');
     };
 
-    this.datasetSelectionInstructions = type =>
-      _.get(analysesStrings[type], 'datasetSelectionInstructions', '???');
+    this.datasetSelectionInstructions = type => _.get(analysesStrings[type], 'datasetSelectionInstructions', '???');
+
 
     /**
      * Add analysis to local storage
@@ -323,7 +288,7 @@ require('./setSelection');
         id: analysis.id,
         timestamp: analysis.timestamp || '--',
         // Type is used in the UI route, we convert union to set so it makes more logical sense
-        type: type === 'union' ? 'set' : type,
+        type: type === 'union'? 'set' : type
       };
 
       if (type === 'enrichment') {
@@ -341,7 +306,7 @@ require('./setSelection');
         payload.inputSetCount = analysis.inputCount || '';
       }
 
-      analysisList.unshift(payload);
+      analysisList.unshift( payload );
       localStorageService.set(ANALYSIS_ENTITY, analysisList);
     };
 
@@ -359,5 +324,7 @@ require('./setSelection');
 
     // Init service
     analysisList = localStorageService.get(ANALYSIS_ENTITY) || [];
+
   });
+
 })();
