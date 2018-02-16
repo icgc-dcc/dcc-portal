@@ -1,26 +1,135 @@
 .home-main {
+  // Homepage Colours
+  $white: #ffffff;
+  $light-grey: #fafafa;
+  $grey: #eaecef;
+  $blue: #166aa2;
+  $dark-blue: #283e5d;
+  $orange: #e9931c;
+
+  font-size: 1.25rem;
+  color: $dark-blue;
+
+  // Homepage Placeholders
+  %content-row {
+    width: 100%;
+    padding: 32px 0;
+
+    @include breakpoint($break-tablet) {
+      padding: 48px 0;
+    }
+  }
+
+  // Layout
+  .white-row {
+    @extend %content-row;
+    background: $white;
+  }
+
+  .grey-row {
+    @extend %content-row;
+    background: $light-grey;
+  }
+
+  .blue-row {
+    @extend %content-row;
+    background: $light-grey;
+    background-color: $blue;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    color: $white;
+  }
+
   .content-wrap {
     display: flex;
+    flex-direction: column;
+    max-width: 1065px;
+    margin: 0 auto;
 
     @include breakpoint($break-tablet) {
       flex-direction: row;
     }
   }
 
+  h2,
+  h3 {
+    font-family: $sans-stack;
+    margin: 0 0 1rem;
+    color: $dark-blue;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+  }
+
+  h2 {
+    font-size: 2.34375rem;
+  }
+
+  h3 {
+    font-size: 1.9531rem;
+  }
+
+  // Content
   .search-container {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 18px;
 
     @include breakpoint($break-tablet) {
       width: 60%;
       padding-right: 32px;
     }
+
+    .search-box {
+      background: $light-grey;
+      padding: 24px;
+    }
   }
 
   .projects-container {
-    width: 100%;
+    background: $light-grey;
+    padding: 21px 32px 72px;
 
     @include breakpoint($break-tablet) {
       width: 40%;
+    }
+
+    h3 {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    a {
+      display: inline-block;
+      color: $orange;
+      border-bottom: 1px solid $orange;
+    }
+
+    .stats {
+      display: flex;
+      flex-flow: row wrap;
+      padding: 48px 0 32px;
+      border-bottom: solid 1px $grey;
+
+      > div {
+        flex: 1 1 auto;
+        margin-bottom: 1.5rem;
+      }
+
+      break {
+        flex-basis: 100%;
+        width: 0px;
+        height: 0px;
+        overflow: hidden;
+      }
+
+      .stat {
+        text-align: right;
+        page-break-after: always;
+        break-after: always;
+      }
     }
   }
 }

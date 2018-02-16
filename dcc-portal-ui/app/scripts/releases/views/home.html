@@ -1,22 +1,64 @@
 <main class="home-main">
-    <div class="row">
+    <div class="white-row">
         <div class="content-wrap">
             <div class="search-container">
                 <div class="headline">
-                    <h1>Cancer genomics data sets visualization, analysis and download.</h1>
+                    <h2>
+                        <translate>Cancer genomics data sets visualization, analysis and download.</translate>
+                    </h2>
                 </div>
                 <div class="search-box">
                     SEARCH BOX
                 </div>
             </div>
-            <div class="projects-container">
-                PROJECTS
+            <div class="projects-container" data-ng-controller="ReleaseCtrl as ReleaseCtrl">
+                <h3>{{ReleaseCtrl.release.projectCount | number}}
+                    <translate>Cancer projects</translate>
+                </h3>
+                <a href="/projects">View Projects</a>
+                <div class="stats">
+                    <div class="label">
+                        <translate>Cancer primary sites</translate>
+                    </div>
+                    <div class="stat">{{ReleaseCtrl.release.primarySiteCount | number}}</div>
+
+                    <break></break>
+
+                    <div class="label">
+                        <translate>Donor with molecular data in DCC</translate>
+                    </div>
+                    <div class="stat">{{ReleaseCtrl.release.liveDonorCount | number}}</div>
+
+                    <break></break>
+
+                    <div class="label">
+                        <translate>Total Donors</translate>
+                    </div>
+                    <div class="stat">{{ReleaseCtrl.release.donorCount | number}}</div>
+
+                    <break></break>
+
+                    <div class="label">
+                        <translate>Simple somatic mutations</translate>
+                    </div>
+                    <div class="stat">{{ReleaseCtrl.release.ssmCount | number}}</div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="grey-row">
         <div class="content-wrap">
             CONTENT HERE
+        </div>
+    </div>
+    <div class="white-row">
+        <div class="content-wrap">
+            RESOURCES HERE
+        </div>
+    </div>
+    <div class="blue-row">
+        <div class="content-wrap">
+            BLUE HERE
         </div>
     </div>
 </main>
