@@ -46,20 +46,40 @@ body {
   height: 100%;
 }
 
+%centered-main {
+  // Sets a max width. Site will be fluid until it reaches 1200, then stick there.
+  max-width: 1280px;
+
+  @include breakpoint($break-tablet) {
+    margin: 0 auto;
+  }
+  @include breakpoint($break-widescreen) {
+    max-width: 1440px;
+  }
+}
+
 body {
   @include clearfix();
   margin: 0;
 
   &:not(#home-page) {
-    // Sets a max width. Site will be fluid until it reaches 1200, then stick there.
-    max-width: 1280px;
+    @extend %centered-main;
+  }
+}
 
-    @include breakpoint($break-tablet) {
-      margin: 0 auto;
-    }
-    @include breakpoint($break-widescreen) {
-      max-width: 1440px;
-    }
+#home-page {
+  footer .wrap,
+  .header-container {
+    @extend %centered-main;
+  }
+
+  .row {
+    width: 100%;
+  }
+
+  .content-wrap {
+    max-width: 1065px;
+    margin: 0 auto;
   }
 }
 
