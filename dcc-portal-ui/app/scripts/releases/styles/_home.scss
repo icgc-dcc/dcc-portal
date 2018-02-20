@@ -11,16 +11,26 @@
   $dark-blue: #283e5d;
   $orange: #e9931c;
 
-  font-size: 1.25rem;
-  color: $dark-blue;
+  // Measurements
+  $content-fold-max: 1095px;
+
+  $spacing-min: 12px;
+  $spacing-1x: 16px;
+  $spacing-2x: $spacing-1x * 2;
+  $spacing-3x: $spacing-1x * 3;
+  $spacing-max: 72px;
 
   // Homepage Placeholders
   %content-row {
     width: 100%;
-    padding: 32px 0;
+    padding: $spacing-1x 0;
 
     @include breakpoint($break-tablet) {
-      padding: 48px 0;
+      padding: $spacing-2x 0;
+    }
+
+    @include breakpoint($content-fold-max) {
+      padding: $spacing-3x 0;
     }
   }
 
@@ -45,6 +55,10 @@
       break-after: always;
     }
   }
+
+  // home-main styles
+  font-size: 1.25rem;
+  color: $dark-blue;
 
   // Layout
   .white-row {
@@ -74,6 +88,9 @@
 
     @include breakpoint($break-tablet) {
       flex-direction: row;
+    }
+
+    @include breakpoint($content-fold-max) {
       padding: 0;
     }
   }
@@ -106,13 +123,27 @@
     padding-top: 18px;
 
     @include breakpoint($break-tablet) {
+      width: 56%;
+      padding-right: $spacing-1x;
+    }
+
+    @include breakpoint($content-fold-max) {
       width: 60%;
-      padding-right: 32px;
+      padding-right: $spacing-2x;
     }
 
     .search-box {
       background: $light-grey;
-      padding: 24px;
+      padding: $spacing-1x;
+      margin-bottom: $spacing-1x;
+
+      @include breakpoint($break-tablet) {
+        margin-bottom: 0;
+      }
+
+      @include breakpoint($content-fold-max) {
+        padding: 24px;
+      }
 
       .t_suggest {
         width: 100%;
@@ -120,45 +151,63 @@
         flex-flow: row nowrap;
         background-color: #ffffff;
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.05);
-        margin-bottom: 16px;
+        margin-bottom: $spacing-1x;
 
         %search-input {
-          height: 60px;
-          line-height: 60px;
+          height: 48px;
+          line-height: 48px;
           border: 0;
           border-radius: 0;
+
+          @include breakpoint($content-fold-max) {
+            height: 60px;
+            line-height: 60px;
+          }
         }
 
         .search-input-container {
           position: relative;
-          width: calc(100% - 144px);
+          width: calc(100% - 96px);
+
+          @include breakpoint($content-fold-max) {
+            width: calc(100% - 144px);
+          }
         }
 
         .t_suggest__input {
           @extend %search-input;
           margin: 0;
-          padding: 0 48px 0 21px;
+          padding: 0 40px 0 21px;
           text-indent: 0;
           font-size: 1.25em;
 
           &::placeholder {
             color: $placeholder-grey;
           }
+
+          @include breakpoint($content-fold-max) {
+            padding: 0 48px 0 21px;
+          }
         }
 
         .t_suggest__embedded__right {
-          top: 19px;
+          top: 50%;
+          transform: translateY(-50%);
           right: 13px;
         }
 
         button[type='submit'] {
           @extend %search-input;
-          width: 144px;
+          width: 96px;
           padding: 0;
           text-align: center;
           font-size: 1.125em;
           background: $orange;
           color: $white;
+
+          @include breakpoint($content-fold-max) {
+            width: 144px;
+          }
         }
       }
 
@@ -198,10 +247,15 @@
 
   .projects-container {
     background: $light-grey;
-    padding: 21px 32px 72px;
+    padding: $spacing-1x $spacing-1x $spacing-2x;
 
     @include breakpoint($break-tablet) {
+      width: 44%;
+    }
+
+    @include breakpoint($content-fold-max) {
       width: 40%;
+      padding: 21px $spacing-2x $spacing-max;
     }
 
     h3 {
@@ -217,7 +271,7 @@
 
     .stats {
       @extend %two-col-flex;
-      padding: 48px 0 32px;
+      padding: 48px 0 $spacing-2x;
       border-bottom: solid 1px $border-grey;
 
       > div {
