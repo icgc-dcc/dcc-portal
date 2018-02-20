@@ -11,7 +11,7 @@
   $dark-blue: #283e5d;
   $orange: #e9931c;
 
-  // Measurements
+  // Measuements
   $content-fold-max: 1095px;
 
   $spacing-min: 12px;
@@ -19,6 +19,10 @@
   $spacing-2x: $spacing-1x * 2;
   $spacing-3x: $spacing-1x * 3;
   $spacing-max: 72px;
+
+  // home-main styles
+  font-size: 1.11111111em;
+  color: $dark-blue;
 
   // Homepage Placeholders
   %content-row {
@@ -35,6 +39,20 @@
   }
 
   %two-col-flex {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+
+    @include breakpoint($break-tablet) {
+      flex-flow: row nowrap;
+
+      > div {
+        width: 50%;
+      }
+    }
+  }
+
+  %two-col-table-flex {
     display: flex;
     flex-flow: row wrap;
 
@@ -55,10 +73,6 @@
       break-after: always;
     }
   }
-
-  // home-main styles
-  font-size: 1.25rem;
-  color: $dark-blue;
 
   // Layout
   .white-row {
@@ -98,7 +112,7 @@
   h2,
   h3 {
     font-family: $sans-stack;
-    margin: 0 0 1rem;
+    margin: 0 0 1em;
     color: $dark-blue;
     font-weight: normal;
     font-style: normal;
@@ -108,11 +122,11 @@
   }
 
   h2 {
-    font-size: 2.34375rem;
+    font-size: 1.875em;
   }
 
   h3 {
-    font-size: 1.9531rem;
+    font-size: 1.5625em;
   }
 
   // Content
@@ -270,17 +284,17 @@
     }
 
     .stats {
-      @extend %two-col-flex;
+      @extend %two-col-table-flex;
       padding: 48px 0 $spacing-2x;
       border-bottom: solid 1px $border-grey;
 
       > div {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.5em;
       }
     }
 
     .latest {
-      @extend %two-col-flex;
+      @extend %two-col-table-flex;
       padding: 18px 0 0;
 
       .label {
@@ -293,6 +307,58 @@
 
       a {
         color: $light-blue;
+      }
+    }
+  }
+
+  .intro {
+    @extend %two-col-flex;
+
+    > div {
+      &:first-of-type {
+        padding: 0 0 $spacing-1x;
+        border-bottom: solid 3px $border-grey;
+      }
+      &:last-of-type {
+        padding: $spacing-1x 0 0;
+      }
+    }
+
+    @include breakpoint($break-tablet) {
+      > div {
+        &:first-of-type {
+          padding: 0 $spacing-2x 0 $spacing-1x;
+          border-right: solid 3px $border-grey;
+          border-bottom: 0;
+        }
+        &:last-of-type {
+          padding: 0 $spacing-1x 0 $spacing-2x;
+        }
+      }
+    }
+
+    @include breakpoint($content-fold-max) {
+      > div {
+        &:first-of-type {
+          padding: 0 $spacing-max 0 $spacing-2x;
+        }
+        &:last-of-type {
+          padding: 0 $spacing-2x 0 $spacing-max;
+        }
+      }
+    }
+
+    p {
+      line-height: 1.5;
+      margin-bottom: 2em;
+    }
+
+    img {
+      height: 110px;
+      width: auto;
+
+      @include breakpoint($content-fold-max) {
+        height: 130px;
       }
     }
   }
