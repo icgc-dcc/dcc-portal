@@ -2,8 +2,11 @@
   // Homepage Colours
   $white: #ffffff;
   $light-grey: #fafafa;
-  $grey: #eaecef;
+  $border-grey: #eaecef;
+  $placeholder-grey: #d4d4d4;
+  $grey: #a1a1a1;
   $blue: #166aa2;
+  $light-blue: #1693c0;
   $dark-blue: #283e5d;
   $orange: #e9931c;
 
@@ -17,6 +20,28 @@
 
     @include breakpoint($break-tablet) {
       padding: 48px 0;
+    }
+  }
+
+  %two-col-flex {
+    display: flex;
+    flex-flow: row wrap;
+
+    > div {
+      flex: 1 1 auto;
+    }
+
+    break {
+      flex-basis: 100%;
+      width: 0px;
+      height: 0px;
+      overflow: hidden;
+    }
+
+    .last {
+      text-align: right;
+      page-break-after: always;
+      break-after: always;
     }
   }
 
@@ -85,6 +110,53 @@
     .search-box {
       background: $light-grey;
       padding: 24px;
+
+      .t_suggest {
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        background-color: #ffffff;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.05);
+
+        %search-input {
+          height: 60px;
+          line-height: 60px;
+          border: 0;
+          border-radius: 0;
+        }
+
+        .search-input-container {
+          position: relative;
+          width: calc(100% - 144px);
+        }
+
+        .t_suggest__input {
+          @extend %search-input;
+          margin: 0;
+          padding: 0 48px 0 21px;
+          text-indent: 0;
+          font-size: 1.25em;
+
+          &::placeholder {
+            color: $placeholder-grey;
+          }
+        }
+
+        .t_suggest__embedded__right {
+          top: 19px;
+          right: 13px;
+        }
+
+        button[type='submit'] {
+          @extend %search-input;
+          width: 144px;
+          padding: 0;
+          text-align: center;
+          font-size: 1.125em;
+          background: $orange;
+          color: $white;
+        }
+      }
     }
   }
 
@@ -101,34 +173,36 @@
       margin-bottom: 4px;
     }
 
-    a {
+    > a {
       display: inline-block;
       color: $orange;
       border-bottom: 1px solid $orange;
     }
 
     .stats {
-      display: flex;
-      flex-flow: row wrap;
+      @extend %two-col-flex;
       padding: 48px 0 32px;
-      border-bottom: solid 1px $grey;
+      border-bottom: solid 1px $border-grey;
 
       > div {
-        flex: 1 1 auto;
         margin-bottom: 1.5rem;
       }
+    }
 
-      break {
-        flex-basis: 100%;
-        width: 0px;
-        height: 0px;
-        overflow: hidden;
+    .latest {
+      @extend %two-col-flex;
+      padding: 18px 0 0;
+
+      .label {
+        color: $grey;
       }
 
-      .stat {
-        text-align: right;
-        page-break-after: always;
-        break-after: always;
+      i {
+        color: $blue;
+      }
+
+      a {
+        color: $light-blue;
       }
     }
   }
