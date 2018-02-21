@@ -482,22 +482,17 @@
         align-items: center;
         margin-bottom: 0.75em;
 
-        i,
+        .resource-icon,
         h4 {
           display: inline-block;
           margin: 0;
         }
 
-        i {
-          color: $blue;
-          margin-right: 0.5em;
-        }
-
         .resource-icon {
-          background-image: url(/styles/images/icon-target.svg);
+          background-image: url('/styles/images/icon-target.svg');
           width: 26px;
           height: 23px;
-          fill: $blue;
+          margin-right: 0.5em;
         }
 
         h4 {
@@ -524,6 +519,12 @@
   }
 
   .community-row {
+    @include breakpoint($break-tablet) {
+      background-image: url('/styles/images/icon-dna.svg');
+      background-repeat: no-repeat;
+      background-position: bottom -50px right -100px;
+    }
+
     .content-wrap {
       flex-direction: column;
     }
