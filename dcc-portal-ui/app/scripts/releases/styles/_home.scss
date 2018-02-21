@@ -434,7 +434,11 @@
 
   .after-updates {
     margin-top: $updates-offset;
-    padding: 0;
+    padding: $spacing-2x 0 0;
+
+    @include breakpoint($break-tablet) {
+      padding: $spacing-1x 0 0;
+    }
 
     .content-wrap {
       flex-direction: column;
@@ -443,7 +447,11 @@
     h3 {
       font-weight: 300;
       text-transform: uppercase;
-      margin-bottom: 2em;
+      margin-bottom: 1.5em;
+
+      @include breakpoint($content-fold-max) {
+        margin-bottom: 2em;
+      }
     }
   }
 
@@ -452,7 +460,11 @@
 
     .resource {
       padding-right: 30px;
-      margin-bottom: 56px;
+      margin-bottom: $spacing-2x;
+
+      @include breakpoint($content-fold-max) {
+        margin-bottom: 56px;
+      }
 
       .title {
         display: flex;
