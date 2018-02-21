@@ -24,11 +24,33 @@
 
   $updates-offset: 210px;
 
+  $transition-speed: 0.25s;
+  $transition-soft: opacity $transition-speed ease, background-color $transition-speed ease,
+    color $transition-speed ease, border-color $transition-speed ease;
+  $transition-hard: opacity 0s, background-color 0s, color 0s, border-color 0s;
+
   // home-main styles
   font-size: 1.11111111em;
   color: $dark-blue;
 
-  // Homepage Placeholders-dt
+  // Mixins
+  @mixin transition-soft($transition: $transition-soft) {
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    -ms-transition: $transition;
+    -o-transition: $transition;
+    transition: $transition;
+  }
+
+  @mixin transition-hard($transition: $transition-hard) {
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    -ms-transition: $transition;
+    -o-transition: $transition;
+    transition: $transition;
+  }
+
+  // Homepage Placeholders
   %content-row {
     width: 100%;
     padding: $spacing-1x 0 ($spacing-1x + $spacing-min);
@@ -75,6 +97,14 @@
       text-align: right;
       page-break-after: always;
       break-after: always;
+    }
+  }
+
+  %soft-transition {
+    @include transition-soft();
+
+    &:hover {
+      @include transition-hard();
     }
   }
 
@@ -223,12 +253,17 @@
 
         button[type='submit'] {
           @extend %search-input;
+          @extend %soft-transition;
           width: 96px;
           padding: 0;
           text-align: center;
           font-size: 1.125em;
           background: $orange;
           color: $white;
+
+          &:hover {
+            background: darken($orange, 4%);
+          }
 
           @include breakpoint($content-fold-max) {
             width: 144px;
@@ -255,6 +290,7 @@
           justify-content: space-between;
 
           .btn {
+            @extend %soft-transition;
             font-size: 1.125em;
             border-radius: 5px;
             color: $white;
@@ -264,6 +300,10 @@
             max-width: 180px;
             padding: 0;
             margin: 0;
+
+            &:hover {
+              background: darken($blue, 4%);
+            }
           }
         }
       }
@@ -561,6 +601,10 @@
 
     a:not(.btn) {
       border-bottom: 1px solid $white;
+
+      &:hover {
+        background: rgba(230, 230, 230, 0.3);
+      }
     }
 
     > div:nth-of-type(2) {
@@ -571,10 +615,15 @@
     }
 
     .btn {
+      @extend %soft-transition;
       background: $mid-blue;
       padding: 0 24px;
       line-height: 50px;
       margin-top: $spacing-1x;
+
+      &:hover {
+        background: darken($mid-blue, 4%);
+      }
     }
   }
 }
