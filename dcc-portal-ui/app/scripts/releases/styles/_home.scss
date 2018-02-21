@@ -493,6 +493,13 @@
           margin-right: 0.5em;
         }
 
+        .resource-icon {
+          background-image: url(/styles/images/icon-target.svg);
+          width: 26px;
+          height: 23px;
+          fill: $blue;
+        }
+
         h4 {
           font-size: 1.125em;
           font-weight: bold;
