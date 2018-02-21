@@ -8,6 +8,7 @@
   $dark-grey: #5d5d5d;
   $blue: #166aa2;
   $light-blue: #1693c0;
+  $mid-blue: #0e5686;
   $dark-blue: #283e5d;
   $orange: #e9931c;
 
@@ -18,6 +19,7 @@
   $spacing-1x: 16px;
   $spacing-2x: $spacing-1x * 2;
   $spacing-3x: $spacing-1x * 3;
+  $spacing-4x: $spacing-1x * 4;
   $spacing-max: 72px;
 
   $updates-offset: 210px;
@@ -29,14 +31,14 @@
   // Homepage Placeholders-dt
   %content-row {
     width: 100%;
-    padding: $spacing-1x 0;
+    padding: $spacing-1x 0 ($spacing-1x + $spacing-min);
 
     @include breakpoint($break-tablet) {
-      padding: $spacing-2x 0;
+      padding: $spacing-2x 0 ($spacing-2x + $spacing-min);
     }
 
     @include breakpoint($content-fold-max) {
-      padding: $spacing-3x 0;
+      padding: $spacing-3x 0 ($spacing-3x + $spacing-min);
     }
   }
 
@@ -117,6 +119,7 @@
     }
   }
 
+  // General Typography
   h2,
   h3 {
     font-family: $sans-stack;
@@ -235,7 +238,7 @@
 
       .search-suggestions {
         color: $grey;
-        padding-bottom: 30px;
+        padding-bottom: $spacing-2x;
         border-bottom: solid 2px $white;
         margin-bottom: 28px;
       }
@@ -440,6 +443,10 @@
       padding: $spacing-1x 0 0;
     }
 
+    @include breakpoint($content-fold-max) {
+      padding: 0;
+    }
+
     .content-wrap {
       flex-direction: column;
     }
@@ -447,7 +454,7 @@
     h3 {
       font-weight: 300;
       text-transform: uppercase;
-      margin-bottom: 1.5em;
+      margin: 0 0 1.5em;
 
       @include breakpoint($content-fold-max) {
         margin-bottom: 2em;
@@ -459,8 +466,11 @@
     @extend %two-col-flex;
 
     .resource {
-      padding-right: 30px;
       margin-bottom: $spacing-2x;
+
+      @include breakpoint($break-tablet) {
+        padding-right: $spacing-2x;
+      }
 
       @include breakpoint($content-fold-max) {
         margin-bottom: 56px;
@@ -503,6 +513,60 @@
       a {
         color: $light-blue;
       }
+    }
+  }
+
+  .community-row {
+    .content-wrap {
+      flex-direction: column;
+    }
+
+    h3 {
+      margin: 0 0 1.52em;
+    }
+  }
+
+  .community-content {
+    @extend %two-col-flex;
+
+    > div {
+      margin-bottom: $spacing-2x;
+
+      @include breakpoint($break-tablet) {
+        margin-bottom: 0;
+        padding-right: $spacing-2x;
+      }
+
+      @include breakpoint($content-fold-max) {
+        padding-right: $spacing-4x;
+      }
+    }
+
+    p {
+      font-size: 1.25em;
+      margin: 0 0 1em;
+    }
+
+    a {
+      font-size: 1.125em;
+    }
+
+    a:not(.btn) {
+      border-bottom: 1px solid $white;
+    }
+
+    > div:nth-of-type(2) {
+      p,
+      a {
+        font-size: 1.125em;
+      }
+    }
+
+    .btn {
+      background: $mid-blue;
+      padding: 0 24px;
+      line-height: 50px;
+      margin-top: $spacing-1x;
     }
   }
 }
