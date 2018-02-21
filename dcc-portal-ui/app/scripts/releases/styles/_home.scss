@@ -20,11 +20,13 @@
   $spacing-3x: $spacing-1x * 3;
   $spacing-max: 72px;
 
+  $updates-offset: 210px;
+
   // home-main styles
   font-size: 1.11111111em;
   color: $dark-blue;
 
-  // Homepage Placeholders
+  // Homepage Placeholders-dt
   %content-row {
     width: 100%;
     padding: $spacing-1x 0;
@@ -40,11 +42,11 @@
 
   %two-col-flex {
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: column wrap;
     justify-content: space-between;
 
     @include breakpoint($break-tablet) {
-      flex-flow: row nowrap;
+      flex-flow: row wrap;
 
       > div {
         width: 50%;
@@ -91,6 +93,12 @@
     background-color: $blue;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     color: $white;
+
+    h3,
+    p,
+    a {
+      color: $white;
+    }
   }
 
   .content-wrap {
@@ -372,7 +380,7 @@
     width: 100%;
     background: $white;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    margin: 0 0 -172px;
+    margin: 0 0 (-$updates-offset);
 
     .header {
       display: flex;
@@ -388,15 +396,101 @@
     }
 
     .body {
-      padding: 36px 22px 28px;
+      padding: 36px 22px 0;
+
+      ul {
+        padding-bottom: 28px;
+        border-bottom: 1px solid $border-grey;
+        padding-left: 18px;
+
+        li {
+          margin-bottom: 1.3125em;
+          list-style: disc;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
     }
 
     .footer {
       padding: 28px 22px 48px;
+
+      h3 {
+        margin-bottom: 0.5em;
+      }
+
+      p {
+        font-size: 1.125em;
+        margin: 0;
+      }
+
+      a {
+        color: $light-blue;
+      }
     }
   }
 
   .after-updates {
-    margin-top: 172px;
+    margin-top: $updates-offset;
+    padding: 0;
+
+    .content-wrap {
+      flex-direction: column;
+    }
+
+    h3 {
+      font-weight: 300;
+      text-transform: uppercase;
+      margin-bottom: 2em;
+    }
+  }
+
+  .resources {
+    @extend %two-col-flex;
+
+    .resource {
+      padding-right: 30px;
+      margin-bottom: 56px;
+
+      .title {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        margin-bottom: 0.75em;
+
+        i,
+        h4 {
+          display: inline-block;
+          margin: 0;
+        }
+
+        i {
+          color: $blue;
+          margin-right: 0.5em;
+        }
+
+        h4 {
+          font-size: 1.125em;
+          font-weight: bold;
+          text-transform: capitalize;
+          color: $dark-blue;
+        }
+      }
+
+      p,
+      a {
+        font-size: 1.125em;
+      }
+
+      p {
+        margin: 0 0 0.5em;
+      }
+
+      a {
+        color: $light-blue;
+      }
+    }
   }
 }
