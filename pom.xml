@@ -102,7 +102,7 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>5.0.0</dcc-common.version>
+    <dcc-common.version>5.1.1</dcc-common.version>
     <dcc-download.version>4.3.11</dcc-download.version>
     <dcc-release.version>4.3.6</dcc-release.version>
 
