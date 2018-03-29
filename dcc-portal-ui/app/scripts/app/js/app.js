@@ -548,10 +548,11 @@ module.run(function(
 
     if (response.status === 500) {
       // don't show login errors
-      var url = response.config && response.config && response.config.url ? response.config.url : '';
-      if(url.includes('/auth/verify'))
+      var url = (response.config || {}).url || '';
+
+      if (url.includes('/auth/verify')) {
         console.error(response);
-      else {
+      } else {
         Notify.setParams(response);
         Notify.showErrors();
       }
