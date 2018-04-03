@@ -149,7 +149,9 @@ public class AuthResource extends Resource {
 
       val userType = resolveUserType(cudToken, cmsToken);
       val userId = icgcUser.getUserName();
-      val userEmail = userType == UserType.CUD ? icgcUser.getEmail() : icgcUser.getUserName();
+      // always get email regardless of user type
+      // fix for: extsd.oicr.on.ca/browse/ICGCSD-1390
+      val userEmail = icgcUser.getEmail();
 
       val dccUser = createUser(userType, userId, userEmail, token);
       val verifiedResponse = verifiedResponse(dccUser);
