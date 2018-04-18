@@ -259,6 +259,16 @@
           _ctrl.specimen = _.find(donor.specimen, function (s) {
             return s.id === _ctrl.active;
           });
+          // Replace any CGHub Repo's with GDC
+          _ctrl.specimen.samples = _ctrl.specimen.samples.map(sample => {
+            sample.availableRawSequenceData = sample.availableRawSequenceData.map(data => {
+              if (data.repository === 'CGHub') {
+                data.repository = 'GDC';
+              }
+              return data;
+            });
+            return sample;
+          });
         }
       }).then(function(){
         _ctrl.uiSpecimenSamples = getUiSpecimenJSON(_ctrl.specimen.samples);
@@ -281,17 +291,21 @@
 
     function processAvailableRawSequenceData(analyzedId, availableRawSequenceData) {
       return availableRawSequenceData.map(data => {
-        if (data.repository === 'CGHub') {
-          data.gdcLegacyLink = gdcLegacyLinkCreator(analyzedId);
+        if (data.repository === 'GDC') {
+          data.gdcLegacyLink = gdcLegacyLinkCreator(analyzedId, data.libraryStrategy);
         }
         return data;
       });
     }
 
-    function gdcLegacyLinkCreator(analyzedId) {
+    function gdcLegacyLinkCreator(analyzedId, libraryStrategy) {
       // Extract first three "blocks" of analyzedId
       const submitter_id = analyzedId.match(/[^-]*-[^-]*-[^-]*/g)[0];
-      return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}}]}`;
+      if (libraryStrategy) {
+        return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"files.data_format","value":["BAM","FASTQ"]}},{"op":"in","content":{"field":"files.data_category","value":["Raw sequencing data"]}},{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}},{"op":"in","content":{"field":"files.experimental_strategy","value":["${libraryStrategy}"]}}]}`;
+      } else {
+        return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"files.data_format","value":["BAM","FASTQ"]}},{"op":"in","content":{"field":"files.data_category","value":["Raw sequencing data"]}},{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}}]}`;
+      }
     }
 
     _ctrl.setActive();
