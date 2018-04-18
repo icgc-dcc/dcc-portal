@@ -293,8 +293,15 @@
     function processAvailableRawSequenceData(analyzedId, availableRawSequenceData) {
       return availableRawSequenceData.map(data => {
         if (data.repository === 'GDC') {
-          // Get all available analysis types
-          const libraryStrategies = availableRawSequenceData.map(x => x.libraryStrategy);
+          // Reduce available libraryStrategies into one string ready for querying the GDC legacy portal with
+          const libraryStrategies = availableRawSequenceData
+          .reduce((acc, curr, index, arr) => {
+            if (index < (arr.length -1)) {
+              return acc + `"${curr.libraryStrategy}", `;
+            } else {
+              return acc + `"${curr.libraryStrategy}"`;
+            }
+          }, '');
           // Build the link
           data.gdcLegacyLink = gdcLegacyLinkCreator(analyzedId, libraryStrategies);
         }
@@ -305,22 +312,11 @@
     function gdcLegacyLinkCreator(analyzedId, libraryStrategies) {
       // Extract first three "blocks" of analyzedId
       const submitter_id = analyzedId.match(/[^-]*-[^-]*-[^-]*/g)[0];
-      if (libraryStrategies) {
-        const formatedLibraryStrategies = libraryStrategies.reduce((acc, curr, index, arr) => {
-          if (index < (arr.length -1)) {
-            return acc + `"${curr}", `;
-          } else {
-            return acc + `"${curr}"`;
-          }
-        }, '');
-        return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"files.data_format","value":["BAM","FASTQ"]}},{"op":"in","content":{"field":"files.data_category","value":["Raw sequencing data"]}},{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}},{"op":"in","content":{"field":"files.experimental_strategy","value":[${formatedLibraryStrategies}]}}]}`;
+      if (libraryStrategies.length > 0) {
+        return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"files.data_format","value":["BAM","FASTQ"]}},{"op":"in","content":{"field":"files.data_category","value":["Raw sequencing data"]}},{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}},{"op":"in","content":{"field":"files.experimental_strategy","value":[${libraryStrategies}]}}]}`;
       } else {
         return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"files.data_format","value":["BAM","FASTQ"]}},{"op":"in","content":{"field":"files.data_category","value":["Raw sequencing data"]}},{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}}]}`;
       }
-    }
-
-    function makeUniqueRawSequenceData() {
-
     }
     
     _ctrl.setActive();
