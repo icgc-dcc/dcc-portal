@@ -273,10 +273,25 @@
           uiStudy: sample.study,
           uiAnalyzedInterval: sample.analyzedInterval,
           uiAnalyzedIntervalFiltered: $filter('numberPT')(sample.analyzedInterval),
-          uiAvailableRawSequenceData: sample.availableRawSequenceData,
+          uiAvailableRawSequenceData: processAvailableRawSequenceData(sample.analyzedId, sample.availableRawSequenceData),
           uiUniqueRawSequenceData: $filter('unique')(sample.availableRawSequenceData)
         });
       });
+    }
+
+    function processAvailableRawSequenceData(analyzedId, availableRawSequenceData) {
+      return availableRawSequenceData.map(data => {
+        if (data.repository === 'CGHub') {
+          data.gdcLegacyLink = gdcLegacyLinkCreator(analyzedId);
+        }
+        return data;
+      });
+    }
+
+    function gdcLegacyLinkCreator(analyzedId) {
+      // Extract first three "blocks" of analyzedId
+      const submitter_id = analyzedId.match(/[^-]*-[^-]*-[^-]*/g)[0];
+      return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}}]}`;
     }
 
     _ctrl.setActive();
