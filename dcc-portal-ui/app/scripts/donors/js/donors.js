@@ -277,14 +277,15 @@
 
     function getUiSpecimenJSON(samples){
       return samples.map(function(sample){
+        const availableRawSequenceData = processAvailableRawSequenceData(sample.analyzedId, sample.availableRawSequenceData);
         return _.extend({}, {
           uiId: sample.id,
           uiAnalyzedId: sample.analyzedId,
           uiStudy: sample.study,
           uiAnalyzedInterval: sample.analyzedInterval,
           uiAnalyzedIntervalFiltered: $filter('numberPT')(sample.analyzedInterval),
-          uiAvailableRawSequenceData: processAvailableRawSequenceData(sample.analyzedId, sample.availableRawSequenceData),
-          uiUniqueRawSequenceData: $filter('unique')(sample.availableRawSequenceData)
+          uiAvailableRawSequenceData: availableRawSequenceData,
+          uiUniqueRawSequenceData: $filter('unique')(availableRawSequenceData)
         });
       });
     }
@@ -292,22 +293,36 @@
     function processAvailableRawSequenceData(analyzedId, availableRawSequenceData) {
       return availableRawSequenceData.map(data => {
         if (data.repository === 'GDC') {
-          data.gdcLegacyLink = gdcLegacyLinkCreator(analyzedId, data.libraryStrategy);
+          // Get all available analysis types
+          const libraryStrategies = availableRawSequenceData.map(x => x.libraryStrategy);
+          // Build the link
+          data.gdcLegacyLink = gdcLegacyLinkCreator(analyzedId, libraryStrategies);
         }
         return data;
       });
     }
 
-    function gdcLegacyLinkCreator(analyzedId, libraryStrategy) {
+    function gdcLegacyLinkCreator(analyzedId, libraryStrategies) {
       // Extract first three "blocks" of analyzedId
       const submitter_id = analyzedId.match(/[^-]*-[^-]*-[^-]*/g)[0];
-      if (libraryStrategy) {
-        return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"files.data_format","value":["BAM","FASTQ"]}},{"op":"in","content":{"field":"files.data_category","value":["Raw sequencing data"]}},{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}},{"op":"in","content":{"field":"files.experimental_strategy","value":["${libraryStrategy}"]}}]}`;
+      if (libraryStrategies) {
+        const formatedLibraryStrategies = libraryStrategies.reduce((acc, curr, index, arr) => {
+          if (index < (arr.length -1)) {
+            return acc + `"${curr}", `;
+          } else {
+            return acc + `"${curr}"`;
+          }
+        }, '');
+        return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"files.data_format","value":["BAM","FASTQ"]}},{"op":"in","content":{"field":"files.data_category","value":["Raw sequencing data"]}},{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}},{"op":"in","content":{"field":"files.experimental_strategy","value":[${formatedLibraryStrategies}]}}]}`;
       } else {
         return `https://portal.gdc.cancer.gov/legacy-archive/search/f?filters={"op":"and","content":[{"op":"in","content":{"field":"files.data_format","value":["BAM","FASTQ"]}},{"op":"in","content":{"field":"files.data_category","value":["Raw sequencing data"]}},{"op":"in","content":{"field":"cases.submitter_id","value":["${submitter_id}"]}}]}`;
       }
     }
 
+    function makeUniqueRawSequenceData() {
+
+    }
+    
     _ctrl.setActive();
   });
 

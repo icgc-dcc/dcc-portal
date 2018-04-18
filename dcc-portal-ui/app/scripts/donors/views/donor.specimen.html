@@ -177,7 +177,7 @@
                     <td>
                         <ul>
                             <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
-                            <abbr data-icgc-tooltip="{{ item.libraryStrategy | define }}">
+                                <abbr data-icgc-tooltip="{{ item.libraryStrategy | define }}">
                                     <span data-ng-bind-html="item.libraryStrategy | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
                                 </abbr>
                             </li>
