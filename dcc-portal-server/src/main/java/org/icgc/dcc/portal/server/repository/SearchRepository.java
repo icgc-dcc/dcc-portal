@@ -119,7 +119,8 @@ public class SearchRepository {
 
   private static final Set<SearchField> GENE_MUTATIONS_BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
           newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
-          newBoostedSearchField(2.8f, LOWERCASE_MATCH_FIELDNAME), // 2.8 / 4 = 0.7 (which is the ES tiebreak score)
+          // 2.8 / 4 = 0.7 (which is the ES tiebreak score) is the min value to make a difference
+          newBoostedSearchField(2.89515f, LOWERCASE_MATCH_FIELDNAME),
           newBoostedSearchField(2, PARTIAL_MATCH_FIELDNAME)
   );
 
