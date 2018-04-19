@@ -547,8 +547,15 @@ module.run(function(
     }
 
     if (response.status === 500) {
-      Notify.setParams(response);
-      Notify.showErrors();
+      // don't show login errors
+      var url = (response.config || {}).url || '';
+
+      if (url.includes('/auth/verify')) {
+        console.error(response);
+      } else {
+        Notify.setParams(response);
+        Notify.showErrors();
+      }
     } else if (response.status === 404) {
       console.error(response.data.message);
     }

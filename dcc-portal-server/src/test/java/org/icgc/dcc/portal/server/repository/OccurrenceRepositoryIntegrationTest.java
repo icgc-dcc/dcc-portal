@@ -24,11 +24,13 @@ import org.elasticsearch.action.search.MultiSearchResponse;
 import org.icgc.dcc.portal.server.model.Query.QueryBuilder;
 import org.icgc.dcc.portal.server.model.IndexType;
 import org.icgc.dcc.portal.server.model.param.FiltersParam;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
+@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class OccurrenceRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 

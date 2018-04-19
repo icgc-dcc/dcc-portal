@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.icgc.dcc</groupId>
     <artifactId>dcc-portal</artifactId>
-    <version>5.4.1-SNAPSHOT</version>
+    <version>5.5.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -97,7 +97,7 @@
   </build>
 
   <properties>
-    <elasticsearch.version>5.1.2</elasticsearch.version>
+    <elasticsearch.version>5.6.7</elasticsearch.version>
     <junit.version>4.11</junit.version>
     <antlr4.version>4.5.1</antlr4.version>
     <antlr4-maven.version>4.5.1</antlr4-maven.version>

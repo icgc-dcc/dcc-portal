@@ -177,7 +177,7 @@
                     <td>
                         <ul>
                             <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
-                            <abbr data-icgc-tooltip="{{ item.libraryStrategy | define }}">
+                                <abbr data-icgc-tooltip="{{ item.libraryStrategy | define }}">
                                     <span data-ng-bind-html="item.libraryStrategy | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
                                 </abbr>
                             </li>
@@ -187,7 +187,8 @@
                     <td>
                         <ul>
                             <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
-                                <span data-ng-bind-html="item.repository | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
+                                <a data-ng-if="item.gdcLegacyLink" href="{{item.gdcLegacyLink}}" target="_blank"><span data-ng-bind-html="'GDC' | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span></a>
+                                <span data-ng-if="!item.gdcLegacyLink" data-ng-bind-html="item.repository | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
                             </li>
                         </ul>
                         <span data-ng-if="sample.uiAvailableRawSequenceData.length == 0">--</span>
