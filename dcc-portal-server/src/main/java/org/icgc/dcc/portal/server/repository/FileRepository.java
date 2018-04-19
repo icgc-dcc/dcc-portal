@@ -499,7 +499,7 @@ public class FileRepository {
       return repoTermFacet(0L, 0, ImmutableList.of());
     }
 
-    val repoNames = transform(terms, term -> term.getTerm());
+    List<String> repoNames = transform(terms, term -> term.getTerm());
 
     val donorAggKey = CustomAggregationKeys.REPO_DONOR_COUNT;
     val repoFilterTemplate = "{file: {repoName: {is: [\"%s\"]}}}";

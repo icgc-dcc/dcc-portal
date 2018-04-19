@@ -55,12 +55,12 @@
     <dependency>
     	<groupId>org.icgc.dcc</groupId>
     	<artifactId>elasticsearch-plugins-shaded</artifactId>
-    	<version>5.6.7</version>
+      <version>5.6.7</version>
 	</dependency>
 	<dependency>
 	    <groupId>org.icgc.dcc</groupId>
 	    <artifactId>elasticsearch-shaded</artifactId>
-	    <version>5.6.7</version>
+      <version>5.6.7</version>
 	</dependency>
       <dependency>
         <groupId>com.github.tlrx</groupId>
@@ -102,7 +102,7 @@
 
   <properties>
     <!-- Versions - DCC -->
-    <dcc-common.version>4.3.11</dcc-common.version>
+    <dcc-common.version>5.1.1</dcc-common.version>
     <dcc-download.version>4.3.11</dcc-download.version>
     <dcc-release.version>4.3.6</dcc-release.version>
 
