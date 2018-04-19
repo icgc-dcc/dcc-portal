@@ -104,9 +104,24 @@ public class SearchRepository {
   );
 
   private static final Set<SearchField> SPECIAL_BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
-      newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
-      newBoostedSearchField(4, LOWERCASE_MATCH_FIELDNAME),
-      newBoostedSearchField(2, PARTIAL_MATCH_FIELDNAME)
+          newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
+          newBoostedSearchField(4, LOWERCASE_MATCH_FIELDNAME),
+          newBoostedSearchField(2, PARTIAL_MATCH_FIELDNAME)
+  );
+
+  /**
+   * DCCPRTL-484 so that mutation partials outmatch gene exact but not too
+   * much, (special boost would result in kras matching mutations instead of genes)
+   */
+  private static final Set<String> GENE_MUTATIONS_BOOSTED_SEARCH_FIELD_NAMES = ImmutableSet.of(
+          "text.geneMutations"
+  );
+
+  private static final Set<SearchField> GENE_MUTATIONS_BOOSTED_SEARCH_FIELDS = ImmutableSet.of(
+          newBoostedSearchField(4, EXACT_MATCH_FIELDNAME),
+          // 2.8 / 4 = 0.7 (which is the ES tiebreak score) is the min value to make a difference
+          newBoostedSearchField(2.89515f, LOWERCASE_MATCH_FIELDNAME),
+          newBoostedSearchField(2, PARTIAL_MATCH_FIELDNAME)
   );
 
 
@@ -319,9 +334,15 @@ public class SearchRepository {
     return SPECIAL_BOOSTED_SEARCH_FIELD_NAMES.contains(searchFieldName);
   }
 
+  private static boolean isGeneMutationsSearchFieldName(String searchFieldName){
+    return GENE_MUTATIONS_BOOSTED_SEARCH_FIELD_NAMES.contains(searchFieldName);
+  }
+
   private static SearchKey createSearchKey(String searchFieldName) {
     if(isSpecialSearchFieldName(searchFieldName)){
       return newSearchKey(searchFieldName, SPECIAL_BOOSTED_SEARCH_FIELDS);
+    } else if (isGeneMutationsSearchFieldName(searchFieldName)) {
+      return newSearchKey(searchFieldName, GENE_MUTATIONS_BOOSTED_SEARCH_FIELDS);
     } else {
       return newSearchKey(searchFieldName, NORMAL_SEARCH_FIELDS);
     }

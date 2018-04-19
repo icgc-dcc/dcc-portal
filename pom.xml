@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dcc-portal</artifactId>
-  <version>5.3.1-SNAPSHOT</version>
+  <version>5.5.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -55,12 +55,12 @@
     <dependency>
     	<groupId>org.icgc.dcc</groupId>
     	<artifactId>elasticsearch-plugins-shaded</artifactId>
-    	<version>5.6.4</version>
+      <version>5.6.7</version>
 	</dependency>
 	<dependency>
 	    <groupId>org.icgc.dcc</groupId>
 	    <artifactId>elasticsearch-shaded</artifactId>
-	    <version>5.6.4</version>
+      <version>5.6.7</version>
 	</dependency>
       <dependency>
         <groupId>com.github.tlrx</groupId>

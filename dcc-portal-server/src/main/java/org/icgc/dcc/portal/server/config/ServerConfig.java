@@ -95,6 +95,7 @@ public class ServerConfig {
     val setAnalysis = properties().getSetOperation();
     val features = properties().getFeatures();
     val mirror = properties().getMirror();
+    val jupyter = properties().getJupyter();
 
     return Settings.builder()
         .ssoUrl(crowd.getSsoUrl())
@@ -107,6 +108,7 @@ public class ServerConfig {
         .maxMultiplier(setAnalysis.maxMultiplier)
         .mirror(mirror)
         .featureFlags(features)
+        .jupyter(jupyter)
         .build();
   }
 

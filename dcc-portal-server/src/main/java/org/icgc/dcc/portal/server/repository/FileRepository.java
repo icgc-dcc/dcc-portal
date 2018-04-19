@@ -528,7 +528,7 @@ public class FileRepository {
           final Aggregations aggResult = responseItems[i].getResponse().getAggregations();
           final int donorCount = bucketSize(getSubAggResultFromNested(aggResult, donorAggKey), donorAggKey);
 
-          return new Term(repoNames.get(i), Long.valueOf(donorCount));
+          return new Term(repoNames.get(i).toString(), Long.valueOf(donorCount));
         })
         .collect(toImmutableList());
 

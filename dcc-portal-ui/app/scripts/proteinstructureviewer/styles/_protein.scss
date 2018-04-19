@@ -1,80 +1,85 @@
+/*** NEW Protein Viewer ***/
+circle[class^='mutation-circle-'],
+circle[class*=' mutation-circle-'] {
+  opacity: 0.75;
+}
+
 /*** Protein Viewer ***/
 .axis-label {
-    font-size: 1.5ex;
+  font-size: 1.5ex;
 }
 
 .axis {
-    shape-rendering: crispEdges;
+  shape-rendering: crispEdges;
 }
 
 .axis line {
-    stroke: #666;
-    stroke-width: 1px;
+  stroke: #666;
+  stroke-width: 1px;
 }
 
 .axis .tick line {
-    stroke: #666;
-    stroke-width: 1px;
+  stroke: #666;
+  stroke-width: 1px;
 }
 
 .axis .tick text {
-    font-size: 1.2ex;
+  font-size: 1.2ex;
 }
 
 g.domain text {
-    font-size: 1.5ex;
-    font-weight: bold;
-    fill: white;
+  font-size: 1.5ex;
+  font-weight: bold;
+  fill: white;
 }
 
 g.marker circle {
-    cursor: pointer;
-    opacity: 0.75;
+  cursor: pointer;
+  opacity: 0.75;
 }
 
 g.marker path {
-   opacity: 0.75;
+  opacity: 0.75;
 }
 
 g.marker circle.high {
-   fill: #d44;
-   stroke: none;
+  fill: #d44;
+  stroke: none;
 }
 
 g.marker circle.low {
-   fill: #4d4;
-   stroke: none;
+  fill: #4d4;
+  stroke: none;
 }
 
 g.marker circle.unknown {
-   fill: #bbb;
-   stroke: none;
+  fill: #bbb;
+  stroke: none;
 }
 
 g.marker rect {
-   visibility: hidden;
+  visibility: hidden;
 }
 
 g.marker rect.selected {
-   stroke-width: 2.0;
-   stroke: #33A; 
-   fill: none;
-   opacity: 1.0;
-   visibility: visible;
+  stroke-width: 2;
+  stroke: #33a;
+  fill: none;
+  opacity: 1;
+  visibility: visible;
 }
 
-
 .axis .minor {
-    stroke-opacity: .5;
+  stroke-opacity: 0.5;
 }
 
 .axis path {
-    fill: none;
-    stroke: #666;
-    stroke-width: 1px;
+  fill: none;
+  stroke: #666;
+  stroke-width: 1px;
 }
 
 .proteinstructure .marker {
-    stroke: #666;
-    stroke-width: 1px;
+  stroke: #666;
+  stroke-width: 1px;
 }
