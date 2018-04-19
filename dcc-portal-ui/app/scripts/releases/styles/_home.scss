@@ -364,20 +364,48 @@
 
   .intro {
     @extend %two-col-flex;
-    margin-bottom: $spacing-1x;
+    margin-bottom: $spacing-1x - 12px; // accouting for button margin;
 
     > div {
+      img {
+        margin-bottom: 1.2em;
+        max-width: 100%;
+      }
+
+      .cta {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        max-width: 320px;
+
+        .btn {
+          @extend %soft-transition;
+          font-size: 1.125em;
+          border-radius: 5px;
+          color: $white;
+          background-color: $blue;
+          line-height: 36px;
+          padding: 0 24px;
+          margin: 0 0 12px 0;
+
+          &:hover {
+            background: darken($blue, 4%);
+          }
+        }
+      }
+
       &:first-of-type {
         padding: 0 0 $spacing-1x;
         border-bottom: solid 3px $border-grey;
       }
+
       &:last-of-type {
         padding: $spacing-1x 0 0;
       }
     }
 
     @include breakpoint($break-tablet) {
-      margin-bottom: $spacing-2x;
+      margin-bottom: $spacing-2x - 12px; // accouting for button margin
 
       > div {
         &:first-of-type {
@@ -392,14 +420,32 @@
     }
 
     @include breakpoint($content-fold-max) {
-      margin-bottom: $spacing-max;
+      margin-bottom: $spacing-max - 20px; // accouting for button margin
 
       > div {
+        .cta {
+          max-width: 346px;
+          .btn {
+            margin-bottom: 20px;
+          }
+        }
         &:first-of-type {
           padding: 0 $spacing-max 0 $spacing-2x;
         }
         &:last-of-type {
           padding: 0 $spacing-2x 0 $spacing-max;
+        }
+      }
+    }
+
+    @include breakpoint($break-widescreen) {
+      > div {
+        .cta {
+          max-width: 374px;
+
+          .btn {
+            line-height: 40px;
+          }
         }
       }
     }
