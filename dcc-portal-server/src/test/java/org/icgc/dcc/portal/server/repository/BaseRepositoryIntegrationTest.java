@@ -255,7 +255,7 @@ public class BaseRepositoryIntegrationTest {
     // Compare entry count to count response;
     val aggsIter = r.getAggregations().iterator();
     Terms aggs = (Terms) aggsIter.next();
-    Iterator<Bucket> entryIter = aggs.getBuckets().iterator();
+    Iterator<? extends Bucket> entryIter = aggs.getBuckets().iterator();
 
     for (val countResponse : csr.getResponses()) {
       val cr = countResponse.getResponse();

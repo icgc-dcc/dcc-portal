@@ -192,7 +192,7 @@ public class FileRepository {
 
     val termsStream = terms.getBuckets().stream();
     return termsStream.collect(toMap(Bucket::getKeyAsString, bucket -> {
-      final List<Bucket> repoNameBuckets = termsBuckets(bucket.getAggregations(), repoName);
+      final List<? extends Bucket> repoNameBuckets = termsBuckets(bucket.getAggregations(), repoName);
 
       return isEmpty(repoNameBuckets) ? "" : repoNameBuckets.get(0).getKeyAsString();
     }));
@@ -528,7 +528,7 @@ public class FileRepository {
           final Aggregations aggResult = responseItems[i].getResponse().getAggregations();
           final int donorCount = bucketSize(getSubAggResultFromNested(aggResult, donorAggKey), donorAggKey);
 
-          return new Term(repoNames.get(i), Long.valueOf(donorCount));
+          return new Term(repoNames.get(i).toString(), Long.valueOf(donorCount));
         })
         .collect(toImmutableList());
 
@@ -745,7 +745,7 @@ public class FileRepository {
     return ((Nested) nestedAggs.get(aggKey)).getAggregations();
   }
 
-  private static List<Bucket> termsBuckets(Aggregations aggResult, String aggKey) {
+  private static List<? extends Bucket> termsBuckets(Aggregations aggResult, String aggKey) {
     return ((Terms) aggResult.get(aggKey)).getBuckets();
   }
 
@@ -757,7 +757,7 @@ public class FileRepository {
     return ((Avg) aggResult.get(name)).getValue();
   }
 
-  private static double sumFileCopySize(List<Bucket> buckets, String aggregationKey) {
+  private static double sumFileCopySize(List<? extends Bucket> buckets, String aggregationKey) {
     return buckets.stream().mapToDouble(
         bucket -> averageValue(
             getSubAggResultFromNested(bucket.getAggregations(), aggregationKey), aggregationKey))
