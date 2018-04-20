@@ -367,6 +367,21 @@
     margin-bottom: $spacing-1x - 12px; // accouting for button margin;
 
     > div {
+      .logos {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+      }
+
+      .logo-link {
+        width: 48%;
+
+        &:hover {
+          background: transparent;
+        }
+      }
+
       img {
         margin-bottom: 1.2em;
         max-width: 100%;

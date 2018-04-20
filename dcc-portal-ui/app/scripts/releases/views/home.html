@@ -88,33 +88,42 @@
         <div class="content-wrap">
             <div class="intro">
                 <div>
-                    <img src="/styles/images/PCAWG-final.svg" />
+                    <a class="logo-link" href="https://docs.icgc.org/pcawg/" target="_blank">
+                        <img src="/styles/images/PCAWG-final.svg" />
+                    </a>
                     <h2>
                         <translate>Browse more than 2800 harmonized whole genomes</translate>
                     </h2>
                     <p>
                         <translate>The
-                            <a href="/pcawg">Pan-Cancer Analysis of Whole Genomes</a> is an international collaboration from over 700 scientists
+                            <a href="https://docs.icgc.org/pcawg/" target="_blank">Pan-Cancer Analysis of Whole Genomes</a> is an international collaboration from over 700 scientists
                             to identify common mutation patterns across more than 60 cancer types. </translate>
                     </p>
                     <div class="cta">
-                        <a class="btn" href='/search?filters=%7B"donor":%7B"studies":%7B"is":%5B"PCAWG"%5D%7D%7D%7D&donors=%7B"from":1%7D'>Browse mutations</a>
-                        <a class="btn" href='/repositories?filters=%7B"file":%7B"study":%7B"is":%5B"PCAWG"%5D%7D%7D%7D&files=%7B"from":1%7D'>Browse files</a>
+                        <a class="btn" href='/search/m?filters=%7B"donor":%7B"studies":%7B"is":%5B"PCAWG"%5D%7D%7D%7D&donors=%7B"from":1%7D'>Browse mutations</a>
+                        <a class="btn" href='/repositories?filters=%7B"file":%7B"donorStudy":%7B"is":%5B"PCAWG"%5D%7D%7D%7D&files=%7B"from":1%7D'>Browse files</a>
                     </div>
                 </div>
                 <div>
-                    <img src="/styles/images/logos-AWS-Cancer-Collaborator.svg" />
+                    <div class="logos">
+                        <a class="logo-link" href="https://dcc.icgc.org/icgc-in-the-cloud/aws" target="_blank">
+                            <img src="/styles/images/aws_logo.svg" />
+                        </a>
+                        <a class="logo-link" href="https://www.cancercollaboratory.org/" target="_blank">
+                            <img src="/styles/images/collab_logo.svg" />
+                        </a>
+                    </div>
                     <h2>
                         <translate>Instant analysis with cloud computing</translate>
                     </h2>
                     <p>
                         <translate>Getting headaches spending days or weeks downloading data? Instead, upload your analytic software
                             to our
-                            <a href="http://www.cancercollaboratory.org/" target="_blank">Collaboratory cloud</a> or
-                            <a href="https://aws.amazon.com/">Amazon Web Services</a> and get right to the research with ICGC data in the cloud.</translate>
+                            <a href="https://www.cancercollaboratory.org/" target="_blank">Collaboratory cloud</a> or
+                            <a href="https://dcc.icgc.org/icgc-in-the-cloud/aws">Amazon Web Services</a> and get right to the research with ICGC data in the cloud.</translate>
                     </p>
                     <div class="cta">
-                        <a class="btn" href='/repositories?filters=%7B"file":%7B"repoName":%7B"is":%5B"Collaboratory%20-%20Toronto"%5D%7D%7D%7D'>Browse content</a>
+                        <a class="btn" href='/repositories?filters=%7B"file":%7B"repoName":%7B"is":%5B"Collaboratory%20-%20Toronto","AWS%20-%20Virginia"%5D%7D%7D%7D&files=%7B"from":1,"size":25%7D'>Browse content</a>
                     </div>
                 </div>
             </div>
@@ -131,9 +140,12 @@
                 </div>
                 <div class="body">
                     <ul>
-                        <li>New: Analyze ICGC portal data from a Jupyter notebook that comes preinstalled with our new python API.  Access through the Data Analysis page.</li>
-                        <li>New: Clinical annotation for variants has been integrated from ClinVar and CIViC source data. View data in Advanced Search or Mutation pages.</li>
-                        <li>Update: The protein lolliplot viewer has been improved. Filter by mutation consequences and zoom in/out from domain locations.  Explore from any gene or mutation page.</li>
+                        <li>New: Analyze ICGC portal data from a Jupyter notebook that comes preinstalled with our new python
+                            API. Access through the Data Analysis page.</li>
+                        <li>New: Clinical annotation for variants has been integrated from ClinVar and CIViC source data. View
+                            data in Advanced Search or Mutation pages.</li>
+                        <li>Update: The protein lolliplot viewer has been improved. Filter by mutation consequences and zoom
+                            in/out from domain locations. Explore from any gene or mutation page.</li>
                     </ul>
                 </div>
                 <div class="footer">
@@ -154,10 +166,10 @@
                 <div class="resource">
                     <div class="title">
                         <i class="resource-icon"></i>
-                        <h4>Compounds Explorer</h4>
+                        <h4>Programatic APIS</h4>
                     </div>
-                    <p>Search for cancer targeting therapeutics.</p>
-                    <a href="/compounds">Learn More</a>
+                    <p>Access portal data through REST and Python APIs.</p>
+                    <a href="http://icgc-python.readthedocs.io/en/develop/" target="_blank">Learn More</a>
                 </div>
                 <div class="resource">
                     <div class="title">
@@ -165,15 +177,15 @@
                         <h4>Pathways</h4>
                     </div>
                     <p>Search for data based on pathway participation.</p>
-                    <a href="/q?q=R-HSA%20phosphorylation">Learn More</a>
+                    <a href="/q?q=R-HSA">Learn More</a>
                 </div>
                 <div class="resource">
                     <div class="title">
                         <i class="resource-icon"></i>
-                        <h4>Programatic APIS</h4>
+                        <h4>Compounds Explorer</h4>
                     </div>
-                    <p>Access portal data through REST and Python APIs.</p>
-                    <a href="http://docs.icgc.org/portal/api/" target- "_blank">Learn More</a>
+                    <p>Search for cancer targeting therapeutics.</p>
+                    <a href="/compounds">Learn More</a>
                 </div>
                 <div class="resource">
                     <div class="title">
@@ -197,7 +209,7 @@
                         <h4>Documentation</h4>
                     </div>
                     <p>Learn more about the ICGC data portal.</p>
-                    <a target="_blank" href="http://docs.icgc.org/">Learn More</a>
+                    <a target="_blank" href="https://docs.icgc.org/">Learn More</a>
                 </div>
             </div>
         </div>
@@ -215,7 +227,7 @@
                 <div>
                     <p>Like what you see in the data portal? We provide open-source, actively supported components that you
                         can incorporate in your systems though our Overture stack.</p>
-                    <a target="_blank" href="http://www.overture.bio/" class="btn">Learn about Overture</a>
+                    <a target="_blank" href="https://www.overture.bio/" class="btn">Learn about Overture</a>
                 </div>
             </div>
         </div>
