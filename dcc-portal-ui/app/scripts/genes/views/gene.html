@@ -11,22 +11,38 @@
             <translate>Summary</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'relations'" data-ng-class="{active: GeneCtrl.activeTab === 'relations'}"
-            data-nested data-href="genes/{{GeneCtrl.gene.id}}/relations">
-            <translate>Relations</translate>
+        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'variants'" data-ng-class="{active: GeneCtrl.activeTab === 'variants'}"
+            data-nested data-href="genes/{{GeneCtrl.gene.id}}/variants">
+            <translate>Variants</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'visualizations'" data-ng-class="{active: GeneCtrl.activeTab === 'visualizations'}"
-            data-nested data-href="genes/{{GeneCtrl.gene.id}}/visualizations">
-            <translate>Visualizations</translate>
+        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'targetingCompounds'" data-ng-class="{active: GeneCtrl.activeTab === 'targetingCompounds'}"
+            data-nested data-href="genes/{{GeneCtrl.gene.id}}/targeting-compounds">
+            <translate>Targetting Compounds</translate>
+            <br>
+        </div>
+        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'protein'" data-ng-class="{active: GeneCtrl.activeTab === 'protein'}"
+            data-nested data-href="genes/{{GeneCtrl.gene.id}}/protein">
+            <translate>Protein</translate>
+            <br>
+        </div>
+        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'genomeViewer'" data-ng-class="{active: GeneCtrl.activeTab === 'genomeViewer'}"
+            data-nested data-href="genes/{{GeneCtrl.gene.id}}/genome-viewer">
+            <translate>Genome Viewer</translate>
             <br>
         </div>
     </div>
     <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'summary'}" data-ng-include="'scripts/genes/views/gene.summary.html'"></div>
-    <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'relations'}">
-        <div data-ng-include="'scripts/genes/views/gene.relations.html'"></div>
+    <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'variants'}">
+        <div data-ng-include="'scripts/genes/views/gene.variants.html'"></div>
     </div>
-    <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'visualizations'}">
-        <div data-ng-include="'scripts/genes/views/gene.visualizations.html'"></div>
+    <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'targetingCompounds'}">
+        <div data-ng-include="'scripts/genes/views/gene.targetingCompounds.html'"></div>
+    </div>
+    <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'protein'}">
+        <div data-ng-include="'scripts/genes/views/gene.protein.html'"></div>
+    </div>
+    <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'genomeViewer'}">
+        <div data-ng-include="'scripts/genes/views/gene.genomeViewer.html'"></div>
     </div>
 </article>

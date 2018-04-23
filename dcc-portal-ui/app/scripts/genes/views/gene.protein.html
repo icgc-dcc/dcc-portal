@@ -1,0 +1,13 @@
+<section data-ng-if="GeneCtrl.activeTab ==='protein'" id="protein" class="dynamic-height">
+    <div data-ng-if="!GeneCtrl.gene.uiProteinTranscript.length" class="empty">
+        <h3 data-ng-if="GeneCtrl.gene.affectedTranscriptIds.length">
+            <translate>No Protein Coding Transcript Found.</translate>
+        </h3>
+        <h3 data-ng-if="!GeneCtrl.gene.affectedTranscriptIds.length">
+            <translate>No Mutation occurs in coding region of this Gene.</translate>
+        </h3>
+    </div>
+    <div data-ng-if="GeneCtrl.gene.uiProteinTranscript.length" data-ng-init="sorted = (GeneCtrl.gene.uiProteinTranscript | orderBy:'+name')">
+        <onco-lolliplot transcripts="sorted"></onco-lolliplot>
+    </div>
+</section>

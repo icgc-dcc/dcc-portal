@@ -1,0 +1,86 @@
+<section data-ng-if="GeneCtrl.activeTab ==='targetingCompounds'" id="compounds" class="dynamic-height" ng-controller="GeneCompoundsCtrl as GeneCompoundsCtrl"
+    ng-class="{ 'loading': GeneCompoundsCtrl.compounds === undefined, 'empty': GeneCompoundsCtrl.compoundslength === 0 }">
+
+    <h3 ng-if="GeneCompoundsCtrl.compounds === undefined">
+        <i class="icon-spinner icon-spin" />
+        <translate>Loading Compounds...</translate>
+    </h3>
+
+    <h3 ng-if="GeneCompoundsCtrl.compounds.length === 0">
+        <translate>No Target Compounds Found.</translate>
+    </h3>
+
+    <div ng-if="GeneCompoundsCtrl.compounds.length > 0">
+        <h3>
+            <translate>Targeting Compounds</translate>
+        </h3>
+
+        <h4>
+            <translate>Target compounds provided by
+                <a href="http://zinc15.docking.org/" target="_blank">ZINC</a>
+            </translate>
+        </h4>
+
+        <span class="t_table_top">
+            <data-table-row-counts data-data="GeneCompoundsCtrl.uiCompounds" data-filter="GeneCompoundsCtrl.tableFilter.compounds" data-label="{{'compounds' | translate}}"
+                data-current-page="GeneCompoundsCtrl.currentCompoundsPage" data-row-limit="GeneCompoundsCtrl.defaultCompoundsRowLimit">
+            </data-table-row-counts>
+        </span>
+
+        <table-filter data-class="small-filter" data-filter-model="GeneCompoundsCtrl.tableFilter.compounds" data-current-page="GeneCompoundsCtrl.currentCompoundsPage"></table-filter>
+        <span ng-init="sortField = 'uiFullName'; sortDescendingly = false;" />
+
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th style="cursor: pointer" ng-click="sortField = 'uiFullName'; sortDescendingly = ! sortDescendingly">
+                        <translate>Name</translate>
+                        <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'uiFullName'" class="icon-sort" />
+                        <i ng-if="sortField === 'uiFullName'" class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+                    </th>
+                    <th>
+                        <translate>ATC Level 4 Description</translate>
+                    </th>
+                    <th style="cursor: pointer" ng-click="sortField = 'uiDrugClass'; sortDescendingly = ! sortDescendingly">
+                        <translate>Compound Class</translate>
+                        <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'uiDrugClass'" class="icon-sort" />
+                        <i ng-if="sortField === 'uiDrugClass'" class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+                    </th>
+                    <th style="cursor: pointer" ng-click="sortField = 'cancerTrialCount'; sortDescendingly = ! sortDescendingly">
+                        <translate># Clinical Trials</translate>
+                        <i style="color: hsl(0,0%,80%)" ng-if="sortField !== 'cancerTrialCount'" class="icon-sort" />
+                        <i ng-if="sortField === 'cancerTrialCount'" class="{{ sortDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="compound in (GeneCompoundsCtrl.uiCompounds |
+        filter: GeneCompoundsCtrl.tableFilter.compounds |
+        orderBy:sortField:sortDescendingly |
+        limitTo: GeneCompoundsCtrl.defaultCompoundsRowLimit : ((GeneCompoundsCtrl.currentCompoundsPage-1) * GeneCompoundsCtrl.defaultCompoundsRowLimit))">
+                    <td>
+                        <a href="{{ GeneCompoundsCtrl.compoundUrl }}{{ compound.uiZincId }}">
+                            <span data-ng-bind-html="compound.uiFullName | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <span data-ng-bind-html="compound.uiDescription | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
+                    </td>
+                    <td>
+                        <span data-ng-bind-html="compound.uiDrugClass | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
+                    </td>
+                    <td class="text-right">
+                        <a href="/compound/{{compound.uiZincId}}#trials">
+                            <span data-ng-bind-html="compound.uiCancerTrials | highlight: GeneCompoundsCtrl.tableFilter.compounds"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pagination-client-side data-data="GeneCompoundsCtrl.uiCompounds" data-filter="GeneCompoundsCtrl.tableFilter.compounds" data-row-limit="GeneCompoundsCtrl.defaultCompoundsRowLimit"
+            data-row-sizes="GeneCompoundsCtrl.rowSizes" data-current-page="GeneCompoundsCtrl.currentCompoundsPage"></pagination-client-side>
+
+    </div>
+
+</section>
