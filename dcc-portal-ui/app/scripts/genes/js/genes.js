@@ -45,7 +45,7 @@
     });
 
     // [ {tab name}, {url} ] - consumed below by forEach
-    const tabs = [ 
+    const tabs = [
       ['variants', 'variants'],
       ['targetingCompounds', 'targeting-compounds'],
       ['protein', 'protein'],
@@ -54,7 +54,7 @@
 
     tabs.forEach(tab => {
       $stateProvider.state(`gene.${tab[0]}`, {
-        url:`/${tab[1]}`,
+        url: `/${tab[1]}`,
         reloadOnSearch: false,
         data: { tab: `${tab[0]}` },
         resolve: stateResolver,
@@ -138,6 +138,7 @@
     Page,
     Projects,
     Mutations,
+    CompoundsService,
     LocationService,
     Donors,
     Genes,
@@ -175,11 +176,26 @@
     // Counts
     _ctrl.summaryCounts = getSummaryCounts();
 
-    function getSummaryCounts() {
+    async function getSummaryCounts() {
+      const mutationParams = {
+        filters: { gene: { id: { is: [_ctrl.gene.id] } } },
+        size: 0,
+        include: ['facets'],
+      };
+
+      const data = await Promise.all([
+        Mutations.getList(mutationParams),
+        CompoundsService.getCompoundsByGeneId(gene.id),
+      ]);
+
+      const [mutations, compounds] = data;
+
       return {
-        highImpactMutations: 123,
+        highImpactMutations: mutations.facets.functionalImpact.terms.filter(
+          term => term.term === 'High'
+        )[0].count,
         clinicallySignificantVariants: 456,
-        compounds: 789
+        compounds: compounds.plain().length,
       };
     }
 
