@@ -47,7 +47,7 @@
     // [ {tab name}, {url} ] - consumed below by forEach
     const tabs = [ 
       ['variants', 'variants'],
-      ['targettingCompounds', 'targeting-compounds'],
+      ['targettingCompounds', 'targetting-compounds'],
       ['protein', 'protein'],
       ['genomeViewer', 'genome-viewer'],
     ];
@@ -56,7 +56,7 @@
       $stateProvider.state(`gene.${tab[0]}`, {
         url:`/${tab[1]}`,
         reloadOnSearch: false,
-        data: { tab: `/${tab[0]}` },
+        data: { tab: `${tab[0]}` },
         resolve: stateResolver,
       });
     });
@@ -152,7 +152,7 @@
     Page.setTitle(gene.id);
     Page.setPage('entity');
 
-    _ctrl.activeTab = $state.current.data.tab; //FilterService.filters() ? 'relations' : 'summary';
+    _ctrl.activeTab = $state.current.data.tab;
 
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
