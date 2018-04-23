@@ -1,0 +1,167 @@
+<section data-ng-if="GeneCtrl.activeTab === 'summary'" id="summary" class="dynamic-height">
+    <div class="wide">
+        <h3>
+            <translate>Summary</translate>
+        </h3>
+        <table class="table table-info">
+            <tr>
+                <th>
+                    <translate>Symbol</translate>
+                </th>
+                <td>{{ GeneCtrl.gene.symbol }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Name</translate>
+                </th>
+                <td>{{ GeneCtrl.gene.name }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Synonyms</translate>
+                </th>
+                <td>
+                    {{ GeneCtrl.gene.synonyms.join(', ') }}
+                    <span data-ng-if="!GeneCtrl.gene.synonyms.length">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Type</translate>
+                </th>
+                <td>{{ GeneCtrl.gene.type | trans}}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Location</translate>
+                </th>
+                <td>chr{{ GeneCtrl.gene.chromosome}}:{{ GeneCtrl.gene.start }}-{{ GeneCtrl.gene.end }} (GRCh37)</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Strand</translate>
+                </th>
+                <td>
+                    <i data-ng-class="{true:'icon-plus', false:'icon-minus'}[GeneCtrl.gene.strand===1]"></i>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Description</translate>
+                </th>
+                <td>
+                    <hide-text text="{{ GeneCtrl.gene.description }}" data-class="table-text-wrap"></hide-text>
+                </td>
+            </tr>
+        </table>
+
+        <h3>
+            <translate>Annotation</translate>
+        </h3>
+        <table class="table table-info">
+            <tr>
+                <th>
+                    <translate>Reactome Pathways</translate>
+                </th>
+                <td>
+                    <hide-list data-items="GeneCtrl.uiGeneSets.pathwayList" data-display-limit="5" data-template-name="template/geneGeneSetList.html">
+                    </hide-list>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>GO Terms</translate>
+                </th>
+                <td>
+                    <hide-list data-items="GeneCtrl.uiGeneSets.goList" data-display-limit="5" data-template-name="template/geneGeneSetList.html">
+                    </hide-list>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Curated Gene Set</translate>
+                </th>
+                <td>
+                    <hide-list data-items="GeneCtrl.uiGeneSets.curatedList" data-display-limit="5" data-template-name="template/geneGeneSetList.html">
+                    </hide-list>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="narrow omega">
+        <h3>
+            <translate>External References</translate>
+        </h3>
+        <table class="table table-info">
+            <tr>
+                <th>
+                    <translate>HGNC Gene</translate>
+                </th>
+                <td>
+                    <ul>
+                        <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['hgnc']">
+                            <a data-ng-href="{{GeneCtrl.ExternalLinks.geneHGNC(id)}}" target="_blank">
+                                <i class="icon-external-link"></i> {{ id }}</a>
+                        </li>
+                    </ul>
+                    <span data-ng-if="GeneCtrl.hasNoExternal('hgnc')">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Ensembl (release 75)</translate>
+                </th>
+                <td>
+                    <a data-ng-href="{{GeneCtrl.ExternalLinks.geneEnsembl(GeneCtrl.gene.id)}}" target="_blank">
+                        <i class="icon-external-link"></i> {{ GeneCtrl.gene.id }}</a>
+                </td>
+            </tr>
+            <tr>
+                <th>COSMIC</th>
+                <td>
+                    <a data-ng-href="{{GeneCtrl.ExternalLinks.geneCOSMIC(GeneCtrl.gene.symbol)}}" target="_blank">
+                        <i class="icon-external-link"></i> {{ GeneCtrl.gene.symbol }}</a>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Entrez Gene</translate>
+                </th>
+                <td>
+                    <ul>
+                        <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['entrez_gene']">
+                            <a data-ng-href="{{GeneCtrl.ExternalLinks.geneEntrez(id)}}" target="_blank">
+                                <i class="icon-external-link"></i> {{ id }}</a>
+                        </li>
+                    </ul>
+                    <span data-ng-if="GeneCtrl.hasNoExternal('entrez_gene')">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>OMIM</th>
+                <td>
+                    <ul>
+                        <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['omim_gene']">
+                            <a data-ng-href="{{GeneCtrl.ExternalLinks.geneOMIM(id)}}" target="_blankc">
+                                <i class="icon-external-link"></i> {{ id }}</a>
+                        </li>
+                    </ul>
+                    <span data-ng-if="GeneCtrl.hasNoExternal('omim_gene')">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>UniProtKB/Swiss-Prot</th>
+                <td>
+                    <ul>
+                        <li data-ng-repeat="id in GeneCtrl.gene.externalDbIds['uniprotkb_swissprot']">
+                            <a data-ng-href="{{GeneCtrl.ExternalLinks.geneUniProt(id)}}" target="_blank">
+                                <i class="icon-external-link"></i> {{ id }}</a>
+                        </li>
+                    </ul>
+                    <span data-ng-if="GeneCtrl.hasNoExternal('uniprotkb_swissprot')">--</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</section>

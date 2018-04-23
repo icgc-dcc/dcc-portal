@@ -95,7 +95,7 @@
             <td ng-click="AdvancedCtrl.toggleSelectedEntity('gene', gene)">
                 <icgc-checkbox is-checked="AdvancedCtrl.isEntitySelected('gene', gene)"></icgc-checkbox>
             </td>
-            <td><a href="/genes/{{ gene.id }}">{{ gene.symbol }}</a></td>
+            <td><a href="/genes/{{ gene.id }}/relations?filters={{gene.embedFilters}}">{{ gene.symbol }}</a></td>
             <td>{{ gene.name }}</td>
             <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
             <td>{{ gene.type | trans }}</td>

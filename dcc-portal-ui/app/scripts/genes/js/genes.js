@@ -20,24 +20,40 @@
 
   var module = angular.module('icgc.genes', ['icgc.genes.controllers', 'ui.router', 'app.common']);
 
+  const stateResolver = {
+    gene: [
+      '$stateParams',
+      'Genes',
+      function($stateParams, Genes) {
+        return Genes.one($stateParams.id)
+          .get({ include: ['projects', 'transcripts'] })
+          .then(function(gene) {
+            return gene;
+          });
+      },
+    ],
+  };
+
   module.config(function($stateProvider) {
     $stateProvider.state('gene', {
       url: '/genes/:id',
       templateUrl: 'scripts/genes/views/gene.html',
       controller: 'GeneCtrl as GeneCtrl',
-      resolve: {
-        gene: [
-          '$stateParams',
-          'Genes',
-          function($stateParams, Genes) {
-            return Genes.one($stateParams.id)
-              .get({ include: ['projects', 'transcripts'] })
-              .then(function(gene) {
-                return gene;
-              });
-          },
-        ],
-      },
+      reloadOnSearch: false,
+      data: { tab: 'summary' },
+      resolve: stateResolver,
+    });
+    $stateProvider.state('gene.relations', {
+      url: '/relations',
+      reloadOnSearch: false,
+      data: { tab: 'relations' },
+      resolve: stateResolver,
+    });
+    $stateProvider.state('gene.visualizations', {
+      url: '/visualizations',
+      reloadOnSearch: false,
+      data: { tab: 'visualizations' },
+      resolve: stateResolver,
     });
   });
 })();
@@ -112,7 +128,7 @@
 
   module.controller('GeneCtrl', function(
     $scope,
-    $modal,
+    $state,
     HighchartsService,
     Page,
     Projects,
@@ -124,17 +140,19 @@
     Restangular,
     ExternalLinks,
     gene,
-    $filter,
+    FilterService,
+    $filter
   ) {
     var _ctrl = this;
     Page.setTitle(gene.id);
     Page.setPage('entity');
 
+    _ctrl.activeTab = $state.current.data.tab; //FilterService.filters() ? 'relations' : 'summary';
+
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
     _ctrl.defaultProjectsLimit = 10;
     _ctrl.isPVLoading = true;
-    _ctrl.isPVInitialLoad = true;
     _ctrl.isGVLoading = true;
     _ctrl.gvOptions = { location: false, panels: false, zoom: 50 };
 
@@ -192,6 +210,7 @@
         include: ['facets'],
         filters: _ctrl.gene.advQuery,
       }).then(function(data) {
+        _ctrl.donorFacets = data.facets;
         var ids = _.map(data.facets.projectId.terms, 'term');
 
         if (_.isEmpty(ids)) {
@@ -241,7 +260,7 @@
                 _.sortBy(projects.hits, function(p) {
                   return -p.uiAffectedDonorPercentage;
                 }),
-                10,
+                10
               ),
               xAxis: 'id',
               yValue: 'uiAffectedDonorPercentage',
@@ -306,12 +325,12 @@
             uiTumourSubtype: project.tumourSubtype,
             uiAffectedDonorPercentage: $filter('number')(
               project.uiAffectedDonorPercentage * 100,
-              2,
+              2
             ),
             uiAdvQuery: project.advQuery,
             uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
             uiMutationCount: $filter('number')(project.mutationCount),
-          },
+          }
         );
       });
     }
@@ -332,7 +351,7 @@
     Genes,
     Projects,
     Donors,
-    ProjectCache,
+    ProjectCache
   ) {
     var _ctrl = this;
 
@@ -367,12 +386,12 @@
                   }
                   return prev;
                 },
-                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
               );
               return counts;
             };
             mutation.uiClinicalEvidenceCounts = countClinicalEvidence(
-              mutation.clinical_evidence.civic,
+              mutation.clinical_evidence.civic
             );
             return mutation;
           }
@@ -454,7 +473,7 @@
     $stateParams,
     CompoundsService,
     RouteInfoService,
-    $filter,
+    $filter
   ) {
     var geneId = $stateParams.id;
     var _this = this;
@@ -479,7 +498,7 @@
       },
       function(error) {
         throw new Error('Error getting compounds related to the geneId', error);
-      },
+      }
     );
 
     function getUiCompoundsJSON(compounds) {
@@ -494,7 +513,7 @@
             uiDrugClass: $filter('formatCompoundClass')(compound.drugClass),
             cancerTrialCount: compound.cancerTrialCount,
             uiCancerTrials: $filter('number')(compound.cancerTrialCount),
-          },
+          }
         );
       });
     }

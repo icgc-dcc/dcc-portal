@@ -167,10 +167,10 @@
 
           // If placement = overflow, check if there is actually overflow
           if (attrs.tooltipPlacement === 'overflow') {
-            if (element.context.scrollWidth <= element.context.clientWidth) {
-              return;
-            } else {
+            if (element.context && (element.context.scrollWidth >= element.context.clientWidth)) {
               placement = 'top';
+            } else {
+              return;
             }
           }
 
