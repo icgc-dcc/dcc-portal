@@ -47,7 +47,7 @@
     // [ {tab name}, {url} ] - consumed below by forEach
     const tabs = [ 
       ['variants', 'variants'],
-      ['targettingCompounds', 'targetting-compounds'],
+      ['targetingCompounds', 'targeting-compounds'],
       ['protein', 'protein'],
       ['genomeViewer', 'genome-viewer'],
     ];
@@ -171,6 +171,17 @@
     _ctrl.currentProjectsPage = 1;
     _ctrl.defaultProjectsRowLimit = 10;
     _ctrl.rowSizes = [10, 25, 50];
+
+    // Counts
+    _ctrl.summaryCounts = getSummaryCounts();
+
+    function getSummaryCounts() {
+      return {
+        highImpactMutations: 123,
+        clinicallySignificantVariants: 456,
+        compounds: 789
+      };
+    }
 
     _ctrl.hasNoExternal = function(dbId) {
       return _.get(_ctrl.gene, ['externalDbIds', dbId], []).length === 0;
