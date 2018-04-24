@@ -103,6 +103,12 @@
   }
 }
 
+.t_tabs__tab__compound {
+  &.active, &:hover {
+    border-top-color: $compound;
+  }
+}
+
 .t_tabs__tab__file {
   &.active, &:hover {
     border-top-color: $file;

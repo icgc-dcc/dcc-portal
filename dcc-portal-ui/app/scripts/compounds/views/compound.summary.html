@@ -1,0 +1,130 @@
+<section data-ng-if="CompoundCtrl.activeTab === 'summary'" data-ng-init="compound = CompoundCtrl.getCompound()" id="summary">
+    <div class="wide">
+
+        <h3>
+            <translate>Summary</translate>
+        </h3>
+        <table class="table table-info">
+            <tbody>
+                <tr>
+                    <th>
+                        <translate>Name</translate>
+                    </th>
+                    <td data-ng-bind=":: compound.name"></td>
+                </tr>
+                <tr>
+                    <th>
+                        <translate>Synonyms</translate>
+                    </th>
+                    <td>
+                        <hide-text data-text="{{compound.synonyms.join(', ')}}">
+                        </hide-text>
+                    </td>
+                </tr>
+                <tr>
+                    <th>InChIKey</th>
+                    <td data-ng-bind=":: compound.inchiKey"></td>
+                </tr>
+                <tr>
+                    <th>
+                        <translate>Compound Class</translate>
+                    </th>
+                    <td data-ng-bind=":: compound.drugClass | formatCompoundClass"></td>
+                </tr>
+                <tr>
+                    <th>
+                        <translate>Clinical Trials</translate>
+                    </th>
+                    <td>
+                        <a data-scrollto href="#trials" data-ng-bind=":: compound.cancerTrialCount"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+    <div class="narrow omega">
+        <h3>
+            <translate>External References</translate>
+        </h3>
+        <table class="table table-info">
+            <tbody>
+                <tr>
+                    <th>
+                        <translate>Zinc ID</translate>
+                    </th>
+                    <td>
+                        <a href="http://zinc15.docking.org/substances/{{compound.id}}" target="_blank">
+                            <span class="icon-external-link"></span>
+                            <span data-ng-bind="compound.id"></span>
+                        </a>
+                    </td>
+                </tr>
+                <tr data-ng-repeat="(refName, refIds) in :: compound.externalReferences" data-ng-if="refIds.length">
+                    <th data-ng-bind="CompoundCtrl.getPrettyExternalRefName(refName)"></th>
+                    <td>
+                        <ul>
+                            <li data-ng-repeat="refId in :: refIds">
+                                <a data-ng-if="refName === 'chembl'" href="https://www.ebi.ac.uk/chembl/compound/inspect/{{refId}}" target="_blank">
+                                    <span class="icon-external-link"></span>
+                                    <span data-ng-bind="refId"></span>
+                                </a>
+
+                                <a data-ng-if="refName === 'drugbank'" href="http://www.drugbank.ca/drugs/{{refId}}" target="_blank">
+                                    <span class="icon-external-link"></span>
+                                    <span data-ng-bind="refId"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="wide">
+        <h3>
+            <translate>ATC Codes</translate>
+        </h3>
+        <div data-ng-if="compound.atcCodes.length == 0">
+            <translate>No ATC Codes Found.</translate>
+        </div>
+        <table class="table table-info" data-ng-if="compound.atcCodes.length">
+            <tbody>
+                <tr>
+                    <th>
+                        <translate>Code</translate>
+                    </th>
+                    <th>
+                        <translate>ATC Level 4 Code</translate>
+                    </th>
+                    <th>
+                        <translate>ATC Level 4 Description</translate>
+                    </th>
+
+                </tr>
+                <tr data-ng-repeat="atcCodes in :: compound.atcCodes">
+                    <td>
+                        <a href="http://www.whocc.no/atc_ddd_index/?code={{atcCodes.atcLevel5Codes}}" target="_blank">
+                            <i class="icon-external-link"></i>
+                            <span data-ng-bind="atcCodes.atcLevel5Codes"></span>
+                        </a>
+                    </td>
+                    <td data-ng-bind="atcCodes.code"></td>
+                    <td data-ng-bind="atcCodes.description"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="narrow omega" data-ng-if="compound.imageURL">
+        <h3>
+            <translate>Molecule</translate>
+        </h3>
+        <div style="border: solid 1px #ccc; text-align: center; ">
+            <a href="{{compound.imageURL}}" class="no-style" target="_blank">
+                <img ng-src="{{compound.imageURL}}" data-ng-if="compound.imageURL" style="max-width: 100%" />
+            </a>
+        </div>
+    </div>
+
+</section>

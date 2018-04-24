@@ -1,0 +1,135 @@
+<aside data-ng-if="CompoundCtrl.activeTab === 'targetedGenes'" class="t_sidebar">
+    <section>
+        <ul class="t_subnav__items">
+            <li class="t_subnav__items__item" data-ng-if="CompoundCtrl.mutationFacets.functionalImpact.total > 0" style="padding: .1rem 0;">
+                <span>
+                    <translate>Quick Filters</translate>
+                </span>
+            </li>
+        </ul>
+    </section>
+    <ul class="t_subnav__items__box" data-ng-if="CompoundCtrl.mutationFacets.functionalImpact.total > 0">
+        <ul class="t_facets">
+            <terms data-type="mutation" data-facet-name="functionalImpact" data-hide-count="true" data-label="{{'Mutation Impact' | translate}}"
+                data-facet="CompoundCtrl.mutationFacets.functionalImpact"></terms>
+        </ul>
+        <ul class="t_facets">
+            <terms data-type="mutation" data-facet-name="clinvarClinicalSignificance" data-hide-count="true" data-label="{{'Clinical Significance' | translate}}"
+                data-facet="CompoundCtrl.mutationFacets.clinvarClinicalSignificance"></terms>
+        </ul>
+    </ul>
+</aside>
+
+<article data-ng-if="CompoundCtrl.activeTab === 'targetedGenes'">
+    <section data-ng-init="compound = CompoundCtrl.getCompound()" id="genes">
+        <div class="full">
+            <h3>
+                <translate>Targeted Genes</translate>
+
+                <span class="open-in pull-right" data-ng-if="CompoundCtrl.getTargetedCompoundGenes() && CompoundCtrl.getTargetedCompoundGenes().length > 0">
+                    <translate has-markup>
+                        Open in
+                        <a href="/search/g?filters={{CompoundCtrl.getFilter()}}">
+                            Advanced Search
+                        </a>
+                        <a href="/browser/g?filters={{CompoundCtrl.getFilter()}}">
+                            <i class="icon-chart"></i>Genome Viewer
+                        </a>
+                    </translate>
+                </span>
+            </h3>
+
+            <div class="t_table_top">
+
+                <span data-ng-if="CompoundCtrl.getTargetedCompoundGenes() && CompoundCtrl.getTargetedCompoundGenes().length > 0">
+                    <data-table-row-counts data-data="CompoundCtrl.getTargetedCompoundGenes()" data-filter="CompoundCtrl.tableFilter.targetedGenes"
+                        data-label="{{'genes' | translate}}" data-current-page="CompoundCtrl.currentGenesPage" data-row-limit="CompoundCtrl.defaultGenesRowLimit">
+                    </data-table-row-counts>
+                    <span class="t_tools" data-toolbar="" data-entity="compound_mutated_genes" data-json="{{CompoundCtrl.getTargetedCompoundGenes()}}">
+                        <span class="t_tools__tool" data-tooltip-placement="left" data-icgc-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')">
+                            <i class="icon-file"></i>
+                        </span>
+                    </span>
+                    <table-filter data-class="small-filter" data-filter-model="CompoundCtrl.tableFilter.targetedGenes" data-current-page="CompoundCtrl.currentGenesPage"></table-filter>
+                </span>
+                <span data-ng-if="CompoundCtrl.getTargetedCompoundGenes() &&  CompoundCtrl.getTargetedCompoundGenes().length === 0">
+                    <translate>No targeted genes found.</translate>
+                </span>
+            </div>
+            <div class="empty" data-ng-if="! CompoundCtrl.getTargetedCompoundGenes()">
+                <h3>
+                    <i class="icon-spinner icon-spin"></i>
+                    <translate>Loading targeted genes...</translate>
+                </h3>
+            </div>
+            <table class="table table-info" data-ng-if="CompoundCtrl.getTargetedCompoundGenes().length > 0">
+                <tbody>
+                    <tr>
+                        <th>
+                            <translate>Symbol</translate>
+                        </th>
+                        <th>
+                            <translate>Name</translate>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}">
+                                <translate>Location</translate>
+                            </abbr>
+                        </th>
+                        <th>
+                            <translate>Type</translate>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{'Number of Donors where a Gene involved in the Gene Set can be targeted by the compound' | translate}}">#
+                                <translate>Donors affected</translate>
+                            </abbr>
+                            <i class="icon-sort-down"></i>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{'Number of Mutations of gene observed' | translate}}" data-tooltip-placement="left">
+                                <translate># Mutations</translate>
+                            </abbr>
+                        </th>
+                    </tr>
+                    <tr data-ng-repeat="gene in (CompoundCtrl.getTargetedCompoundGenes() |
+                        filter: CompoundCtrl.tableFilter.targetedGenes |
+                        limitTo: CompoundCtrl.defaultGenesRowLimit : ((CompoundCtrl.currentGenesPage-1) * CompoundCtrl.defaultGenesRowLimit))">
+                        <td>
+                            <a href="/genes/{{gene.uiId}}" data-ng-bind-html="gene.uiSymbol | highlight: CompoundCtrl.tableFilter.targetedGenes"></a>
+                        </td>
+                        <td data-ng-bind-html="gene.uiName | highlight: CompoundCtrl.tableFilter.targetedGenes"></td>
+                        <td data-ng-bind-html="gene.uiLocation | highlight: CompoundCtrl.tableFilter.targetedGenes"></td>
+                        <td data-ng-bind-html="gene.uiType | highlight: CompoundCtrl.tableFilter.targetedGenes"></td>
+                        <td class="text-right" style="position: relative; white-space: nowrap">
+                            <span data-ng-style="{width: gene.uiAffectedDonorCountTotalPercentage}" class="t_facets__facet__terms__active__term__bar">
+                            </span>
+                            <span data-ng-if="gene.uiAffectedDonorCountFiltered==null">
+                                <i class="icon-spinner icon-spin"></i>
+                            </span>
+                            <span style="position: relative" data-ng-if="(gene.uiAffectedDonorCountFiltered | number) >= 0">
+                                <a data-ng-href='/search?filters={{gene.uiAffectedDonorCountFilter}}' data-ng-bind-html="gene.uiAffectedDonorCountFiltered | highlight: CompoundCtrl.tableFilter.targetedGenes">
+                                </a>
+                                /
+                                <a href="/search?filters={{CompoundCtrl.getAffectedDonorCountTotalFilter()}}" ng-bind-html="gene.uiAffectedDonorCountTotal | highlight: CompoundCtrl.tableFilter.targetedGenes"></a>
+                                <em data-ng-bind-html="'(' + gene.uiAffectedDonorCountTotalPercentage + ')' | highlight: CompoundCtrl.tableFilter.targetedGenes"></em>
+                            </span>
+
+                        </td>
+                        <td class="text-right">
+                            <span data-ng-if="gene.uiMutationCountTotal == null">
+                                <i class="icon-spinner icon-spin"></i>
+                            </span>
+                            <span data-ng-if="gene.uiMutationCountTotal === 0">--</span>
+                            <a data-ng-if="gene.uiMutationCountTotal > '0'" data-ng-href='/search/m?filters={{gene.uiMutationCountFilter}}' data-ng-bind-html="gene.uiMutationCountTotal | highlight: CompoundCtrl.tableFilter.targetedGenes">
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <pagination-client-side data-data="CompoundCtrl.getTargetedCompoundGenes()" data-filter="CompoundCtrl.tableFilter.targetedGenes"
+                data-row-limit="CompoundCtrl.defaultGenesRowLimit" data-row-sizes="CompoundCtrl.rowSizes" data-current-page="CompoundCtrl.currentGenesPage"></pagination-client-side>
+
+        </div>
+    </section>
+</article>
