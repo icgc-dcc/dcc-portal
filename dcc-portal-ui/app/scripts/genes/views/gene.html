@@ -6,27 +6,27 @@
 
 <article fix-scroll class="full">
     <div class="t_tabs t_tabs__isolated">
-        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'summary'" data-ng-class="{active: GeneCtrl.activeTab === 'summary'}"
+        <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="GeneCtrl.activeTab = 'summary'" data-ng-class="{active: GeneCtrl.activeTab === 'summary'}"
             data-nested data-href="genes/{{GeneCtrl.gene.id}}">
             <translate>Summary</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'variants'" data-ng-class="{active: GeneCtrl.activeTab === 'variants'}"
+        <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="GeneCtrl.activeTab = 'variants'" data-ng-class="{active: GeneCtrl.activeTab === 'variants'}"
             data-nested data-href="genes/{{GeneCtrl.gene.id}}/variants">
             <translate>Variants</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'targetingCompounds'" data-ng-class="{active: GeneCtrl.activeTab === 'targetingCompounds'}"
+        <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="GeneCtrl.activeTab = 'targetingCompounds'" data-ng-class="{active: GeneCtrl.activeTab === 'targetingCompounds'}"
             data-nested data-href="genes/{{GeneCtrl.gene.id}}/targeting-compounds">
             <translate>Targeting Compounds</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'protein'" data-ng-class="{active: GeneCtrl.activeTab === 'protein'}"
+        <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="GeneCtrl.activeTab = 'protein'" data-ng-class="{active: GeneCtrl.activeTab === 'protein'}"
             data-nested data-href="genes/{{GeneCtrl.gene.id}}/protein">
             <translate>Protein</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="GeneCtrl.activeTab = 'genomeViewer'" data-ng-class="{active: GeneCtrl.activeTab === 'genomeViewer'}"
+        <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="GeneCtrl.activeTab = 'genomeViewer'" data-ng-class="{active: GeneCtrl.activeTab === 'genomeViewer'}"
             data-nested data-href="genes/{{GeneCtrl.gene.id}}/genome-viewer">
             <translate>Genome Viewer</translate>
             <br>

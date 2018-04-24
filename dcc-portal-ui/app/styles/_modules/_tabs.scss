@@ -89,6 +89,12 @@
   }
 }
 
+.t_tabs__tab__project {
+  &.active, &:hover {
+    border-top-color: $project;
+  }
+}
+
 .t_tabs__tab__file {
   &.active, &:hover {
     border-top-color: $file;
