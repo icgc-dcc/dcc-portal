@@ -78,11 +78,13 @@
     border-top-color: $donor;
   }
 }
+
 .t_tabs__tab__gene {
   &.active, &:hover {
     border-top-color: $gene;
   }
 }
+
 .t_tabs__tab__mutation {
   &.active, &:hover {
     border-top-color: $mutation;
@@ -92,6 +94,12 @@
 .t_tabs__tab__project {
   &.active, &:hover {
     border-top-color: $project;
+  }
+}
+
+.t_tabs__tab__geneset {
+  &.active, &:hover {
+    border-top-color: $pathway;
   }
 }
 
