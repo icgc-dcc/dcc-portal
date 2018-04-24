@@ -174,6 +174,8 @@
     _ctrl.rowSizes = [10, 25, 50];
 
     // Counts
+    _ctrl.summarCountsLoaded = false;
+    
     const mutationParams = {
       filters: { gene: { id: { is: [_ctrl.gene.id] } } },
       size: -1,
@@ -182,6 +184,7 @@
 
     Promise.all([Mutations.getList(mutationParams), CompoundsService.getCompoundsByGeneId(gene.id)])
       .then(result => {
+        _ctrl.summarCountsLoaded = true;
         _ctrl.summaryCounts = getSummaryCounts(result);
       })
       .catch(e => {
