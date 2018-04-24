@@ -1,27 +1,4 @@
-<aside data-ng-if="GeneCtrl.activeTab ==='protein'" class="t_sidebar">
-    <section>
-        <ul class="t_subnav__items">
-            <li class="t_subnav__items__item" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0">
-                <span>
-                    <translate>Quick Filters</translate>
-                </span>
-            </li>
-        </ul>
-    </section>
-    <ul class="t_subnav__items__box" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0">
-        <ul class="t_facets">
-            <terms data-type="donor" data-facet-name="projectId" data-hide-count="true" data-label="{{'Project' | translate}}" data-facet="GeneCtrl.donorFacets.projectId"></terms>
-        </ul>
-        <ul class="t_facets">
-            <terms data-type="donor" data-facet-name="primarySite" data-hide-count="true" data-label="{{'Primary Site' | translate}}"
-                data-facet="GeneCtrl.donorFacets.primarySite"></terms>
-        </ul>
-        <ul class="t_facets">
-            <terms data-type="mutation" data-facet-name="functionalImpact" data-hide-count="true" data-label="{{'Mutation Impact' | translate}}"
-                data-facet="GeneCtrl.mutationFacets.functionalImpact"></terms>
-        </ul>
-    </ul>
-</aside>
+<aside data-ng-include="'scripts/genes/views/gene.filters.html'" data-ng-if="GeneCtrl.activeTab ==='protein'" class="t_sidebar"></aside>
 
 <article data-ng-if="GeneCtrl.activeTab === 'protein'">
     <current></current>

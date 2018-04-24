@@ -1,27 +1,4 @@
-<aside data-ng-if="GeneCtrl.activeTab ==='variants'" class="t_sidebar">
-    <section>
-        <ul class="t_subnav__items">
-            <li class="t_subnav__items__item" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0">
-                <span>
-                    <translate>Quick Filters</translate>
-                </span>
-            </li>
-        </ul>
-    </section>
-    <ul class="t_subnav__items__box" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0">
-        <ul class="t_facets">
-            <terms data-type="donor" data-facet-name="projectId" data-hide-count="true" data-label="{{'Project' | translate}}" data-facet="GeneCtrl.donorFacets.projectId"></terms>
-        </ul>
-        <ul class="t_facets">
-            <terms data-type="donor" data-facet-name="primarySite" data-hide-count="true" data-label="{{'Primary Site' | translate}}"
-                data-facet="GeneCtrl.donorFacets.primarySite"></terms>
-        </ul>
-        <ul class="t_facets">
-            <terms data-type="mutation" data-facet-name="functionalImpact" data-hide-count="true" data-label="{{'Mutation Impact' | translate}}"
-                data-facet="GeneCtrl.mutationFacets.functionalImpact"></terms>
-        </ul>
-    </ul>
-</aside>
+<aside data-ng-include="'scripts/genes/views/gene.filters.html'" data-ng-if="GeneCtrl.activeTab ==='variants'" class="t_sidebar"></aside>
 
 <article data-ng-if="GeneCtrl.activeTab === 'variants'">
     <current></current>
@@ -58,7 +35,7 @@
             </h4>
 
             <div data-ng-if="GeneCtrl.bar.hasData" class="clearfix">
-                <bar height=200 items="GeneCtrl.bar" heading="" ylabel="{{'% of Donors Affected' | translate}}" format="percentage"></bar>
+                <bar class="wide" height=200 items="GeneCtrl.bar" heading="" ylabel="{{'% of Donors Affected' | translate}}" format="percentage"></bar>
             </div>
             <span class="t_table_top">
                 <data-table-row-counts data-data="GeneCtrl.gene.uiProjects" data-filter="GeneCtrl.tableFilter.projects" data-label="{{'projects' | translate}}"
@@ -208,7 +185,7 @@
             </h3>
 
             <div data-ng-if="GeneMutationsCtrl.bar.hasData" class="clearfix">
-                <bar height=200 items="GeneMutationsCtrl.bar" heading="" ylabel="{{'Donors affected' | translate}}"></bar>
+                <bar class="wide" height=200 items="GeneMutationsCtrl.bar" heading="" ylabel="{{'Donors affected' | translate}}"></bar>
             </div>
             <span class="t_table_top">
                 <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneMutationsCtrl.mutations.pagination"></span>

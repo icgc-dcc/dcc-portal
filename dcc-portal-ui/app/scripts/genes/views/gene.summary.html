@@ -170,7 +170,6 @@
         <table class="table table-info">
             <tr>
                 <td>
-                    {{GeneCtrl.summaryCounts.highImpactMutations}}
                     <span ng-if="GeneCtrl.summaryCounts.highImpactMutations === 0">0</span>
                     <a ng-if="GeneCtrl.summaryCounts.highImpactMutations > 0" data-ng-click="GeneCtrl.activeTab = 'variants'" ng-href='/genes/{{ GeneCtrl.gene.id }}/variants?filters=%7B"mutation":%7B"functionalImpact":%7B"is":%5B"High"%5D%7D%7D%7D&mutations=%7B"from":1%7D'>{{ GeneCtrl.summaryCounts.highImpactMutations }}</a>
                 </td>

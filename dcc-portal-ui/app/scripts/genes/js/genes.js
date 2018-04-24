@@ -174,27 +174,39 @@
     _ctrl.rowSizes = [10, 25, 50];
 
     // Counts
-    _ctrl.summaryCounts = getSummaryCounts();
+    const mutationParams = {
+      filters: { gene: { id: { is: [_ctrl.gene.id] } } },
+      size: -1,
+      include: ['facets'],
+    };
 
-    async function getSummaryCounts() {
-      const mutationParams = {
-        filters: { gene: { id: { is: [_ctrl.gene.id] } } },
-        size: 0,
-        include: ['facets'],
-      };
+    Promise.all([Mutations.getList(mutationParams), CompoundsService.getCompoundsByGeneId(gene.id)])
+      .then(result => {
+        _ctrl.summaryCounts = getSummaryCounts(result);
+      })
+      .catch(e => {
+        console.error(e);
+      });
 
-      const data = await Promise.all([
-        Mutations.getList(mutationParams),
-        CompoundsService.getCompoundsByGeneId(gene.id),
-      ]);
-
+    function getSummaryCounts(data) {
       const [mutations, compounds] = data;
+
+      const clinicalCount = mutations.facets.clinvarClinicalSignificance.terms
+        .filter(
+          term =>
+            term.term === 'Pathogenic' ||
+            term.term === 'Likely pathogenic' ||
+            term.term === 'Pathogenic/Likely pathogenic'
+        )
+        .reduce((acc, curr) => {
+          return acc + curr.count;
+        }, 0);
 
       return {
         highImpactMutations: mutations.facets.functionalImpact.terms.filter(
           term => term.term === 'High'
         )[0].count,
-        clinicallySignificantVariants: 456,
+        clinicallySignificantVariants: clinicalCount,
         compounds: compounds.plain().length,
       };
     }
@@ -320,11 +332,11 @@
     }
 
     if (_ctrl.gene.hasOwnProperty('transcripts')) {
-      var geneTranscriptPromie = Genes.one(_ctrl.gene.id)
+      var geneTranscriptPromise = Genes.one(_ctrl.gene.id)
         .handler.one('affected-transcripts')
         .get({});
 
-      geneTranscriptPromie.then(function(data) {
+      geneTranscriptPromise.then(function(data) {
         var affectedTranscriptIds = Restangular.stripRestangular(data)[_ctrl.gene.id];
 
         _ctrl.gene.transcripts.forEach(function(transcript) {
