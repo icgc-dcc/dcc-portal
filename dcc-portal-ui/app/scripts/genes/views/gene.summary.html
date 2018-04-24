@@ -180,7 +180,7 @@
             <tr>
                 <td>
                     <span ng-if="GeneCtrl.summaryCounts.clinicallySignificantVariants === 0">0</span>
-                    <a ng-if="GeneCtrl.summaryCounts.clinicallySignificantVariants > 0" data-ng-click="GeneCtrl.activeTab = 'variants'" ng-href='/genes/{{ GeneCtrl.gene.id }}/variants'>{{ GeneCtrl.summaryCounts.clinicallySignificantVariants }}</a>
+                    <a ng-if="GeneCtrl.summaryCounts.clinicallySignificantVariants > 0" data-ng-click="GeneCtrl.activeTab = 'variants'" ng-href='/genes/{{ GeneCtrl.gene.id }}/variants?filters=%7B"mutation":%7B"clinvarClinicalSignificance":%7B"is":%5B"Pathogenic%2FLikely%20pathogenic","Pathogenic","Likely%20pathogenic"%5D%7D%7D%7D&mutations=%7B"from":1%7D'>{{ GeneCtrl.summaryCounts.clinicallySignificantVariants }}</a>
                 </td>
                 <td>
                     <translate>Clinically Significant Variants</translate>
