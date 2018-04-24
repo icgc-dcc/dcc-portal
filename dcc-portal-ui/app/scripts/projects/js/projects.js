@@ -46,20 +46,6 @@
       reloadOnSearch: false,
       data: {tab:'history', isProject: true}
     });
-
-    $stateProvider.state('project', {
-      url: '/projects/:id',
-      templateUrl: 'scripts/projects/views/project.html',
-      controller: 'ProjectCtrl as ProjectCtrl',
-      resolve: {
-        project: ['$stateParams', 'Projects', 
-        function ($stateParams, Projects) {
-          return Projects.one($stateParams.id).get().then(function(project){
-            return project;
-          });
-        }]
-      }
-    });
   });
 })();
 
