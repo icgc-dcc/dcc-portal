@@ -1,0 +1,144 @@
+<section data-ng-if="GeneSetCtrl.activeTab === 'summary'" id="summary">
+    <div class="wide">
+        <h3>
+            <translate>Summary</translate>
+        </h3>
+
+        <table class="table table-info">
+            <tr>
+                <th>ID</th>
+                <td>{{ GeneSetCtrl.geneSet.id }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Name</translate>
+                </th>
+                <td>{{ GeneSetCtrl.geneSet.name }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Gene Set Type</translate>
+                </th>
+                <td>{{ GeneSetCtrl.geneSet.type }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Human Genes</translate>
+                </th>
+                <td>
+                    <a href='/search/g?filters={"gene":{"{{GeneSetCtrl.geneSet.queryType}}":{"is":["{{GeneSetCtrl.geneSet.id}}"]}}}'>{{GeneSetCtrl.geneSet.geneCount}}</a>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Description</translate>
+                    </td>
+                    <td data-ng-if="GeneSetCtrl.geneSet.description === '???' || GeneSetCtrl.geneSet.description === ''">
+                        --
+                    </td>
+                    <td data-ng-if="GeneSetCtrl.geneSet.description !== '???'">
+                        <hide-text text="{{ GeneSetCtrl.geneSet.description}}" data-class="table-text-wrap"></hide-text>
+                    </td>
+            </tr>
+            <tr data-ng-if="GeneSetCtrl.geneSet.type==='go_term'">
+                <th>
+                    <translate>Ontology</translate>
+                </th>
+                <td>{{ GeneSetCtrl.geneSet.ontology }}</td>
+            </tr>
+            <tr data-ng-if="GeneSetCtrl.geneSet.type==='go_term'">
+                <th>
+                    <translate>Alt. ID</translate>
+                </th>
+                <td data-ng-if="GeneSetCtrl.geneSet.altIds.length === 0">--</td>
+                <td data-ng-if="GeneSetCtrl.geneSet.altIds.length > 0">{{ GeneSetCtrl.geneSet.altIds.join(', ') }}</td>
+            </tr>
+            <tr data-ng-if="GeneSetCtrl.geneSet.type==='go_term'">
+                <th>
+                    <translate>Synonyms</translate>
+                </th>
+
+                <td data-ng-if="GeneSetCtrl.geneSet.synonyms.length === 0">--</td>
+                <td data-ng-if="GeneSetCtrl.geneSet.synonyms.length > 0">{{ GeneSetCtrl.geneSet.synonyms.join(', ') }}</td>
+
+            </tr>
+            <tr data-ng-if="GeneSetCtrl.geneSet.type==='go_term'">
+                <th>
+                    <translate>Inferred Tree</translate>
+                </th>
+                <td>
+                    <inferred-tree tree="GeneSetCtrl.uiInferredTree"></inferred-tree>
+                </td>
+            </tr>
+            <tr data-ng-if="GeneSetCtrl.geneSet.type==='pathway'">
+                <th>
+                    <translate>Hierarchy</translate>
+                </th>
+                <td>
+                    <hide-list data-items="GeneSetCtrl.uiParentPathways" data-display-limit="1" data-template-name="template/reactomePathway.html">
+                    </hide-list>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="narrow omega">
+        <h3>
+            <translate>External References</translate>
+        </h3>
+        <table class="table table-info">
+
+            <tr data-ng-if="GeneSetCtrl.geneSet.source === 'Reactome'">
+                <td>
+                    <translate>Reactome Pathway</translate>
+                </td>
+                <td>
+                    <a href="{{GeneSetCtrl.ExternalLinks.geneSetReactome(GeneSetCtrl.geneSet.id)}}" target="_blank">
+                        <i class="icon-external-link"></i> {{ GeneSetCtrl.geneSet.id }}</a>
+                </td>
+            </tr>
+            <tr data-ng-if="GeneSetCtrl.geneSet.source === 'COSMIC - Sanger'">
+                <td>
+                    <translate>COSMIC</translate>
+                </td>
+                <td>
+                    <a href="{{GeneSetCtrl.ExternalLinks.geneSetSanger()}}" target="_blank">
+                        <i class="icon-external-link"></i>Cancer Gene Census</a>
+                </td>
+            </tr>
+            <tr data-ng-if="GeneSetCtrl.geneSet.source === 'Gene Ontology'">
+                <td>
+                    <translate>Amigo2</translate>
+                </td>
+                <td>
+                    <a href="{{GeneSetCtrl.ExternalLinks.geneSetAmigo(GeneSetCtrl.geneSet.id)}}" target="_blank">
+                        <i class="icon-external-link"></i> {{ GeneSetCtrl.geneSet.id }}
+                    </a>
+                </td>
+            </tr>
+            <tr data-ng-if="GeneSetCtrl.geneSet.source === 'Gene Ontology'">
+                <td>
+                    <translate>EBI QuickGO</translate>
+                </td>
+                <td>
+                    <a href="{{GeneSetCtrl.ExternalLinks.geneSetEBI(GeneSetCtrl.geneSet.id)}}" target="_blank">
+                        <i class="icon-external-link"></i> {{ GeneSetCtrl.geneSet.id }}
+                    </a>
+                </td>
+            </tr>
+            <tr data-ng-if="GeneSetCtrl.geneSet.source === 'Gene Ontology'">
+                <td>
+                    <translate>Gene Ontology</translate>
+                </td>
+                <td>
+                    <a href="{{GeneSetCtrl.ExternalLinks.geneSetGeneOntology()}}" target="_blank">
+                        <i class="icon-external-link"></i>
+                        <translate>GO Website</translate>
+                    </a>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+</section>
