@@ -1,0 +1,346 @@
+<section data-ng-if="MutationCtrl.activeTab === 'summary'" id="summary" class="dynamic-height">
+    <div class="wide">
+        <h3>
+            <translate>Summary</translate>
+        </h3>
+        <table class="table table-info">
+            <tr>
+                <th>ID</th>
+                <td>{{ MutationCtrl.mutation.id }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>DNA change</translate>
+                </th>
+                <td style="word-break: break-all">
+                    chr{{MutationCtrl.mutation.chromosome}}:g.{{MutationCtrl.mutation.start}}{{MutationCtrl.mutation.mutation}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Type</translate>
+                </th>
+                <td>
+                    <abbr data-icgc-tooltip="{{ MutationCtrl.mutation.type | define }}">
+                        {{ MutationCtrl.mutation.type}}</abbr>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Reference genome assembly</translate>
+                </th>
+                <td>{{ MutationCtrl.mutation.assemblyVersion }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Allele in the reference assembly</translate>
+                </th>
+                <td>{{ MutationCtrl.mutation.referenceGenomeAllele }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Functional Impact</translate>
+                </th>
+                <td>
+                    {{MutationCtrl.mutation.displayedFunctionalImpact}}
+                </td>
+            </tr>
+            <tr data-ng-if="MutationCtrl.mutation.clinical_significance.clinvar.clinicalSignificance.length > 0">
+                <th>
+                    <translate>Clinical Significance</translate>
+                </th>
+                <td>
+                    {{MutationCtrl.mutation.clinical_significance.clinvar.clinicalSignificance}}
+                </td>
+            </tr>
+            <tr data-ng-if="MutationCtrl.mutation.description.length > 0">
+                <th>
+                    <translate>Description</translate>
+                </th>
+                <td>
+                    <hide-text text="{{MutationCtrl.mutation.description}}" data-class="table-text-wrap"></hide-text>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-if="MutationCtrl.mutation.external_db_ids.clinvar != null || MutationCtrl.mutation.external_db_ids.civic != null"
+        class="narrow omega">
+        <h3>
+            <translate>External References</translate>
+        </h3>
+        <table class="table table-info">
+            <tr data-ng-if="MutationCtrl.mutation.external_db_ids.clinvar != null">
+                <th>ClinVar</th>
+                <td>
+                    <a data-ng-href="https://www.ncbi.nlm.nih.gov/clinvar/variation/{{MutationCtrl.mutation.external_db_ids.clinvar}}" target="_blank">
+                        <i class="icon-external-link"></i>{{MutationCtrl.mutation.external_db_ids.clinvar}}</a>
+                </td>
+            </tr>
+            <tr data-ng-if="MutationCtrl.mutation.external_db_ids.civic != null">
+                <th>Civic</th>
+                <td>
+                    <a data-ng-href="{{MutationCtrl.mutation.clinical_evidence.civic[0].variantCivicUrl}}" target="_blank">
+                        <i class="icon-external-link"></i>{{MutationCtrl.mutation.external_db_ids.civic}}</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</section>
+
+<section data-ng-if="MutationCtrl.activeTab === 'summary'" id="transcripts" data-ng-class="{'loading': !MutationCtrl.mutation.transcripts, 'empty': MutationCtrl.mutation.transcripts.length == 0}">
+    <h3 data-ng-if="MutationCtrl.mutation.transcripts.length == 0">
+        <translate>No Consequences Found.</translate>
+    </h3>
+
+    <div data-ng-if="MutationCtrl.mutation.transcripts.length > 0">
+        <h3>
+            <translate>Consequences</translate>
+            <span data-open-in-list='/g?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}'></span>
+        </h3>
+        <span class="t_table_top">
+            <data-table-row-counts data-data="MutationCtrl.uiConsequences" data-filter="MutationCtrl.tableFilter.consequences" data-label="{{'Consequences' | translate}}"
+                data-current-page="MutationCtrl.currentConsequencesPage" data-row-limit="MutationCtrl.defaultConsequencesRowLimit">
+            </data-table-row-counts>
+            <span data-toolbar data-entity="{{MutationCtrl.mutation.id}}_consequence" data-json="{{ MutationCtrl.uiConsequences }}"></span>
+            <table-filter data-class="small-filter" data-filter-model="MutationCtrl.tableFilter.consequences" data-current-page="MutationCtrl.currentConsequencesPage"></table-filter>
+        </span>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        <translate>Gene</translate>
+                    </th>
+                    <th>
+                        <abbr data-icgc-tooltip="{{ 'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate }}">
+                            <translate>AA Change</translate>
+                        </abbr>
+                    </th>
+                    <th>
+                        <abbr data-icgc-tooltip="{{ 'SO term: consequence_type' | translate }}">
+                            <translate>Consequence</translate>
+                        </abbr>
+                    </th>
+                    <th>
+                        <translate>Coding DNA Change</translate>
+                    </th>
+                    <th>
+                        <translate>Strand</translate>
+                    </th>
+                    <th>
+                        <translate>Transcript(s)</translate>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="consequence in (MutationCtrl.uiConsequences |
+            filter: MutationCtrl.tableFilter.consequences |
+            limitTo: MutationCtrl.defaultConsequencesRowLimit : ((MutationCtrl.currentConsequencesPage-1) * MutationCtrl.defaultConsequencesRowLimit))">
+                    <td>
+                        <a data-ng-href="/genes/{{consequence.uiGeneAffectedId}}" data-ng-bind-html="consequence.uiAffectedSymbol | highlight: MutationCtrl.tableFilter.consequences"></a>
+                    </td>
+                    <td>
+                        <span class="t_impact_{{consequence.uiFunctionalImpact | lowercase }}" data-ng-bind-html="consequence.uiAAMutation | highlight: MutationCtrl.tableFilter.consequences"></span>
+                    </td>
+                    <td>
+                        <abbr data-icgc-tooltip="{{'SO term: [[ consequenceType ]]' | translate | subDelimiters:{consequenceType: consequence.uiType} }}">
+                            <span data-ng-bind-html="consequence.uiTypeFiltered | highlight: MutationCtrl.tableFilter.consequences"></span>
+                        </abbr>
+                    </td>
+                    <td>
+                        <span data-ng-bind-html="consequence.uiCDSMutation | highlight: MutationCtrl.tableFilter.consequences"></span>
+                    </td>
+                    <td>
+                        <i data-ng-class="{'icon-plus':consequence.uiGeneStrand==1,'icon-minus':consequence.uiGeneStrand==-1}"></i>
+                        <span data-ng-if="!consequence.uiGeneStrand">N/A</span>
+                    </td>
+                    <td>
+                        <hide-list data-ng-if="consequence.uiGeneAffectedId" data-items="consequence.uiTranscriptsAffected" data-limit="1" data-template-name="template/mutationTranscriptList.html"
+                            data-highlight-filter="MutationCtrl.tableFilter.consequences">
+                        </hide-list>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pagination-client-side data-data="MutationCtrl.uiConsequences" data-filter="MutationCtrl.tableFilter.consequences" data-row-limit="MutationCtrl.defaultConsequencesRowLimit"
+            data-row-sizes="MutationCtrl.rowSizes" data-current-page="MutationCtrl.currentConsequencesPage"></pagination-client-side>
+
+        <table class="hidden" id="{{MutationCtrl.mutation.id}}_consequence">
+            <thead>
+                <tr>
+                    <th>
+                        <translate>Gene</translate>
+                    </th>
+                    <th>
+                        <translate>AA Change</translate>
+                    </th>
+                    <th>
+                        <translate>Consequence</translate>
+                    </th>
+                    <th>
+                        <translate>Coding DNA Change</translate>
+                    </th>
+                    <th>
+                        <translate>Strand</translate>
+                    </th>
+                    <th>
+                        <translate>Transcript(s)</translate>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="consequence in MutationCtrl.mutation.consequences">
+                    <td>{{consequence.geneAffectedSymbol}}</td>
+                    <td>{{consequence.aaMutation}}</td>
+                    <td>{{consequence.type}}</td>
+                    <td>{{consequence.cdsMutation}}</td>
+                    <td>{{consequence.geneStrand}}</td>
+                    <td>
+                        <div data-ng-repeat="transcript in consequence.transcriptsAffected">
+                            <div>{{transcript.name}}</div>
+                            <div data-ng-if="!$last">,</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</section>
+
+<section data-ng-if="MutationCtrl.activeTab === 'summary'" id="donors" data-ng-class="{'loading': !MutationCtrl.projects, 'empty': MutationCtrl.projects.length == 0}" fix-scroll>
+    <h3 data-ng-if="MutationCtrl.projects.length == 0">
+        <translate>No Cancer Projects affected by this Mutation</translate>
+    </h3>
+
+    <div data-ng-if="MutationCtrl.projects.length > 0">
+        <h3>
+            <translate>Cancer Distribution</translate>
+            <span data-open-in-list='?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}' data-type="donor"></span>
+        </h3>
+        <h4>
+            <strong>{{MutationCtrl.mutation.id}}</strong>
+            <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">affects</translate>
+            <a data-ng-href='/search?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}'>
+                <strong>{{MutationCtrl.mutation.affectedDonorCountTotal | number}}</strong>
+            </a>
+            <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">distinct donors across</translate>
+            <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(MutationCtrl.projects|_:"map":"id").join("\",\"")}}"]}}}'>
+                <strong>{{MutationCtrl.mutation.affectedProjectCount | number}}</strong>
+            </a>
+            <translate translate-comment="'N' affects 'N' distinct donors across 'N' cancer projects">cancer projects</translate>
+        </h4>
+
+        <div data-ng-if="MutationCtrl.bar.hasData" class="clearfix">
+            <bar class="wide" height=220 items="MutationCtrl.bar" title="" ylabel="{{'% Donors Affected' | translate}}" format="percentage"></bar>
+        </div>
+
+        <span class="t_table_top">
+            <data-table-row-counts data-data="MutationCtrl.uiProjects" data-filter="MutationCtrl.tableFilter.projects" data-label="{{'projects' | translate}}"
+                data-current-page="MutationCtrl.currentProjectsPage" data-row-limit="MutationCtrl.defaultProjectsRowLimit">
+            </data-table-row-counts>
+            <span data-toolbar data-entity="{{MutationCtrl.mutation.id}}_distribution" data-json="{{ MutationCtrl.uiProjects }}"></span>
+            <table-filter data-class="small-filter" data-filter-model="MutationCtrl.tableFilter.projects" data-current-page="MutationCtrl.currentProjectsPage"></table-filter>
+        </span>
+        <table class="table table-bordered table-striped table-condensed" data-ng-init="sortProjectsDescendingly = true;">
+            <thead>
+                <tr>
+                    <th>
+                        <translate>Project</translate>
+                    </th>
+                    <th>
+                        <translate>Site</translate>
+                    </th>
+                    <th>
+                        <translate>Tumour Type</translate>
+                    </th>
+                    <th>
+                        <translate>Tumour Subtype</translate>
+                    </th>
+                    <th style="cursor: pointer" data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
+                        <abbr data-icgc-tooltip="{{'Breakdown of Donors affected by [[ mutationId ]] <br># Donors where [[ mutationId ]] observed / # SSM tested Donors' | translate | subDelimiters:{mutationId: MutationCtrl.mutation.id} }}"
+                            data-tooltip-placement="left">
+                            <translate># Donors affected</translate>
+                        </abbr>
+                        <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="project in (MutationCtrl.uiProjects | 
+                filter: MutationCtrl.tableFilter.projects |
+                orderBy:'uiPercentAffected/100':sortProjectsDescendingly |
+                limitTo: MutationCtrl.defaultProjectsRowLimit : ((MutationCtrl.currentProjectsPage-1) * MutationCtrl.defaultProjectsRowLimit)) track by project.uiId">
+                    <td>
+                        <a data-icgc-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{project.uiId}}" data-ng-bind-html="project.uiId | highlight: MutationCtrl.tableFilter.projects">
+                        </a>
+                    </td>
+                    <td>
+                        <span data-ng-bind-html="project.uiPrimarySite | highlight: MutationCtrl.tableFilter.projects"></span>
+                    </td>
+                    <td>
+                        <span data-ng-bind-html="project.uiTumourType | highlight: MutationCtrl.tableFilter.projects"></span>
+                    </td>
+                    <td>
+                        <span data-ng-bind-html="project.uiTumourSubtype | highlight: MutationCtrl.tableFilter.projects"></span>
+                    </td>
+                    <td class="text-right" style="position: relative">
+                        <span data-ng-style="{width:project.uiPercentAffected+'%'}" class="t_facets__facet__terms__active__term__bar"></span>
+                        <span style="position: relative">
+                            <a data-ng-href='/search?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}},"donor":{"projectId":{"is":["{{project.uiId}}"]},"availableDataTypes":{"is":["ssm"]}}}'
+                                data-ng-bind-html="project.uiAffectedDonorCount | highlight: MutationCtrl.tableFilter.projects">
+                            </a>
+                            /
+                            <a data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{project.id}}"]},"availableDataTypes":{"is":["ssm"]}}}' data-ng-bind-html="project.uiSSMTestedDonorCount | highlight: MutationCtrl.tableFilter.projects">
+                            </a>
+                            <em data-ng-bind-html="'('+project.uiPercentAffected+'%)' | highlight: MutationCtrl.tableFilter.projects"></em>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pagination-client-side data-data="MutationCtrl.uiProjects" data-filter="MutationCtrl.tableFilter.projects" data-row-limit="MutationCtrl.defaultProjectsRowLimit"
+            data-row-sizes="MutationCtrl.rowSizes" data-current-page="MutationCtrl.currentProjectsPage"></pagination-client-side>
+
+
+        <table class="hidden" id="{{MutationCtrl.mutation.id}}_distribution">
+            <thead>
+                <tr>
+                    <th>
+                        <translate>Project</translate>
+                    </th>
+                    <th>
+                        <translate>Site</translate>
+                    </th>
+                    <th>
+                        <translate>Tumour Type</translate>
+                    </th>
+                    <th>
+                        <translate>Tumour Subtype</translate>
+                    </th>
+                    <th>
+                        <translate>Number of donors from the current project containing the current mutation</translate>
+                    </th>
+                    <th>
+                        <translate>Number of SSM-tested donors in the current project</translate>
+                    </th>
+                    <th>
+                        <translate>Percentage of donors with the current mutation</translate>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="project in MutationCtrl.projects | orderBy:'-percentAffected'">
+                    <td>{{project.name}}</td>
+                    <td>{{project.primarySite}}</td>
+                    <td>{{project.tumourType}}</td>
+                    <td>{{project.tumourSubtype}}</td>
+                    <td>{{project.affectedDonorCount}}</td>
+                    <td>{{project.ssmTestedDonorCount}}</td>
+                    <td>{{project.affectedDonorCount/project.ssmTestedDonorCount}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

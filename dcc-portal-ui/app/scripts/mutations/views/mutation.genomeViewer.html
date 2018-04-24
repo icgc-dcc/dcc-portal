@@ -1,0 +1,18 @@
+<section data-ng-if="MutationCtrl.activeTab === 'genomeViewer'" id="genomic">
+    <div class="empty" data-ng-if="MutationCtrl.isGVLoading">
+        <h3>
+            <i class="icon-spinner icon-spin"></i>Loading Genomic Context...
+        </h3>
+    </div>
+    <h3 data-ng-if="!MutationCtrl.isGVLoading">
+        <translate>Genomic Context</translate>
+        <span data-open-in-list='/m?filters={"mutation":{"id":{"is":["{{MutationCtrl.mutation.id}}"]}}}' data-type="viewer"></span>
+    </h3>
+
+    <div class="t_gv__navbar" data-ng-if="!MutationCtrl.isGVLoading">
+        <span data-gv-header data-options="MutationCtrl.gvOptions"></span>
+        <span class="pull-right gv-navbar-zoom"></span>
+    </div>
+    <gvembed region="{{MutationCtrl.mutation.chromosome}}:{{MutationCtrl.mutation.start}}-{{MutationCtrl.mutation.end}}" data-is-gv-loading="MutationCtrl.isGVLoading"
+        data-ng-style="{'visibility': MutationCtrl.isGVLoading ? 'hidden' : 'visible'}"></gvembed>
+</section>

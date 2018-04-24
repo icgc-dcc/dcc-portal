@@ -1,0 +1,10 @@
+<section data-ng-if="MutationCtrl.activeTab === 'protein'" id="protein">
+    <div data-ng-if="!MutationCtrl.mutation.uiProteinTranscript.length" class="empty">
+        <h3>
+            <translate>No protein coding transcript is affected by this mutation in CDS region.</translate>
+        </h3>
+    </div>
+    <div data-ng-if="MutationCtrl.mutation.uiProteinTranscript.length">
+        <onco-lolliplot transcripts="MutationCtrl.mutation.uiProteinTranscript" highlighted-point-id="MutationCtrl.mutation.id"></onco-lolliplot>
+    </div>
+</section>
