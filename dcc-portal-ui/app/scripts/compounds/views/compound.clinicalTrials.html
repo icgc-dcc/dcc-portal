@@ -1,4 +1,4 @@
-<section data-ng-if="CompoundCtrl.activeTab === 'clinicalTrial'" data-ng-init="compound = CompoundCtrl.getCompound(); sortField = 'uiCode'; sortDescending = false;"
+<section data-ng-if="CompoundCtrl.activeTab === 'clinicalTrials'" data-ng-init="compound = CompoundCtrl.getCompound(); sortField = 'uiCode'; sortDescending = false;"
     id="trials">
     <div class="full">
         <h3>
@@ -104,52 +104,6 @@
             data-row-sizes="CompoundCtrl.rowSizes" data-current-page="CompoundCtrl.currentClinicalTrailsPage"></pagination-client-side>
 
     </div>
-    <table class="hidden" id="compound_mutated_genes">
-        <thead>
-            <tr>
-                <th>
-                    <translate>Symbol</translate>
-                </th>
-                <th>
-                    <translate>Name</translate>
-                </th>
-                <th>
-                    <translate>Location</translate>
-                </th>
-                <th>
-                    <translate>Type</translate>
-                </th>
-                <th>
-                    <translate>Number of donors affected</translate>
-                </th>
-                <th>
-                    <translate>Percentage of affected donors</translate>
-                </th>
-                <th>
-                    <translate>Number of Mutations</translate>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-ng-repeat="gene in CompoundCtrl.getTargetedCompoundGenes()">
-                <td>
-                    <a href="/genes/{{gene.id}}" data-ng-bind="gene.symbol"></a>
-                </td>
-                <td data-ng-bind="gene.name"></td>
-                <td data-ng-bind-template="chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}"></td>
-                <td data-ng-bind="gene.type | trans"></td>
-                <td>
-                    {{ gene.affectedDonorCountFiltered | number }}
-                </td>
-                <td>
-                    {{gene.affectedDonorCountFiltered/CompoundCtrl.getAffectedDonorCountTotal() * 100 | number:2}}%
-                </td>
-                <td>
-                    {{ gene.mutationCountTotal | number }}
-                </td>
-            </tr>
-        </tbody>
-    </table>
     <table class="hidden" data-ng-if="compound.trials.length > 0" id="compound_trials">
         <thead>
             <tr>

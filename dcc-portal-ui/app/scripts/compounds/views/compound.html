@@ -17,9 +17,9 @@
                 <translate>Targeted Genes</translate>
                 <br>
             </div>
-            <div class="t_tabs__tab t_tabs__tab__compound" data-ng-click="CompoundCtrl.activeTab = 'clinicalTrial'" data-ng-class="{active: CompoundCtrl.activeTab === 'clinicalTrial'}"
-                data-nested data-href="compound/{{compound.id}}/clinical-trial">
-                <translate>Clinical Trial</translate>
+            <div class="t_tabs__tab t_tabs__tab__compound" data-ng-click="CompoundCtrl.activeTab = 'clinicalTrials'" data-ng-class="{active: CompoundCtrl.activeTab === 'clinicalTrials'}"
+                data-nested data-href="compound/{{compound.id}}/clinical-trials">
+                <translate>Clinical Trials</translate>
                 <br>
             </div>
         </div>
@@ -27,8 +27,8 @@
         <div class='t_tab_pane' data-ng-class="{active: CompoundCtrl.activeTab === 'targetedGenes'}">
             <div data-ng-include="'scripts/compounds/views/compound.targetedGenes.html'"></div>
         </div>
-        <div class='t_tab_pane' data-ng-class="{active: CompoundCtrl.activeTab === 'clinicalTrial'}">
-            <div data-ng-include="'scripts/compounds/views/compound.clinicalTrial.html'"></div>
+        <div class='t_tab_pane' data-ng-class="{active: CompoundCtrl.activeTab === 'clinicalTrials'}">
+            <div data-ng-include="'scripts/compounds/views/compound.clinicalTrials.html'"></div>
         </div>
     </article>
 </div>

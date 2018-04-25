@@ -50,7 +50,7 @@ angular
     });
 
     // [ {tab name}, {url} ] - consumed below by forEach
-    const tabs = [['targetedGenes', 'targeted-genes'], ['clinicalTrial', 'clinical-trial']];
+    const tabs = [['targetedGenes', 'targeted-genes'], ['clinicalTrials', 'clinical-trials']];
 
     tabs.forEach(tab => {
       $stateProvider.state(`compound.${tab[0]}`, {

@@ -172,6 +172,7 @@
 
   module.controller('DonorMutationsCtrl', function(
     $scope,
+    $modal,
     Restangular,
     Donors,
     Projects,
@@ -180,6 +181,19 @@
   ) {
     var _ctrl = this,
       donor;
+
+    // Opens mutation modal on click
+    _ctrl.openMutationModal = function(mutation) {
+      $modal.open({
+        templateUrl: '/scripts/mutations/views/mutations.evidenceItemsModal.html',
+        controller: 'EvidenceItemModalCtrl',
+        size: 'mutation',
+        resolve: {
+          mutation: () => mutation,
+          levelFilter: () => null,
+        },
+      });
+    };
 
     function success(mutations) {
       if (mutations.hasOwnProperty('hits')) {

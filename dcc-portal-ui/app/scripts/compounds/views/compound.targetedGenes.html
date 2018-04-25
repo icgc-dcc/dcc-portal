@@ -131,5 +131,51 @@
                 data-row-limit="CompoundCtrl.defaultGenesRowLimit" data-row-sizes="CompoundCtrl.rowSizes" data-current-page="CompoundCtrl.currentGenesPage"></pagination-client-side>
 
         </div>
+        <table class="hidden" id="compound_mutated_genes">
+            <thead>
+                <tr>
+                    <th>
+                        <translate>Symbol</translate>
+                    </th>
+                    <th>
+                        <translate>Name</translate>
+                    </th>
+                    <th>
+                        <translate>Location</translate>
+                    </th>
+                    <th>
+                        <translate>Type</translate>
+                    </th>
+                    <th>
+                        <translate>Number of donors affected</translate>
+                    </th>
+                    <th>
+                        <translate>Percentage of affected donors</translate>
+                    </th>
+                    <th>
+                        <translate>Number of Mutations</translate>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="gene in CompoundCtrl.getTargetedCompoundGenes()">
+                    <td>
+                        <a href="/genes/{{gene.id}}" data-ng-bind="gene.symbol"></a>
+                    </td>
+                    <td data-ng-bind="gene.name"></td>
+                    <td data-ng-bind-template="chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}"></td>
+                    <td data-ng-bind="gene.type | trans"></td>
+                    <td>
+                        {{ gene.affectedDonorCountFiltered | number }}
+                    </td>
+                    <td>
+                        {{gene.affectedDonorCountFiltered/CompoundCtrl.getAffectedDonorCountTotal() * 100 | number:2}}%
+                    </td>
+                    <td>
+                        {{ gene.mutationCountTotal | number }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 </article>
