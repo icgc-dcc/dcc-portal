@@ -27,9 +27,6 @@ const stateResolver = {
     'CompoundsService',
     'gettextCatalog',
     function(Page, $stateParams, CompoundsService, gettextCatalog) {
-      Page.startWork();
-      Page.setTitle(gettextCatalog.getString('Compounds'));
-      Page.setPage('entity');
       return CompoundsService.getCompoundManagerFactory($stateParams.compoundId);
     },
   ],
@@ -88,6 +85,9 @@ angular
       _targetCompoundResultPage = 0,
       _targetedCompoundIds = [],
       _mutationalImpactFacets = null;
+
+    Page.setTitle(gettextCatalog.getString('Compounds'));
+    Page.setPage('entity');
 
     _ctrl.activeTab = $state.current.data.tab;
 

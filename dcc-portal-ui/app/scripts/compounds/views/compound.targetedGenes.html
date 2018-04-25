@@ -1,21 +1,21 @@
 <aside data-ng-if="CompoundCtrl.activeTab === 'targetedGenes'" class="t_sidebar">
     <section>
         <ul class="t_subnav__items">
-            <li class="t_subnav__items__item" data-ng-if="CompoundCtrl.mutationFacets.functionalImpact.total > 0" style="padding: .1rem 0;">
+            <li class="t_subnav__items__item" data-ng-if="CompoundCtrl.getMutationImpactFacets() && CompoundCtrl.getMutationImpactFacets().functionalImpact.total > 0" style="padding: .1rem 0;">
                 <span>
                     <translate>Quick Filters</translate>
                 </span>
             </li>
         </ul>
     </section>
-    <ul class="t_subnav__items__box" data-ng-if="CompoundCtrl.mutationFacets.functionalImpact.total > 0">
+    <ul class="t_subnav__items__box" data-ng-if="CompoundCtrl.getMutationImpactFacets() && CompoundCtrl.getMutationImpactFacets().functionalImpact.total > 0">
         <ul class="t_facets">
             <terms data-type="mutation" data-facet-name="functionalImpact" data-hide-count="true" data-label="{{'Mutation Impact' | translate}}"
-                data-facet="CompoundCtrl.mutationFacets.functionalImpact"></terms>
+                data-facet="CompoundCtrl.getMutationImpactFacets().functionalImpact"></terms>
         </ul>
         <ul class="t_facets">
             <terms data-type="mutation" data-facet-name="clinvarClinicalSignificance" data-hide-count="true" data-label="{{'Clinical Significance' | translate}}"
-                data-facet="CompoundCtrl.mutationFacets.clinvarClinicalSignificance"></terms>
+                data-facet="CompoundCtrl.getMutationImpactFacets().clinvarClinicalSignificance"></terms>
         </ul>
     </ul>
 </aside>
