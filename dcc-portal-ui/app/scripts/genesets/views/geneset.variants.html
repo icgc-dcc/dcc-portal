@@ -12,8 +12,6 @@
         <ul class="t_facets">
             <terms data-type="mutation" data-facet-name="functionalImpact" data-hide-count="true" data-label="{{'Mutation Impact' | translate}}"
                 data-facet="GeneSetCtrl.mutationFacets.functionalImpact"></terms>
-        </ul>
-        <ul class="t_facets">
             <terms data-type="mutation" data-facet-name="clinvarClinicalSignificance" data-hide-count="true" data-label="{{'Clinical Significance' | translate}}"
                 data-facet="GeneSetCtrl.mutationFacets.clinvarClinicalSignificance"></terms>
         </ul>
@@ -84,7 +82,7 @@
                 <span data-toolbar data-entity="{{GeneSetCtrl.geneSet.id}}_distribution" data-json="{{ GeneSetCtrl.geneSet.uiProjects }}"></span>
                 <table-filter data-class="small-filter" data-filter-model="GeneSetCtrl.tableFilter.projects" data-current-page="GeneSetCtrl.currentCancerPage"></table-filter>
             </span>
-            
+
             <table class="table table-bordered table-striped table-condensed" data-ng-init="sortProjectsDescendingly = true;">
                 <thead>
                     <tr>
