@@ -1,59 +1,139 @@
-<div class="clearfix">
-    <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
-        <li class="heading"><translate>Main</translate></li>
-        <li ng-repeat="item in FooterCtrl.mainItems"><a href="{{:: item.href }}">{{:: item.title }}</a></li>
-    </ul>
-    <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
-        <li class="heading"><translate>Tools</translate></li>
-        <li><a href="/browser"><translate>Genome Viewer</translate></a></li>
-        <li><a href="/ga4gh/beacon"><translate>ICGC GA4GH Beacon</translate></a></li>
-        <li><a href="http://docs.icgc.org/software/binaries/"><translate>Software</translate></a></li>
-    </ul>
-    <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
-        <li class="heading"><translate>Documentation</translate></li>
-        <li><a href="http://docs.icgc.org/portal/about" target="_blank"><translate>Portal</translate></a></li>
-        <li><a href="http://docs.icgc.org/portal/api-endpoints/" target="_blank"><translate>Portal API</translate></a></li>
-        <li><a href="http://docs.icgc.org/submission/about" target="_blank"><translate>Submission</translate></a></li>
-    </ul>
-    <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
-        <li class="heading">DCC</li>
-        <li><a href="/team"><translate>The Team</translate></a></li>
-        <li><a href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback"><translate>Contact Us</translate></a></li>
-        <li><a target="_blank" href="https://twitter.com/icgc_dcc"><translate>Twitter</translate></a></li>
-    </ul>
-    <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
-        <li class="heading">ICGC</li>
-        <li><a href="https://icgc.org" target="_blank"><translate>ICGC Home</translate></a></li>
-        <li><a href="https://www.icgc.org/daco" target="_blank"><translate>Data Access</translate></a></li>
-        <li><a href="https://www.icgc.org/icgc/goals-structure-policies-guidelines/e3-publication-policy" target="_blank"><translate>Publication Policy</translate></a></li>
-        <li><a href="https://www.icgc.org/privacy-policy" target="_blank"><translate>Privacy Policy</translate></a></li>
-        <li><a href="https://www.icgc.org/terms-and-conditions" target="_blank"><translate>Terms and Conditions</translate></a></li>
-    </ul>
-    <ul data-ng-if="stagedFeatures.getCloudLinks()">
-        <li class="heading"><translate>Cloud</translate></li>
-        <li data-ng-repeat="cloudLink in ::stagedFeatures.getCloudLinks()"><a data-ng-href="{{cloudLink.link}}" data-ng-bind="cloudLink.title"></a></li>
-        <li><a href="http://docs.icgc.org/cloud/guide/" target="_blank"><translate>User Guide</translate></a></li>
-    </ul>
-    <div class="logo omega">
-        <a href="http://oicr.on.ca/" target="_blank"><img src="/styles/images/OICR2logo.png"></a>
+<div class="wrap">
+    <div class="clearfix">
+        <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
+            <li class="heading">
+                <translate>Main</translate>
+            </li>
+            <li ng-repeat="item in FooterCtrl.mainItems">
+                <a href="{{:: item.href }}">{{:: item.title }}</a>
+            </li>
+        </ul>
+        <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
+            <li class="heading">
+                <translate>Tools</translate>
+            </li>
+            <li>
+                <a href="/browser">
+                    <translate>Genome Viewer</translate>
+                </a>
+            </li>
+            <li>
+                <a href="/ga4gh/beacon">
+                    <translate>ICGC GA4GH Beacon</translate>
+                </a>
+            </li>
+            <li>
+                <a href="http://docs.icgc.org/software/binaries/">
+                    <translate>Software</translate>
+                </a>
+            </li>
+        </ul>
+        <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
+            <li class="heading">
+                <translate>Documentation</translate>
+            </li>
+            <li>
+                <a href="http://docs.icgc.org/portal/about" target="_blank">
+                    <translate>Portal</translate>
+                </a>
+            </li>
+            <li>
+                <a href="http://docs.icgc.org/portal/api-endpoints/" target="_blank">
+                    <translate>Portal API</translate>
+                </a>
+            </li>
+            <li>
+                <a href="http://docs.icgc.org/submission/about" target="_blank">
+                    <translate>Submission</translate>
+                </a>
+            </li>
+        </ul>
+        <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
+            <li class="heading">DCC</li>
+            <li>
+                <a href="/team">
+                    <translate>The Team</translate>
+                </a>
+            </li>
+            <li>
+                <a href="mailto:dcc-support@icgc.org?Subject=Data%20Portal%20Feedback">
+                    <translate>Contact Us</translate>
+                </a>
+            </li>
+            <li>
+                <a target="_blank" href="https://twitter.com/icgc_dcc">
+                    <translate>Twitter</translate>
+                </a>
+            </li>
+        </ul>
+        <ul data-ng-class="{'footer-grid-adjust': ! stagedFeatures.getCloudLinks()}">
+            <li class="heading">ICGC</li>
+            <li>
+                <a href="https://icgc.org" target="_blank">
+                    <translate>ICGC Home</translate>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.icgc.org/daco" target="_blank">
+                    <translate>Data Access</translate>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.icgc.org/icgc/goals-structure-policies-guidelines/e3-publication-policy" target="_blank">
+                    <translate>Publication Policy</translate>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.icgc.org/privacy-policy" target="_blank">
+                    <translate>Privacy Policy</translate>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.icgc.org/terms-and-conditions" target="_blank">
+                    <translate>Terms and Conditions</translate>
+                </a>
+            </li>
+        </ul>
+        <ul data-ng-if="stagedFeatures.getCloudLinks()">
+            <li class="heading">
+                <translate>Cloud</translate>
+            </li>
+            <li data-ng-repeat="cloudLink in ::stagedFeatures.getCloudLinks()">
+                <a data-ng-href="{{cloudLink.link}}" data-ng-bind="cloudLink.title"></a>
+            </li>
+            <li>
+                <a href="http://docs.icgc.org/cloud/guide/" target="_blank">
+                    <translate>User Guide</translate>
+                </a>
+            </li>
+        </ul>
+        <div class="logo omega">
+            <a href="http://oicr.on.ca/" target="_blank">
+                <img src="/styles/images/OICR2logo.png">
+            </a>
+        </div>
     </div>
-</div>
-<div class="footer-caption" style="position:relative;">
-    <div>
-        <small>Crafted with care using</small>
-        <a href="https://jetbrains.com/" target="_blank">
-            <small><strong>JetBrains</strong></small>
-            <img src="/styles/images/jetbrains-logo.svg">
-        </a>
-    </div>
-    <div>
-        <small style="display: block"> &copy; {{COPYRIGHT_YEAR}} <a href="https://icgc.org"><translate>International Cancer Genome Consortium</translate>.</a> 
-            <translate>All Rights reserved.</translate>
-        </small>
-        <small style="display: block; line-height: .5rem" data-ng-if="FooterCtrl.portalVersion">
-            <translate>ICGC Data Portal</translate> 
-            {{FooterCtrl.portalVersion}} - API {{FooterCtrl.apiVersion}} -
-            <a href="https://github.com/icgc-dcc/dcc-portal/commit/{{FooterCtrl.portalCommit}}" target="_blank" data-ng-bind="FooterCtrl.portalCommit"></a>
-        </small>
+    <div class="footer-caption" style="position:relative;">
+        <div>
+            <small>Crafted with care using</small>
+            <a href="https://jetbrains.com/" target="_blank">
+                <small>
+                    <strong>JetBrains</strong>
+                </small>
+                <img src="/styles/images/jetbrains-logo.svg">
+            </a>
+        </div>
+        <div>
+            <small style="display: block"> &copy; {{COPYRIGHT_YEAR}}
+                <a href="https://icgc.org">
+                    <translate>International Cancer Genome Consortium</translate>.</a>
+                <translate>All Rights reserved.</translate>
+            </small>
+            <small style="display: block; line-height: .5rem" data-ng-if="FooterCtrl.portalVersion">
+                <translate>ICGC Data Portal</translate>
+                {{FooterCtrl.portalVersion}} - API {{FooterCtrl.apiVersion}} -
+                <a href="https://github.com/icgc-dcc/dcc-portal/commit/{{FooterCtrl.portalCommit}}" target="_blank" data-ng-bind="FooterCtrl.portalCommit"></a>
+            </small>
+        </div>
     </div>
 </div>
