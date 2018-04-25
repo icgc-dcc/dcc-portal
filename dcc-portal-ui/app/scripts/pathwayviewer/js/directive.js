@@ -366,15 +366,16 @@ import {ReactomePathway, PathwayModel, Renderer} from '@oncojs/pathwayviewer';
           handleRender();
         });
 
-        $scope.$watch('zooms', function (newValue, oldValue) {
-          if (newValue === oldValue) {
-            return;
-          }
+        // Commenting out to fix zoom bug, no ill effects visible ...
+        // $scope.$watch('zooms', function (newValue, oldValue) {
+        //   if (newValue === oldValue) {
+        //     return;
+        //   }
 
-          rendered = false;
-          zoomedOn = newValue;
-          handleRender();
-        });
+        //   rendered = false;
+        //   zoomedOn = newValue;
+        //   handleRender();
+        // });
 
         $scope.$watch('mutationHighlights', function (newValue, oldValue) {
           if (! newValue || newValue === oldValue) {
