@@ -38,7 +38,7 @@
             <translate>Donors</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__geneset" data-ng-click="GeneSetCtrl.activeTab = 'pathwayViewer'" data-ng-class="{active: GeneSetCtrl.activeTab === 'pathwayViewer'}"
+        <div ng-if="GeneSetCtrl.geneSet.type === 'pathway'" class="t_tabs__tab t_tabs__tab__geneset" data-ng-click="GeneSetCtrl.activeTab = 'pathwayViewer'" data-ng-class="{active: GeneSetCtrl.activeTab === 'pathwayViewer'}"
             data-nested data-href="genesets/{{GeneSetCtrl.geneSet.id}}/pathway-viewer">
             <translate>Pathway Viewer</translate>
             <br>
@@ -51,7 +51,7 @@
     <div class='t_tab_pane' data-ng-class="{active: GeneSetCtrl.activeTab === 'donors'}">
         <div data-ng-include="'scripts/genesets/views/geneset.donors.html'"></div>
     </div>
-    <div class='t_tab_pane' data-ng-class="{active: GeneSetCtrl.activeTab === 'pathwayViewer'}">
+    <div ng-if="GeneSetCtrl.geneSet.type === 'pathway'" class='t_tab_pane' data-ng-class="{active: GeneSetCtrl.activeTab === 'pathwayViewer'}">
         <div data-ng-include="'scripts/genesets/views/geneset.pathwayViewer.html'"></div>
     </div>
 </article>

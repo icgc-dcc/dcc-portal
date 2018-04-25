@@ -76,6 +76,7 @@
                     subheading="{{'Top 10 projects with donors containing mutated genes in the gene set sorted by proportion of mutated genes' | translate}}"
                     ylabel="{{'% of Genes Affected' | translate}}" format="percentage"></bar>
             </div>
+
             <span class="t_table_top">
                 <data-table-row-counts data-data="GeneSetCtrl.geneSet.uiProjects" data-filter="GeneSetCtrl.tableFilter.projects" data-label="{{'projects' | translate}}"
                     data-current-page="GeneSetCtrl.currentCancerPage" data-row-limit="GeneSetCtrl.defaultCancerRowLimit">
@@ -83,6 +84,7 @@
                 <span data-toolbar data-entity="{{GeneSetCtrl.geneSet.id}}_distribution" data-json="{{ GeneSetCtrl.geneSet.uiProjects }}"></span>
                 <table-filter data-class="small-filter" data-filter-model="GeneSetCtrl.tableFilter.projects" data-current-page="GeneSetCtrl.currentCancerPage"></table-filter>
             </span>
+            
             <table class="table table-bordered table-striped table-condensed" data-ng-init="sortProjectsDescendingly = true;">
                 <thead>
                     <tr>
