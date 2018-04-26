@@ -26,9 +26,9 @@
                 <translate>Summary</translate>
                 <br>
             </div>
-            <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="DonorCtrl.activeTab = 'variants'" data-ng-class="{active: DonorCtrl.activeTab === 'variants'}"
-                data-nested data-href="donors/{{DonorCtrl.donor.id}}/variants">
-                <translate>Variants</translate>
+            <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="DonorCtrl.activeTab = 'mutations'" data-ng-class="{active: DonorCtrl.activeTab === 'mutations'}"
+                data-nested data-href="donors/{{DonorCtrl.donor.id}}/mutations">
+                <translate>Mutations</translate>
                 <br>
             </div>
             <div class="t_tabs__tab t_tabs__tab__donor" data-ng-click="DonorCtrl.activeTab = 'files'" data-ng-class="{active: DonorCtrl.activeTab === 'files'}"
@@ -38,8 +38,8 @@
             </div>
         </div>
         <div class='t_tab_pane' data-ng-class="{active: DonorCtrl.activeTab === 'summary'}" data-ng-include="'scripts/donors/views/donor.summary.html'"></div>
-        <div class='t_tab_pane' data-ng-class="{active: DonorCtrl.activeTab === 'variants'}">
-            <div data-ng-include="'scripts/donors/views/donor.variants.html'"></div>
+        <div class='t_tab_pane' data-ng-class="{active: DonorCtrl.activeTab === 'mutations'}">
+            <div data-ng-include="'scripts/donors/views/donor.mutations.html'"></div>
         </div>
         <div class='t_tab_pane' data-ng-class="{active: DonorCtrl.activeTab === 'files'}">
             <div data-ng-include="'scripts/donors/views/donor.files.html'"></div>

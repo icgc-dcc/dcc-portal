@@ -1,4 +1,4 @@
-<aside data-ng-if="DonorCtrl.activeTab === 'variants'" class="t_sidebar">
+<aside data-ng-if="DonorCtrl.activeTab === 'mutations'" class="t_sidebar">
     <section>
         <ul class="t_subnav__items">
             <li class="t_subnav__items__item" data-ng-if="DonorCtrl.mutationFacets.functionalImpact.total > 0" style="padding: .1rem 0;">
@@ -18,7 +18,7 @@
     </ul>
 </aside>
 
-<article data-ng-if="DonorCtrl.activeTab === 'variants'">
+<article data-ng-if="DonorCtrl.activeTab === 'mutations'">
     <section id="mutations" data-ng-if="DonorCtrl.donor.state === 'live'" data-ng-controller="DonorMutationsCtrl as DonorMutationsCtrl"
         data-ng-class="{'loading': !DonorMutationsCtrl.mutations.hits, 'empty': DonorMutationsCtrl.mutations.hits.length == 0}">
         <h3 data-ng-if="!DonorMutationsCtrl.mutations.hits">

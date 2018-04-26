@@ -44,7 +44,7 @@
     });
 
     // [ {tab name}, {url} ] - consumed below by forEach
-    const tabs = [['variants', 'variants'], ['files', 'files']];
+    const tabs = [['mutations', 'mutations'], ['files', 'files']];
 
     tabs.forEach(tab => {
       $stateProvider.state(`donor.${tab[0]}`, {

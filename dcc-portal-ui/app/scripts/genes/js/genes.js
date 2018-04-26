@@ -46,7 +46,7 @@
 
     // [ {tab name}, {url} ] - consumed below by forEach
     const tabs = [
-      ['variants', 'variants'],
+      ['mutations', 'mutations'],
       ['targetingCompounds', 'targeting-compounds'],
       ['protein', 'protein'],
       ['genomeViewer', 'genome-viewer'],
@@ -208,7 +208,7 @@
         highImpactMutations: mutations.facets.functionalImpact.terms.filter(
           term => term.term === 'High'
         )[0].count,
-        clinicallySignificantVariants: clinicalCount,
+        clinicallySignificantMutations: clinicalCount,
         compounds: compounds.plain().length,
       };
     }

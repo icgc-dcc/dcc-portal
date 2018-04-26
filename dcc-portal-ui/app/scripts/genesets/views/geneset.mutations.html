@@ -1,4 +1,4 @@
-<aside data-ng-if="GeneSetCtrl.activeTab === 'variants'" class="t_sidebar">
+<aside data-ng-if="GeneSetCtrl.activeTab === 'mutations'" class="t_sidebar">
     <section>
         <ul class="t_subnav__items">
             <li class="t_subnav__items__item" data-ng-if="GeneSetCtrl.mutationFacets.functionalImpact.total > 0" style="padding: .1rem 0;">
@@ -19,7 +19,7 @@
 </aside>
 
 
-<article data-ng-if="GeneSetCtrl.activeTab === 'variants'">
+<article data-ng-if="GeneSetCtrl.activeTab === 'mutations'">
     <section id="projects" data-ng-class="{'loading': !GeneSetCtrl.geneSet.projects, 'empty': GeneSetCtrl.geneSet.projects.length == 0}">
         <h3 data-ng-if="!GeneSetCtrl.geneSet.projects">
             <i class="icon-spinner icon-spin"></i>

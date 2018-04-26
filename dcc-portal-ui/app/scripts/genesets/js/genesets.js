@@ -44,7 +44,7 @@
     });
 
     // [ {tab name}, {url} ] - consumed below by forEach
-    const tabs = [['variants', 'variants'], ['donors', 'donors'], ['pathwayViewer', 'pathway-viewer']];
+    const tabs = [['mutations', 'mutations'], ['donors', 'donors'], ['pathwayViewer', 'pathway-viewer']];
 
     tabs.forEach(tab => {
       $stateProvider.state(`geneset.${tab[0]}`, {

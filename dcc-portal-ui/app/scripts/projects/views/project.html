@@ -38,9 +38,9 @@
                 <translate>Donors</translate>
                 <br>
             </div>
-            <div class="t_tabs__tab t_tabs__tab__project" data-ng-click="ProjectCtrl.activeTab = 'variants'" data-ng-class="{active: ProjectCtrl.activeTab === 'variants'}"
-                data-nested data-href="projects/{{ProjectCtrl.project.id}}/variants">
-                <translate>Variants</translate>
+            <div class="t_tabs__tab t_tabs__tab__project" data-ng-click="ProjectCtrl.activeTab = 'mutations'" data-ng-class="{active: ProjectCtrl.activeTab === 'mutations'}"
+                data-nested data-href="projects/{{ProjectCtrl.project.id}}/mutations">
+                <translate>Mutations</translate>
                 <br>
             </div>
         </div>
@@ -48,8 +48,8 @@
         <div class='t_tab_pane' data-ng-class="{active: ProjectCtrl.activeTab === 'donors'}">
             <div data-ng-include="'scripts/projects/views/project.donors.html'"></div>
         </div>
-        <div class='t_tab_pane' data-ng-class="{active: ProjectCtrl.activeTab === 'variants'}">
-            <div data-ng-include="'scripts/projects/views/project.variants.html'"></div>
+        <div class='t_tab_pane' data-ng-class="{active: ProjectCtrl.activeTab === 'mutations'}">
+            <div data-ng-include="'scripts/projects/views/project.mutations.html'"></div>
         </div>
     </article>
 </span>

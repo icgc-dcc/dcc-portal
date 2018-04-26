@@ -28,9 +28,9 @@
             <translate>Summary</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__geneset" data-ng-click="GeneSetCtrl.activeTab = 'variants'" data-ng-class="{active: GeneSetCtrl.activeTab === 'variants'}"
-            data-nested data-href="genesets/{{GeneSetCtrl.geneSet.id}}/variants">
-            <translate>Variants</translate>
+        <div class="t_tabs__tab t_tabs__tab__geneset" data-ng-click="GeneSetCtrl.activeTab = 'mutations'" data-ng-class="{active: GeneSetCtrl.activeTab === 'mutations'}"
+            data-nested data-href="genesets/{{GeneSetCtrl.geneSet.id}}/mutations">
+            <translate>Mutations</translate>
             <br>
         </div>
         <div class="t_tabs__tab t_tabs__tab__geneset" data-ng-click="GeneSetCtrl.activeTab = 'donors'" data-ng-class="{active: GeneSetCtrl.activeTab === 'donors'}"
@@ -45,8 +45,8 @@
         </div>
     </div>
     <div class='t_tab_pane' data-ng-class="{active: GeneSetCtrl.activeTab === 'summary'}" data-ng-include="'scripts/genesets/views/geneset.summary.html'"></div>
-    <div class='t_tab_pane' data-ng-class="{active: GeneSetCtrl.activeTab === 'variants'}">
-        <div data-ng-include="'scripts/genesets/views/geneset.variants.html'"></div>
+    <div class='t_tab_pane' data-ng-class="{active: GeneSetCtrl.activeTab === 'mutations'}">
+        <div data-ng-include="'scripts/genesets/views/geneset.mutations.html'"></div>
     </div>
     <div class='t_tab_pane' data-ng-class="{active: GeneSetCtrl.activeTab === 'donors'}">
         <div data-ng-include="'scripts/genesets/views/geneset.donors.html'"></div>

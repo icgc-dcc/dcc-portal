@@ -1,6 +1,6 @@
-<aside data-ng-include="'scripts/genes/views/gene.filters.html'" data-ng-if="GeneCtrl.activeTab ==='variants'" class="t_sidebar"></aside>
+<aside data-ng-include="'scripts/genes/views/gene.filters.html'" data-ng-if="GeneCtrl.activeTab ==='mutations'" class="t_sidebar"></aside>
 
-<article data-ng-if="GeneCtrl.activeTab === 'variants'">
+<article data-ng-if="GeneCtrl.activeTab === 'mutations'">
     <current></current>
     
     <section id="projects" class="dynamic-height" data-ng-class="{'loading': !GeneCtrl.gene.projects.hits, 'empty': GeneCtrl.gene.projects.length == 0}">

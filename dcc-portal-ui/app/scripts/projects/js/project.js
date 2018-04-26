@@ -42,7 +42,7 @@
   module.config(function($stateProvider) {
 
     // [ {tab name}, {url} ] - consumed below by forEach
-    const tabs = [['variants', 'variants'], ['donors', 'donors']];
+    const tabs = [['mutations', 'mutations'], ['donors', 'donors']];
 
     tabs.forEach(tab => {
       $stateProvider.state(`project.${tab[0]}`, {

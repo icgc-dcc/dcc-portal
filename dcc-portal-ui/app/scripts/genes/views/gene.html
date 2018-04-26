@@ -11,9 +11,9 @@
             <translate>Summary</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="GeneCtrl.activeTab = 'variants'" data-ng-class="{active: GeneCtrl.activeTab === 'variants'}"
-            data-nested data-href="genes/{{GeneCtrl.gene.id}}/variants">
-            <translate>Variants</translate>
+        <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="GeneCtrl.activeTab = 'mutations'" data-ng-class="{active: GeneCtrl.activeTab === 'mutations'}"
+            data-nested data-href="genes/{{GeneCtrl.gene.id}}/mutations">
+            <translate>Mutations</translate>
             <br>
         </div>
         <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="GeneCtrl.activeTab = 'targetingCompounds'" data-ng-class="{active: GeneCtrl.activeTab === 'targetingCompounds'}"
@@ -33,8 +33,8 @@
         </div>
     </div>
     <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'summary'}" data-ng-include="'scripts/genes/views/gene.summary.html'"></div>
-    <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'variants'}">
-        <div data-ng-include="'scripts/genes/views/gene.variants.html'"></div>
+    <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'mutations'}">
+        <div data-ng-include="'scripts/genes/views/gene.mutations.html'"></div>
     </div>
     <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'targetingCompounds'}">
         <div data-ng-include="'scripts/genes/views/gene.targetingCompounds.html'"></div>

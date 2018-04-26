@@ -172,7 +172,7 @@
                 <td>
                     <i ng-if="!GeneCtrl.summarCountsLoaded" class="icon-spinner icon-spin"></i>
                     <span ng-if="GeneCtrl.summarCountsLoaded && GeneCtrl.summaryCounts.highImpactMutations === 0">0</span>
-                    <a ng-if="GeneCtrl.summarCountsLoaded && GeneCtrl.summaryCounts.highImpactMutations > 0" data-ng-click="GeneCtrl.activeTab = 'variants'" ng-href='/genes/{{ GeneCtrl.gene.id }}/variants?filters=%7B"mutation":%7B"functionalImpact":%7B"is":%5B"High"%5D%7D%7D%7D&mutations=%7B"from":1%7D'>{{ GeneCtrl.summaryCounts.highImpactMutations }}</a>
+                    <a ng-if="GeneCtrl.summarCountsLoaded && GeneCtrl.summaryCounts.highImpactMutations > 0" data-ng-click="GeneCtrl.activeTab = 'mutations'" ng-href='/genes/{{ GeneCtrl.gene.id }}/mutations?filters=%7B"mutation":%7B"functionalImpact":%7B"is":%5B"High"%5D%7D%7D%7D&mutations=%7B"from":1%7D'>{{ GeneCtrl.summaryCounts.highImpactMutations }}</a>
                 </td>
                 <td>
                     <translate>High Impact Mutations</translate>
@@ -181,11 +181,11 @@
             <tr>
                 <td>
                     <i ng-if="!GeneCtrl.summarCountsLoaded" class="icon-spinner icon-spin"></i>
-                    <span ng-if="GeneCtrl.summarCountsLoaded && GeneCtrl.summaryCounts.clinicallySignificantVariants === 0">0</span>
-                    <a ng-if="GeneCtrl.summarCountsLoaded && GeneCtrl.summaryCounts.clinicallySignificantVariants > 0" data-ng-click="GeneCtrl.activeTab = 'variants'" ng-href='/genes/{{ GeneCtrl.gene.id }}/variants?filters=%7B"mutation":%7B"clinvarClinicalSignificance":%7B"is":%5B"Pathogenic%2FLikely%20pathogenic","Pathogenic","Likely%20pathogenic"%5D%7D%7D%7D&mutations=%7B"from":1%7D'>{{ GeneCtrl.summaryCounts.clinicallySignificantVariants }}</a>
+                    <span ng-if="GeneCtrl.summarCountsLoaded && GeneCtrl.summaryCounts.clinicallySignificantMutations === 0">0</span>
+                    <a ng-if="GeneCtrl.summarCountsLoaded && GeneCtrl.summaryCounts.clinicallySignificantMutations > 0" data-ng-click="GeneCtrl.activeTab = 'mutations'" ng-href='/genes/{{ GeneCtrl.gene.id }}/mutations?filters=%7B"mutation":%7B"clinvarClinicalSignificance":%7B"is":%5B"Pathogenic%2FLikely%20pathogenic","Pathogenic","Likely%20pathogenic"%5D%7D%7D%7D&mutations=%7B"from":1%7D'>{{ GeneCtrl.summaryCounts.clinicallySignificantMutations }}</a>
                 </td>
                 <td>
-                    <translate>Clinically Significant Variants</translate>
+                    <translate>Clinically Significant Mutations</translate>
                 </td>
             </tr>
             <tr>
