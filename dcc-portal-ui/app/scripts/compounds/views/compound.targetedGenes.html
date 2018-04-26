@@ -1,4 +1,4 @@
-<aside data-ng-if="CompoundCtrl.activeTab === 'targetedGenes'" class="t_sidebar">
+<aside data-ng-show="CompoundCtrl.activeTab === 'targetedGenes'" class="t_sidebar">
     <section>
         <ul class="t_subnav__items">
             <li class="t_subnav__items__item" data-ng-if="CompoundCtrl.getMutationImpactFacets() && CompoundCtrl.getMutationImpactFacets().functionalImpact.total > 0" style="padding: .1rem 0;">
@@ -20,7 +20,7 @@
     </ul>
 </aside>
 
-<article data-ng-if="CompoundCtrl.activeTab === 'targetedGenes'">
+<article data-ng-show="CompoundCtrl.activeTab === 'targetedGenes'">
     <section data-ng-init="compound = CompoundCtrl.getCompound()" id="genes">
         <div class="full">
             <h3>
