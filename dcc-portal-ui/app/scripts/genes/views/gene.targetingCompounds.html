@@ -1,4 +1,4 @@
-<section data-ng-if="GeneCtrl.activeTab ==='targetingCompounds'" id="compounds" class="dynamic-height" ng-controller="GeneCompoundsCtrl as GeneCompoundsCtrl"
+<section data-ng-show="GeneCtrl.activeTab ==='targetingCompounds'" id="compounds" class="dynamic-height" ng-controller="GeneCompoundsCtrl as GeneCompoundsCtrl"
     ng-class="{ 'loading': GeneCompoundsCtrl.compounds === undefined, 'empty': GeneCompoundsCtrl.compoundslength === 0 }">
 
     <h3 ng-if="GeneCompoundsCtrl.compounds === undefined">
