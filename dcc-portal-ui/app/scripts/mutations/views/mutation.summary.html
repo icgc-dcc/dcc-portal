@@ -1,4 +1,4 @@
-<section data-ng-if="MutationCtrl.activeTab === 'summary'" id="summary" class="dynamic-height">
+<section data-ng-show="MutationCtrl.activeTab === 'summary'" id="summary" class="dynamic-height">
     <div class="wide">
         <h3>
             <translate>Summary</translate>
@@ -87,7 +87,7 @@
     </div>
 </section>
 
-<section data-ng-if="MutationCtrl.activeTab === 'summary'" id="transcripts" data-ng-class="{'loading': !MutationCtrl.mutation.transcripts, 'empty': MutationCtrl.mutation.transcripts.length == 0}">
+<section data-ng-show="MutationCtrl.activeTab === 'summary'" id="transcripts" data-ng-class="{'loading': !MutationCtrl.mutation.transcripts, 'empty': MutationCtrl.mutation.transcripts.length == 0}">
     <h3 data-ng-if="MutationCtrl.mutation.transcripts.length == 0">
         <translate>No Consequences Found.</translate>
     </h3>
@@ -208,7 +208,7 @@
     </div>
 </section>
 
-<section data-ng-if="MutationCtrl.activeTab === 'summary'" id="donors" data-ng-class="{'loading': !MutationCtrl.projects, 'empty': MutationCtrl.projects.length == 0}" fix-scroll>
+<section data-ng-show="MutationCtrl.activeTab === 'summary'" id="donors" data-ng-class="{'loading': !MutationCtrl.projects, 'empty': MutationCtrl.projects.length == 0}" fix-scroll>
     <h3 data-ng-if="MutationCtrl.projects.length == 0">
         <translate>No Cancer Projects affected by this Mutation</translate>
     </h3>

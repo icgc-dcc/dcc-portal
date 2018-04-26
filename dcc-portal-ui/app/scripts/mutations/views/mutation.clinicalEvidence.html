@@ -1,4 +1,4 @@
-<section data-ng-if="MutationCtrl.activeTab ==='clinicalEvidence'" id="clinicalEvidence" data-ng-class="{'loading': !MutationCtrl.mutation.clinical_evidence.civic, 'null': MutationCtrl.mutation.clinical_evidence.civic == null}">
+<section data-ng-show="MutationCtrl.activeTab ==='clinicalEvidence'" id="clinicalEvidence" data-ng-class="{'loading': !MutationCtrl.mutation.clinical_evidence.civic, 'null': MutationCtrl.mutation.clinical_evidence.civic == null}">
     <h3 data-ng-if="MutationCtrl.mutation.clinical_evidence.civic == null">
         <translate>No Clinical Evidence Found.</translate>
     </h3>
