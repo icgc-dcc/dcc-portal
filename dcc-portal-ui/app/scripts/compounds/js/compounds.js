@@ -57,7 +57,6 @@ angular
         url: `/${tab[1]}`,
         reloadOnSearch: true,
         data: { tab: `${tab[0]}` },
-        resolve: stateResolver,
       });
     });
   });

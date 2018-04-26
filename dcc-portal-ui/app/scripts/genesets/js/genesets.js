@@ -49,8 +49,8 @@
     tabs.forEach(tab => {
       $stateProvider.state(`geneset.${tab[0]}`, {
         url: `/${tab[1]}`,
+        reloadOnSearch: false,
         data: { tab: `${tab[0]}` },
-        resolve: stateResolver,
       });
     });
   });
