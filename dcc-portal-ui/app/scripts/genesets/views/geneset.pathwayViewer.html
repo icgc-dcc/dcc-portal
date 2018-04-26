@@ -1,4 +1,4 @@
-<section data-ng-if="GeneSetCtrl.activeTab === 'pathwayViewer'" id="pathway" data-ng-if="GeneSetCtrl.geneSet.source === 'Reactome'" data-ng-class="{'loading': GeneSetCtrl.pathway.loading, 'empty': GeneSetCtrl.pathway.xml}">
+<section data-ng-show="GeneSetCtrl.activeTab === 'pathwayViewer'" id="pathway" data-ng-if="GeneSetCtrl.geneSet.source === 'Reactome'" data-ng-class="{'loading': GeneSetCtrl.pathway.loading, 'empty': GeneSetCtrl.pathway.xml}">
     <h3 data-ng-if="GeneSetCtrl.pathway.loading">
         <i class="icon-spinner icon-spin"></i>
         <translate>Loading Pathway Viewer...</translate>

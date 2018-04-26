@@ -1,4 +1,4 @@
-<section data-ng-if="GeneSetCtrl.activeTab === 'donors'" id="donors" data-ng-controller="GeneSetDonorsCtrl as GeneSetDonorsCtrl" data-ng-class="{'loading': !GeneSetDonorsCtrl.donors.hits, 'empty': GeneSetDonorsCtrl.donors.hits.length == 0}"
+<section data-ng-show="GeneSetCtrl.activeTab === 'donors'" id="donors" data-ng-controller="GeneSetDonorsCtrl as GeneSetDonorsCtrl" data-ng-class="{'loading': !GeneSetDonorsCtrl.donors.hits, 'empty': GeneSetDonorsCtrl.donors.hits.length == 0}"
     fix-scroll>
     <h3 data-ng-if="!GeneSetDonorsCtrl.donors.hits">
         <i class="icon-spinner icon-spin"></i>
