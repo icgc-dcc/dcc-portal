@@ -71,6 +71,7 @@
 
   module.controller('MutationCtrl', function(
     $state,
+    $scope,
     HighchartsService,
     Page,
     Genes,
@@ -83,7 +84,7 @@
     Page.setTitle(mutation.id);
     Page.setPage('entity');
 
-    _ctrl.activeTab = $state.current.data.tab;
+    setActiveTab($state.current.data.tab);
 
     _ctrl.gvOptions = { location: false, panels: false, zoom: 100 };
 
@@ -327,6 +328,29 @@
         );
       });
     }
+
+    function setActiveTab(tab) {
+      if (_ctrl.activeTab !== tab)
+        _ctrl.activeTab = tab;
+    }
+
+    $scope.$watch(
+      function() {
+        var stateData = angular.isDefined($state.current.data) ? $state.current.data : null;
+        if (
+          !stateData ||
+          !angular.isDefined(stateData.tab)
+        ) {
+          return null;
+        }
+        return stateData.tab;
+      },
+      function(tab) {
+        if (tab !== null) {
+          setActiveTab(tab);
+        }
+      }
+    );
 
     _ctrl.isPCAWG = function(mutation) {
       return _.some(mutation.study, PCAWG.isPCAWGStudy);

@@ -81,7 +81,7 @@
     Page.setTitle(donor.id);
     Page.setPage('entity');
 
-    _ctrl.activeTab = $state.current.data.tab;
+    setActiveTab($state.current.data.tab);
 
     _ctrl.hasSupplementalFiles = function(donor) {
       return donor.biomarker || donor.family || donor.exposure || donor.surgery || donor.therapy;
@@ -161,11 +161,35 @@
       });
     }
 
+    function setActiveTab(tab) {
+      if (_ctrl.activeTab !== tab)
+        _ctrl.activeTab = tab;
+    }
+
     $scope.$on('$locationChangeSuccess', function(event, dest) {
+      // debugger;
       if (dest.indexOf('donors') !== -1) {
         refresh();
       }
     });
+
+    $scope.$watch(
+      function() {
+        var stateData = angular.isDefined($state.current.data) ? $state.current.data : null;
+        if (
+          !stateData ||
+          !angular.isDefined(stateData.tab)
+        ) {
+          return null;
+        }
+        return stateData.tab;
+      },
+      function(tab) {
+        if (tab !== null) {
+          setActiveTab(tab);
+        }
+      }
+    );
 
     refresh();
   });

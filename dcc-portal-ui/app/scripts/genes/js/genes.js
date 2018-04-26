@@ -152,7 +152,7 @@
     Page.setTitle(gene.id);
     Page.setPage('entity');
 
-    _ctrl.activeTab = $state.current.data.tab;
+    setActiveTab($state.current.data.tab);
 
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
@@ -380,6 +380,29 @@
         );
       });
     }
+
+    function setActiveTab(tab) {
+      if (_ctrl.activeTab !== tab)
+        _ctrl.activeTab = tab;
+    }
+
+    $scope.$watch(
+      function() {
+        var stateData = angular.isDefined($state.current.data) ? $state.current.data : null;
+        if (
+          !stateData ||
+          !angular.isDefined(stateData.tab)
+        ) {
+          return null;
+        }
+        return stateData.tab;
+      },
+      function(tab) {
+        if (tab !== null) {
+          setActiveTab(tab);
+        }
+      }
+    );
 
     $scope.$on('$locationChangeSuccess', function(event, dest) {
       if (dest.indexOf('genes') !== -1) {

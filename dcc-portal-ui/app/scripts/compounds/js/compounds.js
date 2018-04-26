@@ -88,7 +88,7 @@ angular
     Page.setTitle(gettextCatalog.getString('Compounds'));
     Page.setPage('entity');
 
-    _ctrl.activeTab = $state.current.data.tab;
+    setActiveTab($state.current.data.tab);
 
     // Defaults for client side pagination
     _ctrl.currentGenesPage = 1;
@@ -251,6 +251,11 @@ angular
       return _compound;
     };
 
+    function setActiveTab(tab) {
+      if (_ctrl.activeTab !== tab)
+        _ctrl.activeTab = tab;
+    }
+
     // Watch to get affected donor count total once genes promise finishes loading
     $scope.$watch(
       function() {
@@ -258,6 +263,24 @@ angular
       },
       function() {
         _targetGenes = getUiTargetedCompoundGenesJSON(_targetedCompoundGenes);
+      }
+    );
+
+    $scope.$watch(
+      function() {
+        var stateData = angular.isDefined($state.current.data) ? $state.current.data : null;
+        if (
+          !stateData ||
+          !angular.isDefined(stateData.tab)
+        ) {
+          return null;
+        }
+        return stateData.tab;
+      },
+      function(tab) {
+        if (tab !== null) {
+          setActiveTab(tab);
+        }
       }
     );
   });

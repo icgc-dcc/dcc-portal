@@ -25,20 +25,6 @@
     'ui.router',
   ]);
 
-  const stateResolver = {
-    project: [
-      '$stateParams',
-      'Projects',
-      function($stateParams, Projects) {
-        return Projects.one($stateParams.id)
-          .get()
-          .then(function(project) {
-            return project;
-          });
-      },
-    ],
-  };
-
   module.config(function($stateProvider) {
 
     // [ {tab name}, {url} ] - consumed below by forEach
@@ -80,7 +66,7 @@
     Page.setTitle(project.id);
     Page.setPage('entity');
 
-    _ctrl.activeTab = $state.current.data.tab;
+    setActiveTab($state.current.data.tab);
 
     var loadState = new LoadState();
 
@@ -259,11 +245,34 @@
       });
     };
 
+    function setActiveTab(tab) {
+      if (_ctrl.activeTab !== tab)
+        _ctrl.activeTab = tab;
+    }
+
     $scope.$on('$locationChangeSuccess', function(event, dest) {
       if (dest.indexOf('projects') !== -1) {
         refresh();
       }
     });
+
+    $scope.$watch(
+      function() {
+        var stateData = angular.isDefined($state.current.data) ? $state.current.data : null;
+        if (
+          !stateData ||
+          !angular.isDefined(stateData.tab)
+        ) {
+          return null;
+        }
+        return stateData.tab;
+      },
+      function(tab) {
+        if (tab !== null) {
+          setActiveTab(tab);
+        }
+      }
+    );
 
     $scope.$watch(
       function() {
