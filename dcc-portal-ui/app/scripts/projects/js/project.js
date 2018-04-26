@@ -40,13 +40,6 @@
   };
 
   module.config(function($stateProvider) {
-    $stateProvider.state('project', {
-      url: '/projects/:id',
-      templateUrl: 'scripts/projects/views/project.html',
-      controller: 'ProjectCtrl as ProjectCtrl',
-      data: { tab: 'summary' },
-      resolve: stateResolver,
-    });
 
     // [ {tab name}, {url} ] - consumed below by forEach
     const tabs = [['variants', 'variants'], ['donors', 'donors']];
