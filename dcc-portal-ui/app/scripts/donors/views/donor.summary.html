@@ -1,4 +1,4 @@
-<section data-ng-if="DonorCtrl.activeTab === 'summary'" id="summary">
+<section data-ng-show="DonorCtrl.activeTab === 'summary'" id="summary">
     <div class="half">
         <h3>
             <translate>Summary</translate>
@@ -181,7 +181,7 @@
     </div>
 </section>
 
-<section data-ng-if="DonorCtrl.activeTab === 'summary'" id="clinical">
+<section data-ng-show="DonorCtrl.activeTab === 'summary'" id="clinical">
     <h3>
         <translate>Clinical Data</translate>
         <small class="pull-right" style="font-size: 1.0rem" data-ng-if="DonorCtrl.donor.clinicalXML">
@@ -320,7 +320,7 @@
 
 </section>
 
-<section data-ng-if="DonorCtrl.activeTab === 'summary'" id="specimen" data-ng-controller="DonorSpecimenCtrl as DonorSpecimenCtrl" data-ng-class="{'empty': DonorCtrl.donor.specimen.length == 0}">
+<section data-ng-show="DonorCtrl.activeTab === 'summary'" id="specimen" data-ng-controller="DonorSpecimenCtrl as DonorSpecimenCtrl" data-ng-class="{'empty': DonorCtrl.donor.specimen.length == 0}">
     <h3 data-ng-if="DonorCtrl.donor.specimen.length == 0">
         <translate>No Specimen Found.</translate>
     </h3>
