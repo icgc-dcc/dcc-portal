@@ -681,21 +681,21 @@ angular
       >not working</div>
     `,
       link: function($scope, $element, $attrs) {
-        
         // Wrap render into a function used within $timeout below
         const renderWhenReady = () => {
-          let c, renderChart, chartsDefaults;
+          let c;
 
           const onRender = $scope.onRender();
 
-          renderChart = function(settings) {
+          const renderChart = function(settings) {
             if (c) {
               c.destroy();
             }
+            debugger;
             c = new Highcharts.Chart(settings, onRender);
           };
 
-          chartsDefaults = {
+          const chartsDefaults = {
             credits: { enabled: false },
             chart: {
               renderTo: $element[0],
@@ -825,44 +825,46 @@ angular
             $scope.configOverrides()
           );
 
+          $scope.$watch(
+            'items',
+            function(newValue) {
+              var deepCopy, newSettings;
+
+              if (!newValue) {
+                return;
+              }
+              // We need deep copy in order to NOT override original chart object.
+              // This allows us to override chart data member and still the keep
+              // our original renderTo will be the same
+              deepCopy = true;
+              newSettings = {};
+              jQuery.extend(deepCopy, newSettings, chartsDefaults);
+              newSettings.xAxis.categories = newValue.x;
+
+              if (!$attrs.format || $attrs.format !== 'percentage') {
+                if (newSettings.yAxis) {
+                  newSettings.yAxis.allowDecimals = false;
+                }
+              }
+
+              newSettings.series = [{ data: newValue.s }];
+              debugger;
+              renderChart(newSettings);
+            },
+            true
+          );
+
+          $scope.$on('$destroy', function() {
+            debugger;
+            c.destroy();
+          });
+
           renderChart(chartsDefaults);
         };
 
         // $timeout forces the render function to after the DOM has loaded
         // ensureing that we have our proper parent elem offsetWidth
         $timeout(renderWhenReady, 0);
-
-        $scope.$watch(
-          'items',
-          function(newValue) {
-            var deepCopy, newSettings;
-
-            if (!newValue) {
-              return;
-            }
-            // We need deep copy in order to NOT override original chart object.
-            // This allows us to override chart data member and still the keep
-            // our original renderTo will be the same
-            deepCopy = true;
-            newSettings = {};
-            jQuery.extend(deepCopy, newSettings, chartsDefaults);
-            newSettings.xAxis.categories = newValue.x;
-
-            if (!$attrs.format || $attrs.format !== 'percentage') {
-              if (newSettings.yAxis) {
-                newSettings.yAxis.allowDecimals = false;
-              }
-            }
-
-            newSettings.series = [{ data: newValue.s }];
-            renderChart(newSettings);
-          },
-          true
-        );
-
-        $scope.$on('$destroy', function() {
-          c.destroy();
-        });
       },
     };
   });
