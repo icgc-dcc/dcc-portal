@@ -167,7 +167,6 @@
     }
 
     $scope.$on('$locationChangeSuccess', function(event, dest) {
-      // debugger;
       if (dest.indexOf('donors') !== -1) {
         refresh();
       }
