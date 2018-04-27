@@ -1,4 +1,4 @@
-<section data-ng-if="MutationCtrl.activeTab === 'genomeViewer'" id="genomic">
+<section data-ng-show="MutationCtrl.activeTab === 'genomeViewer'" id="genomic">
     <div class="empty" data-ng-if="MutationCtrl.isGVLoading">
         <h3>
             <i class="icon-spinner icon-spin"></i>Loading Genomic Context...
