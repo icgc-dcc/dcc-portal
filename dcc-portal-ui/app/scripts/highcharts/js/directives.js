@@ -691,7 +691,6 @@ angular
             if (c) {
               c.destroy();
             }
-            debugger;
             c = new Highcharts.Chart(settings, onRender);
           };
 
@@ -848,14 +847,12 @@ angular
               }
 
               newSettings.series = [{ data: newValue.s }];
-              debugger;
               renderChart(newSettings);
             },
             true
           );
 
           $scope.$on('$destroy', function() {
-            debugger;
             c.destroy();
           });
 
