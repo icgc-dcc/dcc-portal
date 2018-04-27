@@ -1,6 +1,6 @@
-<aside data-ng-include="'scripts/genes/views/gene.filters.html'" data-ng-show="GeneCtrl.activeTab ==='protein'" class="t_sidebar"></aside>
+<aside data-ng-include="'scripts/genes/views/gene.filters.html'" data-ng-if="GeneCtrl.activeTab ==='protein'" class="t_sidebar"></aside>
 
-<article data-ng-show="GeneCtrl.activeTab === 'protein'">
+<article data-ng-if="GeneCtrl.activeTab === 'protein'">
     <current></current>
 
     <section id="protein" class="dynamic-height">

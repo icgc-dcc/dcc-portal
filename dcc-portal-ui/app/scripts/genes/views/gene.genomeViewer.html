@@ -1,4 +1,4 @@
-<section data-ng-show="GeneCtrl.activeTab ==='genomeViewer'" id="genomic" class="dynamic-height" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
+<section data-ng-if="GeneCtrl.activeTab ==='genomeViewer'" id="genomic" class="dynamic-height" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
     <div class="empty" data-ng-if="GeneCtrl.isGVLoading">
         <h3>
             <i class="icon-spinner icon-spin"></i>Loading Genomic Context...
