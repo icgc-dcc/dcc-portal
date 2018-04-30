@@ -20,7 +20,7 @@
 
   let module = angular.module('icgc.oncololliplot.controllers', []);
 
-  module.controller('OncoLolliplotController', ($scope, $element, $filter, Protein) => {
+  module.controller('OncoLolliplotController', ($scope, $element, $filter, $timeout, Protein) => {
     const importDependencies = [
       import('react'),
       import('react-dom'),
@@ -58,7 +58,9 @@
 
         // Update state on filters changes
         $scope.$watch('filters', () => {
-          const { oncoLolliplot: { selectedTranscript, mutationService } } = store.getState();
+          const {
+            oncoLolliplot: { selectedTranscript, mutationService },
+          } = store.getState();
           loadTranscript(store.dispatch, {
             selectedTranscript,
             mutationService,
@@ -86,7 +88,7 @@
         $(window).on('resize', () => {
           $scope.$apply();
         });
-
+        
         render(
           <Provider store={store}>
             <Lolliplot d3={d3} />
