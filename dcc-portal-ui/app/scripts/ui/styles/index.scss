@@ -2,6 +2,7 @@
 @import "./tooltip";
 @import "./copyclip";
 @import "./trees";
+@import "./lolliplot";
 
 [data-open-in-list], [open-in-list] {
   & > a + a, & > ng-transclude > a {
