@@ -148,10 +148,10 @@ function filterResults(m, filters) {
 /**
  * Extract mutation start
  * @param {object} m - mutation
- * @returns {string} - starting position
+ * @returns {number} - starting position
  */
 function getAaStart(m) {
-  return m.replace(/[^\d]/g, '');
+  return parseInt(m.replace(/[^\d]/g, ''), 10);
 }
 
 /** Process proteins for backbone

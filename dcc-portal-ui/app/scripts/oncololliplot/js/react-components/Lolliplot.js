@@ -47,11 +47,14 @@ class Lolliplot extends Component {
 
     const { cursorPos } = this.state;
 
+    // If data is still loading or the UI parent element has not been drawn yet by Angular ... loadingStatus === true
+    const loadingStatus = loading || displayWidth === 0;
+
     return (
       <div onMouseMove={this._onMouseMove.bind(this)} style={{ minHeight: '454px' }}>
         <h3>Protein</h3>
         <Toolbar />
-        {loading ? (
+        {loadingStatus ? (
           <Loading />
         ) : (
           <div>

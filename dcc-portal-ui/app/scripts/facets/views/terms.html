@@ -11,7 +11,7 @@
             ><i class="icon-undo"></i></span>
         </span>
         <span class="t_tools t_facets_facet_search_icon" 
-            data-ng-show="(inactives.length > (searchIconShowLimit || 5)) && !collapsed">
+            data-ng-show="(inactives.length > (searchIconShowLimit || 5)) && !collapsed && !actives.length">
             <span data-ng-click="showSearch = !showSearch" class="t_tools__tool"><i class="icon-search"></i></span>
         </span>
         <div class="t_facets__facet__search t_facets__facet__input" data-ng-if="showSearch && !collapsed">

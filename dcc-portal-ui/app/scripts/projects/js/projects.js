@@ -20,6 +20,20 @@
 
   var module = angular.module('icgc.projects', ['icgc.project', 'icgc.projects.controllers', 'ui.router']);
 
+  const stateResolver = {
+    project: [
+      '$stateParams',
+      'Projects',
+      function($stateParams, Projects) {
+        return Projects.one($stateParams.id)
+          .get()
+          .then(function(project) {
+            return project;
+          });
+      },
+    ],
+  };
+
   module.config(function ($stateProvider) {
     $stateProvider.state('projects', {
       url: '/projects?filters',
@@ -47,18 +61,14 @@
       data: {tab:'history', isProject: true}
     });
 
+    // Needs to be here so that /:id has last priority after
+    // the other endpoints (/details, /summary ...)
     $stateProvider.state('project', {
       url: '/projects/:id',
       templateUrl: 'scripts/projects/views/project.html',
       controller: 'ProjectCtrl as ProjectCtrl',
-      resolve: {
-        project: ['$stateParams', 'Projects', 
-        function ($stateParams, Projects) {
-          return Projects.one($stateParams.id).get().then(function(project){
-            return project;
-          });
-        }]
-      }
+      data: { tab: 'summary' },
+      resolve: stateResolver,
     });
   });
 })();

@@ -24,24 +24,42 @@
     'ui.router',
   ]);
 
+  const stateResolver = {
+    mutation: [
+      '$stateParams',
+      'Mutations',
+      function($stateParams, Mutations) {
+        return Mutations.one($stateParams.id)
+          .get({ include: ['occurrences', 'transcripts', 'consequences'] })
+          .then(function(mutation) {
+            return mutation;
+          });
+      },
+    ],
+  };
+
   module.config(function($stateProvider) {
     $stateProvider.state('mutation', {
       url: '/mutations/:id',
       templateUrl: 'scripts/mutations/views/mutation.html',
       controller: 'MutationCtrl as MutationCtrl',
-      resolve: {
-        mutation: [
-          '$stateParams',
-          'Mutations',
-          function($stateParams, Mutations) {
-            return Mutations.one($stateParams.id)
-              .get({ include: ['occurrences', 'transcripts', 'consequences'] })
-              .then(function(mutation) {
-                return mutation;
-              });
-          },
-        ],
-      },
+      data: { tab: 'summary' },
+      resolve: stateResolver,
+    });
+
+    // [ {tab name}, {url} ] - consumed below by forEach
+    const tabs = [
+      ['clinicalEvidence', 'clinical-evidence'],
+      ['protein', 'protein'],
+      ['genomeViewer', 'genome-viewer'],
+    ];
+
+    tabs.forEach(tab => {
+      $stateProvider.state(`mutation.${tab[0]}`, {
+        url: `/${tab[1]}`,
+        reloadOnSearch: false,
+        data: { tab: `${tab[0]}` },
+      });
     });
   });
 })();
@@ -52,24 +70,27 @@
   var module = angular.module('icgc.mutations.controllers', ['icgc.mutations.models']);
 
   module.controller('MutationCtrl', function(
+    $state,
+    $scope,
     HighchartsService,
     Page,
     Genes,
     mutation,
     $filter,
-    PCAWG,
+    PCAWG
   ) {
     var _ctrl = this,
       projects;
     Page.setTitle(mutation.id);
     Page.setPage('entity');
 
+    setActiveTab($state.current.data.tab);
+
     _ctrl.gvOptions = { location: false, panels: false, zoom: 100 };
 
     _ctrl.mutation = mutation;
     _ctrl.mutation.uiProteinTranscript = [];
     _ctrl.isPVLoading = true;
-    _ctrl.isPVInitialLoad = true;
     _ctrl.isGVLoading = true;
 
     // Defaults for client side pagination
@@ -194,7 +215,7 @@
             uiPercentAffected: $filter('number')(project.percentAffected * 100, 2),
             uiAffectedDonorCount: $filter('number')(project.affectedDonorCount),
             uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
-          },
+          }
         );
       });
     }
@@ -209,7 +230,7 @@
 
     if (_ctrl.mutation.hasOwnProperty('consequences') && _ctrl.mutation.consequences.length) {
       var affectedGeneIds = _.filter(_.map(_ctrl.mutation.consequences, 'geneAffectedId'), function(
-        d,
+        d
       ) {
         return !_.isUndefined(d);
       });
@@ -244,7 +265,7 @@
               _ctrl.mutation.uiProteinTranscript.push(
                 _.find(mergedTranscripts, function(t) {
                   return t.id === transcript.id;
-                }),
+                })
               );
             }
           });
@@ -252,7 +273,7 @@
             _ctrl.mutation.uiProteinTranscript,
             function(t) {
               return t.name;
-            },
+            }
           );
         });
       }
@@ -283,7 +304,7 @@
             uiCDSMutation: consequence.cdsMutation,
             uiGeneStrand: consequence.geneStrand,
             uiTranscriptsAffected: consequence.transcriptsAffected,
-          },
+          }
         );
       });
     }
@@ -303,10 +324,33 @@
             uiEvidenceDirection: evidenceItems.evidenceDirection,
             uiPubmedID: evidenceItems.pubmedID,
             doid: evidenceItems.doid,
-          },
+          }
         );
       });
     }
+
+    function setActiveTab(tab) {
+      if (_ctrl.activeTab !== tab)
+        _ctrl.activeTab = tab;
+    }
+
+    $scope.$watch(
+      function() {
+        var stateData = angular.isDefined($state.current.data) ? $state.current.data : null;
+        if (
+          !stateData ||
+          !angular.isDefined(stateData.tab)
+        ) {
+          return null;
+        }
+        return stateData.tab;
+      },
+      function(tab) {
+        if (tab !== null) {
+          setActiveTab(tab);
+        }
+      }
+    );
 
     _ctrl.isPCAWG = function(mutation) {
       return _.some(mutation.study, PCAWG.isPCAWGStudy);
@@ -317,7 +361,7 @@
     $scope,
     $modalInstance,
     mutation,
-    levelFilter,
+    levelFilter
   ) {
     $scope.params = {};
     $scope.params.mutationId = mutation.id;
@@ -376,7 +420,7 @@
     FilterService,
     Mutation,
     Consequence,
-    ImpactOrder,
+    ImpactOrder
   ) {
     this.handler = Restangular.all('mutations');
 
@@ -407,7 +451,7 @@
           ) {
             data.facets.consequenceType.terms = data.facets.consequenceType.terms.sort(function(
               a,
-              b,
+              b
             ) {
               return precedence.indexOf(a.term) - precedence.indexOf(b.term);
             });
@@ -418,7 +462,7 @@
           ) {
             data.facets.functionalImpact.terms = data.facets.functionalImpact.terms.sort(function(
               a,
-              b,
+              b
             ) {
               return ImpactOrder.indexOf(a.term) - ImpactOrder.indexOf(b.term);
             });

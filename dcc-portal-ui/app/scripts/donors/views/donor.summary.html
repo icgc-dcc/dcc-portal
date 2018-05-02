@@ -1,0 +1,182 @@
+<section data-ng-show="DonorCtrl.activeTab === 'summary'" id="summary">
+    <div class="half">
+        <h3>
+            <translate>Summary</translate>
+        </h3>
+        <table class="table table-info">
+            <tr>
+                <th>ID</th>
+                <td>{{ DonorCtrl.donor.id }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Submitter ID</translate>
+                </th>
+                <td>{{ DonorCtrl.donor.submittedDonorId }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Project Name</translate>
+                </th>
+                <td>
+                    <a href="/projects/{{DonorCtrl.donor.projectId}}">{{ DonorCtrl.donor.projectName }}</a>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Project Code</translate>
+                </th>
+                <td>{{ DonorCtrl.donor.projectId }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Primary Site</translate>
+                </th>
+                <td>{{ DonorCtrl.donor.primarySite }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Tumour Type</translate>
+                </th>
+                <td>{{ DonorCtrl.donor.tumourType }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Tumour Subtype</translate>
+                </th>
+                <td>{{ DonorCtrl.donor.tumourSubtype }}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Total number of mutations</translate>
+                </th>
+                <td>
+                    <a data-ng-if="DonorCtrl.donor.ssmCount > 0" href='/search/m?filters={"donor":{"id":{"is":["{{DonorCtrl.donor.id}}"]}}}'>
+                        {{ DonorCtrl.donor.ssmCount | numberPT }}</a>
+                    <span data-ng-if="!DonorCtrl.donor.ssmCount">--</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="half omega">
+        <h3>
+            <translate>Available Data Types:</translate>
+        </h3>
+        <div data-ng-if="DonorCtrl.donor.state === 'pending'" class="well">
+            <translate>Only clinical data has been submitted to ICGC DCC.</translate>
+        </div>
+        <table class="table table-info" data-ng-if="DonorCtrl.donor.state === 'live'">
+            <tr>
+                <th>
+                    <translate>Clinical Data</translate>
+                </th>
+                <td class="text-center">
+                    <i class="icon-ok"></i>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Simple Somatic Mutations (SSM)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.ssmCount"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Copy Number Somatic Mutations (CNSM)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.cnsmExists"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Structural Somatic Mutations (StSM)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.stsmExists"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Simple Germline Variants (SGV)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.sgvExists"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Array-based DNA Methylation (METH-A)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.methArrayExists"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Sequence-based DNA Methylation (METH-S)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.methSeqExists"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Array-based Gene Expression (EXP-A)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.expArrayExists"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Sequence-based Gene Expression (EXP-S)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.expSeqExists"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Protein Expression (PEXP)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.pexpExists"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Sequence-based miRNA Expression (miRNA)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.mirnaSeqExists"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Exon Junctions (JCN)</translate>
+                </th>
+                <td class="text-center">
+                    <span data-exists="DonorCtrl.donor.jcnExists"></span>
+                </td>
+            </tr>
+        </table>
+
+        <div>
+            <button class="t_button" type="button" data-ng-click="DonorCtrl.downloadDonorData(); track('download-donor-data', { action: 'click', label: 'donor page' });"
+                data-ng-disabled="!ICGC_SETTINGS.downloadEnabled">
+                <i class="icon-download"></i>
+                <span>
+                    <translate>Download Donor Data</translate>
+                </span>
+            </button>
+            <br>
+            <span data-ng-if="!ICGC_SETTINGS.downloadEnabled" class="alert-warning">
+                <translate>Data download is currently unavailable.</translate>
+            </span>
+        </div>
+
+    </div>
+</section>

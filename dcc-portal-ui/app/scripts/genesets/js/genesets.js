@@ -20,24 +20,38 @@
 
   var module = angular.module('icgc.genesets', ['icgc.genesets.controllers', 'ui.router']);
 
+  const stateResolver = {
+    geneSet: [
+      '$stateParams',
+      'GeneSets',
+      function($stateParams, GeneSets) {
+        return GeneSets.one($stateParams.id)
+          .get()
+          .then(function(geneSet) {
+            return geneSet;
+          });
+      },
+    ],
+  };
+
   module.config(function($stateProvider) {
     $stateProvider.state('geneset', {
       url: '/genesets/:id',
       templateUrl: 'scripts/genesets/views/geneset.html',
       controller: 'GeneSetCtrl as GeneSetCtrl',
-      resolve: {
-        geneSet: [
-          '$stateParams',
-          'GeneSets',
-          function($stateParams, GeneSets) {
-            return GeneSets.one($stateParams.id)
-              .get()
-              .then(function(geneSet) {
-                return geneSet;
-              });
-          },
-        ],
-      },
+      data: { tab: 'summary' },
+      resolve: stateResolver,
+    });
+
+    // [ {tab name}, {url} ] - consumed below by forEach
+    const tabs = [['mutations', 'mutations'], ['donors', 'donors'], ['pathwayViewer', 'pathway-viewer']];
+
+    tabs.forEach(tab => {
+      $stateProvider.state(`geneset.${tab[0]}`, {
+        url: `/${tab[1]}`,
+        reloadOnSearch: false,
+        data: { tab: `${tab[0]}` },
+      });
     });
   });
 })();
@@ -83,6 +97,8 @@
 
     Page.setTitle(geneSet.id);
     Page.setPage('entity');
+
+    setActiveTab($state.current.data.tab);
 
     _ctrl.geneSet = geneSet;
     _ctrl.geneSet.queryType = FiltersUtil.getGeneSetQueryType(_ctrl.geneSet.type);
@@ -316,6 +332,29 @@
         );
       });
     }
+
+    function setActiveTab(tab) {
+      if (_ctrl.activeTab !== tab)
+        _ctrl.activeTab = tab;
+    }
+
+    $scope.$watch(
+      function() {
+        var stateData = angular.isDefined($state.current.data) ? $state.current.data : null;
+        if (
+          !stateData ||
+          !angular.isDefined(stateData.tab)
+        ) {
+          return null;
+        }
+        return stateData.tab;
+      },
+      function(tab) {
+        if (tab !== null) {
+          setActiveTab(tab);
+        }
+      }
+    );
 
     $scope.$on('$locationChangeSuccess', function(event, dest) {
       if (dest.indexOf('genesets') !== -1) {

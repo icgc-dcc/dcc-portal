@@ -1,0 +1,21 @@
+<section data-ng-if="GeneCtrl.activeTab ==='genomeViewer'" id="genomic" class="dynamic-height" data-ng-class="{'empty': !GeneCtrl.gene.hasGVChromosome}">
+    <div class="empty" data-ng-if="GeneCtrl.isGVLoading">
+        <h3>
+            <i class="icon-spinner icon-spin"></i>Loading Genomic Context...
+        </h3>
+    </div>
+    <h3 data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
+        <translate>Genomic Context</translate>
+        <span data-open-in-list='/g?filters={"gene":{"id":{"is":["{{GeneCtrl.gene.id}}"]}}}' data-type="viewer"></span>
+    </h3>
+    <h3 data-ng-if="!GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading">
+        <translate>No Genomic Context available.</translate>
+    </h3>
+
+    <div data-ng-if="GeneCtrl.gene.hasGVChromosome && !GeneCtrl.isGVLoading" class="t_gv__navbar">
+        <span data-gv-header data-options="GeneCtrl.gvOptions"></span>
+        <span class="pull-right gv-navbar-zoom"></span>
+    </div>
+    <gvembed data-ng-show="GeneCtrl.gene.hasGVChromosome" region="{{GeneCtrl.gene.chromosome}}:{{GeneCtrl.gene.start}}-{{GeneCtrl.gene.end}}"
+        data-is-gv-loading="GeneCtrl.isGVLoading" data-ng-style="{'visibility': GeneCtrl.isGVLoading ? 'hidden' : 'visible'}"></gvembed>
+</section>

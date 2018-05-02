@@ -19,789 +19,849 @@
 
 angular.module('highcharts', ['highcharts.directives', 'highcharts.services']);
 
-angular.module('highcharts.directives', [])
+angular
+  .module('highcharts.directives', [])
   .constant('highchartsConstants', {
     DEFAULT_NO_DATA_SETTINGS: {
       lang: {
-        noData: 'No data to display.'
+        noData: 'No data to display.',
       },
       noData: {
         style: {
           fontWeight: '400',
           fontSize: '1rem',
-          color: '#777'
-        }
-      }
-    }
+          color: '#777',
+        },
+      },
+    },
   })
   .service('highchartsService', function(highchartsConstants) {
     var _service = this;
 
     _service.getCustomNoDataConfig = function(shouldShowNoDataMsg) {
       var defaultNoDataConfig = highchartsConstants.DEFAULT_NO_DATA_SETTINGS,
-          shouldShowNoDataMessage = typeof shouldShowNoDataMsg === 'string' &&
-                                    shouldShowNoDataMsg.toLowerCase() === 'false'  ? false : true;
+        shouldShowNoDataMessage =
+          typeof shouldShowNoDataMsg === 'string' && shouldShowNoDataMsg.toLowerCase() === 'false'
+            ? false
+            : true;
 
-      if (! shouldShowNoDataMessage) {
+      if (!shouldShowNoDataMessage) {
         defaultNoDataConfig.noData.style.display = 'none';
       }
 
       return defaultNoDataConfig;
     };
-
   });
 
-angular.module('highcharts.directives').directive('pie', function (
-  Facets,
-  $filter,
-  ValueTranslator,
-  highchartsService,
-  $rootScope
-) {
-  function ensureArray (array) {
-    return _.isArray (array) ? array : [];
-  }
-  var isEmptyArray = _.flow (ensureArray, _.isEmpty);
+angular
+  .module('highcharts.directives')
+  .directive('pie', function(Facets, $filter, ValueTranslator, highchartsService, $rootScope) {
+    function ensureArray(array) {
+      return _.isArray(array) ? array : [];
+    }
+    var isEmptyArray = _.flow(ensureArray, _.isEmpty);
 
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: {
-      heading: '@',
-      items: '=',
-      groupPercent: '@',
-      shouldShowNoDataMessage: '@',
-      configOverrides: '&'
-    },
-    template: `
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        heading: '@',
+        items: '=',
+        groupPercent: '@',
+        shouldShowNoDataMessage: '@',
+        configOverrides: '&',
+      },
+      template: `
       <span
         style="margin: 0 auto"
       >not working</span>
     `,
-    link: function ($scope, $element, $attrs) {
-      // Defaults to 5%
-      $scope.groupPercent = $scope.groupPercent || 5;
+      link: function($scope, $element, $attrs) {
+        // Defaults to 5%
+        $scope.groupPercent = $scope.groupPercent || 5;
 
-      var enrichDatum = function (datum) {
-        datum.term = datum.name;
-
-        return datum;
-      };
-
-      var summarize = function (items) {
-        var count = _.size (items);
-
-        if (count < 2) {
-          return items.map (enrichDatum);
-        }
-
-        var firstItem = _.head (items);
-
-        return {
-          name: 'Others (' + count + ' ' + $scope.heading + 's)',
-          color: '#999',
-          y: _.sumBy (items, 'y'),
-          type: firstItem.type,
-          facet: firstItem.facet,
-          term: _.map (items, 'name')
-        };
-      };
-
-      var transformSeriesData = function (data) {
-        if (isEmptyArray (data)) {
-          return [];
-        }
-
-        // Separates data into two groups, one with a defined 'name' attribute & one without.
-        var separated = _.partition (data, 'name');
-        var withName = _.head (separated);
-        var withoutName = _.last (separated).map (function (datum) {
-          datum.color = '#E0E0E0';
-          datum.term = null;
+        var enrichDatum = function(datum) {
+          datum.term = datum.name;
 
           return datum;
-        });
-
-        var max = _.maxBy (withName, function (datum) {
-          return datum.y;
-        });
-
-        var isBelowGroupPercent = function (datum) {
-          return (datum.y / max.y) < ($scope.groupPercent / 100);
         };
 
-        // Further seperation per the rule of isBelowGroupPercent()
-        separated = _.partition (withName, isBelowGroupPercent);
-        var belowGroupPercent = _.head (separated);
-        var regular = _.last (separated);
+        var summarize = function(items) {
+          var count = _.size(items);
 
-        // Combines all the groups into one collection.
-        var result = regular.map (enrichDatum)
-          .concat (withoutName)
-          .concat (summarize (belowGroupPercent));
-
-        return result;
-      };
-
-      var chartsDefaults = {
-        credits: {enabled: false},
-        chart: {
-          renderTo: $element[0],
-          type: 'pie',
-          spacingTop: 2,
-          spacingBottom: 2,
-          marginTop: 12,
-          height: $attrs.height || null,
-          width: $attrs.width || null
-        },
-        title: {
-          text: $scope.heading,
-          margin: 5,
-          style: {
-            fontSize: '1.25rem'
+          if (count < 2) {
+            return items.map(enrichDatum);
           }
-        },
-        plotOptions: {
-          pie: {
-            borderWidth: 1,
-            animation: false,
-            cursor: 'pointer',
-            showInLegend: false,
-            events: {
-              click: function (e) {
-                if (angular.isArray(e.point.term)) {
-                  Facets.setTerms({
-                    type: e.point.type,
-                    facet: e.point.facet,
-                    terms: e.point.term
-                  });
-                } else {
-                  Facets.toggleTerm({
-                    type: e.point.type,
-                    facet: e.point.facet,
-                    term: e.point.name
-                  });
-                }
-                $scope.$apply();
-              }
-            },
-            dataLabels: {
-              enabled: false,
-              distance: 10,
-              connectorPadding: 7,
-              formatter: function () {
-                if (this.point.percentage > 5) {
-                  if (this.point.y > 999) {
-                    var v = this.point.y.toString();
-                    v = v.substring(0, v.length - 3);
-                    return $filter('number')(v) + 'k';
-                  } else {
-                    return $filter('number')(this.point.y);
-                  }
-                }
-              }
-            }
+
+          var firstItem = _.head(items);
+
+          return {
+            name: 'Others (' + count + ' ' + $scope.heading + 's)',
+            color: '#999',
+            y: _.sumBy(items, 'y'),
+            type: firstItem.type,
+            facet: firstItem.facet,
+            term: _.map(items, 'name'),
+          };
+        };
+
+        var transformSeriesData = function(data) {
+          if (isEmptyArray(data)) {
+            return [];
+          }
+
+          // Separates data into two groups, one with a defined 'name' attribute & one without.
+          var separated = _.partition(data, 'name');
+          var withName = _.head(separated);
+          var withoutName = _.last(separated).map(function(datum) {
+            datum.color = '#E0E0E0';
+            datum.term = null;
+
+            return datum;
+          });
+
+          var max = _.maxBy(withName, function(datum) {
+            return datum.y;
+          });
+
+          var isBelowGroupPercent = function(datum) {
+            return datum.y / max.y < $scope.groupPercent / 100;
+          };
+
+          // Further seperation per the rule of isBelowGroupPercent()
+          separated = _.partition(withName, isBelowGroupPercent);
+          var belowGroupPercent = _.head(separated);
+          var regular = _.last(separated);
+
+          // Combines all the groups into one collection.
+          var result = regular
+            .map(enrichDatum)
+            .concat(withoutName)
+            .concat(summarize(belowGroupPercent));
+
+          return result;
+        };
+
+        var chartsDefaults = {
+          credits: { enabled: false },
+          chart: {
+            renderTo: $element[0],
+            type: 'pie',
+            spacingTop: 2,
+            spacingBottom: 2,
+            marginTop: 12,
+            height: $attrs.height || null,
+            width: $attrs.width || null,
           },
-          series: {
+          title: {
+            text: $scope.heading,
+            margin: 5,
+            style: {
+              fontSize: '1.25rem',
+            },
+          },
+          plotOptions: {
+            pie: {
+              borderWidth: 1,
+              animation: false,
+              cursor: 'pointer',
+              showInLegend: false,
+              events: {
+                click: function(e) {
+                  if (angular.isArray(e.point.term)) {
+                    Facets.setTerms({
+                      type: e.point.type,
+                      facet: e.point.facet,
+                      terms: e.point.term,
+                    });
+                  } else {
+                    Facets.toggleTerm({
+                      type: e.point.type,
+                      facet: e.point.facet,
+                      term: e.point.name,
+                    });
+                  }
+                  $scope.$apply();
+                },
+              },
+              dataLabels: {
+                enabled: false,
+                distance: 10,
+                connectorPadding: 7,
+                formatter: function() {
+                  if (this.point.percentage > 5) {
+                    if (this.point.y > 999) {
+                      var v = this.point.y.toString();
+                      v = v.substring(0, v.length - 3);
+                      return $filter('number')(v) + 'k';
+                    } else {
+                      return $filter('number')(this.point.y);
+                    }
+                  }
+                },
+              },
+            },
+            series: {
               point: {
                 events: {
-                  mouseOver: function (event) {
-                    var name = event.target.term ?
-                                  ValueTranslator.translate(event.target.name, event.target.facet) : 'No Data';
+                  mouseOver: function(event) {
+                    var name = event.target.term
+                      ? ValueTranslator.translate(event.target.name, event.target.facet)
+                      : 'No Data';
                     $scope.$emit('tooltip::show', {
                       element: angular.element(this),
-                      text: '<div>' +
-                     '<strong>' + name + '</strong><br/>' +
-                     Highcharts.numberFormat(event.target.y, 0) + ' ' + event.target.series.name +
-                     '</div>',
+                      text:
+                        '<div>' +
+                        '<strong>' +
+                        name +
+                        '</strong><br/>' +
+                        Highcharts.numberFormat(event.target.y, 0) +
+                        ' ' +
+                        event.target.series.name +
+                        '</div>',
                       placement: 'top',
-                      sticky: true
+                      sticky: true,
                     });
 
                     $rootScope.delayedTrack(
                       'viz-filter',
-                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` },
+                      {
+                        action: 'hover',
+                        label: `${$scope.heading}->${event.target.term || event.target.name}`,
+                      },
                       600
                     );
                   },
-                  mouseOut: function (event) {
+                  mouseOut: function(event) {
                     $scope.$emit('tooltip::hide');
-                    $rootScope.clearDelayedTrack(
-                      'viz-filter',
-                      { action: 'hover', label: `${$scope.heading}->${event.target.term || event.target.name}` }
-                    );
+                    $rootScope.clearDelayedTrack('viz-filter', {
+                      action: 'hover',
+                      label: `${$scope.heading}->${event.target.term || event.target.name}`,
+                    });
                   },
-                  click: function (event) {
-                    $rootScope.track('viz-filter', { action: 'click', label: `${$scope.heading}->${event.point.term || event.point.name}` });
-                    $rootScope.clearDelayedTrack(
-                      'viz-filter',
-                      { action: 'hover', label: `${$scope.heading}->${event.point.term || event.point.name}` }
-                    );
-                  }
-                }
-              }
-            }
+                  click: function(event) {
+                    $rootScope.track('viz-filter', {
+                      action: 'click',
+                      label: `${$scope.heading}->${event.point.term || event.point.name}`,
+                    });
+                    $rootScope.clearDelayedTrack('viz-filter', {
+                      action: 'hover',
+                      label: `${$scope.heading}->${event.point.term || event.point.name}`,
+                    });
+                  },
+                },
+              },
+            },
           },
           tooltip: {
-            enabled: false
+            enabled: false,
           },
           series: [
             {
               type: 'pie',
               size: '90%',
               name: $attrs.label,
-              data: transformSeriesData ($scope.items)
-            }
-          ]
+              data: transformSeriesData($scope.items),
+            },
+          ],
         };
 
-      jQuery.extend(
-        true, 
-        chartsDefaults, 
-        highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage),
-        $scope.configOverrides());
+        jQuery.extend(
+          true,
+          chartsDefaults,
+          highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage),
+          $scope.configOverrides()
+        );
 
-      $scope.$watch('items', function (newValue) {
-        if (!newValue) {
-          return;
-        }
-        c.series[0].setData (transformSeriesData (newValue), true);
-      });
-      var c = new Highcharts.Chart (chartsDefaults);
-
-      $scope.$on('$destroy', function () {
-        c.destroy();
-      });
-    }
-  };
-});
-
-angular.module('highcharts.directives').directive('donut', function ($rootScope, ProjectCache, $state, Facets,
-                                                                     highchartsService, gettextCatalog) {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: {
-      items: '=',
-      subTitle: '@',
-      shouldShowNoDataMessage: '@'
-    },
-    template: '<div id="container" style="margin: 0 auto">' + gettextCatalog.getString('not working') + '</div>',
-    link: function ($scope, $element, $attrs) {
-      var c, renderChart, chartsDefaults;
-      var projectLookup = {};
-
-      renderChart = function (settings) {
-        if (c) {
-          c.destroy();
-        }
-        c = new Highcharts.Chart(settings);
-      };
-
-      chartsDefaults = {
-        credits: {enabled: false},
-        chart: {
-          renderTo: $element[0],
-          type: 'pie',
-          height: $attrs.height|| null,
-          width: $attrs.width || null,
-          marginBottom: 60
-        },
-        title: {
-          text: $attrs.heading,
-          margin: 25,
-          style: {
-            fontSize: '1.25rem'
+        $scope.$watch('items', function(newValue) {
+          if (!newValue) {
+            return;
           }
-        },
-        subtitle: {
-          text: '',
-          style: {
-            color: 'hsl(0, 0%, 60%)',
-            paddingBottom: '25px'
-          }
-        },
-        plotOptions: {
-          pie: {
-            allowPointSelect: false,
-            borderWidth: 1,
-            animation: true,
-            cursor: 'pointer',
-            showInLegend: false,
-            events: {
-              click: function (e) {
-                if ($attrs.home) {
-                  var type = e.point.type;
-                  var facet = e.point.facet;
-                  var name = e.point.name;
-
-                  var filters = {};
-                  filters[type] = {};
-                  filters[type][facet] = {};
-                  filters[type][facet].is = [name];
-
-                  $state.go('projects', {filters: angular.toJson(filters)});
-                } else {
-                  Facets.toggleTerm({
-                    type: e.point.type,
-                    facet: e.point.facet,
-                    term: e.point.name
-                  });
-                }
-                $scope.$apply();
-              }
-            }
-          },
-          series: {
-            point: {
-              events: {
-                mouseOver: function (event) {
-                  var name = projectLookup[event.target.name] || event.target.name;
-
-                  $scope.$emit('tooltip::show', {
-                    element: angular.element(this),
-                    text: '<div>' +
-                   '<strong>' + name + '</strong><br>' +
-                   Highcharts.numberFormat(event.target.y, 0) + ' ' + event.target.series.name +
-                   '</div>',
-                    placement: 'right',
-                    sticky: true
-                  });
-                },
-                mouseOut: function () {
-                  $scope.$emit('tooltip::hide');
-                }
-              }
-            }
-          }
-        },
-        tooltip: {
-          enabled: false
-        },
-        series: [
-          {
-            name: $attrs.innerLabel,
-            size: '99%',
-            dataLabels: {
-              enabled: false,
-              color: '#fff',
-              connectorColor: '#000000',
-              zIndex: 0,
-              formatter: function () {
-                if (this.point.percentage > 5) {
-                  return this.point.y;
-                }
-              }
-            }
-          },
-          {
-            name: $attrs.outerLabel,
-            size: '120%',
-            innerSize: '70%',
-            dataLabels: {
-              enabled: false,
-              overflow: 'justify',
-              formatter: function () {
-                if (this.point.percentage > 3) {
-                  return this.point.y;
-                }
-              }
-            }
-          }
-        ]
-      };
-
-      jQuery.extend(true, chartsDefaults, highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage));
-
-      $scope.$watch('items', function (newValue) {
-        var deepCopy, newSettings, promise;
-        if (!newValue) {
-          return;
-        }
-
-        promise = ProjectCache.getData();
-
-        // We need deep copy in order to NOT override original chart object.
-        // This allows us to override chart data member and still the keep
-        // our original renderTo will be the same
-        deepCopy = true;
-        newSettings = {};
-        jQuery.extend(deepCopy, newSettings, chartsDefaults);
-        newSettings.series[0].data = newValue.inner;
-        newSettings.series[1].data = newValue.outer;
-
-        newSettings.subtitle.text = $scope.subTitle;
-        promise.then(function(data) {
-          projectLookup = data;
-          renderChart(newSettings);
+          c.series[0].setData(transformSeriesData(newValue), true);
         });
-      });
+        var c = new Highcharts.Chart(chartsDefaults);
 
-      renderChart(chartsDefaults);
-
-      $scope.$on('$destroy', function () {
-        c.destroy();
-      });
-    }
-  };
-});
-
-angular.module('highcharts.directives')
-  .directive('groupedBar', function ($location, highchartsService) {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: {
-      items: '=',
-      colours: '=',
-      shouldShowNoDataMessage: '@'
-    },
-    template: '<div id="container" style="margin: 0 auto">not working</div>',
-    link: function ($scope, $element, $attrs) {
-      var c, renderChart, chartsDefaults;
-      renderChart = function (settings) {
-        if (c) {
+        $scope.$on('$destroy', function() {
           c.destroy();
-        }
-        c = new Highcharts.Chart(settings);
-      };
+        });
+      },
+    };
+  });
 
-      chartsDefaults = {
-        credits: {enabled: false},
-        chart: {
-          renderTo: $element[0],
-          type: 'column',
-          height: $attrs.height || null,
-          width: $attrs.width || null
-        },
-        /* D3 cat 10 */
-        colors: $scope.colours || ['#1f77b4', '#ff7f0e', '#2ca02c'],
-        title: {
-          text: $attrs.heading || '',
-          margin: 25,
-          style: {
-            fontSize: '1.25rem'
+angular
+  .module('highcharts.directives')
+  .directive('donut', function(
+    $rootScope,
+    ProjectCache,
+    $state,
+    Facets,
+    highchartsService,
+    gettextCatalog
+  ) {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        items: '=',
+        subTitle: '@',
+        shouldShowNoDataMessage: '@',
+      },
+      template:
+        '<div id="container" style="margin: 0 auto">' +
+        gettextCatalog.getString('not working') +
+        '</div>',
+      link: function($scope, $element, $attrs) {
+        var c, renderChart, chartsDefaults;
+        var projectLookup = {};
+
+        renderChart = function(settings) {
+          if (c) {
+            c.destroy();
           }
-        },
-        xAxis: {
-          labels: {
-            rotation: -45,
-            align: 'right',
-            x: 10,
-            formatter: function () {
-              if (this.value.length > 15) {
-                return this.value.substring(0, 15) + '...';
-              } else {
-                return this.value;
-              }
-            }
+          c = new Highcharts.Chart(settings);
+        };
+
+        chartsDefaults = {
+          credits: { enabled: false },
+          chart: {
+            renderTo: $element[0],
+            type: 'pie',
+            height: $attrs.height || null,
+            width: $attrs.width || null,
+            marginBottom: 60,
           },
-          categories: angular.isDefined($scope.items) ? $scope.items.categories : []
-        },
-        tooltip: {
-          enabled: false
-        },
-        legend: {
-          enabled: false
-        },
-        yAxis: {
-          min: 0,
-          showFirstLabel: true,
-          showLastLabel: true,
           title: {
-            text: $attrs.ylabel,
+            text: $attrs.heading,
+            margin: 25,
+            style: {
+              fontSize: '1.25rem',
+            },
+          },
+          subtitle: {
+            text: '',
             style: {
               color: 'hsl(0, 0%, 60%)',
-              fontSize: '0.75rem',
-              fontWeight: '300'
+              paddingBottom: '25px',
             },
-            margin: 5
           },
-          labels: {
-            enabled: true,
-            formatter: function () {
-              if ($attrs.format === 'percentage') {
-                return this.value * 100;
-              }
-              return this.value;
-            }
-          }
-        },
-        series: angular.isDefined($scope.items) ? $scope.items.series : [],
-        plotOptions: {
-          column: {
-            pointPadding: 0.10,
-            borderWidth: 0,
-            events: {
-              click: function (e) {
-                if (e.point.link) {
-                  $location.path(e.point.link);
-                  $scope.$apply();
-                }
-              }
-            }
-          },
-          series: {
-            stickyTracking : true,
-            point: {
+          plotOptions: {
+            pie: {
+              allowPointSelect: false,
+              borderWidth: 1,
+              animation: true,
+              cursor: 'pointer',
+              showInLegend: false,
               events: {
-                mouseOver: function (event) {
-                  var getLabel = function () {
-                    var num;
-                    if ($attrs.format && $attrs.format === 'percentage') {
-                      num = Number(event.target.y * 100).toFixed(2);
-                    } else {
-                      num = event.target.y;
-                    }
-                    return '<div>' +
-                           // '<strong>' + event.target.category + ' - ' + event.target.series.name + '</strong><br>' +
-                           '<strong>' + event.target.series.name + '</strong><br>' +
-                           num +  $attrs.ylabel + ' (' + event.target.count + ')' +
-                           '</div>';
-                  };
-                  $scope.$emit('tooltip::show', {
-                    element: angular.element(this),
-                    placement:'right',
-                    text: getLabel(),
-                    sticky:true
-                  });
+                click: function(e) {
+                  if ($attrs.home) {
+                    var type = e.point.type;
+                    var facet = e.point.facet;
+                    var name = e.point.name;
+
+                    var filters = {};
+                    filters[type] = {};
+                    filters[type][facet] = {};
+                    filters[type][facet].is = [name];
+
+                    $state.go('projects', { filters: angular.toJson(filters) });
+                  } else {
+                    Facets.toggleTerm({
+                      type: e.point.type,
+                      facet: e.point.facet,
+                      term: e.point.name,
+                    });
+                  }
+                  $scope.$apply();
                 },
-                mouseOut: function () {
-                  $scope.$emit('tooltip::hide');
+              },
+            },
+            series: {
+              point: {
+                events: {
+                  mouseOver: function(event) {
+                    var name = projectLookup[event.target.name] || event.target.name;
+
+                    $scope.$emit('tooltip::show', {
+                      element: angular.element(this),
+                      text:
+                        '<div>' +
+                        '<strong>' +
+                        name +
+                        '</strong><br>' +
+                        Highcharts.numberFormat(event.target.y, 0) +
+                        ' ' +
+                        event.target.series.name +
+                        '</div>',
+                      placement: 'right',
+                      sticky: true,
+                    });
+                  },
+                  mouseOut: function() {
+                    $scope.$emit('tooltip::hide');
+                  },
+                },
+              },
+            },
+          },
+          tooltip: {
+            enabled: false,
+          },
+          series: [
+            {
+              name: $attrs.innerLabel,
+              size: '99%',
+              dataLabels: {
+                enabled: false,
+                color: '#fff',
+                connectorColor: '#000000',
+                zIndex: 0,
+                formatter: function() {
+                  if (this.point.percentage > 5) {
+                    return this.point.y;
+                  }
+                },
+              },
+            },
+            {
+              name: $attrs.outerLabel,
+              size: '120%',
+              innerSize: '70%',
+              dataLabels: {
+                enabled: false,
+                overflow: 'justify',
+                formatter: function() {
+                  if (this.point.percentage > 3) {
+                    return this.point.y;
+                  }
+                },
+              },
+            },
+          ],
+        };
+
+        jQuery.extend(
+          true,
+          chartsDefaults,
+          highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage)
+        );
+
+        $scope.$watch('items', function(newValue) {
+          var deepCopy, newSettings, promise;
+          if (!newValue) {
+            return;
+          }
+
+          promise = ProjectCache.getData();
+
+          // We need deep copy in order to NOT override original chart object.
+          // This allows us to override chart data member and still the keep
+          // our original renderTo will be the same
+          deepCopy = true;
+          newSettings = {};
+          jQuery.extend(deepCopy, newSettings, chartsDefaults);
+          newSettings.series[0].data = newValue.inner;
+          newSettings.series[1].data = newValue.outer;
+
+          newSettings.subtitle.text = $scope.subTitle;
+          promise.then(function(data) {
+            projectLookup = data;
+            renderChart(newSettings);
+          });
+        });
+
+        renderChart(chartsDefaults);
+
+        $scope.$on('$destroy', function() {
+          c.destroy();
+        });
+      },
+    };
+  });
+
+angular
+  .module('highcharts.directives')
+  .directive('groupedBar', function($location, highchartsService) {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        items: '=',
+        colours: '=',
+        shouldShowNoDataMessage: '@',
+      },
+      template: '<div id="container" style="margin: 0 auto">not working</div>',
+      link: function($scope, $element, $attrs) {
+        var c, renderChart, chartsDefaults;
+        renderChart = function(settings) {
+          if (c) {
+            c.destroy();
+          }
+          c = new Highcharts.Chart(settings);
+        };
+
+        chartsDefaults = {
+          credits: { enabled: false },
+          chart: {
+            renderTo: $element[0],
+            type: 'column',
+            height: $attrs.height || null,
+            width: $attrs.width || null,
+          },
+          /* D3 cat 10 */
+          colors: $scope.colours || ['#1f77b4', '#ff7f0e', '#2ca02c'],
+          title: {
+            text: $attrs.heading || '',
+            margin: 25,
+            style: {
+              fontSize: '1.25rem',
+            },
+          },
+          xAxis: {
+            labels: {
+              rotation: -45,
+              align: 'right',
+              x: 10,
+              formatter: function() {
+                if (this.value.length > 15) {
+                  return this.value.substring(0, 15) + '...';
+                } else {
+                  return this.value;
                 }
+              },
+            },
+            categories: angular.isDefined($scope.items) ? $scope.items.categories : [],
+          },
+          tooltip: {
+            enabled: false,
+          },
+          legend: {
+            enabled: false,
+          },
+          yAxis: {
+            min: 0,
+            showFirstLabel: true,
+            showLastLabel: true,
+            title: {
+              text: $attrs.ylabel,
+              style: {
+                color: 'hsl(0, 0%, 60%)',
+                fontSize: '0.75rem',
+                fontWeight: '300',
+              },
+              margin: 5,
+            },
+            labels: {
+              enabled: true,
+              formatter: function() {
+                if ($attrs.format === 'percentage') {
+                  return this.value * 100;
+                }
+                return this.value;
+              },
+            },
+          },
+          series: angular.isDefined($scope.items) ? $scope.items.series : [],
+          plotOptions: {
+            column: {
+              pointPadding: 0.1,
+              borderWidth: 0,
+              events: {
+                click: function(e) {
+                  if (e.point.link) {
+                    $location.path(e.point.link);
+                    $scope.$apply();
+                  }
+                },
+              },
+            },
+            series: {
+              stickyTracking: true,
+              point: {
+                events: {
+                  mouseOver: function(event) {
+                    var getLabel = function() {
+                      var num;
+                      if ($attrs.format && $attrs.format === 'percentage') {
+                        num = Number(event.target.y * 100).toFixed(2);
+                      } else {
+                        num = event.target.y;
+                      }
+                      return (
+                        '<div>' +
+                        // '<strong>' + event.target.category + ' - ' + event.target.series.name + '</strong><br>' +
+                        '<strong>' +
+                        event.target.series.name +
+                        '</strong><br>' +
+                        num +
+                        $attrs.ylabel +
+                        ' (' +
+                        event.target.count +
+                        ')' +
+                        '</div>'
+                      );
+                    };
+                    $scope.$emit('tooltip::show', {
+                      element: angular.element(this),
+                      placement: 'right',
+                      text: getLabel(),
+                      sticky: true,
+                    });
+                  },
+                  mouseOut: function() {
+                    $scope.$emit('tooltip::hide');
+                  },
+                },
+              },
+            },
+          },
+        };
+
+        jQuery.extend(
+          true,
+          chartsDefaults,
+          highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage)
+        );
+
+        $scope.$watch(
+          'items',
+          function(newValue) {
+            var deepCopy, newSettings;
+
+            if (!newValue) {
+              return;
+            }
+            // We need deep copy in order to NOT override original chart object.
+            // This allows us to override chart data member and still the keep
+            // our original renderTo will be the same
+            deepCopy = true;
+            newSettings = {};
+            jQuery.extend(deepCopy, newSettings, chartsDefaults);
+            newSettings.xAxis.categories = newValue.x;
+
+            if (!$attrs.format || $attrs.format !== 'percentage') {
+              if (newSettings.yAxis) {
+                newSettings.yAxis.allowDecimals = false;
               }
             }
-          }
-        }
-      };
 
-      jQuery.extend(true, chartsDefaults, highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage));
+            newSettings.series = newValue.series;
+            newSettings.xAxis.categories = newValue.categories;
+            renderChart(newSettings);
+          },
+          true
+        );
 
-      $scope.$watch('items', function (newValue) {
-        var deepCopy, newSettings;
+        renderChart(chartsDefaults);
 
-        if (!newValue) {
-          return;
-        }
-        // We need deep copy in order to NOT override original chart object.
-        // This allows us to override chart data member and still the keep
-        // our original renderTo will be the same
-        deepCopy = true;
-        newSettings = {};
-        jQuery.extend(deepCopy, newSettings, chartsDefaults);
-        newSettings.xAxis.categories = newValue.x;
+        $scope.$on('$destroy', function() {
+          c.destroy();
+        });
+      },
+    };
+  });
 
-        if (!$attrs.format || $attrs.format !== 'percentage') {
-          if (newSettings.yAxis) {
-            newSettings.yAxis.allowDecimals = false;
-          }
-        }
-
-        newSettings.series = newValue.series;
-        newSettings.xAxis.categories = newValue.categories;
-        renderChart(newSettings);
-      }, true);
-
-      renderChart(chartsDefaults);
-
-      $scope.$on('$destroy', function () {
-        c.destroy();
-      });
-    }
-  };
-});
-
-
-
-angular.module('highcharts.directives').directive('bar', function ($location, highchartsService, $rootScope) {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: {
-      heading: '@',
-      items: '=',
-      shouldShowNoDataMessage: '@',
-      configOverrides: '&',
-      onRender: '&'
-    },
-    template: `
+angular
+  .module('highcharts.directives')
+  .directive('bar', function($location, highchartsService, $rootScope, $timeout) {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        heading: '@',
+        items: '=',
+        shouldShowNoDataMessage: '@',
+        configOverrides: '&',
+        onRender: '&',
+      },
+      template: `
       <div
         id="container"
         style="margin: 0 auto"
         ng-click="$root.track('viz-filter', {action: 'click', label: heading })"
       >not working</div>
     `,
-    link: function ($scope, $element, $attrs) {
-      var c, renderChart, chartsDefaults;
+      link: function($scope, $element, $attrs) {
+        // Wrap render into a function used within $timeout below
+        const renderWhenReady = () => {
+          let c;
 
-      var onRender = $scope.onRender();
+          const onRender = $scope.onRender();
 
-      renderChart = function (settings) {
-        if (c) {
-          c.destroy();
-        }
-        c = new Highcharts.Chart(settings, onRender);
-      };
-
-      chartsDefaults = {
-        credits: {enabled: false},
-        chart: {
-          renderTo: $element[0],
-          type: 'column',
-          height: $attrs.height || null,
-          width: $attrs.width || null
-        },
-        title: {
-          text: $attrs.heading || '',
-          margin: 25,
-          style: {
-            fontSize: '1.25rem'
-          }
-        },
-        subtitle: {
-          text: $attrs.subheading || '',
-          style: {
-            color: 'hsl(0, 0%, 60%)'
-          }
-        },
-        xAxis: {
-          labels: {
-            rotation: -45,
-            align: 'right',
-            x: 10,
-            formatter: function () {
-              if (this.value.length > 15) {
-                return this.value.substring(0, 15) + '...';
-              } else {
-                return this.value;
-              }
+          const renderChart = function(settings) {
+            if (c) {
+              c.destroy();
             }
-          },
-          categories: angular.isDefined($scope.items) ? $scope.items.x : []
-        },
-        tooltip: {
-          enabled: false,
-        },
-        yAxis: {
-          min: 0,
-          showFirstLabel: true,
-          showLastLabel: true,
-          title: {
-            text: $attrs.ylabel,
-            style: {
-              color: 'hsl(0, 0%, 60%)',
-              fontSize: '0.75rem',
-              fontWeight: '300'
+            c = new Highcharts.Chart(settings, onRender);
+          };
+
+          const chartsDefaults = {
+            credits: { enabled: false },
+            chart: {
+              renderTo: $element[0],
+              type: 'column',
+              height: $attrs.height || null,
+              width: $attrs.width || null,
             },
-            margin: 15
-          },
-          labels: {
-            enabled: true,
-            formatter: function () {
-              if ($attrs.format === 'percentage') {
-                return this.value * 100;
-              }
-              return this.value;
-            }
-          }
-        },
-        series: angular.isDefined($scope.items) ? [
-          {data: $scope.items.s}
-        ] : [
-          {data: []}
-        ],
-        plotOptions: {
-          column: {
-            events: {
-              click: function (e) {
-                if (e.point.link) {
-                  $location.path(e.point.link);
-                  $scope.$apply();
-                }
-              }
-            }
-          },
-          series: {
-            stickyTracking : true,
-            point: {
-              events: {
-                mouseOver: function (event) {
-                  var getLabel = function () {
-                    var num;
-                    if ($attrs.format && $attrs.format === 'percentage') {
-                      num = Number(event.target.y * 100).toFixed(2);
-                    } else {
-                      num = Highcharts.numberFormat(event.target.y, 0);
-                    }
-
-                    return '<div>' +
-                           '<strong>' + event.target.category + '</strong><br/>' +
-                           num + ' ' + $attrs.ylabel +
-                           '</div>';
-                  };
-                  $scope.$emit('tooltip::show', {
-                    element: angular.element(this),
-                    placement:'right',
-                    text: getLabel(),
-                    sticky:true
-                  });
-                  $rootScope.delayedTrack(
-                    'viz-filter',
-                    { action: 'hover', label: `${$attrs.heading}->${event.target.category}` },
-                    600
-                  );
+            title: {
+              text: $attrs.heading || '',
+              margin: 25,
+              style: {
+                fontSize: '1.25rem',
+              },
+            },
+            subtitle: {
+              text: $attrs.subheading || '',
+              style: {
+                color: 'hsl(0, 0%, 60%)',
+              },
+            },
+            xAxis: {
+              labels: {
+                rotation: -45,
+                align: 'right',
+                x: 10,
+                formatter: function() {
+                  if (this.value.length > 15) {
+                    return this.value.substring(0, 15) + '...';
+                  } else {
+                    return this.value;
+                  }
                 },
-                mouseOut: function (event) {
-                  $scope.$emit('tooltip::hide');
-                  $rootScope.clearDelayedTrack(
-                    'viz-filter',
-                    { action: 'hover', label: `${$attrs.heading}->${event.target.category}` },
-                  );
+              },
+              categories: angular.isDefined($scope.items) ? $scope.items.x : [],
+            },
+            tooltip: {
+              enabled: false,
+            },
+            yAxis: {
+              min: 0,
+              showFirstLabel: true,
+              showLastLabel: true,
+              title: {
+                text: $attrs.ylabel,
+                style: {
+                  color: 'hsl(0, 0%, 60%)',
+                  fontSize: '0.75rem',
+                  fontWeight: '300',
+                },
+                margin: 15,
+              },
+              labels: {
+                enabled: true,
+                formatter: function() {
+                  if ($attrs.format === 'percentage') {
+                    return this.value * 100;
+                  }
+                  return this.value;
+                },
+              },
+            },
+            series: angular.isDefined($scope.items) ? [{ data: $scope.items.s }] : [{ data: [] }],
+            plotOptions: {
+              column: {
+                events: {
+                  click: function(e) {
+                    if (e.point.link) {
+                      $location.path(e.point.link);
+                      $scope.$apply();
+                    }
+                  },
+                },
+              },
+              series: {
+                stickyTracking: true,
+                point: {
+                  events: {
+                    mouseOver: function(event) {
+                      var getLabel = function() {
+                        var num;
+                        if ($attrs.format && $attrs.format === 'percentage') {
+                          num = Number(event.target.y * 100).toFixed(2);
+                        } else {
+                          num = Highcharts.numberFormat(event.target.y, 0);
+                        }
+
+                        return (
+                          '<div>' +
+                          '<strong>' +
+                          event.target.category +
+                          '</strong><br/>' +
+                          num +
+                          ' ' +
+                          $attrs.ylabel +
+                          '</div>'
+                        );
+                      };
+                      $scope.$emit('tooltip::show', {
+                        element: angular.element(this),
+                        placement: 'right',
+                        text: getLabel(),
+                        sticky: true,
+                      });
+                      $rootScope.delayedTrack(
+                        'viz-filter',
+                        { action: 'hover', label: `${$attrs.heading}->${event.target.category}` },
+                        600
+                      );
+                    },
+                    mouseOut: function(event) {
+                      $scope.$emit('tooltip::hide');
+                      $rootScope.clearDelayedTrack('viz-filter', {
+                        action: 'hover',
+                        label: `${$attrs.heading}->${event.target.category}`,
+                      });
+                    },
+                  },
+                },
+              },
+            },
+          };
+
+          jQuery.extend(
+            true,
+            chartsDefaults,
+            highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage),
+            $scope.configOverrides()
+          );
+
+          $scope.$watch(
+            'items',
+            function(newValue) {
+              var deepCopy, newSettings;
+
+              if (!newValue) {
+                return;
+              }
+              // We need deep copy in order to NOT override original chart object.
+              // This allows us to override chart data member and still the keep
+              // our original renderTo will be the same
+              deepCopy = true;
+              newSettings = {};
+              jQuery.extend(deepCopy, newSettings, chartsDefaults);
+              newSettings.xAxis.categories = newValue.x;
+
+              if (!$attrs.format || $attrs.format !== 'percentage') {
+                if (newSettings.yAxis) {
+                  newSettings.yAxis.allowDecimals = false;
                 }
               }
-            }
-          }
-        }
-      };
 
-      jQuery.extend(
-        true,
-        chartsDefaults,
-        highchartsService.getCustomNoDataConfig($scope.shouldShowNoDataMessage),
-        $scope.configOverrides()
-      );
+              newSettings.series = [{ data: newValue.s }];
+              renderChart(newSettings);
+            },
+            true
+          );
 
-      $scope.$watch('items', function (newValue) {
-        var deepCopy, newSettings;
+          $scope.$on('$destroy', function() {
+            c.destroy();
+          });
 
-        if (!newValue) {
-          return;
-        }
-        // We need deep copy in order to NOT override original chart object.
-        // This allows us to override chart data member and still the keep
-        // our original renderTo will be the same
-        deepCopy = true;
-        newSettings = {};
-        jQuery.extend(deepCopy, newSettings, chartsDefaults);
-        newSettings.xAxis.categories = newValue.x;
+          renderChart(chartsDefaults);
+        };
 
-        if (!$attrs.format || $attrs.format !== 'percentage') {
-          if (newSettings.yAxis) {
-            newSettings.yAxis.allowDecimals = false;
-          }
-        }
-
-        newSettings.series = [
-          {data: newValue.s}
-        ];
-        renderChart(newSettings);
-      }, true);
-
-      renderChart(chartsDefaults);
-
-      $scope.$on('$destroy', function () {
-        c.destroy();
-      });
-    }
-  };
-});
+        // $timeout forces the render function to after the DOM has loaded
+        // ensureing that we have our proper parent elem offsetWidth
+        $timeout(renderWhenReady, 0);
+      },
+    };
+  });

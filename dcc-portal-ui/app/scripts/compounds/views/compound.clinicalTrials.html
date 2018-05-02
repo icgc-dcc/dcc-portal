@@ -1,0 +1,151 @@
+<section data-ng-show="CompoundCtrl.activeTab === 'clinicalTrials'" data-ng-init="compound = CompoundCtrl.getCompound(); sortField = 'uiCode'; sortDescending = false;"
+    id="trials">
+    <div class="full">
+        <h3>
+            <translate>Clinical Trials</translate>
+
+            <span class="pull-right open-in" data-ng-if="compound.trials.length > 0">
+                <translate has-markup>
+                    Open in
+                    <a href="http://zinc15.docking.org/substances/{{compound.id}}/trials/subsets/cancer/" target="_blank">
+                        <i class="icon-external-link"></i>
+                        Zinc
+                    </a>
+                </translate>
+
+            </span>
+        </h3>
+        <div class="t_table_top">
+            <span data-ng-if="compound.trials.length > 0">
+                <data-table-row-counts data-data="compound.uiTrials" data-filter="CompoundCtrl.tableFilter.clinicalTrials" data-label="{{'Clinical Trials' | translate}}"
+                    data-current-page="CompoundCtrl.currentClinicalTrailsPage" data-row-limit="CompoundCtrl.defaultClinicalTrialsRowLimit">
+                </data-table-row-counts>
+                <span class="t_tools" data-toolbar="" data-entity="compound_trials" data-json="{{compound.trials}}">
+                    <span class="t_tools__tool" data-tooltip-placement="left" data-icgc-tooltip="{{'Export Table as TSV' | translate}}" data-ng-clicks="downloadHTMLTable(dl, 'tsv')">
+                        <i class="icon-file"></i>
+                    </span>
+                </span>
+                <table-filter data-class="small-filter" data-filter-model="CompoundCtrl.tableFilter.clinicalTrials" data-current-page="CompoundCtrl.currentClinicalTrailsPage"></table-filter>
+            </span>
+            <span data-ng-if="compound.trials.length === 0">
+                <translate>No trials found.</translate>
+            </span>
+        </div>
+        <table class="table table-info" data-ng-if="compound.uiTrials.length > 0">
+            <thead>
+                <tr>
+                    <th data-ng-click="sortField = 'uiCode'; sortDescending = ! sortDescending" class="sortable">
+                        <translate>Code</translate>
+                        <i data-ng-if="sortField !== 'uiCode'" class="icon-sort"></i>
+                        <i data-ng-if="sortField === 'uiCode'" data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                        </i>
+                    </th>
+                    <th data-ng-click="sortField = 'uiDescription'; sortDescending = ! sortDescending" class="sortable">
+                        <translate>Description</translate>
+                        <i data-ng-if="sortField !== 'uiDescription'" class="icon-sort"></i>
+                        <i data-ng-if="sortField === 'uiDescription'" data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                        </i>
+                    </th>
+                    <th>
+                        <translate>Conditions</translate>
+                    </th>
+                    <th data-ng-click="sortField = 'uiStartDate'; sortDescending = ! sortDescending" class="sortable">
+                        <translate>Start Date</translate>
+                        <i data-ng-if="sortField !== 'uiStartDate'" class="icon-sort"></i>
+                        <i data-ng-if="sortField === 'uiStartDate'" data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                        </i>
+                    </th>
+                    <th data-ng-click="sortField = 'uiPhaseName'; sortDescending = ! sortDescending" class="sortable">
+                        <translate>Phase</translate>
+                        <i data-ng-if="sortField !== 'uiPhaseName'" class="icon-sort"></i>
+                        <i data-ng-if="sortField === 'uiPhaseName'" data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                        </i>
+                    </th>
+                    <th data-ng-click="sortField = 'uiStatusName'; sortDescending = ! sortDescending" class="sortable">
+                        <translate>Status</translate>
+                        <i data-ng-if="sortField !== 'uiStatusName'" class="icon-sort"></i>
+                        <i data-ng-if="sortField === 'uiStatusName'" data-ng-class="{'icon-sort-down': sortDescending, 'icon-sort-up': ! sortDescending}">
+                        </i>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="trial in (compound.uiTrials |
+                        filter: CompoundCtrl.tableFilter.clinicalTrials |
+                        orderBy:sortField:sortDescending |
+                        limitTo: CompoundCtrl.defaultClinicalTrialsRowLimit : ((CompoundCtrl.currentClinicalTrailsPage-1) * CompoundCtrl.defaultClinicalTrialsRowLimit))">
+                    <td>
+                        <a style="white-space: nowrap" target="_blank" href="https://www.clinicaltrials.gov/ct2/show/{{trial.uiCode}}">
+                            <i class="icon-external-link"></i>
+                            <span data-ng-bind-html="trial.uiCode | highlight: CompoundCtrl.tableFilter.clinicalTrials"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <hide-text text="{{ trial.uiDescription}}" data-class="table-text-wrap" data-highlight-filter="CompoundCtrl.tableFilter.clinicalTrials"></hide-text>
+                    </td>
+                    <td class="text-wrap">
+                        <ul>
+                            <hide-list data-items="trial.uiConditions" data-display-limit="2" data-template-name="template/compoundList.html" data-highlight-filter="CompoundCtrl.tableFilter.clinicalTrials">
+                            </hide-list>
+                        </ul>
+                    </td>
+                    <td data-ng-bind-html="trial.uiStartDate | highlight: CompoundCtrl.tableFilter.clinicalTrials" style="width:6rem; white-space: nowrap;"></td>
+                    <td>
+                        <div data-ng-repeat="phase in trial.uiPhaseName">
+                            <span data-ng-bind-html="phase | highlight: CompoundCtrl.tableFilter.clinicalTrials"></span>
+                        </div>
+                    </td>
+                    <td class="text-wrap" data-ng-bind-html="trial.uiStatusName | highlight: CompoundCtrl.tableFilter.clinicalTrials"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pagination-client-side data-data="compound.uiTrials" data-filter="CompoundCtrl.tableFilter.clinicalTrials" data-row-limit="CompoundCtrl.defaultClinicalTrialsRowLimit"
+            data-row-sizes="CompoundCtrl.rowSizes" data-current-page="CompoundCtrl.currentClinicalTrailsPage"></pagination-client-side>
+
+    </div>
+    <table class="hidden" data-ng-if="compound.trials.length > 0" id="compound_trials">
+        <thead>
+            <tr>
+                <th>
+                    <translate>Code</translate>
+                </th>
+                <th>
+                    <translate>Description</translate>
+                </th>
+                <th>
+                    <translate>Conditions</translate>
+                </th>
+                <th>
+                    <translate>Start Date</translate>
+                </th>
+                <th>
+                    <translate>Phase</translate>
+                </th>
+                <th>
+                    <translate>Status</translate>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="trial in compound.trials | orderBy:sortField:sortDescending">
+                <td>
+                    <a>
+                        <span data-ng-bind="trial.code"></span>
+                    </a>
+                </td>
+                <td>
+                    {{ trial.description }}
+                </td>
+                <td>
+                    <span data-ng-repeat="condition in trial.conditions">
+                        {{condition.name}}
+                    </span>
+                </td>
+                <td data-ng-bind="trial.startDate"></td>
+                <td data-ng-bind="trial.phaseName"></td>
+                <td data-ng-bind="trial.statusName"></td>
+            </tr>
+        </tbody>
+    </table>
+</section>

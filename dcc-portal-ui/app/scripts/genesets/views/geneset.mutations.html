@@ -1,0 +1,529 @@
+<aside data-ng-if="GeneSetCtrl.activeTab === 'mutations'" class="t_sidebar">
+    <section>
+        <ul class="t_subnav__items">
+            <li class="t_subnav__items__item" data-ng-if="GeneSetCtrl.mutationFacets.functionalImpact.total > 0" style="padding: .1rem 0;">
+                <span>
+                    <translate>Quick Filters</translate>
+                </span>
+            </li>
+        </ul>
+    </section>
+    <ul class="t_subnav__items__box" data-ng-if="GeneSetCtrl.mutationFacets.functionalImpact.total > 0">
+        <ul class="t_facets">
+            <terms data-type="mutation" data-facet-name="functionalImpact" data-hide-count="true" data-label="{{'Mutation Impact' | translate}}"
+                data-facet="GeneSetCtrl.mutationFacets.functionalImpact"></terms>
+            <terms data-type="mutation" data-facet-name="clinvarClinicalSignificance" data-hide-count="true" data-label="{{'Clinical Significance' | translate}}"
+                data-facet="GeneSetCtrl.mutationFacets.clinvarClinicalSignificance"></terms>
+        </ul>
+    </ul>
+</aside>
+
+
+<article data-ng-if="GeneSetCtrl.activeTab === 'mutations'">
+    <section id="projects" data-ng-class="{'loading': !GeneSetCtrl.geneSet.projects, 'empty': GeneSetCtrl.geneSet.projects.length == 0}">
+        <h3 data-ng-if="!GeneSetCtrl.geneSet.projects">
+            <i class="icon-spinner icon-spin"></i>
+            <translate>Loading Donors...</translate>
+        </h3>
+
+        <h3 data-ng-if="GeneSetCtrl.geneSet.projects.length == 0">
+            <translate>No Donors Affected.</translate>
+        </h3>
+
+        <div data-ng-if="GeneSetCtrl.geneSet.projects.length > 0">
+            <h3>
+                <translate>Cancer Distribution</translate>
+                <span data-open-in-list='?filters={{GeneSetCtrl.baseAdvQuery}}' data-type='donor'></span>
+            </h3>
+
+            <h4 class="subhead">
+                <a data-ng-href='/search?filters={{GeneSetCtrl.baseAdvQuery}}'>
+                    <strong>{{GeneSetCtrl.totalDonors | number}}</strong>
+                </a>
+                <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">donors affected by</translate>
+                <a data-ng-href='/search/m?filters={{GeneSetCtrl.baseAdvQuery}}'>
+                    <strong>{{GeneSetCtrl.totalMutations | number}}</strong>
+                </a>
+                <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">mutations across</translate>
+                <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|_:"map":"id").join("\",\"")}}"]}}}'>
+                    <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong>
+                </a>
+                <translate translate-comment="'N' donors affected by 'N' mutations across 'N' projects">projects</translate>
+                <br>
+
+                <a data-ng-href='search/g?filters={{GeneSetCtrl.baseAdvQuery}}'>
+                    <strong>{{GeneSetCtrl.totalGenes}}</strong>
+                </a>
+                <translate translate-comment="'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects">out of</translate>
+                <a data-ng-href='/search/g?filters={"gene":{"{{GeneSetCtrl.geneSet.queryType}}":{"is":["{{GeneSetCtrl.geneSet.id}}"]}}}'>
+                    <strong>{{GeneSetCtrl.geneSet.geneCount}}</strong>
+                </a>
+                <translate translate-comment="'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects">genes in this gene set affected by mutations across</translate>
+                <a data-ng-href='/projects?filters={"project":{"id":{"is":["{{(GeneSetCtrl.geneSet.projects|_:"map":"id").join("\",\"")}}"]}}}'>
+                    <strong>{{GeneSetCtrl.geneSet.projects.length | number}}</strong>
+                </a>
+                <translate translate-comment="'N' out of 'N' genes in this gene set affected by mutations across 'N' cancer projects">cancer projects</translate>
+            </h4>
+
+            <div data-ng-if="GeneSetCtrl.donorBar.hasData">
+                <bar class="half" height=250 items="GeneSetCtrl.donorBar" heading="{{'Top Projects by Donor Proportion' | translate}}" subheading="{{'Top 10 projects with donors containing mutated genes in the gene set sorted by proportion of affected donors' | translate}}"
+                    ylabel="{{'% of Donors Affected' | translate}}" format="percentage"></bar>
+            </div>
+            <div data-ng-if="GeneSetCtrl.geneBar.hasData" class="clearfix">
+                <bar class="half omega" height=250 items="GeneSetCtrl.geneBar" heading="{{'Top Projects by Gene Proportion' | translate}}"
+                    subheading="{{'Top 10 projects with donors containing mutated genes in the gene set sorted by proportion of mutated genes' | translate}}"
+                    ylabel="{{'% of Genes Affected' | translate}}" format="percentage"></bar>
+            </div>
+
+            <span class="t_table_top">
+                <data-table-row-counts data-data="GeneSetCtrl.geneSet.uiProjects" data-filter="GeneSetCtrl.tableFilter.projects" data-label="{{'projects' | translate}}"
+                    data-current-page="GeneSetCtrl.currentCancerPage" data-row-limit="GeneSetCtrl.defaultCancerRowLimit">
+                </data-table-row-counts>
+                <span data-toolbar data-entity="{{GeneSetCtrl.geneSet.id}}_distribution" data-json="{{ GeneSetCtrl.geneSet.uiProjects }}"></span>
+                <table-filter data-class="small-filter" data-filter-model="GeneSetCtrl.tableFilter.projects" data-current-page="GeneSetCtrl.currentCancerPage"></table-filter>
+            </span>
+
+            <table class="table table-bordered table-striped table-condensed" data-ng-init="sortProjectsDescendingly = true;">
+                <thead>
+                    <tr>
+                        <th>
+                            <translate>Project</translate>
+                        </th>
+                        <th>
+                            <translate>Site</translate>
+                        </th>
+                        <th>
+                            <translate>Tumour Type</translate>
+                        </th>
+                        <th>
+                            <translate>Tumour Subtype</translate>
+                        </th>
+                        <th style="cursor: pointer" data-ng-click="sortProjectsDescendingly = ! sortProjectsDescendingly">
+                            <abbr data-icgc-tooltip="{{'Number of Donors where a Gene involved in the Gene Set contains SSM' | translate}}">
+                                <translate># Donors affected</translate>
+                                <i class="{{ sortProjectsDescendingly ? 'icon-sort-down' : 'icon-sort-up'}}" />
+                            </abbr>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{'Number of SSM observed in [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
+                                data-tooltip-placement="left">
+                                <translate># Mutations</translate>
+                            </abbr>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{'Number of Genes affected by [[ geneId ]]' | translate | subDelimiters:{geneId: GeneSetCtrl.geneSet.id} }}"
+                                data-tooltip-placement="left">
+                                <translate># Genes</translate>
+                            </abbr>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="project in (GeneSetCtrl.geneSet.uiProjects |
+            filter: GeneSetCtrl.tableFilter.projects | 
+            orderBy:'uiAffectedDonorPercentage/100':sortProjectsDescendingly | 
+            limitTo: GeneSetCtrl.defaultCancerRowLimit : ((GeneSetCtrl.currentCancerPage-1) * GeneSetCtrl.defaultCancerRowLimit)) track by project.uiId">
+                        <td>
+                            <a data-icgc-tooltip="{{ project.uiName }}" data-ng-href="/projects/{{ project.uiId }}">
+                                <span data-ng-bind-html="project.uiId | highlight: GeneSetCtrl.tableFilter.projects"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <span data-ng-bind-html="project.uiPrimarySite | highlight: GeneSetCtrl.tableFilter.projects"></span>
+                        </td>
+                        <td>
+                            <span data-ng-bind-html="project.uiTumourType | highlight: GeneSetCtrl.tableFilter.projects"></span>
+                        </td>
+                        <td>
+                            <span data-ng-bind-html="project.uiTumourSubtype | highlight: GeneSetCtrl.tableFilter.projects"></span>
+                        </td>
+                        <td class="text-right" style="position: relative; display: block">
+                            <span data-ng-style="{width:project.uiAffectedDonorPercentage+'%'}" class="t_facets__facet__terms__active__term__bar"></span>
+                            <span style="position: relative">
+                                <a data-ng-href='/search?filters={{project.uiAdvQuery}}'>
+                                    <span data-ng-bind-html="project.uiAffectedDonorCount | highlight: GeneSetCtrl.tableFilter.projects"></span>
+                                </a>
+                                /
+                                <a data-ng-href='/search?filters={"donor":{"projectId":{"is":["{{ project.uiId }}"]},"availableDataTypes":{"is":["ssm"]}}}'>
+                                    <span data-ng-bind-html="project.uiSSMTestedDonorCount | highlight: GeneSetCtrl.tableFilter.projects"></span>
+                                </a>
+                                <em data-ng-bind-html="'('+project.uiAffectedDonorPercentage + '%)' | highlight: GeneSetCtrl.tableFilter.projects"></em>
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <span data-ng-if="project.uiMutationCount==null">
+                                <i class="icon-spinner icon-spin"></i>
+                            </span>
+                            <span data-ng-if="project.uiMutationCount === '0'">--</span>
+                            <a data-ng-if="project.uiMutationCount > '0'" data-ng-href='/search/m?filters={{project.uiAdvQuery}}' data-ng-bind-html="project.uiMutationCount | highlight: GeneSetCtrl.tableFilter.projects">
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <span data-ng-if="project.uiGeneCount==null">
+                                <i class="icon-spinner icon-spin"></i>
+                            </span>
+                            <span data-ng-if="project.uiGeneCount ==='0'">--</span>
+                            <a data-ng-if="project.uiGeneCount > '0'" data-ng-href='/search/g?filters={{project.uiAdvQuery}}' data-ng-bind-html="project.uiGeneCount | highlight: GeneSetCtrl.tableFilter.projects">
+                            </a> /
+                            <a data-ng-href='/search/g?filters={"gene":{"{{project.uiQueryType}}":{"is":["{{project.uiGeneSetId}}"]}}}' data-ng-bind-html="project.uiGeneSetCount | highlight: GeneSetCtrl.tableFilter.projects">
+                            </a>
+                            <em data-ng-bind-html="'(' + project.uiAffectedGenePercentage + '%)' | highlight: GeneSetCtrl.tableFilter.projects"></em>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <pagination-client-side data-data="GeneSetCtrl.geneSet.uiProjects" data-filter="GeneSetCtrl.tableFilter.projects" data-row-limit="GeneSetCtrl.defaultCancerRowLimit"
+                data-row-sizes="GeneSetCtrl.rowSizes" data-current-page="GeneSetCtrl.currentCancerPage"></pagination-client-side>
+
+            <table class="hidden" id="{{GeneSetCtrl.geneSet.id}}_distribution">
+                <thead>
+                    <tr>
+                        <th>
+                            <translate>Project</translate>
+                        </th>
+                        <th>
+                            <translate>Site</translate>
+                        </th>
+                        <th>
+                            <translate>Tumour Type</translate>
+                        </th>
+                        <th>
+                            <translate>Tumour Subtype</translate>
+                        </th>
+                        <th>
+                            <translate>Number of donors with the current gene containing simple somatic mutations in the current project
+                            </translate>
+                        </th>
+                        <th>
+                            <translate>Number of SSM-tested donors in the current project</translate>
+                        </th>
+                        <th>
+                            <translate>Percentage of donors with the current gene</translate>
+                        </th>
+                        <th>
+                            <translate>Mutations</translate>
+                        </th>
+                        <th>
+                            <translate>Genes</translate>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="project in GeneSetCtrl.geneSet.projects | orderBy:'uiAffectedDonorPercentage':true">
+                        <td>{{project.name}}</td>
+                        <td>{{project.primarySite}}</td>
+                        <td>{{project.tumourType}}</td>
+                        <td>{{project.tumourSubtype}}</td>
+                        <td>{{project.affectedDonorCount}}</td>
+                        <td>{{project.ssmTestedDonorCount}}</td>
+                        <td>{{project.uiAffectedDonorPercentage}}</td>
+                        <td>{{project.mutationCount}}</td>
+                        <td>{{project.geneCount}}/{{GeneSetCtrl.geneSet.geneCount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="genes" data-ng-controller="GeneSetGenesCtrl as GeneSetGenesCtrl" data-ng-class="{'loading': !GeneSetGenesCtrl.genes.hits, 'empty': GeneSetGenesCtrl.genes.hits.length == 0}"
+        fix-scroll>
+        <h3 data-ng-if="!GeneSetGenesCtrl.genes.hits">
+            <i class="icon-spinner icon-spin"></i>
+            <translate>Loading Mutated Genes...</translate>
+        </h3>
+
+        <h3 data-ng-if="GeneSetGenesCtrl.genes.hits.length == 0">
+            <translate>No Mutated Genes Found.</translate>
+        </h3>
+
+        <div data-ng-if="GeneSetGenesCtrl.genes.hits.length > 0">
+            <h3>
+                <translate>Most Frequently Mutated Genes</translate>
+                <span data-open-in-list='/g?filters={{GeneSetCtrl.baseAdvQuery}}'></span>
+            </h3>
+
+            <div class="clearfix">
+                <bar data-ng-if="GeneSetGenesCtrl.bar.hasData" format="percentage" class="wide" height=200 items="GeneSetGenesCtrl.bar" title=""
+                    ylabel="{{'% of Donors Affected' | translate}}">
+                </bar>
+            </div>
+            <div class="t_table_top">
+                <span data-table-counts data-label="{{'genes' | translate}}" data-page="GeneSetGenesCtrl.genes.pagination"></span>
+                <span data-toolbar data-entity="{{GeneSetCtrl.geneSet.id}}_genes" data-json="{{ GeneSetGenesCtrl.genes.hits }}"></span>
+            </div>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>
+                            <translate>Symbol</translate>
+                        </th>
+                        <th>
+                            <translate>Name</translate>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{'Gene location on the genome, chr:start-end' | translate}}">
+                                <translate>Location</translate>
+                            </abbr>
+                        </th>
+                        <th>
+                            <translate>Type</translate>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{'Number of Donors where a Gene involved in the Gene Set contains SSM' | translate}}">#
+                                <translate>Donors affected</translate>
+                            </abbr>
+                            <i class="icon-sort-down"></i>
+                        </th>
+                        <th class="text-center">
+                            <abbr data-icgc-tooltip="{{'Number of SSM in the Gene' | translate}}" data-tooltip-placement="left">
+                                <translate># Mutations</translate>
+                            </abbr>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="gene in GeneSetGenesCtrl.genes.hits track by gene.id">
+                        <td>
+                            <a data-ui-sref="gene({id:gene.id})">{{gene.symbol}}</a>
+                        </td>
+                        <td>{{gene.name}}</td>
+                        <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
+                        <td>{{gene.type}}</td>
+                        <td class="text-right" style="position: relative; white-space: nowrap">
+                            <span data-ng-style="{width:gene.affectedDonorCountFiltered/GeneSetCtrl.totalDonors * 100+'%'}" class="t_facets__facet__terms__active__term__bar"></span>
+                            <span style="position: relative">
+                                <a data-ng-href='/search?filters={{gene.advQuery}}'>
+                                    {{gene.affectedDonorCountFiltered | number}}
+                                </a>
+                                /
+                                <a data-ng-href='/search?filters={{GeneSetCtrl.baseAdvQuery}}'>
+                                    {{GeneSetCtrl.totalDonors | number}}</a>
+                                <em>({{gene.affectedDonorCountFiltered/GeneSetCtrl.totalDonors * 100 | number:2}}%)</em>
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <span data-ng-show="gene.mutationCount === null">
+                                <i class="icon-spinner icon-spin"></i>
+                            </span>
+                            <span data-ng-show="gene.mutationCount === 0">--</span>
+                            <a data-ng-show="gene.mutationCount > 0" href='/search/m?filters={{gene.advQuery}}'>
+                                {{gene.mutationCount | number}}
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <pagination-controls data-type="genesets" data-data="GeneSetGenesCtrl.genes"></pagination-controls>
+
+            <table class="hidden" id="{{GeneSetCtrl.geneSet.id}}_genes">
+                <thead>
+                    <tr>
+                        <th>
+                            <translate>Symbol</translate>
+                        </th>
+                        <th>
+                            <translate>Name</translate>
+                        </th>
+                        <th>
+                            <translate>Location</translate>
+                        </th>
+                        <th>
+                            <translate>Type</translate>
+                        </th>
+                        <th>
+                            <translate>Number of donors affected</translate>
+                        </th>
+                        <th>
+                            <translate>Total number of SSM-tested donors from the current gene set</translate>
+                        </th>
+                        <th>
+                            <translate>Percentage of affected donors</translate>
+                        </th>
+                        <th>
+                            <translate>Mutations</translate>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="gene in GeneSetGenesCtrl.genes.hits">
+                        <td>{{gene.symbol}}</td>
+                        <td>{{gene.name}}</td>
+                        <td>chr{{gene.chromosome}}:{{gene.start}}-{{gene.end}}</td>
+                        <td>{{gene.type}}</td>
+                        <td>{{gene.affectedDonorCountFiltered}}</td>
+                        <td>{{GeneSetCtrl.totalDonors}}</td>
+                        <td>{{gene.affectedDonorCountFiltered / GeneSetCtrl.totalDonors}}</td>
+                        <td>{{gene.mutationCount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="mutations" data-ng-controller="GeneSetMutationsCtrl as GeneSetMutationsCtrl" data-ng-class="{'loading': !GeneSetMutationsCtrl.mutations.hits, 'empty': GeneSetMutationsCtrl.mutations.hits.length == 0}"
+        fix-scroll>
+        <h3 data-ng-if="!GeneSetMutationsCtrl.mutations.hits">
+            <i class="icon-spinner icon-spin"></i>
+            <translate>Loading Mutations...</translate>
+        </h3>
+
+        <h3 data-ng-if="GeneSetMutationsCtrl.mutations.hits.length == 0">
+            <translate>No Mutations Found.</translate>
+        </h3>
+
+        <div data-ng-if="GeneSetMutationsCtrl.mutations.hits.length > 0">
+            <h3>
+                <translate>Most Frequent Mutations</translate>
+                <span data-open-in-list='/m?filters={{GeneSetCtrl.baseAdvQuery}}'></span>
+            </h3>
+
+            <div class="clearfix">
+                <bar class="wide" data-ng-if="GeneSetMutationsCtrl.bar.hasData" height=200 items="GeneSetMutationsCtrl.bar" title="" ylabel="{{'Donors affected' | translate}}"></bar>
+            </div>
+
+            <div class="t_table_top">
+                <span data-table-counts data-label="{{'mutations' | translate}}" data-page="GeneSetMutationsCtrl.mutations.pagination"></span>
+                <span data-toolbar data-entity="{{GeneSetCtrl.geneSet.id}}_mutations" data-json="{{ GeneSetMutationsCtrl.mutations.hits }}"></span>
+            </div>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{'Genomic DNA change, shown as {chromosome}:g.{start}{ref}>{tumor}' | translate}}">
+                                <translate>DNA change</translate>
+                            </abbr>
+                        </th>
+                        <th>
+                            <translate>Type</translate>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{'Consequences caused by the mutation, annotated using SnpEff with Sequence Ontology terms. High, Low impact AA change is in RED or GREEN respectively.' | translate}}">
+                                <translate>Consequences</translate>
+                            </abbr>
+                        </th>
+                        <th>
+                            <translate>Clinical Significance</translate>
+                        </th>
+                        <th class="text-center">
+                            <abbr data-icgc-tooltip="{{'# Donors where mutation is observed filtered by current criteria / # SSM tested donors portal wide. Expand to see breakdown by project.' | translate}}"
+                                data-tooltip-placement="left">
+                                <translate># Donors affected</translate>
+                            </abbr>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{ 'CIVIC curated clinical evidence associated to mutation' | translate }}" data-tooltip-placement="left"
+                                style="display:block;padding-left:4px;">
+                                <i class="fa fa-heartbeat">
+                                </i>
+                            </abbr>
+                        </th>
+                        <th>
+                            <abbr data-icgc-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutation' | translate }}" data-tooltip-placement="left"
+                                style="display:block;">
+                                <i class="icon-team">
+                                </i>
+                            </abbr>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="mutation in GeneSetMutationsCtrl.mutations.hits track by mutation.id">
+                        <td>
+                            <a data-ui-sref="mutation({id:mutation.id})">{{mutation.id}}</a>
+                        </td>
+                        <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
+                        <td>
+                            <abbr data-icgc-tooltip="{{ mutation.type | define }}">{{mutation.type}}</abbr>
+                        </td>
+                        <td>
+                            <mutation-consequences data-items="mutation.consequences"></mutation-consequences>
+                        </td>
+                        <td>
+                            {{ mutation.clinical_significance.clinvar.clinicalSignificance }}
+                        </td>
+                        <td class="text-right" style="white-space: nowrap">
+                            <ul data-hide-sum-list="{{mutation.uiDonors}}" data-link='/search?filters={{mutation.advQuery}}'>
+                                <li data-ng-repeat="p in list | orderBy:'percentage':true" style="position: relative">
+                                    <span data-ng-style="{width:p.percentage * 100+'%'}" class="t_facets__facet__terms__active__term__bar"></span>
+                                    <span style="position: relative">
+                                        <a data-tooltip-placement="left" data-icgc-tooltip="{{ p.projectName }}" href="/projects/{{p.term}}">{{p.term}}</a>
+                                        <a href='/search?filters={{p.advQuery}}'>
+                                            {{p.count | number}}
+                                        </a>/
+                                        <a href='/search?filters={"donor":{"projectId":{"is":["{{p.term}}"]},"availableDataTypes":{"is":["ssm"]}}}'>
+                                            {{p.countTotal | number}}
+                                        </a>
+                                        <em>({{p.percentage * 100 | number:2}}%)</em>
+                                    </span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <i data-ng-if="mutation.clinical_evidence.civic.length > 0" class="fa fa-heartbeat clinical-evidence-popup" style="padding-left:4px;"
+                                data-ng-click="GeneSetCtrl.openMutationModal(mutation)"></i>
+                            <span data-ng-if="mutation.clinical_evidence.civic == null" style="display:block; text-align:center;">--</span>
+                        </td>
+                        <td>
+                            <i class="icon-team phenotype-analysis" data-ng-click="GeneSetCtrl.launchSurvivalAnalysis('mutation', mutation.id, mutation.id)"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <pagination-controls data-type="mutationset" data-data="GeneSetMutationsCtrl.mutations"></pagination-controls>
+
+            <table class="hidden" id="{{GeneSetCtrl.geneSet.id}}_mutations">
+                <thead>
+                    <tr>
+                        <th>
+                            <translate>Mutation ID</translate>
+                        </th>
+                        <th>
+                            <translate>Genomic DNA Change</translate>
+                        </th>
+                        <th>
+                            <translate>Type</translate>
+                        </th>
+                        <th>
+                            <translate>Consequences</translate>
+                        </th>
+                        <th>
+                            <translate>Clinical Significance</translate>
+                        </th>
+                        <th>
+                            <translate>Donors affected</translate>
+                        </th>
+                        <th>
+                            <translate>Clinical Evidence</translate>
+                        </th>
+                        <th>
+                            <translate>Projects Mutation Observed</translate>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="mutation in GeneSetMutationsCtrl.mutations.hits">
+                        <td>{{mutation.id}}</td>
+                        <td>chr{{mutation.chromosome}}:g.{{mutation.start}}{{mutation.mutation}}</td>
+                        <td>{{mutation.type}}</td>
+                        <td>
+                            <mutation-consequences data-items="mutation.consequences"></mutation-consequences>
+                        </td>
+                        <td>{{mutation.clinical_significance.clinvar.clinicalSignificance}}</td>
+                        <td>
+                            <div data-ng-repeat="p in mutation.uiDonors | orderBy:'percentage':true">
+                                <div>{{p.term}}:{{p.count | number}}/{{p.countTotal | number}}</div>
+                                <div data-ng-if="!$last">|</div>
+                            </div>
+                        </td>
+                        <td>{{mutation.clinical_evidence.civic !== null ? + mutation.clinical_evidence.civic.length : 0}}</td>
+                        <td>{{mutation.uiDonorsExportString}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</article>

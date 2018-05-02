@@ -1,0 +1,239 @@
+<section data-ng-show="GeneSetCtrl.activeTab === 'donors'" id="donors" data-ng-controller="GeneSetDonorsCtrl as GeneSetDonorsCtrl" data-ng-class="{'loading': !GeneSetDonorsCtrl.donors.hits, 'empty': GeneSetDonorsCtrl.donors.hits.length == 0}"
+    fix-scroll>
+    <h3 data-ng-if="!GeneSetDonorsCtrl.donors.hits">
+        <i class="icon-spinner icon-spin"></i>
+        <translate>Loading Donors...</translate>
+    </h3>
+
+    <h3 data-ng-if="GeneSetDonorsCtrl.donors.hits.length == 0">
+        <translate>No Donors Found.</translate>
+    </h3>
+
+    <div data-ng-if="GeneSetDonorsCtrl.donors.hits.length > 0">
+        <h3>
+            <translate>Donors</translate>
+            <span data-open-in-list='?filters={{GeneSetCtrl.baseAdvQuery}}' data-type='donor'></span>
+        </h3>
+
+        <div class="clearfix">
+            <bar class="wide" data-ng-if="GeneSetDonorsCtrl.bar.hasData" height=200 items="GeneSetDonorsCtrl.bar" title="" ylabel="{{'Genes affected' | translate}}"></bar>
+        </div>
+
+        <div class="t_table_top">
+            <span data-table-counts data-label="{{'donors' | translate}}" data-page="GeneSetDonorsCtrl.donors.pagination"></span>
+            <span data-toolbar data-entity="{{GeneSetCtrl.geneSet.id}}_donors" data-json="{{ GeneSetDonorsCtrl.donors.hits }}"></span>
+        </div>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th rowspan="2">ID</th>
+                    <th rowspan="2">
+                        <translate>Site</translate>
+                    </th>
+                    <th rowspan="2">
+                        <translate>Gender</translate>
+                    </th>
+                    <th rowspan="2" class="text-center">
+                        <abbr data-icgc-tooltip="{{'Age at Diagnosis' | translate}}">
+                            <translate>Age</translate>
+                        </abbr>
+                    </th>
+                    <th rowspan="2">
+                        <abbr data-icgc-tooltip="{{'Tumour Stage at Diagnosis' | translate}}">
+                            <translate>Stage</translate>
+                        </abbr>
+                    </th>
+                    <th rowspan="2" class="text-center">
+                        <abbr data-icgc-tooltip="{{'Survival Time in days' | translate}}">
+                            <translate has-markup>Survival
+                                <br>(days)</translate>
+                        </abbr>
+                    </th>
+                    <th rowspan="2">
+                        <abbr data-icgc-tooltip="{{'Experimental analysis performed' | translate}}">
+                            <translate>Analysis</translate>
+                        </abbr>
+                    </th>
+                    <th colspan="11" class="text-center">
+                        <translate>Available Data Types:</translate>
+                    </th>
+                    <th rowspan="2" data-icgc-tooltip="{{'Number of SSM' | translate}}">
+                        <abbr>
+                            <translate># Mutations</translate>
+                        </abbr>
+                    </th>
+                    <th rowspan="2">
+                        <abbr data-icgc-tooltip="{{'Number of Genes with SSM' | translate}}" data-tooltip-placement="left">
+                            <translate># Genes</translate>
+                            <i class="icon-caret-down"></i>
+                        </abbr>
+                    </th>
+                </tr>
+                <tr>
+                    <th data-icgc-tooltip="{{ 'ssm' | datatype }}">
+                        <abbr class="tiny-header">SSM</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'cnsm' | datatype }}">
+                        <abbr class="tiny-header">CNSM</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'stsm' | datatype }}">
+                        <abbr class="tiny-header">StSM</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'sgv' | datatype }}">
+                        <abbr class="tiny-header">SGV</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'meth_array' | datatype }}">
+                        <abbr class="tiny-header">METH-A</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'meth_seq' | datatype }}">
+                        <abbr class="tiny-header">METH-S</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'exp_array' | datatype }}">
+                        <abbr class="tiny-header">EXP-A</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'exp_seq' | datatype }}">
+                        <abbr class="tiny-header">EXP-S</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'pexp' | datatype }}">
+                        <abbr class="tiny-header">PEXP</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'mirna_seq' | datatype }}">
+                        <abbr class="tiny-header">miRNA-S</abbr>
+                    </th>
+                    <th data-icgc-tooltip="{{ 'jcn' | datatype }}">
+                        <abbr class="tiny-header">JCN</abbr>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="donor in GeneSetDonorsCtrl.donors.hits track by donor.id">
+                    <td>
+                        <a data-ui-sref="donor({id:donor.id})">{{donor.id}}</a>
+                    </td>
+                    <td>{{donor.primarySite}}</td>
+                    <td>{{donor.gender}}</td>
+                    <td class="text-right">{{donor.ageAtDiagnosis | numberPT}}</td>
+                    <td>{{donor.tumourStageAtDiagnosis}}</td>
+                    <td class="text-right">{{donor.survivalTime | numberPT}}</td>
+                    <td>{{donor.analysisTypes.join(', ')}}</td>
+                    <td class="text-center">
+                        <span data-exists="donor.ssmCount"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.cnsmExists"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.stsmExists"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.sgvExists"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.methArrayExists"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.methSeqExists"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.expArrayExists"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.expSeqExists"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.pexpExists"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.mirnaSeqExists"></span>
+                    </td>
+                    <td class="text-center">
+                        <span data-exists="donor.jcnExists"></span>
+                    </td>
+                    <td class="text-right">
+                        <i data-ng-if="donor.mutationCount===null" class="icon-spinner icon-spin"></i>
+                        <span data-ng-if="donor.mutationCount === 0">--</span>
+                        <a data-ng-if="donor.mutationCount" href='/search/m?filters={{donor.advQuery}}'>
+                            {{donor.mutationCount | number}}
+                        </a>
+                    </td>
+                    <td class="text-right">
+                        <a href='/search/g?filters={{donor.advQuery}}'>
+                            {{donor.ssmAffectedGenes | number}}
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pagination-controls data-type="affectedDonors" data-data="GeneSetDonorsCtrl.donors"></pagination-controls>
+
+        <table class="hidden" id="{{GeneSetCtrl.geneSet.id}}_donors">
+            <thead>
+                <tr>
+                    <th>
+                        <translate>Donor ID</translate>
+                    </th>
+                    <th>
+                        <translate>Site</translate>
+                    </th>
+                    <th>
+                        <translate>Gender</translate>
+                    </th>
+                    <th>
+                        <translate>Age at Diagnosis</translate>
+                    </th>
+                    <th>
+                        <translate>Tumor Stage at Diagnosis</translate>
+                    </th>
+                    <th>
+                        <translate>Survival Time (days)</translate>
+                    </th>
+                    <th>
+                        <translate>Experimental Analysis</translate>
+                    </th>
+                    <th>SSM</th>
+                    <th>CNSM</th>
+                    <th>StSM</th>
+                    <th>SGV</th>
+                    <th>METH-A</th>
+                    <th>METH-S</th>
+                    <th>EXP-A</th>
+                    <th>EXP-S</th>
+                    <th>PEXP</th>
+                    <th>miRNA-S</th>
+                    <th>JCN</th>
+                    <th>
+                        <translate>Mutations</translate>
+                    </th>
+                    <th>
+                        <translate>Mutated Genes</translate>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="donor in GeneSetDonorsCtrl.donors.hits">
+                    <td>{{donor.id}}</td>
+                    <td>{{donor.primarySite}}</td>
+                    <td>{{donor.gender}}</td>
+                    <td>{{donor.ageAtDiagnosis}}</td>
+                    <td>{{donor.tumourStageAtDiagnosis}}</td>
+                    <td>{{donor.survivalTime}}</td>
+                    <td>{{donor.analysisTypes.join(', ')}}</td>
+                    <td>{{donor.ssmCount? 'True': 'False'}}</td>
+                    <td>{{donor.cnsmExists? 'True':'False'}}</td>
+                    <td>{{donor.stsmExists? 'True':'False'}}</td>
+                    <td>{{donor.sgvExists? 'True':'False'}}</td>
+                    <td>{{donor.methArrayExists? 'True':'False'}}</td>
+                    <td>{{donor.methSeqExists? 'True':'False'}}</td>
+                    <td>{{donor.expArrayExists? 'True':'False'}}</td>
+                    <td>{{donor.expSeqExists? 'True':'False'}}</td>
+                    <td>{{donor.pexpExists? 'True':'False'}}</td>
+                    <td>{{donor.mirnaSeqExists? 'True':'False'}}</td>
+                    <td>{{donor.jcnExists? 'True':'False'}}</td>
+                    <td>{{donor.mutationCount}}</td>
+                    <td>{{donor.ssmAffectedGenes}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

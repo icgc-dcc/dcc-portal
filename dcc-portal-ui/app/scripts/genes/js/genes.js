@@ -20,24 +20,44 @@
 
   var module = angular.module('icgc.genes', ['icgc.genes.controllers', 'ui.router', 'app.common']);
 
+  const stateResolver = {
+    gene: [
+      '$stateParams',
+      'Genes',
+      function($stateParams, Genes) {
+        return Genes.one($stateParams.id)
+          .get({ include: ['projects', 'transcripts'] })
+          .then(function(gene) {
+            return gene;
+          });
+      },
+    ],
+  };
+
   module.config(function($stateProvider) {
     $stateProvider.state('gene', {
       url: '/genes/:id',
       templateUrl: 'scripts/genes/views/gene.html',
       controller: 'GeneCtrl as GeneCtrl',
-      resolve: {
-        gene: [
-          '$stateParams',
-          'Genes',
-          function($stateParams, Genes) {
-            return Genes.one($stateParams.id)
-              .get({ include: ['projects', 'transcripts'] })
-              .then(function(gene) {
-                return gene;
-              });
-          },
-        ],
-      },
+      reloadOnSearch: false,
+      data: { tab: 'summary' },
+      resolve: stateResolver,
+    });
+
+    // [ {tab name}, {url} ] - consumed below by forEach
+    const tabs = [
+      ['mutations', 'mutations'],
+      ['targetingCompounds', 'targeting-compounds'],
+      ['protein', 'protein'],
+      ['genomeViewer', 'genome-viewer'],
+    ];
+
+    tabs.forEach(tab => {
+      $stateProvider.state(`gene.${tab[0]}`, {
+        url: `/${tab[1]}`,
+        reloadOnSearch: false,
+        data: { tab: `${tab[0]}` },
+      });
     });
   });
 })();
@@ -112,11 +132,12 @@
 
   module.controller('GeneCtrl', function(
     $scope,
-    $modal,
+    $state,
     HighchartsService,
     Page,
     Projects,
     Mutations,
+    CompoundsService,
     LocationService,
     Donors,
     Genes,
@@ -124,17 +145,19 @@
     Restangular,
     ExternalLinks,
     gene,
-    $filter,
+    FilterService,
+    $filter
   ) {
     var _ctrl = this;
     Page.setTitle(gene.id);
     Page.setPage('entity');
 
+    setActiveTab($state.current.data.tab);
+
     _ctrl.ExternalLinks = ExternalLinks;
     _ctrl.shouldLimitDisplayProjects = true;
     _ctrl.defaultProjectsLimit = 10;
     _ctrl.isPVLoading = true;
-    _ctrl.isPVInitialLoad = true;
     _ctrl.isGVLoading = true;
     _ctrl.gvOptions = { location: false, panels: false, zoom: 50 };
 
@@ -148,6 +171,47 @@
     _ctrl.currentProjectsPage = 1;
     _ctrl.defaultProjectsRowLimit = 10;
     _ctrl.rowSizes = [10, 25, 50];
+
+    // Counts
+    _ctrl.summarCountsLoaded = false;
+    
+    const mutationParams = {
+      filters: { gene: { id: { is: [_ctrl.gene.id] } } },
+      size: -1,
+      include: ['facets'],
+    };
+
+    Promise.all([Mutations.getList(mutationParams), CompoundsService.getCompoundsByGeneId(gene.id)])
+      .then(result => {
+        _ctrl.summarCountsLoaded = true;
+        _ctrl.summaryCounts = getSummaryCounts(result);
+      })
+      .catch(e => {
+        console.error(e);
+      });
+
+    function getSummaryCounts(data) {
+      const [mutations, compounds] = data;
+
+      const clinicalCount = mutations.facets.clinvarClinicalSignificance.terms
+        .filter(
+          term =>
+            term.term === 'Pathogenic' ||
+            term.term === 'Likely pathogenic' ||
+            term.term === 'Pathogenic/Likely pathogenic'
+        )
+        .reduce((acc, curr) => {
+          return acc + curr.count;
+        }, 0);
+
+      return {
+        highImpactMutations: mutations.facets.functionalImpact.terms.filter(
+          term => term.term === 'High'
+        )[0].count,
+        clinicallySignificantMutations: clinicalCount,
+        compounds: compounds.plain().length,
+      };
+    }
 
     _ctrl.hasNoExternal = function(dbId) {
       return _.get(_ctrl.gene, ['externalDbIds', dbId], []).length === 0;
@@ -192,6 +256,7 @@
         include: ['facets'],
         filters: _ctrl.gene.advQuery,
       }).then(function(data) {
+        _ctrl.donorFacets = data.facets;
         var ids = _.map(data.facets.projectId.terms, 'term');
 
         if (_.isEmpty(ids)) {
@@ -241,7 +306,7 @@
                 _.sortBy(projects.hits, function(p) {
                   return -p.uiAffectedDonorPercentage;
                 }),
-                10,
+                10
               ),
               xAxis: 'id',
               yValue: 'uiAffectedDonorPercentage',
@@ -269,11 +334,11 @@
     }
 
     if (_ctrl.gene.hasOwnProperty('transcripts')) {
-      var geneTranscriptPromie = Genes.one(_ctrl.gene.id)
+      var geneTranscriptPromise = Genes.one(_ctrl.gene.id)
         .handler.one('affected-transcripts')
         .get({});
 
-      geneTranscriptPromie.then(function(data) {
+      geneTranscriptPromise.then(function(data) {
         var affectedTranscriptIds = Restangular.stripRestangular(data)[_ctrl.gene.id];
 
         _ctrl.gene.transcripts.forEach(function(transcript) {
@@ -306,15 +371,38 @@
             uiTumourSubtype: project.tumourSubtype,
             uiAffectedDonorPercentage: $filter('number')(
               project.uiAffectedDonorPercentage * 100,
-              2,
+              2
             ),
             uiAdvQuery: project.advQuery,
             uiSSMTestedDonorCount: $filter('number')(project.ssmTestedDonorCount),
             uiMutationCount: $filter('number')(project.mutationCount),
-          },
+          }
         );
       });
     }
+
+    function setActiveTab(tab) {
+      if (_ctrl.activeTab !== tab)
+        _ctrl.activeTab = tab;
+    }
+
+    $scope.$watch(
+      function() {
+        var stateData = angular.isDefined($state.current.data) ? $state.current.data : null;
+        if (
+          !stateData ||
+          !angular.isDefined(stateData.tab)
+        ) {
+          return null;
+        }
+        return stateData.tab;
+      },
+      function(tab) {
+        if (tab !== null) {
+          setActiveTab(tab);
+        }
+      }
+    );
 
     $scope.$on('$locationChangeSuccess', function(event, dest) {
       if (dest.indexOf('genes') !== -1) {
@@ -332,7 +420,7 @@
     Genes,
     Projects,
     Donors,
-    ProjectCache,
+    ProjectCache
   ) {
     var _ctrl = this;
 
@@ -367,12 +455,12 @@
                   }
                   return prev;
                 },
-                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
               );
               return counts;
             };
             mutation.uiClinicalEvidenceCounts = countClinicalEvidence(
-              mutation.clinical_evidence.civic,
+              mutation.clinical_evidence.civic
             );
             return mutation;
           }
@@ -454,7 +542,7 @@
     $stateParams,
     CompoundsService,
     RouteInfoService,
-    $filter,
+    $filter
   ) {
     var geneId = $stateParams.id;
     var _this = this;
@@ -479,7 +567,7 @@
       },
       function(error) {
         throw new Error('Error getting compounds related to the geneId', error);
-      },
+      }
     );
 
     function getUiCompoundsJSON(compounds) {
@@ -494,7 +582,7 @@
             uiDrugClass: $filter('formatCompoundClass')(compound.drugClass),
             cancerTrialCount: compound.cancerTrialCount,
             uiCancerTrials: $filter('number')(compound.cancerTrialCount),
-          },
+          }
         );
       });
     }

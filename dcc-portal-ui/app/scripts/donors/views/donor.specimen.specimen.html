@@ -1,0 +1,243 @@
+<aside>
+    <ul class="nav nav-pills nav-stacked" data-ng-repeat="s in DonorCtrl.donor.specimen">
+        <li data-ng-class="{active:s.id==DonorSpecimenCtrl.specimen.id}">
+            <a href="" 
+                data-ng-click="DonorSpecimenCtrl.tableFilter.specimenSamples=''; DonorSpecimenCtrl.currentSpecimenPage=1; DonorSpecimenCtrl.setActive(s.id);"
+                data-ng-style="s.id===DonorSpecimenCtrl.specimen.id?{color:'#FFFFFF'}:{}" style="line-height:1.25rem">
+                    {{ s.id }}<br>
+                <small>{{ s.type }}</small>
+            </a></li>
+    </ul>
+</aside>
+<div class="specimen-wrap">
+    <div class="clearfix">
+        <h3>
+            {{ DonorSpecimenCtrl.specimen.id }} 
+            <pcawg-badge data-ng-if="DonorSpecimenCtrl.isPCAWG(DonorSpecimenCtrl.specimen)"></pcawg-badge>
+        </h3>
+
+        <div class="half">
+            <table class="table table-info">
+                <tr>
+                    <th><translate>Submitted Specimen ID</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.submittedId }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Specimen Type</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.type }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Specimen Type Other</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.typeOther }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Tumour Confirmed</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.tumourConfirmed }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Specimen Interval (days)</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.interval | numberPT }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Donor Treatment Type</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.treatmentType }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Donor Treatment Type Other</translate></th>
+                    <td class="text-wrap">{{ DonorSpecimenCtrl.specimen.treatmentTypeOther }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Specimen Processing</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.processing }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Specimen Processing Other</translate></th>
+                    <td class="text-wrap">{{ DonorSpecimenCtrl.specimen.processingOther }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Specimen Storage</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.storage }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Specimen Storage Other</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.storageOther }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Specimen Available</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.available }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="half omega">
+            <table class="table table-info">
+                <tr>
+                    <th><translate>Specimen Biobank</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.biobank }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Specimen Biobank ID</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.biobankId }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Tumour Grade</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.tumourGrade }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Tumour Grading System</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.tumourGradingSystem }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Tumour Grade Supplemental</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.tumourGradeSupplemental }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Tumour Stage</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.tumourStage }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Tumour Stage System</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.tumourStageSystem }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Tumour Stage Supplemental</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.tumourStageSupplemental }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Tumour Histological Type</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.tumourHistologicalType }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Percentage Cellularity</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.percentCellularity }}</td>
+                </tr>
+                <tr>
+                    <th><translate>Level of Cellularity</translate></th>
+                    <td>{{ DonorSpecimenCtrl.specimen.levelOfCellularity }}</td>
+                </tr>
+            </table>
+            <p><a data-ng-if="DonorSpecimenCtrl.specimen.digitalImageOfStainedSection | startsWith:'http'"
+                  data-ng-href="{{ DonorSpecimenCtrl.specimen.digitalImageOfStainedSection }}"
+                  target="_blank">
+                <i style="cursor: pointer" class="icon-picture"></i><translate>Image Of Stained Section</translate>
+            </a></p>
+        </div>
+    </div>
+    <div class="clearfix">
+        <h3 data-ng-if="DonorSpecimenCtrl.specimen.samples.length == 0"><translate>No Samples Found.</translate></h3>
+
+        <div data-ng-if="DonorSpecimenCtrl.specimen.samples.length > 0">
+            <span class="t_table_top">
+                <data-table-row-counts
+                    data-data="DonorSpecimenCtrl.uiSpecimenSamples"
+                    data-filter="DonorSpecimenCtrl.tableFilter.specimenSamples"
+                    data-label="{{'samples' | translate}}"
+                    data-current-page="DonorSpecimenCtrl.currentSpecimenPage"
+                    data-row-limit="DonorSpecimenCtrl.defaultSpecimenRowLimit">
+                </data-table-row-counts>
+                <span data-toolbar
+                      data-entity="{{DonorCtrl.donor.id}}_specimen"
+                      data-json="{{ DonorSpecimenCtrl.uiSpecimenSamples }}"></span>
+                <table-filter data-filter-model="DonorSpecimenCtrl.tableFilter.specimenSamples"
+                    data-current-page="DonorSpecimenCtrl.currentSpecimenPage"></table-filter>
+            </span>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><translate>Sample ID</translate></th>
+                    <th><translate>Submitted Sample ID</translate></th>
+                    <th><translate>Study</translate></th>
+                    <th><translate>Interval<br>(days)</translate></th>
+                    <th><translate>Analysis</translate></th>
+                    <th><translate>Sequence Repo</translate></th>
+                    <th><translate>BAM File</translate></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="sample in (DonorSpecimenCtrl.uiSpecimenSamples | 
+                    filter: DonorSpecimenCtrl.tableFilter.specimenSamples |
+                     limitTo: DonorSpecimenCtrl.defaultSpecimenRowLimit : ((DonorSpecimenCtrl.currentSpecimenPage-1)*DonorSpecimenCtrl.defaultSpecimenRowLimit)) track by sample.uiId">
+                    <td>
+                        <span data-ng-bind-html="sample.uiId | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
+                    </td>
+                    <td>
+                        <span data-ng-bind-html="sample.uiAnalyzedId | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
+                    </td>
+                    <td>
+                        <pcawg-badge data-ng-if="DonorSpecimenCtrl.PCAWG.isPCAWGStudy(sample.uiStudy)"></pcawg-badge>
+                        <span data-ng-if="!DonorSpecimenCtrl.PCAWG.isPCAWGStudy(sample.uiStudy)"
+                            data-ng-bind-html="sample.uiStudy ? (sample.uiStudy  | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples) : '--'">
+                        </span>
+                    </td>
+                    </td>
+                    <td>
+                        <span data-ng-if="sample.uiAnalyzedInterval"
+                            data-ng-bind-html="sample.uiAnalyzedIntervalFiltered | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
+                        <span data-ng-if="!sample.uiAnalyzedInterval">--</span>
+                    </td>
+                    <td>
+                        <ul>
+                            <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
+                                <abbr data-icgc-tooltip="{{ item.libraryStrategy | define }}">
+                                    <span data-ng-bind-html="item.libraryStrategy | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
+                                </abbr>
+                            </li>
+                        </ul>
+                        <span data-ng-if="sample.uiAvailableRawSequenceData.length == 0">--</span>
+                    </td>
+                    <td>
+                        <ul>
+                            <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
+                                <a data-ng-if="item.gdcLegacyLink" href="{{item.gdcLegacyLink}}" target="_blank"><span data-ng-bind-html="'GDC' | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span></a>
+                                <span data-ng-if="!item.gdcLegacyLink" data-ng-bind-html="item.repository | highlight: DonorSpecimenCtrl.tableFilter.specimenSamples"></span>
+                            </li>
+                        </ul>
+                        <span data-ng-if="sample.uiAvailableRawSequenceData.length == 0">--</span>
+                    </td>
+                    <td>
+                        <ul>
+                            <li data-ng-repeat="item in sample.uiUniqueRawSequenceData">
+                            <i data-ng-if="item.id" style="cursor: pointer" class="icon-file-alt"
+                                   data-tooltip-placement="left"
+                                   data-icgc-tooltip="{{ item.id }}"></i>
+                                <span data-ng-if="!item.id">--</span>
+                            </li>
+                        </ul>
+                        <span data-ng-if="sample.uiAvailableRawSequenceData.length == 0">--</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <pagination-client-side data-data="DonorSpecimenCtrl.uiSpecimenSamples"
+                data-filter="DonorSpecimenCtrl.tableFilter.specimenSamples"
+                data-row-limit="DonorSpecimenCtrl.defaultSpecimenRowLimit"
+                data-row-sizes="DonorSpecimenCtrl.rowSizes"
+                data-current-page="DonorSpecimenCtrl.currentSpecimenPage"></pagination-client-side>
+
+            <table class="hidden" id="{{DonorCtrl.donor.id}}_specimen">
+                <thead>
+                <tr>
+                    <th><translate>Sample ID</translate></th>
+                    <th><translate>Submitted Sample ID</translate></th>
+                    <th><translate>Study</translate></th>
+                    <th><translate>Interval (days)</translate></th>
+                    <th><translate>Analysis</translate></th>
+                    <th><translate>Sequence Repo</translate></th>
+                    <th><translate>BAM File Access</translate></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="sample in DonorSpecimenCtrl.specimen.samples">
+                    <td>{{sample.id}}</td>
+                    <td>{{sample.analyzedId}}</td>
+                    <td>{{sample.study}}</td>
+                    <td>{{sample.analyzedInterval}}</td>
+                    <td>{{ (sample.availableRawSequenceData | unique | _:"map":'libraryStrategy').join(', ') }}</td>
+                    <td>{{ (sample.availableRawSequenceData | unique | _:"map":'repository').join(', ') }}</td>
+                    <td>{{ (sample.availableRawSequenceData | unique | _:"map":'id').join(', ') }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

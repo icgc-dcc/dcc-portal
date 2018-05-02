@@ -1,0 +1,345 @@
+<section data-ng-show="ProjectCtrl.activeTab === 'summary'" id="summary" class="dynamic-height">
+    <div class="half">
+        <h3>
+            <translate>Summary</translate>
+        </h3>
+        <table class="table table-info">
+            <tr>
+                <th>
+                    <translate>Code</translate>
+                </th>
+                <td>{{ProjectCtrl.project.id}}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Name</translate>
+                </th>
+                <td>
+                    <a href="http://icgc.org/node/{{ProjectCtrl.project.icgcId}}" target="_blank">
+                        <i class="icon-external-link"></i>{{ProjectCtrl.project.name}}</a>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Primary Site</translate>
+                </th>
+                <td>{{ProjectCtrl.project.primarySite}}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Tumour Type</translate>
+                </th>
+                <td>{{ProjectCtrl.project.tumourType}}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Tumour Subtype</translate>
+                </th>
+                <td>{{ProjectCtrl.project.tumourSubtype}}</td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Countries</translate>
+                </th>
+                <td>
+                    <ul data-ng-repeat="country in ProjectCtrl.project.primaryCountries">
+                        <li>{{country}}</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr data-ng-if="ProjectCtrl.project.state === 'live' && ProjectCtrl.studies.length > 0">
+                <th>
+                    <translate>
+                        Number of donors in
+                        <a href="/pcawg">PCAWG</a>
+                    </translate>
+                </th>
+                <td>
+                    <ul>
+                        <li data-ng-repeat="study in ProjectCtrl.studies">
+                            <a href="/search?filters={{study.advQuery}}">{{study.count | number }}</a>
+                            <span data-ng-if="!ProjectCtrl.isPCAWG(study.term)"> {{study.term}} </span>
+                            <!--
+                            <span data-ng-if="ProjectCtrl.isPCAWG(study.term)"><pcawg-badge></pcawg-badge></span>
+                            -->
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Number of donors with molecular data in DCC</translate>
+                </th>
+                <td>
+                    <span data-ng-if="ProjectCtrl.project.totalLiveDonorCount > 0">
+                        <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"state\":{\"is\":[\"live\"]}}}"})'>
+                            {{::ProjectCtrl.project.totalLiveDonorCount | number}}</a>
+                    </span>
+                    <span data-ng-if="ProjectCtrl.project.totalLiveDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Total number of donors</translate>
+                </th>
+                <td>
+                    <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]}}}"})'>
+                        {{::ProjectCtrl.project.totalDonorCount | number}}
+                    </a>
+                </td>
+            </tr>
+
+        </table>
+        <div data-ng-if="ProjectCtrl.hasExp">
+            <h3>
+                <translate>Experimental Analysis</translate>
+            </h3>
+            <table class="table table-info">
+                <tr data-ng-repeat="(k,v) in ProjectCtrl.project.experimentalAnalysisPerformedSampleCounts track by k">
+                    <th>
+                        <abbr data-icgc-tooltip="{{ k | define }}">{{k}}</abbr>
+                    </th>
+                    <td>
+                        <translate translate-comment="N samples from N donors">{{v}} samples from</translate>
+                        <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"analysisTypes\":{\"is\":[\"{{k}}\"]}}}"})'>
+                            {{ProjectCtrl.project.experimentalAnalysisPerformedDonorCounts[k]}}
+                        </a>
+                        <translate translate-comment="N samples from N donors">donors</translate>
+                    </td>
+                </tr>
+            </table>
+            <p>
+                <button type="button" class="t_button" data-ng-click="ProjectCtrl.downloadSample()">
+                    <i class="icon-download"></i>
+                    <translate>Download Sample Sheet</translate>
+                </button>
+            </p>
+
+            <div data-ng-if="ProjectCtrl.project.repository.length > 0">
+                <h3>
+                    <translate>Raw data is available at</translate>
+                </h3>
+                <table class="table table-info">
+                    <tr data-ng-repeat="repo in ProjectCtrl.project.repository" data-ng-switch="repo">
+                        <td>
+                            <a data-ng-switch-when="EGA" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectEGA()}}">
+                                <i class="icon-external-link"></i>
+                                <translate>European Genome-phenome Archive</translate>
+                            </a>
+
+                            <a data-ng-switch-when="dbSNP" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectSNP()}}">
+                                <i class="icon-external-link"></i>
+                                <translate>NCBI dbSNP</translate>
+                            </a>
+
+                            <a data-ng-switch-when="TCGA" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGDCLegacy()}}">
+                                <i class="icon-external-link"></i>
+                                <translate>Genomic Data Commons (Legacy)</translate>
+                            </a>
+
+                            <a data-ng-switch-when="CGHub" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGDCActive()}}">
+                                <i class="icon-external-link"></i>
+                                <translate>Genomic Data Commons (Active)</translate>
+                            </a>
+
+                            <a data-ng-switch-when="GEO" target="_blank" href="{{ProjectCtrl.ExternalLinks.projectGEO()}}">
+                                <i class="icon-external-link"></i>
+                                <translate>Gene Expression Omnibus</translate>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <translate>
+                        An approved
+                        <a target="_blank" href="http://icgc.org/daco">
+                            <i class="icon-external-link"></i>data access request</a> is required.
+                    </translate>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="half omega">
+        <h3>
+            <translate>Available Data Types:</translate>
+        </h3>
+        <div data-ng-if="ProjectCtrl.project.state === 'pending'" class="well">
+            <translate>Only clinical data has been submitted to ICGC DCC.</translate>
+        </div>
+        <table class="table table-info" data-ng-if="ProjectCtrl.project.state === 'live'">
+            <tr>
+                <th>
+                    <translate>Clinical Data</translate>
+                </th>
+                <td>
+                    <a data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]}}}"})'>
+                        {{ProjectCtrl.project.totalDonorCount | number}} donors
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Simple Somatic Mutations (SSM)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.ssmTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"ssm\"]}}}"})'>
+                        {{ProjectCtrl.project.ssmTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.ssmTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Copy Number Somatic Mutations (CNSM)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.cnsmTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"cnsm\"]}}}"})'>
+                        {{ProjectCtrl.project.cnsmTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.cnsmTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Structural Somatic Mutations (StSM)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.stsmTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"stsm\"]}}}"})'>
+                        {{ProjectCtrl.project.stsmTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.stsmTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Simple Germline Variants (SGV)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.sgvTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"sgv\"]}}}"})'>
+                        {{ProjectCtrl.project.sgvTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.sgvTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Array-based DNA Methylation (METH-A)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.methArrayTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"meth_array\"]}}}"})'>
+                        {{ProjectCtrl.project.methArrayTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.methArrayTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Sequence-based DNA Methylation (METH-S)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.methSeqTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"meth_seq\"]}}}"})'>
+                        {{ProjectCtrl.project.methSeqTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.methSeqTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Array-based Gene Expression (EXP-A)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.expArrayTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"exp_array\"]}}}"})'>
+                        {{ProjectCtrl.project.expArrayTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.expArrayTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Sequence-based Gene Expression (EXP-S)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.expSeqTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"exp_seq\"]}}}"})'>
+                        {{ProjectCtrl.project.expSeqTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.expSeqTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Protein Expression (PEXP)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.pexpTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"pexp\"]}}}"})'>
+                        {{ProjectCtrl.project.pexpTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.pexpTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Sequence-based miRNA Expression (miRNA)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.mirnaSeqTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"mirna_seq\"]}}}"})'>
+                        {{ProjectCtrl.project.mirnaSeqTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.mirnaSeqTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <translate>Exon Junction (JCN)</translate>
+                </th>
+                <td>
+                    <a data-ng-if="ProjectCtrl.project.jcnTestedDonorCount > 0" data-ui-sref='advanced({filters:"{\"donor\":{\"projectId\":{\"is\":[\"{{ProjectCtrl.project.id}}\"]},\"availableDataTypes\":{\"is\":[\"jcn\"]}}}"})'>
+                        {{ProjectCtrl.project.jcnTestedDonorCount | number}} donors
+                    </a>
+                    <span data-ng-if="ProjectCtrl.project.jcnTestedDonorCount === 0">--</span>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <span class="action-toolbar">
+                <span class="action-item">
+                    <span>
+                        <i class="icon-database"></i>
+                        <span>
+                            <a href='{{:: ProjectCtrl.dataReleasesUrl }}/current/Projects/{{ProjectCtrl.project.id}}'>
+                                <translate>Open in {{:: ProjectCtrl.dataReleasesTitle }}</translate>
+                            </a>
+                        </span>
+                    </span>
+                </span>
+                <span class="action-item">
+                    <span>
+                        <i class="icon-download-cloud"></i>
+                        <span>
+                            <a href='/repositories?filters={"file":{"projectCode":{"is":["{{ProjectCtrl.project.id}}"]}}}'>
+                                <translate>View in Data Repositories</translate>
+                            </a>
+                        </span>
+                    </span>
+                </span>
+            </span>
+        </div>
+    </div>
+</section>
+<section data-ng-if="ProjectCtrl.activeTab === 'summary'" id="publications" data-ng-if="ProjectCtrl.project.state === 'live'"
+    data-ng-class="{'empty': ProjectCtrl.project.uiPublicationList.length == 0}">
+    <h3 data-ng-if="ProjectCtrl.project.uiPublicationList.length == 0">No Publications.</h3>
+
+    <div data-ng-if="ProjectCtrl.project.uiPublicationList.length > 0">
+        <h3>Publications</h3>
+        <ol>
+            <li data-ng-repeat="pub in ProjectCtrl.project.uiPublicationList | orderBy:'refCount':true">
+                <a href="http://www.ncbi.nlm.nih.gov/pubmed/{{pub.id}}" target="_blank">
+                    {{pub.authors[0]}}
+                    <i data-ng-if="pub.authors.length > 1">et al., </i>
+                    <strong>{{pub.title}}</strong>, {{pub.journal}}, {{pub.issue}}, {{pub.pubdate}}
+                </a>
+            </li>
+        </ol>
+    </div>
+</section>
