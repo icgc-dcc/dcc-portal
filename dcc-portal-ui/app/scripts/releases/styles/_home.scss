@@ -320,12 +320,23 @@
 
     @include breakpoint($content-fold-max) {
       width: 40%;
-      padding: 21px $spacing-2x $spacing-max;
+      padding: $spacing-2x;
+    }
+
+    .pc-header {
+      display: flex;
+      flex-flow: row;
+      justify-content: space-between;
+      align-items: baseline;
     }
 
     h3 {
       font-weight: bold;
       margin-bottom: 4px;
+    }
+
+    .release-date {
+      color: $grey;
     }
 
     > a {
@@ -336,7 +347,7 @@
 
     .stats {
       @extend %two-col-table-flex;
-      padding: 48px 0 $spacing-2x;
+      padding: 36px 0 $spacing-2x;
       border-bottom: solid 1px $border-grey;
 
       > div {
