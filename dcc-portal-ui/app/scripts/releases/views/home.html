@@ -39,11 +39,22 @@
                 </div>
             </div>
             <div class="projects-container" data-ng-controller="ReleaseCtrl as ReleaseCtrl">
-                <h3>{{ReleaseCtrl.release.projectCount | number}}
-                    <translate>Cancer projects</translate>
-                </h3>
-                <a href="/projects">View Projects</a>
+                <div class="pc-header">
+                    <h3>
+                        <translate>Data Release</translate> {{ReleaseCtrl.release.releaseNumber | number}}
+                    </h3>
+                    <span class="release-date">{{ReleaseCtrl.applicationReleaseDate}}</span>
+                </div>
                 <div class="stats">
+                    <div class="label">
+                        <translate>Cancer projects</translate>
+                    </div>
+                    <div class="last">
+                        <a href="/projects">{{ReleaseCtrl.release.projectCount | number}}</a>
+                    </div>
+
+                    <break></break>
+
                     <div class="label">
                         <translate>Cancer primary sites</translate>
                     </div>
@@ -54,26 +65,29 @@
                     <div class="label">
                         <translate>Donor with molecular data in DCC</translate>
                     </div>
-                    <div class="last">{{ReleaseCtrl.release.liveDonorCount | number}}</div>
+                    <div class="last">
+                        <a href="{{ReleaseCtrl.routeToAdvancedSearchPageWithLiveDonorStateFilter()}}">{{ReleaseCtrl.release.liveDonorCount | number}}</a>
+                    </div>
 
                     <break></break>
 
                     <div class="label">
                         <translate>Total Donors</translate>
                     </div>
-                    <div class="last">{{ReleaseCtrl.release.donorCount | number}}</div>
+                    <div class="last">
+                        <a href="/search">{{ReleaseCtrl.release.donorCount | number}}</a>
+                    </div>
 
                     <break></break>
 
                     <div class="label">
                         <translate>Simple somatic mutations</translate>
                     </div>
-                    <div class="last">{{ReleaseCtrl.release.ssmCount | number}}</div>
+                    <div class="last">
+                        <a href="/search/m">{{ReleaseCtrl.release.ssmCount | number}}</a>
+                    </div>
                 </div>
                 <div class="latest">
-                    <div class="label">
-                        <translate>{{ReleaseCtrl.applicationReleaseDate}}</translate>
-                    </div>
                     <div class="last">
                         <i class="fa fa-download"></i>
                         <a href="/releases/current">
