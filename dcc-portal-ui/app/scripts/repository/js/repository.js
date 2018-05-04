@@ -677,12 +677,12 @@ import './file-finder';
           uiStudy: donor.study,
           uiDonorId: donor.donorId,
           uiStringDonorId: stringOrDefault(donor.donorId),
-          uiSubmitterId: noNullConcat([donor.otherIdentifiers.tcgaParticipantBarcode, donor.submittedDonorId]),
+          uiSubmitterId: noNullConcat([donor.otherIdentifiers.tcgaParticipantBarcode || '', donor.submittedDonorId]),
           uiSpecimentId: noNullConcat(donor.specimenId),
-          uiSpecimentSubmitterId: noNullConcat([donor.otherIdentifiers.tcgaSampleBarcode, donor.submittedSpecimenId]),
+          uiSpecimentSubmitterId: noNullConcat([donor.otherIdentifiers.tcgaSampleBarcode || '', donor.submittedSpecimenId]),
           uiSpecimenType: noNullConcat(donor.specimenType),
           uiSampleId: noNullConcat(donor.sampleId),
-          uiSampleSubmitterId: noNullConcat([donor.otherIdentifiers.tcgaAliquotBarcode, donor.submittedSampleId]),
+          uiSampleSubmitterId: noNullConcat([donor.otherIdentifiers.tcgaAliquotBarcode || '', donor.submittedSampleId]),
           uiMatchedSampleId: stringOrDefault(donor.matchedControlSampleId)
         });
       });
