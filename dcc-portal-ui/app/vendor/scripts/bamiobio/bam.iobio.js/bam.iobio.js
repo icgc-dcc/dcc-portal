@@ -52,7 +52,7 @@ var Bam = Class.extend({
 
     // set iobio servers
     this.iobio = {};
-    var currentHost = 'iobio.icgc.org';
+    var currentHost = 'iobio.cancercollaboratory.org';
     this.iobio.samHeader = "wss://" + currentHost + "/samheader/";
     this.iobio.bamReadDepther = "wss://" + currentHost + "/bamreaddepther/";
     this.iobio.bamstatsAlive = "wss://" + currentHost + "/bamstatsalive/";

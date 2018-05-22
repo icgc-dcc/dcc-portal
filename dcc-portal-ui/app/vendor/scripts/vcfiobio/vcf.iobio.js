@@ -134,7 +134,7 @@ var Vcfiobio = function() {
         "Y":   59373566
       };
   
-  var currentHost = 'iobio.icgc.org:8443';
+  var currentHost = 'iobio.cancercollaboratory.org:8443';
   var vcfstatsAliveServer    = "wss://" + currentHost + "/vcfstatsalive/";
   var vcfReadDeptherServer   = "wss://" + currentHost + "/vcfdepther/";
   
