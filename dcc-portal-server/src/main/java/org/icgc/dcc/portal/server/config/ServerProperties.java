@@ -27,6 +27,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
@@ -101,6 +103,10 @@ public class ServerProperties {
   @Valid
   @JsonProperty
   JupyterProperties jupyter = new JupyterProperties();
+
+  @Valid
+  @JsonProperty
+  BannerProperties banner = new BannerProperties();
 
   @Data
   public static class CacheProperties {
@@ -433,6 +439,18 @@ public class ServerProperties {
 
     @JsonProperty
     String url;
+
+  }
+
+  @Data
+  public static class BannerProperties {
+
+    @JsonProperty
+    String message;
+
+    public Map<String, String> getJsonMessage() {
+      return ImmutableMap.of("message", message);
+    }
 
   }
 

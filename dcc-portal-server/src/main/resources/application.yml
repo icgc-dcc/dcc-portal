@@ -198,3 +198,6 @@ spring.mvc.locale-resolver: fixed
 jupyter:
   enabled: true
   url: "https://jupyterhub.cancercollaboratory.org"
+
+banner:
+  message: "Hello Alex"

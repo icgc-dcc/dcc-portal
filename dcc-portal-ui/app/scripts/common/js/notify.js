@@ -25,7 +25,10 @@
       removable = true,
       error = false,
       message = '',
-      theme = '';
+      theme = '',
+      dismissAction = () => {
+        //no-op
+      };
     
     let params = {};
 
@@ -87,6 +90,8 @@
       return message;
     }
 
+    const isError = () => error;
+
     function isRemovable() {
       return !!removable;
     }
@@ -106,6 +111,15 @@
       return theme;
     }
 
+    const setDismissAction = (func) => {
+      dismissAction = func;
+    };
+
+    const dismiss = () => {
+      visible = false;
+      dismissAction();
+    };
+
     return {
       isVisible,
       show,
@@ -119,7 +133,10 @@
       setRemovable,
       isRemovable,
       setTheme,
-      getTheme
+      getTheme,
+      isError,
+      setDismissAction,
+      dismiss
     };
   });
 
@@ -140,41 +157,7 @@
       replace: true,
       controller: 'NotifyCtrl',
       scope: true,
-      template: `<div>
-                  <div data-ng-if="notify.isVisible()" class="t_notify_popup {{notify.getTheme()}}">
-                    <div class="t_notify_body pull-left">
-                      <span>
-                        An error occured while performing the requested operation. 
-                        <a class="t_notify_link" href="" data-ng-click="showMessage = !showMessage">See details</a>
-                         for more information.
-                      </span>
-                      <div data-ng-if="showMessage">
-                        <pre><code data-ng-bind="responseParams.message || notify.getMessage()"></code></pre>
-                        <span data-ng-if="responseParams.source && responseParams.headers">
-                          We have created an error report that you can send to help us improve ICGC Portal.
-                          <a class="t_notify_link" 
-                            href="mailto:dcc-support@icgc.org?Subject=ICGC DCC Portal - Error Report
-                              &body=An error occured while {{responseParams.source}} operation.%0A
-Error: {{responseParams.message || notify.getMessage()}}%0A
-Portal Information: %0A
-  API Version: {{responseParams.headers['x-icgc-api-version']}}%0A
-  Index Commit Id: {{responseParams.headers['x-icgc-index-commitid']}}%0A
-  Index Name: {{responseParams.headers['x-icgc-index-name']}}%0A
-  Portal Commit Id: {{responseParams.headers['x-icgc-portal-commitid']}}">Email error report.</a>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="pull-right">
-                      <a class="t_notify_link" data-ng-href="" data-ng-click="notify.redirectHome()">
-                        <i data-ng-if="notify.isRemovable()" class="icon-home"></i>Home
-                      </a>
-                      <span>&nbsp;&nbsp;</span>
-                      <a class="t_notify_link" data-ng-href="" data-ng-click="notify.hide()">
-                        <i data-ng-if="notify.isRemovable()" class="icon-cancel"></i>Close
-                      </a>
-                    </div>
-                  </div>
-                </div>`
+      templateUrl: 'scripts/common/views/notify.html'
     };
   });
 })();

@@ -36,7 +36,8 @@ angular.module('icgc.ui', [
   'icgc.ui.numberTween',
   'icgc.ui.iobio',
   'icgc.ui.loader',
-  'icgc.ui.splitButtons'
+  'icgc.ui.splitButtons',
+  'icgc.ui.banner'
 ]);
 
 
