@@ -32,31 +32,27 @@
     
     let params = {};
 
-    function isVisible() {
-      return !!visible;
-    }
+    const isVisible = () => !!visible;
 
-    function show() {
-      visible = true;
-    }
+    const show = () => {visible = true};
 
-    function showErrors() {
+    const showErrors = () => {
       // Portal convention
       Page.setError(true);
       error = true;
       visible = true;
-    }
+    };
 
-    function hide() {
+    const hide = () => {
       visible = false;
       if (error === true) {
         error = false;
         Page.setError(false);
         Page.stopAllWork();
       }
-    }
+    };
 
-    function redirectHome() {
+    const redirectHome = () => {
       visible = false;
       if (error === true) {
         error = false;
@@ -64,17 +60,13 @@
         Page.stopAllWork();
         $location.path('/').search({});
       }
-    }
+    };
 
-    function setMessage(m) {
-      if (!angular.isDefined(m)) {
-        throw new Error('Notify requires a message');
-      }
-      if (!angular.isString(m)) {
-        throw new Error('msg must be a string');
-      }
+    const setMessage = (m) => {
+      if (!angular.isDefined(m)) throw new Error('Notify requires a message');
+      if (!angular.isString(m)) throw new Error('msg must be a string');
       message = m;
-    }
+    };
 
     const setParams = (response) => {
       if(!_.isEmpty(response)){
@@ -86,30 +78,20 @@
 
     const getParams = () => params;
 
-    function getMessage() {
-      return message;
-    }
+    const getMessage = () => message;
 
     const isError = () => error;
 
-    function isRemovable() {
-      return !!removable;
-    }
+    const isRemovable = () => !!removable;
 
-    function setRemovable(r) {
-      if (angular.isDefined(r) && typeof r !== 'boolean') {
-        throw new Error('r must be a boolean');
-      }
+    const setRemovable = (r) => {
+      if (angular.isDefined(r) && typeof r !== 'boolean') throw new Error('r must be a boolean');
       removable = r;
-    }
+    };
 
-    function setTheme(t) {
-      theme = t;
-    }
+    const setTheme = (t) => {theme = t};
 
-    function getTheme() {
-      return theme;
-    }
+    const getTheme = () => theme;
 
     const setDismissAction = (func) => {
       dismissAction = func;
