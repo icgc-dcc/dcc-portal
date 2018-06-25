@@ -28,13 +28,23 @@
         .get();
 
     const handleNotification = async () => {
-      let message = (await getMessage()).message;
+      let messageObj = _.pick(await getMessage(), [
+        'alwaysShow',
+        'message',
+        'link',
+        'linkText'
+      ]);
+
+      let alwaysShow = messageObj.alwaysShow;
+      let message = messageObj.message;
       let oldMessage = localStorageService.get(STORAGE_NAME);
 
-      if (message != null && message !== '' && message !== oldMessage) {
+      if (alwaysShow || message != null && message !== '' && !_.isEqual(messageObj, oldMessage)) {
         Notify.setMessage(message);
+        Notify.setLink(messageObj.link);
+        Notify.setLinkText(messageObj.linkText);
         Notify.setDismissAction(() => {
-          localStorageService.set(STORAGE_NAME, message);
+          localStorageService.set(STORAGE_NAME, messageObj);
         });
         Notify.show();
       }

@@ -36,6 +36,9 @@ Portal Commit Id: {{responseParams.headers['x-icgc-portal-commitid']}}">Email er
             <span>
                 {{ notify.getMessage() }}
             </span>
+            <span class="t_notify_link_text" data-ng-if="notify.getLinkText() != ''">
+                <a href="{{ notify.getLink() }}">{{ notify.getLinkText() }}</a>
+            </span>
         </div>
         <div class="pull-right">
                 <a class="t_notify_link" data-ng-href="" data-ng-click="notify.dismiss()">

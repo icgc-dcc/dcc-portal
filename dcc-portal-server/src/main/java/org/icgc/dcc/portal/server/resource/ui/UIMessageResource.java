@@ -30,7 +30,7 @@ public class UIMessageResource extends Resource {
   }
 
   @GET
-  public Map<String, String> getMessage() {
+  public Map<String, Object> getMessage() {
     return properties.getBanner().getJsonMessage();
   }
 

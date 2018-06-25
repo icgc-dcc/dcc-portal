@@ -26,6 +26,8 @@
       error = false,
       message = '',
       theme = '',
+      link = '',
+      linkText = '',
       dismissAction = () => {
         //no-op
       };
@@ -102,6 +104,14 @@
       dismissAction();
     };
 
+    const setLink = (l) => {link = l};
+
+    const getLink = () => link;
+
+    const setLinkText = (l) => {linkText = l};
+
+    const getLinkText = () => linkText;
+
     return {
       isVisible,
       show,
@@ -118,7 +128,11 @@
       getTheme,
       isError,
       setDismissAction,
-      dismiss
+      dismiss,
+      setLink,
+      getLink,
+      setLinkText,
+      getLinkText
     };
   });
 

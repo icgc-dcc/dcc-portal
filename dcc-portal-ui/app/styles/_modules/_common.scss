@@ -230,6 +230,10 @@ h3:hover {
   left: 0;
   border: none;
   font-family: inherit;
+
+  a {
+    color: $white;
+  }
 }
 
 .t_notify_popup,
@@ -261,6 +265,12 @@ h3:hover {
 .t_notify_link {
   cursor: pointer;
   color: #fff;
+}
+
+.t_notify_link_text {
+  cursor: pointer;
+  color: #fff;
+  padding-left: 1em;
 }
 
 .t_notify_link:hover {

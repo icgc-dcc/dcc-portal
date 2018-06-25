@@ -28,7 +28,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
@@ -448,8 +447,20 @@ public class ServerProperties {
     @JsonProperty
     String message;
 
-    public Map<String, String> getJsonMessage() {
-      return ImmutableMap.of("message", message);
+    @JsonProperty
+    boolean alwaysShow;
+
+    @JsonProperty
+    String link;
+
+    @JsonProperty
+    String linkText;
+
+    public Map<String, Object> getJsonMessage() {
+      return ImmutableMap.of("message", message,
+        "alwaysShow", alwaysShow,
+        "link", link,
+        "linkText", linkText);
     }
 
   }
