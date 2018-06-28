@@ -36,6 +36,7 @@ require('./ui/js/query.js');
 require('./ui/js/tooltip.js');
 require('./ui/js/events.js');
 require('./ui/js/scroll.js');
+require('./ui/js/banner.js');
 require('./ui-number-tween/ui-number-tween.js');
 require('./visualization/js/common.js');
 require('./highcharts/js/service.js');

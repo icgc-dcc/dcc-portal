@@ -219,6 +219,23 @@ h3:hover {
   }
 }
 
+.t_notify_valid_popup {
+  position: fixed;
+  z-index: 1000000;
+  width: 100%;
+  font-size: 1.25rem;
+  background: #1693c0;
+  color: $white;
+  padding: 1rem 2rem;
+  left: 0;
+  border: none;
+  font-family: inherit;
+
+  a {
+    color: $white;
+  }
+}
+
 .t_notify_popup,
 #buorg {
   position: fixed;
@@ -248,6 +265,12 @@ h3:hover {
 .t_notify_link {
   cursor: pointer;
   color: #fff;
+}
+
+.t_notify_link_text {
+  cursor: pointer;
+  color: #fff;
+  padding-left: 1em;
 }
 
 .t_notify_link:hover {

@@ -25,35 +25,36 @@
       removable = true,
       error = false,
       message = '',
-      theme = '';
+      theme = '',
+      link = '',
+      linkText = '',
+      dismissAction = () => {
+        //no-op
+      };
     
     let params = {};
 
-    function isVisible() {
-      return !!visible;
-    }
+    const isVisible = () => !!visible;
 
-    function show() {
-      visible = true;
-    }
+    const show = () => {visible = true};
 
-    function showErrors() {
+    const showErrors = () => {
       // Portal convention
       Page.setError(true);
       error = true;
       visible = true;
-    }
+    };
 
-    function hide() {
+    const hide = () => {
       visible = false;
       if (error === true) {
         error = false;
         Page.setError(false);
         Page.stopAllWork();
       }
-    }
+    };
 
-    function redirectHome() {
+    const redirectHome = () => {
       visible = false;
       if (error === true) {
         error = false;
@@ -61,17 +62,13 @@
         Page.stopAllWork();
         $location.path('/').search({});
       }
-    }
+    };
 
-    function setMessage(m) {
-      if (!angular.isDefined(m)) {
-        throw new Error('Notify requires a message');
-      }
-      if (!angular.isString(m)) {
-        throw new Error('msg must be a string');
-      }
+    const setMessage = (m) => {
+      if (!angular.isDefined(m)) throw new Error('Notify requires a message');
+      if (!angular.isString(m)) throw new Error('msg must be a string');
       message = m;
-    }
+    };
 
     const setParams = (response) => {
       if(!_.isEmpty(response)){
@@ -83,28 +80,37 @@
 
     const getParams = () => params;
 
-    function getMessage() {
-      return message;
-    }
+    const getMessage = () => message;
 
-    function isRemovable() {
-      return !!removable;
-    }
+    const isError = () => error;
 
-    function setRemovable(r) {
-      if (angular.isDefined(r) && typeof r !== 'boolean') {
-        throw new Error('r must be a boolean');
-      }
+    const isRemovable = () => !!removable;
+
+    const setRemovable = (r) => {
+      if (angular.isDefined(r) && typeof r !== 'boolean') throw new Error('r must be a boolean');
       removable = r;
-    }
+    };
 
-    function setTheme(t) {
-      theme = t;
-    }
+    const setTheme = (t) => {theme = t};
 
-    function getTheme() {
-      return theme;
-    }
+    const getTheme = () => theme;
+
+    const setDismissAction = (func) => {
+      dismissAction = func;
+    };
+
+    const dismiss = () => {
+      visible = false;
+      dismissAction();
+    };
+
+    const setLink = (l) => {link = l};
+
+    const getLink = () => link;
+
+    const setLinkText = (l) => {linkText = l};
+
+    const getLinkText = () => linkText;
 
     return {
       isVisible,
@@ -119,7 +125,14 @@
       setRemovable,
       isRemovable,
       setTheme,
-      getTheme
+      getTheme,
+      isError,
+      setDismissAction,
+      dismiss,
+      setLink,
+      getLink,
+      setLinkText,
+      getLinkText
     };
   });
 
@@ -140,41 +153,7 @@
       replace: true,
       controller: 'NotifyCtrl',
       scope: true,
-      template: `<div>
-                  <div data-ng-if="notify.isVisible()" class="t_notify_popup {{notify.getTheme()}}">
-                    <div class="t_notify_body pull-left">
-                      <span>
-                        An error occured while performing the requested operation. 
-                        <a class="t_notify_link" href="" data-ng-click="showMessage = !showMessage">See details</a>
-                         for more information.
-                      </span>
-                      <div data-ng-if="showMessage">
-                        <pre><code data-ng-bind="responseParams.message || notify.getMessage()"></code></pre>
-                        <span data-ng-if="responseParams.source && responseParams.headers">
-                          We have created an error report that you can send to help us improve ICGC Portal.
-                          <a class="t_notify_link" 
-                            href="mailto:dcc-support@icgc.org?Subject=ICGC DCC Portal - Error Report
-                              &body=An error occured while {{responseParams.source}} operation.%0A
-Error: {{responseParams.message || notify.getMessage()}}%0A
-Portal Information: %0A
-  API Version: {{responseParams.headers['x-icgc-api-version']}}%0A
-  Index Commit Id: {{responseParams.headers['x-icgc-index-commitid']}}%0A
-  Index Name: {{responseParams.headers['x-icgc-index-name']}}%0A
-  Portal Commit Id: {{responseParams.headers['x-icgc-portal-commitid']}}">Email error report.</a>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="pull-right">
-                      <a class="t_notify_link" data-ng-href="" data-ng-click="notify.redirectHome()">
-                        <i data-ng-if="notify.isRemovable()" class="icon-home"></i>Home
-                      </a>
-                      <span>&nbsp;&nbsp;</span>
-                      <a class="t_notify_link" data-ng-href="" data-ng-click="notify.hide()">
-                        <i data-ng-if="notify.isRemovable()" class="icon-cancel"></i>Close
-                      </a>
-                    </div>
-                  </div>
-                </div>`
+      templateUrl: 'scripts/common/views/notify.html'
     };
   });
 })();

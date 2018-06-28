@@ -615,7 +615,7 @@ module.constant('Extensions', {
   ],
 });
 
-module.controller('AppCtrl', function($scope, Page, Settings) {
+module.controller('AppCtrl', function($scope, Page, Settings, BannerService) {
   var _ctrl = this;
   _ctrl.appLoaded = true;
   _ctrl.Page = Page;
@@ -635,6 +635,8 @@ module.controller('AppCtrl', function($scope, Page, Settings) {
     _ctrl.authEnabled = setting.authEnabled;
     _ctrl.mirror = setting.mirror;
   });
+
+  BannerService.handleNotification();
 });
 
 function gettext(string) {

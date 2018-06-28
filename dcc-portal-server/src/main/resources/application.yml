@@ -195,6 +195,12 @@ spring.mvc.locale: en_CA
 spring.mvc.locale-resolver: fixed
 
 # Jupyter Notebooks
-jupyter:
+jupyter:  
   enabled: true
   url: "https://jupyterhub.cancercollaboratory.org"
+
+banner:
+  message: "Documentation for downloading PCAWG datasets is now available."
+  alwaysShow: false
+  link: "https://docs.icgc.org/pcawg/data/"
+  linkText: "Click here to go to doc site."
