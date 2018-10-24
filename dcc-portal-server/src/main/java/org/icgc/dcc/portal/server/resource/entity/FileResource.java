@@ -41,6 +41,7 @@ import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_FIELD;
 import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_VALUE;
 import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -170,7 +171,19 @@ public class FileResource extends Resource {
         outputStream -> fileService.exportFiles(outputStream, query(filtersParam), type);
 
     // Make this similar to client-side export naming format
-    val fileName = String.format("repository_%s.%s", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())), type);
+    SimpleDateFormat formatter = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
+    long epochTime = 0L;
+    String currentTime = formatter.format(new Date());
+
+    try {
+      Date currentDate = formatter.parse(currentTime);
+      epochTime = currentDate.getTime();
+
+    } catch(ParseException e){
+      e.printStackTrace();
+    }
+
+    val fileName = String.format("repository_%s.%s", epochTime, type);
 
     return ok(outputGenerator).header(CONTENT_DISPOSITION,
         type(TYPE_ATTACHMENT).fileName(fileName).creationDate(new Date()).build()).build();
