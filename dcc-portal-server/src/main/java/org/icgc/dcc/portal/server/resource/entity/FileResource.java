@@ -59,6 +59,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriBuilder;
 
+import lombok.SneakyThrows;
 import org.icgc.dcc.portal.server.model.File;
 import org.icgc.dcc.portal.server.model.Files;
 import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
@@ -163,7 +164,8 @@ public class FileResource extends Resource {
   @Path("/export")
   @Produces({TEXT_TSV, APPLICATION_JSON})
   @ApiOperation(value = "Exports repository file listings to a TSV or a JSON file.", response = File.class)
-  public Response getExport(
+  @SneakyThrows
+  public Response getExport (
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
       @ApiParam(value = API_TYPE_VALUE) @QueryParam(API_TYPE_PARAM) @DefaultValue(DEFAULT_TYPE) String type) {
 
@@ -171,17 +173,11 @@ public class FileResource extends Resource {
         outputStream -> fileService.exportFiles(outputStream, query(filtersParam), type);
 
     // Make this similar to client-side export naming format
-    SimpleDateFormat formatter = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
+    val formatter = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
     long epochTime = 0L;
-    String currentTime = formatter.format(new Date());
-
-    try {
-      Date currentDate = formatter.parse(currentTime);
-      epochTime = currentDate.getTime();
-
-    } catch(ParseException e){
-      e.printStackTrace();
-    }
+    val currentTime = formatter.format(new Date());
+    val currentDate = formatter.parse(currentTime);
+    epochTime = currentDate.getTime();
 
     val fileName = String.format("repository_%s.%s", epochTime, type);
 
