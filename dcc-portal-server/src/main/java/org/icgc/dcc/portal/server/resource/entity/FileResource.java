@@ -43,6 +43,7 @@ import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -173,12 +174,7 @@ public class FileResource extends Resource {
         outputStream -> fileService.exportFiles(outputStream, query(filtersParam), type);
 
     // Make this similar to client-side export naming format
-    val formatter = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
-    long epochTime = 0L;
-    val currentTime = formatter.format(new Date());
-    val currentDate = formatter.parse(currentTime);
-    epochTime = currentDate.getTime();
-
+    val epochTime = Instant.now().getEpochSecond();
     val fileName = String.format("repository_%s.%s", epochTime, type);
 
     return ok(outputGenerator).header(CONTENT_DISPOSITION,
