@@ -41,7 +41,9 @@ import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_FIELD;
 import static org.icgc.dcc.portal.server.resource.Resources.API_SORT_VALUE;
 import static org.icgc.dcc.portal.server.util.MediaTypes.TEXT_TSV;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +60,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriBuilder;
 
+import lombok.SneakyThrows;
 import org.icgc.dcc.portal.server.model.File;
 import org.icgc.dcc.portal.server.model.Files;
 import org.icgc.dcc.portal.server.model.UniqueSummaryQuery;
@@ -162,7 +165,8 @@ public class FileResource extends Resource {
   @Path("/export")
   @Produces({TEXT_TSV, APPLICATION_JSON})
   @ApiOperation(value = "Exports repository file listings to a TSV or a JSON file.", response = File.class)
-  public Response getExport(
+  @SneakyThrows
+  public Response getExport (
       @ApiParam(value = API_FILTER_VALUE) @QueryParam(API_FILTER_PARAM) @DefaultValue(DEFAULT_FILTERS) FiltersParam filtersParam,
       @ApiParam(value = API_TYPE_VALUE) @QueryParam(API_TYPE_PARAM) @DefaultValue(DEFAULT_TYPE) String type) {
 
@@ -170,7 +174,8 @@ public class FileResource extends Resource {
         outputStream -> fileService.exportFiles(outputStream, query(filtersParam), type);
 
     // Make this similar to client-side export naming format
-    val fileName = String.format("repository_%s.%s", (new SimpleDateFormat("yyyy_MM_dd").format(new Date())), type);
+    val epochTime = Instant.now().getEpochSecond();
+    val fileName = String.format("repository_%s.%s", epochTime, type);
 
     return ok(outputGenerator).header(CONTENT_DISPOSITION,
         type(TYPE_ATTACHMENT).fileName(fileName).creationDate(new Date()).build()).build();
