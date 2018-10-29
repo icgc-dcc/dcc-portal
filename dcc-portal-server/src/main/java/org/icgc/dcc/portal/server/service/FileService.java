@@ -99,6 +99,7 @@ public class FileService {
   private static final Map<String, String> DATA_TABLE_EXPORT_MAP = ImmutableMap.<String, String> builder()
       .put(Fields.ACCESS, "Access")
       .put(Fields.FILE_ID, "File ID")
+      .put(Fields.OBJECT_ID, "Object ID")
       .put(Fields.FILE_NAME, "File Name")
       .put(Fields.DONOR_ID, "ICGC Donor")
       .put(Fields.SPECIMEN_ID, "Specimen ID")
