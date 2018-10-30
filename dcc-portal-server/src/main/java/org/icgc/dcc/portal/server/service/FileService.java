@@ -41,12 +41,9 @@ import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -301,8 +298,12 @@ public class FileService {
   private static Map<String, String> toRowMap(File file) {
     val row = ImmutableMap.<String, String> builder();
     val study = file.getStudy();
-    val strategy = file.getDataCategorization().getExperimentalStrategy();
-    val dataType = file.getDataCategorization().getDataType();
+    String strategy = "";
+    String dataType = "";
+    if(file.getDataCategorization() != null) {
+      strategy = file.getDataCategorization().getExperimentalStrategy();
+      dataType = file.getDataCategorization().getDataType();
+    }
 
     row.put(Fields.DONOR_ID,
         toSummarizedString(fieldToSet(file.getDonors(), Donor::getDonorId)));
@@ -320,6 +321,7 @@ public class FileService {
         String.valueOf(file.getFileCopies().stream().mapToLong(FileCopy::getFileSize).average().orElse(0)));
     row.put(Fields.ACCESS, file.getAccess());
     row.put(Fields.FILE_ID, file.getId());
+    row.put(Fields.OBJECT_ID, file.getObjectId());
     row.put(Fields.REPO_NAME, fieldToCSV(file.getFileCopies(), FileCopy::getRepoName));
     row.put(Fields.STUDY, study != null ? study.stream().distinct().collect(joining(COMMA)) : "");
     row.put(Fields.DATA_TYPE, dataType != null? dataType : "");
