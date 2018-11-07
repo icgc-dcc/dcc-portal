@@ -133,6 +133,7 @@
   module.controller('GeneCtrl', function(
     $scope,
     $state,
+    $modal,
     HighchartsService,
     Page,
     Projects,
