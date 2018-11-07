@@ -10,7 +10,7 @@
       <div class="modal-info-wrapper">
         <div class="modal-info">
           <p>
-            <translate>For instructions on obtaining access, see the <a href="http://docs.icgc.org/cloud/repositories/" target="_blank" external-link>Repositories documentation</a>.</translate>
+            <translate>For instructions on obtaining access, see the <a href="http://docs.icgc.org/download/repositories/" target="_blank" external-link>Repositories documentation</a>.</translate>
           </p>
           <div class="flex-row">
             <small><translate>The available repositories below are restricted by your search filter</translate></small>
@@ -175,7 +175,7 @@
         </div>
       </div>
       <a
-        href="http://docs.icgc.org/cloud/icgc-get/"
+        href="http://docs.icgc.org/download/icgc-get/#download-using-manifest-id"
         target="_blank"
         style="margin-left: 4px;"
       >
@@ -238,7 +238,7 @@
       <a
       data-ng-repeat="repoData in repos"
       data-ng-if="repos.length === 1 && repoData.hasManifest"
-      href="http://docs.icgc.org/cloud/guide/#installation"
+      href="http://docs.icgc.org/download/guide/#manifest-from-the-data-portal"
       target="_blank"
       style="margin-left: 4px;"
       >
@@ -260,7 +260,7 @@
         <i class="icon-download"></i><translate>Download Manifest</translate>
       </button>
       <a
-        href="http://docs.icgc.org/cloud/guide/#manifest-command"
+        href="http://docs.icgc.org/download/guide/#manifest"
         target="_blank"
         style="margin-left: 4px;"
       >
@@ -276,20 +276,20 @@
     <div class="more-info" data-ng-if="manifestID">
       <div>
         <div>
-          <translate>For downloading files only from AWS-Virginia or Collaboratory, you can use the ICGC Storage Client:</translate>
+          <translate>For downloading files only from AWS-Virginia or Collaboratory, you can use the Score Client:</translate>
         </div>
         <code
           ng-class="{ 'text-center': isGeneratingManifestID }"
           class="code"
           data-copy-to-clip
           data-copy-analytics-tag="generate-manifest-id"
-          data-copy-data="'bin/icgc-storage-client manifest --manifest ' + manifestID"
+          data-copy-data="'bin/score-client download --manifest ' + manifestID"
           data-show-copy-tips="true"
           data-prompt-on-copy="false"
           data-on-copy-success-message="Copied!"
           data-on-hover-message="Copy to clipboard"
         >
-          <span>bin/icgc-storage-client manifest --manifest {{manifestID}}</span>
+          <span>bin/score-client download --manifest {{manifestID}}</span>
           <i
             class="icon-spin icon-spinner"
             ng-class="{ 'hidden': !isGeneratingManifestID }"
