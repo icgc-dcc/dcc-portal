@@ -250,7 +250,7 @@ The swagger library provides us with a user facing representation of our API end
 allows those who are curious in working directly against the API to see the data model our
 API uses to communicate, what endpoints are available, and what parameters are to be used.
 
-For the production swagger documentation: https://dcc.icgc.org/docs/
+For the production swagger documentation: https://docs.icgc.org/portal/api-endpoints/
 
 ## Additional Reading
  
