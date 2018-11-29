@@ -57,7 +57,7 @@
 
     // Gene related links
     this.geneHGNC = function(hgncId) {
-      return 'http://www.genenames.org/data/hgnc_data.php?hgnc_id=' + hgncId;
+      return 'http://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:' + hgncId;
     };
     this.geneEnsembl = function(geneId) {
       return 'http://feb2014.archive.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=' + geneId;
