@@ -8,3 +8,8 @@ git:
 install: true
 
 script: "mvn -pl dcc-portal-pql,dcc-portal-server package"
+
+addons:
+  apt:
+    packages:
+    - oracle-java8-installer
