@@ -200,7 +200,7 @@ jupyter:
   url: "https://jupyterhub.cancercollaboratory.org"
 
 banner:
-  message: "The Cancer Genome Collaboratory is now open to all researchers."
-  alwaysShow: false
-  link: "https://cancercollaboratory.org/"
-  linkText: "Learn about this compute cloud resource here."
+  message: "The Collaboratory cloud will be down for maintenance from Jan. 14, 2019, 11 PM EST to the afternoon of Jan. 16, 2019.  These ICGC Portal services will be impacted: Collaboratory object storage, Jupyter notebooks, iobio stats."
+  alwaysShow: true
+  link: "https://cancercollaboratory.org/support/system-status#/"
+  linkText: "Check in regularly on the Collaboratory system status here."
