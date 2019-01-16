@@ -110,7 +110,11 @@ angular.module('icgc.compounds.index', [])
                 label="term.title"
                 items-affected-by-facet="vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')).length"
                 items-affected-by-term="_.filter(vm.getFilteredCompounds(vm.compounds, _.omit(vm.filters, 'drugClass')), {drugClass: term.code}).length"
-              ></togglable-term>
+                is-fda="vm.isFDA(term.code)"
+                is-world="vm.isWorld(term.code)"
+                fda-count="vm.fdaCount()"
+                world-count="vm.worldCount()"
+              </togglable-term>
 
             </collapsible-wrapper>
           </aside>
@@ -303,11 +307,17 @@ angular.module('icgc.compounds.index', [])
           isSortable: true,
           sortFunction: (row) => row.trials.length,
           dataFormat: (cell, row, array) => {
-            return `
+            if(row.trials.length > 0){
+              return `
               <a ui-sref="compound({compoundId: '${row.zincId}', '#': 'trials'})">
                 ${row.trials.length.toLocaleString()}
               </a>
             `;
+            } else {
+              return `
+              <span>0</span>
+              `;
+            }
           }
         },
       ];
@@ -315,6 +325,22 @@ angular.module('icgc.compounds.index', [])
       this.toggleFacetContent = (facet, classType) => {
         this.filters[facet] = _.xor((this.filters[facet] || []), [classType]);
         this.handleFiltersChange(this.filters);
+      };
+
+      this.isFDA = (term) => {
+        return term === 'fda';
+      };
+
+      this.isWorld = (term) => {
+        return term === 'world';
+      };
+
+      this.fdaCount = () => {
+        return this.getFilteredCompounds(this.compounds,{"compoundDrugClass": "fda"}).length;
+      };
+
+      this.worldCount = () => {
+        return this.getFilteredCompounds(this.compounds,{"compoundDrugClass": "world"}).length;
       };
 
       this.getFilteredCompounds = (compounds, filters) => {
