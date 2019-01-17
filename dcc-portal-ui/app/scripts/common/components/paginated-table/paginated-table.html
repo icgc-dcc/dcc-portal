@@ -7,7 +7,10 @@
           <span ng-show="vm.filteredRows().length > vm.itemsPerPage">
             <strong>{{vm.itemsPerPage * (vm.currentPageNumber - 1) + 1}}</strong>
             -
-            <strong>{{vm.itemsPerPage * vm.currentPageNumber}}</strong>
+            <strong data-ng-if="vm.itemsPerPage * vm.currentPageNumber >= vm.filteredRows().length">
+              {{ vm.filteredRows().length.toLocaleString() }}</strong>
+            <strong data-ng-if="vm.itemsPerPage * vm.currentPageNumber < vm.filteredRows().length">
+              {{ vm.itemsPerPage * vm.currentPageNumber }}</strong>
             of
           </span>
           <strong>{{ vm.filteredRows().length.toLocaleString() }}</strong>
