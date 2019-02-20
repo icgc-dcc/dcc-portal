@@ -175,7 +175,7 @@
 
     // Counts
     _ctrl.summarCountsLoaded = false;
-    
+
     const mutationParams = {
       filters: { gene: { id: { is: [_ctrl.gene.id] } } },
       size: -1,
@@ -383,17 +383,13 @@
     }
 
     function setActiveTab(tab) {
-      if (_ctrl.activeTab !== tab)
-        _ctrl.activeTab = tab;
+      if (_ctrl.activeTab !== tab) _ctrl.activeTab = tab;
     }
 
     $scope.$watch(
       function() {
         var stateData = angular.isDefined($state.current.data) ? $state.current.data : null;
-        if (
-          !stateData ||
-          !angular.isDefined(stateData.tab)
-        ) {
+        if (!stateData || !angular.isDefined(stateData.tab)) {
           return null;
         }
         return stateData.tab;
@@ -453,6 +449,7 @@
                     case 'E - Inferential':
                       prev[4]++;
                       break;
+                    default:
                   }
                   return prev;
                 },

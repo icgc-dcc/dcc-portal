@@ -1,5 +1,4 @@
 import invariant from 'invariant';
-import _ from 'lodash';
 
 const ngModule = angular.module('entityset.persistence.modals.modify.existing', []);
 
@@ -61,10 +60,16 @@ ngModule.component('modifyExistingSetModal', {
       </div>
     </div>
   `,
-  controller: function (SetService) {
+  controller: function(SetService) {
     const validOperations = ['add', 'remove'];
-    invariant(validOperations.includes(this.operation), `The "operation" binding must be one of ${JSON.stringify(validOperations)}`);
-    this.eligibleEntitysets = SetService.getAll().filter(entityset => entityset.type.toLowerCase() === this.initialEntitysetDefinition.type.toLowerCase());
+    invariant(
+      validOperations.includes(this.operation),
+      `The "operation" binding must be one of ${JSON.stringify(validOperations)}`
+    );
+    this.eligibleEntitysets = SetService.getAll().filter(
+      entityset =>
+        entityset.type.toLowerCase() === this.initialEntitysetDefinition.type.toLowerCase()
+    );
     this.selectedEntitysets = [];
 
     this.handleClickClose = () => {
@@ -73,16 +78,18 @@ ngModule.component('modifyExistingSetModal', {
 
     this.handleClickSave = () => {
       this.close();
-      SetService.modifySet(this.selectedEntitysets[0], this.initialEntitysetDefinition, this.operation)
-        .then(this.onOperationSuccess);
+      SetService.modifySet(
+        this.selectedEntitysets[0],
+        this.initialEntitysetDefinition,
+        this.operation
+      ).then(this.onOperationSuccess);
     };
 
-    this.handleClickSavedEntityset = (entityset) => {
+    this.handleClickSavedEntityset = entityset => {
       this.selectedEntitysets = this.selectedEntitysets.includes(entityset) ? [] : [entityset];
     };
 
     this.isValid = () => this.selectedEntitysets.length !== 0;
-    
   },
   bindings: {
     close: '&',

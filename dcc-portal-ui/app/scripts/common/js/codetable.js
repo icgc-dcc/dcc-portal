@@ -54,7 +54,7 @@
       snRNA: 'snRNA',
       snoRNA: 'snoRNA',
       rRNA: 'rRNA',
-      '3prime_overlapping_ncrna': "3' Overlapping ncRNA",
+      '3prime_overlapping_ncrna': '3\' Overlapping ncRNA',
       Mt_rRNA: 'Mt rRNA',
 
       // Capitalize PCAWG
@@ -138,7 +138,7 @@
         'Sequencing of overlapping or distinct PCR or RT-PCR products.' +
           ' For example, metagenomic community profiling using SSU rRNA.',
       ),
-      CLONEEND: gettextCatalog.getString("Clone end (5', 3', or both) sequencing."),
+      CLONEEND: gettextCatalog.getString('Clone end (5\', 3\', or both) sequencing.'),
       FINISHING: gettextCatalog.getString(
         'Sequencing intended to finish (close) gaps in existing coverage.',
       ),
@@ -245,7 +245,7 @@
       cd: 'Congo, Democratic Republic',
       ck: 'Cook Islands',
       cr: 'Costa Rica',
-      ci: "Cote D'Ivoire",
+      ci: 'Cote D\'Ivoire',
       hr: 'Croatia',
       cu: 'Cuba',
       cy: 'Cyprus',
@@ -311,7 +311,7 @@
       kr: 'South Korea',
       kw: 'Kuwait',
       kg: 'Kyrgyzstan',
-      la: "Lao People's Democratic Republic",
+      la: 'Lao People\'s Democratic Republic',
       lv: 'Latvia',
       lb: 'Lebanon',
       ls: 'Lesotho',

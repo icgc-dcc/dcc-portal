@@ -49,7 +49,7 @@
       if($scope.type === 'mutation' || $scope.type === 'file'){
         return $scope.uploadEntitySet();
       }
-    }
+    };
 
     // This function is called by tags.html to prevent the File input box in
     // External Repo File page from displaying the "Uploaded donor set" label.
@@ -436,7 +436,7 @@
         $scope.removeTerm(`ES:${set.id}`);
         event.stopPropagation();
       }
-    }
+    };
 
     // Needed if term removed from outside scope
     $scope.$on(FilterService.constants.FILTER_EVENTS.FILTER_UPDATE_EVENT, setup);

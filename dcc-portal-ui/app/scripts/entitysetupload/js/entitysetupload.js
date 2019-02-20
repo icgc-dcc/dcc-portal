@@ -15,56 +15,64 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import deepmerge from 'deepmerge';
-
 (function() {
   'use strict';
 
-  angular.module ('icgc.entitySetUpload', [
+  angular.module('icgc.entitySetUpload', [
     'icgc.entitySetUpload.controllers',
-    'icgc.entitySetUpload.services'
+    'icgc.entitySetUpload.services',
   ]);
 })();
 
 (function() {
   'use strict';
-  
-  angular.module ('icgc.entitySetUpload.services', [])
-  .service ('EntitySetUploadVerificationService', function (Restangular, SetService) {
-    const _service = this;
 
-    _service.readFileContent = (filepath) => {
-      let data = new FormData();
-      data.append('filepath', filepath);
+  angular
+    .module('icgc.entitySetUpload.services', [])
+    .service('EntitySetUploadVerificationService', function(Restangular, SetService) {
+      const _service = this;
 
-      return Restangular.one('ui').customPOST(data, 'search/file', {}, {'Content-Type': undefined});
-    }
+      _service.readFileContent = filepath => {
+        let data = new FormData();
+        data.append('filepath', filepath);
 
-    _service.addSet = (entityIds, entityType) => {
-      let params = {};
+        return Restangular.one('ui').customPOST(
+          data,
+          'search/file',
+          {},
+          { 'Content-Type': undefined }
+        );
+      };
 
-      params.filters = {};
-      params.filters[entityType] = {id : {is : entityIds }};
-      params.isTransient = true;
-      params.type = entityType;
-      params.size = entityIds.length;
-      params.name = `Uploaded ${entityType} set`;
-      return SetService.addSet(entityType, params, entityType === 'file');
-    }
-  });
+      _service.addSet = (entityIds, entityType) => {
+        let params = {};
 
+        params.filters = {};
+        params.filters[entityType] = { id: { is: entityIds } };
+        params.isTransient = true;
+        params.type = entityType;
+        params.size = entityIds.length;
+        params.name = `Uploaded ${entityType} set`;
+        return SetService.addSet(entityType, params, entityType === 'file');
+      };
+    });
 })();
 
-(function () {
+(function() {
   'use strict';
 
   const mutationIdRegEx = new RegExp(/\bMU([1-9])\d*\b/g);
   const fileIdRegEx = new RegExp(/\bFI([1-9])\d*\b/g);
 
-  angular.module ('icgc.entitySetUpload.controllers', [])
-    .controller ('EntitySetUploadController', function ($scope, $modalInstance, EntitySetUploadVerificationService,
-      LocationService, entityType) {
-
+  angular
+    .module('icgc.entitySetUpload.controllers', [])
+    .controller('EntitySetUploadController', function(
+      $scope,
+      $modalInstance,
+      EntitySetUploadVerificationService,
+      LocationService,
+      entityType
+    ) {
       const _controller = this;
 
       _controller.entityUploadService = EntitySetUploadVerificationService;
@@ -72,17 +80,19 @@ import deepmerge from 'deepmerge';
       $scope.params = {};
       $scope.params.entityType = entityType;
 
-      $scope.cancel = function () {
+      $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
       };
 
       _controller.fileUpload = () => {
-        if($scope.params.uploadedFile){
+        if ($scope.params.uploadedFile) {
           $scope.params.fileName = $scope.params.uploadedFile.name;
-          _controller.entityUploadService.readFileContent($scope.params.uploadedFile).then((fileData) => {
-            $scope.params.entityIds = fileData.data;
-            $scope.verifyInput();
-          });
+          _controller.entityUploadService
+            .readFileContent($scope.params.uploadedFile)
+            .then(fileData => {
+              $scope.params.entityIds = fileData.data;
+              $scope.verifyInput();
+            });
         }
       };
 
@@ -93,35 +103,45 @@ import deepmerge from 'deepmerge';
         /**
          *  We should be verfying the entity IDs against an API endpoint
          *  currently the endpoint doesnt exist so checking against a RegEx
-         * */ 
-        $scope.params.entityIdsArray = _.words($scope.params.entityIds, $scope.params.entityType === 'file' ? fileIdRegEx : mutationIdRegEx);
+         * */
 
-        if(!$scope.params.entityIdsArray.length) {
+        $scope.params.entityIdsArray = _.words(
+          $scope.params.entityIds,
+          $scope.params.entityType === 'file' ? fileIdRegEx : mutationIdRegEx
+        );
+
+        if (!$scope.params.entityIdsArray.length) {
           $scope.params.verified = false;
         } else {
           $scope.params.verified = true;
         }
-      }
+      };
 
       $scope.resetAll = () => {
         $scope.params.entityIds = '';
         $scope.verifyInput();
-      }
+      };
 
       $scope.submit = () => {
-        if(!$scope.params.entityIds || !$scope.params.verified) {return;}
+        if (!$scope.params.entityIds || !$scope.params.verified) {
+          return;
+        }
 
         let filters = LocationService.filters();
 
-        _controller.entityUploadService.addSet($scope.params.entityIdsArray, $scope.params.entityType).then((set) => {
-          filters = _.set (filters, [$scope.params.entityType, 'id', 'is'], [`ES:${set.id}`]);
-          LocationService.filters(filters);
-        });
+        _controller.entityUploadService
+          .addSet($scope.params.entityIdsArray, $scope.params.entityType)
+          .then(set => {
+            filters = _.set(filters, [$scope.params.entityType, 'id', 'is'], [`ES:${set.id}`]);
+            LocationService.filters(filters);
+          });
       };
 
-      $scope.$watch('params.uploadedFile', function (newValue) {
-        if (!newValue) {return;}
+      $scope.$watch('params.uploadedFile', function(newValue) {
+        if (!newValue) {
+          return;
+        }
         _controller.fileUpload();
       });
-  });
+    });
 })();

@@ -16,11 +16,7 @@
  */
 
 import { emptyActionGenerator, payloadActionGenerator } from '../helpers';
-import {
-  generateLolliplotChartState,
-  resetLolliplotChartState,
-  separateOverlapping,
-} from './services';
+import { generateLolliplotChartState, resetLolliplotChartState } from './services';
 
 /*
 * Actions

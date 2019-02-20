@@ -116,7 +116,7 @@ require('./share.scss');
     };
     this.popoverIsOpen = false;
     this.requestShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => Share.getShortUrl(shareParams, shouldUseParamsOnlyForRequest);
-    this.setShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => this.requestShortUrl(shareParams, shouldUseParamsOnlyForRequest).then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl;});
+    this.setShortUrl = (shareParams, shouldUseParamsOnlyForRequest) => this.requestShortUrl(shareParams, shouldUseParamsOnlyForRequest).then(value => {this.changedUrl = false; this.shortUrl = value.shortUrl});
 
     this.handleClickShareButton = (shareParams, shouldUseParamsOnlyForRequest) => {
       this.Url = $location.url();

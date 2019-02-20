@@ -115,7 +115,7 @@
       };
 
       // If sort is undefined return default sort
-      if (typeof sort == 'undefined') {
+      if (typeof sort === 'undefined') {
         return defaultSort;
       }
 

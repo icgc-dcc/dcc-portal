@@ -13,7 +13,7 @@ angular
   return {
     restrict: 'AE',
     link: function (scope, $element) {
-      $element.addClass('collapsible-text collapsible-text--collapsed')
+      $element.addClass('collapsible-text collapsible-text--collapsed');
       $element.click(() => $element.toggleClass('collapsible-text--expanded collapsible-text--collapsed'));
     }
   };
