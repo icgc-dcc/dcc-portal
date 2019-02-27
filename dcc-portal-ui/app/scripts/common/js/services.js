@@ -135,9 +135,11 @@
   });
 
   module.service('Settings', function(Restangular) {
-    window.ICGC_SETTINGS.serverSettings = Restangular.one('settings')
-      .withHttpConfig({ cache: false })
-      .get();
+    if (window.ICGC_SETTINGS) {
+      window.ICGC_SETTINGS.serverSettings = Restangular.one('settings')
+        .withHttpConfig({ cache: false })
+        .get();
+    }
 
     Object.freeze(window.ICGC_SETTINGS);
     this.get = () => Promise.resolve(window.ICGC_SETTINGS);
