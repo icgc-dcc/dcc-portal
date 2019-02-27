@@ -1,21 +1,9 @@
 package org.icgc.dcc.portal.server.security.openid;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.util.Collections.emptyList;
-import static org.icgc.dcc.portal.server.security.AuthUtils.stringToUuid;
-import static org.icgc.dcc.portal.server.security.AuthUtils.throwRedirectException;
-
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
-
-import javax.ws.rs.core.UriBuilder;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.slf4j.Slf4j;
-
+import lombok.val;
 import org.icgc.dcc.common.client.api.daco.DACOClient.UserType;
 import org.icgc.dcc.common.core.util.Scheme;
 import org.icgc.dcc.portal.server.model.User;
@@ -36,6 +24,17 @@ import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.Collections.emptyList;
+import static org.icgc.dcc.portal.server.security.AuthUtils.stringToUuid;
+import static org.icgc.dcc.portal.server.security.AuthUtils.throwRedirectException;
 
 /**
  * The service provides utilities to perform OpenID authentication.
@@ -242,7 +241,7 @@ public class OpenIDAuthService {
     // This is either a new registration or the user's OpenID URL(XRI) has changed
     if (lookupUser.getEmailAddress() != null) {
       log.debug("[{}] Looking for users by email: '{}'", sessionToken, lookupUser.getEmailAddress());
-      val userOptional = sessionService.getUserByEmail(lookupUser.getEmailAddress());
+      Optional<User> userOptional = sessionService.getUserByEmail(lookupUser.getEmailAddress());
       if (!userOptional.isPresent()) {
         log.debug("[{}] No authenticated users found. Registering a new one - {}", sessionToken, lookupUser);
 

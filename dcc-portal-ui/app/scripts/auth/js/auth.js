@@ -18,10 +18,7 @@
 (function() {
   'use strict';
 
-  angular.module('icgc.auth', [
-    'icgc.auth.controllers',
-    'icgc.auth.directives'
-  ]);
+  angular.module('icgc.auth', ['icgc.auth.controllers', 'icgc.auth.directives']);
 })();
 
 (function() {
@@ -32,8 +29,10 @@
   angular
     .module('icgc.auth.models')
     .factory('Auth', function($window, $cookies, Restangular, Settings) {
-      var user = {},
-        handler = Restangular.one('auth').withHttpConfig({ cache: false });
+      var user = {};
+      const handler = Restangular.one('auth').withHttpConfig({
+        cache: false,
+      });
 
       function hasSession() {
         console.debug('Checking for active session...');
@@ -48,12 +47,30 @@
             user.verifying = false;
             return;
           }
-          handler
-            .one('verify')
-            .get()
-            .then(succ, function() {
-              user.verifying = false;
+
+          settings.serverSettings.then(({ egoUrl, egoClientId }) => {
+            const egoTokenUrl = egoUrl + '/oauth/ego-token?client_id=' + egoClientId;
+            jQuery.ajax({
+              url: egoTokenUrl,
+              type: 'GET',
+              xhrFields: {
+                withCredentials: true,
+              },
+              success: jwtToken => {
+                handler
+                  .one('verify')
+                  .get(null, {
+                    token: jwtToken,
+                  })
+                  .then(succ, function() {
+                    user.verifying = false;
+                  });
+              },
+              error: () => {
+                user.verifying = false;
+              },
             });
+          });
         });
       }
 
@@ -64,7 +81,7 @@
           token: data.token || false,
           daco: data.daco || false,
           verifying: false,
-          cloudAccess: data.cloudAccess || false
+          cloudAccess: data.cloudAccess || false,
         };
       }
 
@@ -92,69 +109,63 @@
         login: login,
         logout: logout,
         deleteCookies: deleteCookies,
-        getUser: getUser
+        getUser: getUser,
       };
     });
 
-  angular
-    .module('icgc.auth.models')
-    .factory('CUD', function($window, Settings) {
-      function login(provider) {
-        Settings.get().then(function(settings) {
-          if (provider === 'icgc') {
-            redirect(settings.ssoUrl);
-          } else if (provider === 'google') {
-            redirect(settings.ssoUrlGoogle);
-          }
-        });
-      }
-
-      function redirect(url) {
-        $window.location = url + encodeURIComponent($window.location.href);
-      }
-
-      return {
-        login: login,
-        redirect: redirect
-      };
-    });
-
-  angular
-    .module('icgc.auth.models')
-    .factory('OpenID', function(Restangular, $window, $cookies) {
-      var handler = Restangular.one('auth/openid');
-
-      function provider(identifier) {
-        return handler
-          .post(
-            'provider',
-            {},
-            {
-              identifier: identifier,
-              currentUrl: encodeURIComponent(
-                $window.location.pathname + $window.location.search
-              )
-            }
-          )
-          .then(function(response) {
-            $window.location = response.replace(/"/g, '');
+  angular.module('icgc.auth.models').factory('CUD', function($window, Settings) {
+    function login(provider) {
+      Settings.get().then(function(settings) {
+        if (provider === 'google') {
+          settings.serverSettings.then(({ egoUrl, egoClientId }) => {
+            redirect(egoUrl + '/oauth/login/google?client_id=' + egoClientId);
           });
-      }
+        }
+      });
+    }
 
-      function getErrors() {
-        return $cookies.openid_error;
-      }
+    function redirect(url) {
+      $window.location = url;
+    }
 
-      function hasErrors() {
-        return !!$cookies.openid_error;
-      }
+    return {
+      login: login,
+      redirect: redirect,
+    };
+  });
 
-      return {
-        provider: provider,
-        getErrors: getErrors,
-        hasErrors: hasErrors
-      };
-    });
+  angular.module('icgc.auth.models').factory('OpenID', function(Restangular, $window, $cookies) {
+    var handler = Restangular.one('auth/openid');
+
+    function provider(identifier) {
+      return handler
+        .post(
+          'provider',
+          {},
+          {
+            identifier: identifier,
+            currentUrl: encodeURIComponent($window.location.pathname + $window.location.search),
+          }
+        )
+        .then(function(response) {
+          $window.location = response.replace(/"/g, '');
+        });
+    }
+
+    function getErrors() {
+      return $cookies.openid_error;
+    }
+
+    function hasErrors() {
+      return !!$cookies.openid_error;
+    }
+
+    return {
+      provider: provider,
+      getErrors: getErrors,
+      hasErrors: hasErrors,
+    };
+  });
 })();
 
 (function() {
@@ -215,7 +226,7 @@
               reload: true,
               inherit: true,
               notify: true,
-              location: false
+              location: false,
             };
 
             Auth.login(data);
@@ -228,11 +239,7 @@
 
             // If we are on the homepage (i.e. $state.current.name is falsey) don't bother transitioning...
             if ($state.current.name) {
-              $state.transitionTo(
-                $state.current,
-                $stateParams,
-                transitionParams
-              );
+              $state.transitionTo($state.current, $stateParams, transitionParams);
             }
 
             $scope.closeLoginPopup();
@@ -244,14 +251,14 @@
         switch (e.code) {
           case '1796':
             /// openIDUrl would be a login provider such as Google or ICGC
-            return _.template(
-              gettextCatalog.getString('${openIDUrl} is not a known provider')
-            )({ openIDUrl: $scope.params.openIDUrl });
+            return _.template(gettextCatalog.getString('${openIDUrl} is not a known provider'))({
+              openIDUrl: $scope.params.openIDUrl,
+            });
           case '1798':
             /// openIDUrl would be a login provider such as Google or ICGC
-            return _.template(
-              gettextCatalog.getString('Could not connect to ${openIDUrl}')
-            )({ openIDUrl: $scope.params.openIDUrl });
+            return _.template(gettextCatalog.getString('Could not connect to ${openIDUrl}'))({
+              openIDUrl: $scope.params.openIDUrl,
+            });
           default:
             return e.message;
         }
@@ -262,9 +269,7 @@
           case 'google':
             return 'https://www.google.com/accounts/o8/id';
           case 'verisign':
-            return (
-              'https://' + $scope.verisignUsername + '.pip.verisignlabs.com/'
-            );
+            return 'https://' + $scope.verisignUsername + '.pip.verisignlabs.com/';
           default:
             return $scope.params.openIDUrl;
         }
@@ -279,9 +284,7 @@
           return PortalFeature.get('AUTH_TOKEN');
         },
         function() {
-          $scope.params.showCollaboratoryToken = PortalFeature.get(
-            'AUTH_TOKEN'
-          );
+          $scope.params.showCollaboratoryToken = PortalFeature.get('AUTH_TOKEN');
         }
       );
 
@@ -289,14 +292,14 @@
         $modal.open({
           templateUrl: '/scripts/tokens/views/token.manager.html',
           controller: 'TokenController',
-          size: 'lg'
+          size: 'lg',
         });
       };
 
       $scope.openLoginPopup = function() {
         loginInstance = $modal.open({
           templateUrl: '/scripts/auth/views/login.popup.html',
-          scope: $scope
+          scope: $scope,
         });
       };
 
@@ -310,7 +313,7 @@
       $scope.openLogoutPopup = function() {
         logoutInstance = $modal.open({
           templateUrl: '/scripts/auth/views/logout.popup.html',
-          scope: $scope
+          scope: $scope,
         });
       };
 
@@ -356,7 +359,7 @@
       replace: true,
       transclude: true,
       templateUrl: '/scripts/auth/views/login.html',
-      controller: 'authController'
+      controller: 'authController',
     };
   });
 
@@ -364,7 +367,7 @@
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/scripts/auth/views/login.popup.html'
+      templateUrl: '/scripts/auth/views/login.popup.html',
     };
   });
 
@@ -372,7 +375,7 @@
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/scripts/auth/views/logout.popup.html'
+      templateUrl: '/scripts/auth/views/logout.popup.html',
     };
   });
 
@@ -380,7 +383,7 @@
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/scripts/auth/views/auth.popup.html'
+      templateUrl: '/scripts/auth/views/auth.popup.html',
     };
   });
 })();

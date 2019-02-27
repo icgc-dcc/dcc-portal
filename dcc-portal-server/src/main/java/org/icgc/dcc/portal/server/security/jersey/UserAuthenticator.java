@@ -17,18 +17,17 @@
  */
 package org.icgc.dcc.portal.server.security.jersey;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.security.oauth.OAuthClient;
 import org.icgc.dcc.portal.server.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.common.base.Optional;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
 
 /**
  * Authenticator which verifies if the provided OpenID credentials are valid.
@@ -57,7 +56,7 @@ public class UserAuthenticator {
       log.debug("Looking up user by session token '{}'...", sessionToken);
 
       // Get the User referred to by the API key
-      val user = sessionService.getUserBySessionToken(sessionToken);
+      Optional<User> user = sessionService.getUserBySessionToken(sessionToken);
       if (user.isPresent() && user.get().getDaco()) {
         return user;
       }
@@ -74,7 +73,7 @@ public class UserAuthenticator {
       }
     }
 
-    return Optional.absent();
+    return Optional.empty();
   }
 
 }

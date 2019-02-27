@@ -17,23 +17,29 @@
  */
 package org.icgc.dcc.portal.server.resource.security;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.lang.String.format;
-import static java.util.UUID.randomUUID;
-import static javax.ws.rs.core.HttpHeaders.SET_COOKIE;
-import static javax.ws.rs.core.Response.status;
-import static javax.ws.rs.core.Response.Status.NOT_MODIFIED;
-import static javax.ws.rs.core.Response.Status.OK;
-import static lombok.AccessLevel.PRIVATE;
-import static org.icgc.dcc.portal.server.security.AuthUtils.createSessionCookie;
-import static org.icgc.dcc.portal.server.security.AuthUtils.deleteCookie;
-import static org.icgc.dcc.portal.server.security.AuthUtils.stringToUuid;
-import static org.icgc.dcc.portal.server.security.AuthUtils.throwAuthenticationException;
-
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import io.swagger.annotations.Api;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.icgc.dcc.common.client.api.ICGCException;
+import org.icgc.dcc.common.client.api.daco.DACOClient.UserType;
+import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
+import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
+import org.icgc.dcc.portal.server.model.Error;
+import org.icgc.dcc.portal.server.model.User;
+import org.icgc.dcc.portal.server.resource.Resource;
+import org.icgc.dcc.portal.server.security.AuthService;
+import org.icgc.dcc.portal.server.security.AuthenticationException;
+import org.icgc.dcc.portal.server.service.BadRequestException;
+import org.icgc.dcc.portal.server.service.CmsAuthService;
+import org.icgc.dcc.portal.server.service.EgoAuthService;
+import org.icgc.dcc.portal.server.service.SessionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -46,29 +52,18 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
 
-import org.icgc.dcc.common.client.api.ICGCException;
-import org.icgc.dcc.common.client.api.daco.DACOClient.UserType;
-import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
-import org.icgc.dcc.portal.server.config.ServerProperties.CrowdProperties;
-import org.icgc.dcc.portal.server.model.User;
-import org.icgc.dcc.portal.server.resource.Resource;
-import org.icgc.dcc.portal.server.security.AuthService;
-import org.icgc.dcc.portal.server.service.BadRequestException;
-import org.icgc.dcc.portal.server.service.CmsAuthService;
-import org.icgc.dcc.portal.server.service.SessionService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import io.swagger.annotations.Api;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.UUID.randomUUID;
+import static javax.ws.rs.core.HttpHeaders.SET_COOKIE;
+import static javax.ws.rs.core.Response.Status.NOT_MODIFIED;
+import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.status;
+import static lombok.AccessLevel.PRIVATE;
+import static org.icgc.dcc.portal.server.security.AuthUtils.*;
 
 @Component
 @Api("/auth")
@@ -102,6 +97,9 @@ public class AuthResource extends Resource {
   private final SessionService sessionService;
   @NonNull
   private final CmsAuthService cmsService;
+  @NonNull
+  private final EgoAuthService egoAuthService;
+
 
   /**
    * State.
@@ -120,52 +118,23 @@ public class AuthResource extends Resource {
       throwAuthenticationException("Login disabled");
     }
 
-    // Resolve tokens from cookies
-    val cookies = requestHeaders.getCookies();
-    val sessionToken = getCookieValue(cookies.get(AuthProperties.SESSION_TOKEN_NAME));
-    val cudToken = getCookieValue(cookies.get(CrowdProperties.CUD_TOKEN_NAME));
-    val cmsToken = getCmsCookie(cookies);
-    log.info("Received an authorization request. Session token: '{}'. CUD token: '{}', CMS token: {}",
-        sessionToken, cudToken, cmsToken);
+    val jwtToken = requestHeaders.getRequestHeader("token").get(0);
+    if (!isNullOrEmpty(jwtToken)) {
+      val optionalUser = egoAuthService.getUserInfo(jwtToken);
+      if (optionalUser.isPresent()) {
+        val user = optionalUser.get();
+        val dccUser = createUser(user.getUserName(), user.getEmail());
+        dccUser.setDaco(egoAuthService.hasDacoAccess(jwtToken));
+        dccUser.setCloudAccess(egoAuthService.hasCloudAccess(jwtToken));
 
-    // Already logged in and credentials available
-    if (sessionToken != null) {
-      log.info("[{}] Looking for already authenticated user in the cache", sessionToken);
-      val user = getAuthenticatedUser(sessionToken);
-
-      val verifiedResponse = verifiedResponse(user);
-      log.info("[{}] Finished authorization for user '{}'. DACO access: '{}'",
-          new Object[] { sessionToken, user.getOpenIDIdentifier(), user.getDaco() });
-
-      return verifiedResponse;
+        val verifiedResponse = verifiedResponse(dccUser);
+        log.info("[{}] Finished authorization for user {} {}", jwtToken, UserType.OPENID, dccUser);
+        return verifiedResponse;
+      } else {
+        return null;
+      }
     }
 
-    if (!isNullOrEmpty(cudToken) || !isNullOrEmpty(cmsToken)) {
-      log.info("[{}, {}] The user has been authenticated by the ICGC authenticator.", cudToken, cmsToken);
-      val tokenUserEntry = resolveIcgcUser(cudToken, cmsToken);
-      val token = tokenUserEntry.getKey();
-      val icgcUser = tokenUserEntry.getValue();
-      log.debug("Resolved ICGC user: {}", icgcUser);
-
-      val userType = resolveUserType(cudToken, cmsToken);
-      val userId = icgcUser.getUserName();
-      // always get email regardless of user type
-      // fix for: extsd.oicr.on.ca/browse/ICGCSD-1390
-      val userEmail = icgcUser.getEmail();
-
-      val dccUser = createUser(userType, userId, userEmail, token);
-      val verifiedResponse = verifiedResponse(dccUser);
-      log.info("[{}] Finished authorization for user {} {}", token, userType.name(), dccUser);
-
-      return verifiedResponse;
-    }
-
-    val userMessage = "Authorization failed due to missing token";
-    val logMessage = "Couldn't authorize the user. No session token found.";
-
-    throwAuthenticationException(userMessage, logMessage, getCookiesToDelete());
-
-    // Will not come to this point because of throwAuthenticationException()
     return null;
   }
 
@@ -197,7 +166,7 @@ public class AuthResource extends Resource {
           String.format("[%s] Failed to login the user. Exception %s", username, e.getMessage()));
     }
 
-    return verifiedResponse(createUser(UserType.CUD, username, username, null));
+    return verifiedResponse(createUser(username, username));
   }
 
   @POST
@@ -209,9 +178,7 @@ public class AuthResource extends Resource {
     if (sessionToken != null) {
       val userOptional = sessionService.getUserBySessionToken(sessionToken);
 
-      if (userOptional.isPresent()) {
-        sessionService.removeUser(userOptional.get());
-      }
+      userOptional.ifPresent(sessionService::removeUser);
       log.info("[{}] Successfully terminated session", sessionToken);
 
       return createLogoutResponse(OK, "");
@@ -220,92 +187,17 @@ public class AuthResource extends Resource {
     return createLogoutResponse(NOT_MODIFIED, "Did not find a user to log out");
   }
 
-  private String getCmsCookie(Map<String, javax.ws.rs.core.Cookie> cookies) {
-    String cmsToken = getCookieValue(cookies.get(cmsService.getSessionName()));
-    if (cmsToken == null) {
-      cmsService.refreshSessionName();
-      cmsToken = getCookieValue(cookies.get(cmsService.getSessionName()));
-    }
-    return cmsToken;
-  }
-
-  private SimpleImmutableEntry<String, org.icgc.dcc.common.client.api.cud.User> resolveIcgcUser(String cudToken,
-      String cmsToken) {
-    org.icgc.dcc.common.client.api.cud.User user = null;
-    String token = null;
-
-    log.debug("[{}, {}] Looking for user info in the CUD", cudToken, cmsToken);
-    try {
-      if (!isNullOrEmpty(cudToken)) {
-        user = authService.getCudUserInfo(cudToken);
-        token = cudToken;
-      } else {
-        user = cmsService.getUserInfo(cmsToken);
-        token = cmsToken;
-      }
-    } catch (ICGCException e) {
-      log.warn("[{}, {}] Failed to authorize ICGC user. Exception: {}",
-          new Object[] { cudToken, cmsToken, e.getMessage() });
-      throwAuthenticationException("Authorization failed due to expired token", getCookiesToDelete());
-    }
-
-    log.debug("[{}] Retrieved user information: {}", token, user);
-
-    return new SimpleImmutableEntry<String, org.icgc.dcc.common.client.api.cud.User>(token, user);
-  }
-
   /**
-   * Gets already authenticated user.
+   * Create a valid session user or throws {@link AuthenticationException} in case of failure.
    * 
-   * @throws org.icgc.dcc.portal.server.security.AuthenticationException
    */
-  private User getAuthenticatedUser(String sessionToken) {
-    val token = stringToUuid(sessionToken);
-    val tempUserOptional = sessionService.getUserBySessionToken(token);
-
-    if (!tempUserOptional.isPresent()) {
-      throwAuthenticationException(
-          "Authentication failed due to no User matching session token: " + sessionToken,
-          String.format("[%s] Could not find any user in the cache. The session must have expired.", sessionToken),
-          getCookiesToDelete());
-    }
-    log.info("[{}] Found user in the cache: {}", sessionToken, tempUserOptional.get());
-
-    return tempUserOptional.get();
-  }
-
-  /**
-   * Create a valid session user or throws {@link org.icgc.dcc.portal.server.security.AuthenticationException} in case of failure.
-   * 
-   * @throws org.icgc.dcc.portal.server.security.AuthenticationException
-   */
-  private User createUser(UserType userType, String userId, String userEmail, String cudToken) {
+  private User createUser(String userId, String userEmail) {
     val sessionToken = randomUUID();
-    val sessionTokenString = cudToken == null ? sessionToken.toString() : cudToken;
+    val sessionTokenString = sessionToken.toString();
     log.info("[{}] Creating and persisting user '{}' in the cache.", sessionTokenString, userId);
     val user = new User(userId, sessionToken);
     user.setEmailAddress(userEmail);
     log.debug("[{}] Created user: {}", sessionTokenString, user);
-
-    try {
-      log.debug("[{}] Checking if the user has DACO and cloud access", sessionTokenString);
-      val dacoUserOpt = authService.getDacoUser(userType, userId);
-      if (dacoUserOpt.isPresent()) {
-        val dacoUser = dacoUserOpt.get();
-        log.info("[{}] Granted DACO access to the user", sessionTokenString);
-        user.setDaco(true);
-        user.setOpenIDIdentifier(dacoUser.getOpenid());
-
-        if (dacoUser.isCloudAccess()) {
-          log.info("[{}] Granted DACO cloud access to the user", sessionTokenString);
-          user.setCloudAccess(true);
-        }
-      }
-    } catch (ICGCException e) {
-      throwAuthenticationException("Failed to grant DACO access to the user",
-          format("[%s] Failed to grant DACO access to the user. Exception: %s", sessionTokenString, e.getMessage()));
-    }
-
     log.debug("[{}] Saving the user in the cache", sessionTokenString);
     sessionService.putUser(sessionToken, user);
     log.debug("[{}] Saved the user in the cache", sessionTokenString);
@@ -322,7 +214,7 @@ public class AuthResource extends Resource {
         .header(SET_COOKIE, dccCookie.toString())
         .header(SET_COOKIE, crowdCookie.toString())
         .header(SET_COOKIE, cmsCookie.toString())
-        .entity(new org.icgc.dcc.portal.server.model.Error(status, message)) // Not really an error
+        .entity(new Error(status, message)) // Not really an error
         .build();
   }
 
@@ -337,14 +229,6 @@ public class AuthResource extends Resource {
     }
 
     return result.build();
-  }
-
-  private static UserType resolveUserType(String cudToken, String cmsToken) {
-    return isNullOrEmpty(cudToken) ? UserType.OPENID : UserType.CUD;
-  }
-
-  private static String getCookieValue(javax.ws.rs.core.Cookie cookie) {
-    return cookie == null ? null : cookie.getValue();
   }
 
   /**

@@ -1,16 +1,9 @@
 package org.icgc.dcc.portal.server.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.icgc.dcc.portal.server.service.SessionService.DISCOVERY_INFO_CACHE_NAME;
-
-import java.net.URL;
-import java.util.Map;
-import java.util.UUID;
-
+import com.hazelcast.core.HazelcastInstance;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.val;
-
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.test.HazelcastFactory;
 import org.junit.After;
@@ -19,7 +12,13 @@ import org.junit.Test;
 import org.openid4java.discovery.DiscoveryException;
 import org.openid4java.discovery.DiscoveryInformation;
 
-import com.hazelcast.core.HazelcastInstance;
+import java.net.URL;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.icgc.dcc.portal.server.service.SessionService.DISCOVERY_INFO_CACHE_NAME;
 
 public class SessionServiceTest {
 
@@ -51,7 +50,7 @@ public class SessionServiceTest {
 
   @Test
   public void testGetBySessionToken() throws Exception {
-    val userOptional = sessionService.getUserBySessionToken(sessionToken);
+    Optional<User> userOptional = sessionService.getUserBySessionToken(sessionToken);
 
     assertThat(userOptional.isPresent()).isEqualTo(true);
     assertThat(userOptional.get()).isEqualTo(user);
@@ -89,7 +88,7 @@ public class SessionServiceTest {
   public void testGetUserByEmailFound() throws Exception {
     user.setEmailAddress(EMAIL_ADDRESS);
     sessionService.putUser(sessionToken, user);
-    val userOptional = sessionService.getUserByEmail(EMAIL_ADDRESS);
+    Optional<User> userOptional = sessionService.getUserByEmail(EMAIL_ADDRESS);
 
     assertThat(userOptional.isPresent()).isEqualTo(true);
     assertThat(userOptional.get()).isEqualTo(user);

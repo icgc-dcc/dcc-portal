@@ -5,8 +5,6 @@ module.exports = {
   dataVersion: 2,
   downloadEnabled: true,
   authEnabled: true,
-  ssoUrl: 'https://icgc.org/user?continue=',
-  ssoUrlGoogle: 'https://icgc.org/gooapi/redirect?continue=',
   maxNumberOfHits: 20000,
   maxMultiplier: 3,
   mirror: {
