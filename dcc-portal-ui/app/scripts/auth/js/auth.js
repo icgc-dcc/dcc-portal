@@ -67,7 +67,12 @@
                   });
               },
               error: () => {
-                user.verifying = false;
+                handler
+                  .one('verify')
+                  .get()
+                  .then(succ, function() {
+                    user.verifying = false;
+                  });
               },
             });
           });
