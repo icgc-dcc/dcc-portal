@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.ImmutableSet.copyOf;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newTreeSet;
 import static com.sun.jersey.api.client.Client.create;
 import static com.sun.jersey.api.client.ClientResponse.Status.FORBIDDEN;
@@ -34,12 +35,13 @@ import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.Status.Family.SERVER_ERROR;
 
+import java.util.List;
 import java.util.Set;
-
+import java.util.stream.Collectors;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.ws.rs.core.MultivaluedMap;
-
+import com.sun.jersey.api.client.GenericType;
 import org.icgc.dcc.common.core.security.DumbHostnameVerifier;
 import org.icgc.dcc.common.core.security.DumbX509TrustManager;
 import org.icgc.dcc.common.core.util.Splitters;
@@ -87,6 +89,11 @@ public class OAuthClient {
   private static final String GRANT_TYPE_PARAM = "grant_type";
   private static final String TOKEN_PARAM = "token";
 
+  private static final String USER_ID = "user_id";
+  private static final String AUTH = "Authorization";
+  private static final String SCOPES = "scopes";
+  private static final String DESCRIPTION = "description";
+
   /**
    * Constants - URL.
    */
@@ -95,6 +102,8 @@ public class OAuthClient {
   private static final String SCOPES_URL = "scopes";
   private static final String CREATE_TOKEN_URL = "oauth/token";
   private static final String CHECK_TOKEN_URL = "oauth/check_token";
+  private static final String EGO_TOKEN_URL = "o/token";
+  private static final String CHECK_EGO_TOKEN_URL = "o/check_token";
 
   /**
    * Configuration.
@@ -125,6 +134,19 @@ public class OAuthClient {
     return convertToAccessToken(accessToken);
   }
 
+  public AccessToken createEgoToken(@NonNull String auth, @NonNull String userId,
+                                    @NonNull String scopes, String description){
+    checkArguments(userId, auth, scopes);
+    val response = resource
+            .path(EGO_TOKEN_URL)
+            .type(APPLICATION_FORM_URLENCODED_TYPE)
+            .accept(APPLICATION_JSON_TYPE)
+            .post(ClientResponse.class, createParametersEgo(auth, userId, scopes, description));
+    validateResponse(response);
+    val egoToken = response.getEntity(EgoTokenResponse.class);
+    return convertEgoTokenToAccessToken(egoToken);
+  }
+
   public Tokens listTokens(@NonNull String userId) {
     checkArguments(userId);
     val response = resource.path(USERS_URL).path(userId).path(TOKENS_URL).get(ClientResponse.class);
@@ -133,9 +155,35 @@ public class OAuthClient {
     return response.getEntity(Tokens.class);
   }
 
+  public Tokens listEgoTokens(@NonNull String auth, @NonNull String userId) {
+    checkArguments(auth, userId);
+    val response = resource
+            .path(EGO_TOKEN_URL)
+            .queryParam("Authorization", auth)
+            .queryParam("user_id", userId)
+            .get(ClientResponse.class);
+    validateResponse(response);
+    val tokens = response.getEntity(new GenericType<List<EgoTokenResponse>>() {});
+    val accessTokens = tokens.stream().map(
+            token -> new AccessToken(
+            token.getAccessToken(), token.getDescription(), Math.toIntExact(token.getExp()), token.getScope()))
+            .collect(Collectors.toList());
+    return new Tokens(accessTokens);
+  }
+
   public void revokeToken(@NonNull String token) {
     checkArguments(token);
     val response = resource.path(TOKENS_URL).path(token).delete(ClientResponse.class);
+    validateResponse(response);
+  }
+
+  public void revokeEgoToken(@NonNull String auth, @NonNull String token){
+    checkArguments(token);
+    val response = resource
+            .path(EGO_TOKEN_URL)
+            .queryParam("Authorization", auth)
+            .queryParam("token", token)
+            .delete(ClientResponse.class);
     validateResponse(response);
   }
 
@@ -146,6 +194,30 @@ public class OAuthClient {
     }
 
     return token.getScope().contains(scope);
+  }
+
+  public boolean checkEgoToken(@NonNull String auth, @NonNull String token, @NonNull String scope){
+    val response = resource
+            .path(CHECK_EGO_TOKEN_URL)
+            .queryParam("Authorization", auth)
+            .queryParam("token", token)
+            .type(APPLICATION_FORM_URLENCODED_TYPE)
+            .accept(APPLICATION_JSON_TYPE)
+            .post(ClientResponse.class);
+    validateCheckEgoTokenResponse(response, new HttpMultiStatus());
+
+    val tokenResponse = response.getEntity(EgoTokenScopeResponse.class);
+    val requestedScope = newArrayList(Splitters.WHITESPACE.split(scope));
+    return tokenResponse.getScope().stream().allMatch(s -> requestedScope.contains(s));
+  }
+
+  private void validateCheckEgoTokenResponse(ClientResponse response, HttpMultiStatus status){
+    if (response.getStatus() == FORBIDDEN.getStatusCode()) {
+      throw new ForbiddenAccessException("Invalid Token Scope", "auth");
+    } else if (response.getStatus() == INTERNAL_SERVER_ERROR.getStatusCode()) {
+      throw new BadGatewayException("Auth server experienced an error.");
+    }
+    checkState(response.getStatus() == status.getStatusCode());
   }
 
   public AccessToken getToken(@NonNull String token) {
@@ -195,6 +267,26 @@ public class OAuthClient {
     return params;
   }
 
+  private static MultivaluedMapImpl createParametersEgo(String auth, String userId, String scopes, String description) {
+    val params = new MultivaluedMapImpl();
+    params.add(USER_ID, userId);
+    params.add(AUTH, auth);
+    parseScopes(params, scopes);
+
+    if (!isNullOrEmpty(description)) {
+      if (description.length() > MAX_DESCRIPTION_LENGTH) {
+        throw new BadRequestException(format("Token description length is more than %d characters.",
+                MAX_DESCRIPTION_LENGTH));
+      }
+      params.add(DESCRIPTION, description);
+    }
+    return params;
+  }
+
+  private static void parseScopes(MultivaluedMapImpl params, String scopes){
+    Splitters.WHITESPACE.split(scopes).forEach(scope -> params.add(SCOPES, scope));
+  }
+
   private static void validateResponse(ClientResponse response) {
     if (response.getClientResponseStatus() == FORBIDDEN) {
       throw new ForbiddenAccessException("Invalid Token Scope", "auth");
@@ -236,6 +328,11 @@ public class OAuthClient {
 
   private static AccessToken convertToAccessToken(AccessTokenResponse token) {
     return new AccessToken(token.getId(), token.getDescription(), token.getExpiresIn(), convertScope(token.getScope()));
+  }
+
+  private static AccessToken convertEgoTokenToAccessToken(EgoTokenResponse token) {
+    return new AccessToken( token.getAccessToken(), token.getDescription(),
+      Math.toIntExact(token.getExp()), token.getScope());
   }
 
   private static Set<String> convertScope(String scope) {
