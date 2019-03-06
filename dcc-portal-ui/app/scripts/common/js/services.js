@@ -134,7 +134,13 @@
     };
   });
 
-  module.service('Settings', function() {
+  module.service('Settings', function(Restangular) {
+    if (window.ICGC_SETTINGS) {
+      window.ICGC_SETTINGS.serverSettings = Restangular.one('settings')
+        .withHttpConfig({ cache: false })
+        .get();
+    }
+
     Object.freeze(window.ICGC_SETTINGS);
     this.get = () => Promise.resolve(window.ICGC_SETTINGS);
 
@@ -225,26 +231,26 @@
   module.service('TooltipText', function(gettextCatalog) {
     this.ENRICHMENT = {
       OVERVIEW_GENES_OVERLAP: gettextCatalog.getString(
-        'Intersection between genes involved in Universe and input' + ' genes.',
+        'Intersection between genes involved in Universe and input' + ' genes.'
       ),
       INPUT_GENES: gettextCatalog.getString(
         'Number of genes resulting from original query with upper limit. <br>' +
-          'Input genes for this enrichment analysis result.',
+          'Input genes for this enrichment analysis result.'
       ),
       FDR: gettextCatalog.getString('False Discovery Rate'),
       GENESET_GENES: gettextCatalog.getString('Number of genes involved in this gene set.'),
       GENESET_GENES_OVERLAP: gettextCatalog.getString(
-        'Intersection between genes involved in this gene set and' + ' input genes.',
+        'Intersection between genes involved in this gene set and' + ' input genes.'
       ),
       GENESET_DONORS: gettextCatalog.getString('Number of donors filtered by genes in overlap'),
       GENESET_MUTATIONS: gettextCatalog.getString(
-        'Number of simple somatic mutations filtered by genes in overlap.',
+        'Number of simple somatic mutations filtered by genes in overlap.'
       ),
       // GENESET_EXPECTED: 'Number of genes expected by chance',
       GENESET_EXPECTED: gettextCatalog.getString('Number of genes in overlap expected by chance'),
       GENESET_PVALUE: gettextCatalog.getString('P-Value using hypergeometric test'),
       GENESET_ADJUSTED_PVALUE: gettextCatalog.getString(
-        'Adjusted P-Value using the Benjamini-Hochberg procedure',
+        'Adjusted P-Value using the Benjamini-Hochberg procedure'
       ),
     };
   });
@@ -307,7 +313,7 @@
 
   module.service(
     'GeneSetNameLookupService',
-    new KeyValueLookupServiceFactory(_fetchGeneSetNameById),
+    new KeyValueLookupServiceFactory(_fetchGeneSetNameById)
   );
 
   /**
@@ -329,7 +335,7 @@
             data +
             '"/>' +
             '<input type="submit" value="Submit"/>' +
-            '</form>',
+            '</form>'
         ).appendTo('body');
         jQuery('#htmlDownload').submit();
         jQuery('#htmlDownload').remove();
@@ -338,6 +344,8 @@
 
     this.exportDataUri = (name, uri) => {
       if (navigator.msSaveOrOpenBlob) {
+        // TODO: figure out where is uriToBlob
+        // eslint-disable-next-line
         navigator.msSaveOrOpenBlob(uriToBlob(uri), name);
       } else {
         var saveLink = document.createElement('a');

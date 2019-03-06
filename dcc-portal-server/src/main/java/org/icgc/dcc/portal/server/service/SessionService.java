@@ -17,21 +17,19 @@
  */
 package org.icgc.dcc.portal.server.service;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Maps.newHashMap;
+import com.google.common.base.Optional;
+import lombok.NonNull;
+import lombok.val;
+import org.icgc.dcc.portal.server.model.User;
+import org.openid4java.discovery.DiscoveryInformation;
 
 import java.util.Map;
 import java.util.UUID;
 
-import lombok.NonNull;
-import lombok.val;
-
-import org.icgc.dcc.portal.server.model.User;
-import org.openid4java.discovery.DiscoveryInformation;
-
-import com.google.common.base.Optional;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Maps.newHashMap;
 
 public class SessionService {
 
@@ -64,8 +62,8 @@ public class SessionService {
     usersCache.remove(user.getSessionToken());
   }
 
-  public Optional<User> getUserBySessionToken(@NonNull UUID sessionToken) {
-    return Optional.fromNullable(usersCache.get(sessionToken));
+  public java.util.Optional<User> getUserBySessionToken(@NonNull UUID sessionToken) {
+    return java.util.Optional.ofNullable(usersCache.get(sessionToken));
   }
 
   public Optional<User> getUserByOpenidIdentifier(String openIDIdentifier) {
@@ -80,16 +78,16 @@ public class SessionService {
     return Optional.absent();
   }
 
-  public Optional<User> getUserByEmail(String emailAddress) {
-    if (emailAddress == null) return Optional.absent();
+  public java.util.Optional<User> getUserByEmail(String emailAddress) {
+    if (emailAddress == null) return java.util.Optional.empty();
 
     for (val user : usersCache.values()) {
       if (user.getEmailAddress().equals(emailAddress)) {
-        return Optional.of(user);
+        return java.util.Optional.of(user);
       }
     }
 
-    return Optional.absent();
+    return java.util.Optional.empty();
   }
 
   public void putDiscoveryInfo(@NonNull UUID sessionToken, @NonNull DiscoveryInformation discoveryInfo) {

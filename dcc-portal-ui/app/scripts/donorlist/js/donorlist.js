@@ -15,16 +15,11 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import deepmerge from 'deepmerge';
-
 // Declaring 'icgc.donorlist', used in app.js
 (function() {
   'use strict';
 
-  angular.module ('icgc.donorlist', [
-    'icgc.donorlist.controllers',
-    'icgc.donorlist.services'
-  ]);
+  angular.module('icgc.donorlist', ['icgc.donorlist.controllers', 'icgc.donorlist.services']);
 })();
 
 // DonorSetVerificationService
@@ -33,210 +28,223 @@ import deepmerge from 'deepmerge';
 
   var donorIdListParamName = 'donorIds';
 
-  function donorIdList (input) {
-    return donorIdListParamName + '=' + encodeURI (input);
+  function donorIdList(input) {
+    return donorIdListParamName + '=' + encodeURI(input);
   }
 
   var donorSetEndpointName = 'donorsets';
   var uiEndpointName = 'ui';
 
   // Angular wiring
-  angular.module ('icgc.donorlist.services', [])
-    .service ('DonorSetVerificationService', function (Restangular, LocationService, Extensions, Facets) {
-    // Helpers
-    function restEndpoint (endpointName) {
-      return Restangular.one (endpointName)
-          .withHttpConfig ({transformRequest: angular.identity});
-    }
+  angular
+    .module('icgc.donorlist.services', [])
+    .service('DonorSetVerificationService', function(
+      Restangular,
+      LocationService,
+      Extensions,
+      Facets
+    ) {
+      // Helpers
+      function restEndpoint(endpointName) {
+        return Restangular.one(endpointName).withHttpConfig({ transformRequest: angular.identity });
+      }
 
-    var donorSetEndpoint = _.partial (restEndpoint, donorSetEndpointName);
-    var uiEndpoint = _.partial (restEndpoint, uiEndpointName);
+      var donorSetEndpoint = _.partial(restEndpoint, donorSetEndpointName);
+      var uiEndpoint = _.partial(restEndpoint, uiEndpointName);
 
-    function callDonorSetEndpoint (isValidationOnly, text, isExternalRepo) {
-      var queryParams = {
-        validationOnly: !! isValidationOnly,
-        externalRepo: !! isExternalRepo
+      function callDonorSetEndpoint(isValidationOnly, text, isExternalRepo) {
+        var queryParams = {
+          validationOnly: !!isValidationOnly,
+          externalRepo: !!isExternalRepo,
+        };
+
+        return donorSetEndpoint().customPOST(donorIdList(text), undefined, queryParams);
+      }
+
+      // Public functions
+      this.verifyIds = _.partial(callDonorSetEndpoint, true);
+      /* Create new gene set based on text input - assumes input is already correct */
+      this.createList = _.partial(callDonorSetEndpoint, false);
+
+      /* Echo back the text content of file */
+      this.readFileContent = function(filepath) {
+        var data = new FormData();
+        data.append('filepath', filepath);
+
+        return uiEndpoint().customPOST(data, 'search/file', {}, { 'Content-Type': undefined });
       };
 
-      return donorSetEndpoint()
-        .customPOST (donorIdList (text), undefined, queryParams);
-    }
-
-    // Public functions
-    this.verifyIds = _.partial (callDonorSetEndpoint, true);
-    /* Create new gene set based on text input - assumes input is already correct */
-    this.createList = _.partial (callDonorSetEndpoint, false);
-
-    /* Echo back the text content of file */
-    this.readFileContent = function (filepath) {
-      var data = new FormData();
-      data.append ('filepath', filepath);
-
-      return uiEndpoint().customPOST (data, 'search/file', {}, {'Content-Type': undefined});
-    };
-
-    this.updateDonorSetIdFilter = function (donorSetId, isExternalRepo) {
-      var filters = LocationService.filters(),
-          params = {type: 'donor', facet: 'id'},
-          entityType = (isExternalRepo ? 'file' : 'donor'),
-          entitySpecifier = isExternalRepo ?  'donorId' : 'id',
+      this.updateDonorSetIdFilter = function(donorSetId, isExternalRepo) {
+        var filters = LocationService.filters(),
+          params = { type: 'donor', facet: 'id' },
+          entityType = isExternalRepo ? 'file' : 'donor',
+          entitySpecifier = isExternalRepo ? 'donorId' : 'id',
           entityID = [Extensions.ENTITY_PREFIX + donorSetId],
           isOrNot = Facets.isNot(params) ? 'not' : 'is';
 
-      return _.set (filters, [entityType, entitySpecifier, isOrNot], entityID);
-    };
-  });
-
+        return _.set(filters, [entityType, entitySpecifier, isOrNot], entityID);
+      };
+    });
 })();
 
 // DonorListController
-(function () {
+(function() {
   'use strict';
 
-  angular.module ('icgc.donorlist.controllers', [])
-    .controller ('DonorListController', function ($scope, $timeout, $location, $modalInstance,
-    DonorSetVerificationService, LocationService, Page) {
+  angular
+    .module('icgc.donorlist.controllers', [])
+    .controller('DonorListController', function(
+      $scope,
+      $timeout,
+      $location,
+      $modalInstance,
+      DonorSetVerificationService,
+      LocationService,
+      Page
+    ) {
+      var DELAY = 1000;
+      var verificationPromise = null;
 
-    var DELAY = 1000;
-    var verificationPromise = null;
+      function initialize() {
+        $scope.params = {
+          rawText: '',
+          state: '',
+          myFile: null,
+          fileName: '',
+          inputMethod: 'id',
+        };
+        $scope.out = {};
+        $timeout.cancel(verificationPromise);
+      }
+      initialize();
 
-    function initialize() {
-      $scope.params = {
-        rawText: '',
-        state: '',
-        myFile: null,
-        fileName: '',
-        inputMethod: 'id'
+      $scope.isInRepositoryFile = Page.page() === 'repository';
+
+      function setUiState(state) {
+        $scope.params.state = state;
+      }
+
+      var verifyIds_ = DonorSetVerificationService.verifyIds;
+      var readFileContent_ = DonorSetVerificationService.readFileContent;
+      var createDonorList_ = DonorSetVerificationService.createList;
+      var updateDonorSetIdFilter_ = DonorSetVerificationService.updateDonorSetIdFilter;
+
+      function verifyUserInput() {
+        setUiState('verifying');
+
+        verifyIds_($scope.params.rawText, $scope.isInRepositoryFile).then(function(result) {
+          setUiState('verified');
+
+          $scope.out = result;
+          $scope.numberOfUiColumns = result.hasIcgcIds && result.hasSubmitterIds ? 2 : 1;
+          $scope.numberOfUiRows = _.keys(result.donorSet).length;
+        });
+      }
+
+      function verifyFileUpload() {
+        setUiState('uploading');
+
+        var uploadedFile = $scope.params.myFile;
+        $scope.params.fileName = uploadedFile.name;
+
+        var callback = function(result) {
+          $scope.params.rawText = result.data;
+          verifyUserInput();
+        };
+
+        // The $timeout is just to give sufficent time in order to convey system state
+        $timeout(function() {
+          readFileContent_(uploadedFile).then(callback);
+        }, DELAY);
+      }
+
+      function createDonorList() {
+        createDonorList_($scope.params.rawText, $scope.isInRepositoryFile).then(function(result) {
+          var search = LocationService.search();
+          search.filters = angular.toJson(
+            updateDonorSetIdFilter_(result.donorListId, $scope.isInRepositoryFile)
+          );
+
+          $location.path($location.path()).search(search);
+        });
+      }
+
+      function hasWarnings() {
+        return !_.isEmpty($scope.out.warnings);
+      }
+      function hasInvalids() {
+        return !_.isEmpty($scope.out.invalidIds);
+      }
+      function hasValids() {
+        return $scope.numberOfUiRows > 0;
+      }
+
+      function clearFileUploadInfo() {
+        $scope.params.fileName = null;
+        $scope.params.myFile = null;
+      }
+
+      function closeMe() {
+        $modalInstance.dismiss('cancel');
+      }
+      $scope.cancel = closeMe;
+
+      // Publicly visible
+      $scope.hasWarnings = hasWarnings;
+      $scope.hasBothValidsAndInvalidsButNoWarnings = function() {
+        return hasValids() && hasInvalids() && !hasWarnings();
       };
-      $scope.out = {};
-      $timeout.cancel (verificationPromise);
-    }
-    initialize();
-
-    $scope.isInRepositoryFile = Page.page() === 'repository';
-
-    function setUiState (state) {
-      $scope.params.state = state;
-    }
-
-    var verifyIds_ = DonorSetVerificationService.verifyIds;
-    var readFileContent_ = DonorSetVerificationService.readFileContent;
-    var createDonorList_ = DonorSetVerificationService.createList;
-    var updateDonorSetIdFilter_ = DonorSetVerificationService.updateDonorSetIdFilter;
-
-    function verifyUserInput() {
-      setUiState ('verifying');
-
-      verifyIds_ ($scope.params.rawText, $scope.isInRepositoryFile).then (function (result) {
-        setUiState ('verified');
-
-        $scope.out = result;
-        $scope.numberOfUiColumns = (result.hasIcgcIds && result.hasSubmitterIds) ? 2 : 1;
-        $scope.numberOfUiRows = _.keys (result.donorSet).length;
-      });
-    }
-
-    function verifyFileUpload() {
-      setUiState ('uploading');
-
-      var uploadedFile = $scope.params.myFile;
-      $scope.params.fileName = uploadedFile.name;
-
-      var callback = function (result) {
-        $scope.params.rawText = result.data;
-        verifyUserInput();
+      $scope.hasValidsButNoWarnings = function() {
+        return hasValids() && !hasWarnings();
+      };
+      $scope.hasNeitherValidsNorWarnings = function() {
+        return !hasValids() && !hasWarnings();
       };
 
-      // The $timeout is just to give sufficent time in order to convey system state
-      $timeout (function() {
-        readFileContent_ (uploadedFile).then (callback);
-      }, DELAY);
-    }
+      $scope.isInState = function(state) {
+        return state === $scope.params.state;
+      };
 
-    function createDonorList() {
-      createDonorList_ ($scope.params.rawText, $scope.isInRepositoryFile).then (function (result) {
-        var search = LocationService.search();
-        search.filters = angular.toJson (updateDonorSetIdFilter_ (result.donorListId, $scope.isInRepositoryFile));
+      $scope.validIdCount = function() {
+        var invalidIdCount = _.get($scope, 'out.invalidIds.length', 0);
+        return $scope.out.uploadIdCount - invalidIdCount;
+      };
 
-        $location.path ($location.path()).search (search);
-      });
-    }
+      $scope.save = function() {
+        createDonorList();
+        closeMe();
+      };
 
-    function hasWarnings() {
-      return ! _.isEmpty ($scope.out.warnings);
-    }
-    function hasInvalids() {
-      return ! _.isEmpty ($scope.out.invalidIds);
-    }
-    function hasValids() {
-      return $scope.numberOfUiRows > 0;
-    }
-
-    function clearFileUploadInfo() {
-      $scope.params.fileName = null;
-      $scope.params.myFile = null;
-    }
-
-    function closeMe () {
-      $modalInstance.dismiss ('cancel');
-    }
-    $scope.cancel = closeMe;
-
-    // Publicly visible
-    $scope.hasWarnings = hasWarnings;
-    $scope.hasBothValidsAndInvalidsButNoWarnings = function () {
-      return hasValids() && hasInvalids() && (! hasWarnings());
-    };
-    $scope.hasValidsButNoWarnings = function () {
-      return hasValids() && (! hasWarnings());
-    };
-    $scope.hasNeitherValidsNorWarnings = function () {
-      return (! hasValids()) && (! hasWarnings());
-    };
-
-    $scope.isInState = function (state) {
-      return state === $scope.params.state;
-    };
-
-    $scope.validIdCount = function () {
-      var invalidIdCount = _.get ($scope, 'out.invalidIds.length', 0);
-      return $scope.out.uploadIdCount - invalidIdCount;
-    };
-
-    $scope.save = function() {
-      createDonorList();
-      closeMe();
-    };
-
-    // This triggers the upload after user selects a file.
-    /* Daniel Chang's original comment: This may be a bit brittle, angularJS as of 1.2x
+      // This triggers the upload after user selects a file.
+      /* Daniel Chang's original comment: This may be a bit brittle, angularJS as of 1.2x
      * does not seem to have any native/clean
      * way of modeling [input type=file]. So to get file information, it is proxied through a
      * directive that gets the file value (myFile) from input $element
      * Possible issues with illegal invocation
      *  - https://github.com/danialfarid/ng-file-upload/issues/776#issuecomment-106929172
      */
-    $scope.$watch ('params.myFile', function (newValue) {
-      if (! newValue) {return}
+      $scope.$watch('params.myFile', function(newValue) {
+        if (!newValue) {
+          return;
+        }
 
-      verifyFileUpload();
+        verifyFileUpload();
+      });
+
+      $scope.verifyDonorInput = function() {
+        // Clears UI artifacts set by previous file upload.
+        clearFileUploadInfo();
+
+        $timeout.cancel(verificationPromise);
+        verificationPromise = $timeout(verifyUserInput, DELAY, true);
+      };
+
+      $scope.resetAll = function() {
+        initialize();
+      };
+
+      $scope.$on('$destroy', function() {
+        initialize();
+      });
     });
-
-    $scope.verifyDonorInput = function() {
-      // Clears UI artifacts set by previous file upload.
-      clearFileUploadInfo();
-
-      $timeout.cancel (verificationPromise);
-      verificationPromise = $timeout (verifyUserInput, DELAY, true);
-    };
-
-    $scope.resetAll = function() {
-      initialize();
-    };
-
-    $scope.$on ('$destroy', function() {
-      initialize();
-    });
-
-  });
 })();

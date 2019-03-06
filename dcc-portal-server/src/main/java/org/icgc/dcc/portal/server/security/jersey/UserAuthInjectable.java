@@ -17,29 +17,26 @@
  */
 package org.icgc.dcc.portal.server.security.jersey;
 
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import com.google.common.net.HttpHeaders;
+import com.sun.jersey.api.core.HttpContext;
+import com.sun.jersey.server.impl.inject.AbstractHttpContextInjectable;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
+import org.icgc.dcc.portal.server.model.User;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
-import org.icgc.dcc.portal.server.config.ServerProperties.AuthProperties;
-import org.icgc.dcc.portal.server.model.User;
-
-import com.google.common.net.HttpHeaders;
-import com.sun.jersey.api.core.HttpContext;
-import com.sun.jersey.server.impl.inject.AbstractHttpContextInjectable;
-
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 /**
  * An {@code Injectable} which provides the following to {@link UserAuthProvider}:
@@ -149,7 +146,7 @@ class UserAuthInjectable extends AbstractHttpContextInjectable<User> {
     val credentials = new UserCredentials(sessionToken, accessToken);
 
     try {
-      val result = authenticator.authenticate(credentials);
+      Optional<User> result = authenticator.authenticate(credentials);
       if (result.isPresent()) {
         return result.get();
       }

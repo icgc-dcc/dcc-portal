@@ -32,7 +32,7 @@ An user's `browser`/`Portal UI` send requests to ICGC and Google authenticators,
 
 Portal UI has controls which allow to initiate log-in or log-out flows.
 
-Portal UI uses `dcc-portal-service/conf/application.yml` to get redirect URLs for the ICGC.org and Google providers. Configuration options are `crowd.ssoUrl` and `crowd.ssoUrlGoogle`.
+Portal UI uses `dcc-portal-service/conf/application.yml` to get EGO endpoint. Configuration options are `crowd.egoUrl` and `crowd.egoClientId`.
 
 #### Portal API
 Portal API grants access to the to the restricted data based on user's authorization. It stores authorized users information, shares it between portal instances so user's requests could be servers from any portal server in the cluster; and communicates with the DCC download server get download data which is available to user.

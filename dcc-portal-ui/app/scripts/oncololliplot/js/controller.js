@@ -15,6 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/* global $ */
 (function() {
   'use strict';
 
@@ -88,7 +89,7 @@
         $(window).on('resize', () => {
           $scope.$apply();
         });
-        
+
         render(
           <Provider store={store}>
             <Lolliplot d3={d3} />

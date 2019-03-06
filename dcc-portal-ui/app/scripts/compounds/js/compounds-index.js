@@ -1,14 +1,7 @@
 import _ from 'lodash';
-import memoize from 'memoizee';
 import { highlightFn } from '../../common/js/common';
 
-const filterParams = [
-  'compoundName',
-  'gene',
-  'compoundAtc',
-  'compoundCTC',
-  'compoundDrugClass',
-];
+const filterParams = ['compoundName', 'gene', 'compoundAtc', 'compoundCTC', 'compoundDrugClass'];
 
 const paginatedTableParams = [
   'sortColumnId',
@@ -18,24 +11,25 @@ const paginatedTableParams = [
   'tableFilter',
 ];
 
-const routeParams = [
-  ...filterParams,
-  ...paginatedTableParams
-];
+const routeParams = [...filterParams, ...paginatedTableParams];
 
-angular.module('icgc.compounds.index', [])
-  .config(function ($stateProvider) {
+angular
+  .module('icgc.compounds.index', [])
+  .config(function($stateProvider) {
     $stateProvider.state('compound-index', {
       url: `/compounds?${routeParams.join('&')}`,
       template: '<compound-index></compound-index>',
       reloadOnSearch: false,
     });
   })
-  .service('CompoundIndexService', function (Restangular) {
+  .service('CompoundIndexService', function(Restangular) {
     const params = {
       size: 2000,
     };
-    const getAll = () => Restangular.one('drugs').get(params).then(Restangular.stripRestangular);
+    const getAll = () =>
+      Restangular.one('drugs')
+        .get(params)
+        .then(Restangular.stripRestangular);
     Object.assign(this, {
       getAll,
     });
@@ -191,9 +185,9 @@ angular.module('icgc.compounds.index', [])
       </div>
     `,
     // # genes targetd with bars
-    // 100% width would be max length of 
+    // 100% width would be max length of
     // http://local.dcc.icgc.org:9000/api/v1/ui/search/gene-symbols/ENSG00000170827,ENSG00000095303
-    controller: function (Page, CompoundIndexService, $location, $scope, GeneSymbols) {
+    controller: function(Page, CompoundIndexService, $location, $scope, GeneSymbols) {
       Page.setTitle('Compounds');
       Page.setPage('entity');
 
@@ -233,27 +227,32 @@ angular.module('icgc.compounds.index', [])
       };
 
       this.filters = _.defaults(_.pick($location.search(), filterParams), {});
-      this.tableState = _.mapValues(_.defaults(_.pick($location.search(), paginatedTableParams), defaultTableState), (value, key) => _.isNumber(defaultTableState[key]) ? _.toNumber(value) : value);
+      this.tableState = _.mapValues(
+        _.defaults(_.pick($location.search(), paginatedTableParams), defaultTableState),
+        (value, key) => (_.isNumber(defaultTableState[key]) ? _.toNumber(value) : value)
+      );
 
       this.columns = [
         {
           id: 'name',
           heading: 'Name',
           isSortable: true,
-          sortFunction: (row) => `${row.name} (${row.zincId})`,
+          sortFunction: row => `${row.name} (${row.zincId})`,
           dataFormat: (cell, row, array, extraData) => {
             const { tableFilter } = extraData;
             const unformattedContent = `${row.name} (${row.zincId})`;
-            const content = [tableFilter, this.filters.compoundName]
-              .sort((a, b) => b.length - a.length)
-              .filter(Boolean)
-              .reduce((content, query) => highlightFn(content, query), unformattedContent) || unformattedContent;
+            const content =
+              [tableFilter, this.filters.compoundName]
+                .sort((a, b) => b.length - a.length)
+                .filter(Boolean)
+                .reduce((content, query) => highlightFn(content, query), unformattedContent) ||
+              unformattedContent;
             return `
               <a ui-sref="compound({compoundId: '${row.zincId}'})">
                 ${content}
               </a>
             `;
-          }
+          },
         },
         {
           id: 'atc',
@@ -262,10 +261,12 @@ angular.module('icgc.compounds.index', [])
           dataFormat: (cell, row, array, extraData) => {
             const { tableFilter } = extraData;
             const unformattedContent = _.map(row.atcCodes, 'description').join(', ');
-            const content = [tableFilter, this.filters.compoundAtc]
-              .sort((a, b) => b.length - a.length)
-              .filter(Boolean)
-              .reduce((content, query) => highlightFn(content, query), unformattedContent) || unformattedContent;
+            const content =
+              [tableFilter, this.filters.compoundAtc]
+                .sort((a, b) => b.length - a.length)
+                .filter(Boolean)
+                .reduce((content, query) => highlightFn(content, query), unformattedContent) ||
+              unformattedContent;
             return `
               <div collapsible-text>
                 ${content}
@@ -282,32 +283,33 @@ angular.module('icgc.compounds.index', [])
             const { tableFilter } = extraData;
             const content = { fda: 'FDA', world: 'World' }[cell];
             return highlightFn(content, tableFilter);
-          }
+          },
         },
         {
           id: 'geneCount',
           heading: '# Targeted Genes',
           classes: 'text-right',
           isSortable: true,
-          sortFunction: (row) => row.genes.length,
+          sortFunction: row => row.genes.length,
           dataFormat: (cell, row, array) => {
-            const filtersValue = JSON.stringify({gene:{compoundId:{is: [row.zincId] }}})
-              .replace(/"/g, '&quot;');
+            const filtersValue = JSON.stringify({
+              gene: { compoundId: { is: [row.zincId] } },
+            }).replace(/"/g, '&quot;');
             return `
               <a ui-sref="advanced.gene({filters: '${filtersValue}'})">
                 ${row.genes.length.toLocaleString()}
               </a>
             `;
-          }
+          },
         },
         {
           id: 'trialCount',
           heading: '# Clinical Trials',
           classes: 'text-right',
           isSortable: true,
-          sortFunction: (row) => row.trials.length,
+          sortFunction: row => row.trials.length,
           dataFormat: (cell, row, array) => {
-            if(row.trials.length > 0){
+            if (row.trials.length > 0) {
               return `
               <a ui-sref="compound({compoundId: '${row.zincId}', '#': 'trials'})">
                 ${row.trials.length.toLocaleString()}
@@ -318,29 +320,29 @@ angular.module('icgc.compounds.index', [])
               <span>0</span>
               `;
             }
-          }
+          },
         },
       ];
-      
+
       this.toggleFacetContent = (facet, classType) => {
-        this.filters[facet] = _.xor((this.filters[facet] || []), [classType]);
+        this.filters[facet] = _.xor(this.filters[facet] || [], [classType]);
         this.handleFiltersChange(this.filters);
       };
 
-      this.isFDA = (term) => {
+      this.isFDA = term => {
         return term === 'fda';
       };
 
-      this.isWorld = (term) => {
+      this.isWorld = term => {
         return term === 'world';
       };
 
       this.fdaCount = () => {
-        return this.getFilteredCompounds(this.compounds,{"compoundDrugClass": "fda"}).length;
+        return this.getFilteredCompounds(this.compounds, { compoundDrugClass: 'fda' }).length;
       };
 
       this.worldCount = () => {
-        return this.getFilteredCompounds(this.compounds,{"compoundDrugClass": "world"}).length;
+        return this.getFilteredCompounds(this.compounds, { compoundDrugClass: 'world' }).length;
       };
 
       this.getFilteredCompounds = (compounds, filters) => {
@@ -349,25 +351,54 @@ angular.module('icgc.compounds.index', [])
         const geneRegex = new RegExp(filters.gene, 'i');
         const clinicalTrialConditionRegex = new RegExp(filters.compoundCTC, 'i');
 
-        return _.filter(compounds, (compound) => {
+        return _.filter(compounds, compound => {
           return _.every([
-            filters.compoundName ? (compound.name.match(nameRegex) || compound.zincId.match(nameRegex)) : true,
-            filters.gene ? (_.some(compound.genes, item => _.some(_.map(item, (value, key) => (value.match(geneRegex) || (key === 'ensemblGeneId' && this.geneSymbols && this.geneSymbols[value] && this.geneSymbols[value].match(geneRegex))))))) : true,
-            filters.compoundAtc ? (_.some(compound.atcCodes, item => _.some(_.values(item).map(value => value.match(atcRegex))))) : true,
-            filters.compoundCTC ? (_.some(_.flattenDeep(compound.trials.map(trial => trial.conditions.map(_.values))), str => str.match(clinicalTrialConditionRegex))) : true,
-            filters.compoundDrugClass && filters.compoundDrugClass.length ? filters.compoundDrugClass.includes(compound.drugClass) : true,
+            filters.compoundName
+              ? compound.name.match(nameRegex) || compound.zincId.match(nameRegex)
+              : true,
+            filters.gene
+              ? _.some(compound.genes, item =>
+                  _.some(
+                    _.map(
+                      item,
+                      (value, key) =>
+                        value.match(geneRegex) ||
+                        (key === 'ensemblGeneId' &&
+                          this.geneSymbols &&
+                          this.geneSymbols[value] &&
+                          this.geneSymbols[value].match(geneRegex))
+                    )
+                  )
+                )
+              : true,
+            filters.compoundAtc
+              ? _.some(compound.atcCodes, item =>
+                  _.some(_.values(item).map(value => value.match(atcRegex)))
+                )
+              : true,
+            filters.compoundCTC
+              ? _.some(
+                  _.flattenDeep(compound.trials.map(trial => trial.conditions.map(_.values))),
+                  str => str.match(clinicalTrialConditionRegex)
+                )
+              : true,
+            filters.compoundDrugClass && filters.compoundDrugClass.length
+              ? filters.compoundDrugClass.includes(compound.drugClass)
+              : true,
           ]);
         });
       };
 
-      const getCombinedState = () => Object.assign({},
-        _.omitBy(this.filters, (value, key) => _.isEqual(defaultFiltersState[key], value)),
-        _.omitBy(this.tableState, (value, key) => _.isEqual(defaultTableState[key], value)),
-      );
+      const getCombinedState = () =>
+        Object.assign(
+          {},
+          _.omitBy(this.filters, (value, key) => _.isEqual(defaultFiltersState[key], value)),
+          _.omitBy(this.tableState, (value, key) => _.isEqual(defaultTableState[key], value))
+        );
 
-      this.handleFiltersChange = (filters) => {
+      this.handleFiltersChange = filters => {
         _.each(filters, (value, key) => {
-          if(_.isEmpty(value)) {
+          if (_.isEmpty(value)) {
             delete filters[key];
           }
         });
@@ -376,15 +407,15 @@ angular.module('icgc.compounds.index', [])
         $location.search(getCombinedState());
       };
 
-      this.handlePaginatedTableChange = (newTableState) => {
+      this.handlePaginatedTableChange = newTableState => {
         this.tableState = newTableState;
         $location.replace();
         $location.search(getCombinedState());
       };
 
       this.removeFilter = (key, value) => {
-        if(key === 'compoundDrugClass' && value && this.filters[key].length > 1) {
-          _.remove(this.filters[key], (v) => v === value);
+        if (key === 'compoundDrugClass' && value && this.filters[key].length > 1) {
+          _.remove(this.filters[key], v => v === value);
         } else {
           delete this.filters[key];
         }

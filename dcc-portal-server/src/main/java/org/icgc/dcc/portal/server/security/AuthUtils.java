@@ -47,7 +47,7 @@ public final class AuthUtils {
   private static final String FAILED_AUTH_COOKIE_VALUE = null;
   private static final int FAILED_AUTH_COOKIE_AGE = 0; // Expire immediately
   private static final int SUCCESSFUL_AUTH_COOKIE_AGE = 60 * 30; // 30 mins
-  private static final boolean SECURE = true;
+  private static final boolean SECURE = false;
   private static final String DEFAULT_USER_MESSAGE = "An error occurred while trying to log in.";
 
   public static NewCookie deleteCookie(@NonNull String cookieName) {

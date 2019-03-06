@@ -37,8 +37,8 @@ spring.datasource:
 
 # Authorization
 crowd:
-  ssoUrl: "https://ssoUrl?continue="
-  ssoUrlGoogle: "https://ssoUrlGoogle?continue="
+  egoUrl: "https://ego.staging.cancercollaboratory.org/api"
+  egoClientId: dcc-portal
 
 # ICGC auth server config
 oauth:

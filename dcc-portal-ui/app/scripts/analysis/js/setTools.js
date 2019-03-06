@@ -50,7 +50,7 @@ angular.module('icgc.analysis.setTools', [])
     ) {
       $scope.SetService = SetService;
       this.downloadEnabled = false; 
-      Settings.get().then((settings) => { this.downloadEnabled = !!settings.downloadEnabled; });
+      Settings.get().then((settings) => { this.downloadEnabled = !!settings.downloadEnabled });
 
       this.downloadSetData = (setId) => $modal.open({
         templateUrl: '/scripts/downloader/views/request.html',

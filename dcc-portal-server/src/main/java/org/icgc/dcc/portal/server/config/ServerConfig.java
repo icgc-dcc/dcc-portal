@@ -98,8 +98,8 @@ public class ServerConfig {
     val jupyter = properties().getJupyter();
 
     return Settings.builder()
-        .ssoUrl(crowd.getSsoUrl())
-        .ssoUrlGoogle(crowd.getSsoUrlGoogle())
+        .egoUrl(crowd.getEgoUrl())
+        .egoClientId(crowd.getEgoClientId())
         .releaseDate(release.getReleaseDate())
         .dataVersion(release.getDataVersion())
         .downloadEnabled(download.isEnabled())

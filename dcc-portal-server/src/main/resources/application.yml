@@ -60,8 +60,9 @@ cache:
 
 # Authentication
 crowd:
-  ssoUrl: ""
-  
+  egoUrl: "https://ego.staging.cancercollaboratory.org/api"
+  egoClientId: dcc-portal
+
 oauth:
   serviceUrl: "https://localhost:8443"
   clientId: "mgmt"
