@@ -1,0 +1,15 @@
+<section>
+    <ul class="t_subnav__items">
+        <li class="t_subnav__items__item" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0" style="padding: .1rem 0;">
+            <span>
+                <translate>Quick Filters</translate>
+            </span>
+        </li>
+    </ul>
+</section>
+<ul class="t_subnav__items__box" data-ng-if="GeneCtrl.mutationFacets.functionalImpact.total > 0">
+    <ul class="t_facets">
+        <terms data-type="mutation" data-facet-name="functionalImpact" data-hide-count="true" data-label="{{'Mutation Impact' | translate}}"
+               data-facet="GeneCtrl.mutationFacets.functionalImpact"></terms>
+    </ul>
+</ul>

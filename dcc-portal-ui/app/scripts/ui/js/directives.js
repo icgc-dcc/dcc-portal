@@ -825,6 +825,13 @@ angular.module('icgc.ui.badges', []).directive('pcawgBadge', function () {
     template: '<span class="badge pcawg-badge">PCAWG</span>'
   };
 })
+  .directive('somaticBadge', function(){
+    return {
+      restrict: 'E',
+      replace: true,
+      template: '<span class="badge pcawg-badge">Somatic</span>'
+    };
+  })
   .directive('studyBadge', function () {
     return {
       restrict: 'E',

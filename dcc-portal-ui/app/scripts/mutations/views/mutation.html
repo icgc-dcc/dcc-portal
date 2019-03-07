@@ -3,6 +3,7 @@
         <span class="t_badge t_badge__mutation"></span>
         {{ MutationCtrl.mutation.id }}
         <pcawg-badge data-ng-if="MutationCtrl.isPCAWG(MutationCtrl.mutation)"></pcawg-badge>
+        <somatic-badge></somatic-badge>
     </h1>
 </div>
 
@@ -23,12 +24,11 @@
             <translate>Protein</translate>
             <br>
         </div>
-        <!-- Hide Genome Viewer because 3rd party API changes -->
-        <!-- <div class="t_tabs__tab t_tabs__tab__mutation" data-ng-click="MutationCtrl.activeTab = 'genomeViewer'" data-ng-class="{active: MutationCtrl.activeTab === 'genomeViewer'}" -->
-        <!--     data-nested data-href="mutations/{{MutationCtrl.mutation.id}}/genome-viewer"> -->
-        <!--     <translate>Genome Viewer</translate> -->
-        <!--     <br> -->
-        <!-- </div> -->
+        <div class="t_tabs__tab t_tabs__tab__mutation" data-ng-click="MutationCtrl.activeTab = 'genomeViewer'" data-ng-class="{active: MutationCtrl.activeTab === 'genomeViewer'}"
+             data-nested data-href="mutations/{{MutationCtrl.mutation.id}}/genome-viewer">
+            <translate>Genome Viewer</translate>
+            <br>
+        </div>
     </div>
     <div class='t_tab_pane' data-ng-class="{active: MutationCtrl.activeTab === 'summary'}" data-ng-include="'scripts/mutations/views/mutation.summary.html'"></div>
     <div class='t_tab_pane' data-ng-class="{active: MutationCtrl.activeTab === 'clinicalEvidence'}">
@@ -37,8 +37,7 @@
     <div class='t_tab_pane' data-ng-class="{active: MutationCtrl.activeTab === 'protein'}">
         <div data-ng-include="'scripts/mutations/views/mutation.protein.html'"></div>
     </div>
-    <!-- Hide Genome Viewer because 3rd party API changes -->
-    <!-- <div class='t_tab_pane' data-ng-class="{active: MutationCtrl.activeTab === 'genomeViewer'}"> -->
-    <!--     <div data-ng-include="'scripts/mutations/views/mutation.genomeViewer.html'"></div> -->
-    <!-- </div> -->
+    <div class='t_tab_pane' data-ng-class="{active: MutationCtrl.activeTab === 'genomeViewer'}">
+        <div data-ng-include="'scripts/mutations/views/mutation.genomeViewer.html'"></div>
+    </div>
 </article>

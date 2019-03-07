@@ -48,8 +48,8 @@ public class Settings {
   /**
    * Crowd settings.
    */
-  String ssoUrl;
-  String ssoUrlGoogle;
+  String egoUrl;
+  String egoClientId;
 
   /**
    * Set analysis settings.

@@ -9,6 +9,10 @@ angular
     label: '<',
     itemsAffectedByFacet: '<',
     itemsAffectedByTerm: '<',
+    fdaCount: '<',
+    worldCount: '<',
+    isFda: '<',
+    isWorld: '<'
   },
   transclude: true,
   controller: function () {},
@@ -40,8 +44,11 @@ angular
           ></i>
           <span>{{ vm.label }}</span>
         </span>
-        <span class="term__count t_facets__facet__terms__active__term__count">
-          {{ vm.itemsAffectedByTerm }}
+        <span  ng-if="vm.isFda" class="term__count t_facets__facet__terms__active__term__count">
+          {{ vm.fdaCount }}
+        </span>
+        <span  ng-if="vm.isWorld" class="term__count t_facets__facet__terms__active__term__count">
+          {{ vm.worldCount }}
         </span>
     </div>
   `

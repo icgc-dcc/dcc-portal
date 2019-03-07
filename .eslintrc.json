@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "babel-eslint",
-  "plugins": ["flowtype"],
+  "plugins": ["flowtype", "react"],
   "globals": {
     "track": false,
     "invariant": true,
@@ -191,6 +191,8 @@
     "valid-typeof": "warn",
     "flowtype/define-flow-type": "warn",
     "flowtype/require-valid-file-annotation": "warn",
-    "flowtype/use-flow-type": "warn"
+    "flowtype/use-flow-type": "warn",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
   }
 }

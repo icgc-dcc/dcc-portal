@@ -133,11 +133,10 @@ public class ServerProperties {
     public static final String CUD_TOKEN_NAME = "crowd.token_key";
 
     @JsonProperty
-    String ssoUrl;
+    String egoUrl;
 
     @JsonProperty
-    String ssoUrlGoogle;
-
+    String egoClientId;
   }
 
   @Data

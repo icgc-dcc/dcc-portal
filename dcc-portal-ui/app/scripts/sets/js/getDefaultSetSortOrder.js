@@ -1,7 +1,7 @@
-import invariant from 'invariant';
+/* import invariant from 'invariant'; */
 import { ENTITY_TYPES } from './ENTITY_TYPES';
 
-export const getDefaultSetSortOrder = (setType) => {
+export const getDefaultSetSortOrder = setType => {
   // invariant(_.values(ENTITY_TYPES).includes(setType), `'type' must be one of [${_.values(ENTITY_TYPES)}]`);
   return {
     [ENTITY_TYPES.FILE]: 'id',
