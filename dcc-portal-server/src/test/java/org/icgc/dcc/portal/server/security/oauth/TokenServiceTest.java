@@ -32,6 +32,7 @@ import org.icgc.dcc.portal.server.model.AccessToken;
 import org.icgc.dcc.portal.server.model.AccessTokenScopes.AccessTokenScope;
 import org.icgc.dcc.portal.server.model.User;
 import org.icgc.dcc.portal.server.service.ForbiddenAccessException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -45,6 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RunWith(MockitoJUnitRunner.class)
+@Ignore
 public class TokenServiceTest {
 
   /**
