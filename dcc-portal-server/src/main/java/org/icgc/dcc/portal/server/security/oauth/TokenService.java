@@ -29,6 +29,7 @@ import static org.icgc.dcc.portal.server.security.AuthUtils.throwForbiddenExcept
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.icgc.dcc.common.core.util.Splitters;
 import org.icgc.dcc.portal.server.model.AccessToken;
@@ -59,13 +60,12 @@ public class TokenService {
 
   private static final String DEFAULT_SCOPE_DESCRIPTION = EMPTY_STRING;
   private static final Map<String, String> SCOPE_DESCRIPTIONS = ImmutableMap.<String, String> builder()
-      .put("portal.download", "Allows secure downloads from the Data Portal")
-      .put("portal.export", "Allows to download controlled export data from the download server")
-      .put("aws.upload", "Allows uploads to AWS S3")
-      .put("aws.download", "Allows secure downloads from AWS S3")
-      .put("collab.upload", "Allows uploads to the Collaboratory cloud")
-      .put("collab.download", "Allows secure downloads from the Collaboratory cloud")
-      .put("id.create", "Allows to create new ICGC IDs at https://id.icgc.org")
+      .put("portal.READ", "Allows secure downloads from the Data Portal")
+      .put("aws.WRITE", "Allows uploads to AWS S3")
+      .put("aws.READ", "Allows secure downloads from AWS S3")
+      .put("collab.WRITE", "Allows uploads to the Collaboratory cloud")
+      .put("collab.READ", "Allows secure downloads from the Collaboratory cloud")
+      .put("id.WRITE", "Allows to create new ICGC IDs at https://id.icgc.org")
       .build();
 
   @NonNull
@@ -73,26 +73,25 @@ public class TokenService {
 
   public String create(User user, String scope, String description) {
     log.debug("Creating access token of scope '{}' for user '{}'...", scope, user);
-    val userId = user.getEmailAddress();
+    val userId = UUID.fromString(user.getId());
     if (user.getDaco().equals(FALSE)) {
       throwForbiddenException("The user is not DACO approved",
           format("User %s is not DACO approved to access the create access token resource", userId));
     }
 
     validateScope(user, scope);
-    val token = client.createToken(userId, scope, description);
+    val token = client.createEgoToken(userId, scope, description);
     log.debug("Created token '{}' for '{}'", token, userId);
 
     return token.getId();
   }
 
   public Tokens list(@NonNull User user) {
-    // See getUserScopes(User) method commends on why user's email is used.
-    return client.listTokens(user.getEmailAddress());
+    return client.listEgoTokens(user.getId());
   }
 
   public void delete(@NonNull String tokenId) {
-    client.revokeToken(tokenId);
+    client.revokeEgoToken(tokenId);
   }
 
   public AccessToken getToken(@NonNull String tokenId) {
@@ -109,13 +108,13 @@ public class TokenService {
     // When using the ICGC API CUD users are always identified by user name
     // On the DCC Portal _all_ users are identified by their emails. For this reason we always user users's email when
     // communicating with the Auth server.
-    val userId = user.getEmailAddress();
-    if (userId == null) {
+    val userEmail = user.getEmailAddress();
+    if (userEmail == null) {
       log.warn("User has no OpenID but trying to access tokens: {}", user);
       return new AccessTokenScopes(emptySet());
     }
 
-    val userScopes = client.getUserScopes(userId);
+    val userScopes = client.getEgoUserScopes(userEmail);
     val scopesResult = ImmutableSet.<AccessTokenScope> builder();
 
     for (val scope : userScopes.getScopes()) {

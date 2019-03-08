@@ -119,20 +119,6 @@ public class AuthResource extends Resource {
       throwAuthenticationException("Login disabled");
     }
 
-    val cookies = requestHeaders.getCookies();
-    val sessionToken = Optional.ofNullable(cookies.get(AuthProperties.SESSION_TOKEN_NAME)).map(javax.ws.rs.core.Cookie::getValue).orElse(null);
-    // Already logged in and credentials available
-    if (sessionToken != null) {
-      log.info("[{}] Looking for already authenticated user in the cache", sessionToken);
-      val user = getAuthenticatedUser(sessionToken);
-
-      val verifiedResponse = verifiedResponse(user);
-      log.info("[{}] Finished authorization for user '{}'. DACO access: '{}'",
-              sessionToken, user.getOpenIDIdentifier(), user.getDaco());
-
-      return verifiedResponse;
-    }
-
     val jwtToken = requestHeaders.getRequestHeader("token").get(0);
     if (!isNullOrEmpty(jwtToken)) {
       val optionalUser = egoAuthService.getUserInfo(jwtToken);
@@ -148,6 +134,20 @@ public class AuthResource extends Resource {
       } else {
         return null;
       }
+    }
+
+    val cookies = requestHeaders.getCookies();
+    val sessionToken = Optional.ofNullable(cookies.get(AuthProperties.SESSION_TOKEN_NAME)).map(javax.ws.rs.core.Cookie::getValue).orElse(null);
+    // Already logged in and credentials available
+    if (sessionToken != null) {
+      log.info("[{}] Looking for already authenticated user in the cache", sessionToken);
+      val user = getAuthenticatedUser(sessionToken);
+
+      val verifiedResponse = verifiedResponse(user);
+      log.info("[{}] Finished authorization for user '{}'. DACO access: '{}'",
+              sessionToken, user.getOpenIDIdentifier(), user.getDaco());
+
+      return verifiedResponse;
     }
 
     return null;

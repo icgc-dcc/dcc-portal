@@ -137,6 +137,10 @@ public class ServerProperties {
 
     @JsonProperty
     String egoClientId;
+
+    @JsonProperty
+    String egoClientSecret;
+
   }
 
   @Data

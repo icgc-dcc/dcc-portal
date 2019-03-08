@@ -62,7 +62,7 @@ public class EgoAuthService {
       try {
         DecodedJWT jwt = JWT.decode(jwtToken);
         val m = (HashMap<String,String>) jwt.getClaims().get("context").asMap().get("user");
-        val user = new User(m.get("email"), m.get("email"), m.get("firstName"), m.get("lastName"));
+        val user = new User(jwt.getSubject(), m.get("email"), m.get("firstName"), m.get("lastName"));
         return Optional.of(user);
       } catch (JWTDecodeException exception){
         //Invalid token
@@ -78,14 +78,15 @@ public class EgoAuthService {
   public boolean hasDacoAccess(String jwtToken) {
     DecodedJWT jwt = JWT.decode(jwtToken);
     val scope = (List<String>) jwt.getClaims().get("context").asMap().get("scope");
-    return scope.contains("portal.READ");
+    return scope.contains("portal.READ") || scope.contains("portal.WRITE");
   }
 
   @SuppressWarnings("unchecked")
   public Boolean hasCloudAccess(String jwtToken) {
     DecodedJWT jwt = JWT.decode(jwtToken);
     val scope = (List<String>) jwt.getClaims().get("context").asMap().get("scope");
-    return scope.contains("aws.READ") && scope.contains("collab.READ");
+    return (scope.contains("aws.READ") && scope.contains("collab.READ"))
+            || (scope.contains("aws.WRITE") && scope.contains("collab.WRITE"));
   }
 }
 
