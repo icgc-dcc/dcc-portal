@@ -280,7 +280,7 @@
         }
       }
 
-      var loginInstance, logoutInstance;
+      var logoutInstance;
 
       // Auth isn't technically a state, so the default state reload in PortalFeature won't work.
       // We get around this by using a watcher instead on the actual var.
@@ -299,20 +299,6 @@
           controller: 'TokenController',
           size: 'lg',
         });
-      };
-
-      $scope.openLoginPopup = function() {
-        loginInstance = $modal.open({
-          templateUrl: '/scripts/auth/views/login.popup.html',
-          scope: $scope,
-        });
-      };
-
-      $scope.closeLoginPopup = function() {
-        if (loginInstance) {
-          loginInstance.dismiss('cancel');
-          loginInstance = null;
-        }
       };
 
       $scope.openLogoutPopup = function() {
