@@ -119,7 +119,9 @@ public class TokenService {
 
     for (val scope : userScopes.getScopes()) {
       val scopeDescription = firstNonNull(SCOPE_DESCRIPTIONS.get(scope), DEFAULT_SCOPE_DESCRIPTION);
-      scopesResult.add(new AccessTokenScope(scope, scopeDescription));
+      if(!scope.toLowerCase().contains("DENY".toLowerCase())) {
+        scopesResult.add(new AccessTokenScope(scope, scopeDescription));
+      }
     }
 
     return new AccessTokenScopes(scopesResult.build());
