@@ -52,7 +52,7 @@ class UserAuthInjectable extends AbstractHttpContextInjectable<User> {
   /**
    * Constants.
    */
-  public static final String APP_TOKEN_PREFIX = "Basic ";
+  public static final String AUTH_BEARER_TYPE = "Bearer";
 
   /**
    * The Authenticator that will compare credentials
@@ -124,8 +124,8 @@ class UserAuthInjectable extends AbstractHttpContextInjectable<User> {
     try {
       // Typically there is only one (most servers enforce that)
       for (val value : headers)
-        if ((value.toLowerCase().startsWith(APP_TOKEN_PREFIX.toLowerCase()))) {
-          val authHeaderValue = value.substring(APP_TOKEN_PREFIX.length()).trim();
+        if ((value.toLowerCase().startsWith(AUTH_BEARER_TYPE.toLowerCase()))) {
+          val authHeaderValue = value.substring(AUTH_BEARER_TYPE.length()).trim();
           int commaIndex = authHeaderValue.indexOf(',');
           if (commaIndex > 0) {
             token = authHeaderValue.substring(0, commaIndex);
