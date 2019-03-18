@@ -40,7 +40,7 @@ public class EgoIntegrationTest {
   @Test
   public void checkToken(){
     val tokenName = "841e00ae-55d3-4f74-91fa-9cc1a5a68b52";
-    val result = client.checkEgoToken(AUTH, tokenName, SCOPES);
+    val result = client.checkEgoToken(tokenName, SCOPES);
     assertThat(result).isEqualTo(true);
   }
 
