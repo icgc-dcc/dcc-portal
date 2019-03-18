@@ -79,7 +79,7 @@
         });
       }
 
-      function login(data) {
+      function login(data = {}) {
         delete $cookies.openid_error;
         user = {
           email: data.username || 'Unknown User',
@@ -246,8 +246,6 @@
             if ($state.current.name) {
               $state.transitionTo($state.current, $stateParams, transitionParams);
             }
-
-            $scope.closeLoginPopup();
           });
         }
       }

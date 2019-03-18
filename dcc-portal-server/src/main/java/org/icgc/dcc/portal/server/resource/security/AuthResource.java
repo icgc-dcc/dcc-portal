@@ -119,7 +119,11 @@ public class AuthResource extends Resource {
       throwAuthenticationException("Login disabled");
     }
 
-    val jwtToken = requestHeaders.getRequestHeader("token").get(0);
+    String jwtToken = null;
+    if (requestHeaders.getRequestHeader("token") != null) {
+      jwtToken = requestHeaders.getRequestHeader("token").get(0);
+    }
+
     if (!isNullOrEmpty(jwtToken)) {
       val optionalUser = egoAuthService.getUserInfo(jwtToken);
       if (optionalUser.isPresent()) {
