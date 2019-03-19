@@ -40,7 +40,7 @@ public class UserAuthenticator {
   /**
    * Constants.
    */
-  private static final String PORTAL_DOWNLOAD_SCOPE = "portal.download";
+  private static final String PORTAL_DOWNLOAD_SCOPE = "portal.READ";
 
   /**
    * Dependencies.
@@ -64,7 +64,7 @@ public class UserAuthenticator {
       val accessToken = credentials.getAccessToken().get();
       log.debug("Looking up user by access token '{}'...", accessToken);
 
-      if (oauthClient.checkToken(accessToken, PORTAL_DOWNLOAD_SCOPE)) {
+      if (oauthClient.checkEgoToken(accessToken, PORTAL_DOWNLOAD_SCOPE)) {
         val user = new User();
 
         user.setDaco(true);

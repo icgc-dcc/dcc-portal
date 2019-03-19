@@ -39,7 +39,7 @@ class UserCredentials {
   private final Optional<UUID> sessionToken;
 
   /**
-   * OAuth {@code portal.download} token.
+   * OAuth {@code portal.READ} token.
    */
   @NonNull
   private final Optional<String> accessToken;
