@@ -55,6 +55,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.google.common.collect.Lists;
 import org.icgc.dcc.portal.server.manifest.ManifestContext;
 import org.icgc.dcc.portal.server.manifest.ManifestService;
 import org.icgc.dcc.portal.server.manifest.model.Manifest;
@@ -246,9 +247,30 @@ public class ManifestResource extends Resource {
       boolean multipart) {
     checkFormat(format);
 
+    /**
+     * Why this terrible kludge you may ask? Why is it buried here?
+     *
+     * Well, once upon a time several metadata systems were built to track metadata about objects.
+     * Then an indexer was built to collate these different systems together.
+     * And all of this worked in harmony with a central ID service to maintain referential integrity across all of it.
+     *
+     * The developers looked upon this and saw that it was good.
+     *
+     * Then one day, a requirement came in, that required all of this to be thrown out so that a tiny number of objects
+     * could be back-doored into our system. Rather than rebuild the world, here we are, adding kludges to fix issues
+     * such as this one: https://github.com/icgc-dcc/dcc-repository/issues/39
+     */
+    val repos = Lists.newArrayList(repoParam.get());
+    if (repos.contains("song-pdc")) {
+      repos.remove("song-pdc");
+      if (!repos.contains("pdc")) {
+        repos.add("pdc");
+      }
+    }
+
     val manifest = new Manifest()
         .setFormat(ManifestFormat.get(format))
-        .setRepos(repoParam.get())
+        .setRepos(repos)
         .setFilters(filtersParam.get())
         .setFields(parseFields(fieldsParam))
         .setUnique(unique)
