@@ -39,6 +39,24 @@ public class ManifestContext {
   }
 
   public boolean isActive(String repo) {
+
+    /**
+     * Why this terrible kludge you may ask? Why is it buried here?
+     *
+     * Well, once upon a time several metadata systems were built to track metadata about objects.
+     * Then an indexer was built to collate these different systems together.
+     * And all of this worked in harmony with a central ID service to maintain referential integrity across all of it.
+     *
+     * The developers looked upon this and saw that it was good.
+     *
+     * Then one day, a requirement came in, that required all of this to be thrown out so that a tiny number of objects
+     * could be back-doored into our system. Rather than rebuild the world, here we are, adding kludges to fix issues
+     * such as this one: https://github.com/icgc-dcc/dcc-repository/issues/39
+     */
+    if (repo.equals("song-pdc")) {
+      repo = "pdc";
+    }
+
     return manifest.getRepos().isEmpty() || manifest.getRepos().contains(repo);
   }
 
