@@ -49,7 +49,7 @@ public class ManifestContext {
      *
      * The developers looked upon this and saw that it was good.
      *
-     * The one day, a requirement came in, that required all of this to be thrown out so that a tiny number of objects
+     * Then one day, a requirement came in, that required all of this to be thrown out so that a tiny number of objects
      * could be back-doored into our system. Rather than rebuild the world, here we are, adding kludges to fix issues
      * such as this one: https://github.com/icgc-dcc/dcc-repository/issues/39
      */
