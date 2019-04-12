@@ -18,6 +18,7 @@
 package org.icgc.dcc.portal.server.manifest;
 
 import static com.google.common.collect.Maps.uniqueIndex;
+import static java.lang.String.format;
 import static org.icgc.dcc.common.core.util.stream.Streams.stream;
 import static org.icgc.dcc.portal.server.util.ElasticsearchResponseUtils.getString;
 import static org.icgc.dcc.portal.server.util.Strings.defaultString;
@@ -25,6 +26,7 @@ import static org.icgc.dcc.portal.server.util.Strings.defaultString;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import org.dcc.portal.pql.meta.FileTypeModel.Fields;
@@ -72,11 +74,11 @@ public class ManifestMapper {
 
     // Map and combine with common data
     return file.getFileCopies().stream()
-        .map(fileCopy -> mapFileCopy(fileCopy))
+        .map(fileCopy -> mapFileCopy(fileCopy, file.getDonors().get(0).getProjectCode()))
         .map(manifestFile -> mapManifestFile(manifestFile, fileFields));
   }
 
-  private ManifestFile mapFileCopy(FileCopy fileCopy) {
+  private ManifestFile mapFileCopy(FileCopy fileCopy, String project) {
     val indexFile = fileCopy.getIndexFile();
     val indexObjectId = (null == indexFile) ? "" : defaultString(indexFile.getObjectId());
 
@@ -94,6 +96,17 @@ public class ManifestMapper {
      * such as this one: https://github.com/icgc-dcc/dcc-repository/issues/39
      */
     val repoCode = fileCopy.getRepoCode().equals("song-pdc") ? "pdc" : fileCopy.getRepoCode();
+
+    // This is required due to some convention existing inside a 3rd party system.
+    final BiFunction<String, String, String> createPdcDataPath = (String proj, String dataPath) -> {
+      final String template = "pcawg-tcga-%s/%s";
+      final String cleanedProj = proj.toLowerCase(); // Business Requirement
+      final String cleanedDataPath = dataPath.replace("/", ""); // Has multiple extra slashes
+
+      return format(template, cleanedProj, cleanedDataPath);
+    };
+
+    val dataPath = fileCopy.getRepoCode().equals("song-pdc") ? createPdcDataPath.apply(project, fileCopy.getRepoDataPath()) : fileCopy.getRepoDataPath();
     /**
      * fin
      */
@@ -112,7 +125,7 @@ public class ManifestMapper {
         .setRepoCode(defaultString(repoCode))
         .setRepoType(defaultString(fileCopy.getRepoType()))
         .setRepoBaseUrl(defaultString(fileCopy.getRepoBaseUrl()))
-        .setRepoDataPath(defaultString(fileCopy.getRepoDataPath()));
+        .setRepoDataPath(defaultString(dataPath));
   }
 
   private static ManifestFile mapManifestFile(ManifestFile manifestFile, Map<String, String> fileFields) {
