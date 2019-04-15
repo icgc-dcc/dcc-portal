@@ -333,53 +333,6 @@ import './file-finder';
         .removeClass('tweening');
     };
 
-    $scope.isGeneratingIcgcGetId = false;
-    $scope.icgcGetId = null;
-    let abortGenerateIcgcGetId = false;
-
-    const generateIcgcGetId = repos => {
-      $scope.isGeneratingIcgcGetId = true;
-      const repoCodes = repos.map(repo => repo.repoCode);
-
-      var params = {
-        format: 'files',
-        repos: repoCodes,
-        filters: $scope.selectedFiles
-          ? _.merge(FilterService.filters(), { file: { id: { is: $scope.selectedFiles } } })
-          : FilterService.filters(),
-      };
-
-      ExternalRepoService.createManifest(params).then(function(id) {
-        if (abortGenerateIcgcGetId) {
-          abortGenerateIcgcGetId = false;
-        } else if (!id) {
-          $scope.isGeneratingIcgcGetId = false;
-          throw new Error('No Manifest UUID is returned from API call.');
-        } else {
-          $scope.isGeneratingIcgcGetId = false;
-          $scope.icgcGetId = id;
-        }
-      });
-    };
-
-    $scope.$watchGroup(
-      [
-        () => $scope.shouldDeduplicate,
-        () => $scope.repos && $scope.repos.map(x => x.repoName).join(),
-      ],
-      ([shouldDeduplicate, repos], [oldShouldDeduplicate, oldRepos]) => {
-        if ($scope.isGeneratingIcgcGetId) {
-          abortGenerateIcgcGetId = true;
-        }
-        $scope.icgcGetId = '';
-        $scope.isGeneratingIcgcGetId = false;
-      }
-    );
-
-    $scope.handleClickGenerateIcgcGetId = () => {
-      generateIcgcGetId($scope.repos);
-    };
-
     var p = {};
     p.size = 0;
     p.filters = FilterService.filters();
@@ -1112,21 +1065,6 @@ import './file-finder';
       $modal.open({
         templateUrl: '/scripts/repository/views/repository.external.submit.html',
         controller: 'ExternalFileDownloadController',
-        size: 'lg',
-        resolve: {
-          params: function() {
-            return {
-              selectedFiles: _ctrl.selectedFiles,
-            };
-          },
-        },
-      });
-    };
-
-    _ctrl.showIcgcGetModal = function() {
-      $modal.open({
-        templateUrl: '/scripts/repository/views/repository.external.icgc-get.html',
-        controller: 'ExternalFileIcgcGetController as vm',
         size: 'lg',
         resolve: {
           params: function() {
