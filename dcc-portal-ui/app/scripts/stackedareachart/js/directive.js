@@ -43,7 +43,8 @@
       24: 'May-17',
       25: 'June-17',
       26: 'Nov-17',
-      27: 'Apr-18'
+      27: 'Apr-18',
+      28: 'Mar-19'
     };
 
   module.directive('donorHistory', function ($location, HighchartsService, gettextCatalog) {
@@ -76,7 +77,6 @@
         $scope.showPlot = false;
         $scope.defaultGraphHeight = 600;
         $scope.defaultGraphTitle = gettextCatalog.getString('Cumulative Count of Project Donors with Molecular Data in DCC by Release');
-
         var config = {
           margin:{top: 10, right: 40, bottom: 60, left: 40},
           height: $scope.defaultGraphHeight,
@@ -85,7 +85,7 @@
           yaxis:{label: gettextCatalog.getString('# of Donors'),ticks:8},
           xaxis: {
             label: gettextCatalog.getString('Release'),
-            ticksValueRange: [4, 27],
+            ticksValueRange: [4, 28],
             secondaryLabel: function(data){return releaseDates[data]}
           },
           onClick: function(project){
