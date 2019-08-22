@@ -1,18 +1,18 @@
 /*
- * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.                             
- *                                                                                                               
+ * Copyright (c) 2016 The Ontario Institute for Cancer Research. All rights reserved.
+ *
  * This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
- * You should have received a copy of the GNU General Public License along with                                  
- * this program. If not, see <http://www.gnu.org/licenses/>.                                                     
- *                                                                                                               
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY                           
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES                          
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT                           
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,                                
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED                          
- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;                               
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER                              
- * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN                         
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.icgc.dcc.portal.server.resource.security;
@@ -47,10 +47,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 import java.util.Collection;
 import java.util.Map;
@@ -71,7 +68,7 @@ import static org.icgc.dcc.portal.server.security.AuthUtils.*;
 @Path("/v1/auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class AuthResource extends Resource {
 
   /**
@@ -149,7 +146,7 @@ public class AuthResource extends Resource {
 
       val verifiedResponse = verifiedResponse(user);
       log.info("[{}] Finished authorization for user '{}'. DACO access: '{}'",
-              sessionToken, user.getOpenIDIdentifier(), user.getDaco());
+        sessionToken, user.getOpenIDIdentifier(), user.getDaco());
 
       return verifiedResponse;
     }
@@ -182,7 +179,7 @@ public class AuthResource extends Resource {
       authService.loginUser(username, creds.get(PASSWORD_KEY));
     } catch (ICGCException e) {
       throwAuthenticationException("Username and password are incorrect",
-          String.format("[%s] Failed to login the user. Exception %s", username, e.getMessage()));
+        String.format("[%s] Failed to login the user. Exception %s", username, e.getMessage()));
     }
 
     return verifiedResponse(createUser(username, username));
@@ -208,7 +205,6 @@ public class AuthResource extends Resource {
 
   /**
    * Create a valid session user or throws {@link AuthenticationException} in case of failure.
-   * 
    */
   private User createUser(String userId, String userEmail) {
     val sessionToken = randomUUID();
@@ -227,24 +223,37 @@ public class AuthResource extends Resource {
   private Response createLogoutResponse(Status status, String message) {
     val dccCookie = deleteCookie(AuthProperties.SESSION_TOKEN_NAME);
     val crowdCookie = deleteCookie(CrowdProperties.CUD_TOKEN_NAME);
-    val cmsCookie = deleteCookie(cmsService.getSessionName());
+    NewCookie cmsCookie = null;
+    try {
+      cmsCookie = deleteCookie(cmsService.getSessionName()); // No longer using CMS system for logins
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
 
-    return status(status)
-        .header(SET_COOKIE, dccCookie.toString())
-        .header(SET_COOKIE, crowdCookie.toString())
-        .header(SET_COOKIE, cmsCookie.toString())
-        .entity(new Error(status, message)) // Not really an error
-        .build();
+    val st = status(status)
+      .header(SET_COOKIE, dccCookie.toString())
+      .header(SET_COOKIE, crowdCookie.toString());
+
+      if (cmsCookie != null) {
+        st.header(SET_COOKIE, cmsCookie.toString());
+      }
+      //.header(SET_COOKIE, cmsCookie.toString())
+    st.entity(new Error(status, message));// Not really an error
+    return st.build();
   }
 
   private Collection<String> initCookiesToDelete() {
-    val result = ImmutableList.<String> builder();
+    val result = ImmutableList.<String>builder();
     result.add(CrowdProperties.CUD_TOKEN_NAME);
     if (cmsService == null) {
       log.warn(
-          "Can't properly define all cookies to be deleted on a failed authentication request. CmsService is not initialized");
+        "Can't properly define all cookies to be deleted on a failed authentication request. CmsService is not initialized");
     } else {
-      result.add(cmsService.getSessionName());
+      try {
+        result.add(cmsService.getSessionName());
+      } catch (Exception e) {
+        log.error(e.getMessage());
+      }
     }
 
     return result.build();
@@ -252,7 +261,7 @@ public class AuthResource extends Resource {
 
   /**
    * Extracts session token from cookies or HTTP header.
-   * 
+   *
    * @return sessionToken or <tt>null</tt> if no token found
    */
   private static UUID getSessionToken(HttpServletRequest request) {
@@ -279,12 +288,12 @@ public class AuthResource extends Resource {
     val cookie = createSessionCookie(AuthProperties.SESSION_TOKEN_NAME, user.getSessionToken().toString());
 
     return Response.ok(ImmutableMap.of(
-        TOKEN_KEY, user.getSessionToken(),
-        USERNAME_KEY, user.getEmailAddress(),
-        DACO_ACCESS_KEY, user.getDaco(),
-        CLOUD_ACCESS_KEY, user.getCloudAccess()))
-        .header(SET_COOKIE, cookie.toString())
-        .build();
+      TOKEN_KEY, user.getSessionToken(),
+      USERNAME_KEY, user.getEmailAddress(),
+      DACO_ACCESS_KEY, user.getDaco(),
+      CLOUD_ACCESS_KEY, user.getCloudAccess()))
+      .header(SET_COOKIE, cookie.toString())
+      .build();
   }
 
   private User getAuthenticatedUser(String sessionToken) {
@@ -293,9 +302,9 @@ public class AuthResource extends Resource {
 
     if (!tempUserOptional.isPresent()) {
       throwAuthenticationException(
-              "Authentication failed due to no User matching session token: " + sessionToken,
-              String.format("[%s] Could not find any user in the cache. The session must have expired.", sessionToken),
-              getCookiesToDelete());
+        "Authentication failed due to no User matching session token: " + sessionToken,
+        String.format("[%s] Could not find any user in the cache. The session must have expired.", sessionToken),
+        getCookiesToDelete());
     }
 
     log.info("[{}] Found user in the cache: {}", sessionToken, tempUserOptional.get());
