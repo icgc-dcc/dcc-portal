@@ -124,6 +124,68 @@
 
     <div class="modal-footer">
 
+      <!-- ICGC-GET -->
+      <button
+        ng-if="!icgcGetId"
+        class="t_button no-animate"
+        data-ng-click="
+          !icgcGetId && handleClickGenerateIcgcGetId(repos);
+          icgcGetId && 
+          track('generate-icgc-get-id', { action: 'click' });
+        ">
+        <span ng-show="!isGeneratingIcgcGetId && !icgcGetId">
+          <translate>Generate icgc-get ID</translate>
+        </span>
+        <span ng-show="isGeneratingIcgcGetId">
+          <translate>Generating icgc-get ID</translate> <i class="fa fa-spin fa-spinner"></i>
+        </span>
+      </button>
+      <div ng-if="icgcGetId" class="text-left">
+        <span class="button-label">Your icgc-get manifest ID is:</span>
+        <div class="flex-row align-flex-end">
+          <button
+            class="t_button icgc-get-id"
+            data-ng-click="
+              track('copy-icgc-get-id', { action: 'click' });
+            "
+            data-copy-to-clip
+            data-copy-analytics-tag="icgc-get-manifest-id"
+            data-copy-data="icgcGetId"
+            data-show-copy-tips="true"
+            data-prompt-on-copy="false"
+            data-on-copy-success-message="Copied!"
+            data-on-hover-message="Copy to clipboard"
+          >
+              {{ icgcGetId }}
+          </button>
+          <button
+              style="border-radius: 0 3px 3px 0;"
+              class="btn btn-default btn-sm"
+              type="button"
+              data-copy-to-clip
+              data-copy-analytics-tag="icgc-get-manifest-id"
+              data-copy-data="icgcGetId"
+              data-show-copy-tips="true"
+              data-prompt-on-copy="false"
+              data-on-copy-success-message="Copied!"
+              data-on-hover-message="Copy to clipboard"
+          >
+              <i class="icon-clippy"></i>
+          </button>
+        </div>
+      </div>
+      <a
+        href="http://docs.icgc.org/download/icgc-get/#download-using-manifest-id"
+        target="_blank"
+        style="margin-left: 4px;"
+      >
+        <i
+          class="fa fa-question-circle"
+          style="cursor: pointer;"
+          icgc-tooltip="{{'<div class=\'tooltip-contents\'>icgc-get is a universal download client for accessing ICGC data residing in various data repositories. <br/><small><em>Click to see the User Guide for more information</em> <i class=\'fa fa-external-link\'></i></small></div>' | translate}}"
+        ></i>
+      </a>
+
       <!-- ICGC Storage Manifest ID -->
       <button
         class="t_button"
