@@ -200,7 +200,7 @@ public class OAuthClient {
     validateCheckEgoTokenResponse(response, new HttpMultiStatus());
 
     val tokenResponse = response.getEntity(EgoTokenScopeResponse.class);
-    return new AccessToken(token, "", tokenResponse.getExp(), tokenResponse.getScope());
+    return new AccessToken(token, "", tokenResponse.getExp().intValue(), tokenResponse.getScope());
   }
 
   public UserScopesResponse getEgoUserScopes(@NonNull String userEmail){
