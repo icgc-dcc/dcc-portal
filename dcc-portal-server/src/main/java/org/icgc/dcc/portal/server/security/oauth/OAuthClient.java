@@ -188,6 +188,21 @@ public class OAuthClient {
     return tokenResponse.getScope().stream().allMatch(s -> requestedScope.contains(s));
   }
 
+  public AccessToken getEgoToken(@NonNull String token){
+    val auth = generateAuthString(egoClientId, egoClientSecret);
+    val response = resource
+      .path(CHECK_EGO_TOKEN_URL)
+      .queryParam("Authorization", auth)
+      .queryParam("token", token)
+      .type(APPLICATION_FORM_URLENCODED_TYPE)
+      .accept(APPLICATION_JSON_TYPE)
+      .post(ClientResponse.class);
+    validateCheckEgoTokenResponse(response, new HttpMultiStatus());
+
+    val tokenResponse = response.getEntity(EgoTokenScopeResponse.class);
+    return new AccessToken(token, "", tokenResponse.getExp().intValue(), tokenResponse.getScope());
+  }
+
   public UserScopesResponse getEgoUserScopes(@NonNull String userEmail){
     checkArguments(userEmail);
     val auth = generateAuthString(egoClientId, egoClientSecret);

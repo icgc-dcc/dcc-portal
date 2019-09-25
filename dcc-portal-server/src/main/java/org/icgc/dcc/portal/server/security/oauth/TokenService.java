@@ -95,7 +95,7 @@ public class TokenService {
   }
 
   public AccessToken getToken(@NonNull String tokenId) {
-    val token = client.getToken(tokenId);
+    val token = client.getEgoToken(tokenId);
     if (token == null) {
       throw new BadRequestException("Invalid token");
     }
