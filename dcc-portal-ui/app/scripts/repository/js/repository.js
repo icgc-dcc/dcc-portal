@@ -150,7 +150,7 @@ import './file-finder';
 
           // Grab text file (markdown)
           _ctrl.textFiles = _.filter(files, function(f) {
-            return f.type === 'f' && f.isText === true;
+            return f.type === 'f' && f.isText === true && f.name.includes('README');
           });
           _ctrl.textFiles.forEach(function(f) {
             Restangular.one('download')
