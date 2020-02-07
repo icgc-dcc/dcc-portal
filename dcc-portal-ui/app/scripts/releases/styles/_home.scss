@@ -428,6 +428,41 @@
       &:last-of-type {
         padding: $spacing-1x 0 0;
       }
+
+      h2 {
+        margin: 0;
+      }
+      p {
+        margin: 1.5em 0;
+      }
+
+      div.nature-wrapper {
+        display: flex;
+        margin-top: 1em;
+
+        div {
+          p {
+            margin: 0;
+            font-size: 1.1em;
+          }
+          .nature-description {
+            font-size: 0.8em;
+          }
+          .photo-credits {
+            font-style: italic;
+          }
+        }
+
+        .nature-image {
+          margin: 3px 15px 0 0;
+
+          img {
+            height: 120px;
+            max-width: none;
+            margin-bottom: 10px;
+          }
+        }
+      }
     }
 
     @include breakpoint($break-tablet) {
