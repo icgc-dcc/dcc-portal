@@ -749,6 +749,9 @@ section.nature-announcement {
     div p.nature-description {
       margin-top: 5px;
       font-size: 0.8em;
+      a {
+        font-weight: bold;
+      }
     }
 
     .nature-image {
