@@ -428,6 +428,13 @@
       &:last-of-type {
         padding: $spacing-1x 0 0;
       }
+
+      h2 {
+        margin: 0;
+      }
+      p {
+        margin: 1.5em 0;
+      }
     }
 
     @include breakpoint($break-tablet) {
@@ -695,6 +702,62 @@
 
       &:hover {
         background: darken($mid-blue, 4%);
+      }
+    }
+  }
+}
+
+div.nature-wrapper {
+  display: flex;
+  margin-top: 1em;
+
+  div {
+    p.nature-title {
+      margin: 0;
+      font-size: 1.1em;
+    }
+    p.nature-description {
+      margin: 0;
+      font-size: 0.8em;
+    }
+    .photo-credits {
+      font-style: italic;
+    }
+  }
+
+  .nature-image {
+    margin: 3px 15px 0 0;
+
+    img {
+      height: 120px;
+      max-width: none;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+section.nature-announcement {
+  width: 45%;
+  padding: 10px;
+
+  div.nature-wrapper {
+    margin-top: 0px;
+    p.nature-title {
+      font-size: 1.2em;
+    }
+
+    div p.nature-description {
+      margin-top: 5px;
+      font-size: 0.8em;
+      a {
+        font-weight: bold;
+      }
+    }
+
+    .nature-image {
+      margin: 0 15px 0 0;
+      img {
+        margin-bottom: 0;
       }
     }
   }
