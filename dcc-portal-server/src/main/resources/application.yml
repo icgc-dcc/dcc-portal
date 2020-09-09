@@ -50,7 +50,16 @@ cache:
   enableLastModified: true
 
   # List of resources for which Last-Modified HTTP header should not be generated. Format: regex accepted by java.lang.String
-  excludeLastModified: ["^v\\d+/short$", "^v\\d+/auth/.*$", "^v\\d+/download.*$", "^v\\d+/analysis.*$", "^v\\d+/entityset.*$", "^v\\d+/settings.*$", "^v\\d+/repository/files.*$" ]
+  excludeLastModified:
+    [
+      "^v\\d+/short$",
+      "^v\\d+/auth/.*$",
+      "^v\\d+/download.*$",
+      "^v\\d+/analysis.*$",
+      "^v\\d+/entityset.*$",
+      "^v\\d+/settings.*$",
+      "^v\\d+/repository/files.*$",
+    ]
 
   # Enable ETag HTTP header generation
   enableETag: false
@@ -89,7 +98,7 @@ hazelcast:
 
   # Expire openId authentication attempt in 2 minutes
   openidAuthTTL: 120
-  
+
   # Enable multicast? If false then hosts must be provided. hosts not used otherwise
   # Multicast must be disabled in an OpenStack / AWS environment
   multicast: false
@@ -101,12 +110,12 @@ elastic:
   indexName: "dcc-release"
   repoIndexName: "icgc-repository"
   nodeAddresses:
-     - host: "localhost"
-       port: 9300
+    - host: "localhost"
+      port: 9300
 
-  # List of TransportClient settings. 
-  # E.g. 
-  # "client.transport.sniff": true 
+  # List of TransportClient settings.
+  # E.g.
+  # "client.transport.sniff": true
   client:
     "client.transport.sniff": true
 
@@ -126,13 +135,12 @@ download:
 web:
   # Defines an external URL when the portal is behind a reverse proxy / load balancer. E.g. shortUrl resource uses it for generation of valid URLs
   baseUrl: ""
-  
+
   # Google Analytics account id
   gaAccount: UA-43425408-1
 
 # ICGC Client configuration
 icgc:
-
   # CGP/DACO API endpoint
   cgpUrl: ""
   # ShortUrl API endpoint
@@ -140,7 +148,7 @@ icgc:
 
   # CUD API endpoint
   cudUrl: ""
-  
+
   # CMS API endpoint
   cmsUrl: ""
 
@@ -164,7 +172,6 @@ icgc:
 
 # Set analysis configuration
 setOperation:
-
   # Limit for number of items to return from ElasticSearch
   maxPreviewNumberOfHits: 1000
   maxNumberOfHits: 20000
@@ -174,7 +181,7 @@ setOperation:
 release:
   releaseDate: "placeholder"
   dataVersion: 2
-  
+
 # Feature Flags
 features:
   AUTH_TOKEN: true
@@ -202,7 +209,7 @@ jupyter:
   url: "https://jupyterhub.cancercollaboratory.org"
 
 banner:
-  message: The Cancer Genome Collaboratory is now open to all researchers.""
+  message: The Cancer Genome Collaboratory is now open to all researchers."
   alwaysShow: false
   link: "https://cancercollaboratory.org/"
   linkText: "Learn about this compute cloud resource here."
