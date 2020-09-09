@@ -197,12 +197,12 @@ spring.mvc.locale: en_CA
 spring.mvc.locale-resolver: fixed
 
 # Jupyter Notebooks
-jupyter:  
+jupyter:
   enabled: true
   url: "https://jupyterhub.cancercollaboratory.org"
 
 banner:
-  message: "The Cancer Genome Collaboratory is under an emergency system shutdown due to HVAC failure.  Compute instances in the Cancer Genome Collaboratory will not be available, as well as data download from the Cancer Genome Collaboratory. We are working with the data center to restore service as soon as possible."
+  message: The Cancer Genome Collaboratory is now open to all researchers.""
   alwaysShow: false
-  link: "https://cancercollaboratory.org/support/system-status/#/"
-  linkText: "Check in regularly on the Cancer Collaboratory system status here."
+  link: "https://cancercollaboratory.org/"
+  linkText: "Learn about this compute cloud resource here."
