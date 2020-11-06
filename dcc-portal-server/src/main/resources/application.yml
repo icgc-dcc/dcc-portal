@@ -209,7 +209,7 @@ jupyter:
   url: "https://jupyterhub.cancercollaboratory.org"
 
 banner:
-  message: "The Cancer Genome Collaboratory is now open to all researchers."
+  message: "The Cancer Genome Collaboratory datacentre has experienced a cooling failure and is offline.  File downloads from the Cancer Genome Collaboratory are currently unavailable. "
   alwaysShow: false
   link: "https://cancercollaboratory.org/"
-  linkText: "Learn about this compute cloud resource here."
+  linkText: "Check the up-to-date Cancer Genome Collaboratory Status here."
