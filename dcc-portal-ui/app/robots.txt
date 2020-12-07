@@ -4,8 +4,11 @@ Disallow: /donors*
 Disallow: /genes*
 Disallow: /mutations*
 Disallow: /q*
-Crawl-delay: 30
+Disallow: /api*
+Crawl-delay: 60
 
-User-agent: Googlebot
-Disallow: /mutations*
+User-agent: *
+Disallow: /search*
 Disallow: /q*
+Disallow: /api*
+Crawl-delay: 30
