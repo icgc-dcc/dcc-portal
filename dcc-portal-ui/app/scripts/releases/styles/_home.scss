@@ -373,9 +373,12 @@
     }
   }
 
+  .before-updates {
+    margin-bottom: $updates-offset - $spacing-2x;
+  }
+
   .intro {
     @extend %two-col-flex;
-    margin-bottom: $spacing-1x - 12px; // accouting for button margin;
 
     > div {
       .logos {
@@ -438,8 +441,6 @@
     }
 
     @include breakpoint($break-tablet) {
-      margin-bottom: $spacing-2x - 12px; // accouting for button margin
-
       > div {
         &:first-of-type {
           padding: 0 $spacing-2x 0 $spacing-1x;
@@ -453,8 +454,6 @@
     }
 
     @include breakpoint($content-fold-max) {
-      margin-bottom: $spacing-max - 20px; // accouting for button margin
-
       > div {
         .cta {
           max-width: 346px;
@@ -502,7 +501,7 @@
     width: 100%;
     background: $white;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    margin: 0 0 (-$updates-offset);
+    margin: (-$updates-offset) 0 0;
 
     .header {
       display: flex;
@@ -552,10 +551,19 @@
         color: $light-blue;
       }
     }
+
+    margin-bottom: $spacing-2x;
+
+    @include breakpoint($break-tablet) {
+      margin-bottom: $spacing-3x;
+    }
+
+    @include breakpoint($content-fold-max) {
+      margin-bottom: $spacing-max - 20px;
+    }
   }
 
   .after-updates {
-    margin-top: $updates-offset;
     padding: $spacing-2x 0 0;
 
     @include breakpoint($break-tablet) {
@@ -563,7 +571,7 @@
     }
 
     @include breakpoint($content-fold-max) {
-      padding: 0;
+      padding: $spacing-3x 0 0;
     }
 
     .content-wrap {
