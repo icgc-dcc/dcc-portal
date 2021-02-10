@@ -113,6 +113,7 @@ module.exports = {
       { from: 'app/styles/images', to: paths.appBuild + '/styles/images' },
       { from: 'vendor/styles', to: paths.appBuild + '/vendor/styles' },
       { from: 'app/styles/icgc-icons.css', to: paths.appBuild + '/styles/icgc-icons.css' },
+      { from: paths.cgpBackup, to: paths.appBuild + '/cgp' }, // backup of CGP nodes, DACO retirement. Ticket#712
 
       // TODO: this is only necessary due to templateUrls, we should compile templates
       { from: 'app/scripts', to: paths.appBuild + '/scripts' },

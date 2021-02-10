@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var paths = require('./paths');
 
 module.exports = {
@@ -112,6 +113,9 @@ module.exports = {
     return [require('autoprefixer')];
   },
   plugins: [
+    new CopyWebpackPlugin([
+      { from: paths.cgpBackup, to: 'cgp' }, // backup of CGP nodes, DACO retirement. Ticket#712
+    ]),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,

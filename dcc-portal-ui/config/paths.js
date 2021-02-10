@@ -11,6 +11,7 @@ module.exports = {
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('app'),
   appNodeModules: resolveApp('node_modules'),
+  cgpBackup: resolveApp('app/assets/cgp'),
   internalVendorModules: resolveApp('app/vendor'),
   ownNodeModules: resolveApp('node_modules')
 };
