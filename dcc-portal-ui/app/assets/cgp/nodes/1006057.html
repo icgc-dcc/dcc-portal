@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="{{params.filesPath + 'css/styles.css'}}" />
+<link type="text/css" rel="stylesheet" ng-href="{{params.filesPath}}css/styles.css" />
 
 <div class="container">
     <div class="container-inner">
@@ -14,7 +14,7 @@
         <div id="cgp-project">
           <div class="cgp-subject floatl full" style="padding-bottom: 0.25em;">
             <div class="cgp-flag-block">
-              <div class="cgp-flag"><img class="cpg-flag" src="../../../../files/flags/fr.gif" /></div><div class="cgp-flag-country">France</div>            </div>
+              <div class="cgp-flag"><img class="cpg-flag" ng-src="{{params.filesPath}}flags/fr.gif" /></div><div class="cgp-flag-country">France</div>            </div>
 
     <!-- Tumor type and molecular subtype -->
             <div class="floatl cgp-tumor-type" style="margin-bottom:0px;width:535px ">
@@ -22,13 +22,13 @@
               Uterine Cancer - Carcinosarcoma</div>
          <div id = "project-ids" class="floatl datacode">
               <ul id = "project-ids-list">
-              <li class=datacodelinks><a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22UTCA-FR%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">UTCA-FR</a></li>
+              <li class=datacodelinks><a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22UTCA-FR%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">UTCA-FR</a></li>
               </ul></div>
             </div>
 
       <div class="floatl cgp-org-sys-icon" style="margin-bottom:0px;padding-left:7px;">
 
-        <img class="cgp-org-sys-icon" src="../../../../files/org_sys/ute.png"/>      </div>
+        <img class="cgp-org-sys-icon" ng-src="{{params.filesPath}}org_sys/ute.png"/>      </div>
 
 
           </div>
@@ -40,7 +40,7 @@
 
 <div class = "tab floatl whitetab">Project Profile</div>
 <div class = "tab floatl bluetab">
-                          <a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22UTCA-FR%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
+                          <a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22UTCA-FR%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
           <div class="cpg-funding floatl full">
             <div id="cgp-projects-left" class="cgp-region floatl">
               <div class="spacing-top full blue font-large">Funding Organizations</div>
@@ -62,7 +62,7 @@
 
 <a target="_blank" href="http://www.e-cancer.fr/" title="Institut National du Cancer (INCa)">Institut National du Cancer (INCa)</a></td></tr>
 <tr><td colspan="2" style="line-height:0.5em;">
-<a target="_blank" href="http://www.e-cancer.fr/" title="Institut National du Cancer (INCa)"><img class="cgp-logo cgp-logo-funding" src="../../../../files/imagefield_uploads/uploaded_logo/nouveau-logo-inca_2015%20-%20300dpi.jpg"/></a>
+<a target="_blank" href="http://www.e-cancer.fr/" title="Institut National du Cancer (INCa)"><img class="cgp-logo cgp-logo-funding" ng-src="{{params.filesPath}}logos/nouveau-logo-inca_2015%20-%20300dpi.jpg"/></a>
 </td>
 </tr>
       <tr>
@@ -72,7 +72,7 @@
 
 <a target="_blank" href="https://itcancer.aviesan.fr/" title="Instituts Thématiques Multi-Organismes (ITMO Cancer) / INSERM">Instituts Thématiques Multi-Organismes (ITMO Cancer) / INSERM</a></td></tr>
 <tr><td colspan="2" style="line-height:0.5em;">
-<a target="_blank" href="https://itcancer.aviesan.fr/" title="Instituts Thématiques Multi-Organismes (ITMO Cancer) / INSERM"><img class="cgp-logo cgp-logo-funding" src="../../../../files/imagefield_uploads/uploaded_logo/Inserm.jpg"/></a>
+<a target="_blank" href="https://itcancer.aviesan.fr/" title="Instituts Thématiques Multi-Organismes (ITMO Cancer) / INSERM"><img class="cgp-logo cgp-logo-funding" ng-src="{{params.filesPath}}logos/Inserm.jpg"/></a>
 </td>
 </tr>
   </tbody>
@@ -94,7 +94,7 @@
       <div class="view-content">
       <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.crcl.fr/" title="Centre de Recherche en Cancérologie de Lyon (CRCL)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Centre%20de%20Recherche%20en%20Canc%c3%a9rologie%20de%20Lyon.jpg" title="Centre de Recherche en Cancérologie de Lyon (CRCL)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Centre_de_Recherche_en_Cancerologie_de_Lyon.jpg" title="Centre de Recherche en Cancérologie de Lyon (CRCL)"/>
 </a>
 <a target="_blank" href="http://www.crcl.fr/" title="Centre de Recherche en Cancérologie de Lyon (CRCL)">
 <span class="cgp-res-grid-title">France: Centre de Recherche en Cancérologie de Lyon (CRCL)</span>
@@ -102,7 +102,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.cgfl.fr/" title="Centre Georges François Leclerc (CGFL)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/CGFL-jpeg-RVB%20300dpi.jpg" title="Centre Georges François Leclerc (CGFL)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/CGFL-jpeg-RVB%20300dpi.jpg" title="Centre Georges François Leclerc (CGFL)"/>
 </a>
 <a target="_blank" href="http://www.cgfl.fr/" title="Centre Georges François Leclerc (CGFL)">
 <span class="cgp-res-grid-title">France: Centre Georges François Leclerc (CGFL)</span>
@@ -110,7 +110,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.unicancer.fr/en/centre/centre-jean-perrin-clermont-ferrand" title="Centre Jean Perrin">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Clermont.jpg" title="Centre Jean Perrin"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Clermont.jpg" title="Centre Jean Perrin"/>
 </a>
 <a target="_blank" href="http://www.unicancer.fr/en/centre/centre-jean-perrin-clermont-ferrand" title="Centre Jean Perrin">
 <span class="cgp-res-grid-title">France: Centre Jean Perrin</span>
@@ -118,7 +118,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.centreleonberard.fr/" title="Centre Léon-Bérard">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/clb_logo.jpg" title="Centre Léon-Bérard"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/clb_logo.jpg" title="Centre Léon-Bérard"/>
 </a>
 <a target="_blank" href="http://www.centreleonberard.fr/" title="Centre Léon-Bérard">
 <span class="cgp-res-grid-title">France: Centre Léon-Bérard</span>
@@ -126,7 +126,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.synergielyoncancer.fr/" title="Fondation Synergie Lyon Cancer">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Fondation%20Synergie%20Lyon%20Cancer.jpg" title="Fondation Synergie Lyon Cancer"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Fondation%20Synergie%20Lyon%20Cancer.jpg" title="Fondation Synergie Lyon Cancer"/>
 </a>
 <a target="_blank" href="http://www.synergielyoncancer.fr/" title="Fondation Synergie Lyon Cancer">
 <span class="cgp-res-grid-title">France: Fondation Synergie Lyon Cancer</span>
@@ -134,7 +134,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.chu-lyon.fr/web/Hopital_Croix_rousse_2279.html" title="Hôpital Croix Rousse (Hospices Civils de Lyon) (HCL)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Hospices-Civils-de-Lyon-minimized-2_0.jpg" title="Hôpital Croix Rousse (Hospices Civils de Lyon) (HCL)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Hospices-Civils-de-Lyon-minimized-2_0.jpg" title="Hôpital Croix Rousse (Hospices Civils de Lyon) (HCL)"/>
 </a>
 <a target="_blank" href="http://www.chu-lyon.fr/web/Hopital_Croix_rousse_2279.html" title="Hôpital Croix Rousse (Hospices Civils de Lyon) (HCL)">
 <span class="cgp-res-grid-title">France: Hôpital Croix Rousse (Hospices Civils de Lyon) (HCL)</span>
@@ -142,7 +142,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.bergonie.org/" title="Institut Bergonié">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Institut%20Bergoni%c3%a9.jpg" title="Institut Bergonié"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Institut_Bergonie.jpg" title="Institut Bergonié"/>
 </a>
 <a target="_blank" href="http://www.bergonie.org/" title="Institut Bergonié">
 <span class="cgp-res-grid-title">France: Institut Bergonié</span>
@@ -150,7 +150,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.ico-cancer.fr/" title="Institut de Cancérologie de l’Ouest (ICO)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Institut%20de%20Canc%c3%a9rologie%20de%20l%27Ouest.jpg" title="Institut de Cancérologie de l’Ouest (ICO)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Institut%20de%20Cancerologie%20de%20l%27Ouest.jpg" title="Institut de Cancérologie de l’Ouest (ICO)"/>
 </a>
 <a target="_blank" href="http://www.ico-cancer.fr/" title="Institut de Cancérologie de l’Ouest (ICO)">
 <span class="cgp-res-grid-title">France: Institut de Cancérologie de l’Ouest (ICO)</span>
@@ -158,7 +158,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.crcl.fr/" title="UMR Inserm 1052 CNRS 5286 - Centre Léon Bérard">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/CNRS%205286.jpg" title="UMR Inserm 1052 CNRS 5286 - Centre Léon Bérard"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/CNRS%205286.jpg" title="UMR Inserm 1052 CNRS 5286 - Centre Léon Bérard"/>
 </a>
 <a target="_blank" href="http://www.crcl.fr/" title="UMR Inserm 1052 CNRS 5286 - Centre Léon Bérard">
 <span class="cgp-res-grid-title">France: UMR Inserm 1052 CNRS 5286 - Centre Léon Bérard</span>
@@ -166,7 +166,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.cnag.cat/" title="Centro Nacional de Análisis Genómico">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/CIC_logo.jpg" title="Centro Nacional de Análisis Genómico"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/CIC_logo.jpg" title="Centro Nacional de Análisis Genómico"/>
 </a>
 <a target="_blank" href="http://www.cnag.cat/" title="Centro Nacional de Análisis Genómico">
 <span class="cgp-res-grid-title">Spain: Centro Nacional de Análisis Genómico</span>
@@ -182,7 +182,7 @@
 </div>               <div class="blue full floatl font-large" style="margin-top:12px;">Research Activities</div>
 <!-- Publication Policy -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/dat.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dat.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Publication Policy</div>
                   <hr class="blue"/>
@@ -192,38 +192,15 @@
 
 
 
-      <div class="view-content">
-
-
-    <table class="views-table cols-10" style="margin-bottom:1em;">
-  <tbody>
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    1:&nbsp;&nbsp;</td>
-
-    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="../../../goals-structure-policies-guidelines/e3-publication-policy.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif"></a><br/>    <span class="media-gr"></span>
-</td>
-
-</tr>
-
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    2:&nbsp;&nbsp;</td>
-
-    <td class="floatl">Template Letters to Facilitate Communications<a  target="_blank" href="../../../cgp-template-letters.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif"></a><br/>    <span class="media-gr">to ensure appropriate dialogue between data users and generators and for authors to contact ICGC members and editors</span>
-</td>
-
-</tr>
-
-      </tbody>
-</table>
-
+    <div class="view-content">
+        <table class="views-table cols-10" style="margin-bottom:1em;">
+            <tbody>
+                <tr class="">
+                    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="https://daco.icgc.org/assets/site/files/ICGC%20November%2015%202011%20Updates%20to%20Section%20E.3.pdf"> PDF&nbsp;<img ng-src="{{params.filesPath}}theme/internalicon_small.gif"></a><br/>    <span class="media-gr"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 
@@ -238,7 +215,7 @@
 <!-- Clinic and Pathology -->
 
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/medical.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/medical.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Clinic &amp; Pathology</div>
                       <hr class="blue"/>
@@ -331,7 +308,7 @@ Established in January 2011 as the fusion of the Centres of “Lutte Contre le C
 
 <!-- Sequencing and Analysis -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/dna.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dna.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Sequencing &amp; Analysis</div>
                   <hr class="blue"/>
@@ -391,7 +368,7 @@ The CNAG was created in 2009 as a platform integrated into the Barcelona Science
 
 <!-- Complementary Studies -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/compstudies.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compstudies.png"/>
                 <div class="floatl eighty">
                   <div class="cgp-region-subject blue">Complementary Studies</div>
                   <hr class="blue"/>
@@ -464,7 +441,7 @@ Linked to EAM 4128 Santé Individu Société (Universités Lyon 1, Lyon 2 and Ly
 
 <!-- Data storage, Analysis and Management -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/compserver.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compserver.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Data Storage, Analysis &amp; Management</div>
                   <hr class="blue"/>

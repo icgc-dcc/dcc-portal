@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="{{params.filesPath + 'css/styles.css'}}" />
+<link type="text/css" rel="stylesheet" ng-href="{{params.filesPath}}css/styles.css" />
 
 <div class="container">
     <div class="container-inner">
@@ -14,7 +14,7 @@
         <div id="cgp-project">
           <div class="cgp-subject floatl full" style="padding-bottom: 0.25em;">
             <div class="cgp-flag-block">
-              <div class="cgp-flag"><img class="cpg-flag" src="../../../../files/flags/es.gif" /></div><div class="cgp-flag-country">Spain</div>            </div>
+              <div class="cgp-flag"><img class="cpg-flag" ng-src="{{params.filesPath}}flags/es.gif" /></div><div class="cgp-flag-country">Spain</div>            </div>
 
     <!-- Tumor type and molecular subtype -->
             <div class="floatl cgp-tumor-type" style="margin-bottom:0px;width:535px ">
@@ -22,18 +22,18 @@
               Chronic Lymphocytic Leukemia - CLL with mutated and unmutated IgVH</div>
          <div id = "project-ids" class="floatl datacode">
               <ul id = "project-ids-list">
-              <li class=datacodelinks><a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22CLLE-ES%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">CLLE-ES</a></li>
+              <li class=datacodelinks><a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22CLLE-ES%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">CLLE-ES</a></li>
               </ul></div>
             </div>
 
       <div class="floatl cgp-org-sys-icon" style="margin-bottom:0px;padding-left:7px;">
 
-        <img class="cgp-org-sys-icon" src="../../../../files/org_sys/hem.png"/>      </div>
+        <img class="cgp-org-sys-icon" ng-src="{{params.filesPath}}org_sys/hem.png"/>      </div>
 
 <span class="link">
       Project Website&nbsp;
       <a title="Project Website" href="http://www.cllgenome.es/" target="_blank"> HTML
-      <img src="../../../../sites/all/themes/daco_theme/images/htmlicon_small.gif">;&nbsp;</a>
+      <img ng-src="{{params.filesPath}}theme/htmlicon_small.gif">;&nbsp;</a>
 </span>
 
           </div>
@@ -45,7 +45,7 @@
 
 <div class = "tab floatl whitetab">Project Profile</div>
 <div class = "tab floatl bluetab">
-                          <a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22CLLE-ES%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
+                          <a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22CLLE-ES%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
           <div class="cpg-funding floatl full">
             <div id="cgp-projects-left" class="cgp-region floatl">
               <div class="spacing-top full blue font-large">Funding Organizations</div>
@@ -91,7 +91,7 @@
       <div class="view-content">
       <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.bsc.es/" title="Barcelona Supercomputing Centre">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/BSC.jpg" title="Barcelona Supercomputing Centre"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/BSC.jpf" title="Barcelona Supercomputing Centre"/>
 </a>
 <a target="_blank" href="http://www.bsc.es/" title="Barcelona Supercomputing Centre">
 <span class="cgp-res-grid-title">Spain: Barcelona Supercomputing Centre</span>
@@ -99,7 +99,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.iconcologia.net/" title="Catalan Institute of Oncology">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/ICO.png" title="Catalan Institute of Oncology"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/ICO.pnf" title="Catalan Institute of Oncology"/>
 </a>
 <a target="_blank" href="http://www.iconcologia.net/" title="Catalan Institute of Oncology">
 <span class="cgp-res-grid-title">Spain: Catalan Institute of Oncology</span>
@@ -107,7 +107,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.cicancer.org/" title="Center for Cancer Research, University Hospital">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/CIC%20SALAMANCA.png" title="Center for Cancer Research, University Hospital"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/CIC%20SALAMANCA.pnf" title="Center for Cancer Research, University Hospital"/>
 </a>
 <a target="_blank" href="http://www.cicancer.org/" title="Center for Cancer Research, University Hospital">
 <span class="cgp-res-grid-title">Spain: Center for Cancer Research, University Hospital</span>
@@ -115,7 +115,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://pasteur.crg.es/portal/page/portal/Internet/" title="Center for Genomic Regulation">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/CRG.jpg" title="Center for Genomic Regulation"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/CRG.jpf" title="Center for Genomic Regulation"/>
 </a>
 <a target="_blank" href="http://pasteur.crg.es/portal/page/portal/Internet/" title="Center for Genomic Regulation">
 <span class="cgp-res-grid-title">Spain: Center for Genomic Regulation</span>
@@ -123,7 +123,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.cnag.cat/" title="Centro Nacional de Análisis Genómico">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/CIC_logo.jpg" title="Centro Nacional de Análisis Genómico"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/CIC_logo.jpf" title="Centro Nacional de Análisis Genómico"/>
 </a>
 <a target="_blank" href="http://www.cnag.cat/" title="Centro Nacional de Análisis Genómico">
 <span class="cgp-res-grid-title">Spain: Centro Nacional de Análisis Genómico</span>
@@ -131,7 +131,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.hospitalclinic.org/" title="Hospital Clinic of Barcelona">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/HC.jpg" title="Hospital Clinic of Barcelona"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/HC.jpf" title="Hospital Clinic of Barcelona"/>
 </a>
 <a target="_blank" href="http://www.hospitalclinic.org/" title="Hospital Clinic of Barcelona">
 <span class="cgp-res-grid-title">Spain: Hospital Clinic of Barcelona</span>
@@ -139,7 +139,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.upf.edu/" title="Pompeu Fabra University">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/UPF.jpg" title="Pompeu Fabra University"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/UPF.jpf" title="Pompeu Fabra University"/>
 </a>
 <a target="_blank" href="http://www.upf.edu/" title="Pompeu Fabra University">
 <span class="cgp-res-grid-title">Spain: Pompeu Fabra University</span>
@@ -147,7 +147,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.cnio.es/" title="Spanish National Cancer Research Centre">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/CNIO_0.jpg" title="Spanish National Cancer Research Centre"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/CNIO_0.jpf" title="Spanish National Cancer Research Centre"/>
 </a>
 <a target="_blank" href="http://www.cnio.es/" title="Spanish National Cancer Research Centre">
 <span class="cgp-res-grid-title">Spain: Spanish National Cancer Research Centre</span>
@@ -155,7 +155,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.ub.edu/" title="University of Barcelona">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/UB.jpg" title="University of Barcelona"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/UB.jpf" title="University of Barcelona"/>
 </a>
 <a target="_blank" href="http://www.ub.edu/" title="University of Barcelona">
 <span class="cgp-res-grid-title">Spain: University of Barcelona</span>
@@ -163,7 +163,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.deusto.es/" title="University of Deusto">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/DEUSTO.jpg" title="University of Deusto"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/DEUSTO.jpf" title="University of Deusto"/>
 </a>
 <a target="_blank" href="http://www.deusto.es/" title="University of Deusto">
 <span class="cgp-res-grid-title">Spain: University of Deusto</span>
@@ -171,7 +171,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.uniovi.es/" title="University of Oviedo">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/UNIOVI.gif" title="University of Oviedo"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/UNIOVI.gif" title="University of Oviedo"/>
 </a>
 <a target="_blank" href="http://www.uniovi.es/" title="University of Oviedo">
 <span class="cgp-res-grid-title">Spain: University of Oviedo</span>
@@ -179,7 +179,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.usc.es/" title="University of Santiago de Compostela">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/USC.gif" title="University of Santiago de Compostela"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/USC.gif" title="University of Santiago de Compostela"/>
 </a>
 <a target="_blank" href="http://www.usc.es/" title="University of Santiago de Compostela">
 <span class="cgp-res-grid-title">Spain: University of Santiago de Compostela</span>
@@ -195,7 +195,7 @@
 </div>               <div class="blue full floatl font-large" style="margin-top:12px;">Research Activities</div>
 <!-- Publication Policy -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/dat.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dat.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Publication Policy</div>
                   <hr class="blue"/>
@@ -205,38 +205,15 @@
 
 
 
-      <div class="view-content">
-
-
-    <table class="views-table cols-10" style="margin-bottom:1em;">
-  <tbody>
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    1:&nbsp;&nbsp;</td>
-
-    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="../../../goals-structure-policies-guidelines/e3-publication-policy.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif"></a><br/>    <span class="media-gr"></span>
-</td>
-
-</tr>
-
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    2:&nbsp;&nbsp;</td>
-
-    <td class="floatl">Template Letters to Facilitate Communications<a  target="_blank" href="../../../cgp-template-letters.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif"></a><br/>    <span class="media-gr">to ensure appropriate dialogue between data users and generators and for authors to contact ICGC members and editors</span>
-</td>
-
-</tr>
-
-      </tbody>
-</table>
-
+    <div class="view-content">
+        <table class="views-table cols-10" style="margin-bottom:1em;">
+            <tbody>
+                <tr class="">
+                    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="https://daco.icgc.org/assets/site/files/ICGC%20November%2015%202011%20Updates%20to%20Section%20E.3.pdf"> PDF&nbsp;<img ng-src="{{params.filesPath}}theme/internalicon_small.gif"></a><br/>    <span class="media-gr"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 
@@ -251,7 +228,7 @@
 <!-- Clinic and Pathology -->
 
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/medical.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/medical.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Clinic &amp; Pathology</div>
                       <hr class="blue"/>
@@ -340,7 +317,7 @@ The clinical working group's main purpose is to:<br />
     <td class="cgp-countrytxt">
     1:&nbsp;&nbsp;</td>
 
-    <td class="floatl">ICGC CLL Project Consent Form<a  target="_blank" href="../../../../files/icgc/cgp/ICGC_CLL_project_consent_form.pdf"> PDF&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/pdficon_small.gif"></a><br/>    <span class="media-gr"></span>
+    <td class="floatl">ICGC CLL Project Consent Form<a  target="_blank" ng-href="{{params.filesPath}}icgc/cgp/ICGC_CLL_project_consent_form.pdf"> PDF&nbsp;<img ng-src="{{params.filesPath}}theme/pdficon_small.gif"></a><br/>    <span class="media-gr"></span>
 </td>
 
 </tr>
@@ -352,7 +329,7 @@ The clinical working group's main purpose is to:<br />
     <td class="cgp-countrytxt">
     2:&nbsp;&nbsp;</td>
 
-    <td class="floatl">ICGC CLL Project Patient Brochure<a  target="_blank" href="../../../../files/icgc/cgp/ICGC_CLL_project_patient_brochure.pdf"> PDF&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/pdficon_small.gif"></a><br/>    <span class="media-gr"></span>
+    <td class="floatl">ICGC CLL Project Patient Brochure<a  target="_blank" ng-href="{{params.filesPath}}icgc/cgp/ICGC_CLL_project_patient_brochure.pdf"> PDF&nbsp;<img ng-src="{{params.filesPath}}theme/pdficon_small.gif"></a><br/>    <span class="media-gr"></span>
 </td>
 
 </tr>
@@ -364,7 +341,7 @@ The clinical working group's main purpose is to:<br />
     <td class="cgp-countrytxt">
     3:&nbsp;&nbsp;</td>
 
-    <td class="floatl">ICGC CLL Project Epidemiology Questionnaire<a  target="_blank" href="../../../../files/icgc/cgp/ICGC_CLL_project_Epidemiology_questionnaire.pdf"> PDF&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/pdficon_small.gif"></a><br/>    <span class="media-gr"></span>
+    <td class="floatl">ICGC CLL Project Epidemiology Questionnaire<a  target="_blank" ng-href="{{params.filesPath}}icgc/cgp/ICGC_CLL_project_Epidemiology_questionnaire.pdf"> PDF&nbsp;<img ng-src="{{params.filesPath}}theme/pdficon_small.gif"></a><br/>    <span class="media-gr"></span>
 </td>
 
 </tr>
@@ -384,7 +361,7 @@ The clinical working group's main purpose is to:<br />
 
 <!-- Sequencing and Analysis -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/dna.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dna.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Sequencing &amp; Analysis</div>
                   <hr class="blue"/>
@@ -451,7 +428,7 @@ The clinical working group's main purpose is to:<br />
 
 <!-- Complementary Studies -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/compstudies.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compstudies.png"/>
                 <div class="floatl eighty">
                   <div class="cgp-region-subject blue">Complementary Studies</div>
                   <hr class="blue"/>
@@ -518,7 +495,7 @@ The clinical working group's main purpose is to:<br />
 
 <!-- Data storage, Analysis and Management -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/compserver.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compserver.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Data Storage, Analysis &amp; Management</div>
                   <hr class="blue"/>
@@ -597,10 +574,7 @@ The clinical working group's main purpose is to:<br />
 
 <!-- Project Summary -->
             <div id="cgp-projects-right" class="cgp-region floatl">
-    <div class="spacing-top blue font-large">Project Publications</div>
-    <div style="display:none;"><button class="wfui-button wfui-button-primary">View Related Publications (1) »</button></div>
-    <button onclick="window.location='../../../publications8b5c.html?cgp=Chronic%20Lymphocytic%20Leukemia%20-%20CLL%20with%20mutated%20and%20unmutated%20IgVH';" class="wfui-button wfui-button-primary">View Related Publications (1) »</button>
-                                <div class="spacing-top blue font-large">Project Summary</div>
+    <div class="spacing-top blue font-large">Project Summary</div>
               <div class="cgp-projects-summary floatl"><p>Chronic Lymphocytic Leukemia (CLL) is one of the most frequent tumors in Western countries. CLL represents 35% of all leukemias with an incidence of 3-7 per 100.000 habitants and reaches 12-15/100.000 in people over 60 years. The disease is heterogeneous; there are patients who have a long clinical evolution with a stable disease whereas others follow a progressive course with a median survival of 5-8 years. This heterogeneity is due to the existence of two major molecular groups, characterized respectively by the presence or absence of somatic mutations in immunoglobulin genes. Different genetic alterations have been identified associated with particular clinical presentations and evolution. There is also evidence of genetic predisposition, but the initiating genetic alterations are largely unknown in both sporadic and inherited cases. Today, there is no curative therapy for CLL.</p>
 <p>As a contributing member of the ICGC, the CLL Consortium will generate a comprehensive catalogue of genetic alterations in 500 independent tumors. Normal and tumour samples with highly purified tumor cell content (&gt;95%) and normal samples with &lt;5% tumor cell contamination will be included.</p>
 <p>Working Plan<br />

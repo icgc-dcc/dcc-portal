@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="{{params.filesPath + 'css/styles.css'}}" />
+<link type="text/css" rel="stylesheet" ng-href="{{params.filesPath}}css/styles.css" />
 
 <div class="container">
     <div class="container-inner">
@@ -14,7 +14,7 @@
         <div id="cgp-project">
           <div class="cgp-subject floatl full" style="padding-bottom: 0.25em;">
             <div class="cgp-flag-block">
-              <div class="cgp-flag"><img class="cpg-flag" src="../../../../files/flags/de.gif" /></div><div class="cgp-flag-country">Germany</div>            </div>
+              <div class="cgp-flag"><img class="cpg-flag" ng-src="{{params.filesPath}}flags/de.gif" /></div><div class="cgp-flag-country">Germany</div>            </div>
 
     <!-- Tumor type and molecular subtype -->
             <div class="floatl cgp-tumor-type" style="margin-bottom:0px;width:535px ">
@@ -22,13 +22,13 @@
               Malignant Lymphoma - Germinal center B-cell derived lymphomas</div>
          <div id = "project-ids" class="floatl datacode">
               <ul id = "project-ids-list">
-              <li class=datacodelinks><a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22MALY-DE%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">MALY-DE</a></li>
+              <li class=datacodelinks><a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22MALY-DE%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">MALY-DE</a></li>
               </ul></div>
             </div>
 
       <div class="floatl cgp-org-sys-icon" style="margin-bottom:0px;padding-left:7px;">
 
-        <img class="cgp-org-sys-icon" src="../../../../files/org_sys/hem.png"/>      </div>
+        <img class="cgp-org-sys-icon" ng-src="{{params.filesPath}}org_sys/hem.png"/>      </div>
 
 
           </div>
@@ -40,7 +40,7 @@
 
 <div class = "tab floatl whitetab">Project Profile</div>
 <div class = "tab floatl bluetab">
-                          <a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22MALY-DE%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
+                          <a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22MALY-DE%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
           <div class="cpg-funding floatl full">
             <div id="cgp-projects-left" class="cgp-region floatl">
               <div class="spacing-top full blue font-large">Funding Organizations</div>
@@ -62,7 +62,7 @@
 
 <a target="_blank" href="http://www.bmbf.de/en/index.php" title="Federal Ministry of Education and Research (BMBF)">Federal Ministry of Education and Research (BMBF)</a></td></tr>
 <tr><td colspan="2" style="line-height:0.5em;">
-<a target="_blank" href="http://www.bmbf.de/en/index.php" title="Federal Ministry of Education and Research (BMBF)"><img class="cgp-logo cgp-logo-funding" src="../../../../files/imagefield_uploads/uploaded_logo/logo_bmbf_en_0.jpg"/></a>
+<a target="_blank" href="http://www.bmbf.de/en/index.php" title="Federal Ministry of Education and Research (BMBF)"><img class="cgp-logo cgp-logo-funding" ng-src="{{params.filesPath}}logos/logo_bmbf_en_0.jpg"/></a>
 </td>
 </tr>
   </tbody>
@@ -90,7 +90,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.uni-duesseldorf.de/home/en/home.html" title="Düsseldorf University">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/uni_duesseldorf_logo.jpg" title="Düsseldorf University"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/uni_duesseldorf_logo.jpg" title="Düsseldorf University"/>
 </a>
 <a target="_blank" href="http://www.uni-duesseldorf.de/home/en/home.html" title="Düsseldorf University">
 <span class="cgp-res-grid-title">Germany: Düsseldorf University</span>
@@ -98,7 +98,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.embl.de/" title="European Molecular Biology Laboratory (EMBL)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/logo_European%20Molecular%20Biology%20Laboratory.png" title="European Molecular Biology Laboratory (EMBL)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/logo_European%20Molecular%20Biology%20Laboratory.png" title="European Molecular Biology Laboratory (EMBL)"/>
 </a>
 <a target="_blank" href="http://www.embl.de/" title="European Molecular Biology Laboratory (EMBL)">
 <span class="cgp-res-grid-title">Germany: European Molecular Biology Laboratory (EMBL)</span>
@@ -109,7 +109,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.dkfz.de/" title="German Cancer Research Center (DKFZ)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/logo_dkfz_en.gif" title="German Cancer Research Center (DKFZ)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/logo_dkfz_en.gif" title="German Cancer Research Center (DKFZ)"/>
 </a>
 <a target="_blank" href="http://www.dkfz.de/" title="German Cancer Research Center (DKFZ)">
 <span class="cgp-res-grid-title">Germany: German Cancer Research Center (DKFZ)</span>
@@ -120,7 +120,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.uni-giessen.de/cms/" title="Justus-Liebig Universität Giessen">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Justin-Liebig%20Universitat%20Gieben%20logo.jpg" title="Justus-Liebig Universität Giessen"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Justin-Liebig%20Universitat%20Gieben%20logo.jpg" title="Justus-Liebig Universität Giessen"/>
 </a>
 <a target="_blank" href="http://www.uni-giessen.de/cms/" title="Justus-Liebig Universität Giessen">
 <span class="cgp-res-grid-title">Germany: Justus-Liebig Universität Giessen</span>
@@ -129,7 +129,7 @@
 <div  class="cgp-res-grid">Germany: Lymphoma Study Groups (NHL-BFM, GLSG, DSHNHL)</div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.uni-giessen.de/cms/fbz/fb11/nhl-bfm/" title="NHL-BFM">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/NHL%20BFM%20Giessen%20logo.jpg" title="NHL-BFM"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/NHL%20BFM%20Giessen%20logo.jpg" title="NHL-BFM"/>
 </a>
 <a target="_blank" href="http://www.uni-giessen.de/cms/fbz/fb11/nhl-bfm/" title="NHL-BFM">
 <span class="cgp-res-grid-title">Germany: NHL-BFM</span>
@@ -167,7 +167,7 @@
 </div>               <div class="blue full floatl font-large" style="margin-top:12px;">Research Activities</div>
 <!-- Publication Policy -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/dat.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dat.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Publication Policy</div>
                   <hr class="blue"/>
@@ -177,38 +177,15 @@
 
 
 
-      <div class="view-content">
-
-
-    <table class="views-table cols-10" style="margin-bottom:1em;">
-  <tbody>
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    1:&nbsp;&nbsp;</td>
-
-    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="../../../goals-structure-policies-guidelines/e3-publication-policy.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif"></a><br/>    <span class="media-gr"></span>
-</td>
-
-</tr>
-
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    2:&nbsp;&nbsp;</td>
-
-    <td class="floatl">Template Letters to Facilitate Communications<a  target="_blank" href="../../../cgp-template-letters.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif"></a><br/>    <span class="media-gr">to ensure appropriate dialogue between data users and generators and for authors to contact ICGC members and editors</span>
-</td>
-
-</tr>
-
-      </tbody>
-</table>
-
+    <div class="view-content">
+        <table class="views-table cols-10" style="margin-bottom:1em;">
+            <tbody>
+                <tr class="">
+                    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="https://daco.icgc.org/assets/site/files/ICGC%20November%2015%202011%20Updates%20to%20Section%20E.3.pdf"> PDF&nbsp;<img ng-src="{{params.filesPath}}theme/internalicon_small.gif"></a><br/>    <span class="media-gr"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 
@@ -223,7 +200,7 @@
 <!-- Clinic and Pathology -->
 
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/medical.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/medical.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Clinic &amp; Pathology</div>
                       <hr class="blue"/>
@@ -354,7 +331,7 @@
 
 <!-- Sequencing and Analysis -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/dna.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dna.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Sequencing &amp; Analysis</div>
                   <hr class="blue"/>
@@ -436,7 +413,7 @@
 
 <!-- Complementary Studies -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/compstudies.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compstudies.png"/>
                 <div class="floatl eighty">
                   <div class="cgp-region-subject blue">Complementary Studies</div>
                   <hr class="blue"/>
@@ -514,7 +491,7 @@
 
 <!-- Data storage, Analysis and Management -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/compserver.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compserver.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Data Storage, Analysis &amp; Management</div>
                   <hr class="blue"/>
@@ -573,10 +550,7 @@
 
 <!-- Project Summary -->
             <div id="cgp-projects-right" class="cgp-region floatl">
-    <div class="spacing-top blue font-large">Project Publications</div>
-    <div style="display:none;"><button class="wfui-button wfui-button-primary">View Related Publications (1) »</button></div>
-    <button onclick="window.location='../../../publicationsa2c1.html?cgp=Malignant%20Lymphoma%20-%20Germinal%20center%20B-cell%20derived%20lymphomas';" class="wfui-button wfui-button-primary">View Related Publications (1) »</button>
-                                <div class="spacing-top blue font-large">Project Summary</div>
+    <div class="spacing-top blue font-large">Project Summary</div>
               <div class="cgp-projects-summary floatl"><p>The ICGC-MMML-Seq (Molecular Mechanisms in Malignant Lymphoma by Sequencing) Consortium is the continuation of a long and outstanding tradition of interdisciplinary, multicenter and formalized collaboration in the field of lymphoma research in Germany. It is based on strongly interacting networks of reference pathologists, lymphoma scientists and clinical trial groups. These groups have joined-up in the ICGC-MMML-Seq with internationally renowned groups in the field of high-throughput sequencing and sequence analysis. The partners have broad experience in large international sequencing consortia. A unique alliance of strong bioinformatics groups with distinct and complementary expertise and a clear share of the workload will cover data management, sequence analysis, genotype-phenotype association and pathway modeling in the most efficient way.</p>
 <p>The ICGC-MMML-Seq Consortium aims at analyzing germinal-center derived B-cell malignant (non-Hodgkin) lymphomas (GCB-lymphomas). The core subtypes of GCB-lymphoma to be analysed will be follicular lymphoma (FL), diffuse large B-cell lymphoma (DLBCL) and Burkitt lymphoma/leukemia (BL) with clinical or histologic variants or grey-zone forms to be added. The selection of this tumor type is based on its frequency (GCB-lymphomas are by far the most frequent malignant lymphomas in children and adults), its clinical relevance (30-50% of patients die from the disease), its socio-economic burden (GCB-lymphomas are systemic and frequently chronic diseases requiring recurrent cost-intensive therapies), the availability of qualified material (from the systematic collection in reference pathologies, clinical trials and the MMML research network) and overlapping biologic/genetic features. The analysis pipeline of the ICGC-MMML-Seq contains three pre-analysis workpackages responsible for standardized sample acquisition through the clinical trials groups (WP1), reference pathology (WP2) and preparation of analytes (WP3), which widely uses the established structure of the German MMML lymphoma network. A special WPN will in addition provide samples from normal B-cells in order to challenge the “germline problem inherent to B cells” which suffers somatic mutations under physiologic conditions. Sequencing will cover genome (WP4), transcriptome (WP5), small RNAome (WP6) and DNA-methylome (WP7). Due to the expected changes in sequencing technology and costs the steering committee will centrally monitor and allocate all sequencing slots of the consortium to ensure cost effective usage of funds for highest quality sequencing. In an initial pilot phase sequences of a restricted but utmost informative sets of tumors and controls will be obtained whereas the second phase production will scale up to all GCB-lymphomas and germline controls to be analyzed. Stepwise analysis of sequence data will be performed in two workpackages (WP8 and WP9) which shall ensure integrative and most comprehensive evaluation of all sequencing data. Central coordination (WP C1) is supported by the steering committee and supervised by Scientific and Ethical Advisory Boards which well renowned experts agreed to join. </p>
 <p>A special “ICGC Scientist” shall ensure international exchange with other ICGC groups (particularly the project dealing with chronic lymphocytic leukemia in Barcelona). Perspectively, the ICGC-MMML-Seq is even prepared to rapidly translate findings from the ICGC sequencing pipeline into clinics through the unique collections from clinical trials readily available for molecular analysis.</p>

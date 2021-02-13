@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="{{params.filesPath + 'css/styles.css'}}" />
+<link type="text/css" rel="stylesheet" ng-href="{{params.filesPath}}css/styles.css" />
 
 <div class="container">
     <div class="container-inner">
@@ -14,7 +14,7 @@
         <div id="cgp-project">
           <div class="cgp-subject floatl full" style="padding-bottom: 0.25em;">
             <div class="cgp-flag-block">
-              <div class="cgp-flag"><img class="cpg-flag" src="../../../../files/flags/fr.gif" /></div><div class="cgp-flag-country">France</div>            </div>
+              <div class="cgp-flag"><img class="cpg-flag" ng-src="{{params.filesPath}}flags/fr.gif" /></div><div class="cgp-flag-country">France</div>            </div>
 
     <!-- Tumor type and molecular subtype -->
             <div class="floatl cgp-tumor-type" style="margin-bottom:0px;width:535px ">
@@ -22,13 +22,13 @@
               Prostate Cancer - Adenocarcinoma</div>
          <div id = "project-ids" class="floatl datacode">
               <ul id = "project-ids-list">
-              <li class=datacodelinks><a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22PRAD-FR%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">PRAD-FR</a></li>
+              <li class=datacodelinks><a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22PRAD-FR%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">PRAD-FR</a></li>
               </ul></div>
             </div>
 
       <div class="floatl cgp-org-sys-icon" style="margin-bottom:0px;padding-left:7px;">
 
-        <img class="cgp-org-sys-icon" src="../../../../files/org_sys/tes.png"/>      </div>
+        <img class="cgp-org-sys-icon" ng-src="{{params.filesPath}}org_sys/tes.png"/>      </div>
 
 
           </div>
@@ -40,7 +40,7 @@
 
 <div class = "tab floatl whitetab">Project Profile</div>
 <div class = "tab floatl bluetab">
-                          <a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22PRAD-FR%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
+                          <a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22PRAD-FR%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
           <div class="cpg-funding floatl full">
             <div id="cgp-projects-left" class="cgp-region floatl">
               <div class="spacing-top full blue font-large">Funding Organizations</div>
@@ -62,7 +62,7 @@
 
 <a target="_blank" href="http://www.e-cancer.fr/" title="Institut National du Cancer (INCa)">Institut National du Cancer (INCa)</a></td></tr>
 <tr><td colspan="2" style="line-height:0.5em;">
-<a target="_blank" href="http://www.e-cancer.fr/" title="Institut National du Cancer (INCa)"><img class="cgp-logo cgp-logo-funding" src="../../../../files/imagefield_uploads/uploaded_logo/nouveau-logo-inca_2015%20-%20300dpi.jpg"/></a>
+<a target="_blank" href="http://www.e-cancer.fr/" title="Institut National du Cancer (INCa)"><img class="cgp-logo cgp-logo-funding" ng-src="{{params.filesPath}}logos/nouveau-logo-inca_2015%20-%20300dpi.jpg"/></a>
 </td>
 </tr>
       <tr>
@@ -72,7 +72,7 @@
 
 <a target="_blank" href="http://www.inserm.fr/" title="Institut National de la Santé et de la Recherche Médicale (INSERM)">Institut National de la Santé et de la Recherche Médicale (INSERM)</a></td></tr>
 <tr><td colspan="2" style="line-height:0.5em;">
-<a target="_blank" href="http://www.inserm.fr/" title="Institut National de la Santé et de la Recherche Médicale (INSERM)"><img class="cgp-logo cgp-logo-funding" src="../../../../files/imagefield_uploads/uploaded_logo/InsermThematiqueLogo.jpg"/></a>
+<a target="_blank" href="http://www.inserm.fr/" title="Institut National de la Santé et de la Recherche Médicale (INSERM)"><img class="cgp-logo cgp-logo-funding" ng-src="{{params.filesPath}}logos/InsermThematiqueLogo.jpg"/></a>
 </td>
 </tr>
   </tbody>
@@ -94,7 +94,7 @@
       <div class="view-content">
       <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.aphp.fr/" title="Assistance Publique - Hôpitaux de Paris (AP-HP)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Assistance%20Publique%20-%20H%c3%b4pitaux%20de%20Paris%20(AP-HP).jpg" title="Assistance Publique - Hôpitaux de Paris (AP-HP)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Assistance%20Publique%20-%20Hopitaux%20de%20Paris%20(AP-HP).jpg" title="Assistance Publique - Hôpitaux de Paris (AP-HP)"/>
 </a>
 <a target="_blank" href="http://www.aphp.fr/" title="Assistance Publique - Hôpitaux de Paris (AP-HP)">
 <span class="cgp-res-grid-title">France: Assistance Publique - Hôpitaux de Paris (AP-HP)</span>
@@ -102,7 +102,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.cerepp.org/default.aspx" title="Centre de Recherche sur les Pathologies Prostatiques (CeRePP)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/CeRePP.jpg" title="Centre de Recherche sur les Pathologies Prostatiques (CeRePP)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/CeRePP.jpg" title="Centre de Recherche sur les Pathologies Prostatiques (CeRePP)"/>
 </a>
 <a target="_blank" href="http://www.cerepp.org/default.aspx" title="Centre de Recherche sur les Pathologies Prostatiques (CeRePP)">
 <span class="cgp-res-grid-title">France: Centre de Recherche sur les Pathologies Prostatiques (CeRePP)</span>
@@ -122,7 +122,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.synergielyoncancer.fr/" title="Fondation Synergie Lyon Cancer">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Fondation%20Synergie%20Lyon%20Cancer.jpg" title="Fondation Synergie Lyon Cancer"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Fondation%20Synergie%20Lyon%20Cancer.jpg" title="Fondation Synergie Lyon Cancer"/>
 </a>
 <a target="_blank" href="http://www.synergielyoncancer.fr/" title="Fondation Synergie Lyon Cancer">
 <span class="cgp-res-grid-title">France: Fondation Synergie Lyon Cancer</span>
@@ -130,7 +130,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.inserm.fr/" title="INSERM U625">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/InsermThematiqueLogo_0.jpg" title="INSERM U625"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/InsermThematiqueLogo_0.jpg" title="INSERM U625"/>
 </a>
 <a target="_blank" href="http://www.inserm.fr/" title="INSERM U625">
 <span class="cgp-res-grid-title">France: INSERM U625</span>
@@ -138,7 +138,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.iuc.upmc.fr/" title="Institut Universitaire de Cancérologie - Université Pierre et Marie Curie (IUC-UPMC)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Institut%20Universitaire%20de%20Canc%c3%a9rologie%20(IUC-UPMC)%20copy.jpg" title="Institut Universitaire de Cancérologie - Université Pierre et Marie Curie (IUC-UPMC)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Institut%20Universitaire%20de%20Cancerologie%20(IUC-UPMC)%20copy.jpg" title="Institut Universitaire de Cancérologie - Université Pierre et Marie Curie (IUC-UPMC)"/>
 </a>
 <a target="_blank" href="http://www.iuc.upmc.fr/" title="Institut Universitaire de Cancérologie - Université Pierre et Marie Curie (IUC-UPMC)">
 <span class="cgp-res-grid-title">France: Institut Universitaire de Cancérologie - Université Pierre et Marie Curie (IUC-UPMC)</span>
@@ -146,7 +146,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.iarc.fr/" title="International Agency for Research on Cancer (IARC)">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/International%20Agency%20for%20Research%20on%20Cancer%20(IARC).jpg" title="International Agency for Research on Cancer (IARC)"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/International%20Agency%20for%20Research%20on%20Cancer%20(IARC).jpg" title="International Agency for Research on Cancer (IARC)"/>
 </a>
 <a target="_blank" href="http://www.iarc.fr/" title="International Agency for Research on Cancer (IARC)">
 <span class="cgp-res-grid-title">France: International Agency for Research on Cancer (IARC)</span>
@@ -154,7 +154,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.cnag.cat/" title="Centro Nacional de Análisis Genómico">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/CIC_logo.jpg" title="Centro Nacional de Análisis Genómico"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/CIC_logo.jpg" title="Centro Nacional de Análisis Genómico"/>
 </a>
 <a target="_blank" href="http://www.cnag.cat/" title="Centro Nacional de Análisis Genómico">
 <span class="cgp-res-grid-title">Spain: Centro Nacional de Análisis Genómico</span>
@@ -170,7 +170,7 @@
 </div>               <div class="blue full floatl font-large" style="margin-top:12px;">Research Activities</div>
 <!-- Publication Policy -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/dat.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dat.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Publication Policy</div>
                   <hr class="blue"/>
@@ -180,38 +180,15 @@
 
 
 
-      <div class="view-content">
-
-
-    <table class="views-table cols-10" style="margin-bottom:1em;">
-  <tbody>
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    1:&nbsp;&nbsp;</td>
-
-    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="../../../goals-structure-policies-guidelines/e3-publication-policy.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif"></a><br/>    <span class="media-gr"></span>
-</td>
-
-</tr>
-
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    2:&nbsp;&nbsp;</td>
-
-    <td class="floatl">Template Letters to Facilitate Communications<a  target="_blank" href="../../../cgp-template-letters.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif"></a><br/>    <span class="media-gr">to ensure appropriate dialogue between data users and generators and for authors to contact ICGC members and editors</span>
-</td>
-
-</tr>
-
-      </tbody>
-</table>
-
+    <div class="view-content">
+        <table class="views-table cols-10" style="margin-bottom:1em;">
+            <tbody>
+                <tr class="">
+                    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="https://daco.icgc.org/assets/site/files/ICGC%20November%2015%202011%20Updates%20to%20Section%20E.3.pdf"> PDF&nbsp;<img ng-src="{{params.filesPath}}theme/internalicon_small.gif"></a><br/>    <span class="media-gr"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 
@@ -226,7 +203,7 @@
 <!-- Clinic and Pathology -->
 
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/medical.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/medical.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Clinic &amp; Pathology</div>
                       <hr class="blue"/>
@@ -329,7 +306,7 @@
 
 <!-- Sequencing and Analysis -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/dna.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dna.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Sequencing &amp; Analysis</div>
                   <hr class="blue"/>
@@ -396,7 +373,7 @@
 
 <!-- Complementary Studies -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/compstudies.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compstudies.png"/>
                 <div class="floatl eighty">
                   <div class="cgp-region-subject blue">Complementary Studies</div>
                   <hr class="blue"/>
@@ -443,7 +420,7 @@
 
 <!-- Data storage, Analysis and Management -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/compserver.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compserver.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Data Storage, Analysis &amp; Management</div>
                   <hr class="blue"/>

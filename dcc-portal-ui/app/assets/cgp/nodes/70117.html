@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="{{params.filesPath + 'css/styles.css'}}" />
+<link type="text/css" rel="stylesheet" ng-href="{{params.filesPath}}css/styles.css" />
 
 <div class="container">
     <div class="container-inner">
@@ -14,7 +14,7 @@
         <div id="cgp-project">
           <div class="cgp-subject floatl full" style="padding-bottom: 0.25em;">
             <div class="cgp-flag-block">
-              <div class="cgp-flag"><img class="cpg-flag" src="../../../../files/flags/gb.gif" /></div><div class="cgp-flag-country">United Kingdom</div>            </div>
+              <div class="cgp-flag"><img class="cpg-flag" ng-src="{{params.filesPath}}flags/gb.gif" /></div><div class="cgp-flag-country">United Kingdom</div>            </div>
 
     <!-- Tumor type and molecular subtype -->
             <div class="floatl cgp-tumor-type" style="margin-bottom:0px;width:535px ">
@@ -22,13 +22,13 @@
               Chronic Myeloid Disorders - Myelodysplastic Syndromes, Myeloproliferative Neoplasms &amp; Other Chronic Myeloid Malignancies</div>
          <div id = "project-ids" class="floatl datacode">
               <ul id = "project-ids-list">
-              <li class=datacodelinks><a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22CMDI-UK%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">CMDI-UK</a></li>
+              <li class=datacodelinks><a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22CMDI-UK%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">CMDI-UK</a></li>
               </ul></div>
             </div>
 
       <div class="floatl cgp-org-sys-icon" style="margin-bottom:0px;padding-left:7px;">
 
-        <img class="cgp-org-sys-icon" src="../../../../files/org_sys/hem.png"/>      </div>
+        <img class="cgp-org-sys-icon" ng-src="{{params.filesPath}}org_sys/hem.png"/>      </div>
 
 
           </div>
@@ -40,7 +40,7 @@
 
 <div class = "tab floatl whitetab">Project Profile</div>
 <div class = "tab floatl bluetab">
-                          <a href="https://dcc.icgc.org/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22CMDI-UK%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
+                          <a href="/projects?filters=%7B%22project%22%3A%7B%22id%22%3A%7B%22is%22%3A%5B%22CMDI-UK%22%5D%7D%7D%7D" class="project-data-extra ext" target="_blank">Project Data »</a></div>
           <div class="cpg-funding floatl full">
             <div id="cgp-projects-left" class="cgp-region floatl">
               <div class="spacing-top full blue font-large">Funding Organizations</div>
@@ -62,7 +62,7 @@
 
 <a target="_blank" href="http://www.wellcome.ac.uk/" title="The Wellcome Trust">The Wellcome Trust</a></td></tr>
 <tr><td colspan="2" style="line-height:0.5em;">
-<a target="_blank" href="http://www.wellcome.ac.uk/" title="The Wellcome Trust"><img class="cgp-logo cgp-logo-funding" src="../../../../files/imagefield_uploads/uploaded_logo/logo_uk_wt.png"/></a>
+<a target="_blank" href="http://www.wellcome.ac.uk/" title="The Wellcome Trust"><img class="cgp-logo cgp-logo-funding" ng-src="{{params.filesPath}}logos/logo_uk_wt.png"/></a>
 </td>
 </tr>
       <tr>
@@ -90,7 +90,7 @@
       <div class="view-content">
       <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.unimib.it/go/102/Home/English" title="University of Milan – Bicocca">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/Milano.jpg" title="University of Milan – Bicocca"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/Milano.jpg" title="University of Milan – Bicocca"/>
 </a>
 <a target="_blank" href="http://www.unimib.it/go/102/Home/English" title="University of Milan – Bicocca">
 <span class="cgp-res-grid-title">Italy: University of Milan – Bicocca</span>
@@ -116,7 +116,7 @@
 </div>
 <div  class="cgp-res-grid crg_img">
 <a target="_blank" href="http://www.sanger.ac.uk/" title="Wellcome Trust Sanger Institute">
-<img class="cgp-logo" src="../../../../files/imagefield_uploads/uploaded_logo/logo_uk_sanger_6.jpg" title="Wellcome Trust Sanger Institute"/>
+<img class="cgp-logo" ng-src="{{params.filesPath}}logos/logo_uk_sanger_6.jpg" title="Wellcome Trust Sanger Institute"/>
 </a>
 <a target="_blank" href="http://www.sanger.ac.uk/" title="Wellcome Trust Sanger Institute">
 <span class="cgp-res-grid-title">United Kingdom: Wellcome Trust Sanger Institute</span>
@@ -135,7 +135,7 @@
 </div>               <div class="blue full floatl font-large" style="margin-top:12px;">Research Activities</div>
 <!-- Publication Policy -->
 
-              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" src="../../../../files/icgc/dat.png"/>
+              <div class="cgp-projects-region floatl spacing-top"><img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dat.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Publication Policy</div>
                   <hr class="blue"/>
@@ -145,43 +145,15 @@
 
 
 
-      <div class="view-content">
-
-
-    <table class="views-table cols-10" style="margin-bottom:1em;">
-  <tbody>
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    1:&nbsp;&nbsp;</td>
-
-    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="../../../goals-structure-policies-guidelines/e3-publication-policy.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif">
-</a>
-<br/>    <span class="media-gr">
-</span>
-</td>
-
-</tr>
-
-
-
-
-<tr class="">
-    <td class="cgp-countrytxt">
-    2:&nbsp;&nbsp;</td>
-
-    <td class="floatl">Template Letters to Facilitate Communications<a  target="_blank" href="../../../cgp-template-letters.html"> HTML&nbsp;<img src="../../../../sites/all/themes/daco_theme_2/images/internalicon_small.gif">
-</a>
-<br/>    <span class="media-gr">to ensure appropriate dialogue between data users and generators and for authors to contact ICGC members and editors</span>
-</td>
-
-</tr>
-
-      </tbody>
-</table>
-
+    <div class="view-content">
+        <table class="views-table cols-10" style="margin-bottom:1em;">
+            <tbody>
+                <tr class="">
+                    <td class="floatl">ICGC Goals, Structure, Policies and Guidelines Section E.3 - Publication Policy<a  target="_blank" href="https://daco.icgc.org/assets/site/files/ICGC%20November%2015%202011%20Updates%20to%20Section%20E.3.pdf"> PDF&nbsp;<img ng-src="{{params.filesPath}}theme/internalicon_small.gif"></a><br/>    <span class="media-gr"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 
@@ -197,7 +169,7 @@
 
 
               <div class="cgp-projects-region floatl spacing-top">
-<img class="css-projects-region" src="../../../../files/icgc/medical.png"/>
+<img class="css-projects-region" ng-src="{{params.filesPath}}icgc/medical.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Clinic &amp; Pathology</div>
                       <hr class="blue"/>
@@ -290,7 +262,7 @@
 <!-- Sequencing and Analysis -->
 
               <div class="cgp-projects-region floatl spacing-top">
-<img class="css-projects-region" src="../../../../files/icgc/dna.png"/>
+<img class="css-projects-region" ng-src="{{params.filesPath}}icgc/dna.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Sequencing &amp; Analysis</div>
                   <hr class="blue"/>
@@ -341,7 +313,7 @@
 <!-- Complementary Studies -->
 
               <div class="cgp-projects-region floatl spacing-top">
-<img class="css-projects-region" src="../../../../files/icgc/compstudies.png"/>
+<img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compstudies.png"/>
                 <div class="floatl eighty">
                   <div class="cgp-region-subject blue">Complementary Studies</div>
                   <hr class="blue"/>
@@ -391,7 +363,7 @@
 <!-- Data storage, Analysis and Management -->
 
               <div class="cgp-projects-region floatl spacing-top">
-<img class="css-projects-region" src="../../../../files/icgc/compserver.png"/>
+<img class="css-projects-region" ng-src="{{params.filesPath}}icgc/compserver.png"/>
                 <div class="eighty floatl">
                   <div class="cgp-region-subject blue">Data Storage, Analysis &amp; Management</div>
                   <hr class="blue"/>
@@ -445,12 +417,7 @@
 
 <!-- Project Summary -->
             <div id="cgp-projects-right" class="cgp-region floatl">
-    <div class="spacing-top blue font-large">Project Publications</div>
-    <div style="display:none;">
-<button class="wfui-button wfui-button-primary">View Related Publications (2) »</button>
-</div>
-    <button onclick="window.location='../../../publications7b39.html?cgp=Chronic%20Myeloid%20Disorders%20-%20Myelodysplastic%20Syndromes%2C%20Myeloproliferative%20Neoplasms%20%26%20Other%20Chronic%20Myeloid%20Malignancies';" class="wfui-button wfui-button-primary">View Related Publications (2) »</button>
-                                <div class="spacing-top blue font-large">Project Summary</div>
+                <div class="spacing-top blue font-large">Project Summary</div>
               <div class="cgp-projects-summary floatl">
 <p>The chronic myeloid disorders are a heterogeneous group of clonal or oligoclonal haematological disorders characterised by hyperproliferation of myeloid progenitor cells, cytopenias or cytoses and a risk of progression to acute leukaemia.  Despite being the commonest group of haematological disorders, with a rapidly rising incidence in the West due to ageing population structures, treatment remains unsatisfactory, with most patients having few options other than supportive blood transfusions or cytoreductive therapy. </p>
 <p>The majority of patients with myelodysplastic syndromes have normal cytogenetics and for most of the recurrent cytogenetic abnormalities, causative genes have not been identified. One exception is the 5q- syndrome, where haploinsufficiency of RPS14 is associated with impaired erythroid differentiation. Point mutation screens have documented mutations in KRAS, NRAS, JAK2, FLT3, TET2 and RUNX1, but generally at rates of &lt;5-10% and often at late stages of the disease. </p>

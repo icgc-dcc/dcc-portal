@@ -254,7 +254,7 @@
           controller: 'CGPNodeModalCtl',
           size: 'lg',
           resolve: {
-            filesPath: () => '/cgp/nodes/',
+            filesPath: () => '/cgp/nodes/files/',
             publicationPolicyURL: () => 'https://daco.icgc.org/assets/site/files/ICGC%20November%2015%202011%20Updates%20to%20Section%20E.3.pdf'
           },
         });
