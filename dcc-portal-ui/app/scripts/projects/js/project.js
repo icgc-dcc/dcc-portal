@@ -61,6 +61,7 @@
     LocationService,
     SurvivalAnalysisLaunchService
   ) {
+    const cgpPath = '/cgp/nodes/';
     var _ctrl = this;
 
     Page.setTitle(project.id);
@@ -247,14 +248,13 @@
 
     // Opens cgp modal on click
     _ctrl.openCGPNodeModal = function(nodeId) {
-        console.log('clicked', nodeId);
       if (nodeId) {
         $modal.open({
-          templateUrl: `/cgp/nodes/${nodeId}.html`,
+          templateUrl: `${cgpPath}${nodeId}.html`,
           controller: 'CGPNodeModalCtl',
           size: 'lg',
           resolve: {
-            filesPath: () => '/cgp/nodes/files/',
+            filesPath: () => `${cgpPath}files/`,
             publicationPolicyURL: () => 'https://daco.icgc.org/assets/site/files/ICGC%20November%2015%202011%20Updates%20to%20Section%20E.3.pdf'
           },
         });
