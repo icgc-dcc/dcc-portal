@@ -15,8 +15,9 @@
                     <translate>Name</translate>
                 </th>
                 <td>
-                    <a href="http://icgc.org/node/{{ProjectCtrl.project.icgcId}}" target="_blank">
-                        <i class="icon-external-link"></i>{{ProjectCtrl.project.name}}</a>
+                    <a href="#" data-ng-click="ProjectCtrl.openCGPNodeModal(ProjectCtrl.project.icgcId)">
+                        {{ProjectCtrl.project.name}}
+                    </a>
                 </td>
             </tr>
             <tr>

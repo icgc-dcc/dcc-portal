@@ -15,23 +15,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
-.modal-header {
-  padding: 1rem 2rem;
-  border-bottom: 1px solid $greyLight
-}
-.modal-body {
-  padding: 0 2rem 1rem;
-}
-.modal-footer {
-  padding: 1rem;
-  margin-bottom: 0;
-  text-align: right;
-  background-color: $greyLightest;
-  border-top: 1px solid $greyLight;
-  border-radius: 0 0 6px 6px;
-}
-*/
+@import "cgpmodal";
 
 .set-upload {
   margin: 0;

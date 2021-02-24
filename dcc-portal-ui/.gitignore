@@ -6,3 +6,5 @@ app/scripts/common/js/pql/pqlparser.js
 target/
 translations/*.mo
 NOTES.txt
+
+.env*
