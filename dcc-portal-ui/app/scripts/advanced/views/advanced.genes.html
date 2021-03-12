@@ -26,9 +26,6 @@
                 "><translate>Enrichment Analysis</translate></a>
             </span>
             <span class="action-item">
-               <i class="icon-chart"></i><a href="/browser/g?filters={{AdvancedCtrl.Location.filters()}}" ng-click="track('advanced-search-links', { action: 'click-genome-viewer' });"><translate>Genome Viewer</translate></a>
-            </span>
-            <span class="action-item">
                 <entityset-persistence-dropdown
                     selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.gene"
                     entity-type="'gene'"
@@ -65,7 +62,7 @@
                       data-tooltip-placement="left"><translate># Mutations</translate></abbr>
             </th>
             <th rowspan="2">
-                <abbr data-icgc-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutated gene' | translate }}" 
+                <abbr data-icgc-tooltip="{{ 'Cohort comparison for filtered donors with versus without mutated gene' | translate }}"
                     data-tooltip-placement="left"
                     style="display:block;">
                     <i class="icon-chart-bar">

@@ -2,12 +2,6 @@
     <translate>Somatic Mutations</translate>
     <span class="action-toolbar pull-right">
         <span class="action-item">
-            <i class="icon-chart"></i>
-            <a href="/browser/m?filters={{AdvancedCtrl.Location.filters()}}">
-                <translate>Genome Viewer</translate>
-            </a>
-        </span>
-        <span class="action-item">
             <entityset-persistence-dropdown selected-entity-ids="AdvancedCtrl.selectedEntityIdsMap.mutation" entity-type="'mutation'"
                 set-total-count="AdvancedCtrl.Mutation.mutations.pagination.total" set-limit="ICGC_SETTINGS.maxNumberOfHits"
                 on-operation-success="AdvancedCtrl.handleOperationSuccess('mutation')"></entityset-persistence-dropdown>

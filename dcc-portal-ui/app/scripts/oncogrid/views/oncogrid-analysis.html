@@ -4,7 +4,7 @@
     <span style="font-size:1rem" class="pull-right">
       <share-button></share-button>
     </span>
-  </h3>    
+  </h3>
   <h5 class="analysis-subtitle"> {{ subtitle }} </h5>
 </div>
 <div data-ng-if="!item || item.state === 'ANALYZING'">
@@ -65,13 +65,10 @@
       <span class="action-toolbar">
         <translate>Resulting Number of High Impact Mutation Occurrences:</translate> <a href="{{obsLink}}">{{obsCount}}</a>
       </span>
-      <span class="action-toolbar pull-right">
-        <i class="icon-chart"></i><a href="{{gvLink}}"><translate>Genome Viewer</translate></a>
-      </span>
     </div>
-    
+
     <div class="clearfix"></div>
-    
+
     <span id="oncogrid-spinner" class="text-center oncogrid-spinner">
       <i class="icon-spinner icon-spin"></i> Loading OncoGrid...
     </span>
@@ -83,40 +80,40 @@
             <tr>
               <td>
                 <span class="btn-group">
-                  <button id="reload-button" 
-                    data-icgc-tooltip="{{'Reload grid' | translate}}" 
-                    class="btn btn-default btn-onco" 
+                  <button id="reload-button"
+                    data-icgc-tooltip="{{'Reload grid' | translate}}"
+                    class="btn btn-default btn-onco"
                     data-ng-click="OncoCtrl.reloadGrid()">
                     <i class="icon-undo"></i>
                   </button>
-                  <button id="fullscreen-button" 
-                    data-icgc-tooltip="{{'Fullscreen' | translate}}" 
-                    class="btn btn-default btn-onco" 
+                  <button id="fullscreen-button"
+                    data-icgc-tooltip="{{'Fullscreen' | translate}}"
+                    class="btn btn-default btn-onco"
                     data-ng-click="OncoCtrl.requestFullScreen()">
                     <i id="og-fullscreen-button" class="icon-resize-full"></i>
                   </button>
-                  <button id="cluster-button" 
-                    data-icgc-tooltip="{{'Cluster data' | translate}}" 
-                    class="btn btn-default btn-onco" 
+                  <button id="cluster-button"
+                    data-icgc-tooltip="{{'Cluster data' | translate}}"
+                    class="btn btn-default btn-onco"
                     data-ng-click="OncoCtrl.clusterData()">
                     <i class="icon-sort-alt-down"></i>
                   </button>
-                  <button 
-                    id="heat-button" 
-                    data-icgc-tooltip="{{'Toggle heatmap view' | translate}}" 
-                    class="btn btn-default btn-onco" 
+                  <button
+                    id="heat-button"
+                    data-icgc-tooltip="{{'Toggle heatmap view' | translate}}"
+                    class="btn btn-default btn-onco"
                     data-ng-click="OncoCtrl.heatMap()">
                     <i class="icon-fire"></i>
                   </button>
-                  <button id="grid-button" 
-                    data-icgc-tooltip="{{'Toggle grid lines' | translate}}" 
-                    class="btn btn-default btn-onco" 
+                  <button id="grid-button"
+                    data-icgc-tooltip="{{'Toggle grid lines' | translate}}"
+                    class="btn btn-default btn-onco"
                     data-ng-click="OncoCtrl.gridLines()">
                     <i class="icon-grid"></i>
                   </button>
-                  <button id="crosshair-button" 
-                    data-icgc-tooltip="{{'Toggle crosshair' | translate}}" 
-                    class="btn btn-default btn-onco" 
+                  <button id="crosshair-button"
+                    data-icgc-tooltip="{{'Toggle crosshair' | translate}}"
+                    class="btn btn-default btn-onco"
                     data-ng-click="OncoCtrl.crosshair()">
                     <i class="icon-target"></i>
                   </button>
@@ -125,8 +122,8 @@
             </tr>
 
             <tr style="height: 40px;">
-              <td id="og-crosshair-message" 
-                colspan="6" 
+              <td id="og-crosshair-message"
+                colspan="6"
                 style="display:none;">
                 <translate>Click and drag to select a region on the OncoGrid to zoom in.</translate>
               </td>
@@ -148,7 +145,7 @@
                   <small><translate>frameshift variant</translate></small>
                 </div>
               </td>
-              
+
               <td>
                 <div>
                   <div class="onco-legend-square" style="background:#ff2323"></div>
