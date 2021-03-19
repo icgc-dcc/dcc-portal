@@ -156,6 +156,12 @@ function runDevServer(port) {
       ignored: /node_modules/
     },
     proxy: {
+      ...process.env.SHORT_URL && {
+          '/api/v1/short': {
+          pathRewrite: { '^/api/v1/short': '/' },
+          target: process.env.SHORT_URL,
+          changeOrigin: true,
+      }},
       '/api/**': {
         target: process.env.API_SOURCE
           ? process.env.API_SOURCE === 'production'

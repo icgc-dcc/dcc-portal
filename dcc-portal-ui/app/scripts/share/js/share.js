@@ -57,7 +57,7 @@ require('./share.scss');
 
       var port = window.location.port ? ':' +  window.location.port : '',
           defaults = {
-            url: window.location.protocol + '//' + window.location.hostname + 
+            url: window.location.protocol + '//' + window.location.hostname +
             port + window.location.pathname
           },
         requestParams = (shouldUseParamsOnlyForRequest === true ? params : $location.search()),
@@ -79,10 +79,8 @@ require('./share.scss');
         if (queryStr !== '') {
           queryStr += '&';
         }
-        // FIXME: The url shortner decodes the GET request params for some reason - 
-        // I will file a bug with them but in the meantime
-        // this double encoding will do...fail...
-        queryStr += requestKey + '=' + encodeURIComponent(encodeURIComponent(requestParams[requestKey]));
+
+        queryStr += requestKey + '=' + encodeURI(requestParams[requestKey]);
 
         // The webservice does not take any other parameters so only keep the 'url'
         // property - no point making a request for the rest since we are encoding
@@ -131,7 +129,7 @@ require('./share.scss');
       $scope.$watch(() => (this.shortUrl), (newValue) => {
       if(newValue){
          setTimeout(() => {
-          var input = $element.find('.short-url-input');      
+          var input = $element.find('.short-url-input');
           input.focus();
           input.select();
         });
