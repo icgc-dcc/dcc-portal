@@ -26,11 +26,6 @@
             <translate>Protein</translate>
             <br>
         </div>
-        <div class="t_tabs__tab t_tabs__tab__gene" data-ng-click="GeneCtrl.activeTab = 'genomeViewer'" data-ng-class="{active: GeneCtrl.activeTab === 'genomeViewer'}"
-             data-nested data-href="genes/{{GeneCtrl.gene.id}}/genome-viewer">
-            <translate>Genome Viewer</translate>
-            <br>
-        </div>
     </div>
     <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'summary'}" data-ng-include="'scripts/genes/views/gene.summary.html'"></div>
     <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'mutations'}">
@@ -41,8 +36,5 @@
     </div>
     <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'protein'}">
         <div data-ng-include="'scripts/genes/views/gene.protein.html'"></div>
-    </div>
-    <div class='t_tab_pane' data-ng-class="{active: GeneCtrl.activeTab === 'genomeViewer'}">
-        <div data-ng-include="'scripts/genes/views/gene.genomeViewer.html'"></div>
     </div>
 </article>

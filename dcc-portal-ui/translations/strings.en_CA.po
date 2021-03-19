@@ -1994,14 +1994,6 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: app/scripts/browser/views/browser.html:19
-msgid "Filter genes"
-msgstr ""
-
-#: app/scripts/browser/views/browser.html:55
-msgid "Filter mutations"
-msgstr ""
-
 #: app/scripts/pathwayviewer/views/pathways.html:9
 msgid "Filter pathways"
 msgstr ""
@@ -2293,7 +2285,6 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.genes.html:8
 #: app/scripts/advanced/views/advanced.html:12
 #: app/scripts/advanced/views/advanced.html:53
-#: app/scripts/browser/views/browser.html:8
 #: app/scripts/genesets/views/geneset.html:328
 #: app/scripts/genesets/views/geneset.html:37
 msgid "Genes"
@@ -2310,17 +2301,6 @@ msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:47
 msgid "Genome ID: Currently only GRCh37"
-msgstr ""
-
-#: app/scripts/advanced/views/advanced.genes.html:17
-#: app/scripts/advanced/views/advanced.mutations.mutations.html:8
-#: app/scripts/advanced/views/advanced.mutations.observations.html:7
-#: app/scripts/browser/js/controller.js:25
-#: app/scripts/browser/views/browser.html:2
-#: app/scripts/common/views/footer.html:10
-#: app/scripts/oncogrid/views/oncogrid-analysis.html:68
-#: app/scripts/ui/views/open_in.html:6 app/scripts/ui/views/open_in.html:9
-msgid "Genome Viewer"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:26 app/scripts/genes/views/gene.html:352
@@ -2517,11 +2497,6 @@ msgid ""
 "sequencing reads,\n"
 "                and other primary data, to controlled access public "
 "repositories."
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:325
-#: app/scripts/genomemaps/js/viewer.js:681
-msgid "ICGC mutation"
 msgstr ""
 
 #: app/scripts/repositories/views/repos/repos.html:5
@@ -3077,7 +3052,6 @@ msgstr ""
 #: app/scripts/advanced/views/advanced.mutations.html:30
 #: app/scripts/advanced/views/advanced.mutations.html:42
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:2
-#: app/scripts/browser/views/browser.html:13
 #: app/scripts/donors/views/donor.html:27 app/scripts/genes/views/gene.html:309
 #: app/scripts/genes/views/gene.html:31
 #: app/scripts/genesets/views/geneset.html:327
@@ -3174,10 +3148,6 @@ msgstr ""
 
 #: app/scripts/advanced/views/advanced.genes.html:4
 msgid "No Genes Found."
-msgstr ""
-
-#: app/scripts/browser/views/browser.html:93
-msgid "No Genomic Context available"
 msgstr ""
 
 #: app/scripts/genes/views/gene.html:356
@@ -3559,11 +3529,6 @@ msgid ""
 "                              <a href=\"/search/g?filters={{CompoundCtrl."
 "getFilter()}}\">\n"
 "                                  Advanced Search\n"
-"                              </a>\n"
-"                                |\n"
-"                              <a href=\"/browser/g?filters={{CompoundCtrl."
-"getFilter()}}\">\n"
-"                                  Genome Viewer\n"
 "                              </a>"
 msgstr ""
 
@@ -3874,12 +3839,6 @@ msgstr ""
 msgid "Powered by <a href=\"http://iobio.io/\">iobio</a>"
 msgstr ""
 
-#: app/scripts/genomemaps/js/viewer.js:519
-msgid ""
-"Powered by <a target=\"_blank\" href=\"http://www.genomemaps.org/\">Genome "
-"Maps</a>"
-msgstr ""
-
 #: app/scripts/downloader/views/request.html:71
 msgid "Preparing..."
 msgstr ""
@@ -4030,7 +3989,6 @@ msgid ""
 msgstr ""
 
 #: app/scripts/beacon/views/beacon.html:8
-#: app/scripts/browser/views/browser.html:96
 msgid "Query"
 msgstr ""
 
@@ -4591,8 +4549,6 @@ msgstr ""
 msgid "Show More"
 msgstr ""
 
-#: app/scripts/browser/views/browser.html:45
-#: app/scripts/browser/views/browser.html:81
 #: app/scripts/keyword/views/results.html:283
 msgid "Show more results"
 msgstr ""
@@ -4640,20 +4596,6 @@ msgstr ""
 msgid ""
 "Showing <strong>{{ MutationCtrl.mutation.consequences.length }}</strong> "
 "consequences"
-msgstr ""
-
-#: app/scripts/browser/views/browser.html:49
-msgid ""
-"Showing <strong>{{ genes.data.hits.length | number }}</strong> of "
-"<strong>{{ genes.data.pagination.total\n"
-"                  | number }}</strong>"
-msgstr ""
-
-#: app/scripts/browser/views/browser.html:85
-msgid ""
-"Showing <strong>{{ mutations.data.hits.length | number }}</strong> of "
-"<strong>{{\n"
-"                  mutations.data.pagination.total | number }}</strong>"
 msgstr ""
 
 #: app/scripts/genesets/views/geneset.html:238
@@ -6240,14 +6182,6 @@ msgstr ""
 msgid "chromatin immunoprecipitation."
 msgstr ""
 
-#: app/scripts/genomemaps/js/viewer.js:338
-msgid "consequences"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:695
-msgid "consequences:"
-msgstr ""
-
 #: app/scripts/tokens/views/token.manager.html:125
 msgid "days"
 msgstr ""
@@ -6355,14 +6289,6 @@ msgstr ""
 msgid "frameshift variant"
 msgstr ""
 
-#: app/scripts/genomemaps/js/viewer.js:343
-msgid "functional impact"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:700
-msgid "functional impact:"
-msgstr ""
-
 #: app/scripts/enrichment/views/enrichment.upload.html:51
 msgid "gene sets"
 msgstr ""
@@ -6404,24 +6330,8 @@ msgstr ""
 msgid "more"
 msgstr ""
 
-#: app/scripts/genomemaps/js/viewer.js:330
-msgid "mutation"
-msgstr ""
-
 #: app/scripts/advanced/views/advanced.mutations.observations.html:12
 msgid "mutation occurrences"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:334
-msgid "mutation type"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:691
-msgid "mutation type:"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:687
-msgid "mutation:"
 msgstr ""
 
 #: app/scripts/advanced/views/advanced.mutations.mutations.html:14
@@ -6455,50 +6365,18 @@ msgstr ""
 msgid "out of"
 msgstr ""
 
-#: app/scripts/genomemaps/js/viewer.js:336
-msgid "project info"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:693
-msgid "project info:"
-msgstr ""
-
 #. 'N' donors affected by 'N' mutations across 'N' projects
 #: app/scripts/genes/views/gene.html:222
 #: app/scripts/genesets/views/geneset.html:208
 msgid "projects"
 msgstr ""
 
-#: app/scripts/genomemaps/js/viewer.js:332
-msgid "reference allele"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:689
-msgid "reference allele:"
-msgstr ""
-
 #: app/scripts/ui/js/table.js:63
 msgid "rows"
 msgstr ""
 
-#: app/scripts/genomemaps/js/viewer.js:340
-msgid "source"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:697
-msgid "source:"
-msgstr ""
-
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:166
 msgid "start lost"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:341
-msgid "start-end"
-msgstr ""
-
-#: app/scripts/genomemaps/js/viewer.js:698
-msgid "start-end:"
 msgstr ""
 
 #: app/scripts/oncogrid/views/oncogrid-analysis.html:183

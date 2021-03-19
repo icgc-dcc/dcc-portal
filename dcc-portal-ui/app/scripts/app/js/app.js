@@ -205,7 +205,6 @@ var module = angular.module('icgc', [
   'highcharts',
 
   // modules
-  'icgc.modules.genomeviewer',
   'proteinstructureviewer',
 
   // core
@@ -223,7 +222,6 @@ var module = angular.module('icgc', [
   'icgc.releases',
   'icgc.portalfeature',
   'icgc.keyword',
-  'icgc.browser',
   'icgc.donorlist',
   'icgc.genelist',
   'icgc.entitySetUpload',

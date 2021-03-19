@@ -55,7 +55,6 @@
 
           var obsFilter = OncogridService.observationFilter($scope.donorSet, $scope.geneSet);
           $scope.obsLink = obsSearch + JSON.stringify(obsFilter);
-          $scope.gvLink = '/browser/m?filters=' + JSON.stringify(obsFilter);
 
           $scope.donorShare = {
             url: LocationService.buildURLFromPath('search'),
@@ -101,7 +100,7 @@
           var genes = OncogridService.mapGenes($scope.genes, $scope.curatedList);
           var observations = OncogridService.mapOccurences($scope.occurrences, donors, genes);
 
-          // Clean gene & donor data before using for oncogrid. 
+          // Clean gene & donor data before using for oncogrid.
           var donorObs = _.map(observations, 'donorId');
           var geneObs = _.map(observations, 'geneId');
           donors = _.filter(donors, function(d) { return donorObs.indexOf(d.id) >= 0});
@@ -110,7 +109,7 @@
           if (observations.length === 0) {
             $('#oncogrid-controls').toggle();
             $('#oncogrid-no-data').toggle();
-            return; 
+            return;
           }
 
           var sortInt = function (field) {
@@ -144,26 +143,26 @@
           };
 
           var donorTracks = [
-            { 'name': gettextCatalog.getString('Age at Diagnosis'), 
+            { 'name': gettextCatalog.getString('Age at Diagnosis'),
               'fieldName': 'age', 'type': 'int', 'sort': sortInt, 'group': 'Clinical'},
-            { 'name': gettextCatalog.getString('Vital Status'), 
+            { 'name': gettextCatalog.getString('Vital Status'),
               'fieldName': 'vitalStatus', 'type': 'vital', 'sort': sortByString, 'group': 'Clinical' },
-            { 'name': gettextCatalog.getString('Survival Time'), 
+            { 'name': gettextCatalog.getString('Survival Time'),
               'fieldName': 'survivalTime', 'type': 'survival', 'sort': sortInt, 'group': 'Clinical'},
             { 'name': gettextCatalog.getString('Sex'), 'fieldName': 'sex', 'type': 'sex', 'sort': sortByString, 'group': 'Clinical' },
             { 'name': 'CNSM', 'fieldName': 'cnsmExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
             { 'name': 'STSM', 'fieldName': 'stsmExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
             { 'name': 'SGV', 'fieldName': 'sgvExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
-            { 'name': 'METH-A' , 
+            { 'name': 'METH-A' ,
               'fieldName': 'methArrayExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
-            { 'name': 'METH-S', 
+            { 'name': 'METH-S',
               'fieldName': 'methSeqExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
-            { 'name': 'EXP-A', 
+            { 'name': 'EXP-A',
               'fieldName': 'expArrayExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
-            { 'name': 'EXP-S', 
+            { 'name': 'EXP-S',
               'fieldName': 'expSeqExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
             { 'name': 'PEXP', 'fieldName': 'pexpExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
-            { 'name': 'miRNA-S', 
+            { 'name': 'miRNA-S',
               'fieldName': 'mirnaSeqExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
             { 'name': 'JCN', 'fieldName': 'jcnExists', 'type': 'bool', 'sort': sortBool, 'group': 'Data Types' },
             { 'name': 'PCAWG', 'fieldName': 'pcawg', 'type': 'bool', 'sort': sortBool, 'group': 'Study' }
@@ -216,7 +215,7 @@
 
           var donorHistogramClick = function (d) {
             window.location = donorSearch +
-              '{"donor":{"id":{"is": ["' + d.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}},' + 
+              '{"donor":{"id":{"is": ["' + d.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}},' +
                 '"gene":{"id":{"is":["ES:' + $scope.geneSet + '"]}}}';
           };
 
@@ -227,7 +226,7 @@
 
           var geneHistogramClick = function (g) {
             window.location = geneSearch +
-              '{"gene":{"id":{"is": ["' + g.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}},'+ 
+              '{"gene":{"id":{"is": ["' + g.id + '"]}}, "mutation":{"functionalImpact":{"is":["High"]}},'+
                 '"donor":{"id":{"is":["ES:' + $scope.donorSet + '"]}}}';
           };
 
@@ -312,7 +311,7 @@
 
           $('#og-crosshair-message').hide();
           var gridDiv = $element.find('#oncogrid-div');
-          gridDiv.addClass('og-pointer-mode'); 
+          gridDiv.addClass('og-pointer-mode');
           gridDiv.removeClass('og-crosshair-mode');
         };
 
@@ -359,7 +358,7 @@
             }, 0);
           } else {
             // TODO: Maybe come up with a better way to deal with fullscreen spacing.
-            setTimeout(function () { 
+            setTimeout(function () {
               $scope.OncoCtrl.getGrid().resize(screen.width - 400, screen.height - 400, true);
             }, 0);
           }

@@ -51,7 +51,6 @@
     const tabs = [
       ['clinicalEvidence', 'clinical-evidence'],
       ['protein', 'protein'],
-      ['genomeViewer', 'genome-viewer'],
     ];
 
     tabs.forEach(tab => {

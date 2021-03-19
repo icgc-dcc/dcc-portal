@@ -24,11 +24,8 @@
 @import "~angularjs-toaster/toaster.css";
 
 // Genome Browser
-@import "../vendor/scripts/genome-viewer/vendor/qtip2/jquery.qtip.min.css";
 $fa-font-path: '~font-awesome/fonts';
 @import '~font-awesome/scss/font-awesome.scss';
-
-@import "../vendor/styles/genomeviewer/css/style.css";
 
 // Base
 @import "_base/base";
@@ -65,7 +62,6 @@ $fa-font-path: '~font-awesome/fonts';
 @import "../scripts/visualization/styles/vis";
 @import "../scripts/highcharts/styles/highcharts";
 @import "../scripts/proteinstructureviewer/styles/protein";
-@import "../scripts/genomemaps/styles/genomemaps";
 @import "../scripts/phenotype/styles/phenotype.result.scss";
 @import "../scripts/survivalanalysis/styles/survival-analysis.scss";
 

@@ -123,7 +123,6 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"development"',
-      'process.env.GENOME_VIEWER_REQUIRE_STRING': JSON.stringify(require('./shims/genome-viewer')),
     }),
     // Note: only CSS is currently hot reloaded
     new webpack.HotModuleReplacementPlugin(),

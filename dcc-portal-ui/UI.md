@@ -40,7 +40,7 @@ refer to the *package.json* file in the current directory to lookup which versio
    * Please Refer to the Frontend *webpack.config.dev.js* and *webpack.config.prod.js* for More Details)
 * SASS Preprocessor - CSS Development
 * NPM and Yarn (Package Management)
- 
+
 
 
 ### UI ###
@@ -62,7 +62,7 @@ refer to the *bower.json* file in the current directory to lookup which versions
 ### UI Architecture ###
 
 The frontend UI is based fully on an AngularJS Single Page Application ([SPA](https://en.wikipedia.org/wiki/Single-page_application)) Architecture
-meaning that the core domain logic is encapsulated on the server-side while the UI logic is soley handled in the user's browser and managed via JavaScript 
+meaning that the core domain logic is encapsulated on the server-side while the UI logic is soley handled in the user's browser and managed via JavaScript
 (specifically [ECMAScript](https://en.wikipedia.org/wiki/ECMAScript) Version 5). Communication between the two layers is achieved using [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfer) webservices.
 
 ![Image of Frontend Architecture](docs/images/architecture-diagram.png)
@@ -80,11 +80,10 @@ Folder | Purpose   | Example
 ------ | --------- | -------
 /scripts/404| 404 Page. It also redirects if the current page has been moved to a different URL. Configuration for this can be found in `/js/404.js` | [https://dcc.icgc.org/404](https://dcc.icgc.org/404)
 /scripts/advanced| Advanced Page | [https://dcc.icgc.org/search](https://dcc.icgc.org/search)
-/scripts/analysis | Set Analysis Page | [https://dcc.icgc.org/analysis](https://dcc.icgc.org/analysis) 
+/scripts/analysis | Set Analysis Page | [https://dcc.icgc.org/analysis](https://dcc.icgc.org/analysis)
 **/scripts/app** | The main entry point in the application. This is the file that provides the definition of the main application module and it's dependencies.It also contains bootstrap code and some configuration for some of the dependencies (i.e. Restangular) used within the application. | N/A
 /scripts/auth | Login module | N/A
 /scripts/beacon | Global alliance beacon page | [https://dcc.icgc.org/ga4gh/beacon](https://dcc.icgc.org/ga4gh/beacon)
-/scripts/browser | Genome Viewer Page  | [https://dcc.icgc.org/browser](https://dcc.icgc.org/browser)
 /scripts/common | Houses common angular services, filters, and other utilities that are shared among application modules. This is also the build area for the PQL grammar file. | N/A
 /scripts/compounds | Drug Entity Page | [https://dcc.icgc.org/compound/ZINC000001530689](https://dcc.icgc.org/compound/ZINC000001530689)
 /scripts/donors | Donor Page | N/A
@@ -116,7 +115,6 @@ Folder | Purpose   | Example
 /scripts/venn23 | Venn diagram UI component used in analysis module. | N/A
 /scripts/visualization | Visualization module definition for the project mutation viewer, project stacked bar and area bar. | N/A
 /vendor/scripts/bamiobio| Customized iobio Module | N/A
-/vendor/scripts/genome-viewer | Customized genome viewer with ICGC Tracks and Data Adapters. Uses opencb's genome-maps [repo](https://github.com/opencb/genome-maps) [website](http://genomemaps.org/) | N/A
 
 
 ### Other Notable Areas in the UI ###
@@ -333,4 +331,4 @@ in ```scripts/pancancer``` and ICGC Cloud pages which can be found in ```scripts
 ## Got Questions/Feeback? ##
 
  * We are always happy to help - should you have any questions or feedback
-please feel free to contact us at [dcc-support@icgc.org](mailto:dcc-support@icgc.org) 
+please feel free to contact us at [dcc-support@icgc.org](mailto:dcc-support@icgc.org)

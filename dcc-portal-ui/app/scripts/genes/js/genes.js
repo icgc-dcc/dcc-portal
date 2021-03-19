@@ -49,7 +49,6 @@
       ['mutations', 'mutations'],
       ['targetingCompounds', 'targeting-compounds'],
       ['protein', 'protein'],
-      ['genomeViewer', 'genome-viewer'],
     ];
 
     tabs.forEach(tab => {
@@ -142,7 +141,6 @@
     LocationService,
     Donors,
     Genes,
-    GMService,
     Restangular,
     ExternalLinks,
     gene,
@@ -166,7 +164,6 @@
     _ctrl.gene.uiProteinTranscript = [];
     _ctrl.gene.fprojects = [];
     _ctrl.totalDonors = 0;
-    _ctrl.gene.hasGVChromosome = GMService.isValidChromosome(_ctrl.gene.chromosome);
 
     // Defaults for client side pagination
     _ctrl.currentProjectsPage = 1;
