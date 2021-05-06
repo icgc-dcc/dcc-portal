@@ -9,6 +9,10 @@
       
       .message-404 {
 
+        &.redirected {
+          text-transform: unset;
+        }
+
         &:after{
           display: block;
           margin-top: 1rem;

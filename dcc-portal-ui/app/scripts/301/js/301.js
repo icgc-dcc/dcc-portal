@@ -20,7 +20,7 @@
 angular.module('icgc.301', ['icgc.301.controllers', 'ui.router'])
   .config(function($stateProvider){
     $stateProvider.state('301', {
-      url: '/301?page',
+      url: '/301?page&from',
       templateUrl: '/scripts/404/views/404.html',
       controller: '301Controller as ctrlr'
     });
@@ -32,7 +32,8 @@ angular.module('icgc.301', ['icgc.301.controllers', 'ui.router'])
       const _ctrl = this;
       _ctrl.isRedirect = true;
       _ctrl.pathToGoTo = $stateParams.page;
-      _ctrl.timeToRedirect = 10;
+      _ctrl.fromShortURL = $stateParams.from === 'shortURL';
+      _ctrl.timeToRedirect = _ctrl.fromShortURL ? 3 : 10;
 
       Page.setTitle('301 - Redirecting');
       Page.setPage('error');
@@ -41,7 +42,7 @@ angular.module('icgc.301', ['icgc.301.controllers', 'ui.router'])
          _ctrl.timer = $timeout(() => {
            _ctrl.timeToRedirect--;
            if(_ctrl.timeToRedirect === 0){
-             $window.location.href = _ctrl.pathToGoTo;
+             $window.location.href = _ctrl.fromShortURL ? '/' : _ctrl.pathToGoTo;
            } else {
              processRedirect();
            }
