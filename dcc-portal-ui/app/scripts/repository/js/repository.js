@@ -48,7 +48,7 @@ import './file-finder';
     'file-finder',
   ]);
 
-  var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto', 'PDC - Chicago'];
+  var cloudRepos = ['AWS - Virginia', 'Collaboratory - Toronto', 'PDC - Chicago', 'Azure - Toronto'];
 
   /**
    * ICGC static repository controller
