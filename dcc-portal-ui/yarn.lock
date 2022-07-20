@@ -290,10 +290,10 @@ angular-xeditable@^0.4.0:
     jquery "^1.11.1"
     moment "^2.5.0"
 
-angular@1.5.7, angular@~1.x:
-  version "1.5.7"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.5.7.tgz#4ecefd0c7134b72757ba3b41bba3a1e4d5eff5ac"
-  integrity sha1-Ts79DHE0tydXujtBu6Oh5NXv9aw=
+angular@1.8.3, angular@~1.x:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.8.3.tgz#851ad75d5163c105a7e329555ef70c90aa706894"
+  integrity sha512-5qjkWIQQVsHj4Sb5TcEs4WZWpFeVFHXwxEBHUhrny41D8UrBAd6T/6nPPAsLngJCReIOqi95W3mxdveveutpZw==
 
 angularjs-toaster@2.0.0:
   version "2.0.0"
