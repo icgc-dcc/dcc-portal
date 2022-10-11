@@ -89,6 +89,11 @@
     lodash.uniqby "^4.7.0"
     lodash.uniqueid "^4.0.1"
 
+"@xmldom/xmldom@^0.7.4":
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.7.5.tgz#09fa51e356d07d0be200642b0e4f91d8e6dd408d"
+  integrity sha512-V3BIhmY36fXZ1OtVcI9W+FxQqxVLsPKcNjWigIaa81dLC9IolJl5Mt4Cvhmr0flUnjSpTdrbMTSbXqYqV5dT6A==
+
 Base64@~0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/Base64/-/Base64-0.2.1.tgz#ba3a4230708e186705065e66babdd4c35cf60028"
@@ -7823,22 +7828,17 @@ ws@1.0.1:
     options ">=0.0.5"
     ultron "1.0.x"
 
-x2js@^3.1.0:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.1.1.tgz#f7c4e6077c29470f2b0dd6714805871b25667119"
-  integrity sha1-98TmB3wpRw8rDdZxSAWHGyVmcRk=
+x2js@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.4.3.tgz#3f57537302ff269ad7043078188bb07bc8088af9"
+  integrity sha512-+65+WHCaQ9E0Gb2FDz/tYRSRBGGvFsSMiWDGn8KbgJOLkJhZBMCU1lxuRMLyTcx/54IopT0rDQWCUz2f7FTsyQ==
   dependencies:
-    xmldom "^0.1.19"
+    "@xmldom/xmldom" "^0.7.4"
 
 xml-char-classes@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/xml-char-classes/-/xml-char-classes-1.0.0.tgz#64657848a20ffc5df583a42ad8a277b4512bbc4d"
   integrity sha1-ZGV4SKIP/F31g6Qq2KJ3tFErvE0=
-
-xmldom@^0.1.19:
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
-  integrity sha1-1QH5ezvbQDr4757MIFcxh6rawOk=
 
 xmlhttprequest-ssl@1.5.1:
   version "1.5.1"
