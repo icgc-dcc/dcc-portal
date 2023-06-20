@@ -28,6 +28,10 @@
     "ensure-node-version": "semver `node -v` -r `json -f package.json engines.node`",
     "ensure-npm-version": "semver `npm -v` -r `json -f package.json engines.npm`"
   },
+  "engines": {
+    "node": ">=16",
+    "npm": ">=8"
+  },
   "devDependencies": {
     "angular-gettext-cli": "1.0.7",
     "autoprefixer": "^6.5.4",
@@ -86,7 +90,7 @@
     "matchdep": "1.0.1",
     "modularscale-sass": "2.1.1",
     "ng-annotate-loader": "0.2.0",
-    "node-sass": "3.10.0",
+    "node-sass": "9.0.0",
     "opn": "4.0.2",
     "phantomjs-prebuilt": "2.1.13",
     "postcss-loader": "^1.2.1",
@@ -106,10 +110,6 @@
     "webpack": "1.13.2",
     "webpack-dev-server": "1.16.1",
     "whatwg-fetch": "1.0.0"
-  },
-  "engines": {
-    "node": ">=4.4.0",
-    "npm": ">=3"
   },
   "dependencies": {
     "@oncojs/pathwayviewer": "^0.3.4",

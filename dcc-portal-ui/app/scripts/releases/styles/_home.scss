@@ -11,6 +11,7 @@
   $mid-blue: #0e5686;
   $dark-blue: #283e5d;
   $orange: #e9931c;
+  $light-orange: hsl(35, 80%, 90%);
 
   // Measuements
   $content-fold-max: 1095px;
@@ -109,6 +110,11 @@
   }
 
   // Layout
+  .yellow-row {
+    @extend %content-row;
+    background: $light-orange;
+  }
+
   .white-row {
     @extend %content-row;
     background: $white;
@@ -497,11 +503,10 @@
     }
   }
 
-  .updates {
+  .card {
     width: 100%;
     background: $white;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    margin: (-$updates-offset) 0 0;
 
     .header {
       display: flex;
@@ -509,7 +514,6 @@
       justify-content: space-between;
       align-items: center;
       padding: 11px 22px;
-      background: rgba(68, 199, 243, 0.1);
 
       h3 {
         margin: 0;
@@ -550,6 +554,24 @@
       a {
         color: $light-blue;
       }
+    }
+  }
+
+  .retirement-banner {
+    .header {
+      background: $orange;
+
+      h3 {
+        color: $white;
+      }
+    }
+  }
+
+  .updates {
+    margin: (-$updates-offset) 0 0;
+
+    .header {
+      background: rgba(68, 199, 243, 0.1);
     }
 
     margin-bottom: $spacing-2x;
