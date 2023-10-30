@@ -205,7 +205,7 @@ spring.mvc.locale-resolver: fixed
 
 # Jupyter Notebooks
 jupyter:
-  enabled: true
+  enabled: false
   url: "https://jupyterhub.cancercollaboratory.org"
 
 banner:

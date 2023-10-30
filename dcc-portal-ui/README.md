@@ -11,8 +11,8 @@ Install the following:
 Then execute:
 
 ```shell
-nvm install 6
-nvm use 6
+nvm install 16
+nvm use 16
 ```
 
 Next, install `npm` dependencies:

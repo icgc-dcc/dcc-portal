@@ -20,7 +20,7 @@ module.exports = {
     SOFTWARE_PAGE: true,
   },
   jupyter: {
-    enabled: true,
+    enabled: false,
     url: 'https://jupyterhub.cancercollaboratory.org',
   },
 };
